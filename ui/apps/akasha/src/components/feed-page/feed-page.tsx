@@ -5,7 +5,6 @@ import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import {
   ModalNavigationOptions,
   IPublishData,
-  IProfileData,
   RootComponentProps,
   EntityTypes,
   AnalyticsCategories,
@@ -22,6 +21,7 @@ import {
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, BasicCardBox, Text } =
   DS;
@@ -29,7 +29,7 @@ const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, Basic
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 
-  loggedProfileData?: IProfileData;
+  loggedProfileData?: Profile;
   loginState: LoginState;
 }
 
@@ -191,7 +191,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
               flagAsLabel={t('Report Post')}
-              loggedProfileEthAddress={loggedProfileData.ethAddress}
+              loggedProfileId={loggedProfileData.did.id}
               locale={locale || 'en'}
               showMore={true}
               profileAnchorLink={'/profile'}
@@ -218,7 +218,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         onLoginModalOpen={props.showLoginModal}
         requestStatus={postsReq.status}
         hasNextPage={postsReq.hasNextPage}
-        loggedProfile={loggedProfileData}
+        loggedProfileData={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}

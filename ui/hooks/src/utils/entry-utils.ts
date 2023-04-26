@@ -9,6 +9,7 @@ import { Comment, UserProfile } from '@akashaorg/typings/sdk/graphql-types';
 import { IEntryData, IPublishData, IProfileData, ModerationStatus } from '@akashaorg/typings/ui';
 
 import { getMediaUrl } from './media-utils';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';
@@ -282,7 +283,7 @@ export const mapEntry = (
  * Utility to create an entry yet to be published
  */
 export const createPendingEntry = (
-  author: IProfileData,
+  author: Profile,
   entryPublishData: IPublishData & { entryId?: string },
 ) => {
   return {

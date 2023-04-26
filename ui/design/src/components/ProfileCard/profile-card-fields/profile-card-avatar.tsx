@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { IProfileData } from '@akashaorg/typings/ui';
 import Avatar from '../../Avatar';
 import ImageOverlay from '../../ImageOverlay';
 import { AvatarDiv } from '../styled-profile-card';
 import { AvatarBorderColor } from '../../Avatar/styled-avatar';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type IProfileCardAvatarProps = {
-  avatar?: IProfileData['avatar'];
+  avatar?: Profile['avatar'];
   avatarBorderColor?: AvatarBorderColor;
-  ethAddress?: string;
+  profileId?: string;
 };
 
 const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
-  const { avatar, avatarBorderColor, ethAddress } = props;
+  const { avatar, avatarBorderColor, profileId } = props;
 
   const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
 
@@ -30,13 +30,15 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
         <Avatar
           size="xxl"
           border="lg"
-          ethAddress={ethAddress}
-          src={avatar}
+          profileId={profileId}
+          avatar={avatar}
           onClick={handleClickImage}
           borderColor={avatarBorderColor}
         />
       </AvatarDiv>
-      {imageOverlayOpen && avatar && <ImageOverlay src={avatar} closeModal={closeImageOverlay} />}
+      {imageOverlayOpen && avatar && (
+        <ImageOverlay src={avatar.default.src} closeModal={closeImageOverlay} />
+      )}
     </>
   );
 };

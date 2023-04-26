@@ -10,14 +10,9 @@ import TextLine from '../../TextLine';
 import CopyToClipboard from '../../CopyToClipboard';
 import Button from '../../Button';
 import { useCloseActions } from '../../../utils/useCloseActions';
-import { ImageSrc } from '../../types/common.types';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type HeaderProps = {
-  ethAddress: string;
-  coverImage: ImageSrc;
-  avatar: ImageSrc;
-  name: string;
-  userName: string;
   ensName: 'loading' | string;
   isFollowing: boolean;
   viewerIsOwner: boolean;
@@ -29,12 +24,11 @@ export type HeaderProps = {
   actionButtonExt?: React.ReactNode;
 };
 
-const Header: React.FC<HeaderProps> = ({
-  ethAddress,
-  coverImage,
+const Header: React.FC<HeaderProps & Profile> = ({
+  background,
+  did,
   avatar,
   name,
-  userName,
   ensName,
   isFollowing,
   viewerIsOwner,
@@ -60,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({
         radius={{ top: 20 }}
         background={{ light: 'grey7', dark: 'grey5' }}
         customStyle={`h-32 ${
-          coverImage ? `bg-center bg-[url(${coverImage?.url || coverImage?.fallbackUrl})]` : ''
+          background?.default ? `bg-center bg-[url(${background?.default.src})]` : ''
         }`}
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
@@ -68,17 +62,14 @@ const Header: React.FC<HeaderProps> = ({
           <Stack spacing="gap-x-2" customStyle="-ml-2">
             <div className={tw(avatarContainer)}>
               <Avatar
-                ethAddress={ethAddress}
+                profileId={did.id}
                 size="xl"
-                src={avatar}
+                avatar={avatar}
                 customStyle="absolute -top-6 border-2 border-white dark:border-grey2"
               />
             </div>
             <Stack direction="column">
               <Text variant="button-lg">{name}</Text>
-              <Text variant="body2" color={{ light: 'grey5', dark: 'grey7' }}>
-                {`@${userName.replace('@', '')}`}
-              </Text>
             </Stack>
             <div className={tw(`ml-auto mt-2`)}>
               {viewerIsOwner ? (
@@ -136,12 +127,12 @@ const Header: React.FC<HeaderProps> = ({
           <Stack direction="column" spacing="gap-y-4">
             <Stack direction="column" spacing="gap-y-1.5">
               <Text variant="label">Ethereum Address</Text>
-              <CopyToClipboard value={ethAddress}>
+              <CopyToClipboard value={did.id}>
                 <Text
                   variant="footnotes2"
                   color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 >
-                  {ethAddress}
+                  {did.id}
                 </Text>
               </CopyToClipboard>
             </Stack>

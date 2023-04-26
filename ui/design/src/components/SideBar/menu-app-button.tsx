@@ -56,7 +56,13 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
       return (
         <AppAvatar
           size="md"
-          src={{ url: menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null }}
+          avatar={{
+            default: {
+              src: menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null,
+              width: 40,
+              height: 40,
+            },
+          }}
           backgroundColor="transparent"
           appType={IntegrationTypes.WIDGET}
         />

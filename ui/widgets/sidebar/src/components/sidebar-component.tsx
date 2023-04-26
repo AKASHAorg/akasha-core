@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps, EventTypes, MenuItemAreaType } from '@akashaorg/typings/ui';
 import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/SideBar/sidebar-menu-item';
 

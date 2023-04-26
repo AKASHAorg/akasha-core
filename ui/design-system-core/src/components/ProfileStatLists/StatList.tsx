@@ -17,7 +17,7 @@ type StatListProps = {
 
 export const StatList: React.FC<StatListProps> = ({
   type,
-  pubKeyOfLoggedUser,
+  loggedProfileId,
   followedProfiles,
   follow,
   followLabel,
@@ -67,18 +67,16 @@ export const StatList: React.FC<StatListProps> = ({
       {follow.status === 'success' &&
         follow.data.map((profile, index) => (
           <ListEntry
-            key={`${profile.contentId}-${index}`}
+            key={`${profile.did.id}-${index}`}
             followLabel={followLabel}
             unFollowLabel={unFollowLabel}
             followingLabel={followingLabel}
             profileAnchorLink={profileAnchorLink}
-            ethAddress={profile.ethAddress}
-            pubKey={profile.pubKey}
+            profileId={profile.did.id}
             avatar={profile.avatar}
             name={profile.name}
-            userName={profile.userName}
-            isFollowing={followedProfiles.includes(profile.pubKey)}
-            pubKeyOfLoggedUser={pubKeyOfLoggedUser}
+            isFollowing={followedProfiles.includes(profile.did.id)}
+            loggedProfileId={loggedProfileId}
             hasNextPage={follow.hasNextPage}
             loadingMoreLabel={loadingMoreLabel}
             onLoadMore={follow.onLoadMore}

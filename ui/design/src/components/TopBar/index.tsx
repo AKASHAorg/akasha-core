@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { Box, Stack } from 'grommet';
-import { IMenuItem, LogoTypeSource, IProfileData } from '@akashaorg/typings/ui';
+import { IMenuItem, LogoTypeSource } from '@akashaorg/typings/ui';
 import Icon from '../Icon';
 import Avatar from '../Avatar';
 import {
@@ -21,10 +21,11 @@ import {
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
 import { ProfileMenu } from './profile-menu';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface ITopbarProps {
   // data
-  loggedProfileData?: Partial<IProfileData>;
+  loggedProfileData?: Profile;
   versionURL?: string;
   hasNewNotifications?: boolean;
   quickAccessItems?: IMenuItem[];
@@ -100,7 +101,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const menuItemRefs = React.useRef([]);
   const feedbackMenuRef = React.useRef(null);
 
-  const mobileSignedOutView = isMobileOnly && !loggedProfileData?.ethAddress;
+  const mobileSignedOutView = isMobileOnly && !loggedProfileData?.did.id;
   const iconSize = isMobileOnly ? 'md' : 'sm';
 
   React.useEffect(() => {
@@ -212,7 +213,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     if (menuItem.subRoutes?.length && currentLocation?.includes(menuItem?.subRoutes[0]?.route)) {
       return true;
     }
-    return !!(loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey));
+    return !!(loggedProfileData?.did.id && currentLocation?.includes(loggedProfileData?.did.id));
   };
 
   const renderPluginButton = (menuItem: IMenuItem, index: number) => {
@@ -226,8 +227,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
         {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
           <Avatar
             active={checkActiveAvatar(menuItem)}
-            ethAddress={loggedProfileData?.ethAddress}
-            src={loggedProfileData?.avatar}
+            profileId={loggedProfileData?.did.id}
+            avatar={loggedProfileData?.avatar}
             size="xs"
             onClick={onClickAvatarButton(menuItem)}
           />
@@ -283,11 +284,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
             fill="horizontal"
             justify="end"
           >
-            {loggedProfileData?.ethAddress &&
+            {loggedProfileData?.did.id &&
               !shouldRenderOnboarding &&
               quickAccessItems &&
               quickAccessItems.map(renderPluginButton)}
-            {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
+            {!isMobileOnly && !loggedProfileData?.did.id && !shouldRenderOnboarding && (
               <Box direction="row" align="center" gap="xsmall">
                 <Button
                   onClick={onLoginClick}
@@ -306,7 +307,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
                 <StyledAnchor href={writeToUs} label={helpLabel} target="_blank" />
               </Box>
             )}
-            {(!loggedProfileData?.ethAddress || shouldRenderOnboarding) && (
+            {(!loggedProfileData?.did.id || shouldRenderOnboarding) && (
               <IconDiv isActive={menuDropOpen} onClick={handleMenuClick} isMobile={isMobileOnly}>
                 <MenuIcon
                   rotate={isMobileOnly ? 90 : 0}
@@ -342,7 +343,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   };
 
   const renderLoggedInMenu = () => {
-    if (avatarDropOpen && loggedProfileData?.ethAddress) {
+    if (avatarDropOpen && loggedProfileData?.did.id) {
       return (
         <ProfileMenu
           target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
@@ -367,7 +368,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   };
 
   const renderLoggedOutMenu = () => {
-    if (menuDropOpen && !loggedProfileData?.ethAddress) {
+    if (menuDropOpen && !loggedProfileData?.did.id) {
       return (
         <ProfileMenu
           target={feedbackMenuRef.current}

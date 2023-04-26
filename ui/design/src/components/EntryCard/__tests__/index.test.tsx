@@ -41,7 +41,7 @@ describe('<EntryCard /> Component', () => {
             sharePostUrl={'https://ethereum.world'}
             repostWithCommentLabel={'Repost with comment'}
             shareTextLabel={'Share this post with your friends'}
-            loggedProfileEthAddress={'0x003410499401674320006570047391024572000'}
+            loggedProfileId={'did:pkh:eip155:5:0x003410499401674320006570047391024572000'}
             onRepost={handleRepost}
           />,
         ),

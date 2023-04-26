@@ -1,20 +1,21 @@
 import React from 'react';
 import Tab from '../Tab';
 import Card from '../Card';
-import { IProfileData, ProfileStatType, QueryStatus } from '@akashaorg/typings/ui';
+import { ProfileStatType, QueryStatus } from '@akashaorg/typings/ui';
 import { StatList } from './StatList';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type List = {
   label: string;
   status: QueryStatus['status'];
-  data: IProfileData[];
+  data: Profile[];
   hasNextPage: boolean;
   onLoadMore?: () => void;
 };
 
 export type ProfileStatProps = {
   selectedStat: ProfileStatType;
-  pubKeyOfLoggedUser: string;
+  loggedProfileId: string;
   followedProfiles: string[];
   followers: List;
   following: List;

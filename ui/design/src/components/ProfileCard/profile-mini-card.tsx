@@ -1,16 +1,16 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { IProfileData } from '@akashaorg/typings/ui';
 import Avatar from '../Avatar';
 import { MiniProfileAvatarDiv } from './styled-profile-card';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
 import { truncateMiddle } from '../../utils/string-utils';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IProfileMiniCard {
   // data
-  profileData: IProfileData;
-  loggedEthAddress?: string | null;
+  profileData: Profile;
+  loggedProfileId?: string | null;
   isFollowing?: boolean;
   // labels
   followLabel?: string;
@@ -20,8 +20,8 @@ export interface IProfileMiniCard {
   postsLabel?: string;
   // handlers
   handleClick?: (arg1?: string) => void;
-  handleFollow?: (profileEthAddress: string) => void;
-  handleUnfollow?: (profileEthAddress: string) => void;
+  handleFollow?: (profileId: string) => void;
+  handleUnfollow?: (profileId: string) => void;
   disableFollowing?: boolean;
   footerExt?: React.ReactNode;
 }
@@ -29,7 +29,7 @@ export interface IProfileMiniCard {
 const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
   const {
     profileData,
-    loggedEthAddress,
+    loggedProfileId,
     followLabel,
     followingLabel,
     followersLabel,
@@ -45,26 +45,26 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
 
   const onFollow = (ev: React.SyntheticEvent) => {
     if (handleFollow) {
-      handleFollow(profileData.pubKey);
+      handleFollow(profileData.did.id);
     }
     ev.stopPropagation();
   };
 
   const onUnfollow = (ev: React.SyntheticEvent) => {
     if (handleUnfollow) {
-      handleUnfollow(profileData.pubKey);
+      handleUnfollow(profileData.did.id);
     }
     ev.stopPropagation();
   };
 
   const onClick = () => {
     if (handleClick) {
-      handleClick(profileData.pubKey);
+      handleClick(profileData.did.id);
     }
   };
 
   // check if a user is logged in and different from the profile displayed
-  const showFollowingButton = loggedEthAddress && profileData.ethAddress !== loggedEthAddress;
+  const showFollowingButton = loggedProfileId && profileData.did.id !== loggedProfileId;
 
   return (
     <Box
@@ -76,7 +76,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     >
       <Box
         height="4rem"
-        background={`url(${profileData.coverImage})`}
+        background={`url(${profileData.background.default.src})`}
         pad="none"
         round={{ corner: 'top', size: 'xsmall' }}
         align="center"
@@ -85,8 +85,8 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
           <Avatar
             border="lg"
             size="xxl"
-            src={profileData.avatar}
-            ethAddress={profileData.ethAddress}
+            avatar={profileData.avatar}
+            profileId={profileData.did.id}
           />
         </MiniProfileAvatarDiv>
       </Box>
@@ -104,21 +104,20 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
             </Text>
           )}
           <Text size="medium" color="secondaryText" wordBreak="break-word" textAlign="center">
-            {(profileData.userName && `@${profileData.userName}`) ||
-              truncateMiddle(profileData.ethAddress)}
+            {profileData.name || truncateMiddle(profileData.did.id)}
           </Text>
         </Box>
-        <Box direction="row" gap="xsmall">
-          <Text size="small" color="secondaryText">{`${
-            profileData.totalPosts || 0
-          } ${postsLabel}`}</Text>
-          <Text size="small" color="secondaryText">{`${
-            profileData.totalFollowers || 0
-          } ${followersLabel}`}</Text>
-          <Text size="small" color="secondaryText">{`${
-            profileData.totalFollowing || 0
-          } ${followingLabel}`}</Text>
-        </Box>
+        {/*<Box direction="row" gap="xsmall">*/}
+        {/*  <Text size="small" color="secondaryText">{`${*/}
+        {/*    profileData.totalPosts || 0*/}
+        {/*  } ${postsLabel}`}</Text>*/}
+        {/*  <Text size="small" color="secondaryText">{`${*/}
+        {/*    profileData.totalFollowers || 0*/}
+        {/*  } ${followersLabel}`}</Text>*/}
+        {/*  <Text size="small" color="secondaryText">{`${*/}
+        {/*    profileData.totalFollowing || 0*/}
+        {/*  } ${followingLabel}`}</Text>*/}
+        {/*</Box>*/}
       </Box>
 
       <Box direction="column" pad="medium" gap="medium">

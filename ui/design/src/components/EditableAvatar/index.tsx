@@ -2,15 +2,16 @@ import * as React from 'react';
 import { getEditableImageFieldHandlers } from '../../utils/get-editable-field-handlers';
 import Avatar, { AvatarProps } from '../Avatar';
 import { AvatarSize, StyleFileInput } from '../Avatar/styled-avatar';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface EditableAvatarProps extends Omit<AvatarProps, 'onClick'> {
-  onChange: (newSrc: { url?: string }) => void;
+  onChange: (newSrc: Profile['avatar']) => void;
 }
 
 const EditableAvatar: React.FC<EditableAvatarProps & Partial<typeof defaultProps>> = props => {
-  const { src, onChange } = props;
+  const { avatar, onChange } = props;
   const inputRef = React.useRef(null);
-  const [newAvatar, setNewAvatar] = React.useState(src);
+  const [newAvatar, setNewAvatar] = React.useState(avatar);
 
   const { handleClick, handleChange } = getEditableImageFieldHandlers(
     true,
@@ -21,7 +22,7 @@ const EditableAvatar: React.FC<EditableAvatarProps & Partial<typeof defaultProps
 
   return (
     <>
-      <Avatar {...props} src={newAvatar} onClick={handleClick} />
+      <Avatar {...props} avatar={newAvatar} onClick={handleClick} />
       <StyleFileInput
         data-testid="avatar-file-input"
         type="file"

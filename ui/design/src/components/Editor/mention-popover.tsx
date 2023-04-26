@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Portal } from './helpers';
 import { StyledPopoverDiv, StyledPopoverValueBox } from './styled-editor-box';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { IProfileData } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IMentionPopover {
-  values: Partial<IProfileData>[];
+  values: Profile[];
   ref: React.Ref<HTMLDivElement>;
   currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -32,9 +32,9 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
           >
             <ProfileAvatarButton
               label={value.name}
-              info={value.userName && `@${value.userName}`}
+              info={value.name}
               avatarImage={value.avatar}
-              ethAddress={value.ethAddress as string}
+              profileId={value.did.id}
             />
           </StyledPopoverValueBox>
         ))}

@@ -3,41 +3,60 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
 import {
   EntityTypes,
+  IEntryPage,
   IProfileData,
   ModalNavigationOptions,
   RootComponentProps,
 } from '@akashaorg/typings/ui';
 import { useInfiniteCustomPosts, LoginState, useTagSubscriptions } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import {
+  useGetFollowingListByDidQuery,
+  useGetInterestsByDidQuery,
+  useGetPostsQuery,
+  useInfiniteGetPostsQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const { Box, Helmet, StartCard, MyFeedCard } = DS;
 
 export interface MyFeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  loggedProfileData?: IProfileData;
-  loginState: LoginState;
+  loggedProfileData?: Profile;
 }
 
 const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
-  const { logger, loggedProfileData, loginState } = props;
+  const { logger, loggedProfileData } = props;
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const isLoggedUser = React.useMemo(() => !!loginState.pubKey, [loginState.pubKey]);
+  const isLoggedUser = React.useMemo(() => !!loggedProfileData?.did.id, [loggedProfileData]);
 
   const { t } = useTranslation('app-akasha-integration');
 
-  const postsReq = useInfiniteCustomPosts(isLoggedUser, 15);
-  const tagSubsReq = useTagSubscriptions(loggedProfileData?.ethAddress);
-
+  const postsReq = useInfiniteGetPostsQuery('last', { last: 15 });
+  const tagSubsReq = useGetInterestsByDidQuery(
+    { id: loggedProfileData?.did.id },
+    {
+      select: data => {
+        if (data?.node) {
+          if ('interests' in data.node) {
+            return data.node.interests;
+          }
+        }
+        return null;
+      },
+    },
+  );
+  const followingReq = useGetFollowingListByDidQuery({ id: loggedProfileData?.did.id });
   const navigateToModal = React.useRef(props.navigateToModal);
   const showLoginModal = React.useRef(props.showLoginModal);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage && loginState?.fromCache) {
+    if (!postsReq.isLoading && postsReq.hasNextPage) {
       postsReq.fetchNextPage();
     }
-  }, [postsReq, loginState?.fromCache]);
+  }, [postsReq]);
 
   const postPages = React.useMemo(() => {
     if (postsReq.data) {
@@ -47,12 +66,8 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   }, [postsReq.data]);
 
   const userHasSubscriptions = React.useMemo(() => {
-    return loggedProfileData?.totalFollowing > 0 || tagSubsReq.data?.length > 0;
-  }, [loggedProfileData?.totalFollowing, tagSubsReq.data?.length]);
-
-  const hasPosts = React.useMemo(() => {
-    return postPages[0]?.total > 0;
-  }, [postPages]);
+    return loggedProfileData?.followers.edges.length > 0 || tagSubsReq.data?.topics.length > 0;
+  }, [followingReq.data, tagSubsReq.data]);
 
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
@@ -109,18 +124,17 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         modalSlotId={props.layoutConfig.modalSlotId}
         logger={logger}
         itemType={EntityTypes.POST}
-        pages={postPages}
+        pages={postPages as IEntryPage[]}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) =>
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
         }
-        loginState={loginState}
         navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={props.showLoginModal}
         requestStatus={postsReq.status}
         hasNextPage={postsReq.hasNextPage}
-        loggedProfile={loggedProfileData}
+        loggedProfileData={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
@@ -145,7 +159,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           )}
           CTALabel={t('Find topics and people')}
           onClickCTA={handleCTAClick}
-          hasPosts={hasPosts}
+          hasPosts={postsReq.hasNextPage && postsReq.data?.pages.length > 0}
         />
       )}
     </Box>

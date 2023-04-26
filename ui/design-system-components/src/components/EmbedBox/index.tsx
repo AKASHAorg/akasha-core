@@ -12,9 +12,9 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
   <div className={tw(`flex p-4 gap-4 rounded-xs bg(grey8 dark:grey1)`)} data-testid="embed-box">
     <ProfileAvatarButton
       label={props.embedEntryData.author?.name}
-      info={props.embedEntryData.author?.userName && `@${props.embedEntryData.author?.userName}`}
+      info={props.embedEntryData.author?.name}
       avatarImage={props.embedEntryData.author?.avatar}
-      ethAddress={props.embedEntryData.author?.ethAddress}
+      profileId={props.embedEntryData.author?.did.id}
     />
 
     <div className={tw(`flex`)}>

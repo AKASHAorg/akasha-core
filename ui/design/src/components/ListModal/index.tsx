@@ -6,7 +6,7 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { IconType } from '../Icon';
 import TextIcon from '../TextIcon';
 import { StyledLayer } from './styled-modal';
-import { IProfileData } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IlistModal {
   className?: string;
@@ -22,8 +22,8 @@ export interface IlistModal {
 interface IListElem {
   name?: string;
   time: string;
-  ethAddress: string;
-  avatar?: IProfileData['avatar'];
+  profileId: string;
+  avatar?: Profile['avatar'];
 }
 
 const StyledLayerElemDiv = styled.div`
@@ -55,8 +55,8 @@ const ListModal: React.FC<IlistModal> = props => {
                 info={formatDate(elem.time, locale)}
                 label={elem.name}
                 avatarImage={elem.avatar}
-                onClick={() => handleClickAvatar(elem.ethAddress)}
-                ethAddress={elem.ethAddress}
+                onClick={() => handleClickAvatar(elem.profileId)}
+                profileId={elem.profileId}
               />
             </StyledLayerElemDiv>
           ))}

@@ -17,7 +17,7 @@ import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
 import { tw, tx } from '@twind/core';
 import { Popover } from '@headlessui/react';
-import { IEntryData, IMetadata, IPublishData, IProfileData } from '@akashaorg/typings/ui';
+import { IEntryData, IMetadata, IPublishData } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -38,6 +38,7 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import isUrl from 'is-url';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 const MAX_LENGTH = 280;
 
@@ -46,7 +47,7 @@ const MAX_LENGTH = 280;
  * @param editorState - the state of the editor is controlled from the parent component
  */
 export interface IEditorBox {
-  avatar?: IProfileData['avatar'];
+  avatar?: Profile['avatar'];
   showAvatar?: boolean;
   ethAddress: string | null;
   postLabel?: string;
@@ -71,10 +72,10 @@ export interface IEditorBox {
     name?: string;
     userName?: string;
     pubKey: string;
-    avatar?: IProfileData['avatar'];
+    avatar?: Profile['avatar'];
     ethAddress: string;
     description?: string;
-    coverImage?: IProfileData['coverImage'];
+    coverImage?: Profile['background'];
   }[];
   tags?: { name: string; totalPosts: number }[];
   uploadRequest?: (

@@ -1,20 +1,19 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 
-import { IProfileData } from '@akashaorg/typings/ui';
-
 import Avatar from '../Avatar';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IMessageAppConvoHeaderProps {
-  chatOwner: IProfileData['name'];
-  chatOwnerAvatar: IProfileData['avatar'];
-  chatOwnerUsername: IProfileData['userName'];
-  chatOwnerEthAddress: IProfileData['ethAddress'];
+  chatOwner: Profile['name'];
+  chatOwnerAvatar: Profile['avatar'];
+  chatOwnerUsername: Profile['name'];
+  chatOwnerProfileId: Profile['did']['id'];
   onClickAvatar?: () => void;
 }
 
 const MessageAppConvoHeader: React.FC<IMessageAppConvoHeaderProps> = props => {
-  const { chatOwner, chatOwnerAvatar, chatOwnerUsername, chatOwnerEthAddress, onClickAvatar } =
+  const { chatOwner, chatOwnerAvatar, chatOwnerUsername, chatOwnerProfileId, onClickAvatar } =
     props;
 
   return (
@@ -28,8 +27,8 @@ const MessageAppConvoHeader: React.FC<IMessageAppConvoHeaderProps> = props => {
     >
       <Avatar
         size="md"
-        src={chatOwnerAvatar}
-        ethAddress={chatOwnerEthAddress}
+        avatar={chatOwnerAvatar}
+        profileId={chatOwnerProfileId}
         onClick={onClickAvatar}
       />
       <Box align="start" margin={{ left: 'small' }}>

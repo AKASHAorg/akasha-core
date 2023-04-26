@@ -38,11 +38,12 @@ export interface IContentClickDetails {
     itemId?: string;
   };
 }
+
 export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
   locale: ILocale;
-  loggedProfileEthAddress?: string | null;
+  loggedProfileId?: string | null;
   // share data
   sharePostLabel?: string;
   shareTextLabel?: string;
@@ -113,7 +114,7 @@ const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
 const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
     entryData,
-    loggedProfileEthAddress,
+    loggedProfileId,
     sharePostLabel,
     shareTextLabel,
     sharePostUrl,
@@ -377,7 +378,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 elevation="shadow"
               >
                 <ProfileMiniCard
-                  loggedEthAddress={loggedProfileEthAddress}
+                  loggedEthAddress={loggedProfileId}
                   profileData={entryData.author}
                   handleFollow={handleFollowAuthor}
                   handleUnfollow={handleUnfollowAuthor}
@@ -446,7 +447,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
             menuItems={[
-              ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
+              ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileId)
                 ? [
                     {
                       icon: 'report' as IconType,
@@ -456,7 +457,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                     },
                   ]
                 : []),
-              ...(entryData.author.ethAddress === loggedProfileEthAddress
+              ...(entryData.author.ethAddress === loggedProfileId
                 ? [
                     {
                       icon: 'trash' as IconType,
@@ -474,7 +475,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             modalSlotId={modalSlotId}
             closeModal={closeMenuDrop}
             menuItems={[
-              ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
+              ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileId)
                 ? [
                     {
                       label: props.flagAsLabel,
@@ -484,7 +485,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                     },
                   ]
                 : []),
-              ...(entryData.author.ethAddress === loggedProfileEthAddress
+              ...(entryData.author.ethAddress === loggedProfileId
                 ? [
                     {
                       icon: 'trash' as IconType,
@@ -499,7 +500,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {props.isRemoved && (
           <EntryCardRemoved
-            isAuthor={entryData.author.ethAddress === props.loggedProfileEthAddress}
+            isAuthor={entryData.author.ethAddress === props.loggedProfileId}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />
@@ -547,7 +548,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {showRemovedQuote && (
           <EntryCardRemoved
-            isAuthor={entryData.author.ethAddress === props.loggedProfileEthAddress}
+            isAuthor={entryData.author.ethAddress === props.loggedProfileId}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />
@@ -571,7 +572,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         {!hideActionButtons && (
           <CardActions
             entryData={entryData}
-            loggedProfileEthAddress={loggedProfileEthAddress}
+            loggedProfileId={loggedProfileId}
             sharePostLabel={sharePostLabel}
             shareTextLabel={shareTextLabel}
             sharePostUrl={sharePostUrl}

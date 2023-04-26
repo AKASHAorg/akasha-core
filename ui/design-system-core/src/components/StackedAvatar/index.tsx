@@ -1,13 +1,11 @@
 import React from 'react';
 import { apply, tw } from '@twind/core';
-import { IProfileData } from '@akashaorg/typings/ui';
 
 import Avatar, { AvatarSize } from '../Avatar';
-
-export type UserDataType = { ethAddress: string; avatar?: IProfileData['avatar'] }[];
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IStackedAvatarProps {
-  userData: UserDataType;
+  userData: Profile[];
   maxAvatars?: number;
   size?: AvatarSize;
 }
@@ -31,8 +29,8 @@ const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
           onClick={() => {
             /** */
           }}
-          ethAddress={data[level].ethAddress}
-          src={data[level].avatar}
+          profileId={data[level].did.id}
+          avatar={data[level].avatar}
           size={size}
           border="xs"
         />

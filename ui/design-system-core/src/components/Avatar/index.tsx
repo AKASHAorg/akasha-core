@@ -4,6 +4,7 @@ import { apply, tw } from '@twind/core';
 import AvatarImage from './AvatarImage';
 
 import { getAvatarFromSeed } from '../../utils/get-avatar-from-seed';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type AvatarSrc = { url?: string; fallbackUrl?: string };
 
@@ -14,11 +15,11 @@ export type AvatarBorderSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 export type AvatarBorderColor = 'white' | 'darkerBlue' | 'accent';
 
 export interface IAvatarProps {
-  ethAddress?: string | null;
+  profileId?: string | null;
   alt?: string;
   publicImgPath?: string;
   backgroundColor?: string;
-  src?: AvatarSrc;
+  avatar?: Profile['avatar'];
   size?: AvatarSize;
   border?: AvatarBorderSize;
   borderColor?: AvatarBorderColor;
@@ -55,11 +56,11 @@ export const avatarBorderColorsMap = {
 
 const Avatar: React.FC<IAvatarProps> = props => {
   const {
-    ethAddress = '0x0000000000000000000000000000000',
+    profileId = '0x0000000000000000000000000000000',
     alt,
     publicImgPath = '/images',
     backgroundColor,
-    src,
+    avatar,
     size = 'md',
     border,
     borderColor,
@@ -72,12 +73,8 @@ const Avatar: React.FC<IAvatarProps> = props => {
 
   let avatarImageFallback: string;
 
-  if (src?.fallbackUrl) {
-    avatarImageFallback = src.fallbackUrl;
-  }
-
   if (!avatarImageFallback) {
-    const seed = getAvatarFromSeed(ethAddress);
+    const seed = getAvatarFromSeed(profileId);
     avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
   }
 
@@ -95,9 +92,14 @@ const Avatar: React.FC<IAvatarProps> = props => {
 
   return (
     <div className={tw(containerStyle)} onClick={onClick}>
-      {src && (
+      {avatar && (
         <React.Suspense fallback={<></>}>
-          <AvatarImage url={src.url} alt={alt} fallbackUrl={avatarImageFallback} faded={faded} />
+          <AvatarImage
+            url={avatar.default.src}
+            alt={alt}
+            fallbackUrl={avatarImageFallback}
+            faded={faded}
+          />
         </React.Suspense>
       )}
 

@@ -29,6 +29,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 import FeedWidget from './App';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 const { Box, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 
@@ -64,7 +65,7 @@ export interface IEntryRenderer {
   logger: ILogger;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (props: ModalNavigationOptions) => void;
-  loggedProfile?: IProfileData;
+  loggedProfileData?: Profile;
   i18n: i18n;
 }
 
@@ -323,7 +324,7 @@ const EntryRenderer = (
                 shareLabel={t('Share')}
                 copyLinkLabel={t('Copy Link')}
                 flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
-                loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
+                loggedProfileId={props.loggedProfileData.did.id}
                 locale={locale || 'en'}
                 style={{
                   ...(style as React.CSSProperties),
@@ -385,7 +386,6 @@ const EntryRenderer = (
                   <FeedWidget
                     modalSlotId={props.modalSlotId}
                     logger={props.logger}
-                    pages={replyPages}
                     itemType={EntityTypes.REPLY}
                     onLoadMore={() => ({})}
                     getShareUrl={(itemId: string) =>
@@ -407,7 +407,7 @@ const EntryRenderer = (
                     navigateToModal={props.navigateToModal}
                     requestStatus={repliesReq.status}
                     hasNextPage={repliesReq.hasNextPage}
-                    loggedProfile={props.loggedProfile}
+                    loggedProfileData={props.loggedProfileData}
                     contentClickable={true}
                     onEntryFlag={props.onFlag}
                     onEntryRemove={props.onEntryRemove}
