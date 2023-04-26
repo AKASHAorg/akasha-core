@@ -34,6 +34,12 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
 
   const ENSReq = useEnsByAddress(profileData.ethAddress);
 
+  const [activeTab, setActiveTab] = React.useState(0);
+  const [selectedTab, setSelectedTab] = React.useState(0);
+  const [generalValid, setGeneralValid] = React.useState(true);
+  const [socialLinksValid, setSocialLinksValid] = React.useState(true);
+  const [interestsValid, setInterestsValid] = React.useState(true);
+
   const [showModal, setShowModal] = React.useState(false);
   const [showFeedback, setShowFeedback] = React.useState(false);
 
@@ -77,6 +83,17 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     }, 5000);
   };
 
+  const onTabChange = (selectedIndex: number, previousIndex: number) => {
+    if (selectedIndex != previousIndex) {
+      //check if one of the forms has invalid state
+      if (!generalValid || !socialLinksValid || !interestsValid) {
+        setShowModal(true);
+        setActiveTab(previousIndex);
+        setSelectedTab(selectedIndex);
+      }
+    }
+  };
+
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
       <Card radius={20} elevation="1" customStyle="py-4 h-full mb-4">
@@ -85,11 +102,8 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             labels={[t('General'), t('External URLs'), t('Your interests')]}
             customStyle="h-full"
             bodyStyle="p-4"
-            onChange={(selectedIndex, previousIndex) => {
-              if (selectedIndex != previousIndex) {
-                setShowModal(true);
-              }
-            }}
+            activeTab={activeTab}
+            onChange={onTabChange}
           >
             <GeneralForm
               header={{
@@ -148,6 +162,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   handleFeedback();
                 },
               }}
+              onFormValid={setGeneralValid}
               customStyle="h-full"
             />
             <SocialLinks
@@ -174,6 +189,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 },
               }}
               onDelete={() => ({})}
+              onFormValid={setSocialLinksValid}
               customStyle="h-full"
             />
             {/*@TODO: Create loading and error states for interests list */}
@@ -206,6 +222,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                     handleFeedback();
                   },
                 }}
+                onFormValid={setInterestsValid}
                 customStyle="h-full"
               />
             }
@@ -234,6 +251,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             variant: 'text',
             label: t('Leave'),
             onClick: () => {
+              setActiveTab(selectedTab);
               setShowModal(false);
             },
           },

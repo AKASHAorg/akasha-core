@@ -93,7 +93,7 @@ const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
                   <Pill
                     key={category + idx}
                     label={category}
-                    secondaryBg={true}
+                    active={true}
                     customStyle="mt-3 mr-3"
                   />
                 ))}
