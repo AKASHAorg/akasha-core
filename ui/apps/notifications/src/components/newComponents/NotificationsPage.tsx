@@ -26,8 +26,14 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   const [messageType, setMessageType] = React.useState('');
   const [showMenu, setShowMenu] = React.useState(false);
 
+  // check if user has gone through onboarding steps before
+  let savedPreferences;
+  if (window.localStorage) {
+    savedPreferences = JSON.parse(localStorage.getItem('notification-preference'));
+  }
+
   React.useEffect(() => {
-    /* uncomment this part when backend data becomes available */
+    /* @TODO:  uncomment this part when backend data becomes available */
     // redirect to sign in page if not logged in
     // if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
     //   navigateTo?.({
@@ -35,22 +41,6 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     //     getNavigationUrl: navRoutes => navRoutes.Connect,
     //   });
     // }
-    let savedPreferences;
-    if (window.localStorage) {
-      savedPreferences = JSON.parse(localStorage.getItem('notification-preference'));
-    }
-
-    // if logged in, navigate to step 1
-    if (
-      !loginQuery.data
-        ?.pubKey /* change logic here to the opposite when backend data becomes available */ &&
-      !savedPreferences
-    ) {
-      return navigateTo?.({
-        appName: '@akashaorg/app-notifications',
-        getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
-      });
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -59,6 +49,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     if (searchParams.get('message')) {
       setMessage(searchParams.get('message'));
       setMessageType(searchParams.get('type'));
+
       setShowFeedback(true);
     }
   }, [searchParams]);
@@ -221,6 +212,15 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     },
   ];
 
+  if (!loginQuery.isSuccess) return null;
+
+  if (!savedPreferences) {
+    return navigateTo?.({
+      appName: '@akashaorg/app-notifications',
+      getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
+    });
+  }
+
   return (
     <>
       <Card
@@ -232,7 +232,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
       >
         <div className={tw('py-4 relative w-full')}>
           <Text variant="h5" align="center">
-            Notifications
+            <>{t('Notifications')}</>
           </Text>
           <Stack direction="column" spacing="gap-y-1" customStyle="absolute right-4 top-5">
             <Button customStyle="relative" plain={true} onClick={handleTopMenuClick}>
@@ -291,7 +291,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
         </Tab>
       </Card>
       {showFeedback && (
-        <div className={tw('mt-4 w-full')}>
+        <div className={tw('-mt-12 md:mt-4 z-50 w-full')}>
           <Snackbar
             title={message}
             type={messageType as SnackBarType}

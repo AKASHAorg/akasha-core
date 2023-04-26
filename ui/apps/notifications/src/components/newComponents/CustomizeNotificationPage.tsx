@@ -170,7 +170,6 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
 
   const goToNextStep = () => {
     // navigate to final step or go back to notifications page depending whether it's the first time accessing the app or not
-
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () =>
@@ -181,6 +180,11 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   };
 
   const skipHandler = () => {
+    // save to localstorage so we don't come back again after skipping
+    if (window.localStorage) {
+      localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
+    }
+
     // navigate to final step
     goToNextStep();
   };
@@ -189,7 +193,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     // @TODO: save preferences somewhere, now we just save a key in localstorage to mark as set
     try {
       if (window.localStorage) {
-        localStorage.setItem('notification-preference', JSON.stringify('1')); //where to save settings?
+        localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
         setMessage('Notification settings updated successfully');
 
         if (snoozed && !localStorage.getItem('notifications-snoozed')) {
@@ -212,6 +216,9 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
           setMessage('You have unsnoozed your notifications successfully');
         }
       }
+
+      // disable the button again after saving preferences
+      setUpdateButtonDisabled(true);
 
       // navigate to final step
       initial && goToNextStep();
@@ -238,7 +245,9 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
           <>
             <Divider customStyle="my-2" />
             <Box customStyle="flex justify-between">
-              <Text variant="footnotes2">Snooze Notifications</Text>
+              <Text variant="footnotes2">
+                <>{t('Snooze Notifications')}</>
+              </Text>
               <Toggle
                 iconChecked="BellSnoozeIcon"
                 iconUnchecked="BellAlertIcon"
@@ -251,11 +260,16 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
         )}
         {initial ? (
           <Text variant="footnotes2" color={{ dark: 'grey6', light: 'grey4' }}>
-            Choose the notifications that you would like to receive from other applications.
-            Remember, you can change this anytime from the notifications settings.
+            <>
+              {t(
+                'Choose the notifications that you would like to receive from other applications. Remember, you can change this anytime from the notifications settings.',
+              )}
+            </>
           </Text>
         ) : (
-          <Text variant="h6">Receiving Notifications</Text>
+          <Text variant="h6">
+            <>{t('Receiving Notifications')}</>
+          </Text>
         )}
         <Checkbox
           id="receive-all-notifications-checkbox"
@@ -322,7 +336,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
         </div>
       </Card>
       {showFeedback && (
-        <div className={tw('mt-4 w-full')}>
+        <div className={tw('-mt-12 md:mt-4 z-50 w-full')}>
           <Snackbar
             title={message}
             type={messageType as SnackBarType}
