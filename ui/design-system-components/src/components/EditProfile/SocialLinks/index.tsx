@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -24,6 +24,7 @@ export type SocialLinksProp = {
   saveButton: { label: string; handleClick: (formValues: SocialLinkFormValue) => void };
   customStyle?: string;
   onDelete: (index: number) => void;
+  onFormValid?: (valid: boolean) => void;
 };
 
 export const SocialLinks: React.FC<SocialLinksProp> = ({
@@ -35,6 +36,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   saveButton,
   customStyle,
   onDelete,
+  onFormValid,
 }) => {
   const {
     control,
@@ -60,6 +62,13 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   const onAddNew = () => {
     setLinks([...links, { _id: links.length, value: '' }]);
   };
+
+  const validForm = !isDirty || !isValid || links.length === 0;
+
+  useEffect(() => {
+    if (onFormValid) validForm;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [validForm]);
 
   return (
     <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
@@ -111,7 +120,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
           <Button
             variant="primary"
             label={saveButton.label}
-            disabled={!isDirty || !isValid || links.length === 0}
+            disabled={validForm}
             onClick={handleSubmit(onSave)}
             type="submit"
           />
