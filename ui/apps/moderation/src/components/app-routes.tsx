@@ -54,7 +54,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     <Box>
       <Router basename={props.baseRouteName}>
         <Routes>
-          <Route path={routes[HOME]} element={<Overview {...props} />} />
+          <Route
+            path={routes[HOME]}
+            element={<Overview {...props} isAuthorised={isAuthorised} navigateTo={navigateTo} />}
+          />
 
           <Route path={routes[MODERATION_VALUE]} element={<ModerationValue {...props} />} />
 

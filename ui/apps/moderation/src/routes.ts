@@ -11,6 +11,7 @@ export const DISMISS_MODERATOR = 'DismissModerator';
 export const HISTORY = 'Transparency Log';
 export const HISTORY_ITEM = 'Transparency Log Item';
 export const MODERATION_VALUE = 'Moderation Value';
+export const BECOME_MODERATOR = 'BecomeModerator';
 
 export const baseOverviewUrl = '/overview';
 export const baseDashboardUrl = '/dashboard';
@@ -29,4 +30,5 @@ export default {
   [HISTORY]: '/history',
   [HISTORY_ITEM]: '/history/:itemId',
   [MODERATION_VALUE]: `${baseOverviewUrl}/values/:value`,
+  [BECOME_MODERATOR]: '/become-a-moderator',
 };

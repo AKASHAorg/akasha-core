@@ -39,7 +39,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox pad="p-4" margin="mb-4">
+    <BasicCardBox pad="p-4">
       <Box customStyle="grid gap-4 grid-cols-1">
         <Text variant="h5" align="center">
           {titleLabel}
