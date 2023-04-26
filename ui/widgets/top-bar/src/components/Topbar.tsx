@@ -11,23 +11,28 @@ export interface ITopbarProps {
   currentLocation?: string;
   // sidebar
   sidebarVisible: boolean;
+  // isLoggedIn ?
+  isLoggedIn: boolean;
   // handlers
   onSidebarToggle?: () => void;
   onBackClick: () => void;
   onAppWidgetClick: () => void;
   onBrandClick?: () => void;
   onNotificationClick: () => void;
+  onLoginClick: () => void;
   modalSlotId: string;
 }
 
 const Topbar: React.FC<ITopbarProps> = props => {
   const {
+    isLoggedIn,
     sidebarVisible,
     onSidebarToggle,
     onBrandClick,
     onAppWidgetClick,
     onNotificationClick,
     onBackClick,
+    onLoginClick,
     hasNewNotifications = false,
   } = props;
 
@@ -90,9 +95,48 @@ const Topbar: React.FC<ITopbarProps> = props => {
       </div>
 
       <div className={tw('flex space-x-2')}>
-        {displayWidgetTogglingButton && (
-          <Button iconOnly={true} icon="appCenter" onClick={onAppWidgetClick} variant="primary" />
+        {displayWidgetTogglingButton ? (
+          isLoggedIn ? (
+            <>
+              <Button
+                iconOnly={true}
+                icon="appCenter"
+                onClick={onAppWidgetClick}
+                variant="primary"
+              />
+              <Button
+                iconOnly={true}
+                icon={
+                  snoozeNotifications
+                    ? 'BellSnoozeIcon'
+                    : hasNewNotifications
+                    ? 'BellAlertIcon'
+                    : 'BellIcon'
+                }
+                onClick={onNotificationClick}
+                greyBg={true}
+                variant="primary"
+              />
+            </>
+          ) : (
+            <Button iconOnly={true} icon="BoltIcon" onClick={onLoginClick} variant="primary" />
+          )
+        ) : (
+          <Button
+            iconOnly={true}
+            icon={
+              snoozeNotifications
+                ? 'BellSnoozeIcon'
+                : hasNewNotifications
+                ? 'BellAlertIcon'
+                : 'BellIcon'
+            }
+            onClick={onNotificationClick}
+            greyBg={true}
+            variant="primary"
+          />
         )}
+<<<<<<< Updated upstream
         <Button
           iconOnly={true}
           icon={hasNewNotifications ? 'BellAlertIcon' : 'BellIcon'}
@@ -100,6 +144,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
           greyBg={true}
           variant="primary"
         />
+=======
+>>>>>>> Stashed changes
       </div>
     </BasicCardBox>
   );

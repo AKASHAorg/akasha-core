@@ -155,7 +155,7 @@ const Layout: React.FC<RootComponentProps> = props => {
       `;
 
   return (
-    <div className={tw('bg-white dark:bg-black min-h-screen')}>
+    <div className={tw('bg(white dark:black) min-h-screen mx-4')}>
       <div className={tw('h-full w-full')} onClick={handleClickOutside}>
         <div className={tw(layoutStyle)}>
           <ScrollRestorer />
@@ -170,14 +170,16 @@ const Layout: React.FC<RootComponentProps> = props => {
               </div>
             </div>
           </div>
-          <div className={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
-            <div className="sticky top-0 z-50">
-              <div className="text() pt-4 bg-background dark:(bg-background-dark)">
+          <div
+            className={tw(apply(`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`))}
+          >
+            <div className={tw('sticky top-0 z-50')}>
+              <div className={tw('pt-4 bg(white dark:black)')}>
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
               </div>
             </div>
             <div id="scrollTopStop"></div>
-            <div className="pt-4">
+            <div className={tw('pt-4')}>
               {!isPlatformHealty && (
                 <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
                   <WarningIcon type="error" themeColor="secondary" />
