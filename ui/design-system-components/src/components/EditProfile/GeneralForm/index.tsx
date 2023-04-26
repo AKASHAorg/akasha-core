@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -31,6 +31,7 @@ export type GeneralFormProps = {
   cancelButton: ButtonType;
   saveButton: { label: string; handleClick: (formValues: GeneralFormValues) => void };
   customStyle?: string;
+  onFormValid?: (valid: boolean) => void;
 };
 
 export const GeneralForm: React.FC<GeneralFormProps> = ({
@@ -43,6 +44,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
   cancelButton,
   saveButton,
   customStyle,
+  onFormValid,
 }) => {
   const {
     control,
@@ -56,6 +58,13 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
   const onSave = (formValues: GeneralFormValues) => saveButton.handleClick(formValues);
 
   const isLargeScreen = useMedia('(min-width: 640px)');
+
+  const validForm = !isDirty || !isValid;
+
+  useEffect(() => {
+    if (onFormValid) validForm;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [validForm]);
 
   return (
     <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
@@ -167,7 +176,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           <Button
             variant="primary"
             label={saveButton.label}
-            disabled={!isDirty || !isValid}
+            disabled={validForm}
             onClick={handleSubmit(onSave)}
             type="submit"
           />

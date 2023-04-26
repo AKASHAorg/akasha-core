@@ -8,6 +8,7 @@ interface IContainerClasses {
   loading: ButtonProps['loading'];
   disabled: ButtonProps['disabled'];
   active: ButtonProps['active'];
+  hover: ButtonProps['hover'];
 }
 
 export function getContainerClasses({
@@ -16,13 +17,14 @@ export function getContainerClasses({
   loading,
   disabled,
   active,
+  hover,
 }: IContainerClasses) {
   if (variant === 'primary') {
-    return getPrimaryClasses({ greyBg, loading, disabled, active });
+    return getPrimaryClasses({ greyBg, loading, disabled, active, hover });
   }
 
   if (variant === 'secondary') {
-    return getSecondaryClasses({ loading, disabled, active });
+    return getSecondaryClasses({ loading, disabled, active, hover });
   }
 
   return '';
@@ -33,11 +35,12 @@ interface IPrimaryClasses {
   loading: ButtonProps['loading'];
   disabled: ButtonProps['disabled'];
   active: ButtonProps['active'];
+  hover: ButtonProps['hover'];
 }
 
-function getPrimaryClasses({ greyBg, loading, disabled, active }: IPrimaryClasses) {
+function getPrimaryClasses({ greyBg, loading, disabled, active, hover }: IPrimaryClasses) {
   let backgroundStyle = `bg-gradient-to-r from-primaryStart to-primaryStop`;
-  const hoverStyle = !loading && !disabled ? `hover:${getElevationClasses('4')}` : '';
+  const hoverStyle = !loading && !disabled && hover ? `hover:${getElevationClasses('4')}` : '';
   const activeStyle = !loading && !disabled && active ? `${getElevationClasses('4')}` : '';
 
   if (greyBg) {
@@ -57,9 +60,10 @@ interface ISecondaryClasses {
   loading: ButtonProps['loading'];
   disabled: ButtonProps['disabled'];
   active: ButtonProps['active'];
+  hover: ButtonProps['hover'];
 }
 
-function getSecondaryClasses({ loading, disabled, active }: ISecondaryClasses) {
+function getSecondaryClasses({ loading, disabled, active, hover }: ISecondaryClasses) {
   const backgroundStyle = 'bg-transparent';
   const borderStyle = getColorClasses(
     {
@@ -69,7 +73,7 @@ function getSecondaryClasses({ loading, disabled, active }: ISecondaryClasses) {
     'border',
   );
   const hoverStyle =
-    !loading && !disabled
+    !loading && !disabled && hover
       ? `${getColorClasses(
           {
             light: 'secondaryLight/30',
