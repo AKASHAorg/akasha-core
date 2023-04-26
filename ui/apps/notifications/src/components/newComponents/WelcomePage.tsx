@@ -30,6 +30,7 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
   } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  let message = '';
 
   const goToNextStep = () => {
     // navigate to step 2
@@ -39,13 +40,31 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
     });
   };
 
-  const message = 'Notification settings updated successfully';
   const goToNotificationsPage = () => {
     // go to notifications page
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}/?message=${message}&type=success`,
+      getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}?message=${message}&type=success`,
     });
+  };
+
+  const confirmCustomization = () => {
+    if (finalStep) {
+      message = 'Notification settings updated successfully';
+
+      goToNotificationsPage();
+    } else {
+      goToNextStep();
+    }
+  };
+
+  const skipCustomization = () => {
+    if (window.localStorage) {
+      localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
+    }
+    message = '';
+    // navigate to notifications
+    goToNotificationsPage();
   };
 
   return (
@@ -68,14 +87,10 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
             variant="text"
             label={leftButtonLabel}
             color="secondaryLight dark:secondaryDark"
-            onClick={goToNotificationsPage}
+            onClick={skipCustomization}
           />
         )}
-        <Button
-          variant="primary"
-          label={rightButtonLabel}
-          onClick={finalStep ? goToNotificationsPage : goToNextStep}
-        />
+        <Button variant="primary" label={rightButtonLabel} onClick={confirmCustomization} />
       </div>
     </Card>
   );
