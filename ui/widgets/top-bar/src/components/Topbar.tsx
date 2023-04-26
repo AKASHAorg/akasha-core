@@ -8,6 +8,7 @@ export interface ITopbarProps {
   // data
   versionURL?: string;
   hasNewNotifications?: boolean;
+  snoozeNotifications?: boolean;
   currentLocation?: string;
   // sidebar
   sidebarVisible: boolean;
@@ -34,6 +35,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onBackClick,
     onLoginClick,
     hasNewNotifications = false,
+    snoozeNotifications,
   } = props;
 
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
@@ -136,16 +138,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
             variant="primary"
           />
         )}
-<<<<<<< Updated upstream
-        <Button
-          iconOnly={true}
-          icon={hasNewNotifications ? 'BellAlertIcon' : 'BellIcon'}
-          onClick={onNotificationClick}
-          greyBg={true}
-          variant="primary"
-        />
-=======
->>>>>>> Stashed changes
       </div>
     </BasicCardBox>
   );
