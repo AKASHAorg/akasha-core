@@ -6,6 +6,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import routes, {
@@ -55,6 +56,18 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     moderationApp: Array(moderationAppCheckboxes.map(e => e.selected)),
     integrationCenter: Array(integrationCenterCheckboxes.map(e => e.selected)),
   });
+
+  // for displaying feedback messages
+  const [message, setMessage] = React.useState('');
+  const [messageType, setMessageType] = React.useState('success');
+
+  const [showFeedback, setShowFeedback] = React.useState(false);
+
+  if (showFeedback) {
+    setTimeout(() => {
+      setShowFeedback(false);
+    }, 6000);
+  }
 
   const [snoozed, setSnoozed] = React.useState(false);
 
@@ -155,8 +168,6 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
-  let message = '';
-
   const goToNextStep = () => {
     // navigate to final step or go back to notifications page depending whether it's the first time accessing the app or not
 
@@ -176,129 +187,150 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
 
   const confirmHandler = () => {
     // @TODO: save preferences somewhere, now we just save a key in localstorage to mark as set
-    if (window.localStorage) {
-      localStorage.setItem('notification-preference', JSON.stringify('1'));
-      if (snoozed && !localStorage.getItem('notifications-snoozed')) {
-        localStorage.setItem('notifications-snoozed', JSON.stringify(true));
+    try {
+      if (window.localStorage) {
+        localStorage.setItem('notification-preference', JSON.stringify('1')); //where to save settings?
+        setMessage('Notification settings updated successfully');
 
-        // emit snooze notification event so the topbar's notification icon can be updated
-        uiEvents.current.next({
-          event: EventTypes.SnoozeNotifications,
-        });
-      }
-      if (!snoozed && localStorage.getItem('notifications-snoozed')) {
-        localStorage.removeItem('notifications-snoozed');
+        if (snoozed && !localStorage.getItem('notifications-snoozed')) {
+          localStorage.setItem('notifications-snoozed', JSON.stringify(true));
 
-        // emit unsnooze notification event so the topbar's notification icon can be updated
-        uiEvents.current.next({
-          event: EventTypes.UnsnoozeNotifications,
-        });
+          // emit snooze notification event so the topbar's notification icon can be updated
+          uiEvents.current.next({
+            event: EventTypes.SnoozeNotifications,
+          });
+          setMessage('You have snoozed your notifications successfully');
+        }
+
+        if (!snoozed && localStorage.getItem('notifications-snoozed')) {
+          localStorage.removeItem('notifications-snoozed');
+
+          // emit unsnooze notification event so the topbar's notification icon can be updated
+          uiEvents.current.next({
+            event: EventTypes.UnsnoozeNotifications,
+          });
+          setMessage('You have unsnoozed your notifications successfully');
+        }
       }
+
+      // navigate to final step
+      initial && goToNextStep();
+    } catch (error) {
+      setMessage('Something went wrong. Retry');
+      setMessageType('error');
     }
-
-    message = 'Notification settings updated successfully';
-    // navigate to final step
-    goToNextStep();
+    setShowFeedback(true);
   };
 
   return (
-    <Card
-      direction="row"
-      elevation={'1'}
-      radius={16}
-      padding={{ x: 8, y: 8 }}
-      customStyle="h-full md:h-min space-y-4"
-    >
-      <Text variant="h5" align="center">
-        {initial ? ' Customize Your Notifications' : 'Notifications Settings'}
-      </Text>
-      {!initial && (
-        <>
-          <Divider customStyle="my-2" />
-          <Box customStyle="flex justify-between">
-            <Text variant="footnotes2">Snooze Notifications</Text>
-            <Toggle
-              iconChecked="BellSnoozeIcon"
-              iconUnchecked="BellAlertIcon"
-              checked={snoozed}
-              onChange={snoozeChangeHandler}
-            />
-          </Box>
-          <Divider customStyle="my-2" />
-        </>
-      )}
-      {initial ? (
-        <Text variant="footnotes2" color={{ dark: 'grey6', light: 'grey4' }}>
-          Choose the notifications that you would like to receive from other applications. Remember,
-          you can change this anytime from the notifications settings.
+    <>
+      <Card
+        direction="row"
+        elevation={'1'}
+        radius={16}
+        padding={{ x: 8, y: 8 }}
+        customStyle="h-full md:h-min space-y-4"
+      >
+        <Text variant="h5" align="center">
+          {initial ? ' Customize Your Notifications' : 'Notifications Settings'}
         </Text>
-      ) : (
-        <Text variant="h6">Receiving Notifications</Text>
-      )}
-      <Checkbox
-        id="receive-all-notifications-checkbox"
-        label={t('I want to receive all types of notifications')}
-        value="I want to receive all types of notifications"
-        name="check-all"
-        isSelected={selected}
-        handleChange={() => setSelected(!selected)}
-        customStyle="ml-2"
-      />
-      <Divider customStyle="my-2" />
-      <div className={tw('min-h-[80%]')}>
-        <Accordion
-          titleNode={Title(t('Social App'))}
-          contentNode={Content(socialAppCheckboxes, 'social')}
-          open={initial}
-        />
-        <Divider customStyle="my-2" />
-        <Accordion
-          titleNode={Title(t('Article App'))}
-          contentNode={Content(articleAppCheckboxes, 'articleApp')}
-          open={initial}
-        />
-        <Divider customStyle="my-2" />
-        <Accordion
-          titleNode={Title(t('Moderation App'))}
-          contentNode={Content(moderationAppCheckboxes, 'moderationApp')}
-          open={initial}
-        />
-        <Divider customStyle="my-2" />
-        <Accordion
-          titleNode={Title(t('Integration Center'))}
-          contentNode={Content(integrationCenterCheckboxes, 'integrationCenter')}
-          open={initial}
-        />
-      </div>
-      <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2')}>
-        {initial ? (
+        {!initial && (
           <>
-            <Button
-              variant="text"
-              label={t('Do it later')}
-              color="secondaryLight dark:secondaryDark"
-              onClick={skipHandler}
-            />
-            <Button variant="primary" label={t('Confirm')} onClick={confirmHandler} />
-          </>
-        ) : (
-          <>
-            <Button
-              variant="text"
-              label={t('Cancel')}
-              color="secondaryLight dark:secondaryDark"
-              onClick={skipHandler}
-            />
-            <Button
-              variant="primary"
-              label={t('Update')}
-              onClick={confirmHandler}
-              disabled={updateButtonDisabled}
-            />
+            <Divider customStyle="my-2" />
+            <Box customStyle="flex justify-between">
+              <Text variant="footnotes2">Snooze Notifications</Text>
+              <Toggle
+                iconChecked="BellSnoozeIcon"
+                iconUnchecked="BellAlertIcon"
+                checked={snoozed}
+                onChange={snoozeChangeHandler}
+              />
+            </Box>
+            <Divider customStyle="my-2" />
           </>
         )}
-      </div>
-    </Card>
+        {initial ? (
+          <Text variant="footnotes2" color={{ dark: 'grey6', light: 'grey4' }}>
+            Choose the notifications that you would like to receive from other applications.
+            Remember, you can change this anytime from the notifications settings.
+          </Text>
+        ) : (
+          <Text variant="h6">Receiving Notifications</Text>
+        )}
+        <Checkbox
+          id="receive-all-notifications-checkbox"
+          label={t('I want to receive all types of notifications')}
+          value="I want to receive all types of notifications"
+          name="check-all"
+          isSelected={selected}
+          handleChange={() => setSelected(!selected)}
+          customStyle="ml-2"
+        />
+        <Divider customStyle="my-2" />
+        <div className={tw('min-h-[80%]')}>
+          <Accordion
+            titleNode={Title(t('Social App'))}
+            contentNode={Content(socialAppCheckboxes, 'social')}
+            open={initial}
+          />
+          <Divider customStyle="my-2" />
+          <Accordion
+            titleNode={Title(t('Article App'))}
+            contentNode={Content(articleAppCheckboxes, 'articleApp')}
+            open={initial}
+          />
+          <Divider customStyle="my-2" />
+          <Accordion
+            titleNode={Title(t('Moderation App'))}
+            contentNode={Content(moderationAppCheckboxes, 'moderationApp')}
+            open={initial}
+          />
+          <Divider customStyle="my-2" />
+          <Accordion
+            titleNode={Title(t('Integration Center'))}
+            contentNode={Content(integrationCenterCheckboxes, 'integrationCenter')}
+            open={initial}
+          />
+        </div>
+        <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2')}>
+          {initial ? (
+            <>
+              <Button
+                variant="text"
+                label={t('Do it later')}
+                color="secondaryLight dark:secondaryDark"
+                onClick={skipHandler}
+              />
+              <Button variant="primary" label={t('Confirm')} onClick={confirmHandler} />
+            </>
+          ) : (
+            <>
+              <Button
+                variant="text"
+                label={t('Cancel')}
+                color="secondaryLight dark:secondaryDark"
+                onClick={skipHandler}
+              />
+              <Button
+                variant="primary"
+                label={t('Update')}
+                onClick={confirmHandler}
+                disabled={updateButtonDisabled}
+              />
+            </>
+          )}
+        </div>
+      </Card>
+      {showFeedback && (
+        <div className={tw('mt-4 w-full')}>
+          <Snackbar
+            title={message}
+            type={messageType as SnackBarType}
+            handleDismiss={() => setShowFeedback(false)}
+          />
+        </div>
+      )}
+    </>
   );
 };
 export default CustomizeNotificationPage;

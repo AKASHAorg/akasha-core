@@ -52,7 +52,7 @@ const ProfileAvatarNotificationApp = React.forwardRef(
           <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
         </div>
         <div
-          className={tw(apply(`pl(lg:4 md:2 sm:2 xs:1) flex h-[50%] my-auto`))}
+          className={tw(apply(`pl(lg:4 2) flex h-[50%] my-auto`))}
           onClick={onClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
@@ -64,7 +64,7 @@ const ProfileAvatarNotificationApp = React.forwardRef(
           </div>
         </div>
         <div />
-        <div className={tw(apply(`pl(lg:4 md:2 sm:2 xs:1)`))}>
+        <div className={tw(apply(`pl(lg:4 2)`))}>
           <Text variant="footnotes2" color="grey7" truncate={true}>
             {info}
           </Text>
