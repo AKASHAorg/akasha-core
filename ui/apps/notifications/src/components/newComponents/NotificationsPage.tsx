@@ -224,7 +224,6 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   return (
     <>
       <Card
-        data-testid="notifications"
         direction="row"
         elevation={'1'}
         radius={16}
