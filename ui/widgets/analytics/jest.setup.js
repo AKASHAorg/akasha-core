@@ -1,3 +1,4 @@
+import '../jest.setup';
 import { mockSDK } from '@akashaorg/af-testing';
 
 jest.mock('@akashaorg/awf-sdk', () => {
