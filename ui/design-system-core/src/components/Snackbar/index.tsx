@@ -43,7 +43,6 @@ const Snackbar: React.FC<ISnackbar> = ({
   border(l-8 ${colorLight}/30) dark:border-${colorDark}/30
   `;
 
-  console.log(colorDark);
   return (
     <Card
       elevation="1"

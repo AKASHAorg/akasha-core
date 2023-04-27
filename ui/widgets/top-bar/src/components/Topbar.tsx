@@ -3,11 +3,13 @@ import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import { isMobileOnly } from 'react-device-detect';
 
 export interface ITopbarProps {
   // data
   versionURL?: string;
   hasNewNotifications?: boolean;
+  snoozeNotifications?: boolean;
   currentLocation?: string;
   // sidebar
   sidebarVisible: boolean;
@@ -29,6 +31,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onNotificationClick,
     onBackClick,
     hasNewNotifications = false,
+    snoozeNotifications,
   } = props;
 
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
@@ -95,7 +98,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
         )}
         <Button
           iconOnly={true}
-          icon={hasNewNotifications ? 'BellAlertIcon' : 'BellIcon'}
+          icon={
+            snoozeNotifications
+              ? 'BellSnoozeIcon'
+              : hasNewNotifications
+              ? 'BellAlertIcon'
+              : 'BellIcon'
+          }
           onClick={onNotificationClick}
           greyBg={true}
           variant="primary"
