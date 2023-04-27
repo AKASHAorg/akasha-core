@@ -53,9 +53,6 @@ const Index = (props: IndexProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-  const isLoading =
-    profileDataQuery.fetchStatus === 'fetching' || profileDataQuery.fetchStatus === 'idle';
-
   const handleCTAClick = () => {
     routing.navigateTo({
       appName: '@akashaorg/app-legal',
@@ -80,14 +77,16 @@ const Index = (props: IndexProps) => {
           devDetails={profileDataQuery.error?.message}
         />
       )}
-      <PageByType
-        {...props}
-        pageType={pageType}
-        profileData={profileState}
-        loginState={loginQuery.data}
-        isLoading={isLoading}
-        onCTAClick={handleCTAClick}
-      />
+      {profileDataQuery.status !== 'error' && (
+        <PageByType
+          {...props}
+          pageType={pageType}
+          profileData={profileState}
+          loginState={loginQuery.data}
+          isLoading={profileDataQuery.status === 'loading'}
+          onCTAClick={handleCTAClick}
+        />
+      )}
     </Box>
   );
 };

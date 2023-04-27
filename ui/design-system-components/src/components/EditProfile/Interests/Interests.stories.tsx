@@ -17,7 +17,7 @@ BaseInterests.args = {
   moreInterestDescription: 'You can find more interests and add them to your list of interests!',
   moreInterestPlaceholder: 'Search for interests',
   myInterests: ['Akasha', 'Ethereum', 'Finance', 'Politics', 'Travel', 'Cooking'],
-  interests: ['Akasha', 'Akira', 'Akela', 'Ethereum', 'Finance', 'Politics', 'Travel', 'Cooking'],
+  interests: ['Akira', 'Akela', 'Sports', 'Reading', 'Swimming'],
   cancelButton: { label: 'Cancel', handleClick: () => ({}) },
   saveButton: { label: 'Save', handleClick: () => ({}) },
 };
