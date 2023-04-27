@@ -2,27 +2,18 @@ import React, { PropsWithChildren } from 'react';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IPageHeaderProps {
+import PageButtons, { IPageButtonsProps } from './page-buttons';
+
+export interface IPageHeaderProps extends IPageButtonsProps {
   label: string;
-  cancelButtonLabel: string;
-  confirmButtonLabel: string;
-  onCancelButtonClick: () => void;
-  onConfirmButtonClick: () => void;
 }
 
 const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props => {
-  const {
-    label,
-    cancelButtonLabel,
-    confirmButtonLabel,
-    children,
-    onCancelButtonClick,
-    onConfirmButtonClick,
-  } = props;
+  const { label, children } = props;
+
   return (
     <BasicCardBox pad="p-0">
       <Box customStyle="px-4 py-6">
@@ -38,18 +29,7 @@ const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props => {
       </Box>
 
       <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
-        <Button plain={true} onClick={onCancelButtonClick}>
-          <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-            {cancelButtonLabel}
-          </Text>
-        </Button>
-
-        <Button
-          size="md"
-          variant="primary"
-          label={confirmButtonLabel}
-          onClick={onConfirmButtonClick}
-        />
+        <PageButtons {...props} />
       </Box>
     </BasicCardBox>
   );

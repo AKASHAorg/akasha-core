@@ -11,7 +11,7 @@ export const DISMISS_MODERATOR = 'DismissModerator';
 export const HISTORY = 'Transparency Log';
 export const HISTORY_ITEM = 'Transparency Log Item';
 export const MODERATION_VALUE = 'Moderation Value';
-export const BECOME_MODERATOR = 'BecomeModerator';
+export const BECOME_MODERATOR = 'Become Moderator';
 
 export const baseOverviewUrl = '/overview';
 export const baseDashboardUrl = '/dashboard';

@@ -7,10 +7,11 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ModerationIntroCard from '@akashaorg/design-system-components/lib/components/ModerationIntroCard';
 import ModerationValuesCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard';
 
-import BecomeModeratorCard from '../components/overview/become-moderator-card';
+import BecomeModeratorCard from '../components/moderator/become-moderator-card';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils/external-links';
+import { BECOME_MODERATOR } from '../routes';
 
 export interface IOverviewProps {
   isAuthorised: boolean;
@@ -38,7 +39,7 @@ export const Overview: React.FC<IOverviewProps> = props => {
   const handleClickApply = () => {
     navigateTo({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: routes => routes.BecomeModerator,
+      getNavigationUrl: routes => routes[BECOME_MODERATOR],
     });
   };
 

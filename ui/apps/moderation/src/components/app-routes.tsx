@@ -18,6 +18,7 @@ import {
   EditMaxApplicantsPage,
   ResignRolePage,
   ResignConfirmationPage,
+  BecomeModeratorPage,
 } from '../pages';
 
 import routes, {
@@ -34,6 +35,7 @@ import routes, {
   MODERATION_VALUE,
   MODERATORS,
   VIEW_MODERATOR,
+  BECOME_MODERATOR,
 } from '../routes';
 
 const { Box } = DS;
@@ -126,6 +128,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           />
 
           <Route path={routes[HISTORY_ITEM]} element={<TransparencyLogItem />} />
+
+          <Route
+            path={routes[BECOME_MODERATOR]}
+            element={<BecomeModeratorPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+          />
 
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
