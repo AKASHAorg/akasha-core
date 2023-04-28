@@ -6,8 +6,8 @@ import { IconType } from '@akashaorg/typings/ui';
 import { ButtonProps } from '../Button/types';
 
 export type DuplexButtonProps = ButtonProps & {
-  onClickInactive?: () => void;
-  onClickActive?: () => void;
+  onClickInactive?: React.EventHandler<React.SyntheticEvent>;
+  onClickActive?: React.EventHandler<React.SyntheticEvent>;
   inactiveLabel?: string;
   activeLabel?: string;
   activeHoverLabel?: string;

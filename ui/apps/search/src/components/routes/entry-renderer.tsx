@@ -1,5 +1,4 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import {
   EventTypes,
@@ -172,7 +171,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 isRemoved={itemData.isRemoved}
                 entryData={itemData}
                 onClickAvatar={handleClickAvatar}
-                repliesLabel={t('Replies')}
                 flagAsLabel={t('Report Post')}
                 loggedProfileEthAddress={ethAddress}
                 locale={locale || 'en'}

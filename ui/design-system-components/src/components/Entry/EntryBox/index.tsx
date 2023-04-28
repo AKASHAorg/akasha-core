@@ -38,7 +38,6 @@ export interface IEntryBoxProps {
   locale: ILocale;
   loggedProfileEthAddress?: string | null;
   // labels
-  repliesLabel: string;
   flagAsLabel?: string;
   comment?: boolean;
   editedLabel?: string;
@@ -89,7 +88,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
     entryData,
     loggedProfileEthAddress,
-    repliesLabel,
     flagAsLabel,
     locale,
     profileAnchorLink,
@@ -368,7 +366,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         {!hideActionButtons && (
           <CardActions
             entryData={entryData}
-            repliesLabel={repliesLabel}
             repliesAnchorLink={repliesAnchorLink}
             onRepost={handleRepost(false)}
             handleRepliesClick={handleRepliesClick}

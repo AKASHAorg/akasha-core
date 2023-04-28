@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { isMobile } from 'react-device-detect';
 import { IEntryData } from '@akashaorg/typings/ui';
 import { tw } from '@twind/core';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -8,8 +7,6 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 export interface CardActionProps {
   // data
   entryData: IEntryData;
-  // labels
-  repliesLabel: string;
   // anchor link
   repliesAnchorLink?: string;
   // handlers
@@ -26,7 +23,6 @@ const CardActions: React.FC<CardActionProps> = props => {
   const {
     // data
     entryData,
-    repliesLabel,
     repliesAnchorLink,
     // handlers
     onRepost,
@@ -39,9 +35,7 @@ const CardActions: React.FC<CardActionProps> = props => {
   } = props;
 
   const repostsBtnText = `${entryData.reposts || ''}`;
-  const repliesBtnText = isMobile
-    ? `${entryData.replies || 0}`
-    : `${entryData.replies || 0} ${repliesLabel}`;
+  const repliesBtnText = `${entryData.replies || 0}`;
 
   if (isModerated) {
     return (
@@ -49,16 +43,16 @@ const CardActions: React.FC<CardActionProps> = props => {
         className={tw(`flex flex-row items-center justify-end space-x-4 w-3/4 self-center py-4`)}
       >
         <button onClick={handleRepliesClick} className={tw(`flex flex-row items-center space-x-2`)}>
-          <Icon type="ChatBubbleLeftRightIcon" />
-          <Text>{repliesBtnText}</Text>
+          <Icon type="ChatBubbleLeftRightIcon" accentColor={true} />
+          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repliesBtnText}</Text>
         </button>
         <button
           onClick={onRepost}
           className={tw(`flex flex-row items-center space-x-2`)}
           disabled={disableReposting}
         >
-          <Icon type="ArrowPathIcon" />
-          <Text>{repostsBtnText}</Text>
+          <Icon type="ArrowPathIcon" accentColor={true} />
+          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repostsBtnText}</Text>
         </button>
       </div>
     );
@@ -80,8 +74,8 @@ const CardActions: React.FC<CardActionProps> = props => {
           className={tw(`flex flex-row items-center space-x-2`)}
           disabled={disableActions}
         >
-          <Icon type="ChatBubbleLeftRightIcon" />
-          <Text>{repliesBtnText}</Text>
+          <Icon type="ChatBubbleLeftRightIcon" accentColor={true} />
+          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repliesBtnText}</Text>
         </button>
       </a>
 
@@ -91,8 +85,8 @@ const CardActions: React.FC<CardActionProps> = props => {
           className={tw(`flex flex-row items-center space-x-2`)}
           disabled={disableReposting || disableActions}
         >
-          <Icon type="ArrowPathIcon" />
-          <Text>{repostsBtnText}</Text>
+          <Icon type="ArrowPathIcon" accentColor={true} />
+          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repostsBtnText}</Text>
         </button>
       )}
     </div>

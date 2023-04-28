@@ -155,7 +155,6 @@ export function OriginalItem({
           onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
             handleAvatarClick(ev, entryData?.author?.pubKey)
           }
-          repliesLabel={t('Replies')}
           flagAsLabel={t('Report Post')}
           loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
           locale={locale}
@@ -205,7 +204,12 @@ export function OriginalItem({
       </Box>
       <Box customStyle="m-4">
         {!loginState?.ethAddress && (
-          <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
+          <EditorPlaceholder
+            onClick={handlePlaceholderClick}
+            ethAddress={null}
+            replyLabel={t('Reply')}
+            placeholderLabel={t('Share your thoughts')}
+          />
         )}
         {showReplyEditor && loginState?.ethAddress && !entryData?.isRemoved && (
           <Extension

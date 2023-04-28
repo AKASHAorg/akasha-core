@@ -2,6 +2,7 @@ import React from 'react';
 
 import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
@@ -109,8 +110,13 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   };
 
   return (
-    <Box customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)] bg(white dark:grey2) rounded-r-2xl xl:rounded-2xl">
-      <Box customStyle="flex flex-row p-4 border-b-1 border-grey8">
+    <BasicCardBox
+      style="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
+      round={'rounded-r-2xl xl:rounded-2xl'}
+      elevation="md"
+      pad="p-0"
+    >
+      <Box customStyle="flex flex-row p-4 border-b-1 border(grey9 dark:grey3)">
         <Box customStyle="w-fit h-fit mr-2">
           <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
         </Box>
@@ -174,7 +180,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           ))}
         </Box>
       </Box>
-    </Box>
+    </BasicCardBox>
   );
 };
 

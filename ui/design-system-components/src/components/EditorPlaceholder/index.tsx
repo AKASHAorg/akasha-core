@@ -1,30 +1,32 @@
 import * as React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { IProfileData } from '@akashaorg/typings/ui';
+import { tw } from '@twind/core';
 
 export interface IEditorPlaceholder {
   avatar?: IProfileData['avatar'];
   ethAddress: string | null;
   placeholderLabel?: string;
+  replyLabel?: string;
   onClick?: React.MouseEventHandler<HTMLElement>;
-  style?: string;
 }
 
 const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
-  const { avatar, ethAddress, placeholderLabel, onClick, style } = props;
+  const { avatar, ethAddress, placeholderLabel, replyLabel, onClick } = props;
   return (
-    <BasicCardBox style={style}>
-      <button onClick={onClick}>
-        <Box customStyle="flex flex-row items-center px-4 py-2 gap-4">
-          {ethAddress && <Avatar src={avatar} ethAddress={ethAddress} size="md" />}
+    <BasicCardBox border={true} pad="none">
+      <div className={tw(`flex justify-between px-4 py-2 `)} onClick={onClick}>
+        <div className={tw(`flex flex-row items-center gap-4`)}>
+          <Avatar src={avatar} ethAddress={ethAddress} size="sm" />
           <Text variant="subtitle2" truncate={true}>
             {placeholderLabel}
           </Text>
-        </Box>
-      </button>
+        </div>
+        <Button variant="primary" disabled={true} label={replyLabel} size="sm" />
+      </div>
     </BasicCardBox>
   );
 };

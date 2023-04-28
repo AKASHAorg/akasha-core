@@ -274,7 +274,6 @@ const EntryRenderer = (
                 isRemoved={itemData.isRemoved}
                 entryData={itemData}
                 onClickAvatar={handleAvatarClick}
-                repliesLabel={itemType === EntityTypes.POST ? '' : t('Replies')}
                 editedLabel={t('Last edited')}
                 flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
                 loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
@@ -304,7 +303,7 @@ const EntryRenderer = (
                 removedByAuthorLabel={props.removedByAuthorLabel}
                 disableReposting={itemData.isRemoved || isComment}
                 disableReporting={loginState.waitForAuth || loginState.isSigningIn}
-                noBorder={isComment}
+                border={!isComment}
                 accentBorderTop={accentBorderTop}
                 actionsRightExt={
                   !isComment && (

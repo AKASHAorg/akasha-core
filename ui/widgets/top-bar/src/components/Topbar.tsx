@@ -84,7 +84,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
         onClick={onBrandClick}
       >
         <Icon type="akasha" customStyle="w-18 h-8" />
-        <span className={tw('uppercase font([Inter] light) text-xs drop-shadow-md')}>
+        <span
+          className={tw('uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md')}
+        >
           Akasha World
         </span>
       </div>

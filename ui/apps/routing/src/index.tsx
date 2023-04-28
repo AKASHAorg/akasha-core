@@ -158,13 +158,7 @@ export class RoutingPlugin {
 export const register = async (opts: IntegrationRegistrationOptions) => {
   return {
     loadingFn: () => Promise.resolve(),
-    // needed ???
     mountsIn: opts.layoutConfig?.routerSlotId,
-    extends: (matcher, loader) => {
-      matcher({
-        'back-navigation': loader(() => import('./extensions/back-navigation')),
-      });
-    },
   };
 };
 

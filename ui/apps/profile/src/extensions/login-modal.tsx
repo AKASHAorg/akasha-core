@@ -4,12 +4,16 @@ import singleSpaReact from 'single-spa-react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { RootExtensionProps, StorageKeys } from '@akashaorg/typings/ui';
-import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import ModalContainer from '@akashaorg/design-system-core/lib/components/ModalContainer';
 
-const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon } = DS;
+import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 const LoginModal = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');
@@ -19,7 +23,7 @@ const LoginModal = (props: RootExtensionProps) => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
-  const handleSignInClick = () => {
+  const handleConnectClick = () => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: appRoutes => {
@@ -31,56 +35,28 @@ const LoginModal = (props: RootExtensionProps) => {
     });
   };
 
-  const handleSignUpClick = () => {
-    sessionStorage.setItem(StorageKeys.LAST_URL, location.pathname);
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: navRoutes => navRoutes.Connect,
-    });
-  };
-
   return (
-    <ModalContainer onModalClose={handleModalClose} innerStyle={{ maxWidth: '90%' }}>
-      <ModalCardLogin>
-        <Icon
-          type="close"
-          color="gray"
-          onClick={handleModalClose}
-          style={{ position: 'absolute', right: '0.4rem' }}
-          clickable
-        />
-        <Box direction="column" align="center" justify="center" data-testid="modal-card-login">
-          <Box direction="column" align="center" fill="horizontal">
-            <Text weight="bold" size="large" margin={{ vertical: '0.5rem' }}>
-              {t('Ethereum World')}
-            </Text>
-            <Text color="gray" size="large" textAlign="center" margin={{ vertical: '0.5rem' }}>
+    <ModalContainer onModalClose={handleModalClose}>
+      <BasicCardBox style="py-3 px-6 md:px-24">
+        <Box customStyle={`flex flex-row justify-end`}>
+          <button onClick={handleModalClose}>
+            <Icon type="XMarkIcon" color={{ light: 'grey7', dark: 'grey4' }} />
+          </button>
+        </Box>
+
+        <Box customStyle="flex flex-col items-center" data-testid="modal-card-login">
+          <Box customStyle="flex flex-col items-center w-full gap-y-2">
+            <Text variant="h6">{t('Ethereum World')}</Text>
+            <Text variant="body1" align="center">
               {t('To continue you need an Ethereum World account')}
             </Text>
           </Box>
-          <Box
-            direction="row"
-            align="center"
-            gap="small"
-            fill="horizontal"
-            pad={{ vertical: 'medium' }}
-            style={{ maxWidth: '12rem' }}
-          >
-            <Button
-              onClick={handleSignInClick}
-              label={t('Sign In')}
-              fill="horizontal"
-              hoverIndicator="accentText"
-            />
-            <Button
-              primary={true}
-              onClick={handleSignUpClick}
-              label={t('Sign Up')}
-              fill="horizontal"
-            />
+          <Box customStyle="flex flex-row items-center justify-center gap-x-2 w-full pt-4">
+            <Button onClick={handleModalClose} label={t('Cancel')} />
+            <Button onClick={handleConnectClick} label={t('Connect')} variant="primary" />
           </Box>
         </Box>
-      </ModalCardLogin>
+      </BasicCardBox>
     </ModalContainer>
   );
 };
@@ -104,11 +80,7 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
-    return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in login modal" details={err.message} />
-      </ThemeWrapper>
-    );
+    return <ErrorLoader type="script-error" title="Error in login modal" details={err.message} />;
   },
 });
 

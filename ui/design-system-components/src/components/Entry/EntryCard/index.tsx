@@ -14,7 +14,7 @@ export interface IEntryCardProps extends IEntryBoxProps {
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
   contentClickable?: boolean;
-  noBorder?: boolean;
+  border?: boolean;
   noBorderRadius?: boolean;
   bottomBorderOnly?: boolean;
   accentBorderTop?: boolean;
@@ -29,7 +29,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     andLabel,
     othersLabel,
     onClickAvatar,
-    repliesLabel,
     locale,
     loggedProfileEthAddress,
     rootNodeRef,
@@ -61,7 +60,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onEntryRemove,
     removedByMeLabel,
     removedByAuthorLabel,
-    noBorder,
+    border,
     noBorderRadius,
     // bottomBorderOnly,
     // accentBorderTop,
@@ -73,7 +72,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
   return (
     <BasicCardBox
       rootNodeRef={rootNodeRef}
-      noBorder={noBorder}
+      border={border}
       noBorderRadius={noBorderRadius}
       elevation="sm"
       pad="p-0"
@@ -90,7 +89,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
       <EntryBox
         entryData={entryData}
         onClickAvatar={onClickAvatar}
-        repliesLabel={repliesLabel}
         flagAsLabel={flagAsLabel}
         loggedProfileEthAddress={loggedProfileEthAddress}
         showMore={showMore}

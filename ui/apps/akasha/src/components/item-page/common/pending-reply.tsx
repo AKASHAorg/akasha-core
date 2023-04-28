@@ -36,7 +36,6 @@ export function PendingReply({ postId, loggedProfileData, commentIds }: PendingR
             >
               <EntryBox
                 entryData={createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
-                repliesLabel={t('Replies')}
                 flagAsLabel={t('Report Comment')}
                 loggedProfileEthAddress={loggedProfileData.ethAddress}
                 locale={'en'}

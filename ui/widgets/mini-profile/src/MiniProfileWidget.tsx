@@ -4,8 +4,10 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 
-import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import ExtensionPoint from '@akashaorg/design-system-components/lib/utils/extension-point';
+import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 import { RootExtensionProps, EventTypes } from '@akashaorg/typings/ui';
 import {
   useGetEntryAuthor,
@@ -14,10 +16,7 @@ import {
   useUnfollow,
   useGetLogin,
   withProviders,
-  ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
-
-const { Box, ProfileMiniCard, ExtensionPoint } = DS;
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const params: { postId?: string } = useParams();
@@ -33,7 +32,15 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
+  const showLoginModal = () => {
+    props.navigateToModal({ name: 'login' });
+  };
+
   const handleFollow = () => {
+    if (!loginQuery.data?.ethAddress) {
+      showLoginModal();
+      return;
+    }
     if (profileData?.pubKey) {
       followReq.mutate(profileData?.pubKey);
     }
@@ -80,7 +87,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   };
 
   return (
-    <Box pad={{ bottom: 'small' }} height={{ max: '30rem' }}>
+    <Box customStyle="pb-2 max-h-[30rem]">
       <ProfileMiniCard
         handleClick={handleProfileClick}
         handleFollow={handleFollow}
@@ -131,13 +138,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader
-          type="script-error"
-          title="Error in profile card widget"
-          details={err.message}
-        />
-      </ThemeWrapper>
+      <ErrorLoader type="script-error" title="Error in profile card widget" details={err.message} />
     );
   },
 });

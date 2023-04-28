@@ -26,7 +26,9 @@ const ModalContainer: React.FC<IModalContainerProps> = props => {
   const innerStyle = Object.assign({ zIndex: 10 }, props.innerStyle);
   return (
     <div
-      className={tw(`flex w-full items-center justify-items-center fixed ${positionClass}`)}
+      className={tw(
+        `flex w-full items-center justify-items-center justify-center fixed ${positionClass}`,
+      )}
       style={props.style}
     >
       <div
