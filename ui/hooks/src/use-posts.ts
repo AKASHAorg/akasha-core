@@ -1,10 +1,4 @@
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueries,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueries, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { IPublishData, IProfileData } from '@akashaorg/typings/ui';
@@ -99,7 +93,7 @@ const getPosts = async (limit: number, offset?: string, filterDeleted = true) =>
  */
 export function useInfinitePosts(limit: number, offset?: string) {
   return useInfiniteQuery(
-    [ENTRIES_KEY],
+    ENTRIES_KEY,
     async ({ pageParam = offset }) => getPosts(limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
@@ -150,7 +144,7 @@ const getCustomFeedPosts = async (limit: number, offset?: number) => {
  */
 export function useInfiniteCustomPosts(enabler: boolean, limit: number, offset?: string) {
   return useInfiniteQuery(
-    [ENTRIES_CUSTOM_KEY],
+    ENTRIES_CUSTOM_KEY,
     async ({ pageParam = offset }) => getCustomFeedPosts(limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
@@ -333,7 +327,7 @@ export function usePosts({ postIds, loggedUser, enabler = true }: usePostsParam)
     queryFn: () => getPost(postId, loggedUser),
     ...options(postId),
   }));
-  return useQueries({ queries });
+  return useQueries(queries);
 }
 
 /**
@@ -424,7 +418,7 @@ export function useCreatePost() {
     },
     {
       onMutate: async (publishObj: IPublishData) => {
-        await queryClient.cancelQueries([ENTRIES_KEY]);
+        await queryClient.cancelQueries(ENTRIES_KEY);
         await queryClient.cancelQueries([ENTRIES_BY_AUTHOR_KEY, publishObj.pubKey]);
         const optimisticEntry = Object.assign({}, publishObj, { isPublishing: true });
 
@@ -438,14 +432,13 @@ export function useCreatePost() {
       },
       onSettled: async () => {
         //shouldn't await 'ENTRIES_KEY' as as it creates a race condition
-        await queryClient.invalidateQueries([ENTRIES_KEY]);
-        await queryClient.invalidateQueries([TRENDING_TAGS_KEY]);
+        queryClient.invalidateQueries(ENTRIES_KEY);
+        await queryClient.invalidateQueries(TRENDING_TAGS_KEY);
       },
-      mutationKey: [CREATE_POST_MUTATION_KEY],
+      mutationKey: CREATE_POST_MUTATION_KEY,
     },
   );
 }
-
 const updateSearchEntry = (postIndex, slateContent) => (entry, index) => {
   if (index !== postIndex) {
     return entry;
@@ -488,7 +481,7 @@ export const useEditPost = () => {
             updatedAt: Date.now().toString(),
           };
         });
-        queryClient.setQueriesData<unknown>([SEARCH_KEY], oldData => {
+        queryClient.setQueriesData<unknown>(SEARCH_KEY, oldData => {
           if (!oldData) return;
           const postIndex = oldData.entries.findIndex(
             entry => entry.entryId === editedPost.entryID,

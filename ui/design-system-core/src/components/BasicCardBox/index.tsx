@@ -8,7 +8,7 @@ export interface IBasicCardBox {
   pad?: string;
   margin?: string;
   round?: string;
-  noBorder?: boolean;
+  border?: boolean;
   noBorderRadius?: boolean;
   style?: string;
   onClick?: () => void;
@@ -23,7 +23,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
     pad = 'p-6',
     margin = 'm-0',
     round = 'rounded-2xl',
-    noBorder,
+    border,
     noBorderRadius,
     style = '',
     onClick,
@@ -34,15 +34,15 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
       return 'border(2 dashed grey5)';
     }
 
-    if (noBorder) {
-      return 'border-none';
+    if (border) {
+      return 'border(1 solid grey9 dark:grey3)';
     }
 
     /**
      * Define other border-changing props here
      */
 
-    return 'border(1 solid grey8 dark:none)';
+    return 'border-none';
   };
 
   const className = apply`flex flex-col shadow-${elevation} w-full ${pad} ${margin} bg(white dark:grey2) ${

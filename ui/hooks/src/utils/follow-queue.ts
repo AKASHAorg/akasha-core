@@ -1,5 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { BehaviorSubject, concatMap, EMPTY, share } from 'rxjs';
+import { BehaviorSubject, concatMap, EMPTY, lastValueFrom, share } from 'rxjs';
 
 class FollowUnfollowQueue {
   static sdk = getSDK();
@@ -21,7 +21,6 @@ class FollowUnfollowQueue {
     }),
     share(),
   );
-
   static addToQueue(obj) {
     this.queue.next(obj);
   }

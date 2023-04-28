@@ -1,6 +1,6 @@
 import React from 'react';
 import objHash from 'object-hash';
-import { Query, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Query, useMutation, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { IProfileData } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
@@ -38,7 +38,6 @@ const deduplicateArray = (arr: string[]): string[] => [...new Set(arr)];
 
 class GetFollowingBuffer {
   static buffer: string[] = [];
-
   static addToBuffer(arr: string[]) {
     this.buffer = deduplicateArray([...this.buffer, ...arr]);
   }
@@ -142,7 +141,6 @@ const getIsContactMultiple = async (mainProfile: string, checkIfContactsPubkeys:
 
 class GetContactListBuffer {
   static buffer: string[] = [];
-
   static addToBuffer(arr: string[]) {
     this.buffer = deduplicateArray([...this.buffer, ...arr]);
   }
@@ -261,7 +259,7 @@ export function useFollow() {
   const queryClient = useQueryClient();
   return useMutation(followPubKey => sdk.api.profile.follow(followPubKey), {
     onMutate: async (followPubKey: string) => {
-      await queryClient.cancelQueries([FOLLOWED_PROFILES_KEY]);
+      await queryClient.cancelQueries(FOLLOWED_PROFILES_KEY);
       // Snapshot the previous value
       const previousFollowedProfiles: string[] =
         (await queryClient.getQueryData([FOLLOWED_PROFILES_KEY])) || [];
@@ -297,7 +295,7 @@ export function useFollow() {
       // invalidate the queries of the profile if it's already fetched
       // eg. we are on his profile page
       const profileQuery = queryClient.getQueriesData<IProfileData>({
-        queryKey: [PROFILE_KEY],
+        queryKey: PROFILE_KEY,
         predicate: (query: Query<IProfileData>) => {
           return query.state.data && query.state.data.pubKey === followPubKey;
         },
@@ -340,7 +338,7 @@ export function useUnfollow() {
   const queryClient = useQueryClient();
   return useMutation(unfollowPubKey => sdk.api.profile.unFollow(unfollowPubKey), {
     onMutate: async (unfollowPubKey: string) => {
-      await queryClient.cancelQueries([FOLLOWED_PROFILES_KEY]);
+      await queryClient.cancelQueries(FOLLOWED_PROFILES_KEY);
       // Snapshot the previous value
       const previousFollowedProfiles: string[] =
         (await queryClient.getQueryData([FOLLOWED_PROFILES_KEY])) || [];
@@ -374,7 +372,7 @@ export function useUnfollow() {
       // invalidate the queries of the profile if it's already fetched
       // eg. we are on his profile page
       const profileQuery = queryClient.getQueriesData<IProfileData>({
-        queryKey: [PROFILE_KEY],
+        queryKey: PROFILE_KEY,
         predicate: (query: Query<IProfileData>) => {
           return query.state.data && query.state.data.pubKey === unfollowPubKey;
         },

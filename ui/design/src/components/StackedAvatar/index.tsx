@@ -1,13 +1,14 @@
 import * as React from 'react';
 
+import { IProfileData } from '@akashaorg/typings/ui';
+
 import Avatar from '../Avatar';
 
 import { AvatarSize } from '../Avatar/styled-avatar';
 import { StyledStackBox, StyledContainer } from './styled-stacked-avatar';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IStackedAvatarProps {
-  userData: { ethAddress: string; avatar?: Profile['avatar'] }[];
+  userData: { ethAddress: string; avatar?: IProfileData['avatar'] }[];
   maxAvatars?: number;
   size?: AvatarSize;
 }
@@ -28,7 +29,7 @@ const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
             /** */
           }}
           ethAddress={data[level].ethAddress}
-          src={data[level].avatar.default.src}
+          src={data[level].avatar}
           size={size ? size : 'xs'}
           border="sm"
         />

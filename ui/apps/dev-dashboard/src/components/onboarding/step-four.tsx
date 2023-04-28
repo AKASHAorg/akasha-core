@@ -12,7 +12,7 @@ const { Box, Button, DevKeyCard } = DS;
 type ExtendableProps = BaseStepsProps & IDevKeyCardProps & IHeroImageCard;
 
 interface IStepFourProps extends ExtendableProps {
-  buttonLabel: string[];
+  buttonLabel: string;
   onButtonClick: () => void;
 }
 

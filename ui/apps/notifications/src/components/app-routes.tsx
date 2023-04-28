@@ -2,20 +2,42 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import CustomizeNotificationPage from './newComponents/CustomizeNotificationPage';
-import NotificationsPage from './newComponents/NotificationsPage';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import WelcomePage from './newComponents/WelcomePage';
+import CustomizeNotificationPage from './newComponents/CustomizeNotificationPage';
 
 import routes, {
   CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
   CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE,
   CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE,
-  SHOW_NOTIFICATIONS_PAGE,
-  SETTINGS_PAGE,
 } from '../routes';
 
 const AppRoutes = (props: RootComponentProps) => {
+  const { plugins } = props;
+
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
   const { t } = useTranslation('app-notifications');
+
+  const loginQuery = useGetLogin();
+
+  React.useEffect(() => {
+    // redirect to sign in page if not logged in
+    if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
+      navigateTo?.({
+        appName: '@akashaorg/app-auth-ewa',
+        getNavigationUrl: navRoutes => navRoutes.Connect,
+      });
+    }
+
+    // if logged in, navigate to step 1
+    if (loginQuery.data?.pubKey) {
+      return navigateTo?.({
+        appName: '@akashaorg/app-notifications',
+        getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Router basename={props.baseRouteName}>
@@ -36,7 +58,7 @@ const AppRoutes = (props: RootComponentProps) => {
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]}
-          element={<CustomizeNotificationPage {...props} initial={true} />}
+          element={<CustomizeNotificationPage {...props} />}
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]}
@@ -51,11 +73,6 @@ const AppRoutes = (props: RootComponentProps) => {
               {...props}
             />
           }
-        />
-        <Route path={routes[SHOW_NOTIFICATIONS_PAGE]} element={<NotificationsPage {...props} />} />
-        <Route
-          path={routes[SETTINGS_PAGE]}
-          element={<CustomizeNotificationPage {...props} initial={false} />}
         />
       </Routes>
     </Router>

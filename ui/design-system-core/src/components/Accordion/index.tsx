@@ -27,7 +27,7 @@ const Accordion: React.FC<IAccordionProps> = props => {
         {titleNode}
         <Icon
           accentColor={true}
-          customStyle="h-4, w-4 secondaryDark"
+          customStyle="h-4, w-4 text-secondaryDark"
           type={isToggled ? 'ChevronUpIcon' : 'ChevronDownIcon'}
         />
       </div>
