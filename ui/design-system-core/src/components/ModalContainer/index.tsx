@@ -18,9 +18,10 @@ const positionClass = apply(`top-0 left-0 bottom-0 right-0`);
 //     opacity: 1
 //   }
 // `;
+// ${fadeIn}
 
 const fadeInClass = css`
-  animation: 0.25s ${fadeIn} ease-out;
+  animation: 0.25s ease-out;
 `;
 const ModalContainer: React.FC<IModalContainerProps> = props => {
   const innerStyle = Object.assign({ zIndex: 10 }, props.innerStyle);
