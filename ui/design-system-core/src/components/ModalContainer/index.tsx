@@ -10,8 +10,9 @@ export interface IModalContainerProps {
 
 const ModalContainer: React.FC<IModalContainerProps> = props => {
   const innerStyle = Object.assign({ zIndex: 10 }, props.innerStyle);
+
   const positionClass = apply(`top-0 left-0 bottom-0 right-0`);
-  console.log('KEYFRAMES: ', keyframes);
+
   const fadeIn = keyframes`
   0% {
     opacity: 0

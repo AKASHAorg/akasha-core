@@ -16,7 +16,7 @@ module.exports = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['<rootDir>/sdk/', '!<rootDir>/node_modules/@twind/core'],
+  transformIgnorePatterns: ['<rootDir>/sdk/'],
   coverageReporters: ['text-summary'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   unmockedModulePathPatterns: ['lodash', 'core-js'],

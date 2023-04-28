@@ -227,7 +227,7 @@ const EntryRenderer = (
   }, [repliesReq.data]);
 
   const entryCardStyle = () => {
-    if (!isComment) return null;
+    if (!isComment) return '';
 
     if (props.replyFragmentItem) return;
     `ml-6 border-l-1 border(grey8 dark:grey3)`;
