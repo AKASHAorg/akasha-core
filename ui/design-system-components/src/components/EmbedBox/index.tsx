@@ -9,7 +9,12 @@ export interface IEmbedEntryBox {
 }
 
 const EmbedBox: React.FC<IEmbedEntryBox> = props => (
-  <div className={tw(`flex p-4 gap-4 rounded-xs bg(grey8 dark:grey1)`)} data-testid="embed-box">
+  <div
+    className={tw(
+      `flex flex-col justify-items-start p-4 gap-4 rounded-lg bg(grey8 dark:grey1) w-full`,
+    )}
+    data-testid="embed-box"
+  >
     <ProfileAvatarButton
       label={props.embedEntryData.author?.name}
       info={props.embedEntryData.author?.userName && `@${props.embedEntryData.author?.userName}`}

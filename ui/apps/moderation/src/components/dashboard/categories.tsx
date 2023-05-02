@@ -52,7 +52,7 @@ const EditCategories: React.FC<IEditCategoriesProps> = props => {
         <Pill
           label={allCategoriesLabel}
           clickable={true}
-          active={allCategoriesSelected}
+          secondaryBg={allCategoriesSelected}
           customStyle="mt-3 mr-3"
           onPillClick={handlePillClick({ label: allCategoriesLabel, value: allCategoriesLabel })}
         />
@@ -62,9 +62,10 @@ const EditCategories: React.FC<IEditCategoriesProps> = props => {
             key={label + idx}
             label={label}
             clickable={true}
-            active={categories.map(cat => cat?.value).includes(value)}
-            icon={categories.map(cat => cat?.value).includes(value) ? 'XMarkIcon' : undefined}
-            iconDirection="right"
+            secondaryBg={categories.map(cat => cat?.value).includes(value)}
+            trailingIcon={
+              categories.map(cat => cat?.value).includes(value) ? 'XMarkIcon' : undefined
+            }
             customStyle="mt-3 mr-3"
             onPillClick={handlePillClick({ label, value })}
           />

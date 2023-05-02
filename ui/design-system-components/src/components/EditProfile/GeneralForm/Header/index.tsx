@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import Avatar, { IAvatarProps } from '@akashaorg/design-system-core/lib/components/Avatar';
+import Avatar, {
+  AvatarSrc,
+  IAvatarProps,
+} from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -28,7 +31,7 @@ export type HeaderProps = {
   imageTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   deleteTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   confirmationLabel: { avatar: string; coverImage: string };
-  onAvatarChange: (avatar?: ImageSrc) => void;
+  onAvatarChange: (avatar?: AvatarSrc) => void;
   onCoverImageChange: (coverImage?: ImageSrc) => void;
 };
 

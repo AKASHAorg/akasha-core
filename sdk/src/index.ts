@@ -6,7 +6,7 @@
 import 'reflect-metadata';
 import 'systemjs-webpack-interop/auto-public-path';
 import * as typings from '@akashaorg/typings/sdk';
-import container /*, { importLazy }*/ from './container';
+import container, { importLazy } from './container';
 import type Logging from './logging';
 import type Settings from './settings';
 import type Gql from './gql';
@@ -109,7 +109,7 @@ export function init(): AWF_SDK {
   const icRegistry = container.get<AWF_IC_REGISTRY>(TYPES.ICRegistry);
   const misc = container.get<AWF_Misc>(TYPES.Misc);
   const fetchService = async () => {
-    // await importLazy();
+    await importLazy();
     const gqlNew = container.get<GqlNew>(TYPES.GqlNew);
     console.info('new gql client', gqlNew);
     return gqlNew;

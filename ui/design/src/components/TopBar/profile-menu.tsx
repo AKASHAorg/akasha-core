@@ -31,6 +31,7 @@ export interface IProfileMenu {
   onLegalClick: (menuItem: IMenuItem) => () => void;
   onLogout?: () => void;
   modalSlotId: string;
+  children?: React.ReactNode;
 }
 
 interface ISimilarMenu {

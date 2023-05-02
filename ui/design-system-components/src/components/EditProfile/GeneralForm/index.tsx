@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import { tw, apply } from '@twind/core';
 import { Header, HeaderProps } from './Header';
 import { useForm, Controller } from 'react-hook-form';
 import { useMedia } from 'react-use';
@@ -30,8 +29,6 @@ export type GeneralFormProps = {
   ensButton: ButtonType;
   cancelButton: ButtonType;
   saveButton: { label: string; handleClick: (formValues: GeneralFormValues) => void };
-  customStyle?: string;
-  onFormValid?: (valid: boolean) => void;
 };
 
 export const GeneralForm: React.FC<GeneralFormProps> = ({
@@ -43,8 +40,6 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
   ensButton,
   cancelButton,
   saveButton,
-  customStyle,
-  onFormValid,
 }) => {
   const {
     control,
@@ -59,16 +54,9 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
 
   const isLargeScreen = useMedia('(min-width: 640px)');
 
-  const validForm = !isDirty || !isValid;
-
-  useEffect(() => {
-    if (onFormValid) validForm;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validForm]);
-
   return (
-    <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
-      <Stack direction="column" spacing="gap-y-3.5" customStyle="h-full">
+    <form onSubmit={handleSubmit(onSave)}>
+      <Stack direction="column" spacing="gap-y-3.5">
         <Header
           {...header}
           onAvatarChange={avatar => setValue('avatar', avatar?.url || avatar?.fallbackUrl)}
@@ -176,7 +164,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           <Button
             variant="primary"
             label={saveButton.label}
-            disabled={validForm}
+            disabled={!isDirty || !isValid}
             onClick={handleSubmit(onSave)}
             type="submit"
           />

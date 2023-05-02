@@ -8,24 +8,16 @@ import { tw } from '@twind/core';
 
 type AutoCompleteProps = {
   options: string[];
-  placeholder?: InputProps['placeholder'];
-  disabled?: InputProps['disabled'];
-  value?: string;
   customStyle?: string;
-  onChange?: (value: string) => void;
-  onSelected?: (value: string) => void;
 };
 
-const AutoComplete: React.FC<AutoCompleteProps> = ({
+const AutoComplete: React.FC<AutoCompleteProps & InputProps> = ({
   options,
-  placeholder,
-  disabled,
   customStyle,
-  value,
-  onChange,
-  onSelected,
+  ...rest
 }) => {
   const [filters, setFilters] = useState([]);
+  const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const autoCompleteRef = useCloseActions(() => {
@@ -33,25 +25,16 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
   });
 
   useEffect(() => {
-    setFilters(
-      options.filter(option =>
-        value ? option.toLowerCase().startsWith(value.toLowerCase()) : true,
-      ),
-    );
-  }, [value, options]);
+    setFilters(options.filter(option => option.toLowerCase().startsWith(query.toLowerCase())));
+  }, [query, options]);
 
   const suggestions: Item[] = useMemo(
     () =>
       filters.map(filter => ({
         label: filter,
-        onClick: (label: string) => {
-          setShowSuggestions(false);
-          if (onChange) onChange(label);
-          if (onSelected) onSelected(label);
-        },
+        onClick: () => ({}),
         variant: 'subtitle2',
       })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [filters],
   );
 
@@ -64,20 +47,18 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
       ref={autoCompleteRef}
     >
       <TextField
-        type="text"
-        placeholder={placeholder}
+        {...rest}
         iconRight="MagnifyingGlassIcon"
-        value={value}
+        value={query}
         onChange={event => {
+          setQuery(event.target.value);
           setShowSuggestions(true);
-          if (onChange) onChange(event.target.value);
         }}
         onFocus={() => {
           setShowSuggestions(true);
         }}
         customStyle="rounded-3xl"
         radius={100}
-        disabled={disabled}
       />
       {showSuggestions && suggestions.length > 0 && (
         <div className={tw('relative')}>

@@ -2,8 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { i18n } from 'i18next';
 
-import DS, { BoxExtendedProps } from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import EntryCardHidden from '@akashaorg/design-system-components/lib/components/Entry/EntryCardHidden';
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+
+import ExtensionPoint from '@akashaorg/design-system-components/lib/utils/extension-point';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import { ILogger } from '@akashaorg/typings/sdk/log';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
@@ -18,19 +23,9 @@ import {
   ModalNavigationOptions,
   IProfileData,
 } from '@akashaorg/typings/ui';
-import {
-  usePost,
-  useComment,
-  mapEntry,
-  useFollow,
-  useIsFollowingMultiple,
-  useUnfollow,
-  LoginState,
-} from '@akashaorg/ui-awf-hooks';
+import { usePost, useComment, mapEntry, LoginState } from '@akashaorg/ui-awf-hooks';
 
 import FeedWidget from './App';
-
-const { Box, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 
 export interface IEntryRenderer {
   itemId?: string;
@@ -82,33 +77,19 @@ const EntryRenderer = (
     onFlag,
     onEntryNavigate,
     navigateTo,
-    sharePostUrl,
     onRepost,
     contentClickable,
     parentIsProfilePage,
-    modalSlotId,
     accentBorderTop,
     itemSpacing,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
-  const followProfileQuery = useFollow();
-  const unfollowProfileQuery = useUnfollow();
 
   const { t } = useTranslation('ui-lib-feed');
 
   const postReq = usePost({ postId: itemId, enabler: itemType === EntityTypes.POST });
   const commentReq = useComment(itemId, itemType === EntityTypes.REPLY);
-  const authorPubKey = React.useMemo(() => {
-    if (itemType === EntityTypes.REPLY && commentReq.status === 'success') {
-      return commentReq.data.author.pubKey;
-    }
-    if (itemType === EntityTypes.POST && postReq.status === 'success') {
-      return postReq.data.author.pubKey;
-    }
-  }, [itemType, commentReq, postReq]);
-
-  const followedProfilesReq = useIsFollowingMultiple(loginState.pubKey, [authorPubKey]);
 
   const postData = React.useMemo(() => {
     if (postReq.data && itemType === EntityTypes.POST) {
@@ -123,12 +104,6 @@ const EntryRenderer = (
     }
     return undefined;
   }, [commentReq.data, itemType]);
-
-  const isFollowing = React.useMemo(() => {
-    return (
-      followedProfilesReq.status === 'success' && followedProfilesReq.data.includes(authorPubKey)
-    );
-  }, [authorPubKey, followedProfilesReq.data, followedProfilesReq.status]);
 
   const itemData = React.useMemo(() => {
     if (itemType === EntityTypes.POST) {
@@ -145,18 +120,6 @@ const EntryRenderer = (
     const reqSuccess = postReq.isSuccess || commentReq.isSuccess;
     return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
   }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
-
-  const handleFollow = React.useCallback(() => {
-    if (authorPubKey) {
-      followProfileQuery.mutate(authorPubKey);
-    }
-  }, [followProfileQuery, authorPubKey]);
-
-  const handleUnfollow = React.useCallback(() => {
-    if (authorPubKey) {
-      unfollowProfileQuery.mutate(authorPubKey);
-    }
-  }, [unfollowProfileQuery, authorPubKey]);
 
   const handleAvatarClick = () => {
     navigateTo?.({
@@ -263,27 +226,25 @@ const EntryRenderer = (
     return [];
   }, [repliesReq.data]);
 
-  const entryCardStyle = (): BoxExtendedProps => {
-    if (!isComment) return null;
+  const entryCardStyle = () => {
+    if (!isComment) return '';
 
-    if (props.replyFragmentItem)
-      return {
-        margin: { left: '1.5rem' },
-        border: { color: 'replyFragmentBorder', size: '1px', side: 'left' },
-      };
+    if (props.replyFragmentItem) return;
+    `ml-6 border-l-1 border(grey8 dark:grey3)`;
 
-    if (props.index !== props.totalEntry)
-      return {
-        border: { color: 'border', side: 'bottom' },
-      };
+    if (props.index !== props.totalEntry) return;
+    `border-b-1 border(grey8 dark:grey3)`;
   };
 
   const entryLoading = postReq.isLoading || commentReq.isLoading;
 
+  const hasItemSpacingStyle = React.useMemo(
+    () => itemSpacing && (entryLoading || canShowEntry),
+    [itemSpacing, entryLoading, canShowEntry],
+  );
+
   return (
-    <Box
-      margin={{ bottom: itemSpacing && (entryLoading || canShowEntry) ? `${itemSpacing}px` : null }}
-    >
+    <Box customStyle={hasItemSpacingStyle ? `mb-[${itemSpacing}px]` : ''}>
       {entryLoading && <EntryCardLoading />}
       {(postReq.isError || commentReq.isError) && (
         <ErrorLoader
@@ -307,21 +268,13 @@ const EntryRenderer = (
             />
           )}
           {canShowEntry && (
-            <Box {...entryCardStyle()}>
+            <Box customStyle={entryCardStyle()}>
               <EntryCard
                 className={props.className}
                 isRemoved={itemData.isRemoved}
                 entryData={itemData}
-                sharePostUrl={sharePostUrl}
-                sharePostLabel={t('Share Post')}
-                shareTextLabel={t('Share this post with your friends')}
                 onClickAvatar={handleAvatarClick}
-                repliesLabel={itemType === EntityTypes.POST ? '' : t('Replies')}
-                repostLabel={t('Repost')}
                 editedLabel={t('Last edited')}
-                repostWithCommentLabel={t('Repost with comment')}
-                shareLabel={t('Share')}
-                copyLinkLabel={t('Copy Link')}
                 flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
                 loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
                 locale={locale || 'en'}
@@ -336,9 +289,6 @@ const EntryRenderer = (
                 hideRepost={isComment}
                 onRepost={onRepost}
                 onEntryFlag={onFlag && onFlag(itemData.entryId, itemType)}
-                handleFollowAuthor={handleFollow}
-                handleUnfollowAuthor={handleUnfollow}
-                isFollowingAuthor={isFollowing}
                 onContentClick={handleContentClick}
                 onMentionClick={handleMentionClick}
                 onTagClick={handleTagClick}
@@ -353,8 +303,7 @@ const EntryRenderer = (
                 removedByAuthorLabel={props.removedByAuthorLabel}
                 disableReposting={itemData.isRemoved || isComment}
                 disableReporting={loginState.waitForAuth || loginState.isSigningIn}
-                modalSlotId={modalSlotId}
-                noBorder={isComment}
+                border={!isComment}
                 accentBorderTop={accentBorderTop}
                 actionsRightExt={
                   !isComment && (
@@ -378,10 +327,7 @@ const EntryRenderer = (
               />
 
               {props.showReplyFragment && (
-                <Box
-                  data-testid="reply-fragment"
-                  margin={{ bottom: replyPages.length ? 'xsmall' : null }}
-                >
+                <Box customStyle={replyPages.length ? `mb-1` : ''} data-testid="reply-fragment">
                   <FeedWidget
                     modalSlotId={props.modalSlotId}
                     logger={props.logger}
