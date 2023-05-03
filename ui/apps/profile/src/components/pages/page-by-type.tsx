@@ -1,18 +1,18 @@
 import React from 'react';
-import ProfileEngagementsPage from './profile-engagement';
-import EditProfilePage from './edit-profile';
+import ProfileStat from './profile-stat';
 import ProfilePage from './profile';
 import DS from '@akashaorg/design-system';
+import ProfileEdit from './profile-edit';
 import { IProfileData, RootComponentProps } from '@akashaorg/typings/ui';
 import { LoginState } from '@akashaorg/ui-awf-hooks';
-import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
-import { ProfileEngagementsLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementsLoading';
+import { ProfileLoading } from '@akashaorg/design-system-core/lib/components/ProfileCard';
+import { ProfileStatLoading } from '@akashaorg/design-system-core/lib/components/ProfileStatLists/placeholders/ProfileStatLoading';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const { EntryCardHidden, ProfileDelistedCard } = DS;
 
-export type PageType = 'engagement' | 'edit';
+export type PageType = 'stat' | 'edit';
 
 type PageByTypeProps = {
   profileData: IProfileData;
@@ -38,10 +38,8 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
   const tab = params.get('tab');
   const selectedStat = tab === 'followers' || tab === 'following' ? tab : 'followers';
 
-  const navigateTo = rest.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
   if (isLoading) {
-    if (pageType === 'engagement') return <ProfileEngagementsLoading />;
+    if (pageType === 'stat') return <ProfileStatLoading />;
     return <ProfileLoading />;
   }
 
@@ -74,9 +72,9 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
   }
 
   if (!profileData.delisted) {
-    if (pageType === 'engagement') {
+    if (pageType === 'stat') {
       return (
-        <ProfileEngagementsPage
+        <ProfileStat
           {...rest}
           selectedStat={selectedStat}
           loginState={loginState}
@@ -85,15 +83,8 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
       );
     }
 
-    if (pageType === 'edit') {
-      if (loginState.ethAddress !== profileData.ethAddress) {
-        navigateTo({
-          appName: '@akashaorg/app-profile',
-          getNavigationUrl: () => `/${pubKey}`,
-        });
-      }
-      return <EditProfilePage {...rest} loginState={loginState} profileData={profileData} />;
-    }
+    if (pageType === 'edit')
+      return <ProfileEdit {...rest} loginState={loginState} profileData={profileData} />;
 
     return (
       <ProfilePage {...rest} profileData={profileData} profileId={pubKey} loginState={loginState} />

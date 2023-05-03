@@ -24,7 +24,6 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     breakPointSize,
     customStyle = '',
     active,
-    hover = true,
     ...rest
   } = props;
 
@@ -48,15 +47,14 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         breakPointSize={breakPointSize}
         customStyle={customStyle}
         active={active}
-        hover={hover}
         ref={ref}
         {...rest}
       />
     );
   }
 
-  const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled, active, hover });
-  const textStyle = getTextClasses({ variant, loading, disabled, hover });
+  const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled, active });
+  const textStyle = getTextClasses({ variant, loading, disabled });
   const breakPointStyle = breakPointSize
     ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
     : '';

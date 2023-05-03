@@ -2,89 +2,71 @@ import React from 'react';
 import Icon from '../Icon';
 import Text from '../Text';
 import Button from '../Button';
-import Stack from '../Stack';
-import Card from '../Card';
-import { apply } from '@twind/core';
+import { tw, apply } from '@twind/core';
 import { getColorLight, getColorDark } from './getColor';
 import { Color } from '../types/common.types';
-import { IconType } from '@akashaorg/typings/ui';
 
-export type SnackBarType = 'alert' | 'caution' | 'success' | 'info';
+export type snackBarType = 'alert' | 'caution' | 'success' | 'info';
 
 export interface ISnackbar {
   title: string;
-  type?: SnackBarType;
-  iconType?: IconType;
-  description?: string;
+  description: string;
   actionButtonLabel?: string;
-  customStyle?: string;
+  type: snackBarType;
   handleButtonClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   handleDismiss?: (event: React.SyntheticEvent<Element, Event>) => void;
 }
 
 const Snackbar: React.FC<ISnackbar> = ({
   title,
-  type = 'info',
-  iconType = 'InformationCircleIcon',
   description,
+  type,
   //action button
   actionButtonLabel,
-  customStyle,
   handleButtonClick,
   handleDismiss,
 }) => {
   const colorLight = getColorLight(type);
   const colorDark = getColorDark(type);
 
-  const textColor: Color = { dark: 'white', light: 'black' };
+  const textcolor = { dark: 'white', light: 'black' } as Color;
+  const bgColor = 'bg-white dark:bg-grey1';
 
   const instanceStyle = apply`
-  px-5 py-4
-  border(l-8 ${colorLight}/30) dark:border-${colorDark}/30
+  flex items-start px-5 py-4 w-full md:w-[592px]
+  ${bgColor}
+  rounded-md
+  border(l-8 ${colorLight}) dark:border-${colorDark}
+  shadow-sm
   `;
-
   return (
-    <Card
-      elevation="1"
-      background={{ light: 'white', dark: 'grey1' }}
-      radius={8}
-      customStyle={`${instanceStyle} ${customStyle}`}
-    >
-      <Stack spacing="gap-x-3" fullWidth>
+    <div className={tw(instanceStyle)}>
+      <span className={tw('mr-2')}>
         <Icon
-          type={iconType}
-          color={{ light: colorLight, dark: colorDark }}
-          // customStyle={`fill-${colorLight} dark:fill-${colorDark}`}
-          size="lg"
-          solid={true}
+          type="InformationCircleIcon"
+          color="red"
+          customStyle={`w-6 h-6 fill-${colorLight} dark:fill-${colorDark} stroke-white dark:stroke-black`}
         />
-        <Stack direction="column">
-          <Text variant="button-md" color={textColor}>
-            {title}
-          </Text>
-          {description && (
-            <Text variant="body2" color={textColor}>
-              {description}
+      </span>
+      <div className={tw('w-11/12')}>
+        <Text variant="button-md" color={textcolor}>
+          {title}
+        </Text>
+        <Text variant="body2" color={textcolor}>
+          {description}
+        </Text>
+        {actionButtonLabel && (
+          <Button onClick={handleButtonClick} plain>
+            <Text variant="button-md" color={{ light: `${colorLight}`, dark: `${colorDark}` }}>
+              {actionButtonLabel}
             </Text>
-          )}
-          {actionButtonLabel && (
-            <Button onClick={handleButtonClick} plain>
-              <Text variant="button-md" color={{ light: `${colorLight}`, dark: `${colorDark}` }}>
-                {actionButtonLabel}
-              </Text>
-            </Button>
-          )}
-        </Stack>
-        <Button
-          onClick={handleDismiss}
-          customStyle="self-start	ml-auto"
-          data-testid="dismiss-button"
-          plain={true}
-        >
-          <Icon type="XMarkIcon" color="grey7" size="lg" />
-        </Button>
-      </Stack>
-    </Card>
+          </Button>
+        )}
+      </div>
+      <Button onClick={handleDismiss} customStyle="ml-2" plain={true} data-testid="dismiss-button">
+        <Icon type="XMarkIcon" color="grey7" customStyle="w-4 h-4" />
+      </Button>
+    </div>
   );
 };
 

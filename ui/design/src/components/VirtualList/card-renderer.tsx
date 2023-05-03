@@ -83,7 +83,7 @@ const CardRenderer = (props: IRenderItemProps) => {
   }, [itemRect, itemId, onItemUnmount, updateRef]);
 
   const shouldLoadData = itemRect && itemRect.canRender;
-
+  // TODO: fix typings
   return (
     <CardItemWrapper
       ref={cardWrapperRef}
@@ -93,12 +93,12 @@ const CardRenderer = (props: IRenderItemProps) => {
       }}
       opacity={itemRect ? 1 : 0.01}
     >
-      {beforeEntities.map((entityObj, idx) => {
+      {/* {beforeEntities.map((entityObj, idx) => {
         return entityObj.getComponent({
           key: `${itemId}-${idx}`,
           style: { marginBottom: itemSpacing },
         });
-      })}
+      })} */}
 
       {!shouldLoadData && <EntryLoadingPlaceholder height={averageItemHeight} />}
       {!itemData && <EntryLoadingPlaceholder height={averageItemHeight} />}
@@ -106,12 +106,12 @@ const CardRenderer = (props: IRenderItemProps) => {
         shouldLoadData &&
         React.cloneElement(itemCard, { itemId, itemData, key: itemId })}
 
-      {afterEntities.map((entityObj, idx) => {
+      {/* {afterEntities.map((entityObj, idx) => {
         return entityObj.getComponent({
           key: `${itemId}-${idx}`,
           style: { marginTop: itemSpacing },
         });
-      })}
+      })} */}
     </CardItemWrapper>
   );
 };

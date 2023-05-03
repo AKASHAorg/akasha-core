@@ -5,10 +5,9 @@ interface ITextClasses {
   variant: ButtonProps['variant'];
   loading: ButtonProps['loading'];
   disabled: ButtonProps['disabled'];
-  hover: ButtonProps['hover'];
 }
 
-export function getTextClasses({ variant, loading, disabled, hover }: ITextClasses) {
+export function getTextClasses({ variant, loading, disabled }: ITextClasses) {
   if (variant === 'text') {
     const textColorStyle = getColorClasses(
       {
@@ -18,7 +17,7 @@ export function getTextClasses({ variant, loading, disabled, hover }: ITextClass
       'text',
     );
     const hoverStyle =
-      !loading && !disabled && hover
+      !loading && !disabled
         ? getColorClasses(
             {
               light: 'secondaryDark',

@@ -1,8 +1,6 @@
 import React from 'react';
 
-import * as HeroIconsOutline from '@heroicons/react/24/outline';
-import * as HeroIconsSolid from '@heroicons/react/24/solid';
-
+import * as HeroIcons from '@heroicons/react/24/outline';
 import * as CustomIcons from './akasha-icons';
 import { APP_ICON_TO_HERO_ICON_MAP, IconType } from '@akashaorg/typings/ui';
 import { isAppIcon } from './isAppIcon';
@@ -12,14 +10,11 @@ type PassedIconProps = {
   type: IconType;
   testId: string;
   customStyle: string;
-  solid: boolean;
 };
 
-export const PassedIcon: React.FC<PassedIconProps> = ({ solid, type, customStyle, testId }) => {
+export const PassedIcon: React.FC<PassedIconProps> = ({ type, customStyle, testId }) => {
   let iconStyle = customStyle;
   let PassedIcon = null;
-
-  const HeroIcons = solid ? HeroIconsSolid : HeroIconsOutline;
 
   /* @TODO: change the following logic once the old design system is fully replaced */
   if (isAppIcon(type)) {

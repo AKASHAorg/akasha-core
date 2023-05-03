@@ -1,5 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from 'react-query';
 import { logError } from './utils/error-handler';
 
 const ENS_KEY = 'ens';

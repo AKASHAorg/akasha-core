@@ -7,6 +7,7 @@ export interface IPlaceholderProps {
   style?: React.CSSProperties;
   height?: number;
   animated?: boolean;
+  children?: React.ReactNode;
 }
 
 const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {

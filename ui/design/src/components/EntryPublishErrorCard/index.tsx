@@ -8,6 +8,7 @@ export interface PublishErrorCardProps {
   style?: React.CSSProperties;
   isCard?: boolean;
   message: string;
+  children?: React.ReactNode;
 }
 
 const MessageWrapper = styled(Box)`

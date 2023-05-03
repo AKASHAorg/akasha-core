@@ -511,12 +511,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               onTagClick={handleTagClick}
               contentClickable={true}
               locale={locale}
-              sharePostUrl={`${window.location.origin}/@akashaorg/app-akasha-integration/post/`}
               moderatedContentLabel={t('This content has been moderated')}
               ctaLabel={t('See it anyway')}
               uiEvents={props.uiEvents}
               navigateToModal={props.navigateToModal}
-              modalSlotId={props.layoutConfig.modalSlotId}
             />
           ))}
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
@@ -528,7 +526,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}
-              pubKey={loginState?.pubKey}
               onContentClick={handleEntryNavigation}
               navigateTo={navigateTo}
               onRepost={handleRepost}
@@ -537,12 +534,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               onTagClick={handleTagClick}
               contentClickable={true}
               locale={locale}
-              sharePostUrl={`${window.location.origin}/@akashaorg/app-akasha-integration/post/`}
               moderatedContentLabel={t('This content has been moderated')}
               ctaLabel={t('See it anyway')}
               uiEvents={props.uiEvents}
               navigateToModal={props.navigateToModal}
-              modalSlotId={props.layoutConfig.modalSlotId}
             />
           ))}
       </Box>

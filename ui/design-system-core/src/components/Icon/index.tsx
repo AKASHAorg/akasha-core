@@ -21,7 +21,6 @@ export interface IconProps {
   testId?: string;
   customStyle?: string;
   hoverColor?: Color;
-  solid?: boolean;
 }
 
 const fillOnlyIcons: IconType[] = ['akasha', 'discord', 'telegram', 'twitter', 'widget'];
@@ -39,7 +38,6 @@ const Icon: React.FC<IconProps> = props => {
     testId,
     customStyle = '',
     hoverColor,
-    solid = false,
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -51,7 +49,7 @@ const Icon: React.FC<IconProps> = props => {
       ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
       : `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
 
-  const isFillOnlyIcon = fillOnlyIcons.includes(type) || solid;
+  const isFillOnlyIcon = fillOnlyIcons.includes(type);
 
   const baseStyle = `select-none ${
     hover
@@ -85,7 +83,7 @@ const Icon: React.FC<IconProps> = props => {
 
   return (
     <Stack ref={ref}>
-      <PassedIcon customStyle={iconStyle} testId={testId} type={type} solid={solid} />
+      <PassedIcon customStyle={iconStyle} testId={testId} type={type} />
     </Stack>
   );
 };
