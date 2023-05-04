@@ -68,17 +68,19 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
         )}
 
         {codeOfConductLabel && (
-          <Button plain={true} onClick={onCodeOfConductClick}>
-            <Text
-              variant="subtitle2"
-              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-              weight="bold"
-              align="center"
-              customStyle="cursor-pointer"
-            >
-              {codeOfConductLabel}
-            </Text>
-          </Button>
+          <Box customStyle="flex justify-center">
+            <Button plain={true} onClick={onCodeOfConductClick}>
+              <Text
+                variant="subtitle2"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                weight="bold"
+                align="center"
+                customStyle="cursor-pointer"
+              >
+                {codeOfConductLabel}
+              </Text>
+            </Button>
+          </Box>
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
