@@ -56,9 +56,9 @@ ceramic.did = did
 //
 // await writeEncodedComposite(_1_beams, path.resolve(__dirname, '../build/1_beams.json'))
 
-const _2_models = await createComposite(ceramic, path.resolve(__dirname, '../models/2_models.graphql'))
-
-await writeEncodedComposite(_2_models, path.resolve(__dirname, '../build/2_models.json'))
+// const _2_models = await createComposite(ceramic, path.resolve(__dirname, '../models/2_models.graphql'))
+//
+// await writeEncodedComposite(_2_models, path.resolve(__dirname, '../build/2_models.json'))
 //
 // const _2_application = await createComposite(ceramic, path.resolve(__dirname, '../models/2_application.graphql'))
 //
@@ -76,6 +76,6 @@ await writeEncodedComposite(_2_models, path.resolve(__dirname, '../build/2_model
 //
 // await writeEncodedComposite(_4_beams, path.resolve(__dirname, '../build/4_beams.json'))
 
-const _5_beams = await createComposite(ceramic, path.resolve(__dirname, '../models/5_beams.graphql'))
-
-await writeEncodedComposite(_5_beams, path.resolve(__dirname, '../build/5_beams.json'))
+// const _5_beams = await createComposite(ceramic, path.resolve(__dirname, '../models/5_beams.graphql'))
+//
+// await writeEncodedComposite(_5_beams, path.resolve(__dirname, '../build/5_beams.json'))
