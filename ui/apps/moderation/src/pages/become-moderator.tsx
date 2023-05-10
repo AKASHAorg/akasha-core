@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import BecomeModeratorIntro from '../components/moderator/become-moderator/intro';
 import BMSelectReason from '../components/moderator/become-moderator/reason';
+import BMSelectCategory from '../components/moderator/become-moderator/select-category';
 import BMContactInfo from '../components/moderator/become-moderator/contact-info';
 import BMConfirmation from '../components/moderator/become-moderator/confirmation';
-import BMSelectCategory from '../components/moderator/become-moderator/select-category';
 
 import { HOME } from '../routes';
 import { reasons, preSelectedReasons } from '../utils/reasons';
@@ -21,7 +21,14 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
 
   const [activeStep, setActiveStep] = useState(0);
 
-  // const { t } = useTranslation('app-moderation-ewa');
+  const checks = [
+    'I have read and completely understood the code of conduct',
+    'I understand that if I violate the rules, I will be revoked as a moderator.',
+  ];
+
+  const [checkedState, setCheckedState] = React.useState(Array(checks.length).fill(false));
+
+  const { t } = useTranslation('app-moderation-ewa');
 
   const stepLabels = ['intro', 'select_categories', 'contact_info'];
 
@@ -46,6 +53,11 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
     /** do something */
   };
 
+  const handleCheckBoxClick = pos => () => {
+    const updatedCheckedState = checkedState.map((item, idx) => (idx === pos ? !item : item));
+    setCheckedState(updatedCheckedState);
+  };
+
   const handleCancelButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
@@ -67,12 +79,16 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
     <>
       {activeStep === 0 && (
         <BecomeModeratorIntro
-          titleLabel="Becoming a moderator"
-          subtitle1Label="Becoming a moderator means that you will be responsible to protect the community from harmful contents that violate our"
-          codeOfConductLabel="Code of Conduct"
-          subtitle2Label="Make sure that you have fully understood our values and our code of conduct before applying!"
-          cancelButtonLabel="Cancel"
-          confirmButtonLabel="Continue"
+          titleLabel={t('Becoming a moderator')}
+          subtitle1Label={t(
+            'Becoming a moderator means that you will be responsible to protect the community from harmful contents that violate our',
+          )}
+          codeOfConductLabel={t('Code of Conduct')}
+          subtitle2Label={t(
+            'Make sure that you have fully understood our values and our code of conduct before applying!',
+          )}
+          cancelButtonLabel={t('Cancel')}
+          confirmButtonLabel={t('Continue')}
           onCodeOfConductClick={handleCodeOfConductClick}
           onCancelButtonClick={handleCancelButtonClick}
           onConfirmButtonClick={handleConfirmButtonClick}
@@ -121,13 +137,12 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
           emailLabel="Email"
           emailPlaceholderLabel="example@example.com"
           fillFromProfileLabel="Fill info from profile"
-          checks={[
-            'I have read and completely understood the code of conduct',
-            'I understand that if I violate the rules, I will be revoked as a moderator.',
-          ]}
+          checks={checks}
+          checkedState={checkedState}
           cancelButtonLabel="Cancel"
           confirmButtonLabel="Submit"
           onFillFromProfileClick={handleFillFromProfileClick}
+          onCheckBoxClick={handleCheckBoxClick}
           onCancelButtonClick={handleCancelButtonClick}
           onConfirmButtonClick={handleConfirmButtonClick}
         />

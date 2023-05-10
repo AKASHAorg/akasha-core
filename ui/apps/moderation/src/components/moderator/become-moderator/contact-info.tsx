@@ -17,7 +17,9 @@ export interface IBMContactInfoProps extends ISteppedActionWrapperProps {
   emailPlaceholderLabel: string;
   fillFromProfileLabel: string;
   checks: string[];
+  checkedState: string[];
   onFillFromProfileClick: () => void;
+  onCheckBoxClick: (idx: number) => () => void;
 }
 
 const BMContactInfo: React.FC<IBMContactInfoProps> = props => {
@@ -29,7 +31,9 @@ const BMContactInfo: React.FC<IBMContactInfoProps> = props => {
     emailPlaceholderLabel,
     fillFromProfileLabel,
     checks,
+    checkedState,
     onFillFromProfileClick,
+    onCheckBoxClick,
   } = props;
 
   return (
@@ -61,7 +65,15 @@ const BMContactInfo: React.FC<IBMContactInfoProps> = props => {
       </Box>
 
       {checks.map((check, idx) => (
-        <Checkbox key={check + idx} id={`${idx}`} label={check} name={check} value={check} />
+        <Checkbox
+          key={check + idx}
+          id={`${idx}`}
+          label={check}
+          name={check}
+          value={check}
+          isSelected={!!checkedState[idx]}
+          handleChange={onCheckBoxClick(idx)}
+        />
       ))}
     </SteppedActionWrapper>
   );
