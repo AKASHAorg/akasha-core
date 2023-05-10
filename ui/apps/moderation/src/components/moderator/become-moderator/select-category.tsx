@@ -1,38 +1,26 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import CategoryPills, { ICategoryPillsProps } from '../../dashboard/category-pills';
-import PageButtons, { IPageButtonsProps } from '../../dashboard/page-buttons';
+import SteppedActionWrapper, { ISteppedActionWrapperProps } from './stepped-action-wrapper';
 
-export interface IBMSelectCategoryProps extends IPageButtonsProps {
+export interface IBMSelectCategoryProps extends ISteppedActionWrapperProps {
   titleLabel: string;
   subtitleLabel: string;
 }
 
 const BMSelectCategory: React.FC<IBMSelectCategoryProps & ICategoryPillsProps> = props => {
-  const { titleLabel, subtitleLabel } = props;
+  const { subtitleLabel } = props;
 
   return (
-    <BasicCardBox pad="p-4">
-      <Box customStyle="flex flex-col space-y-4">
-        <Text variant="h5" align="center">
-          {titleLabel}
-        </Text>
+    <SteppedActionWrapper {...props}>
+      <Text variant="footnotes2" weight="light">
+        {subtitleLabel}{' '}
+      </Text>
 
-        <Text variant="footnotes2" weight="light">
-          {subtitleLabel}{' '}
-        </Text>
-
-        <CategoryPills {...props} />
-
-        <Box customStyle="flex space-x-6 items-center justify-end">
-          <PageButtons {...props} />
-        </Box>
-      </Box>
-    </BasicCardBox>
+      <CategoryPills {...props} />
+    </SteppedActionWrapper>
   );
 };
 
