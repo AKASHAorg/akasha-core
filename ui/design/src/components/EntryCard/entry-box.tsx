@@ -337,7 +337,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             label={
               <StyledProfileAvatarButton
                 label={entryData.author?.name}
-                info={entryData.author?.userName && `@${entryData.author?.userName}`}
+                info={entryData.author?.name}
                 avatarImage={entryData.author?.avatar}
                 onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) => {
                   if (disableActions) {

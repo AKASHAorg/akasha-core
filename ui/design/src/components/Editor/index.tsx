@@ -12,7 +12,7 @@ import {
 import { withHistory } from 'slate-history';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 import Avatar from '../Avatar';
-import { IEntryData, IMetadata, IPublishData, IProfileData } from '@akashaorg/typings/ui';
+import { IEntryData, IMetadata, IPublishData } from '@akashaorg/typings/ui';
 import Icon from '../Icon';
 import EmojiPopover from '../EmojiPopover';
 import EmbedBox from '../EmbedBox';
@@ -32,6 +32,7 @@ import LinkPreview from './link-preview';
 import { ImageObject } from '../ImageGallery/image-grid-item';
 import ImageGallery from '../ImageGallery';
 import isUrl from 'is-url';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 const MAX_LENGTH = 280;
 
@@ -40,9 +41,9 @@ const MAX_LENGTH = 280;
  * @param editorState - the state of the editor is controlled from the parent component
  */
 export interface IEditorBox {
-  avatar?: IProfileData['avatar'];
+  avatar?: Profile['avatar'];
   showAvatar?: boolean;
-  ethAddress: string | null;
+  profileId: string | null;
   postLabel?: string;
   placeholderLabel?: string;
   emojiPlaceholderLabel?: string;
@@ -61,15 +62,7 @@ export interface IEditorBox {
   getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
-  mentions?: {
-    name?: string;
-    userName?: string;
-    pubKey: string;
-    avatar?: IProfileData['avatar'];
-    ethAddress: string;
-    description?: string;
-    coverImage?: IProfileData['coverImage'];
-  }[];
+  mentions?: Profile[];
   tags?: { name: string; totalPosts: number }[];
   uploadRequest?: (
     data: string | File,
@@ -93,7 +86,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     avatar,
     showAvatar = true,
     showDraft = false,
-    ethAddress,
+    profileId,
     postLabel,
     placeholderLabel,
     emojiPlaceholderLabel,
@@ -206,7 +199,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const handleInsertLink = (text: string) => {
     CustomEditor.insertLink(editor, { url: text.trim() });
     if (images.length === 0 && !uploading && typeof getLinkPreview === 'function') {
-      handleGetLinkPreview(text);
+      handleGetLinkPreview(text).catch(err => console.error(err));
     }
   };
 
@@ -243,8 +236,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       const domRange = ReactEditor.toDOMRange(editor, mentionTargetRange);
       const rect = domRange.getBoundingClientRect();
       if (el) {
-        el.style.top = `${rect.top + window.pageYOffset + 20}px`;
-        el.style.left = `${rect.left + window.pageXOffset}px`;
+        el.style.top = `${rect.top + window.scrollY + 20}px`;
+        el.style.left = `${rect.left + window.scrollX}px`;
       }
     }
     if (tagTargetRange && tags && tags.length > 0) {
@@ -252,8 +245,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       const domRange = ReactEditor.toDOMRange(editor, tagTargetRange);
       const rect = domRange.getBoundingClientRect();
       if (el) {
-        el.style.top = `${rect.top + window.pageYOffset + 20}px`;
-        el.style.left = `${rect.left + window.pageXOffset}px`;
+        el.style.top = `${rect.top + window.scrollY + 20}px`;
+        el.style.left = `${rect.left + window.scrollX}px`;
       }
     }
   }, [mentions, tags, editor, index, mentionTargetRange, tagTargetRange, editorState]);
@@ -292,7 +285,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       }
     })(initContent);
     const textContent: string = serializeToPlainText({ children: slateContent });
-    const data = { metadata, slateContent, textContent, author: ethAddress };
+    const data = { metadata, slateContent, textContent, author: profileId };
     CustomEditor.clearEditor(editor);
     ReactEditor.focus(editor);
     onPublish(data);
@@ -591,7 +584,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       >
         {showAvatar && (
           <Box flex={{ shrink: 0 }}>
-            <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
+            <Avatar avatar={avatar} profileId={profileId} margin={{ top: '0.5rem' }} />
           </Box>
         )}
         <Box width="100%" pad={{ horizontal: 'small' }} direction="row" justify="between">

@@ -5,21 +5,19 @@ import FilterCard from '../';
 import ProfileAvatarButton from '../../ProfileAvatarButton';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import userEvent from '@testing-library/user-event';
+import { userData } from '../../../utils/dummy-data';
 
 describe('<FilterCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const titleElement = (
     <ProfileAvatarButton
-      avatarImage={{
-        url: 'https://placebeard.it/360x360',
-        fallbackUrl: 'https://placebeard.it/360x360',
-      }}
+      avatarImage={userData[0].avatar}
       onClick={() => null}
       label="@ivacarter"
       info="ivacarter.akasha.eth"
       size="sm"
-      ethAddress={'0x000000'}
+      profileId={'0x000000'}
     />
   );
 

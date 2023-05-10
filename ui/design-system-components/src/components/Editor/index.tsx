@@ -68,15 +68,7 @@ export interface IEditorBox {
   getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
-  mentions?: {
-    name?: string;
-    userName?: string;
-    pubKey: string;
-    avatar?: Profile['avatar'];
-    ethAddress: string;
-    description?: string;
-    coverImage?: Profile['background'];
-  }[];
+  mentions?: Profile[];
   tags?: { name: string; totalPosts: number }[];
   uploadRequest?: (
     data: string | File,
@@ -586,7 +578,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       >
         {showAvatar && (
           <div className={tw(`flex shrink-0 pb-2`)}>
-            <Avatar src={avatar} ethAddress={ethAddress} />
+            <Avatar avatar={avatar} profileId={ethAddress} />
           </div>
         )}
         <div className={tw(`w-full px-2 flex flex-row justify-between`)}>
