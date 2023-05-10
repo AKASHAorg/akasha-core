@@ -43,7 +43,7 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
     <Card direction="row" elevation={'1'} radius={16} padding={8}>
       <div className={tw('flex(& col) justify-center align-center mb-32')}>
         <BasicCardBox
-          style="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
+          customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
           round="rounded-xl"
         />
         <Text variant={finalStep ? 'h5' : 'h6'} align="center">

@@ -12,7 +12,7 @@ export interface IPlaceholderProps {
 const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {
   const { height = 200, animated = false } = props;
   return (
-    <BasicCardBox pad={'p-4'} style={`min-h-[${height}]`}>
+    <BasicCardBox pad={'p-4'} customStyle={`min-h-[${height}]`}>
       <div className={tw(`flex flex-row`)}>
         <div className={tw(`flex flex-row items-center`)}>
           <TextLine title="avatar" width="40" height="40" round={'rounded-full'} />
