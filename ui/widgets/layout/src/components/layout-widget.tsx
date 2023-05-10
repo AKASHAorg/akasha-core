@@ -201,7 +201,7 @@ const Layout: React.FC<RootComponentProps> = props => {
             </div>
             <div id="scrollTopStop"></div>
             <div className={tw('pt-4')}>
-              {!isPlatformHealty && (
+              {!isPlatformHealthy && (
                 <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
                   <WarningIcon type="error" themeColor="secondary" />
                   <Box width="100%">
