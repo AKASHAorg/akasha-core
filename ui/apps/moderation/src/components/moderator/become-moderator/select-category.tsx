@@ -4,19 +4,15 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import CategoryPills from '../../dashboard/category-pills';
+import CategoryPills, { ICategoryPillsProps } from '../../dashboard/category-pills';
 import PageButtons, { IPageButtonsProps } from '../../dashboard/page-buttons';
-import { ModerationCategory } from '../../dashboard/categories';
 
 export interface IBMSelectCategoryProps extends IPageButtonsProps {
   titleLabel: string;
   subtitleLabel: string;
-  selectedCategories: ModerationCategory[];
-  moderationCategories: ModerationCategory[];
-  allCategoriesLabel: string;
 }
 
-const BMSelectCategory: React.FC<IBMSelectCategoryProps> = props => {
+const BMSelectCategory: React.FC<IBMSelectCategoryProps & ICategoryPillsProps> = props => {
   const { titleLabel, subtitleLabel } = props;
 
   return (

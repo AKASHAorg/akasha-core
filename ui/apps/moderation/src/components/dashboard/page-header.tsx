@@ -24,9 +24,7 @@ const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props => {
 
       <Divider />
 
-      <Box customStyle="p-4">
-        <>{children}</>
-      </Box>
+      <Box customStyle="p-4">{children}</Box>
 
       <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
         <PageButtons {...props} />
