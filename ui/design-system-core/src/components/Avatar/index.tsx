@@ -4,7 +4,8 @@ import { apply, tw } from '@twind/core';
 import AvatarImage from './AvatarImage';
 
 import { getAvatarFromSeed } from '../../utils/get-avatar-from-seed';
-import { ImageSrc } from '../types/common.types';
+
+export type AvatarSrc = { url?: string; fallbackUrl?: string };
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
@@ -17,7 +18,7 @@ export interface IAvatarProps {
   alt?: string;
   publicImgPath?: string;
   backgroundColor?: string;
-  src?: ImageSrc;
+  src?: AvatarSrc;
   size?: AvatarSize;
   border?: AvatarBorderSize;
   borderColor?: AvatarBorderColor;
@@ -94,12 +95,9 @@ const Avatar: React.FC<IAvatarProps> = props => {
 
   return (
     <div className={tw(containerStyle)} onClick={onClick}>
-      {src && (
-        <React.Suspense fallback={<></>}>
-          <AvatarImage url={src.url} alt={alt} fallbackUrl={avatarImageFallback} faded={faded} />
-        </React.Suspense>
-      )}
-
+      <React.Suspense fallback={<></>}>
+        <AvatarImage url={src?.url} alt={alt} fallbackUrl={avatarImageFallback} faded={faded} />
+      </React.Suspense>
       {active && <div className={tw(activeOverlayClass)}></div>}
     </div>
   );

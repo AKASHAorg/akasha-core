@@ -55,8 +55,6 @@
         "build": {
           "builder": "@nrwl/workspace:run-commands",
           "outputPath": "ui/build/design-system-components",
-          "tsConfig": "ui/design/tsconfig.json",
-          "webpackConfig": "ui/design/webpack.config.js",
           "options": {
             "commands": ["yarn run pack"],
             "cwd": "ui/design-system-components",
@@ -73,8 +71,6 @@
         "build": {
           "builder": "@nrwl/workspace:run-commands",
           "outputPath": "ui/build/design",
-          "tsConfig": "ui/design/tsconfig.json",
-          "webpackConfig": "ui/design/webpack.config.js",
           "options": {
             "commands": ["yarn run pack"],
             "cwd": "ui/design",

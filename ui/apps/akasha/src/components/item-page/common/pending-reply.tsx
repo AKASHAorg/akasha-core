@@ -1,58 +1,23 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
-
-import { IEntryData, IProfileData, IPublishData, RootComponentProps } from '@akashaorg/typings/ui';
-import {
-  createPendingEntry,
-  useFollow,
-  useMutationsListener,
-  useUnfollow,
-  useIsFollowingMultiple,
-} from '@akashaorg/ui-awf-hooks';
+import { IProfileData, IPublishData } from '@akashaorg/typings/ui';
+import { createPendingEntry, useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { REPLY } from '../../../routes';
 import { PUBLISH_PENDING_KEY } from '@akashaorg/ui-awf-hooks/lib/use-comments';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
-const { Box, EntryBox } = DS;
-
-type Props = {
+type PendingReplyProps = {
   postId: string;
   loggedProfileData: IProfileData;
-  layoutConfig: RootComponentProps['layoutConfig'];
   commentIds: string[];
-  entryData?: IEntryData;
 };
 
-export function PendingReply({
-  postId,
-  layoutConfig,
-  loggedProfileData,
-  commentIds,
-  entryData,
-}: Props) {
+export function PendingReply({ postId, loggedProfileData, commentIds }: PendingReplyProps) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutations: pendingReplyStates } = useMutationsListener<IPublishData & { postID: string }>(
-    [PUBLISH_PENDING_KEY],
+    PUBLISH_PENDING_KEY,
   );
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
-  const isFollowingMultipleReq = useIsFollowingMultiple(loggedProfileData?.pubKey, [
-    entryData?.author?.pubKey,
-  ]);
-  const followedProfiles = isFollowingMultipleReq.data;
-  const isFollowing = followedProfiles.includes(entryData?.author?.pubKey);
-
-  const handleFollow = () => {
-    if (entryData?.author?.pubKey) {
-      followReq.mutate(entryData?.author?.pubKey);
-    }
-  };
-
-  const handleUnfollow = () => {
-    if (entryData?.author?.pubKey) {
-      unfollowReq.mutate(entryData?.author?.pubKey);
-    }
-  };
 
   return (
     <>
@@ -65,35 +30,22 @@ export function PendingReply({
               !commentIds.includes(pendingReplyState.state.data.toString()))) &&
           pendingReplyState.state.variables.postID === postId && (
             <Box
-              pad={{ horizontal: 'medium' }}
-              border={{ side: 'bottom', size: '1px', color: 'border' }}
-              background="pendingEntryBackground"
+              customStyle={`px-4 border border(grey8 dark:grey3) bg-secondaryLight/30`}
               data-testid="pending-entry"
               key={pendingReplyState.mutationId}
             >
               <EntryBox
                 entryData={createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
-                sharePostLabel={t('Share Post')}
-                shareTextLabel={t('Share this post with your friends')}
-                repliesLabel={t('Replies')}
-                repostLabel={t('Reposts')}
-                repostWithCommentLabel={t('Repost with comment')}
-                shareLabel={t('Share')}
-                copyLinkLabel={t('Copy Link')}
                 flagAsLabel={t('Report Comment')}
                 loggedProfileEthAddress={loggedProfileData.ethAddress}
                 locale={'en'}
                 showMore={true}
                 profileAnchorLink={'/profile'}
                 repliesAnchorLink={routes[REPLY]}
-                handleFollowAuthor={handleFollow}
-                handleUnfollowAuthor={handleUnfollow}
-                isFollowingAuthor={isFollowing}
                 contentClickable={false}
                 hidePublishTime={true}
                 disableActions={true}
                 hideActionButtons={true}
-                modalSlotId={layoutConfig.modalSlotId}
               />
             </Box>
           ),

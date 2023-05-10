@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { IMenuItem } from '@akashaorg/typings/ui';
+import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ListSidebarApps from './list-sidebar-apps';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -20,7 +20,7 @@ export interface ISidebarProps {
   allMenuItems: IMenuItem[];
   activeApps?: string[];
   currentRoute?: string;
-  loggedProfileData?: Omit<Profile, 'followers' | 'did'> & { did: { id: string } };
+  loggedProfileData?: IProfileData;
   isLoggedIn: boolean;
   hasNewNotifs?: boolean;
   loadingUserInstalledApps: boolean;
@@ -39,7 +39,6 @@ export interface ISidebarProps {
   ctaButtonLabel: string;
   footerLabel: string;
   footerIcons: { name: ButtonProps['icon']; link: string }[];
-  onLoginClick?: () => void;
 }
 
 const Sidebar: React.FC<ISidebarProps> = props => {
@@ -60,7 +59,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
 
     onSidebarClose,
     onClickMenuItem,
-    onLoginClick,
   } = props;
 
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
@@ -112,13 +110,15 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   };
 
   return (
-    <Box customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)] bg(white dark:grey2) rounded-r-2xl xl:rounded-2xl">
-      <Box customStyle="flex flex-row p-4 border-b-1 border-grey8">
+    <BasicCardBox
+      style="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
+      round={'rounded-r-2xl xl:rounded-2xl'}
+      elevation="md"
+      pad="p-0"
+    >
+      <Box customStyle="flex flex-row p-4 border-b-1 border(grey9 dark:grey3)">
         <Box customStyle="w-fit h-fit mr-2">
-          <Avatar
-            ethAddress={loggedProfileData?.name}
-            src={loggedProfileData?.avatar?.default.src}
-          />
+          <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
         </Box>
         <Box customStyle="w-fit">
           <Text customStyle="font-bold">{title}</Text>
@@ -127,9 +127,10 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           </Text>
         </Box>
         <Box customStyle="w-fit h-fit ml-6 self-end">
-          <Button icon="BoltIcon" variant="primary" iconOnly={true} onClick={onLoginClick} />
+          <Button icon="BoltIcon" variant="primary" iconOnly={true} />
         </Box>
       </Box>
+
       {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
@@ -179,7 +180,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           ))}
         </Box>
       </Box>
-    </Box>
+    </BasicCardBox>
   );
 };
 

@@ -7,6 +7,7 @@ export interface IModalContainerProps {
   style?: React.CSSProperties;
   innerStyle?: React.CSSProperties;
   animation?: BoxProps['animation'];
+  children?: React.ReactNode;
 }
 const StyledModalWrapper = styled(Box)`
   position: fixed;

@@ -8,21 +8,28 @@ export interface IModalContainerProps {
   children?: React.ReactNode;
 }
 
-const positionClass = apply(`top-0 left-0 bottom-0 right-0`);
-
-const fadeIn = keyframes({
-  '0%': { opacity: 0 },
-  '100%': { opacity: 1 },
-});
-
-const fadeInClass = css`
-  animation: 0.25s ${fadeIn} ease-out;
-`;
 const ModalContainer: React.FC<IModalContainerProps> = props => {
   const innerStyle = Object.assign({ zIndex: 10 }, props.innerStyle);
+
+  const positionClass = apply(`top-0 left-0 bottom-0 right-0`);
+
+  const fadeIn = keyframes`
+  0% {
+    opacity: 0
+  }
+  100% {
+    opacity: 1
+  }
+`;
+
+  const fadeInClass = css`
+    animation: 0.25s ${fadeIn} ease-out;
+  `;
   return (
     <div
-      className={tw(`flex w-full items-center justify-items-center fixed ${positionClass}`)}
+      className={tw(
+        `flex w-full items-center justify-items-center justify-center fixed ${positionClass}`,
+      )}
       style={props.style}
     >
       <div

@@ -9,6 +9,7 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 export interface IImageOverlay {
   src: { url?: string; fallbackUrl?: string };
   closeModal: () => void;
+  children?: React.ReactNode;
 }
 
 const StyledPicture = styled.picture`

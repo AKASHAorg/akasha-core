@@ -34,6 +34,7 @@ export interface RootComponentProps {
   parseQueryString: (queryString: string) => QueryStringType;
   encodeAppName: (name: string) => string;
   decodeAppName: (name: string) => string;
+  children?: React.ReactNode;
 }
 
 export interface RootExtensionProps extends RootComponentProps {

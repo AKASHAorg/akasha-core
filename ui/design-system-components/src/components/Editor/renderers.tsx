@@ -57,7 +57,7 @@ const ImgElement = ({
         )}
         <picture className={tw(`flex`)}>
           <source srcSet={element.url} />
-          <img className={tw(`block max-w-full rounded-sm`)} src={element.fallbackUrl} />
+          <img className={tw(`block max-w-full rounded-lg`)} src={element.fallbackUrl} />
         </picture>
       </div>
       {children}
@@ -71,7 +71,7 @@ const MentionElement = (props: any) => {
   const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
   return (
     <span
-      className={tw(`cursor-pointer text-color-secondary`)}
+      className={tw(`cursor-pointer text-secondaryLight dark:text-secondaryDark`)}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
@@ -90,7 +90,7 @@ const MentionElement = (props: any) => {
 const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
   return (
     <span
-      className={tw(`cursor-pointer text-color-secondary`)}
+      className={tw(`cursor-pointer text-secondaryLight dark:text-secondaryDark`)}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
@@ -107,7 +107,7 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
 const LinkElement = ({ attributes, children, element, handleLinkClick }: any) => {
   return (
     <a
-      className={tw(`text-color-secondary no-underline`)}
+      className={tw(`text-secondaryLight dark:text-secondaryDark no-underline`)}
       {...attributes}
       contentEditable={false}
       href={element.url as string}
@@ -155,14 +155,18 @@ const renderElement = (
       return <LinkElement handleLinkClick={handleLinkClick} {...props} />;
 
     default:
-      return <p {...props.attributes}>{props.children}</p>;
+      return (
+        <p className={tw(`text-black dark:text-white`)} {...props.attributes}>
+          {props.children}
+        </p>
+      );
   }
 };
 
 const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   if (leaf.bold) {
     return (
-      <span {...attributes}>
+      <span className={tw(`text-black dark:text-white`)} {...attributes}>
         <strong>{children}</strong>
       </span>
     );
@@ -170,7 +174,7 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
 
   if (leaf.italic) {
     return (
-      <span {...attributes}>
+      <span className={tw(`text-black dark:text-white`)} {...attributes}>
         <em>{children}</em>
       </span>
     );
@@ -178,7 +182,7 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
 
   if (leaf.underlined) {
     return (
-      <span {...attributes}>
+      <span className={tw(`text-black dark:text-white`)} {...attributes}>
         <u>{children}</u>
       </span>
     );
@@ -186,7 +190,7 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
 
   if (leaf.code) {
     return (
-      <span {...attributes}>
+      <span className={tw(`text-black dark:text-white`)} {...attributes}>
         <code>{children}</code>
       </span>
     );
@@ -200,7 +204,11 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
     );
   }
 
-  return <span {...attributes}>{children}</span>;
+  return (
+    <span className={tw(`text-black dark:text-white`)} {...attributes}>
+      {children}
+    </span>
+  );
 };
 
 const renderLeaf = (props: RenderLeafProps) => <Leaf {...props} />;

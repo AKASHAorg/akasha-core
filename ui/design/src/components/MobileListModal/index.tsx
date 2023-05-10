@@ -19,6 +19,7 @@ export interface IMobileListModal {
   menuItems: IMenuItem[];
   headerMenuExt?: React.ReactElement;
   modalSlotId: string;
+  children?: React.ReactNode;
 }
 
 export interface IMenuItem {

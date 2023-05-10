@@ -1,6 +1,4 @@
 import * as React from 'react';
-import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
@@ -11,7 +9,7 @@ import {
   ProfileProviderProperties,
   ProfileProviders,
   EntityTypes,
-  EngagementType,
+  ProfileStatType,
 } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
@@ -24,20 +22,21 @@ import {
 
 // import ModeratorLabel from '../routes/moderator-label';
 import routes, { EDIT } from '../../routes';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   ProfileHeader,
   ProfileBio,
   ProfileLinks,
   ProfileStats,
-} from '@akashaorg/design-system-components/lib/components/Profile';
+} from '@akashaorg/design-system-core/lib/components/ProfileCard';
 
-export type ProfilePageProps = {
+export type ProfileProps = {
   profileId: string;
   profileData: IProfileData;
   loginState: LoginState;
 };
 
-const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
+const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
   const { profileData, loginState, profileId } = props;
 
   // undefined for logged user's profile page, use loginState?.pubKey instead
@@ -48,8 +47,6 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-profile');
-
-  const [showFeedback, setShowFeedback] = React.useState(false);
 
   const isFollowingReq = useIsFollowingMultiple(loginState.pubKey, [profileData.pubKey]);
   const followedProfiles = isFollowingReq.data;
@@ -105,10 +102,6 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
   const handleUnfollow = () => {
     if (profileData?.pubKey) {
       unfollowReq.mutate(profileData.pubKey);
-      setShowFeedback(true);
-      setTimeout(() => {
-        setShowFeedback(false);
-      }, 5000);
     }
   };
 
@@ -137,11 +130,10 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
     props.navigateToModal({ name: 'profile-share' });
   };
 
-  const onStatClick = (stat: EngagementType) => () => {
+  const onStatClick = (stat: ProfileStatType) => () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes =>
-        `/${pubKey ?? loginState?.pubKey}${routes.engagement}?tab=${stat}`,
+      getNavigationUrl: routes => `/${pubKey ?? loginState?.pubKey}${routes.stat}?tab=${stat}`,
     });
   };
 
@@ -175,7 +167,7 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
     <>
       <Stack direction="column" spacing="gap-y-4">
         {/*@TODO remove the following line when the profile app is done */}
-        {/* <Profile
+        {/* <ProfileCard
           handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
           handleShareClick={showShareModal}
@@ -232,7 +224,7 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
               </>
             )}
           </Box>
-        </Profile> */}
+        </ProfileCard> */}
         <ProfileHeader
           ethAddress={profileData.ethAddress}
           coverImage={profileData.coverImage}
@@ -297,19 +289,9 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
             copyLabel={t('Copy to clipboard')}
           />
         )}
-        {showFeedback && loginState.ethAddress === profileData.ethAddress && (
-          <Snackbar
-            title={t('You unfollowed {{userName}}', { userName: profileData.userName })}
-            iconType="CheckCircleIcon"
-            handleDismiss={() => {
-              setShowFeedback(false);
-            }}
-            customStyle="mb-4"
-          />
-        )}
       </Stack>
     </>
   );
 };
 
-export default ProfilePage;
+export default Profile;

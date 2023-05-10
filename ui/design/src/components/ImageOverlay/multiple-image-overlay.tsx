@@ -11,6 +11,7 @@ export interface IImageOverlay {
   clickedImg: ImageObject;
   images: ImageObject[];
   closeModal: () => void;
+  children?: React.ReactNode;
 }
 
 const StyledPicture = styled.picture`

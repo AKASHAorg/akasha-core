@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 
-export const ModalRenderer: React.FC<{ slotId?: string }> = props => {
+export const ModalRenderer: React.FC<{ slotId?: string; children?: React.ReactNode }> = props => {
   const { children, slotId } = props;
   if (!slotId) {
     return null;

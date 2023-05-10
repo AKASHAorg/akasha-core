@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { IProfileData } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
@@ -69,7 +69,7 @@ export function useToggleTagSubscription() {
   const queryClient = useQueryClient();
   return useMutation(tagName => sdk.api.profile.toggleTagSubscription(tagName), {
     onMutate: async (tagName: string) => {
-      await queryClient.cancelQueries([TAG_SUBSCRIPTIONS_KEY]);
+      await queryClient.cancelQueries(TAG_SUBSCRIPTIONS_KEY);
       const previousTagSubs: string[] = queryClient.getQueryData([TAG_SUBSCRIPTIONS_KEY]);
       let newTagsSubs = [];
 

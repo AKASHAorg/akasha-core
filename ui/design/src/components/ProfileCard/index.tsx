@@ -38,6 +38,7 @@ export interface IProfileCardProps {
   handleShareClick: () => void;
   handleUnfollow?: React.EventHandler<React.SyntheticEvent>;
   handleFollow?: React.EventHandler<React.SyntheticEvent>;
+  children?: React.ReactNode;
 }
 
 const EditButton = styled(TextIcon)`

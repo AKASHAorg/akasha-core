@@ -12,6 +12,8 @@ export interface UseGlobalLoginProps {
   onLogin: OnLoginSuccessHandler;
   onLogout: OnLogoutSuccessHandler;
   onError?: OnErrorHandler;
+  waitForAuth?: (data: boolean) => void;
+  onReady?: (data: { ethAddress: string; pubKey: string }) => void;
   onLoadFromCache?: (data: CurrentUser) => void;
 }
 
@@ -30,10 +32,12 @@ export interface UseGlobalLoginProps {
  * ```
  */
 const useGlobalLogin = (props: UseGlobalLoginProps): void => {
-  const { onError, onLogin, onLogout, onLoadFromCache } = props;
+  const { onError, onLogin, waitForAuth, onReady, onLogout, onLoadFromCache } = props;
   const onErrorHandler = React.useRef(onError);
   const onLoginHandler = React.useRef(onLogin);
+  const waitForAuthHandler = React.useRef(waitForAuth);
   const onLogoutHandler = React.useRef(onLogout);
+  const onReadyHandler = React.useRef(onReady);
   const onLoadFromCacheHandler = React.useRef(onLoadFromCache);
 
   const sdk = React.useRef(getSDK());
@@ -50,6 +54,38 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
         onLoginHandler.current(data as CurrentUser);
       },
       error: createErrorHandler('useGlobalLogin.login'),
+    });
+    return () => sub.unsubscribe();
+  }, []);
+
+  React.useEffect(() => {
+    const waitForAuthCall = sdk.current.api.globalChannel.pipe(
+      filter(payload => {
+        return payload.event === AUTH_EVENTS.WAIT_FOR_AUTH;
+      }),
+    );
+
+    const sub = waitForAuthCall.subscribe(payload => {
+      const { data } = payload;
+      if (waitForAuthHandler.current) {
+        waitForAuthHandler.current(!!data);
+      }
+    });
+    return () => sub.unsubscribe();
+  }, []);
+
+  React.useEffect(() => {
+    const readyCall = sdk.current.api.globalChannel.pipe(
+      filter(payload => {
+        return payload.event === AUTH_EVENTS.READY;
+      }),
+    );
+
+    const sub = readyCall.subscribe(payload => {
+      const { data } = payload;
+      if (onReadyHandler.current) {
+        onReadyHandler.current(data as { ethAddress: string; pubKey: string });
+      }
     });
     return () => sub.unsubscribe();
   }, []);
