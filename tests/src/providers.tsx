@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { TestThemeProvider } from '@akashaorg/design-system/src/test-utils/providers';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import i18n from 'i18next';
 
 const queryClient = new QueryClient();
@@ -20,7 +20,7 @@ const getI18nInstance = () => {
   return i18n;
 };
 
-const TranslationProvider: React.FC = ({ children }) => {
+const TranslationProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <React.Suspense fallback="loading">
       <div id="test-translation-provider">
@@ -30,8 +30,11 @@ const TranslationProvider: React.FC = ({ children }) => {
   );
 };
 
-const AllProviders: React.FC = ({ children }) => {
+const AllProviders: React.FC<{
+  children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+}> = ({ children }) => {
   return (
+    // @ts-ignore
     <QueryClientProvider client={queryClient}>
       <TranslationProvider>
         <TestThemeProvider>{children}</TestThemeProvider>

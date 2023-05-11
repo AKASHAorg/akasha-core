@@ -1,10 +1,8 @@
 import * as React from 'react';
-
 import Avatar from '../Avatar';
-
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 import { AvatarSize } from '../Avatar/styled-avatar';
 import { StyledStackBox, StyledContainer } from './styled-stacked-avatar';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IStackedAvatarProps {
   userData: Profile[];

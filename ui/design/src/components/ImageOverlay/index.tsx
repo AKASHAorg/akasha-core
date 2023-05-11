@@ -10,6 +10,7 @@ export interface IImageOverlay {
   src: string;
   alt?: string;
   closeModal: () => void;
+  children?: React.ReactNode;
 }
 
 const StyledPicture = styled.picture`

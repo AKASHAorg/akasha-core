@@ -8,7 +8,7 @@ import { apply, tw } from '@twind/core';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 
-const { Box, BasicCardBox, Icon, styled, Text, Extension } = DS;
+const { Box, BasicCardBox, Icon, styled, Text, Extension, ExtensionPoint } = DS;
 
 const WarningCard = styled(BasicCardBox)`
   background-color: ${props => props.theme.colors.warning};
@@ -42,11 +42,11 @@ const Layout: React.FC<RootComponentProps> = props => {
   const dismissedCardId = 'dismiss-the-merge-notification';
   const [dismissed, setDismissed] = useDismissedCard();
 
-  const isPlatformHealty = React.useMemo(() => {
+  const isPlatformHealthy = React.useMemo(() => {
     if (maintenanceReq.status === 'success') {
       return maintenanceReq.data.success;
     }
-    // defaults to healty.
+    // defaults to healthy.
     return true;
   }, [maintenanceReq.status, maintenanceReq.data]);
 
@@ -65,6 +65,27 @@ const Layout: React.FC<RootComponentProps> = props => {
   };
   const handleWidgetsHide = () => {
     setshowWidgets(false);
+  };
+
+  /**
+   * Handler for modal mount events
+   * This event is only triggered when `navigateToModal` fn is called
+   */
+  const handleModalNodeMount = React.useCallback(() => {
+    uiEvents.current.next({
+      event: EventTypes.ExtensionPointMount,
+      data: activeModal,
+    });
+  }, [activeModal]);
+
+  const handleModalNodeUnmount = (name: string) => {
+    if (!name) {
+      return;
+    }
+    uiEvents.current.next({
+      event: EventTypes.ExtensionPointUnmount,
+      data: { name },
+    });
   };
 
   const handleModal = React.useCallback(
@@ -155,7 +176,7 @@ const Layout: React.FC<RootComponentProps> = props => {
       `;
 
   return (
-    <div className={tw('bg-white dark:bg-black min-h-screen')}>
+    <div className={tw('bg(white dark:black) min-h-screen mx-4')}>
       <div className={tw('h-full w-full')} onClick={handleClickOutside}>
         <div className={tw(layoutStyle)}>
           <ScrollRestorer />
@@ -170,15 +191,17 @@ const Layout: React.FC<RootComponentProps> = props => {
               </div>
             </div>
           </div>
-          <div className={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
-            <div className="sticky top-0 z-50">
-              <div className="text() pt-4 bg-background dark:(bg-background-dark)">
+          <div
+            className={tw(apply(`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`))}
+          >
+            <div className={tw('sticky top-0 z-50')}>
+              <div className={tw('pt-4 bg(white dark:black)')}>
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
               </div>
             </div>
             <div id="scrollTopStop"></div>
-            <div className="pt-4">
-              {!isPlatformHealty && (
+            <div className={tw('pt-4')}>
+              {!isPlatformHealthy && (
                 <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
                   <WarningIcon type="error" themeColor="secondary" />
                   <Box width="100%">
@@ -221,7 +244,6 @@ const Layout: React.FC<RootComponentProps> = props => {
                   />
                 </WarningCard>
               )}
-              <Extension name="back-navigation" uiEvents={props.uiEvents} />
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </div>
           </div>
@@ -237,6 +259,19 @@ const Layout: React.FC<RootComponentProps> = props => {
             </div>
           </div>
         </div>
+        {activeModal && (
+          <ExtensionPoint
+            name={activeModal.name}
+            onMount={handleModalNodeMount}
+            onUnmount={handleModalNodeUnmount}
+            style={{ position: 'relative', zIndex: 9999 }}
+          />
+        )}
+        <Extension
+          name={props.layoutConfig.modalSlotId}
+          uiEvents={props.uiEvents}
+          style={{ position: 'relative', zIndex: 9999 }}
+        />
       </div>
     </div>
   );

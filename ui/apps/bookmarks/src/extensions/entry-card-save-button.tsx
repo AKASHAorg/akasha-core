@@ -1,7 +1,6 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import DS from '@akashaorg/design-system';
 import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/ui';
 import {
   useDeleteBookmark,
@@ -12,23 +11,9 @@ import {
   useAnalytics,
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
-import { I18nextProvider, useTranslation } from 'react-i18next';
-
-const { styled, TextIcon, Icon } = DS;
-
-const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
-  svg * {
-    ${props => {
-      if (props.isBookmarked) {
-        return `
-          fill: ${props.theme.colors.blue};
-          stroke: ${props.theme.colors.blue};
-        `;
-      }
-      return '';
-    }}
-  }
-`;
+import { I18nextProvider } from 'react-i18next';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const EntryCardSaveButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
@@ -37,8 +22,6 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
   const bookmarkCreate = useSaveBookmark();
   const bookmarkDelete = useDeleteBookmark();
   const [analyticsActions] = useAnalytics();
-
-  const { t } = useTranslation('app-bookmarks');
 
   const isBookmarked = React.useMemo(() => {
     return bookmarkReq.data?.some(
@@ -70,15 +53,15 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
   };
 
   return (
-    <BookmarkButton
-      label={extensionData.hideLabel ? '' : isBookmarked ? t('Saved') : t('Save')}
-      iconType="bookmark"
-      iconSize="sm"
-      fontSize="large"
-      onClick={handleEntryBookmark}
-      isBookmarked={isBookmarked}
-      clickable={true}
-    />
+    <Box customStyle={'flex items-center'}>
+      <button onClick={handleEntryBookmark}>
+        <Icon
+          type="BookmarkIcon"
+          accentColor={true}
+          customStyle={isBookmarked && `[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark`}
+        />
+      </button>
+    </Box>
   );
 };
 
@@ -100,7 +83,7 @@ const reactLifecycles = singleSpaReact({
 
     return (
       <ThemeWrapper {...props}>
-        <Icon type="error" size="sm" />
+        <Icon type="ExclamationCircleIcon" />
       </ThemeWrapper>
     );
   },

@@ -147,14 +147,15 @@ const LineChart: React.FC<ILineChart> = props => {
       {chart}
       {tooltipData && (
         <div ref={tooltipWrapperRef}>
-          <TooltipWithBounds
+          {/* TODO: fix typings */}
+          {/* <TooltipWithBounds
             key={Math.random()}
             top={tooltipTop}
             left={tooltipLeft}
             style={tooltipStyles}
           >
             {`${getY(tooltipData as IMentionData)} mentions`}
-          </TooltipWithBounds>
+          </TooltipWithBounds> */}
         </div>
       )}
     </div>

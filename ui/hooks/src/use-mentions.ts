@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { IProfileData } from '@akashaorg/typings/ui';
 import { buildProfileMediaLinks } from './utils/media-utils';

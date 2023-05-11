@@ -55,7 +55,7 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox noBorder={true} pad="0" elevation="md">
+    <BasicCardBox pad="0" elevation="md">
       <div className={tw('py-4 pl-4')}>
         <Text variant="button-md" weight="bold">
           {titleLabel}

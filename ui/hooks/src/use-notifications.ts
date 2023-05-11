@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
 import { IMessage } from '@akashaorg/typings/sdk';
@@ -69,7 +69,7 @@ export function useMarkAsRead() {
   return useMutation(messageId => sdk.api.auth.markMessageAsRead(messageId), {
     // When mutate is called:
     onMutate: async (messageId: string) => {
-      await queryClient.cancelQueries([NOTIFICATIONS_KEY]);
+      await queryClient.cancelQueries(NOTIFICATIONS_KEY);
 
       // Snapshot the previous value
       const previousNotifs: IMessage[] = queryClient.getQueryData([NOTIFICATIONS_KEY]);

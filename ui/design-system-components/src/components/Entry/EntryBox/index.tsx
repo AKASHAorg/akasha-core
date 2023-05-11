@@ -1,24 +1,24 @@
 import * as React from 'react';
-import { tw, tx } from '@twind/core';
+import { tw } from '@twind/core';
 import CardHeaderMenu from './card-header-menu';
 import CardActions from './card-actions';
 
-import { EntryCardHidden } from './entry-card-hidden';
+import EntryCardHidden from '../EntryCardHidden';
 
-import EmbedBox from '../EmbedBox';
-import ReadOnlyEditor from '../ReadOnlyEditor';
-import LinkPreview from '../LinkPreview';
+import EmbedBox from '../../EmbedBox';
+import ReadOnlyEditor from '../../ReadOnlyEditor';
+import LinkPreview from '../../LinkPreview';
 
-import { formatDate, formatRelativeTime, ILocale } from '../../utils/time';
+import { formatDate, formatRelativeTime, ILocale } from '../../../utils/time';
 import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
 
-import { EntryCardRemoved } from './entry-card-removed';
-import { EntryImageGallery } from '../ImageGallery/entry-image-gallery';
-import { ImageObject } from '../ImageGallery/image-grid-item';
-import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
-import { editorDefaultValue } from '../Editor/initialValue';
+import EntryCardRemoved from '../EntryCardRemoved';
+import { EntryImageGallery } from '../../ImageGallery/entry-image-gallery';
+import { ImageObject } from '../../ImageGallery/image-grid-item';
+import MultipleImageOverlay from '../../ImageOverlay/multiple-image-overlay';
+import { editorDefaultValue } from '../../Editor/initialValue';
 import isEqual from 'lodash.isequal';
-import { EntryCardError } from './entry-card-error';
+import EntryCardError from '../EntryCardError';
 
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -38,7 +38,6 @@ export interface IEntryBoxProps {
   locale: ILocale;
   loggedProfileEthAddress?: string | null;
   // labels
-  repliesLabel: string;
   flagAsLabel?: string;
   comment?: boolean;
   editedLabel?: string;
@@ -89,7 +88,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
     entryData,
     loggedProfileEthAddress,
-    repliesLabel,
     flagAsLabel,
     locale,
     profileAnchorLink,
@@ -128,7 +126,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
-  const akashaRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   const handleRepost = (withComment: boolean) => () => {
     if (onRepost) {
@@ -220,8 +217,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <>
-      <div className={tx(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
-        <div className={tw(`flex flex-row justify-between pt-4 px-4 shrink-0`)}>
+      <div className={tw(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
+        <div className={tw(`flex flex-row justify-between p-4 shrink-0`)}>
           <a
             className={tw(`flex min-w-0 no-underline`)}
             onClick={(e: React.SyntheticEvent) => {
@@ -247,6 +244,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={profileRef}
             />
           </a>
+
           <div className={tw(`flex flex-row gap-2 items-center shrink-0`)}>
             {entryData.time && !hidePublishTime && (
               <Tooltip placement={'top'} content={formatDate(entryData.time, locale)}>
@@ -263,7 +261,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 <Icon size="sm" type="PencilIcon" />
               </Tooltip>
             )}
-            <Icon type="akasha" size="sm" ref={akashaRef} />
             {entryData.type !== 'REMOVED' && (
               <CardHeaderMenu
                 disabled={disableActions}
@@ -303,7 +300,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {!props.isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
           <div
-            className={tx(
+            className={tw(
               `px-4 max-h-[50rem] ${scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'} ${
                 contentClickable ? 'cursor-pointer' : 'cursor-default'
               }`,
@@ -369,7 +366,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         {!hideActionButtons && (
           <CardActions
             entryData={entryData}
-            repliesLabel={repliesLabel}
             repliesAnchorLink={repliesAnchorLink}
             onRepost={handleRepost(false)}
             handleRepliesClick={handleRepliesClick}
@@ -386,4 +382,4 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   );
 };
 
-export { EntryBox };
+export default EntryBox;

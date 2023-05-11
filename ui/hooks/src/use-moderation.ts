@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
 import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
@@ -96,10 +96,10 @@ export function useModeration() {
       }
 
       // refetch queries
-      await queryClient.refetchQueries([PENDING_ITEMS_KEY]);
-      await queryClient.refetchQueries([KEPT_ITEMS_KEY]);
-      await queryClient.refetchQueries([DELISTED_ITEMS_KEY]);
-      await queryClient.refetchQueries([MODERATION_ITEMS_COUNT_KEY]);
+      await queryClient.refetchQueries(PENDING_ITEMS_KEY);
+      await queryClient.refetchQueries(KEPT_ITEMS_KEY);
+      await queryClient.refetchQueries(DELISTED_ITEMS_KEY);
+      await queryClient.refetchQueries(MODERATION_ITEMS_COUNT_KEY);
     },
     onError: (err: Error) => logError('[use-moderation.ts]: useModeration err', err),
   });
@@ -165,7 +165,7 @@ export function useReport() {
             reason: variables.dataToSign.reason,
             reported: true,
           }));
-          queryClient.setQueriesData<PostResultFragment>([ENTRY_KEY], oldData => {
+          queryClient.setQueriesData<PostResultFragment>(ENTRY_KEY, oldData => {
             if (oldData?.author?.pubKey === variables.contentId) {
               return {
                 ...oldData,
@@ -286,7 +286,7 @@ export function useGetFlags(entryId: string) {
  */
 export function useInfiniteLog(limit: number, offset?: string) {
   return useInfiniteQuery(
-    [LOG_ITEMS_KEY],
+    LOG_ITEMS_KEY,
     async ({ pageParam = offset }) =>
       getLogItems({
         limit,
@@ -325,7 +325,7 @@ export function useInfiniteLog(limit: number, offset?: string) {
  */
 export function useInfinitePending(limit: number, offset?: string) {
   return useInfiniteQuery(
-    [PENDING_ITEMS_KEY],
+    PENDING_ITEMS_KEY,
     async ({ pageParam = offset }) => getPendingItems({ limit, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
@@ -360,7 +360,7 @@ export function useInfinitePending(limit: number, offset?: string) {
  */
 export function useInfiniteKept(limit: number, offset?: string) {
   return useInfiniteQuery(
-    [KEPT_ITEMS_KEY],
+    KEPT_ITEMS_KEY,
     async ({ pageParam = offset }) =>
       getModeratedItems({
         limit,
@@ -400,7 +400,7 @@ export function useInfiniteKept(limit: number, offset?: string) {
  */
 export function useInfiniteDelisted(limit: number, offset?: string) {
   return useInfiniteQuery(
-    [DELISTED_ITEMS_KEY],
+    DELISTED_ITEMS_KEY,
     async ({ pageParam = offset }) =>
       getModeratedItems({
         limit,

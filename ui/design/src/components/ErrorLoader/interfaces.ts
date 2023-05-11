@@ -28,4 +28,5 @@ export interface ErrorLoaderProps {
   devDetails?: string | React.ReactNode;
   style?: React.CSSProperties;
   noBorder?: boolean;
+  children?: React.ReactNode;
 }

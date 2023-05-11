@@ -24,7 +24,7 @@ export function ReplyError({ postId, pubKey, onChange }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutation: publishCommentMutation, clear } = useMutationListener<
     IPublishData & { postID: string }
-  >([PUBLISH_PENDING_KEY]);
+  >(PUBLISH_PENDING_KEY);
 
   const profileDataReq = useGetProfile(pubKey);
   const loggedProfileData = profileDataReq.data;

@@ -29,4 +29,4 @@ const EntryCardError: React.FC<IEntryCardError> = props => {
   );
 };
 
-export { EntryCardError };
+export default EntryCardError;

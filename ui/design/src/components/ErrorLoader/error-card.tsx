@@ -12,6 +12,7 @@ interface ErrorRendererProps {
   theme: any;
   className: string;
   style: React.CSSProperties;
+  children?: React.ReactNode;
 }
 
 const ErrorRenderer: React.FC<ErrorRendererProps> = props => {

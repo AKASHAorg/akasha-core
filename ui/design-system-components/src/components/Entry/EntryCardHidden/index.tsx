@@ -90,4 +90,4 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
   );
 };
 
-export { EntryCardHidden };
+export default EntryCardHidden;

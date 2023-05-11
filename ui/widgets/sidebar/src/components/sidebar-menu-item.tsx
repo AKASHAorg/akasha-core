@@ -9,11 +9,11 @@ const { Box, SidebarMenuItem } = DS;
 
 type MenuItemPassedProps = {
   plugins?: RootComponentProps['plugins'];
-  profileId?: string;
+  loginState?: LoginState;
 };
 
 export const MenuItem: React.FC<SidebarMenuItemProps & MenuItemPassedProps> = props => {
-  const { menuItem, profileId } = props;
+  const { menuItem, loginState } = props;
 
   const [notificationsCount, setNotificationsCount] = React.useState(0);
 
@@ -24,7 +24,7 @@ export const MenuItem: React.FC<SidebarMenuItemProps & MenuItemPassedProps> = pr
       notifSub = props.plugins['@akashaorg/app-notifications'].notification.listen(menuItem.name, {
         next: (messages?: IMessage[]) => {
           if (messages) {
-            const fromOthers = messages.filter(msg => msg.from !== profileId);
+            const fromOthers = messages.filter(msg => msg.from !== loginState.pubKey);
             setNotificationsCount(fromOthers.length);
           }
         },
@@ -36,7 +36,7 @@ export const MenuItem: React.FC<SidebarMenuItemProps & MenuItemPassedProps> = pr
         notifSub.unsubscribe();
       }
     };
-  }, [props.plugins, menuItem, profileId]);
+  }, [props.plugins, menuItem, loginState]);
 
   return (
     <Box flex={true} direction="row">

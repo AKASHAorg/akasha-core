@@ -49,7 +49,8 @@ export type GlobalEventBusData = {
 export const CurrentUserSchema = z.object({
   id: z.string(),
   ethAddress: EthAddressSchema.optional(),
-  pubKey: PubKeySchema,
+  isNewUser: z.boolean().optional(),
+  pubKey: z.string().optional(),
 });
 
 export type CurrentUser = z.infer<typeof CurrentUserSchema>;
