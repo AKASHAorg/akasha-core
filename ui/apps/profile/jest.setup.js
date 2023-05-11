@@ -31,3 +31,11 @@ jest.mock('@akashaorg/typings/ui', () => ({
     ThemeChange: 'theme-change',
   },
 }));
+
+jest.mock('@twind/core', () => {
+  return {
+    tw: () => ({}),
+    apply: () => ({}),
+    keyframes: () => ({}),
+  };
+});

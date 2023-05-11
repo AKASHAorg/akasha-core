@@ -1,4 +1,4 @@
-import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { IProfileData, ProfileProviderProperties, ProfileProviders } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
@@ -107,7 +107,7 @@ export function useUpdateUsernameProvider(pubKey?: string) {
         }
         logError('useUsername.useUpdateUsernameProvider.onError', error);
       },
-      mutationKey: [UPDATE_USERNAME_PROVIDER_KEY],
+      mutationKey: UPDATE_USERNAME_PROVIDER_KEY,
     },
   );
 }
@@ -159,7 +159,7 @@ const registerENS = async ({ userName }: { userName: string }) => {
 export function useEnsRegistration(pubKey?: string) {
   const queryClient = useQueryClient();
   return useMutation(registerENS, {
-    mutationKey: [REGISTER_ENS_KEY],
+    mutationKey: REGISTER_ENS_KEY,
     onMutate: ({ userName }: { userName: string }) => {
       // optimistic update only if pubKey is provided
       const providerData = {

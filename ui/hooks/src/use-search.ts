@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from 'react-query';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { checkStatus } from './use-moderation';
@@ -95,7 +95,7 @@ const getSearchPosts = async (
     }),
   );
 
-  const entriesResp = await Promise.all(getEntriesCalls);
+  const entriesResp = await lastValueFrom(forkJoin(getEntriesCalls), { defaultValue: [] });
 
   const entriesModResp = await lastValueFrom(forkJoin(getEntriesModStatus), { defaultValue: [] });
 
@@ -157,7 +157,7 @@ const getSearchComments = async (
     }),
   );
 
-  const commentsResp = await Promise.all(getCommentsCalls);
+  const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls), { defaultValue: [] });
 
   const commentsModResp = await lastValueFrom(forkJoin(getCommentsModStatus), {
     defaultValue: [],
@@ -244,7 +244,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
     }),
   );
 
-  const profilesResp = await Promise.all(getProfilesCalls);
+  const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls), { defaultValue: [] });
 
   const profilesModResp = await lastValueFrom(forkJoin(getProfilesModStatus), {
     defaultValue: [],
@@ -270,7 +270,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
     }),
   );
 
-  const entriesResp = await Promise.all(getEntriesCalls);
+  const entriesResp = await lastValueFrom(forkJoin(getEntriesCalls), { defaultValue: [] });
 
   const entriesModResp = await lastValueFrom(forkJoin(getEntriesModStatus), { defaultValue: [] });
 
@@ -291,7 +291,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
     }),
   );
 
-  const commentsResp = await Promise.all(getCommentsCalls);
+  const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls), { defaultValue: [] });
 
   const commentsModResp = await lastValueFrom(forkJoin(getCommentsModStatus), {
     defaultValue: [],

@@ -38,7 +38,7 @@ const ProfileAvatarButton = React.forwardRef(
     const textStyle = 'text(lg:base md:xs) max-w([7rem] xs:[2rem])';
 
     return (
-      <div className={tw(`inline-flex items-center justify-center ${customStyle}`)}>
+      <div className={tw(`inline-flex items-center ${customStyle}`)}>
         <div className={tw('shrink-0')}>
           <Avatar size={size} avatar={avatarImage} profileId={profileId} onClick={onClickAvatar} />
         </div>

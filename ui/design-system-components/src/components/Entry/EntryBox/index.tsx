@@ -1,34 +1,34 @@
 import * as React from 'react';
-import { tw, tx } from '@twind/core';
+import { tw } from '@twind/core';
 import CardHeaderMenu from './card-header-menu';
 import CardActions from './card-actions';
 
-import { EntryCardHidden } from './entry-card-hidden';
+import EntryCardHidden from '../EntryCardHidden';
 
-import EmbedBox from '../EmbedBox';
-import ReadOnlyEditor from '../ReadOnlyEditor';
-import LinkPreview from '../LinkPreview';
+import EmbedBox from '../../EmbedBox';
+import ReadOnlyEditor from '../../ReadOnlyEditor';
+import LinkPreview from '../../LinkPreview';
 
-import { formatDate, formatRelativeTime, ILocale } from '../../utils/time';
+import { formatDate, formatRelativeTime, ILocale } from '../../../utils/time';
 import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
 
-import { EntryCardRemoved } from './entry-card-removed';
-import { EntryImageGallery } from '../ImageGallery/entry-image-gallery';
-import { ImageObject } from '../ImageGallery/image-grid-item';
-import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
-import { editorDefaultValue } from '../Editor/initialValue';
+import EntryCardRemoved from '../EntryCardRemoved';
+import { EntryImageGallery } from '../../ImageGallery/entry-image-gallery';
+import { ImageObject } from '../../ImageGallery/image-grid-item';
+import MultipleImageOverlay from '../../ImageOverlay/multiple-image-overlay';
+import { editorDefaultValue } from '../../Editor/initialValue';
 import isEqual from 'lodash.isequal';
-import { EntryCardError } from './entry-card-error';
+import EntryCardError from '../EntryCardError';
 
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
 export interface IContentClickDetails {
-  authorEthAddress: string;
+  authorId: string;
   id: string;
   replyTo?: {
-    authorEthAddress?: string;
+    authorId?: string;
     itemId?: string;
   };
 }
@@ -36,9 +36,7 @@ export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
   locale: ILocale;
-  loggedProfileEthAddress?: string | null;
   // labels
-  repliesLabel: string;
   flagAsLabel?: string;
   comment?: boolean;
   editedLabel?: string;
@@ -88,8 +86,6 @@ export interface IEntryBoxProps {
 const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
     entryData,
-    loggedProfileEthAddress,
-    repliesLabel,
     flagAsLabel,
     locale,
     profileAnchorLink,
@@ -128,7 +124,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
-  const akashaRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   const handleRepost = (withComment: boolean) => () => {
     if (onRepost) {
@@ -159,7 +154,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       const itemType = replyTo ? EntityTypes.REPLY : EntityTypes.POST;
       onContentClick(
         {
-          authorEthAddress: data.author.ethAddress,
+          authorId: data.author.did.id,
           id: data.entryId,
           replyTo,
         },
@@ -220,20 +215,21 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <>
-      <div className={tx(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
-        <div className={tw(`flex flex-row justify-between pt-4 px-4 shrink-0`)}>
+      <div className={tw(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
+        <div className={tw(`flex flex-row justify-between p-4 shrink-0`)}>
           <a
             className={tw(`flex min-w-0 no-underline`)}
             onClick={(e: React.SyntheticEvent) => {
               e.preventDefault();
               return false;
             }}
-            href={`${profileAnchorLink}/${entryData.author.pubKey}`}
+            href={`${profileAnchorLink}/${entryData.author.id}`}
           >
             <ProfileAvatarButton
               customStyle={'grow shrink'}
+              profileId={entryData.author?.id}
               label={entryData.author?.name}
-              info={entryData.author?.userName && `@${entryData.author?.userName}`}
+              info={entryData.author?.id && `@${entryData.author?.id}`}
               avatarImage={entryData.author?.avatar}
               onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
                 if (disableActions) {
@@ -243,10 +239,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                   onClickAvatar(ev);
                 }
               }}
-              ethAddress={entryData.author?.ethAddress}
               ref={profileRef}
             />
           </a>
+
           <div className={tw(`flex flex-row gap-2 items-center shrink-0`)}>
             {entryData.time && !hidePublishTime && (
               <Tooltip placement={'top'} content={formatDate(entryData.time, locale)}>
@@ -263,12 +259,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 <Icon size="sm" type="PencilIcon" />
               </Tooltip>
             )}
-            <Icon type="akasha" size="sm" ref={akashaRef} />
             {entryData.type !== 'REMOVED' && (
               <CardHeaderMenu
                 disabled={disableActions}
                 menuItems={[
-                  ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
+                  ...(onEntryFlag && !entryData.author.did.isViewer
                     ? [
                         {
                           icon: 'FlagIcon',
@@ -278,7 +273,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                         },
                       ]
                     : []),
-                  ...(entryData.author.ethAddress === loggedProfileEthAddress
+                  ...(entryData.author.did.isViewer
                     ? [
                         {
                           icon: 'TrashIcon',
@@ -296,14 +291,14 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
         {props.isRemoved && (
           <EntryCardRemoved
-            isAuthor={entryData.author.ethAddress === props.loggedProfileEthAddress}
+            isAuthor={entryData.author.did.isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />
         )}
         {!props.isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
           <div
-            className={tx(
+            className={tw(
               `px-4 max-h-[50rem] ${scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'} ${
                 contentClickable ? 'cursor-pointer' : 'cursor-default'
               }`,
@@ -345,7 +340,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {showRemovedQuote && (
           <EntryCardRemoved
-            isAuthor={entryData.author.ethAddress === props.loggedProfileEthAddress}
+            isAuthor={entryData.author.did.isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />
@@ -369,7 +364,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         {!hideActionButtons && (
           <CardActions
             entryData={entryData}
-            repliesLabel={repliesLabel}
             repliesAnchorLink={repliesAnchorLink}
             onRepost={handleRepost(false)}
             handleRepliesClick={handleRepliesClick}
@@ -386,4 +380,4 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   );
 };
 
-export { EntryBox };
+export default EntryBox;

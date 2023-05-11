@@ -24,8 +24,9 @@ export type LinkElement = { type: 'link'; url: string; children: EmptyText[] };
 
 export type MentionElement = {
   type: 'mention';
-  children?: EmptyText[];
   name?: string;
+  id?: string;
+  children?: EmptyText[];
   did: Profile['did'];
 };
 

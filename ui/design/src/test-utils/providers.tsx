@@ -4,7 +4,7 @@ import { ThemeSelector } from '../styles/themes/utils/theme-selector';
 import { createTheme } from '../styles/themes/utils/create-theme';
 // const { ThemeSelector, createTheme } = DS;
 
-const TestThemeProvider: React.FC = ({ children }) => {
+const TestThemeProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const themeData = createTheme();
   return (
     <React.Suspense fallback="loading">

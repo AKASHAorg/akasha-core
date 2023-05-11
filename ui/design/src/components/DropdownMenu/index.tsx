@@ -49,6 +49,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = props => {
 };
 type DropdownItemProps = {
   onClose: () => void;
+  children?: React.ReactNode;
 };
 const DrodownMenuItem: React.FC<DropdownItemProps> = ({ children, onClose }) => {
   return (

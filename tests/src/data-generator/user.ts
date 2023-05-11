@@ -1,70 +1,48 @@
-import { IProfileData } from '@akashaorg/typings/ui';
 import faker from 'faker';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
-const genUser = (ethAddress?: string, userName?: string): IProfileData => {
+const genUser = (ethAddress?: string): Profile => {
   const avatarUrl = faker.image.avatar();
   const coverImageUrl = faker.image.imageUrl();
   return {
-    avatar: { url: avatarUrl, fallbackUrl: avatarUrl },
-    coverImage: { url: coverImageUrl, fallbackUrl: coverImageUrl },
+    id: '123',
+    avatar: { default: { src: avatarUrl, width: 200, height: 200 } },
+    coverImage: { default: { src: coverImageUrl, width: 200, height: 200 } },
     description: faker.lorem.sentences(3),
-    ethAddress: ethAddress || faker.finance.ethereumAddress(),
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
-    pubKey: faker.datatype.uuid(),
-    userName: userName || faker.internet.userName(),
-    default: [],
-    providers: [],
-    totalFollowers: faker.datatype.number(),
-    totalFollowing: faker.datatype.number(),
-    totalInterests: faker.datatype.number(),
+    did: { id: `did:${ethAddress}`, isViewer: true },
+    followers: null,
   };
 };
 
-export const genLoggedInState = (loggedIn = false) => {
-  if (!loggedIn)
-    return {
-      ethAddress: null,
-      pubKey: null,
-      isReady: false,
-      waitForAuth: false,
-      isSigningIn: false,
-      fromCache: true,
-    };
+export const genLoggedInState = (loggedIn = false): Profile => {
+  if (!loggedIn) return null;
   return {
-    ethAddress: '0x92Aa5CF1302883Ba0D470918a46033890Dd36048',
-    pubKey: 'bbaareieeoufgnvi6izyvaalsv4tuvz6q3ccszygalvzyovsq3ukw6wbepe',
-    isReady: true,
-    waitForAuth: false,
-    isSigningIn: false,
-    fromCache: true,
+    id: '124',
+    did: { id: 'did:0x92Aa5CF1302883Ba0D470918a46033890Dd36048', isViewer: true },
+    name: faker.fake('{{name.firstName}} {{name.lastName}}'),
+    avatar: {
+      default: {
+        src: 'https://api.dicebear.com/6.x/bottts-neutral/svg?seed=0x92Aa5CF1302883Ba0D470918a46033890Dd36048',
+        width: 200,
+        height: 200,
+      },
+    },
+    coverImage: {
+      default: {
+        src: 'https://api.dicebear.com/6.x/avataaars/svg?seed=0x92Aa5CF1302883Ba0D470918a46033890Dd36048',
+        width: 520,
+        height: 320,
+      },
+    },
+    description: 'profile description',
+    followers: null,
   };
 };
 
 const genLoggedUser = (ethAddress?: string) => {
-  const userName = faker.internet.userName();
-  const ensName = faker.internet.userName();
-
   return {
-    ...genUser(ethAddress, userName),
-    default: [
-      {
-        property: 'userName',
-        provider: 'ewa.providers.basic',
-        value: userName,
-      },
-    ],
-    providers: [
-      {
-        property: 'userName',
-        provider: 'ewa.providers.basic',
-        value: userName,
-      },
-      {
-        property: 'userName',
-        provider: 'ewa.providers.ens',
-        value: ensName,
-      },
-    ],
+    ...genUser(ethAddress),
   };
 };
 

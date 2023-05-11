@@ -24,4 +24,4 @@ const EntryCardRemoved: React.FC<IEntryCardRemoved> = props => {
   );
 };
 
-export { EntryCardRemoved };
+export default EntryCardRemoved;

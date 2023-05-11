@@ -34,7 +34,8 @@
   "dependencies": {
     "@akashaorg/awf-sdk": "*",
     "object-hash": "2.2.0",
-    "@tanstack/react-query": "4.29.3",
+    "react-query": "3.34.7",
+    "@tanstack/react-query": "4.29.1",
     "rxjs": "7.3.0"
   },
   "devDependencies": {
@@ -42,7 +43,7 @@
     "@akashaorg/design-system": "*",
     "@akashaorg/design-system-core": "*",
     "@akashaorg/af-testing": "*",
-    "@types/react": "17.0.20"
+    "@types/react": "18.0.33"
   },
   "peerDependencies": {
     "react": "^18.1.0"

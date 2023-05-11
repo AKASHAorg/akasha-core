@@ -57,8 +57,14 @@ import {
 } from './use-notifications';
 import { useNetworkState, useCurrentNetwork } from './use-network-state';
 import { useMentionSearch } from './use-mentions';
-
-export * from './use-login';
+import {
+  useGetLogin,
+  useLogin,
+  useLogout,
+  LoginState,
+  useCheckSignup,
+  useSignUp,
+} from './use-login';
 import { useLegalDoc } from './use-legal';
 import { useIsFollowingMultiple, useIsContactMultiple, useFollow, useUnfollow } from './use-follow';
 import {
@@ -92,6 +98,7 @@ import {
   useReport,
 } from './use-moderation';
 import {
+  useConnectProvider,
   disconnectProvider,
   useInjectedProvider,
   useRequiredNetworkName,
@@ -203,6 +210,13 @@ export {
   useMentionSearch,
   // use-navigation
   useEntryNavigation,
+  // use-login
+  LoginState,
+  useGetLogin,
+  useLogin,
+  useLogout,
+  useCheckSignup,
+  useSignUp,
   // use-legal
   useLegalDoc,
   // use-follow
@@ -241,6 +255,7 @@ export {
   useReport,
   // use-injected-provider
   useInjectedProvider,
+  useConnectProvider,
   disconnectProvider,
   useRequiredNetworkName,
   switchToRequiredNetwork,

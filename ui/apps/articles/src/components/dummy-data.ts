@@ -1,5 +1,4 @@
 import { IArticleData, IProfileData } from '@akashaorg/typings/ui';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export const apps = [
   {
@@ -66,23 +65,23 @@ export const topics = [
 
 export const userData: {
   ethAddress: string;
-  avatar?: Profile['avatar'];
+  avatar?: IProfileData['avatar'];
 }[] = [
   {
     ethAddress: '0x003410490050000320006570034567114572000',
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
+    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
   },
   {
     ethAddress: '0x004410490050000320006570034567114572001',
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
+    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
   },
   {
     ethAddress: '0x005410490050000320006570034567114572002',
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
+    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
   },
   {
     ethAddress: '0x006410490050000320006570034567114572003',
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
+    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
   },
 ];
 

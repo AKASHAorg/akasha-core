@@ -6,7 +6,6 @@ import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/Si
 
 import Sidebar from './sidebar-new';
 import { MenuItem } from './sidebar-menu-item';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 declare const __DEV__: boolean;
 
@@ -23,11 +22,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('ui-widget-sidebar');
 
   const currentLocation = useLocation();
-  const myProfileQuery = useGetMyProfileQuery();
 
-  // const loginQuery = useGetLogin();
-  //
-  // const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
+  const loginQuery = useGetLogin();
+
+  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
@@ -111,12 +109,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       event: EventTypes.HideSidebar,
     });
   };
-  const handleLoginClick = () => {
-    routing.navigateTo({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: () => '/',
-    });
-  };
+
   return (
     <Sidebar
       versionLabel={__DEV__ && 'DEV'}
@@ -131,13 +124,12 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       worldApps={worldApps}
       currentRoute={currentLocation.pathname}
       // size={size}
-      loggedProfileData={myProfileQuery.data?.viewer?.profile}
-      isLoggedIn={!!myProfileQuery.data?.viewer?.profile.did}
+      loggedProfileData={loggedProfileQuery?.data}
+      isLoggedIn={!!loginQuery.data.ethAddress}
       loadingUserInstalledApps={false}
-      title={myProfileQuery.data?.viewer?.profile.name ?? t('Guest')}
+      title={loggedProfileQuery?.data?.name ?? t('Guest')}
       subtitle={
-        myProfileQuery.data?.viewer?.profile.name ??
-        t('Connect to see exclusive member only features.')
+        loggedProfileQuery?.data?.userName ?? t('Connect to see exclusive member only features.')
       }
       ctaText={t('Add magic to your world by installing cool apps developed by the community')}
       ctaButtonLabel={t('Check them out!')}
@@ -152,7 +144,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       onSidebarClose={handleSidebarClose}
       onClickMenuItem={handleNavigation}
       onClickExplore={handleClickExplore}
-      onLoginClick={handleLoginClick}
       /* Menu item will surely have the props,
           but typescript is not able to infer it
           because the cloneElement is used
@@ -160,7 +151,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       menuItem={
         <MenuItem
           plugins={props.plugins}
-          profileId={myProfileQuery.data?.viewer?.profile?.did.id}
+          loginState={loginQuery?.data}
           {...({} as SidebarMenuItemProps)}
         />
       }

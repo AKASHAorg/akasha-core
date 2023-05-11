@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Topbar from './Topbar';
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
@@ -9,6 +11,8 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   const location = useLocation();
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
+
+  const myProfileQuery = useGetMyProfileQuery();
 
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
@@ -128,13 +132,22 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     });
   };
 
+  const handleLoginClick = () => {
+    props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: () => '/',
+    });
+  };
+
   return (
     <Topbar
+      isLoggedIn={!!myProfileQuery.data?.viewer?.profile.did}
       sidebarVisible={sidebarVisible}
       onSidebarToggle={handleSidebarToggle}
       onAppWidgetClick={handleWidgetToggle}
       onNotificationClick={handleNotificationClick}
       onBackClick={handleBackClick}
+      onLoginClick={handleLoginClick}
       currentLocation={location?.pathname}
       onBrandClick={handleBrandClick}
       modalSlotId={props.layoutConfig.modalSlotId}
