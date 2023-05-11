@@ -4,14 +4,9 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import { getIconFromType } from './getIconFromType';
-import { Link } from '../../types/common.types';
+import { getIconFromType } from '../../../utils/getIconFromType';
 import { getLinkFromType } from '../../../utils/getLinkFromType';
-
-export type Link = {
-  type: string;
-  value: string;
-};
+import { Link } from '../../types/common.types';
 
 export interface LinksProps {
   title: string;

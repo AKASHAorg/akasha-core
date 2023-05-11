@@ -8,8 +8,8 @@ import {
   RootComponentProps,
   EntityTypes,
   AnalyticsCategories,
+  IProfileData,
 } from '@akashaorg/typings/ui';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 import {
   useInfinitePosts,
   CREATE_POST_MUTATION_KEY,
@@ -28,7 +28,7 @@ const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, Basic
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  loggedProfileData?: Profile;
+  loggedProfileData?: IProfileData;
   loginState: LoginState;
 }
 

@@ -5,7 +5,7 @@ import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import ListEntryLoading from './EntryLoading';
 import { LOADING_LIST_SIZE } from '../Engagement';
 
-export const ProfileEngagementsLoading = () => {
+export const ProfileEngagementLoading = () => {
   return (
     <Card radius={20} elevation="1" customStyle="py-4">
       <Tab labels={['...', '...']}>

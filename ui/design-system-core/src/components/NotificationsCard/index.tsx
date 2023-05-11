@@ -7,7 +7,6 @@ import Box from '../Box';
 import Divider from '../Divider';
 import ProfileAvatarNotificationApp from './ProfileAvatarNotificationApp';
 import Spinner from '../Spinner';
-import Text from '../Text';
 
 export interface INotificationsCard {
   // data
@@ -45,9 +44,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     moderatedPostLabel,
     moderatedReplyLabel,
     moderatedAccountLabel,
-    markAsReadLabel,
     emptyTitle,
-    emptySubtitle,
     handleMessageRead,
     handleEntryClick,
     handleProfileClick,
@@ -165,7 +162,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
     return (
       <div key={index}>
-        <BasicCardBox pad="py-3 pl-4" onClick={clickHandler} style="flex-row" round="none" noBorder>
+        <BasicCardBox pad="py-3 pl-4" onClick={clickHandler} style="flex-row" round="none">
           <ProfileAvatarNotificationApp
             ethAddress={profileData.ethAddress}
             avatarImage={profileData.avatar}
@@ -182,7 +179,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
   };
 
   return (
-    <BasicCardBox noBorder pad="p-0">
+    <BasicCardBox pad="p-0">
       {loggedIn && !isFetching && notifications.length === 0 && (
         <BasicInfoCard titleLabel={emptyTitle} />
       )}

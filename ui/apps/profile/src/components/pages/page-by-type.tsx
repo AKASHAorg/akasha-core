@@ -6,7 +6,7 @@ import DS from '@akashaorg/design-system';
 import { IProfileData, RootComponentProps } from '@akashaorg/typings/ui';
 import { LoginState } from '@akashaorg/ui-awf-hooks';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
-import { ProfileEngagementsLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementsLoading';
+import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -40,7 +40,7 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
   const navigateTo = rest.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   if (isLoading) {
-    if (pageType === 'engagement') return <ProfileEngagementsLoading />;
+    if (pageType === 'engagement') return <ProfileEngagementLoading />;
     return <ProfileLoading />;
   }
 

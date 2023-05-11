@@ -12,22 +12,27 @@ export interface ITopbarProps {
   currentLocation?: string;
   // sidebar
   sidebarVisible: boolean;
+  // isLoggedIn ?
+  isLoggedIn: boolean;
   // handlers
   onSidebarToggle?: () => void;
   onBackClick: () => void;
   onAppWidgetClick: () => void;
   onBrandClick?: () => void;
   onNotificationClick: () => void;
+  onLoginClick: () => void;
   modalSlotId: string;
 }
 const Topbar: React.FC<ITopbarProps> = props => {
   const {
+    isLoggedIn,
     sidebarVisible,
     onSidebarToggle,
     onBrandClick,
     onAppWidgetClick,
     onNotificationClick,
     onBackClick,
+    onLoginClick,
     hasNewNotifications = false,
     snoozeNotifications,
   } = props;
@@ -87,22 +92,47 @@ const Topbar: React.FC<ITopbarProps> = props => {
         </span>
       </div>
       <div className={tw('flex space-x-2')}>
-        {displayWidgetTogglingButton && (
-          <Button iconOnly={true} icon="appCenter" onClick={onAppWidgetClick} variant="primary" />
+        {displayWidgetTogglingButton ? (
+          isLoggedIn ? (
+            <>
+              <Button
+                iconOnly={true}
+                icon="appCenter"
+                onClick={onAppWidgetClick}
+                variant="primary"
+              />
+              <Button
+                iconOnly={true}
+                icon={
+                  snoozeNotifications
+                    ? 'BellSnoozeIcon'
+                    : hasNewNotifications
+                    ? 'BellAlertIcon'
+                    : 'BellIcon'
+                }
+                onClick={onNotificationClick}
+                greyBg={true}
+                variant="primary"
+              />
+            </>
+          ) : (
+            <Button iconOnly={true} icon="BoltIcon" onClick={onLoginClick} variant="primary" />
+          )
+        ) : (
+          <Button
+            iconOnly={true}
+            icon={
+              snoozeNotifications
+                ? 'BellSnoozeIcon'
+                : hasNewNotifications
+                ? 'BellAlertIcon'
+                : 'BellIcon'
+            }
+            onClick={onNotificationClick}
+            greyBg={true}
+            variant="primary"
+          />
         )}
-        <Button
-          iconOnly={true}
-          icon={
-            snoozeNotifications
-              ? 'BellSnoozeIcon'
-              : hasNewNotifications
-              ? 'BellAlertIcon'
-              : 'BellIcon'
-          }
-          onClick={onNotificationClick}
-          greyBg={true}
-          variant="primary"
-        />
       </div>
     </BasicCardBox>
   );
