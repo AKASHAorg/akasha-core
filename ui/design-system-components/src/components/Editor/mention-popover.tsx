@@ -42,7 +42,7 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
               label={value.name}
               info={value.name}
               avatarImage={value.avatar}
-              ethAddress={value.did.id}
+              profileId={value.did.id}
             />
           </div>
         ))}

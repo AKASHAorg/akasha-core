@@ -1,6 +1,6 @@
 import * as React from 'react';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import { SocialBox } from '../../SocialBox';
+import SocialBox from '../../SocialBox';
 import EntryBox, { IEntryBoxProps } from '../EntryBox';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
@@ -30,7 +30,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     othersLabel,
     onClickAvatar,
     locale,
-    loggedProfileEthAddress,
     rootNodeRef,
     showMore,
     profileAnchorLink,
@@ -90,7 +89,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         entryData={entryData}
         onClickAvatar={onClickAvatar}
         flagAsLabel={flagAsLabel}
-        loggedProfileEthAddress={loggedProfileEthAddress}
         showMore={showMore}
         locale={locale}
         profileAnchorLink={profileAnchorLink}

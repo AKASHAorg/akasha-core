@@ -23,6 +23,8 @@ export type LinkElement = { type: 'link'; url: string; children: EmptyText[] };
 
 export type MentionElement = {
   type: 'mention';
+  name?: string;
+  id?: string;
   children?: EmptyText[];
 };
 

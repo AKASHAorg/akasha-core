@@ -4,11 +4,11 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Menu } from '@headlessui/react';
 import { truncateMiddle } from '../../utils/string-utils';
-import { IProfileData } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface ISocialBox {
-  socialData: IProfileData[];
-  onClickUser?: (ethAddress: string) => void;
+  socialData: Profile[];
+  onClickUser?: (profileId: string) => void;
   // labels
   repostedThisLabel?: string;
   andLabel?: string;
@@ -20,10 +20,8 @@ const SocialBox: React.FC<ISocialBox> = props => {
 
   const avatarUserData = socialData.map(user => {
     return {
-      pubKey: user.pubKey,
-      ethAddress: user.ethAddress,
+      profileId: user.id,
       avatar: user.avatar,
-      userName: user.userName,
       name: user.name,
     };
   });
@@ -32,12 +30,12 @@ const SocialBox: React.FC<ISocialBox> = props => {
     <div className={tw(`flex flex-row items-center gap-1 px-4 py-2`)}>
       {avatarUserData && (
         <Avatar
-          src={avatarUserData[0].avatar}
-          ethAddress={avatarUserData[0].ethAddress}
+          avatar={avatarUserData[0].avatar}
+          profileId={avatarUserData[0].profileId}
           size="xs"
           onClick={() => {
             if (onClickUser) {
-              onClickUser(avatarUserData[0].pubKey);
+              onClickUser(avatarUserData[0].profileId);
             }
           }}
         />
@@ -46,13 +44,13 @@ const SocialBox: React.FC<ISocialBox> = props => {
         className={tw(`flex no-underline`)}
         onClick={() => {
           if (onClickUser) {
-            onClickUser(socialData[0].pubKey);
+            onClickUser(socialData[0].id);
           }
         }}
       >
         {socialData[0].name ||
-          socialData[0].userName ||
-          truncateMiddle(socialData[0]?.ethAddress, 3, 3)}
+          // socialData[0].userName ||
+          truncateMiddle(socialData[0]?.id, 3, 3)}
       </a>
 
       {socialData.length > 1 ? (
@@ -80,25 +78,23 @@ const SocialBox: React.FC<ISocialBox> = props => {
                         )}
                       >
                         <Avatar
-                          src={user.avatar}
-                          ethAddress={user.ethAddress}
+                          avatar={user.avatar}
+                          profileId={user.profileId}
                           size="xs"
                           onClick={() => {
                             if (onClickUser) {
-                              onClickUser(user.pubKey);
+                              onClickUser(user.profileId);
                             }
                           }}
                         />
                         <button
                           onClick={() => {
                             if (onClickUser) {
-                              onClickUser(user.pubKey);
+                              onClickUser(user.profileId);
                             }
                           }}
                         >
-                          <Text>
-                            {user.name || user.userName || truncateMiddle(user.ethAddress, 3, 3)}
-                          </Text>
+                          <Text>{user.name || truncateMiddle(user.profileId, 3, 3)}</Text>
                         </button>
                       </div>
                     </Menu.Item>
@@ -127,4 +123,4 @@ SocialBox.defaultProps = {
   othersLabel: 'others',
 };
 
-export { SocialBox };
+export default SocialBox;

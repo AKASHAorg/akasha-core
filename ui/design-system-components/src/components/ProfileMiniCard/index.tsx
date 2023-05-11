@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-import { IProfileData } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -9,7 +9,7 @@ import { truncateMiddle } from '../../utils/string-utils';
 
 export interface IProfileMiniCard {
   // data
-  profileData: IProfileData;
+  profileData: Profile;
   loggedEthAddress?: string | null;
   isFollowing?: boolean;
   // labels
@@ -29,7 +29,6 @@ export interface IProfileMiniCard {
 const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
   const {
     profileData,
-    loggedEthAddress,
     followLabel,
     followingLabel,
     followersLabel,
@@ -45,32 +44,32 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
 
   const onFollow = (ev: React.SyntheticEvent) => {
     if (handleFollow) {
-      handleFollow(profileData.pubKey);
+      handleFollow(profileData.id);
     }
     ev.stopPropagation();
   };
 
   const onUnfollow = (ev: React.SyntheticEvent) => {
     if (handleUnfollow) {
-      handleUnfollow(profileData.pubKey);
+      handleUnfollow(profileData.id);
     }
     ev.stopPropagation();
   };
 
   const onClick = () => {
     if (handleClick) {
-      handleClick(profileData.pubKey);
+      handleClick(profileData.id);
     }
   };
 
   // check if a user is logged in and different from the profile displayed
-  const showFollowingButton = profileData.ethAddress !== loggedEthAddress;
+  const showFollowingButton = !profileData.did.isViewer;
 
   return (
     <Card elevation={{ light: '1', dark: '1' }} radius={'rounded-2xl'}>
       <div onClick={onClick}>
         <div
-          style={{ backgroundImage: `url(${profileData.coverImage})` }}
+          style={{ backgroundImage: `url(${profileData.background})` }}
           className={tw(`flex items-center justify-center w-full h-28 rounded-t-2xl`)}
         >
           <div className={tw(`relative top-4`)}>
@@ -78,8 +77,8 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
               size="xl"
               border="sm"
               borderColor="darkerBlue"
-              src={profileData.avatar}
-              ethAddress={profileData.ethAddress}
+              avatar={profileData.avatar}
+              profileId={profileData.did.id}
             />
           </div>
         </div>
@@ -91,18 +90,18 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
               </Text>
             )}
             <Text variant="subtitle2" breakWord={true} align="center">
-              {(profileData.userName && `@${profileData.userName}`) ||
-                truncateMiddle(profileData.ethAddress)}
+              {/* {(profileData.userName && `@${profileData.userName}`) || */}
+              {truncateMiddle(profileData.did.id)}
             </Text>
           </div>
           <div className={tw(`flex flex-row gap-2`)}>
-            <Text variant="subtitle2">{`${profileData.totalPosts || 0} ${postsLabel}`}</Text>
+            <Text variant="subtitle2">{`${profileData.did.postList || 0} ${postsLabel}`}</Text>
             <Text variant="subtitle2">{`${
-              profileData.totalFollowers || 0
+              profileData.did.followList || 0
             } ${followersLabel}`}</Text>
-            <Text variant="subtitle2">{`${
+            {/* <Text variant="subtitle2">{`${
               profileData.totalFollowing || 0
-            } ${followingLabel}`}</Text>
+            } ${followingLabel}`}</Text> */}
           </div>
         </div>
 
