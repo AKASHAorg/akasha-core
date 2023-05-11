@@ -55,6 +55,7 @@ query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $firs
           hasPreviousPage
         }
       }
+      isViewer
     }
   }
 }

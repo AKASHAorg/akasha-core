@@ -49,6 +49,7 @@ query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int
           hasPreviousPage
         }
       }
+      isViewer
     }
   }
 }

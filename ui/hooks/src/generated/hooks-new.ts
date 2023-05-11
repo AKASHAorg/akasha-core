@@ -166,6 +166,7 @@ export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ `
           hasPreviousPage
         }
       }
+      isViewer
     }
   }
 }
@@ -546,6 +547,7 @@ export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ `
           hasPreviousPage
         }
       }
+      isViewer
     }
   }
 }
@@ -801,6 +803,7 @@ export const GetProfileByDidDocument = /*#__PURE__*/ `
       profile {
         ...UserProfileFragment
       }
+      isViewer
     }
   }
 }
@@ -974,6 +977,7 @@ export const GetInterestsByDidDocument = /*#__PURE__*/ `
         }
         id
       }
+      isViewer
     }
   }
 }
@@ -1090,6 +1094,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ `
           hasPreviousPage
         }
       }
+      isViewer
     }
   }
 }
@@ -1154,6 +1159,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ `
           }
         }
       }
+      isViewer
     }
   }
 }

@@ -21,7 +21,7 @@ export type GetBeamsByAuthorDidQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetBeamsByAuthorDidQuery = { node?: { beamList?: { edges?: Array<{ node?: { id: string, reflectionsCount: number, rebeamsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, author: { id: string }, content: Array<{ property: string, provider: string, value: string }> } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
+export type GetBeamsByAuthorDidQuery = { node?: { isViewer: boolean, beamList?: { edges?: Array<{ node?: { id: string, reflectionsCount: number, rebeamsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, author: { id: string }, content: Array<{ property: string, provider: string, value: string }> } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
 
 export type GetBeamByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -94,7 +94,7 @@ export type GetReflectionsByAuthorDidQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetReflectionsByAuthorDidQuery = { node?: { reflectList?: { edges?: Array<{ node?: { version: any, active: boolean, isReply: boolean, reflectionsCount: number, author: { id: string }, content: Array<{ provider: string, property: string, value: string }>, beam?: { id: string, author: { id: string } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
+export type GetReflectionsByAuthorDidQuery = { node?: { isViewer: boolean, reflectList?: { edges?: Array<{ node?: { version: any, active: boolean, isReply: boolean, reflectionsCount: number, author: { id: string }, content: Array<{ provider: string, property: string, value: string }>, beam?: { id: string, author: { id: string } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
 
 export type GetReflectReflectionsQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -149,7 +149,7 @@ export type GetProfileByDidQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetProfileByDidQuery = { node?: { profile?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | {} | null };
+export type GetProfileByDidQuery = { node?: { isViewer: boolean, profile?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | {} | null };
 
 export type GetProfilesQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']>;
@@ -176,7 +176,7 @@ export type GetInterestsByDidQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetInterestsByDidQuery = { node?: { interests?: { id: string, topics: Array<{ value: string, labelType: string }>, did: { id: string } } | null } | {} | null };
+export type GetInterestsByDidQuery = { node?: { isViewer: boolean, interests?: { id: string, topics: Array<{ value: string, labelType: string }>, did: { id: string } } | null } | {} | null };
 
 export type GetInterestsByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -194,7 +194,7 @@ export type GetFollowingListByDidQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetFollowingListByDidQuery = { node?: { followList?: { edges?: Array<{ node?: { isFollowing: boolean, profile?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
+export type GetFollowingListByDidQuery = { node?: { isViewer: boolean, followList?: { edges?: Array<{ node?: { isFollowing: boolean, profile?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
 
 export type GetFollowersListByDidQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -205,7 +205,7 @@ export type GetFollowersListByDidQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetFollowersListByDidQuery = { node?: { profile?: { followers: { edges?: Array<{ node?: { isFollowing: boolean, profile?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | null } | {} | null };
+export type GetFollowersListByDidQuery = { node?: { isViewer: boolean, profile?: { followers: { edges?: Array<{ node?: { isFollowing: boolean, profile?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | null } | {} | null };
 
 export type GetMyProfileQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
