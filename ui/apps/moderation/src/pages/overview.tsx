@@ -10,7 +10,7 @@ import ModerationValuesCard from '@akashaorg/design-system-components/lib/compon
 import BecomeModeratorCard from '../components/moderator/become-moderator-card';
 
 import { values } from '../services/values';
-import { externalLinks } from '../utils/external-links';
+import { externalLinks } from '../utils';
 import { BECOME_MODERATOR, CHECK_APPLICATION_STATUS } from '../routes';
 
 export enum ApplicationStatusType {
