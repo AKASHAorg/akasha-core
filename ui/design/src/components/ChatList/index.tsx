@@ -13,7 +13,7 @@ export interface IChatListProps {
   emptyChatLabel: string;
   fetchingMessagesLabel?: string;
   unreadMessagesLabel?: string;
-  loggedUserEthAddress: string;
+  loggedUserProfileId: string;
   itemCard: React.ReactElement;
   fetchingMessages?: boolean;
   markLatestMessagesRead?: () => void;
@@ -24,7 +24,7 @@ export interface IChatListProps {
 const ChatList: React.FC<IChatListProps> = props => {
   const {
     emptyChatLabel,
-    loggedUserEthAddress,
+    loggedUserProfileId,
     itemCard,
     oldMessages,
     newMessages,
@@ -82,13 +82,13 @@ const ChatList: React.FC<IChatListProps> = props => {
             key={id}
             width="95%"
             margin={{ vertical: 'small' }}
-            alignSelf={message.ethAddress !== loggedUserEthAddress ? 'end' : 'start'}
+            alignSelf={message.did.id !== loggedUserProfileId ? 'end' : 'start'}
             style={{ minHeight: 'min-content', flexShrink: 0 }}
           >
             {React.cloneElement(itemCard, {
               senderName: message.name,
               isRead: message.read,
-              isFromLoggedUser: message.ethAddress === loggedUserEthAddress,
+              isFromLoggedUser: message.did.id === loggedUserProfileId,
               chatTimestamp: message.timestamp,
               content: message.content,
             })}
@@ -114,14 +114,14 @@ const ChatList: React.FC<IChatListProps> = props => {
             key={index}
             width="95%"
             margin={{ vertical: 'small' }}
-            alignSelf={message.ethAddress !== loggedUserEthAddress ? 'end' : 'start'}
+            alignSelf={message.did.id !== loggedUserProfileId ? 'end' : 'start'}
             style={{ minHeight: 'min-content', flexShrink: 0 }}
             ref={index === newMessages.length - 1 ? chatBottomRef : null}
           >
             {React.cloneElement(itemCard, {
               senderName: message.name,
               isRead: message.read,
-              isFromLoggedUser: message.ethAddress === loggedUserEthAddress,
+              isFromLoggedUser: message.did.id === loggedUserProfileId,
               chatTimestamp: message.timestamp,
               content: message.content,
             })}

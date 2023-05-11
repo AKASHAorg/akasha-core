@@ -2,11 +2,7 @@ import * as React from 'react';
 import { Box, Spinner, Text } from 'grommet';
 import Cropper from 'react-easy-crop';
 import { isMobileOnly } from 'react-device-detect';
-import {
-  IProfileData,
-  ProfileProviderProperties,
-  UpdateProfileStatus,
-} from '@akashaorg/typings/ui';
+import { ProfileProviderProperties, UpdateProfileStatus } from '@akashaorg/typings/ui';
 
 import { AvatarSection } from './sections/AvatarSection';
 import { NameInputSection } from './sections/NameInputSection';
@@ -26,6 +22,7 @@ import SocialLinksSection, { StateLink } from './sections/social-links-section';
 import EnsPrefillSection from './sections/ens-prefill-section';
 import { EnsTxtPresets } from './sections/social-link-input';
 import { getUpdatedFields } from './get-updated-fields';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface ProfileFormProps {
   className?: string;
@@ -82,9 +79,10 @@ export interface IImageSrc {
   preview?: string;
   isUrl: boolean;
 }
+
 export interface IBoxData {
-  avatar?: IProfileData['avatar'];
-  coverImage?: IProfileData['coverImage'];
+  avatar?: Profile['avatar'];
+  background?: Profile['background'];
   name?: string;
   description?: string;
   default?: { provider: string; property: string; value: string }[];
@@ -92,6 +90,7 @@ export interface IBoxData {
   ethAddress: string;
   pubKey: string;
 }
+
 export interface IFormValues {
   avatar?: IImageSrc | null;
   coverImage?: IImageSrc | null;

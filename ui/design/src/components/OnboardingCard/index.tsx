@@ -5,14 +5,14 @@ import IconLink from '../IconLink';
 import TextIcon from '../TextIcon';
 import SearchInput from '../SearchInput';
 import TagCard from '../TagCard';
-import { IProfileData } from '@akashaorg/typings/ui';
 import { ITagData } from '../TagCard';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
 import Icon from '../Icon';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface ICustomizeFeedCardProps {
   // data
-  profiles: IProfileData[];
+  profiles: Profile[];
   tags: ITagData[];
   // labels
   title1Label?: string;
@@ -247,7 +247,6 @@ const CustomizeFeedCard: React.FC<ICustomizeFeedCardProps> = props => {
               .filter(
                 profile =>
                   profile.name?.toLowerCase().includes(inputValue.toLowerCase()) ||
-                  profile.userName?.toLowerCase().includes(inputValue.toLowerCase()) ||
                   profile.description?.toLowerCase().includes(inputValue.toLowerCase()),
               )
               .map((profile, index) => (

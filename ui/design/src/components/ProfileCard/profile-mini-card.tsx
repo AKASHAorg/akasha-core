@@ -10,7 +10,6 @@ import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 export interface IProfileMiniCard {
   // data
   profileData: Profile;
-  loggedProfileId?: string | null;
   isFollowing?: boolean;
   // labels
   followLabel?: string;
@@ -29,7 +28,6 @@ export interface IProfileMiniCard {
 const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
   const {
     profileData,
-    loggedProfileId,
     followLabel,
     followingLabel,
     followersLabel,
@@ -62,9 +60,6 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
       handleClick(profileData.did.id);
     }
   };
-
-  // check if a user is logged in and different from the profile displayed
-  const showFollowingButton = loggedProfileId && profileData.did.id !== loggedProfileId;
 
   return (
     <Box
@@ -125,7 +120,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
           {profileData.description}
         </Text>
 
-        {!disableFollowing && showFollowingButton && (
+        {!disableFollowing && profileData.did.isViewer && (
           <DuplexButton
             inactiveLabel={followLabel}
             activeLabel={followingLabel}

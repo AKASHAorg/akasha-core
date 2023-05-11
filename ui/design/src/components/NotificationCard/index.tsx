@@ -175,7 +175,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         onClick={clickHandler}
       >
         <ProfileAvatarButton
-          ethAddress={profileData.ethAddress}
+          profileId={profileData.did.id}
           avatarImage={profileData.avatar}
           label={fullLabel}
           info={relativeTime}

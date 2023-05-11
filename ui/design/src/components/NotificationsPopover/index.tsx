@@ -1,9 +1,9 @@
-import { IProfileData } from '@akashaorg/typings/ui';
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import Avatar from '../Avatar';
 import BasicPopover from '../BasicPopover';
 import { StyledListContainer, StyledListElem } from './styled-notifications-popover';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface INotificationsPopover {
   className?: string;
@@ -14,9 +14,9 @@ export interface INotificationsPopover {
 }
 
 export interface INotification {
-  ethAddress: string;
+  profileId: string;
   user: string;
-  userAvatar: IProfileData['avatar'];
+  userAvatar: Profile['avatar'];
   time: string;
   action: string;
 }
@@ -40,7 +40,7 @@ const NotificationsPopover: React.FC<INotificationsPopover> = props => {
                 align="center"
                 gap="small"
               >
-                <Avatar size="sm" src={notification.userAvatar} ethAddress={notification.user} />
+                <Avatar size="sm" avatar={notification.userAvatar} profileId={notification.user} />
                 <Box direction="column">
                   <Text size="medium" weight="bold">
                     {notification.action}

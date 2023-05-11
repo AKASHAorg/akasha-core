@@ -10,7 +10,7 @@ describe('<Avatar /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(<Avatar ethAddress={'0x01230123450012312'} />),
+        wrapWithTheme(<Avatar profileId={'did:0x01230123450012312'} />),
         {},
       );
     });

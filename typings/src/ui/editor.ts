@@ -1,6 +1,7 @@
 import { BaseEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
+import { Profile } from '../../sdk/graphql-types-new';
 
 export type EmptyText = {
   text: string;
@@ -24,6 +25,8 @@ export type LinkElement = { type: 'link'; url: string; children: EmptyText[] };
 export type MentionElement = {
   type: 'mention';
   children?: EmptyText[];
+  name?: string;
+  did: Profile['did'];
 };
 
 export type TagElement = {

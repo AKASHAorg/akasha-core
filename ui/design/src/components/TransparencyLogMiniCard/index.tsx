@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Box, Text } from 'grommet';
-import { IProfileData } from '@akashaorg/typings/ui';
 
 import Avatar from '../Avatar';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import Tooltip from '../Tooltip';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface ITransparencyLogMiniCardProps {
   locale: ILocale;
@@ -15,8 +15,8 @@ export interface ITransparencyLogMiniCardProps {
   isSelected: boolean;
   isDelisted: boolean;
   moderatedTimestamp: string;
-  moderatorAvatar: IProfileData['avatar'];
-  moderatorEthAddress: string;
+  moderatorAvatar: Profile['avatar'];
+  moderatorProfileId: string;
   moderator: string;
   onClickAvatar?: () => void;
   onClickCard?: () => void;
@@ -27,6 +27,7 @@ const ClampBox = styled(Box)`
   width: 100%;
   overflow: hidden;
   position: relative;
+
   ::before {
     position: absolute;
   }
@@ -41,7 +42,7 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
     isDelisted,
     moderatedTimestamp,
     moderatorAvatar,
-    moderatorEthAddress,
+    moderatorProfileId,
     moderator,
     onClickAvatar,
     onClickCard,
@@ -77,8 +78,8 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
               <span>
                 <Avatar
                   size="xs"
-                  src={moderatorAvatar}
-                  ethAddress={moderatorEthAddress}
+                  avatar={moderatorAvatar}
+                  profileId={moderatorProfileId}
                   onClick={onClickAvatar}
                 />
               </span>

@@ -1,32 +1,31 @@
 import React from 'react';
 import { Box, Text, ThemeContext } from 'grommet';
 
-import { IProfileData } from '@akashaorg/typings/ui';
-
 import Avatar from '../Avatar';
 import Button from '../Button';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface ICollaboratorProps {
-  value: IProfileData;
+  profile: Profile;
   isRed?: boolean;
   buttonLabel: string;
   onClick: () => void;
 }
 
 const Collaborator: React.FC<ICollaboratorProps> = props => {
-  const { value, isRed = false, buttonLabel, onClick } = props;
+  const { profile, isRed = false, buttonLabel, onClick } = props;
 
   const theme: any = React.useContext(ThemeContext);
 
   return (
     <Box direction="row" fill="horizontal" justify="between" align="center">
       <Box direction="row" gap="xsmall" align="center">
-        <Avatar size="md" src={value.avatar} />
+        <Avatar size="md" avatar={profile.avatar} />
         <Box>
-          <Text size="large">{value.name}</Text>
-          <Text size="small" color="secondaryText">
-            {value.userName}
-          </Text>
+          <Text size="large">{profile.name}</Text>
+          {/*<Text size="small" color="secondaryText">*/}
+          {/*  {value.userName}*/}
+          {/*</Text>*/}
         </Box>
       </Box>
       <Button

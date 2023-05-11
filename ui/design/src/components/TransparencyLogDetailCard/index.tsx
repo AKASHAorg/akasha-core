@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
-
 import MobileHeading from './mobile-heading';
-
 import Icon from '../Icon';
 import Avatar from '../Avatar';
 import { StyledAnchor } from '../EntryCard/basic-card-box';
 import { ITransparencyLogMiniCardProps } from '../TransparencyLogMiniCard';
-
 import { StyledText } from '../ListModal/styled-modal';
 import { formatRelativeTime } from '../../utils/time';
 
@@ -56,7 +53,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     moderatorAvatar,
     reportedTimesLabel,
     moderatedTimestamp,
-    moderatorEthAddress,
+    moderatorProfileId,
     onClickArrowLeft,
     onClickViewItem,
     onClickAvatar,
@@ -124,8 +121,8 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
         <Box direction="row" justify="between" align="start">
           <Box direction="row" align="center" gap="xsmall">
             <Avatar
-              src={moderatorAvatar}
-              ethAddress={moderatorEthAddress}
+              avatar={moderatorAvatar}
+              profileId={moderatorProfileId}
               onClick={onClickAvatar}
             />
             <Box>

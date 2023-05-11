@@ -3,13 +3,12 @@ import { Box, Text } from 'grommet';
 
 import Icon from '../Icon';
 import StackedAvatar from '../StackedAvatar';
-import { IProfileData } from '@akashaorg/typings/ui';
 import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface INewPostsPill {
   infoLabel?: string;
   handleDismiss?: () => void;
-  userData: { ethAddress: string; avatar?: Profile['avatar'] }[];
+  userData: { did: Profile['did']; avatar?: Profile['avatar'] }[];
 }
 
 const NewPostsPill: React.FC<INewPostsPill> = props => {

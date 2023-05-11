@@ -10,10 +10,10 @@ import DuplexButton from '../DuplexButton';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { TextLine } from '../TextLine';
 import SubtitleTextIcon from '../SubtitleTextIcon';
-import { IProfileData } from '@akashaorg/typings/ui';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import Version from './version';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface ICDetailCardProps {
   className?: string;
@@ -39,7 +39,7 @@ export interface ICDetailCardProps {
   id?: string;
   integrationName?: string;
   authorEthAddress?: string;
-  authorProfile?: IProfileData;
+  authorProfile?: Profile;
   isInstalled: boolean;
   releases: IntegrationReleaseInfo[];
   latestRelease: IntegrationReleaseInfo;
@@ -76,7 +76,6 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     licenseLabel,
     id,
     integrationName,
-    authorEthAddress,
     authorProfile,
     isInstalled,
     releases = [],
@@ -104,7 +103,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     <MainAreaCardBox className={className}>
       <ICDetailCardCoverImage
         shareLabel={shareLabel}
-        coverImage={null}
+        background={null}
         handleShareClick={onClickShare}
       />
       <Box direction="column" pad={{ bottom: 'medium' }} margin={{ horizontal: 'medium' }}>
@@ -117,7 +116,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
         >
           <Box direction="row" align="center" style={{ position: 'relative', top: '-0.5rem' }}>
             <ICDetailCardAvatar
-              ethAddress={latestRelease?.id}
+              profileId={latestRelease?.id}
               iconType={
                 latestRelease?.integrationType === 2
                   ? 'integrationWidgetLarge'
@@ -285,24 +284,24 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
           {authorProfile && (
             <ProfileAvatarButton
               avatarImage={authorProfile.avatar}
-              ethAddress={authorProfile.ethAddress}
+              profileId={authorProfile.did.id}
               label={authorProfile.name}
-              info={authorProfile.userName && `@${authorProfile.userName}`}
+              info={authorProfile.did.id}
               onClick={() => handleAuthorClick(authorProfile)}
             />
           )}
           <Text>{ethereumAddressLabel}</Text>
-          {isFetching && !authorEthAddress && (
+          {isFetching && !authorProfile.did.id && (
             <TextLine title="integrationAuthorEthAddress" animated={false} width="150px" />
           )}
-          {authorEthAddress && (
+          {authorProfile.did.id && (
             <Text
               size="md"
               color="accent"
               style={{ cursor: 'pointer' }}
-              onClick={() => handleAuthorEthAddressClick(authorEthAddress)}
+              onClick={() => handleAuthorEthAddressClick(authorProfile.did.id)}
             >
-              {authorEthAddress}
+              {authorProfile.name}
             </Text>
           )}
         </Box>

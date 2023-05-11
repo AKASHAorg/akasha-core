@@ -7,7 +7,7 @@ import { StyledStackBox, StyledContainer } from './styled-stacked-avatar';
 import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IStackedAvatarProps {
-  userData: Profile[];
+  userData: { did: Profile['did']; avatar?: Profile['avatar'] }[];
   maxAvatars?: number;
   size?: AvatarSize;
 }

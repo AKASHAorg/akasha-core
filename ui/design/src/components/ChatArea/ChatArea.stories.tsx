@@ -25,7 +25,7 @@ const Template = (args: IChatAreaProps) => (
     </Box>
   </Grommet>
 );
-const ethAddress = '0x003410490050000320006570034567114572000';
+const profileId = 'did:0x003410490050000320006570034567114572000';
 
 export const BaseChatArea = Template.bind({});
 
@@ -34,17 +34,17 @@ BaseChatArea.args = {
     <ChatAreaHeader
       name="Estelle Collier"
       userName="estellecollier"
-      avatar={{ url: 'https://placebeard.it/360x360' }}
-      ethAddress="0x003410490050000320006570034567114572021"
+      avatar={{ default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } }}
+      profileId="did:0x003410490050000320006570034567114572021"
       onClickAvatar={() => null}
     />
   ),
   bodyElement: (
     <ChatList
       emptyChatLabel="Start by saying hello! 👋🏼"
-      loggedUserEthAddress={ethAddress}
       itemCard={<BubbleCard locale="en" youLabel="You" />}
       oldMessages={dummyChatArr}
+      loggedUserProfileId={profileId}
     />
   ),
   editorElement: (
@@ -55,7 +55,7 @@ BaseChatArea.args = {
     >
       <EditorBox
         showAvatar={false}
-        ethAddress={ethAddress}
+        profileId={profileId}
         placeholderLabel="Type a message"
         emojiPlaceholderLabel="Search"
         postLabel="Send"

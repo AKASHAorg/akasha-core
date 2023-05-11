@@ -31,10 +31,10 @@ import isEqual from 'lodash.isequal';
 import { EntryCardError } from './entry-card-error';
 
 export interface IContentClickDetails {
-  authorEthAddress: string;
+  authorProfileId: string;
   id: string;
   replyTo?: {
-    authorEthAddress?: string;
+    authorProfileId?: string;
     itemId?: string;
   };
 }
@@ -74,8 +74,8 @@ export interface IEntryBoxProps {
   onRepost?: (withComment: boolean, itemId: string) => void;
   onEntryFlag?: (itemId?: string, itemType?: string) => void;
   // follow related
-  handleFollowAuthor?: (profileEthAddress: string) => void;
-  handleUnfollowAuthor?: (profileEthAddress: string) => void;
+  handleFollowAuthor?: (profileId: string) => void;
+  handleUnfollowAuthor?: (profileId: string) => void;
   isFollowingAuthor?: boolean;
   // redirects
   onContentClick?: (details: IContentClickDetails, itemType?: EntityTypes) => void;
@@ -236,7 +236,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       const itemType = replyTo ? EntityTypes.REPLY : EntityTypes.POST;
       onContentClick(
         {
-          authorEthAddress: data.author.ethAddress,
+          authorProfileId: data.author.did.id,
           id: data.entryId,
           replyTo,
         },
@@ -333,7 +333,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             }}
             weight="normal"
             style={{ display: 'flex', minWidth: 0 }}
-            href={`${profileAnchorLink}/${entryData.author.pubKey}`}
+            href={`${profileAnchorLink}/${entryData.author.did.id}`}
             label={
               <StyledProfileAvatarButton
                 label={entryData.author?.name}
@@ -355,7 +355,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                     onClickAvatar(ev);
                   }
                 }}
-                ethAddress={entryData.author?.ethAddress}
+                profileId={entryData.author?.did.id}
                 ref={profileRef}
                 // onMouseEnter={() => setProfileDropOpen(true)}
                 // onMouseLeave={() => setProfileDropOpen(false)}
@@ -378,7 +378,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 elevation="shadow"
               >
                 <ProfileMiniCard
-                  loggedEthAddress={loggedProfileId}
                   profileData={entryData.author}
                   handleFollow={handleFollowAuthor}
                   handleUnfollow={handleUnfollowAuthor}
@@ -447,7 +446,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
             menuItems={[
-              ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileId)
+              ...(onEntryFlag && !entryData.author.did.isViewer
                 ? [
                     {
                       icon: 'report' as IconType,
@@ -457,10 +456,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                     },
                   ]
                 : []),
-              ...(entryData.author.ethAddress === loggedProfileId
+              ...(entryData.author.did.isViewer
                 ? [
                     {
-                      icon: 'trash' as IconType,
+                      icon: 'trash',
                       handler: handleEntryRemove,
                       label: removeEntryLabel,
                     },
@@ -475,7 +474,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             modalSlotId={modalSlotId}
             closeModal={closeMenuDrop}
             menuItems={[
-              ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileId)
+              ...(onEntryFlag && !entryData.author.did.isViewer
                 ? [
                     {
                       label: props.flagAsLabel,
@@ -485,7 +484,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                     },
                   ]
                 : []),
-              ...(entryData.author.ethAddress === loggedProfileId
+              ...(entryData.author.did.isViewer
                 ? [
                     {
                       icon: 'trash' as IconType,
@@ -500,7 +499,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {props.isRemoved && (
           <EntryCardRemoved
-            isAuthor={entryData.author.ethAddress === props.loggedProfileId}
+            isAuthor={entryData.author.did.isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />
@@ -548,7 +547,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {showRemovedQuote && (
           <EntryCardRemoved
-            isAuthor={entryData.author.ethAddress === props.loggedProfileId}
+            isAuthor={entryData.author.did.isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />

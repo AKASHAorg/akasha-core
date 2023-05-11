@@ -1,4 +1,5 @@
 import { EntityTypes } from './ui-events';
+import { Profile } from '../sdk/graphql-types-new';
 
 export enum ButtonValues {
   ALL = 'All',
@@ -20,12 +21,6 @@ export const ModerationEntityTypesMap = {
 export type ModeratorStatus = 'active' | 'revoked' | 'resigned';
 
 export interface IModeratorInfo {
-  name: string;
-  userName: string;
-  avatar: {
-    url?: string;
-    fallbackUrl?: string;
-  };
   moderatorEndDate?: string;
   status: ModeratorStatus;
   social: {
@@ -33,24 +28,12 @@ export interface IModeratorInfo {
   };
 }
 
-export interface Moderator extends IModeratorInfo {
-  _id: string;
-  _mod: Date;
-  creationDate: Date;
-  active: boolean;
-  admin: boolean;
-  coverImage: string;
-  pubKey: string;
-  ethAddress: string;
-}
-
-type Profile = {
-  pubKey: string;
-  ethAddress: string;
-  name: string;
-  userName: string;
-  avatar: string;
-};
+export type Moderator = Profile &
+  IModeratorInfo & {
+    _mod: Date;
+    active: boolean;
+    admin: boolean;
+  };
 
 export interface ModerationStatus {
   contentId: string;

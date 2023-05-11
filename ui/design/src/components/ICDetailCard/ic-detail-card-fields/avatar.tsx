@@ -1,19 +1,18 @@
 import * as React from 'react';
 import styled from 'styled-components';
-
 import Icon from '../../Icon';
 import Avatar from '../../Avatar';
 import ImageOverlay from '../../ImageOverlay';
 import { AvatarBorderSize, AvatarSize } from '../../Avatar/styled-avatar';
-import { IProfileData } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 type Size = 'xl' | 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
 
 export interface ICDetailCardAvatarProps {
-  avatar?: IProfileData['avatar'];
+  avatar?: Profile['avatar'];
   avatarSize?: AvatarSize;
   avatarBorder?: AvatarBorderSize;
-  ethAddress?: string;
+  profileId?: string;
   iconType?: string;
   iconSize?: Size;
 }
@@ -42,7 +41,7 @@ const ICDetailCardAvatar: React.FC<ICDetailCardAvatarProps> = props => {
     avatar,
     avatarSize = 'xxl',
     avatarBorder = 'lg',
-    ethAddress,
+    profileId,
     iconType = 'integrationAppLarge',
     iconSize = 'xl',
   } = props;
@@ -64,8 +63,8 @@ const ICDetailCardAvatar: React.FC<ICDetailCardAvatarProps> = props => {
         <Avatar
           size={avatarSize}
           border={avatarBorder}
-          ethAddress={ethAddress}
-          src={avatar}
+          profileId={profileId}
+          avatar={avatar}
           onClick={handleClickImage}
         />
       )}
@@ -75,7 +74,9 @@ const ICDetailCardAvatar: React.FC<ICDetailCardAvatarProps> = props => {
           <Icon type={iconType} size={iconSize} plain={true} />
         </StyledBackgroundDiv>
       )}
-      {imageOverlayOpen && avatar && <ImageOverlay src={avatar} closeModal={closeImageOverlay} />}
+      {imageOverlayOpen && avatar?.default && (
+        <ImageOverlay src={avatar?.default?.src} closeModal={closeImageOverlay} />
+      )}
     </>
   );
 };
