@@ -11,15 +11,22 @@ import BecomeModeratorCard from '../components/moderator/become-moderator-card';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils/external-links';
-import { BECOME_MODERATOR } from '../routes';
+import { BECOME_MODERATOR, CHECK_APPLICATION_STATUS } from '../routes';
+
+export enum ApplicationStatusType {
+  review = 'Under Review',
+  approved = 'Approved!',
+  rejected = 'Rejected',
+}
 
 export interface IOverviewProps {
   isAuthorised: boolean;
+  applicationStatus: ApplicationStatusType | null;
   navigateTo: (args: NavigateToParams) => void;
 }
 
 export const Overview: React.FC<IOverviewProps> = props => {
-  const { isAuthorised, navigateTo } = props;
+  const { isAuthorised, applicationStatus, navigateTo } = props;
   const { t } = useTranslation('app-moderation-ewa');
 
   const handleCodeOfConductClick = () => {
@@ -39,7 +46,8 @@ export const Overview: React.FC<IOverviewProps> = props => {
   const handleClickApply = () => {
     navigateTo({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: routes => routes[BECOME_MODERATOR],
+      getNavigationUrl: routes =>
+        applicationStatus ? routes[CHECK_APPLICATION_STATUS] : routes[BECOME_MODERATOR],
     });
   };
 
@@ -81,7 +89,7 @@ export const Overview: React.FC<IOverviewProps> = props => {
           subtitleLabel={t(
             'You can help us keep the community safer by applying to be a moderator!',
           )}
-          buttonLabel={t('Apply')}
+          buttonLabel={applicationStatus ? t('Check your application') : t('Apply')}
           onClickApply={handleClickApply}
         />
       )}

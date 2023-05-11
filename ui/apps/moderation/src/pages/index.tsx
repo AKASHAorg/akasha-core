@@ -12,3 +12,4 @@ export * from './edit-max-applicants';
 export * from './resign-role';
 export * from './resign-confirmation';
 export * from './become-moderator';
+export * from './application-status';
