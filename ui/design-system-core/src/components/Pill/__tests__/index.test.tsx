@@ -15,7 +15,8 @@ describe('<Pill /> Component', () => {
       componentWrapper = customRender(
         <Pill
           label={label}
-          trailingIcon="XMarkIcon"
+          icon="XMarkIcon"
+          iconDirection="right"
           onPillClick={mockChangeHandler}
           clickable={true} // add this, to enable the click handler
         />,

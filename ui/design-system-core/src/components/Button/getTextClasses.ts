@@ -1,13 +1,13 @@
 import { getColorClasses } from '../../utils/getColorClasses';
 import { ButtonProps } from './types';
-
 interface ITextClasses {
   variant: ButtonProps['variant'];
   loading: ButtonProps['loading'];
   disabled: ButtonProps['disabled'];
+  hover: ButtonProps['hover'];
 }
 
-export function getTextClasses({ variant, loading, disabled }: ITextClasses) {
+export function getTextClasses({ variant, loading, disabled, hover }: ITextClasses) {
   if (variant === 'text') {
     const textColorStyle = getColorClasses(
       {
@@ -17,7 +17,7 @@ export function getTextClasses({ variant, loading, disabled }: ITextClasses) {
       'text',
     );
     const hoverStyle =
-      !loading && !disabled
+      !loading && !disabled && hover
         ? getColorClasses(
             {
               light: 'secondaryDark',
@@ -26,14 +26,11 @@ export function getTextClasses({ variant, loading, disabled }: ITextClasses) {
             'group-hover:text',
           )
         : '';
-
     return `${disabled ? 'opacity-50' : ''} ${textColorStyle} ${hoverStyle}`;
   }
-
   if (variant === 'primary') {
     return 'text-white';
   }
-
   if (variant === 'secondary') {
     const textColorStyle = getColorClasses(
       {
@@ -45,6 +42,5 @@ export function getTextClasses({ variant, loading, disabled }: ITextClasses) {
     const hoverStyle = !loading && !disabled ? 'dark:group-hover:text-white' : '';
     return `${textColorStyle} ${hoverStyle}`;
   }
-
   return '';
 }

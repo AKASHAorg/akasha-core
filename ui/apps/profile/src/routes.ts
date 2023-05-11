@@ -1,9 +1,9 @@
-export const STAT = 'stat';
+export const ENGAGEMENT = 'stat';
 export const EDIT = 'edit';
 
 export const rootRoute = '';
 
 export default {
-  [STAT]: `/stat`,
+  [ENGAGEMENT]: `/stat`,
   [EDIT]: `/edit`,
 };

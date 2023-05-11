@@ -10,7 +10,7 @@ export type Elevation = BaseElevation | { light: BaseElevation; dark: BaseElevat
 
 export type Radius = number | { top?: number; bottom?: number } | string;
 
-export type Padding = number | { x: number; y: number } | string;
+export type Padding = number | { x: number; y: number } | `p${string}`;
 
 export type BasicSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 

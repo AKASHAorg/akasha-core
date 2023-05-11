@@ -10,7 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import routes, { POST } from '../../../routes';
-import { UseQueryResult } from 'react-query';
+import { UseQueryResult } from '@tanstack/react-query';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';

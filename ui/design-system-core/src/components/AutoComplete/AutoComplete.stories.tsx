@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AutoComplete from '.';
 
 export default {
@@ -6,7 +6,10 @@ export default {
   component: AutoComplete,
 };
 
-const Template = args => <AutoComplete {...args} />;
+const Template = args => {
+  const [query, setQuery] = useState('');
+  return <AutoComplete value={query} onChange={setQuery} {...args} />;
+};
 
 export const BaseAutoComplete = Template.bind({});
 BaseAutoComplete.args = {

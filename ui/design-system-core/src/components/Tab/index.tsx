@@ -1,10 +1,8 @@
 import React, { Children, Fragment, PropsWithChildren, useState } from 'react';
-import { tw } from '@twind/core';
-
 import Button from '../Button';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
-
+import { apply, tw } from '@twind/core';
 import { getColorClasses } from '../../utils/getColorClasses';
 
 export type TabProps = {
@@ -12,35 +10,28 @@ export type TabProps = {
   activeTab?: number;
   borderBottom?: boolean;
   labelTextVariant?: TextProps['variant'];
-  onChange?: (selectedIndex: number) => void;
+  customStyle?: string;
+  bodyStyle?: string;
+  onChange?: (selectedIndex: number, previousIndex: number) => void;
 };
 
 const Tab: React.FC<PropsWithChildren<TabProps>> = ({
   labels,
   labelTextVariant,
   activeTab,
-  borderBottom,
   children,
+  customStyle,
+  bodyStyle,
   onChange,
 }) => {
   const [selectedIndex, changeSelectedIndex] = useState(activeTab || 0);
 
-  const onTabChange = (selectedIndex: number) => {
+  const onTabChange = (selectedIndex: number, previousIndex: number) => {
     changeSelectedIndex(selectedIndex);
-    if (onChange) onChange(selectedIndex);
+    if (onChange) onChange(selectedIndex, previousIndex);
   };
 
-  const borderBottomStyle = borderBottom
-    ? `border-b ${getColorClasses(
-        {
-          light: 'grey8',
-          dark: 'grey5',
-        },
-        'border',
-      )}`
-    : '';
-
-  const baseStyle = `group p-2 ${borderBottomStyle}`;
+  const baseStyle = 'group p-2';
 
   const activeStyle = `border-b ${getColorClasses(
     {
@@ -49,7 +40,6 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
     },
     'border',
   )}`;
-
   const hoverStyle = `hover:border-b ${getColorClasses(
     {
       light: 'secondaryLight',
@@ -57,17 +47,16 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
     },
     'hover:border',
   )}`;
-
   const getSelectedTabVariant = (index: number) =>
     selectedIndex === index ? 'button-sm' : 'footnotes2';
 
   return (
-    <Stack direction="column" spacing="gap-y-4" fullWidth>
+    <Stack direction="column" spacing="gap-y-4" customStyle={customStyle} fullWidth>
       <div className={tw(`grid grid-cols-${labels.length}`)}>
         {labels.map((label, index) => (
           <Button
             key={index}
-            onClick={() => onTabChange(index)}
+            onClick={() => onTabChange(index, selectedIndex)}
             customStyle={`${baseStyle} ${hoverStyle} ${selectedIndex === index ? activeStyle : ''}`}
             plain
           >
@@ -96,14 +85,14 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
           </Button>
         ))}
       </div>
-
       {Children.toArray(children)
         .slice(0, labels.length)
         .map((child, index) => (
-          <Fragment key={index}>{index === selectedIndex && child}</Fragment>
+          <Fragment key={index}>
+            {index === selectedIndex && <div className={tw(apply`${bodyStyle}`)}>{child}</div>}
+          </Fragment>
         ))}
     </Stack>
   );
 };
-
 export default Tab;
