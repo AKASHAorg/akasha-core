@@ -2,8 +2,12 @@ import React from 'react';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import CategoryPills, { ICategoryPillsProps } from '../../dashboard/category-pills';
-import SteppedActionWrapper, { ISteppedActionWrapperProps } from './stepped-action-wrapper';
+import {
+  CategoryPills,
+  ICategoryPillsProps,
+  ISteppedActionWrapperProps,
+  SteppedActionWrapper,
+} from '../../common';
 
 export interface IBMSelectCategoryProps extends ISteppedActionWrapperProps {
   titleLabel: string;

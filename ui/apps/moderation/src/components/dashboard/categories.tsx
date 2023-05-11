@@ -1,7 +1,6 @@
 import React from 'react';
 
-import CategoryPills, { ICategoryPillsProps } from './category-pills';
-import PageHeader, { IPageHeaderProps } from './page-header';
+import { PageHeader, IPageHeaderProps, CategoryPills, ICategoryPillsProps } from '../common';
 
 export interface IEditCategoriesProps extends IPageHeaderProps {
   label: string;

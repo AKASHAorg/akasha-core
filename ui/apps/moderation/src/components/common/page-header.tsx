@@ -5,13 +5,13 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import PageButtons, { IPageButtonsProps } from './page-buttons';
+import { PageButtons, IPageButtonsProps } from './page-buttons';
 
 export interface IPageHeaderProps extends IPageButtonsProps {
   label: string;
 }
 
-const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props => {
+export const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props => {
   const { label, children } = props;
 
   return (
@@ -32,5 +32,3 @@ const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props => {
     </BasicCardBox>
   );
 };
-
-export default PageHeader;

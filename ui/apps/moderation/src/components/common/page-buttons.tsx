@@ -10,7 +10,7 @@ export interface IPageButtonsProps {
   onConfirmButtonClick?: () => void;
 }
 
-const PageButtons: React.FC<IPageButtonsProps> = props => {
+export const PageButtons: React.FC<IPageButtonsProps> = props => {
   const { cancelButtonLabel, confirmButtonLabel, onCancelButtonClick, onConfirmButtonClick } =
     props;
 
@@ -47,5 +47,3 @@ const PageButtons: React.FC<IPageButtonsProps> = props => {
     </>
   );
 };
-
-export default PageButtons;

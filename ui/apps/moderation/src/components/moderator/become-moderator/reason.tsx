@@ -3,7 +3,7 @@ import React from 'react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import SteppedActionWrapper, { ISteppedActionWrapperProps } from './stepped-action-wrapper';
+import { ISteppedActionWrapperProps, SteppedActionWrapper } from '../../common';
 
 export interface IBMSelectReasonProps extends ISteppedActionWrapperProps {
   titleLabel: string;

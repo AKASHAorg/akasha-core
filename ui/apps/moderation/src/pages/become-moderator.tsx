@@ -10,6 +10,7 @@ import BMConfirmation from '../components/moderator/become-moderator/confirmatio
 
 import { HOME } from '../routes';
 import { reasons, preSelectedReasons } from '../utils/reasons';
+import { BMConfirmationSubtitles, BMIntroSubtitles } from '../utils';
 
 export interface IBecomeModeratorPageProps {
   user: string | null;
@@ -42,7 +43,7 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
     label: el,
   }));
 
-  const handleCodeOfConductClick = () => {
+  const handleCodeOfConductClick = () => () => {
     navigateTo({
       appName: '@akashaorg/app-legal',
       getNavigationUrl: routes => routes.codeOfConduct,
@@ -56,6 +57,13 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
   const handleCheckBoxClick = pos => () => {
     const updatedCheckedState = checkedState.map((item, idx) => (idx === pos ? !item : item));
     setCheckedState(updatedCheckedState);
+  };
+
+  const handleLinkClick = (link: string) => () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: routes => routes[link],
+    });
   };
 
   const handleCancelButtonClick = () => {
@@ -80,16 +88,13 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
       {activeStep === 0 && (
         <BecomeModeratorIntro
           titleLabel={t('Becoming a moderator')}
-          subtitle1Label={t(
-            'Becoming a moderator means that you will be responsible to protect the community from harmful contents that violate our',
-          )}
-          codeOfConductLabel={t('Code of Conduct')}
-          subtitle2Label={t(
-            'Make sure that you have fully understood our values and our code of conduct before applying!',
-          )}
+          subtitleLabels={BMIntroSubtitles.map(subtitle => ({
+            ...subtitle,
+            label: t('{{label}}', { label: subtitle.label }),
+          }))}
           cancelButtonLabel={t('Cancel')}
           confirmButtonLabel={t('Continue')}
-          onCodeOfConductClick={handleCodeOfConductClick}
+          onLinkClick={handleCodeOfConductClick}
           onCancelButtonClick={handleCancelButtonClick}
           onConfirmButtonClick={handleConfirmButtonClick}
         />
@@ -153,12 +158,12 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
           stepLabels={stepLabels}
           activeIndex={activeStep - 1}
           titleLabel="Application Successfully Submitted"
-          subtitle1Label="Your application will be reviewed by the admin and you will receive feedback shortly. To check your application status, you can click"
-          hereLabel="here"
-          subtitle2Label="or by visiting the"
-          overviewPageLabel="moderation overview"
-          subtitle3Label="page"
+          subtitleLabels={BMConfirmationSubtitles.map(subtitle => ({
+            ...subtitle,
+            label: t('{{label}}', { label: subtitle.label }),
+          }))}
           confirmButtonLabel="Continue"
+          onLinkClick={handleLinkClick}
           onConfirmButtonClick={handleConfirmButtonClick}
         />
       )}

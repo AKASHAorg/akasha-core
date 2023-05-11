@@ -11,7 +11,7 @@ export interface ICategoryPillsProps {
   allCategoriesLabel: string;
 }
 
-const CategoryPills: React.FC<ICategoryPillsProps> = props => {
+export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
   const { selectedCategories, moderationCategories, allCategoriesLabel } = props;
 
   const [categories, setCategories] = React.useState<ModerationCategory[]>(
@@ -63,5 +63,3 @@ const CategoryPills: React.FC<ICategoryPillsProps> = props => {
     </Box>
   );
 };
-
-export default CategoryPills;

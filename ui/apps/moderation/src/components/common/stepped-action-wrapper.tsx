@@ -5,7 +5,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import StepIndicator from '@akashaorg/design-system-core/lib/components/Stepper';
 
-import PageButtons, { IPageButtonsProps } from '../../dashboard/page-buttons';
+import { PageButtons, IPageButtonsProps } from './page-buttons';
 
 export interface ISteppedActionWrapperProps extends IPageButtonsProps {
   stepLabels: string[];
@@ -13,7 +13,9 @@ export interface ISteppedActionWrapperProps extends IPageButtonsProps {
   titleLabel: string;
 }
 
-const SteppedActionWrapper: React.FC<PropsWithChildren<ISteppedActionWrapperProps>> = props => {
+export const SteppedActionWrapper: React.FC<
+  PropsWithChildren<ISteppedActionWrapperProps>
+> = props => {
   const { stepLabels, activeIndex, titleLabel, children } = props;
 
   return (
@@ -36,5 +38,3 @@ const SteppedActionWrapper: React.FC<PropsWithChildren<ISteppedActionWrapperProp
     </BasicCardBox>
   );
 };
-
-export default SteppedActionWrapper;
