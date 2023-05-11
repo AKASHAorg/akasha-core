@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -11,11 +11,7 @@ export const createWrapper = () => {
     },
   });
   return [
-    ({ children }) => (
-      <QueryClientProvider contextSharing={true} client={queryClient}>
-        {children}
-      </QueryClientProvider>
-    ),
+    ({ children }) => <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>,
     queryClient,
   ];
 };
