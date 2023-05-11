@@ -1,7 +1,7 @@
-fragment PostFragment on Post{
+fragment BeamFragment on Beam{
   id
-  commentsCount
-  quotesCount
+  reflectionsCount
+  rebeamsCount
   active
   author{
     id
@@ -17,11 +17,11 @@ fragment PostFragment on Post{
   version
 }
 
-query GetPosts($after: String, $before: String, $first: Int, $last: Int){
-  postIndex(after: $after, before: $before, first: $first, last: $last){
+query GetBeams($after: String, $before: String, $first: Int, $last: Int){
+  beamIndex(after: $after, before: $before, first: $first, last: $last){
     edges {
      node {
-       ...PostFragment
+       ...BeamFragment
      }
     }
     pageInfo {
@@ -33,13 +33,13 @@ query GetPosts($after: String, $before: String, $first: Int, $last: Int){
   }
 }
 
-query GetPostsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
   node(id: $id){
     ... on CeramicAccount{
-      postList(after: $after, before: $before, first: $first, last: $last){
+      beamList(after: $after, before: $before, first: $first, last: $last){
         edges {
           node {
-            ...PostFragment
+            ...BeamFragment
           }
         }
         pageInfo {
@@ -49,29 +49,30 @@ query GetPostsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int
           hasPreviousPage
         }
       }
+      isViewer
     }
   }
 }
 
-query GetPostById($id: ID!){
+query GetBeamById($id: ID!){
   node(id: $id){
-    ... on Post{
-      ...PostFragment
+    ... on Beam{
+      ...BeamFragment
     }
   }
 }
 
-query GetQuotedPostsFromPost($id: ID!){
+query GetRebeamsFromBeam($id: ID!){
   node(id: $id){
-    ... on Post{
-      quotes(first: 5) {
+    ... on Beam{
+      rebeams(first: 5) {
         edges{
           node{
-            quotedPost{
-              ...PostFragment
+            quotedBeam{
+              ...BeamFragment
             }
-            post{
-              ...PostFragment
+            beam{
+              ...BeamFragment
             }
           }
         }
@@ -80,17 +81,17 @@ query GetQuotedPostsFromPost($id: ID!){
   }
 }
 
-query GetMentionsFromPost($id: ID!){
+query GetMentionsFromBeam($id: ID!){
   node(id: $id){
-    ... on Post{
+    ... on Beam{
       mentions(first: 10) {
         edges{
           node{
             profile{
               ...UserProfileFragment
             }
-            post{
-              ...PostFragment
+            beam{
+              ...BeamFragment
             }
           }
         }
@@ -99,31 +100,31 @@ query GetMentionsFromPost($id: ID!){
   }
 }
 
-mutation CreatePost($i: CreatePostInput!){
-  createPost(input: $i){
+mutation CreateBeam($i: CreateBeamInput!){
+  createBeam(input: $i){
     document {
-      ...PostFragment
+      ...BeamFragment
     }
   }
 }
 
-mutation UpdatePost($i: UpdatePostInput!){
-  updatePost(input: $i){
+mutation UpdateBeam($i: UpdateBeamInput!){
+  updateBeam(input: $i){
     document {
-      ...PostFragment
+      ...BeamFragment
     }
     clientMutationId
   }
 }
 
-mutation CreatePostQuote($i: CreatePostQuoteInput!){
-  createPostQuote(input: $i){
+mutation CreateRebeam($i: CreateRebeamInput!){
+  createRebeam(input: $i){
     document {
-      post {
-        ...PostFragment
+      beam {
+        ...BeamFragment
       }
-      quotedPost {
-        ...PostFragment
+      quotedBeam {
+        ...BeamFragment
       }
       active
     }
@@ -131,11 +132,11 @@ mutation CreatePostQuote($i: CreatePostQuoteInput!){
   }
 }
 
-mutation CreatePostProfileMention($i: CreateProfileMentionInput!){
+mutation CreateBeamProfileMention($i: CreateProfileMentionInput!){
   createProfileMention(input: $i){
     document {
-      post {
-        ...PostFragment
+      beam {
+        ...BeamFragment
       }
       profile {
         ...UserProfileFragment

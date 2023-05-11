@@ -1,8 +1,0 @@
-type CommentReply @loadModel(id: "kjzl6hvfrbw6c9upbqks2g1djjct4mizwq6uzfapjx0owridl8q0nugecs794pp"){
-  id: ID!
-}
-
-type Comment @loadModel(id: "kjzl6hvfrbw6c5golzc94ty8m2dmkestqdee89if5k5sh2xyhvpbi94tikky7f5"){
-  replies: [CommentReply] @relationFrom(model: "CommentReply", property: "commentID")
-  repliesCount: Int! @relationCountFrom(model: "CommentReply", property: "commentID")
-}
