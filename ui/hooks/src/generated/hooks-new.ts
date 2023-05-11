@@ -15,33 +15,11 @@ export function fetcher<TData, TVariables extends Record<string, unknown>>(query
   };
 }
 
-export const CommentFragmentDoc = /*#__PURE__*/ `
-    fragment CommentFragment on Comment {
-  author {
-    id
-  }
-  version
-  active
-  content {
-    provider
-    property
-    value
-  }
-  isReply
-  repliesCount
-  post {
-    id
-    author {
-      id
-    }
-  }
-}
-    `;
-export const PostFragmentDoc = /*#__PURE__*/ `
-    fragment PostFragment on Post {
+export const BeamFragmentDoc = /*#__PURE__*/ `
+    fragment BeamFragment on Beam {
   id
-  commentsCount
-  quotesCount
+  reflectionsCount
+  rebeamsCount
   active
   author {
     id
@@ -53,6 +31,28 @@ export const PostFragmentDoc = /*#__PURE__*/ `
   }
   tags
   version
+}
+    `;
+export const ReflectFragmentDoc = /*#__PURE__*/ `
+    fragment ReflectFragment on Reflect {
+  author {
+    id
+  }
+  version
+  active
+  content {
+    provider
+    property
+    value
+  }
+  isReply
+  reflectionsCount
+  beam {
+    id
+    author {
+      id
+    }
+  }
 }
     `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ `
@@ -94,289 +94,12 @@ export const UserProfileFragmentDoc = /*#__PURE__*/ `
   createdAt
 }
     `;
-export const GetCommentsFromPostDocument = /*#__PURE__*/ `
-    query GetCommentsFromPost($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
-  node(id: $id) {
-    ... on Post {
-      comments(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            ...CommentFragment
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const useGetCommentsFromPostQuery = <
-      TData = Types.GetCommentsFromPostQuery,
-      TError = unknown
-    >(
-      variables: Types.GetCommentsFromPostQueryVariables,
-      options?: UseQueryOptions<Types.GetCommentsFromPostQuery, TError, TData>
-    ) =>
-    useQuery<Types.GetCommentsFromPostQuery, TError, TData>(
-      ['GetCommentsFromPost', variables],
-      fetcher<Types.GetCommentsFromPostQuery, Types.GetCommentsFromPostQueryVariables>(GetCommentsFromPostDocument, variables),
-      options
-    );
-useGetCommentsFromPostQuery.document = GetCommentsFromPostDocument;
-
-
-useGetCommentsFromPostQuery.getKey = (variables: Types.GetCommentsFromPostQueryVariables) => ['GetCommentsFromPost', variables];
-;
-
-export const useInfiniteGetCommentsFromPostQuery = <
-      TData = Types.GetCommentsFromPostQuery,
-      TError = unknown
-    >(
-      pageParamKey: keyof Types.GetCommentsFromPostQueryVariables,
-      variables: Types.GetCommentsFromPostQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetCommentsFromPostQuery, TError, TData>
-    ) =>{
-    
-    return useInfiniteQuery<Types.GetCommentsFromPostQuery, TError, TData>(
-      ['GetCommentsFromPost.infinite', variables],
-      (metaData) => fetcher<Types.GetCommentsFromPostQuery, Types.GetCommentsFromPostQueryVariables>(GetCommentsFromPostDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      options
-    )};
-
-
-useInfiniteGetCommentsFromPostQuery.getKey = (variables: Types.GetCommentsFromPostQueryVariables) => ['GetCommentsFromPost.infinite', variables];
-;
-
-useGetCommentsFromPostQuery.fetcher = (variables: Types.GetCommentsFromPostQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetCommentsFromPostQuery, Types.GetCommentsFromPostQueryVariables>(GetCommentsFromPostDocument, variables, options);
-export const GetCommentsByAuthorDidDocument = /*#__PURE__*/ `
-    query GetCommentsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
-  node(id: $id) {
-    ... on CeramicAccount {
-      commentList(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            ...CommentFragment
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const useGetCommentsByAuthorDidQuery = <
-      TData = Types.GetCommentsByAuthorDidQuery,
-      TError = unknown
-    >(
-      variables: Types.GetCommentsByAuthorDidQueryVariables,
-      options?: UseQueryOptions<Types.GetCommentsByAuthorDidQuery, TError, TData>
-    ) =>
-    useQuery<Types.GetCommentsByAuthorDidQuery, TError, TData>(
-      ['GetCommentsByAuthorDid', variables],
-      fetcher<Types.GetCommentsByAuthorDidQuery, Types.GetCommentsByAuthorDidQueryVariables>(GetCommentsByAuthorDidDocument, variables),
-      options
-    );
-useGetCommentsByAuthorDidQuery.document = GetCommentsByAuthorDidDocument;
-
-
-useGetCommentsByAuthorDidQuery.getKey = (variables: Types.GetCommentsByAuthorDidQueryVariables) => ['GetCommentsByAuthorDid', variables];
-;
-
-export const useInfiniteGetCommentsByAuthorDidQuery = <
-      TData = Types.GetCommentsByAuthorDidQuery,
-      TError = unknown
-    >(
-      pageParamKey: keyof Types.GetCommentsByAuthorDidQueryVariables,
-      variables: Types.GetCommentsByAuthorDidQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetCommentsByAuthorDidQuery, TError, TData>
-    ) =>{
-    
-    return useInfiniteQuery<Types.GetCommentsByAuthorDidQuery, TError, TData>(
-      ['GetCommentsByAuthorDid.infinite', variables],
-      (metaData) => fetcher<Types.GetCommentsByAuthorDidQuery, Types.GetCommentsByAuthorDidQueryVariables>(GetCommentsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      options
-    )};
-
-
-useInfiniteGetCommentsByAuthorDidQuery.getKey = (variables: Types.GetCommentsByAuthorDidQueryVariables) => ['GetCommentsByAuthorDid.infinite', variables];
-;
-
-useGetCommentsByAuthorDidQuery.fetcher = (variables: Types.GetCommentsByAuthorDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetCommentsByAuthorDidQuery, Types.GetCommentsByAuthorDidQueryVariables>(GetCommentsByAuthorDidDocument, variables, options);
-export const GetCommentRepliesDocument = /*#__PURE__*/ `
-    query GetCommentReplies($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
-  node(id: $id) {
-    ... on Comment {
-      replies(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            reply {
-              ...CommentFragment
-            }
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const useGetCommentRepliesQuery = <
-      TData = Types.GetCommentRepliesQuery,
-      TError = unknown
-    >(
-      variables: Types.GetCommentRepliesQueryVariables,
-      options?: UseQueryOptions<Types.GetCommentRepliesQuery, TError, TData>
-    ) =>
-    useQuery<Types.GetCommentRepliesQuery, TError, TData>(
-      ['GetCommentReplies', variables],
-      fetcher<Types.GetCommentRepliesQuery, Types.GetCommentRepliesQueryVariables>(GetCommentRepliesDocument, variables),
-      options
-    );
-useGetCommentRepliesQuery.document = GetCommentRepliesDocument;
-
-
-useGetCommentRepliesQuery.getKey = (variables: Types.GetCommentRepliesQueryVariables) => ['GetCommentReplies', variables];
-;
-
-export const useInfiniteGetCommentRepliesQuery = <
-      TData = Types.GetCommentRepliesQuery,
-      TError = unknown
-    >(
-      pageParamKey: keyof Types.GetCommentRepliesQueryVariables,
-      variables: Types.GetCommentRepliesQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetCommentRepliesQuery, TError, TData>
-    ) =>{
-    
-    return useInfiniteQuery<Types.GetCommentRepliesQuery, TError, TData>(
-      ['GetCommentReplies.infinite', variables],
-      (metaData) => fetcher<Types.GetCommentRepliesQuery, Types.GetCommentRepliesQueryVariables>(GetCommentRepliesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      options
-    )};
-
-
-useInfiniteGetCommentRepliesQuery.getKey = (variables: Types.GetCommentRepliesQueryVariables) => ['GetCommentReplies.infinite', variables];
-;
-
-useGetCommentRepliesQuery.fetcher = (variables: Types.GetCommentRepliesQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetCommentRepliesQuery, Types.GetCommentRepliesQueryVariables>(GetCommentRepliesDocument, variables, options);
-export const CreateCommentDocument = /*#__PURE__*/ `
-    mutation CreateComment($i: CreateCommentInput!) {
-  createComment(input: $i) {
-    document {
-      ...CommentFragment
-    }
-    clientMutationId
-  }
-}
-    ${CommentFragmentDoc}`;
-export const useCreateCommentMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<Types.CreateCommentMutation, TError, Types.CreateCommentMutationVariables, TContext>) =>
-    useMutation<Types.CreateCommentMutation, TError, Types.CreateCommentMutationVariables, TContext>(
-      ['CreateComment'],
-      (variables?: Types.CreateCommentMutationVariables) => fetcher<Types.CreateCommentMutation, Types.CreateCommentMutationVariables>(CreateCommentDocument, variables)(),
-      options
-    );
-useCreateCommentMutation.getKey = () => ['CreateComment'];
-
-useCreateCommentMutation.fetcher = (variables: Types.CreateCommentMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateCommentMutation, Types.CreateCommentMutationVariables>(CreateCommentDocument, variables, options);
-export const UpdateCommentDocument = /*#__PURE__*/ `
-    mutation UpdateComment($i: UpdateCommentInput!) {
-  updateComment(input: $i) {
-    document {
-      ...CommentFragment
-    }
-    clientMutationId
-  }
-}
-    ${CommentFragmentDoc}`;
-export const useUpdateCommentMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<Types.UpdateCommentMutation, TError, Types.UpdateCommentMutationVariables, TContext>) =>
-    useMutation<Types.UpdateCommentMutation, TError, Types.UpdateCommentMutationVariables, TContext>(
-      ['UpdateComment'],
-      (variables?: Types.UpdateCommentMutationVariables) => fetcher<Types.UpdateCommentMutation, Types.UpdateCommentMutationVariables>(UpdateCommentDocument, variables)(),
-      options
-    );
-useUpdateCommentMutation.getKey = () => ['UpdateComment'];
-
-useUpdateCommentMutation.fetcher = (variables: Types.UpdateCommentMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateCommentMutation, Types.UpdateCommentMutationVariables>(UpdateCommentDocument, variables, options);
-export const CreateCommentReplyDocument = /*#__PURE__*/ `
-    mutation CreateCommentReply($i: CreateCommentReplyInput!) {
-  createCommentReply(input: $i) {
-    document {
-      active
-      comment {
-        ...CommentFragment
-      }
-      reply {
-        ...CommentFragment
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const useCreateCommentReplyMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<Types.CreateCommentReplyMutation, TError, Types.CreateCommentReplyMutationVariables, TContext>) =>
-    useMutation<Types.CreateCommentReplyMutation, TError, Types.CreateCommentReplyMutationVariables, TContext>(
-      ['CreateCommentReply'],
-      (variables?: Types.CreateCommentReplyMutationVariables) => fetcher<Types.CreateCommentReplyMutation, Types.CreateCommentReplyMutationVariables>(CreateCommentReplyDocument, variables)(),
-      options
-    );
-useCreateCommentReplyMutation.getKey = () => ['CreateCommentReply'];
-
-useCreateCommentReplyMutation.fetcher = (variables: Types.CreateCommentReplyMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateCommentReplyMutation, Types.CreateCommentReplyMutationVariables>(CreateCommentReplyDocument, variables, options);
-export const UpdateCommentReplyDocument = /*#__PURE__*/ `
-    mutation UpdateCommentReply($i: UpdateCommentReplyInput!) {
-  updateCommentReply(input: $i) {
-    document {
-      active
-      comment {
-        ...CommentFragment
-      }
-      reply {
-        ...CommentFragment
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const useUpdateCommentReplyMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<Types.UpdateCommentReplyMutation, TError, Types.UpdateCommentReplyMutationVariables, TContext>) =>
-    useMutation<Types.UpdateCommentReplyMutation, TError, Types.UpdateCommentReplyMutationVariables, TContext>(
-      ['UpdateCommentReply'],
-      (variables?: Types.UpdateCommentReplyMutationVariables) => fetcher<Types.UpdateCommentReplyMutation, Types.UpdateCommentReplyMutationVariables>(UpdateCommentReplyDocument, variables)(),
-      options
-    );
-useUpdateCommentReplyMutation.getKey = () => ['UpdateCommentReply'];
-
-useUpdateCommentReplyMutation.fetcher = (variables: Types.UpdateCommentReplyMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateCommentReplyMutation, Types.UpdateCommentReplyMutationVariables>(UpdateCommentReplyDocument, variables, options);
-export const GetPostsDocument = /*#__PURE__*/ `
-    query GetPosts($after: String, $before: String, $first: Int, $last: Int) {
-  postIndex(after: $after, before: $before, first: $first, last: $last) {
+export const GetBeamsDocument = /*#__PURE__*/ `
+    query GetBeams($after: String, $before: String, $first: Int, $last: Int) {
+  beamIndex(after: $after, before: $before, first: $first, last: $last) {
     edges {
       node {
-        ...PostFragment
+        ...BeamFragment
       }
     }
     pageInfo {
@@ -387,53 +110,375 @@ export const GetPostsDocument = /*#__PURE__*/ `
     }
   }
 }
-    ${PostFragmentDoc}`;
-export const useGetPostsQuery = <
-      TData = Types.GetPostsQuery,
+    ${BeamFragmentDoc}`;
+export const useGetBeamsQuery = <
+      TData = Types.GetBeamsQuery,
       TError = unknown
     >(
-      variables?: Types.GetPostsQueryVariables,
-      options?: UseQueryOptions<Types.GetPostsQuery, TError, TData>
+      variables?: Types.GetBeamsQueryVariables,
+      options?: UseQueryOptions<Types.GetBeamsQuery, TError, TData>
     ) =>
-    useQuery<Types.GetPostsQuery, TError, TData>(
-      variables === undefined ? ['GetPosts'] : ['GetPosts', variables],
-      fetcher<Types.GetPostsQuery, Types.GetPostsQueryVariables>(GetPostsDocument, variables),
+    useQuery<Types.GetBeamsQuery, TError, TData>(
+      variables === undefined ? ['GetBeams'] : ['GetBeams', variables],
+      fetcher<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables),
       options
     );
-useGetPostsQuery.document = GetPostsDocument;
+useGetBeamsQuery.document = GetBeamsDocument;
 
 
-useGetPostsQuery.getKey = (variables?: Types.GetPostsQueryVariables) => variables === undefined ? ['GetPosts'] : ['GetPosts', variables];
+useGetBeamsQuery.getKey = (variables?: Types.GetBeamsQueryVariables) => variables === undefined ? ['GetBeams'] : ['GetBeams', variables];
 ;
 
-export const useInfiniteGetPostsQuery = <
-      TData = Types.GetPostsQuery,
+export const useInfiniteGetBeamsQuery = <
+      TData = Types.GetBeamsQuery,
       TError = unknown
     >(
-      pageParamKey: keyof Types.GetPostsQueryVariables,
-      variables?: Types.GetPostsQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetPostsQuery, TError, TData>
+      pageParamKey: keyof Types.GetBeamsQueryVariables,
+      variables?: Types.GetBeamsQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetBeamsQuery, TError, TData>
     ) =>{
     
-    return useInfiniteQuery<Types.GetPostsQuery, TError, TData>(
-      variables === undefined ? ['GetPosts.infinite'] : ['GetPosts.infinite', variables],
-      (metaData) => fetcher<Types.GetPostsQuery, Types.GetPostsQueryVariables>(GetPostsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+    return useInfiniteQuery<Types.GetBeamsQuery, TError, TData>(
+      variables === undefined ? ['GetBeams.infinite'] : ['GetBeams.infinite', variables],
+      (metaData) => fetcher<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetPostsQuery.getKey = (variables?: Types.GetPostsQueryVariables) => variables === undefined ? ['GetPosts.infinite'] : ['GetPosts.infinite', variables];
+useInfiniteGetBeamsQuery.getKey = (variables?: Types.GetBeamsQueryVariables) => variables === undefined ? ['GetBeams.infinite'] : ['GetBeams.infinite', variables];
 ;
 
-useGetPostsQuery.fetcher = (variables?: Types.GetPostsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetPostsQuery, Types.GetPostsQueryVariables>(GetPostsDocument, variables, options);
-export const GetPostsByAuthorDidDocument = /*#__PURE__*/ `
-    query GetPostsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+useGetBeamsQuery.fetcher = (variables?: Types.GetBeamsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables, options);
+export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ `
+    query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
     ... on CeramicAccount {
-      postList(after: $after, before: $before, first: $first, last: $last) {
+      beamList(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
-            ...PostFragment
+            ...BeamFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    ${BeamFragmentDoc}`;
+export const useGetBeamsByAuthorDidQuery = <
+      TData = Types.GetBeamsByAuthorDidQuery,
+      TError = unknown
+    >(
+      variables: Types.GetBeamsByAuthorDidQueryVariables,
+      options?: UseQueryOptions<Types.GetBeamsByAuthorDidQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetBeamsByAuthorDidQuery, TError, TData>(
+      ['GetBeamsByAuthorDid', variables],
+      fetcher<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, variables),
+      options
+    );
+useGetBeamsByAuthorDidQuery.document = GetBeamsByAuthorDidDocument;
+
+
+useGetBeamsByAuthorDidQuery.getKey = (variables: Types.GetBeamsByAuthorDidQueryVariables) => ['GetBeamsByAuthorDid', variables];
+;
+
+export const useInfiniteGetBeamsByAuthorDidQuery = <
+      TData = Types.GetBeamsByAuthorDidQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetBeamsByAuthorDidQueryVariables,
+      variables: Types.GetBeamsByAuthorDidQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetBeamsByAuthorDidQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetBeamsByAuthorDidQuery, TError, TData>(
+      ['GetBeamsByAuthorDid.infinite', variables],
+      (metaData) => fetcher<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetBeamsByAuthorDidQuery.getKey = (variables: Types.GetBeamsByAuthorDidQueryVariables) => ['GetBeamsByAuthorDid.infinite', variables];
+;
+
+useGetBeamsByAuthorDidQuery.fetcher = (variables: Types.GetBeamsByAuthorDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, variables, options);
+export const GetBeamByIdDocument = /*#__PURE__*/ `
+    query GetBeamById($id: ID!) {
+  node(id: $id) {
+    ... on Beam {
+      ...BeamFragment
+    }
+  }
+}
+    ${BeamFragmentDoc}`;
+export const useGetBeamByIdQuery = <
+      TData = Types.GetBeamByIdQuery,
+      TError = unknown
+    >(
+      variables: Types.GetBeamByIdQueryVariables,
+      options?: UseQueryOptions<Types.GetBeamByIdQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetBeamByIdQuery, TError, TData>(
+      ['GetBeamById', variables],
+      fetcher<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables),
+      options
+    );
+useGetBeamByIdQuery.document = GetBeamByIdDocument;
+
+
+useGetBeamByIdQuery.getKey = (variables: Types.GetBeamByIdQueryVariables) => ['GetBeamById', variables];
+;
+
+export const useInfiniteGetBeamByIdQuery = <
+      TData = Types.GetBeamByIdQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetBeamByIdQueryVariables,
+      variables: Types.GetBeamByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetBeamByIdQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetBeamByIdQuery, TError, TData>(
+      ['GetBeamById.infinite', variables],
+      (metaData) => fetcher<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetBeamByIdQuery.getKey = (variables: Types.GetBeamByIdQueryVariables) => ['GetBeamById.infinite', variables];
+;
+
+useGetBeamByIdQuery.fetcher = (variables: Types.GetBeamByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options);
+export const GetRebeamsFromBeamDocument = /*#__PURE__*/ `
+    query GetRebeamsFromBeam($id: ID!) {
+  node(id: $id) {
+    ... on Beam {
+      rebeams(first: 5) {
+        edges {
+          node {
+            quotedBeam {
+              ...BeamFragment
+            }
+            beam {
+              ...BeamFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    ${BeamFragmentDoc}`;
+export const useGetRebeamsFromBeamQuery = <
+      TData = Types.GetRebeamsFromBeamQuery,
+      TError = unknown
+    >(
+      variables: Types.GetRebeamsFromBeamQueryVariables,
+      options?: UseQueryOptions<Types.GetRebeamsFromBeamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetRebeamsFromBeamQuery, TError, TData>(
+      ['GetRebeamsFromBeam', variables],
+      fetcher<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, variables),
+      options
+    );
+useGetRebeamsFromBeamQuery.document = GetRebeamsFromBeamDocument;
+
+
+useGetRebeamsFromBeamQuery.getKey = (variables: Types.GetRebeamsFromBeamQueryVariables) => ['GetRebeamsFromBeam', variables];
+;
+
+export const useInfiniteGetRebeamsFromBeamQuery = <
+      TData = Types.GetRebeamsFromBeamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetRebeamsFromBeamQueryVariables,
+      variables: Types.GetRebeamsFromBeamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetRebeamsFromBeamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetRebeamsFromBeamQuery, TError, TData>(
+      ['GetRebeamsFromBeam.infinite', variables],
+      (metaData) => fetcher<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetRebeamsFromBeamQuery.getKey = (variables: Types.GetRebeamsFromBeamQueryVariables) => ['GetRebeamsFromBeam.infinite', variables];
+;
+
+useGetRebeamsFromBeamQuery.fetcher = (variables: Types.GetRebeamsFromBeamQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, variables, options);
+export const GetMentionsFromBeamDocument = /*#__PURE__*/ `
+    query GetMentionsFromBeam($id: ID!) {
+  node(id: $id) {
+    ... on Beam {
+      mentions(first: 10) {
+        edges {
+          node {
+            profile {
+              ...UserProfileFragment
+            }
+            beam {
+              ...BeamFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    ${UserProfileFragmentDoc}
+${BeamFragmentDoc}`;
+export const useGetMentionsFromBeamQuery = <
+      TData = Types.GetMentionsFromBeamQuery,
+      TError = unknown
+    >(
+      variables: Types.GetMentionsFromBeamQueryVariables,
+      options?: UseQueryOptions<Types.GetMentionsFromBeamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetMentionsFromBeamQuery, TError, TData>(
+      ['GetMentionsFromBeam', variables],
+      fetcher<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, variables),
+      options
+    );
+useGetMentionsFromBeamQuery.document = GetMentionsFromBeamDocument;
+
+
+useGetMentionsFromBeamQuery.getKey = (variables: Types.GetMentionsFromBeamQueryVariables) => ['GetMentionsFromBeam', variables];
+;
+
+export const useInfiniteGetMentionsFromBeamQuery = <
+      TData = Types.GetMentionsFromBeamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetMentionsFromBeamQueryVariables,
+      variables: Types.GetMentionsFromBeamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetMentionsFromBeamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetMentionsFromBeamQuery, TError, TData>(
+      ['GetMentionsFromBeam.infinite', variables],
+      (metaData) => fetcher<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetMentionsFromBeamQuery.getKey = (variables: Types.GetMentionsFromBeamQueryVariables) => ['GetMentionsFromBeam.infinite', variables];
+;
+
+useGetMentionsFromBeamQuery.fetcher = (variables: Types.GetMentionsFromBeamQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, variables, options);
+export const CreateBeamDocument = /*#__PURE__*/ `
+    mutation CreateBeam($i: CreateBeamInput!) {
+  createBeam(input: $i) {
+    document {
+      ...BeamFragment
+    }
+  }
+}
+    ${BeamFragmentDoc}`;
+export const useCreateBeamMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.CreateBeamMutation, TError, Types.CreateBeamMutationVariables, TContext>) =>
+    useMutation<Types.CreateBeamMutation, TError, Types.CreateBeamMutationVariables, TContext>(
+      ['CreateBeam'],
+      (variables?: Types.CreateBeamMutationVariables) => fetcher<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables)(),
+      options
+    );
+useCreateBeamMutation.getKey = () => ['CreateBeam'];
+
+useCreateBeamMutation.fetcher = (variables: Types.CreateBeamMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables, options);
+export const UpdateBeamDocument = /*#__PURE__*/ `
+    mutation UpdateBeam($i: UpdateBeamInput!) {
+  updateBeam(input: $i) {
+    document {
+      ...BeamFragment
+    }
+    clientMutationId
+  }
+}
+    ${BeamFragmentDoc}`;
+export const useUpdateBeamMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.UpdateBeamMutation, TError, Types.UpdateBeamMutationVariables, TContext>) =>
+    useMutation<Types.UpdateBeamMutation, TError, Types.UpdateBeamMutationVariables, TContext>(
+      ['UpdateBeam'],
+      (variables?: Types.UpdateBeamMutationVariables) => fetcher<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables)(),
+      options
+    );
+useUpdateBeamMutation.getKey = () => ['UpdateBeam'];
+
+useUpdateBeamMutation.fetcher = (variables: Types.UpdateBeamMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables, options);
+export const CreateRebeamDocument = /*#__PURE__*/ `
+    mutation CreateRebeam($i: CreateRebeamInput!) {
+  createRebeam(input: $i) {
+    document {
+      beam {
+        ...BeamFragment
+      }
+      quotedBeam {
+        ...BeamFragment
+      }
+      active
+    }
+    clientMutationId
+  }
+}
+    ${BeamFragmentDoc}`;
+export const useCreateRebeamMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.CreateRebeamMutation, TError, Types.CreateRebeamMutationVariables, TContext>) =>
+    useMutation<Types.CreateRebeamMutation, TError, Types.CreateRebeamMutationVariables, TContext>(
+      ['CreateRebeam'],
+      (variables?: Types.CreateRebeamMutationVariables) => fetcher<Types.CreateRebeamMutation, Types.CreateRebeamMutationVariables>(CreateRebeamDocument, variables)(),
+      options
+    );
+useCreateRebeamMutation.getKey = () => ['CreateRebeam'];
+
+useCreateRebeamMutation.fetcher = (variables: Types.CreateRebeamMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateRebeamMutation, Types.CreateRebeamMutationVariables>(CreateRebeamDocument, variables, options);
+export const CreateBeamProfileMentionDocument = /*#__PURE__*/ `
+    mutation CreateBeamProfileMention($i: CreateProfileMentionInput!) {
+  createProfileMention(input: $i) {
+    document {
+      beam {
+        ...BeamFragment
+      }
+      profile {
+        ...UserProfileFragment
+      }
+    }
+  }
+}
+    ${BeamFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useCreateBeamProfileMentionMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.CreateBeamProfileMentionMutation, TError, Types.CreateBeamProfileMentionMutationVariables, TContext>) =>
+    useMutation<Types.CreateBeamProfileMentionMutation, TError, Types.CreateBeamProfileMentionMutationVariables, TContext>(
+      ['CreateBeamProfileMention'],
+      (variables?: Types.CreateBeamProfileMentionMutationVariables) => fetcher<Types.CreateBeamProfileMentionMutation, Types.CreateBeamProfileMentionMutationVariables>(CreateBeamProfileMentionDocument, variables)(),
+      options
+    );
+useCreateBeamProfileMentionMutation.getKey = () => ['CreateBeamProfileMention'];
+
+useCreateBeamProfileMentionMutation.fetcher = (variables: Types.CreateBeamProfileMentionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateBeamProfileMentionMutation, Types.CreateBeamProfileMentionMutationVariables>(CreateBeamProfileMentionDocument, variables, options);
+export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
+    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  node(id: $id) {
+    ... on Beam {
+      reflections(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            ...ReflectFragment
           }
         }
         pageInfo {
@@ -446,307 +491,264 @@ export const GetPostsByAuthorDidDocument = /*#__PURE__*/ `
     }
   }
 }
-    ${PostFragmentDoc}`;
-export const useGetPostsByAuthorDidQuery = <
-      TData = Types.GetPostsByAuthorDidQuery,
+    ${ReflectFragmentDoc}`;
+export const useGetReflectionsFromBeamQuery = <
+      TData = Types.GetReflectionsFromBeamQuery,
       TError = unknown
     >(
-      variables: Types.GetPostsByAuthorDidQueryVariables,
-      options?: UseQueryOptions<Types.GetPostsByAuthorDidQuery, TError, TData>
+      variables: Types.GetReflectionsFromBeamQueryVariables,
+      options?: UseQueryOptions<Types.GetReflectionsFromBeamQuery, TError, TData>
     ) =>
-    useQuery<Types.GetPostsByAuthorDidQuery, TError, TData>(
-      ['GetPostsByAuthorDid', variables],
-      fetcher<Types.GetPostsByAuthorDidQuery, Types.GetPostsByAuthorDidQueryVariables>(GetPostsByAuthorDidDocument, variables),
+    useQuery<Types.GetReflectionsFromBeamQuery, TError, TData>(
+      ['GetReflectionsFromBeam', variables],
+      fetcher<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables),
       options
     );
-useGetPostsByAuthorDidQuery.document = GetPostsByAuthorDidDocument;
+useGetReflectionsFromBeamQuery.document = GetReflectionsFromBeamDocument;
 
 
-useGetPostsByAuthorDidQuery.getKey = (variables: Types.GetPostsByAuthorDidQueryVariables) => ['GetPostsByAuthorDid', variables];
+useGetReflectionsFromBeamQuery.getKey = (variables: Types.GetReflectionsFromBeamQueryVariables) => ['GetReflectionsFromBeam', variables];
 ;
 
-export const useInfiniteGetPostsByAuthorDidQuery = <
-      TData = Types.GetPostsByAuthorDidQuery,
+export const useInfiniteGetReflectionsFromBeamQuery = <
+      TData = Types.GetReflectionsFromBeamQuery,
       TError = unknown
     >(
-      pageParamKey: keyof Types.GetPostsByAuthorDidQueryVariables,
-      variables: Types.GetPostsByAuthorDidQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetPostsByAuthorDidQuery, TError, TData>
+      pageParamKey: keyof Types.GetReflectionsFromBeamQueryVariables,
+      variables: Types.GetReflectionsFromBeamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetReflectionsFromBeamQuery, TError, TData>
     ) =>{
     
-    return useInfiniteQuery<Types.GetPostsByAuthorDidQuery, TError, TData>(
-      ['GetPostsByAuthorDid.infinite', variables],
-      (metaData) => fetcher<Types.GetPostsByAuthorDidQuery, Types.GetPostsByAuthorDidQueryVariables>(GetPostsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+    return useInfiniteQuery<Types.GetReflectionsFromBeamQuery, TError, TData>(
+      ['GetReflectionsFromBeam.infinite', variables],
+      (metaData) => fetcher<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetPostsByAuthorDidQuery.getKey = (variables: Types.GetPostsByAuthorDidQueryVariables) => ['GetPostsByAuthorDid.infinite', variables];
+useInfiniteGetReflectionsFromBeamQuery.getKey = (variables: Types.GetReflectionsFromBeamQueryVariables) => ['GetReflectionsFromBeam.infinite', variables];
 ;
 
-useGetPostsByAuthorDidQuery.fetcher = (variables: Types.GetPostsByAuthorDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetPostsByAuthorDidQuery, Types.GetPostsByAuthorDidQueryVariables>(GetPostsByAuthorDidDocument, variables, options);
-export const GetPostByIdDocument = /*#__PURE__*/ `
-    query GetPostById($id: ID!) {
+useGetReflectionsFromBeamQuery.fetcher = (variables: Types.GetReflectionsFromBeamQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables, options);
+export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ `
+    query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
-    ... on Post {
-      ...PostFragment
+    ... on CeramicAccount {
+      reflectList(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            ...ReflectFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
     }
   }
 }
-    ${PostFragmentDoc}`;
-export const useGetPostByIdQuery = <
-      TData = Types.GetPostByIdQuery,
+    ${ReflectFragmentDoc}`;
+export const useGetReflectionsByAuthorDidQuery = <
+      TData = Types.GetReflectionsByAuthorDidQuery,
       TError = unknown
     >(
-      variables: Types.GetPostByIdQueryVariables,
-      options?: UseQueryOptions<Types.GetPostByIdQuery, TError, TData>
+      variables: Types.GetReflectionsByAuthorDidQueryVariables,
+      options?: UseQueryOptions<Types.GetReflectionsByAuthorDidQuery, TError, TData>
     ) =>
-    useQuery<Types.GetPostByIdQuery, TError, TData>(
-      ['GetPostById', variables],
-      fetcher<Types.GetPostByIdQuery, Types.GetPostByIdQueryVariables>(GetPostByIdDocument, variables),
+    useQuery<Types.GetReflectionsByAuthorDidQuery, TError, TData>(
+      ['GetReflectionsByAuthorDid', variables],
+      fetcher<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables),
       options
     );
-useGetPostByIdQuery.document = GetPostByIdDocument;
+useGetReflectionsByAuthorDidQuery.document = GetReflectionsByAuthorDidDocument;
 
 
-useGetPostByIdQuery.getKey = (variables: Types.GetPostByIdQueryVariables) => ['GetPostById', variables];
+useGetReflectionsByAuthorDidQuery.getKey = (variables: Types.GetReflectionsByAuthorDidQueryVariables) => ['GetReflectionsByAuthorDid', variables];
 ;
 
-export const useInfiniteGetPostByIdQuery = <
-      TData = Types.GetPostByIdQuery,
+export const useInfiniteGetReflectionsByAuthorDidQuery = <
+      TData = Types.GetReflectionsByAuthorDidQuery,
       TError = unknown
     >(
-      pageParamKey: keyof Types.GetPostByIdQueryVariables,
-      variables: Types.GetPostByIdQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetPostByIdQuery, TError, TData>
+      pageParamKey: keyof Types.GetReflectionsByAuthorDidQueryVariables,
+      variables: Types.GetReflectionsByAuthorDidQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetReflectionsByAuthorDidQuery, TError, TData>
     ) =>{
     
-    return useInfiniteQuery<Types.GetPostByIdQuery, TError, TData>(
-      ['GetPostById.infinite', variables],
-      (metaData) => fetcher<Types.GetPostByIdQuery, Types.GetPostByIdQueryVariables>(GetPostByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+    return useInfiniteQuery<Types.GetReflectionsByAuthorDidQuery, TError, TData>(
+      ['GetReflectionsByAuthorDid.infinite', variables],
+      (metaData) => fetcher<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetPostByIdQuery.getKey = (variables: Types.GetPostByIdQueryVariables) => ['GetPostById.infinite', variables];
+useInfiniteGetReflectionsByAuthorDidQuery.getKey = (variables: Types.GetReflectionsByAuthorDidQueryVariables) => ['GetReflectionsByAuthorDid.infinite', variables];
 ;
 
-useGetPostByIdQuery.fetcher = (variables: Types.GetPostByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetPostByIdQuery, Types.GetPostByIdQueryVariables>(GetPostByIdDocument, variables, options);
-export const GetQuotedPostsFromPostDocument = /*#__PURE__*/ `
-    query GetQuotedPostsFromPost($id: ID!) {
+useGetReflectionsByAuthorDidQuery.fetcher = (variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options);
+export const GetReflectReflectionsDocument = /*#__PURE__*/ `
+    query GetReflectReflections($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
-    ... on Post {
-      quotes(first: 5) {
+    ... on Reflect {
+      reflections(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
-            quotedPost {
-              ...PostFragment
-            }
-            post {
-              ...PostFragment
+            reflect {
+              ...ReflectFragment
             }
           }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
         }
       }
     }
   }
 }
-    ${PostFragmentDoc}`;
-export const useGetQuotedPostsFromPostQuery = <
-      TData = Types.GetQuotedPostsFromPostQuery,
+    ${ReflectFragmentDoc}`;
+export const useGetReflectReflectionsQuery = <
+      TData = Types.GetReflectReflectionsQuery,
       TError = unknown
     >(
-      variables: Types.GetQuotedPostsFromPostQueryVariables,
-      options?: UseQueryOptions<Types.GetQuotedPostsFromPostQuery, TError, TData>
+      variables: Types.GetReflectReflectionsQueryVariables,
+      options?: UseQueryOptions<Types.GetReflectReflectionsQuery, TError, TData>
     ) =>
-    useQuery<Types.GetQuotedPostsFromPostQuery, TError, TData>(
-      ['GetQuotedPostsFromPost', variables],
-      fetcher<Types.GetQuotedPostsFromPostQuery, Types.GetQuotedPostsFromPostQueryVariables>(GetQuotedPostsFromPostDocument, variables),
+    useQuery<Types.GetReflectReflectionsQuery, TError, TData>(
+      ['GetReflectReflections', variables],
+      fetcher<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables),
       options
     );
-useGetQuotedPostsFromPostQuery.document = GetQuotedPostsFromPostDocument;
+useGetReflectReflectionsQuery.document = GetReflectReflectionsDocument;
 
 
-useGetQuotedPostsFromPostQuery.getKey = (variables: Types.GetQuotedPostsFromPostQueryVariables) => ['GetQuotedPostsFromPost', variables];
+useGetReflectReflectionsQuery.getKey = (variables: Types.GetReflectReflectionsQueryVariables) => ['GetReflectReflections', variables];
 ;
 
-export const useInfiniteGetQuotedPostsFromPostQuery = <
-      TData = Types.GetQuotedPostsFromPostQuery,
+export const useInfiniteGetReflectReflectionsQuery = <
+      TData = Types.GetReflectReflectionsQuery,
       TError = unknown
     >(
-      pageParamKey: keyof Types.GetQuotedPostsFromPostQueryVariables,
-      variables: Types.GetQuotedPostsFromPostQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetQuotedPostsFromPostQuery, TError, TData>
+      pageParamKey: keyof Types.GetReflectReflectionsQueryVariables,
+      variables: Types.GetReflectReflectionsQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetReflectReflectionsQuery, TError, TData>
     ) =>{
     
-    return useInfiniteQuery<Types.GetQuotedPostsFromPostQuery, TError, TData>(
-      ['GetQuotedPostsFromPost.infinite', variables],
-      (metaData) => fetcher<Types.GetQuotedPostsFromPostQuery, Types.GetQuotedPostsFromPostQueryVariables>(GetQuotedPostsFromPostDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+    return useInfiniteQuery<Types.GetReflectReflectionsQuery, TError, TData>(
+      ['GetReflectReflections.infinite', variables],
+      (metaData) => fetcher<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetQuotedPostsFromPostQuery.getKey = (variables: Types.GetQuotedPostsFromPostQueryVariables) => ['GetQuotedPostsFromPost.infinite', variables];
+useInfiniteGetReflectReflectionsQuery.getKey = (variables: Types.GetReflectReflectionsQueryVariables) => ['GetReflectReflections.infinite', variables];
 ;
 
-useGetQuotedPostsFromPostQuery.fetcher = (variables: Types.GetQuotedPostsFromPostQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetQuotedPostsFromPostQuery, Types.GetQuotedPostsFromPostQueryVariables>(GetQuotedPostsFromPostDocument, variables, options);
-export const GetMentionsFromPostDocument = /*#__PURE__*/ `
-    query GetMentionsFromPost($id: ID!) {
-  node(id: $id) {
-    ... on Post {
-      mentions(first: 10) {
-        edges {
-          node {
-            profile {
-              ...UserProfileFragment
-            }
-            post {
-              ...PostFragment
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    ${UserProfileFragmentDoc}
-${PostFragmentDoc}`;
-export const useGetMentionsFromPostQuery = <
-      TData = Types.GetMentionsFromPostQuery,
-      TError = unknown
-    >(
-      variables: Types.GetMentionsFromPostQueryVariables,
-      options?: UseQueryOptions<Types.GetMentionsFromPostQuery, TError, TData>
-    ) =>
-    useQuery<Types.GetMentionsFromPostQuery, TError, TData>(
-      ['GetMentionsFromPost', variables],
-      fetcher<Types.GetMentionsFromPostQuery, Types.GetMentionsFromPostQueryVariables>(GetMentionsFromPostDocument, variables),
-      options
-    );
-useGetMentionsFromPostQuery.document = GetMentionsFromPostDocument;
-
-
-useGetMentionsFromPostQuery.getKey = (variables: Types.GetMentionsFromPostQueryVariables) => ['GetMentionsFromPost', variables];
-;
-
-export const useInfiniteGetMentionsFromPostQuery = <
-      TData = Types.GetMentionsFromPostQuery,
-      TError = unknown
-    >(
-      pageParamKey: keyof Types.GetMentionsFromPostQueryVariables,
-      variables: Types.GetMentionsFromPostQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetMentionsFromPostQuery, TError, TData>
-    ) =>{
-    
-    return useInfiniteQuery<Types.GetMentionsFromPostQuery, TError, TData>(
-      ['GetMentionsFromPost.infinite', variables],
-      (metaData) => fetcher<Types.GetMentionsFromPostQuery, Types.GetMentionsFromPostQueryVariables>(GetMentionsFromPostDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      options
-    )};
-
-
-useInfiniteGetMentionsFromPostQuery.getKey = (variables: Types.GetMentionsFromPostQueryVariables) => ['GetMentionsFromPost.infinite', variables];
-;
-
-useGetMentionsFromPostQuery.fetcher = (variables: Types.GetMentionsFromPostQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetMentionsFromPostQuery, Types.GetMentionsFromPostQueryVariables>(GetMentionsFromPostDocument, variables, options);
-export const CreatePostDocument = /*#__PURE__*/ `
-    mutation CreatePost($i: CreatePostInput!) {
-  createPost(input: $i) {
+useGetReflectReflectionsQuery.fetcher = (variables: Types.GetReflectReflectionsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options);
+export const CreateReflectDocument = /*#__PURE__*/ `
+    mutation CreateReflect($i: CreateReflectInput!) {
+  createReflect(input: $i) {
     document {
-      ...PostFragment
-    }
-  }
-}
-    ${PostFragmentDoc}`;
-export const useCreatePostMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<Types.CreatePostMutation, TError, Types.CreatePostMutationVariables, TContext>) =>
-    useMutation<Types.CreatePostMutation, TError, Types.CreatePostMutationVariables, TContext>(
-      ['CreatePost'],
-      (variables?: Types.CreatePostMutationVariables) => fetcher<Types.CreatePostMutation, Types.CreatePostMutationVariables>(CreatePostDocument, variables)(),
-      options
-    );
-useCreatePostMutation.getKey = () => ['CreatePost'];
-
-useCreatePostMutation.fetcher = (variables: Types.CreatePostMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreatePostMutation, Types.CreatePostMutationVariables>(CreatePostDocument, variables, options);
-export const UpdatePostDocument = /*#__PURE__*/ `
-    mutation UpdatePost($i: UpdatePostInput!) {
-  updatePost(input: $i) {
-    document {
-      ...PostFragment
+      ...ReflectFragment
     }
     clientMutationId
   }
 }
-    ${PostFragmentDoc}`;
-export const useUpdatePostMutation = <
+    ${ReflectFragmentDoc}`;
+export const useCreateReflectMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.UpdatePostMutation, TError, Types.UpdatePostMutationVariables, TContext>) =>
-    useMutation<Types.UpdatePostMutation, TError, Types.UpdatePostMutationVariables, TContext>(
-      ['UpdatePost'],
-      (variables?: Types.UpdatePostMutationVariables) => fetcher<Types.UpdatePostMutation, Types.UpdatePostMutationVariables>(UpdatePostDocument, variables)(),
+    >(options?: UseMutationOptions<Types.CreateReflectMutation, TError, Types.CreateReflectMutationVariables, TContext>) =>
+    useMutation<Types.CreateReflectMutation, TError, Types.CreateReflectMutationVariables, TContext>(
+      ['CreateReflect'],
+      (variables?: Types.CreateReflectMutationVariables) => fetcher<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables)(),
       options
     );
-useUpdatePostMutation.getKey = () => ['UpdatePost'];
+useCreateReflectMutation.getKey = () => ['CreateReflect'];
 
-useUpdatePostMutation.fetcher = (variables: Types.UpdatePostMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdatePostMutation, Types.UpdatePostMutationVariables>(UpdatePostDocument, variables, options);
-export const CreatePostQuoteDocument = /*#__PURE__*/ `
-    mutation CreatePostQuote($i: CreatePostQuoteInput!) {
-  createPostQuote(input: $i) {
+useCreateReflectMutation.fetcher = (variables: Types.CreateReflectMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables, options);
+export const UpdateReflectDocument = /*#__PURE__*/ `
+    mutation UpdateReflect($i: UpdateReflectInput!) {
+  updateReflect(input: $i) {
     document {
-      post {
-        ...PostFragment
-      }
-      quotedPost {
-        ...PostFragment
-      }
+      ...ReflectFragment
+    }
+    clientMutationId
+  }
+}
+    ${ReflectFragmentDoc}`;
+export const useUpdateReflectMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.UpdateReflectMutation, TError, Types.UpdateReflectMutationVariables, TContext>) =>
+    useMutation<Types.UpdateReflectMutation, TError, Types.UpdateReflectMutationVariables, TContext>(
+      ['UpdateReflect'],
+      (variables?: Types.UpdateReflectMutationVariables) => fetcher<Types.UpdateReflectMutation, Types.UpdateReflectMutationVariables>(UpdateReflectDocument, variables)(),
+      options
+    );
+useUpdateReflectMutation.getKey = () => ['UpdateReflect'];
+
+useUpdateReflectMutation.fetcher = (variables: Types.UpdateReflectMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateReflectMutation, Types.UpdateReflectMutationVariables>(UpdateReflectDocument, variables, options);
+export const CreateReflectReflectionDocument = /*#__PURE__*/ `
+    mutation CreateReflectReflection($i: CreateReflectionInput!) {
+  createReflection(input: $i) {
+    document {
       active
+      reflect {
+        ...ReflectFragment
+      }
+      reflection {
+        ...ReflectFragment
+      }
     }
-    clientMutationId
   }
 }
-    ${PostFragmentDoc}`;
-export const useCreatePostQuoteMutation = <
+    ${ReflectFragmentDoc}`;
+export const useCreateReflectReflectionMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.CreatePostQuoteMutation, TError, Types.CreatePostQuoteMutationVariables, TContext>) =>
-    useMutation<Types.CreatePostQuoteMutation, TError, Types.CreatePostQuoteMutationVariables, TContext>(
-      ['CreatePostQuote'],
-      (variables?: Types.CreatePostQuoteMutationVariables) => fetcher<Types.CreatePostQuoteMutation, Types.CreatePostQuoteMutationVariables>(CreatePostQuoteDocument, variables)(),
+    >(options?: UseMutationOptions<Types.CreateReflectReflectionMutation, TError, Types.CreateReflectReflectionMutationVariables, TContext>) =>
+    useMutation<Types.CreateReflectReflectionMutation, TError, Types.CreateReflectReflectionMutationVariables, TContext>(
+      ['CreateReflectReflection'],
+      (variables?: Types.CreateReflectReflectionMutationVariables) => fetcher<Types.CreateReflectReflectionMutation, Types.CreateReflectReflectionMutationVariables>(CreateReflectReflectionDocument, variables)(),
       options
     );
-useCreatePostQuoteMutation.getKey = () => ['CreatePostQuote'];
+useCreateReflectReflectionMutation.getKey = () => ['CreateReflectReflection'];
 
-useCreatePostQuoteMutation.fetcher = (variables: Types.CreatePostQuoteMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreatePostQuoteMutation, Types.CreatePostQuoteMutationVariables>(CreatePostQuoteDocument, variables, options);
-export const CreatePostProfileMentionDocument = /*#__PURE__*/ `
-    mutation CreatePostProfileMention($i: CreateProfileMentionInput!) {
-  createProfileMention(input: $i) {
+useCreateReflectReflectionMutation.fetcher = (variables: Types.CreateReflectReflectionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateReflectReflectionMutation, Types.CreateReflectReflectionMutationVariables>(CreateReflectReflectionDocument, variables, options);
+export const UpdateReflectReflectionDocument = /*#__PURE__*/ `
+    mutation UpdateReflectReflection($i: UpdateReflectionInput!) {
+  updateReflection(input: $i) {
     document {
-      post {
-        ...PostFragment
+      active
+      reflect {
+        ...ReflectFragment
       }
-      profile {
-        ...UserProfileFragment
+      reflection {
+        ...ReflectFragment
       }
     }
   }
 }
-    ${PostFragmentDoc}
-${UserProfileFragmentDoc}`;
-export const useCreatePostProfileMentionMutation = <
+    ${ReflectFragmentDoc}`;
+export const useUpdateReflectReflectionMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.CreatePostProfileMentionMutation, TError, Types.CreatePostProfileMentionMutationVariables, TContext>) =>
-    useMutation<Types.CreatePostProfileMentionMutation, TError, Types.CreatePostProfileMentionMutationVariables, TContext>(
-      ['CreatePostProfileMention'],
-      (variables?: Types.CreatePostProfileMentionMutationVariables) => fetcher<Types.CreatePostProfileMentionMutation, Types.CreatePostProfileMentionMutationVariables>(CreatePostProfileMentionDocument, variables)(),
+    >(options?: UseMutationOptions<Types.UpdateReflectReflectionMutation, TError, Types.UpdateReflectReflectionMutationVariables, TContext>) =>
+    useMutation<Types.UpdateReflectReflectionMutation, TError, Types.UpdateReflectReflectionMutationVariables, TContext>(
+      ['UpdateReflectReflection'],
+      (variables?: Types.UpdateReflectReflectionMutationVariables) => fetcher<Types.UpdateReflectReflectionMutation, Types.UpdateReflectReflectionMutationVariables>(UpdateReflectReflectionDocument, variables)(),
       options
     );
-useCreatePostProfileMentionMutation.getKey = () => ['CreatePostProfileMention'];
+useUpdateReflectReflectionMutation.getKey = () => ['UpdateReflectReflection'];
 
-useCreatePostProfileMentionMutation.fetcher = (variables: Types.CreatePostProfileMentionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreatePostProfileMentionMutation, Types.CreatePostProfileMentionMutationVariables>(CreatePostProfileMentionDocument, variables, options);
+useUpdateReflectReflectionMutation.fetcher = (variables: Types.UpdateReflectReflectionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateReflectReflectionMutation, Types.UpdateReflectReflectionMutationVariables>(UpdateReflectReflectionDocument, variables, options);
 export const GetProfileByIdDocument = /*#__PURE__*/ `
     query GetProfileByID($id: ID!) {
   node(id: $id) {
@@ -801,6 +803,7 @@ export const GetProfileByDidDocument = /*#__PURE__*/ `
       profile {
         ...UserProfileFragment
       }
+      isViewer
     }
   }
 }
@@ -974,6 +977,7 @@ export const GetInterestsByDidDocument = /*#__PURE__*/ `
         }
         id
       }
+      isViewer
     }
   }
 }
@@ -1090,6 +1094,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ `
           hasPreviousPage
         }
       }
+      isViewer
     }
   }
 }
@@ -1154,6 +1159,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ `
           }
         }
       }
+      isViewer
     }
   }
 }

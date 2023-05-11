@@ -51,6 +51,7 @@ query GetProfileByDid($id: ID!) {
       profile {
         ...UserProfileFragment
       }
+      isViewer
     }
   }
 }
@@ -109,6 +110,7 @@ query GetInterestsByDid($id: ID!){
         }
         id
       }
+      isViewer
     }
   }
 }
@@ -148,6 +150,7 @@ query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: I
           hasPreviousPage
         }
       }
+      isViewer
     }
   }
 }
@@ -174,6 +177,7 @@ query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: I
           }
         }
       }
+      isViewer
     }
   }
 
