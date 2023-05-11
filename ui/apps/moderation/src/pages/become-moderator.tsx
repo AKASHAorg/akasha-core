@@ -104,7 +104,7 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
         <BMSelectReason
           stepLabels={stepLabels}
           activeIndex={activeStep - 1}
-          titleLabel="Why you want to become a moderator?"
+          titleLabel="Why do you want to become a moderator?"
           subtitleLabel="Telling the admin why you want to become a moderator will make your application look stronger"
           reasonCaption="1000 words Max."
           reasonPlaceholderLabel="I would like to apply because..."

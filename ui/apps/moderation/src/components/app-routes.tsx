@@ -22,6 +22,7 @@ import {
   BecomeModeratorPage,
   ApplicationStatusPage,
   ApplicationStatusType,
+  ModifyApplicationPage,
 } from '../pages';
 
 import routes, {
@@ -40,6 +41,7 @@ import routes, {
   VIEW_MODERATOR,
   BECOME_MODERATOR,
   CHECK_APPLICATION_STATUS,
+  MODIFY_APPLICATION,
 } from '../routes';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
@@ -153,6 +155,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 navigateTo={navigateTo}
               />
             }
+          />
+
+          <Route
+            path={routes[MODIFY_APPLICATION]}
+            element={<ModifyApplicationPage navigateTo={navigateTo} />}
           />
 
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
