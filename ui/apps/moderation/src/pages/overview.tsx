@@ -55,9 +55,9 @@ export const Overview: React.FC<IOverviewProps> = props => {
     <Box customStyle="space-y-4">
       <ModerationIntroCard
         titleLabel={t('Overview')}
-        introLabel={t('Welcome to Akasha Moderation')}
+        introLabel={t('Welcome to Vibe')}
         subtitleLabel={t(
-          'The Moderation app facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
+          'Vibe facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
         )}
         codeOfConductLabel={t('Read our Code of Conduct')}
         overviewCTAArr={[
