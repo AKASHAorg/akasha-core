@@ -141,10 +141,7 @@ class AWF_Profile {
   async getMyProfile() {
     try {
       const result = await this._gql.getAPI().GetMyProfile();
-      if (!result.viewer) {
-        return throwError('Failed to get my profile.', ['sdk', 'profile', 'getMyProfile']);
-      }
-      return createFormattedValue(result.viewer.profile);
+      return createFormattedValue(result.viewer?.profile);
     } catch (err) {
       throwError(`Failed to get my profile: ${(err as Error).message}`, [
         'sdk',
