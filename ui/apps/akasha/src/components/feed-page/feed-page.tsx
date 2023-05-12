@@ -28,7 +28,6 @@ const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, Basic
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-
   loggedProfileData?: Profile;
   loginState: LoginState;
 }
@@ -61,8 +60,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const dismissedCardId = 'dismiss-private-alpha-notification';
   const [dismissed, setDismissed] = useDismissedCard();
 
-  const { mutations: pendingPostStates } =
-    useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const { mutations: pendingPostStates } = useMutationsListener<IPublishData>([
+    CREATE_POST_MUTATION_KEY,
+  ]);
 
   const postsReq = useInfinitePosts(15);
 
@@ -190,7 +190,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
               flagAsLabel={t('Report Post')}
-              loggedProfileId={loggedProfileData.did.id}
               locale={locale || 'en'}
               showMore={true}
               profileAnchorLink={'/profile'}
@@ -217,7 +216,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         onLoginModalOpen={props.showLoginModal}
         requestStatus={postsReq.status}
         hasNextPage={postsReq.hasNextPage}
-        loggedProfileData={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}

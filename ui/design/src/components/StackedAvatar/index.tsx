@@ -9,7 +9,6 @@ export interface IStackedAvatarProps {
   maxAvatars?: number;
   size?: AvatarSize;
 }
-
 const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
   const { userData, maxAvatars, size } = props;
 
@@ -32,8 +31,6 @@ const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
       </StyledStackBox>
     );
   };
-
   return <StyledContainer>{renderStack(0)}</StyledContainer>;
 };
-
 export default StackedAvatar;

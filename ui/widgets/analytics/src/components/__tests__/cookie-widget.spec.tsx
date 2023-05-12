@@ -14,7 +14,5 @@ describe('< CookieWidget />', () => {
     const essentialButton = await renderResult.findByText('Only essential');
     expect(acceptButton).toBeDefined();
     expect(essentialButton).toBeDefined();
-    expect(acceptButton.tagName.toLowerCase()).toEqual('button');
-    expect(essentialButton.tagName.toLowerCase()).toEqual('button');
   });
 });

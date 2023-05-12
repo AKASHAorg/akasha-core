@@ -6,8 +6,6 @@ import AvatarImage from './AvatarImage';
 import { getAvatarFromSeed } from '../../utils/get-avatar-from-seed';
 import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
-export type AvatarSrc = { url?: string; fallbackUrl?: string };
-
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 export type AvatarBorderSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';

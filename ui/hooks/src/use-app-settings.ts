@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 
@@ -85,7 +85,7 @@ export function useInstallApp() {
       );
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries(APP_SETTINGS_KEY);
+      await queryClient.invalidateQueries([APP_SETTINGS_KEY]);
     },
   });
 }
@@ -114,7 +114,7 @@ export function useUninstallApp() {
       await queryClient.fetchQuery([APP_SETTINGS_KEY, variables], () => getAppConfig(variables));
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries(APP_SETTINGS_KEY);
+      await queryClient.invalidateQueries([APP_SETTINGS_KEY]);
     },
   });
 }
