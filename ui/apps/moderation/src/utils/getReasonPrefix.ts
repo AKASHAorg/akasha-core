@@ -1,7 +1,7 @@
 const modifiers = ['and', 'or', 'of'];
 
 /**
- * Utility to return a prefix from a specified moderation app reason
+ * Utility to return a prefix from a specified vibe reason
  * @param reason - string
  */
 export default function getReasonPrefix(reason: string): string {

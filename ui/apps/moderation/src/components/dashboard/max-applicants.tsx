@@ -5,7 +5,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import PageHeader, { IPageHeaderProps } from './page-header';
+import { PageHeader, IPageHeaderProps } from '../common';
 
 export interface IEditMaxApplicantsProps extends IPageHeaderProps {
   introLabel: string;

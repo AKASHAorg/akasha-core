@@ -16,6 +16,7 @@ export const EditCategoriesPage: React.FC<IEditCategoriesPageProps> = props => {
   const { navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');
+
   const categories = reasons.map(reason => ({
     value: reason,
     label: t('{{label}}', { label: reason }),
