@@ -12,7 +12,7 @@ import HelloModeratorCard from '../components/overview/hello-moderator-card';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils';
-import { BECOME_MODERATOR, CHECK_APPLICATION_STATUS } from '../routes';
+import { BECOME_MODERATOR, CHECK_APPLICATION_STATUS, DASHBOARD } from '../routes';
 
 export enum ApplicationStatusType {
   review = 'Under Review',
@@ -44,6 +44,16 @@ export const Overview: React.FC<IOverviewProps> = props => {
     });
   };
 
+  const handleClickButton = () => {
+    /**
+     * replace with the proper routes for moderator's guide and moderation FAQs
+     */
+    navigateTo({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: routes => routes[DASHBOARD],
+    });
+  };
+
   const handleClickApply = () => {
     navigateTo({
       appName: '@akashaorg/app-moderation-ewa',
@@ -62,7 +72,7 @@ export const Overview: React.FC<IOverviewProps> = props => {
           )}
           moderatorGuideLabel={t("Moderator's Guide")}
           moderationFAQLabel={t('Moderation FAQs')}
-          onClickButton={handleClickApply}
+          onClickButton={handleClickButton}
         />
       )}
       <ModerationIntroCard
