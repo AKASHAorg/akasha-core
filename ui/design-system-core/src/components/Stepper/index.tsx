@@ -9,18 +9,15 @@ export interface IStepIndicatorProps {
 }
 
 const StepIndicator: React.FC<IStepIndicatorProps> = ({ stepLabels, activeIndex }) => {
-  const baseHorizontalLineStyle = cx`
-    w-20 h-4 border-b-2
-    mr-4 md:mr-10
-    `;
+  const baseHorizontalLineStyle = cx`w-20 h-4 border-b-2`;
 
   const completedHorizontalLineStyle = cx`
     ${baseHorizontalLineStyle}
-    border-secondaryLight hover:border-secondaryDark dark:border:secondaryDark
+    border(secondaryLight dark:secondaryDark)
     `;
   const incompletedHorizontalLineStyle = cx`
     ${baseHorizontalLineStyle}
-    border-grey5 dark:border-grey6
+    border(grey5 dark:grey6)
     `;
 
   return (

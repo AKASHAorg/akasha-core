@@ -39,7 +39,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox pad="p-4" margin="mb-4">
+    <BasicCardBox pad="p-4">
       <Box customStyle="grid gap-4 grid-cols-1">
         <Text variant="h5" align="center">
           {titleLabel}
@@ -68,17 +68,19 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
         )}
 
         {codeOfConductLabel && (
-          <Button plain={true} onClick={onCodeOfConductClick}>
-            <Text
-              variant="subtitle2"
-              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-              weight="bold"
-              align="center"
-              customStyle="cursor-pointer"
-            >
-              {codeOfConductLabel}
-            </Text>
-          </Button>
+          <Box customStyle="flex justify-center">
+            <Button plain={true} onClick={onCodeOfConductClick}>
+              <Text
+                variant="subtitle2"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                weight="bold"
+                align="center"
+                customStyle="cursor-pointer"
+              >
+                {codeOfConductLabel}
+              </Text>
+            </Button>
+          </Box>
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
