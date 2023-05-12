@@ -1,4 +1,4 @@
-import { IProfileData } from './profile';
+import { Profile } from '../sdk/graphql-types-new';
 
 type ArticleContent = { type: string; value: string };
 
@@ -24,6 +24,6 @@ export interface IArticleData {
   isShared?: boolean;
   collaborators?: {
     ethAddress: string;
-    avatar?: IProfileData['avatar'];
+    avatar?: Profile['avatar'];
   }[];
 }

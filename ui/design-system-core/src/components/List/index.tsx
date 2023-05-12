@@ -11,7 +11,7 @@ import { getColorClasses } from '../../utils/getColorClasses';
 export type Item = {
   label: string;
   icon?: IconType;
-  onClick: (index: number) => void;
+  onClick?: (label: string) => void;
 } & TextProps;
 
 export type ListProps = {
@@ -32,7 +32,7 @@ const List: React.FC<ListProps> = forwardRef(({ items, customStyle, showDivider 
       )}`
     : '';
   const baseStyle = `${borderStyle}`;
-  const hoverStyle = `${getColorClasses({ light: 'grey8', dark: 'grey5' }, 'hover:bg')}`;
+  const hoverStyle = getColorClasses({ light: 'grey8', dark: 'grey5' }, 'hover:bg');
 
   return (
     <Card elevation="1" radius={8} customStyle={`z-50	w-fit ${customStyle}`} ref={ref}>
@@ -41,7 +41,7 @@ const List: React.FC<ListProps> = forwardRef(({ items, customStyle, showDivider 
           <Button
             key={item.label + index}
             customStyle={`${baseStyle} ${hoverStyle} first:rounded-t-lg	last:rounded-b-lg`}
-            onClick={() => item.onClick(index)}
+            onClick={() => (item.onClick ? item.onClick(item.label) : undefined)}
             plain
           >
             <Stack align="center" spacing="gap-x-3" customStyle="py-2 px-4">

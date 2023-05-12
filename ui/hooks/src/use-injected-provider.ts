@@ -1,13 +1,13 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { INJECTED_PROVIDERS, EthProviders } from '@akashaorg/typings/sdk';
+import { INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
 
 import constants from './constants';
 import { logError } from './utils/error-handler';
 import getProviderDetails from './utils/getProviderDetails';
 
-const { INJECTED_PROVIDER_KEY, CONNECT_PROVIDER_KEY, REQUIRED_NETWORK_KEY } = constants;
+const { INJECTED_PROVIDER_KEY, REQUIRED_NETWORK_KEY } = constants;
 
 const getInjectedProvider = async () => {
   const sdk = getSDK();
@@ -19,10 +19,10 @@ const getInjectedProvider = async () => {
   return { name: provider.data, details };
 };
 
-const connectProvider = async (provider: EthProviders) => {
-  const sdk = getSDK();
-  return sdk.services.common.web3.connect(provider);
-};
+// const connectProvider = async (provider: EthProviders) => {
+//   const sdk = getSDK();
+//   return sdk.services.common.web3.connect(provider);
+// };
 
 const getRequiredNetwork = async () => {
   const sdk = getSDK();
@@ -52,9 +52,9 @@ export const switchToRequiredNetwork = async () => {
  * const injectedProviderQuery = useInjectedProvider('selectedProvider');
  *
  * const injectedProvider = React.useMemo(
-    () => injectedProviderQuery.data,
-    [injectedProviderQuery.data],
-  );
+ () => injectedProviderQuery.data,
+ [injectedProviderQuery.data],
+ );
  * ```
  */
 export function useInjectedProvider() {
@@ -81,13 +81,13 @@ export function useInjectedProvider() {
  * const networkStateQuery = useNetworkState(connectProviderQuery.data);
  * ```
  */
-export function useConnectProvider(provider: EthProviders) {
-  return useQuery([CONNECT_PROVIDER_KEY], () => connectProvider(provider), {
-    enabled: provider !== EthProviders.None,
-    keepPreviousData: true,
-    retry: false,
-  });
-}
+// export function useConnectProvider(provider: EthProviders) {
+//   return useQuery([CONNECT_PROVIDER_KEY], () => connectProvider(provider), {
+//     enabled: provider !== EthProviders.None,
+//     keepPreviousData: true,
+//     retry: false,
+//   });
+// }
 
 /**
  * A hook to get required network name from the SDK

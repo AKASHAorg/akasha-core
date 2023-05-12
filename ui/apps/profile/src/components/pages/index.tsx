@@ -6,26 +6,20 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import { RootComponentProps, IProfileData } from '@akashaorg/typings/ui';
 import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks';
-
 const { Box, Helmet } = DS;
-
 export interface IndexProps extends RootComponentProps {
   loggedProfileData: IProfileData;
   loginState: LoginState;
   pageType?: PageType;
 }
-
 const Index = (props: IndexProps) => {
   const { plugins, loggedProfileData, pageType } = props;
-
   const { t } = useTranslation('app-profile');
   const location = useLocation();
   const { pubKey } = useParams<{
     pubKey: string;
   }>();
-
   const routing = plugins['@akashaorg/app-routing']?.routing;
-
   const publicKey = React.useMemo(() => {
     if (location.pathname.includes('app-profile')) {
       if (loggedProfileData && loggedProfileData.pubKey) {
@@ -35,17 +29,13 @@ const Index = (props: IndexProps) => {
     }
     return pubKey;
   }, [pubKey, loggedProfileData, location.pathname]);
-
   const loginQuery = useGetLogin();
-
   const profileDataQuery = useGetProfile(
     publicKey,
     loginQuery.data?.pubKey,
     loginQuery.data?.fromCache,
   );
-
   const profileState = profileDataQuery.data;
-
   const profileUserName = React.useMemo(() => {
     if (profileState && profileState.name) {
       return profileState.name;
@@ -53,15 +43,12 @@ const Index = (props: IndexProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-  const isLoading = profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle';
-
   const handleCTAClick = () => {
     routing.navigateTo({
       appName: '@akashaorg/app-legal',
       getNavigationUrl: () => '/code-of-conduct',
     });
   };
-
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -79,16 +66,17 @@ const Index = (props: IndexProps) => {
           devDetails={profileDataQuery.error?.message}
         />
       )}
-      <PageByType
-        {...props}
-        pageType={pageType}
-        profileData={profileState}
-        loginState={loginQuery.data}
-        isLoading={isLoading}
-        onCTAClick={handleCTAClick}
-      />
+      {profileDataQuery.status !== 'error' && (
+        <PageByType
+          {...props}
+          pageType={pageType}
+          profileData={profileState}
+          loginState={loginQuery.data}
+          isLoading={profileDataQuery.status === 'loading'}
+          onCTAClick={handleCTAClick}
+        />
+      )}
     </Box>
   );
 };
-
 export default Index;

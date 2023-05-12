@@ -16,6 +16,8 @@ export enum EventTypes {
   HideSidebar = 'hide-sidebar',
   ShowWidgets = 'show-widgets',
   HideWidgets = 'hide-widgets',
+  SnoozeNotifications = 'snooze-notifications',
+  UnsnoozeNotifications = 'unsnooze-notifications',
   /*
    * Events that are handled by the layout widget
    */

@@ -16,7 +16,7 @@ type PendingReplyProps = {
 export function PendingReply({ postId, loggedProfileData, commentIds }: PendingReplyProps) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutations: pendingReplyStates } = useMutationsListener<IPublishData & { postID: string }>(
-    PUBLISH_PENDING_KEY,
+    [PUBLISH_PENDING_KEY],
   );
 
   return (
