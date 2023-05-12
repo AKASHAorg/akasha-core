@@ -7,7 +7,8 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ModerationIntroCard from '@akashaorg/design-system-components/lib/components/ModerationIntroCard';
 import ModerationValuesCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard';
 
-import BecomeModeratorCard from '../components/moderator/become-moderator-card';
+import BecomeModeratorCard from '../components/overview/become-moderator-card';
+import HelloModeratorCard from '../components/overview/hello-moderator-card';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils';
@@ -53,6 +54,17 @@ export const Overview: React.FC<IOverviewProps> = props => {
 
   return (
     <Box customStyle="space-y-4">
+      {isAuthorised && (
+        <HelloModeratorCard
+          titleLabel={t('Hello Moderator!')}
+          subtitleLabel={t(
+            'In this section you will find some useful moderation documentation and FAQs',
+          )}
+          moderatorGuideLabel={t("Moderator's Guide")}
+          moderationFAQLabel={t('Moderation FAQs')}
+          onClickButton={handleClickApply}
+        />
+      )}
       <ModerationIntroCard
         titleLabel={t('Overview')}
         introLabel={t('Welcome to Vibe')}
