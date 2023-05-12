@@ -11,8 +11,7 @@ import ModeratorDetailCard from '../components/moderator';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
-import { moderators } from '../utils/dummy-data';
-import { formatDate } from '../utils/format-date';
+import { moderators, formatDate } from '../utils';
 
 export interface IModeratorDetailPageProps {
   navigateTo: (args: NavigateToParams) => void;

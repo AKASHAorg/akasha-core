@@ -17,7 +17,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     ...routes,
   },
   menuItems: {
-    label: 'Moderating',
+    label: 'Vibe',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.OtherArea],

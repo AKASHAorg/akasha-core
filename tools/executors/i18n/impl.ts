@@ -4,17 +4,6 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
-export const getParserConfig = (ns: string, pkgRootPath: string, outputRoot: string) => ({
-  useKeysAsDefaultValue: true,
-  locales: ['en'],
-  verbose: true,
-  keySeparator: false,
-  nsSeparator: null,
-  defaultNamespace: ns,
-  output: `${outputRoot}/$LOCALE/$NAMESPACE.json`,
-  input: [`${pkgRootPath}/src/**/*.{ts,tsx}`],
-});
-
 export interface i18nExecutorOptions {
   cwd: string;
 }
@@ -29,15 +18,39 @@ export default async function i18nExecutor(options: i18nExecutorOptions, context
   const namespace = currentProject.split('/')[1];
   const projectRoot = path.resolve(options.cwd);
 
-  const config = getParserConfig(namespace, projectRoot, outputDir);
-  const configInApp = getParserConfig(namespace, projectRoot, translationAppOutputDir);
   const configPath = `${executorRoot}/dist/i18next-parser.${namespace}.config.js`;
   const configPathInApp = `${executorRoot}/dist/i18next-parser.${namespace}.InApp.config.js`;
 
   fs.mkdirSync(`${executorRoot}/dist`, { recursive: true });
-  fs.writeFileSync(configPath, `module.exports=${JSON.stringify(config)}`, 'utf-8');
+  fs.writeFileSync(
+    configPath,
+    `module.exports={
+    defaultValue: (_locale, _ns, key, value) => value ? value : key,
+    locales: ['en'],
+    verbose: true,
+    keySeparator: false,
+    nsSeparator: null,
+    defaultNamespace: "${namespace}",
+    output: "${outputDir}/$LOCALE/$NAMESPACE.json",
+    input: ["${projectRoot}/src/**/*.{ts,tsx}"],
+  };`,
+    'utf-8',
+  );
   fs.mkdirSync(`${projectRoot}/dist`, { recursive: true });
-  fs.writeFileSync(configPathInApp, `module.exports=${JSON.stringify(configInApp)}`, 'utf-8');
+  fs.writeFileSync(
+    configPathInApp,
+    `module.exports={
+    defaultValue: (_locale, _ns, key, value) => value ? value : key,
+    locales: ['en'],
+    verbose: true,
+    keySeparator: false,
+    nsSeparator: null,
+    defaultNamespace: "${namespace}",
+    output: "${translationAppOutputDir}/$LOCALE/$NAMESPACE.json",
+    input: ["${projectRoot}/src/**/*.{ts,tsx}"],
+  }`,
+    'utf-8',
+  );
 
   const { stdout, stderr } = await promisify(exec)(`i18next --config ${configPath}`);
   await promisify(exec)(`i18next --config ${configPathInApp}`);
