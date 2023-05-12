@@ -73,7 +73,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
       rootNodeRef={rootNodeRef}
       border={border}
       noBorderRadius={noBorderRadius}
-      elevation="sm"
       pad="p-0"
     >
       {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (

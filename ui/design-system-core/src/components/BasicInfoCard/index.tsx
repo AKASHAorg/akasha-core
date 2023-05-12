@@ -14,7 +14,7 @@ const BasicInfoCard: React.FC<IBasicInfoCardProps> = ({ titleLabel, subtitleLabe
     <Card padding={8} customStyle="border-none">
       <div className={tw('flex(& col) justify-center align-center mb-32')}>
         <BasicCardBox
-          style="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
+          customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
           round="rounded-xl"
         />
         <div className={tw('w-[50%] m-auto')}>

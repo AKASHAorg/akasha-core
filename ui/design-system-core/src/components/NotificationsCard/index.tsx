@@ -162,7 +162,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
     return (
       <div key={index}>
-        <BasicCardBox pad="py-3 pl-4" onClick={clickHandler} style="flex-row" round="none">
+        <BasicCardBox pad="py-3 pl-4" onClick={clickHandler} customStyle="flex-row" round="none">
           <ProfileAvatarNotificationApp
             profileId={profileData.did.id}
             avatarImage={profileData.avatar}

@@ -17,7 +17,9 @@ export type IconType =
   | keyof typeof HeroIcons
   | 'akasha'
   | 'discord'
+  | 'faq'
   | 'github'
+  | 'shield'
   | 'telegram'
   | 'twitter'
   | 'widget'

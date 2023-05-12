@@ -19,7 +19,7 @@ const reactLifecycles = singleSpaReact({
     }
     return (
       <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in moderation app" details={error.message} />
+        <ErrorLoader type="script-error" title="Error in Vibe" details={error.message} />
       </ThemeWrapper>
     );
   },

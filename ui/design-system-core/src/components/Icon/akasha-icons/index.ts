@@ -1,7 +1,10 @@
 import { IconType } from '@akashaorg/typings/ui';
+
 import akasha from './akasha';
 import discord from './discord';
+import faq from './faq';
 import github from './github';
+import shield from './shield';
 import telegram from './telegram';
 import twitter from './twitter';
 import widget from './widget';
@@ -11,7 +14,7 @@ import widget from './widget';
  */
 export type CustomIconTypes = Extract<
   IconType,
-  'akasha' | 'discord' | 'github' | 'telegram' | 'twitter' | 'widget'
+  'akasha' | 'discord' | 'faq' | 'github' | 'shield' | 'telegram' | 'twitter' | 'widget'
 >;
 
-export { akasha, discord, github, telegram, twitter, widget };
+export { akasha, discord, faq, github, shield, telegram, twitter, widget };

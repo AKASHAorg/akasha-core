@@ -107,9 +107,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   };
   return (
     <BasicCardBox
-      style="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
-      round={'rounded-r-2xl xl:rounded-2xl'}
-      elevation="md"
+      customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
+      round="rounded-r-2xl xl:rounded-2xl"
       pad="p-0"
     >
       <Box customStyle="flex flex-row p-4 border-b-1 border(grey9 dark:grey3)">
