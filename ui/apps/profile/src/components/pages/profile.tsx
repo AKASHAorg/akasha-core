@@ -1,4 +1,6 @@
 import * as React from 'react';
+import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
@@ -9,7 +11,7 @@ import {
   ProfileProviderProperties,
   ProfileProviders,
   EntityTypes,
-  ProfileStatType,
+  EngagementType,
 } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
@@ -22,55 +24,49 @@ import {
 
 // import ModeratorLabel from '../routes/moderator-label';
 import routes, { EDIT } from '../../routes';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   ProfileHeader,
   ProfileBio,
   ProfileLinks,
   ProfileStats,
-} from '@akashaorg/design-system-core/lib/components/ProfileCard';
+} from '@akashaorg/design-system-components/lib/components/Profile';
 
-export type ProfileProps = {
+export type ProfilePageProps = {
   profileId: string;
   profileData: IProfileData;
   loginState: LoginState;
 };
 
-const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
+const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
   const { profileData, loginState, profileId } = props;
 
   // undefined for logged user's profile page, use loginState?.pubKey instead
   const { pubKey } = useParams<{
     pubKey: string;
   }>();
-
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-profile');
+
+  const [showFeedback, setShowFeedback] = React.useState(false);
 
   const isFollowingReq = useIsFollowingMultiple(loginState.pubKey, [profileData.pubKey]);
   const followedProfiles = isFollowingReq.data;
 
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
-
   const ENSReq = useEnsByAddress(profileData.ethAddress);
-
   const checkModeratorQuery = useCheckModerator(loginState?.pubKey);
   const checkModeratorResp = checkModeratorQuery.data;
-
   const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
-
   const handleFollow = () => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({ name: 'login', profileId });
     }
-
     if (profileData?.pubKey) {
       followReq.mutate(profileData.pubKey);
     }
   };
-
   const socialLinks: { type: string; value: string }[] = React.useMemo(() => {
     if (profileData.default.length > 0) {
       const socialLinksProvider = profileData.default.find(
@@ -98,17 +94,19 @@ const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
     }
     return [];
   }, [profileData]);
-
   const handleUnfollow = () => {
     if (profileData?.pubKey) {
       unfollowReq.mutate(profileData.pubKey);
+      setShowFeedback(true);
+      setTimeout(() => {
+        setShowFeedback(false);
+      }, 5000);
     }
   };
 
   const showLoginModal = () => {
     props.navigateToModal({ name: 'login' });
   };
-
   const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({
@@ -118,22 +116,21 @@ const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
     }
     props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
   };
-
   const showUpdateProfileModal = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => routes['edit'],
     });
   };
-
   const showShareModal = () => {
     props.navigateToModal({ name: 'profile-share' });
   };
 
-  const onStatClick = (stat: ProfileStatType) => () => {
+  const onStatClick = (stat: EngagementType) => () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `/${pubKey ?? loginState?.pubKey}${routes.stat}?tab=${stat}`,
+      getNavigationUrl: routes =>
+        `/${pubKey ?? loginState?.pubKey}${routes.engagement}?tab=${stat}`,
     });
   };
 
@@ -143,7 +140,6 @@ const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
       getNavigationUrl: routes => `${routes.ProfileFeed}/${pubKey ?? loginState?.pubKey}`,
     });
   };
-
   const handleExtPointMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
@@ -153,7 +149,6 @@ const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
       },
     });
   };
-
   const handleExtPointUnmount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointUnmount,
@@ -162,12 +157,11 @@ const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
       },
     });
   };
-
   return (
     <>
       <Stack direction="column" spacing="gap-y-4">
         {/*@TODO remove the following line when the profile app is done */}
-        {/* <ProfileCard
+        {/* <Profile
           handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
           handleShareClick={showShareModal}
@@ -224,7 +218,7 @@ const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
               </>
             )}
           </Box>
-        </ProfileCard> */}
+        </Profile> */}
         <ProfileHeader
           ethAddress={profileData.ethAddress}
           coverImage={profileData.coverImage}
@@ -289,9 +283,19 @@ const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
             copyLabel={t('Copy to clipboard')}
           />
         )}
+        {showFeedback && loginState.ethAddress === profileData.ethAddress && (
+          <Snackbar
+            title={t('You unfollowed {{userName}}', { userName: profileData.userName })}
+            iconType="CheckCircleIcon"
+            handleDismiss={() => {
+              setShowFeedback(false);
+            }}
+            customStyle="mb-4"
+          />
+        )}
       </Stack>
     </>
   );
 };
 
-export default Profile;
+export default ProfilePage;

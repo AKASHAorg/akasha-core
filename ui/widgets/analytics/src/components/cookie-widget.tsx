@@ -1,5 +1,5 @@
-import DS from '@akashaorg/design-system';
 import React from 'react';
+import CookieCard from '@akashaorg/design-system-components/lib/components/CookieCard';
 import { I18nextProvider, Translation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
@@ -10,15 +10,12 @@ import {
   uninstallPageTacking,
 } from '../analytics';
 
-const { CookieWidgetCard, Text } = DS;
-
 export const COOKIE_CONSENT_NAME = 'ewa-cookie-consent';
 
 export enum CookieConsentTypes {
   ESSENTIAL = 'ESSENTIAL',
   ALL = 'ALL',
 }
-
 const CookieWidget: React.FC<RootComponentProps> = props => {
   const [cookieType, setCookieType] = React.useState(null);
   const eventSub = React.useRef(null);
@@ -32,7 +29,6 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
       setCookieType(null);
     }
   }, []);
-
   React.useEffect(() => {
     if (cookieType && cookieType === CookieConsentTypes.ESSENTIAL) {
       return;
@@ -52,7 +48,6 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
       uninstallPageTacking();
     };
   }, [cookieType]);
-
   const handleAcceptCookie = (all?: boolean) => {
     window.localStorage.setItem(
       COOKIE_CONSENT_NAME,
@@ -60,65 +55,37 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
     );
     setCookieType(all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL);
   };
-
   return (
     <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       {cookieType === null && (
         <div>
           <Translation ns="ui-widget-analytics">
             {t => (
-              <CookieWidgetCard
-                titleLabel={`${t('But first, cookies!')} 🙈🍪`}
-                paragraphOneLabel={
-                  <>
-                    <Text size="medium">
-                      {t(
-                        'Ethereum World uses cookies. Some are essential for the technology to work, and others help us all improve things around here. You can contribute use data via ',
-                      )}
-                    </Text>
-                    <Text
-                      color="accentText"
-                      size="medium"
-                      style={{ cursor: 'pointer' }}
-                      onClick={() =>
-                        window.open('https://matomo.org', 'Matomo', '_blank noopener noreferrer')
-                      }
-                    >
-                      Matomo
-                    </Text>
-                    <Text size="medium">
-                      {t(', an open source analytics platform, by choosing "Accept all".')}
-                    </Text>
-                  </>
-                }
-                paragraphTwoLabel={
-                  <>
-                    <Text>
-                      {t(
-                        'No personal identifiable information (PPI) will be stored. And if you change your mind at any time, you can always ',
-                      )}
-                    </Text>
-                    <Text weight="bold">{t(' opt-out ')}</Text>
-                    <Text>{t('via the ')}</Text>
-                    <Text
-                      color="accentText"
-                      size="medium"
-                      style={{ cursor: 'pointer' }}
-                      onClick={() =>
-                        props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-                          appName: '@akashaorg/app-settings-ewa',
-                          getNavigationUrl: navRoutes => navRoutes.Home,
-                        })
-                      }
-                    >
-                      {t('settings ')}
-                    </Text>
-                    {t('app.')}
-                  </>
-                }
-                privacyCTALabel={t('For more info, see our ')}
-                privacyUrlLabel={t('Privacy Policy.')}
-                privacyUrl={`${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/privacy-policy`}
+              <CookieCard
+                titleLabel={t('The Choice is Yours 🤘🏼')}
+                paragraphOneLabel={t(
+                  `We use cookies. Some are necessary to operate effectively the platform, others are to help us improve AKASHA World.`,
+                )}
+                paragraphTwo={{
+                  ctaLabel: t(`By opting-in you allow us to collect data via `),
+                  analyticsLabel: t('Matomo'),
+                  analyticsURL: 'https://matomo.org',
+                  middleParagraphLabeL: t(
+                    `, an open source analytics platform that will help us improve AKASHA World. As we respect your privacy, rest assured that we don't store personal identifiable information (PII). In addition, if you change your mind, you can always opt-out by accessing the `,
+                  ),
+                  settingsLabel: t('settings '),
+                  onSettingsClick: () =>
+                    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+                      appName: '@akashaorg/app-settings-ewa',
+                      getNavigationUrl: navRoutes => navRoutes.Home,
+                    }),
+                  lastParagraphLabel: t(' menu.'),
+                }}
+                paragraphThree={{
+                  ctaLabel: t('For more info, see our '),
+                  urlLabel: t('Privacy Policy'),
+                  url: `${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/privacy-policy`,
+                }}
                 onlyEssentialLabel={t('Only essential')}
                 acceptAllLabel={t('Accept all')}
                 onClickOnlyEssential={() => handleAcceptCookie()}
@@ -131,5 +98,4 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
     </I18nextProvider>
   );
 };
-
 export default React.memo(CookieWidget);

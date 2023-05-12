@@ -17,7 +17,6 @@ const Template = args => {
 export const BaseSnackbar = Template.bind({});
 BaseSnackbar.args = {
   title: 'Cooler Info Snackbar',
-  description: 'Some important information will appear here',
   type: 'info',
 };
 
@@ -43,4 +42,11 @@ ActionableCautionSnackbar.args = {
   description: 'Some important information will appear here',
   type: 'caution',
   actionButtonLabel: 'OK',
+};
+
+export const ActionableSuccessSnackbarWithCustomIcon = Template.bind({});
+ActionableSuccessSnackbarWithCustomIcon.args = {
+  title: 'Cooler Info Snackbar',
+  type: 'success',
+  iconType: 'CheckCircleIcon',
 };

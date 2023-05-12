@@ -23,7 +23,6 @@ export interface ITopbarProps {
   onLoginClick: () => void;
   modalSlotId: string;
 }
-
 const Topbar: React.FC<ITopbarProps> = props => {
   const {
     isLoggedIn,
@@ -41,14 +40,12 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
     window.matchMedia('(max-width: 768px)').matches,
   );
-
   React.useEffect(() => {
     const mql = window.matchMedia('(max-width: 768px)');
     const resize = e => {
       setDisplayWidgetTogglingButton(e.matches);
     };
     mql.addEventListener('change', resize);
-
     return () => {
       mql.removeEventListener('change', resize);
     };
@@ -56,7 +53,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
   const customStyle =
     'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-50)';
-
   return (
     <BasicCardBox customStyle={customStyle}>
       <div className={tw('flex space-x-2')}>
@@ -85,7 +81,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onClick={onBackClick}
         />
       </div>
-
       <div
         className={tw('p-0 m-0 cursor-pointer flex(& col) justify-center items-center')}
         onClick={onBrandClick}
@@ -97,7 +92,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
           Akasha World
         </span>
       </div>
-
       <div className={tw('flex space-x-2')}>
         {displayWidgetTogglingButton ? (
           isLoggedIn ? (
@@ -144,7 +138,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     </BasicCardBox>
   );
 };
-
 Topbar.defaultProps = {
   onBackClick: () => {
     return;
@@ -153,5 +146,4 @@ Topbar.defaultProps = {
     return;
   },
 };
-
 export default Topbar;

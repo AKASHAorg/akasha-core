@@ -51,7 +51,6 @@
   "peerDependencies": {
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-query": "3.34.7",
     "rxjs": "7.3.0"
   },
   "files": [

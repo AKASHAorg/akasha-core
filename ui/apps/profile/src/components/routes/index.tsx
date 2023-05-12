@@ -1,34 +1,27 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import Index from '../pages';
 import NoProfileFound from '../pages/no-profile-found';
-import menuRoute, { EDIT, STAT } from '../../routes';
+import menuRoute, { EDIT, ENGAGEMENT } from '../../routes';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
-
 const { Box } = DS;
-
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
-
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
-
   const { t } = useTranslation('app-profile');
-
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
-
   const handleGoToFeedClick = () => {
     plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: (routes: Record<string, string>) => routes.defaultRoute,
     });
   };
-
   const handleCTAClick = () => {
     // if user is logged in, show link to their profile
     if (loggedProfileQuery.data?.pubKey) {
@@ -43,7 +36,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       getNavigationUrl: (routes: Record<string, string>) => routes.Connect,
     });
   };
-
   return (
     <Router basename={props.baseRouteName}>
       <Box>
@@ -60,13 +52,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               }
             />
             <Route
-              path={`:pubKey${menuRoute[STAT]}`}
+              path={`:pubKey${menuRoute[ENGAGEMENT]}`}
               element={
                 <Index
                   {...props}
                   loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data}
-                  pageType="stat"
+                  pageType="engagement"
                 />
               }
             />
@@ -81,7 +73,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 />
               }
             />
-
             <Route
               element={
                 <NoProfileFound
@@ -103,5 +94,4 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     </Router>
   );
 };
-
 export default AppRoutes;

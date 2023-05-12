@@ -5,10 +5,10 @@ import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import {
   ModalNavigationOptions,
   IPublishData,
-  IProfileData,
   RootComponentProps,
   EntityTypes,
   AnalyticsCategories,
+  IProfileData,
 } from '@akashaorg/typings/ui';
 import {
   useInfinitePosts,
@@ -28,7 +28,6 @@ const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, Basic
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-
   loggedProfileData?: IProfileData;
   loginState: LoginState;
 }
@@ -61,8 +60,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const dismissedCardId = 'dismiss-private-alpha-notification';
   const [dismissed, setDismissed] = useDismissedCard();
 
-  const { mutations: pendingPostStates } =
-    useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const { mutations: pendingPostStates } = useMutationsListener<IPublishData>([
+    CREATE_POST_MUTATION_KEY,
+  ]);
 
   const postsReq = useInfinitePosts(15);
 
