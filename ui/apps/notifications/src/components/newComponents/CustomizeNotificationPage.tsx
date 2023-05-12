@@ -16,45 +16,111 @@ import routes, {
 import { RootComponentProps, EventTypes } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 
-const socialAppCheckboxes: { label: string; selected: boolean }[] = [
-  { label: 'New Followers', selected: true },
-  { label: 'Replies to my post', selected: true },
-  { label: 'Mentions me in a post / reply', selected: true },
-  { label: 'Someone sharing my post', selected: true },
-  { label: 'When someone I am following posts new content', selected: true },
-  {
-    label: 'When there’s new content in topics I’m Subscribed to',
-    selected: true,
-  },
-];
-const articleAppCheckboxes: { label: string; selected: boolean }[] = [
-  { label: 'Replies to my Article', selected: true },
-  { label: 'Quotes me in an Article.', selected: true },
-  { label: 'Someone shares my Article', selected: true },
-];
-const moderationAppCheckboxes: { label: string; selected: boolean }[] = [
-  { label: 'My content gets delisted/kept', selected: true },
-];
-const integrationCenterCheckboxes: { label: string; selected: boolean }[] = [
-  { label: 'New versions of installed integrations', selected: true },
-];
-
 interface ICustomizeNotificationPageProps extends RootComponentProps {
   initial?: boolean;
 }
+
+const Title = ({ title }: { title: string }): JSX.Element => {
+  return (
+    <div className={tw('flex flex-row items-center')}>
+      <Text variant="h6" align="center">
+        {title}
+      </Text>
+    </div>
+  );
+};
 
 const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   initial = true,
   ...props
 }) => {
+  const { t } = useTranslation('app-notifications');
   const { plugins } = props;
 
   const [selected, setSelected] = React.useState(true);
+
+  const socialAppCheckboxes = React.useMemo(
+    () => [
+      {
+        label: t('New Followers'),
+        value: 'New Followers',
+        selected: true,
+      },
+      {
+        label: t('Replies to my post'),
+        value: 'Replies to my post',
+        selected: true,
+      },
+      {
+        label: t('Mentions me in a post / reply'),
+        value: 'Mentions me in a post / reply',
+        selected: true,
+      },
+      {
+        label: t('Someone sharing my post'),
+        value: 'Someone sharing my post',
+        selected: true,
+      },
+      {
+        label: t('When someone I am following posts new content'),
+        value: 'When someone I am following posts new content',
+        selected: true,
+      },
+      {
+        label: t('When there’s new content in topics I’m Subscribed to'),
+        value: 'When there’s new content in topics I’m Subscribed to',
+        selected: true,
+      },
+    ],
+    [t],
+  );
+
+  const articleAppCheckboxes = React.useMemo(
+    () => [
+      {
+        label: t('Replies to my Article'),
+        value: 'Replies to my Article',
+        selected: true,
+      },
+      {
+        label: t('Quotes me in an Article.'),
+        value: 'Quotes me in an Article',
+        selected: true,
+      },
+      {
+        label: t('Someone shares my Article'),
+        value: 'Someone shares my Article',
+        selected: true,
+      },
+    ],
+    [t],
+  );
+  const moderationAppCheckboxes = React.useMemo(
+    () => [
+      {
+        label: t('My content gets delisted/kept'),
+        value: 'My content gets delisted/kept',
+        selected: true,
+      },
+    ],
+    [t],
+  );
+  const integrationCenterCheckboxes = React.useMemo(
+    () => [
+      {
+        label: t('New versions of installed integrations'),
+        value: 'New versions of installed integrations',
+        selected: true,
+      },
+    ],
+    [t],
+  );
+
   const [allStates, setAllStates] = React.useState({
-    social: Array.from(socialAppCheckboxes.map(e => e.selected)),
-    articleApp: Array.from(articleAppCheckboxes.map(e => e.selected)),
-    moderationApp: Array(moderationAppCheckboxes.map(e => e.selected)),
-    integrationCenter: Array(integrationCenterCheckboxes.map(e => e.selected)),
+    social: socialAppCheckboxes.map(e => e.selected),
+    articleApp: articleAppCheckboxes.map(e => e.selected),
+    moderationApp: moderationAppCheckboxes.map(e => e.selected),
+    integrationCenter: integrationCenterCheckboxes.map(e => e.selected),
   });
 
   // for displaying feedback messages
@@ -81,13 +147,11 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   //for the button, disabled when no change made, enabled when there's an change
   const [updateButtonDisabled, setUpdateButtonDisabled] = React.useState(true);
 
-  const snoozeChangeHandler = e => {
+  const snoozeChangeHandler = () => {
     setSnoozed(!snoozed);
   };
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
-
-  const { t } = useTranslation('app-notifications');
 
   // added for emitting snooze notification event
   const uiEvents = React.useRef(props.uiEvents);
@@ -109,31 +173,21 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     setAllStates({ ...allStates, [section]: updatedCheckedState });
   };
 
-  const Title = (title: string): JSX.Element => {
-    const translatedTitle = t(title);
-    return (
-      <div className={tw('flex flex-row items-center')}>
-        <Text variant="h6" align="center">
-          {translatedTitle}
-        </Text>
-      </div>
-    );
-  };
-
-  const Content = (
-    checkboxArray: { label: string; selected: boolean }[],
-    section: string,
-  ): JSX.Element => {
+  const Content = ({
+    checkboxArray,
+    section,
+  }: {
+    checkboxArray: Array<{ label: string; value: string; selected: boolean }>;
+    section: string;
+  }): JSX.Element => {
     return (
       <div>
-        {checkboxArray.map(({ label }, index) => {
-          const translatedLabel = t(label);
-
+        {checkboxArray.map(({ label, value }, index) => {
           return (
             <div className={tw('')} key={index}>
               <Checkbox
-                label={translatedLabel}
-                value={label}
+                label={label}
+                value={value}
                 id={index.toString()}
                 isSelected={allStates[section][index]}
                 handleChange={() => changeHandler(index, section)}
@@ -282,26 +336,30 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
         <Divider customStyle="my-2" />
         <div className={tw('min-h-[80%]')}>
           <Accordion
-            titleNode={Title(t('Social App'))}
-            contentNode={Content(socialAppCheckboxes, 'social')}
+            titleNode={<Title title={t('Social App')} />}
+            contentNode={<Content checkboxArray={socialAppCheckboxes} section={'social'} />}
             open={initial}
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={Title(t('Article App'))}
-            contentNode={Content(articleAppCheckboxes, 'articleApp')}
+            titleNode={<Title title={t('Article App')} />}
+            contentNode={<Content checkboxArray={articleAppCheckboxes} section={'articleApp'} />}
             open={initial}
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={Title(t('Moderation App'))}
-            contentNode={Content(moderationAppCheckboxes, 'moderationApp')}
+            titleNode={<Title title={t('Moderation App')} />}
+            contentNode={
+              <Content checkboxArray={moderationAppCheckboxes} section={'moderationApp'} />
+            }
             open={initial}
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={Title(t('Integration Center'))}
-            contentNode={Content(integrationCenterCheckboxes, 'integrationCenter')}
+            titleNode={<Title title={t('Integration Center')} />}
+            contentNode={
+              <Content checkboxArray={integrationCenterCheckboxes} section={'integrationCenter'} />
+            }
             open={initial}
           />
         </div>
