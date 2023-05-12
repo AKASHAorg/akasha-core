@@ -1,15 +1,15 @@
 import React from 'react';
-import { IProfileData } from '@akashaorg/typings/ui';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { tw, apply } from '@twind/core';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface ITrendingProfileCardProps {
   // data
-  profiles: IProfileData[];
+  profiles: Profile[];
   followedProfiles?: string[];
   loggedEthAddress?: string | null;
   isLoadingProfiles?: boolean;
@@ -90,25 +90,25 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
                     e.preventDefault();
                     return false;
                   }}
-                  href={`${profileAnchorLink}/${profile.pubKey}`}
+                  href={`${profileAnchorLink}/${profile.did.id}`}
                 >
                   <ProfileAvatarButton
-                    ethAddress={profile.ethAddress}
-                    onClick={() => onClickProfile(profile.pubKey)}
+                    profileId={profile.did.id}
+                    onClick={() => onClickProfile(profile.did.id)}
                     label={profile.name}
-                    info={profile.userName}
+                    info={profile.did.id}
                     size="md"
                     avatarImage={profile.avatar}
                   />
                 </a>
-                {profile.ethAddress !== loggedEthAddress && (
+                {!profile.did.isViewer && (
                   <div>
                     <DuplexButton
                       inactiveLabel={followLabel}
                       activeLabel={unfollowLabel}
-                      onClickInactive={() => handleFollowProfile(profile.pubKey)}
-                      onClickActive={() => handleUnfollowProfile(profile.pubKey)}
-                      active={followedProfiles?.includes(profile.pubKey)}
+                      onClickInactive={() => handleFollowProfile(profile.did.id)}
+                      onClickActive={() => handleUnfollowProfile(profile.did.id)}
+                      active={followedProfiles?.includes(profile.did.id)}
                       allowMinimization={false}
                     />
                   </div>

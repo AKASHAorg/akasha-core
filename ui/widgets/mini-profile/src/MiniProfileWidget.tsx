@@ -27,7 +27,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const profileDataReq = useGetEntryAuthor(params.postId);
   const profileData = profileDataReq.data;
 
-  const isFollowingReq = useIsFollowingMultiple(loginQuery.data?.pubKey, [profileData?.pubKey]);
+  const isFollowingReq = useIsFollowingMultiple(loginQuery.data?.pubKey, [profileData?.did.id]);
   const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();

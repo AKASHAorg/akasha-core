@@ -8,7 +8,6 @@ import {
 import getSDK from '@akashaorg/awf-sdk';
 import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import {
-  IProfileData,
   ProfileProviderProperties,
   ProfileProviders,
   UpdateProfileStatus,
@@ -17,6 +16,7 @@ import {
 import { checkStatus } from './use-moderation';
 import { logError } from './utils/error-handler';
 import { buildProfileMediaLinks } from './utils/media-utils';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 /**
  * @internal
@@ -145,7 +145,7 @@ export function useGetProfileByEthAddress(ethAddress: string, loggedUser?: strin
 const getEntryAuthorProfileData = async (entryId: string, queryClient: QueryClient) => {
   const sdk = getSDK();
   const res = await sdk.api.entries.getEntry(entryId);
-  const authorCache = queryClient.getQueryData<IProfileData>([
+  const authorCache = queryClient.getQueryData<Profile>([
     PROFILE_KEY,
     res?.getPost?.author?.pubKey,
   ]);
@@ -429,16 +429,16 @@ const completeProfileUpdate = async (pubKey: string, queryClient: QueryClient) =
  * profileUpdateMutation.reset();
  * ```
  */
-export function useProfileUpdate(pubKey: string) {
+export function useProfileUpdate(id: Profile['id']) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: [UPDATE_PROFILE_DATA_KEY],
-    mutationFn: async () => completeProfileUpdate(pubKey, queryClient),
+    mutationFn: async () => completeProfileUpdate(id, queryClient),
     onMutate: async (formData: UpdateProfileFormData) => {
-      const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
+      const currentProfile = queryClient.getQueryData<Profile>([PROFILE_KEY, id]);
       const { profileData, changedFields } = formData;
-      queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, pubKey], {
+      queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, id], {
         status: UpdateProfileStatus.UPDATE_INITIATED,
         remainingFields: changedFields,
       });
@@ -447,7 +447,7 @@ export function useProfileUpdate(pubKey: string) {
       try {
         if (changedFields.includes('avatar')) {
           // save avatar
-          queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, pubKey], {
+          queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, id], {
             status: UpdateProfileStatus.UPLOADING_AVATAR,
             remainingFields: changedFields,
           });
@@ -455,7 +455,7 @@ export function useProfileUpdate(pubKey: string) {
         }
 
         if (changedFields.includes('coverImage')) {
-          queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, pubKey], {
+          queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, id], {
             status: UpdateProfileStatus.UPLOADING_COVER_IMAGE,
             remainingFields: changedFields,
           });
@@ -463,7 +463,7 @@ export function useProfileUpdate(pubKey: string) {
             await saveCoverImage(profileData.coverImage, profileData.coverImage === null),
           );
         }
-        queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, pubKey], {
+        queryClient.setQueryData<ProfileUpdateStatus>([UPDATE_PROFILE_STATUS, id], {
           status: UpdateProfileStatus.UPDATE_IN_PROGRESS,
           remainingFields: changedFields.filter(
             field => field !== 'avatar' && field !== 'coverImage',
@@ -496,7 +496,7 @@ export function useProfileUpdate(pubKey: string) {
           });
         }
 
-        queryClient.setQueryData([UPDATE_PROFILE_STATUS, pubKey], {
+        queryClient.setQueryData([UPDATE_PROFILE_STATUS, id], {
           status: UpdateProfileStatus.UPDATE_IN_PROGRESS,
           remainingFields: [],
         });
@@ -517,8 +517,8 @@ export function useProfileUpdate(pubKey: string) {
       });
       await queryClient.invalidateQueries([PROFILE_KEY]);
     },
-    onError: async (error, vars, context: { currentProfile: IProfileData }) => {
-      queryClient.setQueryData([PROFILE_KEY, pubKey], context.currentProfile);
+    onError: async (error, vars, context: { currentProfile: Profile }) => {
+      queryClient.setQueryData([PROFILE_KEY, id], context.currentProfile);
       queryClient.removeQueries({
         queryKey: [UPDATE_PROFILE_STATUS],
       });
@@ -531,13 +531,13 @@ export function useProfileUpdate(pubKey: string) {
       if (!error) {
         const { changedFields, profileData } = variables;
         if (changedFields.includes('name')) {
-          queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], prev => ({
+          queryClient.setQueryData<Profile>([PROFILE_KEY, id], prev => ({
             ...prev,
             name: profileData.name,
           }));
         }
         if (changedFields.includes('description')) {
-          queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], prev => ({
+          queryClient.setQueryData<Profile>([PROFILE_KEY, id], prev => ({
             ...prev,
             description: profileData.description,
           }));
