@@ -44,7 +44,7 @@ export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
       <Pill
         label={allCategoriesLabel}
         clickable={true}
-        secondaryBg={allCategoriesSelected}
+        active={allCategoriesSelected}
         customStyle="mt-3 mr-3"
         onPillClick={handlePillClick({ label: allCategoriesLabel, value: allCategoriesLabel })}
       />
@@ -54,8 +54,9 @@ export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
           key={label + idx}
           label={label}
           clickable={true}
-          secondaryBg={categories.map(cat => cat?.value).includes(value)}
-          trailingIcon={categories.map(cat => cat?.value).includes(value) ? 'XMarkIcon' : undefined}
+          active={categories.map(cat => cat?.value).includes(value)}
+          icon={categories.map(cat => cat?.value).includes(value) ? 'XMarkIcon' : undefined}
+          iconDirection="right"
           customStyle="mt-3 mr-3"
           onPillClick={handlePillClick({ label, value })}
         />
