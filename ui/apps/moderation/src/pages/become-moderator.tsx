@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
-import BecomeModeratorIntro from '../components/moderator/become-moderator/intro';
+import BMIntro from '../components/moderator/become-moderator/intro';
 import BMSelectReason from '../components/moderator/become-moderator/reason';
 import BMSelectCategory from '../components/moderator/become-moderator/select-category';
 import BMContactInfo from '../components/moderator/become-moderator/contact-info';
@@ -86,7 +86,7 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
   return (
     <>
       {activeStep === 0 && (
-        <BecomeModeratorIntro
+        <BMIntro
           titleLabel={t('Becoming a moderator')}
           subtitleLabels={BMIntroSubtitles.map(subtitle => ({
             ...subtitle,
@@ -104,12 +104,14 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
         <BMSelectReason
           stepLabels={stepLabels}
           activeIndex={activeStep - 1}
-          titleLabel="Why do you want to become a moderator?"
-          subtitleLabel="Telling the admin why you want to become a moderator will make your application look stronger"
-          reasonCaption="1000 words Max."
-          reasonPlaceholderLabel="I would like to apply because..."
-          cancelButtonLabel="Cancel"
-          confirmButtonLabel="Continue"
+          titleLabel={t('Why do you want to become a moderator?')}
+          subtitleLabel={t(
+            'Telling the admin why you want to become a moderator will make your application look stronger',
+          )}
+          reasonCaption={`${t('1000 words Max')}.`}
+          reasonPlaceholderLabel={`${t('I would like to apply because')}...`}
+          cancelButtonLabel={t('Cancel')}
+          confirmButtonLabel={t('Continue')}
           onCancelButtonClick={handleCancelButtonClick}
           onConfirmButtonClick={handleConfirmButtonClick}
         />
@@ -119,13 +121,15 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
         <BMSelectCategory
           stepLabels={stepLabels}
           activeIndex={activeStep - 1}
-          titleLabel="Your Moderation Category"
-          subtitleLabel="When you select any category, you will be able to moderate any reported content that belongs to that category."
+          titleLabel={t('Your Moderation Category')}
+          subtitleLabel={t(
+            'When you select any category, you will be able to moderate any reported content that belongs to that category.',
+          )}
           selectedCategories={selectedCategories}
           moderationCategories={categories}
-          allCategoriesLabel="All categories"
-          cancelButtonLabel="Cancel"
-          confirmButtonLabel="Continue"
+          allCategoriesLabel={t('All categories')}
+          cancelButtonLabel={t('Cancel')}
+          confirmButtonLabel={t('Continue')}
           onCancelButtonClick={handleCancelButtonClick}
           onConfirmButtonClick={handleConfirmButtonClick}
         />
@@ -135,17 +139,19 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
         <BMContactInfo
           stepLabels={stepLabels}
           activeIndex={activeStep - 1}
-          titleLabel="Your Contact Information"
-          subtitleLabel="AKASHA members will be able to contact you in case of a moderation incident"
-          discordLabel="Discord Username"
-          discordPlaceholderLabel="your discord username"
-          emailLabel="Email"
-          emailPlaceholderLabel="example@example.com"
-          fillFromProfileLabel="Fill info from profile"
-          checks={checks}
+          titleLabel={t('Your Contact Information')}
+          subtitleLabel={t(
+            'AKASHA members will be able to contact you in case of a moderation incident',
+          )}
+          discordLabel={t('Discord Username')}
+          discordPlaceholderLabel={t('your discord username')}
+          emailLabel={t('Email')}
+          emailPlaceholderLabel={t('example@example.com')}
+          fillFromProfileLabel={t('Fill info from profile')}
+          checks={checks.map(check => t('{{check}}', { check }))}
           checkedState={checkedState}
-          cancelButtonLabel="Cancel"
-          confirmButtonLabel="Submit"
+          cancelButtonLabel={t('Cancel')}
+          confirmButtonLabel={t('Submit')}
           onFillFromProfileClick={handleFillFromProfileClick}
           onCheckBoxClick={handleCheckBoxClick}
           onCancelButtonClick={handleCancelButtonClick}
@@ -157,12 +163,12 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
         <BMConfirmation
           stepLabels={stepLabels}
           activeIndex={activeStep - 1}
-          titleLabel="Application Successfully Submitted"
+          titleLabel={t('Application Successfully Submitted')}
           subtitleLabels={BMConfirmationSubtitles.map(subtitle => ({
             ...subtitle,
             label: t('{{label}}', { label: subtitle.label }),
           }))}
-          confirmButtonLabel="Continue"
+          confirmButtonLabel={t('Continue')}
           onLinkClick={handleLinkClick}
           onConfirmButtonClick={handleConfirmButtonClick}
         />

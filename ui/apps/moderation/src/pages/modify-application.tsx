@@ -47,14 +47,14 @@ export const ModifyApplicationPage: React.FC<IModifyApplicationPageProps> = prop
     <ModifyApplication
       label={t('Modify Application')}
       reasonTitleLabel={t('Why do you want to become a moderator?')}
-      reasonCaption="1000 words Max."
-      reasonPlaceholderLabel="I would like to apply because..."
-      changeCategoryTitleLabel="Change Moderation Category"
+      reasonCaption={`${t('1000 words Max')}.`}
+      reasonPlaceholderLabel={`${t('I would like to apply because')}...`}
+      changeCategoryTitleLabel={t('Change Moderation Category')}
       selectedCategories={selectedCategories}
       moderationCategories={categories}
-      allCategoriesLabel="All categories"
-      cancelButtonLabel="Cancel"
-      confirmButtonLabel="Update"
+      allCategoriesLabel={t('All categories')}
+      cancelButtonLabel={t('Cancel')}
+      confirmButtonLabel={t('Update')}
       onCancelButtonClick={handleCancelButtonClick}
       onConfirmButtonClick={handleUpdateClick}
     />
