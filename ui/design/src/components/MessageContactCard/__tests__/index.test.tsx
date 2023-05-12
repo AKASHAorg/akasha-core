@@ -23,7 +23,9 @@ describe('<MessageContactCard /> Component', () => {
             isPinned={false}
             pinConvoLabel="Pin"
             unpinConvoLabel="Unpin"
-            senderAvatar={{ url: 'https://placebeard.it/360x360' }}
+            senderAvatar={{
+              default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },
+            }}
             senderProfileId="did:0x003410490050000320006570034567114572000"
             onClickCard={handleClickCard}
             onClickAvatar={handleClickAvatar}

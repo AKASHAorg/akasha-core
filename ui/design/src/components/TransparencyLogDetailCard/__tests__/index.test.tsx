@@ -26,7 +26,9 @@ describe('<TransparencyLogDetailCard /> Component', () => {
             isDelisted={true}
             moderator="John Doe"
             moderatedTimestamp="2021-06-14T16:48:00.000Z"
-            moderatorAvatar={{ url: 'https://placebeard.it/360x360' }}
+            moderatorAvatar={{
+              default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },
+            }}
             moderatorProfileId="did:0x003410490050000320006570034567114572000"
             reportedTimesLabel={`Reported ${4} times`}
             viewItemLink=""

@@ -19,9 +19,8 @@ describe('<ChatAreaHeader /> Component', () => {
         wrapWithTheme(
           <ChatAreaHeader
             name={name}
-            userName={username}
-            avatar={{ url: 'https://placebeard.it/360x360' }}
-            ethAddress="0x003410490050000320006570034567114572000"
+            avatar={{ default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } }}
+            did={{ id: '0x003410490050000320006570034567114572000', isViewer: false }}
             onClickAvatar={handleClickAvatar}
           />,
         ),

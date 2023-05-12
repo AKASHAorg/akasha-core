@@ -22,7 +22,9 @@ describe('<TransparencyLogMiniCard /> Component', () => {
             isDelisted={true}
             moderatedTimestamp="2021-06-14T16:48:00.000Z"
             moderator="somebody"
-            moderatorAvatar={{ url: 'https://placebeard.it/360x360' }}
+            moderatorAvatar={{
+              default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },
+            }}
             moderatorProfileId="did:0x003410490050000320006570034567114572000"
             onClickCard={handleClickCard}
             onClickAvatar={handleClickAvatar}

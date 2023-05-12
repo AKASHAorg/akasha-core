@@ -275,7 +275,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     const initContent: { children: Descendant[] } = { children: slateContent };
     (function getMetadata(node: Descendant | { children: Descendant[] }) {
       if (Element.isElement(node) && node.type === 'mention') {
-        metadata.mentions.push(node.did);
+        metadata.mentions.push(node.did.id);
       }
       if (Element.isElement(node) && node.type === 'tag') {
         metadata.tags.push(node.name);

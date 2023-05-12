@@ -7,11 +7,12 @@ const genUser = (ethAddress?: string): Profile => {
   return {
     id: '123',
     avatar: { default: { src: avatarUrl, width: 200, height: 200 } },
-    coverImage: { default: { src: coverImageUrl, width: 200, height: 200 } },
+    background: { default: { src: coverImageUrl, width: 200, height: 200 } },
     description: faker.lorem.sentences(3),
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
     did: { id: `did:${ethAddress}`, isViewer: true },
     followers: null,
+    createdAt: faker.date.past().toISOString(),
   };
 };
 
@@ -28,7 +29,7 @@ export const genLoggedInState = (loggedIn = false): Profile => {
         height: 200,
       },
     },
-    coverImage: {
+    background: {
       default: {
         src: 'https://api.dicebear.com/6.x/avataaars/svg?seed=0x92Aa5CF1302883Ba0D470918a46033890Dd36048',
         width: 520,
@@ -37,6 +38,7 @@ export const genLoggedInState = (loggedIn = false): Profile => {
     },
     description: 'profile description',
     followers: null,
+    createdAt: faker.date.past().toISOString(),
   };
 };
 

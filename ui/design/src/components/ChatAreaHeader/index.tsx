@@ -4,7 +4,7 @@ import { Box } from 'grommet';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
-export type IChatAreaHeaderProps = Profile & {
+export type IChatAreaHeaderProps = Pick<Profile, 'name' | 'avatar' | 'did'> & {
   onClickAvatar?: () => void;
 };
 

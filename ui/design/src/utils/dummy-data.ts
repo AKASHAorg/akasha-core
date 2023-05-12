@@ -164,28 +164,16 @@ const installedAppsData: IMenuItem[] = [
   },
 ];
 
-const profileData = {
-  ethAddress: '0x003410490050000320006570034567114572000',
-  profileId: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba',
+const profileData: Profile = {
+  id: '14572000',
+  did: { id: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', isViewer: true },
   avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
-  coverImage: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
+  background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
   name: 'Gilbert The Bearded',
-  userName: 'gilbert',
-  ensName: 'gilbert.akasha.eth',
   description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Management. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-  totalFollowers: 15,
-  totalFollowing: 1876,
-  totalInterests: 3,
-  isFollowed: true,
-  apps: '12',
-  profileType: 'user',
-  totalPosts: '235',
-  vnd: {},
-  default: [],
-  providers: [],
-  badges: ['dev', 'publisher'],
-  _id: '31231',
+  createdAt: '2020-01-01T00:00:00.000Z',
+  followers: null,
 };
 
 const TAGS = [
@@ -642,30 +630,15 @@ const profileProvidersData = {
   ],
 };
 
-const boxProviderData = {
-  avatar: { url: '', fallbackUrl: '' },
-  coverImage: { url: '', fallbackUrl: '' },
+const boxProviderData: Profile = {
+  id: '123',
+  avatar: { default: { src: '', width: 0, height: 0 } },
+  background: { default: { src: '', width: 0, height: 0 } },
   name: '',
   description: '',
-  userName: '',
-  pubKey: '',
-  ethAddress: '',
-  default: [
-    {
-      provider: ProfileProviders.EWA_BASIC,
-      property: ProfileProviderProperties.SOCIAL_LINKS,
-      value: JSON.stringify([
-        {
-          type: 'com.twitter',
-          value: 'https://twitter.com/akashaorg',
-        },
-      ]),
-    },
-  ],
-};
-
-const ensProviderData = {
-  name: '',
+  did: { id: '', isViewer: true },
+  followers: null,
+  createdAt: '',
 };
 
 const appData = {
@@ -952,8 +925,12 @@ const repliesLabel = 'Replies';
 const dummyChatArr: IChatMessage[] = [
   {
     name: 'Jerry Mil',
-    username: 'jerrbear',
-    ethAddress: '0x003410490050000320006570034567114572000',
+    id: '6',
+    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    did: { id: '0x003410490050000320006570034567114572000', isViewer: false },
+    followers: null,
+    createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
     content: [
       {
@@ -981,8 +958,12 @@ const dummyChatArr: IChatMessage[] = [
   },
   {
     name: 'Estelle Collier',
-    username: 'estellecollier',
-    ethAddress: '0x003410490050000320006570034567114572021',
+    id: '5',
+    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    did: { id: '0x003410490050000320006570034567114572021', isViewer: false },
+    followers: null,
+    createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
     content: [
       {
@@ -1003,9 +984,12 @@ const dummyChatArr: IChatMessage[] = [
   },
   {
     name: 'Jerry Mil',
-    username: 'jerrbear',
-    ethAddress: '0x003410490050000320006570034567114572000',
-    read: true,
+    id: '1',
+    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    did: { id: '0x003410490050000320006570034567114572001', isViewer: false },
+    followers: null,
+    createdAt: '2021-06-22T10:07:15.000Z',
     content: [
       {
         type: 'paragraph',
@@ -1020,8 +1004,12 @@ const dummyChatArr: IChatMessage[] = [
   },
   {
     name: 'Jerry Mil',
-    username: 'jerrbear',
-    ethAddress: '0x003410490050000320006570034567114572000',
+    id: '2',
+    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    did: { id: '0x003410490050000320006570034567114572002', isViewer: false },
+    followers: null,
+    createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
     content: [
       {
@@ -1037,8 +1025,12 @@ const dummyChatArr: IChatMessage[] = [
   },
   {
     name: 'Estelle Collier',
-    username: 'estellecollier',
-    ethAddress: '0x003410490050000320006570034567114572021',
+    id: '3',
+    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    did: { id: '0x003410490050000320006570034567114572003', isViewer: false },
+    followers: null,
+    createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
     content: [
       {
@@ -1054,8 +1046,12 @@ const dummyChatArr: IChatMessage[] = [
   },
   {
     name: 'Jerry Mil',
-    username: 'jerrbear',
-    ethAddress: '0x003410490050000320006570034567114572000',
+    id: '4',
+    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    did: { id: '0x003410490050000320006570034567114572006', isViewer: false },
+    followers: null,
+    createdAt: '2021-06-22T10:07:15.000Z',
     read: false,
     content: [
       {
@@ -1114,7 +1110,6 @@ export {
   shareProfileLabel,
   topicsDataSource,
   boxProviderData,
-  ensProviderData,
   copyIPFSLinkLabel,
   flagAsLabel,
   bookmarkLabel,

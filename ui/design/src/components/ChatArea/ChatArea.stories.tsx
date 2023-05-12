@@ -33,9 +33,8 @@ BaseChatArea.args = {
   headerElement: (
     <ChatAreaHeader
       name="Estelle Collier"
-      userName="estellecollier"
       avatar={{ default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } }}
-      profileId="did:0x003410490050000320006570034567114572021"
+      did={{ id: 'did:0x003410490050000320006570034567114572021', isViewer: true }}
       onClickAvatar={() => null}
     />
   ),

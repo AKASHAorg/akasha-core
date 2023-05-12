@@ -95,7 +95,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
             </Text>
           </div>
           <div className={tw(`flex flex-row gap-2`)}>
-            <Text variant="subtitle2">{`${profileData.did.postList || 0} ${postsLabel}`}</Text>
+            {/*<Text variant="subtitle2">{`${profileData.did.id || 0} ${postsLabel}`}</Text>*/}
             <Text variant="subtitle2">{`${
               profileData.did.followList || 0
             } ${followersLabel}`}</Text>
