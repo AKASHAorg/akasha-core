@@ -68,7 +68,7 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
   };
 
   return (
-    <Card direction="row" elevation={'1'} radius={16} padding={8} data-testid="notifications">
+    <Card direction="row" elevation={'1'} radius={16} padding={8} testId="notifications">
       <div className={tw('flex(& col) justify-center align-center mb-32')}>
         <BasicCardBox
           style="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"

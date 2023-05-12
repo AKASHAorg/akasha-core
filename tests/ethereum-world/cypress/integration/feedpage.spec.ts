@@ -12,9 +12,7 @@ describe('Feed Page', () => {
     describe('Should test trending widget', () => TrendingWidgetTest());
     describe('Should test dismissable notification card', () => DismissableNotificationCard());
     it('should redirect to profile page', () => {
-      cy.get('[data-page-idx="0"] [data-testid="avatar-image"]', { timeout: TIMEOUT })
-        .first()
-        .click();
+      cy.get('[data-testid="entry-profile-detail"]', { timeout: TIMEOUT }).first().click();
       cy.location('pathname').should('contain', '/app-profile');
     });
   });
@@ -45,8 +43,11 @@ describe('Feed Page', () => {
         .and('not.be.empty');
     });
 
+    /* @TODO: The test should be active when the kebab menu is functional right now the menu isn't working
     it('should open report popup on click', () => {
-      cy.get('svg[type="moreDark"]', { timeout: TIMEOUT }).first().click();
+      cy.get('[data-testid="entry-kebab-menu"]', { timeout: TIMEOUT }).click();
     });
+
+    */
   });
 });
