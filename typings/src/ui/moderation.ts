@@ -1,5 +1,5 @@
 import { EntityTypes } from './ui-events';
-import { Profile } from '../sdk/graphql-types-new';
+import { Profile } from './profile';
 
 export enum ButtonValues {
   ALL = 'All',
@@ -76,7 +76,7 @@ export interface IModerationLogItem {
   delisted: false;
   reasons: string[];
   explanation: string;
-  moderator: Profile;
+  moderator: Moderator;
   moderatedDate: Date;
   reports: number;
 }
@@ -103,5 +103,5 @@ export interface IModeratedItem extends IPendingItem {
   moderator: string;
   moderatedDate?: Date;
   evaluationDate?: Date;
-  moderatorProfile: Profile;
+  moderatorProfile: Moderator;
 }

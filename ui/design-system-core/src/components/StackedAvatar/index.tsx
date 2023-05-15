@@ -2,7 +2,7 @@ import React from 'react';
 import { apply, tw } from '@twind/core';
 
 import Avatar, { AvatarSize } from '../Avatar';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IStackedAvatarProps {
   userData: Profile[];

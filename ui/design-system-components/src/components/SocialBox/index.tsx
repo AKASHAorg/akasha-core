@@ -4,7 +4,7 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Menu } from '@headlessui/react';
 import { truncateMiddle } from '../../utils/string-utils';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ISocialBox {
   socialData: Profile[];

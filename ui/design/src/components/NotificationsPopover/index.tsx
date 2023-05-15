@@ -3,7 +3,7 @@ import * as React from 'react';
 import Avatar from '../Avatar';
 import BasicPopover from '../BasicPopover';
 import { StyledListContainer, StyledListElem } from './styled-notifications-popover';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface INotificationsPopover {
   className?: string;

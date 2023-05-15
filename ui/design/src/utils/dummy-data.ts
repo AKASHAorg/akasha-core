@@ -4,7 +4,7 @@ import { ReleaseInfo } from '@akashaorg/typings/sdk';
 import { IMenuItem, MenuItemType, MenuItemAreaType, IChatMessage } from '@akashaorg/typings/ui';
 import { IAppData } from '../components/AppsWidgetCard';
 import { IntegrationInfo, IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 const userData: { did: Profile['did']; avatar?: Profile['avatar'] }[] = [
   {
@@ -173,7 +173,6 @@ const profileData: Profile = {
   description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Management. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   createdAt: '2020-01-01T00:00:00.000Z',
-  followers: null,
 };
 
 const TAGS = [
@@ -218,7 +217,6 @@ const USERNAMES: Profile[] = [
     description: 'hello',
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
     createdAt: '2020-01-01',
-    followers: null,
   },
   {
     id: '1234',
@@ -228,7 +226,6 @@ const USERNAMES: Profile[] = [
     description: 'hello world',
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
     createdAt: '2020-01-01',
-    followers: null,
   },
   {
     id: '12345',
@@ -238,7 +235,6 @@ const USERNAMES: Profile[] = [
     description: 'nono',
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
     createdAt: '2020-01-01',
-    followers: null,
   },
 ];
 
@@ -268,7 +264,7 @@ const trendingProfilesData: Profile[] = [
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
     createdAt: '2020-01-01',
-    followers: null,
+
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
@@ -281,7 +277,6 @@ const trendingProfilesData: Profile[] = [
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     createdAt: '2020-01-01',
-    followers: null,
   },
   {
     id: '125',
@@ -292,7 +287,6 @@ const trendingProfilesData: Profile[] = [
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     createdAt: '2020-01-01',
-    followers: null,
   },
   {
     id: '125',
@@ -303,7 +297,6 @@ const trendingProfilesData: Profile[] = [
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     createdAt: '2020-01-01',
-    followers: null,
   },
   {
     id: '126',
@@ -314,7 +307,6 @@ const trendingProfilesData: Profile[] = [
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     createdAt: '2020-01-01',
-    followers: null,
   },
 ];
 
@@ -637,7 +629,7 @@ const boxProviderData: Profile = {
   name: '',
   description: '',
   did: { id: '', isViewer: true },
-  followers: null,
+
   createdAt: '',
 };
 
@@ -929,7 +921,7 @@ const dummyChatArr: IChatMessage[] = [
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     did: { id: '0x003410490050000320006570034567114572000', isViewer: false },
-    followers: null,
+
     createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
     content: [
@@ -962,7 +954,7 @@ const dummyChatArr: IChatMessage[] = [
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     did: { id: '0x003410490050000320006570034567114572021', isViewer: false },
-    followers: null,
+
     createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
     content: [
@@ -988,7 +980,7 @@ const dummyChatArr: IChatMessage[] = [
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     did: { id: '0x003410490050000320006570034567114572001', isViewer: false },
-    followers: null,
+
     createdAt: '2021-06-22T10:07:15.000Z',
     content: [
       {
@@ -1008,7 +1000,7 @@ const dummyChatArr: IChatMessage[] = [
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     did: { id: '0x003410490050000320006570034567114572002', isViewer: false },
-    followers: null,
+
     createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
     content: [
@@ -1029,7 +1021,7 @@ const dummyChatArr: IChatMessage[] = [
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     did: { id: '0x003410490050000320006570034567114572003', isViewer: false },
-    followers: null,
+
     createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
     content: [
@@ -1050,7 +1042,7 @@ const dummyChatArr: IChatMessage[] = [
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     did: { id: '0x003410490050000320006570034567114572006', isViewer: false },
-    followers: null,
+
     createdAt: '2021-06-22T10:07:15.000Z',
     read: false,
     content: [

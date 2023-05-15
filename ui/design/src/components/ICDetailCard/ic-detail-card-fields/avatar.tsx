@@ -4,7 +4,7 @@ import Icon from '../../Icon';
 import Avatar from '../../Avatar';
 import ImageOverlay from '../../ImageOverlay';
 import { AvatarBorderSize, AvatarSize } from '../../Avatar/styled-avatar';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 type Size = 'xl' | 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
 

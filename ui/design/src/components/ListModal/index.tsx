@@ -6,7 +6,7 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { IconType } from '../Icon';
 import TextIcon from '../TextIcon';
 import { StyledLayer } from './styled-modal';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IlistModal {
   className?: string;

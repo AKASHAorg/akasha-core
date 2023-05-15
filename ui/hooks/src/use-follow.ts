@@ -5,7 +5,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 import { TRENDING_PROFILES_KEY } from './use-trending';
 import { FOLLOWERS_KEY, PROFILE_KEY } from './use-profile';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 /**
  * @internal

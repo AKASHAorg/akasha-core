@@ -4,7 +4,7 @@ import { truncateMiddle } from '../../utils/string-utils';
 import Avatar from '../Avatar';
 import { AvatarSize } from '../Avatar/styled-avatar';
 import { ButtonInfo, StyledText, StyledWrapperBox } from './styled-profile-avatar-button';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;

@@ -1,4 +1,4 @@
-import { Profile } from '../sdk/graphql-types-new';
+import { Profile } from './profile';
 
 type ArticleContent = { type: string; value: string };
 

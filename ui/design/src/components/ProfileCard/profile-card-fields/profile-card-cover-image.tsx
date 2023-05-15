@@ -4,7 +4,7 @@ import IconButton from '../../IconButton';
 import Icon from '../../Icon';
 import { ShareButtonContainer } from '../styled-profile-card';
 import ImageOverlay from '../../ImageOverlay';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type IProfileCardCoverImageProps = {
   shareProfileLabel: string;

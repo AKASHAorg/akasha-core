@@ -1,6 +1,6 @@
 import React from 'react';
 import Header, { HeaderProps } from './index';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export default {
   title: 'Profile/ProfileHeader',

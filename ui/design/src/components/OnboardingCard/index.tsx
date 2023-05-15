@@ -8,7 +8,7 @@ import TagCard from '../TagCard';
 import { ITagData } from '../TagCard';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
 import Icon from '../Icon';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ICustomizeFeedCardProps {
   // data

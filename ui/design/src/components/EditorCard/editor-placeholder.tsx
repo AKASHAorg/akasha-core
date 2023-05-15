@@ -2,7 +2,7 @@ import * as React from 'react';
 import Avatar from '../Avatar';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import { Box, Text } from 'grommet';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IEditorPlaceholder {
   avatar?: Profile['avatar'];

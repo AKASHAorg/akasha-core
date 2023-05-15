@@ -4,7 +4,7 @@ import { apply, tw } from '@twind/core';
 import AvatarImage from './AvatarImage';
 
 import { getAvatarFromSeed } from '../../utils/get-avatar-from-seed';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 

@@ -3,7 +3,7 @@ import Avatar from '../../Avatar';
 import ImageOverlay from '../../ImageOverlay';
 import { AvatarDiv } from '../styled-profile-card';
 import { AvatarBorderColor } from '../../Avatar/styled-avatar';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type IProfileCardAvatarProps = {
   avatar?: Profile['avatar'];

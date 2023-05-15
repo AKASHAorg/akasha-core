@@ -10,7 +10,7 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledDrop, StyledPopoverBox, StyledOverlay, StyledAccordionPanel } from './styled-topbar';
 import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 import { ModalRenderer } from '../SignInModal/modal-renderer';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileMenu {
   loggedProfileData?: Profile;

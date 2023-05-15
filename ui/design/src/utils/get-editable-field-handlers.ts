@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const getEditableTextFieldHandlers = (
   editable: boolean,

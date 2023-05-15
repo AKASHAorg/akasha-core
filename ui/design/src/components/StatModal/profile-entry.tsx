@@ -6,7 +6,7 @@ import DuplexButton from '../DuplexButton';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledAnchor } from '../EntryCard/basic-card-box';
 import useIntersectionObserver from '../../utils/intersection-observer';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileEntry {
   followedProfiles?: string[];

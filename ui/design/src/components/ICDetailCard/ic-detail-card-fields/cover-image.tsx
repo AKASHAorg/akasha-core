@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box } from 'grommet';
 import ImageOverlay from '../../ImageOverlay';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ICDetailCardCoverImageProps {
   shareLabel: string;

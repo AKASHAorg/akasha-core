@@ -22,7 +22,7 @@ import SocialLinksSection, { StateLink } from './sections/social-links-section';
 import EnsPrefillSection from './sections/ens-prefill-section';
 import { EnsTxtPresets } from './sections/social-link-input';
 import { getUpdatedFields } from './get-updated-fields';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ProfileFormProps {
   className?: string;

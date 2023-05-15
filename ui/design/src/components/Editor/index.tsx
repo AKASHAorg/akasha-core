@@ -32,7 +32,7 @@ import LinkPreview from './link-preview';
 import { ImageObject } from '../ImageGallery/image-grid-item';
 import ImageGallery from '../ImageGallery';
 import isUrl from 'is-url';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 const MAX_LENGTH = 280;
 

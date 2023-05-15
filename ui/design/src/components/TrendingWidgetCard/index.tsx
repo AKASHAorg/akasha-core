@@ -8,7 +8,7 @@ import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import DuplexButton from '../DuplexButton';
 import { TextLine } from '../TextLine';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ITrendingWidgetCardProps {
   // data

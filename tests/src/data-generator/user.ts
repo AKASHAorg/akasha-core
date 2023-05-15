@@ -1,5 +1,5 @@
 import faker from 'faker';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 const genUser = (ethAddress?: string): Profile => {
   const avatarUrl = faker.image.avatar();

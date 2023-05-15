@@ -14,7 +14,7 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { ModalWrapper, StyledBox } from '../ListModal/styled-modal';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IStatModal extends IProfileEntry, ITagEntry {
   className?: string;

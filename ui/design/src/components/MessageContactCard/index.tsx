@@ -8,7 +8,7 @@ import { IconDiv } from '../TopBar/styled-topbar';
 import { ILocale } from '../../utils/time';
 import CardHeaderMenuDropdown from '../EntryCard/card-header-menu';
 import styled from 'styled-components';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const StyledButton = styled(Button)`
   border-radius: 100px;

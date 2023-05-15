@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 import { PROFILE_KEY } from './use-profile';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const TAG_SUBSCRIPTIONS_KEY = 'TAG_SUBSCRIPTIONS';
 export const GET_TAG_KEY = 'GET_TAG';

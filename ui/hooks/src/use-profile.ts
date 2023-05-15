@@ -16,7 +16,7 @@ import {
 import { checkStatus } from './use-moderation';
 import { logError } from './utils/error-handler';
 import { buildProfileMediaLinks } from './utils/media-utils';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 /**
  * @internal

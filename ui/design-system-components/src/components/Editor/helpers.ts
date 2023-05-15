@@ -8,7 +8,7 @@ import {
   MentionElement,
   TagElement,
 } from '@akashaorg/typings/ui';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 const CustomEditor = {
   isBlockActive(editor: Editor, format: string) {

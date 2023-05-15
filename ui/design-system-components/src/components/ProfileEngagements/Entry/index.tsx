@@ -7,7 +7,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type EntryProps = {
   followLabel: string;

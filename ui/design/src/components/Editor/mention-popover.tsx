@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Portal } from './helpers';
 import { StyledPopoverDiv, StyledPopoverValueBox } from './styled-editor-box';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IMentionPopover {
   values: Profile[];

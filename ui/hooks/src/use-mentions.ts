@@ -3,7 +3,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import { buildProfileMediaLinks } from './utils/media-utils';
 import { PROFILE_KEY } from './use-profile';
 import { logError } from './utils/error-handler';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const MENTION_SEARCH_KEY = 'MENTION_SEARCH_KEY';
 
