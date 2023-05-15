@@ -4,3 +4,4 @@ export * from './format-date';
 export * from './getReasonPrefix';
 export * from './reasons';
 export * from './subtitles';
+export * from './tenure-info';
