@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '../Button';
 import { ButtonProps } from '../Button/types';
 
@@ -9,8 +9,7 @@ export interface IPillProps {
   iconDirection?: ButtonProps['iconDirection'];
   customStyle?: ButtonProps['customStyle'];
   active?: boolean;
-  clickable?: boolean;
-  onPillClick?: (active: boolean) => void;
+  onPillClick?: () => void;
 }
 
 const Pill: React.FC<IPillProps> = ({
@@ -20,18 +19,11 @@ const Pill: React.FC<IPillProps> = ({
   iconDirection,
   customStyle,
   active,
-  clickable = false,
   onPillClick,
 }) => {
-  const [pillActive, setPillActive] = useState(active);
-
   const handlePillClick = () => {
-    if (clickable) {
-      setPillActive(!pillActive);
-    }
-
     if (onPillClick) {
-      onPillClick(!pillActive);
+      onPillClick();
     }
   };
 
@@ -44,7 +36,7 @@ const Pill: React.FC<IPillProps> = ({
       icon={icon}
       iconDirection={iconDirection}
       customStyle={customStyle}
-      active={pillActive}
+      active={active}
       onClick={handlePillClick}
     />
   );
