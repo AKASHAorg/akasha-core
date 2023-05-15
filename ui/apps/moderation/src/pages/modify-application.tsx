@@ -18,12 +18,7 @@ export const ModifyApplicationPage: React.FC<IModifyApplicationPageProps> = prop
 
   const categories = reasons.map(reason => ({
     value: reason,
-    label: reason,
-  }));
-
-  const selectedCategories = preSelectedReasons.map(el => ({
-    value: el,
-    label: el,
+    label: t(reason),
   }));
 
   const handleCancelButtonClick = () => {
@@ -50,7 +45,7 @@ export const ModifyApplicationPage: React.FC<IModifyApplicationPageProps> = prop
       reasonCaption={`${t('1000 words Max')}.`}
       reasonPlaceholderLabel={`${t('I would like to apply because')}...`}
       changeCategoryTitleLabel={t('Change Moderation Category')}
-      selectedCategories={selectedCategories}
+      selectedCategories={preSelectedReasons}
       moderationCategories={categories}
       allCategoriesLabel={t('All categories')}
       cancelButtonLabel={t('Cancel')}

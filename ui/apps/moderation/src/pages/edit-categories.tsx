@@ -19,12 +19,7 @@ export const EditCategoriesPage: React.FC<IEditCategoriesPageProps> = props => {
 
   const categories = reasons.map(reason => ({
     value: reason,
-    label: t('{{label}}', { label: reason }),
-  }));
-
-  const selectedCategories = preSelectedReasons.map(el => ({
-    value: el ?? '',
-    label: t('{{el}}', { el: el ?? '' }),
+    label: t(reason),
   }));
 
   const handleCancelButtonClick = () => {
@@ -44,7 +39,7 @@ export const EditCategoriesPage: React.FC<IEditCategoriesPageProps> = props => {
   return (
     <EditCategories
       label={t('Change Categories')}
-      selectedCategories={selectedCategories}
+      selectedCategories={preSelectedReasons}
       moderationCategories={categories}
       allCategoriesLabel={t('All categories')}
       cancelButtonLabel="Cancel"

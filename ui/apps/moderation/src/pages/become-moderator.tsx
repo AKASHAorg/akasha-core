@@ -35,12 +35,7 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
 
   const categories = reasons.map(reason => ({
     value: reason,
-    label: reason,
-  }));
-
-  const selectedCategories = preSelectedReasons.map(el => ({
-    value: el,
-    label: el,
+    label: t(reason),
   }));
 
   const handleCodeOfConductClick = () => () => {
@@ -125,7 +120,7 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
           subtitleLabel={t(
             'When you select any category, you will be able to moderate any reported content that belongs to that category.',
           )}
-          selectedCategories={selectedCategories}
+          selectedCategories={preSelectedReasons}
           moderationCategories={categories}
           allCategoriesLabel={t('All categories')}
           cancelButtonLabel={t('Cancel')}

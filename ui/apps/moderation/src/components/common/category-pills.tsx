@@ -6,17 +6,21 @@ import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 export type ModerationCategory = { value: string; label: string };
 
 export interface ICategoryPillsProps {
-  selectedCategories: ModerationCategory[];
+  selectedCategories: string[];
   moderationCategories: ModerationCategory[];
-  allCategoriesLabel: string;
+  allCategoriesLabel?: string;
+  maxSelection?: number; // maximum allowed categories that can be selected
 }
 
 export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
-  const { selectedCategories, moderationCategories, allCategoriesLabel } = props;
+  const {
+    selectedCategories,
+    moderationCategories,
+    allCategoriesLabel,
+    maxSelection = moderationCategories.length,
+  } = props;
 
-  const [categories, setCategories] = React.useState<ModerationCategory[]>(
-    selectedCategories ?? [],
-  );
+  const [categories, setCategories] = React.useState<string[]>(selectedCategories ?? []);
 
   const allCategoriesSelected = categories.length === moderationCategories.length;
 
@@ -25,15 +29,15 @@ export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
       if (allCategoriesSelected) {
         return setCategories([]);
       }
-      return setCategories(moderationCategories);
+      return setCategories(moderationCategories.map(el => el.value));
     }
 
-    const found = categories.find(cat => cat?.value === category.value);
+    const found = categories.find(cat => cat === category.value);
 
-    if (!found) {
-      setCategories([...categories, category]);
+    if (!found && categories.length < maxSelection) {
+      setCategories([...categories, category.value]);
     } else {
-      const updated = categories.filter(cat => cat?.value !== category.value);
+      const updated = categories.filter(cat => cat !== category.value);
 
       return setCategories(updated);
     }
@@ -41,21 +45,21 @@ export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
 
   return (
     <Box customStyle="flex flex-wrap">
-      <Pill
-        label={allCategoriesLabel}
-        clickable={true}
-        active={allCategoriesSelected}
-        customStyle="mt-3 mr-3"
-        onPillClick={handlePillClick({ label: allCategoriesLabel, value: allCategoriesLabel })}
-      />
+      {allCategoriesLabel && (
+        <Pill
+          label={allCategoriesLabel}
+          active={allCategoriesSelected}
+          customStyle="mt-3 mr-3"
+          onPillClick={handlePillClick({ label: allCategoriesLabel, value: allCategoriesLabel })}
+        />
+      )}
 
       {moderationCategories.map(({ label, value }, idx) => (
         <Pill
           key={label + idx}
           label={label}
-          clickable={true}
-          active={categories.map(cat => cat?.value).includes(value)}
-          icon={categories.map(cat => cat?.value).includes(value) ? 'XMarkIcon' : undefined}
+          active={categories.includes(value)}
+          icon={categories.includes(value) ? 'XMarkIcon' : undefined}
           iconDirection="right"
           customStyle="mt-3 mr-3"
           onPillClick={handlePillClick({ label, value })}
