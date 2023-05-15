@@ -1,7 +1,7 @@
 name: E2E on Chrome
-on: 
+on:
   pull_request:
-    types: 
+    types:
       - labeled
 
 jobs:
