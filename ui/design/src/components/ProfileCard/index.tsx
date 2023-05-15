@@ -17,6 +17,7 @@ export interface IProfileCardProps {
   showMore: boolean;
   isFollowing?: boolean;
   profileData: Profile;
+  isViewer?: boolean;
   followingLabel: string;
   followLabel?: string;
   unfollowLabel?: string;
@@ -87,6 +88,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     handleShareClick,
     handleUnfollow,
     handleFollow,
+    isViewer,
   } = props;
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -141,8 +143,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             flex={{ shrink: 0 }}
             margin={{ top: 'small' }}
           >
-            {!profileData.did.isViewer && actionButtonExt}
-            {!profileData.did.isViewer && (
+            {!isViewer && actionButtonExt}
+            {!isViewer && (
               <Box data-testid="profile-card-follow-button">
                 <DuplexButton
                   icon={<Icon type="following" />}
@@ -155,10 +157,10 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 />
               </Box>
             )}
-            {!isMobile && profileData.did.isViewer && (
+            {!isMobile && isViewer && (
               <EditButton iconType="editSimple" label={editProfileLabel} onClick={onUpdateClick} />
             )}
-            {showMore && (isMobile || (!isMobile && !profileData.did.isViewer)) ? (
+            {showMore && (isMobile || (!isMobile && !isViewer)) ? (
               <Icon
                 type="moreDark"
                 plain={true}

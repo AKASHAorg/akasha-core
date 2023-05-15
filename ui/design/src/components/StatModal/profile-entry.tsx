@@ -28,6 +28,7 @@ export interface IProfileEntry {
   onClickProfile: (profileId: string) => void;
   handleFollowProfile: (profileId: string) => void;
   handleUnfollowProfile: (profileId: string) => void;
+  isViewer?: boolean;
 }
 
 const ProfileEntry: React.FC<IProfileEntry> = props => {
@@ -45,6 +46,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
     onClickProfile,
     handleFollowProfile,
     handleUnfollowProfile,
+    isViewer,
   } = props;
 
   const loadmoreRef = React.createRef<HTMLDivElement>();
@@ -80,7 +82,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
               </Box>
             }
           />
-          {!profile.did.isViewer && (
+          {!isViewer && (
             <Box>
               <DuplexButton
                 inactiveLabel={followLabel}

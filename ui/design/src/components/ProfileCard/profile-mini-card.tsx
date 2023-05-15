@@ -11,6 +11,7 @@ export interface IProfileMiniCard {
   // data
   profileData: Profile;
   isFollowing?: boolean;
+  isViewer?: boolean;
   // labels
   followLabel?: string;
   followingLabel?: string;
@@ -39,6 +40,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     isFollowing,
     disableFollowing,
     footerExt,
+    isViewer,
   } = props;
 
   const onFollow = (ev: React.SyntheticEvent) => {
@@ -120,7 +122,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
           {profileData.description}
         </Text>
 
-        {!disableFollowing && profileData.did.isViewer && (
+        {!disableFollowing && isViewer && (
           <DuplexButton
             inactiveLabel={followLabel}
             activeLabel={followingLabel}

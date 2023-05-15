@@ -46,6 +46,7 @@ export interface ITrendingWidgetCardProps {
 
   // zero-based index of the current tab
   onActiveTabChange?: (tabIdx: number) => void;
+  isViewer?: boolean;
 }
 
 const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
@@ -77,6 +78,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     profileAnchorLink,
     followedProfiles,
     subscribedTags,
+    isViewer,
   } = props;
 
   const handleTabChange = (tabIdx: number) => {
@@ -194,7 +196,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                       </Box>
                     }
                   />
-                  {!profile.did.isViewer && (
+                  {!isViewer && (
                     <Box>
                       <DuplexButton
                         inactiveLabel={followLabel}

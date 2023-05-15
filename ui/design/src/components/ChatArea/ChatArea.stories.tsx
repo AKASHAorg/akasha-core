@@ -34,7 +34,7 @@ BaseChatArea.args = {
     <ChatAreaHeader
       name="Estelle Collier"
       avatar={{ default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } }}
-      did={{ id: 'did:0x003410490050000320006570034567114572021', isViewer: true }}
+      did={{ id: 'did:0x003410490050000320006570034567114572021' }}
       onClickAvatar={() => null}
     />
   ),

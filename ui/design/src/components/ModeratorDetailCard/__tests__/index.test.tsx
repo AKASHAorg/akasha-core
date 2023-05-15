@@ -13,7 +13,7 @@ const moderator: Moderator = {
   admin: true,
   active: true,
   background: { default: { src: '', width: 0, height: 0 } },
-  did: { id: 'bbaareie6w5f2l6b4kpysopls6n4nuejbcyjrzwf7wcjpi3hg', isViewer: false },
+  did: { id: 'bbaareie6w5f2l6b4kpysopls6n4nuejbcyjrzwf7wcjpi3hg' },
   name: 'Isabel Milkovic',
   avatar: {
     default: {

@@ -20,7 +20,7 @@ describe('<ChatAreaHeader /> Component', () => {
           <ChatAreaHeader
             name={name}
             avatar={{ default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } }}
-            did={{ id: '0x003410490050000320006570034567114572000', isViewer: false }}
+            did={{ id: '0x003410490050000320006570034567114572000' }}
             onClickAvatar={handleClickAvatar}
           />,
         ),

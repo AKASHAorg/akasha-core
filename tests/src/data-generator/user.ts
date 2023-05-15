@@ -10,8 +10,7 @@ const genUser = (ethAddress?: string): Profile => {
     background: { default: { src: coverImageUrl, width: 200, height: 200 } },
     description: faker.lorem.sentences(3),
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
-    did: { id: `did:${ethAddress}`, isViewer: true },
-    followers: null,
+    did: { id: `did:${ethAddress}` },
     createdAt: faker.date.past().toISOString(),
   };
 };
@@ -20,7 +19,7 @@ export const genLoggedInState = (loggedIn = false): Profile => {
   if (!loggedIn) return null;
   return {
     id: '124',
-    did: { id: 'did:0x92Aa5CF1302883Ba0D470918a46033890Dd36048', isViewer: true },
+    did: { id: 'did:0x92Aa5CF1302883Ba0D470918a46033890Dd36048' },
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
     avatar: {
       default: {
@@ -37,7 +36,6 @@ export const genLoggedInState = (loggedIn = false): Profile => {
       },
     },
     description: 'profile description',
-    followers: null,
     createdAt: faker.date.past().toISOString(),
   };
 };

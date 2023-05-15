@@ -23,6 +23,7 @@ export interface OnboardingSuggestionsCardProps {
   onClickProfile?: (pubKey: string) => void;
   onClickFollow?: (pubKey: string) => void;
   onClickUnfollow?: (pubKey: string) => void;
+  isViewer?: boolean;
 }
 
 export const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = props => {
@@ -41,6 +42,7 @@ export const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps>
     onClickProfile,
     onClickFollow,
     onClickUnfollow,
+    isViewer,
   } = props;
 
   return (
@@ -77,7 +79,7 @@ export const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps>
                 size="md"
                 avatarImage={profile.avatar}
               />
-              {!profile.did.isViewer && (
+              {!isViewer && (
                 <Box>
                   <DuplexButton
                     inactiveLabel={followLabel}

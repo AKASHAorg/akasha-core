@@ -25,6 +25,7 @@ export interface IProfileSearchCard {
   profileAnchorLink?: string;
   onClickProfile?: () => void;
   showPostCount?: boolean;
+  isViewer?: boolean;
 }
 
 const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
@@ -39,6 +40,7 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
     followLabel,
     unfollowLabel,
     postsLabel,
+    isViewer,
     profileAnchorLink,
     onClickProfile,
     showPostCount = true,
@@ -84,7 +86,7 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
               </Box>
             }
           />
-          {!profileData.did.isViewer && (
+          {!isViewer && (
             <Box>
               <DuplexButton
                 inactiveLabel={followLabel}

@@ -42,6 +42,7 @@ export interface IContentClickDetails {
 export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
+  isViewer?: boolean;
   locale: ILocale;
   loggedProfileId?: string | null;
   // share data
@@ -164,6 +165,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     hideRepost,
     error,
     onRetry,
+    isViewer,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -446,7 +448,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
             menuItems={[
-              ...(onEntryFlag && !entryData.author.did.isViewer
+              ...(onEntryFlag && !isViewer
                 ? [
                     {
                       icon: 'report' as IconType,
@@ -456,7 +458,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                     },
                   ]
                 : []),
-              ...(entryData.author.did.isViewer
+              ...(isViewer
                 ? [
                     {
                       icon: 'trash',
@@ -474,7 +476,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             modalSlotId={modalSlotId}
             closeModal={closeMenuDrop}
             menuItems={[
-              ...(onEntryFlag && !entryData.author.did.isViewer
+              ...(onEntryFlag && !isViewer
                 ? [
                     {
                       label: props.flagAsLabel,
@@ -484,7 +486,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                     },
                   ]
                 : []),
-              ...(entryData.author.did.isViewer
+              ...(isViewer
                 ? [
                     {
                       icon: 'trash' as IconType,
@@ -499,7 +501,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {props.isRemoved && (
           <EntryCardRemoved
-            isAuthor={entryData.author.did.isViewer}
+            isAuthor={isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />
@@ -547,7 +549,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {showRemovedQuote && (
           <EntryCardRemoved
-            isAuthor={entryData.author.did.isViewer}
+            isAuthor={isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />

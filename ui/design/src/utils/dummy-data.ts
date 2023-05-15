@@ -1,5 +1,5 @@
 import { Descendant } from 'slate';
-import { LogoTypeSource, ProfileProviders, ProfileProviderProperties } from '@akashaorg/typings/ui';
+import { LogoTypeSource } from '@akashaorg/typings/ui';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
 import { IMenuItem, MenuItemType, MenuItemAreaType, IChatMessage } from '@akashaorg/typings/ui';
 import { IAppData } from '../components/AppsWidgetCard';
@@ -8,19 +8,19 @@ import { Profile } from '@akashaorg/typings/ui';
 
 const userData: { did: Profile['did']; avatar?: Profile['avatar'] }[] = [
   {
-    did: { id: 'did:0x003410490050000320006570034567114572000', isViewer: false },
+    did: { id: 'did:0x003410490050000320006570034567114572000' },
     avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
   {
-    did: { id: 'did:0x003410490050000320006570034567114572001', isViewer: false },
+    did: { id: 'did:0x003410490050000320006570034567114572001' },
     avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
   {
-    did: { id: 'did:0x003410490050000320006570034567114572002', isViewer: false },
+    did: { id: 'did:0x003410490050000320006570034567114572002' },
     avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
   {
-    did: { id: 'did:0x003410490050000320006570034567114572003', isViewer: false },
+    did: { id: 'did:0x003410490050000320006570034567114572003' },
     avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
 ];
@@ -166,7 +166,7 @@ const installedAppsData: IMenuItem[] = [
 
 const profileData: Profile = {
   id: '14572000',
-  did: { id: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', isViewer: true },
+  did: { id: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba' },
   avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
   background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
   name: 'Gilbert The Bearded',
@@ -212,7 +212,7 @@ const USERNAMES: Profile[] = [
   {
     id: '123',
     name: 'John',
-    did: { id: ' 13131mknnksbshl', isViewer: true },
+    did: { id: ' 13131mknnksbshl' },
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
     description: 'hello',
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
@@ -221,7 +221,7 @@ const USERNAMES: Profile[] = [
   {
     id: '1234',
     name: 'Alex',
-    did: { id: '13131mknnksbsho', isViewer: false },
+    did: { id: '13131mknnksbsho' },
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
     description: 'hello world',
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
@@ -230,7 +230,7 @@ const USERNAMES: Profile[] = [
   {
     id: '12345',
     name: 'Zeno',
-    did: { id: '13131mknnksbshr', isViewer: false },
+    did: { id: '13131mknnksbshr' },
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
     description: 'nono',
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
@@ -259,7 +259,7 @@ const trendingTagsData = [
 const trendingProfilesData: Profile[] = [
   {
     id: '123',
-    did: { id: '13131mknnksbshr', isViewer: false },
+    did: { id: '13131mknnksbshr' },
     name: 'Jon Gilbert',
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
@@ -270,7 +270,7 @@ const trendingProfilesData: Profile[] = [
   },
   {
     id: '124',
-    did: { id: '13131mknnksbskr', isViewer: false },
+    did: { id: '13131mknnksbskr' },
     name: 'Alexei Gilbertovich',
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
@@ -280,7 +280,7 @@ const trendingProfilesData: Profile[] = [
   },
   {
     id: '125',
-    did: { id: '14131mknnksbskr', isViewer: false },
+    did: { id: '14131mknnksbskr' },
     name: 'Jon Silbert',
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
@@ -290,7 +290,7 @@ const trendingProfilesData: Profile[] = [
   },
   {
     id: '125',
-    did: { id: '14132mknnksbskr', isViewer: false },
+    did: { id: '14132mknnksbskr' },
     name: 'Jon Wilbert',
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
@@ -300,7 +300,7 @@ const trendingProfilesData: Profile[] = [
   },
   {
     id: '126',
-    did: { id: '14232mknnksbskr', isViewer: false },
+    did: { id: '14232mknnksbskr' },
     name: 'Jon Bilbert',
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
@@ -498,11 +498,11 @@ const ICWorldAppsData: IntegrationReleaseInfo[] = [
   },
 ];
 
-const topicsDataSource = [
-  { title: '#ethereumworld', subtitle: '6576 mentions' },
-  { title: '#akashaworld', subtitle: '3204 mentions' },
-  { title: '#cryptoworld', subtitle: '6576 mentions' },
-];
+// const topicsDataSource = [
+//   { title: '#ethereumworld', subtitle: '6576 mentions' },
+//   { title: '#akashaworld', subtitle: '3204 mentions' },
+//   { title: '#cryptoworld', subtitle: '6576 mentions' },
+// ];
 
 const appsDataSource: IAppData[] = [
   { title: 'GitCoin', subtitle: '123 embedded cards', appIconType: 'app', iconSize: '40px' },
@@ -628,7 +628,7 @@ const boxProviderData: Profile = {
   background: { default: { src: '', width: 0, height: 0 } },
   name: '',
   description: '',
-  did: { id: '', isViewer: true },
+  did: { id: '' },
 
   createdAt: '',
 };
@@ -785,34 +785,34 @@ const entryData = {
   reposts: 11,
 };
 
-const entrySocialData = {
-  users: [
-    {
-      ethAddress: '0x003410490059837320006570047391024572000',
-      userName: '@someguy',
-      ensName: 'someguy.world.eth',
-      avatar: { fallbackUrl: 'https://placebeard.it/480/480' },
-    },
-    {
-      ethAddress: '0x003410490059837320006570047391024572111',
-      userName: '@alexac',
-      ensName: 'alexac.world.eth',
-      avatar: { fallbackUrl: 'https://placeimg.com/640/480/any' },
-    },
-    {
-      ethAddress: '0x003410490059837320006570047391024572222',
-      userName: '@maochair',
-      ensName: 'maochair.world.eth',
-      avatar: { fallbackUrl: 'https://placeimg.com/640/480/arch' },
-    },
-    {
-      ethAddress: '0x003410490059837320006570047391024572223',
-      userName: '@mrnobody',
-      ensName: 'mrnobody.world.eth',
-      avatar: { fallbackUrl: 'https://placeimg.com/640/480/nature' },
-    },
-  ],
-};
+// const entrySocialData = {
+//   users: [
+//     {
+//       ethAddress: '0x003410490059837320006570047391024572000',
+//       userName: '@someguy',
+//       ensName: 'someguy.world.eth',
+//       avatar: { fallbackUrl: 'https://placebeard.it/480/480' },
+//     },
+//     {
+//       ethAddress: '0x003410490059837320006570047391024572111',
+//       userName: '@alexac',
+//       ensName: 'alexac.world.eth',
+//       avatar: { fallbackUrl: 'https://placeimg.com/640/480/any' },
+//     },
+//     {
+//       ethAddress: '0x003410490059837320006570047391024572222',
+//       userName: '@maochair',
+//       ensName: 'maochair.world.eth',
+//       avatar: { fallbackUrl: 'https://placeimg.com/640/480/arch' },
+//     },
+//     {
+//       ethAddress: '0x003410490059837320006570047391024572223',
+//       userName: '@mrnobody',
+//       ensName: 'mrnobody.world.eth',
+//       avatar: { fallbackUrl: 'https://placeimg.com/640/480/nature' },
+//     },
+//   ],
+// };
 
 const notificationsData = [
   {
@@ -895,20 +895,20 @@ const followersLabel = 'Followers';
 const postsLabel = 'Posts';
 const aboutMeLabel = 'About';
 const badgesLabel = 'Badges';
-const commentsLabel = 'Comments';
-const quotesLabel = 'Quotes';
+// const commentsLabel = 'Comments';
+// const quotesLabel = 'Quotes';
 const shareLabel = 'Share';
-const editPostLabel = 'Edit Post';
-const editCommentLabel = 'Edit Comment';
+// const editPostLabel = 'Edit Post';
+// const editCommentLabel = 'Edit Comment';
 const copyLinkLabel = 'Copy Link';
-const quotedByLabel = 'Quoted By';
+// const quotedByLabel = 'Quoted By';
 const replyLabel = 'Reply';
 const shareProfileLabel = 'Share';
 const editProfileLabel = 'Edit';
-const commentInputPlaceholderLabel = 'Write a comment';
+// const commentInputPlaceholderLabel = 'Write a comment';
 const publishLabel = 'Publish';
 const placeholderLabel = 'Share your thoughts';
-const copyIPFSLinkLabel = 'Copy IPFS Link';
+// const copyIPFSLinkLabel = 'Copy IPFS Link';
 const flagAsLabel = 'Flag as inappropriate';
 const bookmarkLabel = 'Save';
 const bookmarkedLabel = 'Saved';
@@ -920,7 +920,7 @@ const dummyChatArr: IChatMessage[] = [
     id: '6',
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    did: { id: '0x003410490050000320006570034567114572000', isViewer: false },
+    did: { id: '0x003410490050000320006570034567114572000' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
@@ -953,7 +953,7 @@ const dummyChatArr: IChatMessage[] = [
     id: '5',
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    did: { id: '0x003410490050000320006570034567114572021', isViewer: false },
+    did: { id: '0x003410490050000320006570034567114572021' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
@@ -979,7 +979,7 @@ const dummyChatArr: IChatMessage[] = [
     id: '1',
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    did: { id: '0x003410490050000320006570034567114572001', isViewer: false },
+    did: { id: '0x003410490050000320006570034567114572001' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
     content: [
@@ -999,7 +999,7 @@ const dummyChatArr: IChatMessage[] = [
     id: '2',
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    did: { id: '0x003410490050000320006570034567114572002', isViewer: false },
+    did: { id: '0x003410490050000320006570034567114572002' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
@@ -1020,7 +1020,7 @@ const dummyChatArr: IChatMessage[] = [
     id: '3',
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    did: { id: '0x003410490050000320006570034567114572003', isViewer: false },
+    did: { id: '0x003410490050000320006570034567114572003' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
     read: true,
@@ -1041,7 +1041,7 @@ const dummyChatArr: IChatMessage[] = [
     id: '4',
     avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
     background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    did: { id: '0x003410490050000320006570034567114572006', isViewer: false },
+    did: { id: '0x003410490050000320006570034567114572006' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
     read: false,
@@ -1080,29 +1080,29 @@ export {
   notificationsData,
   cancelLabel,
   changeCoverImageLabel,
-  commentInputPlaceholderLabel,
-  commentsLabel,
+  // commentInputPlaceholderLabel,
+  // commentsLabel,
   copyLinkLabel,
-  editCommentLabel,
-  editPostLabel,
+  // editCommentLabel,
+  // editPostLabel,
   editProfileLabel,
   entryData,
-  entrySocialData,
+  // entrySocialData,
   followingLabel,
   followersLabel,
   postsLabel,
   profileProvidersData,
   placeholderLabel,
   publishLabel,
-  quotedByLabel,
-  quotesLabel,
+  // quotedByLabel,
+  // quotesLabel,
   replyLabel,
   saveChangesLabel,
   shareLabel,
   shareProfileLabel,
-  topicsDataSource,
+  // topicsDataSource,
   boxProviderData,
-  copyIPFSLinkLabel,
+  // copyIPFSLinkLabel,
   flagAsLabel,
   bookmarkLabel,
   bookmarkedLabel,

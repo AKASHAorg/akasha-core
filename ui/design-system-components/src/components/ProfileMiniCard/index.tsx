@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-import { Profile } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { truncateMiddle } from '../../utils/string-utils';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileMiniCard {
   // data
-  profileData: Omit<Profile, 'followers' | 'did'> & { did: { id: string } };
+  profileData: Profile;
   isViewer?: boolean;
   loggedEthAddress?: string | null;
   isFollowing?: boolean;

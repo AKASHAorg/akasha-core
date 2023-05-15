@@ -27,6 +27,7 @@ export interface ITrendingProfileCardProps {
   handleUnfollowProfile: (ethAddress: string) => void;
   // css
   className?: string;
+  isViewer?: boolean;
 }
 
 const BaseTabPanelStyles = apply`
@@ -52,6 +53,7 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
     // followersLabel,
     profileAnchorLink,
     followedProfiles,
+    isViewer,
   } = props;
 
   return (
@@ -101,7 +103,7 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
                     avatarImage={profile.avatar}
                   />
                 </a>
-                {!profile.did.isViewer && (
+                {!isViewer && (
                   <div>
                     <DuplexButton
                       inactiveLabel={followLabel}
