@@ -21,8 +21,8 @@ import {
   ResignConfirmationPage,
   BecomeModeratorPage,
   ApplicationStatusPage,
-  ApplicationStatusType,
   ModifyApplicationPage,
+  ReportItemPage,
 } from '../pages';
 
 import routes, {
@@ -42,6 +42,7 @@ import routes, {
   BECOME_MODERATOR,
   CHECK_APPLICATION_STATUS,
   MODIFY_APPLICATION,
+  REPORT_ITEM,
 } from '../routes';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
@@ -52,7 +53,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const isAuthorised = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
-  const applicationStatus = ApplicationStatusType.review;
+  const applicationStatus = null;
 
   const isAdmin = false;
 
@@ -161,6 +162,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             path={routes[MODIFY_APPLICATION]}
             element={<ModifyApplicationPage navigateTo={navigateTo} />}
           />
+
+          <Route path={routes[REPORT_ITEM]} element={<ReportItemPage navigateTo={navigateTo} />} />
 
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
