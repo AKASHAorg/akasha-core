@@ -50,7 +50,8 @@ jobs:
           npx cypress info
       - name: e2e tests
         run: |
-          export CYPRESS_BASE_URL=https://$GITHUB_HEAD_REF.akasha-world-framework.pages.dev
+          PR_PREVIEW_SUB_DOMAIN=$(echo $GITHUB_HEAD_REF | sed -e 's/\//-/g')
+          export CYPRESS_BASE_URL=https://$PR_PREVIEW_SUB_DOMAIN.akasha-world-framework.pages.dev
           npm run cy:e2e:firefox:record
         working-directory: tests
         env:
