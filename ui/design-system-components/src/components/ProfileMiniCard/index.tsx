@@ -9,7 +9,8 @@ import { truncateMiddle } from '../../utils/string-utils';
 
 export interface IProfileMiniCard {
   // data
-  profileData: Profile;
+  profileData: Omit<Profile, 'followers' | 'did'> & { did: { id: string } };
+  isViewer?: boolean;
   loggedEthAddress?: string | null;
   isFollowing?: boolean;
   // labels
@@ -34,6 +35,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     followersLabel,
     unfollowLabel,
     postsLabel,
+    isViewer,
     handleClick,
     handleFollow,
     handleUnfollow,
@@ -61,9 +63,6 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
       handleClick(profileData.id);
     }
   };
-
-  // check if a user is logged in and different from the profile displayed
-  const showFollowingButton = !profileData.did.isViewer;
 
   return (
     <Card elevation={{ light: '1', dark: '1' }} radius={'rounded-2xl'}>
@@ -96,9 +95,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
           </div>
           <div className={tw(`flex flex-row gap-2`)}>
             {/*<Text variant="subtitle2">{`${profileData.did.id || 0} ${postsLabel}`}</Text>*/}
-            <Text variant="subtitle2">{`${
-              profileData.did.followList || 0
-            } ${followersLabel}`}</Text>
+            <Text variant="subtitle2">{`${profileData.did || 0} ${followersLabel}`}</Text>
             {/* <Text variant="subtitle2">{`${
               profileData.totalFollowing || 0
             } ${followingLabel}`}</Text> */}
@@ -110,7 +107,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
             {profileData.description}
           </Text>
 
-          {!disableFollowing && showFollowingButton && (
+          {!disableFollowing && isViewer && (
             <DuplexButton
               inactiveLabel={followLabel}
               activeLabel={followingLabel}
