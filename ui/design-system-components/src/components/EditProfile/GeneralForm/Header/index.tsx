@@ -13,7 +13,7 @@ import { EditImageModal } from './EditImageModal';
 import { DeleteImageModal } from './DeleteImageModal';
 import { CropperProps } from 'react-easy-crop';
 import { useEffect } from 'react';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 type ImageType = 'avatar' | 'cover-image';
 

@@ -4,7 +4,7 @@ import Icon from '../../Icon';
 import { isMobile } from 'react-device-detect';
 import Tooltip from '../../Tooltip';
 import { truncateMiddle } from '../../../utils/string-utils';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type IProfileCardEthereumIdProps = {
   profileDidLabel?: string;

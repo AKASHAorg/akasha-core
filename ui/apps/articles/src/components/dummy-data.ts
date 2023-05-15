@@ -1,5 +1,5 @@
 import { IArticleData } from '@akashaorg/typings/ui';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const apps = [
   {

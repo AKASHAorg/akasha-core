@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/typings/ui';
 import { useInfiniteCustomPosts, LoginState, useTagSubscriptions } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 import {
   useGetFollowingListByDidQuery,
   useGetInterestsByDidQuery,

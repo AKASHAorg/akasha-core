@@ -9,7 +9,7 @@ import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ListSidebarApps from './list-sidebar-apps';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;

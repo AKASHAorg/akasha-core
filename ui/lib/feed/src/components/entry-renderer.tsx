@@ -21,18 +21,16 @@ import {
   NavigateToParams,
   RootComponentProps,
   ModalNavigationOptions,
-  IProfileData,
 } from '@akashaorg/typings/ui';
-import { usePost, useComment, mapEntry, LoginState } from '@akashaorg/ui-awf-hooks';
+import { usePost, useComment, mapEntry } from '@akashaorg/ui-awf-hooks';
 
 import FeedWidget from './App';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IEntryRenderer {
   itemId?: string;
   itemSpacing?: number;
   sharePostUrl: string;
-  loginState: LoginState;
   locale: ILocale;
   style?: React.CSSProperties;
   onFlag?: (
@@ -70,7 +68,6 @@ const EntryRenderer = (
   props: IEntryRenderer & { replyFragmentItem: boolean; showReplyFragment: boolean },
 ) => {
   const {
-    loginState,
     locale,
     itemId,
     itemType,

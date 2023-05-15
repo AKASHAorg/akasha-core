@@ -10,7 +10,7 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledDrop } from '../EntryCard/styled-entry-box';
 import { StyledBox, ModalWrapper, StyledModalBox } from '../ListModal/styled-modal';
 import { useViewportSize } from '../Providers/viewport-dimension';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IManageCollaboratorsModalProps
   extends Omit<ISearchBar, 'searchInputSize' | 'iconSize'> {

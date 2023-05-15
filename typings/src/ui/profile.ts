@@ -1,3 +1,7 @@
+import { Profile as ProfileData } from '../sdk/graphql-types-new';
+
+export type Profile = Omit<ProfileData, 'followers' | 'did'> & { did: { id: string } };
+
 export enum UsernameTypes {
   TEXTILE = 0,
   ENS_DOMAIN,

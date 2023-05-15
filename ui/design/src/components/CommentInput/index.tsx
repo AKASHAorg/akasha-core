@@ -4,7 +4,7 @@ import useSimpleClickAway from '../../utils/simpleClickAway';
 import Avatar from '../Avatar';
 import Icon from '../Icon';
 import { StyledDiv, StyledCommentWrapper } from './styled-comment-input';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ICommentInput {
   className?: string;

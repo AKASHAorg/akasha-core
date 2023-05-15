@@ -6,7 +6,7 @@ import Avatar from '../Avatar';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import Tooltip from '../Tooltip';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ITransparencyLogMiniCardProps {
   locale: ILocale;

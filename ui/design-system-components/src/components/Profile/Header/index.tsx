@@ -10,7 +10,7 @@ import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyTo
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { tw } from '@twind/core';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/components/../utils/useCloseActions';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type HeaderProps = {
   ensName: 'loading' | string;

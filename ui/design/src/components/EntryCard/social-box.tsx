@@ -5,7 +5,7 @@ import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import { truncateMiddle } from '../../utils/string-utils';
 import IconLink from '../IconLink';
 import styled from 'styled-components';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ISocialBox {
   socialData: Profile[];

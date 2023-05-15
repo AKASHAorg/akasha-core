@@ -6,7 +6,7 @@ import { TagButton } from './TagButton';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface OnboardingSuggestionsCardProps {
   topicsLabel?: string;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box } from 'grommet';
 
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type IChatAreaHeaderProps = Pick<Profile, 'name' | 'avatar' | 'did'> & {
   onClickAvatar?: () => void;

@@ -6,7 +6,7 @@ import Avatar from '../Avatar';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
 import { truncateMiddle } from '../../utils/string-utils';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileSearchCard {
   className?: string;

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import TextIcon from '../TextIcon';
 import { IconType } from '../Icon';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type ProfileStatsProps = {
   className?: string;

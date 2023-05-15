@@ -5,7 +5,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { tw, apply } from '@twind/core';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ITrendingProfileCardProps {
   // data

@@ -5,7 +5,7 @@ import MarginInterface from '../../interfaces/margin.interface';
 import AvatarImage from './avatar-image';
 // import { loadPlaceholder } from './placeholders';
 import StyledAvatar, { AvatarSize, ActiveOverlay, AvatarBorderColor } from './styled-avatar';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   profileId?: string | null;

@@ -12,7 +12,6 @@ const moderator: Moderator = {
   createdAt: new Date(),
   admin: true,
   active: true,
-  followers: null,
   background: { default: { src: '', width: 0, height: 0 } },
   did: { id: 'bbaareie6w5f2l6b4kpysopls6n4nuejbcyjrzwf7wcjpi3hg', isViewer: false },
   name: 'Isabel Milkovic',

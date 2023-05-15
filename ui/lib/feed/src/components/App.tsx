@@ -9,7 +9,7 @@ import {
 } from '@akashaorg/typings/ui';
 import { Logger } from '@akashaorg/awf-sdk';
 import EntryFeed from './entry-feed';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export type FeedWidgetProps = {

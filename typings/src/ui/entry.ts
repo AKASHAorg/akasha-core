@@ -1,6 +1,6 @@
 import { Descendant } from 'slate';
 import { Comment, Post, LinkPreview } from '../sdk/graphql-types';
-import { Profile } from '../sdk/graphql-types-new';
+import { Profile } from './profile';
 
 export interface PostResponse extends Post {
   moderated?: boolean;

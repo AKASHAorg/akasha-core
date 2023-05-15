@@ -13,7 +13,7 @@ import SubtitleTextIcon from '../SubtitleTextIcon';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import Version from './version';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ICDetailCardProps {
   className?: string;

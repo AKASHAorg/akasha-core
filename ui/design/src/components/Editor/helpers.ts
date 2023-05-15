@@ -2,7 +2,7 @@ import { Editor, Text, Transforms, Element, Node, Path, Point } from 'slate';
 import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
 import { CustomText, ImageElement, LinkElement, TagElement } from '@akashaorg/typings/ui';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 const CustomEditor = {
   isBlockActive(editor: Editor, format: string) {

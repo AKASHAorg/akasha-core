@@ -3,7 +3,7 @@ import { Box, Text, ThemeContext } from 'grommet';
 
 import Avatar from '../Avatar';
 import Button from '../Button';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ICollaboratorProps {
   profile: Profile;

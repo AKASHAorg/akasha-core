@@ -9,7 +9,7 @@ import { Comment, UserProfile } from '@akashaorg/typings/sdk/graphql-types';
 import { IEntryData, IPublishData, ModerationStatus } from '@akashaorg/typings/ui';
 
 import { getMediaUrl } from './media-utils';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';

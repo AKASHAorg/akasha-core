@@ -3,7 +3,7 @@ import Text from '../Text';
 import Avatar from '../Avatar';
 import { AvatarSize } from '../Avatar';
 import { tw, apply } from '@twind/core';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ProfileAvatarNotificationAppProps {
   info?: string | React.ReactElement;

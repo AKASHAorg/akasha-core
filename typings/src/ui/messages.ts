@@ -1,5 +1,5 @@
 import { Descendant } from 'slate';
-import { Profile } from '../sdk/graphql-types-new';
+import { Profile } from './profile';
 
 export type IChatMessage = Profile & {
   read?: boolean;

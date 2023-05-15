@@ -2,7 +2,7 @@ import * as React from 'react';
 import { getEditableImageFieldHandlers } from '../../utils/get-editable-field-handlers';
 import Avatar, { AvatarProps } from '../Avatar';
 import { AvatarSize, StyleFileInput } from '../Avatar/styled-avatar';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface EditableAvatarProps extends Omit<AvatarProps, 'onClick'> {
   onChange: (newSrc: Profile['avatar']) => void;

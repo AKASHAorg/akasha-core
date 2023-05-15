@@ -21,7 +21,7 @@ import {
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
 import { ProfileMenu } from './profile-menu';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ITopbarProps {
   // data

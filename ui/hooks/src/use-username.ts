@@ -3,7 +3,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import { ProfileProviderProperties, ProfileProviders } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
 import { PROFILE_KEY } from './use-profile';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const UPDATE_USERNAME_PROVIDER_KEY = 'UPDATE_USERNAME_PROVIDER';
 export const REGISTER_ENS_KEY = 'REGISTER_ENS';
