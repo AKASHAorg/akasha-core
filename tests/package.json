@@ -23,7 +23,7 @@
   "scripts": {
     "ethereum-world-local": "cypress open --project ethereum-world --env configFile=local --browser firefox",
     "ethereum-world-prod": "cypress open --project ethereum-world --env configFile=production",
-    "cy:e2e:firefox:record": "cypress run --project ethereum-world --env configFile='pull-request' --record --parallel --browser firefox",
+    "cy:e2e:chrome:record": "cypress run --project ethereum-world --env configFile='pull-request' --record --browser chrome",
     "cy:e2e:firefox:local": "cypress run --project ethereum-world --env configFile=local --browser firefox",
     "build": "tsc --build",
     "tsc": "tsc --build",

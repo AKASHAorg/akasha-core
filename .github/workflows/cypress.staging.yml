@@ -52,7 +52,7 @@ jobs:
         run: |
           PR_PREVIEW_SUB_DOMAIN=$(echo $GITHUB_HEAD_REF | sed -e 's/\//-/g')
           export CYPRESS_BASE_URL=https://$PR_PREVIEW_SUB_DOMAIN.akasha-world-framework.pages.dev
-          npm run cy:e2e:firefox:record
+          npm run cy:e2e:chrome:record
         working-directory: tests
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
