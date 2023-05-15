@@ -27,7 +27,7 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const { t } = useTranslation('app-notifications');
+  const { t } = useTranslation('app-search');
 
   const loginQuery = useGetLogin();
 
