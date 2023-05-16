@@ -1,6 +1,6 @@
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import React, { ReactNode } from 'react';
+import React, { Fragment, ReactNode } from 'react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { apply, tw } from '@twind/core';
 import { getRadiusClasses } from '@akashaorg/design-system-core/lib/utils/getRadiusClasses';
@@ -25,8 +25,8 @@ export const AppList: React.FC<AppListProp> = ({ apps }) => {
   return (
     <Stack direction="column" spacing="gap-y-4">
       {apps.map((app, index, array) => (
-        <>
-          <Stack key={app.name} spacing="gap-x-2">
+        <Fragment key={app.name}>
+          <Stack spacing="gap-x-2">
             <div className={tw(apply(iconStyle))} />
             <Stack direction="column" customStyle="h-[3.75rem] w-[25rem]">
               <Text variant="button-sm">{app.name}</Text>
@@ -42,7 +42,7 @@ export const AppList: React.FC<AppListProp> = ({ apps }) => {
             <div className={tw('ml-auto')}>{app.action}</div>
           </Stack>
           {index < array.length - 1 && <Divider />}
-        </>
+        </Fragment>
       ))}
     </Stack>
   );
