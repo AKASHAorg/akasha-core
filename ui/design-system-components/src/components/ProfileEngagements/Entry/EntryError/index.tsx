@@ -14,7 +14,7 @@ const EntryError: React.FC<EntryErrorProps> = ({
   return (
     <InfoCard
       titleLabel={errorMessage}
-      subTitleLabel={
+      bodyLabel={
         <>Click {<Button label="here" variant="text" onClick={onError} />} to try again!</>
       }
     />
