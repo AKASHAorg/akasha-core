@@ -6,12 +6,12 @@ export type EmptyEntryProps = {
   viewerIsOwner?: boolean;
   userName?: string;
   titleLabel?: ReactNode;
-  subTitleLabel?: ReactNode;
+  bodyLabel?: ReactNode;
 };
 
 const EmptyEntry: React.FC<EmptyEntryProps> = ({
   titleLabel,
-  subTitleLabel,
+  bodyLabel,
   type,
   userName = 'user',
   viewerIsOwner = true,
@@ -21,8 +21,8 @@ const EmptyEntry: React.FC<EmptyEntryProps> = ({
 
   let props = {
     titleLabel: titleLabel ? titleLabel : 'Looks like there are no followers!',
-    subTitleLabel: subTitleLabel ? (
-      subTitleLabel
+    bodyLabel: bodyLabel ? (
+      bodyLabel
     ) : (
       <>
         Interacting with people on AKASHA&apos;s
@@ -34,8 +34,8 @@ const EmptyEntry: React.FC<EmptyEntryProps> = ({
   if (type === 'following') {
     props = {
       titleLabel: titleLabel ? titleLabel : 'You are not following anyone yet!',
-      subTitleLabel: subTitleLabel ? (
-        subTitleLabel
+      bodyLabel: bodyLabel ? (
+        bodyLabel
       ) : (
         <>
           By following others, will help you see interesting

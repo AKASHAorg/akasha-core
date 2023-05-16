@@ -5,7 +5,7 @@ import { TrendingWidgetTest } from './partials/trendingWidget.spec';
 describe('Legal Pages', () => {
   context('Terms of Service Page', () => {
     before(() => {
-      cy.visit('/@akashaorg/app-legal/terms-of-service');
+      cy.visit('/@akashaorg/app-legal/terms-of-service', { timeout: TIMEOUT });
     });
 
     describe('Should test top bar', () => TopbarTest());

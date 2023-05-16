@@ -14,6 +14,7 @@ export type CardProps = {
   padding?: Padding;
   direction?: 'row' | 'column';
   customStyle?: string;
+  testId?: string;
   ref?: LegacyRef<HTMLDivElement>;
 };
 
@@ -27,6 +28,7 @@ const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => 
     padding,
     direction,
     customStyle = '',
+    testId,
   } = props;
 
   const elevationStyle = getElevationClasses(elevation);
@@ -44,7 +46,7 @@ const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => 
   `;
 
   return (
-    <Stack direction={direction} customStyle={instanceStyles} ref={ref}>
+    <Stack direction={direction} customStyle={instanceStyles} testId={testId} ref={ref}>
       {props.children}
     </Stack>
   );

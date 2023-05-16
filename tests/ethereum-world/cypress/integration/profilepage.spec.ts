@@ -1,3 +1,4 @@
+import { TIMEOUT } from '../utils/constants';
 import { TopbarTest } from './partials/topbar.spec';
 import { TrendingWidgetTest } from './partials/trendingWidget.spec';
 
@@ -6,7 +7,7 @@ const pubKeyToVisit = 'bbaareidnmxbszqtl25ifbg6ydyfkswyzyn6xy2adv75fcuuarxql4b72
 describe('Profile Page', () => {
   context('Profile Page', () => {
     before(() => {
-      cy.visit(`/@akashaorg/app-profile/${pubKeyToVisit}`);
+      cy.visit(`/@akashaorg/app-profile/${pubKeyToVisit}`, { timeout: TIMEOUT });
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
