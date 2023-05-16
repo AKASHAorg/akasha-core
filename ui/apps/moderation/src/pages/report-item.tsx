@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -11,7 +11,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ReportItem from '../components/report/report-item';
 
 import { HOME } from '../routes';
-import { reasons } from '../utils';
+import { reportDetailsSubtitles, reasons } from '../utils';
 
 export interface IReportItemPageProps {
   navigateTo: (args: NavigateToParams) => void;
@@ -19,6 +19,8 @@ export interface IReportItemPageProps {
 
 export const ReportItemPage: React.FC<IReportItemPageProps> = props => {
   const { navigateTo } = props;
+
+  const [step, setStep] = useState<number>(0);
 
   const { itemType } = useParams();
 
@@ -37,7 +39,17 @@ export const ReportItemPage: React.FC<IReportItemPageProps> = props => {
     maxSelection: 2,
   });
 
+  const handleSubtitleLinkClick = (link: string) => () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-legal',
+      getNavigationUrl: () => link,
+    });
+  };
+
   const handleCancelButtonClick = () => {
+    if (step === 1) {
+      return setStep(0);
+    }
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
       getNavigationUrl: routes => routes[HOME],
@@ -45,9 +57,10 @@ export const ReportItemPage: React.FC<IReportItemPageProps> = props => {
   };
 
   const handleConfirmButtonClick = () => {
-    /**
-     * handle update
-     */
+    if (step === 0) {
+      return setStep(1);
+    }
+    if (step === 1) return;
   };
 
   return (
@@ -55,10 +68,15 @@ export const ReportItemPage: React.FC<IReportItemPageProps> = props => {
       label={t('Flagging {{type}}', {
         type: itemType[0].toUpperCase() + itemType.slice(1),
       })}
-      introLabel={t('Can you please let us know why did this {{itemType}} bothers you?', {
-        itemType,
-      })}
-      maxLimitLabel={t('2 max')}
+      step={step}
+      introLabel={
+        step === 0
+          ? t('Can you please let us know why did this {{itemType}} bothers you?', {
+              itemType,
+            })
+          : t('Provide us with more details')
+      }
+      subTextLabel={step === 0 ? `${t('2 max')}.` : t('optional')}
       categories={categories}
       moderationCategories={moderationCategories}
       accordionNodes={categories
@@ -77,9 +95,15 @@ export const ReportItemPage: React.FC<IReportItemPageProps> = props => {
             </Box>
           ),
         }))}
+      reasonPlaceholderLabel={`${t('Place some details here, if any')}...`}
+      subtitleLabels={reportDetailsSubtitles.map(subtitle => ({
+        ...subtitle,
+        label: t('{{label}}', { label: subtitle.label }),
+      }))}
       cancelButtonLabel={t('Cancel')}
-      confirmButtonLabel={t('Proceed')}
+      confirmButtonLabel={step === 0 ? t('Proceed') : t('Submit')}
       onPillClick={handleCategoryClick}
+      onLinkClick={handleSubtitleLinkClick}
       onCancelButtonClick={handleCancelButtonClick}
       onConfirmButtonClick={handleConfirmButtonClick}
     />
