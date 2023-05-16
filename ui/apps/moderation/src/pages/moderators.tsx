@@ -66,7 +66,7 @@ export const Moderators: React.FC<IModeratorsPageProps> = props => {
                   key={moderator.pubKey}
                   moderator={moderator}
                   hasBorderBottom={idx < filteredModeratorList.length - 1}
-                  tenureInfoLabel={t(`${tenureInfoLabel}`)}
+                  tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
                   onCardClick={handleViewModerator}
                 />
               );

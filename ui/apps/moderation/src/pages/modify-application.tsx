@@ -1,10 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { NavigateToParams } from '@akashaorg/typings/ui';
+import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 
 import ModifyApplication from '../components/moderator/become-moderator/modify-application';
 
-import { preSelectedReasons, reasons } from '../utils';
+import { reasons } from '../utils';
 import { CHECK_APPLICATION_STATUS, HOME } from '../routes';
 
 export interface IModifyApplicationPageProps {
@@ -16,10 +18,17 @@ export const ModifyApplicationPage: React.FC<IModifyApplicationPageProps> = prop
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const categories = reasons.map(reason => ({
-    value: reason,
-    label: t(reason),
+  const moderationCategories = reasons.map(({ title }) => ({
+    value: title,
+    label: t('{{title}}', title),
   }));
+
+  const allCategoriesLabel = t('All Categories');
+
+  const { categories, handleCategoryClick } = useModerationCategory({
+    moderationCategories,
+    allCategoriesLabel,
+  });
 
   const handleCancelButtonClick = () => {
     navigateTo?.({
@@ -45,11 +54,13 @@ export const ModifyApplicationPage: React.FC<IModifyApplicationPageProps> = prop
       reasonCaption={`${t('1000 words Max')}.`}
       reasonPlaceholderLabel={`${t('I would like to apply because')}...`}
       changeCategoryTitleLabel={t('Change Moderation Category')}
-      selectedCategories={preSelectedReasons}
-      moderationCategories={categories}
-      allCategoriesLabel={t('All categories')}
+      categories={categories}
+      moderationCategories={moderationCategories}
+      allCategoriesLabel={allCategoriesLabel}
+      allCategoriesSelected={categories.length === moderationCategories.length}
       cancelButtonLabel={t('Cancel')}
       confirmButtonLabel={t('Update')}
+      onPillClick={handleCategoryClick}
       onCancelButtonClick={handleCancelButtonClick}
       onConfirmButtonClick={handleUpdateClick}
     />

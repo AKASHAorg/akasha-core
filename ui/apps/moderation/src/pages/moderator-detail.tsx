@@ -92,7 +92,7 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
       <ModeratorDetailCard
         moderator={moderator}
         viewProfileLabel={t('View Profile')}
-        tenureInfoLabel={t(`${tenureInfoLabel}`)}
+        tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
         dismissModeratorLabel={t('Dismiss Moderator')}
         dismissModeratorDescLabel={t(
           "You can dismiss this moderator anytime if they have been inactive or if they violated AKASHA's code of conduct",

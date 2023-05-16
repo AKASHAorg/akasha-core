@@ -1,47 +1,25 @@
 import React from 'react';
+import { ModerationCategory } from '@akashaorg/typings/ui';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 
-export type ModerationCategory = { value: string; label: string };
-
 export interface ICategoryPillsProps {
-  selectedCategories: string[];
+  categories: string[];
   moderationCategories: ModerationCategory[];
   allCategoriesLabel?: string;
-  maxSelection?: number; // maximum allowed categories that can be selected
+  allCategoriesSelected?: boolean;
+  onPillClick: (category?: ModerationCategory) => () => void;
 }
 
 export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
   const {
-    selectedCategories,
+    categories,
     moderationCategories,
     allCategoriesLabel,
-    maxSelection = moderationCategories.length,
+    allCategoriesSelected,
+    onPillClick,
   } = props;
-
-  const [categories, setCategories] = React.useState<string[]>(selectedCategories ?? []);
-
-  const allCategoriesSelected = categories.length === moderationCategories.length;
-
-  const handlePillClick = (category?: ModerationCategory) => () => {
-    if (category.label === allCategoriesLabel) {
-      if (allCategoriesSelected) {
-        return setCategories([]);
-      }
-      return setCategories(moderationCategories.map(el => el.value));
-    }
-
-    const found = categories.find(cat => cat === category.value);
-
-    if (!found && categories.length < maxSelection) {
-      setCategories([...categories, category.value]);
-    } else {
-      const updated = categories.filter(cat => cat !== category.value);
-
-      return setCategories(updated);
-    }
-  };
 
   return (
     <Box customStyle="flex flex-wrap">
@@ -50,7 +28,7 @@ export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
           label={allCategoriesLabel}
           active={allCategoriesSelected}
           customStyle="mt-3 mr-3"
-          onPillClick={handlePillClick({ label: allCategoriesLabel, value: allCategoriesLabel })}
+          onPillClick={onPillClick({ label: allCategoriesLabel, value: allCategoriesLabel })}
         />
       )}
 
@@ -62,7 +40,7 @@ export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
           icon={categories.includes(value) ? 'XMarkIcon' : undefined}
           iconDirection="right"
           customStyle="mt-3 mr-3"
-          onPillClick={handlePillClick({ label, value })}
+          onPillClick={onPillClick({ label, value })}
         />
       ))}
     </Box>
