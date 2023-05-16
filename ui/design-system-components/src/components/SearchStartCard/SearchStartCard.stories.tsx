@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SearchStartCard, SearchStartProps } from './index';
+import SearchStartCard, { SearchStartProps } from './index';
 
 export default {
   title: 'Cards/SearchStartCard',
@@ -28,6 +28,7 @@ BaseSearchStartCard.args = {
   searchKeyword: '',
   inputPlaceholderLabel: 'Search',
   titleLabel: 'Search',
+  tabLabels: ['People', 'Content', 'Tags'],
   subtitleLabel: '✨ Find what you’re looking for quickly ✨',
   description:
     'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community.',

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import routes, { ONBOARDING, RESULTS } from '../../routes';
-import SearchPage from './search-page';
+import NewSearchPage from './new-search-page';
 import OnboardingPage from './onboarding-page';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
@@ -23,7 +23,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <Route
               path=":searchKeyword"
               element={
-                <SearchPage
+                <NewSearchPage
                   {...props}
                   showLoginModal={showLoginModal}
                   loginState={loginQuery.data}
@@ -33,7 +33,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <Route
               path=""
               element={
-                <SearchPage
+                <NewSearchPage
                   {...props}
                   showLoginModal={showLoginModal}
                   loginState={loginQuery.data}

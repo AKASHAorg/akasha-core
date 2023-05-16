@@ -1,57 +1,59 @@
-// import * as React from 'react';
-// import { act, cleanup } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
+import * as React from 'react';
+import { act, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-// import { customRender, wrapWithTheme } from '../../../test-utils';
-// import { SearchStartCard } from '../index';
+import { customRender } from '@akashaorg/design-system-core/src/test-utils';
+import SearchStartCard from '../index';
 
-// describe('<SearchStartCard /> Component', () => {
-//   let componentWrapper = customRender(<></>, {});
+describe('<SearchStartCard /> Component', () => {
+  let componentWrapper = customRender(<></>, {});
 
-//   const handleSearch = jest.fn();
+  const handleSearch = jest.fn();
+  const handleTopMenuClick = jest.fn();
 
-//   beforeEach(() => {
-//     act(() => {
-//       componentWrapper = customRender(
-//         wrapWithTheme(
-//           <SearchStartCard
-//             searchKeyword="Blah"
-//             inputPlaceholderLabel="Search"
-//             titleLabel="Search"
-//             introLabel="✨ Find what you’re looking for quickly ✨"
-//             description="To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community."
-//             handleSearch={handleSearch}
-//           />,
-//         ),
-//         {},
-//       );
-//     });
-//   });
+  beforeEach(() => {
+    act(() => {
+      componentWrapper = customRender(
+        <SearchStartCard
+          searchKeyword="Blah"
+          inputPlaceholderLabel="Search"
+          titleLabel="Search"
+          introLabel="✨ Find what you’re looking for quickly ✨"
+          description="To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community."
+          handleSearch={handleSearch}
+          handleTopMenuClick={handleTopMenuClick}
+          tabLabels={['People', 'Content', 'Tags']}
+        />,
 
-//   afterEach(() => {
-//     act(() => componentWrapper.unmount());
-//     cleanup();
-//   });
+        {},
+      );
+    });
+  });
 
-//   it('renders correctly', () => {
-//     expect(componentWrapper).toBeDefined();
-//   });
+  afterEach(() => {
+    act(() => componentWrapper.unmount());
+    cleanup();
+  });
 
-//   it('has correct placeholder', () => {
-//     const { getByPlaceholderText } = componentWrapper;
-//     const title = getByPlaceholderText('Search');
+  it('renders correctly', () => {
+    expect(componentWrapper).toBeDefined();
+  });
 
-//     expect(title).toBeDefined();
-//   });
+  it('has correct placeholder', () => {
+    const { getByPlaceholderText } = componentWrapper;
+    const title = getByPlaceholderText('Search');
 
-//   it('calls handler when search is performed', async () => {
-//     const { getByRole } = componentWrapper;
+    expect(title).toBeDefined();
+  });
 
-//     const search = getByRole('textbox');
+  it('calls handler when search is performed', async () => {
+    const { getByRole } = componentWrapper;
 
-//     await userEvent.type(search, 'eth');
-//     await userEvent.keyboard('{Enter}');
+    const search = getByRole('textbox');
 
-//     expect(handleSearch).toBeCalledTimes(1);
-//   });
-// });
+    await userEvent.type(search, 'eth');
+    await userEvent.keyboard('{Enter}');
+
+    expect(handleSearch).toBeCalledTimes(1);
+  });
+});
