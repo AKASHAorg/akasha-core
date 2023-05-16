@@ -6,7 +6,7 @@ import { DismissableNotificationCard } from './partials/layout-widget.spec';
 describe('Feed Page', () => {
   context('Feed Page', () => {
     beforeEach(() => {
-      cy.visit('/@akashaorg/app-akasha-integration/feed');
+      cy.visit('/@akashaorg/app-akasha-integration/feed', { timeout: TIMEOUT });
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());

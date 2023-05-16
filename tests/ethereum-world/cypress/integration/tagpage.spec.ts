@@ -5,7 +5,7 @@ import { TrendingWidgetTest } from './partials/trendingWidget.spec';
 describe('Tag Page', () => {
   context('Tag Page', () => {
     before(() => {
-      cy.visit('/@akashaorg/app-akasha-integration/tags/test');
+      cy.visit('/@akashaorg/app-akasha-integration/tags/test', { timeout: TIMEOUT });
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
