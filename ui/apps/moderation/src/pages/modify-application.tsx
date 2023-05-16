@@ -20,7 +20,7 @@ export const ModifyApplicationPage: React.FC<IModifyApplicationPageProps> = prop
 
   const moderationCategories = reasons.map(({ title }) => ({
     value: title,
-    label: t('{{title}}', title),
+    label: t('{{title}}', { title }),
   }));
 
   const allCategoriesLabel = t('All Categories');

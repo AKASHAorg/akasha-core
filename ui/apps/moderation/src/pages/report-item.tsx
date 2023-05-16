@@ -26,7 +26,7 @@ export const ReportItemPage: React.FC<IReportItemPageProps> = props => {
 
   const moderationCategories = reasons.map(({ title }) => ({
     value: title,
-    label: t('{{title}}', title),
+    label: t('{{title}}', { title }),
   }));
 
   const allCategoriesLabel = t('All Categories');

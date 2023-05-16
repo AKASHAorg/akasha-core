@@ -37,7 +37,7 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
 
   const moderationCategories = reasons.map(({ title }) => ({
     value: title,
-    label: t('{{title}}', title),
+    label: t('{{title}}', { title }),
   }));
 
   const allCategoriesLabel = t('All Categories');
