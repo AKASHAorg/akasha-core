@@ -19,6 +19,6 @@ describe('< ExplorePage /> component', () => {
   });
 
   it('should render explore page', async () => {
-    expect(screen.getByText(/Welcome to the Integration Centre/i)).toBeInTheDocument();
+    expect(screen.getByText(/Latest Apps/i)).toBeInTheDocument();
   });
 });

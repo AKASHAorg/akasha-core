@@ -1,9 +1,12 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-
 import getSDK from '@akashaorg/awf-sdk';
 import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { AppList } from '@akashaorg/design-system-components/lib/components/AppList';
+import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
@@ -11,8 +14,9 @@ import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/g
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 
 import { INFO } from '../../routes';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-const { Box, SubtitleTextIcon, DuplexButton, Icon, Spinner, NotificationPill, InfoCard } = DS;
+const { Box, SubtitleTextIcon, DuplexButton, Icon, Spinner, NotificationPill } = DS;
 
 export interface IExplorePage extends RootComponentProps {
   installableApps: IntegrationReleaseInfoFragmentFragment[];
@@ -69,6 +73,22 @@ const ExplorePage: React.FC<IExplorePage> = props => {
     uninstallAppReq.mutate(integrationName);
   };
 
+  /*@TODO: replace with the relevant hook once it's ready */
+  const dummyApps = [
+    {
+      name: 'Supercarts',
+      description:
+        'Play with your friends in AKASHA World and enjoy a couple of puzzle games or drawing games or any kind of game!',
+      action: <Button label="Install" variant="primary" />,
+    },
+    {
+      name: 'Articles App',
+      description:
+        'Read articles written by AKASHA community you can also write your own articles or collaborate with other authors!',
+      action: <Button label="Install" variant="primary" />,
+    },
+  ];
+
   return (
     <>
       <Box gap="small" margin="medium" flex={{ shrink: 0 }}>
@@ -87,17 +107,28 @@ const ExplorePage: React.FC<IExplorePage> = props => {
         )}
         {!isFetching && !reqError && (
           <Box gap="medium">
-            {(!installableApps?.length || !isUserLoggedIn) && (
+            {isUserLoggedIn && (
               <InfoCard
-                icon="appCenter"
-                title={t('Welcome to the Integration Centre!')}
-                suggestion={t(
-                  'The Integration Center is the trusted go-to place to explore, discover and experience apps, widgets, and plug-ins straight from the Ethereum World interface. These applications and integrations are thoroughly reviewed by the AKASHA Foundation so you can experience a palette of fine specimens of dsocial networking in your World.',
+                titleLabel={t('Welcome to the Integration Centre!')}
+                bodyLabel={t(
+                  'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to Ethereum World.',
                 )}
-                noBorder={true}
+                titleVariant="h4"
+                bodyVariant="body1"
+                assetName="akasha-verse"
               />
             )}
-            {installableApps?.length !== 0 &&
+            {!isUserLoggedIn && (
+              <Stack direction="column" spacing="gap-y-4">
+                <Text variant="h6">{t('Latest Apps')}</Text>
+                <AppList apps={dummyApps} />
+                <Text variant="h6">{t('Most Installed Apps')}</Text>
+                <AppList apps={dummyApps} />
+                <InfoCard titleLabel={t('Check out more cool apps from the Apps section')} />
+              </Stack>
+            )}
+            {/*@TODO: Remove the lines below once the page is connected with relevant hooks */}
+            {/* {installableApps?.length !== 0 &&
               installableApps?.map((app, index) => (
                 <Box key={index} direction="row" justify="between" align="center" gap="xsmall">
                   <SubtitleTextIcon
@@ -122,7 +153,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
                     onClickInactive={() => handleAppInstall(app.name)}
                   />
                 </Box>
-              ))}
+              ))} */}
           </Box>
         )}
       </Box>
