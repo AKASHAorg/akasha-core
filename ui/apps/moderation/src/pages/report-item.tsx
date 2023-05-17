@@ -8,10 +8,10 @@ import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import ReportItem from '../components/report/report-item';
+import { ReportItem, ReportItemConfirmation } from '../components/report';
 
 import { HOME } from '../routes';
-import { reportDetailsSubtitles, reasons } from '../utils';
+import { reportDetailsSubtitles, reasons, externalLinks } from '../utils';
 
 export interface IReportItemPageProps {
   navigateTo: (args: NavigateToParams) => void;
@@ -57,11 +57,33 @@ export const ReportItemPage: React.FC<IReportItemPageProps> = props => {
   };
 
   const handleConfirmButtonClick = () => {
-    if (step === 0) {
-      return setStep(1);
+    if (step < 2) {
+      return setStep(step + 1);
     }
-    if (step === 1) return;
+    /**
+     * interact with api
+     */
   };
+
+  const handleCloseIconClick = () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: () => '/feed',
+    });
+  };
+
+  if (step === 2) {
+    return (
+      <ReportItemConfirmation
+        titleLabel={t('Thank you for keeping our community safe')}
+        subtitleLabel={t('Our moderators will review the report as soon as possible')}
+        footnoteLabel={t('Feel like you want to contribute more to improve our community?')}
+        ctaLabel={t('Join our Moderation Discourd channel')}
+        onIconClick={handleCloseIconClick}
+        ctaUrl={externalLinks.discord}
+      />
+    );
+  }
 
   return (
     <ReportItem

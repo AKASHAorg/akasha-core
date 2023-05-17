@@ -22,10 +22,11 @@ export interface IReportItemProps extends IPageHeaderProps {
   reasonPlaceholderLabel: string;
 }
 
-const ReportItem: React.FC<
+export const ReportItem: React.FC<
   IReportItemProps & ICategoryPillsProps & ISubtitleRendererProps
 > = props => {
   const { step, introLabel, subTextLabel, accordionNodes, reasonPlaceholderLabel } = props;
+
   return (
     <PageHeader {...props}>
       <Box customStyle="space-y-4">
@@ -69,5 +70,3 @@ const ReportItem: React.FC<
     </PageHeader>
   );
 };
-
-export default ReportItem;
