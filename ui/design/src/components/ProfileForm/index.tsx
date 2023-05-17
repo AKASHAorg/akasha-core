@@ -46,9 +46,8 @@ export interface ProfileFormProps {
   nameFieldPlaceholder: string;
   usernameFieldPlaceholder?: string;
   descriptionFieldPlaceholder: string;
-  ethAddress: string;
   providerData: Profile;
-  onSave: (
+  onSave?: (
     data: Omit<IFormValues, 'socialLinks'> & { socialLinks?: { type: string; value: string }[] },
     changedFields: string[],
   ) => void;
@@ -97,8 +96,8 @@ export interface IFormValues {
   name?: string;
   userName?: string;
   description?: string;
-  pubKey: string;
-  ethAddress: string;
+  pubKey?: string;
+  ethAddress?: string;
   socialLinks?: StateLink[];
 }
 

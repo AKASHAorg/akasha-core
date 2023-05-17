@@ -21,8 +21,8 @@ type InputType = { label: string; initialValue: string };
 export type GeneralFormProps = {
   header: Omit<HeaderProps, 'onAvatarChange' | 'onCoverImageChange'>;
   name: InputType;
-  userName: InputType;
-  ens: InputType;
+  userName?: InputType;
+  ens?: InputType;
   bio: InputType;
   ensButton: ButtonType;
   cancelButton: ButtonType;

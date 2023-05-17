@@ -1,17 +1,17 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { LoginState, useFollowers, useFollowing } from '@akashaorg/ui-awf-hooks';
+import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
+import { useFollowers, useFollowing } from '@akashaorg/ui-awf-hooks';
 
 const { BasicCardBox, Box, Icon, Text, MessageContactCard } = DS;
 
 export interface InboxPageProps extends RootComponentProps {
-  loginState: LoginState;
+  loggedProfileData: Profile;
 }
 
 const InboxPage: React.FC<InboxPageProps> = props => {
-  const { loginState } = props;
+  const { loggedProfileData } = props;
 
   const { t } = useTranslation('app-messaging');
 
@@ -19,7 +19,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
 
   const [pinnedConvos, setPinnedConvos] = React.useState([]);
 
-  const loggedUserPubKey = React.useMemo(() => loginState?.pubKey, [loginState]);
+  const loggedUserId = React.useMemo(() => loggedProfileData?.did?.id, [loggedProfileData]);
 
   const handleSettingsClick = () => {
     navigateTo?.({
@@ -28,13 +28,14 @@ const InboxPage: React.FC<InboxPageProps> = props => {
     });
   };
 
-  const followersQuery = useFollowers(loggedUserPubKey, 500);
+  // @TODO: replace with new hooks
+  const followersQuery = useFollowers(loggedUserId, 500);
   const followers = React.useMemo(
     () => followersQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followersQuery.data?.pages],
   );
 
-  const followingQuery = useFollowing(loggedUserPubKey, 500);
+  const followingQuery = useFollowing(loggedUserId, 500);
   const following = React.useMemo(
     () => followingQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followingQuery.data?.pages],
@@ -129,9 +130,8 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                       )
                     }
                     senderName={contact?.name}
-                    senderUsername={contact?.userName}
                     senderAvatar={contact?.avatar}
-                    senderEthAddress={contact?.ethAddress}
+                    senderProfileId={contact?.did.id}
                     onClickCard={() => handleCardClick(contact.pubKey)}
                     onClickAvatar={() => handleAvatarClick(contact.pubKey)}
                     onConvoPin={() => handlePinConversation(contact.pubKey)}
@@ -162,9 +162,8 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                     )
                   }
                   senderName={contact?.name}
-                  senderUsername={contact?.userName}
                   senderAvatar={contact?.avatar}
-                  senderEthAddress={contact?.ethAddress}
+                  senderProfileId={contact?.did.id}
                   onClickCard={() => handleCardClick(contact.pubKey)}
                   onClickAvatar={() => handleAvatarClick(contact.pubKey)}
                   onConvoPin={() => handlePinConversation(contact.pubKey)}

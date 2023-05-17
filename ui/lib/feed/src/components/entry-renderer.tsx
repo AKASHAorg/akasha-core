@@ -13,7 +13,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { ILogger } from '@akashaorg/typings/sdk/log';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
-import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
+import { IContentClickDetails } from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 import {
   TrackEventData,
   EventTypes,
@@ -80,6 +80,7 @@ const EntryRenderer = (
     parentIsProfilePage,
     accentBorderTop,
     itemSpacing,
+    loggedProfileData,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -102,14 +103,15 @@ const EntryRenderer = (
     }
     return undefined;
   }, [commentReq.data, itemType]);
-
-  const itemData = React.useMemo(() => {
-    if (itemType === EntityTypes.POST) {
-      return postData;
-    } else if (itemType === EntityTypes.REPLY) {
-      return commentData;
-    }
-  }, [postData, commentData, itemType]);
+  // @TODO fix hooks
+  // const itemData = React.useMemo(() => {
+  //   if (itemType === EntityTypes.POST) {
+  //     return postData;
+  //   } else if (itemType === EntityTypes.REPLY) {
+  //     return commentData;
+  //   }
+  // }, [postData, commentData, itemType]);
+  const itemData = null;
 
   const [isReported, isAccountReported] = React.useMemo(() => {
     if (showAnyway) {
@@ -193,10 +195,10 @@ const EntryRenderer = (
     if (accountAwaitingModeration) return `the author of this ${itemTypeName}`;
     return `this ${itemTypeName}`;
   }, [accountAwaitingModeration, itemTypeName]);
-
+  // @TODO fix author
   const showEditButton = React.useMemo(
-    () => loginState.isReady && loginState.ethAddress === itemData?.author?.ethAddress,
-    [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
+    () => loggedProfileData.did.id === itemData?.author?.ethAddress,
+    [itemData?.author?.ethAddress, loggedProfileData],
   );
 
   const isComment = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
@@ -274,7 +276,6 @@ const EntryRenderer = (
                 onClickAvatar={handleAvatarClick}
                 editedLabel={t('Last edited')}
                 flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
-                loggedProfileId={props.loggedProfileData.did.id}
                 locale={locale || 'en'}
                 style={{
                   ...(style as React.CSSProperties),
@@ -300,7 +301,7 @@ const EntryRenderer = (
                 removedByMeLabel={props.removedByMeLabel}
                 removedByAuthorLabel={props.removedByAuthorLabel}
                 disableReposting={itemData.isRemoved || isComment}
-                disableReporting={loginState.waitForAuth || loginState.isSigningIn}
+                disableReporting={!loggedProfileData.did.id}
                 border={!isComment}
                 accentBorderTop={accentBorderTop}
                 actionsRightExt={
@@ -328,6 +329,7 @@ const EntryRenderer = (
                 <Box customStyle={replyPages.length ? `mb-1` : ''} data-testid="reply-fragment">
                   <FeedWidget
                     modalSlotId={props.modalSlotId}
+                    pages={replyPages}
                     logger={props.logger}
                     itemType={EntityTypes.REPLY}
                     onLoadMore={() => ({})}
@@ -345,7 +347,6 @@ const EntryRenderer = (
                       },
                       limit: REPLY_FRAGMENT_SIZE,
                     }}
-                    loginState={loginState}
                     navigateTo={navigateTo}
                     navigateToModal={props.navigateToModal}
                     requestStatus={repliesReq.status}

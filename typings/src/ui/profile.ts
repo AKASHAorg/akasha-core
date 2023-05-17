@@ -1,6 +1,9 @@
-import { Profile as ProfileData } from '../sdk/graphql-types-new';
+import { CeramicAccount, FollowConnection, Profile as ProfileData } from '../sdk/graphql-types-new';
 
-export type Profile = Omit<ProfileData, 'followers' | 'did'> & { did: { id: string } };
+export type Profile = Omit<ProfileData, 'followers' | 'did'> & {
+  did: Partial<CeramicAccount>;
+  followers?: FollowConnection;
+};
 
 export enum UsernameTypes {
   TEXTILE = 0,

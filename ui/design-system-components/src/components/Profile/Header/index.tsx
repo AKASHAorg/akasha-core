@@ -13,7 +13,7 @@ import { useCloseActions } from '@akashaorg/design-system-core/lib/components/..
 import { Profile } from '@akashaorg/typings/ui';
 
 export type HeaderProps = {
-  ensName: 'loading' | string;
+  ensName?: 'loading' | string;
   isFollowing: boolean;
   viewerIsOwner: boolean;
   flagLabel: string;

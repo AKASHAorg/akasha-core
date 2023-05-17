@@ -4,18 +4,15 @@ import DS from '@akashaorg/design-system';
 import {
   EntityTypes,
   IEntryPage,
-  IProfileData,
   ModalNavigationOptions,
   RootComponentProps,
 } from '@akashaorg/typings/ui';
-import { useInfiniteCustomPosts, LoginState, useTagSubscriptions } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { Profile } from '@akashaorg/typings/ui';
 import {
   useGetFollowingListByDidQuery,
   useGetInterestsByDidQuery,
-  useGetPostsQuery,
-  useInfiniteGetPostsQuery,
+  useInfiniteGetBeamsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const { Box, Helmet, StartCard, MyFeedCard } = DS;
@@ -34,7 +31,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
 
   const { t } = useTranslation('app-akasha-integration');
 
-  const postsReq = useInfiniteGetPostsQuery('last', { last: 15 });
+  const postsReq = useInfiniteGetBeamsQuery('last', { last: 15 });
   const tagSubsReq = useGetInterestsByDidQuery(
     { id: loggedProfileData?.did.id },
     {
@@ -67,7 +64,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
 
   const userHasSubscriptions = React.useMemo(() => {
     return loggedProfileData?.followers.edges.length > 0 || tagSubsReq.data?.topics.length > 0;
-  }, [followingReq.data, tagSubsReq.data]);
+  }, [loggedProfileData, tagSubsReq.data]);
 
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {

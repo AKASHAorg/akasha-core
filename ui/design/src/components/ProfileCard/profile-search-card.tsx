@@ -10,7 +10,6 @@ import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileSearchCard {
   className?: string;
-  loggedEthAddress: string;
   handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
   isFollowing: boolean;
@@ -20,7 +19,6 @@ export interface IProfileSearchCard {
   shareProfileLabel?: string;
   followLabel: string;
   unfollowLabel: string;
-  postsLabel: string;
   descriptionLabel?: string;
   profileAnchorLink?: string;
   onClickProfile?: () => void;
@@ -31,7 +29,6 @@ export interface IProfileSearchCard {
 const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
   const {
     className,
-    loggedEthAddress,
     handleFollow,
     handleUnfollow,
     isFollowing,
@@ -39,7 +36,6 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
     followingLabel,
     followLabel,
     unfollowLabel,
-    postsLabel,
     isViewer,
     profileAnchorLink,
     onClickProfile,

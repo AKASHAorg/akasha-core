@@ -18,7 +18,12 @@ import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hook
 const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const profileDataReq = useGetMyProfileQuery();
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
@@ -33,7 +38,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             element={
               <FeedPage
                 {...props}
-                loggedProfileData={profileDataReq.data?.viewer.profile}
+                loggedProfileData={loggedProfileData}
                 showLoginModal={showLoginModal}
               />
             }
@@ -43,17 +48,14 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             element={
               <MyFeedPage
                 {...props}
-                loggedProfileData={profileDataReq.data?.viewer.profile}
-                loginState={loginQuery.data}
+                loggedProfileData={loggedProfileData}
                 showLoginModal={showLoginModal}
               />
             }
           />
           <Route
             path={`${routes[POST]}/:postId`}
-            element={
-              <PostPage {...props} loginState={loginQuery.data} showLoginModal={showLoginModal} />
-            }
+            element={<PostPage {...props} showLoginModal={showLoginModal} />}
           />
           <Route
             path={`${routes[TAGS]}/:tagName`}
@@ -61,7 +63,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <TagFeedPage
                 {...props}
                 loggedProfileData={loggedProfileData}
-                loginState={loginQuery.data}
                 showLoginModal={showLoginModal}
               />
             }
@@ -72,16 +73,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <ProfileFeedPage
                 {...props}
                 loggedProfileData={loggedProfileData}
-                loginState={loginQuery.data}
                 showLoginModal={showLoginModal}
               />
             }
           />
           <Route
             path={`${routes[REPLY]}/:commentId`}
-            element={
-              <ReplyPage {...props} loginState={loginQuery.data} showLoginModal={showLoginModal} />
-            }
+            element={<ReplyPage {...props} showLoginModal={showLoginModal} />}
           />
           <Route path={`${routes[INVITE]}/:inviteCode`} element={<InvitePage {...props} />} />
           <Route path="/" element={<Navigate to={routes[FEED]} replace />} />

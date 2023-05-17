@@ -6,14 +6,15 @@ import {
   RootComponentProps,
   EntityTypes,
   ModalNavigationOptions,
+  IEntryPage,
 } from '@akashaorg/typings/ui';
 import { Logger } from '@akashaorg/awf-sdk';
 import EntryFeed from './entry-feed';
 import { Profile } from '@akashaorg/typings/ui';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export type FeedWidgetProps = {
   logger: Logger;
+  pages: IEntryPage[];
   itemType: EntityTypes;
   onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;
@@ -44,16 +45,14 @@ export type FeedWidgetProps = {
   };
   trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
 };
-const queryClient = new QueryClient();
+
 const FeedWidgetRoot: React.FC<FeedWidgetProps> = props => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <I18nextProvider i18n={props.i18n}>
-        {props.itemType === EntityTypes.POST && <EntryFeed {...props} />}
-        {props.itemType === EntityTypes.REPLY && <EntryFeed {...props} itemSpacing={0} />}
-        {/* {props.itemType === EntityTypes.PROFILE && <ProfileFeed {...props} />} */}
-      </I18nextProvider>
-    </QueryClientProvider>
+    <I18nextProvider i18n={props.i18n}>
+      {props.itemType === EntityTypes.POST && <EntryFeed {...props} />}
+      {props.itemType === EntityTypes.REPLY && <EntryFeed {...props} itemSpacing={0} />}
+      {/* {props.itemType === EntityTypes.PROFILE && <ProfileFeed {...props} />} */}
+    </I18nextProvider>
   );
 };
 

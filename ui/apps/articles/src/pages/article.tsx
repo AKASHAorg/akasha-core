@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
 import MiniHeader from '../components/mini-header';
@@ -24,7 +24,12 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
 
-  const loginQuery = useGetLogin();
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
 
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
@@ -54,7 +59,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
   };
 
   const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loginQuery.data?.pubKey) {
+    if (!loggedProfileData.did?.id) {
       return props.navigateToModal({
         name: 'login',
         redirectTo: { name: 'report-modal', itemId, itemType },
@@ -83,7 +88,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
   };
 
   const menutItems = [
-    ...(loginQuery.data?.pubKey === sampleArticleData.authorPubkey
+    ...(loggedProfileData.did?.id === sampleArticleData.authorProfileId
       ? [
           {
             icon: 'editSimple',

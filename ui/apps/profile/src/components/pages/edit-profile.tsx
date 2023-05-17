@@ -7,20 +7,20 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useTranslation } from 'react-i18next';
 import {
-  IProfileData,
+  Profile,
   RootComponentProps,
   ProfileProviders,
   ProfileProviderProperties,
 } from '@akashaorg/typings/ui';
-import { LoginState, useEnsByAddress } from '@akashaorg/ui-awf-hooks';
+import { useEnsByAddress } from '@akashaorg/ui-awf-hooks';
 import { GeneralForm } from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
 import { SocialLinks } from '@akashaorg/design-system-components/lib/components/EditProfile/SocialLinks';
 import { Interests } from '@akashaorg/design-system-components/lib/components/EditProfile/Interests';
 import { useParams } from 'react-router';
 
 export type EditProfilePageProps = {
-  profileData: IProfileData;
-  loginState: LoginState;
+  profileData: Profile;
+  loggedProfileData: Profile;
 };
 
 const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
@@ -28,11 +28,11 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const { t } = useTranslation('app-profile');
-  const { pubKey } = useParams<{
-    pubKey: string;
+  const { profileId } = useParams<{
+    profileId: string;
   }>();
 
-  const ENSReq = useEnsByAddress(profileData.ethAddress);
+  // const ENSReq = useEnsByAddress(profileData.ethAddress);
 
   const [activeTab, setActiveTab] = React.useState(0);
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -48,33 +48,33 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   );
 
   /* @TODO: move this logic into hooks module*/
-  const socialLinks: { type: string; value: string }[] = React.useMemo(() => {
-    if (profileData.default.length > 0) {
-      const socialLinksProvider = profileData.default.find(
-        p =>
-          p.property === ProfileProviderProperties.SOCIAL_LINKS &&
-          p.provider === ProfileProviders.EWA_BASIC,
-      );
-      if (socialLinksProvider) {
-        const links = JSON.parse(socialLinksProvider.value);
-        if (links.length > 0) {
-          return links.map((link: { type: string; value: string }) => {
-            if (link.type === 'url') {
-              return {
-                type: link.type,
-                value: decodeURIComponent(link.value),
-              };
-            }
-            return {
-              type: link.type,
-              value: link.value,
-            };
-          });
-        }
-      }
-    }
-    return [];
-  }, [profileData]);
+  // const socialLinks: { type: string; value: string }[] = React.useMemo(() => {
+  //   if (profileData.default.length > 0) {
+  //     const socialLinksProvider = profileData.default.find(
+  //       p =>
+  //         p.property === ProfileProviderProperties.SOCIAL_LINKS &&
+  //         p.provider === ProfileProviders.EWA_BASIC,
+  //     );
+  //     if (socialLinksProvider) {
+  //       const links = JSON.parse(socialLinksProvider.value);
+  //       if (links.length > 0) {
+  //         return links.map((link: { type: string; value: string }) => {
+  //           if (link.type === 'url') {
+  //             return {
+  //               type: link.type,
+  //               value: decodeURIComponent(link.value),
+  //             };
+  //           }
+  //           return {
+  //             type: link.type,
+  //             value: link.value,
+  //           };
+  //         });
+  //       }
+  //     }
+  //   }
+  //   return [];
+  // }, [profileData]);
 
   const handleFeedback = () => {
     setShowFeedback(true);
@@ -108,9 +108,9 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             <GeneralForm
               header={{
                 title: t('Avatar & Cover Image'),
-                coverImage: profileData.coverImage,
+                coverImage: profileData.background,
                 avatar: profileData.avatar,
-                ethAddress: profileData.ethAddress,
+                profileId: profileData.did.id,
                 cancelLabel: t('Cancel'),
                 deleteLabel: t('Delete'),
                 saveLabel: t('Save'),
@@ -128,17 +128,17 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 },
               }}
               name={{ label: t('Name'), initialValue: profileData.name }}
-              userName={{ label: t('Username'), initialValue: profileData.userName }}
+              // userName={{ label: t('Username'), initialValue: profileData.userName }}
               bio={{ label: t('Bio'), initialValue: profileData.description }}
-              ens={{
-                label: t('ENS Name'),
-                initialValue:
-                  ENSReq.isFetching && !ENSReq.isFetched
-                    ? 'loading'
-                    : ENSReq.isFetched && ENSReq.data
-                    ? ENSReq.data
-                    : '',
-              }}
+              // ens={{
+              //   label: t('ENS Name'),
+              //   initialValue:
+              //     ENSReq.isFetching && !ENSReq.isFetched
+              //       ? 'loading'
+              //       : ENSReq.isFetched && ENSReq.data
+              //       ? ENSReq.data
+              //       : '',
+              // }}
               ensButton={{
                 label: t('Fill info from ENS data'),
                 handleClick: () => {
@@ -150,7 +150,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 handleClick: () => {
                   navigateTo({
                     appName: '@akashaorg/app-profile',
-                    getNavigationUrl: () => `/${pubKey}`,
+                    getNavigationUrl: () => `/${profileId}`,
                   });
                 },
               }}
@@ -165,7 +165,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               onFormValid={setGeneralValid}
               customStyle="h-full"
             />
-            <SocialLinks
+            {/* <SocialLinks
               title={t('External URLs')}
               addNewButtonLabel={t('Add new')}
               description={t(
@@ -177,7 +177,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 handleClick: () => {
                   navigateTo({
                     appName: '@akashaorg/app-profile',
-                    getNavigationUrl: () => `/${pubKey}`,
+                    getNavigationUrl: () => `/${profileId}`,
                   });
                 },
               }}
@@ -191,7 +191,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               onDelete={() => ({})}
               onFormValid={setSocialLinksValid}
               customStyle="h-full"
-            />
+            /> */}
             {/*@TODO: Create loading and error states for interests list */}
             {
               <Interests
@@ -211,7 +211,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   handleClick: () => {
                     navigateTo({
                       appName: '@akashaorg/app-profile',
-                      getNavigationUrl: () => `/${pubKey}`,
+                      getNavigationUrl: () => `/${profileId}`,
                     });
                   },
                 }}

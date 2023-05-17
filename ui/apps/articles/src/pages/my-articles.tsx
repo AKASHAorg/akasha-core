@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
 import MyArticlesHeader from '../components/my-articles-header';
@@ -26,7 +26,12 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
   const [menuDropOpen, setMenuDropOpen] = React.useState<string | null>(null);
 
-  const loginQuery = useGetLogin();
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
 
   const { t } = useTranslation('app-articles');
 
@@ -61,7 +66,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   };
 
   const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loginQuery.data?.pubKey) {
+    if (!loggedProfileData.did?.id) {
       return props.navigateToModal({
         name: 'login',
         redirectTo: { name: 'report-modal', itemId, itemType },
@@ -157,7 +162,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
               copyrightLabel={t('copyrighted')}
               menuDropOpen={menuDropOpen === article.id}
               menuItems={[
-                ...(loginQuery.data?.pubKey !== article.authorPubkey
+                ...(loggedProfileData.did?.id !== article.authorProfileId
                   ? [
                       {
                         icon: 'editSimple',
@@ -206,7 +211,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
               draftLabel={t('Draft')}
               menuDropOpen={menuDropOpen === article.id}
               menuItems={[
-                ...(loginQuery.data?.pubKey === article.authorPubkey
+                ...(loggedProfileData.did?.id === article.authorProfileId
                   ? [
                       {
                         icon: 'editSimple',
@@ -247,7 +252,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
               draftLabel={t('Draft')}
               menuDropOpen={menuDropOpen === article.id}
               menuItems={[
-                ...(loginQuery.data?.pubKey === article.authorPubkey
+                ...(loggedProfileData.did?.id === article.authorProfileId
                   ? [
                       {
                         icon: 'editSimple',

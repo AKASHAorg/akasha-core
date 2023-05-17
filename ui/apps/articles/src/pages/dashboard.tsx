@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
 import ArticleHeader from '../components/articles-header';
@@ -25,7 +25,12 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
 
   const [menuDropOpen, setMenuDropOpen] = React.useState<string | null>(null);
 
-  const loginQuery = useGetLogin();
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
 
   const { t } = useTranslation('app-articles');
 
@@ -67,7 +72,7 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
   };
 
   const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loginQuery.data?.pubKey) {
+    if (!loggedProfileData.did.id) {
       return props.navigateToModal({
         name: 'login',
         redirectTo: { name: 'report-modal', itemId, itemType },
@@ -142,7 +147,7 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
             copyrightLabel={t('copyrighted')}
             menuDropOpen={menuDropOpen === article.id}
             menuItems={[
-              ...(loginQuery.data?.pubKey === article.authorPubkey
+              ...(loggedProfileData.did.id === article.authorProfileId
                 ? [
                     {
                       icon: 'editSimple',

@@ -14,7 +14,6 @@ import {
   CREATE_POST_MUTATION_KEY,
   useMutationsListener,
   createPendingEntry,
-  LoginState,
   useAnalytics,
   useDismissedCard,
 } from '@akashaorg/ui-awf-hooks';
@@ -29,11 +28,10 @@ const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, Basic
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: Profile;
-  loginState: LoginState;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { logger, loggedProfileData, loginState } = props;
+  const { logger, loggedProfileData } = props;
 
   const { t } = useTranslation('app-akasha-integration');
   const locale = (props.plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
@@ -70,10 +68,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const showLoginModal = React.useRef(props.showLoginModal);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage && loginState?.fromCache) {
+    if (!postsReq.isLoading && postsReq.hasNextPage) {
       postsReq.fetchNextPage();
     }
-  }, [postsReq, loginState?.fromCache]);
+  }, [postsReq]);
 
   const postPages = React.useMemo(() => {
     if (postsReq.data) {
@@ -84,12 +82,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
-      if (!loginState.pubKey) {
+      if (!loggedProfileData.did?.id) {
         return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
       navigateToModal.current({ name: 'report-modal', itemId, itemType });
     },
-    [loginState.pubKey],
+    [loggedProfileData.did?.id],
   );
 
   const handleEntryRemove = React.useCallback((itemId: string) => {
@@ -115,7 +113,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      {loginState?.ethAddress ? (
+      {loggedProfileData.did?.id ? (
         <>
           <BasicCardBox pad="medium" gap="xsmall" margin={{ bottom: 'xsmall' }}>
             <Box fill="horizontal">
@@ -210,7 +208,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         getShareUrl={(itemId: string) =>
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
         }
-        loginState={loginState}
+        loggedProfileData={loggedProfileData}
         navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={props.showLoginModal}

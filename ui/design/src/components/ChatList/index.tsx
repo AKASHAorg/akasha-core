@@ -17,7 +17,7 @@ export interface IChatListProps {
   itemCard: React.ReactElement;
   fetchingMessages?: boolean;
   markLatestMessagesRead?: () => void;
-  oldMessages: IChatMessage[];
+  oldMessages?: IChatMessage[];
   newMessages?: IChatMessage[];
 }
 

@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { LoginState, useAnalytics, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import { useAnalytics, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import {
   EntityTypes,
   IEntryData,
   RootComponentProps,
   ModalNavigationOptions,
   AnalyticsCategories,
+  Profile,
 } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
@@ -20,7 +21,7 @@ type Props = {
   itemId: string;
   itemType: EntityTypes;
   entryReq: UseQueryResult;
-  loginState?: LoginState;
+  loggedProfileData?: Profile;
   uiEvents: RootComponentProps['uiEvents'];
   plugins: RootComponentProps['plugins'];
   layoutConfig: RootComponentProps['layoutConfig'];
@@ -33,7 +34,7 @@ export function OriginalItem({
   itemId,
   itemType,
   entryReq,
-  loginState,
+  loggedProfileData,
   uiEvents,
   plugins,
   entryData,
@@ -65,13 +66,13 @@ export function OriginalItem({
   );
 
   const showEditButton = React.useMemo(
-    () => loginState.isReady && loginState.ethAddress === entryData?.author?.ethAddress,
-    [entryData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
+    () => entryData?.author?.did.isViewer,
+    [entryData?.author?.did],
   );
 
   if (!showEntry) return null;
 
-  if (loginState?.ethAddress) {
+  if (loggedProfileData?.did?.id) {
     if (action === 'edit') {
       return (
         <Extension
@@ -96,7 +97,7 @@ export function OriginalItem({
       category: AnalyticsCategories.POST,
       action: 'Repost Clicked',
     });
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     } else {
@@ -108,16 +109,16 @@ export function OriginalItem({
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loginState?.pubKey) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
-  const handleMentionClick = (pubKey: string) => {
+  const handleMentionClick = (profileId: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
     });
   };
 
@@ -144,7 +145,7 @@ export function OriginalItem({
     showLoginModal();
   };
 
-  const replyActive = !action && loginState?.ethAddress;
+  const replyActive = !action && loggedProfileData?.did?.id;
 
   return (
     <Box customStyle={`rounded-t-lg`}>
@@ -153,10 +154,9 @@ export function OriginalItem({
           isRemoved={entryData?.isRemoved}
           entryData={entryData}
           onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-            handleAvatarClick(ev, entryData?.author?.pubKey)
+            handleAvatarClick(ev, entryData?.author?.did?.id)
           }
           flagAsLabel={t('Report Post')}
-          loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
           locale={locale}
           showMore={true}
           profileAnchorLink={'/profile'}
@@ -179,7 +179,6 @@ export function OriginalItem({
           removedByAuthorLabel={t('This post was deleted by its author')}
           disableReposting={entryData?.isRemoved || itemType === EntityTypes.REPLY}
           hideRepost={itemType === EntityTypes.REPLY}
-          disableReporting={loginState.waitForAuth || loginState.isSigningIn}
           headerMenuExt={
             showEditButton && (
               <Extension
@@ -203,15 +202,15 @@ export function OriginalItem({
         />
       </Box>
       <Box customStyle="m-4">
-        {!loginState?.ethAddress && (
+        {!loggedProfileData?.did?.id && (
           <EditorPlaceholder
             onClick={handlePlaceholderClick}
-            ethAddress={null}
+            profileId={null}
             replyLabel={t('Reply')}
             placeholderLabel={t('Share your thoughts')}
           />
         )}
-        {showReplyEditor && loginState?.ethAddress && !entryData?.isRemoved && (
+        {showReplyEditor && loggedProfileData?.did?.id && !entryData?.isRemoved && (
           <Extension
             name={`inline-editor_reply_${entryData?.entryId}`}
             uiEvents={uiEvents}

@@ -5,12 +5,12 @@ import DS from '@akashaorg/design-system';
 
 import {
   RootComponentProps,
-  IProfileData,
   IEntryData,
   ITag,
   EntityTypes,
   ModalNavigationOptions,
   AnalyticsCategories,
+  Profile,
 } from '@akashaorg/typings/ui';
 
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
@@ -25,7 +25,6 @@ import {
   useSearchProfiles,
   useSearchComments,
   useSearchTags,
-  LoginState,
   useEntryNavigation,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
@@ -57,7 +56,7 @@ export enum ButtonValues {
 
 interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
-  loginState: LoginState;
+  loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
@@ -71,7 +70,7 @@ const initSearchState = {
 };
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { singleSpa, loginState, showLoginModal } = props;
+  const { singleSpa, loggedProfileData, showLoginModal } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.ALL);
@@ -80,7 +79,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const { t, i18n } = useTranslation('app-search');
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
+  // @TODO replace with new hooks
+  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData.did.id);
   const tagSubscriptionsState = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
@@ -152,42 +152,40 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword]);
 
+  // @TODO replace with new hooks
   const searchProfilesReq = useSearchProfiles(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.PEOPLE].page,
-    loginState?.pubKey,
-    loginState?.fromCache,
+    loggedProfileData.did.id,
   );
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
   const searchPostsReq = useSearchPosts(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.POSTS].page,
-    loginState?.pubKey,
-    loginState?.fromCache,
+    loggedProfileData.did.id,
   );
   const searchPostsState = getSearchStateForTab(ButtonValues.POSTS);
 
   const searchCommentsReq = useSearchComments(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.REPLIES].page,
-    loginState?.pubKey,
-    loginState?.fromCache,
+    loggedProfileData.did.id,
   );
   const searchCommentsState = searchState[ButtonValues.REPLIES].results;
 
   const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TOPICS);
 
-  React.useEffect(() => {
-    if (searchPostsReq.isFetched) updateSearchState(ButtonValues.POSTS, searchPostsReq.data);
-  }, [searchPostsReq.data, searchPostsReq.isFetched]);
+  // React.useEffect(() => {
+  //   if (searchPostsReq.isFetched) updateSearchState(ButtonValues.POSTS, searchPostsReq.data);
+  // }, [searchPostsReq.data, searchPostsReq.isFetched]);
 
-  React.useEffect(() => {
-    if (searchCommentsReq.isFetched) {
-      updateSearchState(ButtonValues.REPLIES, searchCommentsReq.data);
-    }
-  }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
+  // React.useEffect(() => {
+  //   if (searchCommentsReq.isFetched) {
+  //     updateSearchState(ButtonValues.REPLIES, searchCommentsReq.data);
+  //   }
+  // }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
 
   React.useEffect(() => {
     if (searchProfilesReq.isFetched) {
@@ -200,13 +198,16 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   }, [searchTagsReq.data, searchTagsReq.isFetched]);
 
   const followPubKeyArr = searchProfilesState?.map(profile => profile.pubKey);
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.pubKey, followPubKeyArr);
+  const isFollowingMultipleReq = useIsFollowingMultiple(
+    loggedProfileData?.did?.id,
+    followPubKeyArr,
+  );
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
   const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData.did?.id) {
       showLoginModal();
       return;
     }
@@ -224,7 +225,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
   const handleFollowProfile = (pubKey: string) => {
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData.did?.id) {
       showLoginModal();
       return;
     }
@@ -261,7 +262,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleUnfollowProfile = (pubKey: string) => {
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData.did?.id) {
       showLoginModal();
       return;
     }
@@ -285,7 +286,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       category: AnalyticsCategories.POST,
       action: 'Repost Clicked',
     });
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData.did?.id) {
       showLoginModal();
       return;
     } else {
@@ -436,7 +437,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           hasIcon={true}
           hasMobileDesign={true}
           buttonValues={buttonValues}
-          loggedUser={loginState?.pubKey}
+          loggedUser={loggedProfileData.did?.id}
           style={{ marginBottom: '-1px' }} // overlaps border with parent's bottom border
         />
       </SearchStartCard>
@@ -458,23 +459,21 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
       <Box margin={{ top: 'medium' }}>
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.PEOPLE) &&
-          searchProfilesState?.map((profileData: IProfileData, index: number) => (
+          searchProfilesState?.map((profileData: Profile, index: number) => (
             <Box key={index} pad={{ bottom: 'medium' }}>
               <ProfileSearchCard
-                handleFollow={() => handleFollowProfile(profileData.pubKey)}
-                handleUnfollow={() => handleUnfollowProfile(profileData.pubKey)}
-                isFollowing={followedProfiles.includes(profileData?.pubKey)}
-                loggedEthAddress={loginState?.ethAddress}
+                handleFollow={() => handleFollowProfile(profileData.did.id)}
+                handleUnfollow={() => handleUnfollowProfile(profileData.did.id)}
+                isFollowing={followedProfiles.includes(profileData?.did.id)}
                 profileData={profileData}
                 followLabel={t('Follow')}
                 unfollowLabel={t('Unfollow')}
                 descriptionLabel={t('About me')}
                 followingLabel={t('Following')}
                 followersLabel={t('Followers')}
-                postsLabel={t('Posts')}
                 shareProfileLabel={t('Share')}
                 profileAnchorLink={'/profile'}
-                onClickProfile={() => handleProfileClick(profileData.pubKey)}
+                onClickProfile={() => handleProfileClick(profileData.did.id)}
               />
             </Box>
           ))}
@@ -502,7 +501,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               itemType={EntityTypes.POST}
               logger={props.logger}
               singleSpa={singleSpa}
-              ethAddress={loginState?.ethAddress}
+              loggedProfileData={loggedProfileData}
               onContentClick={handleEntryNavigation}
               navigateTo={navigateTo}
               onRepost={handleRepost}
@@ -525,7 +524,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               itemType={EntityTypes.REPLY}
               logger={props.logger}
               singleSpa={singleSpa}
-              ethAddress={loginState?.ethAddress}
+              loggedProfileData={loggedProfileData}
               onContentClick={handleEntryNavigation}
               navigateTo={navigateTo}
               onRepost={handleRepost}

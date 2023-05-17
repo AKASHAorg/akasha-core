@@ -25,7 +25,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-integration-center');
-
+  // @TODO replace with new hooks
   const loginQueryReq = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
@@ -45,7 +45,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
   const latestReleaseInfo = latestReleaseInfoReq.data;
 
   const profileDataReq = useGetProfileByEthAddress(integrationInfo?.author);
-  const authorProfileData = profileDataReq.data;
+  const authorProfileData = null;
 
   const descriptionLink = latestReleaseInfo?.links?.detailedDescription;
 
