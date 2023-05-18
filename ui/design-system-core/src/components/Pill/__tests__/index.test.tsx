@@ -18,7 +18,6 @@ describe('<Pill /> Component', () => {
           icon="XMarkIcon"
           iconDirection="right"
           onPillClick={mockChangeHandler}
-          clickable={true} // add this, to enable the click handler
         />,
         {},
       );

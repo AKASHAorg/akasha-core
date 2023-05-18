@@ -14,3 +14,4 @@ export * from './resign-confirmation';
 export * from './become-moderator';
 export * from './application-status';
 export * from './modify-application';
+export * from './report-item';
