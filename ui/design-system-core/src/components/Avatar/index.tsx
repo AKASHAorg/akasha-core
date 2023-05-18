@@ -93,7 +93,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
       {avatar && (
         <React.Suspense fallback={<></>}>
           <AvatarImage
-            url={avatar.default.src}
+            url={avatar.default?.src}
             alt={alt}
             fallbackUrl={avatarImageFallback}
             faded={faded}

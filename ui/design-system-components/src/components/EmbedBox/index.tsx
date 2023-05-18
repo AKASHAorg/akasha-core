@@ -19,7 +19,7 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
       label={props.embedEntryData.author?.name}
       info={props.embedEntryData.author?.name}
       avatarImage={props.embedEntryData.author?.avatar}
-      profileId={props.embedEntryData.author?.did.id}
+      profileId={props.embedEntryData.author?.did?.id}
     />
 
     <div className={tw(`flex`)}>
