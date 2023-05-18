@@ -65,9 +65,7 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
       moderationDutiesDescLabel={t('{{descLabel}}', { descLabel })}
       changeLabel={t('Change')}
       onButtonClick={handleButtonClick}
-      resignButtonLabel={t('Resign from {{role}} role', {
-        role,
-      })}
+      resignButtonLabel={t('Resign from {{role}} role', { role })}
     />
   );
 };
