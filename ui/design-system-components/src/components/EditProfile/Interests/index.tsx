@@ -79,7 +79,6 @@ export const Interests: React.FC<InterestsProps> = ({
                 label={myInterest}
                 icon="CheckIcon"
                 iconDirection="right"
-                clickable={true}
                 active={true}
                 onPillClick={active => updateMyInterestMap(myInterest, active)}
               />
