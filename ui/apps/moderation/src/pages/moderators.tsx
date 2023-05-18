@@ -63,7 +63,7 @@ export const Moderators: React.FC<IModeratorsPageProps> = props => {
 
               return (
                 <ModeratorDetailMiniCard
-                  key={moderator.pubKey}
+                  key={moderator.did.id}
                   moderator={moderator}
                   hasBorderBottom={idx < filteredModeratorList.length - 1}
                   tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}

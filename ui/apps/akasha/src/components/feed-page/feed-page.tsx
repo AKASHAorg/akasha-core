@@ -82,12 +82,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
-      if (!loggedProfileData.did?.id) {
+      if (!loggedProfileData?.did?.id) {
         return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
       navigateToModal.current({ name: 'report-modal', itemId, itemType });
     },
-    [loggedProfileData.did?.id],
+    [loggedProfileData?.did?.id],
   );
 
   const handleEntryRemove = React.useCallback((itemId: string) => {
