@@ -15,12 +15,22 @@ export type StackProps = {
   spacing?: `gap-x-${number}` | `gap-y-${number}` | `gap-${number}`;
   customStyle?: string;
   fullWidth?: boolean;
+  testId?: string;
   ref?: LegacyRef<HTMLDivElement>;
 };
 
 const Stack: React.FC<PropsWithChildren<StackProps>> = forwardRef(
   (
-    { direction = 'row', justify, align, spacing = '', customStyle = '', fullWidth, children },
+    {
+      direction = 'row',
+      justify,
+      align,
+      spacing = '',
+      customStyle = '',
+      fullWidth,
+      testId,
+      children,
+    },
     ref,
   ) => {
     const baseStyle = `flex`;
@@ -33,6 +43,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = forwardRef(
         className={tw(
           apply`${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
         )}
+        data-testid={testId}
         ref={ref}
       >
         {children}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetModerators } from '@akashaorg/ui-awf-hooks';
@@ -10,6 +10,8 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 import ModeratorDetailMiniCard from '../components/moderator/mini-card';
 
+import { generateTenureInfoLabel } from '../utils';
+
 export interface IModeratorsPageProps {
   navigateTo: (args: NavigateToParams) => void;
 }
@@ -17,7 +19,7 @@ export interface IModeratorsPageProps {
 export const Moderators: React.FC<IModeratorsPageProps> = props => {
   const { navigateTo } = props;
 
-  const [activeTab, setActiveTab] = React.useState<string>('All');
+  const [activeTab, setActiveTab] = useState<string>('All');
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -56,23 +58,19 @@ export const Moderators: React.FC<IModeratorsPageProps> = props => {
       {!getModeratorsQuery.isFetching && filteredModeratorList && filteredModeratorList.length > 0 && (
         <Box customStyle="flex-1">
           <Box customStyle="w-full h-full overflow-y-scroll">
-            {filteredModeratorList?.map((moderator, idx) => (
-              <ModeratorDetailMiniCard
-                key={idx}
-                moderator={moderator}
-                hasBorderBottom={idx < filteredModeratorList.length - 1}
-                tenureInfoLabel={
-                  moderator.status === 'active'
-                    ? t('Moderator since')
-                    : t(`{{status}} on`, {
-                        status: moderator.status
-                          ? moderator.status[0].toUpperCase() + moderator.status.slice(1)
-                          : '',
-                      })
-                }
-                onCardClick={handleViewModerator}
-              />
-            ))}
+            {filteredModeratorList?.map((moderator, idx) => {
+              const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
+
+              return (
+                <ModeratorDetailMiniCard
+                  key={moderator.pubKey}
+                  moderator={moderator}
+                  hasBorderBottom={idx < filteredModeratorList.length - 1}
+                  tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
+                  onCardClick={handleViewModerator}
+                />
+              );
+            })}
           </Box>
         </Box>
       )}

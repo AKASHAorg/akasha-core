@@ -1,5 +1,5 @@
 import React from 'react';
-import { UseQueryResult } from 'react-query';
+import { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -103,7 +103,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   };
 
   return (
-    <BasicCardBox style={`h-auto overflow-hidden`} elevation="sm" pad="p-0">
+    <BasicCardBox customStyle="h-auto overflow-hidden" pad="p-0">
       {children}
       {entryReq.isLoading && <EntryCardLoading />}
       {entryReq.isError && (

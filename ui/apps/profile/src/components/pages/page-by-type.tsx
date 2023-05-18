@@ -1,18 +1,18 @@
 import React from 'react';
-import ProfileStat from './profile-stat';
+import ProfileEngagementsPage from './profile-engagement';
+import EditProfilePage from './edit-profile';
 import ProfilePage from './profile';
 import DS from '@akashaorg/design-system';
-import ProfileEdit from './profile-edit';
 import { IProfileData, RootComponentProps } from '@akashaorg/typings/ui';
 import { LoginState } from '@akashaorg/ui-awf-hooks';
-import { ProfileLoading } from '@akashaorg/design-system-core/lib/components/ProfileCard';
-import { ProfileStatLoading } from '@akashaorg/design-system-core/lib/components/ProfileStatLists/placeholders/ProfileStatLoading';
+import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
+import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const { EntryCardHidden, ProfileDelistedCard } = DS;
 
-export type PageType = 'stat' | 'edit';
+export type PageType = 'engagement' | 'edit';
 
 type PageByTypeProps = {
   profileData: IProfileData;
@@ -21,7 +21,6 @@ type PageByTypeProps = {
   pageType?: PageType;
   onCTAClick?: () => void;
 };
-
 const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
   profileData,
   loginState,
@@ -38,8 +37,10 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
   const tab = params.get('tab');
   const selectedStat = tab === 'followers' || tab === 'following' ? tab : 'followers';
 
+  const navigateTo = rest.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
   if (isLoading) {
-    if (pageType === 'stat') return <ProfileStatLoading />;
+    if (pageType === 'engagement') return <ProfileEngagementLoading />;
     return <ProfileLoading />;
   }
 
@@ -59,7 +60,6 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
       </>
     );
   }
-
   if (!profileData.moderated && profileData.reported) {
     return (
       <EntryCardHidden
@@ -72,9 +72,9 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
   }
 
   if (!profileData.delisted) {
-    if (pageType === 'stat') {
+    if (pageType === 'engagement') {
       return (
-        <ProfileStat
+        <ProfileEngagementsPage
           {...rest}
           selectedStat={selectedStat}
           loginState={loginState}
@@ -83,15 +83,20 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
       );
     }
 
-    if (pageType === 'edit')
-      return <ProfileEdit {...rest} loginState={loginState} profileData={profileData} />;
+    if (pageType === 'edit') {
+      if (loginState.ethAddress !== profileData.ethAddress) {
+        navigateTo({
+          appName: '@akashaorg/app-profile',
+          getNavigationUrl: () => `/${pubKey}`,
+        });
+      }
+      return <EditProfilePage {...rest} loginState={loginState} profileData={profileData} />;
+    }
 
     return (
       <ProfilePage {...rest} profileData={profileData} profileId={pubKey} loginState={loginState} />
     );
   }
-
   return null;
 };
-
 export default PageByType;

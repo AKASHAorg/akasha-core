@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Tab, { TabProps } from './index';
 
@@ -7,13 +7,14 @@ export default {
   component: Tab,
 };
 
-const Template = (args: TabProps) => (
-  <Tab labels={args.labels}>
+const Template = (args: TabProps) => {
+  const [value, setValue] = useState(0);
+  <Tab value={value} onChange={setValue} labels={args.labels}>
     <div>Content 1</div>
     <div>Content 2</div>
     <div>Content 3</div>
-  </Tab>
-);
+  </Tab>;
+};
 
 export const DefaultField = Template.bind({});
 DefaultField.args = {

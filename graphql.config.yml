@@ -1,0 +1,8 @@
+schema: ./tools/composedb/lib/schema.graphql
+extensions:
+  endpoints:
+    Default GraphQL Endpoint:
+      url: http://localhost:5005/graphql
+      headers:
+        user-agent: JS GraphQL
+      introspect: true

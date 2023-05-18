@@ -11,8 +11,8 @@ import ModeratorDetailCard from '../components/moderator';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
-import { moderators } from '../utils/dummy-data';
-import { formatDate } from '../utils/format-date';
+
+import { moderators, formatDate, generateTenureInfoLabel } from '../utils';
 
 export interface IModeratorDetailPageProps {
   navigateTo: (args: NavigateToParams) => void;
@@ -31,6 +31,8 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
   const { moderatorPubKey } = useParams<{ moderatorPubKey: string }>();
 
   const moderator = moderators[1];
+
+  const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -90,15 +92,7 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
       <ModeratorDetailCard
         moderator={moderator}
         viewProfileLabel={t('View Profile')}
-        tenureInfoLabel={
-          moderator.status === 'active'
-            ? t('Moderator since')
-            : t(`{{status}} on`, {
-                status: moderator.status
-                  ? moderator.status[0].toUpperCase() + moderator.status.slice(1)
-                  : '',
-              })
-        }
+        tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
         dismissModeratorLabel={t('Dismiss Moderator')}
         dismissModeratorDescLabel={t(
           "You can dismiss this moderator anytime if they have been inactive or if they violated AKASHA's code of conduct",

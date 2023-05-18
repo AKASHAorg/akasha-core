@@ -122,3 +122,5 @@ export interface IModeratedItem extends IPendingItem {
   evaluationDate?: Date;
   moderatorProfile: Profile;
 }
+
+export type ModerationCategory = { label: string; value: string };

@@ -33,7 +33,7 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
 }) => {
   return (
     <Transition show={show} as={Fragment}>
-      <Dialog as="div" onClose={onClose} className={tw('relative z-50')}>
+      <Dialog as="div" onClose={onClose} className={tw('relative z-[99999]')}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

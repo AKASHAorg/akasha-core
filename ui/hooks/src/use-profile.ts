@@ -1,6 +1,10 @@
-import { forkJoin, lastValueFrom } from 'rxjs';
-import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
-
+import {
+  QueryClient,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import {
@@ -57,6 +61,7 @@ export interface FormProfileData {
   ethAddress: string;
   socialLinks?: { type: string; value: string }[];
 }
+
 interface UpdateProfileFormData {
   profileData: FormProfileData;
   changedFields: string[];
@@ -192,9 +197,9 @@ const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
  * const followersQuery = useFollowers('some-pubkey', 10);
  *
  * const followers = React.useMemo(
-    () => followersQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
-    [followersQuery.data?.pages],
-  );
+ () => followersQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
+ [followersQuery.data?.pages],
+ );
  * ```
  */
 export function useFollowers(pubKey: string, limit: number, offset?: number) {
@@ -234,9 +239,9 @@ const getFollowing = async (pubKey: string, limit: number, offset?: number) => {
  * const followingQuery = useFollowing('some-pubkey', 10);
  *
  * const following = React.useMemo(
-    () => followingQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
-    [followingQuery.data?.pages],
-  );
+ () => followingQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
+ [followingQuery.data?.pages],
+ );
  * ```
  */
 export function useFollowing(pubKey: string, limit: number, offset?: number) {
@@ -428,7 +433,7 @@ export function useProfileUpdate(pubKey: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: UPDATE_PROFILE_DATA_KEY,
+    mutationKey: [UPDATE_PROFILE_DATA_KEY],
     mutationFn: async () => completeProfileUpdate(pubKey, queryClient),
     onMutate: async (formData: UpdateProfileFormData) => {
       const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
@@ -508,14 +513,14 @@ export function useProfileUpdate(pubKey: string) {
     },
     onSuccess: async () => {
       queryClient.removeQueries({
-        queryKey: UPDATE_PROFILE_STATUS,
+        queryKey: [UPDATE_PROFILE_STATUS],
       });
-      await queryClient.invalidateQueries(PROFILE_KEY);
+      await queryClient.invalidateQueries([PROFILE_KEY]);
     },
     onError: async (error, vars, context: { currentProfile: IProfileData }) => {
       queryClient.setQueryData([PROFILE_KEY, pubKey], context.currentProfile);
       queryClient.removeQueries({
-        queryKey: UPDATE_PROFILE_STATUS,
+        queryKey: [UPDATE_PROFILE_STATUS],
       });
       logError(
         'useProfile.useProfileUpdate.onError',

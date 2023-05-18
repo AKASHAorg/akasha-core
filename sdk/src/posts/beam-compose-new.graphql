@@ -1,0 +1,146 @@
+fragment BeamFragment on Beam{
+  id
+  reflectionsCount
+  rebeamsCount
+  active
+  author{
+    id
+  }
+  # the creation date should be saved here since it can be modified by the author
+  # {property: "creationDate", provider: "app.AKASHA", value: "isodate format"}
+  content {
+    property
+    provider
+    value
+  }
+  tags
+  version
+}
+
+query GetBeams($after: String, $before: String, $first: Int, $last: Int){
+  beamIndex(after: $after, before: $before, first: $first, last: $last){
+    edges {
+     node {
+       ...BeamFragment
+     }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
+query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+  node(id: $id){
+    ... on CeramicAccount{
+      beamList(after: $after, before: $before, first: $first, last: $last){
+        edges {
+          node {
+            ...BeamFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+
+query GetBeamById($id: ID!){
+  node(id: $id){
+    ... on Beam{
+      ...BeamFragment
+    }
+  }
+}
+
+query GetRebeamsFromBeam($id: ID!){
+  node(id: $id){
+    ... on Beam{
+      rebeams(first: 5) {
+        edges{
+          node{
+            quotedBeam{
+              ...BeamFragment
+            }
+            beam{
+              ...BeamFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetMentionsFromBeam($id: ID!){
+  node(id: $id){
+    ... on Beam{
+      mentions(first: 10) {
+        edges{
+          node{
+            profile{
+              ...UserProfileFragment
+            }
+            beam{
+              ...BeamFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation CreateBeam($i: CreateBeamInput!){
+  createBeam(input: $i){
+    document {
+      ...BeamFragment
+    }
+  }
+}
+
+mutation UpdateBeam($i: UpdateBeamInput!){
+  updateBeam(input: $i){
+    document {
+      ...BeamFragment
+    }
+    clientMutationId
+  }
+}
+
+mutation CreateRebeam($i: CreateRebeamInput!){
+  createRebeam(input: $i){
+    document {
+      beam {
+        ...BeamFragment
+      }
+      quotedBeam {
+        ...BeamFragment
+      }
+      active
+    }
+    clientMutationId
+  }
+}
+
+mutation CreateBeamProfileMention($i: CreateProfileMentionInput!){
+  createProfileMention(input: $i){
+    document {
+      beam {
+        ...BeamFragment
+      }
+      profile {
+        ...UserProfileFragment
+      }
+    }
+  }
+}

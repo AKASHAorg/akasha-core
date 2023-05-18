@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import DS from '@akashaorg/design-system';
 import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
+
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import {
   Dashboard,
@@ -19,6 +20,10 @@ import {
   ResignRolePage,
   ResignConfirmationPage,
   AssignAdminPage,
+  BecomeModeratorPage,
+  ApplicationStatusPage,
+  ModifyApplicationPage,
+  ReportItemPage,
 } from '../pages';
 
 import routes, {
@@ -36,9 +41,11 @@ import routes, {
   MODERATORS,
   VIEW_MODERATOR,
   ASSIGN_NEW_ADMIN,
+  BECOME_MODERATOR,
+  CHECK_APPLICATION_STATUS,
+  MODIFY_APPLICATION,
+  REPORT_ITEM,
 } from '../routes';
-
-const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
@@ -48,6 +55,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const isAuthorised = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
+  const applicationStatus = null;
+
   const isAdmin = false;
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -56,7 +65,17 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     <Box>
       <Router basename={props.baseRouteName}>
         <Routes>
-          <Route path={routes[HOME]} element={<Overview {...props} />} />
+          <Route
+            path={routes[HOME]}
+            element={
+              <Overview
+                {...props}
+                isAuthorised={isAuthorised}
+                applicationStatus={applicationStatus}
+                navigateTo={navigateTo}
+              />
+            }
+          />
 
           <Route path={routes[MODERATION_VALUE]} element={<ModerationValue {...props} />} />
 
@@ -130,6 +149,28 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           />
 
           <Route path={routes[HISTORY_ITEM]} element={<TransparencyLogItem />} />
+
+          <Route
+            path={routes[BECOME_MODERATOR]}
+            element={<BecomeModeratorPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+          />
+
+          <Route
+            path={routes[CHECK_APPLICATION_STATUS]}
+            element={
+              <ApplicationStatusPage
+                applicationStatus={applicationStatus}
+                navigateTo={navigateTo}
+              />
+            }
+          />
+
+          <Route
+            path={routes[MODIFY_APPLICATION]}
+            element={<ModifyApplicationPage navigateTo={navigateTo} />}
+          />
+
+          <Route path={routes[REPORT_ITEM]} element={<ReportItemPage navigateTo={navigateTo} />} />
 
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>

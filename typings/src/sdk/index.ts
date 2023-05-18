@@ -2,7 +2,7 @@ import type IDBService from './db';
 import type IGqlClient from './gql';
 import type { ServiceCallResult } from './responses';
 import { EthProviders, EthProvidersSchema } from './web3.connector';
-import { EthAddress } from "./common";
+import { EthAddress } from './common';
 
 export * from './events';
 export * from './responses';
@@ -57,4 +57,4 @@ export type IMessage = {
   createdAt: number;
   id: string;
   read: boolean;
-}
+};

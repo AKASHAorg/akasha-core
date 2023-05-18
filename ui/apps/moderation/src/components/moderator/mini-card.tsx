@@ -9,7 +9,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
-import { formatDate } from '../../utils/format-date';
+import { formatDate } from '../../utils';
 
 export interface IModeratorDetailMiniCardProps {
   moderator: Moderator;

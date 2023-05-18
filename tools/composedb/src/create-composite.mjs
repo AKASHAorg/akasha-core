@@ -39,43 +39,43 @@ ceramic.did = did
 // await writeEncodedComposite(profileComposite, path.resolve(__dirname, '../build/0_models.json'))
 //
 //
-// const integrationComposite = await createComposite(ceramic, path.resolve(__dirname, '../models/base/0_integration.graphql'))
+// const applicationComposite = await createComposite(ceramic, path.resolve(__dirname, '../models/base/0_application.graphql'))
 //
-// await writeEncodedComposite(integrationComposite, path.resolve(__dirname, '../build/0_integration.json'))
+// await writeEncodedComposite(applicationComposite, path.resolve(__dirname, '../build/0_application.json'))
 
 
 // const _1_follow = await createComposite(ceramic, path.resolve(__dirname, '../models/1_follow.graphql'))
 //
 // await writeEncodedComposite(_1_follow, path.resolve(__dirname, '../build/1_follow.json'))
 //
-// const _1_integration = await createComposite(ceramic, path.resolve(__dirname, '../models/1_integration.graphql'))
+// const _1_application = await createComposite(ceramic, path.resolve(__dirname, '../models/1_application.graphql'))
 //
-// await writeEncodedComposite(_1_integration, path.resolve(__dirname, '../build/1_integration.json'))
+// await writeEncodedComposite(_1_application, path.resolve(__dirname, '../build/1_application.json'))
 //
-// const _1_posts = await createComposite(ceramic, path.resolve(__dirname, '../models/1_posts.graphql'))
+// const _1_beams = await createComposite(ceramic, path.resolve(__dirname, '../models/1_beams.graphql'))
 //
-// await writeEncodedComposite(_1_posts, path.resolve(__dirname, '../build/1_posts.json'))
+// await writeEncodedComposite(_1_beams, path.resolve(__dirname, '../build/1_beams.json'))
 
 // const _2_models = await createComposite(ceramic, path.resolve(__dirname, '../models/2_models.graphql'))
 //
 // await writeEncodedComposite(_2_models, path.resolve(__dirname, '../build/2_models.json'))
 //
-// const _2_integration = await createComposite(ceramic, path.resolve(__dirname, '../models/2_integration.graphql'))
+// const _2_application = await createComposite(ceramic, path.resolve(__dirname, '../models/2_application.graphql'))
 //
-// await writeEncodedComposite(_2_integration, path.resolve(__dirname, '../build/2_integration.json'))
+// await writeEncodedComposite(_2_application, path.resolve(__dirname, '../build/2_application.json'))
 //
-// const _2_posts = await createComposite(ceramic, path.resolve(__dirname, '../models/2_posts.graphql'))
+// const _2_beams = await createComposite(ceramic, path.resolve(__dirname, '../models/2_beams.graphql'))
 //
-// await writeEncodedComposite(_2_posts, path.resolve(__dirname, '../build/2_posts.json'))
+// await writeEncodedComposite(_2_beams, path.resolve(__dirname, '../build/2_beams.json'))
 
-// const _3_posts = await createComposite(ceramic, path.resolve(__dirname, '../models/3_posts.graphql'))
+// const _3_beams = await createComposite(ceramic, path.resolve(__dirname, '../models/3_beams.graphql'))
 //
-// await writeEncodedComposite(_3_posts, path.resolve(__dirname, '../build/3_posts.json'))
+// await writeEncodedComposite(_3_beams, path.resolve(__dirname, '../build/3_beams.json'))
 
-// const _4_posts = await createComposite(ceramic, path.resolve(__dirname, '../models/4_posts.graphql'))
+// const _4_beams = await createComposite(ceramic, path.resolve(__dirname, '../models/4_beams.graphql'))
 //
-// await writeEncodedComposite(_4_posts, path.resolve(__dirname, '../build/4_posts.json'))
+// await writeEncodedComposite(_4_beams, path.resolve(__dirname, '../build/4_beams.json'))
 
-// const _5_posts = await createComposite(ceramic, path.resolve(__dirname, '../models/5_posts.graphql'))
+// const _5_beams = await createComposite(ceramic, path.resolve(__dirname, '../models/5_beams.graphql'))
 //
-// await writeEncodedComposite(_5_posts, path.resolve(__dirname, '../build/5_posts.json'))
+// await writeEncodedComposite(_5_beams, path.resolve(__dirname, '../build/5_beams.json'))

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 
 import { IconType } from '@akashaorg/typings/ui';
@@ -63,11 +63,12 @@ const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
     onButtonClick,
   } = props;
 
+  const [activeTab, setActiveTab] = useState(0);
   const wrapperStyle = 'p-4 space-y-4';
 
   return (
     <BasicCardBox pad="p-0 pt-4">
-      <Tab labels={tabLabels} labelTextVariant="body1">
+      <Tab value={activeTab} onChange={setActiveTab} labels={tabLabels} labelTextVariant="body1">
         {/* General tab */}
         <Box customStyle={wrapperStyle}>
           <Box customStyle="flex items-center justify-between">
@@ -93,7 +94,7 @@ const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
                   <Pill
                     key={category + idx}
                     label={category}
-                    secondaryBg={true}
+                    active={true}
                     customStyle="mt-3 mr-3"
                   />
                 ))}

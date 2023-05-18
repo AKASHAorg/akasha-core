@@ -1,0 +1,129 @@
+fragment ReflectFragment on Reflect{
+  author {
+    id
+  }
+  version
+  active
+  content {
+    provider
+    property
+    value
+  }
+  isReply
+ reflectionsCount
+  beam {
+    id
+    author{
+      id
+    }
+  }
+}
+
+query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+  node(id: $id){
+    ... on Beam{
+      reflections(after: $after, before: $before, first: $first, last: $last) {
+        edges{
+          node{
+            ...ReflectFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+
+query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+  node(id: $id){
+    ... on CeramicAccount{
+      reflectList(after: $after, before: $before, first: $first, last: $last){
+        edges{
+          node{
+            ...ReflectFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+
+query GetReflectReflections($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+  node(id: $id){
+    ...on Reflect{
+      reflections(after: $after, before: $before, first: $first, last: $last){
+        edges{
+          node{
+            reflect{
+            ...ReflectFragment
+            }
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+
+mutation CreateReflect($i: CreateReflectInput!){
+  createReflect(input: $i){
+    document {
+      ...ReflectFragment
+    }
+    clientMutationId
+  }
+}
+
+mutation UpdateReflect($i: UpdateReflectInput!){
+  updateReflect(input: $i){
+    document {
+      ...ReflectFragment
+    }
+    clientMutationId
+  }
+}
+
+mutation CreateReflectReflection($i: CreateReflectionInput!){
+  createReflection(input: $i){
+    document {
+      active
+      reflect {
+        ...ReflectFragment
+      }
+      reflection {
+        ...ReflectFragment
+      }
+    }
+  }
+}
+
+mutation UpdateReflectReflection($i: UpdateReflectionInput!){
+  updateReflection(input: $i){
+    document {
+      active
+      reflect {
+        ...ReflectFragment
+      }
+      reflection {
+        ...ReflectFragment
+      }
+    }
+  }
+}

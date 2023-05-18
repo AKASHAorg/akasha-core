@@ -1,32 +1,27 @@
 import { Descendant } from 'slate';
 import { LogoTypeSource, ProfileProviders, ProfileProviderProperties } from '@akashaorg/typings/ui';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
-import {
-  IMenuItem,
-  MenuItemType,
-  MenuItemAreaType,
-  IProfileData,
-  IChatMessage,
-} from '@akashaorg/typings/ui';
+import { IMenuItem, MenuItemType, MenuItemAreaType, IChatMessage } from '@akashaorg/typings/ui';
 import { IAppData } from '../components/AppsWidgetCard';
 import { IntegrationInfo, IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
-const userData: { ethAddress: string; avatar?: IProfileData['avatar'] }[] = [
+const userData: { ethAddress: string; avatar?: Profile['avatar'] }[] = [
   {
     ethAddress: '0x003410490050000320006570034567114572000',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
   {
     ethAddress: '0x004410490050000320006570034567114572001',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
   {
     ethAddress: '0x005410490050000320006570034567114572002',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
   {
     ethAddress: '0x006410490050000320006570034567114572003',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
 ];
 

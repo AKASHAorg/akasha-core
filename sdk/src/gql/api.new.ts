@@ -2,33 +2,11 @@ import type * as Types from '@akashaorg/typings/sdk/graphql-operation-types-new'
 
 import type { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-export const CommentFragmentDoc = /*#__PURE__*/ gql`
-    fragment CommentFragment on Comment {
-  author {
-    id
-  }
-  version
-  active
-  content {
-    provider
-    property
-    value
-  }
-  isReply
-  repliesCount
-  post {
-    id
-    author {
-      id
-    }
-  }
-}
-    `;
-export const PostFragmentDoc = /*#__PURE__*/ gql`
-    fragment PostFragment on Post {
+export const BeamFragmentDoc = /*#__PURE__*/ gql`
+    fragment BeamFragment on Beam {
   id
-  commentsCount
-  quotesCount
+  reflectionsCount
+  rebeamsCount
   active
   author {
     id
@@ -40,6 +18,28 @@ export const PostFragmentDoc = /*#__PURE__*/ gql`
   }
   tags
   version
+}
+    `;
+export const ReflectFragmentDoc = /*#__PURE__*/ gql`
+    fragment ReflectFragment on Reflect {
+  author {
+    id
+  }
+  version
+  active
+  content {
+    provider
+    property
+    value
+  }
+  isReply
+  reflectionsCount
+  beam {
+    id
+    author {
+      id
+    }
+  }
 }
     `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
@@ -81,127 +81,12 @@ export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
   createdAt
 }
     `;
-export const GetCommentsFromPostDocument = /*#__PURE__*/ gql`
-    query GetCommentsFromPost($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
-  node(id: $id) {
-    ... on Post {
-      comments(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            ...CommentFragment
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const GetCommentsByAuthorDidDocument = /*#__PURE__*/ gql`
-    query GetCommentsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
-  node(id: $id) {
-    ... on CeramicAccount {
-      commentList(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            ...CommentFragment
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const GetCommentRepliesDocument = /*#__PURE__*/ gql`
-    query GetCommentReplies($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
-  node(id: $id) {
-    ... on Comment {
-      replies(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            reply {
-              ...CommentFragment
-            }
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const CreateCommentDocument = /*#__PURE__*/ gql`
-    mutation CreateComment($i: CreateCommentInput!) {
-  createComment(input: $i) {
-    document {
-      ...CommentFragment
-    }
-    clientMutationId
-  }
-}
-    ${CommentFragmentDoc}`;
-export const UpdateCommentDocument = /*#__PURE__*/ gql`
-    mutation UpdateComment($i: UpdateCommentInput!) {
-  updateComment(input: $i) {
-    document {
-      ...CommentFragment
-    }
-    clientMutationId
-  }
-}
-    ${CommentFragmentDoc}`;
-export const CreateCommentReplyDocument = /*#__PURE__*/ gql`
-    mutation CreateCommentReply($i: CreateCommentReplyInput!) {
-  createCommentReply(input: $i) {
-    document {
-      active
-      comment {
-        ...CommentFragment
-      }
-      reply {
-        ...CommentFragment
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const UpdateCommentReplyDocument = /*#__PURE__*/ gql`
-    mutation UpdateCommentReply($i: UpdateCommentReplyInput!) {
-  updateCommentReply(input: $i) {
-    document {
-      active
-      comment {
-        ...CommentFragment
-      }
-      reply {
-        ...CommentFragment
-      }
-    }
-  }
-}
-    ${CommentFragmentDoc}`;
-export const GetPostsDocument = /*#__PURE__*/ gql`
-    query GetPosts($after: String, $before: String, $first: Int, $last: Int) {
-  postIndex(after: $after, before: $before, first: $first, last: $last) {
+export const GetBeamsDocument = /*#__PURE__*/ gql`
+    query GetBeams($after: String, $before: String, $first: Int, $last: Int) {
+  beamIndex(after: $after, before: $before, first: $first, last: $last) {
     edges {
       node {
-        ...PostFragment
+        ...BeamFragment
       }
     }
     pageInfo {
@@ -212,15 +97,137 @@ export const GetPostsDocument = /*#__PURE__*/ gql`
     }
   }
 }
-    ${PostFragmentDoc}`;
-export const GetPostsByAuthorDidDocument = /*#__PURE__*/ gql`
-    query GetPostsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    ${BeamFragmentDoc}`;
+export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ gql`
+    query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
     ... on CeramicAccount {
-      postList(after: $after, before: $before, first: $first, last: $last) {
+      beamList(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
-            ...PostFragment
+            ...BeamFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    ${BeamFragmentDoc}`;
+export const GetBeamByIdDocument = /*#__PURE__*/ gql`
+    query GetBeamById($id: ID!) {
+  node(id: $id) {
+    ... on Beam {
+      ...BeamFragment
+    }
+  }
+}
+    ${BeamFragmentDoc}`;
+export const GetRebeamsFromBeamDocument = /*#__PURE__*/ gql`
+    query GetRebeamsFromBeam($id: ID!) {
+  node(id: $id) {
+    ... on Beam {
+      rebeams(first: 5) {
+        edges {
+          node {
+            quotedBeam {
+              ...BeamFragment
+            }
+            beam {
+              ...BeamFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    ${BeamFragmentDoc}`;
+export const GetMentionsFromBeamDocument = /*#__PURE__*/ gql`
+    query GetMentionsFromBeam($id: ID!) {
+  node(id: $id) {
+    ... on Beam {
+      mentions(first: 10) {
+        edges {
+          node {
+            profile {
+              ...UserProfileFragment
+            }
+            beam {
+              ...BeamFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    ${UserProfileFragmentDoc}
+${BeamFragmentDoc}`;
+export const CreateBeamDocument = /*#__PURE__*/ gql`
+    mutation CreateBeam($i: CreateBeamInput!) {
+  createBeam(input: $i) {
+    document {
+      ...BeamFragment
+    }
+  }
+}
+    ${BeamFragmentDoc}`;
+export const UpdateBeamDocument = /*#__PURE__*/ gql`
+    mutation UpdateBeam($i: UpdateBeamInput!) {
+  updateBeam(input: $i) {
+    document {
+      ...BeamFragment
+    }
+    clientMutationId
+  }
+}
+    ${BeamFragmentDoc}`;
+export const CreateRebeamDocument = /*#__PURE__*/ gql`
+    mutation CreateRebeam($i: CreateRebeamInput!) {
+  createRebeam(input: $i) {
+    document {
+      beam {
+        ...BeamFragment
+      }
+      quotedBeam {
+        ...BeamFragment
+      }
+      active
+    }
+    clientMutationId
+  }
+}
+    ${BeamFragmentDoc}`;
+export const CreateBeamProfileMentionDocument = /*#__PURE__*/ gql`
+    mutation CreateBeamProfileMention($i: CreateProfileMentionInput!) {
+  createProfileMention(input: $i) {
+    document {
+      beam {
+        ...BeamFragment
+      }
+      profile {
+        ...UserProfileFragment
+      }
+    }
+  }
+}
+    ${BeamFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
+    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  node(id: $id) {
+    ... on Beam {
+      reflections(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            ...ReflectFragment
           }
         }
         pageInfo {
@@ -233,107 +240,102 @@ export const GetPostsByAuthorDidDocument = /*#__PURE__*/ gql`
     }
   }
 }
-    ${PostFragmentDoc}`;
-export const GetPostByIdDocument = /*#__PURE__*/ gql`
-    query GetPostById($id: ID!) {
+    ${ReflectFragmentDoc}`;
+export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ gql`
+    query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
-    ... on Post {
-      ...PostFragment
+    ... on CeramicAccount {
+      reflectList(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            ...ReflectFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
     }
   }
 }
-    ${PostFragmentDoc}`;
-export const GetQuotedPostsFromPostDocument = /*#__PURE__*/ gql`
-    query GetQuotedPostsFromPost($id: ID!) {
+    ${ReflectFragmentDoc}`;
+export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
+    query GetReflectReflections($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
-    ... on Post {
-      quotes(first: 5) {
+    ... on Reflect {
+      reflections(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
-            quotedPost {
-              ...PostFragment
-            }
-            post {
-              ...PostFragment
+            reflect {
+              ...ReflectFragment
             }
           }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
         }
       }
     }
   }
 }
-    ${PostFragmentDoc}`;
-export const GetMentionsFromPostDocument = /*#__PURE__*/ gql`
-    query GetMentionsFromPost($id: ID!) {
-  node(id: $id) {
-    ... on Post {
-      mentions(first: 10) {
-        edges {
-          node {
-            profile {
-              ...UserProfileFragment
-            }
-            post {
-              ...PostFragment
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    ${UserProfileFragmentDoc}
-${PostFragmentDoc}`;
-export const CreatePostDocument = /*#__PURE__*/ gql`
-    mutation CreatePost($i: CreatePostInput!) {
-  createPost(input: $i) {
+    ${ReflectFragmentDoc}`;
+export const CreateReflectDocument = /*#__PURE__*/ gql`
+    mutation CreateReflect($i: CreateReflectInput!) {
+  createReflect(input: $i) {
     document {
-      ...PostFragment
-    }
-  }
-}
-    ${PostFragmentDoc}`;
-export const UpdatePostDocument = /*#__PURE__*/ gql`
-    mutation UpdatePost($i: UpdatePostInput!) {
-  updatePost(input: $i) {
-    document {
-      ...PostFragment
+      ...ReflectFragment
     }
     clientMutationId
   }
 }
-    ${PostFragmentDoc}`;
-export const CreatePostQuoteDocument = /*#__PURE__*/ gql`
-    mutation CreatePostQuote($i: CreatePostQuoteInput!) {
-  createPostQuote(input: $i) {
+    ${ReflectFragmentDoc}`;
+export const UpdateReflectDocument = /*#__PURE__*/ gql`
+    mutation UpdateReflect($i: UpdateReflectInput!) {
+  updateReflect(input: $i) {
     document {
-      post {
-        ...PostFragment
-      }
-      quotedPost {
-        ...PostFragment
-      }
+      ...ReflectFragment
+    }
+    clientMutationId
+  }
+}
+    ${ReflectFragmentDoc}`;
+export const CreateReflectReflectionDocument = /*#__PURE__*/ gql`
+    mutation CreateReflectReflection($i: CreateReflectionInput!) {
+  createReflection(input: $i) {
+    document {
       active
+      reflect {
+        ...ReflectFragment
+      }
+      reflection {
+        ...ReflectFragment
+      }
     }
-    clientMutationId
   }
 }
-    ${PostFragmentDoc}`;
-export const CreatePostProfileMentionDocument = /*#__PURE__*/ gql`
-    mutation CreatePostProfileMention($i: CreateProfileMentionInput!) {
-  createProfileMention(input: $i) {
+    ${ReflectFragmentDoc}`;
+export const UpdateReflectReflectionDocument = /*#__PURE__*/ gql`
+    mutation UpdateReflectReflection($i: UpdateReflectionInput!) {
+  updateReflection(input: $i) {
     document {
-      post {
-        ...PostFragment
+      active
+      reflect {
+        ...ReflectFragment
       }
-      profile {
-        ...UserProfileFragment
+      reflection {
+        ...ReflectFragment
       }
     }
   }
 }
-    ${PostFragmentDoc}
-${UserProfileFragmentDoc}`;
+    ${ReflectFragmentDoc}`;
 export const GetProfileByIdDocument = /*#__PURE__*/ gql`
     query GetProfileByID($id: ID!) {
   node(id: $id) {
@@ -350,6 +352,7 @@ export const GetProfileByDidDocument = /*#__PURE__*/ gql`
       profile {
         ...UserProfileFragment
       }
+      isViewer
     }
   }
 }
@@ -409,6 +412,7 @@ export const GetInterestsByDidDocument = /*#__PURE__*/ gql`
         }
         id
       }
+      isViewer
     }
   }
 }
@@ -449,6 +453,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
           hasPreviousPage
         }
       }
+      isViewer
     }
   }
 }
@@ -475,6 +480,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
           }
         }
       }
+      isViewer
     }
   }
 }
@@ -577,53 +583,53 @@ export const UpdateFollowDocument = /*#__PURE__*/ gql`
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    GetCommentsFromPost(variables: Types.GetCommentsFromPostQueryVariables, options?: C): Promise<Types.GetCommentsFromPostQuery> {
-      return requester<Types.GetCommentsFromPostQuery, Types.GetCommentsFromPostQueryVariables>(GetCommentsFromPostDocument, variables, options) as Promise<Types.GetCommentsFromPostQuery>;
+    GetBeams(variables?: Types.GetBeamsQueryVariables, options?: C): Promise<Types.GetBeamsQuery> {
+      return requester<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables, options) as Promise<Types.GetBeamsQuery>;
     },
-    GetCommentsByAuthorDid(variables: Types.GetCommentsByAuthorDidQueryVariables, options?: C): Promise<Types.GetCommentsByAuthorDidQuery> {
-      return requester<Types.GetCommentsByAuthorDidQuery, Types.GetCommentsByAuthorDidQueryVariables>(GetCommentsByAuthorDidDocument, variables, options) as Promise<Types.GetCommentsByAuthorDidQuery>;
+    GetBeamsByAuthorDid(variables: Types.GetBeamsByAuthorDidQueryVariables, options?: C): Promise<Types.GetBeamsByAuthorDidQuery> {
+      return requester<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, variables, options) as Promise<Types.GetBeamsByAuthorDidQuery>;
     },
-    GetCommentReplies(variables: Types.GetCommentRepliesQueryVariables, options?: C): Promise<Types.GetCommentRepliesQuery> {
-      return requester<Types.GetCommentRepliesQuery, Types.GetCommentRepliesQueryVariables>(GetCommentRepliesDocument, variables, options) as Promise<Types.GetCommentRepliesQuery>;
+    GetBeamById(variables: Types.GetBeamByIdQueryVariables, options?: C): Promise<Types.GetBeamByIdQuery> {
+      return requester<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options) as Promise<Types.GetBeamByIdQuery>;
     },
-    CreateComment(variables: Types.CreateCommentMutationVariables, options?: C): Promise<Types.CreateCommentMutation> {
-      return requester<Types.CreateCommentMutation, Types.CreateCommentMutationVariables>(CreateCommentDocument, variables, options) as Promise<Types.CreateCommentMutation>;
+    GetRebeamsFromBeam(variables: Types.GetRebeamsFromBeamQueryVariables, options?: C): Promise<Types.GetRebeamsFromBeamQuery> {
+      return requester<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, variables, options) as Promise<Types.GetRebeamsFromBeamQuery>;
     },
-    UpdateComment(variables: Types.UpdateCommentMutationVariables, options?: C): Promise<Types.UpdateCommentMutation> {
-      return requester<Types.UpdateCommentMutation, Types.UpdateCommentMutationVariables>(UpdateCommentDocument, variables, options) as Promise<Types.UpdateCommentMutation>;
+    GetMentionsFromBeam(variables: Types.GetMentionsFromBeamQueryVariables, options?: C): Promise<Types.GetMentionsFromBeamQuery> {
+      return requester<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, variables, options) as Promise<Types.GetMentionsFromBeamQuery>;
     },
-    CreateCommentReply(variables: Types.CreateCommentReplyMutationVariables, options?: C): Promise<Types.CreateCommentReplyMutation> {
-      return requester<Types.CreateCommentReplyMutation, Types.CreateCommentReplyMutationVariables>(CreateCommentReplyDocument, variables, options) as Promise<Types.CreateCommentReplyMutation>;
+    CreateBeam(variables: Types.CreateBeamMutationVariables, options?: C): Promise<Types.CreateBeamMutation> {
+      return requester<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables, options) as Promise<Types.CreateBeamMutation>;
     },
-    UpdateCommentReply(variables: Types.UpdateCommentReplyMutationVariables, options?: C): Promise<Types.UpdateCommentReplyMutation> {
-      return requester<Types.UpdateCommentReplyMutation, Types.UpdateCommentReplyMutationVariables>(UpdateCommentReplyDocument, variables, options) as Promise<Types.UpdateCommentReplyMutation>;
+    UpdateBeam(variables: Types.UpdateBeamMutationVariables, options?: C): Promise<Types.UpdateBeamMutation> {
+      return requester<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables, options) as Promise<Types.UpdateBeamMutation>;
     },
-    GetPosts(variables?: Types.GetPostsQueryVariables, options?: C): Promise<Types.GetPostsQuery> {
-      return requester<Types.GetPostsQuery, Types.GetPostsQueryVariables>(GetPostsDocument, variables, options) as Promise<Types.GetPostsQuery>;
+    CreateRebeam(variables: Types.CreateRebeamMutationVariables, options?: C): Promise<Types.CreateRebeamMutation> {
+      return requester<Types.CreateRebeamMutation, Types.CreateRebeamMutationVariables>(CreateRebeamDocument, variables, options) as Promise<Types.CreateRebeamMutation>;
     },
-    GetPostsByAuthorDid(variables: Types.GetPostsByAuthorDidQueryVariables, options?: C): Promise<Types.GetPostsByAuthorDidQuery> {
-      return requester<Types.GetPostsByAuthorDidQuery, Types.GetPostsByAuthorDidQueryVariables>(GetPostsByAuthorDidDocument, variables, options) as Promise<Types.GetPostsByAuthorDidQuery>;
+    CreateBeamProfileMention(variables: Types.CreateBeamProfileMentionMutationVariables, options?: C): Promise<Types.CreateBeamProfileMentionMutation> {
+      return requester<Types.CreateBeamProfileMentionMutation, Types.CreateBeamProfileMentionMutationVariables>(CreateBeamProfileMentionDocument, variables, options) as Promise<Types.CreateBeamProfileMentionMutation>;
     },
-    GetPostById(variables: Types.GetPostByIdQueryVariables, options?: C): Promise<Types.GetPostByIdQuery> {
-      return requester<Types.GetPostByIdQuery, Types.GetPostByIdQueryVariables>(GetPostByIdDocument, variables, options) as Promise<Types.GetPostByIdQuery>;
+    GetReflectionsFromBeam(variables: Types.GetReflectionsFromBeamQueryVariables, options?: C): Promise<Types.GetReflectionsFromBeamQuery> {
+      return requester<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables, options) as Promise<Types.GetReflectionsFromBeamQuery>;
     },
-    GetQuotedPostsFromPost(variables: Types.GetQuotedPostsFromPostQueryVariables, options?: C): Promise<Types.GetQuotedPostsFromPostQuery> {
-      return requester<Types.GetQuotedPostsFromPostQuery, Types.GetQuotedPostsFromPostQueryVariables>(GetQuotedPostsFromPostDocument, variables, options) as Promise<Types.GetQuotedPostsFromPostQuery>;
+    GetReflectionsByAuthorDid(variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: C): Promise<Types.GetReflectionsByAuthorDidQuery> {
+      return requester<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options) as Promise<Types.GetReflectionsByAuthorDidQuery>;
     },
-    GetMentionsFromPost(variables: Types.GetMentionsFromPostQueryVariables, options?: C): Promise<Types.GetMentionsFromPostQuery> {
-      return requester<Types.GetMentionsFromPostQuery, Types.GetMentionsFromPostQueryVariables>(GetMentionsFromPostDocument, variables, options) as Promise<Types.GetMentionsFromPostQuery>;
+    GetReflectReflections(variables: Types.GetReflectReflectionsQueryVariables, options?: C): Promise<Types.GetReflectReflectionsQuery> {
+      return requester<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options) as Promise<Types.GetReflectReflectionsQuery>;
     },
-    CreatePost(variables: Types.CreatePostMutationVariables, options?: C): Promise<Types.CreatePostMutation> {
-      return requester<Types.CreatePostMutation, Types.CreatePostMutationVariables>(CreatePostDocument, variables, options) as Promise<Types.CreatePostMutation>;
+    CreateReflect(variables: Types.CreateReflectMutationVariables, options?: C): Promise<Types.CreateReflectMutation> {
+      return requester<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables, options) as Promise<Types.CreateReflectMutation>;
     },
-    UpdatePost(variables: Types.UpdatePostMutationVariables, options?: C): Promise<Types.UpdatePostMutation> {
-      return requester<Types.UpdatePostMutation, Types.UpdatePostMutationVariables>(UpdatePostDocument, variables, options) as Promise<Types.UpdatePostMutation>;
+    UpdateReflect(variables: Types.UpdateReflectMutationVariables, options?: C): Promise<Types.UpdateReflectMutation> {
+      return requester<Types.UpdateReflectMutation, Types.UpdateReflectMutationVariables>(UpdateReflectDocument, variables, options) as Promise<Types.UpdateReflectMutation>;
     },
-    CreatePostQuote(variables: Types.CreatePostQuoteMutationVariables, options?: C): Promise<Types.CreatePostQuoteMutation> {
-      return requester<Types.CreatePostQuoteMutation, Types.CreatePostQuoteMutationVariables>(CreatePostQuoteDocument, variables, options) as Promise<Types.CreatePostQuoteMutation>;
+    CreateReflectReflection(variables: Types.CreateReflectReflectionMutationVariables, options?: C): Promise<Types.CreateReflectReflectionMutation> {
+      return requester<Types.CreateReflectReflectionMutation, Types.CreateReflectReflectionMutationVariables>(CreateReflectReflectionDocument, variables, options) as Promise<Types.CreateReflectReflectionMutation>;
     },
-    CreatePostProfileMention(variables: Types.CreatePostProfileMentionMutationVariables, options?: C): Promise<Types.CreatePostProfileMentionMutation> {
-      return requester<Types.CreatePostProfileMentionMutation, Types.CreatePostProfileMentionMutationVariables>(CreatePostProfileMentionDocument, variables, options) as Promise<Types.CreatePostProfileMentionMutation>;
+    UpdateReflectReflection(variables: Types.UpdateReflectReflectionMutationVariables, options?: C): Promise<Types.UpdateReflectReflectionMutation> {
+      return requester<Types.UpdateReflectReflectionMutation, Types.UpdateReflectReflectionMutationVariables>(UpdateReflectReflectionDocument, variables, options) as Promise<Types.UpdateReflectReflectionMutation>;
     },
     GetProfileByID(variables: Types.GetProfileByIdQueryVariables, options?: C): Promise<Types.GetProfileByIdQuery> {
       return requester<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables, options) as Promise<Types.GetProfileByIdQuery>;

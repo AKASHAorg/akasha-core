@@ -10,7 +10,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
-import { formatDate } from '../../utils/format-date';
+import { formatDate } from '../../utils';
 
 export interface IModeratorDetailCardProps {
   moderator: Moderator;

@@ -18,9 +18,9 @@ export const BaseModerationIntroCard = Template.bind({});
 
 BaseModerationIntroCard.args = {
   titleLabel: 'Overview',
-  introLabel: 'Welcome to Akasha Moderation',
+  introLabel: 'Welcome to Vibe',
   subtitleLabel:
-    'The Moderation app facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
+    'Vibe facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
 
   codeOfConductLabel: 'Read our Code of Conduct',
   overviewCTAArr: [
