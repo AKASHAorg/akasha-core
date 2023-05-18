@@ -1,4 +1,4 @@
-import { Moderator } from '@akashaorg/typings/ui';
+import { Moderator, ModeratorApplicantData } from '@akashaorg/typings/ui';
 
 export const moderators: Moderator[] = [
   {
@@ -40,7 +40,6 @@ export const moderators: Moderator[] = [
       url: '',
       fallbackUrl: '',
     },
-    // moderatorEndDate?: string,
     status: 'active',
     social: {
       discord: 'aprilcurtis',
@@ -63,7 +62,6 @@ export const moderators: Moderator[] = [
       url: '',
       fallbackUrl: '',
     },
-    // moderatorEndDate?: string,
     status: 'active',
     social: {
       discord: 'murdock',
@@ -92,5 +90,120 @@ export const moderators: Moderator[] = [
       discord: 'babaracus',
       email: 'babaracus',
     },
+  },
+];
+
+export const applicants: ModeratorApplicantData[] = [
+  {
+    _id: '0',
+    _mod: new Date('Jul 18 2020'),
+    joinDate: new Date('Jul 18 2020'),
+    pubKey: 'bbaaryenljnbjtgradio',
+    ethAddress: '0x3626237234radio',
+    name: 'Radioman',
+    userName: 'radioman',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+    applicationDate: new Date('Jan 18 2023').toISOString(),
+    reports: [],
+    history: [],
+  },
+  {
+    _id: '1',
+    _mod: new Date('Jul 18 2020'),
+    joinDate: new Date('Jul 18 2020'),
+    pubKey: 'bbaaryenljnbjtgbigote',
+    ethAddress: '0x3626237234bigote',
+    name: 'Mr. bigote',
+    userName: 'mrbigote',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+    applicationDate: new Date('Jan 18 2023').toISOString(),
+    reports: [],
+    history: [],
+  },
+  {
+    _id: '2',
+    _mod: new Date('Jul 18 2020'),
+    joinDate: new Date('Jul 18 2020'),
+    pubKey: 'bbaaryenljnbjtgpugstenson',
+    ethAddress: '0x3626237234pugstenson',
+    name: 'pugstenson',
+    userName: 'pugstenson',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+    applicationDate: new Date('Jan 18 2023').toISOString(),
+    reports: [],
+    history: [],
+  },
+  {
+    _id: '3',
+    _mod: new Date('Jul 18 2020'),
+    joinDate: new Date('Jul 18 2020'),
+    pubKey: 'bbaaryenljnbjtgjohn',
+    ethAddress: '0x3626237234johne',
+    name: 'John Wick',
+    userName: 'johnwick',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+    applicationDate: new Date('Jan 18 2023').toISOString(),
+    reports: [],
+    history: [],
+  },
+  {
+    _id: '4',
+    _mod: new Date('Jul 18 2020'),
+    joinDate: new Date('Jul 18 2020'),
+    pubKey: 'bbaaryenljnbjtgwizard',
+    ethAddress: '0x3626237234wizard',
+    name: 'Wizard Odd',
+    userName: 'wizardodd',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+    applicationDate: new Date('Jan 18 2023').toISOString(),
+    reports: [],
+    history: [],
+  },
+  {
+    _id: '5',
+    _mod: new Date('Jul 18 2020'),
+    joinDate: new Date('Jul 18 2020'),
+    pubKey: 'bbaaryenljnbjtgjamie',
+    ethAddress: '0x3626237234jamie',
+    name: 'Jamie Oliver',
+    userName: 'jamieoliver',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+    applicationDate: new Date('Jan 18 2023').toISOString(),
+    reports: [],
+    history: [],
+  },
+  {
+    _id: '6',
+    _mod: new Date('Jul 18 2020'),
+    joinDate: new Date('Jul 18 2020'),
+    pubKey: 'bbaaryenljnbjtgcheese',
+    ethAddress: '0x3626237234cheese',
+    name: 'Cheese oil',
+    userName: 'cheeseoil',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+    applicationDate: new Date('Jan 18 2023').toISOString(),
+    reports: [],
+    history: [],
   },
 ];

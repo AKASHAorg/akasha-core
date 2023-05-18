@@ -15,7 +15,7 @@ export interface IModeratorDetailMiniCardProps {
   moderator: Moderator;
   hasBorderBottom: boolean;
   tenureInfoLabel: string;
-  onCardClick: (arg1: string) => void;
+  onCardClick: (pubKey: string) => void;
 }
 
 const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props => {
@@ -29,22 +29,20 @@ const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props =
     moderator.status === 'active'
       ? 'bg-success'
       : moderator.status === 'revoked'
-      ? 'bg(errorLight dark:errorDark)'
-      : 'bg(warningLight dark:warningDark)'
+      ? 'bg-(errorLight dark:errorDark)'
+      : 'bg-(warningLight dark:warningDark)'
   }`;
 
   return (
     <Box customStyle={`flex py-4 flex-none ${borderBottomStyle}`}>
       <Box customStyle="flex space-x-2 items-start w([50%] md:[30%]) px-4 border(r-1 solid grey8 dark:grey3)">
         <Avatar src={moderator.avatar} />
+
         <Box>
-          <Tooltip content={`${moderator.name}`} placement="right">
-            <Text
-              variant="body2"
-              weight="bold"
-              truncate={true}
-              customStyle={textStyle}
-            >{`${moderator.name}`}</Text>
+          <Tooltip content={moderator.name} placement="right">
+            <Text variant="body2" weight="bold" truncate={true} customStyle={textStyle}>
+              {moderator.name}
+            </Text>
           </Tooltip>
 
           <Tooltip content={`@${moderator.userName}`} placement="right">
@@ -54,7 +52,9 @@ const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props =
               truncate={true}
               customStyle={textStyle}
               color={{ light: 'grey4', dark: 'grey7' }}
-            >{`@${moderator.userName}`}</Text>
+            >
+              @{moderator.userName}
+            </Text>
           </Tooltip>
 
           <Box customStyle="flex space-x-1.5 items-center">

@@ -5,7 +5,7 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 import ModeratorDashboard from '../components/dashboard';
 import GuestDashboard from '../components/dashboard/guest';
 
-import { preSelectedReasons } from '../utils/reasons';
+import { applicants, preSelectedReasons } from '../utils';
 
 export interface IDashboardProps {
   user: string | null;
@@ -26,6 +26,13 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
     });
   };
 
+  const handleClickApplicant = (pubKey: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: () => `/applicant/${pubKey}`,
+    });
+  };
+
   // if isAdmin, add 'Applications' tab
   const tabLabels = ['General', ...(isAdmin ? ['Applications'] : []), 'Activity'];
 
@@ -41,6 +48,7 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
 
   return (
     <ModeratorDashboard
+      isAdmin={isAdmin}
       tabLabels={tabLabels.map(label => t('{{label}}', { label }))}
       moderatorSinceLabel={t('{{role}} since', { role })}
       moderatorSince={Date.parse(new Date('01 Jan 2020').toISOString())}
@@ -64,8 +72,10 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
       moderationDutiesLabel={t('{{role}} duties', { role })}
       moderationDutiesDescLabel={t('{{descLabel}}', { descLabel })}
       changeLabel={t('Change')}
-      onButtonClick={handleButtonClick}
       resignButtonLabel={t('Resign from {{role}} role', { role })}
+      applicants={applicants}
+      onButtonClick={handleButtonClick}
+      onClickApplicant={handleClickApplicant}
     />
   );
 };
