@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { NavigateToParams } from '@akashaorg/typings/ui';
+import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 
 import BMIntro from '../components/moderator/become-moderator/intro';
 import BMSelectReason from '../components/moderator/become-moderator/reason';
@@ -9,7 +11,7 @@ import BMContactInfo from '../components/moderator/become-moderator/contact-info
 import BMConfirmation from '../components/moderator/become-moderator/confirmation';
 
 import { HOME } from '../routes';
-import { reasons, preSelectedReasons } from '../utils/reasons';
+import { reasons } from '../utils/reasons';
 import { BMConfirmationSubtitles, BMIntroSubtitles } from '../utils';
 
 export interface IBecomeModeratorPageProps {
@@ -33,15 +35,17 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
 
   const stepLabels = ['intro', 'select_categories', 'contact_info'];
 
-  const categories = reasons.map(reason => ({
-    value: reason,
-    label: reason,
+  const moderationCategories = reasons.map(({ title }) => ({
+    value: title,
+    label: t('{{title}}', { title }),
   }));
 
-  const selectedCategories = preSelectedReasons.map(el => ({
-    value: el,
-    label: el,
-  }));
+  const allCategoriesLabel = t('All Categories');
+
+  const { categories, handleCategoryClick } = useModerationCategory({
+    moderationCategories,
+    allCategoriesLabel,
+  });
 
   const handleCodeOfConductClick = () => () => {
     navigateTo({
@@ -125,11 +129,13 @@ export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props =>
           subtitleLabel={t(
             'When you select any category, you will be able to moderate any reported content that belongs to that category.',
           )}
-          selectedCategories={selectedCategories}
-          moderationCategories={categories}
-          allCategoriesLabel={t('All categories')}
+          categories={categories}
+          moderationCategories={moderationCategories}
+          allCategoriesLabel={allCategoriesLabel}
+          allCategoriesSelected={categories.length === moderationCategories.length}
           cancelButtonLabel={t('Cancel')}
           confirmButtonLabel={t('Continue')}
+          onPillClick={handleCategoryClick}
           onCancelButtonClick={handleCancelButtonClick}
           onConfirmButtonClick={handleConfirmButtonClick}
         />

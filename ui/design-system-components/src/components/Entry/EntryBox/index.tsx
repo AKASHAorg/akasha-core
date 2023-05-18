@@ -225,6 +225,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               return false;
             }}
             href={`${profileAnchorLink}/${entryData.author.id}`}
+            data-testid="entry-profile-detail"
           >
             <ProfileAvatarButton
               customStyle={'grow shrink'}
@@ -305,6 +306,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               }`,
             )}
             onClick={() => handleContentClick(entryData)}
+            data-testid="entry-content"
           >
             <ReadOnlyEditor
               content={entryData.slateContent}

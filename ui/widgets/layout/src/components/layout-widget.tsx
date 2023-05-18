@@ -253,7 +253,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                 <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
                 <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
-              <div className={tw('fixed bottom-0 xl:static')}>
+              <div className={tw('fixed bottom-0 mr-4 mb-4')}>
                 <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
             </div>

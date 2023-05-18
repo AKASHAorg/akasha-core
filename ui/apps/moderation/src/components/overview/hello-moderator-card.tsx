@@ -10,12 +10,19 @@ export interface IHelloModeratorCardProps {
   titleLabel: string;
   subtitleLabel: string;
   moderatorGuideLabel: string;
+  moderatorGuideUrl: string;
   moderationFAQLabel: string;
-  onClickButton: () => void;
+  moderationFAQUrl: string;
 }
 const HelloModeratorCard: React.FC<IHelloModeratorCardProps> = props => {
-  const { titleLabel, subtitleLabel, moderatorGuideLabel, moderationFAQLabel, onClickButton } =
-    props;
+  const {
+    titleLabel,
+    subtitleLabel,
+    moderatorGuideLabel,
+    moderatorGuideUrl,
+    moderationFAQLabel,
+    moderationFAQUrl,
+  } = props;
 
   return (
     <BasicCardBox pad="p-4">
@@ -29,23 +36,27 @@ const HelloModeratorCard: React.FC<IHelloModeratorCardProps> = props => {
         </Text>
 
         <Box customStyle="flex space-x-6 justify-center">
-          <Button plain={true} onClick={onClickButton}>
-            <Box customStyle="flex items-center space-x-2">
-              <Icon size="sm" accentColor={true} type="shield" customStyle="mx-auto my-0" />
-              <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                {moderatorGuideLabel}
-              </Text>
-            </Box>
-          </Button>
+          <a href={moderatorGuideUrl} target="_blank" rel="noreferrer noopener">
+            <Button plain={true}>
+              <Box customStyle="flex items-center space-x-2">
+                <Icon size="sm" accentColor={true} type="shield" customStyle="mx-auto my-0" />
+                <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                  {moderatorGuideLabel}
+                </Text>
+              </Box>
+            </Button>
+          </a>
 
-          <Button plain={true} onClick={onClickButton}>
-            <Box customStyle="flex items-center space-x-2">
-              <Icon size="sm" accentColor={true} type="faq" customStyle="mx-auto my-0" />
-              <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                {moderationFAQLabel}
-              </Text>
-            </Box>
-          </Button>
+          <a href={moderationFAQUrl} target="_blank" rel="noreferrer noopener">
+            <Button plain={true}>
+              <Box customStyle="flex items-center space-x-2">
+                <Icon size="sm" accentColor={true} type="faq" customStyle="mx-auto my-0" />
+                <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                  {moderationFAQLabel}
+                </Text>
+              </Box>
+            </Button>
+          </a>
         </Box>
       </Box>
     </BasicCardBox>
