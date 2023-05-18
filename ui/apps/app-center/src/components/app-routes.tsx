@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
 
-import DS from '@akashaorg/design-system';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
-import { useTranslation } from 'react-i18next';
 import {
   useGetAllInstalledApps,
   useGetLatestReleaseInfo,
@@ -17,16 +15,12 @@ import MyAppsPage from './pages/my-apps-page';
 // import AppsPage from './pages/apps-page';
 import MyWidgetsPage from './pages/my-widgets-page';
 
-import NavButton from './nav-button';
 import { hiddenIntegrations } from '../hidden-integrations';
 import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO } from '../routes';
-
-const { Box, Text, BasicCardBox } = DS;
+import PageByType from './pages/page-by-type';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
-  const { t } = useTranslation('app-integration-center');
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const loginQuery = useGetLogin();
 
@@ -36,12 +30,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
-  };
-
-  const handleSignedOutUser = () => {
-    if (!isLoggedIn) {
-      showLoginModal();
-    }
   };
 
   const defaultIntegrations = [].concat(
@@ -93,114 +81,49 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
         <Route
           path="*"
           element={
-            <BasicCardBox
-              data-testid="integration-center"
-              style={{ maxHeight: '92vh' }}
-              onClick={handleSignedOutUser}
-            >
-              <Box height="6rem" alignContent="stretch" flex={{ shrink: 0 }}>
-                <Box pad="medium">
-                  <Text size="xlarge" weight={'bold'}>
-                    {t('Integration Center')}
-                  </Text>
-                </Box>
-                <Box direction="row" justify="between" pad={{ top: 'small' }}>
-                  <NavButton
-                    path={routes[EXPLORE]}
-                    label={t('Explore')}
-                    icon={'explore'}
-                    onClick={() => {
-                      if (isLoggedIn) {
-                        navigateTo?.({
-                          appName: '@akashaorg/app-integration-center',
-                          getNavigationUrl: routes => routes[EXPLORE],
-                        });
-                      }
-                    }}
-                  />
-                  <NavButton
-                    path={routes[MY_APPS]}
-                    label={t('My Apps')}
-                    icon={'integrationAppSmallFill'}
-                    onClick={() => {
-                      if (isLoggedIn) {
-                        navigateTo?.({
-                          appName: '@akashaorg/app-integration-center',
-                          getNavigationUrl: routes => routes[MY_APPS],
-                        });
-                      }
-                    }}
-                  />
-                  <NavButton
-                    path={routes[MY_WIDGETS]}
-                    label={t('My Widgets')}
-                    icon={'integrationWidgetSmall'}
-                    onClick={() => {
-                      if (isLoggedIn) {
-                        navigateTo?.({
-                          appName: '@akashaorg/app-integration-center',
-                          getNavigationUrl: routes => routes[MY_WIDGETS],
-                        });
-                      }
-                    }}
-                  />
-                  {/* <NavButton
-                  path={routes[APPS]}
-                  label={t('Apps')}
-                  icon={'integrationAppSmall'}
-                  onClick={() => {
-                    if (isLoggedIn) {
-                      navigateTo?.({
-                        appName: '@akashaorg/app-integration-center',
-                        getNavigationUrl: routes => routes[APPS],
-                      });
-                    }
-                  }}
-                /> */}
-                </Box>
-              </Box>
-
-              <Box overflow={'auto'}>
-                <Routes>
-                  <Route
-                    path={routes[EXPLORE]}
-                    element={
-                      <ExplorePage
-                        installableApps={installableApps}
-                        installedAppsInfo={installedAppsReq.data}
-                        isFetching={integrationsInfoReq.isFetching}
-                        reqError={integrationsInfoReq.error}
-                        isUserLoggedIn={isLoggedIn}
-                        {...props}
-                      />
-                    }
-                  />
-                  <Route
-                    path={routes[MY_APPS]}
-                    element={
-                      <MyAppsPage
-                        latestReleasesInfo={latestReleasesInfo}
-                        defaultIntegrations={defaultIntegrations}
-                        installedAppsInfo={installedAppsReq.data}
-                        isFetching={integrationsInfoReq.isFetching}
-                        {...props}
-                      />
-                    }
-                  />
-                  {/*<Route path={routes[APPS]} element={<AppsPage {...props} />} />*/}
-                  <Route
-                    path={routes[MY_WIDGETS]}
-                    element={
-                      <MyWidgetsPage
-                        latestReleasesInfo={latestReleasesInfo}
-                        isFetching={integrationsInfoReq.isFetching}
-                        {...props}
-                      />
-                    }
-                  />
-                </Routes>
-              </Box>
-            </BasicCardBox>
+            <Routes>
+              <Route
+                path={routes[EXPLORE]}
+                element={
+                  <PageByType type="explore">
+                    <ExplorePage
+                      installableApps={installableApps}
+                      installedAppsInfo={installedAppsReq.data}
+                      isFetching={integrationsInfoReq.isFetching}
+                      reqError={integrationsInfoReq.error}
+                      isUserLoggedIn={isLoggedIn}
+                      {...props}
+                    />
+                  </PageByType>
+                }
+              />
+              <Route
+                path={routes[MY_APPS]}
+                element={
+                  <PageByType type="my-apps">
+                    <MyAppsPage
+                      latestReleasesInfo={latestReleasesInfo}
+                      defaultIntegrations={defaultIntegrations}
+                      installedAppsInfo={installedAppsReq.data}
+                      isFetching={integrationsInfoReq.isFetching}
+                      {...props}
+                    />
+                  </PageByType>
+                }
+              />
+              <Route
+                path={routes[MY_WIDGETS]}
+                element={
+                  <PageByType type="widgets">
+                    <MyWidgetsPage
+                      latestReleasesInfo={latestReleasesInfo}
+                      isFetching={integrationsInfoReq.isFetching}
+                      {...props}
+                    />
+                  </PageByType>
+                }
+              />
+            </Routes>
           }
         />
       </Routes>

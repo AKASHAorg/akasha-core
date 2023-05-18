@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
@@ -25,6 +25,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   const [message, setMessage] = React.useState('');
   const [messageType, setMessageType] = React.useState('');
   const [showMenu, setShowMenu] = React.useState(false);
+  const [activeTab, setActiveTab] = React.useState(0);
 
   // check if user has gone through onboarding steps before
   let savedPreferences;
@@ -243,7 +244,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
             )}
           </Stack>
         </div>
-        <Tab labels={labels}>
+        <Tab value={activeTab} onChange={setActiveTab} labels={labels}>
           <NotificationsCard
             notifications={unreadNotifications || []}
             followingLabel={'is now following you'}

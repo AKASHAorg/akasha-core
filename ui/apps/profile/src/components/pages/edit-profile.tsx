@@ -35,7 +35,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   const ENSReq = useEnsByAddress(profileData.ethAddress);
 
   const [activeTab, setActiveTab] = React.useState(0);
-  const [selectedTab, setSelectedTab] = React.useState(0);
+  const [selectedActiveTab, setSelectedActiveTab] = React.useState(0);
   const [generalValid, setGeneralValid] = React.useState(true);
   const [socialLinksValid, setSocialLinksValid] = React.useState(true);
   const [interestsValid, setInterestsValid] = React.useState(true);
@@ -88,9 +88,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       //check if one of the forms has invalid state
       if (!generalValid || !socialLinksValid || !interestsValid) {
         setShowModal(true);
-        setActiveTab(previousIndex);
-        setSelectedTab(selectedIndex);
+        setSelectedActiveTab(selectedIndex);
+        return;
       }
+      setActiveTab(selectedIndex);
     }
   };
 
@@ -102,7 +103,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             labels={[t('General'), t('External URLs'), t('Your interests')]}
             customStyle="h-full"
             bodyStyle="p-4"
-            activeTab={activeTab}
+            value={activeTab}
             onChange={onTabChange}
           >
             <GeneralForm
@@ -251,7 +252,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             variant: 'text',
             label: t('Leave'),
             onClick: () => {
-              setActiveTab(selectedTab);
+              setActiveTab(selectedActiveTab);
               setShowModal(false);
             },
           },

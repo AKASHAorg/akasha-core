@@ -91,7 +91,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
 
   return (
     <>
-      <Box gap="small" margin="medium" flex={{ shrink: 0 }}>
+      <Stack direction="column">
         {isFetching && (
           <Box>
             <Spinner />
@@ -106,7 +106,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
           />
         )}
         {!isFetching && !reqError && (
-          <Box gap="medium">
+          <>
             {isUserLoggedIn && (
               <InfoCard
                 titleLabel={t('Welcome to the Integration Centre!')}
@@ -154,9 +154,9 @@ const ExplorePage: React.FC<IExplorePage> = props => {
                   />
                 </Box>
               ))} */}
-          </Box>
+          </>
         )}
-      </Box>
+      </Stack>
 
       {!!showNotifPill && (
         <NotificationPill

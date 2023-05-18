@@ -17,7 +17,15 @@ describe('<Tab /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Tab labels={TabLabels}> {TabContent}</Tab>, {});
+      const [value, setValue] = React.useState(0);
+
+      componentWrapper = customRender(
+        <Tab value={value} onChange={setValue} labels={TabLabels}>
+          {' '}
+          {TabContent}
+        </Tab>,
+        {},
+      );
     });
   });
 
