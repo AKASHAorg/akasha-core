@@ -103,15 +103,15 @@ const EntryRenderer = (
     }
     return undefined;
   }, [commentReq.data, itemType]);
+
   // @TODO fix hooks
-  // const itemData = React.useMemo(() => {
-  //   if (itemType === EntityTypes.POST) {
-  //     return postData;
-  //   } else if (itemType === EntityTypes.REPLY) {
-  //     return commentData;
-  //   }
-  // }, [postData, commentData, itemType]);
-  const itemData = null;
+  const itemData = React.useMemo(() => {
+    if (itemType === EntityTypes.POST) {
+      return postData;
+    } else if (itemType === EntityTypes.REPLY) {
+      return commentData;
+    }
+  }, [postData, commentData, itemType]);
 
   const [isReported, isAccountReported] = React.useMemo(() => {
     if (showAnyway) {
@@ -197,8 +197,8 @@ const EntryRenderer = (
   }, [accountAwaitingModeration, itemTypeName]);
   // @TODO fix author
   const showEditButton = React.useMemo(
-    () => loggedProfileData.did.id === itemData?.author?.ethAddress,
-    [itemData?.author?.ethAddress, loggedProfileData],
+    () => false, //loggedProfileData?.did.id === itemData?.author?.did.id,
+    [itemData?.author, loggedProfileData],
   );
 
   const isComment = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
@@ -209,14 +209,14 @@ const EntryRenderer = (
     !accountAwaitingModeration &&
     !itemData.delisted &&
     !itemData.isRemoved;
-
+  console.log('here');
   const repliesReq = useInfiniteReplies(
     {
       limit: REPLY_FRAGMENT_SIZE,
       postID: !!commentData && 'postId' in commentData && commentData?.postId,
       commentID: commentData?.entryId,
     },
-    canShowEntry && props.showReplyFragment,
+    Boolean(canShowEntry) && props.showReplyFragment,
   );
 
   const replyPages = React.useMemo(() => {
@@ -272,7 +272,7 @@ const EntryRenderer = (
               <EntryCard
                 className={props.className}
                 isRemoved={itemData.isRemoved}
-                entryData={itemData}
+                entryData={{ ...itemData, author: itemData.author as unknown as Profile }}
                 onClickAvatar={handleAvatarClick}
                 editedLabel={t('Last edited')}
                 flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
@@ -301,7 +301,7 @@ const EntryRenderer = (
                 removedByMeLabel={props.removedByMeLabel}
                 removedByAuthorLabel={props.removedByAuthorLabel}
                 disableReposting={itemData.isRemoved || isComment}
-                disableReporting={!loggedProfileData.did.id}
+                disableReporting={!loggedProfileData?.did.id}
                 border={!isComment}
                 accentBorderTop={accentBorderTop}
                 actionsRightExt={

@@ -32,6 +32,7 @@ export interface IContentClickDetails {
     itemId?: string;
   };
 }
+
 export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
@@ -263,7 +264,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               <CardHeaderMenu
                 disabled={disableActions}
                 menuItems={[
-                  ...(onEntryFlag && !entryData.author.did.isViewer
+                  ...(onEntryFlag && !entryData.author?.did?.isViewer
                     ? [
                         {
                           icon: 'FlagIcon',
@@ -273,7 +274,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                         },
                       ]
                     : []),
-                  ...(entryData.author.did.isViewer
+                  ...(entryData.author?.did?.isViewer
                     ? [
                         {
                           icon: 'TrashIcon',
@@ -291,7 +292,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
         {props.isRemoved && (
           <EntryCardRemoved
-            isAuthor={entryData.author.did.isViewer}
+            isAuthor={entryData.author?.did?.isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />
@@ -340,7 +341,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {showRemovedQuote && (
           <EntryCardRemoved
-            isAuthor={entryData.author.did.isViewer}
+            isAuthor={entryData.author?.did?.isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
-import { Profile } from '@akashaorg/typings/ui';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Topbar from './Topbar';
 
@@ -12,7 +11,9 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
 
-  const myProfileQuery = useGetMyProfileQuery();
+  const myProfileQuery = useGetMyProfileQuery(null, {
+    select: data => data.viewer?.profile,
+  });
 
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
@@ -171,7 +172,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <Topbar
-      isLoggedIn={!!myProfileQuery.data?.viewer?.profile.did}
+      isLoggedIn={!!myProfileQuery.data?.did}
       sidebarVisible={sidebarVisible}
       onSidebarToggle={handleSidebarToggle}
       onAppWidgetClick={handleWidgetToggle}

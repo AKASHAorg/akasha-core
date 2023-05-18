@@ -21,7 +21,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('ui-widget-sidebar');
 
   const currentLocation = useLocation();
-  const myProfileQuery = useGetMyProfileQuery();
+  const myProfileQuery = useGetMyProfileQuery(null, {
+    select: data => data.viewer?.profile,
+  });
 
   // const loginQuery = useGetLogin();
   //
@@ -120,14 +122,11 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       worldApps={worldApps}
       currentRoute={currentLocation.pathname}
       // size={size}
-      loggedProfileData={myProfileQuery.data?.viewer?.profile}
-      isLoggedIn={!!myProfileQuery.data?.viewer?.profile.did}
+      loggedProfileData={myProfileQuery.data}
+      isLoggedIn={!!myProfileQuery.data?.did}
       loadingUserInstalledApps={false}
-      title={myProfileQuery.data?.viewer?.profile.name ?? t('Guest')}
-      subtitle={
-        myProfileQuery.data?.viewer?.profile.name ??
-        t('Connect to see exclusive member only features.')
-      }
+      title={myProfileQuery.data?.name ?? t('Guest')}
+      subtitle={myProfileQuery.data?.name ?? t('Connect to see exclusive member only features.')}
       ctaText={t('Add magic to your world by installing cool apps developed by the community')}
       ctaButtonLabel={t('Check them out!')}
       footerLabel={t('Get in touch')}
@@ -149,7 +148,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       menuItem={
         <MenuItem
           plugins={props.plugins}
-          profileId={myProfileQuery.data?.viewer?.profile?.did.id}
+          profileId={myProfileQuery.data?.did.id}
           {...({} as SidebarMenuItemProps)}
         />
       }
