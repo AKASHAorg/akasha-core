@@ -44,6 +44,23 @@ export interface Moderator extends IModeratorInfo {
   ethAddress: string;
 }
 
+export interface ModeratorApplicantData {
+  _id: string;
+  _mod: Date;
+  joinDate: Date;
+  pubKey: string;
+  ethAddress: string;
+  name: string;
+  userName: string;
+  avatar: {
+    url?: string;
+    fallbackUrl?: string;
+  };
+  applicationDate?: string;
+  reports: Record<string, string>[];
+  history: Record<string, string>[];
+}
+
 type Profile = {
   pubKey: string;
   ethAddress: string;
