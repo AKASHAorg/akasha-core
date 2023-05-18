@@ -19,7 +19,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     },
   });
   const loggedProfileData = profileDataReq.data;
-  const loggedUserId = React.useMemo(() => loggedProfileData.did?.id, [loggedProfileData]);
+  const loggedUserId = React.useMemo(() => loggedProfileData?.did?.id, [loggedProfileData]);
 
   // const getHubUserCallback = React.useCallback(getHubUser, [loggedUserId]);
 

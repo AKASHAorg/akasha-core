@@ -27,7 +27,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
   const { t } = useTranslation('app-profile');
   const { pubKey } = useParams<{ pubKey: string }>();
 
-  const profileDataQuery = useGetProfile(pubKey, loggedProfileData.did.id);
+  const profileDataQuery = useGetProfile(pubKey, loggedProfileData?.did?.id);
   const profileState = profileDataQuery.data;
 
   const profileUserName = React.useMemo(() => {
@@ -62,7 +62,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
   }, [reqPosts.data]);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData.did.id) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     props.navigateToModal({ name: 'report-modal', itemId, itemType });

@@ -72,7 +72,7 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
   };
 
   const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData.did.id) {
+    if (!loggedProfileData?.did?.id) {
       return props.navigateToModal({
         name: 'login',
         redirectTo: { name: 'report-modal', itemId, itemType },
@@ -147,7 +147,7 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
             copyrightLabel={t('copyrighted')}
             menuDropOpen={menuDropOpen === article.id}
             menuItems={[
-              ...(loggedProfileData.did.id === article.authorProfileId
+              ...(loggedProfileData?.did?.id === article.authorProfileId
                 ? [
                     {
                       icon: 'editSimple',

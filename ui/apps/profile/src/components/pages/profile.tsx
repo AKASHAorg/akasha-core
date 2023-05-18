@@ -49,7 +49,7 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
 
   const [showFeedback, setShowFeedback] = React.useState(false);
   // @TODO replace with new hooks
-  const isFollowingReq = useIsFollowingMultiple(loggedProfileData.did.id, [profileData.did.id]);
+  const isFollowingReq = useIsFollowingMultiple(loggedProfileData?.did?.id, [profileData.did.id]);
   const followedProfiles = isFollowingReq.data;
 
   const followReq = useFollow();
@@ -59,7 +59,7 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
   const checkModeratorResp = checkModeratorQuery.data;
   const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
   const handleFollow = () => {
-    if (!loggedProfileData.did.id) {
+    if (!loggedProfileData?.did?.id) {
       return props.navigateToModal({ name: 'login', profileId });
     }
     if (profileData?.did.id) {
@@ -108,7 +108,7 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
     props.navigateToModal({ name: 'login' });
   };
   const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
-    if (!loggedProfileData.did.id) {
+    if (!loggedProfileData?.did?.id) {
       return props.navigateToModal({
         name: 'login',
         redirectTo: { modal: { name: 'report-modal', itemId, itemType, user } },

@@ -66,7 +66,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   };
 
   const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData.did?.id) {
+    if (!loggedProfileData?.did?.id) {
       return props.navigateToModal({
         name: 'login',
         redirectTo: { name: 'report-modal', itemId, itemType },
@@ -162,7 +162,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
               copyrightLabel={t('copyrighted')}
               menuDropOpen={menuDropOpen === article.id}
               menuItems={[
-                ...(loggedProfileData.did?.id !== article.authorProfileId
+                ...(loggedProfileData?.did?.id !== article.authorProfileId
                   ? [
                       {
                         icon: 'editSimple',
@@ -211,7 +211,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
               draftLabel={t('Draft')}
               menuDropOpen={menuDropOpen === article.id}
               menuItems={[
-                ...(loggedProfileData.did?.id === article.authorProfileId
+                ...(loggedProfileData?.did?.id === article.authorProfileId
                   ? [
                       {
                         icon: 'editSimple',
@@ -252,7 +252,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
               draftLabel={t('Draft')}
               menuDropOpen={menuDropOpen === article.id}
               menuItems={[
-                ...(loggedProfileData.did?.id === article.authorProfileId
+                ...(loggedProfileData?.did?.id === article.authorProfileId
                   ? [
                       {
                         icon: 'editSimple',

@@ -113,7 +113,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      {loggedProfileData?.did.id ? (
+      {loggedProfileData?.did?.id ? (
         <>
           <BasicCardBox pad="medium" gap="xsmall" margin={{ bottom: 'xsmall' }}>
             <Box fill="horizontal">

@@ -169,8 +169,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const showLinkPreview = React.useMemo(
-    () => !props.isRemoved && entryData.linkPreview,
-    [entryData.linkPreview, props.isRemoved],
+    () => !props.isRemoved && entryData?.linkPreview,
+    [entryData?.linkPreview, props.isRemoved],
   );
 
   const showQuote = React.useMemo(

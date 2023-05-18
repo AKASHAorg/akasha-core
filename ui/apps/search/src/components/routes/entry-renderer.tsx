@@ -132,7 +132,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData.did.id) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({
         modal: { name: 'report-modal', itemId, itemType: itemType as unknown as EntityTypes },
       });

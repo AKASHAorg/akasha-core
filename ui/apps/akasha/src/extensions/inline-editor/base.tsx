@@ -37,7 +37,7 @@ export function Base(
   const mentionSearch = useMentionSearch(mentionQuery);
   const tagSearch = useTagSearch(tagQuery);
 
-  const disablePublishing = React.useMemo(() => !loggedProfileData.did.id, [loggedProfileData]);
+  const disablePublishing = React.useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
 
   const handleMentionQueryChange = (query: string) => {
     setMentionQuery(query);
@@ -69,7 +69,7 @@ export function Base(
           onCancelClick={() => props.singleSpa.navigateToUrl(location.pathname)}
           cancelButtonLabel={t('Cancel')}
           avatar={profileDataReq.data?.avatar}
-          profileId={loggedProfileData.did.id}
+          profileId={loggedProfileData?.did?.id}
           emojiPlaceholderLabel={t('Search')}
           disablePublishLabel={t('Authenticating')}
           disablePublish={disablePublishing}

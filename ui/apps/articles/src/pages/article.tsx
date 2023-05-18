@@ -59,7 +59,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
   };
 
   const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData.did?.id) {
+    if (!loggedProfileData?.did?.id) {
       return props.navigateToModal({
         name: 'login',
         redirectTo: { name: 'report-modal', itemId, itemType },
@@ -88,7 +88,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
   };
 
   const menutItems = [
-    ...(loggedProfileData.did?.id === sampleArticleData.authorProfileId
+    ...(loggedProfileData?.did?.id === sampleArticleData.authorProfileId
       ? [
           {
             icon: 'editSimple',

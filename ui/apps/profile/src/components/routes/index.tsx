@@ -30,7 +30,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   };
   const handleCTAClick = () => {
     // if user is logged in, show link to their profile
-    if (loggedProfileData.did.id) {
+    if (loggedProfileData?.did?.id) {
       return plugins['@akashaorg/app-routing']?.routing.navigateTo({
         appName: '@akashaorg/app-profile',
         getNavigationUrl: (routes: Record<string, string>) => routes.myProfile,
@@ -68,7 +68,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   subtitleLine1Label={t("You can check Ethereum World's")}
                   subtitleLine2Label={t('or')}
                   cta1Label={t('Feed')}
-                  cta2Label={loggedProfileData.did.id ? t('visit your profile') : t('log in')}
+                  cta2Label={loggedProfileData?.did?.id ? t('visit your profile') : t('log in')}
                   onGoToFeedClick={handleGoToFeedClick}
                   onCTAClick={handleCTAClick}
                 />
