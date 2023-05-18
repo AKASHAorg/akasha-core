@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 
 import { IconType } from '@akashaorg/typings/ui';
@@ -55,7 +55,7 @@ const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
     onButtonClick,
   } = props;
 
-  const [activeTab, setActiveTab] = React.useState(0);
+  const [activeTab, setActiveTab] = useState(0);
   const wrapperStyle = 'p-4 space-y-4';
 
   return (

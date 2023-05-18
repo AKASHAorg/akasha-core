@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { IProfileData, EngagementType, QueryStatus } from '@akashaorg/typings/ui';
@@ -34,7 +34,7 @@ export type EngagementsProps = {
 
 const Engagements: React.FC<EngagementsProps> = props => {
   const { followers, following, selectedStat, onChange } = props;
-  const [activeTab, setActiveTab] = React.useState(selectedStat === 'followers' ? 0 : 1);
+  const [activeTab, setActiveTab] = useState(selectedStat === 'followers' ? 0 : 1);
 
   return (
     <Card radius={20} elevation="1" customStyle="py-4">

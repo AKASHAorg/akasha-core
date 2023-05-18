@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -34,14 +34,14 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
 
   const ENSReq = useEnsByAddress(profileData.ethAddress);
 
-  const [activeTab, setActiveTab] = React.useState(0);
-  const [selectedActiveTab, setSelectedActiveTab] = React.useState(0);
-  const [generalValid, setGeneralValid] = React.useState(true);
-  const [socialLinksValid, setSocialLinksValid] = React.useState(true);
-  const [interestsValid, setInterestsValid] = React.useState(true);
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedActiveTab, setSelectedActiveTab] = useState(0);
+  const [generalValid, setGeneralValid] = useState(true);
+  const [socialLinksValid, setSocialLinksValid] = useState(true);
+  const [interestsValid, setInterestsValid] = useState(true);
 
-  const [showModal, setShowModal] = React.useState(false);
-  const [showFeedback, setShowFeedback] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   const modalMessage = t(
     "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",

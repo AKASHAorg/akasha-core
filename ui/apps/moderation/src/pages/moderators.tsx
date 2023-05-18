@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetModerators } from '@akashaorg/ui-awf-hooks';
@@ -17,7 +17,7 @@ export interface IModeratorsPageProps {
 export const Moderators: React.FC<IModeratorsPageProps> = props => {
   const { navigateTo } = props;
 
-  const [activeTab, setActiveTab] = React.useState<string>('All');
+  const [activeTab, setActiveTab] = useState<string>('All');
 
   const { t } = useTranslation('app-moderation-ewa');
 

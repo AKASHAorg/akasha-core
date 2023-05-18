@@ -22,10 +22,10 @@ interface Notification {
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
   const [searchParams] = useSearchParams();
-  const [message, setMessage] = React.useState('');
-  const [messageType, setMessageType] = React.useState('');
-  const [showMenu, setShowMenu] = React.useState(false);
-  const [activeTab, setActiveTab] = React.useState(0);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
+  const [showMenu, setShowMenu] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
 
   // check if user has gone through onboarding steps before
   let savedPreferences;
