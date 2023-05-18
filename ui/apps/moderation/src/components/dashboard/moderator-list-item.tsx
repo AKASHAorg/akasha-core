@@ -9,17 +9,17 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IModeratorListItemProps {
   assignButtonLabel: string;
-  showButtons: boolean;
+  assignedAdmin: boolean;
   selectedModerator: ActiveModerator;
   activeModerators: ActiveModerator[];
   onClickAssign: () => void;
 }
 
 const ModeratorListItem: React.FC<IModeratorListItemProps> = props => {
-  const { assignButtonLabel, activeModerators, selectedModerator, showButtons, onClickAssign } =
+  const { assignButtonLabel, activeModerators, selectedModerator, assignedAdmin, onClickAssign } =
     props;
 
-  if (showButtons) {
+  if (assignedAdmin) {
     return (
       <Box customStyle="flex space-x-2 items-center">
         <Avatar src={selectedModerator.avatar} />

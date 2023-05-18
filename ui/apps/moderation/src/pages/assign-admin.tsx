@@ -15,7 +15,7 @@ export interface IAssignAdminPageProps {
 export const AssignAdminPage: React.FC<IAssignAdminPageProps> = props => {
   const { navigateTo } = props;
 
-  const [assignedAdmin, setAssignedAdmin] = useState(null);
+  const [assignedAdmin, setAssignedAdmin] = useState(false);
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -50,7 +50,7 @@ export const AssignAdminPage: React.FC<IAssignAdminPageProps> = props => {
       assignButtonLabel={t('Assign')}
       cancelButtonLabel="Cancel"
       confirmButtonLabel="Confirm Assigment"
-      showButtons={!!assignedAdmin}
+      assignedAdmin={assignedAdmin}
       onClickAssign={handleAssignButtonClick}
       onCancelButtonClick={handleCancelButtonClick}
       onConfirmButtonClick={handleConfirmButtonClick}
