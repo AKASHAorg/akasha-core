@@ -114,7 +114,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       <Box customStyle="flex flex-row p-4 border-b-1 border(grey9 dark:grey3)">
         <Box customStyle="w-fit h-fit mr-2">
           <Avatar
-            profileId={loggedProfileData?.did.id}
+            profileId={loggedProfileData?.did?.id}
             avatar={loggedProfileData?.avatar?.default.src}
           />
         </Box>

@@ -23,8 +23,8 @@ const Index = (props: IndexProps) => {
   const routing = plugins['@akashaorg/app-routing']?.routing;
   const publicKey = React.useMemo(() => {
     if (location.pathname.includes('app-profile')) {
-      if (loggedProfileData && loggedProfileData.did.id) {
-        return loggedProfileData.did.id;
+      if (loggedProfileData && loggedProfileData?.did?.id) {
+        return loggedProfileData?.did?.id;
       }
       return undefined;
     }

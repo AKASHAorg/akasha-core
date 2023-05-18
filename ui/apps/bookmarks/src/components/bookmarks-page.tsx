@@ -26,8 +26,8 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const loggedProfileData = profileDataReq.data;
 
   const isLoggedIn = React.useMemo(() => {
-    return loggedProfileData.did?.id;
-  }, [loggedProfileData.did?.id]);
+    return loggedProfileData?.did?.id;
+  }, [loggedProfileData?.did?.id]);
 
   const bookmarksReq = useGetBookmarks(isLoggedIn);
   /**
@@ -49,7 +49,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData.did?.id) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     props.navigateToModal({ name: 'report-modal', itemId, itemType });

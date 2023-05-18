@@ -56,7 +56,7 @@ const ProfileEngagementsPage: React.FC<
     return profiles.map((profile: Profile) => profile.did.id);
   }, [followers, following]);
   // get followed profiles for logged user
-  const isFollowingMultipleReq = useIsFollowingMultiple(loggedProfileData.did.id, profilePubKeys);
+  const isFollowingMultipleReq = useIsFollowingMultiple(loggedProfileData?.did?.id, profilePubKeys);
   const followedProfiles = isFollowingMultipleReq.data;
   // hooks to follow/unfollow profiles
   const followProfileReq = useFollow();
@@ -81,14 +81,14 @@ const ProfileEngagementsPage: React.FC<
     props.navigateToModal({ name: 'login' });
   };
   const onFollow = (pubKey: string) => {
-    if (!loggedProfileData.did.id) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
     followProfileReq.mutate(pubKey);
   };
   const onUnfollow = (pubKey: string) => {
-    if (!loggedProfileData.did.id) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -104,7 +104,7 @@ const ProfileEngagementsPage: React.FC<
   return (
     <ProfileEngagements
       selectedStat={selectedStat}
-      loggedProfileId={loggedProfileData.did.id}
+      loggedProfileId={loggedProfileData?.did?.id}
       followedProfiles={followedProfiles}
       followers={{
         label: t('Followers'),

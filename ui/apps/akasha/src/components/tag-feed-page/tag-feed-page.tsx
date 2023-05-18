@@ -39,7 +39,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 
-  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData.did.id);
+  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
   const tagSubscriptions = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
@@ -58,7 +58,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   }, [reqPosts]);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData.did.id) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     props.navigateToModal({ name: 'report-modal', itemId, itemType });
@@ -73,7 +73,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   const handleTagSubscribe = (tagName: string) => {
-    if (!loggedProfileData.did.id) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }

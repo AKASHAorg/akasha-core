@@ -80,7 +80,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   // @TODO replace with new hooks
-  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData.did.id);
+  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
   const tagSubscriptionsState = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
@@ -156,21 +156,21 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchProfilesReq = useSearchProfiles(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.PEOPLE].page,
-    loggedProfileData.did.id,
+    loggedProfileData?.did?.id,
   );
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
   const searchPostsReq = useSearchPosts(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.POSTS].page,
-    loggedProfileData.did.id,
+    loggedProfileData?.did?.id,
   );
   const searchPostsState = getSearchStateForTab(ButtonValues.POSTS);
 
   const searchCommentsReq = useSearchComments(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.REPLIES].page,
-    loggedProfileData.did.id,
+    loggedProfileData?.did?.id,
   );
   const searchCommentsState = searchState[ButtonValues.REPLIES].results;
 
@@ -207,7 +207,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const unfollowReq = useUnfollow();
 
   const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
-    if (!loggedProfileData.did?.id) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -225,7 +225,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
   const handleFollowProfile = (pubKey: string) => {
-    if (!loggedProfileData.did?.id) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -262,7 +262,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleUnfollowProfile = (pubKey: string) => {
-    if (!loggedProfileData.did?.id) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -286,7 +286,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       category: AnalyticsCategories.POST,
       action: 'Repost Clicked',
     });
-    if (!loggedProfileData.did?.id) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     } else {
@@ -437,7 +437,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           hasIcon={true}
           hasMobileDesign={true}
           buttonValues={buttonValues}
-          loggedUser={loggedProfileData.did?.id}
+          loggedUser={loggedProfileData?.did?.id}
           style={{ marginBottom: '-1px' }} // overlaps border with parent's bottom border
         />
       </SearchStartCard>

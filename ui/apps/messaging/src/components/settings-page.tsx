@@ -96,7 +96,7 @@ const InboxPage = (props: SettingsPageProps) => {
         direction="row"
         justify="between"
       >
-        <Text>{props.loggedProfileData.did?.id}</Text>
+        <Text>{props.loggedProfileData?.did?.id}</Text>
       </Box>
       <Box direction="row" justify="end" pad="medium">
         <Button

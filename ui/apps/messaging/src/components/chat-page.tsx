@@ -43,7 +43,7 @@ const ChatPage = (props: ChatPageProps) => {
   const contactProfileId = React.useMemo(() => profileId, [profileId]);
   const loggedUserId = React.useMemo(() => loggedProfileData?.did?.id, [loggedProfileData]);
 
-  const disablePublishing = React.useMemo(() => !loggedProfileData.did?.id, [loggedProfileData]);
+  const disablePublishing = React.useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
 
   const handleMentionClick = (pubKey: string) => {
     navigateTo?.({

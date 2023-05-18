@@ -41,7 +41,7 @@ const ProfileEditPage: React.FC<ProfileEditProps> = props => {
   const loggedProfileData = profileDataReq.data;
 
   // @TODO replace with new hooks
-  // const ENSReq = useEnsByAddress(loggedProfileData.did.id);
+  // const ENSReq = useEnsByAddress(loggedProfileData?.did?.id);
   // const ensData = React.useMemo<{ name?: string }>(() => {
   //   const ens = {};
   //   if (ENSReq.isSuccess) {
@@ -55,11 +55,11 @@ const ProfileEditPage: React.FC<ProfileEditProps> = props => {
   const { t } = useTranslation('app-profile');
 
   // @TODO replace with new hooks
-  const profileUpdateMutation = useProfileUpdate(loggedProfileData.did.id);
+  const profileUpdateMutation = useProfileUpdate(loggedProfileData?.did?.id);
 
   const updateStatusKey = React.useMemo(
-    () => [UPDATE_PROFILE_STATUS, loggedProfileData.did.id],
-    [loggedProfileData.did.id],
+    () => [UPDATE_PROFILE_STATUS, loggedProfileData?.did?.id],
+    [loggedProfileData?.did?.id],
   );
 
   const updateStatusQuery = useQueryListener<{

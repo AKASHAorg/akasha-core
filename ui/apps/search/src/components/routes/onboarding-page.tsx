@@ -36,18 +36,21 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
 
   const followPubKeyArr = trendingProfiles.map((profile: { pubKey: string }) => profile.pubKey);
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(loggedProfileData.did?.id, followPubKeyArr);
+  const isFollowingMultipleReq = useIsFollowingMultiple(
+    loggedProfileData?.did?.id,
+    followPubKeyArr,
+  );
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData.did?.id);
+  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
   const tagSubscriptions = tagSubscriptionsReq.data;
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
   const isLoggedIn = React.useMemo(() => {
-    return loggedProfileData.did?.id;
-  }, [loggedProfileData.did?.id]);
+    return loggedProfileData?.did?.id;
+  }, [loggedProfileData?.did?.id]);
 
   const handleAvatarClick = (profilePubKey: string) => {
     navigateTo?.({
