@@ -13,7 +13,7 @@ import {
   EDIT_CONTACT_INFO,
   EDIT_MAX_APPLICANTS,
   RESIGN_ROLE,
-} from '../../../routes';
+} from '../../../../routes';
 
 export interface IGeneralTabProps {
   isAdmin?: boolean;
@@ -33,7 +33,7 @@ export interface IGeneralTabProps {
   moderationDutiesDescLabel: string;
   changeLabel: string;
   resignButtonLabel: string;
-  onButtonClick: (route: string) => () => void;
+  onButtonClick: (route?: string) => () => void;
 }
 
 export const GeneralTab: React.FC<IGeneralTabProps> = props => {

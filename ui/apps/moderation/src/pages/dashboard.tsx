@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
+
+import { ModeratorApplicantData, NavigateToParams } from '@akashaorg/typings/ui';
 
 import ModeratorDashboard from '../components/dashboard';
 import GuestDashboard from '../components/dashboard/guest';
@@ -26,10 +27,10 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
     });
   };
 
-  const handleClickApplicant = (pubKey: string) => {
+  const handleClickApplicant = (applicant: ModeratorApplicantData) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `/applicant/${pubKey}`,
+      getNavigationUrl: () => `/applicant/${applicant.pubKey}`,
     });
   };
 

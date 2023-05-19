@@ -2,9 +2,9 @@ import React from 'react';
 
 import { ModeratorApplicantData } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-
-import Applicant, { IApplicantProps } from '../applicant';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+
+import Applicant, { IApplicantProps } from './applicant';
 
 export interface IApplicationsTabProps extends Pick<IApplicantProps, 'onClickApplicant'> {
   applicants: ModeratorApplicantData[];

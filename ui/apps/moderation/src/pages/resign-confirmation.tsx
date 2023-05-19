@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
-import ResignConfirmation from '../components/dashboard/resign-confirmation';
+import ResignConfirmation from '../components/dashboard/tabs/general/resign-confirmation';
 
 import { HOME } from '../routes';
 
