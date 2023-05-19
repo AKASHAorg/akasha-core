@@ -15,6 +15,7 @@ export const BECOME_MODERATOR = 'Become Moderator';
 export const CHECK_APPLICATION_STATUS = 'Check Application Status';
 export const MODIFY_APPLICATION = 'Modify Application';
 export const REPORT_ITEM = 'Report Item';
+export const VIEW_APPLICANT_DETAILS = 'View Applicant Details';
 
 export const baseOverviewUrl = '/overview';
 export const baseDashboardUrl = '/dashboard';
@@ -37,4 +38,5 @@ export default {
   [CHECK_APPLICATION_STATUS]: '/application/status',
   [MODIFY_APPLICATION]: '/application/modify',
   [REPORT_ITEM]: '/report/:itemType/:id',
+  [VIEW_APPLICANT_DETAILS]: '/applicant/:id',
 };

@@ -23,6 +23,7 @@ import {
   ApplicationStatusPage,
   ModifyApplicationPage,
   ReportItemPage,
+  ApplicantDetailPage,
 } from '../pages';
 
 import routes, {
@@ -43,6 +44,7 @@ import routes, {
   CHECK_APPLICATION_STATUS,
   MODIFY_APPLICATION,
   REPORT_ITEM,
+  VIEW_APPLICANT_DETAILS,
 } from '../routes';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
@@ -164,6 +166,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           />
 
           <Route path={routes[REPORT_ITEM]} element={<ReportItemPage navigateTo={navigateTo} />} />
+
+          <Route path={routes[VIEW_APPLICANT_DETAILS]} element={<ApplicantDetailPage />} />
 
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>

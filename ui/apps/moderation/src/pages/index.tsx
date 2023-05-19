@@ -15,3 +15,4 @@ export * from './become-moderator';
 export * from './application-status';
 export * from './modify-application';
 export * from './report-item';
+export * from './applicant-detail';
