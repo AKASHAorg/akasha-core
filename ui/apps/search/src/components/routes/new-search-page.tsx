@@ -33,9 +33,10 @@ import {
 import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
 
 // import EntryCardRenderer from './entry-renderer';
+import SearchDefaultCard from '@akashaorg/design-system-components/lib/components/SearchDefaultCard';
 import SearchStartCard from '@akashaorg/design-system-components/lib/components/SearchStartCard';
 import InfoCard from '@akashaorg/design-system-components/lib/components/InfoCard';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import SeventyFivePercentSpinner from '@akashaorg/design-system-core/lib/components/SeventyFivePercentSpinner';
 
 const {
   Box,
@@ -379,7 +380,7 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
         handleTopMenuClick={handleTopMenuClick}
         tabLabels={[ButtonValues.CONTENT, ButtonValues.PEOPLE, ButtonValues.TAGS]}
       >
-        <TabsToolbar
+        {/* <TabsToolbar
           noMarginBottom
           count={searchCount}
           countLabel={t('Results')}
@@ -417,8 +418,9 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
           buttonValues={buttonValues}
           loggedUser={loginState?.pubKey}
           style={{ marginBottom: '-1px' }} // overlaps border with parent's bottom border
-        />
+        /> */}
       </SearchStartCard>
+      {searchKeyword === '' && <SearchDefaultCard />}
 
       {allQueriesFinished &&
         searchKeyword &&
@@ -427,6 +429,7 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
             <InfoCard
               explanation={t('Oops! Looks like there’s no results for the word')}
               keyword={searchKeyword}
+              preposition_in={t('in')}
               section={activeButton}
               suggestion={t('Try searching for something else or try a different Category!')}
             />
@@ -434,7 +437,6 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
         )}
 
       <Box margin={{ top: 'medium' }}>
-        Hello
         {/* {(activeButton === ButtonValues.CONTENT || activeButton === ButtonValues.PEOPLE) &&
           searchProfilesState?.map((profileData: IProfileData, index: number) => (
             <Box key={index} pad={{ bottom: 'medium' }}>
@@ -520,7 +522,10 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
       </Box>
       {isFetchingSearch && (
         <Box pad="large">
-          <Spinner />
+          <SeventyFivePercentSpinner
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+            size="xxl"
+          />
         </Box>
       )}
       {/* triggers intersection observer */}

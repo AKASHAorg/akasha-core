@@ -3,15 +3,12 @@ import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
 import { SearchBar } from '../SearchBar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-// import Dropdown, {
-//   DropdownMenuItemType,
-// } from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
+import DropDown, { DropdownMenuItemGroupType } from '../SearchAppDropdownFilter';
 
 export interface SearchStartProps {
   inputPlaceholderLabel: string;
@@ -41,13 +38,32 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
 
   // const [selected, setSelected] = React.useState<DropdownMenuItemType | null>();
 
-  const Content = (
-    <div>
-      <p>Accordion content</p>
-      <p>Accordion content</p>
-      <p>Accordion content</p>
-    </div>
-  );
+  const dropdownMenuItems: DropdownMenuItemGroupType[] = [
+    {
+      id: '00',
+      title: 'All',
+      type: 'opt',
+    },
+    {
+      id: '11',
+      title: 'Antenna',
+      type: 'optgroup',
+      children: [
+        { id: '1', title: 'Beams' },
+        { id: '2', title: 'Reflection' },
+      ],
+    },
+    {
+      id: '21',
+      title: 'Akashaverse',
+      type: 'optgroup',
+      children: [
+        { id: '4', title: 'Apps' },
+        { id: '5', title: 'Widgets' },
+        { id: '6', title: 'Plugins' },
+      ],
+    },
+  ];
 
   const { t } = useTranslation('app-search');
 
@@ -81,8 +97,20 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
           <div></div>
         </Tab>
       </BasicCardBox>
-      <div className={tw('w-1/6 mt-6')}>
-        <Accordion titleNode="All" contentNode={Content} />
+      <div className={tw('flex justify-between items-center')}>
+        <div className={tw('w-2/6 my-6')}>
+          <DropDown
+            menuItems={dropdownMenuItems}
+            selected={null}
+            setSelected={e => e}
+            optgroup={true}
+            divider={true}
+            placeholderLabel="All"
+          />
+        </div>
+        <Button variant="secondary" icon="PlusIcon" plain={true}>
+          Reset
+        </Button>
       </div>
     </>
   );
