@@ -14,7 +14,7 @@ export const ApplicationsTab: React.FC<IApplicationsTabProps> = props => {
   const { applicants, onClickApplicant } = props;
 
   return (
-    <Box customStyle="space-y-4">
+    <Box>
       {applicants.map((applicant, idx) => (
         <Box key={applicant.pubKey}>
           <Applicant applicant={applicant} onClickApplicant={onClickApplicant} />

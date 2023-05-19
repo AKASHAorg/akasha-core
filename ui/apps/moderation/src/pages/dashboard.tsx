@@ -7,6 +7,7 @@ import ModeratorDashboard from '../components/dashboard';
 import GuestDashboard from '../components/dashboard/guest';
 
 import { applicants, preSelectedReasons } from '../utils';
+import { baseDashboardUrl } from '../routes';
 
 export interface IDashboardProps {
   user: string | null;
@@ -30,7 +31,7 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
   const handleClickApplicant = (applicant: ModeratorApplicantData) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `/applicant/${applicant.pubKey}`,
+      getNavigationUrl: () => `${baseDashboardUrl}/applicant/${applicant.pubKey}`,
     });
   };
 

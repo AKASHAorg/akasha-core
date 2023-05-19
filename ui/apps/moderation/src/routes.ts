@@ -38,5 +38,5 @@ export default {
   [CHECK_APPLICATION_STATUS]: '/application/status',
   [MODIFY_APPLICATION]: '/application/modify',
   [REPORT_ITEM]: '/report/:itemType/:id',
-  [VIEW_APPLICANT_DETAILS]: '/applicant/:id',
+  [VIEW_APPLICANT_DETAILS]: `${baseDashboardUrl}/applicant/:id`,
 };
