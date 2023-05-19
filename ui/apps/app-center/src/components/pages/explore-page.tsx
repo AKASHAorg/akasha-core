@@ -91,7 +91,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
 
   return (
     <>
-      <Stack direction="column">
+      <Stack direction="column" testId="akasha-verse">
         {isFetching && (
           <Box>
             <Spinner />
