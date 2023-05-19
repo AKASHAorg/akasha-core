@@ -25,7 +25,7 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
 
   return (
     <Menu>
-      <Menu.Button disabled={disabled}>
+      <Menu.Button disabled={disabled} data-testid="entry-kebab-menu">
         <Icon type="EllipsisHorizontalIcon" accentColor={true} />
       </Menu.Button>
       <Menu.Items>

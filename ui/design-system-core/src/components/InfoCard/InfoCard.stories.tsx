@@ -11,5 +11,5 @@ const Template = (args: InfoCardProps) => <InfoCard {...args} />;
 export const BaseInfoCard = Template.bind({});
 BaseInfoCard.args = {
   titleLabel: 'Title label',
-  subTitleLabel: 'Subtitle label',
+  bodyLabel: 'Subtitle label',
 };

@@ -28,7 +28,7 @@ export const ApplicationStatusPage: React.FC<IApplicationStatusPageProps> = prop
     [ApplicationStatusType.rejected]: applicationRejectedSubtitles,
   };
 
-  const subtitles = subtitleLabelsMap[applicationStatus];
+  const subtitles = subtitleLabelsMap[applicationStatus] ?? [];
 
   const handleLinkClick = (link: string) => () => {
     navigateTo?.({

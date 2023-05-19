@@ -3,7 +3,7 @@ import { TIMEOUT } from '../utils/constants';
 describe('Bookmarks Page', () => {
   context('Bookmarks Page', () => {
     before(() => {
-      cy.visit('/@akashaorg/app-bookmarks');
+      cy.visit('/@akashaorg/app-bookmarks', { timeout: TIMEOUT });
     });
 
     it('should have bookmarks page visible', () => {
