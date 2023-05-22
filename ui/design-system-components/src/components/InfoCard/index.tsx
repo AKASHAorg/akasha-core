@@ -5,10 +5,10 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 export interface InfoProps {
-  explanation?: string;
-  suggestion?: string;
-  keyword?: string;
-  preposition_in?: string;
+  explanation: string;
+  suggestion: string;
+  keyword: string;
+  preposition_in: string;
   section?: string;
   noBorder?: boolean;
   noPadding?: boolean;
@@ -32,7 +32,8 @@ const InfoCard: React.FC<InfoProps> = ({
         />
         <div className={tw('w-[50%] m-auto')}>
           <Text variant="body1" align="center">
-            {explanation} {keyword} {preposition_in} {section}. {suggestion}
+            {explanation} <span className={tw('font-bold')}>{keyword}</span> {preposition_in}
+            <span className={tw('font-bold')}>{section}</span>. {suggestion}
           </Text>
         </div>
       </div>

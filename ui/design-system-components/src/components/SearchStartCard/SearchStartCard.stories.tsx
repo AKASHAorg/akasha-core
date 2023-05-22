@@ -1,6 +1,6 @@
 import React from 'react';
 
-import SearchStartCard, { SearchStartProps } from './index';
+import SearchStartCard, { SearchStartProps } from '.';
 
 export default {
   title: 'Cards/SearchStartCard',

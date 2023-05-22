@@ -5,9 +5,9 @@ export default {
   title: 'Cards/InfoCard',
   component: InfoCard,
   argTypes: {
-    icon: { control: 'text' },
-    title: { control: 'text' },
-    description: { control: 'text' },
+    preposition_in: { control: 'text' },
+    keyword: { control: 'text' },
+    explanation: { control: 'text' },
     suggestion: { control: 'text' },
   },
 };
@@ -23,7 +23,8 @@ const Template = (args: InfoProps) => {
 export const BaseSubtitleTextIcon = Template.bind({});
 
 BaseSubtitleTextIcon.args = {
-  title: 'No matching results found',
-  description: '',
+  preposition_in: 'in',
+  explanation: 'No matching results found',
+  keyword: 'test',
   suggestion: 'Make sure you spelled everything correctly',
 };

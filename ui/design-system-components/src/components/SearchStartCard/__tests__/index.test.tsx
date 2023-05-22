@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
 import { customRender } from '@akashaorg/design-system-core/src/test-utils';
-import SearchStartCard from '../index';
+import SearchStartCard from '../';
 
 describe('<SearchStartCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -17,12 +16,8 @@ describe('<SearchStartCard /> Component', () => {
         <SearchStartCard
           searchKeyword="Blah"
           inputPlaceholderLabel="Search"
-          titleLabel="Search"
-          introLabel="✨ Find what you’re looking for quickly ✨"
-          description="To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community."
           handleSearch={handleSearch}
           handleTopMenuClick={handleTopMenuClick}
-          tabLabels={['People', 'Content', 'Tags']}
         />,
 
         {},
