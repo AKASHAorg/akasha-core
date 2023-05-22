@@ -32,7 +32,7 @@ const InfoCard: React.FC<InfoProps> = ({
         />
         <div className={tw('w-[50%] m-auto')}>
           <Text variant="body1" align="center">
-            {explanation} <span className={tw('font-bold')}>{keyword}</span> {preposition_in}
+            {explanation} <span className={tw('font-bold')}>{keyword}</span> {preposition_in}{' '}
             <span className={tw('font-bold')}>{section}</span>. {suggestion}
           </Text>
         </div>

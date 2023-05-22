@@ -20,8 +20,8 @@ describe('<SwitchCard /> Component', () => {
             { value: 'Delisted', label: 'Delisted' },
           ]}
           activeButton={'Kept'}
-          onIconClick={handleIconClick}
-          onTabClick={handleTabClick}
+          onIconClick={() => handleIconClick}
+          onTabClick={() => handleTabClick}
           loggedUser="0x000"
         />,
 
