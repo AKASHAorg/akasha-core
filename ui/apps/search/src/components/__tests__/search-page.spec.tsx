@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchPage from '../routes/search-page';
+import SearchPage from '../routes/new-search-page';
 import {
   screen,
   renderWithAllProviders,
@@ -10,14 +10,14 @@ import {
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 
 const mockLocationValue = {
-  pathname: '/search/grhfsdfk',
+  pathname: '/search/test',
   search: '',
   hash: '',
   state: null,
 };
 
 const mockRouteParams = {
-  searchKeyword: 'grhfsdfk',
+  searchKeyword: 'test',
 };
 
 jest.mock('react-router', () => ({
@@ -43,10 +43,6 @@ describe('<SearchPage />', () => {
     });
   });
   it('should render search page', () => {
-    expect(
-      screen.getByText(
-        /Search everything. Follow wonderful people. And subscribe to any and all topics that get your synapses firing./,
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Start searching for something/)).toBeInTheDocument();
   });
 });
