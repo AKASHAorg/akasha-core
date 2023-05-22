@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
-
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 export type DropdownMenuItemGroupType = {
   id: string;
@@ -92,9 +91,8 @@ const Dropdown: React.FC<IDropdownProps> = ({
                 if (menuItem.type === 'optgroup') {
                   return (
                     <>
-                      <Box customStyle={`flex items-center pt-3 pl-3`}>
+                      <Box customStyle={`flex items-center pt-3 pl-3`} key={menuItem.id}>
                         <Text
-                          key={menuItem.id}
                           variant="body2"
                           customStyle="cursor-not-allowed"
                           color={{ light: 'grey5', dark: 'grey8' }}
@@ -142,14 +140,6 @@ const Dropdown: React.FC<IDropdownProps> = ({
                                   {item.title}
                                 </Text>
                               </Box>
-                              {/* {selected.id === item.id && (
-                                <span className={tw('ml-4')}>
-                                  <Icon
-                                    type="CheckIcon"
-                                    color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                                  />
-                                </span>
-                              )} */}
                             </li>
                           );
                         })}
@@ -193,64 +183,56 @@ const Dropdown: React.FC<IDropdownProps> = ({
                           {menuItem.title}
                         </Text>
                       </Box>
-                      {/* {isSelected && (
-                        <span className={tw('ml-4')}>
-                          <Icon
-                            type="CheckIcon"
-                            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                          />
-                        </span>
-                      )} */}
                     </li>
                   );
                 }
               } else {
-                //   return (
-                //     <li
-                //       key={menuItem.id}
-                //       className={tw(
-                //         `${optionStyle} ${
-                //           idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
-                //         } cursor-pointer`,
-                //       )}
-                //       onClick={handleChange(menuItem)}
-                //     >
-                //       <Box
-                //         customStyle={`flex items-center space-x-2 ${
-                //           isSelected ? 'text-secondaryLight' : 'text-black'
-                //         }`}
-                //       >
-                //         {menuItem?.iconName && (
-                //           <Icon
-                //             type={menuItem.iconName}
-                //             color={
-                //               isSelected
-                //                 ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                //                 : { light: 'black', dark: 'white' }
-                //             }
-                //           />
-                //         )}
-                //         <Text
-                //           variant="body1"
-                //           color={
-                //             isSelected
-                //               ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                //               : { light: 'black', dark: 'white' }
-                //           }
-                //         >
-                //           {menuItem.title}
-                //         </Text>
-                //       </Box>
-                //       {isSelected && (
-                //         <span className={tw('ml-4')}>
-                //           <Icon
-                //             type="CheckIcon"
-                //             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                //           />
-                //         </span>
-                //       )}
-                //     </li>
-                //   );
+                return (
+                  <li
+                    key={menuItem.id}
+                    className={tw(
+                      `${optionStyle} ${
+                        idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
+                      } cursor-pointer`,
+                    )}
+                    onClick={handleChange(menuItem)}
+                  >
+                    <Box
+                      customStyle={`flex items-center space-x-2 ${
+                        isSelected ? 'text-secondaryLight' : 'text-black'
+                      }`}
+                    >
+                      {menuItem?.iconName && (
+                        <Icon
+                          type={menuItem.iconName}
+                          color={
+                            isSelected
+                              ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                              : { light: 'black', dark: 'white' }
+                          }
+                        />
+                      )}
+                      <Text
+                        variant="body1"
+                        color={
+                          isSelected
+                            ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                            : { light: 'black', dark: 'white' }
+                        }
+                      >
+                        {menuItem.title}
+                      </Text>
+                    </Box>
+                    {isSelected && (
+                      <span className={tw('ml-4')}>
+                        <Icon
+                          type="CheckIcon"
+                          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                        />
+                      </span>
+                    )}
+                  </li>
+                );
               }
             })}
           </ul>

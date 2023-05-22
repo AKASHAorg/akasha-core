@@ -21,6 +21,7 @@ const SeventyFivePercentSpinner: React.FC<ISpinnerProps> = props => {
 
   return (
     <div
+      role="status"
       className={tw(
         apply(
           `inline-block ${
@@ -28,7 +29,7 @@ const SeventyFivePercentSpinner: React.FC<ISpinnerProps> = props => {
           } animate-spin rounded-full border-4 border-solid ${getColorClasses(
             color,
             'border',
-          )} border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`,
+          )} border-r-transparent dark:border-r-white align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`,
         ),
       )}
     >

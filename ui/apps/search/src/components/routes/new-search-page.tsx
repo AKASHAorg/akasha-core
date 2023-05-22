@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import DS from '@akashaorg/design-system';
-
 import {
   RootComponentProps,
   IProfileData,
@@ -32,21 +30,22 @@ import {
 
 import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
 
-// import EntryCardRenderer from './entry-renderer';
+import EntryCardRenderer from './entry-renderer';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import InfoCard from '@akashaorg/design-system-components/lib/components/InfoCard';
+import ProfileSearchCard from '@akashaorg/design-system-components/lib/components/ProfileSearchCard';
 import SearchDefaultCard from '@akashaorg/design-system-components/lib/components/SearchDefaultCard';
 import SearchStartCard from '@akashaorg/design-system-components/lib/components/SearchStartCard';
-import InfoCard from '@akashaorg/design-system-components/lib/components/InfoCard';
+import SearchAppFilter from '@akashaorg/design-system-components/lib/components/SearchAppFilter';
 import SeventyFivePercentSpinner from '@akashaorg/design-system-core/lib/components/SeventyFivePercentSpinner';
-
-const {
-  Box,
-  ProfileSearchCard,
-  TagSearchCard,
-  TabsToolbar,
-  StyledSwitchCardButton,
-  TAB_TOOLBAR_TYPE,
-  useIntersectionObserver,
-} = DS;
+import SwitchCard from '@akashaorg/design-system-components/lib/components/SwitchCard';
+import TagSearchCard from '@akashaorg/design-system-components/lib/components/TagSearchCard';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { DropdownMenuItemGroupType } from '@akashaorg/design-system-components/lib/components/SearchAppDropdownFilter';
+import SearchResultCount from './search-result-count';
+import useIntersectionObserver from '@akashaorg/design-system-core/lib/utils/intersection-observer';
 
 export enum ButtonValues {
   CONTENT = 'Content',
@@ -86,10 +85,42 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const handleEntryNavigation = useEntryNavigation(navigateTo);
 
-  const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.CONTENT, [activeButton]);
+  // const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.CONTENT, [activeButton]);
+
+  const dropdownMenuItems: DropdownMenuItemGroupType[] = [
+    {
+      id: '00',
+      title: t('All'),
+      type: 'opt',
+    },
+    {
+      id: '11',
+      title: 'Antenna',
+      type: 'optgroup',
+      children: [
+        { id: '1', title: 'Beams' },
+        { id: '2', title: 'Reflection' },
+      ],
+    },
+    {
+      id: '21',
+      title: 'Akashaverse',
+      type: 'optgroup',
+      children: [
+        { id: '4', title: 'Apps' },
+        { id: '5', title: 'Widgets' },
+        { id: '6', title: 'Plugins' },
+      ],
+    },
+  ];
+
+  const [selected, setSelected] = React.useState<DropdownMenuItemGroupType | null>(
+    dropdownMenuItems[0],
+  );
 
   const updateSearchState = (
-    type: Exclude<ButtonValues, ButtonValues.CONTENT>,
+    // type: Exclude<ButtonValues, ButtonValues.PEOPLE>,
+    type: ButtonValues,
     data: Array<DataResponse & { delisted?: boolean }>,
   ) => {
     if (!data || !data.length) {
@@ -103,7 +134,7 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
       [type]: {
         ...prevState[type],
         results: [...prevState[type].results, ...data.filter(_ => !_.delisted)],
-        // topics edge case because it only fetches once
+        // tags edge case because it only fetches once
         done: type === ButtonValues.TAGS || prevState[type].done,
         isLoading: false,
       },
@@ -111,7 +142,7 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
   };
 
   const handleLoadMore = () => {
-    if (isAllTabActive) return;
+    // if (isAllTabActive) return;
     const { done, isLoading } = searchState[activeButton];
     if (done || isLoading) return;
 
@@ -132,17 +163,17 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
     threshold: 0,
   });
 
-  const getSearchStateForTab = (tab: Exclude<ButtonValues, ButtonValues.CONTENT>) => {
-    if (activeButton === ButtonValues.CONTENT) {
-      return searchState[tab].results.slice(0, 4);
-    }
+  const getSearchStateForTab = (tab: ButtonValues) => {
+    // if (activeButton === ButtonValues.CONTENT) {
+    //   return searchState[tab].results.slice(0, 4);
+    // }
     return searchState[tab].results;
   };
 
   React.useEffect(() => {
-    if (isAllTabActive) {
-      return setSearchState(initSearchState);
-    }
+    // if (isAllTabActive) {
+    //   return setSearchState(initSearchState);
+    // }
     setSearchState({
       ...initSearchState,
       [activeButton]: { ...initSearchState[activeButton], isLoading: true },
@@ -158,13 +189,13 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
   );
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
-  const searchPostsReq = useSearchPosts(
+  const searchBeamsReq = useSearchPosts(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.CONTENT].page,
     loginState?.pubKey,
     loginState?.fromCache,
   );
-  const searchPostsState = getSearchStateForTab(ButtonValues.TAGS);
+  const searchBeamsState = getSearchStateForTab(ButtonValues.CONTENT);
 
   const searchCommentsReq = useSearchComments(
     decodeURIComponent(searchKeyword),
@@ -172,30 +203,32 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
     loginState?.pubKey,
     loginState?.fromCache,
   );
-  const searchCommentsState = searchState[ButtonValues.CONTENT].results;
+  const searchReflectionsState = searchState[ButtonValues.CONTENT].results;
 
   const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TAGS);
 
-  // React.useEffect(() => {
-  //   if (searchPostsReq.isFetched) updateSearchState(ButtonValues.POSTS, searchPostsReq.data);
-  // }, [searchPostsReq.data, searchPostsReq.isFetched]);
+  React.useEffect(() => {
+    if (searchBeamsReq.isFetched) {
+      updateSearchState(ButtonValues.CONTENT, searchBeamsReq.data);
+    }
+  }, [searchBeamsReq.data, searchBeamsReq.isFetched]);
 
-  // React.useEffect(() => {
-  //   if (searchCommentsReq.isFetched) {
-  //     updateSearchState(ButtonValues.CONTENT, searchCommentsReq.data);
-  //   }
-  // }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
+  React.useEffect(() => {
+    if (searchCommentsReq.isFetched) {
+      updateSearchState(ButtonValues.CONTENT, searchCommentsReq.data);
+    }
+  }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
 
-  // React.useEffect(() => {
-  //   if (searchProfilesReq.isFetched) {
-  //     updateSearchState(ButtonValues.PEOPLE, searchProfilesReq.data);
-  //   }
-  // }, [searchProfilesReq.data, searchProfilesReq.isFetched]);
+  React.useEffect(() => {
+    if (searchProfilesReq.isFetched) {
+      updateSearchState(ButtonValues.PEOPLE, searchProfilesReq.data);
+    }
+  }, [searchProfilesReq.data, searchProfilesReq.isFetched]);
 
-  // React.useEffect(() => {
-  //   if (searchTagsReq.isFetched) updateSearchState(ButtonValues.TAGS, searchTagsReq.data);
-  // }, [searchTagsReq.data, searchTagsReq.isFetched]);
+  React.useEffect(() => {
+    if (searchTagsReq.isFetched) updateSearchState(ButtonValues.TAGS, searchTagsReq.data);
+  }, [searchTagsReq.data, searchTagsReq.isFetched]);
 
   const followPubKeyArr = searchProfilesState?.map(profile => profile.pubKey);
   const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.pubKey, followPubKeyArr);
@@ -203,35 +236,35 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  // const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
-  //   if (!loginState?.ethAddress) {
-  //     showLoginModal();
-  //     return;
-  //   }
-  //   analyticsActions.trackEvent({
-  //     category: AnalyticsCategories.FILTER_SEARCH,
-  //     action: subscribe ? 'Trending Topic Subscribed' : 'Trending Topic Unsubscribed',
-  //   });
-  //   toggleTagSubscriptionReq.mutate(tagName);
-  // };
+  const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
+    if (!loginState?.ethAddress) {
+      showLoginModal();
+      return;
+    }
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.FILTER_SEARCH,
+      action: subscribe ? 'Trending Topic Subscribed' : 'Trending Topic Unsubscribed',
+    });
+    toggleTagSubscriptionReq.mutate(tagName);
+  };
 
-  // const handleProfileClick = (pubKey: string) => {
-  //   navigateTo?.({
-  //     appName: '@akashaorg/app-profile',
-  //     getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
-  //   });
-  // };
-  // const handleFollowProfile = (pubKey: string) => {
-  //   if (!loginState?.ethAddress) {
-  //     showLoginModal();
-  //     return;
-  //   }
-  //   analyticsActions.trackEvent({
-  //     category: AnalyticsCategories.FILTER_SEARCH,
-  //     action: 'Trending People Followed',
-  //   });
-  //   followReq.mutate(pubKey);
-  // };
+  const handleProfileClick = (pubKey: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+    });
+  };
+  const handleFollowProfile = (pubKey: string) => {
+    if (!loginState?.ethAddress) {
+      showLoginModal();
+      return;
+    }
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.FILTER_SEARCH,
+      action: 'Trending People Followed',
+    });
+    followReq.mutate(pubKey);
+  };
 
   const handleSearch = (inputValue: string) => {
     const trimmedValue = inputValue.trim();
@@ -243,61 +276,61 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
     });
   };
 
-  // const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-  //   ev.preventDefault();
-  //   navigateTo?.({
-  //     appName: '@akashaorg/app-profile',
-  //     getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorEth}`,
-  //   });
-  // };
+  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
+    ev.preventDefault();
+    navigateTo?.({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorEth}`,
+    });
+  };
 
-  // const handleMentionClick = (profileEthAddress: string) => {
-  //   navigateTo?.({
-  //     appName: '@akashaorg/app-profile',
-  //     getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileEthAddress}`,
-  //   });
-  // };
+  const handleMentionClick = (profileEthAddress: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileEthAddress}`,
+    });
+  };
 
-  // const handleUnfollowProfile = (pubKey: string) => {
-  //   if (!loginState?.ethAddress) {
-  //     showLoginModal();
-  //     return;
-  //   }
-  //   analyticsActions.trackEvent({
-  //     category: AnalyticsCategories.FILTER_SEARCH,
-  //     action: 'Trending People Unfollowed',
-  //   });
-  //   unfollowReq.mutate(pubKey);
-  // };
+  const handleUnfollowProfile = (pubKey: string) => {
+    if (!loginState?.ethAddress) {
+      showLoginModal();
+      return;
+    }
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.FILTER_SEARCH,
+      action: 'Trending People Unfollowed',
+    });
+    unfollowReq.mutate(pubKey);
+  };
 
-  // const handleTagClick = (name: string) => {
-  //   navigateTo?.({
-  //     appName: '@akashaorg/app-akasha-integration',
-  //     getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
-  //   });
-  // };
+  const handleTagClick = (name: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
+    });
+  };
 
   // // repost related
-  // const handleRepost = (_withComment: boolean, itemId: string) => {
-  //   analyticsActions.trackEvent({
-  //     category: AnalyticsCategories.POST,
-  //     action: 'Repost Clicked',
-  //   });
-  //   if (!loginState?.ethAddress) {
-  //     showLoginModal();
-  //     return;
-  //   } else {
-  //     navigateTo?.({
-  //       appName: '@akashaorg/app-akasha-integration',
-  //       getNavigationUrl: () => `/feed?repost=${itemId}`,
-  //     });
-  //   }
-  // };
+  const handleRebeam = (_withComment: boolean, itemId: string) => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.POST,
+      action: 'Repost Clicked',
+    });
+    if (!loginState?.ethAddress) {
+      showLoginModal();
+      return;
+    } else {
+      navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: () => `/feed?repost=${itemId}`,
+      });
+    }
+  };
 
   const emptySearchState =
     searchProfilesState?.length === 0 &&
-    searchPostsState?.length === 0 &&
-    searchCommentsState?.length === 0 &&
+    searchBeamsState?.length === 0 &&
+    searchReflectionsState?.length === 0 &&
     searchTagsState?.length === 0;
 
   React.useEffect(() => {
@@ -313,7 +346,7 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
   const buttonValues = [
     {
       value: ButtonValues.CONTENT,
-      label: t('{{ buttonValueContent }}', { buttonValueAll: ButtonValues.CONTENT }),
+      label: t('{{ buttonValueContent }}', { buttonValueContent: ButtonValues.CONTENT }),
     },
     {
       value: ButtonValues.PEOPLE,
@@ -321,7 +354,7 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
     },
     {
       value: ButtonValues.TAGS,
-      label: t('{{ buttonValueTags }}', { buttonValueTopics: ButtonValues.TAGS }),
+      label: t('{{ buttonValueTags }}', { buttonValueTags: ButtonValues.TAGS }),
     },
   ];
 
@@ -335,169 +368,192 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
 
   const searchCount =
     searchProfilesState?.length ||
-    0 + searchPostsState?.length ||
-    0 + searchCommentsState?.length ||
+    0 + searchBeamsState?.length ||
+    0 + searchReflectionsState?.length ||
     0 + searchTagsState?.length ||
     0;
 
   const allQueriesFinished = React.useMemo(() => {
     return (
       !searchProfilesReq.isFetching &&
-      !searchPostsReq.isFetching &&
+      !searchBeamsReq.isFetching &&
       !searchCommentsReq.isFetching &&
       !searchTagsReq.isFetching
     );
   }, [
     searchCommentsReq.isFetching,
-    searchPostsReq.isFetching,
+    searchBeamsReq.isFetching,
     searchProfilesReq.isFetching,
     searchTagsReq.isFetching,
   ]);
 
   const isFetchingSearch = React.useMemo(() => {
-    if (activeButton === ButtonValues.CONTENT) {
-      return !allQueriesFinished;
-    }
+    // if (activeButton === ButtonValues.ALL) {
+    //   return !allQueriesFinished;
+    // }
     return searchKeyword && !searchState[activeButton].done;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchState, activeButton, allQueriesFinished]);
+  }, [searchState, activeButton /* allQueriesFinished */]);
 
   const handleTopMenuClick = () => {
     //clicked
   };
 
   return (
-    <Box data-testid="search-box" fill="horizontal">
+    <Box data-testid="search-box" customStyle="flex(& col)">
       <SearchStartCard
         searchKeyword={searchKeyword}
         handleSearch={handleSearch}
         inputPlaceholderLabel={t('Search')}
-        titleLabel={t('Search')}
-        introLabel={t('✨ Find what you’re looking for quickly ✨')}
-        description={t(
-          'Search everything. Follow wonderful people. And subscribe to any and all topics that get your synapses firing.',
-        )}
+        // titleLabel={t('Search')}
+        // introLabel={t('✨ Find what you’re looking for quickly ✨')}
+        // description={t(
+        //   'Search everything. Follow wonderful people. And subscribe to any and all topics that get your synapses firing.',
+        // )}
         handleTopMenuClick={handleTopMenuClick}
-        tabLabels={[ButtonValues.CONTENT, ButtonValues.PEOPLE, ButtonValues.TAGS]}
       >
-        {/* <TabsToolbar
-          noMarginBottom
-          count={searchCount}
-          countLabel={t('Results')}
+        <SwitchCard
           activeButton={activeButton}
-          tabForm={TAB_TOOLBAR_TYPE.WIDE}
-          tabButtons={
-            <>
-              <StyledSwitchCardButton
-                label={t('{{ buttonValuesContent }}', { buttonValuesAll: ButtonValues.CONTENT })}
-                size="large"
-                removeBorder={false}
-                primary={ButtonValues.CONTENT === activeButton}
-                onClick={onTabClick(ButtonValues.CONTENT)}
-              />
-              <StyledSwitchCardButton
-                label={t('{{ buttonValuesPeople }}', { buttonValuesPeople: ButtonValues.PEOPLE })}
-                size="large"
-                removeBorder={true}
-                primary={ButtonValues.PEOPLE === activeButton}
-                onClick={onTabClick(ButtonValues.PEOPLE)}
-              />
-              <StyledSwitchCardButton
-                label={t('{{ buttonValuesTopics }}', { buttonValuesTopics: ButtonValues.TAGS })}
-                size="large"
-                removeBorder={true}
-                primary={ButtonValues.TAGS === activeButton}
-                onClick={onTabClick(ButtonValues.TAGS)}
-              />
-            </>
-          }
           onTabClick={onTabClick}
           onIconClick={onNavBack}
-          hasIcon={true}
-          hasMobileDesign={true}
           buttonValues={buttonValues}
           loggedUser={loginState?.pubKey}
-          style={{ marginBottom: '-1px' }} // overlaps border with parent's bottom border
-        /> */}
+          style="-mb-px" // overlaps border with parent's bottom border
+        />
       </SearchStartCard>
+      {activeButton === ButtonValues.CONTENT && (
+        <SearchAppFilter
+          dropdownMenuItems={dropdownMenuItems}
+          selected={selected}
+          setSelected={setSelected}
+        />
+      )}
       {searchKeyword === '' && <SearchDefaultCard />}
 
-      {allQueriesFinished &&
-        searchKeyword &&
-        (isAllTabActive ? emptySearchState : !searchState[activeButton]?.results?.length) && (
-          <Box margin={{ top: 'medium' }}>
-            <InfoCard
-              explanation={t('Oops! Looks like there’s no results for the word')}
-              keyword={searchKeyword}
-              preposition_in={t('in')}
-              section={activeButton}
-              suggestion={t('Try searching for something else or try a different Category!')}
-            />
-          </Box>
-        )}
+      {
+        /* allQueriesFinished */ !isFetchingSearch &&
+          /*           searchKeyword &&
+           */ /* isAllTabActive ? emptySearchState : */ !searchState[activeButton]?.results
+            ?.length && (
+            <Box customStyle="mt-4">
+              <InfoCard
+                explanation={t('Oops! Looks like there’s no results for the word')}
+                keyword={searchKeyword}
+                preposition_in={t('in')}
+                section={activeButton}
+                suggestion={t('Try searching for something else or try a different Category!')}
+              />
+            </Box>
+          )
+      }
 
-      <Box margin={{ top: 'medium' }}>
-        {/* {(activeButton === ButtonValues.CONTENT || activeButton === ButtonValues.PEOPLE) &&
-          searchProfilesState?.map((profileData: IProfileData, index: number) => (
-            <Box key={index} pad={{ bottom: 'medium' }}>
-              <ProfileSearchCard
-                handleFollow={() => handleFollowProfile(profileData.pubKey)}
-                handleUnfollow={() => handleUnfollowProfile(profileData.pubKey)}
-                isFollowing={followedProfiles.includes(profileData?.pubKey)}
-                loggedEthAddress={loginState?.ethAddress}
-                profileData={profileData}
-                followLabel={t('Follow')}
-                unfollowLabel={t('Unfollow')}
-                descriptionLabel={t('About me')}
-                followingLabel={t('Following')}
-                followersLabel={t('Followers')}
-                postsLabel={t('Posts')}
-                shareProfileLabel={t('Share')}
-                profileAnchorLink={'/profile'}
-                onClickProfile={() => handleProfileClick(profileData.pubKey)}
-              />
-            </Box>
-          ))} */}
-        {/* {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.TOPICS) &&
-          searchTagsState?.map((tag: ITag, index: number) => (
-            <Box key={index} pad={{ bottom: 'medium' }}>
-              <TagSearchCard
-                tag={tag}
-                subscribedTags={tagSubscriptionsState}
-                subscribeLabel={t('Subscribe')}
-                unsubscribeLabel={t('Unsubscribe')}
-                tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
-                onClickTag={() => handleTagClick(tag.name)}
-                handleSubscribeTag={handleTagSubscribe(true)}
-                handleUnsubscribeTag={handleTagSubscribe(false)}
-              />
-            </Box>
-          ))}
-        {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.POSTS) &&
-          searchPostsState?.map(itemData => (
-            <EntryCardRenderer
-              key={itemData.itemId}
-              itemData={itemData}
-              itemType={EntityTypes.POST}
-              logger={props.logger}
-              singleSpa={singleSpa}
-              ethAddress={loginState?.ethAddress}
-              onContentClick={handleEntryNavigation}
-              navigateTo={navigateTo}
-              onRepost={handleRepost}
-              onAvatarClick={handleAvatarClick}
-              onMentionClick={handleMentionClick}
-              onTagClick={handleTagClick}
-              contentClickable={true}
-              locale={locale}
-              moderatedContentLabel={t('This content has been moderated')}
-              ctaLabel={t('See it anyway')}
-              uiEvents={props.uiEvents}
-              navigateToModal={props.navigateToModal}
-            />
-          ))}
-        {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
-          searchCommentsState?.map(itemData => (
+      <Box customStyle="mt-4">
+        {activeButton === ButtonValues.PEOPLE &&
+          searchState[ButtonValues.PEOPLE].done &&
+          !!searchProfilesState.length && (
+            <>
+              {
+                <SearchResultCount
+                  countLabel={t('Found {{count}} results for {{searchKeyword}} in {{category}}', {
+                    count: 0 + searchProfilesState?.length,
+                    searchKeyword: searchKeyword,
+                    category: activeButton,
+                  })}
+                />
+              }
+              {searchProfilesState?.map((profileData: IProfileData, index: number) => (
+                <Box key={index} customStyle="pb-4">
+                  <ProfileSearchCard
+                    handleFollow={() => handleFollowProfile(profileData.pubKey)}
+                    handleUnfollow={() => handleUnfollowProfile(profileData.pubKey)}
+                    isFollowing={followedProfiles.includes(profileData?.pubKey)}
+                    loggedEthAddress={loginState?.ethAddress}
+                    profileData={profileData}
+                    followLabel={t('Follow')}
+                    unfollowLabel={t('Unfollow')}
+                    descriptionLabel={t('About me')}
+                    followingLabel={t('Following')}
+                    followersLabel={t('Followers')}
+                    postsLabel={t('Posts')}
+                    shareProfileLabel={t('Share')}
+                    profileAnchorLink={'/profile'}
+                    onClickProfile={() => handleProfileClick(profileData.pubKey)}
+                  />
+                </Box>
+              ))}
+            </>
+          )}
+        {activeButton === ButtonValues.TAGS &&
+          searchState[ButtonValues.TAGS].done &&
+          !!searchTagsState.length && (
+            <>
+              {
+                <SearchResultCount
+                  countLabel={t('Found {{count}} results for {{searchKeyword}} in {{category}}', {
+                    count: 0 + searchTagsState?.length,
+                    searchKeyword: searchKeyword,
+                    category: activeButton,
+                  })}
+                />
+              }
+              <BasicCardBox customStyle="pb-0">
+                {searchTagsState?.map((tag: ITag, index: number) => (
+                  <Box key={index}>
+                    <TagSearchCard
+                      tag={tag}
+                      subscribedTags={tagSubscriptionsState}
+                      subscribeLabel={t('Subscribe')}
+                      unsubscribeLabel={t('Unsubscribe')}
+                      tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
+                      onClickTag={() => handleTagClick(tag.name)}
+                      handleSubscribeTag={handleTagSubscribe(true)}
+                      handleUnsubscribeTag={handleTagSubscribe(false)}
+                    />
+                    {index < searchTagsState?.length - 1 && <Divider />}
+                  </Box>
+                ))}
+              </BasicCardBox>
+            </>
+          )}
+        {activeButton === ButtonValues.CONTENT &&
+          searchState[ButtonValues.CONTENT].done &&
+          !!searchBeamsState.length && (
+            <>
+              {
+                <SearchResultCount
+                  countLabel={t('Found {{count}} results for {{searchKeyword}} in {{category}}', {
+                    count: 0 + searchBeamsState?.length,
+                    searchKeyword: searchKeyword,
+                    category: activeButton,
+                  })}
+                />
+              }
+              {searchBeamsState?.map(itemData => (
+                <EntryCardRenderer
+                  key={itemData.itemId}
+                  itemData={itemData}
+                  itemType={EntityTypes.POST}
+                  logger={props.logger}
+                  singleSpa={singleSpa}
+                  ethAddress={loginState?.ethAddress}
+                  onContentClick={handleEntryNavigation}
+                  navigateTo={navigateTo}
+                  onRebeam={handleRebeam}
+                  onAvatarClick={handleAvatarClick}
+                  onMentionClick={handleMentionClick}
+                  onTagClick={handleTagClick}
+                  contentClickable={true}
+                  locale={locale}
+                  moderatedContentLabel={t('This content has been moderated')}
+                  ctaLabel={t('See it anyway')}
+                  uiEvents={props.uiEvents}
+                  navigateToModal={props.navigateToModal}
+                />
+              ))}
+            </>
+          )}
+        {/* {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
+          searchReflectionsState?.map(itemData => (
             <EntryCardRenderer
               key={itemData.itemId}
               itemData={itemData}
@@ -507,7 +563,7 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
               ethAddress={loginState?.ethAddress}
               onContentClick={handleEntryNavigation}
               navigateTo={navigateTo}
-              onRepost={handleRepost}
+              onRepost={handleRebeam}
               onAvatarClick={handleAvatarClick}
               onMentionClick={handleMentionClick}
               onTagClick={handleTagClick}
@@ -521,15 +577,16 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
           ))} */}
       </Box>
       {isFetchingSearch && (
-        <Box pad="large">
+        <Box customStyle="p-8 flex flex-col items-center justify-center m-auto space-y-8">
           <SeventyFivePercentSpinner
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             size="xxl"
           />
+          <Text variant="footnotes2">Searching...</Text>
         </Box>
       )}
       {/* triggers intersection observer */}
-      <Box pad="xxsmall" ref={loadmoreRef} />
+      <Box customStyle="p-2" ref={loadmoreRef} />
     </Box>
   );
 };

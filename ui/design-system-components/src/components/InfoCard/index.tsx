@@ -24,20 +24,18 @@ const InfoCard: React.FC<InfoProps> = ({
   noPadding,
 }: InfoProps) => {
   return (
-    <Card padding={8} customStyle="border-none">
-      <div className={tw('flex(& col) justify-center align-center mb-32')}>
-        <BasicCardBox
-          customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
-          round="rounded-xl"
-        />
-        <div className={tw('w-[50%] m-auto')}>
-          <Text variant="body1" align="center">
-            {explanation} <span className={tw('font-bold')}>{keyword}</span> {preposition_in}{' '}
-            <span className={tw('font-bold')}>{section}</span>. {suggestion}
-          </Text>
-        </div>
+    <div className={tw('flex(& col) justify-center align-center mt-8 mb-16')}>
+      <BasicCardBox
+        customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
+        round="rounded-xl"
+      />
+      <div className={tw('w-[90%] md:w-[50%] m-auto')}>
+        <Text variant="body1" align="center">
+          {explanation} <span className={tw('font-bold')}>{keyword}</span> {preposition_in}{' '}
+          <span className={tw('font-bold')}>{section}</span>. {suggestion}
+        </Text>
       </div>
-    </Card>
+    </div>
   );
 };
 

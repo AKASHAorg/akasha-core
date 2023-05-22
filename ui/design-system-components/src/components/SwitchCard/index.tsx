@@ -67,7 +67,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
             customStyle={`py-2 px-3 ${baseStyle} ${hoverStyle} ${
               el.value === activeButton ? activeStyle : ''
             }`}
-            onClick={() => onTabClick(buttonValues[idx].value)}
+            onClick={onTabClick(buttonValues[idx].value)}
           >
             <Text
               color={

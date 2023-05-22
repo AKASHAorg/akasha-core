@@ -24,7 +24,7 @@ export interface IEntryCardRendererProps {
   ethAddress?: string | null;
   navigateTo?: (args: NavigateToParams) => void;
   onContentClick: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  onRepost: (withComment: boolean, entryId: string) => void;
+  onRebeam: (withComment: boolean, entryId: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   onTagClick: (name: string) => void;
@@ -38,7 +38,7 @@ export interface IEntryCardRendererProps {
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
-  const { ethAddress, locale, itemData, itemType, style, contentClickable, onRepost, navigateTo } =
+  const { ethAddress, locale, itemData, itemType, style, contentClickable, onRebeam, navigateTo } =
     props;
 
   const { entryId } = itemData || {};
@@ -135,9 +135,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       });
   };
 
-  const handleRepost = () => {
-    if (onRepost) {
-      onRepost(false, entryId);
+  const handleRebeam = () => {
+    if (onRebeam) {
+      onRebeam(false, entryId);
     }
   };
 
@@ -181,7 +181,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
                   itemType === EntityTypes.REPLY ? 'reply' : 'post'
                 }`}
-                onRepost={handleRepost}
+                onRepost={handleRebeam}
                 onContentClick={handleContentClick}
                 onMentionClick={props.onMentionClick}
                 onTagClick={props.onTagClick}
