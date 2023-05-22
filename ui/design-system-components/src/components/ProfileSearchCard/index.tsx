@@ -16,7 +16,7 @@ export interface IProfileSearchCard {
   shareProfileLabel?: string;
   followLabel: string;
   unfollowLabel: string;
-  postsLabel: string;
+  beamsLabel: string;
   descriptionLabel?: string;
   profileAnchorLink?: string;
   onClickProfile?: () => void;

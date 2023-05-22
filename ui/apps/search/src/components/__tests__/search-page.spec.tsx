@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchPage from '../routes/new-search-page';
+import SearchPage from '../routes/search-page';
 import {
   screen,
   renderWithAllProviders,
