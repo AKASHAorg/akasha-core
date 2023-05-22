@@ -38,7 +38,7 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
             <>{t('Search')}</>
           </Text>
           <Stack>
-            <Button customStyle="relative" plain={true} onClick={handleTopMenuClick}>
+            <Button customStyle="relative" plain={true} onClick={() => handleTopMenuClick()}>
               <Icon type="Cog8ToothIcon" accentColor={true} />
             </Button>
           </Stack>
