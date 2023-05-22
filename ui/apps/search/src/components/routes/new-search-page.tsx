@@ -12,7 +12,7 @@ import {
 } from '@akashaorg/typings/ui';
 
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
-import routes, { RESULTS } from '../../routes';
+import routes, { SETTINGS } from '../../routes';
 
 import {
   useTagSubscriptions,
@@ -399,7 +399,7 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
   const handleTopMenuClick = () => {
     return navigateTo?.({
       appName: '@akashaorg/app-search',
-      getNavigationUrl: () => routes[RESULTS],
+      getNavigationUrl: () => routes[SETTINGS],
     });
   };
 
