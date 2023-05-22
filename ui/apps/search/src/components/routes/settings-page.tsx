@@ -19,10 +19,8 @@ interface ISettingsPageProps extends RootComponentProps {
 }
 
 const SettingsPage: React.FC<ISettingsPageProps> = props => {
-  const { t } = useTranslation('app-notifications');
+  const { t } = useTranslation('app-search');
   const { plugins } = props;
-
-  const [selected, setSelected] = React.useState(true);
 
   // for displaying feedback messages
   const [message, setMessage] = React.useState('');
@@ -38,7 +36,7 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
 
   const [showNsfwContent, setShowNsfwContent] = React.useState(false);
 
-  // check if snooze notification option has already been set
+  // check if show NSFW option has already been set
   React.useEffect(() => {
     if (window.localStorage) {
       setShowNsfwContent(JSON.parse(localStorage.getItem('searchApp-showNsfwContent')));
@@ -48,14 +46,13 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
   //for the button, disabled when no change made, enabled when there's an change
   const [updateButtonDisabled, setUpdateButtonDisabled] = React.useState(true);
 
-  const snoozeChangeHandler = () => {
+  const showNSFWChangeHandler = () => {
     setShowNsfwContent(!showNsfwContent);
   };
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
   const goToSearchPage = () => {
-    // navigate to final step or go back to notifications page depending whether it's the first time accessing the app or not
     return navigateTo?.({
       appName: '@akashaorg/app-search',
       getNavigationUrl: () => routes[RESULTS],
@@ -66,10 +63,9 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
   React.useEffect(() => {
     setUpdateButtonDisabled(!updateButtonDisabled);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected, showNsfwContent]);
+  }, [showNsfwContent]);
 
   const cancelHandler = () => {
-    // navigate to final step
     goToSearchPage();
   };
 
@@ -116,16 +112,16 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
           <Text variant="h6">
             <>{t('Show NSFW Content')}</>
           </Text>
-          <Toggle checked={showNsfwContent} onChange={snoozeChangeHandler} size="large" />
+          <Toggle checked={showNsfwContent} onChange={showNSFWChangeHandler} size="large" />
         </Box>
-        <Text variant="footnotes2">
+        <Text variant="footnotes2" color={{ light: 'grey7', dark: 'grey6' }}>
           <>
             {t(
               'If you enable NSFW content, any sensitive content will show up in your search results when you lookup anything.',
             )}
           </>
         </Text>
-        <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2 mt-16')}>
+        <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2 pt-32')}>
           <Button
             variant="text"
             label={t('Cancel')}

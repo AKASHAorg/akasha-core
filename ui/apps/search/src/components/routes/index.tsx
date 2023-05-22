@@ -17,7 +17,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Router basename={props.baseRouteName}>
-      <Box>
+      <Box testId="search-box">
         <Routes>
           <Route path="/" element={<Navigate to={routes[RESULTS]} replace />} />
           <Route path={routes[RESULTS]}>

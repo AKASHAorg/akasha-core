@@ -404,7 +404,7 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
   };
 
   return (
-    <Box testId="search-box" customStyle="flex(& col)">
+    <Box customStyle="flex(& col)">
       <SearchStartCard
         searchKeyword={searchKeyword}
         handleSearch={handleSearch}
