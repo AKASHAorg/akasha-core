@@ -3,6 +3,7 @@ import { apply, tw } from '@twind/core';
 
 export interface IBoxProps {
   customStyle?: string;
+  testId?: string;
 }
 
 const Box: React.FC<
@@ -10,12 +11,12 @@ const Box: React.FC<
     IBoxProps & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
   >
 > = props => {
-  const { customStyle = '', children, ...rest } = props;
+  const { customStyle = '', testId, children, ...rest } = props;
 
   const className = apply`${customStyle}`;
 
   return (
-    <div className={tw(className)} {...rest}>
+    <div className={tw(className)} data-testid={testId} {...rest}>
       {children}
     </div>
   );
