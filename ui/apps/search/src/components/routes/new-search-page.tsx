@@ -12,6 +12,7 @@ import {
 } from '@akashaorg/typings/ui';
 
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
+import routes, { RESULTS } from '../../routes';
 
 import {
   useTagSubscriptions,
@@ -396,7 +397,10 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
   }, [searchState, activeButton /* allQueriesFinished */]);
 
   const handleTopMenuClick = () => {
-    //clicked
+    return navigateTo?.({
+      appName: '@akashaorg/app-search',
+      getNavigationUrl: () => routes[RESULTS],
+    });
   };
 
   return (
@@ -432,9 +436,8 @@ const NewSearchPage: React.FC<NewSearchPageProps> = props => {
 
       {
         /* allQueriesFinished */ !isFetchingSearch &&
-          /*           searchKeyword &&
-           */ /* isAllTabActive ? emptySearchState : */ !searchState[activeButton]?.results
-            ?.length && (
+          searchKeyword &&
+          /* isAllTabActive ? emptySearchState : */ !searchState[activeButton]?.results?.length && (
             <Box customStyle="mt-4">
               <InfoCard
                 explanation={t('Oops! Looks like there’s no results for the word')}

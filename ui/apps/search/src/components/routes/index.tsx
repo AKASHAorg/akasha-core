@@ -2,9 +2,10 @@ import * as React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import routes, { ONBOARDING, RESULTS } from '../../routes';
+import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
 import NewSearchPage from './new-search-page';
 import OnboardingPage from './onboarding-page';
+import SettingsPage from './settings-page';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
@@ -41,6 +42,16 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               }
             />
           </Route>
+          <Route
+            path={routes[SETTINGS]}
+            element={
+              <SettingsPage
+                {...props}
+                showLoginModal={showLoginModal}
+                loginState={loginQuery.data}
+              />
+            }
+          />
           <Route
             path={routes[ONBOARDING]}
             element={
