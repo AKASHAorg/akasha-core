@@ -10,14 +10,14 @@ import {
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 
 const mockLocationValue = {
-  pathname: '/search/test',
+  pathname: '/search/',
   search: '',
   hash: '',
   state: null,
 };
 
 const mockRouteParams = {
-  searchKeyword: 'test',
+  searchKeyword: '',
 };
 
 jest.mock('react-router', () => ({
