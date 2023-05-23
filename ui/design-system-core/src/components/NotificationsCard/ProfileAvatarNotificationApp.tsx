@@ -1,19 +1,19 @@
 import * as React from 'react';
-import { IProfileData } from '@akashaorg/typings/ui';
 import Text from '../Text';
 import Avatar from '../Avatar';
 import { AvatarSize } from '../Avatar';
 import { tw, apply } from '@twind/core';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ProfileAvatarNotificationAppProps {
   info?: string | React.ReactElement;
-  avatarImage?: IProfileData['avatar'];
+  avatarImage?: Profile['avatar'];
   label?: string | React.ReactElement;
   size?: AvatarSize;
   bold?: boolean;
   active?: boolean;
   customStyle?: string;
-  ethAddress: string;
+  profileId: string;
   onClickAvatar?: () => void;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
@@ -30,7 +30,7 @@ const ProfileAvatarNotificationApp = React.forwardRef(
       info,
       onClick,
       onClickAvatar,
-      ethAddress,
+      profileId,
       active,
       onMouseEnter,
       onMouseLeave,
@@ -49,7 +49,7 @@ const ProfileAvatarNotificationApp = React.forwardRef(
               <div className={tw('w-2 h-2 rounded-full bg(secondaryLight dark:secondaryDark)')} />
             )}
           </div>
-          <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
+          <Avatar size={size} avatar={avatarImage} profileId={profileId} onClick={onClickAvatar} />
         </div>
         <div
           className={tw(apply(`pl(lg:4 2) flex h-[50%] my-auto`))}
@@ -59,7 +59,7 @@ const ProfileAvatarNotificationApp = React.forwardRef(
         >
           <div className={tw(AlignmentStyle)}>
             <Text variant="footnotes2" weight="bold" truncate={true} align="center">
-              {label || ethAddress}
+              {label || profileId}
             </Text>
           </div>
         </div>

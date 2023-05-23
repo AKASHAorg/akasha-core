@@ -9,7 +9,7 @@ import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ListSidebarApps from './list-sidebar-apps';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -114,8 +114,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       <Box customStyle="flex flex-row p-4 border-b-1 border(grey9 dark:grey3)">
         <Box customStyle="w-fit h-fit mr-2">
           <Avatar
-            ethAddress={loggedProfileData?.name}
-            src={loggedProfileData?.avatar?.default.src}
+            profileId={loggedProfileData?.did?.id}
+            avatar={loggedProfileData?.avatar?.default.src}
           />
         </Box>
         <Box customStyle="w-fit">

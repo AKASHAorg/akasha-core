@@ -2,8 +2,6 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import {
-  useGetLogin,
-  LoginState,
   useTrendingProfiles,
   useTrendingTags,
   useIsFollowingMultiple,
@@ -12,25 +10,24 @@ import {
   useTagSubscriptions,
   useToggleTagSubscription,
 } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
 
 const { Helmet, Box, OnboardingStartCard, OnboardingSuggestionsCard } = DS;
 
 interface OnboardingPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
-  loginState: LoginState;
+  loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
 const OnboardingPage: React.FC<OnboardingPageProps> = props => {
-  const { showLoginModal } = props;
+  const { showLoginModal, loggedProfileData } = props;
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-notifications');
 
-  const loginQuery = useGetLogin();
-
+  // @TODO: replace with new hooks
   const trendingTagsReq = useTrendingTags();
   const trendingTags = trendingTagsReq.data?.slice(0, 15) || [];
 
@@ -39,20 +36,21 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
 
   const followPubKeyArr = trendingProfiles.map((profile: { pubKey: string }) => profile.pubKey);
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.pubKey, followPubKeyArr);
+  const isFollowingMultipleReq = useIsFollowingMultiple(
+    loggedProfileData?.did?.id,
+    followPubKeyArr,
+  );
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  const tagSubscriptionsReq = useTagSubscriptions(
-    loginQuery.data?.isReady && loginQuery.data?.ethAddress,
-  );
+  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
   const tagSubscriptions = tagSubscriptionsReq.data;
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
   const isLoggedIn = React.useMemo(() => {
-    return loginQuery.data?.ethAddress;
-  }, [loginQuery.data?.ethAddress]);
+    return loggedProfileData?.did?.id;
+  }, [loggedProfileData?.did?.id]);
 
   const handleAvatarClick = (profilePubKey: string) => {
     navigateTo?.({

@@ -2,9 +2,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
-
 import { Moderator } from '@akashaorg/typings/ui';
-
 import SocialLink from './social-link';
 import Avatar from '../Avatar';
 import Tooltip from '../Tooltip';
@@ -50,7 +48,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
         pad={{ horizontal: 'medium' }}
         border={{ side: 'right', color: 'border' }}
       >
-        <Avatar src={moderator.avatar} size={size === 'small' ? 'sm' : 'xxl'} />
+        <Avatar avatar={moderator.avatar} size={size === 'small' ? 'sm' : 'xxl'} />
 
         <Box gap="xxsmall">
           <Tooltip
@@ -64,18 +62,18 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
             </TruncateText>
           </Tooltip>
 
-          <Tooltip
-            dropProps={{ align: { left: 'right' } }}
-            message={`@${moderator.userName}`}
-            plain={true}
-            caretPosition="left"
-          >
-            <TruncateText
-              size="medium"
-              viewportSize={size}
-              color="subtitleText"
-            >{`@${moderator.userName}`}</TruncateText>
-          </Tooltip>
+          {/*<Tooltip*/}
+          {/*  dropProps={{ align: { left: 'right' } }}*/}
+          {/*  message={`@${moderator.userName}`}*/}
+          {/*  plain={true}*/}
+          {/*  caretPosition="left"*/}
+          {/*>*/}
+          {/*  <TruncateText*/}
+          {/*    size="medium"*/}
+          {/*    viewportSize={size}*/}
+          {/*    color="subtitleText"*/}
+          {/*  >{`@${moderator.userName}`}</TruncateText>*/}
+          {/*</Tooltip>*/}
         </Box>
       </Box>
 
@@ -94,7 +92,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
 
             <Text size="medium" color="subtitleText">
               {moderator.status === 'active'
-                ? formatDate(new Date(moderator.creationDate).toISOString())
+                ? formatDate(new Date(moderator.createdAt).toISOString())
                 : formatDate(moderator.moderatorEndDate)}
             </Text>
           </Box>

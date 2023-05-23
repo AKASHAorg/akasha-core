@@ -1,21 +1,37 @@
-import { UserDataType } from '../components/StackedAvatar';
+import { FollowConnection, Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
-const userData: UserDataType = [
+const userData: Profile[] = [
   {
-    ethAddress: '0x003410490050000320006570034567114572000',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    name: 'Alice',
+    id: '410490050000320006570034567114572000',
+    did: { id: 'did:pkh:eip155:1:0x003410490050000320006570034567114572000', isViewer: true },
+    avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
+    createdAt: '2021-03-01T00:00:00.000Z',
+    followers: {} as FollowConnection,
   },
   {
-    ethAddress: '0x004410490050000320006570034567114572001',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    name: 'Bob',
+    id: '410490050000320006570034567114572001',
+    did: { id: 'did:pkh:eip155:1:0x004410490050000320006570034567114572001', isViewer: false },
+    avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
+    createdAt: '2020-03-01T00:00:00.000Z',
+    followers: {} as FollowConnection,
   },
   {
-    ethAddress: '0x005410490050000320006570034567114572002',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    name: 'Charlie',
+    id: '410490050000320006570034567114572002',
+    did: { id: 'did:pkh:eip155:1:0x005410490050000320006570034567114572002', isViewer: true },
+    avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
+    createdAt: '2023-03-01T00:00:00.000Z',
+    followers: {} as FollowConnection,
   },
   {
-    ethAddress: '0x006410490050000320006570034567114572003',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    name: 'Dave',
+    id: '410490050000320006570034567114572003',
+    did: { id: 'did:pkh:eip155:1:0x006410490050000320006570034567114572003', isViewer: false },
+    avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
+    createdAt: '2022-03-01T00:00:00.000Z',
+    followers: {} as FollowConnection,
   },
 ];
 

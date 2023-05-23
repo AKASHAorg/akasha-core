@@ -5,10 +5,11 @@ import MarginInterface from '../../interfaces/margin.interface';
 import AvatarImage from './avatar-image';
 // import { loadPlaceholder } from './placeholders';
 import StyledAvatar, { AvatarSize, ActiveOverlay, AvatarBorderColor } from './styled-avatar';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
-  ethAddress?: string | null;
-  src?: { url?: string; fallbackUrl?: string };
+  profileId?: string | null;
+  avatar?: Profile['avatar'];
   active?: boolean;
   onClick?: React.MouseEventHandler<any>;
   alt?: string;
@@ -47,25 +48,22 @@ export const getAvatarFromSeed = (seed: string | null) => {
 const Avatar: React.FC<AvatarProps> = props => {
   const {
     onClick,
-    src,
+    avatar,
     className,
     size = 'md',
     margin,
     border,
     faded,
     active,
-    ethAddress = '0x0000000000000000000000000000000',
+    profileId = 'did:pkh:eip155:1:0x0000000000000000000000000000000',
     publicImgPath = '/images',
     backgroundColor,
     borderColor,
   } = props;
   const isClickable = typeof onClick === 'function';
   let avatarImageFallback;
-  if (src?.fallbackUrl) {
-    avatarImageFallback = src.fallbackUrl;
-  }
   if (!avatarImageFallback) {
-    const seed = getAvatarFromSeed(ethAddress);
+    const seed = getAvatarFromSeed(profileId);
     avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
   }
 
@@ -81,7 +79,7 @@ const Avatar: React.FC<AvatarProps> = props => {
       borderColor={borderColor}
     >
       <React.Suspense fallback={<></>}>
-        <AvatarImage url={src?.url} fallbackUrl={avatarImageFallback} faded={faded} />
+        <AvatarImage url={avatar?.default.src} fallbackUrl={avatarImageFallback} faded={faded} />
       </React.Suspense>
       {active && <ActiveOverlay />}
     </StyledAvatar>

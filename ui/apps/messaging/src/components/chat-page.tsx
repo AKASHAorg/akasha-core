@@ -1,10 +1,11 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
-import { useMentionSearch, useTagSearch, useGetProfile, LoginState } from '@akashaorg/ui-awf-hooks';
+import { useMentionSearch, useTagSearch } from '@akashaorg/ui-awf-hooks';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -12,18 +13,18 @@ import { useLiveQuery } from 'dexie-react-hooks';
 const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard } = DS;
 
 export interface ChatPageProps extends RootComponentProps {
-  loginState: LoginState;
+  loggedProfileData: Profile;
   fetchingMessages?: boolean;
 }
 
 const ChatPage = (props: ChatPageProps) => {
-  const { loginState, fetchingMessages } = props;
+  const { loggedProfileData, fetchingMessages } = props;
 
   const { t } = useTranslation('app-messaging');
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const { pubKey } = useParams<{ pubKey: string }>();
+  const { profileId } = useParams<{ profileId: string }>();
 
   const onChevronLeftClick = () => {
     navigateTo?.({
@@ -35,17 +36,14 @@ const ChatPage = (props: ChatPageProps) => {
   const handleProfileClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `${routes.rootRoute}/${pubKey}`,
+      getNavigationUrl: routes => `${routes.rootRoute}/${profileId}`,
     });
   };
 
-  const contactPubKey = React.useMemo(() => pubKey, [pubKey]);
-  const loggedUserPubKey = React.useMemo(() => loginState?.pubKey, [loginState]);
+  const contactProfileId = React.useMemo(() => profileId, [profileId]);
+  const loggedUserId = React.useMemo(() => loggedProfileData?.did?.id, [loggedProfileData]);
 
-  const disablePublishing = React.useMemo(
-    () => loginState?.waitForAuth || !loginState?.isReady,
-    [loginState],
-  );
+  const disablePublishing = React.useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
 
   const handleMentionClick = (pubKey: string) => {
     navigateTo?.({
@@ -76,71 +74,78 @@ const ChatPage = (props: ChatPageProps) => {
     setTagQuery(query);
   };
 
-  const profileDataReq = useGetProfile(contactPubKey);
+  const profileDataReq = useGetProfileByDidQuery(
+    { id: profileId },
+    {
+      select: data => {
+        if (data.node && 'profile' in data.node) {
+          return data.node;
+        }
+        return null;
+      },
+    },
+  );
 
   const contactId = React.useMemo(
-    () =>
-      profileDataReq?.data?.name ||
-      profileDataReq?.data?.userName ||
-      profileDataReq?.data?.ethAddress,
-    [profileDataReq?.data?.ethAddress, profileDataReq?.data?.name, profileDataReq?.data?.userName],
+    () => profileDataReq?.data?.profile?.name || profileDataReq?.data?.profile?.did,
+    [profileDataReq?.data],
   );
 
   const handleSendMessage = async publishData => {
     // publish message through textile inbox api
-    const res: any = await sendMessage(contactPubKey, publishData);
+    const res: any = await sendMessage(contactProfileId, publishData);
     const newMessage = {
       content: res.body?.slateContent,
-      ethAddress: res.body?.author,
+      did: res.body?.author,
       timestamp: res.createdAt,
       from: res.from,
       to: res.to,
       read: res.read,
       id: res.id,
-      loggedUserPubKey: loggedUserPubKey,
-      chatPartnerPubKey: pubKey,
+      loggedUserId: loggedUserId,
+      chatPartnerId: profileId,
     };
     // save the published messsage to the local db
-    db.messages.put(newMessage);
+    // db.messages.put(newMessage);
   };
 
   // real time query to get messages from local db
   const dexieMessages =
     useLiveQuery(() =>
       db.messages
-        .where({ loggedUserPubKey: loggedUserPubKey, chatPartnerPubKey: pubKey })
+        .where({ loggedUserId: loggedUserId, chatPartnerId: profileId })
         .sortBy('timestamp'),
     ) || [];
 
   // hydrate user data on messages
   const localMessages = dexieMessages.map(msg => {
-    if (msg.from === loggedUserPubKey) {
+    if (msg.from === loggedUserId) {
       return msg;
-    } else if (msg.from === pubKey) {
+    } else if (msg.from === profileId) {
       return { ...msg, name: contactId };
     }
   });
 
   const indexOfLatestReadMessage = localMessages.findIndex(
-    msg => !msg.read && msg.from !== loggedUserPubKey,
+    msg => !msg.read && msg.from !== loggedUserId,
   );
 
   const unreadMessages = localMessages.slice(indexOfLatestReadMessage);
 
   const markLatestMessagesRead = () => {
-    if (unreadMessages?.length && pubKey) {
+    if (unreadMessages?.length && profileId) {
       const unreadMessageIds = unreadMessages.map(message => message.id);
       // mark messages as read through textile api
       markAsRead(unreadMessageIds);
       // optimistic mark messages as read on local db
       db.messages
-        .where({ from: pubKey })
+        .where({ from: profileId })
         .filter(msg => msg.read === false)
         .modify({ read: true });
       // clear new messages conversation marker
       if (localStorage.getItem('Unread Chats')) {
         const unreadChats = JSON.parse(localStorage.getItem('Unread Chats'));
-        const filteredChats = unreadChats.filter(unreadChat => unreadChat !== pubKey);
+        const filteredChats = unreadChats.filter(unreadChat => unreadChat !== profileId);
         localStorage.setItem('Unread Chats', JSON.stringify(filteredChats));
       }
     }
@@ -163,10 +168,9 @@ const ChatPage = (props: ChatPageProps) => {
           justify="between"
         >
           <ChatAreaHeader
-            name={profileDataReq.data?.name}
-            userName={profileDataReq.data?.userName}
-            avatar={profileDataReq.data?.avatar}
-            ethAddress={profileDataReq.data?.ethAddress}
+            name={profileDataReq.data?.profile?.name}
+            avatar={profileDataReq.data?.profile?.avatar}
+            did={profileDataReq.data?.profile?.did}
             onClickAvatar={handleProfileClick}
           />
 
@@ -176,7 +180,7 @@ const ChatPage = (props: ChatPageProps) => {
             unreadMessagesLabel={t('You have {{numberOfUnread}} new unread messages', {
               numberOfUnread: unreadMessages?.length,
             })}
-            loggedUserEthAddress={loginState?.ethAddress}
+            loggedUserProfileId={loggedProfileData?.did.id}
             itemCard={
               <BubbleCard
                 locale="en"
@@ -186,15 +190,15 @@ const ChatPage = (props: ChatPageProps) => {
                 handleLinkClick={handleLinkClick}
               />
             }
-            oldMessages={localMessages}
-            newMessages={unreadMessages}
+            // oldMessages={localMessages}
+            // newMessages={unreadMessages}
             fetchingMessages={fetchingMessages}
             markLatestMessagesRead={markLatestMessagesRead}
           />
 
           <ChatEditor
             showAvatar={false}
-            ethAddress={loginState?.ethAddress}
+            profileId={loggedProfileData?.did.id}
             postLabel={t('Send')}
             placeholderLabel={t('Message')}
             emojiPlaceholderLabel={t('Search')}

@@ -1,13 +1,14 @@
 import singleSpa from 'single-spa';
-import { RootComponentProps, IEntryData, IProfileData, EntityTypes } from '@akashaorg/typings/ui';
+import { RootComponentProps, IEntryData, EntityTypes } from '@akashaorg/typings/ui';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import { ILogger } from '@akashaorg/typings/sdk/log';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IContentProps extends RootComponentProps {
   user?: string;
   isPending: boolean;
   locale: ILocale;
-  entryData: IEntryData | IProfileData;
+  entryData: IEntryData | Profile;
 
   incidentLabel: string;
   uniqueId: string;
@@ -24,7 +25,7 @@ export interface IContentProps extends RootComponentProps {
   itemId: string;
   reasons: string[];
   reporter?: string;
-  reporterAvatar?: string | null;
+  reporterAvatar?: Profile['avatar'];
   reporterName?: string | null;
   reporterENSName?: string | null;
   otherReporters?: string;

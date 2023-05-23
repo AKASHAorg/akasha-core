@@ -5,13 +5,8 @@ import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import {
-  useGetBookmarks,
-  useGetLogin,
-  useGetProfile,
-  usePosts,
-  checkEntryActive,
-} from '@akashaorg/ui-awf-hooks';
+import { useGetBookmarks, usePosts, checkEntryActive } from '@akashaorg/ui-awf-hooks';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const { Spinner, StartCard, InfoCard, Box } = DS;
 
@@ -23,14 +18,18 @@ type BookmarksPageProps = Omit<
 const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const { t } = useTranslation();
 
-  const loginQuery = useGetLogin();
-  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
 
   const isLoggedIn = React.useMemo(() => {
-    return loginQuery.data?.ethAddress;
-  }, [loginQuery.data?.ethAddress]);
+    return loggedProfileData?.did?.id;
+  }, [loggedProfileData?.did?.id]);
 
-  const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && isLoggedIn);
+  const bookmarksReq = useGetBookmarks(isLoggedIn);
   /**
    * Currently react query's initialData isn't working properly so bookmarksReq.data will return undefined even if we supply initialData.
    * This will be fixed in v4 of react query(https://github.com/DamianOsipiuk/vue-query/issues/124).
@@ -50,7 +49,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loginQuery.data?.pubKey) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     props.navigateToModal({ name: 'report-modal', itemId, itemType });
@@ -134,8 +133,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               }
               pages={[{ results: bookmarkedPostIds, total: bookmarkedPostIds.length }]}
               requestStatus={bookmarksReq.status}
-              loginState={loginQuery.data}
-              loggedProfile={loggedProfileQuery.data}
+              loggedProfileData={loggedProfileData}
               navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               navigateToModal={props.navigateToModal}
               onLoginModalOpen={showLoginModal}

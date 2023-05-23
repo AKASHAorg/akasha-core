@@ -301,7 +301,7 @@ export const getModerators = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<Mo
   // >[];
 
   const moderators = serializedResponse.map((moderator: Moderator) => {
-    const profile = getEWProfilesResp.find(_profile => _profile.pubKey === moderator._id);
+    const profile = getEWProfilesResp.find(profile => profile.did['id'] === moderator.did.id);
 
     const avatarIpfsLinks = getMediaUrl(profile?.avatar as string);
 

@@ -1,14 +1,8 @@
 import { Editor, Text, Transforms, Element, Node, Path, Point } from 'slate';
 import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
-import {
-  CustomText,
-  ImageElement,
-  LinkElement,
-  MentionElement,
-  TagElement,
-  IProfileData,
-} from '@akashaorg/typings/ui';
+import { CustomText, ImageElement, LinkElement, TagElement } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/ui';
 
 const CustomEditor = {
   isBlockActive(editor: Editor, format: string) {
@@ -67,21 +61,12 @@ const CustomEditor = {
     Transforms.insertNodes(editor, textElem);
   },
 
-  insertMention(
-    editor: Editor,
-    mentionData: {
-      name?: string;
-      userName?: string;
-      pubKey: string;
-      avatar?: IProfileData['avatar'];
-      ethAddress: string;
-    },
-  ) {
+  insertMention(editor: Editor, mentionData: Profile) {
     const baseMention: { type: 'mention'; children: [{ text: '' }] } = {
       type: 'mention',
       children: [{ text: '' }],
     };
-    const mention: MentionElement = Object.assign(baseMention, mentionData);
+    const mention = Object.assign(baseMention, mentionData);
     Transforms.insertNodes(editor, mention);
     ReactEditor.focus(editor);
     Transforms.move(editor);

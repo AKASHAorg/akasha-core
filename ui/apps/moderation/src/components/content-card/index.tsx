@@ -43,7 +43,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     makeADecisionLabel,
     reviewDecisionLabel,
   } = props;
-
+  // @TODO: replace with new hooks
   const profileDataQuery = useGetProfile(itemId, props.user, itemType === EntityTypes.PROFILE);
   const profile = profileDataQuery.data;
 
@@ -74,7 +74,8 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           {...props}
           isPending={isPending}
           locale={locale}
-          entryData={itemType === EntityTypes.PROFILE ? profile : entryData}
+          // @TODO fix this after replacing hooks
+          entryData={itemType === EntityTypes.PROFILE ? profile : (entryData as any)}
           incidentLabel={incidentLabel}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}

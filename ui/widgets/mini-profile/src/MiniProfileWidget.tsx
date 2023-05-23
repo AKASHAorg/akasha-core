@@ -9,70 +9,125 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ExtensionPoint from '@akashaorg/design-system-components/lib/utils/extension-point';
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 import { RootExtensionProps, EventTypes } from '@akashaorg/typings/ui';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 import {
-  useGetEntryAuthor,
-  useIsFollowingMultiple,
-  useFollow,
-  useUnfollow,
-  useGetLogin,
-  withProviders,
-} from '@akashaorg/ui-awf-hooks';
+  useCreateFollowMutation,
+  useGetBeamByIdQuery,
+  useGetFollowersListByDidQuery,
+  useGetFollowingListByDidQuery,
+  useGetMyProfileQuery,
+  useGetProfileByDidQuery,
+  useUpdateFollowMutation,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
-  const params: { postId?: string } = useParams();
+  const params: { beamId?: string } = useParams();
   const { t } = useTranslation('app-akasha-integration');
 
-  const loginQuery = useGetLogin();
+  const loggedProfileQuery = useGetMyProfileQuery(null, {
+    select: data => data.viewer?.profile,
+  });
 
-  const profileDataReq = useGetEntryAuthor(params.postId);
-  const profileData = profileDataReq.data;
+  const beamAuthorId = useGetBeamByIdQuery(
+    { id: params.beamId },
+    {
+      select: data => {
+        if (data.node && 'author' in data.node) {
+          return data.node.author.id;
+        }
+        return null;
+      },
+    },
+  );
 
-  const isFollowingReq = useIsFollowingMultiple(loginQuery.data?.pubKey, [profileData?.pubKey]);
-  const followedProfiles = isFollowingReq.data;
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
+  const authorProfileDataReq = useGetProfileByDidQuery(
+    { id: beamAuthorId.data },
+    {
+      enabled: beamAuthorId.isSuccess,
+      select: data => {
+        if (data.node && 'profile' in data.node) {
+          return data.node;
+        }
+        return null;
+      },
+    },
+  );
+
+  const followersListReq = useGetFollowersListByDidQuery(
+    {
+      id: authorProfileDataReq.data?.profile?.did.id,
+    },
+    {
+      select: data => {
+        if (data.node && 'profile' in data.node) {
+          return data.node.profile.followers.edges;
+        }
+      },
+      enabled: authorProfileDataReq.isSuccess && !!authorProfileDataReq.data?.profile?.did,
+    },
+  );
+
+  const followingListReq = useGetFollowingListByDidQuery(
+    {
+      id: authorProfileDataReq.data?.profile.did.id,
+    },
+    {
+      select: data => {
+        if (data.node && 'followList' in data.node) {
+          return data.node.followList.edges;
+        }
+      },
+      enabled: authorProfileDataReq.isSuccess && !!authorProfileDataReq.data.profile.did,
+    },
+  );
+
+  const createFollowMutation = useCreateFollowMutation();
+  const updateFollowMutation = useUpdateFollowMutation();
+
+  const hasFollowed = React.useMemo(() => {
+    return followersListReq.data.find(
+      p => p.node.profile.did.id === loggedProfileQuery.data.did.id,
+    );
+  }, [followersListReq.data, loggedProfileQuery.data]);
 
   const showLoginModal = () => {
     props.navigateToModal({ name: 'login' });
   };
 
-  const handleFollow = () => {
-    if (!loginQuery.data?.ethAddress) {
+  const handleFollow = React.useCallback(() => {
+    if (!loggedProfileQuery.data?.did) {
       showLoginModal();
       return;
     }
-    if (profileData?.pubKey) {
-      followReq.mutate(profileData?.pubKey);
+
+    if (!hasFollowed) {
+      // create follow mutation
+    } else {
+      // update follow mutation if isFollowing is false
     }
-  };
+  }, [followersListReq.data, loggedProfileQuery.data]);
 
   const handleUnfollow = () => {
-    if (profileData?.pubKey) {
-      unfollowReq.mutate(profileData?.pubKey);
+    if (!hasFollowed) {
+      console.log('something is wrong, you cannot unfollow someone you never followed');
+    } else {
+      // update follow mutation if isFollowing is true
     }
   };
 
   const handleProfileClick = (pubKey: string) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorProfileDataReq}`,
     });
   };
-
-  const isFollowing = React.useMemo(() => {
-    return !!followedProfiles.includes(profileData?.pubKey);
-  }, [followedProfiles, profileData?.pubKey]);
-
-  if (!profileData?.ethAddress) {
-    return null;
-  }
 
   const handleExtPointMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
       data: {
         name,
-        pubKey: profileData?.pubKey,
+        did: authorProfileDataReq.data.profile.did.id,
       },
     });
   };
@@ -92,9 +147,10 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         handleClick={handleProfileClick}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
-        isFollowing={isFollowing}
-        loggedEthAddress={loginQuery.data?.ethAddress}
-        profileData={profileData}
+        isFollowing={!!hasFollowed && hasFollowed.node.isFollowing}
+        loggedEthAddress={loggedProfileQuery.data?.did.id}
+        profileData={authorProfileDataReq.data.profile}
+        isViewer={authorProfileDataReq.data.isViewer}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         followingLabel={t('Following')}

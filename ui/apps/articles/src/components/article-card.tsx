@@ -51,8 +51,8 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           <Box gap="xsmall">
             <Box direction="row" gap="xxsmall" align="center">
               <Avatar
-                src={articleData.authorAvatar}
-                ethAddress={articleData.authorEthAddress}
+                avatar={articleData.authorAvatar}
+                profileId={articleData.authorProfileId}
                 size="xs"
                 onClick={() => null}
               />

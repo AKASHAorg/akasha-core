@@ -2,8 +2,8 @@ import Dexie, { Table } from 'dexie';
 import { IChatMessage } from '@akashaorg/typings/ui';
 
 export interface Message extends IChatMessage {
-  loggedUserPubKey: string;
-  chatPartnerPubKey: string;
+  loggedUserId: string;
+  chatPartnerId: string;
 }
 
 export class LocalMessagesDexie extends Dexie {
@@ -12,7 +12,7 @@ export class LocalMessagesDexie extends Dexie {
   constructor() {
     super('MessagesDatabase');
     this.version(1).stores({
-      messages: '&id, from, to, timestamp, [loggedUserPubKey+chatPartnerPubKey]',
+      messages: '&id, from, to, timestamp, [loggedUserId+chatPartnerId]',
     });
   }
 }

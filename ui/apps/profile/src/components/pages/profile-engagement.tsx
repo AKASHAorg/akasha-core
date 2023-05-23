@@ -2,7 +2,7 @@ import React from 'react';
 import ProfileEngagements from '@akashaorg/design-system-components/lib/components/ProfileEngagements';
 import { useTranslation } from 'react-i18next';
 import {
-  IProfileData,
+  Profile,
   NavigateToParams,
   RootComponentProps,
   EngagementType,
@@ -10,7 +10,6 @@ import {
 import {
   useFollowers,
   useFollowing,
-  LoginState,
   useFollow,
   useIsFollowingMultiple,
   useUnfollow,
@@ -18,33 +17,35 @@ import {
 import { useSearchParams } from 'react-router-dom';
 
 type ProfileEngagementsPageProps = {
-  loginState: LoginState;
+  loggedProfileData: Profile;
   selectedStat: EngagementType;
-  profileData: IProfileData;
+  profileData: Profile;
   navigateTo?: (args: NavigateToParams) => void;
 };
 
 const ProfileEngagementsPage: React.FC<
   RootComponentProps & ProfileEngagementsPageProps
 > = props => {
-  const { loginState, selectedStat, profileData, navigateTo } = props;
+  const { loggedProfileData, selectedStat, profileData, navigateTo } = props;
 
   const { t } = useTranslation('app-profile');
   const [, setSearchParams] = useSearchParams();
   // get followers for this profile
-  const followersReq = useFollowers(profileData.pubKey, 500);
+  const followersReq = useFollowers(profileData.did.id, 500);
   const followers = React.useMemo(
     () => followersReq.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followersReq.data?.pages],
   );
+
+  // @TODO fix Hooks
   // get accounts this profile is following
-  const followingReq = useFollowing(profileData.pubKey, 500);
+  const followingReq = useFollowing(profileData.did.id, 500);
   const following = React.useMemo(
     () => followingReq.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followingReq.data?.pages],
   );
   const profilePubKeys: string[] = React.useMemo(() => {
-    let profiles: IProfileData[] = [];
+    let profiles: Profile[] = [];
     // wait for followers and following queries to finish
     if (Array.isArray(followers)) {
       profiles = [...profiles, ...followers];
@@ -52,10 +53,10 @@ const ProfileEngagementsPage: React.FC<
     if (Array.isArray(following)) {
       profiles = [...profiles, ...following];
     }
-    return profiles.map((profile: { pubKey: string }) => profile.pubKey);
+    return profiles.map((profile: Profile) => profile.did.id);
   }, [followers, following]);
   // get followed profiles for logged user
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState.pubKey, profilePubKeys);
+  const isFollowingMultipleReq = useIsFollowingMultiple(loggedProfileData?.did?.id, profilePubKeys);
   const followedProfiles = isFollowingMultipleReq.data;
   // hooks to follow/unfollow profiles
   const followProfileReq = useFollow();
@@ -80,14 +81,14 @@ const ProfileEngagementsPage: React.FC<
     props.navigateToModal({ name: 'login' });
   };
   const onFollow = (pubKey: string) => {
-    if (!loginState.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
     followProfileReq.mutate(pubKey);
   };
   const onUnfollow = (pubKey: string) => {
-    if (!loginState.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -103,7 +104,7 @@ const ProfileEngagementsPage: React.FC<
   return (
     <ProfileEngagements
       selectedStat={selectedStat}
-      pubKeyOfLoggedUser={loginState.pubKey}
+      loggedProfileId={loggedProfileData?.did?.id}
       followedProfiles={followedProfiles}
       followers={{
         label: t('Followers'),
@@ -124,8 +125,8 @@ const ProfileEngagementsPage: React.FC<
       followingLabel={t('Following')}
       loadingMoreLabel={`${t('Loading more')} ...`}
       profileAnchorLink={'/@akashaorg/app-profile'}
-      ownerUserName={profileData.userName}
-      viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
+      ownerUserName={profileData.name}
+      viewerIsOwner={loggedProfileData.did.isViewer}
       onError={onError}
       onProfileClick={onProfileClick}
       onFollow={onFollow}

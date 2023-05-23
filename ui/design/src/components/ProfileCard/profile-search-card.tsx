@@ -1,36 +1,34 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
-import { IProfileData } from '@akashaorg/typings/ui';
 import { SearchProfileAvatarDiv, StyledInlineBox } from './styled-profile-card';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import Avatar from '../Avatar';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
 import { truncateMiddle } from '../../utils/string-utils';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileSearchCard {
   className?: string;
-  loggedEthAddress: string;
   handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
   isFollowing: boolean;
-  profileData: IProfileData;
+  profileData: Profile;
   followingLabel: string;
   followersLabel?: string;
   shareProfileLabel?: string;
   followLabel: string;
   unfollowLabel: string;
-  postsLabel: string;
   descriptionLabel?: string;
   profileAnchorLink?: string;
   onClickProfile?: () => void;
   showPostCount?: boolean;
+  isViewer?: boolean;
 }
 
 const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
   const {
     className,
-    loggedEthAddress,
     handleFollow,
     handleUnfollow,
     isFollowing,
@@ -38,13 +36,13 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
     followingLabel,
     followLabel,
     unfollowLabel,
-    postsLabel,
+    isViewer,
     profileAnchorLink,
     onClickProfile,
     showPostCount = true,
   } = props;
 
-  const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
+  // const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
 
   return (
     <MainAreaCardBox className={className}>
@@ -56,7 +54,7 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
               return false;
             }}
             weight="normal"
-            href={`${profileAnchorLink}/${profileData.pubKey}`}
+            href={`${profileAnchorLink}/${profileData.did.id}`}
             reducedWidth={true}
             label={
               <Box direction="row" align="center" onClick={onClickProfile}>
@@ -64,27 +62,27 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
                   <Avatar
                     border="lg"
                     size="xl"
-                    src={profileData.avatar}
-                    ethAddress={profileData.ethAddress}
+                    avatar={profileData.avatar}
+                    profileId={profileData.did.id}
                   />
                 </SearchProfileAvatarDiv>
                 <Box pad={{ vertical: 'xxsmall', left: 'xxsmall', right: 'small' }}>
                   <StyledInlineBox direction="row" gap="xsmall" align="center">
                     <Text size="xlarge" weight="bold" color="primaryText" truncate={true}>
-                      {profileData.name || truncateMiddle(profileData.ethAddress)}
+                      {profileData.name || truncateMiddle(profileData.did.id)}
                     </Text>
                   </StyledInlineBox>
                   <Box direction="row" gap="xsmall">
-                    <Text size="medium" color="secondaryText">
-                      {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}
-                      {showPostCount && ` ・ ${postsTitle}`}
-                    </Text>
+                    {/*<Text size="medium" color="secondaryText">*/}
+                    {/*  {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}*/}
+                    {/*  {showPostCount && ` ・ ${postsTitle}`}*/}
+                    {/*</Text>*/}
                   </Box>
                 </Box>
               </Box>
             }
           />
-          {loggedEthAddress !== profileData.ethAddress && (
+          {!isViewer && (
             <Box>
               <DuplexButton
                 inactiveLabel={followLabel}

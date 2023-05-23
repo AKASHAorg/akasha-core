@@ -14,9 +14,9 @@ export interface IEditorCard extends IEditorBox {
 
 const EditorCard: React.FC<IEditorCard> = props => {
   const {
+    profileId,
     className,
     avatar,
-    ethAddress,
     postLabel,
     titleLabel,
     placeholderLabel,
@@ -49,7 +49,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
       </Box>
       <EditorBox
         avatar={avatar}
-        ethAddress={ethAddress}
+        profileId={profileId}
         disablePublish={disablePublish}
         onPublish={onPublish}
         postLabel={postLabel}

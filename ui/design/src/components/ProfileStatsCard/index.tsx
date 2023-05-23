@@ -1,4 +1,3 @@
-import { IProfileData } from '@akashaorg/typings/ui';
 import { Box, Text } from 'grommet';
 import { MarginType } from 'grommet/utils';
 import * as React from 'react';
@@ -6,11 +5,12 @@ import styled from 'styled-components';
 import TextIcon from '../TextIcon';
 import { IconType } from '../Icon';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type ProfileStatsProps = {
   className?: string;
   statsTitleLabel?: string;
-  profileData: IProfileData;
+  profileData: Profile;
   postsLabel: string;
   followersLabel: string;
   followingLabel: string;
@@ -54,25 +54,25 @@ const ProfileStatsCard: React.FC<ProfileStatsProps> = props => {
     () => [
       {
         iconType: 'quote',
-        count: `${profileData.totalPosts || 0}`,
+        count: '0', //`${profileData.totalPosts || 0}`,
         dataTestId: 'posts-button',
         ...statsInfo.current.posts,
       },
       {
         iconType: 'follower',
-        count: `${profileData.totalFollowers || 0}`,
+        count: '0', // `${profileData.totalFollowers || 0}`,
         dataTestId: 'followers-button',
         ...statsInfo.current.followers,
       },
       {
         iconType: 'following',
-        count: `${profileData.totalFollowing || 0}`,
+        count: '0', //`${profileData.totalFollowing || 0}`,
         dataTestId: 'following-button',
         ...statsInfo.current.following,
       },
       {
         iconType: 'hashtagGray',
-        count: `${profileData.totalInterests || 0}`,
+        count: '0', //`${profileData.totalInterests || 0}`,
         dataTestId: 'interests-button',
         ...statsInfo.current.interests,
       },
@@ -113,6 +113,7 @@ const ProfileStatsCard: React.FC<ProfileStatsProps> = props => {
 
 const StatIconWrapper = styled(Box)<{ isMobile?: boolean }>`
   color: ${props => props.theme.colors.secondaryText};
+
   &:hover {
     color: ${props => props.theme.colors.accent};
   }
@@ -121,10 +122,11 @@ const StatIconWrapper = styled(Box)<{ isMobile?: boolean }>`
 const StyledTextIcon = styled(TextIcon)`
   ${StatIconWrapper}:hover & {
     color: ${props => props.theme.colors.accent};
-    test: none;
+
     svg {
       stroke: ${props => props.theme.colors.accent};
     }
+
     svg * {
       stroke: ${props => props.theme.colors.accent};
     }

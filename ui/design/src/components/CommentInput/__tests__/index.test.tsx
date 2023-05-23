@@ -5,7 +5,7 @@ import CommentInput from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import userEvent from '@testing-library/user-event';
 
-const testEthAddr = '0x00123123123';
+const testProfileId = 'did:0x00123123123';
 const mockString = 'text 4 test';
 const mockClassName = 'test-classname-comment-input';
 
@@ -24,7 +24,7 @@ describe('<CommentInput /> Component', () => {
           <CommentInput
             placeholderLabel="Write a comment"
             publishLabel="Publish"
-            ethAddress={testEthAddr}
+            profileId={testProfileId}
             onPublish={publishHandler}
             className={mockClassName}
           />,
@@ -79,7 +79,7 @@ describe('<CommentInput /> Component', () => {
     fireEvent.click(publishButton);
 
     expect(publishArgs[0]).toStrictEqual(mockString);
-    expect(publishArgs[1]).toEqual(testEthAddr);
+    expect(publishArgs[1]).toEqual(testProfileId);
   });
 
   it.skip('should reset internal state on publish', async () => {

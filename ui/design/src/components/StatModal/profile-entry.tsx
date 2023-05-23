@@ -6,14 +6,10 @@ import DuplexButton from '../DuplexButton';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledAnchor } from '../EntryCard/basic-card-box';
 import useIntersectionObserver from '../../utils/intersection-observer';
-import { IProfileData } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileEntry {
-  // hides follow button it matches with entry's pubKey
-  loggedUser?: string;
-
   followedProfiles?: string[];
-
   followLabel: string;
   unfollowLabel: string;
   followingLabel: string;
@@ -22,21 +18,21 @@ export interface IProfileEntry {
   profileAnchorLink: string;
 
   // handles load more on scroll
-  profiles?: IProfileData[];
+  profiles?: Profile[];
   status?: 'loading' | 'success' | 'error' | 'idle';
   hasNextPage?: boolean;
   loadingMoreLabel?: string;
   onLoadMore?: () => void;
 
   // handlers
-  onClickProfile: (ethAddress: string) => void;
-  handleFollowProfile: (ethAddress: string) => void;
-  handleUnfollowProfile: (ethAddress: string) => void;
+  onClickProfile: (profileId: string) => void;
+  handleFollowProfile: (profileId: string) => void;
+  handleUnfollowProfile: (profileId: string) => void;
+  isViewer?: boolean;
 }
 
 const ProfileEntry: React.FC<IProfileEntry> = props => {
   const {
-    loggedUser,
     followedProfiles,
     followLabel,
     unfollowLabel,
@@ -50,6 +46,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
     onClickProfile,
     handleFollowProfile,
     handleUnfollowProfile,
+    isViewer,
   } = props;
 
   const loadmoreRef = React.createRef<HTMLDivElement>();
@@ -62,7 +59,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
 
   return (
     <Box flex={false} pad={{ top: 'large' }} gap="medium">
-      {profiles.map((entry, index) => (
+      {profiles.map((profile, index) => (
         <Box key={index} direction="row" justify="between" align="center">
           <StyledAnchor
             onClick={e => {
@@ -70,33 +67,30 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
               return false;
             }}
             weight="normal"
-            href={`${profileAnchorLink}/${entry.pubKey}`}
+            href={`${profileAnchorLink}/${profile.did.id}`}
             reducedWidth={true}
             label={
               <Box width="100%" pad="none">
                 <ProfileAvatarButton
-                  ethAddress={entry.ethAddress}
-                  onClick={() => onClickProfile(entry.pubKey)}
-                  label={entry.name || entry.userName}
-                  info={`@${entry.userName ? entry.userName : 'username'}`}
+                  profileId={profile.did.id}
+                  onClick={() => onClickProfile(profile.did.id)}
+                  label={profile.name || profile.did.id}
+                  // info={`@${entry.userName ? entry.userName : 'username'}`}
                   size="md"
-                  avatarImage={{
-                    url: entry.avatar?.url,
-                    fallbackUrl: entry.avatar?.fallbackUrl,
-                  }}
+                  avatarImage={profile.avatar}
                 />
               </Box>
             }
           />
-          {loggedUser !== entry.pubKey && (
+          {!isViewer && (
             <Box>
               <DuplexButton
                 inactiveLabel={followLabel}
                 activeLabel={followingLabel}
                 activeHoverLabel={unfollowLabel}
-                onClickInactive={() => handleFollowProfile(entry.pubKey)}
-                onClickActive={() => handleUnfollowProfile(entry.pubKey)}
-                active={followedProfiles?.includes(entry.pubKey)}
+                onClickInactive={() => handleFollowProfile(profile.did.id)}
+                onClickActive={() => handleUnfollowProfile(profile.did.id)}
+                active={followedProfiles?.includes(profile.did.id)}
                 icon={<Icon type="following" />}
                 allowMinimization
               />
