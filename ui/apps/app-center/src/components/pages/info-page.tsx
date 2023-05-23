@@ -118,7 +118,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           releases={releasesInfo}
           latestRelease={latestReleaseInfo}
           versionHistoryLabel={t('Version History')}
-          ethereumAddressLabel={t('Ethereum Address')}
+          authorDidLabel={t('Author DID')}
           authorLabel={t('Author')}
           licenseLabel={t('License')}
           isInstalled={isInstalled}
