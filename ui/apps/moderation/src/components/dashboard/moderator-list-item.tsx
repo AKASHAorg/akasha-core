@@ -22,7 +22,7 @@ const ModeratorListItem: React.FC<IModeratorListItemProps> = props => {
   if (assignedAdmin) {
     return (
       <Box customStyle="flex space-x-2 items-center">
-        <Avatar src={selectedModerator.avatar} />
+        <Avatar avatar={selectedModerator.avatar} />
 
         <Box>
           <Text
@@ -48,7 +48,7 @@ const ModeratorListItem: React.FC<IModeratorListItemProps> = props => {
         <React.Fragment key={moderator.userName}>
           <Box customStyle="flex justify-between">
             <Box customStyle="flex space-x-2 items-center">
-              <Avatar src={moderator.avatar} />
+              <Avatar avatar={moderator.avatar} />
 
               <Box>
                 <Text variant="button-md" weight="bold" truncate={true}>{`${moderator.name}`}</Text>

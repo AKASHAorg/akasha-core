@@ -1,5 +1,4 @@
-import { ImageSrc } from '@akashaorg/design-system-core/lib/components/types/common.types';
-import { Moderator } from '@akashaorg/typings/ui';
+import { Moderator, Profile } from '@akashaorg/typings/ui';
 
 export const moderators: Moderator[] = [
   {
@@ -67,7 +66,7 @@ export const moderators: Moderator[] = [
 export type ActiveModerator = {
   name: string;
   userName: string;
-  avatar: ImageSrc;
+  avatar: Profile['avatar'];
 };
 
 export const activeModerators: ActiveModerator[] = [
@@ -75,48 +74,66 @@ export const activeModerators: ActiveModerator[] = [
     name: 'Mr.bigote',
     userName: 'mrbigote',
     avatar: {
-      url: '',
-      fallbackUrl: '',
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
     },
   },
   {
     name: 'Pugstenson',
     userName: 'pugstenson',
     avatar: {
-      url: '',
-      fallbackUrl: '',
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
     },
   },
   {
     name: 'Jordan Lake',
     userName: 'jordanlake',
     avatar: {
-      url: '',
-      fallbackUrl: '',
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
     },
   },
   {
     name: 'Joan Jett',
     userName: 'joanjett',
     avatar: {
-      url: '',
-      fallbackUrl: '',
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
     },
   },
   {
     name: 'Rocker Mill',
     userName: 'rockermill',
     avatar: {
-      url: '',
-      fallbackUrl: '',
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
     },
   },
   {
     name: 'Dudez Jillz',
     userName: 'dudezjillz',
     avatar: {
-      url: '',
-      fallbackUrl: '',
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
     },
   },
 ];
