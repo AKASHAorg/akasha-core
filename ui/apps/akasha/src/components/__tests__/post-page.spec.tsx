@@ -59,6 +59,7 @@ describe('< PostPage /> component', () => {
     ).mockReturnValue({ data: { pages: [{ results: ['oxrr', 'oxgg', 'oxrrt'], total: 3 }] } });
   });
 
+  // @TODO fix after replacing hooks
   it.skip('should render post page', async () => {
     const spiedExtension = jest.spyOn(extension, 'Extension');
 

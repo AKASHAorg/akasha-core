@@ -31,7 +31,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 
 export type ProfilePageProps = {
-  profileId: string;
+  profileId?: string;
   profileData: Profile;
   loggedProfileData: Profile;
 };

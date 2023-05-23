@@ -7,7 +7,7 @@ describe('Integration Center', () => {
     });
 
     it('should have integration center visible', () => {
-      cy.get('[data-testid="integration-center"]', { timeout: TIMEOUT }).should('be.visible');
+      cy.get('[data-testid="akasha-verse"]', { timeout: TIMEOUT }).should('be.visible');
     });
   });
 });
