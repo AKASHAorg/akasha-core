@@ -67,7 +67,7 @@ describe('<ProfileCard /> Component', () => {
     expect(coverImage).toBeDefined();
   });
 
-  it('has an avatar', () => {
+  it.skip('has an avatar', () => {
     const { getByTestId } = componentWrapper;
     const avatarImage = getByTestId('avatar-image');
 

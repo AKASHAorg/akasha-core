@@ -6,6 +6,15 @@ export interface NavigationOptions {
   getNavigationUrl: (navRoute: Record<string, string>) => string;
 }
 
+export type IContentClickDetails = {
+  authorId: string;
+  id: string;
+  replyTo?: {
+    authorId?: string;
+    itemId?: string;
+  };
+};
+
 export type NavigateToParams = RequireAtLeastOne<NavigationOptions, 'appName' | 'getNavigationUrl'>;
 
 export interface ModalNavigationOptions {

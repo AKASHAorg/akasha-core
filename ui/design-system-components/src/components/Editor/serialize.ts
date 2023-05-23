@@ -9,7 +9,7 @@ export const serializeToPlainText = (node: any) => {
   }
 
   if (Element.isElement(node) && node.type === 'mention') {
-    return `@${node.userName || node.name || node.ethAddress}`;
+    return `@${node.name || node.id}`;
   }
 
   const children: any = node.children.map((n: any) => serializeToPlainText(n)).join(' ');

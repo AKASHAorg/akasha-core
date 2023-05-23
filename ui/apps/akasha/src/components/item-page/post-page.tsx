@@ -13,7 +13,7 @@ const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
   const { loginState } = props;
 
   const { postId } = useParams<{ postId: string }>();
-
+  // @TODO replace with new hooks
   const postReq = usePost({
     postId,
     loggedUser: loginState?.pubKey,
@@ -32,7 +32,8 @@ const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
       {...props}
       postId={postId}
       itemType={EntityTypes.POST}
-      entryData={entryData}
+      // @TODO replace with real data after hooks
+      entryData={null}
       entryReq={postReq}
     />
   );

@@ -10,7 +10,12 @@ import ReadOnlyEditor from '../../ReadOnlyEditor';
 import LinkPreview from '../../LinkPreview';
 
 import { formatDate, formatRelativeTime, ILocale } from '../../../utils/time';
-import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
+import {
+  IEntryData,
+  EntityTypes,
+  NavigateToParams,
+  IContentClickDetails,
+} from '@akashaorg/typings/ui';
 
 import EntryCardRemoved from '../EntryCardRemoved';
 import { EntryImageGallery } from '../../ImageGallery/entry-image-gallery';
@@ -24,19 +29,10 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
-export interface IContentClickDetails {
-  authorEthAddress: string;
-  id: string;
-  replyTo?: {
-    authorEthAddress?: string;
-    itemId?: string;
-  };
-}
 export interface IEntryBoxProps {
   // data
   entryData: IEntryData;
   locale: ILocale;
-  loggedProfileEthAddress?: string | null;
   // labels
   flagAsLabel?: string;
   comment?: boolean;
@@ -87,7 +83,6 @@ export interface IEntryBoxProps {
 const EntryBox: React.FC<IEntryBoxProps> = props => {
   const {
     entryData,
-    loggedProfileEthAddress,
     flagAsLabel,
     locale,
     profileAnchorLink,
@@ -156,7 +151,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       const itemType = replyTo ? EntityTypes.REPLY : EntityTypes.POST;
       onContentClick(
         {
-          authorEthAddress: data.author.ethAddress,
+          authorId: data.author.did.id,
           id: data.entryId,
           replyTo,
         },
@@ -170,8 +165,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const showLinkPreview = React.useMemo(
-    () => !props.isRemoved && entryData.linkPreview,
-    [entryData.linkPreview, props.isRemoved],
+    () => !props.isRemoved && entryData?.linkPreview,
+    [entryData?.linkPreview, props.isRemoved],
   );
 
   const showQuote = React.useMemo(
@@ -225,13 +220,14 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               e.preventDefault();
               return false;
             }}
-            href={`${profileAnchorLink}/${entryData.author.pubKey}`}
+            href={`${profileAnchorLink}/${entryData.author.id}`}
             data-testid="entry-profile-detail"
           >
             <ProfileAvatarButton
               customStyle={'grow shrink'}
+              profileId={entryData.author?.id}
               label={entryData.author?.name}
-              info={entryData.author?.userName && `@${entryData.author?.userName}`}
+              info={entryData.author?.id && `@${entryData.author?.id}`}
               avatarImage={entryData.author?.avatar}
               onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
                 if (disableActions) {
@@ -241,7 +237,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                   onClickAvatar(ev);
                 }
               }}
-              ethAddress={entryData.author?.ethAddress}
               ref={profileRef}
             />
           </a>
@@ -266,7 +261,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               <CardHeaderMenu
                 disabled={disableActions}
                 menuItems={[
-                  ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
+                  ...(onEntryFlag && !entryData.author?.did?.isViewer
                     ? [
                         {
                           icon: 'FlagIcon',
@@ -276,7 +271,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                         },
                       ]
                     : []),
-                  ...(entryData.author.ethAddress === loggedProfileEthAddress
+                  ...(entryData.author?.did?.isViewer
                     ? [
                         {
                           icon: 'TrashIcon',
@@ -294,7 +289,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
         {props.isRemoved && (
           <EntryCardRemoved
-            isAuthor={entryData.author.ethAddress === props.loggedProfileEthAddress}
+            isAuthor={entryData.author?.did?.isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />
@@ -344,7 +339,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {showRemovedQuote && (
           <EntryCardRemoved
-            isAuthor={entryData.author.ethAddress === props.loggedProfileEthAddress}
+            isAuthor={entryData.author?.did?.isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />

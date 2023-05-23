@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { Box } from 'grommet';
-import { IProfileData } from '@akashaorg/typings/ui';
 import { truncateMiddle } from '../../utils/string-utils';
 import Avatar from '../Avatar';
 import { AvatarSize } from '../Avatar/styled-avatar';
 import { ButtonInfo, StyledText, StyledWrapperBox } from './styled-profile-avatar-button';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
-  avatarImage?: IProfileData['avatar'];
+  avatarImage?: Profile['avatar'];
   label?: string;
   size?: AvatarSize;
   className?: string;
   onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
-  ethAddress: string;
+  profileId: string;
   bold?: boolean;
   active?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
@@ -31,7 +31,7 @@ const ProfileAvatarButton = React.forwardRef(
       info,
       onClick,
       onClickAvatar,
-      ethAddress,
+      profileId,
       active,
       onMouseEnter,
       onMouseLeave,
@@ -39,7 +39,7 @@ const ProfileAvatarButton = React.forwardRef(
     return (
       <StyledWrapperBox className={className} direction="row" align="center">
         <Box flex={{ shrink: 0 }}>
-          <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
+          <Avatar size={size} avatar={avatarImage} profileId={profileId} onClick={onClickAvatar} />
         </Box>
         <Box
           pad={{ horizontal: 'small' }}
@@ -49,7 +49,7 @@ const ProfileAvatarButton = React.forwardRef(
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <StyledText ref={ref}>{label || truncateMiddle(ethAddress)}</StyledText>
+          <StyledText ref={ref}>{label || truncateMiddle(profileId)}</StyledText>
           <ButtonInfo active={active}>{info}</ButtonInfo>
         </Box>
       </StyledWrapperBox>

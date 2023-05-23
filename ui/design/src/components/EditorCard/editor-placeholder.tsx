@@ -2,18 +2,18 @@ import * as React from 'react';
 import Avatar from '../Avatar';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import { Box, Text } from 'grommet';
-import { IProfileData } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IEditorPlaceholder {
-  avatar?: IProfileData['avatar'];
-  ethAddress: string | null;
+  avatar?: Profile['avatar'];
+  profileId: string | null;
   placeholderLabel?: string;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   style?: React.CSSProperties;
 }
 
 const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
-  const { avatar, ethAddress, placeholderLabel, onClick, style } = props;
+  const { avatar, profileId, placeholderLabel, onClick, style } = props;
   return (
     <BasicCardBox style={style}>
       <Box
@@ -23,7 +23,7 @@ const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
         gap="small"
         onClick={onClick}
       >
-        {ethAddress && <Avatar src={avatar} ethAddress={ethAddress} size="md" />}
+        {profileId && <Avatar avatar={avatar} profileId={profileId} size="md" />}
         <Text size="large" color="secondaryText" truncate={true}>
           {placeholderLabel}
         </Text>

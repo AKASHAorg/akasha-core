@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const getEditableTextFieldHandlers = (
   editable: boolean,
@@ -27,8 +28,8 @@ export const getEditableTextFieldHandlers = (
 export const getEditableImageFieldHandlers = (
   editable: boolean,
   imageRef: React.MutableRefObject<any>,
-  setNewValue: React.Dispatch<React.SetStateAction<{ url?: string; fallbackUrl?: string }>>,
-  onChange: (newValue: { url: string }) => void,
+  setNewValue: React.Dispatch<React.SetStateAction<Profile['avatar']>>,
+  onChange: (newValue: Profile['avatar']) => void,
 ) => {
   const handleClick = () => {
     if (editable && imageRef.current) {
@@ -42,9 +43,9 @@ export const getEditableImageFieldHandlers = (
     }
 
     if (!(e.target.files && e.target.files[0])) {
-      setNewValue({ url: '' });
-      onChange({ url: '' });
-
+      const avatar = { default: { src: '', width: 0, height: 0 } };
+      setNewValue(avatar);
+      onChange(avatar);
       return;
     }
 
@@ -52,9 +53,9 @@ export const getEditableImageFieldHandlers = (
     const fileReader = new FileReader();
     fileReader.addEventListener('load', () => {
       const result = fileReader.result as string;
-
-      setNewValue({ url: result });
-      onChange({ url: result });
+      const avatar = { default: { src: result, width: 0, height: 0 } };
+      setNewValue(avatar);
+      onChange(avatar);
     });
     fileReader.readAsDataURL(file);
   };

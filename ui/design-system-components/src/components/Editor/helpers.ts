@@ -7,8 +7,8 @@ import {
   LinkElement,
   MentionElement,
   TagElement,
-  IProfileData,
 } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/ui';
 
 const CustomEditor = {
   isBlockActive(editor: Editor, format: string) {
@@ -67,16 +67,7 @@ const CustomEditor = {
     Transforms.insertNodes(editor, textElem);
   },
 
-  insertMention(
-    editor: Editor,
-    mentionData: {
-      name?: string;
-      userName?: string;
-      pubKey: string;
-      avatar?: IProfileData['avatar'];
-      ethAddress: string;
-    },
-  ) {
+  insertMention(editor: Editor, mentionData: Profile) {
     const baseMention: { type: 'mention'; children: [{ text: '' }] } = {
       type: 'mention',
       children: [{ text: '' }],

@@ -5,7 +5,7 @@ import { editorDefaultValue } from '../Editor/initialValue';
 
 const ChatEditor: React.FC<Omit<IEditorBox, 'setEditorState'>> = props => {
   const {
-    ethAddress,
+    profileId,
     avatar,
     showAvatar = false,
     postLabel,
@@ -37,7 +37,7 @@ const ChatEditor: React.FC<Omit<IEditorBox, 'setEditorState'>> = props => {
       <EditorBox
         avatar={avatar}
         showAvatar={showAvatar}
-        ethAddress={ethAddress}
+        profileId={profileId}
         postLabel={postLabel}
         placeholderLabel={placeholderLabel}
         emojiPlaceholderLabel={emojiPlaceholderLabel}

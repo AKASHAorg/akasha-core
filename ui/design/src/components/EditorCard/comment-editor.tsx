@@ -16,7 +16,7 @@ export type CommentEditorProps = IEditorBox & {
 
 const CommentEditor: React.FC<CommentEditorProps> = props => {
   const {
-    ethAddress,
+    profileId,
     avatar,
     postLabel,
     placeholderLabel,
@@ -89,7 +89,7 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
       {!showEditor && (
         <EditorPlaceholder
           onClick={handleToggleEditor}
-          ethAddress={ethAddress}
+          profileId={profileId}
           avatar={avatar}
           placeholderLabel={placeholderLabel}
         />
@@ -104,7 +104,7 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
           <EditorBox
             ref={editorRef}
             avatar={avatar}
-            ethAddress={ethAddress}
+            profileId={profileId}
             postLabel={postLabel}
             placeholderLabel={placeholderLabel}
             emojiPlaceholderLabel={emojiPlaceholderLabel}

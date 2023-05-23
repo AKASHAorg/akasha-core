@@ -1,22 +1,20 @@
 import * as React from 'react';
 import {
-  IProfileData,
+  Profile,
   ModalNavigationOptions,
   RootComponentProps,
   UpdateProfileStatus,
 } from '@akashaorg/typings/ui';
 import {
   FormProfileData,
-  LoginState,
   UPDATE_PROFILE_STATUS,
   useEnsByAddress,
-  useGetLogin,
-  useGetProfile,
   useProfileUpdate,
   useQueryListener,
   useUsernameValidation,
   useEnsTexts,
 } from '@akashaorg/ui-awf-hooks';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 
@@ -27,35 +25,41 @@ const Form = styled(ProfileForm)`
 `;
 
 export interface ProfileEditProps extends RootComponentProps {
-  loggedProfileData: IProfileData;
+  loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  loginState: LoginState;
 }
 
 const ProfileEditPage: React.FC<ProfileEditProps> = props => {
   const [partialUsername, setPartialUsername] = React.useState<string>();
   const [ensPrefillActive, setEnsPrefillActive] = React.useState<boolean>(false);
-  const loginQuery = useGetLogin();
-  const profileDataQuery = useGetProfile(loginQuery.data?.pubKey);
 
-  const ENSReq = useEnsByAddress(loginQuery.data?.ethAddress);
-  const ensData = React.useMemo<{ name?: string }>(() => {
-    const ens = {};
-    if (ENSReq.isSuccess) {
-      ens['name'] = ENSReq.data;
-    }
-    return ens;
-  }, [ENSReq.isSuccess, ENSReq.data]);
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
 
-  const ENSTxtData = useEnsTexts(ensData?.name, ensPrefillActive);
+  // @TODO replace with new hooks
+  // const ENSReq = useEnsByAddress(loggedProfileData?.did?.id);
+  // const ensData = React.useMemo<{ name?: string }>(() => {
+  //   const ens = {};
+  //   if (ENSReq.isSuccess) {
+  //     ens['name'] = ENSReq.data;
+  //   }
+  //   return ens;
+  // }, [ENSReq.isSuccess, ENSReq.data]);
+
+  // const ENSTxtData = useEnsTexts(ensData?.name, ensPrefillActive);
 
   const { t } = useTranslation('app-profile');
 
-  const profileUpdateMutation = useProfileUpdate(loginQuery.data?.pubKey);
+  // @TODO replace with new hooks
+  const profileUpdateMutation = useProfileUpdate(loggedProfileData?.did?.id);
 
   const updateStatusKey = React.useMemo(
-    () => [UPDATE_PROFILE_STATUS, loginQuery.data?.pubKey],
-    [loginQuery.data?.pubKey],
+    () => [UPDATE_PROFILE_STATUS, loggedProfileData?.did?.id],
+    [loggedProfileData?.did?.id],
   );
 
   const updateStatusQuery = useQueryListener<{
@@ -135,8 +139,9 @@ const ProfileEditPage: React.FC<ProfileEditProps> = props => {
 
   return (
     <Box fill="horizontal" margin={{ bottom: '2rem' }}>
+      {/* @TODO fix and migrate the DS component */}
       <Form
-        isLoading={!profileDataQuery.isFetched && !profileDataQuery.isLoading}
+        isLoading={!profileDataReq.isFetched && !profileDataReq.isLoading}
         modalSlotId={props.layoutConfig.modalSlotId}
         titleLabel={t('Update Profile')}
         avatarLabel={t('Avatar')}
@@ -154,23 +159,22 @@ const ProfileEditPage: React.FC<ProfileEditProps> = props => {
         deleteLabel={t('Delete')}
         nameFieldPlaceholder={t('Type your name here')}
         descriptionFieldPlaceholder={t('Add a description about you here')}
-        ethAddress={profileDataQuery.data?.ethAddress}
-        providerData={profileDataQuery.data}
+        providerData={loggedProfileData}
         onCancel={handleCancel}
-        onSave={handleFormSubmit}
+        // onSave={handleFormSubmit}
         updateStatus={updateStatusQuery?.data?.status || UpdateProfileStatus.UPDATE_IDLE}
-        showUsername={!profileDataQuery.data?.userName}
+        // showUsername={!profileDataQuery.data?.userName}
         onUsernameBlur={handleUsernameBlur}
         isValidatingUsername={usernameValidationQuery.status === 'loading'}
         usernameSuccess={usernameValidationQuery.data ? ' ' : undefined}
         usernameError={userNameValidationErrors}
         ensPrefillButtonLabel={t('Fill info with ENS data')}
         ensSectionTitle={'ENS'}
-        ensData={ensData}
+        // ensData={ensData}
         onEnsPrefill={handleEnsPrefill}
         loadingDataLabel={t('Loading profile data')}
-        ensPrefillLoading={ENSTxtData.isLoading && !ENSTxtData.isFetched}
-        ensPrefillData={ENSTxtData.data}
+        // ensPrefillLoading={ENSTxtData.isLoading && !ENSTxtData.isFetched}
+        // ensPrefillData={ENSTxtData.data}
       />
     </Box>
   );

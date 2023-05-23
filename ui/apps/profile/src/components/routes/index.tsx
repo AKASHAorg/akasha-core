@@ -6,12 +6,18 @@ import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 const { Box } = DS;
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
-  const loginQuery = useGetLogin();
-  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
+
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
+
   const { t } = useTranslation('app-profile');
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
@@ -24,7 +30,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   };
   const handleCTAClick = () => {
     // if user is logged in, show link to their profile
-    if (loggedProfileQuery.data?.pubKey) {
+    if (loggedProfileData?.did?.id) {
       return plugins['@akashaorg/app-routing']?.routing.navigateTo({
         appName: '@akashaorg/app-profile',
         getNavigationUrl: (routes: Record<string, string>) => routes.myProfile,
@@ -42,36 +48,18 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
         <Routes>
           <Route path="/">
             <Route
-              path={':pubKey'}
+              path={':profileId'}
+              element={<Index {...props} loggedProfileData={loggedProfileData} />}
+            />
+            <Route
+              path={`:profileId${menuRoute[ENGAGEMENT]}`}
               element={
-                <Index
-                  {...props}
-                  loginState={loginQuery.data}
-                  loggedProfileData={loggedProfileQuery.data}
-                />
+                <Index {...props} loggedProfileData={loggedProfileData} pageType="engagement" />
               }
             />
             <Route
-              path={`:pubKey${menuRoute[ENGAGEMENT]}`}
-              element={
-                <Index
-                  {...props}
-                  loginState={loginQuery.data}
-                  loggedProfileData={loggedProfileQuery.data}
-                  pageType="engagement"
-                />
-              }
-            />
-            <Route
-              path={`:pubKey${menuRoute[EDIT]}`}
-              element={
-                <Index
-                  {...props}
-                  loginState={loginQuery.data}
-                  loggedProfileData={loggedProfileQuery.data}
-                  pageType="edit"
-                />
-              }
+              path={`:profileId${menuRoute[EDIT]}`}
+              element={<Index {...props} loggedProfileData={loggedProfileData} pageType="edit" />}
             />
             <Route
               element={
@@ -80,9 +68,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   subtitleLine1Label={t("You can check Ethereum World's")}
                   subtitleLine2Label={t('or')}
                   cta1Label={t('Feed')}
-                  cta2Label={
-                    loggedProfileQuery.data?.pubKey ? t('visit your profile') : t('log in')
-                  }
+                  cta2Label={loggedProfileData?.did?.id ? t('visit your profile') : t('log in')}
                   onGoToFeedClick={handleGoToFeedClick}
                   onCTAClick={handleCTAClick}
                 />

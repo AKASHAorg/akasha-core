@@ -1,8 +1,9 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
-import { IProfileData, ProfileProviderProperties, ProfileProviders } from '@akashaorg/typings/ui';
+import { ProfileProviderProperties, ProfileProviders } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
 import { PROFILE_KEY } from './use-profile';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const UPDATE_USERNAME_PROVIDER_KEY = 'UPDATE_USERNAME_PROVIDER';
 export const REGISTER_ENS_KEY = 'REGISTER_ENS';
@@ -18,7 +19,7 @@ const updateUsernameProvider = async (
   queryClient: QueryClient,
 ) => {
   const sdk = getSDK();
-  const profile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, payload.pubKey]);
+  const profile = queryClient.getQueryData<Profile>([PROFILE_KEY, payload.pubKey]);
   if (!profile) {
     return logError(
       `use-username.updateUsernameProvider`,
@@ -31,22 +32,22 @@ const updateUsernameProvider = async (
     value: payload.userName,
   };
 
-  if (!profile.providers.length || !profile.providers.find(p => p.provider === payload.provider)) {
-    // profile does not have this provider yet!
-    try {
-      const addProviderRes = await sdk.api.profile.addProfileProvider([providerData]);
-      if (!addProviderRes) {
-        logError(
-          `use-username.updateUsernameProvider`,
-          new Error(`No data received from addProfileProvider call`),
-        );
-        throw new Error(`Something went wrong when saving username.`);
-      }
-    } catch (error) {
-      logError('use-username.addProfileProvider', error);
-      throw error;
-    }
-  }
+  // if (!profile.providers.length || !profile.providers.find(p => p.provider === payload.provider)) {
+  //   // profile does not have this provider yet!
+  //   try {
+  //     const addProviderRes = await sdk.api.profile.addProfileProvider([providerData]);
+  //     if (!addProviderRes) {
+  //       logError(
+  //         `use-username.updateUsernameProvider`,
+  //         new Error(`No data received from addProfileProvider call`),
+  //       );
+  //       throw new Error(`Something went wrong when saving username.`);
+  //     }
+  //   } catch (error) {
+  //     logError('use-username.addProfileProvider', error);
+  //     throw error;
+  //   }
+  // }
   try {
     const makeDefaultRes = await sdk.api.profile.makeDefaultProvider([providerData]);
     return makeDefaultRes;
@@ -84,17 +85,17 @@ export function useUpdateUsernameProvider(pubKey?: string) {
           value: payload.userName,
         };
         if (pubKey) {
-          const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
+          const currentProfile = queryClient.getQueryData<Profile>([PROFILE_KEY, pubKey]);
 
-          queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], {
+          queryClient.setQueryData<Profile>([PROFILE_KEY, pubKey], {
             ...currentProfile,
-            providers: [...currentProfile.providers, providerData],
-            default: [
-              ...currentProfile.default.filter(
-                p => p.property !== ProfileProviderProperties.USERNAME,
-              ),
-              providerData,
-            ],
+            // providers: [...currentProfile.providers, providerData],
+            // default: [
+            //   ...currentProfile.default.filter(
+            //     p => p.property !== ProfileProviderProperties.USERNAME,
+            //   ),
+            //   providerData,
+            // ],
           });
 
           return { currentProfile };
@@ -103,7 +104,7 @@ export function useUpdateUsernameProvider(pubKey?: string) {
       onError: (error: Error, variables, context) => {
         if (pubKey && context.currentProfile) {
           // rollback changes
-          queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], context.currentProfile);
+          queryClient.setQueryData<Profile>([PROFILE_KEY, pubKey], context.currentProfile);
         }
         logError('useUsername.useUpdateUsernameProvider.onError', error);
       },
@@ -167,7 +168,7 @@ export function useEnsRegistration(pubKey?: string) {
         property: ProfileProviderProperties.USERNAME,
         value: userName.replace('@', ''),
       };
-      const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
+      const currentProfile = queryClient.getQueryData<Profile>([PROFILE_KEY, pubKey]);
       if (pubKey) {
         if (!currentProfile) {
           logError(
@@ -175,15 +176,15 @@ export function useEnsRegistration(pubKey?: string) {
             new Error(`no profile with pubKey: ${pubKey}`),
           );
         }
-        queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], {
+        queryClient.setQueryData<Profile>([PROFILE_KEY, pubKey], {
           ...currentProfile,
-          providers: [...currentProfile.providers, providerData],
-          default: [
-            ...currentProfile.default.filter(
-              p => p.property !== ProfileProviderProperties.USERNAME,
-            ),
-            providerData,
-          ],
+          // providers: [...currentProfile.providers, providerData],
+          // default: [
+          //   ...currentProfile.default.filter(
+          //     p => p.property !== ProfileProviderProperties.USERNAME,
+          //   ),
+          //   providerData,
+          // ],
         });
       }
       return { currentProfile };
@@ -191,7 +192,7 @@ export function useEnsRegistration(pubKey?: string) {
     onError: (error: Error, variables, context) => {
       if (pubKey) {
         // rollback the changes
-        queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], context.currentProfile);
+        queryClient.setQueryData<Profile>([PROFILE_KEY, pubKey], context.currentProfile);
       }
       logError('use-username.useEnsRegistration.onError', error);
     },

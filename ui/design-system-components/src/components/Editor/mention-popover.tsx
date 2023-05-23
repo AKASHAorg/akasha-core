@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Portal } from './helpers';
 import { tw, tx } from '@twind/core';
-import { IProfileData } from '@akashaorg/typings/ui';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IMentionPopover {
-  values: Partial<IProfileData>[];
+  values: Profile[];
   ref: React.Ref<HTMLDivElement>;
   currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -40,9 +40,9 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
           >
             <ProfileAvatarButton
               label={value.name}
-              info={value.userName && `@${value.userName}`}
+              info={value.name}
               avatarImage={value.avatar}
-              ethAddress={value.ethAddress as string}
+              profileId={value.did.id}
             />
           </div>
         ))}
