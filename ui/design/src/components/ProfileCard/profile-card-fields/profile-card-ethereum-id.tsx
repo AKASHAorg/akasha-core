@@ -1,24 +1,21 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { IProfileData } from '@akashaorg/typings/ui';
 import Icon from '../../Icon';
 import { isMobile } from 'react-device-detect';
 import Tooltip from '../../Tooltip';
 import { truncateMiddle } from '../../../utils/string-utils';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type IProfileCardEthereumIdProps = {
-  ethereumAddressLabel?: string;
-  ethereumNameLabel?: string;
+  profileDidLabel?: string;
   copyLabel?: string;
   copiedLabel?: string;
   showQRCodeLabel?: string;
-  profileData: IProfileData;
-  ensName?: string;
+  profileData: Profile;
 };
 
 const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
-  const { ethereumAddressLabel, ethereumNameLabel, copyLabel, copiedLabel, profileData, ensName } =
-    props;
+  const { profileDidLabel, copyLabel, copiedLabel, profileData } = props;
   const [isCopied, setIsCopied] = React.useState(false);
   const popoverRef: React.Ref<any> = React.useRef(null);
 
@@ -31,23 +28,16 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
   }, [isCopied]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(ensName ?? profileData.ethAddress);
+    navigator.clipboard.writeText(profileData.did.id);
     setIsCopied(true);
   };
 
   return (
     <>
       <Box direction="column" pad={{ vertical: 'xsmall', horizontal: 'medium' }} gap="xxsmall">
-        <Text size="large" weight="bold" color="primaryText" style={{ lineHeight: 1.7 }}>
-          {ensName ? ethereumNameLabel : ethereumAddressLabel}
-        </Text>
         <Box direction="row" gap="xsmall" align="center">
           <Text color="primaryText" size={'medium'} truncate={true} style={{ lineHeight: 1.7 }}>
-            {ensName
-              ? ensName
-              : isMobile
-              ? truncateMiddle(profileData.ethAddress)
-              : profileData.ethAddress}
+            {isMobile ? truncateMiddle(profileData.did.id) : profileData.did.id}
           </Text>
           <Tooltip
             dropProps={{ align: isMobile ? { right: 'left' } : { left: 'right' } }}
@@ -65,8 +55,7 @@ const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
 };
 
 ProfileCardEthereumId.defaultProps = {
-  ethereumNameLabel: 'Ethereum name',
-  ethereumAddressLabel: 'Ethereum address',
+  profileDidLabel: 'Profile DID',
   copyLabel: 'Copy to clipboard',
   showQRCodeLabel: 'Show QR code',
   copiedLabel: 'Copied',

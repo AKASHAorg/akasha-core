@@ -21,8 +21,8 @@ type InputType = { label: string; initialValue: string };
 export type GeneralFormProps = {
   header: Omit<HeaderProps, 'onAvatarChange' | 'onCoverImageChange'>;
   name: InputType;
-  userName: InputType;
-  ens: InputType;
+  userName?: InputType;
+  ens?: InputType;
   bio: InputType;
   ensButton: ButtonType;
   cancelButton: ButtonType;
@@ -67,9 +67,11 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
       <Stack direction="column" spacing="gap-y-3.5" customStyle="h-full">
         <Header
           {...header}
-          onAvatarChange={avatar => setValue('avatar', avatar?.url || avatar?.fallbackUrl)}
+          onAvatarChange={avatar =>
+            setValue('avatar', avatar?.default.src || avatar?.alternatives[0].src)
+          }
           onCoverImageChange={coverImage =>
-            setValue('coverImage', coverImage?.url || coverImage?.fallbackUrl)
+            setValue('coverImage', coverImage?.default.src || coverImage?.alternatives[0].src)
           }
         />
         <Controller

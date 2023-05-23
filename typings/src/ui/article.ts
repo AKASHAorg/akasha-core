@@ -1,13 +1,13 @@
-import { Profile } from '../sdk/graphql-types-new';
+import { CeramicAccount } from '../sdk/graphql-types-new';
+import { Profile } from './profile';
 
 type ArticleContent = { type: string; value: string };
 
 export interface IArticleData {
   id: string;
-  authorAvatar: { url?: string; fallbackUr?: string };
-  authorName: string;
-  authorEthAddress: string;
-  authorPubkey: string;
+  authorAvatar?: Profile['avatar'];
+  authorName?: string;
+  authorProfileId: string;
   publishDate?: string;
   lastUpdateDate?: string;
   readTime?: number;
@@ -23,7 +23,7 @@ export interface IArticleData {
   isDraft?: boolean;
   isShared?: boolean;
   collaborators?: {
-    ethAddress: string;
+    did: Partial<CeramicAccount>;
     avatar?: Profile['avatar'];
   }[];
 }

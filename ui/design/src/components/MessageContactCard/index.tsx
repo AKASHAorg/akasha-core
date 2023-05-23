@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
-
-import { IProfileData } from '@akashaorg/typings/ui';
 import Button from '../Button';
 import Icon, { IconType } from '../Icon';
 import Avatar from '../Avatar';
@@ -10,6 +8,7 @@ import { IconDiv } from '../TopBar/styled-topbar';
 import { ILocale } from '../../utils/time';
 import CardHeaderMenuDropdown from '../EntryCard/card-header-menu';
 import styled from 'styled-components';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const StyledButton = styled(Button)`
   border-radius: 100px;
@@ -21,8 +20,7 @@ export const StyledButton = styled(Button)`
 
 export interface IMessageContactCardProps {
   locale: ILocale;
-  senderName: IProfileData['name'];
-  senderUsername: IProfileData['userName'];
+  senderName: Profile['name'];
   content?: string;
   isRead?: boolean;
   isPinned: boolean;
@@ -30,8 +28,8 @@ export interface IMessageContactCardProps {
   pinConvoLabel: string;
   unpinConvoLabel: string;
   newMessageLabel?: string;
-  senderAvatar: IProfileData['avatar'];
-  senderEthAddress: IProfileData['ethAddress'];
+  senderAvatar: Profile['avatar'];
+  senderProfileId: Profile['did']['id'];
   onClickAvatar?: () => void;
   onClickCard?: () => void;
   onConvoPin?: () => void;
@@ -40,7 +38,6 @@ export interface IMessageContactCardProps {
 const MessageContactCard: React.FC<IMessageContactCardProps> = props => {
   const {
     senderName,
-    senderUsername,
     content,
     isRead,
     isPinned,
@@ -49,7 +46,7 @@ const MessageContactCard: React.FC<IMessageContactCardProps> = props => {
     unpinConvoLabel,
     newMessageLabel,
     senderAvatar,
-    senderEthAddress,
+    senderProfileId,
     onClickAvatar,
     onClickCard,
     onConvoPin,
@@ -97,17 +94,17 @@ const MessageContactCard: React.FC<IMessageContactCardProps> = props => {
         <Box direction="row" align="start">
           <Avatar
             size="lg"
-            src={senderAvatar}
-            ethAddress={senderEthAddress}
+            avatar={senderAvatar}
+            profileId={senderProfileId}
             onClick={handleAvatarClick}
           />
           <Box align="start" margin={{ left: 'small' }}>
             <Text size="xlarge" style={{ textTransform: 'capitalize' }}>
               {senderName}
             </Text>
-            <Text size="medium" color="secondaryText">
-              {`@${senderUsername}`}
-            </Text>
+            {/*<Text size="medium" color="secondaryText">*/}
+            {/*  {`@${senderUsername}`}*/}
+            {/*</Text>*/}
             <Text
               size="large"
               margin={{ top: 'xsmall' }}

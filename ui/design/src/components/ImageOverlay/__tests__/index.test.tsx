@@ -13,12 +13,7 @@ describe('<ImageOverlay /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(
-          <ImageOverlay
-            src={{ url: 'url', fallbackUrl: 'fallbackUrl' }}
-            closeModal={handleCloseModal}
-          />,
-        ),
+        wrapWithTheme(<ImageOverlay src="url" closeModal={handleCloseModal} />),
         {},
       );
     });

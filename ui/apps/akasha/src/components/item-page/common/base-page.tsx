@@ -9,8 +9,9 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import { Logger } from '@akashaorg/awf-sdk';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { LoginState, useInfiniteComments, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import { useInfiniteComments } from '@akashaorg/ui-awf-hooks';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   RootComponentProps,
   EntityTypes,
@@ -28,22 +29,12 @@ type BaseEntryProps = {
   entryReq: UseQueryResult;
   entryData?: IEntryData;
   logger: Logger;
-  loginState?: LoginState;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
-  const {
-    postId,
-    commentId,
-    itemType,
-    entryData,
-    entryReq,
-    showLoginModal,
-    logger,
-    loginState,
-    children,
-  } = props;
+  const { postId, commentId, itemType, entryData, entryReq, showLoginModal, logger, children } =
+    props;
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const { t } = useTranslation('app-akasha-integration');
@@ -70,21 +61,21 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     return [];
   }, [reqCommentsOrReplies.data]);
 
-  const profileDataReq = useGetProfile(loginState?.pubKey);
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
   const loggedProfileData = profileDataReq.data;
 
   const handleLoadMore = () => {
-    if (
-      reqCommentsOrReplies.isSuccess &&
-      reqCommentsOrReplies.hasNextPage &&
-      loginState?.fromCache
-    ) {
+    if (reqCommentsOrReplies.isSuccess && reqCommentsOrReplies.hasNextPage) {
       reqCommentsOrReplies.fetchNextPage();
     }
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loginState?.pubKey) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     props.navigateToModal({ name: 'report-modal', itemId, itemType });
@@ -135,7 +126,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             itemId={commentId || postId}
             itemType={itemType}
             entryReq={entryReq}
-            loginState={loginState}
+            loggedProfileData={loggedProfileData}
             uiEvents={props.uiEvents}
             plugins={props.plugins}
             layoutConfig={props.layoutConfig}
@@ -157,13 +148,12 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             getShareUrl={(itemId: string) =>
               `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${itemId}`
             }
-            loginState={loginState}
+            loggedProfileData={loggedProfileData}
             navigateTo={navigateTo}
             navigateToModal={props.navigateToModal}
             onLoginModalOpen={showLoginModal}
             requestStatus={reqCommentsOrReplies.status}
             hasNextPage={reqCommentsOrReplies.hasNextPage}
-            loggedProfile={loggedProfileData}
             contentClickable={true}
             onEntryFlag={handleEntryFlag}
             onEntryRemove={handleCommentRemove}

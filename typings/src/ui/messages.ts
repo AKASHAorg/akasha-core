@@ -1,13 +1,11 @@
 import { Descendant } from 'slate';
+import { Profile } from './profile';
 
-export interface IChatMessage {
-  name?: string;
-  username?: string;
-  ethAddress: string;
+export type IChatMessage = Profile & {
   read?: boolean;
   content: Descendant[];
   timestamp: string;
   id?: string;
   from?: string;
   to?: string;
-}
+};

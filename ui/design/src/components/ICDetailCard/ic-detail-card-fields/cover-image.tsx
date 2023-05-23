@@ -1,19 +1,16 @@
 import * as React from 'react';
 import { Box } from 'grommet';
-
-import Icon from '../../Icon';
-import IconButton from '../../IconButton';
 import ImageOverlay from '../../ImageOverlay';
-import { ShareButtonContainer } from '../../ProfileCard/styled-profile-card';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ICDetailCardCoverImageProps {
   shareLabel: string;
-  coverImage?: { url?: string };
+  background?: Profile['background'];
   handleShareClick: () => void;
 }
 
 const ICDetailCardCoverImage: React.FC<ICDetailCardCoverImageProps> = props => {
-  const { shareLabel, coverImage, handleShareClick } = props;
+  const { shareLabel, background, handleShareClick } = props;
 
   const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
 
@@ -30,7 +27,7 @@ const ICDetailCardCoverImage: React.FC<ICDetailCardCoverImageProps> = props => {
       height="9rem"
       background={{
         color: 'coverImageBackground',
-        image: `url(${coverImage})`,
+        image: `url(${background?.default?.src})`,
         repeat: 'no-repeat',
         size: 'cover',
       }}
@@ -39,8 +36,8 @@ const ICDetailCardCoverImage: React.FC<ICDetailCardCoverImageProps> = props => {
       onClick={handleClickImage}
       data-testid="profile-card-cover-image"
     >
-      {imageOverlayOpen && coverImage && (
-        <ImageOverlay src={coverImage} closeModal={closeImageOverlay} />
+      {imageOverlayOpen && background?.default && (
+        <ImageOverlay src={background.default?.src} closeModal={closeImageOverlay} />
       )}
       {/* disable share button temporary */}
       {/* <Box align="end" pad="none">

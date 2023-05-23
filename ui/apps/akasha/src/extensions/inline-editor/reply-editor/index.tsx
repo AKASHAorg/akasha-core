@@ -21,6 +21,8 @@ type Props = {
 export function ReplyEditor({ commentId, singleSpa, action }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
+
+  // @TODO replace with new hooks
   const comment = useComment(commentId, true);
   const editComment = useEditComment(commentId, true);
   const publishComment = useCreateComment();
@@ -99,7 +101,8 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
       singleSpa={singleSpa}
       editorState={editorState}
       setEditorState={setEditorState}
-      entryData={entryData}
+      // @TODO replace with real data after hook fix
+      entryData={null}
       openEditor={true}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}

@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { IPublishData, IProfileData } from '@akashaorg/typings/ui';
+import { IPublishData } from '@akashaorg/typings/ui';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
@@ -15,6 +15,7 @@ import { SEARCH_KEY } from './use-search';
 import { TRENDING_TAGS_KEY } from './use-trending';
 import { PROFILE_KEY } from './use-profile';
 import { checkEntryActive } from './utils/checkEntryActive';
+import { Profile } from '@akashaorg/typings/ui';
 
 /**
  * @internal
@@ -371,22 +372,14 @@ export function useDeletePost(postID: string) {
       return { previousPost };
     },
     onSuccess: async () => {
-      const user = await sdk.api.auth.getCurrentUser();
-      if (user) {
-        queryClient.setQueryData<IProfileData>([PROFILE_KEY, user.pubKey], profile => {
-          const postsCount = profile.totalPosts;
-          let totalPosts: string;
-          if (typeof postsCount === 'number') {
-            totalPosts = JSON.stringify(Math.max(0, postsCount - 1));
-          } else {
-            totalPosts = JSON.stringify(Math.max(0, parseInt(postsCount, 10) - 1));
-          }
-          return {
-            ...profile,
-            totalPosts,
-          };
-        });
-      }
+      // const user = await sdk.api.auth.getCurrentUser();
+      // if (user) {
+      //   queryClient.setQueryData<Profile>([PROFILE_KEY, user.did.id], profile => {
+      //     return {
+      //       ...profile,
+      //     };
+      //   });
+      // }
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {

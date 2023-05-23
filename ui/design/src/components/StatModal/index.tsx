@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Tabs, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
-import { ITag, IProfileData, QueryStatus } from '@akashaorg/typings/ui';
+import { ITag, QueryStatus } from '@akashaorg/typings/ui';
 
 import ListEmpty from './list-empty';
 import ListError from './list-error';
@@ -14,6 +14,7 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { ModalWrapper, StyledBox } from '../ListModal/styled-modal';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IStatModal extends IProfileEntry, ITagEntry {
   className?: string;
@@ -30,8 +31,8 @@ export interface IStatModal extends IProfileEntry, ITagEntry {
   placeholderSubtitleLabel: string;
   buttonLabel: string;
 
-  followers?: IProfileData[];
-  following?: IProfileData[];
+  followers?: Profile[];
+  following?: Profile[];
   interests?: ITag[];
 
   followersReqStatus: QueryStatus;
@@ -50,7 +51,6 @@ const StatModal: React.FC<IStatModal> = props => {
     className,
     activeIndex,
     setActiveIndex,
-    loggedUser,
     stats,
     titleLabel,
     tabLabelsArr,
@@ -152,7 +152,6 @@ const StatModal: React.FC<IStatModal> = props => {
                       )}
                       {followersReqStatus.isSuccess && followers && !!followers.length && (
                         <ProfileEntry
-                          loggedUser={loggedUser}
                           followedProfiles={followedProfiles}
                           followLabel={followLabel}
                           followingLabel={followingLabel}
@@ -190,7 +189,6 @@ const StatModal: React.FC<IStatModal> = props => {
                       )}
                       {followingReqStatus.isSuccess && following && !!following.length && (
                         <ProfileEntry
-                          loggedUser={loggedUser}
                           followedProfiles={followedProfiles}
                           followLabel={followLabel}
                           followingLabel={followingLabel}

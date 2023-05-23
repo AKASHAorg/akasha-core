@@ -64,18 +64,18 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [menuDropOpen],
   );
+  // @TODO replace with real data when available
+  const loggedProfileId = '0x003410490050000320006570034567114572000';
 
-  const userEthAddress = '0x003410490050000320006570034567114572000';
-
-  const isCollaborator = articleData.collaborators?.find(el => el.ethAddress === userEthAddress);
+  const isCollaborator = articleData.collaborators?.find(el => el.did?.id === loggedProfileId);
 
   return (
     <MainAreaCardBox pad="medium" gap="medium">
       <Box direction="row" justify="between">
         <Box direction="row" gap="xxsmall" align="center">
           <Avatar
-            src={articleData.authorAvatar}
-            ethAddress={articleData.authorEthAddress}
+            avatar={articleData.authorAvatar}
+            profileId={articleData.authorProfileId}
             size="xs"
             onClick={() => null}
           />
@@ -201,7 +201,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
       )}
       {activeTabIndex === 2 && isCollaborator && (
         <Box direction="row" gap="small" align="center">
-          <Avatar size="md" ethAddress={userEthAddress} />
+          <Avatar size="md" profileId={loggedProfileId} />
           <Text size="medium" color="secondaryText">
             {collaboratingLabel}
           </Text>

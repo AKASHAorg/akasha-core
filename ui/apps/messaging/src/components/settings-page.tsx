@@ -1,15 +1,15 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { getTextileUsage } from '../api/message';
-import { LoginState, useUninstallApp } from '@akashaorg/ui-awf-hooks';
+import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 
 const { BasicCardBox, Box, Icon, Text, TextLine, Button } = DS;
 
 export interface SettingsPageProps extends RootComponentProps {
-  loginState: LoginState;
+  loggedProfileData: Profile;
 }
 
 const InboxPage = (props: SettingsPageProps) => {
@@ -96,7 +96,7 @@ const InboxPage = (props: SettingsPageProps) => {
         direction="row"
         justify="between"
       >
-        <Text>{props.loginState.ethAddress}</Text>
+        <Text>{props.loggedProfileData?.did?.id}</Text>
       </Box>
       <Box direction="row" justify="end" pad="medium">
         <Button

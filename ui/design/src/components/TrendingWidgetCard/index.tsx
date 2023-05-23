@@ -1,6 +1,6 @@
 import { Box, Text, Tabs } from 'grommet';
 import * as React from 'react';
-import { ITag, IProfileData } from '@akashaorg/typings/ui';
+import { ITag } from '@akashaorg/typings/ui';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import Icon from '../Icon';
 import ProfileAvatarButton from '../ProfileAvatarButton';
@@ -8,14 +8,14 @@ import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import DuplexButton from '../DuplexButton';
 import { TextLine } from '../TextLine';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ITrendingWidgetCardProps {
   // data
   tags: ITag[];
-  profiles: IProfileData[];
+  profiles: Profile[];
   followedProfiles?: string[];
   subscribedTags?: string[];
-  loggedEthAddress?: string | null;
   isLoadingTags?: boolean;
   isLoadingProfiles?: boolean;
   // labels
@@ -46,6 +46,7 @@ export interface ITrendingWidgetCardProps {
 
   // zero-based index of the current tab
   onActiveTabChange?: (tabIdx: number) => void;
+  isViewer?: boolean;
 }
 
 const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
@@ -57,7 +58,6 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     handleUnfollowProfile,
     handleSubscribeTag,
     handleUnsubscribeTag,
-    loggedEthAddress,
     titleLabel,
     tags,
     profiles,
@@ -78,6 +78,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     profileAnchorLink,
     followedProfiles,
     subscribedTags,
+    isViewer,
   } = props;
 
   const handleTabChange = (tabIdx: number) => {
@@ -181,29 +182,29 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                       return false;
                     }}
                     weight="normal"
-                    href={`${profileAnchorLink}/${profile.pubKey}`}
+                    href={`${profileAnchorLink}/${profile.did.id}`}
                     label={
                       <Box width="11rem" pad="none">
                         <ProfileAvatarButton
-                          ethAddress={profile.ethAddress}
-                          onClick={() => onClickProfile(profile.pubKey)}
-                          label={profile.userName || profile.name}
-                          info={`${profile.totalFollowers} ${followersLabel}`}
+                          profileId={profile.did.id}
+                          onClick={() => onClickProfile(profile.did.id)}
+                          label={profile.name}
+                          // info={`${profile.totalFollowers} ${followersLabel}`}
                           size="md"
                           avatarImage={profile.avatar}
                         />
                       </Box>
                     }
                   />
-                  {profile.ethAddress !== loggedEthAddress && (
+                  {!isViewer && (
                     <Box>
                       <DuplexButton
                         inactiveLabel={followLabel}
                         activeLabel={followingLabel}
                         activeHoverLabel={unfollowLabel}
-                        onClickInactive={() => handleFollowProfile(profile.pubKey)}
-                        onClickActive={() => handleUnfollowProfile(profile.pubKey)}
-                        active={followedProfiles?.includes(profile.pubKey)}
+                        onClickInactive={() => handleFollowProfile(profile.did.id)}
+                        onClickActive={() => handleUnfollowProfile(profile.did.id)}
+                        active={followedProfiles?.includes(profile.did.id)}
                         icon={<Icon type="following" />}
                         allowMinimization
                       />

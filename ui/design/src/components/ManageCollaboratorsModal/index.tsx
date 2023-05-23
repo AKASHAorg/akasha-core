@@ -2,8 +2,6 @@ import React from 'react';
 import { Box, Text, Image } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
 
-import { IProfileData } from '@akashaorg/typings/ui';
-
 import Collaborator from './collaborator';
 
 import Icon from '../Icon';
@@ -12,6 +10,7 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledDrop } from '../EntryCard/styled-entry-box';
 import { StyledBox, ModalWrapper, StyledModalBox } from '../ListModal/styled-modal';
 import { useViewportSize } from '../Providers/viewport-dimension';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IManageCollaboratorsModalProps
   extends Omit<ISearchBar, 'searchInputSize' | 'iconSize'> {
@@ -19,15 +18,15 @@ export interface IManageCollaboratorsModalProps
   assetName?: string;
   publicImgPath?: string;
   titleLabel: string;
-  collaborators: IProfileData[];
-  searchResults: IProfileData[];
+  collaborators: Profile[];
+  searchResults: Profile[];
   noCollaboratorsLabel: string;
   noSearchItemsLabel: string;
   dropOpen: boolean;
   addButtonLabel: string;
   removeButtonLabel: string;
   closeModal: () => void;
-  onClickCollaborator: (pubKey: string, action: 'add' | 'remove') => () => void;
+  onClickCollaborator: (profileId: string, action: 'add' | 'remove') => () => void;
   closeDrop: () => void;
 }
 
@@ -103,12 +102,12 @@ const ManageCollaboratorsModal: React.FC<IManageCollaboratorsModalProps> = props
                 <Box fill="horizontal" pad="medium" gap="medium">
                   {!searchResults.length && <Text>{noSearchItemsLabel}</Text>}
                   {!!searchResults.length &&
-                    searchResults.map((r, id) => (
+                    searchResults.map(profile => (
                       <Collaborator
-                        key={r.name + id}
-                        value={r}
+                        key={profile.name + profile.did.id}
+                        profile={profile}
                         buttonLabel={addButtonLabel}
-                        onClick={onClickCollaborator(r.pubKey, 'add')}
+                        onClick={onClickCollaborator(profile.did.id, 'add')}
                       />
                     ))}
                 </Box>
@@ -126,13 +125,13 @@ const ManageCollaboratorsModal: React.FC<IManageCollaboratorsModalProps> = props
             )}
             {!!collaborators.length && (
               <Box fill="horizontal" gap="medium">
-                {collaborators.map((c, id) => (
+                {collaborators.map(profile => (
                   <Collaborator
-                    key={c.name + id}
-                    value={c}
+                    key={profile.name + profile.did.id}
+                    profile={profile}
                     buttonLabel={removeButtonLabel}
                     isRed={true}
-                    onClick={onClickCollaborator(c.pubKey, 'remove')}
+                    onClick={onClickCollaborator(profile.did.id, 'remove')}
                   />
                 ))}
               </Box>
