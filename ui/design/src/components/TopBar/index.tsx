@@ -224,7 +224,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           menuItemRefs.current[menuItem.index] = ref;
         }}
       >
-        {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
+        {menuItem.logo?.type === LogoTypeSource.AVATAR && loggedProfileData?.avatar?.default ? (
           <Avatar
             active={checkActiveAvatar(menuItem)}
             profileId={loggedProfileData?.did.id}

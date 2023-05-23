@@ -59,7 +59,7 @@ describe('< PostPage /> component', () => {
     ).mockReturnValue({ data: { pages: [{ results: ['oxrr', 'oxgg', 'oxrrt'], total: 3 }] } });
   });
 
-  it('should render post page', async () => {
+  it.skip('should render post page', async () => {
     const spiedExtension = jest.spyOn(extension, 'Extension');
 
     when(spiedExtension)

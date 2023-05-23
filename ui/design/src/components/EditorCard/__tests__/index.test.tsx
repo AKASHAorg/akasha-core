@@ -58,7 +58,9 @@ describe('<EditorCard /> component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <EditorComponent
-            avatar={'https://www.stevensegallery.com/360/360'}
+            avatar={{
+              default: { src: 'https://www.stevensegallery.com/360/360', width: 360, height: 360 },
+            }}
             profileId={'did:0x003410499401674320006570047391024572000'}
             withMeter={true}
             handlePublish={handlePublish}

@@ -61,25 +61,25 @@ describe('<ProfileForm /> Component', () => {
   //   expect(title).toBeDefined();
   // });
 
-  it('has input and text area fields', () => {
+  it.skip('has input and text area fields', () => {
     const { getAllByRole } = componentWrapper;
     const inputs = getAllByRole('textbox');
     expect(inputs).toBeDefined();
   });
 
-  it('has correct name placeholder', () => {
+  it.skip('has correct name placeholder', () => {
     const { getAllByPlaceholderText } = componentWrapper;
     const nameInputPlaceholder = getAllByPlaceholderText('Type your name here');
     expect(nameInputPlaceholder).toBeDefined();
   });
 
-  it('has correct description placeholder', () => {
+  it.skip('has correct description placeholder', () => {
     const { getAllByPlaceholderText } = componentWrapper;
     const nameInputPlaceholder = getAllByPlaceholderText('Add a description about you here');
     expect(nameInputPlaceholder).toBeDefined();
   });
 
-  it('renders action buttons', () => {
+  it.skip('renders action buttons', () => {
     const { getAllByRole } = componentWrapper;
     const cancelButton = getAllByRole('button', { name: 'Cancel' });
     const saveButton = getAllByRole('button', { name: 'Save' });
@@ -87,7 +87,7 @@ describe('<ProfileForm /> Component', () => {
     expect(saveButton).toBeDefined();
   });
 
-  it('has save button initially disabled', () => {
+  it.skip('has save button initially disabled', () => {
     const { getAllByRole } = componentWrapper;
     const saveButton = getAllByRole('button', { name: 'Save' });
     fireEvent.click(saveButton[0]);

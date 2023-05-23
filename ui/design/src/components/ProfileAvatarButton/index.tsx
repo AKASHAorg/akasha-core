@@ -41,7 +41,7 @@ const ProfileAvatarButton = React.forwardRef(
         <Box flex={{ shrink: 0 }}>
           <Avatar
             size={size}
-            avatar={avatarImage.default.src}
+            avatar={avatarImage?.default.src}
             profileId={profileId}
             onClick={onClickAvatar}
           />

@@ -12,7 +12,7 @@ const handleLogin = jest.fn();
 const handleLogout = jest.fn();
 const handleFeedback = jest.fn();
 
-describe('<Topbar /> Component', () => {
+describe('Topbar Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
