@@ -60,10 +60,10 @@ describe('<EntryCard /> Component', () => {
   });
 
   it('has correct author name', () => {
-    const { getByText } = componentWrapper;
-    const authorName = getByText(/Gilbert The Bearded/i);
+    const { getAllByText } = componentWrapper;
+    const authorNames = getAllByText(/Gilbert The Bearded/i);
 
-    expect(authorName).toBeDefined();
+    expect(authorNames.length).toBeGreaterThanOrEqual(1);
   });
 
   it('triggers the handlers on the action buttons', async () => {

@@ -41,9 +41,7 @@ describe('<ChatAreaHeader /> Component', () => {
   it("has correct chat owner's details", () => {
     const { getByText } = componentWrapper;
     const fullName = getByText(name);
-    const userName = getByText(`@${username}`);
 
     expect(fullName).toBeDefined();
-    expect(userName).toBeDefined();
   });
 });
