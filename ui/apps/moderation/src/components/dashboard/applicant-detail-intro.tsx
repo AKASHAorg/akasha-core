@@ -34,7 +34,7 @@ const ApplicantDetailIntro: React.FC<IApplicantDetailIntroProps> = props => {
     <BasicCardBox pad="p-0">
       <Box customStyle="flex justify-between items-center p-4">
         <Box customStyle="flex space-x-2 items-center">
-          <Avatar size="lg" src={selectedApplicant.avatar} />
+          <Avatar size="lg" avatar={selectedApplicant.avatar} />
 
           <Box>
             <Tooltip content={selectedApplicant.name} placement="right">

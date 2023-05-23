@@ -21,7 +21,7 @@ const Applicant: React.FC<IApplicantProps> = props => {
   return (
     <Box customStyle="flex justify-between p-4">
       <Box customStyle="flex space-x-2 items-start">
-        <Avatar src={applicant.avatar} />
+        <Avatar avatar={applicant.avatar} />
 
         <Box>
           <Tooltip content={applicant.name} placement="right">
