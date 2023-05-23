@@ -33,7 +33,7 @@ export interface ICDetailCardProps {
   noPreviousReleasesLabel: string;
   versionHistoryLabel: string;
   authorLabel: string;
-  ethereumAddressLabel: string;
+  authorDidLabel: string;
   licenseLabel: string;
 
   id?: string;
@@ -66,13 +66,13 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     linksLabel,
     repoLinkLabel,
     docsLinkLabel,
+    authorDidLabel,
     releasesLabel,
     releaseVersionLabel,
     latestReleaseLabel,
     noPreviousReleasesLabel,
     versionHistoryLabel,
     authorLabel,
-    ethereumAddressLabel,
     licenseLabel,
     id,
     integrationName,
@@ -290,7 +290,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
               onClick={() => handleAuthorClick(authorProfile)}
             />
           )}
-          <Text>{ethereumAddressLabel}</Text>
+          <Text>{authorDidLabel}</Text>
           {isFetching && !authorProfile.did.id && (
             <TextLine title="integrationAuthorEthAddress" animated={false} width="150px" />
           )}

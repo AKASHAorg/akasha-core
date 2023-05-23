@@ -57,11 +57,11 @@ describe('<ProfileAvatarButton /> Component', () => {
   });
 
   it('has an avatar with correct profile url', () => {
-    const { getByRole } = componentWrapper;
+    const { getByTestId } = componentWrapper;
 
-    const avatar = getByRole('img');
+    const avatar = getByTestId('avatar-image');
     expect(avatar).toBeDefined();
-    expect(avatar).toHaveAttribute('src', 'https://placebeard.it/360x360');
+    expect(avatar).toHaveAttribute('srcSet', 'https://placebeard.it/360x360');
   });
 
   it('calls handler when clicked', async () => {

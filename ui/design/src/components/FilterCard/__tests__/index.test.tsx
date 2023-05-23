@@ -53,11 +53,11 @@ describe('<FilterCard /> Component', () => {
   });
 
   it('has correct profile avatar', () => {
-    const { getByRole } = componentWrapper;
-    const image = getByRole('img');
+    const { getByTestId } = componentWrapper;
+    const image = getByTestId('avatar-image');
 
     expect(image).toBeDefined();
-    expect(image).toHaveAttribute('src', 'https://placebeard.it/360x360');
+    expect(image).toHaveAttribute('srcSet', 'https://placebeard.it/360x360');
   });
 
   it('has correct profile name and username', () => {

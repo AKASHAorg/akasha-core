@@ -4,13 +4,20 @@ import { act, cleanup, waitFor } from '@testing-library/react';
 import Avatar, { getAvatarFromSeed } from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
+const avatarSrc = '/images/avatar-placeholder-1.webp';
+
 describe('<Avatar /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(<Avatar profileId={'did:0x01230123450012312'} />),
+        wrapWithTheme(
+          <Avatar
+            profileId={'did:0x01230123450012312'}
+            avatar={{ default: { src: avatarSrc, width: 100, height: 100 } }}
+          />,
+        ),
         {},
       );
     });
@@ -36,9 +43,7 @@ describe('<Avatar /> Component', () => {
 
   it('when not in guest mode, should load src prop', async () => {
     const { findByTestId } = componentWrapper;
-
-    const src = '/images/avatar-placeholder-1.webp';
     const image = await waitFor(() => findByTestId('avatar-image'));
-    expect(image.getAttribute('src')).toEqual(src);
+    expect(image.getAttribute('srcSet')).toEqual(avatarSrc);
   });
 });

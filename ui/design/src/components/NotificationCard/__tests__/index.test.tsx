@@ -60,10 +60,10 @@ describe('NotificationsCard Component', () => {
   });
 
   it('renders correct profile avatar', () => {
-    const { getByRole } = componentWrapper;
+    const { getByTestId } = componentWrapper;
 
-    const avatar = getByRole('img');
-    expect(avatar).toHaveAttribute('src', 'https://placebeard.it/360x360');
+    const avatar = getByTestId('avatar-image');
+    expect(avatar).toHaveAttribute('srcSet', profileData.avatar.default.src);
   });
 
   it('has correct label based on type (POST_MENTION)', () => {
