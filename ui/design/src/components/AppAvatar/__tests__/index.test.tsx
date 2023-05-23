@@ -12,7 +12,7 @@ describe('<AppAvatar /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <AppAvatar ethAddress={'0x01230123450012312'} appType={IntegrationTypes.APP} />,
+          <AppAvatar profileId={'did:0x01230123450012312'} appType={IntegrationTypes.APP} />,
         ),
         {},
       );

@@ -1,4 +1,5 @@
 import { EntityTypes } from './ui-events';
+import { Profile } from './profile';
 
 export enum ButtonValues {
   ALL = 'All',
@@ -20,12 +21,6 @@ export const ModerationEntityTypesMap = {
 export type ModeratorStatus = 'active' | 'revoked' | 'resigned';
 
 export interface IModeratorInfo {
-  name: string;
-  userName: string;
-  avatar: {
-    url?: string;
-    fallbackUrl?: string;
-  };
   moderatorEndDate?: string;
   status: ModeratorStatus;
   social: {
@@ -33,16 +28,12 @@ export interface IModeratorInfo {
   };
 }
 
-export interface Moderator extends IModeratorInfo {
-  _id: string;
-  _mod: Date;
-  creationDate: Date;
-  active: boolean;
-  admin: boolean;
-  coverImage: string;
-  pubKey: string;
-  ethAddress: string;
-}
+export type Moderator = Profile &
+  IModeratorInfo & {
+    _mod: Date;
+    active: boolean;
+    admin: boolean;
+  };
 
 export interface ModeratorApplicantData {
   _id: string;
@@ -52,23 +43,11 @@ export interface ModeratorApplicantData {
   ethAddress: string;
   name: string;
   userName: string;
-  avatar: {
-    url?: string;
-    fallbackUrl?: string;
-  };
+  avatar: Profile['avatar'];
   applicationDate?: string;
   reports: Record<string, string>[];
   history: Record<string, string>[];
 }
-
-type Profile = {
-  pubKey: string;
-  ethAddress: string;
-  name: string;
-  userName: string;
-  avatar: string;
-};
-
 export interface ModerationStatus {
   contentId: string;
   delisted: boolean;
@@ -110,7 +89,7 @@ export interface IModerationLogItem {
   delisted: false;
   reasons: string[];
   explanation: string;
-  moderator: Profile;
+  moderator: Moderator;
   moderatedDate: Date;
   reports: number;
 }
@@ -137,7 +116,7 @@ export interface IModeratedItem extends IPendingItem {
   moderator: string;
   moderatedDate?: Date;
   evaluationDate?: Date;
-  moderatorProfile: Profile;
+  moderatorProfile: Moderator;
 }
 
 export type ModerationCategory = { label: string; value: string };

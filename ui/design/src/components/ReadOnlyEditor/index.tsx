@@ -83,7 +83,7 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
           renderLeaf={renderLeaf}
         />
       </Slate>
-      {imageOverlayOpen && <ImageOverlay src={imgUrl} closeModal={closeImageOverlay} />}
+      {imageOverlayOpen && <ImageOverlay src={imgUrl.url} closeModal={closeImageOverlay} />}
     </>
   );
 };

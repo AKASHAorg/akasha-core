@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { IProfileData, RootExtensionProps } from '@akashaorg/typings/ui';
+import { Profile, RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { trendingProfilesData } from '@akashaorg/design-system/lib/utils/dummy-data';
 
@@ -15,8 +15,8 @@ const { ManageCollaboratorsModal } = DS;
 const ManageCollaborators = (props: RootExtensionProps) => {
   const [inputValue, setInputValue] = React.useState<string>('');
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
-  const [collaborators, setCollaborators] = React.useState<IProfileData[]>([]);
-  const [searchResults, setSearchResults] = React.useState<IProfileData[]>([]);
+  const [collaborators, setCollaborators] = React.useState<Profile[]>([]);
+  const [searchResults, setSearchResults] = React.useState<Profile[]>([]);
 
   const { t } = useTranslation('app-articles');
 
@@ -36,26 +36,26 @@ const ManageCollaborators = (props: RootExtensionProps) => {
     if (inputValue.length) {
       const results = trendingProfilesData.filter(
         c =>
-          (c.name.includes(inputValue) || c.userName.includes(inputValue)) &&
-          !collaborators.some(el => el.pubKey === c.pubKey),
+          (c.name.includes(inputValue) || c.name.includes(inputValue)) &&
+          !collaborators.some(el => el.did.id === c.did.id),
       );
       setSearchResults(results);
       setDropOpen(true);
     }
   };
 
-  const handleClickCollaborator = (pubKey: string, action: 'add' | 'remove') => () => {
+  const handleClickCollaborator = (profileId: string, action: 'add' | 'remove') => () => {
     if (action === 'add') {
       // find the collaborator
-      const collaborator = trendingProfilesData.find(el => el.pubKey === pubKey);
+      const collaborator = trendingProfilesData.find(el => el.did.id === profileId);
       // add to collaborators state
       setCollaborators([...collaborators, collaborator]);
       // remove from search results
-      setSearchResults(searchResults.filter(_r => _r.pubKey !== pubKey));
+      setSearchResults(searchResults.filter(_r => _r.did.id !== profileId));
     }
 
     if (action === 'remove') {
-      const filtered = collaborators.filter(_collaborator => _collaborator.pubKey !== pubKey);
+      const filtered = collaborators.filter(_collaborator => _collaborator.did.id !== profileId);
       setCollaborators(filtered);
     }
   };

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 
 import {
-  IProfileData,
+  Profile,
   RootComponentProps,
   EventTypes,
   ProfileProviderProperties,
@@ -17,7 +17,6 @@ import {
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
-  LoginState,
   useEnsByAddress,
   useCheckModerator,
 } from '@akashaorg/ui-awf-hooks';
@@ -32,15 +31,15 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 
 export type ProfilePageProps = {
-  profileId: string;
-  profileData: IProfileData;
-  loginState: LoginState;
+  profileId?: string;
+  profileData: Profile;
+  loggedProfileData: Profile;
 };
 
 const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
-  const { profileData, loginState, profileId } = props;
+  const { profileData, loggedProfileData, profileId } = props;
 
-  // undefined for logged user's profile page, use loginState?.pubKey instead
+  // undefined for logged user's profile page, use loggedProfileData?.pubKey instead
   const { pubKey } = useParams<{
     pubKey: string;
   }>();
@@ -49,54 +48,55 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
   const { t } = useTranslation('app-profile');
 
   const [showFeedback, setShowFeedback] = React.useState(false);
-
-  const isFollowingReq = useIsFollowingMultiple(loginState.pubKey, [profileData.pubKey]);
+  // @TODO replace with new hooks
+  const isFollowingReq = useIsFollowingMultiple(loggedProfileData?.did?.id, [profileData.did.id]);
   const followedProfiles = isFollowingReq.data;
 
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
-  const ENSReq = useEnsByAddress(profileData.ethAddress);
-  const checkModeratorQuery = useCheckModerator(loginState?.pubKey);
+  // const ENSReq = useEnsByAddress(profileData.ethAddress);
+  const checkModeratorQuery = useCheckModerator(loggedProfileData?.did.id);
   const checkModeratorResp = checkModeratorQuery.data;
   const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
   const handleFollow = () => {
-    if (!loginState.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       return props.navigateToModal({ name: 'login', profileId });
     }
-    if (profileData?.pubKey) {
-      followReq.mutate(profileData.pubKey);
+    if (profileData?.did.id) {
+      followReq.mutate(profileData.did.id);
     }
   };
-  const socialLinks: { type: string; value: string }[] = React.useMemo(() => {
-    if (profileData.default.length > 0) {
-      const socialLinksProvider = profileData.default.find(
-        p =>
-          p.property === ProfileProviderProperties.SOCIAL_LINKS &&
-          p.provider === ProfileProviders.EWA_BASIC,
-      );
-      if (socialLinksProvider) {
-        const links = JSON.parse(socialLinksProvider.value);
-        if (links.length > 0) {
-          return links.map((link: { type: string; value: string }) => {
-            if (link.type === 'url') {
-              return {
-                type: link.type,
-                value: decodeURIComponent(link.value),
-              };
-            }
-            return {
-              type: link.type,
-              value: link.value,
-            };
-          });
-        }
-      }
-    }
-    return [];
-  }, [profileData]);
+  // @TODO update with new profile model
+  // const socialLinks: { type: string; value: string }[] = React.useMemo(() => {
+  //   if (profileData.default.length > 0) {
+  //     const socialLinksProvider = profileData.default.find(
+  //       p =>
+  //         p.property === ProfileProviderProperties.SOCIAL_LINKS &&
+  //         p.provider === ProfileProviders.EWA_BASIC,
+  //     );
+  //     if (socialLinksProvider) {
+  //       const links = JSON.parse(socialLinksProvider.value);
+  //       if (links.length > 0) {
+  //         return links.map((link: { type: string; value: string }) => {
+  //           if (link.type === 'url') {
+  //             return {
+  //               type: link.type,
+  //               value: decodeURIComponent(link.value),
+  //             };
+  //           }
+  //           return {
+  //             type: link.type,
+  //             value: link.value,
+  //           };
+  //         });
+  //       }
+  //     }
+  //   }
+  //   return [];
+  // }, [profileData]);
   const handleUnfollow = () => {
-    if (profileData?.pubKey) {
-      unfollowReq.mutate(profileData.pubKey);
+    if (profileData?.did.id) {
+      unfollowReq.mutate(profileData.did.id);
       setShowFeedback(true);
       setTimeout(() => {
         setShowFeedback(false);
@@ -108,7 +108,7 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
     props.navigateToModal({ name: 'login' });
   };
   const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
-    if (!loginState.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       return props.navigateToModal({
         name: 'login',
         redirectTo: { modal: { name: 'report-modal', itemId, itemType, user } },
@@ -130,14 +130,14 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: routes =>
-        `/${pubKey ?? loginState?.pubKey}${routes.engagement}?tab=${stat}`,
+        `/${pubKey ?? loggedProfileData?.did.id}${routes.engagement}?tab=${stat}`,
     });
   };
 
   const handleNavigateToProfilePosts = () => {
     navigateTo({
       appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: routes => `${routes.ProfileFeed}/${pubKey ?? loginState?.pubKey}`,
+      getNavigationUrl: routes => `${routes.ProfileFeed}/${profileId ?? loggedProfileData?.did.id}`,
     });
   };
   const handleExtPointMount = (name: string) => {
@@ -145,7 +145,7 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
       event: EventTypes.ExtensionPointMount,
       data: {
         name,
-        pubKey: profileData?.pubKey,
+        profileId: profileData?.did.id,
       },
     });
   };
@@ -173,8 +173,8 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
           shareProfileLabel={t('Share')}
           editProfileLabel={t('Edit profile')}
           showMore={true}
-          viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
-          flaggable={loginState.ethAddress !== profileData.ethAddress}
+          viewerIsOwner={loggedProfileData.ethAddress === profileData.ethAddress}
+          flaggable={loggedProfileData.ethAddress !== profileData.ethAddress}
           flagAsLabel={t('Report')}
           onEntryFlag={handleEntryFlag(
             profileData.pubKey ? profileData.pubKey : '',
@@ -219,42 +219,45 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
             )}
           </Box>
         </Profile> */}
-        <ProfileHeader
-          ethAddress={profileData.ethAddress}
-          coverImage={profileData.coverImage}
+
+        {/* @TODO fix typings here */}
+        {/* <ProfileHeader
+          did={profileData.did}
+          background={profileData.background}
           avatar={profileData.avatar}
           name={profileData.name}
-          userName={profileData.userName}
-          ensName={
-            ENSReq.isFetching && !ENSReq.isFetched
-              ? 'loading'
-              : ENSReq.isFetched && ENSReq.data
-              ? ENSReq.data
-              : ''
-          }
-          isFollowing={followedProfiles?.includes(profileData.pubKey)}
-          viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
+          // userName={profileData.userName}
+          // ensName={
+          //   ENSReq.isFetching && !ENSReq.isFetched
+          //     ? 'loading'
+          //     : ENSReq.isFetched && ENSReq.data
+          //     ? ENSReq.data
+          //     : ''
+          // }
+          isFollowing={followedProfiles?.includes(profileData.did.id)}
+          viewerIsOwner={loggedProfileData.did.isViewer}
           flagLabel={t('Report')}
           handleUnfollow={handleUnfollow}
           handleFollow={handleFollow}
           handleFlag={handleEntryFlag(
-            profileData.pubKey ? profileData.pubKey : '',
+            profileData.did.id ? profileData.did.id : '',
             EntityTypes.PROFILE,
             profileData.name,
           )}
           handleEdit={() => {
             navigateTo({
               appName: '@akashaorg/app-profile',
-              getNavigationUrl: () => `${pubKey}/${routes[EDIT]}`,
+              getNavigationUrl: () => `${profileId}/${routes[EDIT]}`,
             });
           }}
-        />
+        /> */}
         {/*@TODO replace moderator label with new design when its ready */}
         {/* {isModerator && <ModeratorLabel label={t('Moderator')} />} */}
         {profileData.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
-        <ProfileStats
+        {/* @TODO replace this with data from new hooks */}
+        {/* <ProfileStats
           posts={{
             label: t('Posts'),
             total: profileData.totalPosts,
@@ -274,18 +277,18 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
             total: profileData.totalFollowing,
             onClick: onStatClick('following'),
           }}
-        />
-        {socialLinks.length > 0 && (
+        /> */}
+        {/* {socialLinks.length > 0 && (
           <ProfileLinks
             title={t('Find me on')}
             links={socialLinks}
             copiedLabel={t('Copied')}
             copyLabel={t('Copy to clipboard')}
           />
-        )}
-        {showFeedback && loginState.ethAddress === profileData.ethAddress && (
+        )} */}
+        {showFeedback && loggedProfileData.did.isViewer && (
           <Snackbar
-            title={t('You unfollowed {{userName}}', { userName: profileData.userName })}
+            title={t('You unfollowed {{name}}', { userName: profileData.name })}
             iconType="CheckCircleIcon"
             handleDismiss={() => {
               setShowFeedback(false);

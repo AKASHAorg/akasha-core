@@ -1,9 +1,9 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
-import { IProfileData } from '@akashaorg/typings/ui';
 import { buildProfileMediaLinks } from './utils/media-utils';
 import { logError } from './utils/error-handler';
 import { PROFILE_KEY } from './use-profile';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const TRENDING_TAGS_KEY = 'Trending_Tags';
 export const TRENDING_PROFILES_KEY = 'Trending_Profiles';
@@ -35,7 +35,7 @@ const getTrendingProfiles = async (queryClient: QueryClient) => {
   const sdk = getSDK();
   const res = await sdk.api.profile.getTrending();
   const profiles = res.searchProfiles.map(profile => {
-    const profileCache = queryClient.getQueryData<IProfileData>([PROFILE_KEY, profile?.pubKey]);
+    const profileCache = queryClient.getQueryData<Profile>([PROFILE_KEY, profile.did.id]);
     if (profileCache) {
       return profileCache;
     }

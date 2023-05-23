@@ -1,56 +1,40 @@
 import React from 'react';
 import Header, { HeaderProps } from './index';
+import { Profile } from '@akashaorg/typings/ui';
 
 export default {
   title: 'Profile/ProfileHeader',
   component: Header,
 };
 
-const Template = (args: HeaderProps) => <Header {...args} />;
+const Template = (args: HeaderProps & Profile) => <Header {...args} />;
 
 const ethAddress = '0x003410490050000320006570034567114572000';
 
 export const BasicProfileHeader = Template.bind({});
 BasicProfileHeader.args = {
-  ethAddress,
+  id: 'profile-stream-id',
+  did: { id: ethAddress },
   coverImage: null,
-  avatar: { url: 'https://placebeard.it/360x360' },
+  avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
   name: 'Coffee Lover',
-  userName: '@ilovecoffee',
-  ensName: 'coffeelover.eth',
   flagLabel: 'Report',
 };
 
 export const BasicProfileHeaderFollowing = Template.bind({});
 BasicProfileHeaderFollowing.args = {
-  ethAddress,
-  coverImage: null,
-  avatar: { url: 'https://placebeard.it/360x360' },
-  name: 'Coffee Lover',
-  userName: '@ilovecoffee',
-  ensName: 'coffeelover.eth',
-  flagLabel: 'Report',
+  ...BasicProfileHeader.args,
   isFollowing: true,
 };
 
 export const BasicProfileHeaderOwnProfile = Template.bind({});
 BasicProfileHeaderOwnProfile.args = {
-  ethAddress,
-  coverImage: null,
-  avatar: { url: 'https://placebeard.it/360x360' },
-  name: 'Coffee Lover',
-  userName: '@ilovecoffee',
-  ensName: 'coffeelover.eth',
-  flagLabel: 'Report',
+  ...BasicProfileHeader.args,
   viewerIsOwner: true,
 };
 
 export const ProfileHeaderWithoutEns = Template.bind({});
 ProfileHeaderWithoutEns.args = {
-  ethAddress,
-  coverImage: null,
-  avatar: { url: 'https://placebeard.it/360x360' },
-  name: 'Coffee Lover',
-  userName: '@ilovecoffee',
-  flagLabel: 'Report',
+  ...BasicProfileHeader.args,
+  ens: null,
 };

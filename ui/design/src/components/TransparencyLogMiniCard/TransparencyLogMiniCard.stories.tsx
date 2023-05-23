@@ -29,7 +29,7 @@ const Template = (args: ITransparencyLogMiniCardProps) => (
   </Grommet>
 );
 
-const ethAddress = '0x003410490050000320006570034567114572000';
+const profileId = '0x003410490050000320006570034567114572000';
 
 export const BaseTransparencyLogMiniCard = Template.bind({});
 
@@ -41,6 +41,6 @@ BaseTransparencyLogMiniCard.args = {
   isSelected: true,
   isDelisted: true,
   moderatedTimestamp: '2021-06-14T16:48:00.000Z',
-  moderatorAvatar: { url: 'https://placebeard.it/360x360' },
-  moderatorEthAddress: ethAddress,
+  moderatorAvatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
+  moderatorProfileId: profileId,
 };

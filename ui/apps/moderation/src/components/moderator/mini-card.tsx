@@ -36,8 +36,7 @@ const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props =
   return (
     <Box customStyle={`flex py-4 flex-none ${borderBottomStyle}`}>
       <Box customStyle="flex space-x-2 items-start w([50%] md:[30%]) px-4 border(r-1 solid grey8 dark:grey3)">
-        <Avatar src={moderator.avatar} />
-
+        <Avatar avatar={moderator.avatar} />
         <Box>
           <Tooltip content={moderator.name} placement="right">
             <Text variant="body2" weight="bold" truncate={true} customStyle={textStyle}>
@@ -45,16 +44,14 @@ const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props =
             </Text>
           </Tooltip>
 
-          <Tooltip content={`@${moderator.userName}`} placement="right">
+          <Tooltip content={`${moderator.name}`} placement="right">
             <Text
               variant="button-md"
               weight="normal"
               truncate={true}
               customStyle={textStyle}
               color={{ light: 'grey4', dark: 'grey7' }}
-            >
-              @{moderator.userName}
-            </Text>
+            >{`${moderator.name}`}</Text>
           </Tooltip>
 
           <Box customStyle="flex space-x-1.5 items-center">
@@ -74,12 +71,12 @@ const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props =
 
           <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
             {moderator.status === 'active'
-              ? formatDate(new Date(moderator.creationDate))
+              ? formatDate(new Date(moderator.createdAt))
               : formatDate(moderator.moderatorEndDate)}
           </Text>
         </Box>
 
-        <Button plain={true} onClick={() => onCardClick(moderator.pubKey)}>
+        <Button plain={true} onClick={() => onCardClick(moderator.did.id)}>
           <Icon type="ChevronRightIcon" accentColor={true} customStyle="justify-end" />
         </Button>
       </Box>

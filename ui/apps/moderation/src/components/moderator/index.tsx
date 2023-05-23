@@ -47,7 +47,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
     <BasicCardBox pad="p-4 space-y-4">
       <Box customStyle={boxStyle}>
         <Box customStyle="flex space-x-2 items-center w([50%] md:[30%])">
-          <Avatar src={moderator.avatar} />
+          <Avatar avatar={moderator.avatar} />
           <Box>
             <Tooltip content={moderator.name} placement="right">
               <Text
@@ -58,14 +58,14 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
               >{`${moderator.name}`}</Text>
             </Tooltip>
 
-            <Tooltip content={`@${moderator.userName}`} placement="right">
+            <Tooltip content={`${moderator.name}`} placement="right">
               <Text
                 variant="button-md"
                 weight="normal"
                 truncate={true}
                 customStyle={textStyle}
                 color={{ light: 'grey4', dark: 'grey7' }}
-              >{`@${moderator.userName}`}</Text>
+              >{`${moderator.name}`}</Text>
             </Tooltip>
           </Box>
         </Box>
@@ -84,7 +84,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
 
           <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
             {moderator.status === 'active'
-              ? formatDate(new Date(moderator.creationDate).toISOString())
+              ? formatDate(new Date(moderator.createdAt).toISOString())
               : formatDate(moderator.moderatorEndDate)}
           </Text>
         </Box>

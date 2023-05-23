@@ -164,7 +164,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
       <div key={index}>
         <BasicCardBox pad="py-3 pl-4" onClick={clickHandler} customStyle="flex-row" round="none">
           <ProfileAvatarNotificationApp
-            ethAddress={profileData.ethAddress}
+            profileId={profileData.did?.id}
             avatarImage={profileData.avatar}
             label={fullLabel}
             info={relativeTime}

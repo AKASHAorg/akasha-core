@@ -7,27 +7,25 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
-import { ImageSrc } from '@akashaorg/design-system-core/lib/components/types/common.types';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type EntryProps = {
   followLabel: string;
   unFollowLabel: string;
   followingLabel: string;
   profileAnchorLink: string;
-  ethAddress: string;
-  pubKey: string;
-  avatar: ImageSrc;
+  profileId: string;
+  avatar: Profile['avatar'];
   name: string;
-  userName: string;
   isFollowing: boolean;
-  pubKeyOfLoggedUser?: string;
+  loggedProfileId?: string;
   hasNextPage?: boolean;
   loadingMoreLabel?: string;
   borderBottom?: boolean;
   onLoadMore?: () => void;
-  onProfileClick: (ethAddress: string) => void;
-  onFollow: (ethAddress: string) => void;
-  onUnfollow: (ethAddress: string) => void;
+  onProfileClick: (profileId: string) => void;
+  onFollow: (profileId: string) => void;
+  onUnfollow: (profileId: string) => void;
 };
 
 const Entry: React.FC<EntryProps> = props => {
@@ -36,13 +34,11 @@ const Entry: React.FC<EntryProps> = props => {
     unFollowLabel,
     followingLabel,
     profileAnchorLink,
-    ethAddress,
-    pubKey,
+    profileId,
     avatar,
     name,
-    userName,
     isFollowing,
-    pubKeyOfLoggedUser,
+    loggedProfileId,
     hasNextPage,
     loadingMoreLabel,
     borderBottom = true,
@@ -68,25 +64,23 @@ const Entry: React.FC<EntryProps> = props => {
         'border',
       )}`
     : '';
-  if (pubKeyOfLoggedUser === pubKey) return null;
+
+  if (loggedProfileId === profileId) return null;
+
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle={`px-4 pb-4 ${borderBottomStyle}`}>
       <Stack align="center" justify="between">
-        <Anchor href={`${profileAnchorLink}/${pubKey}`}>
+        <Anchor href={`${profileAnchorLink}/${profileId}`}>
           <Stack align="center" spacing="gap-x-1">
             <Avatar
-              ethAddress={ethAddress}
-              onClick={() => onProfileClick(pubKey)}
+              profileId={profileId}
+              onClick={() => onProfileClick(profileId)}
               size="md"
-              src={{
-                url: avatar?.url,
-                fallbackUrl: avatar?.fallbackUrl,
-              }}
+              avatar={avatar}
               customStyle="cursor-pointer"
             />
             <Stack direction="column" justify="center">
-              <Text variant="button-md">{name || userName}</Text>
-              <Text variant="footnotes2">{`@${userName ? userName : 'username'}`}</Text>
+              <Text variant="button-md">{name}</Text>
             </Stack>
           </Stack>
         </Anchor>
@@ -94,8 +88,8 @@ const Entry: React.FC<EntryProps> = props => {
           inactiveLabel={followLabel}
           activeLabel={followingLabel}
           activeHoverLabel={unFollowLabel}
-          onClickInactive={() => onFollow(pubKey)}
-          onClickActive={() => onUnfollow(pubKey)}
+          onClickInactive={() => onFollow(profileId)}
+          onClickActive={() => onUnfollow(profileId)}
           active={isFollowing}
           size="sm"
           allowMinimization

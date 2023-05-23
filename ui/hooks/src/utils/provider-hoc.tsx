@@ -2,6 +2,7 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AnalyticsProvider } from '../use-analytics';
+// @TODO remove after replacing old DS components in apps
 import ThemeWrapper from './theme-wrapper';
 
 const { ViewportSizeProvider } = DS;

@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { IProfileData, EngagementType, QueryStatus } from '@akashaorg/typings/ui';
+import { EngagementType, QueryStatus } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/ui';
 import { Engagement } from './Engagement';
 
 export type EngagementItem = {
   label: string;
   status: QueryStatus['status'];
-  data: IProfileData[];
+  data: Profile[];
   hasNextPage: boolean;
   onLoadMore?: () => void;
 };
 
 export type EngagementsProps = {
   selectedStat: EngagementType;
-  pubKeyOfLoggedUser: string;
+  loggedProfileId: string;
   followedProfiles: string[];
   followers: EngagementItem;
   following: EngagementItem;
