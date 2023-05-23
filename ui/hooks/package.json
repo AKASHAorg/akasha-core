@@ -41,6 +41,7 @@
     "@akashaorg/typings": "*",
     "@akashaorg/design-system": "*",
     "@akashaorg/design-system-core": "*",
+    "@akashaorg/design-system-components": "*",
     "@akashaorg/af-testing": "*",
     "@types/react": "18.0.33"
   },
