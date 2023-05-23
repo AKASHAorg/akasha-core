@@ -10,7 +10,12 @@ import ReadOnlyEditor from '../../ReadOnlyEditor';
 import LinkPreview from '../../LinkPreview';
 
 import { formatDate, formatRelativeTime, ILocale } from '../../../utils/time';
-import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
+import {
+  IEntryData,
+  EntityTypes,
+  NavigateToParams,
+  IContentClickDetails,
+} from '@akashaorg/typings/ui';
 
 import EntryCardRemoved from '../EntryCardRemoved';
 import { EntryImageGallery } from '../../ImageGallery/entry-image-gallery';
@@ -23,15 +28,6 @@ import EntryCardError from '../EntryCardError';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-
-export interface IContentClickDetails {
-  authorId: string;
-  id: string;
-  replyTo?: {
-    authorId?: string;
-    itemId?: string;
-  };
-}
 
 export interface IEntryBoxProps {
   // data

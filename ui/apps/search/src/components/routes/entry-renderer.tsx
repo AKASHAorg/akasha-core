@@ -8,13 +8,13 @@ import {
   NavigateToParams,
   RootComponentProps,
   Profile,
+  IContentClickDetails,
 } from '@akashaorg/typings/ui';
 import { Logger } from '@akashaorg/awf-sdk';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 // import EntryCardHidden from '@akashaorg/design-system-components/lib/components/Entry/EntryCardHidden';
 import ExtensionPoint from '@akashaorg/design-system-components/lib/utils/extension-point';
-import { IContentClickDetails } from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
 export interface IEntryCardRendererProps {
   logger: Logger;
