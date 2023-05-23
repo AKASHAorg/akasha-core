@@ -8,9 +8,9 @@ import {
   IEntryData,
   EntityTypes,
   ModerationEntityTypesMap,
+  IContentClickDetails,
 } from '@akashaorg/typings/ui';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
-import { IContentClickDetails } from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 

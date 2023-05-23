@@ -13,7 +13,6 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { ILogger } from '@akashaorg/typings/sdk/log';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
-import { IContentClickDetails } from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 import {
   TrackEventData,
   EventTypes,
@@ -25,7 +24,7 @@ import {
 import { usePost, useComment, mapEntry } from '@akashaorg/ui-awf-hooks';
 
 import FeedWidget from './App';
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile, IContentClickDetails } from '@akashaorg/typings/ui';
 
 export interface IEntryRenderer {
   itemId?: string;

@@ -1,6 +1,5 @@
 import React from 'react';
-import { NavigateToParams, EntityTypes } from '@akashaorg/typings/ui';
-import { IContentClickDetails } from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
+import { NavigateToParams, EntityTypes, IContentClickDetails } from '@akashaorg/typings/ui';
 
 /**
  * Hook to navigation to entry's page
