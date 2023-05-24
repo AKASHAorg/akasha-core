@@ -84,11 +84,11 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     setSelected(null);
   };
 
-  const handleClickAvatar = (pubKey: string) => () => {
-    if (pubKey)
+  const handleClickAvatar = (profileId: string) => () => {
+    if (profileId)
       navigateTo?.({
         appName: '@akashaorg/app-profile',
-        getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+        getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
       });
   };
 

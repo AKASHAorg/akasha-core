@@ -50,7 +50,8 @@ import routes, {
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
-  const checkModeratorQuery = useCheckModerator(loginQuery.data?.pubKey);
+  const checkModeratorQuery = useCheckModerator(loginQuery.data?.id);
+
   const checkModeratorResp = checkModeratorQuery.data;
 
   const isAuthorised = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
@@ -83,7 +84,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             path={routes[DASHBOARD]}
             element={
               <Dashboard
-                user={loginQuery.data?.pubKey}
+                user={loginQuery.data?.id}
                 isAuthorised={isAuthorised}
                 isAdmin={isAdmin}
                 navigateTo={navigateTo}
@@ -93,26 +94,24 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
           <Route
             path={routes[EDIT_CATEGORIES]}
-            element={<EditCategoriesPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+            element={<EditCategoriesPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
           />
 
           <Route
             path={routes[EDIT_CONTACT_INFO]}
-            element={<EditContactInfoPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+            element={<EditContactInfoPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
           />
 
           <Route
             path={routes[EDIT_MAX_APPLICANTS]}
-            element={
-              <EditMaxApplicantsPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />
-            }
+            element={<EditMaxApplicantsPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
           />
 
           <Route
             path={routes[RESIGN_ROLE]}
             element={
               <ResignRolePage
-                user={loginQuery.data?.pubKey}
+                user={loginQuery.data?.id}
                 isAdmin={isAdmin}
                 navigateTo={navigateTo}
               />
@@ -121,14 +120,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
           <Route
             path={routes[RESIGN_CONFIRMATION]}
-            element={
-              <ResignConfirmationPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />
-            }
+            element={<ResignConfirmationPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
           />
 
           <Route
             path={routes[ASSIGN_NEW_ADMIN]}
-            element={<AssignAdminPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+            element={<AssignAdminPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
           />
 
           <Route path={routes[MODERATORS]} element={<Moderators navigateTo={navigateTo} />} />
@@ -145,14 +142,14 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
           <Route
             path={routes[HISTORY]}
-            element={<TransparencyLog user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+            element={<TransparencyLog user={loginQuery.data?.id} navigateTo={navigateTo} />}
           />
 
           <Route path={routes[HISTORY_ITEM]} element={<TransparencyLogItem />} />
 
           <Route
             path={routes[BECOME_MODERATOR]}
-            element={<BecomeModeratorPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+            element={<BecomeModeratorPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
           />
 
           <Route
