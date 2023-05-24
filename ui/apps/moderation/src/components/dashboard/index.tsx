@@ -12,6 +12,7 @@ import {
 } from './tabs';
 
 export interface IModeratorDashboardProps {
+  isAdmin: boolean;
   tabLabels: string[];
 }
 

@@ -5,6 +5,7 @@ export const EDIT_CONTACT_INFO = 'EditContactInfo';
 export const EDIT_MAX_APPLICANTS = 'EditMaxApplicants';
 export const RESIGN_ROLE = 'ResignRole';
 export const RESIGN_CONFIRMATION = 'ResignConfirmation';
+export const ASSIGN_NEW_ADMIN = 'AssignNewAdmin';
 export const MODERATORS = 'Moderators';
 export const VIEW_MODERATOR = 'ViewModerator';
 export const DISMISS_MODERATOR = 'DismissModerator';
@@ -28,9 +29,10 @@ export default {
   [EDIT_MAX_APPLICANTS]: `${baseDashboardUrl}/edit-max-applicants`,
   [RESIGN_ROLE]: `${baseDashboardUrl}/resign-from-role`,
   [RESIGN_CONFIRMATION]: `${baseDashboardUrl}/resign-confirmation`,
+  [ASSIGN_NEW_ADMIN]: `${baseDashboardUrl}/assign-admin`,
   [MODERATORS]: '/moderators',
-  [VIEW_MODERATOR]: '/moderator/:moderatorPubKey',
-  [DISMISS_MODERATOR]: '/moderator/:moderatorPubKey/dismiss',
+  [VIEW_MODERATOR]: '/moderator/:moderatorProfileId',
+  [DISMISS_MODERATOR]: '/moderator/:moderatorProfileId/dismiss',
   [HISTORY]: '/history',
   [HISTORY_ITEM]: '/history/:itemId',
   [MODERATION_VALUE]: `${baseOverviewUrl}/values/:value`,

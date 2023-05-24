@@ -68,7 +68,7 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
       footerUrl1={`${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/code-of-conduct`}
       cancelLabel={t('Cancel')}
       errorText={moderateMutation.error ? `${moderateMutation.error}` : ''}
-      user={loginQuery.data?.pubKey || ''}
+      user={loginQuery.data?.id || ''}
       requesting={moderateMutation.status === 'loading'}
       isReview={extensionData.status !== 'pending'}
       closeModal={handleModalClose}

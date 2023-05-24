@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { tw } from '@twind/core';
+
 import Stack from '../Stack';
 import List, { Item } from '../List';
 import TextField from '../TextField';
 import { InputProps } from '../TextField/types';
-import { useCloseActions } from '../../utils/useCloseActions';
-import { tw } from '@twind/core';
 
-type AutoCompleteProps = {
+import { useCloseActions } from '../../utils/useCloseActions';
+
+export type AutoCompleteProps = {
   options: string[];
   placeholder?: InputProps['placeholder'];
   disabled?: InputProps['disabled'];
