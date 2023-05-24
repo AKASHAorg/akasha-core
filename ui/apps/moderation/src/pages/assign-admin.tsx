@@ -5,7 +5,7 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 import AssignAdmin from '../components/dashboard/assign-admin';
 
 import { DASHBOARD } from '../routes';
-import { activeModerators } from '../utils/dummy-data';
+import { generateActiveModerators } from '../utils/dummy-data';
 
 export interface IAssignAdminPageProps {
   user: string | null;
@@ -43,7 +43,7 @@ export const AssignAdminPage: React.FC<IAssignAdminPageProps> = props => {
 
   return (
     <AssignAdmin
-      activeModerators={activeModerators}
+      activeModerators={generateActiveModerators()}
       label={t('Assign a New Admin')}
       introLabel={t('{{introLabel}}', { introLabel })}
       searchPlaceholderLabel={t('Search for a moderator')}

@@ -1,19 +1,19 @@
 import React from 'react';
 
+import { Profile } from '@akashaorg/typings/ui';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ModeratorListItem from './moderator-list-item';
 import { IPageHeaderProps, PageHeader } from '../common';
-import { ActiveModerator } from '../../utils/dummy-data';
 
 export interface IAssignAdminProps extends IPageHeaderProps {
   introLabel: string;
   searchPlaceholderLabel: string;
   assignedAdmin: boolean;
   assignButtonLabel: string;
-  activeModerators: ActiveModerator[];
+  activeModerators: Profile[];
   onClickAssign: () => void;
 }
 
