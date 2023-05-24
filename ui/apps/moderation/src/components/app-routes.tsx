@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
+
 import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useCheckModerator } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
@@ -48,9 +50,15 @@ import routes, {
 } from '../routes';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const loginQuery = useGetLogin();
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
 
-  const checkModeratorQuery = useCheckModerator(loginQuery.data?.id);
+  const loggedProfileData = profileDataReq.data;
+
+  const checkModeratorQuery = useCheckModerator(loggedProfileData?.id);
 
   const checkModeratorResp = checkModeratorQuery.data;
 
@@ -84,7 +92,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             path={routes[DASHBOARD]}
             element={
               <Dashboard
-                user={loginQuery.data?.id}
+                user={loggedProfileData?.id}
                 isAuthorised={isAuthorised}
                 isAdmin={isAdmin}
                 navigateTo={navigateTo}
@@ -94,24 +102,24 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
           <Route
             path={routes[EDIT_CATEGORIES]}
-            element={<EditCategoriesPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
+            element={<EditCategoriesPage user={loggedProfileData?.id} navigateTo={navigateTo} />}
           />
 
           <Route
             path={routes[EDIT_CONTACT_INFO]}
-            element={<EditContactInfoPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
+            element={<EditContactInfoPage user={loggedProfileData?.id} navigateTo={navigateTo} />}
           />
 
           <Route
             path={routes[EDIT_MAX_APPLICANTS]}
-            element={<EditMaxApplicantsPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
+            element={<EditMaxApplicantsPage user={loggedProfileData?.id} navigateTo={navigateTo} />}
           />
 
           <Route
             path={routes[RESIGN_ROLE]}
             element={
               <ResignRolePage
-                user={loginQuery.data?.id}
+                user={loggedProfileData?.id}
                 isAdmin={isAdmin}
                 navigateTo={navigateTo}
               />
@@ -120,12 +128,14 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
           <Route
             path={routes[RESIGN_CONFIRMATION]}
-            element={<ResignConfirmationPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
+            element={
+              <ResignConfirmationPage user={loggedProfileData?.id} navigateTo={navigateTo} />
+            }
           />
 
           <Route
             path={routes[ASSIGN_NEW_ADMIN]}
-            element={<AssignAdminPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
+            element={<AssignAdminPage user={loggedProfileData?.id} navigateTo={navigateTo} />}
           />
 
           <Route path={routes[MODERATORS]} element={<Moderators navigateTo={navigateTo} />} />
@@ -142,14 +152,14 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
           <Route
             path={routes[HISTORY]}
-            element={<TransparencyLog user={loginQuery.data?.id} navigateTo={navigateTo} />}
+            element={<TransparencyLog user={loggedProfileData?.id} navigateTo={navigateTo} />}
           />
 
           <Route path={routes[HISTORY_ITEM]} element={<TransparencyLogItem />} />
 
           <Route
             path={routes[BECOME_MODERATOR]}
-            element={<BecomeModeratorPage user={loginQuery.data?.id} navigateTo={navigateTo} />}
+            element={<BecomeModeratorPage user={loggedProfileData?.id} navigateTo={navigateTo} />}
           />
 
           <Route
