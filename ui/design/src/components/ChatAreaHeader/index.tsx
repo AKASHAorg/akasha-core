@@ -1,20 +1,15 @@
 import * as React from 'react';
 import { Box } from 'grommet';
 
-import { IProfileData } from '@akashaorg/typings/ui';
-
 import ProfileAvatarButton from '../ProfileAvatarButton';
+import { Profile } from '@akashaorg/typings/ui';
 
-export interface IChatAreaHeaderProps {
-  name: IProfileData['name'];
-  avatar: IProfileData['avatar'];
-  userName: IProfileData['userName'];
-  ethAddress: IProfileData['ethAddress'];
+export type IChatAreaHeaderProps = Pick<Profile, 'name' | 'avatar' | 'did'> & {
   onClickAvatar?: () => void;
-}
+};
 
 const ChatAreaHeader: React.FC<IChatAreaHeaderProps> = props => {
-  const { name, avatar, userName, ethAddress, onClickAvatar } = props;
+  const { name, avatar, did, onClickAvatar } = props;
 
   return (
     <Box
@@ -27,8 +22,8 @@ const ChatAreaHeader: React.FC<IChatAreaHeaderProps> = props => {
     >
       <ProfileAvatarButton
         label={name}
-        info={userName && `@${userName}`}
-        ethAddress={ethAddress}
+        // info={userName && `@${userName}`}
+        profileId={did.id}
         avatarImage={avatar}
         onClick={onClickAvatar}
       />

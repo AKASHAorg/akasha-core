@@ -18,7 +18,7 @@ export type ShareData = {
 export interface CardActionProps {
   // data
   entryData: IEntryData;
-  loggedProfileEthAddress?: string | null;
+  loggedProfileId?: string | null;
   // share data
   sharePostLabel?: string;
   shareTextLabel?: string;
@@ -271,7 +271,7 @@ const CardActions: React.FC<CardActionProps> = props => {
           iconType="comments"
           iconSize="sm"
           fontSize="large"
-          clickable={disableReposting ? false : true}
+          clickable={!disableReposting}
           onClick={disableReposting ? () => false : handleRepliesClick}
           disabled={disableReposting}
         />
@@ -280,7 +280,7 @@ const CardActions: React.FC<CardActionProps> = props => {
           iconType="transfer"
           iconSize="sm"
           fontSize="large"
-          clickable={disableReposting ? false : true}
+          clickable={!disableReposting}
           ref={repostNodeRef}
           onClick={disableReposting ? () => false : onRepost}
           disabled={disableReposting}
@@ -336,24 +336,6 @@ const CardActions: React.FC<CardActionProps> = props => {
       )}
       {actionsRightExt}
       {shareNodeRef.current && shareDropOpen && renderShareDrop()}
-      {/* disable sharing for v0.1 */}
-      {false && (
-        <TextIcon
-          label={shareBtnText}
-          iconType="shareSmallDark"
-          iconSize="sm"
-          fontSize="large"
-          ref={shareNodeRef}
-          clickable={!disableActions}
-          onClick={() => {
-            if (disableActions) {
-              return;
-            }
-            handleShareOpen();
-          }}
-          disabled={disableActions}
-        />
-      )}
     </Box>
   );
 };

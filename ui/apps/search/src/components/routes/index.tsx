@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
@@ -9,8 +9,12 @@ import SettingsPage from './settings-page';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const loginQuery = useGetLogin();
-
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
   const showLoginModal = () => {
     props.navigateToModal({ name: 'login' });
   };
@@ -27,7 +31,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 <SearchPage
                   {...props}
                   showLoginModal={showLoginModal}
-                  loginState={loginQuery.data}
+                  loggedProfileData={loggedProfileData}
                 />
               }
             />
@@ -37,7 +41,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 <SearchPage
                   {...props}
                   showLoginModal={showLoginModal}
-                  loginState={loginQuery.data}
+                  loggedProfileData={loggedProfileData}
                 />
               }
             />
@@ -58,7 +62,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <OnboardingPage
                 {...props}
                 showLoginModal={showLoginModal}
-                loginState={loginQuery.data}
+                loggedProfileData={loggedProfileData}
               />
             }
           />

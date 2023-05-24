@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-import { IProfileData } from '@akashaorg/typings/ui';
 
 import Avatar, { AvatarSize } from '../Avatar';
 import Text from '../Text';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
-  avatarImage?: IProfileData['avatar'];
+  avatarImage?: Profile['avatar'];
   label?: string;
   size?: AvatarSize;
   customStyle?: string;
   onClickAvatar?: () => void;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
-  ethAddress: string;
+  profileId: string;
   bold?: boolean;
   active?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
@@ -31,7 +31,7 @@ const ProfileAvatarButton = React.forwardRef(
       info,
       onClick,
       onClickAvatar,
-      ethAddress,
+      profileId,
       onMouseEnter,
       onMouseLeave,
       truncateText = true,
@@ -42,7 +42,7 @@ const ProfileAvatarButton = React.forwardRef(
     return (
       <div className={tw(`inline-flex items-center ${customStyle}`)}>
         <div className={tw('shrink-0')}>
-          <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
+          <Avatar size={size} avatar={avatarImage} profileId={profileId} onClick={onClickAvatar} />
         </div>
         <div
           className={tw('pl(lg:4 md:2 sm:2 xs:1) justify-center align-top')}
@@ -51,7 +51,7 @@ const ProfileAvatarButton = React.forwardRef(
           onMouseLeave={onMouseLeave}
         >
           <Text variant="button-sm" weight="bold" truncate={true} customStyle={textStyle}>
-            {label || ethAddress}
+            {label || profileId}
           </Text>
           <Text variant="footnotes2" color="grey7" truncate={true}>
             {info}

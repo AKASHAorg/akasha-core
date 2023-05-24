@@ -3,7 +3,7 @@ import { act, cleanup } from '@testing-library/react';
 
 import ICDetailCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
-import { ICDetailAppsData } from '../../../utils/dummy-data';
+import { ICDetailAppsData, profileData } from '../../../utils/dummy-data';
 
 describe('<ICDetailCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -28,6 +28,7 @@ describe('<ICDetailCard /> Component', () => {
             descriptionLabel="Description"
             showMoreLabel="Show More"
             linksLabel="Links"
+            authorDidLabel={'Author DID'}
             repoLinkLabel="Public Repository"
             docsLinkLabel="Documentation"
             releasesLabel={'Releases'}
@@ -36,14 +37,12 @@ describe('<ICDetailCard /> Component', () => {
             noPreviousReleasesLabel={'No previous releases'}
             versionHistoryLabel="Version History"
             authorLabel="Authors & Contributors"
-            ethereumAddressLabel="Ethereum Address"
             licenseLabel="License"
             isInstalled={false}
             releases={ICDetailAppsData[3].releases}
             latestRelease={ICDetailAppsData[3].releases[0]}
             id="0x41249dasda269423432534bfafa"
             integrationName={ICDetailAppsData[3].name}
-            authorEthAddress="0x428478234k2jn4das4234fsa23"
             onClickShare={handleClickShare}
             onClickCTA={handleClickCTA}
             onClickInstall={handleClickInstall}
@@ -51,6 +50,7 @@ describe('<ICDetailCard /> Component', () => {
             handleAuthorClick={handleAuthorClick}
             handleAuthorEthAddressClick={handleAuthorEthAddressClick}
             handleTagClick={handleTagClick}
+            authorProfile={profileData}
           />,
         ),
         {},

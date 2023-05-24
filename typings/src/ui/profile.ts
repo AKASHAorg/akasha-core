@@ -1,21 +1,8 @@
-import { UserProfile } from '../sdk/graphql-types';
+import { CeramicAccount, FollowConnection, Profile as ProfileData } from '../sdk/graphql-types-new';
 
-export type IProfileProvider = {
-  property: ProfileProviderProperties;
-  provider: ProfileProviders;
-  value: string;
-};
-
-export type IProfileData = Omit<UserProfile, 'avatar' | 'coverImage' | '_id'> & {
-  // props with media links built
-  avatar?: { url?: string; fallbackUrl?: string };
-  coverImage?: { url?: string; fallbackUrl?: string };
-  // moderation related
-  contentId?: string;
-  reported?: boolean;
-  delisted?: boolean;
-  moderated?: boolean;
-  reason?: string;
+export type Profile = Omit<ProfileData, 'followers' | 'did'> & {
+  did: Partial<CeramicAccount>;
+  followers?: FollowConnection;
 };
 
 export enum UsernameTypes {

@@ -1,6 +1,12 @@
-import * as React from 'react';
+import React from 'react';
+import ExplorePage from './pages/explore-page';
+import InfoPage from './pages/info-page';
+import MyAppsPage from './pages/my-apps-page';
+import MyWidgetsPage from './pages/my-widgets-page';
+import AppsPage from './pages/apps-page';
+import MasterPage from './pages/master-page';
+import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO, APPS } from '../routes';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
-
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 import {
@@ -8,16 +14,7 @@ import {
   useGetLatestReleaseInfo,
   useGetAllIntegrationsIds,
 } from '@akashaorg/ui-awf-hooks';
-
-import ExplorePage from './pages/explore-page';
-import InfoPage from './pages/info-page';
-import MyAppsPage from './pages/my-apps-page';
-// import AppsPage from './pages/apps-page';
-import MyWidgetsPage from './pages/my-widgets-page';
-
 import { hiddenIntegrations } from '../hidden-integrations';
-import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO } from '../routes';
-import PageByType from './pages/page-by-type';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
@@ -28,8 +25,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     return !!loginQuery.data.pubKey && loginQuery.data.isReady;
   }, [loginQuery.data]);
 
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    props.navigateToModal({ name: 'login', redirectTo });
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
+  const connect = () => {
+    navigateTo({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: () => '/connect',
+    });
   };
 
   const defaultIntegrations = [].concat(
@@ -75,58 +77,48 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Router basename={props.baseRouteName}>
-      <Routes>
-        <Route path="/" element={<Navigate to={routes[EXPLORE]} replace />} />
-        <Route path={`${routes[INFO]}/:integrationId`} element={<InfoPage {...props} />} />
-        <Route
-          path="*"
-          element={
-            <Routes>
-              <Route
-                path={routes[EXPLORE]}
-                element={
-                  <PageByType type="explore">
-                    <ExplorePage
-                      installableApps={installableApps}
-                      installedAppsInfo={installedAppsReq.data}
-                      isFetching={integrationsInfoReq.isFetching}
-                      reqError={integrationsInfoReq.error}
-                      isUserLoggedIn={isLoggedIn}
-                      {...props}
-                    />
-                  </PageByType>
-                }
+      <MasterPage isLoggedIn={isLoggedIn} onConnect={connect} navigateTo={navigateTo}>
+        <Routes>
+          <Route
+            path={routes[EXPLORE]}
+            element={
+              <ExplorePage
+                installableApps={installableApps}
+                installedAppsInfo={installedAppsReq.data}
+                isFetching={integrationsInfoReq.isFetching}
+                reqError={integrationsInfoReq.error}
+                isUserLoggedIn={isLoggedIn}
+                {...props}
               />
-              <Route
-                path={routes[MY_APPS]}
-                element={
-                  <PageByType type="my-apps">
-                    <MyAppsPage
-                      latestReleasesInfo={latestReleasesInfo}
-                      defaultIntegrations={defaultIntegrations}
-                      installedAppsInfo={installedAppsReq.data}
-                      isFetching={integrationsInfoReq.isFetching}
-                      {...props}
-                    />
-                  </PageByType>
-                }
+            }
+          />
+          <Route
+            path={routes[MY_APPS]}
+            element={
+              <MyAppsPage
+                latestReleasesInfo={latestReleasesInfo}
+                defaultIntegrations={defaultIntegrations}
+                installedAppsInfo={installedAppsReq.data}
+                isFetching={integrationsInfoReq.isFetching}
+                {...props}
               />
-              <Route
-                path={routes[MY_WIDGETS]}
-                element={
-                  <PageByType type="widgets">
-                    <MyWidgetsPage
-                      latestReleasesInfo={latestReleasesInfo}
-                      isFetching={integrationsInfoReq.isFetching}
-                      {...props}
-                    />
-                  </PageByType>
-                }
+            }
+          />
+          <Route path={routes[APPS]} element={<AppsPage {...props} />} />
+          <Route
+            path={routes[MY_WIDGETS]}
+            element={
+              <MyWidgetsPage
+                latestReleasesInfo={latestReleasesInfo}
+                isFetching={integrationsInfoReq.isFetching}
+                {...props}
               />
-            </Routes>
-          }
-        />
-      </Routes>
+            }
+          />
+          <Route path={`${routes[INFO]}/:integrationId`} element={<InfoPage {...props} />} />
+          <Route path="/" element={<Navigate to={routes[EXPLORE]} replace />} />
+        </Routes>
+      </MasterPage>
     </Router>
   );
 };

@@ -162,7 +162,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         label = '';
         break;
     }
-    const name = profileData.name || profileData.userName || profileData.ethAddress;
+    const name = profileData.name;
     const fullLabel = `${name} ${label}`;
     const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
     return (
@@ -175,7 +175,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         onClick={clickHandler}
       >
         <ProfileAvatarButton
-          ethAddress={profileData.ethAddress}
+          profileId={profileData.did.id}
           avatarImage={profileData.avatar}
           label={fullLabel}
           info={relativeTime}

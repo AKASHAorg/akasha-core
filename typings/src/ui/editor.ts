@@ -1,7 +1,7 @@
 import { BaseEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
-import { IProfileData } from './profile';
+import { Profile } from './profile';
 
 export type EmptyText = {
   text: string;
@@ -25,11 +25,9 @@ export type LinkElement = { type: 'link'; url: string; children: EmptyText[] };
 export type MentionElement = {
   type: 'mention';
   name?: string;
-  userName?: string;
-  pubKey: string;
-  avatar?: IProfileData['avatar'];
-  ethAddress: string;
+  id?: string;
   children?: EmptyText[];
+  did: Profile['did'];
 };
 
 export type TagElement = {

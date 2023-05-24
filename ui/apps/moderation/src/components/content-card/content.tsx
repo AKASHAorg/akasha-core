@@ -2,7 +2,6 @@ import React from 'react';
 import dayjs from 'dayjs';
 
 import DS from '@akashaorg/design-system';
-import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
 
 import EntryDataCard from './entry-data-card';
 import ExplanationsBox from './explanations-box';
@@ -39,8 +38,6 @@ const Content: React.FC<IContentProps> = props => {
   const handleCopy = (value: string) => () => {
     navigator.clipboard.writeText(value);
   };
-
-  const avatarIpfsLinks = getMediaUrl(props.reporterAvatar);
 
   return (
     <Box>
@@ -133,11 +130,8 @@ const Content: React.FC<IContentProps> = props => {
               <Text>{props.originallyReportedByLabel}</Text>
 
               <Avatar
-                ethAddress={props.reporter || ''}
-                src={{
-                  url: avatarIpfsLinks?.originLink,
-                  fallbackUrl: avatarIpfsLinks?.fallbackLink,
-                }}
+                profileId={props.reporter || ''}
+                avatar={props.reporterAvatar}
                 size="xs"
                 backgroundColor="lightBackground"
                 border="sm"

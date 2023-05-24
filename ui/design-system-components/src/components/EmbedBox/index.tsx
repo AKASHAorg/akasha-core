@@ -17,9 +17,9 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
   >
     <ProfileAvatarButton
       label={props.embedEntryData.author?.name}
-      info={props.embedEntryData.author?.userName && `@${props.embedEntryData.author?.userName}`}
+      info={props.embedEntryData.author?.name}
       avatarImage={props.embedEntryData.author?.avatar}
-      ethAddress={props.embedEntryData.author?.ethAddress}
+      profileId={props.embedEntryData.author?.did?.id}
     />
 
     <div className={tw(`flex`)}>

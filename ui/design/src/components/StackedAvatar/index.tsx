@@ -1,21 +1,19 @@
 import * as React from 'react';
 import Avatar from '../Avatar';
-
+import { Profile } from '@akashaorg/typings/ui';
 import { AvatarSize } from '../Avatar/styled-avatar';
 import { StyledStackBox, StyledContainer } from './styled-stacked-avatar';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface IStackedAvatarProps {
-  userData: { ethAddress: string; avatar?: Profile['avatar'] }[];
+  userData: { did: Profile['did']; avatar?: Profile['avatar'] }[];
   maxAvatars?: number;
   size?: AvatarSize;
 }
 const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
   const { userData, maxAvatars, size } = props;
-  let data = userData;
-  if (maxAvatars) {
-    data = userData.slice(0, maxAvatars);
-  }
+
+  const profiles = React.useMemo(() => userData.slice(0, maxAvatars), [userData, maxAvatars]);
+
   const renderStack = (level: number) => {
     return (
       <StyledStackBox zIndex={level + 1}>
@@ -24,12 +22,12 @@ const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
           onClick={() => {
             /** */
           }}
-          ethAddress={data[level].ethAddress}
-          src={data[level].avatar.default.src}
+          profileId={profiles[level].did.id}
+          avatar={profiles[level].avatar}
           size={size ? size : 'xs'}
           border="sm"
         />
-        {level + 1 < data.length && renderStack(level + 1)}
+        {level + 1 < profiles.length && renderStack(level + 1)}
       </StyledStackBox>
     );
   };

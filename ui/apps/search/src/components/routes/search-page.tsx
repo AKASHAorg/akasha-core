@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   RootComponentProps,
-  IProfileData,
   IEntryData,
   ITag,
   EntityTypes,
   ModalNavigationOptions,
   AnalyticsCategories,
+  Profile,
 } from '@akashaorg/typings/ui';
 
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
@@ -24,7 +24,6 @@ import {
   useSearchProfiles,
   useSearchComments,
   useSearchTags,
-  LoginState,
   useEntryNavigation,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
@@ -56,7 +55,7 @@ export enum ButtonValues {
 
 interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
-  loginState: LoginState;
+  loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
@@ -69,7 +68,7 @@ const initSearchState = {
 };
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { singleSpa, loginState, showLoginModal } = props;
+  const { singleSpa, loggedProfileData, showLoginModal } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
@@ -78,7 +77,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const { t, i18n } = useTranslation('app-search');
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
+  // @TODO replace with new hooks
+  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
   const tagSubscriptionsState = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
@@ -182,44 +182,42 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword]);
 
+  // @TODO replace with new hooks
   const searchProfilesReq = useSearchProfiles(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.PEOPLE].page,
-    loginState?.pubKey,
-    loginState?.fromCache,
+    loggedProfileData?.did?.id,
   );
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
   const searchBeamsReq = useSearchPosts(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.CONTENT].page,
-    loginState?.pubKey,
-    loginState?.fromCache,
+    loggedProfileData?.did?.id,
   );
   const searchBeamsState = getSearchStateForTab(ButtonValues.CONTENT);
 
   const searchCommentsReq = useSearchComments(
     decodeURIComponent(searchKeyword),
     searchState[ButtonValues.CONTENT].page,
-    loginState?.pubKey,
-    loginState?.fromCache,
+    loggedProfileData?.did?.id,
   );
   // const searchReflectionsState = searchState[ButtonValues.CONTENT].results;
 
   const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TAGS);
 
-  React.useEffect(() => {
-    if (searchBeamsReq.isFetched) {
-      updateSearchState(ButtonValues.CONTENT, searchBeamsReq.data);
-    }
-  }, [searchBeamsReq.data, searchBeamsReq.isFetched]);
+  // React.useEffect(() => {
+  //   if (searchBeamsReq.isFetched) {
+  //     updateSearchState(ButtonValues.CONTENT, searchBeamsReq.data);
+  //   }
+  // }, [searchBeamsReq.data, searchBeamsReq.isFetched]);
 
-  React.useEffect(() => {
-    if (searchCommentsReq.isFetched) {
-      updateSearchState(ButtonValues.CONTENT, searchCommentsReq.data);
-    }
-  }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
+  // React.useEffect(() => {
+  //   if (searchCommentsReq.isFetched) {
+  //     updateSearchState(ButtonValues.CONTENT, searchCommentsReq.data);
+  //   }
+  // }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
 
   React.useEffect(() => {
     if (searchProfilesReq.isFetched) {
@@ -232,13 +230,16 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   }, [searchTagsReq.data, searchTagsReq.isFetched]);
 
   const followPubKeyArr = searchProfilesState?.map(profile => profile.pubKey);
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.pubKey, followPubKeyArr);
+  const isFollowingMultipleReq = useIsFollowingMultiple(
+    loggedProfileData?.did?.id,
+    followPubKeyArr,
+  );
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
   const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -256,7 +257,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
   const handleFollowProfile = (pubKey: string) => {
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -293,7 +294,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleUnfollowProfile = (pubKey: string) => {
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -317,7 +318,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       category: AnalyticsCategories.POST,
       action: 'Repost Clicked',
     });
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     } else {
@@ -421,7 +422,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           onTabClick={onTabClick}
           onIconClick={onNavBack}
           buttonValues={buttonValues}
-          loggedUser={loginState?.pubKey}
+          loggedUser={loggedProfileData?.did?.id}
           style="-mb-px" // overlaps border with parent's bottom border
         />
       </SearchStartCard>
@@ -464,23 +465,21 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   })}
                 />
               }
-              {searchProfilesState?.map((profileData: IProfileData, index: number) => (
+              {searchProfilesState?.map((profileData: Profile, index: number) => (
                 <Box key={index} customStyle="pb-4">
                   <ProfileSearchCard
-                    handleFollow={() => handleFollowProfile(profileData.pubKey)}
-                    handleUnfollow={() => handleUnfollowProfile(profileData.pubKey)}
-                    isFollowing={followedProfiles.includes(profileData?.pubKey)}
-                    loggedEthAddress={loginState?.ethAddress}
+                    handleFollow={() => handleFollowProfile(profileData.did.id)}
+                    handleUnfollow={() => handleUnfollowProfile(profileData.did.id)}
+                    isFollowing={followedProfiles.includes(profileData?.did.id)}
                     profileData={profileData}
                     followLabel={t('Follow')}
                     unfollowLabel={t('Unfollow')}
                     descriptionLabel={t('About me')}
                     followingLabel={t('Following')}
                     followersLabel={t('Followers')}
-                    beamsLabel={t('Beams')}
                     shareProfileLabel={t('Share')}
                     profileAnchorLink={'/profile'}
-                    onClickProfile={() => handleProfileClick(profileData.pubKey)}
+                    onClickProfile={() => handleProfileClick(profileData.did.id)}
                   />
                 </Box>
               ))}
@@ -538,7 +537,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   itemType={EntityTypes.POST}
                   logger={props.logger}
                   singleSpa={singleSpa}
-                  ethAddress={loginState?.ethAddress}
                   onContentClick={handleEntryNavigation}
                   navigateTo={navigateTo}
                   onRebeam={handleRebeam}
@@ -563,7 +561,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               itemType={EntityTypes.REPLY}
               logger={props.logger}
               singleSpa={singleSpa}
-              ethAddress={loginState?.ethAddress}
+              loggedProfileData={loggedProfileData}
               onContentClick={handleEntryNavigation}
               navigateTo={navigateTo}
               onRepost={handleRebeam}

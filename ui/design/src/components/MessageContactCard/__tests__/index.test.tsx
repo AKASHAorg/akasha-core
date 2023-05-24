@@ -18,14 +18,15 @@ describe('<MessageContactCard /> Component', () => {
           <MessageContactCard
             locale="en"
             senderName="Jerry Mil"
-            senderUsername="jerrbear"
             content="Hello Jerry I hope you're good and having a great day?"
             isRead={true}
             isPinned={false}
             pinConvoLabel="Pin"
             unpinConvoLabel="Unpin"
-            senderAvatar={{ url: 'https://placebeard.it/360x360' }}
-            senderEthAddress="0x003410490050000320006570034567114572000"
+            senderAvatar={{
+              default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },
+            }}
+            senderProfileId="did:0x003410490050000320006570034567114572000"
             onClickCard={handleClickCard}
             onClickAvatar={handleClickAvatar}
             onConvoPin={handleConvoPin}

@@ -6,17 +6,18 @@ import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import {
   NavigateToParams,
   IEntryData,
-  IProfileData,
   EntityTypes,
   ModerationEntityTypesMap,
+  IContentClickDetails,
 } from '@akashaorg/typings/ui';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
-import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
+import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 
-const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
+const { Text, ProfileCard, MainAreaCardBox } = DS;
 
 export interface IEntryDataCardProps {
-  entryData: IEntryData | IProfileData;
+  entryData: IEntryData | Profile;
   locale: ILocale;
   itemType: EntityTypes;
   modalSlotId: string;
@@ -48,10 +49,8 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
           {/* for other contents (reply | comment, post) */}
           {itemType !== EntityTypes.PROFILE && entryData && (
             <EntryCard
-              modalSlotId={modalSlotId}
               showMore={false}
               entryData={entryData as IEntryData}
-              repliesLabel={t('Replies')}
               locale={locale}
               style={{ height: 'auto' }}
               contentClickable={true}
@@ -71,8 +70,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               modalSlotId={modalSlotId}
               showMore={false}
               flaggable={true}
-              viewerIsOwner={false}
-              profileData={entryData as IProfileData}
+              profileData={entryData as Profile}
               followLabel={t('Follow')}
               unfollowLabel={t('Unfollow')}
               followingLabel={t('Following')}

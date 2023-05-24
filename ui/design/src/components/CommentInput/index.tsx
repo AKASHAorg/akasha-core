@@ -1,22 +1,22 @@
-import { IProfileData } from '@akashaorg/typings/ui';
-import { Box, Text, TextArea } from 'grommet';
 import React, { useRef, useState } from 'react';
+import { Box, Text, TextArea } from 'grommet';
 import useSimpleClickAway from '../../utils/simpleClickAway';
 import Avatar from '../Avatar';
 import Icon from '../Icon';
 import { StyledDiv, StyledCommentWrapper } from './styled-comment-input';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ICommentInput {
   className?: string;
-  avatarImg?: IProfileData['avatar'];
-  ethAddress: string;
+  avatarImg?: Profile['avatar'];
+  profileId: string;
   placeholderLabel: string;
   publishLabel: string;
   onPublish: (inputValue: string, ethAddress: string) => void;
 }
 
 const CommentInput: React.FC<ICommentInput> = props => {
-  const { avatarImg, ethAddress, className, placeholderLabel, onPublish, publishLabel } = props;
+  const { avatarImg, profileId, className, placeholderLabel, onPublish, publishLabel } = props;
   const [inputValue, setInputValue] = useState('');
   const [textAreaOpen, setTextAreaOpen] = useState(false);
 
@@ -35,7 +35,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
   };
 
   const handlePublish = () => {
-    onPublish(inputValue, ethAddress);
+    onPublish(inputValue, profileId);
     setInputValue('');
     setTextAreaOpen(false);
   };
@@ -108,7 +108,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
 
   return (
     <Box direction="row" gap="xsmall" fill="horizontal" pad="none" className={className}>
-      <Avatar src={avatarImg} ethAddress={ethAddress} size="md" />
+      <Avatar avatar={avatarImg} profileId={profileId} size="md" />
       {!textAreaOpen && renderFakeInput()}
       {textAreaOpen && renderTextArea()}
     </Box>

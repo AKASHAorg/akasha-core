@@ -9,21 +9,19 @@ import {
   RootComponentProps,
   EntityTypes,
   ModalNavigationOptions,
-  IProfileData,
+  Profile,
 } from '@akashaorg/typings/ui';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
   useGetTag,
-  LoginState,
   useInfinitePostsByTag,
 } from '@akashaorg/ui-awf-hooks';
 
 const { Box, TagProfileCard, Helmet, styled, Spinner } = DS;
 
 interface ITagFeedPage {
-  loggedProfileData?: IProfileData;
-  loginState: LoginState;
+  loggedProfileData?: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
@@ -32,15 +30,16 @@ const TagInfoCard = styled(TagProfileCard)`
 `;
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
-  const { showLoginModal, loggedProfileData, loginState } = props;
+  const { showLoginModal, loggedProfileData } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { tagName } = useParams<{ tagName: string }>();
 
+  // @TODO fix hooks
   const getTagQuery = useGetTag(tagName);
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 
-  const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
+  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
   const tagSubscriptions = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
@@ -53,13 +52,13 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   }, [reqPosts.data]);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState?.fromCache) {
+    if (!reqPosts.isLoading && reqPosts.hasNextPage) {
       reqPosts.fetchNextPage();
     }
-  }, [reqPosts, loginState?.fromCache]);
+  }, [reqPosts]);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loginState?.pubKey) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     props.navigateToModal({ name: 'report-modal', itemId, itemType });
@@ -74,7 +73,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   const handleTagSubscribe = (tagName: string) => {
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -112,8 +111,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
               `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
             }
             requestStatus={reqPosts.status}
-            loginState={loginState}
-            loggedProfile={loggedProfileData}
+            loggedProfileData={loggedProfileData}
             navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
             navigateToModal={props.navigateToModal}
             onLoginModalOpen={showLoginModal}

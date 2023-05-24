@@ -1,9 +1,9 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
-import { IProfileData } from '@akashaorg/typings/ui';
 import { buildProfileMediaLinks } from './utils/media-utils';
 import { PROFILE_KEY } from './use-profile';
 import { logError } from './utils/error-handler';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const MENTION_SEARCH_KEY = 'MENTION_SEARCH_KEY';
 
@@ -11,7 +11,7 @@ const getMentions = async (mention: string, queryClient: QueryClient) => {
   const sdk = getSDK();
   const res = await sdk.api.profile.searchProfiles(mention);
   return res.searchProfiles.map(profileResp => {
-    const authorCache = queryClient.getQueryData<IProfileData>([PROFILE_KEY, profileResp?.pubKey]);
+    const authorCache = queryClient.getQueryData<Profile>([PROFILE_KEY, profileResp?.pubKey]);
     if (authorCache) {
       return authorCache;
     }

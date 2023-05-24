@@ -38,10 +38,10 @@ export const Moderators: React.FC<IModeratorsPageProps> = props => {
     activeTab === 'All' ? moderator : moderator.status === activeTab.toLowerCase(),
   );
 
-  const handleViewModerator = (pubKey: string) => {
+  const handleViewModerator = (profileId: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `/moderator/${pubKey}`,
+      getNavigationUrl: () => `/moderator/${profileId}`,
     });
   };
 
@@ -63,7 +63,7 @@ export const Moderators: React.FC<IModeratorsPageProps> = props => {
 
               return (
                 <ModeratorDetailMiniCard
-                  key={moderator.pubKey}
+                  key={moderator.did.id}
                   moderator={moderator}
                   hasBorderBottom={idx < filteredModeratorList.length - 1}
                   tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}

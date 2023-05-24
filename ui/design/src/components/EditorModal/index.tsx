@@ -16,7 +16,7 @@ export interface IEditorModal extends Omit<IEditorCard, 'setEditorState'> {
 
 const EditorModal: React.FC<IEditorModal> = props => {
   const {
-    ethAddress,
+    profileId,
     avatar,
     postLabel,
     placeholderLabel,
@@ -65,7 +65,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
       {!showCancel && (
         <EditorCard
           avatar={avatar}
-          ethAddress={ethAddress}
+          profileId={profileId}
           postLabel={postLabel}
           placeholderLabel={placeholderLabel}
           emojiPlaceholderLabel={emojiPlaceholderLabel}
