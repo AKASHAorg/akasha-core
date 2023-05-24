@@ -30,24 +30,16 @@ export interface IModeratorInfo {
 
 export type Moderator = Profile &
   IModeratorInfo & {
-    _mod: Date;
     active: boolean;
     admin: boolean;
   };
 
-export interface ModeratorApplicantData {
-  _id: string;
-  _mod: Date;
-  joinDate: Date;
-  pubKey: string;
-  ethAddress: string;
-  name: string;
-  userName: string;
-  avatar: Profile['avatar'];
+export type ModeratorApplicantData = Profile & {
   applicationDate?: string;
   reports: Record<string, string>[];
   history: Record<string, string>[];
-}
+};
+
 export interface ModerationStatus {
   contentId: string;
   delisted: boolean;
