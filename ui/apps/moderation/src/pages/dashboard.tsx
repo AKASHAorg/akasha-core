@@ -6,7 +6,7 @@ import { ModeratorApplicantData, NavigateToParams } from '@akashaorg/typings/ui'
 import ModeratorDashboard from '../components/dashboard';
 import GuestDashboard from '../components/dashboard/guest';
 
-import { applicants, preSelectedReasons } from '../utils';
+import { generateApplicants, preSelectedReasons } from '../utils';
 import { baseDashboardUrl } from '../routes';
 
 export interface IDashboardProps {
@@ -31,7 +31,7 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
   const handleClickApplicant = (applicant: ModeratorApplicantData) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `${baseDashboardUrl}/applicant/${applicant.pubKey}`,
+      getNavigationUrl: () => `${baseDashboardUrl}/applicant/${applicant.did.id}`,
     });
   };
 
@@ -75,7 +75,7 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
       moderationDutiesDescLabel={t('{{descLabel}}', { descLabel })}
       changeLabel={t('Change')}
       resignButtonLabel={t('Resign from {{role}} role', { role })}
-      applicants={applicants}
+      applicants={generateApplicants()}
       onButtonClick={handleButtonClick}
       onClickApplicant={handleClickApplicant}
     />

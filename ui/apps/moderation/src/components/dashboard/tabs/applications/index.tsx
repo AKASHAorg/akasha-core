@@ -16,7 +16,7 @@ export const ApplicationsTab: React.FC<IApplicationsTabProps> = props => {
   return (
     <Box>
       {applicants.map((applicant, idx) => (
-        <Box key={applicant.pubKey}>
+        <Box key={applicant.name + idx}>
           <Applicant applicant={applicant} onClickApplicant={onClickApplicant} />
 
           {idx < applicants.length - 1 && <Divider />}

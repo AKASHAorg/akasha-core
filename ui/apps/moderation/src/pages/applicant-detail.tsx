@@ -7,12 +7,14 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ApplicantDetailIntro from '../components/dashboard/applicant-detail-intro';
 import ApplicantDetail from '../components/dashboard/applicant-detail';
 
-import { applicants, preSelectedReasons } from '../utils';
+import { generateApplicants, preSelectedReasons } from '../utils';
 
 export const ApplicantDetailPage: React.FC = () => {
   const { id } = useParams();
 
-  const selectedApplicant = applicants.find(el => el.pubKey === id);
+  const applicants = generateApplicants();
+
+  const selectedApplicant = applicants.find(el => el.did.id === id) ?? applicants[0];
 
   const { t } = useTranslation('app-moderation-ewa');
 

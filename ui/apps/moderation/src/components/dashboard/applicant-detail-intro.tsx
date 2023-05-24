@@ -43,7 +43,7 @@ const ApplicantDetailIntro: React.FC<IApplicantDetailIntroProps> = props => {
               </Text>
             </Tooltip>
 
-            <Tooltip content={`@${selectedApplicant.userName}`} placement="right">
+            <Tooltip content={`@${selectedApplicant.name}`} placement="right">
               <Text
                 variant="button-md"
                 weight="normal"
@@ -51,7 +51,7 @@ const ApplicantDetailIntro: React.FC<IApplicantDetailIntroProps> = props => {
                 customStyle={textStyle}
                 color={{ light: 'grey4', dark: 'grey7' }}
               >
-                @{selectedApplicant.userName}
+                @{selectedApplicant.did.id}
               </Text>
             </Tooltip>
           </Box>
@@ -75,7 +75,7 @@ const ApplicantDetailIntro: React.FC<IApplicantDetailIntroProps> = props => {
           <Text variant="footnotes2">{memberSinceLabel}</Text>
 
           <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }}>
-            {formatDate(selectedApplicant.joinDate, 'DD-MMM-YYYY')}
+            {formatDate(selectedApplicant.createdAt, 'DD-MMM-YYYY')}
           </Text>
         </Box>
       </Box>

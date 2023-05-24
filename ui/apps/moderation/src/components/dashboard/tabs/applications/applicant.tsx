@@ -30,7 +30,7 @@ const Applicant: React.FC<IApplicantProps> = props => {
             </Text>
           </Tooltip>
 
-          <Tooltip content={`@${applicant.userName}`} placement="right">
+          <Tooltip content={`@${applicant.name}`} placement="right">
             <Text
               variant="button-md"
               weight="normal"
@@ -38,7 +38,7 @@ const Applicant: React.FC<IApplicantProps> = props => {
               customStyle={textStyle}
               color={{ light: 'grey4', dark: 'grey7' }}
             >
-              @{applicant.userName}
+              @{applicant.did.id}
             </Text>
           </Tooltip>
         </Box>

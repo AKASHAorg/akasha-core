@@ -15,7 +15,7 @@ export interface IModeratorDetailMiniCardProps {
   moderator: Moderator;
   hasBorderBottom: boolean;
   tenureInfoLabel: string;
-  onCardClick: (pubKey: string) => void;
+  onCardClick: (profileId: string) => void;
 }
 
 const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props => {
