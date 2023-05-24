@@ -38,10 +38,10 @@ export const Moderators: React.FC<IModeratorsPageProps> = props => {
     activeTab === 'All' ? moderator : moderator.status === activeTab.toLowerCase(),
   );
 
-  const handleViewModerator = (pubKey: string) => {
+  const handleViewModerator = (profileId: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `/moderator/${pubKey}`,
+      getNavigationUrl: () => `/moderator/${profileId}`,
     });
   };
 

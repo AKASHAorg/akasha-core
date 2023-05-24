@@ -111,7 +111,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       cancelLabel={t('Cancel')}
       reportLabel={t('Report')}
       errorText={reportMutation.error ? `${reportMutation.error}` : ''}
-      user={loginQuery.data?.pubKey || ''}
+      user={loginQuery.data?.id || ''}
       itemTypeName={itemTypeName}
       requesting={reportMutation.status === 'loading'}
       success={reportMutation.status === 'success'}

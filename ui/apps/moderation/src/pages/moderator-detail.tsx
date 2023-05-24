@@ -12,7 +12,7 @@ import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
 
-import { moderators, formatDate, generateTenureInfoLabel } from '../utils';
+import { generateModerators, formatDate, generateTenureInfoLabel } from '../utils';
 
 export interface IModeratorDetailPageProps {
   navigateTo: (args: NavigateToParams) => void;
@@ -26,11 +26,11 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
   const [curPage, setCurPage] = React.useState<number>(1);
 
   /**
-   * get the pubkey from parm and use this to fetch the moderator detail
+   * get the profileId from parm and use this to fetch the moderator detail
    */
-  const { moderatorPubKey } = useParams<{ moderatorPubKey: string }>();
+  const { moderatorProfileId } = useParams<{ moderatorProfileId: string }>();
 
-  const moderator = moderators[1];
+  const moderator = generateModerators()[1];
 
   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
 
@@ -52,7 +52,7 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
   const handleClickDismissModerator = () => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `/moderator/${moderatorPubKey}/dismiss`,
+      getNavigationUrl: () => `/moderator/${moderatorProfileId}/dismiss`,
     });
   };
 
