@@ -14,7 +14,7 @@ export type DropdownMenuItemGroupType = {
   children?: DropdownMenuItemGroupType[];
 };
 
-export interface IDropdownProps {
+export type IDropdownProps = {
   name?: string;
   label?: string;
   placeholderLabel?: string;
@@ -23,7 +23,7 @@ export interface IDropdownProps {
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemGroupType>>;
   divider?: boolean;
   optgroup?: boolean;
-}
+};
 
 const Dropdown: React.FC<IDropdownProps> = ({
   label,

@@ -3,7 +3,7 @@ import { apply, tw } from '@twind/core';
 import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export interface ISearchBar {
+export type ISearchBar = {
   inputValue: string;
   onInputChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   inputPlaceholderLabel?: string;
@@ -11,7 +11,7 @@ export interface ISearchBar {
   responsive?: boolean;
   searchInputSize?: string;
   iconSize?: IconProps['size'];
-}
+};
 
 const SearchBar: React.FC<ISearchBar> = props => {
   const {

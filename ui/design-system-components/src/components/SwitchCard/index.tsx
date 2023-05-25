@@ -4,7 +4,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export interface ISwitchCard {
+export type ISwitchCard = {
   loggedUser: string | null;
   hasIcon?: boolean;
   activeButton: string;
@@ -13,7 +13,7 @@ export interface ISwitchCard {
   onTabClick: (value: string) => () => void;
   style?: string;
   className?: string;
-}
+};
 
 export interface IStickyBoxProps {
   readonly userSignedIn?: boolean;

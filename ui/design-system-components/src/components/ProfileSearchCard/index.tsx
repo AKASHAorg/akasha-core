@@ -4,7 +4,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 
-export interface IProfileSearchCard {
+export type IProfileSearchCard = {
   className?: string;
   handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
@@ -20,7 +20,7 @@ export interface IProfileSearchCard {
   onClickProfile?: () => void;
   showPostCount?: boolean;
   isViewer?: boolean;
-}
+};
 
 const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
   const {

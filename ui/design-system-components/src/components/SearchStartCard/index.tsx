@@ -7,13 +7,13 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export interface SearchStartProps {
+export type SearchStartProps = {
   inputPlaceholderLabel: string;
   handleSearch: (val: string) => void;
   handleTopMenuClick: () => void;
   searchKeyword: string;
   children?: ReactNode;
-}
+};
 
 const SearchStartCard: React.FC<SearchStartProps> = ({
   inputPlaceholderLabel,

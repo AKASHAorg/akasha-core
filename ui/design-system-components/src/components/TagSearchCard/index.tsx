@@ -6,7 +6,7 @@ import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexBut
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 
-export interface ITagSearchCard {
+export type ITagSearchCard = {
   // data
   tag: ITag | null;
   subscribedTags: string[];
@@ -22,7 +22,7 @@ export interface ITagSearchCard {
   onClickTag?: React.EventHandler<React.SyntheticEvent>;
   handleSubscribeTag: (tagName: string) => void;
   handleUnsubscribeTag: (tagName: string) => void;
-}
+};
 
 const TagSearchCard: React.FC<ITagSearchCard> = props => {
   const {
