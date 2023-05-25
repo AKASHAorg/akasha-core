@@ -1,4 +1,4 @@
-import { Moderator, Profile } from '@akashaorg/typings/ui';
+import { Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/ui';
 
 const moderatorStatus = ['active', 'resigned', 'revoked'];
 const moderatorNames = ['Mike Torello', 'April Curtis', 'Murdock', 'B.A. Baracus'];
@@ -13,18 +13,17 @@ export const generateModerators = () => {
 
     return {
       id: `${idx + 1}`,
-      _mod: new Date(Math.floor(Math.random() * Date.now())),
       createdAt: new Date(timeStart + Math.random() * (timeEnd - timeStart)),
       active: isAdmin ? true : status === 'active',
       admin: isAdmin,
       did: { id },
       name: name,
-      moderatorEndDate: new Date('Dec 31 2021').toISOString(),
       status: isAdmin ? 'active' : status,
       social: {
         discord: id,
         email: id,
       },
+      ...(status !== 'active' && { moderatorEndDate: new Date('Dec 31 2021').toISOString() }),
     };
   });
 
@@ -56,4 +55,41 @@ export const generateActiveModerators = () => {
   }));
 
   return activeModerators as Profile[];
+};
+
+const applicantNames = [
+  'Radioman',
+  'Mr. Bigote',
+  'Pugstenson',
+  'John Wick',
+  'Wizard Odd',
+  'Jamie Oliver',
+  'Cheese Oil',
+];
+
+export const generateApplicants = () => {
+  const applicants = applicantNames.map((name, idx) => {
+    const id = (Math.random() + 1).toString(36).substring(2);
+    const timeStart = new Date('Jan 01 2020').getTime();
+    const timeEnd = new Date('Dec 31 2022').getTime();
+
+    return {
+      id: `${idx + 1}`,
+      createdAt: new Date(timeStart + Math.random() * (timeEnd - timeStart)),
+      did: { id },
+      name: name,
+      avatar: {
+        default: {
+          height: 320,
+          src: '',
+          width: 320,
+        },
+      },
+      applicationDate: new Date('Jan 18 2023').toISOString(),
+      reports: [],
+      history: [],
+    };
+  });
+
+  return applicants as ModeratorApplicantData[];
 };

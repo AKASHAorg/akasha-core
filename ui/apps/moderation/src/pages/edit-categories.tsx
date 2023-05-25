@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 
-import EditCategories from '../components/dashboard/categories';
+import EditCategories from '../components/dashboard/tabs/general/categories';
 
 import { DASHBOARD } from '../routes';
 import { reasons } from '../utils/reasons';
