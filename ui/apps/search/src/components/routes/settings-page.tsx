@@ -30,7 +30,7 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
   if (showFeedback) {
     setTimeout(() => {
       setShowFeedback(false);
-    }, 6000);
+    }, 3000);
   }
 
   const [showNsfwContent, setShowNsfwContent] = React.useState(false);
@@ -85,7 +85,9 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
       setUpdateButtonDisabled(true);
 
       // navigate to search page
-      goToSearchPage();
+      setTimeout(() => {
+        goToSearchPage();
+      }, 3000);
     } catch (error) {
       setMessage('Something went wrong. Retry');
       setMessageType('error');

@@ -50,9 +50,9 @@ const Dropdown: React.FC<IDropdownProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey5) border(1 grey8 dark:grey3)`;
+  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
 
-  const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey5)`;
+  const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey3)`;
 
   const handleDropClick = () => {
     setDropOpen(!dropOpen);
@@ -68,7 +68,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
       {label && <Text variant="label">{label}</Text>}
 
       <button
-        className={tx`inline-flex items-center justify-between w-full p-3 rounded-lg bg-(white dark:grey5) rounded-lg border-(1 solid ${
+        className={tx`inline-flex items-center justify-between w-full p-3 rounded-lg bg-(white dark:grey3) rounded-lg border-(1 solid ${
           dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'
         })`}
         onClick={handleDropClick}
@@ -106,11 +106,13 @@ const Dropdown: React.FC<IDropdownProps> = ({
                             <li
                               key={item.id}
                               className={tw(
-                                `${optionStyle} ${
-                                  idx < menuItem.children.length - 1
-                                    ? 'border-b(1 grey8 dark:grey3)'
-                                    : ''
-                                } cursor-pointer`,
+                                `${optionStyle} 
+                                // $ {
+                                //   idx < menuItem.children.length - 1
+                                //     ? 'border-b(1 grey8 dark:grey3)'
+                                //     : ''
+                                // } 
+                                cursor-pointer`,
                               )}
                               onClick={handleChange(item)}
                             >
@@ -143,7 +145,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                             </li>
                           );
                         })}
-                      {divider && <Divider customStyle="my-2 bg-blue" />}
+                      {divider && <Divider />}
                     </>
                   );
                 } else {
@@ -151,9 +153,9 @@ const Dropdown: React.FC<IDropdownProps> = ({
                     <li
                       key={menuItem.id}
                       className={tw(
-                        `${optionStyle} ${
-                          idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
-                        } cursor-pointer`,
+                        `${optionStyle} 
+                        ${idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey5)' : ''} 
+                        cursor-pointer`,
                       )}
                       onClick={handleChange(menuItem)}
                     >
