@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
-import ResignRole from '../components/dashboard/resign-role';
+import ResignRole from '../components/dashboard/tabs/general/resign-role';
 
 import { DASHBOARD, RESIGN_CONFIRMATION } from '../routes';
 

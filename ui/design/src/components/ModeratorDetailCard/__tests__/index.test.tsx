@@ -8,7 +8,6 @@ import { customRender, wrapWithTheme } from '../../../test-utils';
 
 const moderator: Moderator = {
   id: 'pi3hg',
-  _mod: new Date(),
   createdAt: new Date(),
   admin: true,
   active: true,

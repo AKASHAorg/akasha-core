@@ -48,10 +48,4 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     ],
   },
-  extends: (matcher, loader) => {
-    matcher({
-      'report-modal': loader(() => import('./extensions/report-modal')),
-      'moderate-modal': loader(() => import('./extensions/moderate-modal')),
-    });
-  },
 });

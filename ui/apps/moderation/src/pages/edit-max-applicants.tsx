@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
-import EditMaxApplicants from '../components/dashboard/max-applicants';
+import EditMaxApplicants from '../components/dashboard/tabs/general/max-applicants';
 
 import { DASHBOARD } from '../routes';
 

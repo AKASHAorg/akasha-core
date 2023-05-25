@@ -15,7 +15,7 @@ export interface IModeratorDetailMiniCardProps {
   moderator: Moderator;
   hasBorderBottom: boolean;
   tenureInfoLabel: string;
-  onCardClick: (arg1: string) => void;
+  onCardClick: (profileId: string) => void;
 }
 
 const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props => {
@@ -29,8 +29,8 @@ const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props =
     moderator.status === 'active'
       ? 'bg-success'
       : moderator.status === 'revoked'
-      ? 'bg(errorLight dark:errorDark)'
-      : 'bg(warningLight dark:warningDark)'
+      ? 'bg-(errorLight dark:errorDark)'
+      : 'bg-(warningLight dark:warningDark)'
   }`;
 
   return (
@@ -38,13 +38,10 @@ const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props =
       <Box customStyle="flex space-x-2 items-start w([50%] md:[30%]) px-4 border(r-1 solid grey8 dark:grey3)">
         <Avatar avatar={moderator.avatar} />
         <Box>
-          <Tooltip content={`${moderator.name}`} placement="right">
-            <Text
-              variant="body2"
-              weight="bold"
-              truncate={true}
-              customStyle={textStyle}
-            >{`${moderator.name}`}</Text>
+          <Tooltip content={moderator.name} placement="right">
+            <Text variant="body2" weight="bold" truncate={true} customStyle={textStyle}>
+              {moderator.name}
+            </Text>
           </Tooltip>
 
           <Tooltip content={`${moderator.name}`} placement="right">

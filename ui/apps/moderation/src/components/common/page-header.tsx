@@ -3,21 +3,22 @@ import React, { PropsWithChildren } from 'react';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 
 import { PageButtons, IPageButtonsProps } from './page-buttons';
 
 export interface IPageHeaderProps extends IPageButtonsProps {
   label: string;
+  labelTextVariant?: TextProps['variant'];
 }
 
 export const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props => {
-  const { label, children } = props;
+  const { labelTextVariant = 'h5', label, children } = props;
 
   return (
     <BasicCardBox pad="p-0">
       <Box customStyle="px-4 py-6">
-        <Text variant="h5" align="center">
+        <Text variant={labelTextVariant} align="center">
           {label}
         </Text>
       </Box>
