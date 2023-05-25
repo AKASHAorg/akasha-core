@@ -18,6 +18,7 @@ export interface ProfileAvatarButtonProps {
   active?: boolean;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+  truncateText?: boolean;
 }
 
 const ProfileAvatarButton = React.forwardRef(
@@ -33,9 +34,10 @@ const ProfileAvatarButton = React.forwardRef(
       profileId,
       onMouseEnter,
       onMouseLeave,
+      truncateText = true,
     } = props;
 
-    const textStyle = 'text(lg:base md:xs) max-w([7rem] xs:[2rem])';
+    const textStyle = `text(lg:base md:xs) ${truncateText ? 'max-w([7rem] xs:[2rem])' : ''}`;
 
     return (
       <div className={tw(`inline-flex items-center ${customStyle}`)}>
