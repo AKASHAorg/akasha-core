@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
-import EditContactInfo from '../components/dashboard/contact-info';
+import EditContactInfo from '../components/dashboard/tabs/general/contact-info';
 
 import { DASHBOARD } from '../routes';
 

@@ -49,7 +49,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
         <Box customStyle="flex space-x-2 items-center w([50%] md:[30%])">
           <Avatar avatar={moderator.avatar} />
           <Box>
-            <Tooltip content={`${moderator.name}`} placement="right">
+            <Tooltip content={moderator.name} placement="right">
               <Text
                 variant="button-lg"
                 weight="bold"

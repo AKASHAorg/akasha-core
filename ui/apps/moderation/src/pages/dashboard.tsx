@@ -1,11 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
+
+import { ModeratorApplicantData, NavigateToParams } from '@akashaorg/typings/ui';
 
 import ModeratorDashboard from '../components/dashboard';
 import GuestDashboard from '../components/dashboard/guest';
 
-import { preSelectedReasons } from '../utils/reasons';
+import { generateApplicants, preSelectedReasons } from '../utils';
+import { baseDashboardUrl } from '../routes';
 
 export interface IDashboardProps {
   user: string | null;
@@ -23,6 +25,13 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
       getNavigationUrl: routes => routes[route],
+    });
+  };
+
+  const handleClickApplicant = (applicant: ModeratorApplicantData) => () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: () => `${baseDashboardUrl}/applicant/${applicant.did.id}`,
     });
   };
 
@@ -65,8 +74,10 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
       moderationDutiesLabel={t('{{role}} duties', { role })}
       moderationDutiesDescLabel={t('{{descLabel}}', { descLabel })}
       changeLabel={t('Change')}
-      onButtonClick={handleButtonClick}
       resignButtonLabel={t('Resign from {{role}} role', { role })}
+      applicants={generateApplicants()}
+      onButtonClick={handleButtonClick}
+      onClickApplicant={handleClickApplicant}
     />
   );
 };
