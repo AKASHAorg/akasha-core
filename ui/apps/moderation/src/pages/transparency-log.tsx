@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -33,14 +33,14 @@ export const contentTypeMap = {
 export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const { navigateTo } = props;
 
-  const [, setActiveButton] = React.useState<string>(ButtonValues.ALL);
-  const [selected, setSelected] = React.useState<IModerationLogItem | null>(null);
-  const [pages, setPages] = React.useState<PaginatedItem[]>([]);
+  const [, setActiveButton] = useState<string>(ButtonValues.ALL);
+  const [selected, setSelected] = useState<IModerationLogItem | null>(null);
+  const [pages, setPages] = useState<PaginatedItem[]>([]);
 
   // list filters
-  const [filterByDecision, setfilterByDecision] = React.useState(null);
-  const [filterByCategory, setfilterByCategory] = React.useState(null);
-  const [curPage, setCurPage] = React.useState<number>(1);
+  const [filterByDecision, setfilterByDecision] = useState(null);
+  const [filterByCategory, setfilterByCategory] = useState(null);
+  const [curPage, setCurPage] = useState<number>(1);
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -49,7 +49,7 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
   const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (logItemsQuery.data) {
       const results = logItemsQuery.data.pages[0].results;
 

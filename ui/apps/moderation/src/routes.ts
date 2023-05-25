@@ -17,9 +17,12 @@ export const CHECK_APPLICATION_STATUS = 'Check Application Status';
 export const MODIFY_APPLICATION = 'Modify Application';
 export const REPORT_ITEM = 'Report Item';
 export const VIEW_APPLICANT_DETAILS = 'View Applicant Details';
+export const APPLICATIONS_ACTIVITY = 'Applications Activity';
+export const MODERATION_ACTIVITY = 'Moderation Activity';
 
 export const baseOverviewUrl = '/overview';
 export const baseDashboardUrl = '/dashboard';
+export const baseApplicationUrl = '/application';
 
 export default {
   [HOME]: baseOverviewUrl,
@@ -37,8 +40,10 @@ export default {
   [HISTORY_ITEM]: '/history/:itemId',
   [MODERATION_VALUE]: `${baseOverviewUrl}/values/:value`,
   [BECOME_MODERATOR]: '/become-a-moderator',
-  [CHECK_APPLICATION_STATUS]: '/application/status',
-  [MODIFY_APPLICATION]: '/application/modify',
+  [CHECK_APPLICATION_STATUS]: `${baseApplicationUrl}/status`,
+  [MODIFY_APPLICATION]: `${baseApplicationUrl}/modify`,
   [REPORT_ITEM]: '/report/:itemType/:id',
   [VIEW_APPLICANT_DETAILS]: `${baseDashboardUrl}/applicant/:id`,
+  [APPLICATIONS_ACTIVITY]: `${baseDashboardUrl}/activity/applications`,
+  [MODERATION_ACTIVITY]: `${baseDashboardUrl}/activity/moderation`,
 };
