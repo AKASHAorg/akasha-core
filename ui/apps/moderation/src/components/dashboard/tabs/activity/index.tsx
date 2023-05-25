@@ -60,7 +60,7 @@ export const ActivityTab: React.FC<IActivityTabProps> = props => {
           </Button>
         </Box>
 
-        <Table rows={moderationRows.slice(0, 4)} hasIcons={true} />
+        <Table rows={moderationRows.slice(0, 4)} hasIcons={true} customTdStyle="px-0" />
       </Box>
     </Box>
   );
