@@ -40,7 +40,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
   ensButton,
   cancelButton,
   saveButton,
-  customStyle,
+  customStyle = '',
   onFormValid,
 }) => {
   const {

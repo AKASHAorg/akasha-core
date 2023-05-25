@@ -22,7 +22,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
   options,
   placeholder,
   disabled,
-  customStyle,
+  customStyle = '',
   value,
   onChange,
   onSelected,
