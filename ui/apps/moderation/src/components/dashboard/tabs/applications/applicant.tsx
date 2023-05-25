@@ -8,10 +8,10 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
-export interface IApplicantProps {
+export type IApplicantProps = {
   applicant: ModeratorApplicantData;
   onClickApplicant: (applicant: ModeratorApplicantData) => () => void;
-}
+};
 
 const Applicant: React.FC<IApplicantProps> = props => {
   const { applicant, onClickApplicant } = props;

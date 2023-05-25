@@ -8,14 +8,14 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ModeratorListItem from './moderator-list-item';
 import { IPageHeaderProps, PageHeader } from '../common';
 
-export interface IAssignAdminProps extends IPageHeaderProps {
+export type IAssignAdminProps = IPageHeaderProps & {
   introLabel: string;
   searchPlaceholderLabel: string;
   assignedAdmin: boolean;
   assignButtonLabel: string;
   activeModerators: Profile[];
   onClickAssign: () => void;
-}
+};
 
 const AssignAdmin: React.FC<IAssignAdminProps> = props => {
   const {

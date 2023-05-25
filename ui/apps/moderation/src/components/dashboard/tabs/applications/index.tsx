@@ -6,9 +6,9 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 import Applicant, { IApplicantProps } from './applicant';
 
-export interface IApplicationsTabProps extends Pick<IApplicantProps, 'onClickApplicant'> {
+export type IApplicationsTabProps = Pick<IApplicantProps, 'onClickApplicant'> & {
   applicants: ModeratorApplicantData[];
-}
+};
 
 export const ApplicationsTab: React.FC<IApplicationsTabProps> = props => {
   const { applicants, onClickApplicant } = props;

@@ -7,7 +7,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { IPageHeaderProps, PageHeader } from '../common';
 
-export interface IApplicantDetailProps extends IPageHeaderProps {
+export type IApplicantDetailProps = IPageHeaderProps & {
   categoryLabel: string;
   categories: string[];
   reasonLabel: string;
@@ -16,7 +16,7 @@ export interface IApplicantDetailProps extends IPageHeaderProps {
   recordDescription: string;
   historyLabel: string;
   historyDescription: string;
-}
+};
 
 const ApplicantDetail: React.FC<IApplicantDetailProps> = props => {
   const {

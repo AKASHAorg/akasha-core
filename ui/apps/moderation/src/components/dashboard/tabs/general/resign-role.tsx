@@ -6,13 +6,13 @@ import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import { IPageHeaderProps, PageHeader } from '../../../common';
 
-export interface IResignRoleProps extends IPageHeaderProps {
+export type IResignRoleProps = IPageHeaderProps & {
   textLine1Label: string;
   reasonTitleLabel: string;
   reasonPlaceholderLabel: string;
   optionalLabel: string;
   textLine2Label: string;
-}
+};
 
 const ResignRole: React.FC<IResignRoleProps> = props => {
   const {

@@ -8,13 +8,13 @@ import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import { IPageHeaderProps, PageHeader } from '../../../common';
 
-export interface IEditContactInfoProps extends IPageHeaderProps {
+export type IEditContactInfoProps = IPageHeaderProps & {
   usernameLabel: string;
   usernamePlaceholderLabel: string;
   emailLabel: string;
   emailPlaceholderLabel: string;
   fillfromProfileLabel: string;
-}
+};
 
 const EditContactInfo: React.FC<IEditContactInfoProps> = props => {
   const {
