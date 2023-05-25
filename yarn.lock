@@ -9057,6 +9057,11 @@
   resolved "https://registry.yarnpkg.com/@twind/preset-container-queries/-/preset-container-queries-1.0.7.tgz#5326fa0dd706cf55599e0748951e275b4b350b9b"
   integrity sha512-HJ7B230lfRU3wLxIF0kE3xbZWVU0/s7qCYYQy0bSXRcwQKokcMO0c0D9cmW4dQTutgsjx2Bk9iiwYqjr9diBIA==
 
+"@twind/preset-line-clamp@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/@twind/preset-line-clamp/-/preset-line-clamp-1.0.7.tgz#ff6b0a5b8fe01e6c98e243091f687c8341f36934"
+  integrity sha512-itKaXtj5O71zX0hljTDyiqAY6tcDovfT46NpT1ThWFtBLMsfiVlee8zSNeP1IYe4t1qALxFRfrpVjhqdkSOgGA==
+
 "@twind/preset-tailwind@1.1.4":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@twind/preset-tailwind/-/preset-tailwind-1.1.4.tgz#354710e9700de27712bfcd226af32b3162fea172"
