@@ -1,8 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
-import { LoginState } from '@akashaorg/ui-awf-hooks';
 import routes, { RESULTS } from '../../routes';
-import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -14,7 +13,7 @@ import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 interface ISettingsPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
-  loginState: LoginState;
+  loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 

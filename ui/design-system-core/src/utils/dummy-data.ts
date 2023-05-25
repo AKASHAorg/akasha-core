@@ -65,28 +65,16 @@ const sidebarItems = [
   },
 ];
 
-const profileData = {
-  ethAddress: '0x003410490050000320006570034567114572000',
-  pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba',
-  avatar: { url: 'https://placebeard.it/480/480', fallbackUrl: 'https://placebeard.it/480/480' },
-  coverImage: { url: 'goldenrod', fallbackUrl: 'red' },
+const profileData: Profile = {
+  did: { id: 'did:pkh:eip155:1:0x003410490050000320006570034567114572000', isViewer: true },
+  avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
+  background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
   name: 'Gilbert The Bearded',
-  userName: 'gilbert',
-  ensName: 'gilbert.akasha.eth',
   description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Management. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-  totalFollowers: 15,
-  totalFollowing: 1876,
-  totalInterests: 3,
-  isFollowed: true,
-  apps: '12',
-  profileType: 'user',
-  totalPosts: '235',
-  vnd: {},
-  default: [],
-  providers: [],
-  badges: ['dev', 'publisher'],
-  _id: '31231',
+  followers: {} as FollowConnection,
+  createdAt: '2023-01-01T00:00:00.000Z',
+  id: '31231',
 };
 
 const chartData = [

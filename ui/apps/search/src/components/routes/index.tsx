@@ -52,7 +52,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <SettingsPage
                 {...props}
                 showLoginModal={showLoginModal}
-                loginState={loginQuery.data}
+                loggedProfileData={loggedProfileData}
               />
             }
           />
