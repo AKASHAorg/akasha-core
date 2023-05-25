@@ -106,12 +106,12 @@ const Dropdown: React.FC<IDropdownProps> = ({
                             <li
                               key={item.id}
                               className={tw(
-                                `${optionStyle} 
+                                `${optionStyle}
                                 // $ {
                                 //   idx < menuItem.children.length - 1
                                 //     ? 'border-b(1 grey8 dark:grey3)'
                                 //     : ''
-                                // } 
+                                // }
                                 cursor-pointer`,
                               )}
                               onClick={handleChange(item)}
@@ -153,8 +153,8 @@ const Dropdown: React.FC<IDropdownProps> = ({
                     <li
                       key={menuItem.id}
                       className={tw(
-                        `${optionStyle} 
-                        ${idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey5)' : ''} 
+                        `${optionStyle}
+                        ${idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey5)' : ''}
                         cursor-pointer`,
                       )}
                       onClick={handleChange(menuItem)}
