@@ -1,9 +1,9 @@
 import React from 'react';
-import { AppList, AppListProp } from '.';
+import AppList, { AppListProp } from '.';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export default {
-  title: 'List/AppList',
+  title: 'AkashaVerse/AppList',
   component: AppList,
   argTypes: {},
 };

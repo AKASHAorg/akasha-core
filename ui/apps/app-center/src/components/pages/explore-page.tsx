@@ -5,7 +5,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { AppList } from '@akashaorg/design-system-components/lib/components/AppList';
+import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
