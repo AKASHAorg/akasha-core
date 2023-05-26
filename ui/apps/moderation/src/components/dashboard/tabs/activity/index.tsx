@@ -11,6 +11,7 @@ export type IActivityTabProps = {
   moderationTitleLabel: string;
   viewAllLabel: string;
   moderationRows: ITableProps['rows'];
+  applicationsRows: ITableProps['rows'];
   onClickViewAll: (activity: 'applications' | 'moderation') => () => void;
 };
 
@@ -20,30 +21,35 @@ export const ActivityTab: React.FC<IActivityTabProps> = props => {
     moderationTitleLabel,
     viewAllLabel,
     moderationRows,
+    applicationsRows,
     onClickViewAll,
   } = props;
 
   return (
     <Box customStyle="space-y-4">
-      <Box customStyle="flex justify-between p-4">
-        <Text variant="button-md" weight="bold">
-          {applicationsTitleLabel}
-        </Text>
-
-        <Button plain={true} onClick={onClickViewAll('applications')}>
-          <Text
-            variant="button-sm"
-            weight="bold"
-            color={{ light: 'secondaryDark', dark: 'secondaryDark' }}
-          >
-            {viewAllLabel}
+      <Box customStyle="px-4">
+        <Box customStyle="flex justify-between">
+          <Text variant="button-md" weight="bold">
+            {applicationsTitleLabel}
           </Text>
-        </Button>
+
+          <Button plain={true} onClick={onClickViewAll('applications')}>
+            <Text
+              variant="button-sm"
+              weight="bold"
+              color={{ light: 'secondaryDark', dark: 'secondaryDark' }}
+            >
+              {viewAllLabel}
+            </Text>
+          </Button>
+        </Box>
+
+        <Table rows={applicationsRows.slice(0, 4)} hasIcons={true} customTdStyle="px-0" />
       </Box>
 
       <Divider />
 
-      <Box customStyle="p-4">
+      <Box customStyle="px-4">
         <Box customStyle="flex justify-between">
           <Text variant="button-md" weight="bold">
             {moderationTitleLabel}

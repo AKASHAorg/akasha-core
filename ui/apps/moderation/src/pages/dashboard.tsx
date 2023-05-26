@@ -9,7 +9,7 @@ import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log
 import ModeratorDashboard from '../components/dashboard';
 import GuestDashboard from '../components/dashboard/guest';
 
-import { generateApplicants, preSelectedReasons } from '../utils';
+import { generateApplicants, generateApplicationsHistory, preSelectedReasons } from '../utils';
 import { baseDashboardUrl } from '../routes';
 
 export interface IDashboardProps {
@@ -67,13 +67,22 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
 
   const role = isAdmin ? 'Admin' : 'Moderator';
 
-  const trimmedRows =
+  const moderationRows =
     pages[0]?.map(el => [
       dayjs(el.moderatedDate).format('DD MMM YYYY'),
       t('{{type}}', { type: contentTypeMap[el.contentType] }),
       el.delisted ? t('Delisted') : t('Kept'),
       el.contentID,
     ]) ?? [];
+
+  const applications = generateApplicationsHistory();
+
+  const applicationsRows = applications.map(el => [
+    dayjs(el.reviewDate).format('DD MMM YYYY'),
+    `@${el.name}`,
+    el.approved ? t('Accepted') : t('Rejected'),
+    el.contentID,
+  ]);
 
   if (!isAuthorised) {
     return <GuestDashboard navigateTo={navigateTo} />;
@@ -109,7 +118,8 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
       applicationsTitleLabel={t('Applications')}
       moderationTitleLabel={t('Moderation')}
       viewAllLabel={t('View All')}
-      moderationRows={trimmedRows}
+      moderationRows={moderationRows}
+      applicationsRows={applicationsRows}
       onClickViewAll={handleClickViewAll}
       applicants={generateApplicants()}
       onButtonClick={handleButtonClick}
