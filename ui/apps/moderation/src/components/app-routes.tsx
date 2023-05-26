@@ -27,6 +27,8 @@ import {
   ModifyApplicationPage,
   ReportItemPage,
   ApplicantDetailPage,
+  ApplicationsActivityPage,
+  ModerationActivityPage,
 } from '../pages';
 
 import routes, {
@@ -49,6 +51,8 @@ import routes, {
   MODIFY_APPLICATION,
   REPORT_ITEM,
   VIEW_APPLICANT_DETAILS,
+  APPLICATIONS_ACTIVITY,
+  MODERATION_ACTIVITY,
 } from '../routes';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
@@ -190,6 +194,16 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route path={routes[REPORT_ITEM]} element={<ReportItemPage navigateTo={navigateTo} />} />
 
           <Route path={routes[VIEW_APPLICANT_DETAILS]} element={<ApplicantDetailPage />} />
+
+          <Route
+            path={routes[APPLICATIONS_ACTIVITY]}
+            element={<ApplicationsActivityPage navigateTo={navigateTo} />}
+          />
+
+          <Route
+            path={routes[MODERATION_ACTIVITY]}
+            element={<ModerationActivityPage navigateTo={navigateTo} />}
+          />
 
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
