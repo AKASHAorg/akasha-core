@@ -16,7 +16,7 @@ export const BECOME_MODERATOR = 'Become Moderator';
 export const CHECK_APPLICATION_STATUS = 'Check Application Status';
 export const MODIFY_APPLICATION = 'Modify Application';
 export const REPORT_ITEM = 'Report Item';
-export const VIEW_APPLICANT_DETAILS = 'View Applicant Details';
+export const VIEW_APPLICATION_DETAILS = 'View Application Details';
 export const APPLICATIONS_ACTIVITY = 'Applications Activity';
 export const MODERATION_ACTIVITY = 'Moderation Activity';
 
@@ -43,7 +43,7 @@ export default {
   [CHECK_APPLICATION_STATUS]: `${baseApplicationUrl}/status`,
   [MODIFY_APPLICATION]: `${baseApplicationUrl}/modify`,
   [REPORT_ITEM]: '/report/:itemType/:id',
-  [VIEW_APPLICANT_DETAILS]: `${baseDashboardUrl}/applicant/:id`,
+  [VIEW_APPLICATION_DETAILS]: `${baseDashboardUrl}/application/:id`,
   [APPLICATIONS_ACTIVITY]: `${baseDashboardUrl}/activity/applications`,
   [MODERATION_ACTIVITY]: `${baseDashboardUrl}/activity/moderation`,
 };

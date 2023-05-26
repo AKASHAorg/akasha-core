@@ -31,6 +31,13 @@ export const ModerationActivityPage: React.FC<IModerationActivityPageProps> = pr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logItemsQuery.data]);
 
+  const handleRowClick = (id: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: navRoutes => `${navRoutes['Transparency Log']}/${id}`,
+    });
+  };
+
   const moderationRows =
     pages[0]?.map(el => [
       dayjs(el.moderatedDate).format('DD MMM YYYY'),
@@ -45,6 +52,7 @@ export const ModerationActivityPage: React.FC<IModerationActivityPageProps> = pr
       rows={moderationRows}
       hasIcons={true}
       clickableRows={true}
+      onRowClick={handleRowClick}
     />
   );
 };

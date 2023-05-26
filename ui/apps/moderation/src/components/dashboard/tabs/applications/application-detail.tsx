@@ -5,9 +5,9 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import { IPageHeaderProps, PageHeader } from '../common';
+import { IPageHeaderProps, PageHeader } from '../../../common';
 
-export type IApplicantDetailProps = IPageHeaderProps & {
+export type IApplicationDetailProps = IPageHeaderProps & {
   categoryLabel: string;
   categories: string[];
   reasonLabel: string;
@@ -18,7 +18,7 @@ export type IApplicantDetailProps = IPageHeaderProps & {
   historyDescription: string;
 };
 
-const ApplicantDetail: React.FC<IApplicantDetailProps> = props => {
+const ApplicationDetail: React.FC<IApplicationDetailProps> = props => {
   const {
     categoryLabel,
     categories,
@@ -79,4 +79,4 @@ const ApplicantDetail: React.FC<IApplicantDetailProps> = props => {
   );
 };
 
-export default ApplicantDetail;
+export default ApplicationDetail;

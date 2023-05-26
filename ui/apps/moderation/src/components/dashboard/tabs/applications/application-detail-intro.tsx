@@ -9,9 +9,9 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
-import { formatDate } from '../../utils';
+import { formatDate } from '../../../../utils';
 
-export type IApplicantDetailIntroProps = {
+export type IApplicationDetailIntroProps = {
   selectedApplicant: ModeratorApplicantData;
   viewProfileLabel: string;
   applicationDateLabel: string;
@@ -19,7 +19,7 @@ export type IApplicantDetailIntroProps = {
   onButtonClick: (route?: string) => () => void;
 };
 
-const ApplicantDetailIntro: React.FC<IApplicantDetailIntroProps> = props => {
+const ApplicationDetailIntro: React.FC<IApplicationDetailIntroProps> = props => {
   const {
     selectedApplicant,
     viewProfileLabel,
@@ -83,4 +83,4 @@ const ApplicantDetailIntro: React.FC<IApplicantDetailIntroProps> = props => {
   );
 };
 
-export default ApplicantDetailIntro;
+export default ApplicationDetailIntro;

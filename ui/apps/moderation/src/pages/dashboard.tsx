@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { ModeratorApplicantData, NavigateToParams } from '@akashaorg/typings/ui';
+import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
@@ -44,10 +44,10 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
     });
   };
 
-  const handleClickApplicant = (applicant: ModeratorApplicantData) => () => {
+  const handleClickApplicant = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `${baseDashboardUrl}/applicant/${applicant.did.id}`,
+      getNavigationUrl: () => `${baseDashboardUrl}/application/${id}`,
     });
   };
 
@@ -55,6 +55,13 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
       getNavigationUrl: () => `${baseDashboardUrl}/activity/${activity}`,
+    });
+  };
+
+  const handleModerationRowClick = (id: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: navRoutes => `${navRoutes['Transparency Log']}/${id}`,
     });
   };
 
@@ -120,8 +127,10 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
       viewAllLabel={t('View All')}
       moderationRows={moderationRows}
       applicationsRows={applicationsRows}
-      onClickViewAll={handleClickViewAll}
       applicants={generateApplicants()}
+      onClickViewAll={handleClickViewAll}
+      onApplicationsRowClick={handleClickApplicant}
+      onModerationRowClick={handleModerationRowClick}
       onButtonClick={handleButtonClick}
       onClickApplicant={handleClickApplicant}
     />

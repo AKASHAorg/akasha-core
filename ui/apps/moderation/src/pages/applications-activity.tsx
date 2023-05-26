@@ -7,6 +7,7 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 import ApplicationsActivity from '../components/dashboard/tabs/activity/applications';
 
 import { generateApplicationsHistory } from '../utils';
+import { baseDashboardUrl } from '../routes';
 
 export interface IApplicationsActivityPageProps {
   navigateTo: (args: NavigateToParams) => void;
@@ -18,6 +19,13 @@ export const ApplicationsActivityPage: React.FC<IApplicationsActivityPageProps> 
   const { t } = useTranslation('app-moderation-ewa');
 
   const applications = generateApplicationsHistory();
+
+  const handleRowClick = (id: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: () => `${baseDashboardUrl}/application/${id}`,
+    });
+  };
 
   const applicationsRows = applications.map(el => [
     dayjs(el.reviewDate).format('DD MMM YYYY'),
@@ -32,6 +40,7 @@ export const ApplicationsActivityPage: React.FC<IApplicationsActivityPageProps> 
       rows={applicationsRows}
       hasIcons={true}
       clickableRows={true}
+      onRowClick={handleRowClick}
     />
   );
 };

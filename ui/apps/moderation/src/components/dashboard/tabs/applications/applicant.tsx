@@ -10,7 +10,7 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
 export type IApplicantProps = {
   applicant: ModeratorApplicantData;
-  onClickApplicant: (applicant: ModeratorApplicantData) => () => void;
+  onClickApplicant: (contentId: string) => void;
 };
 
 const Applicant: React.FC<IApplicantProps> = props => {
@@ -44,7 +44,7 @@ const Applicant: React.FC<IApplicantProps> = props => {
         </Box>
       </Box>
 
-      <Button plain={true} onClick={onClickApplicant(applicant)}>
+      <Button plain={true} onClick={() => onClickApplicant(applicant.did.id)}>
         <Icon type="ChevronRightIcon" accentColor={true} />
       </Button>
     </Box>

@@ -13,6 +13,8 @@ export type IActivityTabProps = {
   moderationRows: ITableProps['rows'];
   applicationsRows: ITableProps['rows'];
   onClickViewAll: (activity: 'applications' | 'moderation') => () => void;
+  onApplicationsRowClick: (id: string) => void;
+  onModerationRowClick: (id: string) => void;
 };
 
 export const ActivityTab: React.FC<IActivityTabProps> = props => {
@@ -23,6 +25,8 @@ export const ActivityTab: React.FC<IActivityTabProps> = props => {
     moderationRows,
     applicationsRows,
     onClickViewAll,
+    onApplicationsRowClick,
+    onModerationRowClick,
   } = props;
 
   return (
@@ -44,7 +48,13 @@ export const ActivityTab: React.FC<IActivityTabProps> = props => {
           </Button>
         </Box>
 
-        <Table rows={applicationsRows.slice(0, 4)} hasIcons={true} customTdStyle="px-0" />
+        <Table
+          rows={applicationsRows.slice(0, 4)}
+          hasIcons={true}
+          clickableRows={true}
+          customTdStyle="px-0"
+          onRowClick={onApplicationsRowClick}
+        />
       </Box>
 
       <Divider />
@@ -66,7 +76,13 @@ export const ActivityTab: React.FC<IActivityTabProps> = props => {
           </Button>
         </Box>
 
-        <Table rows={moderationRows.slice(0, 4)} hasIcons={true} customTdStyle="px-0" />
+        <Table
+          rows={moderationRows.slice(0, 4)}
+          hasIcons={true}
+          clickableRows={true}
+          customTdStyle="px-0"
+          onRowClick={onModerationRowClick}
+        />
       </Box>
     </Box>
   );
