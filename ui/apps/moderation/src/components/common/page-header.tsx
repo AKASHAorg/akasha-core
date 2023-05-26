@@ -27,9 +27,12 @@ export const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props =
 
       <Box customStyle="p-4">{children}</Box>
 
-      <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
-        <PageButtons {...props} />
-      </Box>
+      {/* show buttons only when the labels are specified */}
+      {(props.cancelButtonLabel || props.cancelButtonLabel) && (
+        <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
+          <PageButtons {...props} />
+        </Box>
+      )}
     </BasicCardBox>
   );
 };
