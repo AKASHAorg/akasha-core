@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+
 import { NavigateToParams } from '@akashaorg/typings/ui';
+import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
+
+import { PaginatedItem, DEFAULT_LIMIT, contentTypeMap } from './transparency-log';
 
 import ModerationActivity from '../components/dashboard/tabs/activity/moderation';
 
@@ -11,7 +16,35 @@ export interface IModerationActivityPageProps {
 export const ModerationActivityPage: React.FC<IModerationActivityPageProps> = props => {
   const { navigateTo } = props;
 
+  const [pages, setPages] = useState<PaginatedItem[]>([]);
+
   const { t } = useTranslation('app-moderation-ewa');
 
-  return <ModerationActivity label={t('Moderation Activity')} />;
+  const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
+
+  useEffect(() => {
+    if (logItemsQuery.data) {
+      const results = logItemsQuery.data.pages[0].results;
+
+      setPages([...pages, results]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logItemsQuery.data]);
+
+  const moderationRows =
+    pages[0]?.map(el => [
+      dayjs(el.moderatedDate).format('DD MMM YYYY'),
+      t('{{type}}', { type: contentTypeMap[el.contentType] }),
+      el.delisted ? t('Delisted') : t('Kept'),
+      el.contentID,
+    ]) ?? [];
+
+  return (
+    <ModerationActivity
+      label={t('Moderation Activity')}
+      rows={moderationRows}
+      hasIcons={true}
+      clickableRows={true}
+    />
+  );
 };
