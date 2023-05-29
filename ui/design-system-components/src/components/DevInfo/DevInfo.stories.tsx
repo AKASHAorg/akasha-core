@@ -1,18 +1,21 @@
 import React from 'react';
-import AppList, { AppListProp } from '.';
+import DevInfo, { DevInfoProps } from '.';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
+const profileId = '0x003410490050000320006570034567114572000';
+const avatar = { default: 'https://placebeard.it/360x360' };
+
 export default {
-  title: 'AkashaVerse/AppList',
-  component: AppList,
-  argTypes: {},
+  title: 'AkashaVerse/DevInfo',
+  component: DevInfo,
 };
 
-const Template = (args: AppListProp) => <AppList {...args} />;
+const Template = (args: DevInfoProps) => <DevInfo {...args} />;
 
-export const BaseAppList = Template.bind({});
+export const BaseDevInfo = Template.bind({});
 
-BaseAppList.args = {
+BaseDevInfo.args = {
+  developers: [{ profileId, avatar, name: 'Coffee Lover', userName: '@ilovecoffee' }],
   apps: [
     {
       name: 'Supercarts',
@@ -27,4 +30,5 @@ BaseAppList.args = {
       action: <Button label="Install" variant="primary" />,
     },
   ],
+  developerTitle: 'Developer',
 };

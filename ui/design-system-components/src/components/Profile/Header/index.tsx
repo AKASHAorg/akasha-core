@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { tw } from '@twind/core';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/components/../utils/useCloseActions';
 import { Profile } from '@akashaorg/typings/ui';
 
 export type HeaderProps = {
@@ -38,14 +37,8 @@ const Header: React.FC<HeaderProps & Profile> = ({
   handleFollow,
   handleFlag,
 }) => {
-  const [showMore, setShowMore] = useState(false);
-  const showMoreRef = useCloseActions(() => {
-    setShowMore(false);
-  });
   const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
-  const onShowMore = () => {
-    setShowMore(!showMore);
-  };
+
   return (
     <div>
       <Card
@@ -90,35 +83,19 @@ const Header: React.FC<HeaderProps & Profile> = ({
                     ) : (
                       <Button onClick={handleFollow} icon="UsersIcon" greyBg iconOnly />
                     )}
-                    <Button
-                      ref={showMoreRef}
-                      onClick={onShowMore}
-                      icon="EllipsisVerticalIcon"
-                      greyBg
-                      iconOnly
+                    <Menu
+                      anchorElement={
+                        <Button onClick={handleFlag} icon="EllipsisVerticalIcon" greyBg iconOnly />
+                      }
+                      items={[
+                        {
+                          label: flagLabel,
+                          icon: 'FlagIcon',
+                          color: { light: 'errorLight', dark: 'errorDark' },
+                        },
+                      ]}
                     />
                   </Stack>
-                  {showMore && (
-                    <Card
-                      elevation={{ light: '1', dark: '2' }}
-                      padding={{ x: 18, y: 8 }}
-                      radius={8}
-                      customStyle="absolute top-[36px] right-0 bg-white dark:bg-grey3"
-                    >
-                      <Button onClick={handleFlag} plain>
-                        <Stack align="center" spacing="gap-x-2">
-                          <Icon
-                            type="FlagIcon"
-                            size="sm"
-                            color={{ light: 'errorLight', dark: 'errorDark' }}
-                          />
-                          <Text variant="body1" color={{ light: 'errorLight', dark: 'errorDark' }}>
-                            {flagLabel}
-                          </Text>
-                        </Stack>
-                      </Button>
-                    </Card>
-                  )}
                 </div>
               )}
             </div>

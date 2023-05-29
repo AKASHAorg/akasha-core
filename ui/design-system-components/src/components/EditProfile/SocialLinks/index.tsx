@@ -33,7 +33,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   socialLinks,
   cancelButton,
   saveButton,
-  customStyle,
+  customStyle = '',
   onDelete,
   onFormValid,
 }) => {
