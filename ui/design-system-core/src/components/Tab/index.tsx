@@ -20,7 +20,7 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
   tabListDivider,
   labelTextVariant,
   children,
-  customStyle,
+  customStyle = '',
   bodyStyle,
   onChange,
 }) => {

@@ -17,7 +17,7 @@ const Pill: React.FC<IPillProps> = ({
   size,
   icon,
   iconDirection,
-  customStyle,
+  customStyle = '',
   active,
   onPillClick,
 }) => {

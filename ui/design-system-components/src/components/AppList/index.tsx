@@ -16,7 +16,7 @@ export type AppListProp = {
   apps: App[];
 };
 
-export const AppList: React.FC<AppListProp> = ({ apps }) => {
+const AppList: React.FC<AppListProp> = ({ apps }) => {
   const iconStyle = `${getRadiusClasses(10)} ${getColorClasses(
     { light: 'grey6', dark: 'grey5' },
     'bg',
@@ -47,3 +47,5 @@ export const AppList: React.FC<AppListProp> = ({ apps }) => {
     </Stack>
   );
 };
+
+export default AppList;

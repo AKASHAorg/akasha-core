@@ -6,6 +6,8 @@ export function getWeightClasses(align: Weight) {
       return 'font-normal';
     case 'medium':
       return 'font-medium';
+    case 'semibold':
+      return 'font-semibold';
     case 'light':
       return 'font-light';
     case 'bold':

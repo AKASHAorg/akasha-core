@@ -33,7 +33,7 @@ export const Interests: React.FC<InterestsProps> = ({
   interests,
   cancelButton,
   saveButton,
-  customStyle,
+  customStyle = '',
   onFormValid,
 }) => {
   const [query, setQuery] = useState('');
