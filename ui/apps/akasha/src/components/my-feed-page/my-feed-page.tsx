@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import DS from '@akashaorg/design-system';
 import {
   EntityTypes,
   IEntryPage,
@@ -14,8 +13,10 @@ import {
   useGetInterestsByDidQuery,
   useInfiniteGetBeamsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-
-const { Box, Helmet, StartCard, MyFeedCard } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
+import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
+import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
 
 export interface MyFeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -95,12 +96,12 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   };
 
   return (
-    <Box fill="horizontal">
-      <Helmet>
+    <Box customStyle="w-full">
+      <Helmet.Helmet>
         <title>Ethereum World</title>
-      </Helmet>
+      </Helmet.Helmet>
 
-      <Box margin={{ bottom: 'small' }}>
+      <Box customStyle="mb-2">
         <StartCard
           title={t('My Feed')}
           heading={t('Add some magic to your feed 🪄')}

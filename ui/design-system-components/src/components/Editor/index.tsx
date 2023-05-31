@@ -49,7 +49,7 @@ const MAX_LENGTH = 280;
 export interface IEditorBox {
   avatar?: Profile['avatar'];
   showAvatar?: boolean;
-  ethAddress: string | null;
+  profileId: string | null;
   postLabel?: string;
   placeholderLabel?: string;
   emojiPlaceholderLabel?: string;
@@ -92,7 +92,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     avatar,
     showAvatar = true,
     showDraft = false,
-    ethAddress,
+    profileId,
     postLabel,
     placeholderLabel,
     uploadFailedLabel,
@@ -283,7 +283,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       }
     })(initContent);
     const textContent: string = serializeToPlainText({ children: slateContent });
-    const data = { metadata, slateContent, textContent, author: ethAddress };
+    const data = { metadata, slateContent, textContent, author: profileId };
     CustomEditor.clearEditor(editor);
     ReactEditor.focus(editor);
     onPublish(data);
@@ -578,7 +578,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       >
         {showAvatar && (
           <div className={tw(`flex shrink-0 pb-2`)}>
-            <Avatar avatar={avatar} profileId={ethAddress} />
+            <Avatar avatar={avatar} profileId={profileId} />
           </div>
         )}
         <div className={tw(`w-full px-2 flex flex-row justify-between`)}>

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import {
   RootExtensionProps,
   IPublishData,
@@ -18,9 +17,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
 import { Draft, IDraftStorage } from '../utils';
-import { editorDefaultValue } from '@akashaorg/design-system/lib/components/Editor/initialValue';
-
-const { EntryCardLoading } = DS;
+import { editorDefaultValue } from '@akashaorg/design-system-components/lib/components/Editor/initialValue';
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
 type Props = {
   appName: string;

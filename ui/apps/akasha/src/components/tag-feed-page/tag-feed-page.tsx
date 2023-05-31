@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import {
@@ -17,17 +16,15 @@ import {
   useGetTag,
   useInfinitePostsByTag,
 } from '@akashaorg/ui-awf-hooks';
-
-const { Box, TagProfileCard, Helmet, styled, Spinner } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
+import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
 
 interface ITagFeedPage {
   loggedProfileData?: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
-
-const TagInfoCard = styled(TagProfileCard)`
-  margin-bottom: 0.5rem;
-`;
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData } = props;
@@ -81,10 +78,10 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   return (
-    <Box fill="horizontal">
-      <Helmet>
+    <Box customStyle="w-full">
+      <Helmet.Helmet>
         <title>Ethereum World</title>
-      </Helmet>
+      </Helmet.Helmet>
       {getTagQuery.status === 'loading' && <Spinner />}
       {getTagQuery.status === 'error' && (
         <ErrorLoader
@@ -95,12 +92,15 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       )}
       {getTagQuery.status === 'success' && (
         <>
-          <TagInfoCard
-            tag={getTagQuery.data}
-            subscribedTags={tagSubscriptions}
-            handleSubscribeTag={handleTagSubscribe}
-            handleUnsubscribeTag={handleTagSubscribe}
-          />
+          <Box customStyle="mb-2">
+            <TagProfileCard
+              tag={getTagQuery.data}
+              subscribedTags={tagSubscriptions}
+              handleSubscribeTag={handleTagSubscribe}
+              handleUnsubscribeTag={handleTagSubscribe}
+            />
+          </Box>
+
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}
             itemType={EntityTypes.POST}
