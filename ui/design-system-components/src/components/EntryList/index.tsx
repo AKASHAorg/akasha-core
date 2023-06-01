@@ -10,7 +10,7 @@ import useIntersectionObserver from '@akashaorg/design-system-core/lib/utils/int
 import { IEntryPage } from '@akashaorg/typings/ui';
 import { elementIntersectionObserver } from './elementIntersectionObserver';
 
-export interface EntryListProps {
+export type EntryListProps = {
   pages: IEntryPage[];
   itemCard: React.ReactElement;
   onLoadMore: () => void;
@@ -21,7 +21,7 @@ export interface EntryListProps {
   pageKeyPrefix?: string;
   viewAllEntry?: { onClick: () => void; label: string; limit: number };
   languageDirection?: 'ltr' | 'rtl';
-}
+};
 
 const EntryList = (props: EntryListProps) => {
   const {

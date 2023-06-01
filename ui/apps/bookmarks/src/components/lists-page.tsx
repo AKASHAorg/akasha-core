@@ -8,7 +8,7 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
-import SearchDefaultCard from '@akashaorg/design-system-components/lib/components/SearchDefaultCard';
+import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import {
@@ -134,7 +134,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
 
           {!listsReq.isFetched && isLoggedIn && <Spinner />}
           {(!isLoggedIn || (listsReq.isFetched && (!lists || !lists.length))) && (
-            <SearchDefaultCard infoText={t('You don’t have any saved content in your List')} />
+            <DefaultEmptyCard infoText={t('You don’t have any saved content in your List')} />
           )}
           {listsReq.status === 'success' && lists.length > 0 && (
             <FeedWidget

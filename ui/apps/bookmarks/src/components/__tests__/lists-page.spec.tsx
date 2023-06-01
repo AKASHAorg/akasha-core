@@ -12,6 +12,6 @@ describe('<ListsPage /> component', () => {
   });
 
   it('should render lists page', () => {
-    expect(screen.getByText(/You don’t have any saved content in your List./)).toBeInTheDocument();
+    expect(screen.getByText(/You don’t have any saved content in your List/i)).toBeInTheDocument();
   });
 });

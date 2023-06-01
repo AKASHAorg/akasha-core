@@ -3,14 +3,14 @@ import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DropDown, { DropdownMenuItemGroupType } from '../SearchAppDropdownFilter';
 
-export type ISearchAppFilterProps = {
+export type SearchAppFilterProps = {
   dropdownMenuItems: DropdownMenuItemGroupType[];
   selected: DropdownMenuItemGroupType;
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemGroupType>>;
   resetLabel?: string;
 };
 
-const SearchAppFilter: React.FC<ISearchAppFilterProps> = ({
+const SearchAppFilter: React.FC<SearchAppFilterProps> = ({
   dropdownMenuItems,
   selected,
   setSelected,
