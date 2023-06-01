@@ -100,6 +100,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
+    return;
   }
 
   return (
