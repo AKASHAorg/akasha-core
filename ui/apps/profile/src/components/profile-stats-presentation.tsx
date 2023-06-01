@@ -25,19 +25,39 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
     { id: profileId },
     { select: response => response.node },
   );
+
   const interests = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node },
   );
+
   const followers = useGetFollowersListByDidQuery(
     { id: profileId },
     { select: response => response.node },
   );
+
   const following = useGetFollowingListByDidQuery(
     { id: profileId },
     { select: response => response.node },
   );
 
+  const beamsTotal =
+    beams.data && 'beamList' in beams.data ? beams.data?.beamList?.edges?.length || 0 : 0;
+
+  const interestsTotal =
+    interests.data && 'interests' in interests.data
+      ? interests.data?.interests?.topics?.length || 0
+      : 0;
+
+  const followersTotal =
+    followers.data && 'profile' in followers.data
+      ? followers.data?.profile?.followers?.edges?.length || 0
+      : 0;
+
+  const followingTotal =
+    following.data && 'followList' in following.data
+      ? following.data?.followList?.edges?.length || 0
+      : 0;
   const handleNavigateToProfilePosts = () => {
     navigateTo({
       appName: '@akashaorg/app-akasha-integration',
@@ -48,7 +68,7 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
   const onStatClick = (stat: EngagementType) => () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `/${profileId}/${stat}`,
+      getNavigationUrl: () => `/${profileId}/${stat}`,
     });
   };
 
@@ -56,31 +76,21 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
     <ProfileStats
       posts={{
         label: t('Beams'),
-        total:
-          beams.data && 'beamList' in beams.data ? beams.data?.beamList?.edges?.length || 0 : 0,
+        total: beamsTotal,
         onClick: handleNavigateToProfilePosts,
       }}
       interests={{
         label: t('Interests'),
-        total:
-          interests.data && 'interests' in interests.data
-            ? interests.data?.interests?.topics?.length || 0
-            : 0,
+        total: interestsTotal,
       }}
       followers={{
         label: t('Followers'),
-        total:
-          followers.data && 'profile' in followers.data
-            ? followers.data?.profile?.followers?.edges?.length || 0
-            : 0,
+        total: followersTotal,
         onClick: onStatClick('followers'),
       }}
       following={{
         label: t('Following'),
-        total:
-          following.data && 'followList' in following.data
-            ? following.data?.followList?.edges?.length || 0
-            : 0,
+        total: followingTotal,
         onClick: onStatClick('following'),
       }}
     />

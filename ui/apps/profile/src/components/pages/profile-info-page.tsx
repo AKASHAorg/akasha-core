@@ -37,6 +37,11 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfileInfoPageProps> = pro
 
   const updateFollowReq = useUpdateFollowMutation();
 
+  const isFollowing =
+    followingListReq.data && 'isViewer' in followingListReq.data
+      ? followingListReq.data?.followList?.edges?.length > 0
+      : false;
+
   const handleFollow = () => {
     if (profileId) {
       updateFollowReq.mutate({ i: { id: profileData.did.id, content: { isFollowing: true } } });
@@ -70,11 +75,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfileInfoPageProps> = pro
           avatar={profileData.avatar}
           name={profileData.name}
           ensName={null /*@TODO: integrate ENS when the API is ready */}
-          isFollowing={
-            followingListReq.data && 'isViewer' in followingListReq.data
-              ? followingListReq.data?.followList?.edges?.length > 0
-              : false
-          }
+          isFollowing={isFollowing}
           viewerIsOwner={isViewer}
           flagLabel={t('Report')}
           handleUnfollow={handleUnfollow}
