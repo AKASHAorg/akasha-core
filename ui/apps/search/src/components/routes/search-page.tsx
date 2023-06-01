@@ -431,9 +431,12 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           dropdownMenuItems={dropdownMenuItems}
           selected={selected}
           setSelected={setSelected}
+          resetLabel={t('Reset')}
         />
       )}
-      {searchKeyword === '' && <SearchDefaultCard />}
+      {searchKeyword === '' && (
+        <SearchDefaultCard infoText=" ✨ Start searching for something ✨" />
+      )}
 
       {
         /* allQueriesFinished */ !isFetchingSearch &&

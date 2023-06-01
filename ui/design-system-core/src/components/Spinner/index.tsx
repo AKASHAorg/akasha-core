@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { LegacyRef } from 'react';
 import { tw } from '@twind/core';
 
 export interface ISpinnerProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   color?: string;
+  ref?: LegacyRef<HTMLDivElement>;
 }
 
 const spinnerSizesMap = {
@@ -15,10 +16,10 @@ const spinnerSizesMap = {
 };
 
 const Spinner: React.FC<ISpinnerProps> = props => {
-  const { size = 'md', color = 'current' } = props;
+  const { size = 'md', color = 'current', ref } = props;
 
   return (
-    <div role="status">
+    <div role="status" ref={ref}>
       <svg
         aria-hidden="true"
         className={tw(

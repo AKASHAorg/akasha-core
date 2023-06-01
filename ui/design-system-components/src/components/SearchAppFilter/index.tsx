@@ -7,12 +7,14 @@ export type ISearchAppFilterProps = {
   dropdownMenuItems: DropdownMenuItemGroupType[];
   selected: DropdownMenuItemGroupType;
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemGroupType>>;
+  resetLabel?: string;
 };
 
 const SearchAppFilter: React.FC<ISearchAppFilterProps> = ({
   dropdownMenuItems,
   selected,
   setSelected,
+  resetLabel = 'Reset',
 }) => {
   return (
     <div className={tw('flex justify-between items-center')}>
@@ -27,7 +29,7 @@ const SearchAppFilter: React.FC<ISearchAppFilterProps> = ({
         />
       </div>
       <Button variant="secondary" icon="PlusIcon" plain={true}>
-        Reset
+        {resetLabel}
       </Button>
     </div>
   );
