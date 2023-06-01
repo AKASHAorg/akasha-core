@@ -50,7 +50,12 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
       <Stack direction="column" spacing="gap-4" fullWidth>
         <Stack justify="between">
           {stats.map((stat, index) => (
-            <Button onClick={stat.onClick} key={stat.label + index} plain>
+            <Button
+              onClick={+stat.total > 0 ? stat.onClick : undefined}
+              key={stat.label + index}
+              disabled={+stat.total === 0}
+              plain
+            >
               <Stack direction="column" align="center" customStyle="group">
                 <AppIcon
                   placeholderIconType={stat.icon}
