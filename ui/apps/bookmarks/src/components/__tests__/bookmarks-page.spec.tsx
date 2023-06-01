@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { act, screen, renderWithAllProviders, genAppProps } from '@akashaorg/af-testing';
-import BookmarksPage from '../bookmarks-page';
+import ListsPage from '../lists-page';
 
-describe('<BookmarksPage /> component', () => {
-  const Base = <BookmarksPage {...genAppProps()} />;
+describe('<ListsPage /> component', () => {
+  const Base = <ListsPage {...genAppProps()} />;
 
   beforeEach(async () => {
     await act(async () => {
@@ -11,9 +11,7 @@ describe('<BookmarksPage /> component', () => {
     });
   });
 
-  it('should render bookmarks page', () => {
-    expect(
-      screen.getByText(/Bookmarks help you save your favorite posts for quick access at any time./),
-    ).toBeInTheDocument();
+  it('should render lists page', () => {
+    expect(screen.getByText(/You don’t have any saved content in your List./)).toBeInTheDocument();
   });
 });
