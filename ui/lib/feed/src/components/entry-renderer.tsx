@@ -208,7 +208,6 @@ const EntryRenderer = (
     !accountAwaitingModeration &&
     !itemData.delisted &&
     !itemData.isRemoved;
-  console.log('here');
   const repliesReq = useInfiniteReplies(
     {
       limit: REPLY_FRAGMENT_SIZE,

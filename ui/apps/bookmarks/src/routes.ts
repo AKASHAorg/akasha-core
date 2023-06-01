@@ -1,2 +1,2 @@
-export const BOOKMARKS = 'Bookmarks';
+export const LISTS = 'Lists';
 export default {};

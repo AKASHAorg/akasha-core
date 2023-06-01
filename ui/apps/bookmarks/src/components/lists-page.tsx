@@ -1,18 +1,25 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
+// import DS from '@akashaorg/design-system';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
 import SearchDefaultCard from '@akashaorg/design-system-components/lib/components/SearchDefaultCard';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { useGetBookmarks, usePosts, checkEntryActive } from '@akashaorg/ui-awf-hooks';
+import {
+  useGetBookmarks,
+  useDeleteBookmark,
+  usePosts,
+  checkEntryActive,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-const { StartCard } = DS;
+// const { StartCard } = DS;
 
 type ListsPageProps = Omit<
   RootComponentProps,
@@ -21,6 +28,9 @@ type ListsPageProps = Omit<
 
 const ListsPage: React.FC<ListsPageProps> = props => {
   const { t } = useTranslation('app-lists');
+
+  const [showModal, setShowModal] = React.useState(false);
+  const bookmarkDelete = useDeleteBookmark();
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
@@ -93,9 +103,17 @@ const ListsPage: React.FC<ListsPageProps> = props => {
     return t('Check out the posts saved in your lists');
   };
 
+  const handleIconMenuClick = () => {
+    setShowModal(!showModal);
+  };
+
+  const removeAllBookmarkedItems = () => {
+    bookmarkedBeamsIds.forEach(itemId => bookmarkDelete.mutate(itemId));
+  };
+
   return (
     <>
-      <ListAppTopbar resetLabel={t('Reset')} />
+      <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
       {listsReq.status === 'error' && (
         <ErrorLoader
           type="script-error"
@@ -105,16 +123,17 @@ const ListsPage: React.FC<ListsPageProps> = props => {
       )}
       {listsReq.status !== 'error' && (
         <Box data-testid="lists" customStyle="space-x-8 space-y-8">
-          <StartCard
+          {/* <StartCard
             title={t('Lists')}
             subtitle={getSubtitleText()}
             heading={t('✨ Save what inspires you ✨')}
             description={description}
             image={'/images/no-saved-posts-error.webp'}
             showMainArea={!isLoggedIn}
-          />
+          /> */}
+
           {!listsReq.isFetched && isLoggedIn && <Spinner />}
-          {listsReq.isFetched && (!lists || !lists.length) && (
+          {(!isLoggedIn || (listsReq.isFetched && (!lists || !lists.length))) && (
             <SearchDefaultCard infoText={t('You don’t have any saved content in your List')} />
           )}
           {listsReq.status === 'success' && lists.length > 0 && (
@@ -138,9 +157,9 @@ const ListsPage: React.FC<ListsPageProps> = props => {
               contentClickable={true}
               onEntryFlag={handleEntryFlag}
               onEntryRemove={handleEntryRemove}
-              removeEntryLabel={t('Delete Post')}
-              removedByMeLabel={t('You deleted this post')}
-              removedByAuthorLabel={t('This post was deleted by its author')}
+              removeEntryLabel={t('Delete Beam')}
+              removedByMeLabel={t('You deleted this beam')}
+              removedByAuthorLabel={t('This beam was deleted by its author')}
               uiEvents={props.uiEvents}
               itemSpacing={8}
               i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
@@ -148,6 +167,34 @@ const ListsPage: React.FC<ListsPageProps> = props => {
           )}
         </Box>
       )}
+      <Modal
+        title={{ label: t('Remove Content') }}
+        show={showModal}
+        onClose={() => {
+          setShowModal(false);
+        }}
+        actions={[
+          {
+            variant: 'secondary',
+            label: t('Cancel'),
+            onClick: () => {
+              setShowModal(!showModal);
+            },
+          },
+          {
+            variant: 'primary',
+            label: 'Remove All',
+            onClick: () => {
+              removeAllBookmarkedItems();
+              setShowModal(!showModal);
+            },
+          },
+        ]}
+      >
+        <Text variant="body1">
+          {t('Are you sure you want to remove all saved content from your list?')}
+        </Text>
+      </Modal>
     </>
   );
 };

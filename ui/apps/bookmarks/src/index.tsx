@@ -13,7 +13,7 @@ import {
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  i18nNamespace: ['app-bookmarks'],
+  i18nNamespace: ['app-lists'],
   extends: (matchExtensionPoint, loadingHandler) => {
     matchExtensionPoint({
       'entry-card-actions-right_*': loadingHandler(
@@ -21,9 +21,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       ),
     });
   },
-  title: 'Bookmarks | Ethereum World',
+  title: 'Lists | Akasha World',
   menuItems: {
-    label: 'Bookmarks',
+    label: 'Lists',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
     area: [MenuItemAreaType.AppArea],
