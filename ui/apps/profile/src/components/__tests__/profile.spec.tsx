@@ -1,14 +1,9 @@
 import * as React from 'react';
-import Profile from '../pages/profile';
+import ProfilePage from '../pages/profile-page';
+import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-import {
-  renderWithAllProviders,
-  act,
-  genUser,
-  genLoggedInState,
-  genAppProps,
-  genWorldConfig,
-} from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, screen, genAppProps, genUser } from '@akashaorg/af-testing';
+import { Profile } from '@akashaorg/typings/ui';
 
 const mockLocationValue = {
   pathname: '/@akashaorg/app-profile',
@@ -18,35 +13,35 @@ const mockLocationValue = {
 };
 
 jest.mock('react-router-dom', () => ({
-  useParams: jest.fn(() => ({ pubKey: '' })),
+  useParams: jest.fn(() => ({ profileId: '' })),
   useSearchParams: jest.fn(() => [{ get: () => '' }, () => '']),
   useLocation: jest.fn().mockImplementation(() => {
     return mockLocationValue;
   }),
 }));
 
+/*TODO: enhance test */
 describe('< Profile />', () => {
-  let renderResult;
-  const mockUser = genUser();
-  const BaseComponent = (
-    <Profile
-      {...genAppProps()}
-      profileId={mockUser.did.id}
-      profileData={mockUser}
-      loggedProfileData={mockUser}
-      worldConfig={genWorldConfig()}
-    />
-  );
+  const BaseComponent = <ProfilePage {...genAppProps()} />;
+
   beforeEach(async () => {
     await act(async () => {
-      renderResult = renderWithAllProviders(BaseComponent, {});
+      renderWithAllProviders(BaseComponent, {});
     });
   });
-  // @TODO fix after new hooks
-  it.skip('should render profile cards', async () => {
-    const avatarNode = await renderResult.findByTestId('avatar-image');
-    const avatarSrc = avatarNode.getAttribute('src');
-    //console.log(avatarSrc, '<<<< avatar src');
-    expect(avatarSrc).toEqual(mockUser.avatar?.default);
+
+  beforeAll(() => {
+    (
+      jest.spyOn(hooks, 'useGetProfileByDidQuery') as unknown as jest.SpyInstance<{
+        data: {
+          isViewer: boolean;
+          profile: Profile;
+        };
+        status: 'success' | 'error';
+      }>
+    ).mockReturnValue({ data: { isViewer: true, profile: genUser() }, status: 'success' });
+  });
+  it.skip('should render profile page', async () => {
+    expect(screen.getByTestId('avatar-image')).toBeInTheDocument();
   });
 });
