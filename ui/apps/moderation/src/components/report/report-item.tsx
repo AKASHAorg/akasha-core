@@ -7,24 +7,24 @@ import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import {
   CategoryPills,
-  ICategoryPillsProps,
-  IPageHeaderProps,
-  ISubtitleRendererProps,
+  CategoryPillsProps,
+  PageHeaderProps,
+  SubtitleRendererProps,
   PageHeader,
   SubtitleRenderer,
 } from '../common';
 
-export interface IReportItemProps extends IPageHeaderProps {
-  step: number;
-  introLabel: string;
-  subTextLabel: string;
-  accordionNodes: IAccordionProps[];
-  reasonPlaceholderLabel: string;
-}
+export type ReportItemProps = PageHeaderProps &
+  CategoryPillsProps &
+  SubtitleRendererProps & {
+    step: number;
+    introLabel: string;
+    subTextLabel: string;
+    accordionNodes: IAccordionProps[];
+    reasonPlaceholderLabel: string;
+  };
 
-export const ReportItem: React.FC<
-  IReportItemProps & ICategoryPillsProps & ISubtitleRendererProps
-> = props => {
+export const ReportItem: React.FC<ReportItemProps> = props => {
   const { step, introLabel, subTextLabel, accordionNodes, reasonPlaceholderLabel } = props;
 
   return (

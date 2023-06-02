@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonValues, IModerationLogItem, NavigateToParams } from '@akashaorg/typings/ui';
+import { ButtonValues, IModerationLogItem } from '@akashaorg/typings/ui';
 import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -10,15 +10,11 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import { NoItemsFound } from '../components/error-cards';
+// import { NoItemsFound } from '../components/error-cards';
 
-import getReasonPrefix from '../utils/getReasonPrefix';
+import { BasePageProps } from './dashboard';
+// import getReasonPrefix from '../utils/getReasonPrefix';
 import PaginatedTable from '../components/transparency-log/paginated-table';
-
-export interface ITransparencyLogProps {
-  user: string | null;
-  navigateTo: (args: NavigateToParams) => void;
-}
 
 export type PaginatedItem = IModerationLogItem[];
 
@@ -30,7 +26,7 @@ export const contentTypeMap = {
   post: 'Post',
 };
 
-export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
+export const TransparencyLog: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const [, setActiveButton] = useState<string>(ButtonValues.ALL);

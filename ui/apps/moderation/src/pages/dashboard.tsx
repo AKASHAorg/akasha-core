@@ -12,14 +12,17 @@ import GuestDashboard from '../components/dashboard/guest';
 import { generateApplicants, generateApplicationsHistory, preSelectedReasons } from '../utils';
 import { baseDashboardUrl } from '../routes';
 
-export interface IDashboardProps {
-  user: string | null;
+export type BasePageProps = {
+  user?: string | null;
+  navigateTo: (args: NavigateToParams) => void;
+};
+
+export type DashboardProps = BasePageProps & {
   isAuthorised: boolean;
   isAdmin: boolean;
-  navigateTo: (args: NavigateToParams) => void;
-}
+};
 
-export const Dashboard: React.FC<IDashboardProps> = props => {
+export const Dashboard: React.FC<DashboardProps> = props => {
   const { isAuthorised, isAdmin, navigateTo } = props;
 
   const [pages, setPages] = useState<PaginatedItem[]>([]);

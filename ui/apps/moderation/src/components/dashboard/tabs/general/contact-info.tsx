@@ -6,9 +6,9 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import { IPageHeaderProps, PageHeader } from '../../../common';
+import { PageHeaderProps, PageHeader } from '../../../common';
 
-export type IEditContactInfoProps = IPageHeaderProps & {
+export type IEditContactInfoProps = PageHeaderProps & {
   usernameLabel: string;
   usernamePlaceholderLabel: string;
   emailLabel: string;

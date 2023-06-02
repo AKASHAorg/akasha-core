@@ -5,9 +5,9 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import { IPageHeaderProps, PageHeader } from '../../../common';
+import { PageHeaderProps, PageHeader } from '../../../common';
 
-export type IApplicationDetailProps = IPageHeaderProps & {
+export type IApplicationDetailProps = PageHeaderProps & {
   categoryLabel: string;
   categories: string[];
   reasonLabel: string;

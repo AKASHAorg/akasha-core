@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -12,13 +11,10 @@ import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
 
+import { BasePageProps } from './dashboard';
 import { generateModerators, formatDate, generateTenureInfoLabel } from '../utils';
 
-export interface IModeratorDetailPageProps {
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props => {
+export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const [pages, setPages] = React.useState<PaginatedItem[]>([]);

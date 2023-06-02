@@ -12,14 +12,14 @@ import {
   IGeneralTabProps,
 } from './tabs';
 
-export type IModeratorDashboardProps = IGeneralTabProps &
+export type ModeratorDashboardProps = IGeneralTabProps &
   IApplicationsTabProps &
   IActivityTabProps & {
     isAdmin: boolean;
     tabLabels: string[];
   };
 
-const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
+const ModeratorDashboard: React.FC<ModeratorDashboardProps> = props => {
   const { tabLabels, isAdmin } = props;
 
   const [activeTab, setActiveTab] = useState(0);

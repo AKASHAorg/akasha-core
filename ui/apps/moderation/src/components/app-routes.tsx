@@ -92,7 +92,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
 
-          <Route path={routes[MODERATION_VALUE]} element={<ModerationValue {...props} />} />
+          <Route path={routes[MODERATION_VALUE]} element={<ModerationValue />} />
 
           <Route
             path={routes[DASHBOARD]}

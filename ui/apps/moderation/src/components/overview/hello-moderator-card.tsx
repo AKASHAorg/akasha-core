@@ -6,15 +6,15 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IHelloModeratorCardProps {
+export type HelloModeratorCardProps = {
   titleLabel: string;
   subtitleLabel: string;
   moderatorGuideLabel: string;
   moderatorGuideUrl: string;
   moderationFAQLabel: string;
   moderationFAQUrl: string;
-}
-const HelloModeratorCard: React.FC<IHelloModeratorCardProps> = props => {
+};
+const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
   const {
     titleLabel,
     subtitleLabel,

@@ -6,9 +6,9 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 
 const { ModerationIntroCard } = DS;
 
-export interface IGuestProps {
+export type IGuestProps = {
   navigateTo: (args: NavigateToParams) => void;
-}
+};
 
 const GuestDashboard: React.FC<IGuestProps> = props => {
   const { navigateTo } = props;

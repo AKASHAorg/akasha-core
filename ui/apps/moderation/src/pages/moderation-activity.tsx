@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import { PaginatedItem, DEFAULT_LIMIT, contentTypeMap } from './transparency-log';
 
 import ModerationActivity from '../components/dashboard/tabs/activity/moderation';
 
-export interface IModerationActivityPageProps {
-  navigateTo: (args: NavigateToParams) => void;
-}
+import { BasePageProps } from './dashboard';
 
-export const ModerationActivityPage: React.FC<IModerationActivityPageProps> = props => {
+export const ModerationActivityPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const [pages, setPages] = useState<PaginatedItem[]>([]);

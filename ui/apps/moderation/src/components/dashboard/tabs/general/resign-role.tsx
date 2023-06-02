@@ -4,9 +4,9 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import { IPageHeaderProps, PageHeader } from '../../../common';
+import { PageHeaderProps, PageHeader } from '../../../common';
 
-export type IResignRoleProps = IPageHeaderProps & {
+export type IResignRoleProps = PageHeaderProps & {
   textLine1Label: string;
   reasonTitleLabel: string;
   reasonPlaceholderLabel: string;

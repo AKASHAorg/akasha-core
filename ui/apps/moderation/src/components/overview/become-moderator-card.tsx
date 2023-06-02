@@ -5,13 +5,13 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IBecomeModeratorCardProps {
+export type BecomeModeratorCardProps = {
   titleLabel: string;
   subtitleLabel: string;
   buttonLabel: string;
   onClickApply: () => void;
-}
-const BecomeModeratorCard: React.FC<IBecomeModeratorCardProps> = props => {
+};
+const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
   const { titleLabel, subtitleLabel, buttonLabel, onClickApply } = props;
 
   return (

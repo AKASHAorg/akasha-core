@@ -5,9 +5,9 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import { IPageHeaderProps, PageHeader } from '../../../common';
+import { PageHeaderProps, PageHeader } from '../../../common';
 
-export type IEditMaxApplicantsProps = IPageHeaderProps & {
+export type IEditMaxApplicantsProps = PageHeaderProps & {
   introLabel: string;
   maxApplicantsLabel: string;
   maxApplicantsPlaceholderLabel: string;

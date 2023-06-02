@@ -6,7 +6,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-export interface IDismissModeratorProps {
+export type DismissModeratorProps = {
   titleLabel: string;
   placeholderLabel: string;
   subtitleLabel: string;
@@ -17,9 +17,9 @@ export interface IDismissModeratorProps {
   confirmButtonLabel: string;
   onCancelButtonClick: () => void;
   onConfirmButtonClick: () => void;
-}
+};
 
-const DismissModerator: React.FC<IDismissModeratorProps> = props => {
+const DismissModerator: React.FC<DismissModeratorProps> = props => {
   const {
     titleLabel,
     placeholderLabel,

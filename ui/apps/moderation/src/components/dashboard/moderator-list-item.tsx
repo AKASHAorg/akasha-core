@@ -7,7 +7,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export type IModeratorListItemProps = {
+export type ModeratorListItemProps = {
   assignButtonLabel: string;
   assignedAdmin: boolean;
   selectedModerator: Profile;
@@ -15,7 +15,7 @@ export type IModeratorListItemProps = {
   onClickAssign: () => void;
 };
 
-const ModeratorListItem: React.FC<IModeratorListItemProps> = props => {
+const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
   const { assignButtonLabel, activeModerators, selectedModerator, assignedAdmin, onClickAssign } =
     props;
 

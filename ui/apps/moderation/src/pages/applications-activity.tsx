@@ -2,18 +2,13 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
-
 import ApplicationsActivity from '../components/dashboard/tabs/activity/applications';
 
+import { BasePageProps } from './dashboard';
 import { generateApplicationsHistory } from '../utils';
 import { baseDashboardUrl } from '../routes';
 
-export interface IApplicationsActivityPageProps {
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const ApplicationsActivityPage: React.FC<IApplicationsActivityPageProps> = props => {
+export const ApplicationsActivityPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');

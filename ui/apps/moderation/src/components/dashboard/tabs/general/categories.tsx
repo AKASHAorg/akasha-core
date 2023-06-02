@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { PageHeader, IPageHeaderProps, CategoryPills, ICategoryPillsProps } from '../../../common';
+import { PageHeader, PageHeaderProps, CategoryPills, CategoryPillsProps } from '../../../common';
 
-export type IEditCategoriesProps = IPageHeaderProps & ICategoryPillsProps;
+export type IEditCategoriesProps = PageHeaderProps & CategoryPillsProps;
 
 const EditCategories: React.FC<IEditCategoriesProps> = props => {
   return (
