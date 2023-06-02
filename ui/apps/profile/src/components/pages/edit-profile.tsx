@@ -18,19 +18,16 @@ import { SocialLinks } from '@akashaorg/design-system-components/lib/components/
 import { Interests } from '@akashaorg/design-system-components/lib/components/EditProfile/Interests';
 import { useParams } from 'react-router';
 
-export type EditProfilePageProps = {
+type EditProfilePageProps = {
+  profileId: string;
+  isViewer: boolean;
   profileData: Profile;
-  loggedProfileData: Profile;
 };
 
 const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
-  const { profileData } = props;
-
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { profileId, isViewer, profileData } = props;
   const { t } = useTranslation('app-profile');
-  const { profileId } = useParams<{
-    profileId: string;
-  }>();
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   // const ENSReq = useEnsByAddress(profileData.ethAddress);
 
@@ -42,6 +39,9 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
 
   const [showModal, setShowModal] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+
+  const loggedIn =
+    false; /* @TODO use a login hook when it's ready to check if user is logged in or not */
 
   const modalMessage = t(
     "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
@@ -94,6 +94,13 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       setActiveTab(selectedIndex);
     }
   };
+
+  if (!loggedIn) {
+    return navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}`,
+    });
+  }
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">

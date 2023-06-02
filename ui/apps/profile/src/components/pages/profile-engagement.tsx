@@ -1,99 +1,86 @@
 import React from 'react';
 import ProfileEngagements from '@akashaorg/design-system-components/lib/components/ProfileEngagements';
+import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 import { useTranslation } from 'react-i18next';
+import { RootComponentProps, EngagementType } from '@akashaorg/typings/ui';
+
+import { useParams } from 'react-router-dom';
 import {
-  Profile,
-  NavigateToParams,
-  RootComponentProps,
-  EngagementType,
-} from '@akashaorg/typings/ui';
-import {
-  useFollowers,
-  useFollowing,
-  useFollow,
-  useIsFollowingMultiple,
-  useUnfollow,
-} from '@akashaorg/ui-awf-hooks';
-import { useSearchParams } from 'react-router-dom';
+  useGetFollowersListByDidQuery,
+  useGetFollowingListByDidQuery,
+  useGetProfileByDidQuery,
+  useUpdateFollowMutation,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 type ProfileEngagementsPageProps = {
-  loggedProfileData: Profile;
   selectedStat: EngagementType;
-  profileData: Profile;
-  navigateTo?: (args: NavigateToParams) => void;
 };
 
 const ProfileEngagementsPage: React.FC<
   RootComponentProps & ProfileEngagementsPageProps
 > = props => {
-  const { loggedProfileData, selectedStat, profileData, navigateTo } = props;
-
   const { t } = useTranslation('app-profile');
-  const [, setSearchParams] = useSearchParams();
-  // get followers for this profile
-  const followersReq = useFollowers(profileData.did.id, 500);
-  const followers = React.useMemo(
-    () => followersReq.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
-    [followersReq.data?.pages],
+  const { profileId } = useParams<{ profileId: string }>();
+
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
+  const profileDataReq = useGetProfileByDidQuery(
+    {
+      id: profileId,
+    },
+    {
+      select: response => response.node,
+    },
   );
 
-  // @TODO fix Hooks
-  // get accounts this profile is following
-  const followingReq = useFollowing(profileData.did.id, 500);
-  const following = React.useMemo(
-    () => followingReq.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
-    [followingReq.data?.pages],
+  const followersReq = useGetFollowersListByDidQuery(
+    { id: profileId },
+    { select: resp => resp.node },
   );
-  const profilePubKeys: string[] = React.useMemo(() => {
-    let profiles: Profile[] = [];
-    // wait for followers and following queries to finish
-    if (Array.isArray(followers)) {
-      profiles = [...profiles, ...followers];
-    }
-    if (Array.isArray(following)) {
-      profiles = [...profiles, ...following];
-    }
-    return profiles.map((profile: Profile) => profile.did.id);
-  }, [followers, following]);
-  // get followed profiles for logged user
-  const isFollowingMultipleReq = useIsFollowingMultiple(loggedProfileData?.did?.id, profilePubKeys);
-  const followedProfiles = isFollowingMultipleReq.data;
-  // hooks to follow/unfollow profiles
-  const followProfileReq = useFollow();
-  const unfollowProfileReq = useUnfollow();
-  const loadMoreFollowers = React.useCallback(() => {
-    if (!followersReq.isFetching && followersReq.hasNextPage) {
-      followersReq.fetchNextPage();
-    }
-  }, [followersReq]);
-  const loadMoreFollowing = React.useCallback(() => {
-    if (!followingReq.isFetching && followingReq.hasNextPage) {
-      followingReq.fetchNextPage();
-    }
-  }, [followingReq]);
-  const onProfileClick = (pubKey: string) => {
+
+  const followingReq = useGetFollowingListByDidQuery(
+    { id: profileId },
+    { select: resp => resp.node },
+  );
+
+  const updateFollowReq = useUpdateFollowMutation();
+
+  if (
+    followersReq.status === 'loading' ||
+    followingReq.status === 'loading' ||
+    profileDataReq.status === 'loading'
+  ) {
+    return <ProfileEngagementLoading />;
+  }
+
+  const { isViewer, profile: profileData } =
+    'isViewer' in profileDataReq.data ? profileDataReq.data : { isViewer: null, profile: null };
+
+  const followers =
+    followersReq.data && 'isViewer' in followersReq.data
+      ? followersReq.data?.profile?.followers?.edges?.map(edge => edge.node.profile)
+      : [];
+
+  const following =
+    followingReq.data && 'isViewer' in followingReq.data
+      ? followingReq.data?.followList?.edges?.map(edge => edge.node.profile)
+      : [];
+
+  const onProfileClick = (profileId: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
     });
   };
-  const showLoginModal = () => {
-    props.navigateToModal({ name: 'login' });
+
+  const onFollow = (profileId: string) => {
+    updateFollowReq.mutate({ i: { id: profileId, content: { isFollowing: true } } });
   };
-  const onFollow = (pubKey: string) => {
-    if (!loggedProfileData?.did?.id) {
-      showLoginModal();
-      return;
-    }
-    followProfileReq.mutate(pubKey);
+
+  const onUnfollow = (profileId: string) => {
+    updateFollowReq.mutate({ i: { id: profileId, content: { isFollowing: false } } });
   };
-  const onUnfollow = (pubKey: string) => {
-    if (!loggedProfileData?.did?.id) {
-      showLoginModal();
-      return;
-    }
-    unfollowProfileReq.mutate(pubKey);
-  };
+
   const onError = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
@@ -103,22 +90,18 @@ const ProfileEngagementsPage: React.FC<
 
   return (
     <ProfileEngagements
-      selectedStat={selectedStat}
-      loggedProfileId={loggedProfileData?.did?.id}
-      followedProfiles={followedProfiles}
+      selectedStat={props.selectedStat}
+      loggedProfileId={profileId}
+      isFollowing={props.selectedStat === 'following'}
       followers={{
         label: t('Followers'),
         status: followersReq.status,
         data: followers,
-        hasNextPage: followersReq.hasNextPage,
-        onLoadMore: loadMoreFollowers,
       }}
       following={{
         label: t('Following'),
         status: followingReq.status,
         data: following,
-        hasNextPage: followingReq.hasNextPage,
-        onLoadMore: loadMoreFollowing,
       }}
       followLabel={t('Follow')}
       unFollowLabel={t('Unfollow')}
@@ -126,12 +109,17 @@ const ProfileEngagementsPage: React.FC<
       loadingMoreLabel={`${t('Loading more')} ...`}
       profileAnchorLink={'/@akashaorg/app-profile'}
       ownerUserName={profileData.name}
-      viewerIsOwner={loggedProfileData.did.isViewer}
+      viewerIsOwner={isViewer}
       onError={onError}
       onProfileClick={onProfileClick}
       onFollow={onFollow}
       onUnfollow={onUnfollow}
-      onChange={selectedStat => setSearchParams({ tab: selectedStat }, { replace: true })}
+      onChange={selectedStat => {
+        navigateTo?.({
+          appName: '@akashaorg/app-profile',
+          getNavigationUrl: () => `${profileId}/${selectedStat}`,
+        });
+      }}
     />
   );
 };

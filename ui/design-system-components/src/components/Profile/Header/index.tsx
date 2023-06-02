@@ -12,6 +12,10 @@ import { tw } from '@twind/core';
 import { Profile } from '@akashaorg/typings/ui';
 
 export type HeaderProps = {
+  did: Profile['did'];
+  background?: Profile['background'];
+  avatar?: Profile['avatar'];
+  name: Profile['name'];
   ensName?: 'loading' | string;
   isFollowing: boolean;
   viewerIsOwner: boolean;
@@ -20,12 +24,11 @@ export type HeaderProps = {
   handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleFlag: (event: React.SyntheticEvent<Element, Event>) => void;
-  actionButtonExt?: React.ReactNode;
 };
 
-const Header: React.FC<HeaderProps & Profile> = ({
-  background,
+const Header: React.FC<HeaderProps> = ({
   did,
+  background,
   avatar,
   name,
   ensName,

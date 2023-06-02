@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SocialLink } from './SocialLink';
 import { ButtonType } from '../types';
 import { Link } from '../../types/common.types';
-import { getLinkFromType } from '../../../utils/getLinkFromType';
 
 type SocialLinkFormValue = {
   links: string[];
@@ -48,7 +47,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   });
 
   const linkWithPseudoId = useMemo(
-    () => socialLinks.map((link, index) => ({ _id: index, value: getLinkFromType(link, true) })),
+    () => socialLinks.map((link, index) => ({ _id: index, value: link.href })),
     [socialLinks],
   );
 
