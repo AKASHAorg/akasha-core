@@ -6,11 +6,11 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Table, { ITableProps } from '@akashaorg/design-system-core/lib/components/Table';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export type IApplicationsActivityProps = ITableProps & {
+export type ApplicationsActivityProps = ITableProps & {
   label: string;
 };
 
-const ApplicationsActivity: React.FC<IApplicationsActivityProps> = props => {
+const ApplicationsActivity: React.FC<ApplicationsActivityProps> = props => {
   const { label } = props;
 
   return (

@@ -6,11 +6,11 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Table, { ITableProps } from '@akashaorg/design-system-core/lib/components/Table';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export type IModerationActivityProps = ITableProps & {
+export type ModerationActivityProps = ITableProps & {
   label: string;
 };
 
-const ModerationActivity: React.FC<IModerationActivityProps> = props => {
+const ModerationActivity: React.FC<ModerationActivityProps> = props => {
   const { label } = props;
 
   return (

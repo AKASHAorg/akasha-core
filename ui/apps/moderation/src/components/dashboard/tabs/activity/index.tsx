@@ -6,7 +6,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Table, { ITableProps } from '@akashaorg/design-system-core/lib/components/Table';
 
-export type IActivityTabProps = {
+export type ActivityTabProps = {
   applicationsTitleLabel: string;
   moderationTitleLabel: string;
   viewAllLabel: string;
@@ -17,7 +17,7 @@ export type IActivityTabProps = {
   onModerationRowClick: (id: string) => void;
 };
 
-export const ActivityTab: React.FC<IActivityTabProps> = props => {
+export const ActivityTab: React.FC<ActivityTabProps> = props => {
   const {
     applicationsTitleLabel,
     moderationTitleLabel,

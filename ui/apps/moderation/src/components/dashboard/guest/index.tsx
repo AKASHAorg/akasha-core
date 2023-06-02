@@ -6,11 +6,11 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 
 const { ModerationIntroCard } = DS;
 
-export type IGuestProps = {
+export type GuestProps = {
   navigateTo: (args: NavigateToParams) => void;
 };
 
-const GuestDashboard: React.FC<IGuestProps> = props => {
+const GuestDashboard: React.FC<GuestProps> = props => {
   const { navigateTo } = props;
   const { t } = useTranslation('app-moderation-ewa');
 

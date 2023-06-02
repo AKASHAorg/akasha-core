@@ -7,14 +7,14 @@ import {
   ActivityTab,
   ApplicationsTab,
   GeneralTab,
-  IActivityTabProps,
+  ActivityTabProps,
   ApplicationsTabProps,
   GeneralTabProps,
 } from './tabs';
 
 export type ModeratorDashboardProps = GeneralTabProps &
   ApplicationsTabProps &
-  IActivityTabProps & {
+  ActivityTabProps & {
     isAdmin: boolean;
     tabLabels: string[];
   };
