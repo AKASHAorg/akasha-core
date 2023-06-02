@@ -12,16 +12,16 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
 import { formatDate } from '../../utils';
 
-export interface IModeratorDetailCardProps {
+export type ModeratorDetailCardProps = {
   moderator: Moderator;
   tenureInfoLabel: string;
   viewProfileLabel: string;
   dismissModeratorLabel: string;
   dismissModeratorDescLabel: string;
   onClickDismissModerator: () => void;
-}
+};
 
-const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
+const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
   const {
     moderator,
     tenureInfoLabel,

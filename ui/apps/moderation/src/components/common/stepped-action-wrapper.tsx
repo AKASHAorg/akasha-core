@@ -5,16 +5,16 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import StepIndicator from '@akashaorg/design-system-core/lib/components/Stepper';
 
-import { PageButtons, IPageButtonsProps } from './page-buttons';
+import { PageButtons, PageButtonsProps } from './page-buttons';
 
-export interface ISteppedActionWrapperProps extends IPageButtonsProps {
+export type SteppedActionWrapperProps = PageButtonsProps & {
   stepLabels: string[];
   activeIndex: number;
   titleLabel: string;
-}
+};
 
 export const SteppedActionWrapper: React.FC<
-  PropsWithChildren<ISteppedActionWrapperProps>
+  PropsWithChildren<SteppedActionWrapperProps>
 > = props => {
   const { stepLabels, activeIndex, titleLabel, children } = props;
 

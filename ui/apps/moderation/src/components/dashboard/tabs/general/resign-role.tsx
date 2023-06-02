@@ -4,17 +4,17 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import { IPageHeaderProps, PageHeader } from '../../../common';
+import { PageHeaderProps, PageHeader } from '../../../common';
 
-export interface IResignRoleProps extends IPageHeaderProps {
+export type ResignRoleProps = PageHeaderProps & {
   textLine1Label: string;
   reasonTitleLabel: string;
   reasonPlaceholderLabel: string;
   optionalLabel: string;
   textLine2Label: string;
-}
+};
 
-const ResignRole: React.FC<IResignRoleProps> = props => {
+const ResignRole: React.FC<ResignRoleProps> = props => {
   const {
     textLine1Label,
     reasonTitleLabel,

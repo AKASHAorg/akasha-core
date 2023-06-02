@@ -4,20 +4,16 @@ import { tw } from '@twind/core';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import {
-  IPageHeaderProps,
-  ISubtitleRendererProps,
-  PageHeader,
-  SubtitleRenderer,
-} from '../../common';
+import { PageHeaderProps, SubtitleRendererProps, PageHeader, SubtitleRenderer } from '../../common';
 
-export interface IApplicationStatusProps extends IPageHeaderProps {
-  assetName?: string;
-  publicImgPath?: string;
-  titleLabel: string;
-}
+export type ApplicationStatusProps = PageHeaderProps &
+  SubtitleRendererProps & {
+    assetName?: string;
+    publicImgPath?: string;
+    titleLabel: string;
+  };
 
-const ApplicationStatus: React.FC<IApplicationStatusProps & ISubtitleRendererProps> = props => {
+const ApplicationStatus: React.FC<ApplicationStatusProps> = props => {
   const { assetName = 'moderation', publicImgPath = '/images', titleLabel } = props;
 
   return (

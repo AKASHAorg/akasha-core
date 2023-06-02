@@ -1,18 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import ResignRole from '../components/dashboard/tabs/general/resign-role';
 
+import { BasePageProps } from './dashboard';
 import { DASHBOARD, RESIGN_CONFIRMATION } from '../routes';
 
-export interface IResignRolePageProps {
-  user: string | null;
+export type ResignRolePageProps = BasePageProps & {
   isAdmin: boolean;
-  navigateTo: (args: NavigateToParams) => void;
-}
+};
 
-export const ResignRolePage: React.FC<IResignRolePageProps> = props => {
+export const ResignRolePage: React.FC<ResignRolePageProps> = props => {
   const { isAdmin, navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');

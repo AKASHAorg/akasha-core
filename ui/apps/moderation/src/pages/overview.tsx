@@ -1,8 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
-
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ModerationIntroCard from '@akashaorg/design-system-components/lib/components/ModerationIntroCard';
 import ModerationValuesCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard';
@@ -10,9 +8,10 @@ import ModerationValuesCard from '@akashaorg/design-system-components/lib/compon
 import BecomeModeratorCard from '../components/overview/become-moderator-card';
 import HelloModeratorCard from '../components/overview/hello-moderator-card';
 
+import { BasePageProps } from './dashboard';
+import { BECOME_MODERATOR, CHECK_APPLICATION_STATUS } from '../routes';
 import { values } from '../services/values';
 import { externalLinks } from '../utils';
-import { BECOME_MODERATOR, CHECK_APPLICATION_STATUS } from '../routes';
 
 export enum ApplicationStatusType {
   review = 'Under Review',
@@ -20,13 +19,12 @@ export enum ApplicationStatusType {
   rejected = 'Rejected',
 }
 
-export interface IOverviewProps {
+export type OverviewPageProps = BasePageProps & {
   isAuthorised: boolean;
   applicationStatus: ApplicationStatusType | null;
-  navigateTo: (args: NavigateToParams) => void;
-}
+};
 
-export const Overview: React.FC<IOverviewProps> = props => {
+export const Overview: React.FC<OverviewPageProps> = props => {
   const { isAuthorised, applicationStatus, navigateTo } = props;
   const { t } = useTranslation('app-moderation-ewa');
 

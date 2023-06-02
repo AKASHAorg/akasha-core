@@ -6,9 +6,9 @@ import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import { ISteppedActionWrapperProps, SteppedActionWrapper } from '../../common';
+import { SteppedActionWrapperProps, SteppedActionWrapper } from '../../common';
 
-export interface IBMContactInfoProps extends ISteppedActionWrapperProps {
+export type BMContactInfoProps = SteppedActionWrapperProps & {
   titleLabel: string;
   subtitleLabel: string;
   discordLabel: string;
@@ -20,9 +20,9 @@ export interface IBMContactInfoProps extends ISteppedActionWrapperProps {
   checkedState: string[];
   onFillFromProfileClick: () => void;
   onCheckBoxClick: (idx: number) => () => void;
-}
+};
 
-const BMContactInfo: React.FC<IBMContactInfoProps> = props => {
+const BMContactInfo: React.FC<BMContactInfoProps> = props => {
   const {
     subtitleLabel,
     discordLabel,

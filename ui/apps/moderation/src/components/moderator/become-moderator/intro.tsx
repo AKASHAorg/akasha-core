@@ -6,19 +6,20 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import {
-  IPageButtonsProps,
-  ISubtitleRendererProps,
+  PageButtonsProps,
+  SubtitleRendererProps,
   PageButtons,
   SubtitleRenderer,
 } from '../../common';
 
-export interface IBMIntroProps extends IPageButtonsProps {
-  assetName?: string;
-  publicImgPath?: string;
-  titleLabel: string;
-}
+export type BMIntroProps = PageButtonsProps &
+  SubtitleRendererProps & {
+    assetName?: string;
+    publicImgPath?: string;
+    titleLabel: string;
+  };
 
-const BMIntro: React.FC<IBMIntroProps & ISubtitleRendererProps> = props => {
+const BMIntro: React.FC<BMIntroProps> = props => {
   const { assetName = 'moderation', publicImgPath = '/images', titleLabel } = props;
 
   return (
