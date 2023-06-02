@@ -78,7 +78,7 @@ const ProfileEngagementsPage: React.FC<
   };
 
   const onUnfollow = (profileId: string) => {
-    updateFollowReq.mutate({ i: { id: profileId, content: { isFollowing: true } } });
+    updateFollowReq.mutate({ i: { id: profileId, content: { isFollowing: false } } });
   };
 
   const onError = () => {
@@ -92,7 +92,7 @@ const ProfileEngagementsPage: React.FC<
     <ProfileEngagements
       selectedStat={props.selectedStat}
       loggedProfileId={profileId}
-      isFollowing={props.selectedStat === 'following' ? true : false}
+      isFollowing={props.selectedStat === 'following'}
       followers={{
         label: t('Followers'),
         status: followersReq.status,

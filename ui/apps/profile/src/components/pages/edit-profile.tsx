@@ -96,11 +96,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   };
 
   if (!loggedIn) {
-    navigateTo({
+    return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
-    return;
   }
 
   return (

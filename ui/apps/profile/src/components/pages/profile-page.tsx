@@ -53,9 +53,7 @@ const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
   return (
     <>
       <Helmet>
-        <title>
-          {t("{{name}}'s Page", { name: `${profileData.name} | ` || '' })}Ethereum World
-        </title>
+        <title>{t("{{name}}'s Page", { name: `${profileData.name} | ` || '' })}AKASHA World</title>
       </Helmet>
       {props.editMode ? (
         <EditProfilePage
