@@ -6,7 +6,7 @@ import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import { PageHeaderProps, PageHeader } from '../../../common';
 
-export type IResignRoleProps = PageHeaderProps & {
+export type ResignRoleProps = PageHeaderProps & {
   textLine1Label: string;
   reasonTitleLabel: string;
   reasonPlaceholderLabel: string;
@@ -14,7 +14,7 @@ export type IResignRoleProps = PageHeaderProps & {
   textLine2Label: string;
 };
 
-const ResignRole: React.FC<IResignRoleProps> = props => {
+const ResignRole: React.FC<ResignRoleProps> = props => {
   const {
     textLine1Label,
     reasonTitleLabel,

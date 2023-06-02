@@ -8,12 +8,12 @@ import {
   ApplicationsTab,
   GeneralTab,
   IActivityTabProps,
-  IApplicationsTabProps,
-  IGeneralTabProps,
+  ApplicationsTabProps,
+  GeneralTabProps,
 } from './tabs';
 
-export type ModeratorDashboardProps = IGeneralTabProps &
-  IApplicationsTabProps &
+export type ModeratorDashboardProps = GeneralTabProps &
+  ApplicationsTabProps &
   IActivityTabProps & {
     isAdmin: boolean;
     tabLabels: string[];

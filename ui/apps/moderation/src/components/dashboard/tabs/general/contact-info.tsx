@@ -8,7 +8,7 @@ import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import { PageHeaderProps, PageHeader } from '../../../common';
 
-export type IEditContactInfoProps = PageHeaderProps & {
+export type EditContactInfoProps = PageHeaderProps & {
   usernameLabel: string;
   usernamePlaceholderLabel: string;
   emailLabel: string;
@@ -16,7 +16,7 @@ export type IEditContactInfoProps = PageHeaderProps & {
   fillfromProfileLabel: string;
 };
 
-const EditContactInfo: React.FC<IEditContactInfoProps> = props => {
+const EditContactInfo: React.FC<EditContactInfoProps> = props => {
   const {
     usernameLabel,
     usernamePlaceholderLabel,

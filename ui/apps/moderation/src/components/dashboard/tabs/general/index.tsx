@@ -15,7 +15,7 @@ import {
   RESIGN_ROLE,
 } from '../../../../routes';
 
-export type IGeneralTabProps = {
+export type GeneralTabProps = {
   isAdmin?: boolean;
   moderatorSinceLabel: string;
   moderatorSince: number;
@@ -36,7 +36,7 @@ export type IGeneralTabProps = {
   onButtonClick: (route?: string) => () => void;
 };
 
-export const GeneralTab: React.FC<IGeneralTabProps> = props => {
+export const GeneralTab: React.FC<GeneralTabProps> = props => {
   const {
     isAdmin,
     moderatorSinceLabel,

@@ -11,7 +11,7 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
 import { formatDate } from '../../../../utils';
 
-export type IApplicationDetailIntroProps = {
+export type ApplicationDetailIntroProps = {
   selectedApplicant: ModeratorApplicantData;
   viewProfileLabel: string;
   applicationDateLabel: string;
@@ -19,7 +19,7 @@ export type IApplicationDetailIntroProps = {
   onButtonClick: (route?: string) => () => void;
 };
 
-const ApplicationDetailIntro: React.FC<IApplicationDetailIntroProps> = props => {
+const ApplicationDetailIntro: React.FC<ApplicationDetailIntroProps> = props => {
   const {
     selectedApplicant,
     viewProfileLabel,

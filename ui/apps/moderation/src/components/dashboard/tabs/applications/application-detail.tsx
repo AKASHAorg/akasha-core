@@ -7,7 +7,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { PageHeaderProps, PageHeader } from '../../../common';
 
-export type IApplicationDetailProps = PageHeaderProps & {
+export type ApplicationDetailProps = PageHeaderProps & {
   categoryLabel: string;
   categories: string[];
   reasonLabel: string;
@@ -18,7 +18,7 @@ export type IApplicationDetailProps = PageHeaderProps & {
   historyDescription: string;
 };
 
-const ApplicationDetail: React.FC<IApplicationDetailProps> = props => {
+const ApplicationDetail: React.FC<ApplicationDetailProps> = props => {
   const {
     categoryLabel,
     categories,

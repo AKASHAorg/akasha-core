@@ -7,13 +7,13 @@ import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import { PageHeaderProps, PageHeader } from '../../../common';
 
-export type IEditMaxApplicantsProps = PageHeaderProps & {
+export type EditMaxApplicantsProps = PageHeaderProps & {
   introLabel: string;
   maxApplicantsLabel: string;
   maxApplicantsPlaceholderLabel: string;
 };
 
-const EditMaxApplicants: React.FC<IEditMaxApplicantsProps> = props => {
+const EditMaxApplicants: React.FC<EditMaxApplicantsProps> = props => {
   const { introLabel, maxApplicantsLabel, maxApplicantsPlaceholderLabel } = props;
 
   return (

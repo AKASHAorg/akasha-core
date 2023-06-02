@@ -4,13 +4,13 @@ import { ModeratorApplicantData } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
-import Applicant, { IApplicantProps } from './applicant';
+import Applicant, { ApplicantProps } from './applicant';
 
-export type IApplicationsTabProps = Pick<IApplicantProps, 'onClickApplicant'> & {
+export type ApplicationsTabProps = Pick<ApplicantProps, 'onClickApplicant'> & {
   applicants: ModeratorApplicantData[];
 };
 
-export const ApplicationsTab: React.FC<IApplicationsTabProps> = props => {
+export const ApplicationsTab: React.FC<ApplicationsTabProps> = props => {
   const { applicants, onClickApplicant } = props;
 
   return (
