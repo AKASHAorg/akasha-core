@@ -3,11 +3,15 @@ import React from 'react';
 import Box from '../Box';
 import Button from '../Button';
 import Text from '../Text';
+
+import PageBubble from './page-bubble';
+
 import { Color } from '../types/common.types';
 
 export interface IPaginationProps {
   pageCount: number;
   currentPage: number;
+  maxPagesToShow?: number;
   customStyle?: string;
   prevButtonLabel: string;
   nextButtonLabel: string;
@@ -23,6 +27,7 @@ const Pagination: React.FC<IPaginationProps> = props => {
   const {
     pageCount,
     currentPage,
+    maxPagesToShow = 6,
     customStyle = '',
     prevButtonLabel,
     nextButtonLabel,
@@ -38,16 +43,11 @@ const Pagination: React.FC<IPaginationProps> = props => {
 
   // show buttons only when specified and there's more than a page
   const showButtons = hasButtons && pageCount > 1;
+  const trimBubbles = pageCount - maxPagesToShow >= 2;
 
   const activeButtonTextColor: Color = { light: 'secondaryLight', dark: 'secondaryDark' };
 
-  const disabledButtonTextColor = 'text(secondaryLight dark:secondaryDark)';
-
-  const basePageWrapperStyle = 'flex items-center justify-center w-8 h-8 rounded-full';
-
-  const activePageWrapperBg = 'bg-(secondaryLight dark:secondaryDark)';
-
-  const regularPageWrapperBg = 'bg-(grey8 dark:grey3)';
+  const disabledButtonTextColor = 'grey7';
 
   return (
     <Box customStyle={`flex items-center space-x-2 ${customStyle}`}>
@@ -67,27 +67,67 @@ const Pagination: React.FC<IPaginationProps> = props => {
         </Button>
       )}
 
-      {pages.map(page => {
+      {pages.map((page, idx) => {
         const isActive = page === currentPage;
+
         return (
-          <Button key={page} plain={true} onClick={onClickPage(page)}>
-            <Box
-              customStyle={`${basePageWrapperStyle} ${
-                isActive ? activePageWrapperBg : regularPageWrapperBg
-              }`}
-            >
-              <Text
-                variant="body2"
-                weight="bold"
-                color={{
-                  light: isActive ? 'white' : 'black',
-                  dark: isActive ? 'black' : 'white',
-                }}
-              >
-                {page}
-              </Text>
-            </Box>
-          </Button>
+          <React.Fragment key={page}>
+            {/* SHOW INITIAL BUBBLES */}
+            {/*
+             * if:
+             * idx is less than maxPagesToShow (means pageCount is less than or equal to maxPagesToShow)
+             */}
+            {idx < maxPagesToShow && !trimBubbles && (
+              <PageBubble isActive={isActive} page={page} onClickPage={onClickPage} />
+            )}
+
+            {/*
+             * if:
+             * pagesCount is at least 2 more than maxPagesToShow, trim at an index less to give room for dynamic bubble
+             */}
+            {trimBubbles && idx < maxPagesToShow - 1 && (
+              <PageBubble isActive={isActive} page={page} onClickPage={onClickPage} />
+            )}
+
+            {/*
+             * SHOW DYNAMIC PAGE BUBBLE if:
+              - idx is equal to maxPagesToShow and
+              - maxPagesToShow is at least 2 less than pageCount
+             */}
+            {idx === maxPagesToShow && trimBubbles && (
+              <PageBubble
+                isActive={currentPage > maxPagesToShow - 1 && currentPage !== pageCount}
+                page={
+                  currentPage < maxPagesToShow
+                    ? maxPagesToShow
+                    : currentPage === pageCount
+                    ? pageCount - 1
+                    : currentPage
+                }
+                onClickPage={onClickPage}
+              />
+            )}
+
+            {/*
+             * SHOW ELLIPSIS if:
+              - idx is one less than pageCount and
+              - maxPagesToShow is at least 2 less than pageCount
+             */}
+            {idx === pageCount - 1 && trimBubbles && <Text weight="bold">. . .</Text>}
+
+            {/*
+             * SHOW LAST BUBBLE if:
+              - maxPagesToShow is less than pageCount and
+              - idx is the last element
+             */}
+            {maxPagesToShow < pageCount && idx === pageCount - 1 && (
+              <PageBubble
+                isActive={isActive}
+                page={pages[pageCount - 1]}
+                onClickPage={onClickPage}
+              />
+            )}
+          </React.Fragment>
         );
       })}
 

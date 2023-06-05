@@ -1,17 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import EditMaxApplicants from '../components/dashboard/tabs/general/max-applicants';
 
+import { BasePageProps } from './dashboard';
 import { DASHBOARD } from '../routes';
 
-export interface IEditMaxApplicantsPageProps {
-  user: string | null;
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const EditMaxApplicantsPage: React.FC<IEditMaxApplicantsPageProps> = props => {
+export const EditMaxApplicantsPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');

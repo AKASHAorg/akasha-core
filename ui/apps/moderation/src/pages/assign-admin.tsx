@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import AssignAdmin from '../components/dashboard/assign-admin';
 
+import { BasePageProps } from './dashboard';
 import { DASHBOARD } from '../routes';
 import { generateActiveModerators } from '../utils/dummy-data';
 
-export interface IAssignAdminPageProps {
-  user: string | null;
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const AssignAdminPage: React.FC<IAssignAdminPageProps> = props => {
+export const AssignAdminPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const [assignedAdmin, setAssignedAdmin] = useState(false);

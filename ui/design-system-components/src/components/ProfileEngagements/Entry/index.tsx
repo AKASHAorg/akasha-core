@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { Profile } from '@akashaorg/typings/ui';
 
@@ -19,10 +17,7 @@ export type EntryProps = {
   name: string;
   isFollowing: boolean;
   loggedProfileId?: string;
-  hasNextPage?: boolean;
-  loadingMoreLabel?: string;
   borderBottom?: boolean;
-  onLoadMore?: () => void;
   onProfileClick: (profileId: string) => void;
   onFollow: (profileId: string) => void;
   onUnfollow: (profileId: string) => void;
@@ -39,22 +34,13 @@ const Entry: React.FC<EntryProps> = props => {
     name,
     isFollowing,
     loggedProfileId,
-    hasNextPage,
-    loadingMoreLabel,
     borderBottom = true,
-    onLoadMore,
     onProfileClick,
     onFollow,
     onUnfollow,
   } = props;
   const loadmoreRef = React.createRef<HTMLDivElement>();
-  const intersection = useIntersection(loadmoreRef, { threshold: 0 });
-  useEffect(() => {
-    if (intersection && intersection.isIntersecting) {
-      if (onLoadMore) onLoadMore();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [intersection]);
+
   const borderBottomStyle = borderBottom
     ? `border-b ${getColorClasses(
         {
@@ -95,16 +81,6 @@ const Entry: React.FC<EntryProps> = props => {
           allowMinimization
         />
       </Stack>
-      {hasNextPage && (
-        <Stack justify="center" ref={loadmoreRef}>
-          <Button
-            icon="ArrowPathIcon"
-            iconDirection="left"
-            label={loadingMoreLabel}
-            variant="text"
-          />
-        </Stack>
-      )}
     </Stack>
   );
 };

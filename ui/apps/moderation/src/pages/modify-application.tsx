@@ -1,19 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 
 import ModifyApplication from '../components/moderator/become-moderator/modify-application';
 
-import { reasons } from '../utils';
+import { BasePageProps } from './dashboard';
 import { CHECK_APPLICATION_STATUS, HOME } from '../routes';
+import { reasons } from '../utils';
 
-export interface IModifyApplicationPageProps {
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const ModifyApplicationPage: React.FC<IModifyApplicationPageProps> = props => {
+export const ModifyApplicationPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');

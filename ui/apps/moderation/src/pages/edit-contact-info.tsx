@@ -1,17 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import EditContactInfo from '../components/dashboard/tabs/general/contact-info';
 
+import { BasePageProps } from './dashboard';
 import { DASHBOARD } from '../routes';
 
-export interface IEditContactInfoPageProps {
-  user: string | null;
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const EditContactInfoPage: React.FC<IEditContactInfoPageProps> = props => {
+export const EditContactInfoPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');

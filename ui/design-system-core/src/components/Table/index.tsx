@@ -13,6 +13,7 @@ export interface ITableProps {
   rows: TDataValues[];
   hasIcons?: boolean;
   clickableRows?: boolean;
+  customTdStyle?: string;
   onRowClick?: (contentId: string) => void;
 }
 
@@ -23,6 +24,7 @@ const Table: React.FC<ITableProps> = props => {
     rows,
     hasIcons = false,
     clickableRows = false,
+    customTdStyle = '',
     onRowClick,
   } = props;
 
@@ -32,7 +34,7 @@ const Table: React.FC<ITableProps> = props => {
     }
   };
 
-  const baseRowStyle = apply('py-4 px-5');
+  const baseTdStyle = apply(`py-4 px-5 ${customTdStyle}`);
 
   return (
     <>
@@ -44,12 +46,12 @@ const Table: React.FC<ITableProps> = props => {
         </Box>
       )}
 
-      <table className={tw('table-auto')}>
+      <table className={tw('table-auto w-full')}>
         {theadValues && (
           <thead>
             <tr>
               {theadValues.map((value, idx) => (
-                <th key={value + idx} className={tw(baseRowStyle)}>
+                <th key={value + idx} className={tw(baseTdStyle)}>
                   <Text>{value}</Text>
                 </th>
               ))}
@@ -61,14 +63,16 @@ const Table: React.FC<ITableProps> = props => {
             <tr
               key={idx}
               className={tw(
-                `border(t-1 grey8 dark:grey5) cursor-${clickableRows ? 'pointer' : 'default'}`,
+                `${
+                  !theadValues && idx === 0 ? 'border-none' : 'border(t-1 grey8 dark:grey5)'
+                } cursor-${clickableRows ? 'pointer' : 'default'}`,
               )}
               onClick={handleRowClick(valueArr[3])}
             >
               {valueArr.map((value, idx) => (
                 <td
                   key={value + idx}
-                  className={`${baseRowStyle} ${hasIcons && idx === 3 ? 'flex justify-end' : ''}`}
+                  className={`${baseTdStyle} ${hasIcons && idx === 3 ? 'flex justify-end' : ''}`}
                 >
                   {hasIcons && idx === 2 ? (
                     <div className={tw('flex space-x-1.5 items-center')}>

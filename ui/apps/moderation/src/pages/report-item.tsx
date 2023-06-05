@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -10,14 +9,11 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { ReportItem, ReportItemConfirmation } from '../components/report';
 
+import { BasePageProps } from './dashboard';
 import { HOME } from '../routes';
 import { reportDetailsSubtitles, reasons, externalLinks } from '../utils';
 
-export interface IReportItemPageProps {
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const ReportItemPage: React.FC<IReportItemPageProps> = props => {
+export const ReportItemPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const [step, setStep] = useState<number>(0);

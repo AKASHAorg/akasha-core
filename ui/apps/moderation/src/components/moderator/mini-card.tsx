@@ -11,14 +11,14 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
 import { formatDate } from '../../utils';
 
-export interface IModeratorDetailMiniCardProps {
+export type ModeratorDetailMiniCardProps = {
   moderator: Moderator;
   hasBorderBottom: boolean;
   tenureInfoLabel: string;
   onCardClick: (profileId: string) => void;
-}
+};
 
-const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props => {
+const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props => {
   const { moderator, hasBorderBottom, tenureInfoLabel, onCardClick } = props;
 
   const borderBottomStyle = `${hasBorderBottom ? 'border(b-1 solid grey8 dark:grey3)' : ''}`;
