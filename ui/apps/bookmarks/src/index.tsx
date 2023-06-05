@@ -21,9 +21,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       ),
     });
   },
-  title: 'Lists | Akasha World',
+  title: 'List | Akasha World',
   menuItems: {
-    label: 'Lists',
+    label: 'List',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
     area: [MenuItemAreaType.AppArea],

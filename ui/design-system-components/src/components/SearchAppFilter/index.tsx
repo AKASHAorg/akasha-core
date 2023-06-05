@@ -28,7 +28,7 @@ const SearchAppFilter: React.FC<SearchAppFilterProps> = ({
           placeholderLabel="All"
         />
       </div>
-      <Button variant="secondary" icon="PlusIcon" plain={true}>
+      <Button variant="text" size="md" plain={true} customStyle="text-grey4 dark:text-grey7">
         {resetLabel}
       </Button>
     </div>

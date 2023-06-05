@@ -20,7 +20,6 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
   const { t } = useTranslation('app-lists');
 
   const [filterByCategory, setfilterCategory] = React.useState(null);
-  const categoryFilterPlaceholderLabel = t('All Categories');
 
   const [showMenu, setShowMenu] = React.useState(false);
 
@@ -33,6 +32,16 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
       },
     },
   ];
+
+  const dropDownMenuItems = [
+    { id: '0', title: t('All Categories') },
+    { id: '1', title: t('Beams') },
+    { id: '2', title: t('Reflections') },
+  ];
+
+  const resetHandler = () => {
+    setfilterCategory(dropDownMenuItems[0]);
+  };
 
   return (
     <React.Fragment>
@@ -48,19 +57,21 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
         </Stack>
       </Stack>
       <div className={tw('flex justify-between items-center')}>
-        <div className={tw('w-2/6 mt-6')}>
+        <div className={tw('w-full md:w-2/6 mt-6')}>
           <DropDown
             name="filterByCategory"
-            placeholderLabel={categoryFilterPlaceholderLabel}
             selected={filterByCategory}
-            menuItems={[
-              { id: '1', title: t('Beams') },
-              { id: '2', title: t('Reflections') },
-            ]}
+            menuItems={dropDownMenuItems}
             setSelected={setfilterCategory}
           />
         </div>
-        <Button variant="secondary" plain={true}>
+        <Button
+          variant="secondary"
+          plain={true}
+          size="md"
+          customStyle="text-grey4 dark:text-grey7"
+          onClick={resetHandler}
+        >
           {resetLabel}
         </Button>
       </div>
