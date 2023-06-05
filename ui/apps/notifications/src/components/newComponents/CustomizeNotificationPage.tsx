@@ -117,7 +117,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   );
 
   const [allStates, setAllStates] = React.useState({
-    social: socialAppCheckboxes.map(e => e.selected),
+    socialapp: socialAppCheckboxes.map(e => e.selected),
     articleApp: articleAppCheckboxes.map(e => e.selected),
     moderationApp: moderationAppCheckboxes.map(e => e.selected),
     integrationCenter: integrationCenterCheckboxes.map(e => e.selected),
@@ -132,6 +132,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   if (showFeedback) {
     setTimeout(() => {
       setShowFeedback(false);
+      setMessage('');
     }, 6000);
   }
 
@@ -145,7 +146,8 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   }, []);
 
   //for the button, disabled when no change made, enabled when there's an change
-  const [updateButtonDisabled, setUpdateButtonDisabled] = React.useState(true);
+  // const [updateButtonDisabled, setUpdateButtonDisabled] = React.useState(true);
+  const [isChanged, setIsChanged] = React.useState(false);
 
   const snoozeChangeHandler = () => {
     setSnoozed(!snoozed);
@@ -159,8 +161,8 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   const changeHandler = (pos: number, section: string): void => {
     const stateArray = (() => {
       switch (section) {
-        case 'social':
-          return allStates.social;
+        case 'socialapp':
+          return allStates.socialapp;
         case 'articleApp':
           return allStates.articleApp;
         case 'moderationApp':
@@ -171,6 +173,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     })();
     const updatedCheckedState = stateArray.map((item, idx) => (idx === pos ? !item : item));
     setAllStates({ ...allStates, [section]: updatedCheckedState });
+    setIsChanged(true);
   };
 
   const Content = ({
@@ -202,17 +205,18 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   };
 
   // detects if user changes any of the setting options and then enable the Update button
-  React.useEffect(() => {
-    setUpdateButtonDisabled(!updateButtonDisabled);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected, allStates, snoozed]);
+  // React.useEffect(() => {
+  //   // setUpdateButtonDisabled(!updateButtonDisabled);
+  //   setIsChanged(!isChanged);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isChanged]);
 
   // auto-selects all when I want to receive all notification is checked
   React.useEffect(() => {
     if (selected == true) {
       setAllStates({
         ...allStates,
-        social: Array(socialAppCheckboxes.length).fill(true),
+        socialapp: Array(socialAppCheckboxes.length).fill(true),
         articleApp: Array(articleAppCheckboxes.length).fill(true),
         moderationApp: Array(moderationAppCheckboxes.length).fill(true),
         integrationCenter: Array(integrationCenterCheckboxes.length).fill(true),
@@ -271,7 +275,8 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
       }
 
       // disable the button again after saving preferences
-      setUpdateButtonDisabled(true);
+      // setUpdateButtonDisabled(true);
+      setIsChanged(false);
 
       // navigate to final step
       initial && goToNextStep();
@@ -330,14 +335,17 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
           value="I want to receive all types of notifications"
           name="check-all"
           isSelected={selected}
-          handleChange={() => setSelected(!selected)}
+          handleChange={() => {
+            setSelected(!selected);
+            !initial && setIsChanged(true);
+          }}
           customStyle="ml-2"
         />
         <Divider customStyle="my-2" />
         <div className={tw('min-h-[80%]')}>
           <Accordion
             titleNode={<Title title={t('Social App')} />}
-            contentNode={<Content checkboxArray={socialAppCheckboxes} section={'social'} />}
+            contentNode={<Content checkboxArray={socialAppCheckboxes} section={'socialapp'} />}
             open={initial}
           />
           <Divider customStyle="my-2" />
@@ -386,7 +394,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
                 variant="primary"
                 label={t('Update')}
                 onClick={confirmHandler}
-                disabled={updateButtonDisabled}
+                disabled={!isChanged}
               />
             </>
           )}
