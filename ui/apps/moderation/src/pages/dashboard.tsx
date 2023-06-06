@@ -1,25 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { ModeratorApplicantData, NavigateToParams } from '@akashaorg/typings/ui';
+import { NavigateToParams } from '@akashaorg/typings/ui';
+import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
+import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
 import ModeratorDashboard from '../components/dashboard';
 import GuestDashboard from '../components/dashboard/guest';
 
-import { generateApplicants, preSelectedReasons } from '../utils';
+import { generateApplicants, generateApplicationsHistory, preSelectedReasons } from '../utils';
 import { baseDashboardUrl } from '../routes';
 
-export interface IDashboardProps {
-  user: string | null;
+export type BasePageProps = {
+  user?: string | null;
+  navigateTo: (args: NavigateToParams) => void;
+};
+
+export type DashboardProps = BasePageProps & {
   isAuthorised: boolean;
   isAdmin: boolean;
-  navigateTo: (args: NavigateToParams) => void;
-}
+};
 
-export const Dashboard: React.FC<IDashboardProps> = props => {
+export const Dashboard: React.FC<DashboardProps> = props => {
   const { isAuthorised, isAdmin, navigateTo } = props;
 
+  const [pages, setPages] = useState<PaginatedItem[]>([]);
+
   const { t } = useTranslation('app-moderation-ewa');
+
+  const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
+
+  useEffect(() => {
+    if (logItemsQuery.data) {
+      const results = logItemsQuery.data.pages[0].results;
+
+      setPages([...pages, results]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logItemsQuery.data]);
 
   const handleButtonClick = (route: string) => () => {
     navigateTo?.({
@@ -28,10 +47,24 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
     });
   };
 
-  const handleClickApplicant = (applicant: ModeratorApplicantData) => () => {
+  const handleClickApplicant = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `${baseDashboardUrl}/applicant/${applicant.did.id}`,
+      getNavigationUrl: () => `${baseDashboardUrl}/application/${id}`,
+    });
+  };
+
+  const handleClickViewAll = (activity: 'applications' | 'moderation') => () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: () => `${baseDashboardUrl}/activity/${activity}`,
+    });
+  };
+
+  const handleModerationRowClick = (id: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: navRoutes => `${navRoutes['Transparency Log']}/${id}`,
     });
   };
 
@@ -43,6 +76,23 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
     : 'You can resign anytime from your role. By resigning you will not be able anymore to receive and vote on reported content.';
 
   const role = isAdmin ? 'Admin' : 'Moderator';
+
+  const moderationRows =
+    pages[0]?.map(el => [
+      dayjs(el.moderatedDate).format('DD MMM YYYY'),
+      t('{{type}}', { type: contentTypeMap[el.contentType] }),
+      el.delisted ? t('Delisted') : t('Kept'),
+      el.contentID,
+    ]) ?? [];
+
+  const applications = generateApplicationsHistory();
+
+  const applicationsRows = applications.map(el => [
+    dayjs(el.reviewDate).format('DD MMM YYYY'),
+    `@${el.name}`,
+    el.approved ? t('Accepted') : t('Rejected'),
+    el.contentID,
+  ]);
 
   if (!isAuthorised) {
     return <GuestDashboard navigateTo={navigateTo} />;
@@ -75,7 +125,15 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
       moderationDutiesDescLabel={t('{{descLabel}}', { descLabel })}
       changeLabel={t('Change')}
       resignButtonLabel={t('Resign from {{role}} role', { role })}
+      applicationsTitleLabel={t('Applications')}
+      moderationTitleLabel={t('Moderation')}
+      viewAllLabel={t('View All')}
+      moderationRows={moderationRows}
+      applicationsRows={applicationsRows}
       applicants={generateApplicants()}
+      onClickViewAll={handleClickViewAll}
+      onApplicationsRowClick={handleClickApplicant}
+      onModerationRowClick={handleModerationRowClick}
       onButtonClick={handleButtonClick}
       onClickApplicant={handleClickApplicant}
     />

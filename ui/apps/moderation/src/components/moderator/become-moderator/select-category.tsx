@@ -4,17 +4,18 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import {
   CategoryPills,
-  ICategoryPillsProps,
-  ISteppedActionWrapperProps,
+  CategoryPillsProps,
+  SteppedActionWrapperProps,
   SteppedActionWrapper,
 } from '../../common';
 
-export interface IBMSelectCategoryProps extends ISteppedActionWrapperProps {
-  titleLabel: string;
-  subtitleLabel: string;
-}
+export type BMSelectCategoryProps = SteppedActionWrapperProps &
+  CategoryPillsProps & {
+    titleLabel: string;
+    subtitleLabel: string;
+  };
 
-const BMSelectCategory: React.FC<IBMSelectCategoryProps & ICategoryPillsProps> = props => {
+const BMSelectCategory: React.FC<BMSelectCategoryProps> = props => {
   const { subtitleLabel } = props;
 
   return (

@@ -6,17 +6,17 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import { IPageHeaderProps, PageHeader } from '../../../common';
+import { PageHeaderProps, PageHeader } from '../../../common';
 
-export interface IEditContactInfoProps extends IPageHeaderProps {
+export type EditContactInfoProps = PageHeaderProps & {
   usernameLabel: string;
   usernamePlaceholderLabel: string;
   emailLabel: string;
   emailPlaceholderLabel: string;
   fillfromProfileLabel: string;
-}
+};
 
-const EditContactInfo: React.FC<IEditContactInfoProps> = props => {
+const EditContactInfo: React.FC<EditContactInfoProps> = props => {
   const {
     usernameLabel,
     usernamePlaceholderLabel,

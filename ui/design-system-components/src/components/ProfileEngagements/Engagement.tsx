@@ -18,13 +18,12 @@ type EngagementProps = {
 export const Engagement: React.FC<EngagementProps> = ({
   type,
   loggedProfileId,
-  followedProfiles,
+  isFollowing,
   follow,
   followLabel,
   followingLabel,
   unFollowLabel,
   profileAnchorLink,
-  loadingMoreLabel,
   ownerUserName,
   viewerIsOwner,
   onError,
@@ -42,7 +41,7 @@ export const Engagement: React.FC<EngagementProps> = ({
       emptyEntryProps = {
         type: 'following',
         userName: ownerUserName,
-        viewerIsOwner: viewerIsOwner,
+        viewerIsOwner,
       };
     }
     return emptyEntryProps ? (
@@ -73,11 +72,8 @@ export const Engagement: React.FC<EngagementProps> = ({
             profileId={profile.did.id}
             avatar={profile.avatar}
             name={profile.name}
-            isFollowing={followedProfiles.includes(profile.did.id)}
+            isFollowing={isFollowing}
             loggedProfileId={loggedProfileId}
-            hasNextPage={follow.hasNextPage}
-            loadingMoreLabel={loadingMoreLabel}
-            onLoadMore={follow.onLoadMore}
             onProfileClick={onProfileClick}
             onFollow={onFollow}
             onUnfollow={onUnfollow}

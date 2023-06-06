@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 
 import BMIntro from '../components/moderator/become-moderator/intro';
@@ -10,16 +9,12 @@ import BMSelectCategory from '../components/moderator/become-moderator/select-ca
 import BMContactInfo from '../components/moderator/become-moderator/contact-info';
 import BMConfirmation from '../components/moderator/become-moderator/confirmation';
 
+import { BasePageProps } from './dashboard';
 import { HOME } from '../routes';
 import { reasons } from '../utils/reasons';
 import { BMConfirmationSubtitles, BMIntroSubtitles } from '../utils';
 
-export interface IBecomeModeratorPageProps {
-  user: string | null;
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const BecomeModeratorPage: React.FC<IBecomeModeratorPageProps> = props => {
+export const BecomeModeratorPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const [activeStep, setActiveStep] = useState(0);

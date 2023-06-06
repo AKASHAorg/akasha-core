@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
-import ApplicantDetailIntro from '../components/dashboard/applicant-detail-intro';
-import ApplicantDetail from '../components/dashboard/applicant-detail';
+import ApplicationDetailIntro from '../components/dashboard/tabs/applications/application-detail-intro';
+import ApplicationDetail from '../components/dashboard/tabs/applications/application-detail';
 
 import { generateApplicants, preSelectedReasons } from '../utils';
 
-export const ApplicantDetailPage: React.FC = () => {
+export const ApplicationDetailPage: React.FC = () => {
   const { id } = useParams();
 
   const applicants = generateApplicants();
@@ -32,7 +32,7 @@ export const ApplicantDetailPage: React.FC = () => {
 
   return (
     <Box customStyle="space-y-4">
-      <ApplicantDetailIntro
+      <ApplicationDetailIntro
         selectedApplicant={selectedApplicant}
         viewProfileLabel={t('View Profile')}
         applicationDateLabel={t('Application date')}
@@ -40,7 +40,7 @@ export const ApplicantDetailPage: React.FC = () => {
         onButtonClick={handleButtonClick}
       />
 
-      <ApplicantDetail
+      <ApplicationDetail
         label={t('Application Details')}
         categoryLabel={t('Moderation category')}
         categories={preSelectedReasons.map(el => t('{{el}}', { el }))}

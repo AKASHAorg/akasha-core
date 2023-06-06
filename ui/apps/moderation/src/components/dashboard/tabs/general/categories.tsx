@@ -1,16 +1,10 @@
 import React from 'react';
 
-import { PageHeader, IPageHeaderProps, CategoryPills, ICategoryPillsProps } from '../../../common';
+import { PageHeader, PageHeaderProps, CategoryPills, CategoryPillsProps } from '../../../common';
 
-export interface IEditCategoriesProps extends IPageHeaderProps {
-  label: string;
-  cancelButtonLabel: string;
-  confirmButtonLabel: string;
-  onCancelButtonClick: () => void;
-  onConfirmButtonClick: () => void;
-}
+export type EditCategoriesProps = PageHeaderProps & CategoryPillsProps;
 
-const EditCategories: React.FC<IEditCategoriesProps & ICategoryPillsProps> = props => {
+const EditCategories: React.FC<EditCategoriesProps> = props => {
   return (
     <PageHeader {...props}>
       <CategoryPills {...props} />

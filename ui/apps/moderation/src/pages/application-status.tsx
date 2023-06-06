@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import ApplicationStatus from '../components/moderator/become-moderator/application-status';
 
+import { BasePageProps } from './dashboard';
 import { ApplicationStatusType } from './overview';
 
 import {
@@ -12,12 +12,11 @@ import {
   applicationUnderReviewSubtitles,
 } from '../utils';
 
-export interface IApplicationStatusPageProps {
+export type ApplicationStatusPageProps = BasePageProps & {
   applicationStatus: ApplicationStatusType | null;
-  navigateTo: (args: NavigateToParams) => void;
-}
+};
 
-export const ApplicationStatusPage: React.FC<IApplicationStatusPageProps> = props => {
+export const ApplicationStatusPage: React.FC<ApplicationStatusPageProps> = props => {
   const { applicationStatus, navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');
