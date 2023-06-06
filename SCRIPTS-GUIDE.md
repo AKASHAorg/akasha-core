@@ -1,4 +1,4 @@
-# Scripts Guide -  Akasha Web Framework
+# Scripts Guide -  Akasha Core
 
 Here is a definitive guide for all the scripts found in the [root package file](./package.json) of this project.
 
@@ -156,6 +156,20 @@ $ npm run start:translations-server
 
 ``` shell script
 $ npm run start:design-system:storybook
+```
+
+## `start:design-system-core:storybook`
+> Starts the storybook for Design System Core components and makes it available on the localhost as well as the local machine's IP
+
+``` shell script
+$ npm run start:design-system-core:storybook
+```
+
+## `start:design-system-components:storybook`
+> Starts the storybook for Design System Components (bigger components that are not atomic and cannot be included in DS Core) and makes it available on the localhost as well as the local machine's IP
+
+``` shell script
+$ npm run start:design-system-components:storybook
 ```
 
 ## `start:only`

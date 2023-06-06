@@ -1,4 +1,4 @@
-AKASHA Social App is the foremost implementation of the AKASHA framework. It consists of various standalone components, services and widgets which interact with each other and form the basis of your experience in the World. Some of the core components in the Social App are the Feed page, Post page and Tag Feed page. 
+AKASHA Social App is the foremost implementation of the AKASHA Core. It consists of various standalone components, services and widgets which interact with each other and form the basis of your experience in the World. Some of the core components in the Social App are the Feed page, Post page and Tag Feed page. 
 
 The AKASHA Foundation created Ethereum World as the first use case of the Social App. It enables the Ethereum community to come together, get the word out about any projects, stories or interesting developments and help the participants stay tuned to the latest news in the Ethereum space.  
 
