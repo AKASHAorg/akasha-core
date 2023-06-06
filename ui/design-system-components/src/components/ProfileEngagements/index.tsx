@@ -9,14 +9,12 @@ export type EngagementItem = {
   label: string;
   status: QueryStatus['status'];
   data: Profile[];
-  hasNextPage: boolean;
-  onLoadMore?: () => void;
 };
 
 export type EngagementsProps = {
   selectedStat: EngagementType;
   loggedProfileId: string;
-  followedProfiles: string[];
+  isFollowing: boolean;
   followers: EngagementItem;
   following: EngagementItem;
   followLabel: string;

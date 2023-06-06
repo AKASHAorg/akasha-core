@@ -5,15 +5,15 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import { IPageHeaderProps, PageHeader } from '../../../common';
+import { PageHeaderProps, PageHeader } from '../../../common';
 
-export interface IEditMaxApplicantsProps extends IPageHeaderProps {
+export type EditMaxApplicantsProps = PageHeaderProps & {
   introLabel: string;
   maxApplicantsLabel: string;
   maxApplicantsPlaceholderLabel: string;
-}
+};
 
-const EditMaxApplicants: React.FC<IEditMaxApplicantsProps> = props => {
+const EditMaxApplicants: React.FC<EditMaxApplicantsProps> = props => {
   const { introLabel, maxApplicantsLabel, maxApplicantsPlaceholderLabel } = props;
 
   return (

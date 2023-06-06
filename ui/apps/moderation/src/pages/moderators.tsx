@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetModerators } from '@akashaorg/ui-awf-hooks';
-import { NavigateToParams } from '@akashaorg/typings/ui';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ModerationSwitchCard from '@akashaorg/design-system-components/lib/components/ModerationSwitchCard';
@@ -11,12 +10,9 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ModeratorDetailMiniCard from '../components/moderator/mini-card';
 
 import { generateTenureInfoLabel } from '../utils';
+import { BasePageProps } from './dashboard';
 
-export interface IModeratorsPageProps {
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const Moderators: React.FC<IModeratorsPageProps> = props => {
+export const Moderators: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const [activeTab, setActiveTab] = useState<string>('All');

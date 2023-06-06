@@ -3,19 +3,20 @@ import { tw } from '@twind/core';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import {
-  ISteppedActionWrapperProps,
-  ISubtitleRendererProps,
+  SteppedActionWrapperProps,
+  SubtitleRendererProps,
   SteppedActionWrapper,
   SubtitleRenderer,
 } from '../../common';
 
-export interface IBMConfirmationProps extends ISteppedActionWrapperProps {
-  assetName?: string;
-  publicImgPath?: string;
-  titleLabel: string;
-}
+export type BMConfirmationProps = SteppedActionWrapperProps &
+  SubtitleRendererProps & {
+    assetName?: string;
+    publicImgPath?: string;
+    titleLabel: string;
+  };
 
-const BMConfirmation: React.FC<IBMConfirmationProps & ISubtitleRendererProps> = props => {
+const BMConfirmation: React.FC<BMConfirmationProps> = props => {
   const { assetName = 'moderation', publicImgPath = '/images' } = props;
 
   return (

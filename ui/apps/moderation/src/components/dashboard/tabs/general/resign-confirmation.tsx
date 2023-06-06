@@ -7,14 +7,14 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IResignConfirmationProps {
+export type ResignConfirmationProps = {
   titleLabel: string;
   subtitleLabel: string;
   assetName?: string;
   onCloseButtonClick: () => void;
-}
+};
 
-const ResignConfirmation: React.FC<IResignConfirmationProps> = props => {
+const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
   const { titleLabel, subtitleLabel, onCloseButtonClick } = props;
 
   return (

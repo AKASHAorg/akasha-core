@@ -3,15 +3,15 @@ import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface ISubtitleRendererProps {
+export type SubtitleRendererProps = {
   textVariant?: TextProps['variant'];
   textAlign?: TextProps['align'];
   textColor?: TextProps['color'];
   subtitleLabels: { label: string; link?: string }[];
   onLinkClick: (link?: string) => () => void;
-}
+};
 
-export const SubtitleRenderer: React.FC<ISubtitleRendererProps> = props => {
+export const SubtitleRenderer: React.FC<SubtitleRendererProps> = props => {
   const { textVariant, textAlign = 'center', textColor, subtitleLabels, onLinkClick } = props;
 
   return (

@@ -7,18 +7,19 @@ import {
   ActivityTab,
   ApplicationsTab,
   GeneralTab,
-  IApplicationsTabProps,
-  IGeneralTabProps,
+  ActivityTabProps,
+  ApplicationsTabProps,
+  GeneralTabProps,
 } from './tabs';
 
-export interface IModeratorDashboardProps {
-  isAdmin: boolean;
-  tabLabels: string[];
-}
+export type ModeratorDashboardProps = GeneralTabProps &
+  ApplicationsTabProps &
+  ActivityTabProps & {
+    isAdmin: boolean;
+    tabLabels: string[];
+  };
 
-const ModeratorDashboard: React.FC<
-  IModeratorDashboardProps & IGeneralTabProps & IApplicationsTabProps
-> = props => {
+const ModeratorDashboard: React.FC<ModeratorDashboardProps> = props => {
   const { tabLabels, isAdmin } = props;
 
   const [activeTab, setActiveTab] = useState(0);
@@ -33,7 +34,7 @@ const ModeratorDashboard: React.FC<
         {isAdmin && <ApplicationsTab {...props} />}
 
         {/* Activity tab */}
-        <ActivityTab placeholder="Activities will appear here" />
+        <ActivityTab {...props} />
       </Tab>
     </BasicCardBox>
   );

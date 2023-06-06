@@ -4,15 +4,15 @@ import { ModerationCategory } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 
-export interface ICategoryPillsProps {
+export type CategoryPillsProps = {
   categories: string[];
   moderationCategories: ModerationCategory[];
   allCategoriesLabel?: string;
   allCategoriesSelected?: boolean;
   onPillClick: (category?: ModerationCategory) => () => void;
-}
+};
 
-export const CategoryPills: React.FC<ICategoryPillsProps> = props => {
+export const CategoryPills: React.FC<CategoryPillsProps> = props => {
   const {
     categories,
     moderationCategories,

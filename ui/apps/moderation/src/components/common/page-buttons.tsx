@@ -3,14 +3,14 @@ import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IPageButtonsProps {
+export type PageButtonsProps = {
   cancelButtonLabel?: string;
   confirmButtonLabel?: string;
   onCancelButtonClick?: () => void;
   onConfirmButtonClick?: () => void;
-}
+};
 
-export const PageButtons: React.FC<IPageButtonsProps> = props => {
+export const PageButtons: React.FC<PageButtonsProps> = props => {
   const { cancelButtonLabel, confirmButtonLabel, onCancelButtonClick, onConfirmButtonClick } =
     props;
 

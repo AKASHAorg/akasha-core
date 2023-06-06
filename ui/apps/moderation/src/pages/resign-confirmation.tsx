@@ -1,17 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import ResignConfirmation from '../components/dashboard/tabs/general/resign-confirmation';
 
+import { BasePageProps } from './dashboard';
 import { HOME } from '../routes';
 
-export interface IResignConfirmationPageProps {
-  user: string | null;
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const ResignConfirmationPage: React.FC<IResignConfirmationPageProps> = props => {
+export const ResignConfirmationPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');
