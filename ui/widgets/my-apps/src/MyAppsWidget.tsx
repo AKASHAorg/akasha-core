@@ -144,7 +144,7 @@ const reactLifecycles = singleSpaReact({
       <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
-          title="Error in integration center widget"
+          title="Error in AKASHAverse widget"
           details={err.message}
         />
       </ThemeWrapper>

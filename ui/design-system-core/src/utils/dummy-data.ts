@@ -37,21 +37,21 @@ const userData: Profile[] = [
 
 const sidebarItems = [
   {
-    title: 'Social Feed',
+    title: 'Antenna',
     submenu: {},
   },
   {
-    title: 'Integration Center',
+    title: 'AKASHAverse',
   },
   {
-    title: 'Moderation',
+    title: 'Vibe',
     submenu: {},
   },
   {
     title: 'Search',
   },
   {
-    title: 'Bookmarks',
+    title: 'List',
   },
   {
     title: 'Notifications',

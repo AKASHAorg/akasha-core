@@ -39,7 +39,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
 
   const [selected, setSelected] = React.useState(true);
 
-  const socialAppCheckboxes = React.useMemo(
+  const antennaAppCheckboxes = React.useMemo(
     () => [
       {
         label: t('New Followers'),
@@ -47,23 +47,23 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
         selected: true,
       },
       {
-        label: t('Replies to my post'),
-        value: 'Replies to my post',
+        label: t('Replies to my beam'),
+        value: 'Replies to my beam',
         selected: true,
       },
       {
-        label: t('Mentions me in a post / reply'),
-        value: 'Mentions me in a post / reply',
+        label: t('Mentions me in a beam / reflection'),
+        value: 'Mentions me in a beam / reflection',
         selected: true,
       },
       {
-        label: t('Someone sharing my post'),
-        value: 'Someone sharing my post',
+        label: t('Someone sharing my beam'),
+        value: 'Someone sharing my beam',
         selected: true,
       },
       {
-        label: t('When someone I am following posts new content'),
-        value: 'When someone I am following posts new content',
+        label: t('When someone I am following beams new content'),
+        value: 'When someone I am following beams new content',
         selected: true,
       },
       {
@@ -75,27 +75,27 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     [t],
   );
 
-  const articleAppCheckboxes = React.useMemo(
+  const beamAppCheckboxes = React.useMemo(
     () => [
       {
-        label: t('Replies to my Article'),
-        value: 'Replies to my Article',
+        label: t('Replies to my Beam'),
+        value: 'Replies to my Beam',
         selected: true,
       },
       {
-        label: t('Quotes me in an Article.'),
-        value: 'Quotes me in an Article',
+        label: t('Quotes me in an Beam.'),
+        value: 'Quotes me in an Beam',
         selected: true,
       },
       {
-        label: t('Someone shares my Article'),
-        value: 'Someone shares my Article',
+        label: t('Someone shares my Beam'),
+        value: 'Someone shares my Beam',
         selected: true,
       },
     ],
     [t],
   );
-  const moderationAppCheckboxes = React.useMemo(
+  const vibeAppCheckboxes = React.useMemo(
     () => [
       {
         label: t('My content gets delisted/kept'),
@@ -117,9 +117,9 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   );
 
   const [allStates, setAllStates] = React.useState({
-    social: socialAppCheckboxes.map(e => e.selected),
-    articleApp: articleAppCheckboxes.map(e => e.selected),
-    moderationApp: moderationAppCheckboxes.map(e => e.selected),
+    antenna: antennaAppCheckboxes.map(e => e.selected),
+    beamApp: beamAppCheckboxes.map(e => e.selected),
+    vibeApp: vibeAppCheckboxes.map(e => e.selected),
     integrationCenter: integrationCenterCheckboxes.map(e => e.selected),
   });
 
@@ -159,12 +159,12 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   const changeHandler = (pos: number, section: string): void => {
     const stateArray = (() => {
       switch (section) {
-        case 'social':
-          return allStates.social;
-        case 'articleApp':
-          return allStates.articleApp;
-        case 'moderationApp':
-          return allStates.moderationApp;
+        case 'antenna':
+          return allStates.antenna;
+        case 'beamApp':
+          return allStates.beamApp;
+        case 'vibeApp':
+          return allStates.vibeApp;
         case 'integrationCenter':
           return allStates.integrationCenter;
       }
@@ -212,9 +212,9 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     if (selected == true) {
       setAllStates({
         ...allStates,
-        social: Array(socialAppCheckboxes.length).fill(true),
-        articleApp: Array(articleAppCheckboxes.length).fill(true),
-        moderationApp: Array(moderationAppCheckboxes.length).fill(true),
+        antenna: Array(antennaAppCheckboxes.length).fill(true),
+        beamApp: Array(beamAppCheckboxes.length).fill(true),
+        vibeApp: Array(vibeAppCheckboxes.length).fill(true),
         integrationCenter: Array(integrationCenterCheckboxes.length).fill(true),
       });
     }
@@ -336,27 +336,25 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
         <Divider customStyle="my-2" />
         <div className={tw('min-h-[80%]')}>
           <Accordion
-            titleNode={<Title title={t('Social App')} />}
-            contentNode={<Content checkboxArray={socialAppCheckboxes} section={'social'} />}
+            titleNode={<Title title={t('Antenna App')} />}
+            contentNode={<Content checkboxArray={antennaAppCheckboxes} section={'antenna'} />}
             open={initial}
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={<Title title={t('Article App')} />}
-            contentNode={<Content checkboxArray={articleAppCheckboxes} section={'articleApp'} />}
+            titleNode={<Title title={t('Beam App')} />}
+            contentNode={<Content checkboxArray={beamAppCheckboxes} section={'beamApp'} />}
             open={initial}
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={<Title title={t('Moderation App')} />}
-            contentNode={
-              <Content checkboxArray={moderationAppCheckboxes} section={'moderationApp'} />
-            }
+            titleNode={<Title title={t('Vibe App')} />}
+            contentNode={<Content checkboxArray={vibeAppCheckboxes} section={'vibeApp'} />}
             open={initial}
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={<Title title={t('Integration Center')} />}
+            titleNode={<Title title={t('AKASHAverse')} />}
             contentNode={
               <Content checkboxArray={integrationCenterCheckboxes} section={'integrationCenter'} />
             }

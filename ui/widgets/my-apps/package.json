@@ -2,7 +2,7 @@
   "name": "@akashaorg/ui-widget-my-apps",
   "version": "0.1.0",
   "type": "module",
-  "description": "My Apps widget for integration center",
+  "description": "My Apps widget for AKASHAverse",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",

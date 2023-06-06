@@ -84,7 +84,7 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
             'Our article editor features pretty awesome stuff like adding blocks to your article that will help you elaborate your story better!',
           )}
           textLine3Label={t(
-            'Be sure to visit the integration center every now and then to check the apps that come with great blocks for your articles!',
+            'Be sure to visit the AKASHAverse every now and then to check the apps that come with great blocks for your articles!',
           )}
           skipLabel={t('Skip')}
           nextLabel={t('Next')}

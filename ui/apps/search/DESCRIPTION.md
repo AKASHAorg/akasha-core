@@ -1,4 +1,4 @@
-The AKASHA Foundation built this application to help participants in Ethereum World or any other dsocial World in the future discover relevant content, conversations, profiles and wonderful people to follow.
+The AKASHA Foundation built this application to help participants in Akasha World or any other dsocial World in the future discover relevant content, conversations, profiles and wonderful people to follow.
 
 Search app allows you to tailor search results to specific people, topics, posts or replies. It makes it easier to refine your search and quickly find specific post or anything you're looking for.
 

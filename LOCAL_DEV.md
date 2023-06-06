@@ -1,6 +1,6 @@
 ## Local Development Setup
 
-To start local development, you need a running local Ceramic node. Luckily, the steps to set one up is very simple.
+To start local development, you need a local running Ceramic node. Luckily, the steps to set one up is very simple.
 
 - Set up a local Ceramic Node <sup>1</sup>
   1. Follow this [detailed guide](https://composedb.js.org/docs/0.4.x/set-up-your-environment) from ComposeDB that shows you how to install and configure relevant packages for running a local Ceramic node.

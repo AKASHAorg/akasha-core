@@ -52,7 +52,7 @@ const installedAppsData: IMenuItem[] = [
     area: [MenuItemAreaType.AppArea],
   },
   {
-    label: 'Integration Center',
+    label: 'AKASHAverse',
     index: 4,
     route: '/integration-app',
     type: MenuItemType.App,
@@ -154,7 +154,7 @@ const installedAppsData: IMenuItem[] = [
     subRoutes: [],
   },
   {
-    label: 'App Center',
+    label: 'AKASHAverse',
     index: 7,
     route: '/appcenter',
     type: MenuItemType.Plugin,
