@@ -112,8 +112,8 @@ const EntryList = (props: EntryListProps) => {
         </Anchor>
       )}
       {!viewAllEntry && (props.status === 'loading' || props.hasNextPage) && (
-        <Box customStyle="p-8">
-          <Spinner ref={loadmoreRef} />
+        <Box customStyle="p-8" ref={loadmoreRef}>
+          <Spinner />
         </Box>
       )}
       <ScrollTopWrapper placement={scrollTopButtonPlacement}>

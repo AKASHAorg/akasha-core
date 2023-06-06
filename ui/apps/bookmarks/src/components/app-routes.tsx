@@ -8,7 +8,7 @@ const AppRoutes = (props: RootComponentProps) => {
   return (
     <Router basename={props.baseRouteName}>
       <Helmet>
-        <title>My Lists | Akasha World</title>
+        <title>My List | Akasha World</title>
       </Helmet>
       <Routes>
         <Route path="/" element={<ListsPage {...props} />} />
