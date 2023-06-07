@@ -77,7 +77,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/app-notifications',
       '@akashaorg/app-legal',
       '@akashaorg/app-translation',
-      '@akashaorg/app-bookmarks',
+      '@akashaorg/app-lists',
       '@akashaorg/app-settings-ewa',
     ],
     // pre-installed widgets;

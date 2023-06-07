@@ -362,7 +362,7 @@
         }
       }
     },
-    "@akashaorg/app-bookmarks": {
+    "@akashaorg/app-lists": {
       "root": "ui/apps/bookmarks",
       "sourceRoot": "ui/apps/bookmarks/src",
       "projectType": "application",
