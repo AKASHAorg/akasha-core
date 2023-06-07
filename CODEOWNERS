@@ -1,0 +1,9 @@
+*.json @kenshyx @SeverS
+/build/ @kenshyx
+/tools/ @kenshyx
+/sdk/ @kenshyx @SeverS
+/typings/ @kenshyx @SeverS @quininez
+/tests/ @didd
+/ui/hooks/ @quininez @SeverS
+/ui/design-system-core/ @quininez @didd @josenriagu @themonster2015
+/ui/design-system-components/ @quininez @didd @josenriagu @themonster2015
