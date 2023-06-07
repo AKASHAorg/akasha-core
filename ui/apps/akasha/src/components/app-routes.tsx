@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import DS from '@akashaorg/design-system';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 
 import FeedPage from './feed-page/feed-page';
@@ -14,8 +13,7 @@ import TagFeedPage from './tag-feed-page/tag-feed-page';
 import routes, { FEED, MY_FEED, PROFILE_FEED, POST, REPLY, TAGS, INVITE } from '../routes';
 import ReplyPage from './item-page/reply-page';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-
-const { Box } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetMyProfileQuery(null, {
@@ -31,7 +29,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Router basename={props.baseRouteName}>
-      <Box>
+      <Box customStyle="flex">
         <Routes>
           <Route
             path={routes[FEED]}

@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useInfinitePostsByAuthor, useGetProfile } from '@akashaorg/ui-awf-hooks';
@@ -12,8 +11,8 @@ import {
   Profile,
   ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
-
-const { Box, Helmet } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: Profile;
@@ -77,13 +76,13 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
   };
 
   return (
-    <Box fill="horizontal">
-      <Helmet>
+    <Box customStyle="w-full">
+      <Helmet.Helmet>
         <title>
           {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | Ethereum
           World
         </title>
-      </Helmet>
+      </Helmet.Helmet>
 
       <>
         {reqPosts.isError && reqPosts.error && (
