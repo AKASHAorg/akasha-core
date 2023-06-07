@@ -1,5 +1,5 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
+
 import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/ui';
 import {
   useEditComment,
@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
-const { EntryCardLoading } = DS;
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
 type Props = {
   commentId: string;

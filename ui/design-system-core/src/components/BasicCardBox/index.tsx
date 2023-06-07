@@ -4,6 +4,7 @@ import React, { PropsWithChildren } from 'react';
 export interface IBasicCardBox {
   elevation?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'inner' | 'none';
   dashedBorder?: boolean;
+  accentBorder?: boolean;
   rootNodeRef?: React.Ref<HTMLDivElement>;
   pad?: string;
   margin?: string;
@@ -19,6 +20,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
     children,
     elevation = '[0_0_4px_rgba(0,0,0,0.2)]',
     dashedBorder,
+    accentBorder,
     rootNodeRef,
     pad = 'p-6',
     margin = 'm-0',
@@ -36,6 +38,9 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
 
     if (border) {
       return 'border(1 solid grey9 dark:grey3)';
+    }
+    if (accentBorder) {
+      return 'border(1 solid secondaryLight dark:secondaryDark';
     }
 
     /**
