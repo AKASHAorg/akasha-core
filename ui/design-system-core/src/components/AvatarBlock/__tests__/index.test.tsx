@@ -43,7 +43,7 @@ describe('<AvatarBlock /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('renders correct name and userName', () => {
+  it('has correct name and userName', () => {
     const { getByText } = componentWrapper;
 
     const name = getByText(profile.name);

@@ -1,23 +1,26 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
+import CopyToClipboard from '../';
 import { customRender } from '../../../test-utils';
-import BasicCardBox from '../';
 
-const label = 'Card content';
-const CardContent = (
-  <>
-    <div>{label}</div>
-    <div>{label}</div>
-    <div>{label}</div>
-  </>
-);
-
-describe('<BasicCardBox /> Component', () => {
+describe('<CopyToClipboard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
+
+  const text = 'value';
+
+  const content = (
+    <>
+      <p>{text}</p>
+      <p>{text}</p>
+    </>
+  );
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<BasicCardBox> {CardContent}</BasicCardBox>, {});
+      componentWrapper = customRender(
+        <CopyToClipboard value={text}>{content}</CopyToClipboard>,
+        {},
+      );
     });
   });
 
@@ -31,10 +34,12 @@ describe('<BasicCardBox /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('renders children correctly', () => {
+  it('has correct content', () => {
     const { getAllByText } = componentWrapper;
-    const childDiv = getAllByText(label);
-    expect(childDiv).toBeDefined();
-    expect(childDiv.length).toEqual(3);
+
+    const contents = getAllByText(text);
+
+    expect(contents).toBeDefined();
+    expect(contents).toHaveLength(2);
   });
 });

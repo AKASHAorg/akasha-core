@@ -1,20 +1,16 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
-import BasicInfoCard from '../';
+import ContentBlock from '../';
 import { customRender } from '../../../test-utils';
 
-const titleLabel = 'title';
-const subtitleLabel = 'Subtitle';
-
-describe('<BasicInfoCard /> Component', () => {
+describe('<ContentBlock /> Component', () => {
   let componentWrapper = customRender(<></>, {});
+
+  const blockTitle = 'Block title';
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(
-        <BasicInfoCard titleLabel={titleLabel} subtitleLabel={subtitleLabel} />,
-        {},
-      );
+      componentWrapper = customRender(<ContentBlock blockTitle={blockTitle} />, {});
     });
   });
 
@@ -28,12 +24,11 @@ describe('<BasicInfoCard /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('has correct title and subtitle', () => {
+  it('has correct block title', () => {
     const { getByText } = componentWrapper;
-    const title = getByText(titleLabel);
-    const subtitle = getByText(subtitleLabel);
 
-    expect(title).toBeDefined();
-    expect(subtitle).toBeDefined();
+    const found = getByText(blockTitle);
+
+    expect(found).toBeDefined();
   });
 });

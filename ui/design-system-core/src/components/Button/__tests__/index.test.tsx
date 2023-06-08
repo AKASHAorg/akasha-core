@@ -34,6 +34,7 @@ describe('<Button /> Component', () => {
     const buttonLabel = getByText(label);
     expect(buttonLabel).toBeDefined();
   });
+
   it('correctly call handler function when clicked', () => {
     const { container } = componentWrapper;
     const button = container.querySelector('button');

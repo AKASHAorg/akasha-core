@@ -1,23 +1,24 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
+import Card from '../';
 import { customRender } from '../../../test-utils';
-import BasicCardBox from '../';
 
-const label = 'Card content';
-const CardContent = (
-  <>
-    <div>{label}</div>
-    <div>{label}</div>
-    <div>{label}</div>
-  </>
-);
-
-describe('<BasicCardBox /> Component', () => {
+describe('<Card /> Component', () => {
   let componentWrapper = customRender(<></>, {});
+
+  const content = 'Card Content';
+
+  const children = (
+    <>
+      <p>{content}</p>
+      <p>{content}</p>
+      <p>{content}</p>
+    </>
+  );
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<BasicCardBox> {CardContent}</BasicCardBox>, {});
+      componentWrapper = customRender(<Card>{children}</Card>, {});
     });
   });
 
@@ -31,10 +32,12 @@ describe('<BasicCardBox /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('renders children correctly', () => {
+  it('renders correct card content', () => {
     const { getAllByText } = componentWrapper;
-    const childDiv = getAllByText(label);
-    expect(childDiv).toBeDefined();
-    expect(childDiv.length).toEqual(3);
+
+    const contents = getAllByText(content);
+
+    expect(contents).toBeDefined();
+    expect(contents.length).toEqual(3);
   });
 });
