@@ -60,7 +60,7 @@ export const Interests: React.FC<InterestsProps> = ({
   const validForm = allMyInteretstsAreActive && newInterests.length === myInterests.length;
 
   useEffect(() => {
-    if (onFormValid) validForm;
+    if (onFormValid) onFormValid(validForm);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validForm]);
 
@@ -80,7 +80,7 @@ export const Interests: React.FC<InterestsProps> = ({
                 icon="CheckIcon"
                 iconDirection="right"
                 active={true}
-                onPillClick={active => updateMyInterestMap(myInterest, active)}
+                onPillClick={active => updateMyInterestMap(myInterest, !active)}
               />
             ))}
           </Stack>

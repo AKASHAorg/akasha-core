@@ -1,15 +1,13 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
 import ProfileInfoPage from './profile-info-page';
 import EditProfilePage from './edit-profile';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
-
-const { Helmet } = DS;
 
 type ProfilePageProps = {
   editMode?: boolean;
@@ -44,7 +42,6 @@ const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
         type="script-error"
         title={t('There was an error loading this profile')}
         details={t('We cannot show this profile right now')}
-        devDetails={(profileDataReq.error as Error).message}
       />
     );
 
@@ -53,7 +50,7 @@ const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
   return (
     <>
       <Helmet>
-        <title>{t("{{name}}'s Page", { name: `${profileData.name} | ` || '' })}AKASHA World</title>
+        <title>{t("{{name}}'s Page", { name: `${profileData.name}` })} | AKASHA World</title>
       </Helmet>
       {props.editMode ? (
         <EditProfilePage

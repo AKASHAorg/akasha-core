@@ -13,7 +13,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 type ProfileEngagementsPageProps = {
-  selectedStat: EngagementType;
+  engagementType: EngagementType;
 };
 
 const ProfileEngagementsPage: React.FC<
@@ -43,7 +43,7 @@ const ProfileEngagementsPage: React.FC<
     { select: resp => resp.node },
   );
 
-  const updateFollowReq = useUpdateFollowMutation();
+  const followMutation = useUpdateFollowMutation();
 
   if (
     followersReq.status === 'loading' ||
@@ -58,12 +58,12 @@ const ProfileEngagementsPage: React.FC<
 
   const followers =
     followersReq.data && 'isViewer' in followersReq.data
-      ? followersReq.data?.profile?.followers?.edges?.map(edge => edge.node.profile)
+      ? followersReq.data?.profile?.followers?.edges?.map(edge => edge.node)
       : [];
 
   const following =
     followingReq.data && 'isViewer' in followingReq.data
-      ? followingReq.data?.followList?.edges?.map(edge => edge.node.profile)
+      ? followingReq.data?.followList?.edges?.map(edge => edge.node)
       : [];
 
   const onProfileClick = (profileId: string) => {
@@ -74,11 +74,11 @@ const ProfileEngagementsPage: React.FC<
   };
 
   const onFollow = (profileId: string) => {
-    updateFollowReq.mutate({ i: { id: profileId, content: { isFollowing: true } } });
+    followMutation.mutate({ i: { id: profileId, content: { isFollowing: true } } });
   };
 
   const onUnfollow = (profileId: string) => {
-    updateFollowReq.mutate({ i: { id: profileId, content: { isFollowing: false } } });
+    followMutation.mutate({ i: { id: profileId, content: { isFollowing: false } } });
   };
 
   const onError = () => {
@@ -90,9 +90,7 @@ const ProfileEngagementsPage: React.FC<
 
   return (
     <ProfileEngagements
-      selectedStat={props.selectedStat}
-      loggedProfileId={profileId}
-      isFollowing={props.selectedStat === 'following'}
+      engagementType={props.engagementType}
       followers={{
         label: t('Followers'),
         status: followersReq.status,
@@ -114,10 +112,10 @@ const ProfileEngagementsPage: React.FC<
       onProfileClick={onProfileClick}
       onFollow={onFollow}
       onUnfollow={onUnfollow}
-      onChange={selectedStat => {
+      onChange={engagementType => {
         navigateTo?.({
           appName: '@akashaorg/app-profile',
-          getNavigationUrl: () => `${profileId}/${selectedStat}`,
+          getNavigationUrl: () => `${profileId}/${engagementType}`,
         });
       }}
     />

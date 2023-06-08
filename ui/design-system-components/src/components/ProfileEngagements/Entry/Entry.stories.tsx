@@ -6,9 +6,7 @@ export default {
   component: Entry,
 };
 
-const ethAddress = '0x003410490050000320006570034567114572000';
-
-const pubKey = '63FaC9201494f0bd17B9892B9fae4d52fe3BD377';
+const profileId = 'did:key:003410490050000320006570034567114572000';
 
 const Template = (args: EntryProps) => <Entry {...args} />;
 
@@ -18,8 +16,7 @@ BaseEntry.args = {
   unfollowLabel: 'Unfollow',
   followingLabel: 'Following',
   profileAnchorLink: '',
-  ethAddress,
-  pubKey,
+  profileId,
   avatar: { url: 'https://placebeard.it/360x360' },
   name: 'Coffee Lover',
   userName: 'ilovecoffee',
