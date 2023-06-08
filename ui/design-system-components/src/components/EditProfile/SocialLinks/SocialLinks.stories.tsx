@@ -15,6 +15,11 @@ BaseSocialLinks.args = {
   description: 'You can add your personal websites or social links to be shared on your profile',
   socialLinks: [],
   cancelButton: { label: 'Cancel', handleClick: () => ({}) },
-  saveButton: { label: 'Save', handleClick: () => ({}) },
+  saveButton: {
+    label: 'Save',
+    handleClick: formValues => {
+      console.log(formValues);
+    },
+  },
   onDelete: () => ({}),
 };

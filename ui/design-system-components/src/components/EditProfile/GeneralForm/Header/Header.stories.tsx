@@ -6,13 +6,13 @@ export default {
   component: Header,
 };
 
-const ethAddress = '0x003410490050000320006570034567114572000';
+const profileId = 'did:key:003410490050000320006570034567114572000';
 
 const Template = (args: HeaderProps) => <Header {...args} />;
 
 export const BaseCoverImage = Template.bind({});
 BaseCoverImage.args = {
-  ethAddress,
+  profileId,
   coverImage: { url: 'https://static.licdn.com/sc/h/55k1z8997gh8dwtihm11aajyq' },
   avatar: { url: 'https://next.akasha-world-framework.pages.dev/images/avatar-placeholder-1.webp' },
   title: 'Avatar & Cover Image',

@@ -9,12 +9,12 @@ export default {
 
 const Template = (args: HeaderProps & Profile) => <Header {...args} />;
 
-const ethAddress = '0x003410490050000320006570034567114572000';
+const profileId = 'did:key:003410490050000320006570034567114572000';
 
 export const BasicProfileHeader = Template.bind({});
 BasicProfileHeader.args = {
   id: 'profile-stream-id',
-  did: { id: ethAddress },
+  did: { id: profileId },
   coverImage: null,
   avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
   name: 'Coffee Lover',
