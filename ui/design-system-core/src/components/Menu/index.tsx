@@ -18,9 +18,9 @@ const Menu: React.FC<MenuProps> = ({ anchorElement, ...rest }) => {
 
   return (
     <Stack direction="column" spacing="gap-y-1">
-      <Button ref={anchorRef} onClick={() => setShowList(!showList)} plain>
+      <div ref={anchorRef} onClick={() => setShowList(!showList)}>
         {anchorElement}
-      </Button>
+      </div>
       <div className={tw('relative')}>
         {showList && (
           <div className={tw('absolute right-0')}>

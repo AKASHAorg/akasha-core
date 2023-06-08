@@ -12,8 +12,8 @@ export const BasicProfileLinks = Template.bind({});
 BasicProfileLinks.args = {
   title: 'Find me on',
   links: [
-    { value: 'https://lover.coffee', type: '' },
-    { value: 'handle', type: 'com.github' },
-    { value: 'handle', type: 'org.telegram' },
+    { href: 'https://lover.coffee' },
+    { href: 'https://github.com/handle' },
+    { href: 'https://telegram.com/handle' },
   ],
 };

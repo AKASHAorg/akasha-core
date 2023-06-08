@@ -11,15 +11,13 @@ import { EngagementType } from '@akashaorg/typings/ui';
 export const LOADING_LIST_SIZE = 9;
 
 type EngagementProps = {
-  follow: EngagementItem;
+  engagements: EngagementItem;
   type: EngagementType;
 } & Omit<EngagementsProps, 'followers' | 'following'>;
 
 export const Engagement: React.FC<EngagementProps> = ({
   type,
-  loggedProfileId,
-  isFollowing,
-  follow,
+  engagements,
   followLabel,
   followingLabel,
   unFollowLabel,
@@ -31,7 +29,7 @@ export const Engagement: React.FC<EngagementProps> = ({
   onFollow,
   onUnfollow,
 }) => {
-  const isEmptyEntry = follow.status === 'success' && follow.data?.length === 0;
+  const isEmptyEntry = engagements.status === 'success' && engagements.data.length === 0;
   if (isEmptyEntry) {
     let emptyEntryProps: EmptyEntryProps | null = null;
     if (type === 'followers') {
@@ -52,28 +50,27 @@ export const Engagement: React.FC<EngagementProps> = ({
   }
   return (
     <Stack direction="column" spacing="gap-y-4">
-      {follow.status === 'loading' &&
+      {engagements.status === 'loading' &&
         Array.from({ length: LOADING_LIST_SIZE }).map((_, index) => (
           <EntryLoading key={`stat-list-${index}`} />
         ))}
-      {follow.status === 'error' && (
+      {engagements.status === 'error' && (
         <div className={tw('mt-12')}>
           <EntryError onError={onError} />{' '}
         </div>
       )}
-      {follow.status === 'success' &&
-        follow.data.map((profile, index) => (
+      {engagements.status === 'success' &&
+        engagements.data.map((engagement, index) => (
           <Entry
-            key={`${profile.did.id}-${index}`}
+            key={`${engagement?.profile.id}-${index}`}
             followLabel={followLabel}
             unFollowLabel={unFollowLabel}
             followingLabel={followingLabel}
             profileAnchorLink={profileAnchorLink}
-            profileId={profile.did.id}
-            avatar={profile.avatar}
-            name={profile.name}
-            isFollowing={isFollowing}
-            loggedProfileId={loggedProfileId}
+            profileId={engagement?.profile.id}
+            avatar={engagement?.profile.avatar}
+            name={engagement?.profile.name}
+            isFollowing={engagement.isFollowing}
             onProfileClick={onProfileClick}
             onFollow={onFollow}
             onUnfollow={onUnfollow}

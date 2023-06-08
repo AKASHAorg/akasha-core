@@ -9,12 +9,25 @@ type AvatarBlockProps = {
   avatar: Profile['avatar'];
   name: Profile['name'];
   userName: string;
+  onClick?: () => void;
 };
 
-const AvatarBlock: React.FC<AvatarBlockProps> = ({ profileId, avatar, name, userName }) => {
+const AvatarBlock: React.FC<AvatarBlockProps> = ({
+  profileId,
+  avatar,
+  name,
+  userName,
+  onClick,
+}) => {
   return (
     <Stack align="center" spacing="gap-x-1">
-      <Avatar profileId={profileId} size="md" avatar={avatar} customStyle="cursor-pointer" />
+      <Avatar
+        profileId={profileId}
+        size="md"
+        avatar={avatar}
+        customStyle="cursor-pointer"
+        onClick={onClick}
+      />
       <Stack direction="column" justify="center">
         <Text variant="button-md">{name}</Text>
         <Text variant="footnotes2">{userName}</Text>

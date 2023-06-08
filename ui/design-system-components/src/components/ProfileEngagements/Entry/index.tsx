@@ -6,6 +6,7 @@ import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexBut
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { Profile } from '@akashaorg/typings/ui';
+import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
 
 export type EntryProps = {
   followLabel: string;
@@ -16,7 +17,6 @@ export type EntryProps = {
   avatar: Profile['avatar'];
   name: string;
   isFollowing: boolean;
-  loggedProfileId?: string;
   borderBottom?: boolean;
   onProfileClick: (profileId: string) => void;
   onFollow: (profileId: string) => void;
@@ -33,13 +33,11 @@ const Entry: React.FC<EntryProps> = props => {
     avatar,
     name,
     isFollowing,
-    loggedProfileId,
     borderBottom = true,
     onProfileClick,
     onFollow,
     onUnfollow,
   } = props;
-  const loadmoreRef = React.createRef<HTMLDivElement>();
 
   const borderBottomStyle = borderBottom
     ? `border-b ${getColorClasses(
@@ -51,24 +49,17 @@ const Entry: React.FC<EntryProps> = props => {
       )}`
     : '';
 
-  if (loggedProfileId === profileId) return null;
-
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle={`px-4 pb-4 ${borderBottomStyle}`}>
       <Stack align="center" justify="between">
         <Anchor href={`${profileAnchorLink}/${profileId}`}>
-          <Stack align="center" spacing="gap-x-1">
-            <Avatar
-              profileId={profileId}
-              onClick={() => onProfileClick(profileId)}
-              size="md"
-              avatar={avatar}
-              customStyle="cursor-pointer"
-            />
-            <Stack direction="column" justify="center">
-              <Text variant="button-md">{name}</Text>
-            </Stack>
-          </Stack>
+          <AvatarBlock
+            profileId={profileId}
+            avatar={avatar}
+            name={name}
+            userName={'' /*@TODO: revisit this part when username is implemented on the API side */}
+            onClick={() => onProfileClick(profileId)}
+          />
         </Anchor>
         <DuplexButton
           inactiveLabel={followLabel}

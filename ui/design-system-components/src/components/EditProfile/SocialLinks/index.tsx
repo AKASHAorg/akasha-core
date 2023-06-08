@@ -13,13 +13,14 @@ import { Link } from '../../types/common.types';
 type SocialLinkFormValue = {
   links: string[];
 };
+
 export type SocialLinksProp = {
   title: string;
   addNewButtonLabel: string;
   description: string;
   socialLinks: Link[];
   cancelButton: ButtonType;
-  saveButton: { label: string; handleClick: (formValues: SocialLinkFormValue) => void };
+  saveButton: { label: string; handleClick: (formValues: { links: Link[] }) => void };
   customStyle?: string;
   onDelete: (index: number) => void;
   onFormValid?: (valid: boolean) => void;
@@ -47,24 +48,23 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   });
 
   const linkWithPseudoId = useMemo(
-    () => socialLinks.map((link, index) => ({ _id: index, value: link.href })),
+    () => socialLinks.map((link, index) => ({ _id: index, ...link })),
     [socialLinks],
   );
 
   const [links, setLinks] = useState(
-    socialLinks.length === 0 ? [{ _id: 0, value: '' }] : linkWithPseudoId,
+    socialLinks.length === 0 ? [{ _id: 0, href: '' }] : linkWithPseudoId,
   );
-  const onSave = (formValues: SocialLinkFormValue) => saveButton.handleClick(formValues);
+  const onSave = (formValues: SocialLinkFormValue) =>
+    saveButton.handleClick({ links: formValues.links.map(link => ({ href: link })) });
   const onAddNew = () => {
-    setLinks([...links, { _id: links.length, value: '' }]);
+    setLinks([...links, { _id: links.length, href: '' }]);
   };
 
-  const validForm = !isDirty || !isValid || links.length === 0;
-
   useEffect(() => {
-    if (onFormValid) validForm;
+    if (onFormValid) onFormValid(isValid);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validForm]);
+  }, [isValid]);
 
   return (
     <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
@@ -85,7 +85,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
           </Text>
         </Stack>
         {links.map((link, index) => {
-          const defaultValue = link.value ? { defaultValue: link.value } : {};
+          const defaultValue = link.href ? { defaultValue: link.href } : {};
           return (
             <Controller
               key={link._id}
@@ -116,7 +116,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
           <Button
             variant="primary"
             label={saveButton.label}
-            disabled={validForm}
+            disabled={!isDirty && !isValid}
             onClick={handleSubmit(onSave)}
             type="submit"
           />

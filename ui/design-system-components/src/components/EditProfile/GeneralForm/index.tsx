@@ -8,12 +8,13 @@ import { useForm, Controller } from 'react-hook-form';
 import { useMedia } from 'react-use';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types';
+import { Profile } from '@akashaorg/typings/ui';
 import * as z from 'zod';
 type GeneralFormValues = {
   userName?: string;
   name?: string;
-  avatar?: string;
-  coverImage?: string;
+  avatar?: Profile['avatar'];
+  coverImage?: Profile['background'];
   ens?: string;
   bio?: string;
 };
@@ -50,29 +51,24 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
     formState: { isDirty, isValid },
   } = useForm<GeneralFormValues>({
     resolver: zodResolver(schema),
+    mode: 'onChange',
   });
   const onSave = (formValues: GeneralFormValues) => saveButton.handleClick(formValues);
 
   const isLargeScreen = useMedia('(min-width: 640px)');
 
-  const validForm = !isDirty || !isValid;
-
   useEffect(() => {
-    if (onFormValid) validForm;
+    if (onFormValid) onFormValid(isValid);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validForm]);
+  }, [isValid]);
 
   return (
     <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
       <Stack direction="column" spacing="gap-y-3.5" customStyle="h-full">
         <Header
           {...header}
-          onAvatarChange={avatar =>
-            setValue('avatar', avatar?.default.src || avatar?.alternatives[0].src)
-          }
-          onCoverImageChange={coverImage =>
-            setValue('coverImage', coverImage?.default.src || coverImage?.alternatives[0].src)
-          }
+          onAvatarChange={avatar => setValue('avatar', avatar)}
+          onCoverImageChange={coverImage => setValue('coverImage', coverImage)}
         />
         <Controller
           control={control}
@@ -173,7 +169,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           <Button
             variant="primary"
             label={saveButton.label}
-            disabled={validForm}
+            disabled={!isDirty && !isValid}
             onClick={handleSubmit(onSave)}
             type="submit"
           />
@@ -185,8 +181,8 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
 const schema = z.object({
   name: z.string().optional(),
   userName: z.string().min(1, 'User name is required'),
-  avatar: z.string().optional(),
-  coverImage: z.string().optional(),
+  avatar: z.any().optional(),
+  coverImage: z.any().optional(),
   ens: z.string().optional(),
   bio: z.string().optional(),
 });
