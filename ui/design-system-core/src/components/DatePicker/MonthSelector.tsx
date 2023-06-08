@@ -26,19 +26,18 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({
   goToNextYear,
   goToPreviousYear,
 }) => {
-  const displayMonths = MONTHS_IN_A_YEAR.map((month, index) => {
-    return (
-      <Button
-        plain={true}
-        customStyle={`${baseMonthCellStyle}
-          ${currentMonth === index ? `${selectedCellStyle} rounded-lg` : unselectedCellStyle}`}
-        key={index}
-        onClick={() => handleMonthSelect(index)}
-      >
-        {month}
-      </Button>
-    );
-  });
+  const displayMonths = MONTHS_IN_A_YEAR.map((month, index) => (
+    <Button
+      plain={true}
+      customStyle={`${baseMonthCellStyle} ${
+        currentMonth === index ? `${selectedCellStyle} rounded-lg` : unselectedCellStyle
+      }`}
+      key={index}
+      onClick={() => handleMonthSelect(index)}
+    >
+      {month}
+    </Button>
+  ));
 
   return (
     <div className={tw(wrapperStyle)}>

@@ -12,7 +12,7 @@ export interface IDropdownProps {
   name?: string;
   label?: string;
   placeholderLabel?: string;
-  selected: DropdownMenuItemType;
+  selected?: DropdownMenuItemType;
   menuItems: DropdownMenuItemType[];
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemType>>;
 }
@@ -34,7 +34,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
         title: placeholderLabel ?? menuItems[0].title,
       });
     } else {
-      setSelected(menuItems[0]);
+      setSelected(selected ?? menuItems[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -61,6 +61,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
           dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'
         })`}
         onClick={handleDropClick}
+        data-testid="drop-button"
       >
         <Text variant="body1">{selected?.title}</Text>
         {dropOpen ? (
