@@ -36,9 +36,11 @@ const EditorMeter: React.FC<EditorMeterProps> = props => {
       progressBg={progressStyle}
       customStyle={customStyle}
     >
-      <Text variant="footnotes2" color={progressStyle} weight="normal">
-        {displayCounter}
-      </Text>
+      {displayCounter && (
+        <Text variant="footnotes2" color={progressStyle} weight="normal">
+          {displayCounter}
+        </Text>
+      )}
     </Meter>
   );
 };
