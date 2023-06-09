@@ -1,18 +1,6 @@
 import DS from '@akashaorg/design-system';
 
-const { Box, AccordionPanel, Button, styled } = DS;
-
-const StyledBox = styled(Box)`
-  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-    width: 100%;
-    > div: {
-      padding-left: 0;
-      padding-right: 0;
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-`;
+const { AccordionPanel, Button, styled } = DS;
 
 const StyledAccordionPanel = styled(AccordionPanel)`
   div:nth-child(2) {
@@ -35,4 +23,4 @@ const StyledButton = styled(Button)`
   }
 `;
 
-export { StyledBox, StyledAccordionPanel, StyledButton };
+export { StyledAccordionPanel, StyledButton };

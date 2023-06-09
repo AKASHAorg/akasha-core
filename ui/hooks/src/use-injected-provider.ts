@@ -5,7 +5,6 @@ import { INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
 
 import constants from './constants';
 import { logError } from './utils/error-handler';
-import getProviderDetails from './utils/getProviderDetails';
 
 const { INJECTED_PROVIDER_KEY, REQUIRED_NETWORK_KEY } = constants;
 
@@ -13,16 +12,8 @@ const getInjectedProvider = async () => {
   const sdk = getSDK();
   const provider = await sdk.services.common.web3.detectInjectedProvider();
 
-  // get detected provider details
-  const details = getProviderDetails(provider.data);
-
-  return { name: provider.data, details };
+  return provider.data;
 };
-
-// const connectProvider = async (provider: EthProviders) => {
-//   const sdk = getSDK();
-//   return sdk.services.common.web3.connect(provider);
-// };
 
 const getRequiredNetwork = async () => {
   const sdk = getSDK();
@@ -59,35 +50,10 @@ export const switchToRequiredNetwork = async () => {
  */
 export function useInjectedProvider() {
   return useQuery([INJECTED_PROVIDER_KEY], () => getInjectedProvider(), {
-    initialData: {
-      name: INJECTED_PROVIDERS.NOT_DETECTED,
-      details: {
-        iconType: '',
-        titleLabel: '',
-        subtitleLabel: '',
-      },
-    },
+    initialData: INJECTED_PROVIDERS.NOT_DETECTED,
     onError: (err: Error) => logError('[use-injected-provider.ts]: useInjectedProvider err', err),
   });
 }
-
-/**
- * Hook to connect with one of the supported providers
- * @example useConnectProvider hook
- * ```typescript
- * const connectProviderQuery = useConnectProvider('selectedProvider');
- *
- * // can be used as enabler for useNetworkState hook; so this check works only if provider has been connected.
- * const networkStateQuery = useNetworkState(connectProviderQuery.data);
- * ```
- */
-// export function useConnectProvider(provider: EthProviders) {
-//   return useQuery([CONNECT_PROVIDER_KEY], () => connectProvider(provider), {
-//     enabled: provider !== EthProviders.None,
-//     keepPreviousData: true,
-//     retry: false,
-//   });
-// }
 
 /**
  * A hook to get required network name from the SDK
@@ -100,7 +66,6 @@ export function useInjectedProvider() {
  */
 export function useRequiredNetworkName() {
   return useQuery([REQUIRED_NETWORK_KEY], () => getRequiredNetwork(), {
-    initialData: 'required',
     keepPreviousData: true,
   });
 }

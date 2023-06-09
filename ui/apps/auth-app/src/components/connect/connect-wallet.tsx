@@ -5,20 +5,12 @@ import { EthProviders } from '@akashaorg/typings/sdk';
 
 import BoxedIcon from './boxed-icon';
 import IndicatorDots from './indicator-dots';
+import { useTranslation } from 'react-i18next';
 
 export interface IConnectWalletProps {
-  isActive: boolean;
-  titleLine1Label: string;
-  titleLine2Label: string;
   selectedProvider: EthProviders;
   status: number;
-  errorMessage: string;
-  statusLabel: string;
-  statusDescription: string;
-  yourAddressLabel: string;
   connectedAddress: string;
-  connectedAddressPlaceholder: string;
-  footerLabel: string;
   onSignIn: () => void;
   onSignInComplete: () => void;
   onDisconnect: () => void;
@@ -29,18 +21,9 @@ const { Box, Icon, Text } = DS;
 
 const ConnectWallet: React.FC<IConnectWalletProps> = props => {
   const {
-    isActive,
-    titleLine1Label,
-    titleLine2Label,
     selectedProvider,
     status,
-    errorMessage,
-    statusLabel,
-    statusDescription,
-    yourAddressLabel,
     connectedAddress,
-    connectedAddressPlaceholder,
-    footerLabel,
     onSignIn,
     onSignInComplete,
     onDisconnect,
@@ -50,17 +33,17 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
   const signInCall = React.useRef(onSignIn);
   const signInCompleteCall = React.useRef(onSignInComplete);
 
+  const { t } = useTranslation('app-auth-ewa');
+
   React.useEffect(() => {
     onConnectWallet();
   }, []);
 
   React.useEffect(() => {
-    if (isActive) {
-      if (signInCall.current) {
-        signInCall.current();
-      }
+    if (signInCall.current) {
+      signInCall.current();
     }
-  }, [isActive]);
+  }, []);
 
   React.useEffect(() => {
     if (status >= 8) {
@@ -72,10 +55,10 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     <Box gap="medium">
       <Box align="center">
         <Text size="xlarge" weight="bold">
-          {titleLine1Label}
+          {t('Connect to AKASHA World')}
         </Text>
         <Text size="xlarge" weight="bold">
-          {titleLine2Label}
+          {t('using your wallet')}
         </Text>
       </Box>
 
@@ -88,7 +71,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           iconSize="xxl"
         />
 
-        <IndicatorDots status={status} errorMessage={errorMessage} />
+        <IndicatorDots status={status} errorMessage={''} />
 
         <BoxedIcon
           iconType="akasha"
@@ -98,23 +81,25 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
       </Box>
 
       <Box gap="small">
-        <Box align="center">
-          <Text size="xlarge" weight="bold">
-            {statusLabel}
-          </Text>
-          <Text color="secondaryText" textAlign="center">
-            {statusDescription}.
-          </Text>
-        </Box>
+        {/*<Box align="center">*/}
+        {/*  <Text size="xlarge" weight="bold">*/}
+        {/*    {statusLabel}*/}
+        {/*  </Text>*/}
+        {/*  <Text color="secondaryText" textAlign="center">*/}
+        {/*    {statusDescription}.*/}
+        {/*  </Text>*/}
+        {/*</Box>*/}
 
         <Box align="center">
           <Text size="small" color="secondaryText">
-            {yourAddressLabel}
+            {t('Your Address')}
           </Text>
           {!!connectedAddress?.length && <Text color="secondaryText">{connectedAddress}</Text>}
 
           {!connectedAddress?.length && (
-            <Text color="secondaryText">{connectedAddressPlaceholder}</Text>
+            <Text color="secondaryText">
+              {t('The address you select to connect with will be shown here')}
+            </Text>
           )}
         </Box>
 
@@ -126,7 +111,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
             onClick={onDisconnect}
             style={{ cursor: 'pointer' }}
           >
-            {footerLabel}
+            {t('Disconnect or change way to connect')}
           </Text>
         </Box>
       </Box>

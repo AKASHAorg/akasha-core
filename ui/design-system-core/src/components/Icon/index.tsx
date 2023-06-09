@@ -24,7 +24,14 @@ export interface IconProps {
   solid?: boolean;
 }
 
-const fillOnlyIcons: IconType[] = ['akasha', 'discord', 'telegram', 'twitter', 'widget'];
+const fillOnlyIcons: IconType[] = [
+  'akasha',
+  'discord',
+  'telegram',
+  'twitter',
+  'widget',
+  'metamask',
+];
 
 const Icon: React.FC<IconProps> = props => {
   const {

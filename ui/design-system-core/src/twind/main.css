@@ -1,6 +1,7 @@
 /* Define CSS vars as color channels because want them to work with the opacity modifier syntax
   For more info check https://tailwindcss.com/docs/customizing-colors#using-css-variables
 */
+
 :root {
   --foundation-primary: #ff89b6, #4e71ff;
   --foundation-secondary: 114 34 210; /* #7222d2 */
@@ -28,7 +29,7 @@
 
 .scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #989898;
+  scrollbar-color: rgb(var(--system-grey-7));
 }
 
 .scrollbar::-webkit-scrollbar {
@@ -40,6 +41,6 @@
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background-color: #989898;
+  background-color: rgb(var(--system-grey-7));
   border-radius: 20px;
 }
