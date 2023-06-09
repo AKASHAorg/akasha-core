@@ -6,31 +6,22 @@ import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useTranslation } from 'react-i18next';
-import {
-  Profile,
-  RootComponentProps,
-  ProfileProviders,
-  ProfileProviderProperties,
-} from '@akashaorg/typings/ui';
-import { useEnsByAddress } from '@akashaorg/ui-awf-hooks';
+import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { GeneralForm } from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
 import { SocialLinks } from '@akashaorg/design-system-components/lib/components/EditProfile/SocialLinks';
 import { Interests } from '@akashaorg/design-system-components/lib/components/EditProfile/Interests';
-import { useParams } from 'react-router';
+import { useUpdateProfileMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-export type EditProfilePageProps = {
+type EditProfilePageProps = {
+  profileId: string;
+  isViewer: boolean;
   profileData: Profile;
-  loggedProfileData: Profile;
 };
 
 const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
-  const { profileData } = props;
-
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { profileId, profileData } = props;
   const { t } = useTranslation('app-profile');
-  const { profileId } = useParams<{
-    profileId: string;
-  }>();
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   // const ENSReq = useEnsByAddress(profileData.ethAddress);
 
@@ -43,38 +34,14 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   const [showModal, setShowModal] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
+  const profileMutation = useUpdateProfileMutation();
+
+  const loggedIn =
+    false; /* @TODO use a login hook when it's ready to check if user is logged in or not */
+
   const modalMessage = t(
     "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
   );
-
-  /* @TODO: move this logic into hooks module*/
-  // const socialLinks: { type: string; value: string }[] = React.useMemo(() => {
-  //   if (profileData.default.length > 0) {
-  //     const socialLinksProvider = profileData.default.find(
-  //       p =>
-  //         p.property === ProfileProviderProperties.SOCIAL_LINKS &&
-  //         p.provider === ProfileProviders.EWA_BASIC,
-  //     );
-  //     if (socialLinksProvider) {
-  //       const links = JSON.parse(socialLinksProvider.value);
-  //       if (links.length > 0) {
-  //         return links.map((link: { type: string; value: string }) => {
-  //           if (link.type === 'url') {
-  //             return {
-  //               type: link.type,
-  //               value: decodeURIComponent(link.value),
-  //             };
-  //           }
-  //           return {
-  //             type: link.type,
-  //             value: link.value,
-  //           };
-  //         });
-  //       }
-  //     }
-  //   }
-  //   return [];
-  // }, [profileData]);
 
   const handleFeedback = () => {
     setShowFeedback(true);
@@ -94,6 +61,13 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       setActiveTab(selectedIndex);
     }
   };
+
+  if (!loggedIn) {
+    return navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}`,
+    });
+  }
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
@@ -157,22 +131,23 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               }}
               saveButton={{
                 label: t('Save'),
-                handleClick: () => {
-                  //@TODO
-
+                handleClick: formValues => {
+                  profileMutation.mutate({
+                    i: { id: profileId, content: formValues },
+                  });
                   handleFeedback();
                 },
               }}
               onFormValid={setGeneralValid}
               customStyle="h-full"
             />
-            {/* <SocialLinks
+            <SocialLinks
               title={t('External URLs')}
               addNewButtonLabel={t('Add new')}
               description={t(
                 'You can add your personal websites or social links to be shared on your profile',
               )}
-              socialLinks={socialLinks}
+              socialLinks={profileData.links}
               cancelButton={{
                 label: t('Cancel'),
                 handleClick: () => {
@@ -184,15 +159,17 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               }}
               saveButton={{
                 label: 'Save',
-                handleClick: () => {
-                  //@TODO
+                handleClick: formValues => {
+                  profileMutation.mutate({
+                    i: { id: profileId, content: formValues },
+                  });
                   handleFeedback();
                 },
               }}
               onDelete={() => ({})}
               onFormValid={setSocialLinksValid}
               customStyle="h-full"
-            /> */}
+            />
             {/*@TODO: Create loading and error states for interests list */}
             {
               <Interests

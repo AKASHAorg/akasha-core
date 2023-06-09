@@ -2,12 +2,12 @@ import * as React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import { INFO } from '../../routes';
-import { AppList } from '@akashaorg/design-system-components/lib/components/AppList';
 
 export interface IWidgetsPage extends RootComponentProps {
   latestReleasesInfo?: IntegrationReleaseInfoFragmentFragment[];

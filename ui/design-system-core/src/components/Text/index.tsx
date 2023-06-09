@@ -23,7 +23,7 @@ export type Variant = Heading | BodyText | ButtonText;
 
 export type Alignment = 'start' | 'center' | 'end' | 'justify';
 
-export type Weight = 'normal' | 'bold' | 'light' | 'medium';
+export type Weight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
 
 export type TextProps = {
   customStyle?: string; // pass only the string classes without 'apply' or 'tw'

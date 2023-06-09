@@ -3,16 +3,16 @@ import React from 'react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import { ISteppedActionWrapperProps, SteppedActionWrapper } from '../../common';
+import { SteppedActionWrapperProps, SteppedActionWrapper } from '../../common';
 
-export interface IBMSelectReasonProps extends ISteppedActionWrapperProps {
+export type BMSelectReasonProps = SteppedActionWrapperProps & {
   titleLabel: string;
   subtitleLabel: string;
   reasonCaption: string;
   reasonPlaceholderLabel: string;
-}
+};
 
-const BMSelectReason: React.FC<IBMSelectReasonProps> = props => {
+const BMSelectReason: React.FC<BMSelectReasonProps> = props => {
   const { subtitleLabel, reasonCaption, reasonPlaceholderLabel } = props;
 
   return (

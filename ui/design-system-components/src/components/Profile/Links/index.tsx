@@ -4,8 +4,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import { getIconFromType } from '../../../utils/getIconFromType';
-import { getLinkFromType } from '../../../utils/getLinkFromType';
+import { getIconFromLink } from '../../../utils/get-icon-from-link';
 import { Link } from '../../types/common.types';
 
 export interface LinksProps {
@@ -21,15 +20,15 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
       <Stack direction="column" spacing="gap-y-2.5">
         <Text variant="label">{title}</Text>
         {links.map((link, index) => (
-          <CopyToClipboard key={link.type + index} value={getLinkFromType(link, true)}>
+          <CopyToClipboard key={`${link.href}${index}`} value={link.href}>
             <Stack align="center" spacing="gap-x-2">
-              <AppIcon placeholderIconType={getIconFromType(link.type)} size="xs" accentColor />
+              <AppIcon placeholderIconType={getIconFromLink(link.href)} size="xs" accentColor />
               <Text
                 variant="body2"
                 color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 breakWord
               >
-                {getLinkFromType(link)}
+                {link.href}
               </Text>
             </Stack>
           </CopyToClipboard>

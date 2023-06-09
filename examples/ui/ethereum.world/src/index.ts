@@ -1,3 +1,6 @@
+import '@akashaorg/design-system-core/src/twind/main.css';
+import '@akashaorg/design-system-core/src/twind/globals.css';
+
 import { ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 import { missingRequiredFields } from './registry-overrides';
 
@@ -77,7 +80,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/app-notifications',
       '@akashaorg/app-legal',
       '@akashaorg/app-translation',
-      '@akashaorg/app-bookmarks',
+      '@akashaorg/app-lists',
       '@akashaorg/app-settings-ewa',
     ],
     // pre-installed widgets;

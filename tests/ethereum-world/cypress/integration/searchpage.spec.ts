@@ -5,7 +5,7 @@ import { TrendingWidgetTest } from './partials/trendingWidget.spec';
 describe('Search Page', () => {
   context('Search Page', () => {
     before(() => {
-      cy.visit('/@akashaorg/app-search', { timeout: TIMEOUT });
+      cy.visit('/@akashaorg/app-search/results', { timeout: TIMEOUT });
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());

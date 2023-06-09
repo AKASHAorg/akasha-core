@@ -1,20 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 
-import EditCategories from '../components/dashboard/categories';
+import EditCategories from '../components/dashboard/tabs/general/categories';
 
+import { BasePageProps } from './dashboard';
 import { DASHBOARD } from '../routes';
 import { reasons } from '../utils/reasons';
 
-export interface IEditCategoriesPageProps {
-  user: string | null;
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const EditCategoriesPage: React.FC<IEditCategoriesPageProps> = props => {
+export const EditCategoriesPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');

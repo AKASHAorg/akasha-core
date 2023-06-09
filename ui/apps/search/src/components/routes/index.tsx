@@ -1,13 +1,12 @@
-import DS from '@akashaorg/design-system';
 import * as React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import routes, { ONBOARDING, RESULTS } from '../../routes';
+import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
-
-const { Box } = DS;
+import SettingsPage from './settings-page';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetMyProfileQuery(null, {
@@ -22,7 +21,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Router basename={props.baseRouteName}>
-      <Box>
+      <Box testId="search-box">
         <Routes>
           <Route path="/" element={<Navigate to={routes[RESULTS]} replace />} />
           <Route path={routes[RESULTS]}>
@@ -47,6 +46,16 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               }
             />
           </Route>
+          <Route
+            path={routes[SETTINGS]}
+            element={
+              <SettingsPage
+                {...props}
+                showLoginModal={showLoginModal}
+                loggedProfileData={loggedProfileData}
+              />
+            }
+          />
           <Route
             path={routes[ONBOARDING]}
             element={

@@ -1,5 +1,5 @@
 {
-  "name": "@akashaorg/app-bookmarks",
+  "name": "@akashaorg/app-lists",
   "version": "0.1.0",
   "type": "module",
   "description": "The AKASHA Foundation built this app so you can keep up with the posts and don't miss any conversations you love.",
@@ -31,7 +31,6 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaorg/design-system": "*",
     "@akashaorg/design-system-core": "*",
     "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/ui-lib-feed": "*",
@@ -63,6 +62,6 @@
     "lib"
   ],
   "akasha": {
-    "displayName": "Bookmarks"
+    "displayName": "Lists"
   }
 }

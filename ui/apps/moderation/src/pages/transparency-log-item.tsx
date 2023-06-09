@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -7,7 +7,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export const TransparencyLogItem: React.FC = () => {
-  const { itemId } = useParams<{ itemId: string }>();
+  // const { itemId } = useParams<{ itemId: string }>();
 
   const flexStyle = 'flex items-center justify-between';
   const value = 'Kept';

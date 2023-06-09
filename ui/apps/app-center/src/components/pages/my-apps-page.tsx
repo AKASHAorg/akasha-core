@@ -3,11 +3,11 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
+import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
-import { AppList } from '@akashaorg/design-system-components/lib/components/AppList';
 import { INFO } from '../../routes';
 
 export interface IMyAppsPage extends RootComponentProps {

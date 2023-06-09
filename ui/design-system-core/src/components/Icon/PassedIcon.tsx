@@ -15,7 +15,12 @@ type PassedIconProps = {
   solid: boolean;
 };
 
-export const PassedIcon: React.FC<PassedIconProps> = ({ solid, type, customStyle, testId }) => {
+export const PassedIcon: React.FC<PassedIconProps> = ({
+  solid,
+  type,
+  customStyle = '',
+  testId,
+}) => {
   let iconStyle = customStyle;
   let PassedIcon = null;
 

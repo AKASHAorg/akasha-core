@@ -7,7 +7,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IReportItemConfirmationProps {
+export type ReportItemConfirmationProps = {
   assetName?: string;
   publicImgPath?: string;
   titleLabel: string;
@@ -16,9 +16,9 @@ export interface IReportItemConfirmationProps {
   ctaLabel: string;
   ctaUrl: string;
   onIconClick: () => void;
-}
+};
 
-export const ReportItemConfirmation: React.FC<IReportItemConfirmationProps> = props => {
+export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = props => {
   const {
     assetName = 'moderation',
     publicImgPath = '/images',

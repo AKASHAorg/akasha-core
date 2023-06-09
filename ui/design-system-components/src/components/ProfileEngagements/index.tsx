@@ -8,15 +8,11 @@ import { Engagement } from './Engagement';
 export type EngagementItem = {
   label: string;
   status: QueryStatus['status'];
-  data: Profile[];
-  hasNextPage: boolean;
-  onLoadMore?: () => void;
+  data: { isFollowing: boolean; profile?: Profile }[];
 };
 
 export type EngagementsProps = {
-  selectedStat: EngagementType;
-  loggedProfileId: string;
-  followedProfiles: string[];
+  engagementType: EngagementType;
   followers: EngagementItem;
   following: EngagementItem;
   followLabel: string;
@@ -27,15 +23,15 @@ export type EngagementsProps = {
   ownerUserName: string;
   viewerIsOwner: boolean;
   onError: () => void;
-  onProfileClick: (ethAddress: string) => void;
-  onFollow: (ethAddress: string) => void;
-  onUnfollow: (ethAddress: string) => void;
-  onChange: (selectedStat: EngagementType) => void;
+  onProfileClick: (profileId: string) => void;
+  onFollow: (profileId: string) => void;
+  onUnfollow: (profileId: string) => void;
+  onChange: (engagementType: EngagementType) => void;
 };
 
 const Engagements: React.FC<EngagementsProps> = props => {
-  const { followers, following, selectedStat, onChange } = props;
-  const [activeTab, setActiveTab] = useState(selectedStat === 'followers' ? 0 : 1);
+  const { followers, following, engagementType, onChange } = props;
+  const [activeTab, setActiveTab] = useState(engagementType === 'followers' ? 0 : 1);
 
   return (
     <Card radius={20} elevation="1" customStyle="py-4">
@@ -47,8 +43,8 @@ const Engagements: React.FC<EngagementsProps> = props => {
           setActiveTab(selectedIndex);
         }}
       >
-        <Engagement type="followers" follow={followers} {...props} />
-        <Engagement type="following" follow={following} {...props} />
+        <Engagement type="followers" engagements={followers} {...props} />
+        <Engagement type="following" engagements={following} {...props} />
       </Tab>
     </Card>
   );

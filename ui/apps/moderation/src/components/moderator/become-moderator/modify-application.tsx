@@ -4,16 +4,17 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
-import { CategoryPills, ICategoryPillsProps, IPageHeaderProps, PageHeader } from '../../common';
+import { CategoryPills, CategoryPillsProps, PageHeaderProps, PageHeader } from '../../common';
 
-export interface IModifyApplicationProps extends IPageHeaderProps {
-  reasonTitleLabel: string;
-  reasonPlaceholderLabel: string;
-  reasonCaption: string;
-  changeCategoryTitleLabel: string;
-}
+export type ModifyApplicationProps = PageHeaderProps &
+  CategoryPillsProps & {
+    reasonTitleLabel: string;
+    reasonPlaceholderLabel: string;
+    reasonCaption: string;
+    changeCategoryTitleLabel: string;
+  };
 
-const ModifyApplication: React.FC<IModifyApplicationProps & ICategoryPillsProps> = props => {
+const ModifyApplication: React.FC<ModifyApplicationProps> = props => {
   const { reasonTitleLabel, reasonCaption, reasonPlaceholderLabel, changeCategoryTitleLabel } =
     props;
 

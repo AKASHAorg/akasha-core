@@ -88,10 +88,10 @@ const Icon: React.FC<IconProps> = props => {
 
   const disabledStyle = disabled ? 'opacity-50' : '';
 
-  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${customStyle}`;
+  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle}`;
 
   return (
-    <Stack ref={ref}>
+    <Stack ref={ref} customStyle={customStyle}>
       <PassedIcon customStyle={iconStyle} testId={testId} type={type} solid={solid} />
     </Stack>
   );

@@ -30,10 +30,15 @@ export interface IModeratorInfo {
 
 export type Moderator = Profile &
   IModeratorInfo & {
-    _mod: Date;
     active: boolean;
     admin: boolean;
   };
+
+export type ModeratorApplicantData = Profile & {
+  applicationDate?: string;
+  reports: Record<string, string>[];
+  history: Record<string, string>[];
+};
 
 export interface ModerationStatus {
   contentId: string;

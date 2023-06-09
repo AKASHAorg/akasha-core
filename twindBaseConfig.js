@@ -31,9 +31,9 @@ export default {
         grey9: withOpacity('--system-grey-9'),
         success: withOpacity('--feedback-success'),
         warningLight: withOpacity('--feedback-warning'),
-        warningDark: withOpacity('--feedback-warningDark'),
+        warningDark: withOpacity('--feedback-warning-dark'),
         errorLight: withOpacity('--feedback-error'),
-        errorDark: withOpacity('--feedback-errorDark'),
+        errorDark: withOpacity('--feedback-error-dark'),
         elevation: withOpacity('--elevation'),
       },
       borderRadius: {

@@ -12,16 +12,16 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
 import { formatDate } from '../../utils';
 
-export interface IModeratorDetailCardProps {
+export type ModeratorDetailCardProps = {
   moderator: Moderator;
   tenureInfoLabel: string;
   viewProfileLabel: string;
   dismissModeratorLabel: string;
   dismissModeratorDescLabel: string;
   onClickDismissModerator: () => void;
-}
+};
 
-const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
+const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
   const {
     moderator,
     tenureInfoLabel,
@@ -49,7 +49,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
         <Box customStyle="flex space-x-2 items-center w([50%] md:[30%])">
           <Avatar avatar={moderator.avatar} />
           <Box>
-            <Tooltip content={`${moderator.name}`} placement="right">
+            <Tooltip content={moderator.name} placement="right">
               <Text
                 variant="button-lg"
                 weight="bold"

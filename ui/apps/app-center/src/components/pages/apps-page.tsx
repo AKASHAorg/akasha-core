@@ -2,9 +2,9 @@ import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { AppList } from '@akashaorg/design-system-components/lib/components/AppList';
 
 const AppsPage: React.FC<RootComponentProps> = () => {
   const { t } = useTranslation('app-integration-center');
