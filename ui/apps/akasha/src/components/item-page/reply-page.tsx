@@ -11,6 +11,8 @@ type ReplyPageProps = {
 
 const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();
+
+  // @TODO replace with new hooks
   const comment = useComment(commentId, !!commentId);
 
   const entryData = React.useMemo(() => {
@@ -26,7 +28,8 @@ const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
       postId={!!entryData && 'postId' in entryData && entryData?.postId}
       commentId={commentId}
       itemType={EntityTypes.REPLY}
-      entryData={entryData}
+      // @TODO add data after new hooks
+      entryData={null}
       entryReq={comment}
     />
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Icon, { IconProps } from '../Icon';
+
 import { ButtonProps } from './types';
 import { Color } from '../types/common.types';
 
@@ -11,18 +12,25 @@ export const ButtonIcon: React.FC<
     loading: ButtonProps['loading'];
     breakPointSize: ButtonProps['breakPointSize'];
     disabled: ButtonProps['disabled'];
+    active?: ButtonProps['active'];
   }
-> = ({ size, type, variant, greyBg, loading, breakPointSize, disabled }) => {
+> = ({ size, type, variant, greyBg, loading, breakPointSize, disabled, active }) => {
   return (
     <Icon
       type={type}
       size={size}
       breakPointSize={breakPointSize}
-      color={variant === 'primary' && !greyBg ? 'white' : ''}
+      color={
+        variant === 'primary' && !greyBg
+          ? 'white'
+          : active
+          ? { light: 'secondaryLight', dark: 'black' }
+          : ''
+      }
       accentColor={
         (variant !== 'primary' && loading) ||
         variant === 'text' ||
-        variant === 'secondary' ||
+        (variant === 'secondary' && !active) ||
         (variant === 'primary' && greyBg)
       }
       hoverColor={getHoverColor(variant)}

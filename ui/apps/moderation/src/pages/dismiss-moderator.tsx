@@ -1,15 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import DismissModerator from '../components/moderator/dismiss-moderator';
+
+import { BasePageProps } from './dashboard';
 import { MODERATORS } from '../routes';
 
-export interface IDismissModeratorPageProps {
-  navigateTo: (args: NavigateToParams) => void;
-}
-
-export const DismissModeratorPage: React.FC<IDismissModeratorPageProps> = props => {
+export const DismissModeratorPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');

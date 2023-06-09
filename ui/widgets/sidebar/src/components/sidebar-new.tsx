@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
+import { IMenuItem } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -9,6 +9,7 @@ import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ListSidebarApps from './list-sidebar-apps';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -20,7 +21,7 @@ export interface ISidebarProps {
   allMenuItems: IMenuItem[];
   activeApps?: string[];
   currentRoute?: string;
-  loggedProfileData?: IProfileData;
+  loggedProfileData?: Omit<Profile, 'followers' | 'did'> & { did: { id: string } };
   isLoggedIn: boolean;
   hasNewNotifs?: boolean;
   loadingUserInstalledApps: boolean;
@@ -32,13 +33,13 @@ export interface ISidebarProps {
   onClickMenuItem: (appName: string, route: string) => void;
   onClickExplore: () => void;
   menuItem: React.ReactElement;
-
   title: string;
   subtitle: string;
   ctaText: string;
   ctaButtonLabel: string;
   footerLabel: string;
   footerIcons: { name: ButtonProps['icon']; link: string }[];
+  onLoginClick?: () => void;
 }
 
 const Sidebar: React.FC<ISidebarProps> = props => {
@@ -49,7 +50,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     currentRoute,
     loggedProfileData,
     activeApps,
-
     title,
     subtitle,
     ctaText,
@@ -59,15 +59,14 @@ const Sidebar: React.FC<ISidebarProps> = props => {
 
     onSidebarClose,
     onClickMenuItem,
+    onLoginClick,
   } = props;
 
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
   const [activeOption, setActiveOption] = React.useState<IMenuItem | null>(null);
-
   React.useEffect(() => {
     if (allMenuItems && currentRoute) {
       const [, , , ...path] = currentRoute.split('/');
-
       const activeApp = allMenuItems.find(menuItem => activeApps?.includes?.(menuItem.name));
       if (activeApp && activeApp.index !== currentAppData?.index) {
         setCurrentAppData(activeApp);
@@ -83,7 +82,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       }
     }
   }, [currentRoute, allMenuItems, currentAppData, activeOption, activeApps]);
-
   const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       // if the current app has no subroutes, set as active and redirect to its route
@@ -95,7 +93,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       }
     }
   };
-
   const handleOptionClick = (
     menuItem: IMenuItem,
     subrouteMenuItem: IMenuItem,
@@ -108,17 +105,18 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       onSidebarClose();
     }
   };
-
   return (
     <BasicCardBox
-      style="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
-      round={'rounded-r-2xl xl:rounded-2xl'}
-      elevation="md"
+      customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
+      round="rounded-r-2xl xl:rounded-2xl"
       pad="p-0"
     >
       <Box customStyle="flex flex-row p-4 border-b-1 border(grey9 dark:grey3)">
         <Box customStyle="w-fit h-fit mr-2">
-          <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
+          <Avatar
+            profileId={loggedProfileData?.did?.id}
+            avatar={loggedProfileData?.avatar?.default.src}
+          />
         </Box>
         <Box customStyle="w-fit">
           <Text customStyle="font-bold">{title}</Text>
@@ -127,10 +125,9 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           </Text>
         </Box>
         <Box customStyle="w-fit h-fit ml-6 self-end">
-          <Button icon="BoltIcon" variant="primary" iconOnly={true} />
+          <Button icon="BoltIcon" variant="primary" iconOnly={true} onClick={onLoginClick} />
         </Box>
       </Box>
-
       {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
@@ -144,7 +141,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             onClickMenuItem={handleAppIconClick}
           />
         )}
-
         {/* container for user-installed apps */}
         {userInstalledApps?.length > 0 && (
           <ListSidebarApps
@@ -156,7 +152,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           />
         )}
       </Box>
-
       <Box customStyle="flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3">
         <Text variant="footnotes2" customStyle="text-grey5">
           {ctaText}
@@ -165,7 +160,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <Button label={ctaButtonLabel} variant="primary" />
         </Box>
       </Box>
-
       <Box customStyle="flex flex-col px-8 py-4">
         <Text variant="footnotes2" customStyle="text-grey5">
           {footerLabel}
@@ -183,5 +177,4 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     </BasicCardBox>
   );
 };
-
 export default Sidebar;

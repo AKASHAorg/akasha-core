@@ -13,7 +13,7 @@ describe('<EditableAvatar /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <EditableAvatar ethAddress={'0x01230123450012312'} onChange={handleChange} />,
+          <EditableAvatar profileId={'did:0x01230123450012312'} onChange={handleChange} />,
         ),
         {},
       );

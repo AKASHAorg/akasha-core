@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IProfileData, IPublishData } from '@akashaorg/typings/ui';
+import { IPublishData, Profile } from '@akashaorg/typings/ui';
 import { createPendingEntry, useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { REPLY } from '../../../routes';
@@ -9,14 +9,14 @@ import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/E
 
 type PendingReplyProps = {
   postId: string;
-  loggedProfileData: IProfileData;
+  loggedProfileData: Profile;
   commentIds: string[];
 };
 
 export function PendingReply({ postId, loggedProfileData, commentIds }: PendingReplyProps) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutations: pendingReplyStates } = useMutationsListener<IPublishData & { postID: string }>(
-    PUBLISH_PENDING_KEY,
+    [PUBLISH_PENDING_KEY],
   );
 
   return (
@@ -37,7 +37,6 @@ export function PendingReply({ postId, loggedProfileData, commentIds }: PendingR
               <EntryBox
                 entryData={createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
                 flagAsLabel={t('Report Comment')}
-                loggedProfileEthAddress={loggedProfileData.ethAddress}
                 locale={'en'}
                 showMore={true}
                 profileAnchorLink={'/profile'}

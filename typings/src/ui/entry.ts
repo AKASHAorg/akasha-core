@@ -1,6 +1,6 @@
 import { Descendant } from 'slate';
 import { Comment, Post, LinkPreview } from '../sdk/graphql-types';
-import { IProfileData } from './profile';
+import { Profile } from './profile';
 
 export interface PostResponse extends Post {
   moderated?: boolean;
@@ -40,8 +40,8 @@ export interface IEntryData {
   ipfsLink?: string;
   permalink?: string;
   entryId: string;
-  author: IProfileData;
-  quotedByAuthors?: IProfileData[];
+  author: Profile;
+  quotedByAuthors?: Profile[];
   quotedBy?: string[];
   quote?: IEntryData;
 
@@ -56,7 +56,7 @@ export interface IEntryData {
 }
 
 export interface PendingEntry {
-  author: IProfileData;
+  author: Profile;
   slateContent: IEntryData['slateContent'];
   ipfsLink: string;
   permalink: string;

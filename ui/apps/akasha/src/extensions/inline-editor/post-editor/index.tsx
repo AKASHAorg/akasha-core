@@ -1,5 +1,4 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import {
   RootExtensionProps,
   IPublishData,
@@ -18,9 +17,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
 import { Draft, IDraftStorage } from '../utils';
-import { editorDefaultValue } from '@akashaorg/design-system/lib/components/Editor/initialValue';
-
-const { EntryCardLoading } = DS;
+import { editorDefaultValue } from '@akashaorg/design-system-components/lib/components/Editor/initialValue';
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
 type Props = {
   appName: string;
@@ -34,6 +32,8 @@ type Props = {
 export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftStorage }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
+
+  // @TODO replace with new hooks
   const post = usePost({
     postId,
     enabler: action !== 'post',
@@ -95,13 +95,13 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
     const newDraftPost = { ...currentDraftPost, linkPreview };
     postDraft.save(newDraftPost);
   };
-
-  React.useEffect(() => {
-    if (action === 'repost') {
-      repostDraft.save(embedEntryData);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [action, embedEntryData]);
+  // @TODO fix after hooks
+  // React.useEffect(() => {
+  //   if (action === 'repost') {
+  //     repostDraft.save(embedEntryData);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [action, embedEntryData]);
 
   const handlePublish = React.useCallback(
     (data: IPublishData) => {
@@ -174,8 +174,9 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
       singleSpa={singleSpa}
       linkPreview={entryData?.linkPreview || draftPostData?.linkPreview}
       uploadedImages={entryData?.images || draftPostData?.images}
-      embedEntryData={embeddedEntry}
-      entryData={entryData}
+      // @TODO replace with real data after hook fix
+      embedEntryData={null}
+      entryData={null}
       editorState={editorState}
       openEditor={action === 'edit' || action === 'reply' || !!embeddedEntry || !!draftPostData}
       showCancelButton={action === 'edit'}

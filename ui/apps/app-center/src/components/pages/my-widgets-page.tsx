@@ -1,12 +1,13 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import { INFO } from '../../routes';
-
-const { Box, SubtitleTextIcon, Icon, Text, Spinner } = DS;
 
 export interface IWidgetsPage extends RootComponentProps {
   latestReleasesInfo?: IntegrationReleaseInfoFragmentFragment[];
@@ -45,53 +46,27 @@ const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
     });
   };
 
+  /*@TODO: replace with the relevant hook once it's ready */
+  const dummyNewestWidgets = [
+    {
+      name: 'Widget 1',
+      description:
+        'Send direct messages to your followers or people who have this application, you must be following each other to be able to send messages.',
+      action: <Button label="Install" variant="primary" />,
+    },
+    {
+      name: 'Widget 2',
+      description:
+        'Add some custom emojis to your posts, replies, Articles or even in your messages. Just so you know, for people to be able to see these ...',
+      action: <Button label="Install" variant="primary" />,
+    },
+  ];
+
   return (
-    <Box gap="medium" margin="medium" flex={{ shrink: 0 }}>
-      <>
-        <Box gap="small" pad={{ bottom: 'medium' }}>
-          <Text size="large" color="secondaryText">
-            {t('World Widgets')}
-          </Text>
-          <Text>
-            {t(
-              'Who’d want to arrive in the World widgetless? We wouldn’t do that to you. Here are the essential widgets.',
-            )}
-          </Text>
-        </Box>
-        <Box gap="small">
-          {filteredDefaultWidgets?.map((app, index) => (
-            <Box
-              key={index}
-              direction="row"
-              align="center"
-              justify="between"
-              border={
-                index !== filteredDefaultWidgets.length - 1
-                  ? { side: 'bottom', size: '1px', color: 'border' }
-                  : null
-              }
-              pad={{ bottom: 'small', right: 'medium' }}
-              onClick={() => handleAppClick(app)}
-            >
-              <SubtitleTextIcon
-                label={app.manifestData.displayName}
-                subtitle={app.name}
-                gap="xxsmall"
-                iconType="integrationWidgetLarge"
-                plainIcon={true}
-                backgroundColor={true}
-              />
-              <Icon type="checkSimple" accentColor={true} size="md" />
-            </Box>
-          ))}
-          {isFetching && (
-            <Box>
-              <Spinner />
-            </Box>
-          )}
-        </Box>
-      </>
-    </Box>
+    <Stack direction="column" spacing="gap-y-4">
+      <Text variant="h6">{t('Newest Widgets')}</Text>
+      <AppList apps={dummyNewestWidgets} />
+    </Stack>
   );
 };
 

@@ -55,6 +55,7 @@ BaseICDetailCard.args = {
   latestRelease: ICDetailAppsData[3].releases[0],
   versionHistoryLabel: 'Version History',
   authorsLabel: 'Authors & Contributors',
+  authorDidLabel: 'Author DID',
   authors: ICDetailAppsData[3].author,
   licenseLabel: 'License',
 };

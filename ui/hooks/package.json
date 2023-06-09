@@ -34,14 +34,12 @@
   "dependencies": {
     "@akashaorg/awf-sdk": "*",
     "object-hash": "2.2.0",
-    "react-query": "3.34.7",
-    "@tanstack/react-query": "4.29.1",
+    "@tanstack/react-query": "4.29.3",
     "rxjs": "7.3.0"
   },
   "devDependencies": {
     "@akashaorg/typings": "*",
     "@akashaorg/design-system": "*",
-    "@akashaorg/design-system-core": "*",
     "@akashaorg/af-testing": "*",
     "@types/react": "18.0.33"
   },

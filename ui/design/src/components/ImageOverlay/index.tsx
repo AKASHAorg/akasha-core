@@ -7,7 +7,8 @@ import styled from 'styled-components';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 export interface IImageOverlay {
-  src: { url?: string; fallbackUrl?: string };
+  src: string;
+  alt?: string;
   closeModal: () => void;
   children?: React.ReactNode;
 }
@@ -47,7 +48,7 @@ const StyledCloseDiv = styled.div`
  * renders the full screen image modal that is triggered on image click
  */
 const ImageOverlay: React.FC<IImageOverlay> = props => {
-  const { src } = props;
+  const { src, alt } = props;
 
   const closeModal = React.useRef(props.closeModal);
 
@@ -100,8 +101,8 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
                 <StyledPicture>
-                  <source srcSet={src.url} />
-                  <img src={src.fallbackUrl} alt="" />
+                  <source srcSet={src} />
+                  <img src={alt} alt="" />
                 </StyledPicture>
               </TransformComponent>
             </TransformWrapper>

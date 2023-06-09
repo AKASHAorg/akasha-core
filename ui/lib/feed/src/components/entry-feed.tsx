@@ -1,18 +1,16 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import { FeedWidgetProps } from './App';
 import EntryRenderer from './entry-renderer';
-
-const { EntryList } = DS;
+import EntryList from '@akashaorg/design-system-components/lib/components/EntryList';
 
 const EntryFeed = (props: FeedWidgetProps) => {
   const handleEntryNavigate = useEntryNavigation(props.navigateTo);
 
   const handleRepost = (_withComment: boolean, entryId: string) => {
-    if (!props.loginState.pubKey) {
+    if (!props.loggedProfileData?.did.id) {
       props.navigateToModal({ name: 'login' });
     } else {
       props.navigateTo?.({
@@ -24,9 +22,9 @@ const EntryFeed = (props: FeedWidgetProps) => {
 
   return (
     <EntryList
-      pages={props.pages}
       onLoadMore={props.onLoadMore}
       status={props.requestStatus}
+      pages={props.pages}
       itemSpacing={props.itemSpacing}
       hasNextPage={props.hasNextPage}
       pageKeyPrefix={props.itemType === EntityTypes.POST ? 'entry-page' : 'comment-page'}
@@ -35,7 +33,6 @@ const EntryFeed = (props: FeedWidgetProps) => {
       itemCard={
         <EntryRenderer
           modalSlotId={props.modalSlotId}
-          loginState={props.loginState}
           itemType={props.itemType}
           sharePostUrl={`${window.location.origin}/@akashaorg/app-akasha-integration/post/`}
           locale={props.i18n?.languages[0] as ILocale}
@@ -57,7 +54,7 @@ const EntryFeed = (props: FeedWidgetProps) => {
           logger={props.logger}
           onLoginModalOpen={props.onLoginModalOpen}
           navigateToModal={props.navigateToModal}
-          loggedProfile={props.loggedProfile}
+          loggedProfileData={props.loggedProfileData}
           i18n={props.i18n}
         />
       }

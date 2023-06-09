@@ -20,7 +20,7 @@
     "pack:design-system-components": "nx run @akashaorg/design-system-components:build",
     "pack:ui-widgets": "nx run-many --target=build --projects=@akashaorg/ui-widget-analytics,@akashaorg/ui-widget-layout,@akashaorg/ui-widget-mini-profile,@akashaorg/ui-widget-my-apps,@akashaorg/ui-widget-sidebar,@akashaorg/ui-widget-topbar,@akashaorg/ui-widget-trending",
     "pack:ui-libs": "nx run-many --target=build --projects=@akashaorg/ui-lib-feed",
-    "pack:ui-apps": "nx run-many --target=build --projects=@akashaorg/app-akasha-integration,@akashaorg/app-translation,@akashaorg/app-routing,@akashaorg/app-integration-center,@akashaorg/app-auth-ewa,@akashaorg/app-bookmarks,@akashaorg/app-legal,@akashaorg/app-messaging,@akashaorg/app-moderation-ewa,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles,@akashaorg/app-dev-dashboard",
+    "pack:ui-apps": "nx run-many --target=build --projects=@akashaorg/app-akasha-integration,@akashaorg/app-translation,@akashaorg/app-routing,@akashaorg/app-integration-center,@akashaorg/app-auth-ewa,@akashaorg/app-lists,@akashaorg/app-legal,@akashaorg/app-messaging,@akashaorg/app-moderation-ewa,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles,@akashaorg/app-dev-dashboard",
     "pack:app-loader": "nx run @akashaorg/ui-app-loader:build",
     "pack:ui": "yarn tsc:ui && yarn pack:ui-design && yarn pack:design-system-core && yarn pack:design-system-components && yarn pack:ui-widgets && yarn pack:ui-apps && yarn pack:app-loader",
     "pack:only": "nx run-many --target=build --projects=$AWF_PACKAGE",
@@ -35,7 +35,7 @@
     "start:design-system-components:storybook": "nx run @akashaorg/design-system-components:storybook",
     "build:storybook": "nx run @akashaorg/design-system:build-storybook",
     "build:design-system-core:storybook": "nx run @akashaorg/design-system-core:build-storybook",
-    "test:apps": "nx run-many --target=test --projects=@akashaorg/app-akasha-integration,@akashaorg/app-translation,@akashaorg/app-integration-center,@akashaorg/app-auth-ewa,@akashaorg/app-bookmarks,@akashaorg/app-legal,@akashaorg/app-moderation-ewa,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles,@akashaorg/app-dev-dashboard",
+    "test:apps": "nx run-many --target=test --projects=@akashaorg/app-akasha-integration,@akashaorg/app-translation,@akashaorg/app-integration-center,@akashaorg/app-auth-ewa,@akashaorg/app-lists,@akashaorg/app-legal,@akashaorg/app-moderation-ewa,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles,@akashaorg/app-dev-dashboard",
     "test:design-system": "nx run @akashaorg/design-system:test",
     "test:design-system-core": "nx run @akashaorg/design-system-core:test",
     "test:design-system-components": "nx run @akashaorg/design-system-components:test",
@@ -54,6 +54,7 @@
     "@babel/preset-env": "7.19.0",
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
+    "@headlessui/react": "~1.7.7",
     "@multiformats/multiaddr-to-uri": "9.0.1",
     "@nrwl/cli": "14.6.5",
     "@nrwl/devkit": "14.6.5",
@@ -66,15 +67,16 @@
     "@testing-library/react-hooks": "8.0.1",
     "@testing-library/user-event": "14.4.3",
     "@textile/buckr": "1.3.4",
+    "@twind/core": "1.1.3",
+    "@twind/preset-autoprefix": "1.0.7",
+    "@twind/preset-container-queries": "1.0.7",
+    "@twind/preset-tailwind": "1.1.4",
+    "@twind/with-react": "1.1.3",
+    "@twind/preset-line-clamp": "1.0.7",
     "@types/jest": "29.0.0",
     "@types/node": "18.7.15",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
-    "@twind/core": "1.1.3",
-    "@twind/preset-autoprefix": "1.0.7",
-    "@twind/preset-tailwind": "1.1.4",
-    "@twind/preset-container-queries": "1.0.7",
-    "@twind/with-react": "1.1.3",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "babel-jest": "^29.3.1",
     "babel-loader": "9.1.2",
@@ -121,8 +123,7 @@
     "webpack-cli": "4.10.0",
     "webpack-dev-server": "4.11.1",
     "webpack-manifest-plugin": "5.0.0",
-    "webpack-subresource-integrity": "5.1.0",
-    "@headlessui/react": "~1.7.7"
+    "webpack-subresource-integrity": "5.1.0"
   },
   "workspaces": {
     "packages": [
@@ -187,6 +188,5 @@
       "eslint --fix",
       "git add"
     ]
-  },
-  "dependencies": {}
+  }
 }

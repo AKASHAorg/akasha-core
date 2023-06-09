@@ -1,4 +1,6 @@
-import { IArticleData, IProfileData } from '@akashaorg/typings/ui';
+import { CeramicAccount } from '@akashaorg/typings/sdk/graphql-types-new';
+import { IArticleData } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/ui';
 
 export const apps = [
   {
@@ -64,34 +66,33 @@ export const topics = [
 ];
 
 export const userData: {
-  ethAddress: string;
-  avatar?: IProfileData['avatar'];
+  did: Partial<CeramicAccount>;
+  avatar?: Profile['avatar'];
 }[] = [
   {
-    ethAddress: '0x003410490050000320006570034567114572000',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    did: { id: '0x003410490050000320006570034567114572000' },
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
   {
-    ethAddress: '0x004410490050000320006570034567114572001',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    did: { id: '0x004410490050000320006570034567114572001' },
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
   {
-    ethAddress: '0x005410490050000320006570034567114572002',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    did: { id: '0x005410490050000320006570034567114572002' },
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
   {
-    ethAddress: '0x006410490050000320006570034567114572003',
-    avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+    did: { id: '0x006410490050000320006570034567114572003' },
+    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
   },
 ];
 
 export const articles: IArticleData[] = [
   {
     id: 'bbaryabc123zxcv7scxkfe32fce21ce2ce2rv',
-    authorAvatar: { url: '' },
+
     authorName: 'Estelle Collier',
-    authorEthAddress: '0x',
-    authorPubkey: 'bbary',
+    authorProfileId: '0x',
     publishDate: '14 Dec 2022',
     readTime: 6,
     isCopyrighted: true,
@@ -127,10 +128,8 @@ export const articles: IArticleData[] = [
   },
   {
     id: 'bbaryabc123zxcv7scxkfe32fce21ce2ce2vr',
-    authorAvatar: { url: '' },
     authorName: 'Usain Bolt',
-    authorEthAddress: '0x',
-    authorPubkey: 'bbary',
+    authorProfileId: '0x',
     lastUpdateDate: 'a few seconds ago',
     readTime: 6,
     isCopyrighted: true,
@@ -166,10 +165,9 @@ export const articles: IArticleData[] = [
   },
   {
     id: 'bbaryabc123zxcv7scxkfe32fce21ce2cer2v',
-    authorAvatar: { url: '' },
+
     authorName: 'Estelle Collier',
-    authorEthAddress: '0x',
-    authorPubkey: 'bbary',
+    authorProfileId: '0x',
     publishDate: '14 Dec 2022',
     readTime: 6,
     isCopyrighted: true,
@@ -188,10 +186,8 @@ export const articles: IArticleData[] = [
   },
   {
     id: 'bbaryabc123zxcv7scxkfe32fce21ce2cerv2',
-    authorAvatar: { url: '' },
     authorName: 'Usain Bolt',
-    authorEthAddress: '0x',
-    authorPubkey: 'bbary',
+    authorProfileId: '0x',
     lastUpdateDate: '14 Dec 2022',
     readTime: 6,
     isCopyrighted: true,

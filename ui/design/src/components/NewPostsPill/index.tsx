@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
-
 import Icon from '../Icon';
 import StackedAvatar from '../StackedAvatar';
-import { IProfileData } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface INewPostsPill {
   infoLabel?: string;
   handleDismiss?: () => void;
-  userData: { ethAddress: string; avatar?: IProfileData['avatar'] }[];
+  userData: { did: Profile['did']; avatar?: Profile['avatar'] }[];
 }
 
 const NewPostsPill: React.FC<INewPostsPill> = props => {

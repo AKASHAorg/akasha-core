@@ -1,13 +1,14 @@
-import * as React from 'react';
-
-import DS from '@akashaorg/design-system';
+import React from 'react';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
+import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { INFO } from '../../routes';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
-
-const { Box, SubtitleTextIcon, Icon, Text, InfoCard, Spinner } = DS;
+import { INFO } from '../../routes';
 
 export interface IMyAppsPage extends RootComponentProps {
   latestReleasesInfo?: IntegrationReleaseInfoFragmentFragment[];
@@ -60,102 +61,72 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
     });
   };
 
+  /*@TODO: replace with the relevant hook once it's ready */
+  const dummyInstalledApps = [
+    {
+      name: 'Direct Messaging',
+      description:
+        'Send direct messages to your followers or people who have this application, you must be following each other to be able to send messages.',
+      action: <Button label="Open" variant="primary" />,
+    },
+    {
+      name: 'Emoji App',
+      description:
+        'Add some custom emojis to your posts, replies, Articles or even in your messages. Just so you know, for people to be able to see these ...',
+      action: <Button label="Open" variant="primary" />,
+    },
+  ];
+
+  /*@TODO: replace with the relevant hook once it's ready */
+  const dummyDefaultApps = [
+    {
+      name: 'Social Feed',
+      description:
+        'Keep up with what’s happening in the world! The social feed is the star app of AKASHA World.',
+      action: (
+        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+          Default App
+        </Text>
+      ),
+    },
+    {
+      name: 'Profile App',
+      description:
+        'Control your profile, your preferences and everything else about you from the profile app.',
+      action: (
+        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+          Default App
+        </Text>
+      ),
+    },
+    {
+      name: 'Settings App',
+      description:
+        'You can control many things through the Settings app, like changing your theme, analytics options among many other things.',
+      action: (
+        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+          Default App
+        </Text>
+      ),
+    },
+  ];
+
   return (
-    <Box gap="medium" margin="medium" flex={{ shrink: 0 }}>
-      <>
-        <Box gap="small" pad={{ bottom: 'medium' }}>
-          <Text size="large" color="secondaryText">
-            {t('World Apps')}
-          </Text>
-          <Text>
-            {t(
-              'The World needs love. These are a handful of essential apps to get this World spinning',
-            )}
-          </Text>
-        </Box>
-        <Box gap="small">
-          {filteredDefaultApps?.map((app, index) => (
-            <Box
-              key={index}
-              direction="row"
-              align="center"
-              justify="between"
-              border={
-                index !== filteredDefaultApps.length - 1
-                  ? { side: 'bottom', size: '1px', color: 'border' }
-                  : null
-              }
-              pad={{ bottom: 'small', right: 'medium' }}
-              onClick={() => handleAppClick(app)}
-            >
-              <SubtitleTextIcon
-                label={app.manifestData.displayName}
-                subtitle={app.name}
-                gap="xxsmall"
-                iconType="integrationAppLarge"
-                plainIcon={true}
-                backgroundColor={true}
-              />
-              <Icon type="checkSimple" accentColor={true} size="md" />
-            </Box>
-          ))}
-          {isFetching && (
-            <Box>
-              <Spinner />
-            </Box>
-          )}
-        </Box>
-      </>
-      <>
-        <Box gap="small" pad={{ bottom: 'medium' }}>
-          <Text size="large" color="secondaryText">
-            {t('Installed Apps')}
-          </Text>
-          <Text>{t('These are the apps you installed in your World')}</Text>
-        </Box>
-        <Box gap="small">
-          {filteredInstalledApps?.length !== 0 &&
-            filteredInstalledApps?.map((app, index) => (
-              <Box
-                key={index}
-                direction="row"
-                align="center"
-                justify="between"
-                border={
-                  index !== filteredInstalledApps?.length - 1
-                    ? { side: 'bottom', size: '1px', color: 'border' }
-                    : null
-                }
-                pad={{ bottom: 'small', right: 'medium' }}
-                onClick={() => handleAppClick(app)}
-              >
-                <SubtitleTextIcon
-                  label={app.manifestData.displayName}
-                  subtitle={app.name}
-                  gap="xxsmall"
-                  iconType="integrationAppLarge"
-                  plainIcon={true}
-                  backgroundColor={true}
-                />
-                <Icon type="moreDark" plain={true} />
-              </Box>
-            ))}
-          {filteredInstalledApps?.length === 0 && (
-            <InfoCard
-              icon="appCenter"
-              title={t('You have no installed apps')}
-              suggestion={t('Try some out for extra functionality!')}
-              noBorder={true}
-            />
-          )}
-          {isFetching && (
-            <Box>
-              <Spinner />
-            </Box>
-          )}
-        </Box>
-      </>
-    </Box>
+    <Stack direction="column" spacing="gap-y-4">
+      <Text variant="h6">{t('Installed Apps')}</Text>
+      {dummyInstalledApps.length ? (
+        <AppList apps={dummyInstalledApps} />
+      ) : (
+        <InfoCard
+          titleLabel={t('There are no apps installed yet')}
+          bodyLabel={t('You can install cool apps from the apps section')}
+          titleVariant="h6"
+          bodyVariant="footnotes2"
+        />
+      )}
+      <Text variant="h6">{t('Default Apps')}</Text>
+      <AppList apps={dummyDefaultApps} />
+    </Stack>
   );
 };
 

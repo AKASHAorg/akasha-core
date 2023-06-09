@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { filter, lastValueFrom } from 'rxjs';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
 import { UseAnalyticsActions } from './use-analytics';
@@ -18,6 +18,7 @@ import { logError } from './utils/error-handler';
 
 const LOGIN_STATE_KEY = 'LOGIN_STATE';
 const CHECK_SIGNUP_KEY = 'CHECK_SIGNUP_KEY';
+const CURRENT_USER_KEY = 'CURRENT_USER_KEY';
 
 const SIGNUP_STATES = {
   [AUTH_EVENTS.CONNECT_ADDRESS]: 0,
@@ -62,6 +63,21 @@ const initialData = {
   isSigningIn: false,
 };
 
+export function useCurrentUser() {
+  return useQuery([CURRENT_USER_KEY], () => getSDK().api.auth.getCurrentUser());
+}
+
+export function useConnectWallet(provider: EthProviders) {
+  const sdk = getSDK();
+  return useMutation(async () => sdk.api.auth.connectAddress(provider), {
+    onError: (err: WalletTransactionError) => {
+      if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
+        console.log('User rejected wallet connection');
+      }
+    },
+  });
+}
+
 /**
  * Hook for retrieving the current authentication state of the user
  * @example useGetLogin hook
@@ -70,7 +86,7 @@ const initialData = {
  * // can be used with useGetProfile hook to get the logged profile data
  * const profileDataQuery = useGetProfile(loginQuery.data?.pubKey);
  *
-  const loggedProfileData = profileDataQuery.data;
+ const loggedProfileData = profileDataQuery.data;
  * ```
  */
 export function useGetLogin(onError?: (error: Error) => void) {
@@ -86,22 +102,6 @@ export function useGetLogin(onError?: (error: Error) => void) {
     },
     onLogout: () => {
       queryClient.setQueryData([LOGIN_STATE_KEY], { ethAddress: null, pubKey: null });
-    },
-    waitForAuth: data => {
-      queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
-        ...prev,
-        waitForAuth: data,
-      }));
-    },
-    onReady: data => {
-      queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
-        ...prev,
-        ethAddress: data.ethAddress,
-        pubKey: data.pubKey,
-        waitForAuth: false,
-        isReady: true,
-        isSigningIn: false,
-      }));
     },
     onLoadFromCache: data => {
       queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
@@ -367,7 +367,7 @@ export function useLogout() {
 export function useCheckSignup(ethAddress: string) {
   const sdk = getSDK();
   return useQuery(
-    CHECK_SIGNUP_KEY,
+    [CHECK_SIGNUP_KEY],
     async () => {
       try {
         return await sdk.api.auth.checkIfSignedUp(ethAddress);

@@ -176,8 +176,8 @@ const Layout: React.FC<RootComponentProps> = props => {
       `;
 
   return (
-    <div className={tw('bg(white dark:black) min-h-screen mx-4')}>
-      <div className={tw('h-full w-full')} onClick={handleClickOutside}>
+    <div className={tw('bg(white dark:black) min-h-screen')}>
+      <div className={tw('h-full w-11/12 m-auto lg:w-full')} onClick={handleClickOutside}>
         <div className={tw(layoutStyle)}>
           <ScrollRestorer />
           <div className={tw(mobileLayoverStyle)}>
@@ -253,7 +253,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                 <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
                 <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
-              <div className={tw('fixed bottom-0 xl:static')}>
+              <div className={tw('fixed bottom-0 mr-4 mb-4')}>
                 <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
             </div>

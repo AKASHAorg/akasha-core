@@ -1,11 +1,11 @@
 import React from 'react';
 import objHash from 'object-hash';
-import { Query, useMutation, useQuery, useQueryClient } from 'react-query';
+import { Query, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
-import { IProfileData } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
 import { TRENDING_PROFILES_KEY } from './use-trending';
 import { FOLLOWERS_KEY, PROFILE_KEY } from './use-profile';
+import { Profile } from '@akashaorg/typings/ui';
 
 /**
  * @internal
@@ -38,6 +38,7 @@ const deduplicateArray = (arr: string[]): string[] => [...new Set(arr)];
 
 class GetFollowingBuffer {
   static buffer: string[] = [];
+
   static addToBuffer(arr: string[]) {
     this.buffer = deduplicateArray([...this.buffer, ...arr]);
   }
@@ -141,6 +142,7 @@ const getIsContactMultiple = async (mainProfile: string, checkIfContactsPubkeys:
 
 class GetContactListBuffer {
   static buffer: string[] = [];
+
   static addToBuffer(arr: string[]) {
     this.buffer = deduplicateArray([...this.buffer, ...arr]);
   }
@@ -259,7 +261,7 @@ export function useFollow() {
   const queryClient = useQueryClient();
   return useMutation(followPubKey => sdk.api.profile.follow(followPubKey), {
     onMutate: async (followPubKey: string) => {
-      await queryClient.cancelQueries(FOLLOWED_PROFILES_KEY);
+      await queryClient.cancelQueries([FOLLOWED_PROFILES_KEY]);
       // Snapshot the previous value
       const previousFollowedProfiles: string[] =
         (await queryClient.getQueryData([FOLLOWED_PROFILES_KEY])) || [];
@@ -273,47 +275,47 @@ export function useFollow() {
       return { previousFollowedProfiles };
     },
     onSuccess: async (_data, vars) => {
-      const followPubKey = vars;
-      queryClient.setQueryData<IProfileData[]>([TRENDING_PROFILES_KEY], prev => {
-        return prev.map(profile => {
-          if (profile.pubKey === followPubKey) {
-            const followersCount = profile.totalFollowers;
-            let totalFollowers: number;
-            if (typeof followersCount === 'number') {
-              totalFollowers = Math.max(followersCount + 1);
-            } else {
-              totalFollowers = Math.max(0, parseInt(followersCount, 10) + 1);
-            }
-            return {
-              ...profile,
-              totalFollowers,
-            };
-          }
-          return profile;
-        });
-      });
+      // const followPubKey = vars;
+      // queryClient.setQueryData<Profile[]>([TRENDING_PROFILES_KEY], prev => {
+      //   return prev.map(profile => {
+      //     if (profile.pubKey === followPubKey) {
+      //       const followersCount = profile.totalFollowers;
+      //       let totalFollowers: number;
+      //       if (typeof followersCount === 'number') {
+      //         totalFollowers = Math.max(followersCount + 1);
+      //       } else {
+      //         totalFollowers = Math.max(0, parseInt(followersCount, 10) + 1);
+      //       }
+      //       return {
+      //         ...profile,
+      //         totalFollowers,
+      //       };
+      //     }
+      //     return profile;
+      //   });
+      // });
       // invalidate the queries of the profile if it's already fetched
       // eg. we are on his profile page
-      const profileQuery = queryClient.getQueriesData<IProfileData>({
-        queryKey: PROFILE_KEY,
-        predicate: (query: Query<IProfileData>) => {
-          return query.state.data && query.state.data.pubKey === followPubKey;
-        },
-      })[0];
-      if (profileQuery) {
-        const [, profile] = profileQuery;
-        if (profile) {
-          await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
-          await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
-        }
-      } else {
-        const sdk = getSDK();
-        const user = await sdk.api.auth.getCurrentUser();
-        if (user) {
-          await queryClient.invalidateQueries([PROFILE_KEY, user.pubKey]);
-          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.pubKey]);
-        }
-      }
+      // const profileQuery = queryClient.getQueriesData<Profile>({
+      //   queryKey: [PROFILE_KEY],
+      //   predicate: (query: Query<Profile>) => {
+      //     return query.state.data && query.state.data.pubKey === followPubKey;
+      //   },
+      // })[0];
+      // if (profileQuery) {
+      //   const [, profile] = profileQuery;
+      //   if (profile) {
+      //     await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
+      //     await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+      //   }
+      // } else {
+      //   const sdk = getSDK();
+      //   const user = await sdk.api.auth.getCurrentUser();
+      //   if (user) {
+      //     await queryClient.invalidateQueries([PROFILE_KEY, user.pubKey]);
+      //     await queryClient.invalidateQueries([FOLLOWERS_KEY, user.pubKey]);
+      //   }
+      // }
     },
     onError: (err, variables, context) => {
       if (context?.previousFollowedProfiles) {
@@ -336,31 +338,31 @@ export function useFollow() {
 export function useUnfollow() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
-  return useMutation(unfollowPubKey => sdk.api.profile.unFollow(unfollowPubKey), {
-    onMutate: async (unfollowPubKey: string) => {
-      await queryClient.cancelQueries(FOLLOWED_PROFILES_KEY);
+  return useMutation(unfollowId => sdk.api.profile.unFollow(unfollowId), {
+    onMutate: async (unfollowId: string) => {
+      await queryClient.cancelQueries([FOLLOWED_PROFILES_KEY]);
       // Snapshot the previous value
       const previousFollowedProfiles: string[] =
         (await queryClient.getQueryData([FOLLOWED_PROFILES_KEY])) || [];
       const updatedFollowedProfiles = previousFollowedProfiles.filter(
-        profile => profile !== unfollowPubKey,
+        profile => profile !== unfollowId,
       );
       queryClient.setQueryData([FOLLOWED_PROFILES_KEY], updatedFollowedProfiles);
 
       return { previousFollowedProfiles };
     },
     onSuccess: async (_data, vars) => {
-      const unfollowPubKey = vars;
-      queryClient.setQueryData<IProfileData[]>([TRENDING_PROFILES_KEY], prev => {
+      const unfollowId = vars;
+      queryClient.setQueryData<Profile[]>([TRENDING_PROFILES_KEY], prev => {
         return prev.map(profile => {
-          if (profile.pubKey === unfollowPubKey) {
-            const followersCount = profile.totalFollowers;
+          if (profile.id === unfollowId) {
+            // const followersCount = profile.totalFollowers;
             let totalFollowers: number;
-            if (typeof followersCount === 'number') {
-              totalFollowers = followersCount - 1;
-            } else {
-              totalFollowers = parseInt(followersCount, 10) - 1;
-            }
+            // if (typeof followersCount === 'number') {
+            //   totalFollowers = followersCount - 1;
+            // } else {
+            //   totalFollowers = parseInt(followersCount, 10) - 1;
+            // }
             return {
               ...profile,
               totalFollowers,
@@ -371,17 +373,17 @@ export function useUnfollow() {
       });
       // invalidate the queries of the profile if it's already fetched
       // eg. we are on his profile page
-      const profileQuery = queryClient.getQueriesData<IProfileData>({
-        queryKey: PROFILE_KEY,
-        predicate: (query: Query<IProfileData>) => {
-          return query.state.data && query.state.data.pubKey === unfollowPubKey;
+      const profileQuery = queryClient.getQueriesData<Profile>({
+        queryKey: [PROFILE_KEY],
+        predicate: (query: Query<Profile>) => {
+          return query.state.data && query.state.data.id === unfollowId;
         },
       })[0];
       if (profileQuery) {
         const [, profile] = profileQuery;
         if (profile) {
-          await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
-          await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+          await queryClient.invalidateQueries([PROFILE_KEY, profile.id]);
+          await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.id]);
         }
       } else {
         const sdk = getSDK();

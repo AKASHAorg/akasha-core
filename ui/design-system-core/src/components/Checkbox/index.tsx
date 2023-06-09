@@ -41,7 +41,7 @@ const Checkbox: React.FC<iCheckboxProps> = ({
   indeterminate = false,
   isDisabled = false,
   handleChange,
-  customStyle,
+  customStyle = '',
 }) => {
   const checkboxRef = React.useRef<HTMLInputElement>(null);
 

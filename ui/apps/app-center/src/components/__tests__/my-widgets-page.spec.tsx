@@ -13,6 +13,6 @@ describe('< MyWidgetsPage /> component', () => {
   });
 
   it('should render my widgets page', async () => {
-    expect(screen.getByText(/World Widgets/i)).toBeInTheDocument();
+    expect(screen.getByText(/Newest Widgets/i)).toBeInTheDocument();
   });
 });

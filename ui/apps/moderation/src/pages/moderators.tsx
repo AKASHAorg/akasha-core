@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetModerators } from '@akashaorg/ui-awf-hooks';
-import { NavigateToParams } from '@akashaorg/typings/ui';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ModerationSwitchCard from '@akashaorg/design-system-components/lib/components/ModerationSwitchCard';
@@ -10,14 +9,13 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 import ModeratorDetailMiniCard from '../components/moderator/mini-card';
 
-export interface IModeratorsPageProps {
-  navigateTo: (args: NavigateToParams) => void;
-}
+import { generateTenureInfoLabel } from '../utils';
+import { BasePageProps } from './dashboard';
 
-export const Moderators: React.FC<IModeratorsPageProps> = props => {
+export const Moderators: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
-  const [activeTab, setActiveTab] = React.useState<string>('All');
+  const [activeTab, setActiveTab] = useState<string>('All');
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -36,10 +34,10 @@ export const Moderators: React.FC<IModeratorsPageProps> = props => {
     activeTab === 'All' ? moderator : moderator.status === activeTab.toLowerCase(),
   );
 
-  const handleViewModerator = (pubKey: string) => {
+  const handleViewModerator = (profileId: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `/moderator/${pubKey}`,
+      getNavigationUrl: () => `/moderator/${profileId}`,
     });
   };
 
@@ -56,23 +54,19 @@ export const Moderators: React.FC<IModeratorsPageProps> = props => {
       {!getModeratorsQuery.isFetching && filteredModeratorList && filteredModeratorList.length > 0 && (
         <Box customStyle="flex-1">
           <Box customStyle="w-full h-full overflow-y-scroll">
-            {filteredModeratorList?.map((moderator, idx) => (
-              <ModeratorDetailMiniCard
-                key={idx}
-                moderator={moderator}
-                hasBorderBottom={idx < filteredModeratorList.length - 1}
-                tenureInfoLabel={
-                  moderator.status === 'active'
-                    ? t('Moderator since')
-                    : t(`{{status}} on`, {
-                        status: moderator.status
-                          ? moderator.status[0].toUpperCase() + moderator.status.slice(1)
-                          : '',
-                      })
-                }
-                onCardClick={handleViewModerator}
-              />
-            ))}
+            {filteredModeratorList?.map((moderator, idx) => {
+              const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
+
+              return (
+                <ModeratorDetailMiniCard
+                  key={moderator.did.id}
+                  moderator={moderator}
+                  hasBorderBottom={idx < filteredModeratorList.length - 1}
+                  tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
+                  onCardClick={handleViewModerator}
+                />
+              );
+            })}
           </Box>
         </Box>
       )}

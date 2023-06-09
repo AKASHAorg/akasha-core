@@ -12,12 +12,21 @@ const TabContent = (
   </>
 );
 
+const TabComponent = ({ labels }) => {
+  const [value, setValue] = React.useState(0);
+  return (
+    <Tab value={value} onChange={setValue} labels={labels}>
+      {TabContent}
+    </Tab>
+  );
+};
+
 describe('<Tab /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Tab labels={TabLabels}> {TabContent}</Tab>, {});
+      componentWrapper = customRender(<TabComponent labels={TabLabels} />, {});
     });
   });
 

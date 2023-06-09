@@ -17,7 +17,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     ...routes,
   },
   menuItems: {
-    label: 'Moderating',
+    label: 'Vibe',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.OtherArea],
@@ -47,11 +47,5 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
         type: MenuItemType.Internal,
       },
     ],
-  },
-  extends: (matcher, loader) => {
-    matcher({
-      'report-modal': loader(() => import('./extensions/report-modal')),
-      'moderate-modal': loader(() => import('./extensions/moderate-modal')),
-    });
   },
 });

@@ -1,12 +1,16 @@
 import React, { forwardRef } from 'react';
+import { apply, tw } from '@twind/core';
+
+import { ButtonIcon } from './ButtonIcon';
+import { IconOnlyButton } from './IconOnlyButton';
+
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
-import { IconOnlyButton } from './IconOnlyButton';
+
 import { ButtonProps, ButtonSize } from './types';
+
 import { getTextClasses } from './getTextClasses';
 import { getContainerClasses } from './getContainerClasses';
-import { ButtonIcon } from './ButtonIcon';
-import { apply, tw } from '@twind/core';
 
 const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
   const {
@@ -24,6 +28,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     breakPointSize,
     customStyle = '',
     active,
+    hover = true,
     ...rest
   } = props;
 
@@ -47,14 +52,17 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         breakPointSize={breakPointSize}
         customStyle={customStyle}
         active={active}
+        hover={hover}
         ref={ref}
         {...rest}
       />
     );
   }
 
-  const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled, active });
-  const textStyle = getTextClasses({ variant, loading, disabled });
+  const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled, active, hover });
+
+  const textStyle = getTextClasses({ variant, loading, disabled, hover, active });
+
   const breakPointStyle = breakPointSize
     ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
     : '';
@@ -90,6 +98,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 loading={false}
                 breakPointSize={breakPointSize}
                 disabled={disabled}
+                active={active}
               />
             )}
             <Text
@@ -107,6 +116,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 loading={false}
                 breakPointSize={breakPointSize}
                 disabled={disabled}
+                active={active}
               />
             )}
           </>

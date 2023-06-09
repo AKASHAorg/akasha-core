@@ -1,6 +1,6 @@
 # Ethereum World App Moderation
 
-> Moderation app for Ethereum World
+> Vibe for Ethereum World
 ## Table of contents
 
 - [Background](#background)
@@ -13,7 +13,7 @@
 
 ## Background
 
-Moderation App adds moderation-related functionalities of reporting/moderating offensive/abusive contents and maintaining a log of moderated items, to the Ethereum World. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
+Vibe adds moderation-related functionalities of reporting/moderating offensive/abusive contents and maintaining a log of moderated items, to the Ethereum World. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
 
 ## Components
 

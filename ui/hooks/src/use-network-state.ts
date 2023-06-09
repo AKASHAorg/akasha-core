@@ -1,5 +1,4 @@
-import { useQuery } from 'react-query';
-import { lastValueFrom } from 'rxjs';
+import { useQuery } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 
 export const NETWORK_STATE_KEY = 'Network_State';

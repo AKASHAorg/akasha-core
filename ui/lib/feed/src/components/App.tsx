@@ -2,16 +2,15 @@ import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import {
   TrackEventData,
-  IProfileData,
   NavigateToParams,
   RootComponentProps,
   EntityTypes,
   ModalNavigationOptions,
   IEntryPage,
 } from '@akashaorg/typings/ui';
-import { LoginState } from '@akashaorg/ui-awf-hooks/lib/use-login';
 import { Logger } from '@akashaorg/awf-sdk';
 import EntryFeed from './entry-feed';
+import { Profile } from '@akashaorg/typings/ui';
 
 export type FeedWidgetProps = {
   logger: Logger;
@@ -19,13 +18,12 @@ export type FeedWidgetProps = {
   itemType: EntityTypes;
   onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;
-  loginState: LoginState;
   navigateTo?: (args: NavigateToParams) => void;
   navigateToModal: (props: ModalNavigationOptions) => void;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';
   hasNextPage: boolean;
-  loggedProfile?: IProfileData;
+  loggedProfileData?: Profile;
   contentClickable?: boolean;
   onEntryFlag: (entryId: string, itemType: EntityTypes) => () => void;
   onEntryRemove?: (entryId: string) => void;

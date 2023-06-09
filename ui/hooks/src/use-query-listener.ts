@@ -6,8 +6,8 @@ import {
   QueryObserver,
   QueryObserverResult,
   useQueryClient,
-} from 'react-query';
-import { Mutation } from 'react-query/types/core/mutation';
+} from '@tanstack/react-query';
+import type { Mutation } from '@tanstack/react-query';
 
 /**
  * Hook to detect changes to a mutation
@@ -24,9 +24,9 @@ export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
   const queryClient = useQueryClient();
   const mutationCache = queryClient.getMutationCache();
   React.useEffect(() => {
-    const unsubscribe = mutationCache.subscribe(mutation => {
-      if (mutation.options.mutationKey === mutationKey) {
-        setMutation(mutation as unknown as Mutation<unknown, unknown, TVars>);
+    const unsubscribe = mutationCache.subscribe(event => {
+      if (event.mutation && event.mutation.options.mutationKey === mutationKey) {
+        setMutation(event.mutation as unknown as Mutation<unknown, unknown, TVars>);
       }
     });
     return () => {
@@ -54,12 +54,12 @@ export const useMutationsListener = <TVars>(mutationKey: MutationKey) => {
   const queryClient = useQueryClient();
   const mutationCache = queryClient.getMutationCache();
   React.useEffect(() => {
-    const unsubscribe = mutationCache.subscribe(mutation => {
-      if (mutation.options.mutationKey === mutationKey) {
-        if (mutation.state.status === 'loading') {
+    const unsubscribe = mutationCache.subscribe(event => {
+      if (event.mutation && event.mutation.options.mutationKey === mutationKey) {
+        if (event.mutation.state.status === 'loading') {
           setMutations(mutations =>
             uniqBy(
-              [mutation as unknown as Mutation<unknown, unknown, TVars>, ...mutations],
+              [event as unknown as Mutation<unknown, unknown, TVars>, ...mutations],
               'mutationId',
             ),
           );
@@ -67,8 +67,8 @@ export const useMutationsListener = <TVars>(mutationKey: MutationKey) => {
         }
         setMutations(mutations =>
           mutations.map(_mutation => {
-            if (_mutation.mutationId === mutation.mutationId) {
-              return mutation as unknown as Mutation<unknown, unknown, TVars>;
+            if (_mutation.mutationId === event.mutation.mutationId) {
+              return event.mutation as unknown as Mutation<unknown, unknown, TVars>;
             }
             return _mutation;
           }),

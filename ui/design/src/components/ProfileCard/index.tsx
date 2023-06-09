@@ -2,31 +2,27 @@ import React, { useState } from 'react';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
 import { isMobile, isMobileOnly } from 'react-device-detect';
-
-import { IProfileData } from '@akashaorg/typings/ui';
-
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
 import TextIcon from '../TextIcon';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { ProfileCardAvatar, ProfileCardCoverImage, ProfileCardName } from './profile-card-fields';
-
 import ProfileMenuDropdown from './profile-card-menu-dropdown';
 import MobileListModal from '../MobileListModal';
-
 import { truncateMiddle } from '../../utils/string-utils';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileCardProps {
   className?: string;
   showMore: boolean;
   isFollowing?: boolean;
-  profileData: IProfileData;
+  profileData: Profile;
+  isViewer?: boolean;
   followingLabel: string;
   followLabel?: string;
   unfollowLabel?: string;
   editProfileLabel?: string;
   shareProfileLabel: string;
-  viewerIsOwner?: boolean;
   modalSlotId: string;
   actionButtonExt?: React.ReactNode;
   flaggable: boolean;
@@ -46,17 +42,22 @@ const EditButton = styled(TextIcon)`
   cursor: pointer;
   border: 1px solid ${props => props.theme.colors.blue};
   padding: 0.625em 0.5em;
+
   > span {
     color: ${props => props.theme.colors.blue};
   }
+
   svg * {
     stroke: ${props => props.theme.colors.blue};
   }
+
   &:hover {
     background: ${props => props.theme.colors.blue};
+
     > span {
       color: ${props => props.theme.colors.white};
     }
+
     svg * {
       stroke: ${props => props.theme.colors.white};
     }
@@ -76,7 +77,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     unfollowLabel,
     editProfileLabel,
     shareProfileLabel,
-    viewerIsOwner,
     modalSlotId,
     actionButtonExt,
     flaggable,
@@ -88,18 +88,19 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     handleShareClick,
     handleUnfollow,
     handleFollow,
+    isViewer,
   } = props;
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [avatar, setAvatar] = useState(profileData.avatar);
-  const [coverImage, setCoverImage] = useState(profileData.coverImage);
+  const [background, setBackground] = useState(profileData.background);
   const [name, setName] = useState(profileData.name);
 
   const menuRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   React.useEffect(() => {
     setAvatar(profileData.avatar);
-    setCoverImage(profileData.coverImage);
+    setBackground(profileData.background);
     setName(profileData.name);
   }, [profileData]);
 
@@ -115,23 +116,23 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     <MainAreaCardBox className={className}>
       <ProfileCardCoverImage
         shareProfileLabel={shareProfileLabel}
-        coverImage={coverImage}
+        background={background}
         onShareClick={handleShareClick}
       />
       <Box direction="column" margin={{ horizontal: 'medium' }}>
         <Box direction="row" justify="between" align="start">
           <Box direction="row">
             <ProfileCardAvatar
-              ethAddress={profileData.ethAddress}
+              profileId={profileData.did.id}
               avatar={avatar}
               avatarBorderColor="darkerBlue" // TODO: determine this from the profile data
             />
             <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
-              <ProfileCardName name={name || truncateMiddle(profileData.ethAddress)} />
+              <ProfileCardName name={name || truncateMiddle(profileData.did.id)} />
               <Box direction="row" gap="xsmall">
-                <Text size="medium" color="secondaryText">
-                  {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}
-                </Text>
+                {/*<Text size="medium" color="secondaryText">*/}
+                {/*  {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}*/}
+                {/*</Text>*/}
               </Box>
             </Box>
           </Box>
@@ -142,8 +143,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             flex={{ shrink: 0 }}
             margin={{ top: 'small' }}
           >
-            {!viewerIsOwner && actionButtonExt}
-            {!viewerIsOwner && (
+            {!isViewer && actionButtonExt}
+            {!isViewer && (
               <Box data-testid="profile-card-follow-button">
                 <DuplexButton
                   icon={<Icon type="following" />}
@@ -156,10 +157,10 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 />
               </Box>
             )}
-            {!isMobile && viewerIsOwner && (
+            {!isMobile && isViewer && (
               <EditButton iconType="editSimple" label={editProfileLabel} onClick={onUpdateClick} />
             )}
-            {showMore && (isMobile || (!isMobile && !viewerIsOwner)) ? (
+            {showMore && (isMobile || (!isMobile && !isViewer)) ? (
               <Icon
                 type="moreDark"
                 plain={true}

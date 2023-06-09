@@ -57,14 +57,8 @@ import {
 } from './use-notifications';
 import { useNetworkState, useCurrentNetwork } from './use-network-state';
 import { useMentionSearch } from './use-mentions';
-import {
-  useGetLogin,
-  useLogin,
-  useLogout,
-  LoginState,
-  useCheckSignup,
-  useSignUp,
-} from './use-login';
+
+export * from './use-login';
 import { useLegalDoc } from './use-legal';
 import { useIsFollowingMultiple, useIsContactMultiple, useFollow, useUnfollow } from './use-follow';
 import {
@@ -98,7 +92,6 @@ import {
   useReport,
 } from './use-moderation';
 import {
-  useConnectProvider,
   disconnectProvider,
   useInjectedProvider,
   useRequiredNetworkName,
@@ -135,6 +128,7 @@ import {
   useVerifySignature,
 } from './use-dev-profile';
 import { useDismissedCard } from './use-dismissed-card';
+import useModerationCategory from './use-moderation-categories';
 
 export {
   constants,
@@ -210,13 +204,6 @@ export {
   useMentionSearch,
   // use-navigation
   useEntryNavigation,
-  // use-login
-  LoginState,
-  useGetLogin,
-  useLogin,
-  useLogout,
-  useCheckSignup,
-  useSignUp,
   // use-legal
   useLegalDoc,
   // use-follow
@@ -255,7 +242,6 @@ export {
   useReport,
   // use-injected-provider
   useInjectedProvider,
-  useConnectProvider,
   disconnectProvider,
   useRequiredNetworkName,
   switchToRequiredNetwork,
@@ -288,4 +274,5 @@ export {
   useVerifySignature,
   // use-dismissed-card
   useDismissedCard,
+  useModerationCategory,
 };

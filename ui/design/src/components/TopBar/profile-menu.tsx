@@ -1,4 +1,4 @@
-import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
+import { IMenuItem } from '@akashaorg/typings/ui';
 import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
@@ -10,9 +10,10 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledDrop, StyledPopoverBox, StyledOverlay, StyledAccordionPanel } from './styled-topbar';
 import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 import { ModalRenderer } from '../SignInModal/modal-renderer';
+import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileMenu {
-  loggedProfileData?: Partial<IProfileData>;
+  loggedProfileData?: Profile;
   menuItems?: IMenuItem[];
   legalMenu: IMenuItem | null;
   target: HTMLElement;
@@ -88,14 +89,10 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
           >
             <StyledPopoverBox pad="xsmall" margin={{ vertical: 'xsmall' }} responsive={false}>
               <ProfileAvatarButton
-                ethAddress={loggedProfileData?.ethAddress as string}
+                profileId={loggedProfileData?.did.id}
                 avatarImage={loggedProfileData?.avatar}
                 label={loggedProfileData?.name}
-                info={
-                  loggedProfileData?.userName
-                    ? `@${loggedProfileData.userName.replace('@', '')}`
-                    : undefined
-                }
+                info={loggedProfileData?.name}
               />
             </StyledPopoverBox>
           </Box>
@@ -111,7 +108,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
 
   const renderProfileMenu = () => (
     <Box pad="xsmall" direction="column" align="center">
-      {loggedProfileData?.ethAddress &&
+      {loggedProfileData?.did.id &&
         menuItems?.map((menuItem: IMenuItem, index: number) => (
           <Box fill="horizontal" onClick={onMyProfileButtonClick} key={index}>
             {renderAvatarMenuItem(menuItem)}
@@ -146,7 +143,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
       })}
       <Box
         border={
-          loggedProfileData?.ethAddress
+          loggedProfileData?.did.id
             ? { style: 'solid', size: '1px', color: 'border', side: 'bottom' }
             : undefined
         }
@@ -178,7 +175,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
           </StyledAccordionPanel>
         </Accordion>
       </Box>
-      {loggedProfileData?.ethAddress && onLogout && (
+      {loggedProfileData?.did.id && onLogout && (
         <Box fill="horizontal" justify="start">
           <StyledPopoverBox
             pad="xsmall"
