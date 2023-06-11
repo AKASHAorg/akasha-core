@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { tw } from '@twind/core';
 import {
   RootComponentProps,
   IEntryData,
@@ -34,7 +35,7 @@ import EntryCardRenderer from './entry-renderer';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import InfoCard from '@akashaorg/design-system-components/lib/components/InfoCard';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '@akashaorg/design-system-components/lib/components/ProfileSearchCard';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import SearchStartCard from '@akashaorg/design-system-components/lib/components/SearchStartCard';
@@ -440,13 +441,28 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         /* allQueriesFinished */ !isFetchingSearch &&
           searchKeyword &&
           /* isAllTabActive ? emptySearchState : */ !searchState[activeButton]?.results?.length && (
-            <Box customStyle="mt-4">
+            <Box customStyle="mt-8">
               <InfoCard
-                explanation={t('Oops! Looks like there’s no results for the word')}
-                keyword={searchKeyword}
-                preposition_in={t('in')}
-                section={activeButton}
-                suggestion={t('Try searching for something else or try a different Category!')}
+                titleLabel=""
+                bodyLabel={
+                  <>
+                    {/* {t(
+                      'Oops! Looks like there’s no results for the word {{keyword}} in {{section}}. Try searching for something else or try a different Category!',
+                      { keyword: searchKeyword, section: activeButton },
+                    )} */}
+                    {t('Oops! Looks like there’re no results for the word ')}{' '}
+                    <span className={tw('font-bold')}>{searchKeyword}</span> {t('in ')}{' '}
+                    <span className={tw('font-bold')}>{activeButton}</span>.{' '}
+                    {t(' Try searching for something else or try a different Category!')}
+                  </>
+                }
+                bodyVariant="body1"
+                customWidthStyle="w-[90%] md:w-[50%] m-auto"
+                // explanation={t('Oops! Looks like there’s no results for the word')}
+                // keyword={searchKeyword}
+                // preposition_in={t('in')}
+                // section={activeButton}
+                // suggestion={t('Try searching for something else or try a different Category!')}
               />
             </Box>
           )
