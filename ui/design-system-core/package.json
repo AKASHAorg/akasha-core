@@ -10,10 +10,12 @@
   "type": "module",
   "main": "lib/index.js",
   "directories": {
-    "lib": "lib"
+    "lib": "lib",
+    "src": "src"
   },
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "repository": {
     "type": "git",
@@ -61,7 +63,8 @@
     "react-use": "17.4.0",
     "react-easy-crop": "4.0.1",
     "@hookform/resolvers": "3.0.0",
-    "react-hook-form": "7.43.9"
+    "react-hook-form": "7.43.9",
+    "react-helmet": "6.1.0"
   },
   "devDependencies": {
     "@akashaorg/typings": "*",

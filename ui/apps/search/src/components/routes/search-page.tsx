@@ -36,7 +36,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import InfoCard from '@akashaorg/design-system-components/lib/components/InfoCard';
 import ProfileSearchCard from '@akashaorg/design-system-components/lib/components/ProfileSearchCard';
-import SearchDefaultCard from '@akashaorg/design-system-components/lib/components/SearchDefaultCard';
+import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import SearchStartCard from '@akashaorg/design-system-components/lib/components/SearchStartCard';
 import SearchAppFilter from '@akashaorg/design-system-components/lib/components/SearchAppFilter';
 import SeventyFivePercentSpinner from '@akashaorg/design-system-core/lib/components/SeventyFivePercentSpinner';
@@ -431,9 +431,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           dropdownMenuItems={dropdownMenuItems}
           selected={selected}
           setSelected={setSelected}
+          resetLabel={t('Reset')}
         />
       )}
-      {searchKeyword === '' && <SearchDefaultCard />}
+      {searchKeyword === '' && <DefaultEmptyCard infoText=" ✨ Start searching for something ✨" />}
 
       {
         /* allQueriesFinished */ !isFetchingSearch &&

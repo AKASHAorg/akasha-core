@@ -60,6 +60,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   if (showFeedback) {
     setTimeout(() => {
       setShowFeedback(false);
+      setMessage('');
     }, 6000);
   }
 

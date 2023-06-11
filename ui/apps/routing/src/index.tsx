@@ -131,7 +131,7 @@ export class RoutingPlugin {
    *  handleRedirect({
    *     search: new URLSearchParam(location.search),
    *     fallBack: {
-   *       appName: '@akashaorg/app-bookmarks',
+   *       appName: '@akashaorg/app-lists',
    *       getNavigationUrl: (routes) => routes.someRoute
    *     }
    *  });

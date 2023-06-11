@@ -1,12 +1,10 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import { FeedWidgetProps } from './App';
 import EntryRenderer from './entry-renderer';
-
-const { EntryList } = DS;
+import EntryList from '@akashaorg/design-system-components/lib/components/EntryList';
 
 const EntryFeed = (props: FeedWidgetProps) => {
   const handleEntryNavigate = useEntryNavigation(props.navigateTo);

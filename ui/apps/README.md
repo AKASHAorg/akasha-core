@@ -9,7 +9,7 @@
 - [Auth App](./auth-app/README.md)
 - [Settings App](./settings-app/README.md)
 - [AKASHAverse](./app-center/README.md)
-- [Bookmarks](./bookmarks/README.md)
+- [Lists](./bookmarks/README.md)
 - [Legal](./legal/README.md)
 - [Notifcations](./notifications/README.md)
 - [Profile](./profile/README.md)

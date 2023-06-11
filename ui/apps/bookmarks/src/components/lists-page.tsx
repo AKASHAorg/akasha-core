@@ -1,22 +1,33 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
+import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { useGetBookmarks, usePosts, checkEntryActive } from '@akashaorg/ui-awf-hooks';
+import {
+  useGetBookmarks,
+  useDeleteBookmark,
+  usePosts,
+  checkEntryActive,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-const { Spinner, StartCard, InfoCard, Box } = DS;
-
-type BookmarksPageProps = Omit<
+type ListsPageProps = Omit<
   RootComponentProps,
   'layout' | 'events' | 'domElement' | 'name' | 'unmountSelf' | 'activeWhen' | 'rootNodeId'
 >;
 
-const BookmarksPage: React.FC<BookmarksPageProps> = props => {
-  const { t } = useTranslation();
+const ListsPage: React.FC<ListsPageProps> = props => {
+  const { t } = useTranslation('app-lists');
+
+  const [showModal, setShowModal] = React.useState(false);
+  const bookmarkDelete = useDeleteBookmark();
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
@@ -29,19 +40,19 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     return loggedProfileData?.did?.id;
   }, [loggedProfileData?.did?.id]);
 
-  const bookmarksReq = useGetBookmarks(isLoggedIn);
+  const listsReq = useGetBookmarks(isLoggedIn);
   /**
-   * Currently react query's initialData isn't working properly so bookmarksReq.data will return undefined even if we supply initialData.
+   * Currently react query's initialData isn't working properly so listsReq.data will return undefined even if we supply initialData.
    * This will be fixed in v4 of react query(https://github.com/DamianOsipiuk/vue-query/issues/124).
    * In the mean time, the following check will ensure undefined data is handled.  */
-  const bookmarks = bookmarksReq.data || [];
+  const lists = listsReq.data || [];
 
-  const bookmarkedPostIds = bookmarks.map((bm: Record<string, string>) => bm.itemId);
-  const bookmarkedPosts = usePosts({ postIds: bookmarkedPostIds, enabler: true });
+  const bookmarkedBeamsIds = lists.map((bm: Record<string, string>) => bm.itemId);
+  const bookmarkedBeams = usePosts({ postIds: bookmarkedBeamsIds, enabler: true });
   const numberOfBookmarkedInactivePosts = React.useMemo(
-    () => bookmarkedPosts.filter(({ data }) => (data ? !checkEntryActive(data) : false)).length,
+    () => bookmarkedBeams.filter(({ data }) => (data ? !checkEntryActive(data) : false)).length,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [bookmarkedPostIds],
+    [bookmarkedBeamsIds],
   );
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -63,9 +74,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     });
   };
 
-  const description = t(
-    'Bookmarks help you save your favorite posts for quick access at any time.',
-  );
+  const description = t('Lists help you save your favorite posts for quick access at any time.');
 
   const getInactivePostsText = (numberOfBookmarkedInactivePosts: number) => {
     const linkingVerb = numberOfBookmarkedInactivePosts > 1 ? t('are') : t('is');
@@ -79,48 +88,52 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   };
 
   const getSubtitleText = () => {
-    if (isLoggedIn && bookmarks?.length) {
-      return t('You have {{ bookmarkCount }} bookmarks.{{ inactivePostsText }}', {
-        bookmarkCount: bookmarks.length,
+    if (isLoggedIn && lists?.length) {
+      return t('You have {{ bookmarkCount }} lists.{{ inactivePostsText }}', {
+        bookmarkCount: lists.length,
         inactivePostsText: getInactivePostsText(numberOfBookmarkedInactivePosts),
       });
     }
-    if (isLoggedIn && !bookmarks?.length) {
+    if (isLoggedIn && !lists?.length) {
       return description;
     }
-    return t('Check out the posts saved in your bookmarks');
+    return t('Check out the posts saved in your lists');
+  };
+
+  const handleIconMenuClick = () => {
+    setShowModal(!showModal);
+  };
+
+  const removeAllBookmarkedItems = () => {
+    bookmarkedBeamsIds.forEach(itemId => bookmarkDelete.mutate(itemId));
   };
 
   return (
     <>
-      {bookmarksReq.status === 'error' && (
+      <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
+      {listsReq.status === 'error' && (
         <ErrorLoader
           type="script-error"
-          title={t('There was an error loading the bookmarks')}
-          details={bookmarksReq.error as string}
+          title={t('There was an error loading the lists')}
+          details={listsReq.error as string}
         />
       )}
-      {bookmarksReq.status !== 'error' && (
-        <Box data-testid="bookmarks" gap="medium">
-          <StartCard
-            title={t('Bookmarks')}
+      {listsReq.status !== 'error' && (
+        <Box data-testid="lists" customStyle="space-x-8 space-y-8">
+          {/* <StartCard
+            title={t('Lists')}
             subtitle={getSubtitleText()}
             heading={t('✨ Save what inspires you ✨')}
             description={description}
             image={'/images/no-saved-posts-error.webp'}
             showMainArea={!isLoggedIn}
-          />
-          {!bookmarksReq.isFetched && isLoggedIn && <Spinner />}
-          {bookmarksReq.isFetched && (!bookmarks || !bookmarks.length) && (
-            <InfoCard
-              icon="bookmark"
-              title={t('No bookmarks yet 🔖')}
-              suggestion={t(
-                'When you bookmark things, you’ll find them waiting patiently for you here.',
-              )}
-            />
+          /> */}
+
+          {!listsReq.isFetched && isLoggedIn && <Spinner />}
+          {(!isLoggedIn || (listsReq.isFetched && (!lists || !lists.length))) && (
+            <DefaultEmptyCard infoText={t('You don’t have any saved content in your List')} />
           )}
-          {bookmarksReq.status === 'success' && bookmarks.length > 0 && (
+          {listsReq.status === 'success' && lists.length > 0 && (
             <FeedWidget
               modalSlotId={props.layoutConfig.modalSlotId}
               itemType={EntityTypes.POST}
@@ -131,8 +144,8 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               getShareUrl={(itemId: string) =>
                 `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
               }
-              pages={[{ results: bookmarkedPostIds, total: bookmarkedPostIds.length }]}
-              requestStatus={bookmarksReq.status}
+              pages={[{ results: bookmarkedBeamsIds, total: bookmarkedBeamsIds.length }]}
+              requestStatus={listsReq.status}
               loggedProfileData={loggedProfileData}
               navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               navigateToModal={props.navigateToModal}
@@ -141,9 +154,9 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               contentClickable={true}
               onEntryFlag={handleEntryFlag}
               onEntryRemove={handleEntryRemove}
-              removeEntryLabel={t('Delete Post')}
-              removedByMeLabel={t('You deleted this post')}
-              removedByAuthorLabel={t('This post was deleted by its author')}
+              removeEntryLabel={t('Delete Beam')}
+              removedByMeLabel={t('You deleted this beam')}
+              removedByAuthorLabel={t('This beam was deleted by its author')}
               uiEvents={props.uiEvents}
               itemSpacing={8}
               i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
@@ -151,8 +164,36 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
           )}
         </Box>
       )}
+      <Modal
+        title={{ label: t('Remove Content') }}
+        show={showModal}
+        onClose={() => {
+          setShowModal(false);
+        }}
+        actions={[
+          {
+            variant: 'secondary',
+            label: t('Cancel'),
+            onClick: () => {
+              setShowModal(!showModal);
+            },
+          },
+          {
+            variant: 'primary',
+            label: 'Remove All',
+            onClick: () => {
+              removeAllBookmarkedItems();
+              setShowModal(!showModal);
+            },
+          },
+        ]}
+      >
+        <Text variant="body1">
+          {t('Are you sure you want to remove all saved content from your list?')}
+        </Text>
+      </Modal>
     </>
   );
 };
 
-export default BookmarksPage;
+export default ListsPage;

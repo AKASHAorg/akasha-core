@@ -24,6 +24,10 @@ const exp = {
           fullySpecified: false,
         },
       },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
   resolve: {
