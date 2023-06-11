@@ -18,7 +18,7 @@ describe('< Welcome /> component', () => {
 
   it('should render welcome page', async () => {
     expect(
-      screen.getByText(/Congratulations, you are the newest member of Ethereum World!/i),
+      screen.getByText(/Congratulations, you are the newest member of Akasha World!/i),
     ).toBeInTheDocument();
   });
 });

@@ -170,7 +170,7 @@ const DevDashOnboardingSteps: React.FC<
         <StepOne
           titleLabel={t('First things first ✨')}
           subtitleLabel={t(
-            'To form a part of ethereum world’s developer community you need to accept a few conditions, please make sure to read them carefully 😸',
+            'To form a part of Akasha World’s developer community you need to accept a few conditions, please make sure to read them carefully 😸',
           )}
           paragraphs={[
             t(

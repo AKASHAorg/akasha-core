@@ -1,15 +1,16 @@
-# Ethereum World App Moderation
+# Akasha World Vibe App
 
-> Vibe for Ethereum World
+> Vibe for Akasha World
 ## Table of contents
 
-- [Background](#background)
-- [Components](#components)
+- [Akasha World Vibe App](#akasha-world-vibe-app)
+  - [Table of contents](#table-of-contents)
+  - [Background](#background)
+  - [Components](#components)
     - [Dashboard](#dashboard)
     - [Transparency Log](#transparency-log)
     - [Error Pages](#error-pages)
-
-- [Services](#services)
+  - [Services](#services)
 
 ## Background
 

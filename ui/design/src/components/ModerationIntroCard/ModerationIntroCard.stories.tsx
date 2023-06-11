@@ -29,7 +29,7 @@ BaseModerationIntroCard.args = {
   isIntro: true,
   introLabel: 'Welcome to the Moderation App',
   descriptionLine1Label:
-    'Here you will find the moderated posts, replies, and accounts of Ethereum World. We do not reveal any personal information of the author or submitter(s) to protect their privacy.',
+    'Here you will find the moderated posts, replies, and accounts of Akasha World. We do not reveal any personal information of the author or submitter(s) to protect their privacy.',
   descriptionLine2IntroLabel: 'Visit our',
   codeOfConductLabel: 'Code of Conduct',
   descriptionLine2Label: 'to learn more about our moderation criteria',

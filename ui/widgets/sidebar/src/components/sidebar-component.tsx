@@ -88,7 +88,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         scrollTo(0, 0);
       } else {
         routing.navigateTo({
-          appName: 'Ethereum World',
+          appName: 'Akasha World',
           getNavigationUrl: () => homeAppRoutes.defaultRoute,
         });
       }

@@ -61,7 +61,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
     <Router basename={props.baseRouteName}>
       <Helmet>
-        <title>Message App | Ethereum World</title>
+        <title>Message App | Akasha World</title>
       </Helmet>
       <Routes>
         <Route

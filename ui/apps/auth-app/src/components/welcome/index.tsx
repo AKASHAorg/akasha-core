@@ -41,7 +41,7 @@ const Welcome: React.FC<RootComponentProps> = props => {
   return (
     <WelcomeCard
       titleLabel={t('Welcome to the alpha!')}
-      subtitleLabel={t('Congratulations, you are the newest member of Ethereum World!')}
+      subtitleLabel={t('Congratulations, you are the newest member of Akasha World!')}
       paragraphOneLabel={t(
         'You can now browse the feed, subscribe to topics, write your own posts, and reply to other Ethereans.',
       )}
@@ -51,7 +51,7 @@ const Welcome: React.FC<RootComponentProps> = props => {
         'You can change your display name and avatar, add a cover image and description, as well as claim your own AKASHA ENS name.',
       )}
       paragraphThreeLabel={t("We are very happy you've joined us!")}
-      primaryButtonLabel={t('Browse Ethereum World')}
+      primaryButtonLabel={t('Browse Akasha World')}
       secondaryButtonLabel={t('Customize My Profile')}
       handlePrimaryButtonClick={handlePrimaryButtonClick}
       handleSecondaryButtonClick={handleSecondaryButtonClick}

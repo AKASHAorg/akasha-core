@@ -20,7 +20,7 @@ describe('<ReportModal /> Component', () => {
         wrapWithTheme(
           <ReportModal
             titleLabel="Report a Post"
-            successTitleLabel="Thank you for helping us keep Ethereum World safe! 🙌"
+            successTitleLabel="Thank you for helping us keep Akasha World safe! 🙌"
             successMessageLabel="We have received your message"
             reasonPrefix="TI"
             contentId="0845"

@@ -63,7 +63,7 @@ const AppRoutes = (props: RootComponentProps) => {
   return (
     <Router basename={props.baseRouteName}>
       <Helmet>
-        <title>Dev Dashboard | Ethereum World</title>
+        <title>Dev Dashboard | Akasha World</title>
       </Helmet>
       <Routes>
         <Route path="/" element={<Navigate to={routes[DASHBOARD]} replace />} />
@@ -75,7 +75,7 @@ const AppRoutes = (props: RootComponentProps) => {
               titleLabel={t('Developer Dashboard')}
               introLabel={t('✨ Your journey as a developer begins here ✨')}
               descriptionLabel={t(
-                'Join our community of developers, start creating and publishing amazing applications that will make Ethereum World better!',
+                'Join our community of developers, start creating and publishing amazing applications that will make Akasha World better!',
               )}
               ctaLabel={t('I want to be a developer')}
               onCTAClick={handleOnboardingCTAClick}
