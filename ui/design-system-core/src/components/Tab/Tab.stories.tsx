@@ -16,7 +16,7 @@ const Template = (args: TabProps) => {
   </Tab>;
 };
 
-export const DefaultField = Template.bind({});
-DefaultField.args = {
+export const DefaultTab = Template.bind({});
+DefaultTab.args = {
   labels: ['Tab 1', 'Tab 2', 'Tab 3'],
 };
