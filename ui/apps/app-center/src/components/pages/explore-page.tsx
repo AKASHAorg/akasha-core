@@ -1,6 +1,5 @@
 import React from 'react';
 import getSDK from '@akashaorg/awf-sdk';
-import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -12,11 +11,8 @@ import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
-
 import { INFO } from '../../routes';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
-const { Box, SubtitleTextIcon, DuplexButton, Icon, Spinner, NotificationPill } = DS;
 
 export interface IExplorePage extends RootComponentProps {
   installableApps: IntegrationReleaseInfoFragmentFragment[];
@@ -92,11 +88,6 @@ const ExplorePage: React.FC<IExplorePage> = props => {
   return (
     <>
       <Stack direction="column" testId="akasha-verse">
-        {isFetching && (
-          <Box>
-            <Spinner />
-          </Box>
-        )}
         {!isFetching && reqError && (
           <ErrorLoader
             type="script-error"
@@ -157,16 +148,6 @@ const ExplorePage: React.FC<IExplorePage> = props => {
           </>
         )}
       </Stack>
-
-      {!!showNotifPill && (
-        <NotificationPill
-          icon={<Icon type="check" />}
-          infoLabel={`${showNotifPill} ${t('has been uninstalled')}`}
-          handleDismiss={() => {
-            setShowNotifPill('');
-          }}
-        />
-      )}
     </>
   );
 };

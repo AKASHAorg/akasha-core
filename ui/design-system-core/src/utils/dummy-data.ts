@@ -41,7 +41,7 @@ const sidebarItems = [
     submenu: {},
   },
   {
-    title: 'Integration Center',
+    title: 'AKASHAVerse',
   },
   {
     title: 'Moderation',
