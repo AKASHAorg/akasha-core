@@ -1,0 +1,43 @@
+.global-styles__inherit-height {
+  height: inherit;
+}
+
+.global-styles__inherit-width {
+  width: inherit;
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #989898;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 2px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #989898;
+  border-radius: 20px;
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #989898;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 2px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #989898;
+  border-radius: 20px;
+}
