@@ -30,7 +30,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
           <Text variant={titleVariant} align="center" customStyle="grow">
             {title}
           </Text>
-          <Button onClick={onClose} plain>
+          <Button onClick={onClose} plain data-testid="close-icon">
             <Icon type="XMarkIcon" size="sm" />
           </Button>
         </Stack>

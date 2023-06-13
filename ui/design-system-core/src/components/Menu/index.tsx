@@ -1,9 +1,9 @@
 import React, { ReactNode, useState } from 'react';
-import Stack from '../Stack';
-import Button from '../Button';
-import List from '../List';
-import { ListProps } from '../List';
 import { tw } from '@twind/core';
+
+import Stack from '../Stack';
+import List, { ListProps } from '../List';
+
 import { useCloseActions } from '../../utils/useCloseActions';
 
 type MenuProps = {
@@ -21,6 +21,7 @@ const Menu: React.FC<MenuProps> = ({ anchorElement, ...rest }) => {
       <div ref={anchorRef} onClick={() => setShowList(!showList)}>
         {anchorElement}
       </div>
+
       <div className={tw('relative')}>
         {showList && (
           <div className={tw('absolute right-0')}>
