@@ -19,7 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   title: 'App center',
   menuItems: {
-    label: 'Integration Center',
+    label: 'AKASHAVerse',
     area: [MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
     subRoutes: [],

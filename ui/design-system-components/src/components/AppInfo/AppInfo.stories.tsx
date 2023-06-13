@@ -23,6 +23,7 @@ BaseAppInfo.args = {
   developersTitle: 'Developers',
   latestReleaseTitle: 'Latest Release',
   version: 'Version 2.8.0',
+  versionInfo: 'Latest release',
   versionDate: 'December 2022',
   versionDescription:
     'All problems from previous version have been fixed. We cannot guarantee that it’ll work 100% well as we are all still working on the fixes. Please feel free to contact us if you are facing any other issue.',
