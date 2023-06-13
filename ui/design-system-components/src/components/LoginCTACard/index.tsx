@@ -31,7 +31,7 @@ const LoginCTACard: React.FC<ILoginCTACardProps> = props => {
     onCloseIconClick,
   } = props;
   return (
-    <BasicCardBox pad="medium" accentBorder={true}>
+    <BasicCardBox accentBorder={true}>
       {props.image}
       <div className={tw(`flex flex-row items-start justify-between`)}>
         <div className={tw(`flex flex-col-reverse md:flex-row items-center justify-between`)}>
