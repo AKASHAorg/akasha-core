@@ -1,17 +1,20 @@
-import React, { ReactNode, useState, PropsWithChildren } from 'react';
+import React, { useState, PropsWithChildren, ReactNode } from 'react';
 import Text, { TextProps } from '../Text';
 import Stack from '../Stack';
 import { usePopper } from 'react-popper';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import { getArrowClasses } from './getArrowClasses';
 import { getContentClasses } from './getContentClasses';
 import { Placement } from '@popperjs/core';
+import { useClickAway } from 'react-use';
 
 export type TooltipProps = {
+  placement: 'top' | 'left' | 'bottom' | 'right';
   content: ReactNode;
   textSize?: TextProps['variant'];
-  placement: 'top' | 'left' | 'bottom' | 'right';
+  mode?: 'hover' | 'click';
   centerArrowToReference?: boolean;
+  arrow?: boolean;
 };
 
 const ARROW_SIZE = 4;
@@ -25,13 +28,21 @@ const PLACEMENT_TO_CSS_POSITION_MAP: Record<TooltipProps['placement'], CSSPositi
   top: 'bottom',
 };
 
-const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
-  placement = 'bottom',
-  textSize = 'subtitle2',
-  content,
-  centerArrowToReference,
-  children,
-}) => {
+const Tooltip: React.FC<
+  PropsWithChildren<
+    TooltipProps | ({ open: boolean; onOpen: () => void; onClose: () => void } & TooltipProps)
+  >
+> = props => {
+  const {
+    placement = 'bottom',
+    content,
+    textSize = 'subtitle2',
+    mode = 'hover',
+    centerArrowToReference,
+    arrow = true,
+    children,
+  } = props;
+
   const [referenceElement, setReferenceElement] = useState(null);
   const [contentElement, setContent] = useState(null);
   const [arrowElement, setArrowElement] = useState(null);
@@ -43,6 +54,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
       element: arrowElement,
     },
   };
+
   const offsetModifier = {
     name: 'offset',
     options: {
@@ -55,41 +67,83 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
     modifiers: centerArrowToReference ? [arrowModifier, offsetModifier] : [arrowModifier],
   });
 
+  const contentRef = React.createRef<HTMLDivElement>();
+
+  useClickAway(contentRef, () => {
+    if ('open' in props) {
+      props.onClose();
+      return;
+    }
+    setShowTooltip(false);
+  });
+
   const contextualPlacement = getContextualPlacement(state?.placement);
 
   const arrowStyle = centerArrowToReference ? styles.arrow : {};
 
+  const isContentOfTypeString = typeof content === 'string';
+
+  const contentStyle = isContentOfTypeString
+    ? 'rounded-md bg-secondaryDark/50 dark:bg-grey4 py-[4px] px-[16px]'
+    : '';
+
+  const eventHandlers =
+    mode === 'hover'
+      ? {
+          onMouseOver: () => {
+            if ('open' in props) {
+              props.onOpen();
+              return;
+            }
+            setShowTooltip(true);
+          },
+          onMouseOut: () => {
+            if ('open' in props) {
+              props.onClose();
+              return;
+            }
+            setShowTooltip(false);
+          },
+        }
+      : {
+          onClick: () => {
+            if ('open' in props) {
+              props.onOpen();
+              return;
+            }
+            setShowTooltip(true);
+          },
+        };
+
   return (
     <>
-      <div
-        onMouseOver={() => setShowTooltip(true)}
-        onMouseOut={() => setShowTooltip(false)}
-        className={tw('w-fit')}
-        ref={setReferenceElement}
-      >
+      <div {...eventHandlers} className={tw(apply`w-fit cursor-pointer`)} ref={setReferenceElement}>
         {children}
       </div>
-      {showTooltip && (
+      {('open' in props ? props.open : showTooltip) && (
         <div
           ref={setContent}
           style={{ ...styles.popper, zIndex: 99 }}
           {...attributes.popper}
           className={tw(getContentClasses(contextualPlacement, ARROW_SIZE))}
         >
-          <div
-            ref={setArrowElement}
-            style={{
-              ...arrowStyle,
-              [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
-            }}
-            className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE))}
-          />
+          {arrow && (
+            <div
+              ref={setArrowElement}
+              style={{
+                ...arrowStyle,
+                [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
+              }}
+              className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE))}
+            />
+          )}
           <Stack
+            ref={contentRef}
             align="center"
             justify="center"
-            customStyle="flex-wrap rounded-md bg-secondaryDark/50 dark:bg-grey4 py-[4px] px-[16px]"
+            customStyle={`flex-wrap ${contentStyle}`}
           >
-            <Text variant={textSize}>{content}</Text>
+            {isContentOfTypeString ? <Text variant={textSize}>{content}</Text> : content}
           </Stack>
         </div>
       )}
