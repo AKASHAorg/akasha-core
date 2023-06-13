@@ -36,7 +36,7 @@
 
 ## Background
 
-Akasha Core is one of the results of an [initiative](https://ethereum.world/manifesto) to accelerate the adoption of Ethereum-based apps and services by transforming how they attract, engage and delight users.
+Akasha Core is one of the results of an [initiative](https://ethereum.world/manifesto) to accelerate the adoption of blockchain-based apps and services by transforming how they attract, engage and delight users.
 
 ## Install
 
