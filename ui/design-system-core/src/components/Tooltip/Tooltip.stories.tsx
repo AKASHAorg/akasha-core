@@ -119,6 +119,6 @@ export const ClickModeTooltip = Template.bind({});
 ClickModeTooltip.args = {
   content: 'I am a tooltip',
   placement: 'bottom',
-  mode: 'click',
+  trigger: 'click',
   children: <>Hover over me to know more</>,
 };

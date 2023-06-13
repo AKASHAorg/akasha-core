@@ -12,7 +12,7 @@ export type TooltipProps = {
   placement: 'top' | 'left' | 'bottom' | 'right';
   content: ReactNode;
   textSize?: TextProps['variant'];
-  mode?: 'hover' | 'click';
+  trigger?: 'hover' | 'click';
   centerArrowToReference?: boolean;
   arrow?: boolean;
 };
@@ -37,7 +37,7 @@ const Tooltip: React.FC<
     placement = 'bottom',
     content,
     textSize = 'subtitle2',
-    mode = 'hover',
+    trigger = 'hover',
     centerArrowToReference,
     arrow = true,
     children,
@@ -88,7 +88,7 @@ const Tooltip: React.FC<
     : '';
 
   const eventHandlers =
-    mode === 'hover'
+    trigger === 'hover'
       ? {
           onMouseOver: () => {
             if ('open' in props) {
