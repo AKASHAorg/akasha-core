@@ -1,4 +1,4 @@
-import { PasswordStrengthLevel } from './index';
+import { PasswordStrengthLevel } from './PasswordStrengthIndicator';
 
 export function getBarColor(idx: number, strengthLevel: PasswordStrengthLevel) {
   const defaultClasses = 'bg-grey8 dark:bg-grey5';
