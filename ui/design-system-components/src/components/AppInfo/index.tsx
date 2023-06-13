@@ -9,6 +9,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { Item } from '@akashaorg/design-system-core/lib/components/List';
 import { Developer } from '../types/common.types';
 
@@ -21,6 +22,7 @@ export type AppInfoProps = {
   developersTitle: string;
   latestReleaseTitle: string;
   version: string;
+  versionInfo: string;
   versionDate: string;
   versionDescription: string;
   linksAndDocumentationTitle: string;
@@ -40,6 +42,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
   developersTitle,
   latestReleaseTitle,
   version,
+  versionInfo,
   versionDate,
   versionDescription,
   linksAndDocumentationTitle,
@@ -124,9 +127,17 @@ const AppInfo: React.FC<AppInfoProps> = ({
           <ContentBlock blockTitle={latestReleaseTitle}>
             <Stack direction="column" spacing="gap-y-4">
               <Stack direction="column">
-                <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
-                  {version}
-                </Text>
+                <Stack align="center" spacing="gap-x-1">
+                  <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
+                    {version}
+                  </Text>
+                  <Tooltip content={versionInfo} placement="right">
+                    <Icon
+                      type="InformationCircleIcon"
+                      color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                    />
+                  </Tooltip>
+                </Stack>
                 <Text variant="footnotes2" color="grey7">
                   {versionDate}
                 </Text>
