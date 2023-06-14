@@ -83,9 +83,9 @@ describe('<Dropdown /> Component with placeholder', () => {
   });
 
   it('shows content when clicked', () => {
-    const { getByTestId, getByText } = componentWrapper;
+    const { getByRole, getByText } = componentWrapper;
 
-    const button = getByTestId('drop-button');
+    const button = getByRole('button', { name: 'dropdown' });
 
     fireEvent.click(button);
 

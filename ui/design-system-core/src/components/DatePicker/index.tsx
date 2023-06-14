@@ -67,7 +67,7 @@ const DatePicker: React.FC = () => {
   });
 
   return (
-    <div className={tw('w-full md:w-80')} data-testid="date-picker">
+    <div title="date-picker" className={tw('w-full md:w-80')}>
       <div className={tw('relative')}>
         <div
           onClick={() => {

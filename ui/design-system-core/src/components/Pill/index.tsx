@@ -29,7 +29,7 @@ const Pill: React.FC<IPillProps> = ({
 
   return (
     <Button
-      data-testid="dismiss-button"
+      aria-label="dismiss"
       hover={false}
       label={label}
       size={size}

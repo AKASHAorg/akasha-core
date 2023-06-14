@@ -5,7 +5,7 @@ import Button from '../';
 import { customRender } from '../../../test-utils';
 
 const label = 'Default button';
-const mockClickHandler = jest.fn(() => console.log('clicked'));
+const mockClickHandler = jest.fn(/** */);
 
 describe('<Button /> Component', () => {
   let componentWrapper = customRender(<></>, {});

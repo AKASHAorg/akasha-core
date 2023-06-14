@@ -39,9 +39,9 @@ describe('<MessageCard /> Component', () => {
   });
 
   it('calls handler when clicked', () => {
-    const { getByTestId } = componentWrapper;
+    const { getByRole } = componentWrapper;
 
-    const closeButton = getByTestId('close-icon');
+    const closeButton = getByRole('button', { name: 'close' });
     expect(closeButton).toBeDefined();
     expect(handleClose).toBeCalledTimes(0);
 

@@ -39,10 +39,10 @@ describe('<ImageCropper /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('has hidden input', () => {
-    const { getByTestId } = componentWrapper;
+  it('has input type of slider', () => {
+    const { getByRole } = componentWrapper;
 
-    const rangeInput = getByTestId('range-input');
+    const rangeInput = getByRole('slider', { name: 'range-input' });
 
     expect(rangeInput).toBeDefined();
     expect(rangeInput).toHaveAttribute('type', 'range');

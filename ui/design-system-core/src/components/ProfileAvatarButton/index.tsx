@@ -42,15 +42,15 @@ const ProfileAvatarButton = React.forwardRef(
 
     return (
       <div className={tw(`inline-flex items-center ${customStyle}`)}>
-        <div className={tw('shrink-0')} data-testid="avatar-box">
+        <div title="avatar-box" className={tw('shrink-0')}>
           <Avatar size={size} avatar={avatarImage} profileId={profileId} onClick={onClickAvatar} />
         </div>
         <div
+          title="info-box"
           className={tw('pl(lg:4 md:2 sm:2 xs:1) justify-center align-top')}
           onClick={onClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          data-testid="info-box"
         >
           <Text ref={ref} variant="button-sm" weight="bold" truncate={true} customStyle={textStyle}>
             {label || profileId}

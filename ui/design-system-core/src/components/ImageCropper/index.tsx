@@ -71,7 +71,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
       <Stack justify="evenly" spacing="gap-x-2">
         <Icon type="MagnifyingGlassMinusIcon" size="lg" />
         <input
-          data-testid="range-input"
+          aria-label="range-input"
           type="range"
           value={zoom}
           min={MIN_ZOOM}

@@ -23,9 +23,9 @@ describe('<ScrollTopButton /> Component', () => {
   });
 
   it('calls handler when clicked', () => {
-    const { getByTestId } = componentWrapper;
+    const { getByTitle } = componentWrapper;
 
-    const scrollTopDiv = getByTestId('scroll-to-top');
+    const scrollTopDiv = getByTitle('scroll-to-top');
 
     expect(scrollTopDiv).toBeDefined();
     expect(handleClick).toBeCalledTimes(0);

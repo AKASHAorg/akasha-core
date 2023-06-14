@@ -61,7 +61,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
           dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'
         })`}
         onClick={handleDropClick}
-        data-testid="drop-button"
+        aria-label="dropdown"
       >
         <Text variant="body1">{selected?.title}</Text>
         {dropOpen ? (

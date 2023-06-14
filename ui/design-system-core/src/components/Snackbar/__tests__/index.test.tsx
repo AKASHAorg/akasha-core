@@ -41,8 +41,8 @@ describe('<Snackbar /> Component', () => {
   });
 
   it('correctly calls handler function when clicked', () => {
-    const { getByTestId } = componentWrapper;
-    const dismissButton = getByTestId('dismiss-button');
+    const { getByRole } = componentWrapper;
+    const dismissButton = getByRole('button', { name: 'dismiss' });
     fireEvent.click(dismissButton);
     expect(mockChangeHandler).toHaveBeenCalledTimes(1);
   });

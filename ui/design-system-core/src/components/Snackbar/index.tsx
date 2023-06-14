@@ -1,13 +1,16 @@
 import React from 'react';
-import Icon from '../Icon';
-import Text from '../Text';
-import Button from '../Button';
-import Stack from '../Stack';
-import Card from '../Card';
 import { apply } from '@twind/core';
+
+import { IconType } from '@akashaorg/typings/ui';
+
+import Button from '../Button';
+import Card from '../Card';
+import Icon from '../Icon';
+import Stack from '../Stack';
+import Text from '../Text';
+
 import { getColorLight, getColorDark } from './getColor';
 import { Color } from '../types/common.types';
-import { IconType } from '@akashaorg/typings/ui';
 
 export type SnackBarType = 'alert' | 'caution' | 'success' | 'info';
 
@@ -78,7 +81,7 @@ const Snackbar: React.FC<ISnackbar> = ({
         <Button
           onClick={handleDismiss}
           customStyle="self-start	ml-auto"
-          data-testid="dismiss-button"
+          aria-label="dismiss"
           plain={true}
         >
           <Icon type="XMarkIcon" color="grey7" size="lg" />

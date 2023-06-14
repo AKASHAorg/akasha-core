@@ -32,9 +32,9 @@ describe('<DatePicker /> Component', () => {
   });
 
   it('shows date picker when clicked', () => {
-    const { getByTestId, getByText } = componentWrapper;
+    const { getByTitle, getByText } = componentWrapper;
 
-    const wrapper = getByTestId('date-picker');
+    const wrapper = getByTitle('date-picker');
 
     expect(wrapper).toBeDefined();
 
@@ -51,9 +51,9 @@ describe('<DatePicker /> Component', () => {
   });
 
   it('shows month selector when toggled', () => {
-    const { getByTestId, getByText } = componentWrapper;
+    const { getByTitle, getByText } = componentWrapper;
 
-    const wrapper = getByTestId('date-picker');
+    const wrapper = getByTitle('date-picker');
 
     expect(wrapper).toBeDefined();
 

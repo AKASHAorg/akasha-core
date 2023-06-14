@@ -61,9 +61,9 @@ describe('<ProfileAvatarButton /> Component', () => {
   });
 
   it('calls avatar handler', () => {
-    const { getByTestId } = componentWrapper;
+    const { getByTitle } = componentWrapper;
 
-    const avatarBox = getByTestId('avatar-box');
+    const avatarBox = getByTitle('avatar-box');
     expect(avatarBox.childNodes[0]).toBeDefined();
     expect(handleClickAvatar).toBeCalledTimes(0);
 
@@ -73,9 +73,9 @@ describe('<ProfileAvatarButton /> Component', () => {
   });
 
   it('calls info handlers', () => {
-    const { getByTestId } = componentWrapper;
+    const { getByTitle } = componentWrapper;
 
-    const infoBox = getByTestId('info-box');
+    const infoBox = getByTitle('info-box');
     expect(infoBox).toBeDefined();
     expect(handleClick).toBeCalledTimes(0);
     expect(handleMouseEnter).toBeCalledTimes(0);
