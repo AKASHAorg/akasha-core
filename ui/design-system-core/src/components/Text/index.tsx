@@ -35,6 +35,7 @@ export type TextProps = {
   breakWord?: boolean;
   lineClamp?: number;
   weight?: Weight;
+  ref?: React.Ref<HTMLElement>;
 };
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
@@ -67,6 +68,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   lineClamp,
   weight,
   children,
+  ref,
 }) => {
   const tag = as ?? getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
@@ -80,10 +82,12 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
 
   return React.createElement(
     tag,
+
     {
       className: tw(
         apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
       ),
+      ref,
     },
     children,
   );
