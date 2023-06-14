@@ -585,7 +585,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             size="xxl"
             loadingLabel="Loading..."
           />
-          <Text variant="footnotes2">Searching...</Text>
+          <Text variant="footnotes2">{t('Searching...')}</Text>
         </Box>
       )}
       {/* triggers intersection observer */}
