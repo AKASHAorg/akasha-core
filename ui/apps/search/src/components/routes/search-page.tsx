@@ -583,6 +583,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           <SeventyFivePercentSpinner
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             size="xxl"
+            loadingLabel="Loading..."
           />
           <Text variant="footnotes2">Searching...</Text>
         </Box>
