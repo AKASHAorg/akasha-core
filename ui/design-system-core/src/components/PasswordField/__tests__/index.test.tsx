@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import PasswordField from '../';
 import { customRender } from '../../../test-utils';
 
@@ -16,8 +16,6 @@ describe('<PasswordField /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

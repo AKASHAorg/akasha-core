@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import Box from '../';
 import { customRender } from '../../../test-utils';
 
@@ -15,8 +15,6 @@ describe('<Box /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

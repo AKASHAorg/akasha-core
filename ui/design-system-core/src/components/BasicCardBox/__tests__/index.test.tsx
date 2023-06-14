@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { customRender } from '../../../test-utils';
 import BasicCardBox from '../';
 
@@ -22,8 +22,6 @@ describe('<BasicCardBox /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

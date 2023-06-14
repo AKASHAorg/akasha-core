@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import DatePicker from '../';
 import { customRender } from '../../../test-utils';
 import { DAYS, MONTHS_IN_A_YEAR } from '../calendarHelpers';
@@ -16,8 +16,6 @@ describe('<DatePicker /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import Dropdown, { DropdownMenuItemType } from '../';
 import { customRender } from '../../../test-utils';
 
@@ -33,8 +33,6 @@ describe('<Dropdown /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -77,8 +75,6 @@ describe('<Dropdown /> Component with placeholder', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

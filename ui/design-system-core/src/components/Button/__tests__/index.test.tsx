@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 
 import Button from '../';
 import { customRender } from '../../../test-utils';
@@ -20,8 +20,6 @@ describe('<Button /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -56,8 +54,6 @@ describe('Icon Only Button', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -85,8 +81,6 @@ describe('Disabled Button', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

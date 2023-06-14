@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, cleanup, fireEvent, waitFor } from '@testing-library/react';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 import { customRender } from '../../../test-utils';
 import Tooltip from '../';
 
@@ -21,8 +21,6 @@ describe('<Tooltip /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import Menu from '../';
 import { Item } from '../../List';
 import { customRender } from '../../../test-utils';
@@ -31,8 +31,6 @@ describe('<Menu /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

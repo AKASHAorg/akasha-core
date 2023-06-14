@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 
 import Pill from '../';
 import { customRender } from '../../../test-utils';
@@ -25,8 +25,6 @@ describe('<Pill /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

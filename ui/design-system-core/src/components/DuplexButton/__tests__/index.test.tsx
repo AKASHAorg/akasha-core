@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 
 import DuplexButton from '../';
 import { customRender } from '../../../test-utils';
@@ -34,8 +34,6 @@ describe('<DuplexButton /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

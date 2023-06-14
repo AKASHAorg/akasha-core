@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import ProfileAvatarButton from '../';
 import { customRender } from '../../../test-utils';
 
@@ -43,8 +43,6 @@ describe('<ProfileAvatarButton /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

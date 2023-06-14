@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import SubtitleTextIcon from '../';
 import { customRender } from '../../../test-utils';
 
@@ -19,8 +19,6 @@ describe('<SubtitleTextIcon /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent, getByTestId } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import Anchor from '../';
 import { customRender } from '../../../test-utils';
 
@@ -20,8 +20,6 @@ describe('<Anchor /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -30,17 +28,17 @@ describe('<Anchor /> Component', () => {
   });
 
   it('has correct link', () => {
-    const { container } = componentWrapper;
+    const { getByRole } = componentWrapper;
 
-    const anchor = getByTestId(container, testId);
+    const anchor = getByRole('link');
 
     expect(anchor).toHaveAttribute('href', link);
   });
 
   it('handles click event', () => {
-    const { container } = componentWrapper;
+    const { getByRole } = componentWrapper;
 
-    const anchor = getByTestId(container, testId);
+    const anchor = getByRole('link');
 
     expect(dummyClickFn).toHaveBeenCalledTimes(0);
 
