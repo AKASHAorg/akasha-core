@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Text } from 'grommet';
 import styled from 'styled-components';
-import MdCard from '../../MdCard';
 
 export interface ICDetailCardDescriptionProps {
   description?: string;
@@ -29,11 +28,12 @@ const ICDetailCardDescription: React.FC<ICDetailCardDescriptionProps> = ({ descr
 
   return (
     <Text size="md" style={{ lineHeight: '1.375rem' }}>
-      {drop ? (
+      {/* replace with new markdown card when updating this to twind */}
+      {/* {drop ? (
         <MdCard mdText={description} hasWrapper={false} />
       ) : (
         <MdCard mdText={description.split('\n').filter(_ => _)[0]} hasWrapper={false} />
-      )}
+      )} */}
       {allowDrop && (
         <StyledText onClick={() => setDrop(prevState => !prevState)}>
           {drop ? 'Show less' : 'Read more'}

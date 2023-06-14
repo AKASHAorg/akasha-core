@@ -1,16 +1,14 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import routes, { CHAT, MESSAGING, SETTINGS } from '../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import InboxPage from './inbox/inbox-page';
 import SettingsPage from './settings-page';
 import ChatPage from './chat-page';
+import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { getHubUser, getMessages } from '../api/message';
 import { db } from '../db/messages-db';
-
-const { Helmet } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetMyProfileQuery(null, {

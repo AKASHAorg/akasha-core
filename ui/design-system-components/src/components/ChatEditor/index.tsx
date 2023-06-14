@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Box } from 'grommet';
 import EditorBox, { IEditorBox } from '../Editor';
 import { editorDefaultValue } from '../Editor/initialValue';
+import { tw } from '@twind/core';
 
 const ChatEditor: React.FC<Omit<IEditorBox, 'setEditorState'>> = props => {
   const {
@@ -28,12 +28,7 @@ const ChatEditor: React.FC<Omit<IEditorBox, 'setEditorState'>> = props => {
   const [contentState, setContentState] = React.useState(editorState || editorDefaultValue);
 
   return (
-    <Box
-      border={{ side: 'all', size: '1px', color: 'border' }}
-      margin="xsmall"
-      background="chatBackground"
-      round="small"
-    >
+    <div className={tw(`border(grey8 dark:grey3) m-1 rounded-lg bg(grey9 dark:grey2)`)}>
       <EditorBox
         avatar={avatar}
         showAvatar={showAvatar}
@@ -56,8 +51,8 @@ const ChatEditor: React.FC<Omit<IEditorBox, 'setEditorState'>> = props => {
         onCancelClick={onCancelClick}
         showCancelButton={showCancelButton}
       />
-    </Box>
+    </div>
   );
 };
 
-export { ChatEditor };
+export default ChatEditor;
