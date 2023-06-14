@@ -34,6 +34,16 @@ fragment UserProfileFragment on Profile{
       height
     }
   }
+
+  followers(last: 5){
+   pageInfo {
+     startCursor
+     endCursor
+     hasPreviousPage
+     hasNextPage
+   }
+  }
+
   createdAt
 }
 # id of the profile document
