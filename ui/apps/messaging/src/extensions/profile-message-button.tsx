@@ -2,43 +2,37 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
-import DS from '@akashaorg/design-system';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { I18nextProvider } from 'react-i18next';
 import {
   ThemeWrapper,
   useAnalytics,
-  useGetLogin,
   withProviders,
   useIsContactMultiple,
 } from '@akashaorg/ui-awf-hooks';
-
-const { Icon, Button, styled, Drop, Box, Text } = DS;
-
-const StyledButton = styled(Button)`
-  display: flex;
-  align-items: center;
-  border: 1px solid ${props => props.theme.colors.accent};
-`;
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const MessageIconButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
   const { t } = useTranslation('app-messaging');
   const [analyticsActions] = useAnalytics();
-  const { pubKey } = extensionData;
+  const { profileId } = extensionData;
 
-  const [showTooltip, setShowTooltip] = React.useState(false);
-  const btnRef = React.useRef(null);
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
 
-  const loginQuery = useGetLogin();
-  const loggedUserPubKey = loginQuery.data?.pubKey;
-
-  const isContactReq = useIsContactMultiple(loggedUserPubKey, [pubKey as string]);
+  const isContactReq = useIsContactMultiple(loggedProfileData.did.id, [profileId as string]);
   const contactList = isContactReq.data;
 
   const isContact = React.useMemo(() => {
-    return contactList.includes(pubKey as string);
-  }, [contactList, pubKey]);
+    return contactList.includes(profileId as string);
+  }, [contactList, profileId]);
 
   const handleClick = () => {
     analyticsActions.trackEvent({
@@ -48,50 +42,21 @@ const MessageIconButton = (props: RootExtensionProps) => {
 
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
-      getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
+      getNavigationUrl: routes => `${routes.chat}/${profileId}`,
     });
   };
 
-  const handleShowTooltip = () => {
-    if (!isContact) {
-      setShowTooltip(!showTooltip);
-    }
-  };
-
-  if (pubKey === loggedUserPubKey) {
+  if (profileId === loggedProfileData.did.id) {
     return;
   }
 
   return (
-    <>
-      <div ref={btnRef} onClick={handleShowTooltip}>
-        <StyledButton
-          icon={<Icon type="email" accentColor={true} />}
-          onClick={handleClick}
-          slimBorder={true}
-          disabled={!isContact}
-        />
-      </div>
-
-      {showTooltip && btnRef.current && (
-        <Drop
-          margin={{ top: '5px' }}
-          align={{ top: 'bottom' }}
-          target={btnRef.current}
-          onClickOutside={() => setShowTooltip(false)}
-        >
-          <Box
-            background="activePanelBackground"
-            round="xsmall"
-            pad="xsmall"
-            flex={{ shrink: 0 }}
-            width={{ min: '200px' }}
-          >
-            <Text>{t('You need to follow each other to start using the messaging app')}</Text>
-          </Box>
-        </Drop>
-      )}
-    </>
+    <Button
+      customStyle="flex items-center border(secondaryLight dark:secondaryDark)"
+      icon="EnvelopeIcon"
+      onClick={handleClick}
+      disabled={!isContact}
+    />
   );
 };
 
@@ -113,7 +78,7 @@ const reactLifecycles = singleSpaReact({
 
     return (
       <ThemeWrapper {...props}>
-        <Icon type="error" size="sm" />
+        <Icon type="ExclamationCircleIcon" />
       </ThemeWrapper>
     );
   },

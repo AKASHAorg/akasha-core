@@ -36,23 +36,23 @@ const StartCard: React.FC<StartProps> = ({
   CTALabel,
 }: StartProps) => {
   return (
-    <BasicCardBox noBorderRadius={noBorderRadius} customStyle="p-4 gap-1">
-      <div className={tw(`flex flex-start w-full`)}>
-        {!!title && <Text variant="h1">{title}</Text>}
+    <BasicCardBox noBorderRadius={noBorderRadius} customStyle="gap-1">
+      <div className={tw(`flex justify-center w-full`)}>
+        {!!title && <Text variant="h5">{title}</Text>}
         {!!subtitle && <Text variant="subtitle1">{subtitle}</Text>}
       </div>
       {showMainArea && (
         <div className={tw(`w-full px-4 ${hideMainAreaOnMobile && 'hidden'}`)}>
           {!!image && <img className={tw(`max-w-1/2 mx-auto py-3 pr-2`)} src={image} />}
           {!!icon && icon}
-          <Text variant="h1" align="center">
+          <Text variant="h6" align="center">
             {heading}
           </Text>
-          <Text variant="h4" align="center" customStyle="pt-3 px-8">
+          <Text variant="body1" align="center" customStyle="pt-3 px-8">
             {description}
           </Text>
           {onClickCTA && (
-            <div className={tw(`p-4 flex items-center justify-items-center`)}>
+            <div className={tw(`p-4 flex items-center justify-end`)}>
               <Button variant="primary" label={CTALabel} onClick={onClickCTA} />
             </div>
           )}

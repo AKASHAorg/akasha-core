@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import MdCard from '../';
-import { customRender, wrapWithTheme } from '../../../test-utils';
+import MarkdownCard from '..';
+import { customRender } from '../../../test-utils';
 
-describe('<MdCard /> Component', () => {
+describe('<MarkdownCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(wrapWithTheme(<MdCard mdText="`**Hello**`" />), {});
+      componentWrapper = customRender(<MarkdownCard mdText="`**Hello**`" />, {});
     });
   });
 

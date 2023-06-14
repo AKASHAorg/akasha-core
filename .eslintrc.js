@@ -20,7 +20,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'react-hooks', 'eslint-plugin-tsdoc'],
+  plugins: ['react', '@typescript-eslint', 'react-hooks', 'eslint-plugin-tsdoc', 'unicorn'],
   rules: {
     'tsdoc/syntax': 'warn',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -30,6 +30,26 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'warn',
     'no-prototype-builtins': 'off',
     'no-case-declarations': 'off',
+    'unicorn/filename-case': [
+      'error',
+      {
+        cases: {
+          kebabCase: true,
+          camelCase: true,
+        },
+      },
+    ],
+    'unicorn/consistent-destructuring': 'error',
+    'unicorn/consistent-function-scoping': 'error',
+    'unicorn/custom-error-definition': 'off',
+    'unicorn/empty-brace-spaces': 'error',
+    'unicorn/error-message': 'error',
+    'unicorn/escape-case': 'error',
+    'no-nested-ternary': 'off',
+    'unicorn/no-nested-ternary': 'error',
+    'unicorn/no-unnecessary-await': 'error',
+    'unicorn/no-unreadable-array-destructuring': 'error',
+    'unicorn/no-unreadable-iife': 'error',
   },
   ignorePatterns: ['**/lib/*.js', '*.d.ts'],
 };
