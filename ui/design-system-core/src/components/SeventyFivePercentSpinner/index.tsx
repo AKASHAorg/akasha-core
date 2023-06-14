@@ -6,6 +6,7 @@ import { getColorClasses } from '../../utils/getColorClasses';
 export interface ISpinnerProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   color?: Color;
+  loadingLabel: string;
 }
 
 const spinnerSizesMap = {
@@ -17,7 +18,7 @@ const spinnerSizesMap = {
 };
 
 const SeventyFivePercentSpinner: React.FC<ISpinnerProps> = props => {
-  const { size = 'md', color = 'current' } = props;
+  const { size = 'md', color = 'current', loadingLabel } = props;
 
   return (
     <div
@@ -34,7 +35,7 @@ const SeventyFivePercentSpinner: React.FC<ISpinnerProps> = props => {
       )}
     >
       <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-        Loading...
+        {loadingLabel}
       </span>
     </div>
   );

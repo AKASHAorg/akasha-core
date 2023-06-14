@@ -4,7 +4,7 @@ import { tx } from '@twind/core';
 //Not imported into Icon because this one is a solid check circle icon, not outline icon
 const StepIndicatorCompletedStep = () => {
   return (
-    <div>
+    <div data-testid="completed-step">
       <svg
         width="32"
         height="32"

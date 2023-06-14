@@ -46,6 +46,7 @@ const TabList: React.FC<TabListProps> = ({
           onClick={() => onChange(index, selected)}
           customStyle={`${baseStyle} ${hoverStyle} ${selected === index ? activeStyle : ''}`}
           plain
+          data-testid="tablist-tab"
         >
           <Text
             variant={labelTextVariant ? labelTextVariant : getTabTextVariant(selected, index)}

@@ -12,4 +12,5 @@ export const Spinner = Template.bind({});
 Spinner.args = {
   size: 'xl',
   color: 'secondaryLight',
+  loadingLabel: 'Loading...',
 };
