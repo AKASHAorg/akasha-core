@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
-import List, { Item } from '../';
+import List, { ListItem } from '../';
 import { customRender } from '../../../test-utils';
 
 describe('<List /> Component', () => {

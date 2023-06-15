@@ -1,13 +1,12 @@
 import React from 'react';
-import { tw } from '@twind/core';
-
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import { tw } from '@twind/core';
 
-const ProfileLoading = () => {
+const ProfileLoading: React.FC = () => {
   return (
     <Stack direction="column" spacing="gap-y-4">
       <div>

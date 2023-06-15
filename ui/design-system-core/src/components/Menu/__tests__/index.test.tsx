@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 import Menu from '../';
-import { Item } from '../../List';
+import { ListItem } from '../../List';
 import { customRender } from '../../../test-utils';
 
 describe('<Menu /> Component', () => {
