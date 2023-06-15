@@ -11,7 +11,7 @@ export type BoxProps = {
 >;
 
 const Box: React.FC<PropsWithChildren<BoxProps>> = props => {
-  const { customStyle = '', style = {} testId, children, ...rest } = props;
+  const { customStyle = '', style = {}, testId, children, ...rest } = props;
 
   const className = apply`${customStyle}`;
 
