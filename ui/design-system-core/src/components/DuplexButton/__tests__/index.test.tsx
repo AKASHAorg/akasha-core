@@ -3,7 +3,6 @@ import { act, fireEvent } from '@testing-library/react';
 
 import DuplexButton from '../';
 import { customRender } from '../../../test-utils';
-import { matchMediaMock } from '../../../test-utils/mocks';
 
 const label = 'DuplexButton';
 const activeLabel = 'Active';
@@ -11,8 +10,6 @@ const activeHoverLabel = 'Active Hover';
 const inactiveLabel = 'Inactive';
 
 const mockClickHandler = jest.fn(() => console.log('clicked'));
-
-window.matchMedia = jest.fn().mockImplementation(matchMediaMock);
 
 describe('<DuplexButton /> Component', () => {
   let componentWrapper = customRender(<></>, {});
