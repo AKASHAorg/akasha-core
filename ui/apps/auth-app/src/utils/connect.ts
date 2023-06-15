@@ -1,12 +1,6 @@
 import { EthProviders } from '@akashaorg/typings/sdk';
 import { TFunction } from 'i18next';
 
-const getDotColor = (status: number, errorMessage: string) => {
-  if (errorMessage) return 'errorText';
-  if (status > 5) return 'green';
-  if (status >= 0) return 'accent';
-};
-
 const getStatusLabel = (status: number, t: TFunction, errorMessage?: string) => {
   if (status > 5) return t('Authorized');
   if (status > 1 && !errorMessage) return t('Authorizing');
@@ -48,4 +42,4 @@ const getStatusDescription = (
   }
 };
 
-export { getDotColor, getStatusLabel, getStatusDescription };
+export { getStatusLabel, getStatusDescription };

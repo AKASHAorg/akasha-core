@@ -4,8 +4,14 @@
     "outDir": "./lib",
     "rootDir": "./src",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react"
   },
-  "include": ["./src/**/*"],
-  "exclude": ["./src/__mocks__/*", "./src/__tests__/*"]
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "./src/__mocks__/*",
+    "./src/__tests__/*"
+  ]
 }

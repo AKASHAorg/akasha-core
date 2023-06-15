@@ -63,7 +63,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   }
 
   const loaderConfig: ILoaderConfig = {
-    title: 'Ethereum World',
+    title: 'AKASHA World',
     // main layout (shell)
     layout: '@akashaorg/ui-widget-layout',
     // define an app that will load at root '/' path

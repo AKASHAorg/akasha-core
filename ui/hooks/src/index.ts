@@ -55,7 +55,13 @@ import {
   useFetchNotifications,
   useMarkAsRead,
 } from './use-notifications';
-import { useNetworkState, useCurrentNetwork } from './use-network-state';
+import {
+  useNetworkState,
+  useCurrentNetwork,
+  useRequiredNetwork,
+  switchToRequiredNetwork,
+  useNetworkChangeListener,
+} from './use-network-state';
 import { useMentionSearch } from './use-mentions';
 
 export * from './use-login';
@@ -91,12 +97,7 @@ import {
   useModeration,
   useReport,
 } from './use-moderation';
-import {
-  disconnectProvider,
-  useInjectedProvider,
-  useRequiredNetworkName,
-  switchToRequiredNetwork,
-} from './use-injected-provider';
+import { disconnectProvider, useInjectedProvider } from './use-injected-provider';
 import { useIsValidToken } from './use-invite-token-validation';
 import {
   useGetIntegrationInfo,
@@ -200,6 +201,9 @@ export {
   // use-network
   useNetworkState,
   useCurrentNetwork,
+  useNetworkChangeListener,
+  useRequiredNetwork,
+  switchToRequiredNetwork,
   // use-mentions
   useMentionSearch,
   // use-navigation
@@ -243,8 +247,6 @@ export {
   // use-injected-provider
   useInjectedProvider,
   disconnectProvider,
-  useRequiredNetworkName,
-  switchToRequiredNetwork,
   // use-invite-token-validation
   useIsValidToken,
   // use-integration-registry

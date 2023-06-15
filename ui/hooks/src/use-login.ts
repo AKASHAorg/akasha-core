@@ -69,13 +69,7 @@ export function useCurrentUser() {
 
 export function useConnectWallet(provider: EthProviders) {
   const sdk = getSDK();
-  return useMutation(async () => sdk.api.auth.connectAddress(provider), {
-    onError: (err: WalletTransactionError) => {
-      if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
-        console.log('User rejected wallet connection');
-      }
-    },
-  });
+  return useMutation(async () => sdk.api.auth.connectAddress(provider));
 }
 
 /**

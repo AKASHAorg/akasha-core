@@ -1,14 +1,14 @@
 import * as React from 'react';
 
 // this icon does not need any classnames added
-const MetamaskIcon = ({ className, ...restOfProps }: React.SVGProps<SVGSVGElement>) => (
+const MetamaskIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="40"
     height="40"
     version="1.1"
     viewBox="0 0 36.535 34.133"
     xmlns="http://www.w3.org/2000/svg"
-    {...restOfProps}
+    {...props}
   >
     <polygon
       transform="matrix(.36614 0 0 .36614 -3.7666 -2.7558)"

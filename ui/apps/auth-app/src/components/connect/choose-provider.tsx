@@ -8,11 +8,10 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Web3ConnectCard from './web3-connect-card';
-import { IconType } from '@akashaorg/typings/ui';
-import { useNetworkState, useRequiredNetworkName } from '@akashaorg/ui-awf-hooks';
+import { IconType, RootComponentProps } from '@akashaorg/typings/ui';
+import BoxedIcon from './boxed-icon';
 
 interface ChooseProviderProps {
-  requiredNetworkName: string;
   injectedProvider: {
     name: INJECTED_PROVIDERS;
     iconType?: IconType;
@@ -20,44 +19,33 @@ interface ChooseProviderProps {
     subtitleLabel?: string;
   };
   onProviderSelect: (provider: EthProviders) => void;
+  plugins: RootComponentProps['plugins'];
 }
 
-// @TODO: create a getter method in the routing plugin
-export const baseAppLegalRoute = '/@akashaorg/app-legal';
-
 const ChooseProvider: React.FC<ChooseProviderProps> = props => {
-  const { injectedProvider, onProviderSelect, requiredNetworkName } = props;
-  const [isSubmittingWithError, setIsSubmittingWithError] = React.useState(false);
+  const { injectedProvider, onProviderSelect } = props;
   const { t } = useTranslation('app-auth-ewa');
-  const networkStateQuery = useNetworkState();
 
-  const networkNotSupportedError = React.useMemo(() => {
-    if (networkStateQuery.data.networkNotSupported && injectedProvider.name) {
-      return t(
-        "To use Akasha World during the alpha period, you'll need to set the {{selectedProviderName}} wallet to {{requiredNetworkName}}",
-        {
-          selectedProviderName: injectedProvider.name,
-          requiredNetworkName,
-        },
-      );
-    }
-    return null;
-  }, [requiredNetworkName, injectedProvider]);
+  const routingPlugin = React.useRef(props.plugins['@akashaorg/app-routing']?.routing);
 
-  const handleProviderClick = React.useCallback(
-    (provider: EthProviders) => {
-      if (
-        networkNotSupportedError &&
-        !isSubmittingWithError &&
-        provider !== EthProviders.WalletConnect
-      ) {
-        setIsSubmittingWithError(true);
-        return;
-      }
-      onProviderSelect(provider);
-    },
-    [networkNotSupportedError, isSubmittingWithError],
-  );
+  const termsUrl = routingPlugin.current.getUrlForApp({
+    appName: '@akashaorg/app-legal',
+    getNavigationUrl: appRoutes => appRoutes.termsOfService,
+  });
+
+  const privacyUrl = routingPlugin.current.getUrlForApp({
+    appName: '@akashaorg/app-legal',
+    getNavigationUrl: appRoutes => appRoutes.privacyPolicy,
+  });
+
+  const cocUrl = routingPlugin.current.getUrlForApp({
+    appName: '@akashaorg/app-legal',
+    getNavigationUrl: appRoutes => appRoutes.codeOfConduct,
+  });
+
+  const handleProviderClick = (provider: EthProviders) => {
+    onProviderSelect(provider);
+  };
 
   return (
     <BasicCardBox data-testid="providers-list">
@@ -93,18 +81,27 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                 <Text variant="button-md" align="center" weight="bold">
                   {t('Get your own wallet')}
                 </Text>
-                <Box customStyle="flex">
-                  <Box>
-                    <Icon type="metamask" />
-                  </Box>
+                <Box customStyle="flex flex-row items-center justify-center">
+                  <BoxedIcon
+                    iconType="metamask"
+                    iconSize="sm"
+                    boxSize={6}
+                    background="bg(white dark:white)"
+                    iconColor="self-color"
+                    round="rounded-md"
+                  />
                   <Anchor
                     title={t('Get a MetaMask Wallet')}
                     href="https://metamask.io"
-                    // label={t('Get a MetaMask Wallet')}
                     target="_blank"
-                    // margin={{ left: '0.5rem', right: '0.5rem' }}
-                  />
-                  <Icon type="ArrowTopRightOnSquareIcon" size="lg" />
+                  >
+                    <Box customStyle="flex flex-row">
+                      <Text variant="button-md" customStyle="mx-1">
+                        {t('Get MetaMask Wallet')}
+                      </Text>
+                      <Icon type="ArrowTopRightOnSquareIcon" size="lg" />
+                    </Box>
+                  </Anchor>
                 </Box>
               </Box>
               <hr className="my-4" />
@@ -113,23 +110,15 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
         />
         {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
           <Box customStyle="mb-2">
-            {networkNotSupportedError && (
-              <Box
-                customStyle={`bg-warningLight dark:bg-waningDark ${
-                  isSubmittingWithError ? 'animate-shake' : ''
-                }`}
-                id={'network-not-supported-error'}
-                onAnimationEnd={() => setIsSubmittingWithError(false)}
-              >
-                <Text variant="subtitle2">{networkNotSupportedError}.</Text>
-              </Box>
-            )}
             <Web3ConnectCard
               leftIconType={injectedProvider.iconType}
               titleLabel={injectedProvider.titleLabel}
               subtitleLabel={injectedProvider.subtitleLabel}
               iconBackground="lightGold"
               handleClick={() => handleProviderClick(EthProviders.Web3Injected)}
+              iconColor={
+                injectedProvider.name === INJECTED_PROVIDERS.METAMASK ? 'self-color' : undefined
+              }
             />
           </Box>
         )}
@@ -140,32 +129,26 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
             titleLabel="WalletConnect"
             iconBackground="deepBlue"
             handleClick={() => handleProviderClick(EthProviders.WalletConnect)}
+            iconSize={{
+              width: 48,
+              height: 48,
+            }}
+            iconColor="self-color"
+            boxBgColor="transparent"
           />
         </Box>
       </Box>
       <Text align="center" variant="button-sm" weight="normal">
         {t('By connecting to AKASHA world, you agree to our ')}
-        <Anchor
-          href={`${baseAppLegalRoute}/terms-of-service`}
-          title={t('Terms & Conditions')}
-          target="_blank"
-        >
+        <Anchor href={termsUrl} title={t('Terms & Conditions')} target="_blank">
           {t('Terms & Conditions')}
         </Anchor>
         {', '}
-        <Anchor
-          href={`${baseAppLegalRoute}/privacy-policy`}
-          title={t('Privacy Policy')}
-          target="_blank"
-        >
+        <Anchor href={privacyUrl} title={t('Privacy Policy')} target="_blank">
           {t('Privacy Policy')}
         </Anchor>
         {', and '}
-        <Anchor
-          href={`${baseAppLegalRoute}/code-of-conduct`}
-          title={t('Code of Conduct')}
-          target="_blank"
-        >
+        <Anchor href={cocUrl} title={t('Code of Conduct')} target="_blank">
           {t('Code of Conduct')}
         </Anchor>
         {'.'}

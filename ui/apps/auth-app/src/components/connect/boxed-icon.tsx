@@ -1,32 +1,34 @@
 import React from 'react';
-import DS, { BoxExtendedProps } from '@akashaorg/design-system';
-import { IconProps } from '@akashaorg/design-system/lib/components/Icon';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
+import { IconType } from '@akashaorg/typings/ui';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 
-export interface IBoxedIconProps {
-  iconType: string;
+export type BoxedIconProps = {
+  iconType: IconType;
   iconSize?: IconProps['size'];
-  boxSize?: BoxExtendedProps['width'];
-  backgroundColor?: string;
-}
+  iconColor?: IconProps['color'];
+  boxSize?: 0 | 6 | 12 | 24;
+  background?: string;
+  round?: string;
+};
 
-const { Box, Icon } = DS;
-
-const BoxedIcon: React.FC<IBoxedIconProps> = props => {
-  const { iconType, iconSize = 'md', boxSize = 'xsmall', backgroundColor } = props;
-
+const BoxedIcon: React.FC<BoxedIconProps> = props => {
   return (
-    <Box
-      direction="row"
-      width={boxSize}
-      height={boxSize}
-      round="small"
-      align="center"
-      justify="center"
-      background={backgroundColor}
+    <BasicCardBox
+      pad="0"
+      elevation={'none'}
+      round={props.round || 'rounded-lg'}
+      customStyle={`flex flex-row justify-center items-center w-${props.boxSize} h-${props.boxSize} ${props.background}`}
     >
-      <Icon type={iconType} size={iconSize} plain={true} />
-    </Box>
+      <Icon type={props.iconType} size={props.iconSize} color={props.iconColor} />
+    </BasicCardBox>
   );
+};
+
+BoxedIcon.defaultProps = {
+  boxSize: 24,
+  iconSize: 'md',
 };
 
 export default BoxedIcon;
