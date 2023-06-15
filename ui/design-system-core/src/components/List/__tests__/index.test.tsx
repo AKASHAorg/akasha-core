@@ -10,7 +10,7 @@ describe('<List /> Component', () => {
   const handleEdit = jest.fn(/** */);
   const handleDelete = jest.fn(/** */);
 
-  const items: Item[] = [
+  const items: ListItem[] = [
     { label: 'Upload', icon: 'ArrowUpOnSquareIcon', onClick: handleUpload },
     { label: 'Edit', icon: 'PencilIcon', onClick: handleEdit },
     {
