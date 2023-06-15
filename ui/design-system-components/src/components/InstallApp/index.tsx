@@ -4,9 +4,9 @@ import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import InstallIcon from './install-icon';
-import SuccessIcon from './success-icon';
-import ErrorIcon from './error-icon';
+import InstallImg from './install-img';
+import SuccessImg from './success-img';
+import ErrorImg from './error-img';
 
 export type InstallAppProps = {
   title: string;
@@ -30,9 +30,9 @@ const InstallApp: React.FC<InstallAppProps> = ({
         <InfoCard titleLabel={appName} />
         <Stack align="center" direction="column" customStyle="max-w-xs">
           <>
-            {status === 'error' && <ErrorIcon />}
-            {status === 'in-progress' && <InstallIcon />}
-            {status === 'complete' && <SuccessIcon />}
+            {status === 'error' && <ErrorImg />}
+            {status === 'in-progress' && <InstallImg />}
+            {status === 'complete' && <SuccessImg />}
             <Text
               align="center"
               variant="subtitle1"
