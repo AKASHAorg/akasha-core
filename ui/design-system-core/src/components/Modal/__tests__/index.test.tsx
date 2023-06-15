@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent, waitFor } from '@testing-library/react';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 import { customRender } from '../../../test-utils';
 import Modal from '../';
 import { ButtonProps } from '../../Button/types';
-import { intersectionObserverMock } from '../../../test-utils/mocks';
 
 const buttonLabel = 'Show modal';
 const modalText = 'Modal text';
@@ -22,7 +21,6 @@ const renderCombo = showModal => (
 );
 
 const mockSetShowModal = jest.fn(value => (showModal = value));
-window.IntersectionObserver = jest.fn().mockImplementation(intersectionObserverMock);
 
 describe('<Closed Modal /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -34,8 +32,6 @@ describe('<Closed Modal /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -86,8 +82,6 @@ describe('<Open Modal /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

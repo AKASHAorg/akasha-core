@@ -6,7 +6,7 @@ import DateSelector from './DateSelector';
 import { tw } from '@twind/core';
 import Text from '../Text';
 
-const DatePicker = () => {
+const DatePicker: React.FC = () => {
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [showDatepicker, setShowDatepicker] = useState(false);
@@ -67,7 +67,7 @@ const DatePicker = () => {
   });
 
   return (
-    <div className={tw('w-full md:w-80')}>
+    <div title="date-picker" className={tw('w-full md:w-80')}>
       <div className={tw('relative')}>
         <div
           onClick={() => {

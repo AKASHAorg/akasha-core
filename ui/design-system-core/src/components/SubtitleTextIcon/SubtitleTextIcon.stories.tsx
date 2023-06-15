@@ -3,7 +3,7 @@ import React from 'react';
 import SubtitleTextIcon from './';
 
 export default {
-  title: 'SubtitleTextIcon',
+  title: 'Icons/SubtitleTextIcon',
   component: SubtitleTextIcon,
 };
 

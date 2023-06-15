@@ -20,7 +20,7 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
 
     return (
       !hide && (
-        <div ref={ref} onClick={() => onClick()} className={tw(styledDiv)}>
+        <div title="scroll-to-top" ref={ref} onClick={() => onClick()} className={tw(styledDiv)}>
           <Icon type="ArrowUpIcon" hover={true} accentColor={true} />
         </div>
       )

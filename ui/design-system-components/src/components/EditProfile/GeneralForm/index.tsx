@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types';
 import { Profile } from '@akashaorg/typings/ui';
 import * as z from 'zod';
+
 type GeneralFormValues = {
   userName?: string;
   name?: string;
@@ -18,7 +19,9 @@ type GeneralFormValues = {
   ens?: string;
   bio?: string;
 };
+
 type InputType = { label: string; initialValue: string };
+
 export type GeneralFormProps = {
   header: Omit<HeaderProps, 'onAvatarChange' | 'onCoverImageChange'>;
   name: InputType;
