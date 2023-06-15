@@ -1,5 +1,6 @@
 import { Color } from '../types/common.types';
-import { PasswordStrengthLevel } from './index';
+
+import { PasswordStrengthLevel } from './PasswordStrengthIndicator';
 
 export function getPasswordStrengthLabel(strengthLevel: PasswordStrengthLevel) {
   switch (strengthLevel) {

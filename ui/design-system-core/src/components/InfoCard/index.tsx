@@ -5,11 +5,12 @@ import Text, { TextProps } from '../Text';
 import { tw } from '@twind/core';
 
 export type InfoCardProps = {
+  assetName?: string;
+  publicImgPath?: string;
   titleLabel: ReactNode;
   titleVariant?: TextProps['variant'];
   bodyVariant?: TextProps['variant'];
   bodyLabel?: ReactNode;
-  assetName?: string;
 };
 
 const InfoCard: React.FC<InfoCardProps> = ({
@@ -18,6 +19,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
   bodyVariant = 'footnotes2',
   bodyLabel,
   assetName,
+  publicImgPath = '/images',
 }) => {
   return (
     <Stack
@@ -31,7 +33,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
         <img
           className={tw('object-contain h-56')}
           aria-label={assetName}
-          src={`/images/${assetName}.webp`}
+          src={`${publicImgPath}/${assetName}.webp`}
           alt={assetName}
         />
       ) : (

@@ -68,19 +68,19 @@ describe('<NotificationsCard /> Component', () => {
     act(() => componentWrapper.unmount());
     cleanup();
   });
-  // @TODO fix after implemeting new hooks
-  it.skip('renders correctly', () => {
+
+  it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it.skip('renders correct profile avatar', () => {
+  it('renders correct profile avatar', () => {
     const { getByRole } = componentWrapper;
 
     const avatar = getByRole('img');
-    expect(avatar).toHaveAttribute('src', 'https://placebeard.it/360x360');
+    expect(avatar).toHaveAttribute('src', expect.stringMatching(/placeholder/));
   });
 
-  it.skip('has correct label based on type (POST_MENTION)', () => {
+  it('has correct label based on type (POST_MENTION)', () => {
     const { getByText } = componentWrapper;
 
     const mentionedInAPostLabel = getByText(/mentioned you in a post/i);

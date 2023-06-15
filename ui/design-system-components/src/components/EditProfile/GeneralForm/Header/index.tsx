@@ -28,6 +28,7 @@ export type HeaderProps = {
   imageTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   deleteTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   confirmationLabel: { avatar: string; coverImage: string };
+  dragToRepositionLabel: string;
   onAvatarChange: (avatar?: Profile['avatar']) => void;
   onCoverImageChange: (coverImage?: Profile['background']) => void;
 };
@@ -43,6 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
   imageTitle,
   deleteTitle,
   confirmationLabel,
+  dragToRepositionLabel,
   onAvatarChange,
   onCoverImageChange,
 }) => {
@@ -206,6 +208,7 @@ export const Header: React.FC<HeaderProps> = ({
         saveLabel={saveLabel}
         onClose={() => setShowEditImage(false)}
         image={imageType === 'avatar' ? avatarUrl : coverImageUrl}
+        dragToRepositionLabel={dragToRepositionLabel}
         onSave={onSave}
         {...imageModalProps}
       />

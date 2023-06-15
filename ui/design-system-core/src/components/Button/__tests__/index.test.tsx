@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 
 import Button from '../';
 import { customRender } from '../../../test-utils';
 
 const label = 'Default button';
-const mockClickHandler = jest.fn(() => console.log('clicked'));
+const mockClickHandler = jest.fn(/** */);
 
 describe('<Button /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -20,8 +20,6 @@ describe('<Button /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -34,6 +32,7 @@ describe('<Button /> Component', () => {
     const buttonLabel = getByText(label);
     expect(buttonLabel).toBeDefined();
   });
+
   it('correctly call handler function when clicked', () => {
     const { container } = componentWrapper;
     const button = container.querySelector('button');
@@ -55,8 +54,6 @@ describe('Icon Only Button', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -84,8 +81,6 @@ describe('Disabled Button', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 
 import Checkbox from '../';
 import { customRender } from '../../../test-utils';
@@ -28,8 +28,6 @@ describe('<Checkbox /> Component unchecked', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -66,8 +64,6 @@ describe('<Checkbox /> Component checked', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

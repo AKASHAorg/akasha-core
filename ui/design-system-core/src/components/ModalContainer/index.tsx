@@ -1,5 +1,7 @@
-import * as React from 'react';
-import { tw, keyframes, css, apply } from '@twind/core';
+import React, { PropsWithChildren } from 'react';
+import { keyframes, css, apply } from '@twind/core';
+
+import Box from '../Box';
 
 export interface IModalContainerProps {
   onModalClose?: () => void;
@@ -8,7 +10,9 @@ export interface IModalContainerProps {
   children?: React.ReactNode;
 }
 
-const ModalContainer: React.FC<IModalContainerProps> = props => {
+const ModalContainer: React.FC<PropsWithChildren<IModalContainerProps>> = props => {
+  const { style, children, onModalClose } = props;
+
   const innerStyle = Object.assign({ zIndex: 10 }, props.innerStyle);
 
   const positionClass = apply(`top-0 left-0 bottom-0 right-0`);
@@ -25,24 +29,24 @@ const ModalContainer: React.FC<IModalContainerProps> = props => {
   const fadeInClass = css`
     animation: 0.25s ${fadeIn} ease-out;
   `;
+
   return (
-    <div
-      className={tw(
-        `flex w-full items-center justify-items-center justify-center fixed ${positionClass}`,
-      )}
-      style={props.style}
+    <Box
+      customStyle={`flex w-full items-center justify-items-center justify-center fixed ${positionClass}`}
+      style={style}
     >
-      <div
-        className={tw(`flex items-center justify-items-center h-screen ${fadeInClass}`)}
+      <Box
+        className={`flex items-center justify-items-center h-screen ${fadeInClass}`}
         style={innerStyle}
       >
-        {props.children}
-      </div>
-      <div
-        className={tw(`absolute ${positionClass} bg-white/60 ${fadeInClass}`)}
-        onClick={props.onModalClose}
+        {children}
+      </Box>
+
+      <Box
+        className={`absolute ${positionClass} bg-white/60 ${fadeInClass}`}
+        onClick={onModalClose}
       />
-    </div>
+    </Box>
   );
 };
 
