@@ -238,7 +238,7 @@ class Web3Connector {
    * @param provider - Number representing the provider option
    */
   async #_getProvider(provider: EthProviders) {
-    let ethProvider: ethers.providers.ExternalProvider | undefined = undefined;
+    let ethProvider: ethers.providers.ExternalProvider | undefined;
     const network = {
       name: this.network,
       chainId: this.networkId[this.network],
