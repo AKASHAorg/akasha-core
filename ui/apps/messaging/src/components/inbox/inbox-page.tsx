@@ -1,10 +1,12 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { useFollowers, useFollowing } from '@akashaorg/ui-awf-hooks';
-
-const { BasicCardBox, Box, Icon, Text, MessageContactCard } = DS;
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import MessageContactCard from '@akashaorg/design-system-components/lib/components/MessageContactCard';
 
 export interface InboxPageProps extends RootComponentProps {
   loggedProfileData: Profile;
@@ -92,28 +94,26 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   };
 
   return (
-    <BasicCardBox style={{ maxHeight: '92vh' }}>
-      <Box pad="medium" gap="small">
-        <Box direction="row" justify="between">
-          <Text size="large" weight={'bold'}>
-            {t('Messaging App')}
-          </Text>
-          <Icon type="settingsAlt" onClick={handleSettingsClick} clickable={true} />
+    <BasicCardBox customStyle="max-h-[92vh]">
+      <Box customStyle="flex p-4 gap-2">
+        <Box customStyle="flex flex-row justify-between">
+          <Text variant="h1">{t('Messaging App')}</Text>
+          <button onClick={handleSettingsClick}>
+            <Icon type="settingsAlt" />
+          </button>
         </Box>
         <Text>
           {t('Write and send private, encrypted messages 🔐 to people in Ethereum World.')}
         </Text>
-        <Box border={{ color: 'border', side: 'all' }} round="small">
-          <Box pad={{ horizontal: 'small', vertical: 'medium' }}>
-            <Text weight={'bold'} size="large">
-              {t('Conversations')}
-            </Text>
+        <Box customStyle="flex border(grey8 dark:grey3) rounded-lg">
+          <Box customStyle="flex px-2 py-4">
+            <Text variant="h2">{t('Conversations')}</Text>
           </Box>
-          <Box overflow={'auto'} round={{ corner: 'bottom', size: 'small' }}>
+          <Box customStyle="rounded-b-lg overflow-auto">
             {!!pinnedContacts.length && (
-              <Box flex={{ shrink: 0 }}>
-                <Box pad="medium" flex={{ shrink: 0 }}>
-                  <Text weight={'bold'}>{t('PINNED')}</Text>
+              <Box customStyle="flex shrink-0">
+                <Box customStyle="p-4 flex shrink-0">
+                  <Text variant="body1">{t('PINNED')}</Text>
                 </Box>
 
                 {pinnedContacts.map((contact, idx) => (
@@ -140,10 +140,10 @@ const InboxPage: React.FC<InboxPageProps> = props => {
               </Box>
             )}
 
-            <Box flex={{ shrink: 0 }}>
+            <Box customStyle="flex shrink-0">
               {!!pinnedContacts.length && (
-                <Box pad="medium">
-                  <Text weight={'bold'}>{t('ALL CONVERSATIONS')}</Text>
+                <Box customStyle="flex p-4">
+                  <Text variant="body1">{t('ALL CONVERSATIONS')}</Text>
                 </Box>
               )}
 

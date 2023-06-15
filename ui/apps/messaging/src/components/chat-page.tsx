@@ -1,5 +1,4 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
@@ -9,8 +8,14 @@ import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/h
 import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
 import { useLiveQuery } from 'dexie-react-hooks';
-
-const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard } = DS;
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import ChatList from '@akashaorg/design-system-components/lib/components/ChatList';
+import ChatAreaHeader from '@akashaorg/design-system-components/lib/components/ChatAreaHeader';
+import ChatEditor from '@akashaorg/design-system-components/lib/components/ChatEditor';
+import BubbleCard from '@akashaorg/design-system-components/lib/components/BubbleCard';
 
 export interface ChatPageProps extends RootComponentProps {
   loggedProfileData: Profile;
@@ -152,21 +157,18 @@ const ChatPage = (props: ChatPageProps) => {
   };
 
   return (
-    <BasicCardBox style={{ maxHeight: '92vh' }}>
-      <Box direction="row" pad="medium" align="center">
-        <Icon type="chevronLeft" onClick={onChevronLeftClick} />
-        <Text weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
+    <BasicCardBox customStyle="max-h-[92vh]">
+      <Box customStyle="flx flex-row p-4 items-center">
+        <button onClick={onChevronLeftClick}>
+          <Icon type="ChevronLeftIcon" />
+        </button>
+
+        <Text variant="h5" customStyle="mx-auto">
           {t('Message')}
         </Text>
       </Box>
-      <Box pad="small">
-        <Box
-          width="100%"
-          background="convoAreaBackground"
-          round={{ size: 'small' }}
-          border={{ side: 'all', size: '1px', color: 'border' }}
-          justify="between"
-        >
+      <Box customStyle="p-2">
+        <Box customStyle="flex justify-between w-full rounded-lg border(grey8 dark:grey3)">
           <ChatAreaHeader
             name={profileDataReq.data?.profile?.name}
             avatar={profileDataReq.data?.profile?.avatar}
