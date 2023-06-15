@@ -10,8 +10,10 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import { Item } from '@akashaorg/design-system-core/lib/components/List';
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import { Developer } from '../types/common.types';
+import { DuplexAppIcon } from './duplex-app-icon';
 
 export type AppInfoProps = {
   integrationName: string;
@@ -28,9 +30,12 @@ export type AppInfoProps = {
   linksAndDocumentationTitle: string;
   licenseTitle: string;
   license: string;
-  share: Item;
-  report: Item;
-  onSelectDeveloper?: (profileId: string) => void;
+  share: ListItem;
+  report: ListItem;
+  status: 'installed' | 'not-installed' | 'loading';
+  onInstall: () => void;
+  onUninstall: () => void;
+  onSelectDeveloper: (profileId: string) => void;
 };
 
 const AppInfo: React.FC<AppInfoProps> = ({
@@ -50,6 +55,9 @@ const AppInfo: React.FC<AppInfoProps> = ({
   license,
   share,
   report,
+  status,
+  onInstall,
+  onUninstall,
   onSelectDeveloper,
 }) => {
   return (
@@ -84,7 +92,18 @@ const AppInfo: React.FC<AppInfoProps> = ({
                 </Stack>
               </Stack>
               <Stack spacing="gap-x-2" customStyle="ml-auto">
-                <Button icon="ArrowDownIcon" size="xs" iconOnly />
+                {status === 'not-installed' && (
+                  <Button icon="ArrowDownIcon" size="xs" iconOnly onClick={onInstall} />
+                )}
+                {status === 'installed' && <DuplexAppIcon onUninstall={onUninstall} />}
+                {status === 'loading' && (
+                  <AppIcon
+                    placeholderIconType="ArrowPathIcon"
+                    iconColor="white"
+                    background="secondaryDark"
+                    size="xs"
+                  />
+                )}
                 <Menu
                   anchorElement={<Button icon="EllipsisVerticalIcon" size="xs" greyBg iconOnly />}
                   items={[share, report]}

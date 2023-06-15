@@ -3,19 +3,23 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 
 import getSDK from '@akashaorg/awf-sdk';
-import DS from '@akashaorg/design-system';
+import InstallApp from '@akashaorg/design-system-components/lib/components/InstallApp';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { EventTypes, UIEventData, RootExtensionProps } from '@akashaorg/typings/ui';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useInstallApp, withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
-const { InstallModal, ModalContainer } = DS;
-
 const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   const { extensionData } = props;
   const sdk = getSDK();
   const { t } = useTranslation('app-akasha-integration');
+
+  const PROGRESS_STEP_TO_PROGRESS_INFO_MAP = {
+    1: t('Saving install information...'),
+    2: t('Downloading App resources...'),
+    3: t('Installing App intro your World...'),
+  };
 
   const integrationName: string = React.useMemo(() => {
     if (extensionData && extensionData.integrationName) {
@@ -76,44 +80,13 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   }, [props.singleSpa]);
 
   return (
-    <InstallModal
-      onCancel={() => {
-        return null;
-      }}
-      onCloseModal={handleModalClose}
-      error={error}
-      cancelLabel={t('Cancel')}
-      continueLabel={t('Continue')}
-      cancelTitleLabel={t('Cancel installation')}
-      cancelSubtitleLabel={t('Are you sure you want to cancel the installation?')}
-      doneLabel={t('Done')}
-      dismissLabel={t('Dismiss')}
-      modalTitleLabel={t('App Install')}
-      integrationName={integrationName}
-      installTitleLabel={t(
-        'To add {{integrationName}} to your World we have to do a few things first. This will take less than a minute.',
-        { integrationName },
-      )}
-      installStep={modalState}
-      savingInfoLabel={t('Saving install information')}
-      downloadingResourcesLabel={t('Downloading resources')}
-      successTitleLabel={t('Done!')}
-      successInfoLabel={t(
-        'To check out your new app visit the {{integrationCentreName}} and look under Your Apps. You can also open the side bar menu.',
-        { integrationCentreName: 'Integration Centre' },
-      )}
-      successSubInfoLabel={t('Enjoy!')}
-      successSubtitleLabel={t(
-        '{{integrationName}} is now installed in {{worldName}} and is currently active.',
-        { integrationName, worldName: props.worldConfig.title },
-      )}
-      errorInfoLabel={t('Please check your network connection and try again.')}
-      errorSubInfoLabel={t('Thank you!')}
-      errorSubtitleLabel={t('{{integrationName}} could not be installed in {{worldName}}.', {
-        integrationName,
-        worldName: props.worldConfig.title,
-      })}
-      errorTitleLabel={t('Oops!')}
+    /*@TODO: revisit props when new install/uninstall hooks are ready to be integrated*/
+    <InstallApp
+      title={t('Installation in progress')}
+      appName={integrationName} /*@TODO: revisit*/
+      progressInfo={PROGRESS_STEP_TO_PROGRESS_INFO_MAP[modalState]} /*@TODO: revisit*/
+      status="in-progress" /*@TODO: revisit*/
+      action={{ label: 'Cancel installation', onClick: () => ({}) }} /*@TODO: revisit*/
     />
   );
 };
@@ -137,9 +110,7 @@ const reactLifecycles = singleSpaReact({
     }
     return (
       <ThemeWrapper {...props}>
-        <ModalContainer>
-          <ErrorLoader type="script-error" title="Error in install modal" details={err.message} />
-        </ModalContainer>
+        <ErrorLoader type="script-error" title="Error in install modal" details={err.message} />
       </ThemeWrapper>
     );
   },

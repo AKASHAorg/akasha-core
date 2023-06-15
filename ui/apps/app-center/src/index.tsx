@@ -26,7 +26,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   extends: (matcher, loader) => {
     matcher({
-      'install-modal': loader(() => import('./extensions/install-modal')),
+      'install-app': loader(() => import('./extensions/install-app')),
     });
   },
 });

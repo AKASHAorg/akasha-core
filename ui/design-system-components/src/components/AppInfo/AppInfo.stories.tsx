@@ -9,11 +9,7 @@ export default {
   component: AppInfo,
 };
 
-const Template = (args: AppInfoProps) => <AppInfo {...args} />;
-
-export const BaseAppInfo = Template.bind({});
-
-BaseAppInfo.args = {
+const COMMON_PROPS = {
   integrationName: 'Integration Name',
   packageName: 'Package name',
   developers: [{ profileId, avatar, name: 'Coffee Lover', userName: '@ilovecoffee' }],
@@ -32,4 +28,30 @@ BaseAppInfo.args = {
   license: 'AGPL-3.0',
   share: { label: 'Share', icon: 'ShareIcon' },
   report: { label: 'Report', icon: 'FlagIcon', color: { light: 'errorLight', dark: 'errorDark' } },
+  onInstall: () => ({}),
+  onUninstall: () => ({}),
+  onSelectDeveloper: () => ({}),
+};
+
+const Template = (args: AppInfoProps) => <AppInfo {...args} />;
+
+export const BaseAppInfo = Template.bind({});
+
+BaseAppInfo.args = {
+  ...COMMON_PROPS,
+  status: 'not-installed',
+};
+
+export const InstalledAppInfo = Template.bind({});
+
+InstalledAppInfo.args = {
+  ...COMMON_PROPS,
+  status: 'installed',
+};
+
+export const UnInstallInProgressAppInfo = Template.bind({});
+
+UnInstallInProgressAppInfo.args = {
+  ...COMMON_PROPS,
+  status: 'loading',
 };

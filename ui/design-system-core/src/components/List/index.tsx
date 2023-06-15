@@ -8,14 +8,14 @@ import { IconType } from '@akashaorg/typings/ui';
 import { TextProps } from '../Text';
 import { getColorClasses } from '../../utils/getColorClasses';
 
-export type Item = {
+export type ListItem = {
   label: string;
   icon?: IconType;
   onClick?: (label: string) => void;
 } & TextProps;
 
 export type ListProps = {
-  items: Item[];
+  items: ListItem[];
   customStyle?: string;
   showDivider?: boolean;
   ref?: LegacyRef<HTMLDivElement>;

@@ -112,9 +112,19 @@ const ExplorePage: React.FC<IExplorePage> = props => {
             {!isUserLoggedIn && (
               <Stack direction="column" spacing="gap-y-4">
                 <Text variant="h6">{t('Latest Apps')}</Text>
-                <AppList apps={dummyApps} />
+                <AppList
+                  apps={dummyApps}
+                  onAppSelected={() => {
+                    /*TODO: get app id from new hooks when they are ready and navigate to info page*/
+                  }}
+                />
                 <Text variant="h6">{t('Most Installed Apps')}</Text>
-                <AppList apps={dummyApps} />
+                <AppList
+                  apps={dummyApps}
+                  onAppSelected={() => {
+                    /*TODO: get app id from new hooks when they are ready and navigate to info page*/
+                  }}
+                />
                 <InfoCard titleLabel={t('Check out more cool apps from the Apps section')} />
               </Stack>
             )}
