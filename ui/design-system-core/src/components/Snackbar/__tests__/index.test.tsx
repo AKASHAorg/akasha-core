@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 
 import Snackbar from '../';
 import { customRender } from '../../../test-utils';
@@ -27,8 +27,6 @@ describe('<Snackbar /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -43,8 +41,8 @@ describe('<Snackbar /> Component', () => {
   });
 
   it('correctly calls handler function when clicked', () => {
-    const { getByTestId } = componentWrapper;
-    const dismissButton = getByTestId('dismiss-button');
+    const { getByRole } = componentWrapper;
+    const dismissButton = getByRole('button', { name: 'dismiss' });
     fireEvent.click(dismissButton);
     expect(mockChangeHandler).toHaveBeenCalledTimes(1);
   });

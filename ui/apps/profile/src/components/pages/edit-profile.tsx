@@ -85,6 +85,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 title: t('Avatar & Cover Image'),
                 coverImage: profileData.background,
                 avatar: profileData.avatar,
+                dragToRepositionLabel: t('Drag the image to reposition'),
                 profileId: profileData.did.id,
                 cancelLabel: t('Cancel'),
                 deleteLabel: t('Delete'),

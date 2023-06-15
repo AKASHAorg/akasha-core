@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
-import { customRender } from '../../../test-utils';
+import { act, fireEvent } from '@testing-library/react';
 import Accordion from '../';
+import { customRender } from '../../../test-utils';
 
 const Title = (
   <div>
@@ -25,8 +25,6 @@ describe('<Accordion /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

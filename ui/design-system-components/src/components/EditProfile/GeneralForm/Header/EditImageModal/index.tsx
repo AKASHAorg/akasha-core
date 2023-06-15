@@ -4,15 +4,14 @@ import ImageCropper, {
   ImageCropperProps,
 } from '@akashaorg/design-system-core/lib/components/ImageCropper';
 
-type EditImageModalProps = {
+type EditImageModalProps = Pick<ImageCropperProps, 'image' | 'dragToRepositionLabel'> & {
   title: ModalProps['title'];
   show: ModalProps['show'];
-  image: ImageCropperProps['image'];
   cancelLabel: string;
   saveLabel: string;
   onSave: (image: Blob) => void;
   onClose: ModalProps['onClose'];
-} & Partial<ImageCropperProps>;
+};
 
 export const EditImageModal: React.FC<EditImageModalProps> = ({
   title,

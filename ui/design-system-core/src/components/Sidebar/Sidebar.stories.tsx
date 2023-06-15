@@ -24,6 +24,7 @@ BaseSidebar.args = {
   ctaButtonLabel: 'Check them out!',
   footerLabel: 'Get in Touch',
   listItems: sidebarItems,
+  loggedUser: {},
   footerIcons: [
     { name: 'github', link: '', icon: 'akasha' },
     { name: 'discord', link: '', icon: 'akasha' },

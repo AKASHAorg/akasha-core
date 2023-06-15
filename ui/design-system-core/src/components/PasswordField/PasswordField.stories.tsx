@@ -6,7 +6,7 @@ export default {
   component: PasswordField,
 };
 
-const Template = args => <PasswordField {...args} />;
+const Template = args => <PasswordField {...args} placeholderLabel="Enter your password" />;
 
 export const BasePasswordField = Template.bind({});
 BasePasswordField.args = {
