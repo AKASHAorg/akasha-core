@@ -28,17 +28,17 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
 
   const routingPlugin = React.useRef(props.plugins['@akashaorg/app-routing']?.routing);
 
-  const termsUrl = routingPlugin.current.getUrlForApp({
+  const termsUrl = routingPlugin.current?.getUrlForApp({
     appName: '@akashaorg/app-legal',
     getNavigationUrl: appRoutes => appRoutes.termsOfService,
   });
 
-  const privacyUrl = routingPlugin.current.getUrlForApp({
+  const privacyUrl = routingPlugin.current?.getUrlForApp({
     appName: '@akashaorg/app-legal',
     getNavigationUrl: appRoutes => appRoutes.privacyPolicy,
   });
 
-  const cocUrl = routingPlugin.current.getUrlForApp({
+  const cocUrl = routingPlugin.current?.getUrlForApp({
     appName: '@akashaorg/app-legal',
     getNavigationUrl: appRoutes => appRoutes.codeOfConduct,
   });
