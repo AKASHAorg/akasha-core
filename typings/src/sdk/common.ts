@@ -32,8 +32,8 @@ export const DataProviderInputSchema = z.object({
 });
 export type DataProviderInput = z.infer<typeof DataProviderInputSchema>;
 
-export type GlobalEventBusData = {
-  data: unknown;
+export type GlobalEventBusData<D = unknown> = {
+  data: D;
   event:
     | AUTH_EVENTS
     | APP_EVENTS

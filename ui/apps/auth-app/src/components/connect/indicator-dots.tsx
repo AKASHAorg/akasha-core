@@ -1,40 +1,33 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
-
-import { getDotColor } from '../../utils/connect';
-
-const { Box, Icon, styled } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export interface IndicatorDotsProps {
-  status: number;
-  errorMessage: string;
+  hasErrors?: boolean;
 }
 
-const Dot = styled(Box)<{ size?: string; color?: string; opacity?: number }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: ${props => props.size ?? '1rem'};
-  height: ${props => props.size ?? '1rem'};
-  opacity: ${props => props.opacity ?? 1};
-  border-radius: 100%;
-`;
+const getDotColor = (hasErrors: boolean) => {
+  if (hasErrors) {
+    return 'bg(errorLight dark:errorDark)';
+  }
+
+  return 'bg(blue-400 dark:blue-200)';
+};
 
 const IndicatorDots: React.FC<IndicatorDotsProps> = props => {
-  const { status, errorMessage } = props;
+  const { hasErrors = false } = props;
 
-  const dotColor = getDotColor(status, errorMessage);
+  const dotColor = React.useMemo(() => getDotColor(hasErrors), [hasErrors]);
 
   return (
-    <Box direction="row" gap="xsmall" align="center">
-      <Dot background={dotColor} opacity={0.5} />
-
-      <Dot size="1.25rem" background={dotColor}>
-        {!errorMessage.length && status > 5 && <Icon type="checkSimple" size="xxs" color="white" />}
-        {!!errorMessage.length && <Icon type="error" size="xxs" color="white" />}
-      </Dot>
-
-      <Dot background={dotColor} opacity={0.5} />
+    <Box customStyle="flex flex-row items-center justify-center mx-4">
+      <Box customStyle={`rounded-full w-4 h-4 ${dotColor} opacity-50`} />
+      <Box
+        customStyle={`flex flex-row rounded-full w-5 h-5 ${dotColor} mx-2 justify-center items-center`}
+      >
+        {hasErrors && <Icon type="ExclamationTriangleIcon" color="white" size="xs" />}
+      </Box>
+      <Box customStyle={`rounded-full w-4 h-4 ${dotColor} opacity-50`} />
     </Box>
   );
 };

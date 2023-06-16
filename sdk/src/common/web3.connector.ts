@@ -87,6 +87,7 @@ class Web3Connector {
       return new Error(`Method wallet_requestPermissions not supported on the current provider`);
     });
   }
+
   /**
    * Get access to the web3 provider instance
    */
@@ -143,11 +144,11 @@ class Web3Connector {
     return;
   }
 
-  getRequiredNetworkName() {
+  getRequiredNetwork() {
     if (!this.network) {
       throw new Error('The required ethereum network was not set!');
     }
-    return createFormattedValue(this.network);
+    return createFormattedValue({ name: this.network, chainId: this.networkId[this.network] });
   }
 
   async switchToRequiredNetwork() {
@@ -157,7 +158,11 @@ class Web3Connector {
       ]);
       return createFormattedValue(result);
     }
-    return new Error(`Method wallet_switchEthereumChain not supported on the current provider`);
+    const err: Error & {
+      code?: number;
+    } = new Error(`Method wallet_switchEthereumChain not supported on the current provider`);
+    err.code = PROVIDER_ERROR_CODES.WrongNetwork;
+    throw err;
   }
 
   async #_getCurrentAddress() {
@@ -170,6 +175,7 @@ class Web3Connector {
     }
     return null;
   }
+
   getCurrentEthAddress() {
     return this.#_getCurrentAddress();
   }
@@ -177,6 +183,7 @@ class Web3Connector {
   checkCurrentNetwork() {
     return this.#_checkCurrentNetwork();
   }
+
   async detectInjectedProvider() {
     return createFormattedValue(await this.#_detectInjectedProvider());
   }
@@ -207,10 +214,11 @@ class Web3Connector {
     }
     return detectedProvider;
   }
+
   /**
    * Ensures that the web3 provider is connected to the specified network
    */
-  async #_checkCurrentNetwork(): Promise<void> {
+  async #_checkCurrentNetwork() {
     if (!this.#web3Instance) {
       throw new Error('Must connect first to a provider!');
     }
@@ -230,7 +238,7 @@ class Web3Connector {
    * @param provider - Number representing the provider option
    */
   async #_getProvider(provider: EthProviders) {
-    let ethProvider;
+    let ethProvider: ethers.providers.ExternalProvider | undefined;
     const network = {
       name: this.network,
       chainId: this.networkId[this.network],
@@ -253,6 +261,9 @@ class Web3Connector {
     if (provider === EthProviders.WalletConnect) {
       this.#walletConnect = await this.#_getWalletConnectProvider();
       ethProvider = this.#walletConnect;
+    }
+    if (!ethProvider) {
+      throw new Error('No Web3 Provider found');
     }
     const web3Provider = new ethers.providers.Web3Provider(ethProvider, network);
     this.#_registerProviderChangeEvents(web3Provider);
@@ -296,21 +307,26 @@ class Web3Connector {
     if (!provider.on) {
       throw new Error('Provider does not support on method');
     }
-    provider.on('accountsChanged', () => {
-      this.#log.warn('ethereum address changed');
+    provider.on('accountsChanged', ethAddress => {
+      this.#log.warn(`ethereum address changed ${ethAddress}`);
       this.#globalChannel.next({
-        data: {},
+        data: {
+          ethAddress,
+        },
         event: WEB3_EVENTS.ACCOUNT_CHANGED,
       });
     });
-    provider.on('chainChanged', () => {
-      this.#log.warn('ethereum chain ID changed');
+    provider.on('chainChanged', chainId => {
+      this.#log.warn(`ethereum chain ID changed ${chainId}`);
       this.#globalChannel.next({
-        data: {},
+        data: {
+          chainId,
+        },
         event: WEB3_EVENTS.CHAIN_CHANGED,
       });
     });
   }
+
   /**
    * Connects to Torus and retrieves private key
    * @returns OpenLogin instance
@@ -336,6 +352,12 @@ class Web3Connector {
       infuraId: process.env.INFURA_ID || '',
       chainId: this.networkId[this.network],
       qrcode: true,
+      clientMeta: {
+        description: 'WC Here, WC there, WC everywhere!',
+        name: 'Some wallet',
+        icons: [],
+        url: 'https://example.com',
+      },
     });
     // must wait for the approval
     await provider.enable();
