@@ -1,7 +1,7 @@
 # AKASHA Framework
 
-[![CodeFactor](https://www.codefactor.io/repository/github/akashaorg/akasha-framework/badge)](https://www.codefactor.io/repository/github/akashaorg/akasha-framework)
-[![CircleCI](https://circleci.com/gh/AKASHAorg/akasha-framework.svg?style=svg&circle-token=8e833337dd8ddbc8332abfb5961164630a7dbd92)](https://circleci.com/gh/AKASHAorg/akasha-world-framework)
+[![CodeFactor](https://www.codefactor.io/repository/github/akashaorg/akasha-core/badge)](https://www.codefactor.io/repository/github/akashaorg/akasha-core)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/AKASHAorg/akasha-core/tree/next.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/AKASHAorg/akasha-core/tree/next)
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors)
 
 
