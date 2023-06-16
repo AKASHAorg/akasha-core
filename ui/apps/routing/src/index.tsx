@@ -122,6 +122,27 @@ export class RoutingPlugin {
     }
     return singleSpa.navigateToUrl(targetUrl);
   };
+
+  static getUrlForApp = ({ appName, getNavigationUrl }: NavigateToParams) => {
+    const app = RoutingPlugin.routeRepository.all[appName];
+    let url = '';
+    if (getNavigationUrl) {
+      try {
+        url = getNavigationUrl(app?.navRoutes);
+      } catch (err) {
+        RoutingPlugin.logger.error(
+          `Path not found! Tried to find a path for application: ${appName}. Defaulting to rootRoute!`,
+        );
+        url = undefined;
+      }
+    }
+
+    if (!url === undefined) {
+      url = '/';
+    }
+
+    return `/${RoutingPlugin.encodeAppName(appName)}${url}`;
+  };
   /**
    * handle redirections from search params
    * if redirectTo is found in the search param then it will redirect to that path
@@ -177,6 +198,7 @@ export const getPlugin = async (
       routeObserver: RoutingPlugin.subject,
       navigateTo: RoutingPlugin.navigateTo,
       handleRedirect: RoutingPlugin.handleRedirect,
+      getUrlForApp: RoutingPlugin.getUrlForApp,
     },
   };
 };

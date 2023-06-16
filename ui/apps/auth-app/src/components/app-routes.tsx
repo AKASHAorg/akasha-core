@@ -1,38 +1,19 @@
 import * as React from 'react';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import DS from '@akashaorg/design-system';
-
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import routes, { CONNECT, WELCOME } from '../routes';
 import Welcome from './welcome';
 import Connect from './connect';
-
-const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
     <Box>
       <Router basename={props.baseRouteName}>
         <Routes>
-          <Route
-            path={routes[WELCOME]}
-            element={
-              <div>
-                <Welcome {...props} />
-              </div>
-            }
-          />
-
-          <Route
-            path={routes[CONNECT]}
-            element={
-              <div>
-                <Connect {...props} />
-              </div>
-            }
-          />
-
-          <Route path="/" element={<Navigate to={routes[CONNECT]} replace />} />
+          <Route path={routes[WELCOME]} element={<Welcome {...props} />} />
+          <Route path={`${routes[CONNECT]}/*`} element={<Connect {...props} />} />
+          <Route path="/" element={<Navigate to={routes.Connect} replace />} />
         </Routes>
       </Router>
     </Box>

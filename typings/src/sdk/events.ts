@@ -21,6 +21,7 @@ export enum WEB3_EVENTS {
   DISCONNECTED = '#web3#disconnected',
   ACCOUNT_CHANGED = '#web3#accountChanged',
   CHAIN_CHANGED = '#web3#chainChanged',
+  WC_MODAL_CLOSED = '#web3#modalClosed',
 }
 
 export enum PROFILE_EVENTS {

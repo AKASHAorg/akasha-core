@@ -31,7 +31,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
     onClick,
   } = props;
 
-  const generateBorder = () => {
+  const generatedBorder = React.useMemo(() => {
     if (dashedBorder) {
       return 'border(2 dashed grey5)';
     }
@@ -48,11 +48,15 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
      */
 
     return 'border-none';
-  };
+  }, [dashedBorder, border, accentBorder]);
 
-  const className = apply`flex flex-col shadow-${elevation} w-full ${pad} ${margin} bg(white dark:grey2) ${
-    noBorderRadius ? 'rounded-none' : round
-  } ${generateBorder()} ${customStyle}`;
+  const className = React.useMemo(
+    () =>
+      apply`flex flex-col shadow-${elevation} w-full ${pad} ${margin} bg(white dark:grey2) ${
+        noBorderRadius ? 'rounded-none' : round
+      } ${generatedBorder} ${customStyle}`,
+    [generatedBorder],
+  );
 
   return (
     <div className={tw(className)} ref={rootNodeRef} onClick={onClick}>

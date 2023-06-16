@@ -87,9 +87,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
 
   const bordePositionClass = borderBottomOnly ? 'border-b' : 'border';
   const borderRoundClass = noBorderRound ? '' : 'rounded-lg';
-  const editorContainerClass = apply(
-    `p-0.5 ${bordePositionClass} ${borderRoundClass}  ${props.background}`,
-  );
 
   return (
     <Box ref={wrapperRef}>
@@ -102,7 +99,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
         />
       )}
       {showEditor && (
-        <Box className={tw(`${editorContainerClass}`)}>
+        <Box customStyle={`p-0.5 ${bordePositionClass} ${borderRoundClass}  ${props.background}`}>
           <EditorBox
             ref={editorRef}
             avatar={avatar}

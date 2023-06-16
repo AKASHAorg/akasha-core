@@ -36,14 +36,14 @@ const ModalContainer: React.FC<PropsWithChildren<IModalContainerProps>> = props 
       style={style}
     >
       <Box
-        className={`flex items-center justify-items-center h-screen ${fadeInClass}`}
+        customStyle={`flex items-center justify-items-center h-screen ${fadeInClass}`}
         style={innerStyle}
       >
         {children}
       </Box>
 
       <Box
-        className={`absolute ${positionClass} bg-white/60 ${fadeInClass}`}
+        customStyle={`absolute ${positionClass} bg-white/60 ${fadeInClass}`}
         onClick={onModalClose}
       />
     </Box>

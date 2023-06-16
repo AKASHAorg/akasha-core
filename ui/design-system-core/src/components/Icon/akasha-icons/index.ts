@@ -8,13 +8,24 @@ import shield from './shield';
 import telegram from './telegram';
 import twitter from './twitter';
 import widget from './widget';
+import metamask from './metamask';
+import walletconnect from './walletconnect';
 
 /**
  * maintain alphabetical order for custom icon names
  */
 export type CustomIconTypes = Extract<
   IconType,
-  'akasha' | 'discord' | 'faq' | 'github' | 'shield' | 'telegram' | 'twitter' | 'widget'
+  | 'akasha'
+  | 'discord'
+  | 'faq'
+  | 'github'
+  | 'metamask'
+  | 'shield'
+  | 'telegram'
+  | 'twitter'
+  | 'walletconnect'
+  | 'widget'
 >;
 
-export { akasha, discord, faq, github, shield, telegram, twitter, widget };
+export { akasha, discord, faq, github, metamask, shield, telegram, twitter, walletconnect, widget };
