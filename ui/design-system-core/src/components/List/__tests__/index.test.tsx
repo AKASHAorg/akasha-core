@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
-import List, { Item } from '../';
+import List, { ListItem } from '../';
 import { customRender } from '../../../test-utils';
 
 describe('<List /> Component', () => {
@@ -10,7 +10,7 @@ describe('<List /> Component', () => {
   const handleEdit = jest.fn(/** */);
   const handleDelete = jest.fn(/** */);
 
-  const items: Item[] = [
+  const items: ListItem[] = [
     { label: 'Upload', icon: 'ArrowUpOnSquareIcon', onClick: handleUpload },
     { label: 'Edit', icon: 'PencilIcon', onClick: handleEdit },
     {

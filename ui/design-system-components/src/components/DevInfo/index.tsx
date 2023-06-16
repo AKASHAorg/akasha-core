@@ -11,9 +11,10 @@ export type DevInfoProps = {
   developerTitle: string;
   developers: Developer[];
   apps: AppListProp['apps'];
+  onAppSelected: () => void;
 };
 
-const DevInfo: React.FC<DevInfoProps> = ({ developerTitle, developers, apps }) => {
+const DevInfo: React.FC<DevInfoProps> = ({ developerTitle, developers, apps, onAppSelected }) => {
   return (
     <Card elevation="1" padding={16} radius={20}>
       <Stack direction="column" spacing="gap-y-2">
@@ -22,7 +23,7 @@ const DevInfo: React.FC<DevInfoProps> = ({ developerTitle, developers, apps }) =
           <Stack key={developer.profileId} direction="column" spacing="gap-y-2">
             <AvatarBlock {...developer} />
             <Divider />
-            <AppList apps={apps} />
+            <AppList apps={apps} onAppSelected={onAppSelected} />
           </Stack>
         ))}
       </Stack>

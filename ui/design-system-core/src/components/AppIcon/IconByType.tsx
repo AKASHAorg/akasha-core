@@ -1,15 +1,16 @@
 import React from 'react';
 import Icon from '../Icon';
-import { IAppIcon } from './index';
+import { AppIconProps } from './index';
 import { LogoTypeSource } from '@akashaorg/typings/ui';
 import { apply, tw } from '@twind/core';
 
 type AppImgProps = {
-  appImg: IAppIcon['appImg'];
-  size: IAppIcon['size'];
-  placeholderIconType: IAppIcon['placeholderIconType'];
-  breakPointSize?: IAppIcon['breakPointSize'];
-  accentColor?: IAppIcon['accentColor'];
+  appImg: AppIconProps['appImg'];
+  size: AppIconProps['size'];
+  placeholderIconType: AppIconProps['placeholderIconType'];
+  breakPointSize?: AppIconProps['breakPointSize'];
+  accentColor?: AppIconProps['accentColor'];
+  color?: AppIconProps['iconColor'];
 };
 
 const IconByType: React.FC<AppImgProps> = ({
@@ -18,6 +19,7 @@ const IconByType: React.FC<AppImgProps> = ({
   placeholderIconType,
   breakPointSize,
   accentColor,
+  color,
 }) => {
   if (appImg?.type === LogoTypeSource.ICON) {
     return (
@@ -26,6 +28,7 @@ const IconByType: React.FC<AppImgProps> = ({
         size={size}
         breakPointSize={breakPointSize}
         accentColor={accentColor}
+        color={color}
       />
     );
   }
@@ -39,6 +42,7 @@ const IconByType: React.FC<AppImgProps> = ({
       size={size}
       breakPointSize={breakPointSize}
       accentColor={accentColor}
+      color={color}
     />
   );
 };

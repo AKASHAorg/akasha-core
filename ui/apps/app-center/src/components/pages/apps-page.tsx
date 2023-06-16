@@ -27,7 +27,12 @@ const AppsPage: React.FC<RootComponentProps> = () => {
   return (
     <Stack direction="column" spacing="gap-y-4">
       <Text variant="h6">{t('Newest Apps')}</Text>
-      <AppList apps={dummyNewestApps} />
+      <AppList
+        apps={dummyNewestApps}
+        onAppSelected={() => {
+          /*TODO: get app id from new hooks when they are ready and navigate to info page*/
+        }}
+      />
     </Stack>
   );
 };

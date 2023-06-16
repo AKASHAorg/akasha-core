@@ -1,9 +1,9 @@
 import * as React from 'react';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-import DS from '@akashaorg/design-system';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useGetAllInstalledApps,
@@ -16,8 +16,6 @@ import {
   useCurrentNetwork,
   useAppDescription,
 } from '@akashaorg/ui-awf-hooks';
-
-const { Box, ICDetailCard } = DS;
 
 const InfoPage: React.FC<RootComponentProps> = props => {
   const { integrationId } = useParams<{ integrationId: string }>();
@@ -97,39 +95,44 @@ const InfoPage: React.FC<RootComponentProps> = props => {
         />
       )}
       {!latestReleaseInfoReq.error && (
-        <ICDetailCard
-          shareLabel={t('Share')}
-          id={integrationId}
+        <AppInfo
           integrationName={integrationInfo?.name}
-          authorEthAddress={integrationInfo?.author}
-          authorProfile={authorProfileData}
-          repoLinkLabel={t('Public Repository')}
-          docsLinkLabel={t('Documentation')}
-          installLabel={t('Install')}
-          uninstallLabel={t('Uninstall')}
-          installedLabel={t('Installed')}
-          descriptionLabel={t('Description')}
-          showMoreLabel={t('Show More')}
-          linksLabel={t('Links')}
-          releasesLabel={t('Releases')}
-          latestReleaseLabel={t('Latest Release')}
-          noPreviousReleasesLabel={t('No previous releases')}
-          releaseVersionLabel={t('Version')}
-          releases={releasesInfo}
-          latestRelease={latestReleaseInfo}
-          versionHistoryLabel={t('Version History')}
-          authorDidLabel={t('Author DID')}
-          authorLabel={t('Author')}
-          licenseLabel={t('License')}
-          isInstalled={isInstalled}
-          onClickCTA={() => null}
-          onClickShare={() => null}
-          onClickInstall={() => null}
-          onClickUninstall={() => null}
-          handleAuthorClick={handleAuthorClick}
-          handleAuthorEthAddressClick={handleAuthorEthAddressClick}
-          isFetching={latestReleaseInfoReq.isFetching}
-          description={detailedDescription}
+          packageName={''}
+          developers={[
+            {
+              profileId: '' /*TODO: connect new hooks when they are ready*/,
+              avatar: null /*TODO: connect new hooks when they are ready*/,
+              name: latestReleaseInfo.author,
+              userName: '' /*TODO: connect new hooks when they are ready*/,
+            },
+          ]}
+          descriptionTitle={t('Description')}
+          descriptionBody={detailedDescription}
+          developersTitle={t('Developers')}
+          latestReleaseTitle={t('Latest Release')}
+          version={t('Version') + ` ${latestReleaseInfo.version}`}
+          versionInfo={t('Latest release')}
+          versionDate={t('December 2022')}
+          versionDescription={latestReleaseInfo.manifestData.description}
+          linksAndDocumentationTitle={t('Links & Documentation')}
+          licenseTitle={t('License')}
+          license={t('AGPL-3.0')}
+          share={{ label: 'Share', icon: 'ShareIcon' }}
+          report={{
+            label: 'Report',
+            icon: 'FlagIcon',
+            color: { light: 'errorLight', dark: 'errorDark' },
+          }}
+          onInstall={() => {
+            /*TODO: connect new hooks when they are ready*/
+          }}
+          onUninstall={() => {
+            /*TODO: connect new hooks when they are ready*/
+          }}
+          onSelectDeveloper={() => {
+            /*TODO: connect new hooks when they are ready*/
+          }}
+          status={isInstalled ? 'installed' : 'not-installed'}
         />
       )}
     </Box>

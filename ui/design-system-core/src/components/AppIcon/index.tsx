@@ -1,15 +1,15 @@
 import * as React from 'react';
 import Stack from '../Stack';
 import IconByType from './IconByType';
+import Button from '../Button';
 import { IconType, LogoSourceType } from '@akashaorg/typings/ui';
 import { apply, tw } from '@twind/core';
-import { BasicIconSize, BreakPointSize } from '../types/common.types';
+import { BasicIconSize, BreakPointSize, Color } from '../types/common.types';
 import { getElevationClasses } from '../../utils/getElevationClasses';
+import { getColorClasses } from '../../utils/getColorClasses';
 
-export interface IAppIcon {
-  ref?: React.Ref<HTMLDivElement>;
+export type AppIconProps = {
   appImg?: LogoSourceType;
-  onClick?: React.EventHandler<React.SyntheticEvent>;
   placeholderIconType: IconType;
   accentColor?: boolean;
   // props for notifications icon
@@ -19,13 +19,14 @@ export interface IAppIcon {
   breakPointSize?: BreakPointSize;
   hover?: boolean;
   active?: boolean;
+  iconColor?: Color;
+  background?: Color;
   customStyle?: string;
-}
+} & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
-const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
+const AppIcon: React.FC<AppIconProps> = React.forwardRef((props, ref) => {
   const {
     appImg,
-    onClick,
     placeholderIconType,
     size = 'md',
     breakPointSize,
@@ -34,7 +35,10 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     hasNewNotifs,
     hover,
     active,
+    iconColor,
+    background,
     customStyle = '',
+    ...rest
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -48,12 +52,21 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     : '';
 
   const activeStyle = active ? 'bg-secondaryLight/30 hover:bg-secondaryDark' : '';
-  const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${customStyle}`;
+  const iconContainerBackground = background ? getColorClasses(background, 'bg') : '';
+  const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${iconContainerBackground} ${customStyle}`;
   const notifyStyle = NOTIFY_MAP[size];
+
+  const Wrapper = Object.keys(rest).length
+    ? ({ children }) => (
+        <Button ref={ref} {...rest} plain>
+          {children}
+        </Button>
+      )
+    : ({ children }) => <div>{children}</div>;
 
   if (stackedIcon)
     return (
-      <div ref={ref} onClick={onClick}>
+      <Wrapper>
         <Stack align="center" justify="center" customStyle={iconContainerStyle}>
           <IconByType
             appImg={appImg}
@@ -61,16 +74,17 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
             breakPointSize={breakPointSize}
             placeholderIconType={placeholderIconType}
             accentColor={accentColor}
+            color={iconColor}
           />
           {hasNewNotifs && (
             <div className={tw(`rounded-full absolute top-0  bg-secondaryDark ${notifyStyle})`)} />
           )}
         </Stack>
-      </div>
+      </Wrapper>
     );
 
   return (
-    <div ref={ref} onClick={onClick}>
+    <Wrapper>
       <Stack align="center" justify="center" customStyle={iconContainerStyle}>
         <IconByType
           appImg={appImg}
@@ -78,14 +92,15 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
           breakPointSize={breakPointSize}
           placeholderIconType={placeholderIconType}
           accentColor={accentColor}
+          color={iconColor}
         />
       </Stack>
-    </div>
+    </Wrapper>
   );
 });
 
 const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicIconSize, string> = {
-  xs: 'h-5 w-5',
+  xs: 'h-6 w-6',
   sm: 'h-8 w-8',
   md: 'h-10 w-10',
   lg: 'h-12 w-12',
@@ -94,7 +109,7 @@ const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicIconSize, string> = {
 const APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT = (
   breakPoint: string,
 ): Record<BasicIconSize, string> => ({
-  xs: `${breakPoint}:h-5 ${breakPoint}:w-5`,
+  xs: `${breakPoint}:h-6 ${breakPoint}:w-6`,
   sm: `${breakPoint}:h-8 ${breakPoint}:w-8`,
   md: `${breakPoint}:h-10 ${breakPoint}:w-10`,
   lg: `${breakPoint}:h-12 ${breakPoint}:w-12`,

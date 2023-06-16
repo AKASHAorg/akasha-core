@@ -1,7 +1,8 @@
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import React, { Fragment, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { apply, tw } from '@twind/core';
 import { getRadiusClasses } from '@akashaorg/design-system-core/lib/utils/getRadiusClasses';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
@@ -14,9 +15,10 @@ type App = {
 
 export type AppListProp = {
   apps: App[];
+  onAppSelected: () => void;
 };
 
-const AppList: React.FC<AppListProp> = ({ apps }) => {
+const AppList: React.FC<AppListProp> = ({ apps, onAppSelected }) => {
   const iconStyle = `${getRadiusClasses(10)} ${getColorClasses(
     { light: 'grey6', dark: 'grey5' },
     'bg',
@@ -25,7 +27,7 @@ const AppList: React.FC<AppListProp> = ({ apps }) => {
   return (
     <Stack direction="column" spacing="gap-y-4">
       {apps.map((app, index, array) => (
-        <Fragment key={app.name}>
+        <Button key={app.name} onClick={onAppSelected} plain>
           <Stack spacing="gap-x-2">
             <div className={tw(apply(iconStyle))} />
             <Stack direction="column" customStyle="h-[3.75rem] w-[25rem]">
@@ -42,7 +44,7 @@ const AppList: React.FC<AppListProp> = ({ apps }) => {
             <div className={tw('ml-auto')}>{app.action}</div>
           </Stack>
           {index < array.length - 1 && <Divider />}
-        </Fragment>
+        </Button>
       ))}
     </Stack>
   );

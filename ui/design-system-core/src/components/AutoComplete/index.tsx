@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { tw } from '@twind/core';
 
 import Stack from '../Stack';
-import List, { Item } from '../List';
+import List, { ListItem } from '../List';
 import TextField from '../TextField';
 import { InputProps } from '../TextField/types';
 
@@ -42,7 +42,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
     );
   }, [value, options]);
 
-  const suggestions: Item[] = useMemo(
+  const suggestions: ListItem[] = useMemo(
     () =>
       filters.map(filter => ({
         label: filter,

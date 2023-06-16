@@ -65,7 +65,12 @@ const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
   return (
     <Stack direction="column" spacing="gap-y-4">
       <Text variant="h6">{t('Newest Widgets')}</Text>
-      <AppList apps={dummyNewestWidgets} />
+      <AppList
+        apps={dummyNewestWidgets}
+        onAppSelected={() => {
+          /*TODO: get app id from new hooks when they are ready and navigate to info page*/
+        }}
+      />
     </Stack>
   );
 };

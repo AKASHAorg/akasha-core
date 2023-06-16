@@ -115,7 +115,12 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
     <Stack direction="column" spacing="gap-y-4">
       <Text variant="h6">{t('Installed Apps')}</Text>
       {dummyInstalledApps.length ? (
-        <AppList apps={dummyInstalledApps} />
+        <AppList
+          apps={dummyInstalledApps}
+          onAppSelected={() => {
+            /*TODO: get app id from new hooks when they are ready and navigate to info page*/
+          }}
+        />
       ) : (
         <InfoCard
           titleLabel={t('There are no apps installed yet')}
@@ -125,7 +130,12 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
         />
       )}
       <Text variant="h6">{t('Default Apps')}</Text>
-      <AppList apps={dummyDefaultApps} />
+      <AppList
+        apps={dummyDefaultApps}
+        onAppSelected={() => {
+          /*TODO: get app id from new hooks when they are ready and navigate to info page*/
+        }}
+      />
     </Stack>
   );
 };
