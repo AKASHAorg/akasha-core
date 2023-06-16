@@ -26,7 +26,6 @@ describe('< SignIn /> component', () => {
 
   it('has a connect option', async () => {
     const walletConnect = screen.getByText('Scan with WalletConnect');
-
     expect(walletConnect).toBeInTheDocument();
   });
 });
