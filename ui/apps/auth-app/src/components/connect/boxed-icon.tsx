@@ -1,5 +1,4 @@
 import React from 'react';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
 import { IconType } from '@akashaorg/typings/ui';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';

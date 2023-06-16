@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
+// import DS from '@akashaorg/design-system';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-const { WelcomeCard } = DS;
+// const { WelcomeCard } = DS;
 
 const Welcome: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-auth-ewa');
@@ -39,23 +39,24 @@ const Welcome: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <WelcomeCard
-      titleLabel={t('Welcome to the alpha!')}
-      subtitleLabel={t('Congratulations, you are the newest member of Ethereum World!')}
-      paragraphOneLabel={t(
-        'You can now browse the feed, subscribe to topics, write your own posts, and reply to other Ethereans.',
-      )}
-      paragraphTwoIntroLabel={t("While you don't have to do it now,")}
-      paragraphTwoBoldLabel={t('we do recommend you take the time to customize your profile')}
-      paragraphTwoNextLabel={t(
-        'You can change your display name and avatar, add a cover image and description, as well as claim your own AKASHA ENS name.',
-      )}
-      paragraphThreeLabel={t("We are very happy you've joined us!")}
-      primaryButtonLabel={t('Browse Ethereum World')}
-      secondaryButtonLabel={t('Customize My Profile')}
-      handlePrimaryButtonClick={handlePrimaryButtonClick}
-      handleSecondaryButtonClick={handleSecondaryButtonClick}
-    />
+    <div>Congratulations, you are the newest member of Ethereum World!</div>
+    // <WelcomeCard
+    //   titleLabel={t('Welcome to the alpha!')}
+    //   subtitleLabel={t('Congratulations, you are the newest member of Ethereum World!')}
+    //   paragraphOneLabel={t(
+    //     'You can now browse the feed, subscribe to topics, write your own posts, and reply to other Ethereans.',
+    //   )}
+    //   paragraphTwoIntroLabel={t("While you don't have to do it now,")}
+    //   paragraphTwoBoldLabel={t('we do recommend you take the time to customize your profile')}
+    //   paragraphTwoNextLabel={t(
+    //     'You can change your display name and avatar, add a cover image and description, as well as claim your own AKASHA ENS name.',
+    //   )}
+    //   paragraphThreeLabel={t("We are very happy you've joined us!")}
+    //   primaryButtonLabel={t('Browse Ethereum World')}
+    //   secondaryButtonLabel={t('Customize My Profile')}
+    //   handlePrimaryButtonClick={handlePrimaryButtonClick}
+    //   handleSecondaryButtonClick={handleSecondaryButtonClick}
+    // />
   );
 };
 
