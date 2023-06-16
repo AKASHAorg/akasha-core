@@ -41,8 +41,8 @@ const InstallApp: React.FC<InstallAppProps> = ({
       <Stack align="center" direction="column" spacing="gap-y-8">
         <Text variant="h5">{title}</Text>
         <InfoCard titleLabel={appName} />
-        <Stack align="center" direction="column" customStyle="max-w-xs">
-          <>
+        <Stack direction="column" customStyle="max-w-xs">
+          <Stack align="center" direction="column" spacing="gap-y-2">
             {status === 'error' && (
               <div className={tw('relative')}>
                 <ErrorIcon className={tw(apply`${errorAnimationStyle}`)} />
@@ -64,7 +64,7 @@ const InstallApp: React.FC<InstallAppProps> = ({
             >
               {progressInfo}
             </Text>
-          </>
+          </Stack>
           <Button label={action.label} onClick={action.onClick} variant="text" size="lg" />
         </Stack>
       </Stack>
