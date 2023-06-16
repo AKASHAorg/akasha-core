@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Router, Routes } from 'react-router-dom';
 import { EthProviders } from '@akashaorg/typings/sdk';
 import { AnalyticsCategories, RootComponentProps } from '@akashaorg/typings/ui';
 import {
