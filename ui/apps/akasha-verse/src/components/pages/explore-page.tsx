@@ -25,7 +25,7 @@ export interface IExplorePage extends RootComponentProps {
 const ExplorePage: React.FC<IExplorePage> = props => {
   const { installableApps, isFetching, reqError, installedAppsInfo, isUserLoggedIn } = props;
   const sdk = getSDK();
-  const { t } = useTranslation('app-integration-center');
+  const { t } = useTranslation('app-akasha-verse');
 
   const [uninstallingApps, setUninstallingApps] = React.useState([]);
   const [showNotifPill, setShowNotifPill] = React.useState('');
@@ -52,7 +52,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
 
   const handleAppClick = (app: IntegrationReleaseInfo) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-integration-center',
+      appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });
   };

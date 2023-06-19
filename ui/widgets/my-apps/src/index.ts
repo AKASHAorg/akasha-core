@@ -8,8 +8,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
   mountsIn: opts.layoutConfig?.widgetSlotId,
   loadingFn: () => import('./MyAppsWidget'),
   activeWhen: (location, pathToActiveWhen) =>
-    pathToActiveWhen('/@akashaorg/app-integration-center/', false)(location),
+    pathToActiveWhen('/@akashaorg/app-akasha-verse/', false)(location),
   name: 'ui-widget-my-apps',
   i18nNamespace: [],
-  tags: ['my-apps', 'integration-center'],
+  tags: ['my-apps', 'akasha-verse'],
 });

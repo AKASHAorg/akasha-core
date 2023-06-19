@@ -13,9 +13,9 @@ export const missingRequiredFields = {
 // config for integrations config overrides
 const overrides = [
   {
-    name: '@akashaorg/app-integration-center',
+    name: '@akashaorg/app-akasha-verse',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`/apps/app-center/index.js`],
+    sources: [`/apps/akasha-verse/index.js`],
     ...missingRequiredFields,
   },
   {

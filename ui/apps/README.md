@@ -8,7 +8,7 @@
 - [Vibe](./moderation/README.md)
 - [Auth App](./auth-app/README.md)
 - [Settings App](./settings-app/README.md)
-- [Integration Center](./app-center/README.md)
+- [AKASHAVerse](./akasha-verse/README.md)
 - [Lists](./bookmarks/README.md)
 - [Legal](./legal/README.md)
 - [Notifcations](./notifications/README.md)

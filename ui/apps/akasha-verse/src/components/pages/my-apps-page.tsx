@@ -21,7 +21,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
   const { worldConfig, latestReleasesInfo, installedAppsInfo, defaultIntegrations, isFetching } =
     props;
 
-  const { t } = useTranslation('app-integration-center');
+  const { t } = useTranslation('app-akasha-verse');
 
   const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
 
@@ -56,7 +56,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
 
   const handleAppClick = (app: IntegrationReleaseInfoFragmentFragment) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-integration-center',
+      appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });
   };

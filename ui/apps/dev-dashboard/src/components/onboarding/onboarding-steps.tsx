@@ -117,7 +117,7 @@ const DevDashOnboardingSteps: React.FC<
 
   const handleCTAClick = () => {
     navigateTo?.({
-      appName: '@akashaorg/app-integration-center',
+      appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: (routes: Record<string, string>) => routes.explore,
     });
   };
@@ -198,7 +198,7 @@ const DevDashOnboardingSteps: React.FC<
           subtitleLabel={t(
             'if you have installed the CLI tool and generated your key already, you can skip this step',
           )}
-          ctaListItem={[t('Install'), t('CLI tool'), t('from the integration center.')]}
+          ctaListItem={[t('Install'), t('CLI tool'), t('from the AKASHAVerse.')]}
           paragraphs={[
             t('Once installed, open it and write the following command.'),
             t(

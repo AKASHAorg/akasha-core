@@ -15,7 +15,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   routes: {
     ...routes,
   },
-  i18nNamespace: ['app-integration-center'],
+  i18nNamespace: ['app-akasha-verse'],
   loadingFn: () => import('./components'),
   title: 'App center',
   menuItems: {

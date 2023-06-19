@@ -1,6 +1,6 @@
 # Sidebar widget
 
-> Shows currently installed app(s), app-center and other quick access icons
+> Shows currently installed app(s), akasha-verse and other quick access icons
 
 ## Usage
 

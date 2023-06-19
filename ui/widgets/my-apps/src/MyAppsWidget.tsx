@@ -20,7 +20,7 @@ import { hiddenIntegrations } from './hidden-integrations';
 const { Box, ICWidgetCard } = DS;
 
 const ICWidget: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation('app-integration-center');
+  const { t } = useTranslation('app-akasha-verse');
 
   const { worldConfig } = props;
 
@@ -100,7 +100,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       return showLoginModal();
     }
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-integration-center',
+      appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
     });
   };
@@ -144,7 +144,7 @@ const reactLifecycles = singleSpaReact({
       <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
-          title="Error in integration center widget"
+          title="Error in AKASHAVerse widget"
           details={err.message}
         />
       </ThemeWrapper>

@@ -3,7 +3,7 @@ import { TIMEOUT } from '../utils/constants';
 describe('AKASHAVerse', () => {
   context('AKASHAVerse', () => {
     before(() => {
-      cy.visit('/@akashaorg/app-integration-center', { timeout: TIMEOUT });
+      cy.visit('/@akashaorg/app-akasha-verse', { timeout: TIMEOUT });
     });
 
     it('should have akasha verse visible', () => {
