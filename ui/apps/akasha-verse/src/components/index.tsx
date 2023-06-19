@@ -21,7 +21,7 @@ const reactLifecycles = singleSpaReact({
       <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
-          title="Error in app-center plugin"
+          title="Error in akasha-verse plugin"
           details={error.message}
         />
       </ThemeWrapper>

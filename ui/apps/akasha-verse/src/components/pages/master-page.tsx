@@ -37,7 +37,7 @@ const dismissedCardId = 'welcome-message';
 const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => {
   const { isLoggedIn, onConnect, navigateTo, children } = props;
 
-  const { t } = useTranslation('app-integration-center');
+  const { t } = useTranslation('app-akasha-verse');
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(
     isLoggedIn ? ROUTE_TO_TAB_INDEX_MAP[location.pathname] || 0 : 0,
@@ -48,7 +48,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
   const handleTabChange = (selectedIndex: number) => {
     if (navigateTo) {
       navigateTo({
-        appName: '@akashaorg/app-integration-center',
+        appName: '@akashaorg/app-akasha-verse',
         getNavigationUrl: () => TAB_INDEX_TO_ROUTE_MAP[selectedIndex],
       });
     }
@@ -58,7 +58,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
     if (!isLoggedIn && location.pathname !== routes[EXPLORE]) {
       if (navigateTo) {
         navigateTo({
-          appName: '@akashaorg/app-integration-center',
+          appName: '@akashaorg/app-akasha-verse',
           getNavigationUrl: () => routes[EXPLORE],
         });
       }

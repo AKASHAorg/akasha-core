@@ -74,7 +74,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   };
   const handleClickExplore = () => {
     routing?.navigateTo({
-      appName: '@akashaorg/app-integration-center',
+      appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => routes.explore,
     });
   };

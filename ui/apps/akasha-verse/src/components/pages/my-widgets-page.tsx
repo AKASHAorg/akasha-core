@@ -19,7 +19,7 @@ export interface IWidgetsPage extends RootComponentProps {
 const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
   const { worldConfig, latestReleasesInfo, isFetching } = props;
 
-  const { t } = useTranslation('app-integration-center');
+  const { t } = useTranslation('app-akasha-verse');
 
   const defaultWidgetNamesNormalized = React.useMemo(() => {
     return worldConfig?.defaultWidgets.map(app => {
@@ -41,7 +41,7 @@ const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
 
   const handleAppClick = (app: IntegrationReleaseInfo) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-integration-center',
+      appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });
   };

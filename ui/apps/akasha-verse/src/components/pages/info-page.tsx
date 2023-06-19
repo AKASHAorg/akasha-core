@@ -22,7 +22,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const { t } = useTranslation('app-integration-center');
+  const { t } = useTranslation('app-akasha-verse');
   // @TODO replace with new hooks
   const loginQueryReq = useGetLogin();
 
