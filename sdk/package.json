@@ -12,7 +12,7 @@
     "@ensdomains/ens-contracts": "0.0.15",
     "@lit-protocol/sdk-browser": "1.1.241",
     "@metamask/detect-provider": "2.0.0",
-    "@openzeppelin/contracts": "4.8.0",
+    "@openzeppelin/contracts": "4.9.2",
     "@openzeppelin/contracts-upgradeable": "4.8.0",
     "@toruslabs/openlogin": "2.10.0",
     "@walletconnect/web3-provider": "1.8.0",
