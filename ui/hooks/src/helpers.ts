@@ -1,7 +1,7 @@
-import { QueryFunction, QueryKey, useQuery, useQueryClient } from 'react-query';
+import { QueryFunction, QueryKey, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Observable } from 'rxjs';
 import { useEffect } from 'react';
-import { UseQueryOptions } from 'react-query/types/react/types';
+import type { UseQueryOptions } from '@tanstack/react-query';
 import { Logger } from '@akashaorg/awf-sdk';
 
 export const useQueryStream = (

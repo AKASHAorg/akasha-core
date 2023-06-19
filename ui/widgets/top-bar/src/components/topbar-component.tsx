@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Topbar from './Topbar';
 
@@ -12,7 +11,9 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
 
-  const myProfileQuery = useGetMyProfileQuery();
+  const myProfileQuery = useGetMyProfileQuery(null, {
+    select: data => data.viewer?.profile,
+  });
 
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
@@ -25,6 +26,36 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   );
 
   const uiEventsRef = React.useRef(uiEvents);
+
+  // added for detecting snooze notification event
+  const [snoozeNotifications, setSnoozeNotifications] = React.useState(false);
+
+  // check if snooze notification option has already been set
+  React.useEffect(() => {
+    if (window.localStorage) {
+      setSnoozeNotifications(JSON.parse(localStorage.getItem('notifications-snoozed')));
+    }
+  }, []);
+
+  React.useEffect(() => {
+    const eventsSub = uiEventsRef.current.subscribe({
+      next: (eventInfo: UIEventData) => {
+        if (eventInfo.event == EventTypes.SnoozeNotifications) {
+          setSnoozeNotifications(true);
+        }
+        if (eventInfo.event == EventTypes.UnsnoozeNotifications) {
+          setSnoozeNotifications(false);
+        }
+      },
+    });
+
+    return () => {
+      if (eventsSub) {
+        eventsSub.unsubscribe();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // show or hide sidebar
   React.useEffect(() => {
@@ -141,7 +172,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <Topbar
-      isLoggedIn={!!myProfileQuery.data?.viewer?.profile.did}
+      isLoggedIn={!!myProfileQuery.data?.did}
       sidebarVisible={sidebarVisible}
       onSidebarToggle={handleSidebarToggle}
       onAppWidgetClick={handleWidgetToggle}
@@ -151,6 +182,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       currentLocation={location?.pathname}
       onBrandClick={handleBrandClick}
       modalSlotId={props.layoutConfig.modalSlotId}
+      snoozeNotifications={snoozeNotifications}
     />
   );
 };

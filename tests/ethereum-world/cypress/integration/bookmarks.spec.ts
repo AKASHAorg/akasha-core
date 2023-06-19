@@ -1,13 +1,13 @@
 import { TIMEOUT } from '../utils/constants';
 
-describe('Bookmarks Page', () => {
-  context('Bookmarks Page', () => {
+describe('Lists Page', () => {
+  context('Lists Page', () => {
     before(() => {
-      cy.visit('/@akashaorg/app-bookmarks');
+      cy.visit('/@akashaorg/app-lists', { timeout: TIMEOUT });
     });
 
-    it('should have bookmarks page visible', () => {
-      cy.get('[data-testid="bookmarks"]', { timeout: TIMEOUT }).should('be.visible');
+    it('should have lists page visible', () => {
+      cy.get('[data-testid="lists"]', { timeout: TIMEOUT }).should('be.visible');
     });
   });
 });

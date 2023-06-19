@@ -4,14 +4,16 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE } from '../../routes';
+import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 interface IWelcomePageProps {
   header: string;
   description: string;
   leftButtonLabel?: string;
+  // leftButtonClickHandler?: () => void;
   rightButtonLabel: string;
+  // rightButtonClickHandler?: () => void;
   finalStep?: boolean;
 }
 
@@ -19,13 +21,16 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
   const {
     plugins,
     leftButtonLabel,
+    // leftButtonClickHandler,
     rightButtonLabel,
+    // rightButtonClickHandler,
     header,
     description,
     finalStep = false,
   } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  let message = '';
 
   const goToNextStep = () => {
     // navigate to step 2
@@ -36,14 +41,37 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
   };
 
   const goToNotificationsPage = () => {
-    // @TODO: go to notification listing page.
+    // go to notifications page
+    return navigateTo?.({
+      appName: '@akashaorg/app-notifications',
+      getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}?message=${message}&type=success`,
+    });
+  };
+
+  const confirmCustomization = () => {
+    if (finalStep) {
+      message = 'Notification settings updated successfully';
+
+      goToNotificationsPage();
+    } else {
+      goToNextStep();
+    }
+  };
+
+  const skipCustomization = () => {
+    if (window.localStorage) {
+      localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
+    }
+    message = '';
+    // navigate to notifications
+    goToNotificationsPage();
   };
 
   return (
-    <Card direction="row" elevation={'1'} radius={16} padding={8}>
+    <Card direction="row" elevation={'1'} radius={16} padding={8} testId="notifications">
       <div className={tw('flex(& col) justify-center align-center mb-32')}>
         <BasicCardBox
-          style="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
+          customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
           round="rounded-xl"
         />
         <Text variant={finalStep ? 'h5' : 'h6'} align="center">
@@ -59,10 +87,10 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
             variant="text"
             label={leftButtonLabel}
             color="secondaryLight dark:secondaryDark"
-            onClick={goToNotificationsPage}
+            onClick={skipCustomization}
           />
         )}
-        <Button variant="primary" label={rightButtonLabel} onClick={goToNextStep} />
+        <Button variant="primary" label={rightButtonLabel} onClick={confirmCustomization} />
       </div>
     </Card>
   );

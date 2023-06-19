@@ -55,16 +55,16 @@ import {
   useFetchNotifications,
   useMarkAsRead,
 } from './use-notifications';
-import { useNetworkState, useCurrentNetwork } from './use-network-state';
-import { useMentionSearch } from './use-mentions';
 import {
-  useGetLogin,
-  useLogin,
-  useLogout,
-  LoginState,
-  useCheckSignup,
-  useSignUp,
-} from './use-login';
+  useNetworkState,
+  useCurrentNetwork,
+  useRequiredNetwork,
+  switchToRequiredNetwork,
+  useNetworkChangeListener,
+} from './use-network-state';
+import { useMentionSearch } from './use-mentions';
+
+export * from './use-login';
 import { useLegalDoc } from './use-legal';
 import { useIsFollowingMultiple, useIsContactMultiple, useFollow, useUnfollow } from './use-follow';
 import {
@@ -97,13 +97,7 @@ import {
   useModeration,
   useReport,
 } from './use-moderation';
-import {
-  useConnectProvider,
-  disconnectProvider,
-  useInjectedProvider,
-  useRequiredNetworkName,
-  switchToRequiredNetwork,
-} from './use-injected-provider';
+import { disconnectProvider, useInjectedProvider } from './use-injected-provider';
 import { useIsValidToken } from './use-invite-token-validation';
 import {
   useGetIntegrationInfo,
@@ -135,6 +129,7 @@ import {
   useVerifySignature,
 } from './use-dev-profile';
 import { useDismissedCard } from './use-dismissed-card';
+import useModerationCategory from './use-moderation-categories';
 
 export {
   constants,
@@ -206,17 +201,13 @@ export {
   // use-network
   useNetworkState,
   useCurrentNetwork,
+  useNetworkChangeListener,
+  useRequiredNetwork,
+  switchToRequiredNetwork,
   // use-mentions
   useMentionSearch,
   // use-navigation
   useEntryNavigation,
-  // use-login
-  LoginState,
-  useGetLogin,
-  useLogin,
-  useLogout,
-  useCheckSignup,
-  useSignUp,
   // use-legal
   useLegalDoc,
   // use-follow
@@ -255,10 +246,7 @@ export {
   useReport,
   // use-injected-provider
   useInjectedProvider,
-  useConnectProvider,
   disconnectProvider,
-  useRequiredNetworkName,
-  switchToRequiredNetwork,
   // use-invite-token-validation
   useIsValidToken,
   // use-integration-registry
@@ -288,4 +276,5 @@ export {
   useVerifySignature,
   // use-dismissed-card
   useDismissedCard,
+  useModerationCategory,
 };

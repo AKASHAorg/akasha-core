@@ -19,9 +19,8 @@ export enum CookieConsentTypes {
 
 const AnalyticsContext = React.createContext(null);
 
-export const AnalyticsProvider: React.FC<RootComponentProps> = props => {
-  const { uiEvents } = props;
-  return <AnalyticsContext.Provider value={uiEvents}>{props.children}</AnalyticsContext.Provider>;
+export const AnalyticsProvider: React.FC<RootComponentProps> = ({ uiEvents, children }) => {
+  return <AnalyticsContext.Provider value={uiEvents}>{children}</AnalyticsContext.Provider>;
 };
 
 export interface UseAnalyticsActions {

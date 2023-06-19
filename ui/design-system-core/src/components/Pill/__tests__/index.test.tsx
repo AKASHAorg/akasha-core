@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 
 import Pill from '../';
 import { customRender } from '../../../test-utils';
@@ -15,9 +15,9 @@ describe('<Pill /> Component', () => {
       componentWrapper = customRender(
         <Pill
           label={label}
-          trailingIcon="XMarkIcon"
+          icon="XMarkIcon"
+          iconDirection="right"
           onPillClick={mockChangeHandler}
-          clickable={true} // add this, to enable the click handler
         />,
         {},
       );
@@ -25,8 +25,6 @@ describe('<Pill /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 
@@ -41,8 +39,9 @@ describe('<Pill /> Component', () => {
   });
 
   it('correctly calls handler function when clicked', () => {
-    const { getByTestId } = componentWrapper;
-    const dismissButton = getByTestId('dismiss-button');
+    const { getByRole } = componentWrapper;
+
+    const dismissButton = getByRole('button', { name: 'dismiss' });
 
     fireEvent.click(dismissButton);
 

@@ -17,10 +17,14 @@ export type IconType =
   | keyof typeof HeroIcons
   | 'akasha'
   | 'discord'
+  | 'faq'
   | 'github'
+  | 'shield'
   | 'telegram'
   | 'twitter'
   | 'widget'
+  | 'metamask'
+  | 'walletconnect'
   | AppIcons;
 
 /* @TODO: remove the following once the old design system is fully replaced */

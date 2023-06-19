@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import { tw, apply } from '@twind/core';
 import { Header, HeaderProps } from './Header';
 import { useForm, Controller } from 'react-hook-form';
 import { useMedia } from 'react-use';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types';
+import { Profile } from '@akashaorg/typings/ui';
 import * as z from 'zod';
 
 type GeneralFormValues = {
   userName?: string;
   name?: string;
-  avatar?: string;
-  coverImage?: string;
+  avatar?: Profile['avatar'];
+  coverImage?: Profile['background'];
   ens?: string;
   bio?: string;
 };
@@ -23,12 +25,14 @@ type InputType = { label: string; initialValue: string };
 export type GeneralFormProps = {
   header: Omit<HeaderProps, 'onAvatarChange' | 'onCoverImageChange'>;
   name: InputType;
-  userName: InputType;
-  ens: InputType;
+  userName?: InputType;
+  ens?: InputType;
   bio: InputType;
   ensButton: ButtonType;
   cancelButton: ButtonType;
   saveButton: { label: string; handleClick: (formValues: GeneralFormValues) => void };
+  customStyle?: string;
+  onFormValid?: (valid: boolean) => void;
 };
 
 export const GeneralForm: React.FC<GeneralFormProps> = ({
@@ -40,6 +44,8 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
   ensButton,
   cancelButton,
   saveButton,
+  customStyle = '',
+  onFormValid,
 }) => {
   const {
     control,
@@ -48,21 +54,24 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
     formState: { isDirty, isValid },
   } = useForm<GeneralFormValues>({
     resolver: zodResolver(schema),
+    mode: 'onChange',
   });
-
   const onSave = (formValues: GeneralFormValues) => saveButton.handleClick(formValues);
 
   const isLargeScreen = useMedia('(min-width: 640px)');
 
+  useEffect(() => {
+    if (onFormValid) onFormValid(isValid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isValid]);
+
   return (
-    <form onSubmit={handleSubmit(onSave)}>
-      <Stack direction="column" spacing="gap-y-3.5">
+    <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
+      <Stack direction="column" spacing="gap-y-3.5" customStyle="h-full">
         <Header
           {...header}
-          onAvatarChange={avatar => setValue('avatar', avatar?.url || avatar?.fallbackUrl)}
-          onCoverImageChange={coverImage =>
-            setValue('coverImage', coverImage?.url || coverImage?.fallbackUrl)
-          }
+          onAvatarChange={avatar => setValue('avatar', avatar)}
+          onCoverImageChange={coverImage => setValue('coverImage', coverImage)}
         />
         <Controller
           control={control}
@@ -98,7 +107,6 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           )}
           defaultValue={userNameField.initialValue ? userNameField.initialValue : ''}
         />
-
         {isLargeScreen && (
           <Stack align="end" justify="between" spacing="gap-x-6" fullWidth>
             <Controller
@@ -164,7 +172,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           <Button
             variant="primary"
             label={saveButton.label}
-            disabled={!isDirty || !isValid}
+            disabled={!isDirty && !isValid}
             onClick={handleSubmit(onSave)}
             type="submit"
           />
@@ -173,12 +181,11 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
     </form>
   );
 };
-
 const schema = z.object({
   name: z.string().optional(),
   userName: z.string().min(1, 'User name is required'),
-  avatar: z.string().optional(),
-  coverImage: z.string().optional(),
+  avatar: z.any().optional(),
+  coverImage: z.any().optional(),
   ens: z.string().optional(),
   bio: z.string().optional(),
 });

@@ -3,8 +3,9 @@ import { act, cleanup } from '@testing-library/react';
 
 import NotificationsCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
+import { profileData } from '../../../utils/dummy-data';
 
-describe('<NotificationsCard /> Component', () => {
+describe('NotificationsCard Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleMessageRead = jest.fn();
@@ -20,24 +21,8 @@ describe('<NotificationsCard /> Component', () => {
               {
                 body: {
                   value: {
-                    author: {
-                      name: 'Dr. Flynn',
-                      userName: 'thedrflynn',
-                      ethAddress: '0x003410490050000320006570034567114572000',
-                      avatar: {
-                        url: 'https://placebeard.it/360x360',
-                        fallbackUrl: 'https://placebeard.it/360x360',
-                      },
-                    },
-                    follower: {
-                      name: 'Dr. Flynn',
-                      userName: 'thedrflynn',
-                      ethAddress: '0x003410490050000320006570034567114572000',
-                      avatar: {
-                        url: 'https://placebeard.it/360x360',
-                        fallbackUrl: 'https://placebeard.it/360x360',
-                      },
-                    },
+                    author: profileData,
+                    follower: profileData,
                     postID: '01f3st44m5g3tc6419b92zyd21',
                   },
                   property: 'POST_MENTION',
@@ -75,10 +60,10 @@ describe('<NotificationsCard /> Component', () => {
   });
 
   it('renders correct profile avatar', () => {
-    const { getByRole } = componentWrapper;
+    const { getByTestId } = componentWrapper;
 
-    const avatar = getByRole('img');
-    expect(avatar).toHaveAttribute('src', 'https://placebeard.it/360x360');
+    const avatar = getByTestId('avatar-image');
+    expect(avatar).toHaveAttribute('srcSet', profileData.avatar.default.src);
   });
 
   it('has correct label based on type (POST_MENTION)', () => {

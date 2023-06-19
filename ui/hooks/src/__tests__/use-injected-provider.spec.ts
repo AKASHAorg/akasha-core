@@ -1,7 +1,10 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
+// @ts-ignore
+import { useInjectedProvider } from '../use-injected-provider';
+// @ts-ignore
+import { useRequiredNetwork } from '../use-network-state';
 import { createWrapper } from './utils';
-import { useInjectedProvider, useRequiredNetworkName } from '../use-injected-provider';
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
@@ -9,8 +12,8 @@ jest.mock('@akashaorg/awf-sdk', () => {
       common: {
         web3: {
           detectInjectedProvider: () => ({ data: 'MetaMask' }),
-          getRequiredNetworkName: () => {
-            return { data: 'Rinkeby' };
+          getRequiredNetwork: () => {
+            return { data: { name: 'goerli', chainId: 5 } };
           },
         },
       },
@@ -24,17 +27,15 @@ describe('useInjectedProvider', () => {
       wrapper,
     });
     await waitFor(() => result.current.isFetched, { timeout: 5000 });
-    expect(result.current.data.name).toBe('MetaMask');
-    expect(result.current.data.details.iconType).toBe('metamask');
-    expect(result.current.data.details.subtitleLabel).toMatch(/Connect using your MetaMask wallet/);
+    expect(result.current.data).toBe('MetaMask');
   });
 
   it('should return correct required network', async () => {
     const [wrapper] = createWrapper();
-    const { result, waitFor } = renderHook(() => useRequiredNetworkName(), {
+    const { result, waitFor } = renderHook(() => useRequiredNetwork(), {
       wrapper,
     });
     await waitFor(() => result.current.isFetched, { timeout: 5000 });
-    expect(result.current.data).toBe('Rinkeby');
+    expect(result.current.data.name).toBe('goerli');
   });
 });

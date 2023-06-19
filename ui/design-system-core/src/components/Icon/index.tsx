@@ -21,9 +21,17 @@ export interface IconProps {
   testId?: string;
   customStyle?: string;
   hoverColor?: Color;
+  solid?: boolean;
 }
 
-const fillOnlyIcons: IconType[] = ['akasha', 'discord', 'telegram', 'twitter', 'widget'];
+const fillOnlyIcons: IconType[] = [
+  'akasha',
+  'discord',
+  'telegram',
+  'twitter',
+  'widget',
+  'metamask',
+];
 
 const Icon: React.FC<IconProps> = props => {
   const {
@@ -38,6 +46,7 @@ const Icon: React.FC<IconProps> = props => {
     testId,
     customStyle = '',
     hoverColor,
+    solid = false,
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -49,7 +58,7 @@ const Icon: React.FC<IconProps> = props => {
       ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
       : `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
 
-  const isFillOnlyIcon = fillOnlyIcons.includes(type);
+  const isFillOnlyIcon = fillOnlyIcons.includes(type) || solid;
 
   const baseStyle = `select-none ${
     hover
@@ -79,11 +88,11 @@ const Icon: React.FC<IconProps> = props => {
 
   const disabledStyle = disabled ? 'opacity-50' : '';
 
-  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${customStyle}`;
+  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle}`;
 
   return (
-    <Stack ref={ref}>
-      <PassedIcon customStyle={iconStyle} testId={testId} type={type} />
+    <Stack ref={ref} customStyle={customStyle}>
+      <PassedIcon customStyle={iconStyle} testId={testId} type={type} solid={solid} />
     </Stack>
   );
 };

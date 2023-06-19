@@ -13,7 +13,6 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { ILogger } from '@akashaorg/typings/sdk/log';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
-import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import {
   TrackEventData,
   EventTypes,
@@ -21,17 +20,16 @@ import {
   NavigateToParams,
   RootComponentProps,
   ModalNavigationOptions,
-  IProfileData,
 } from '@akashaorg/typings/ui';
-import { usePost, useComment, mapEntry, LoginState } from '@akashaorg/ui-awf-hooks';
+import { usePost, useComment, mapEntry } from '@akashaorg/ui-awf-hooks';
 
 import FeedWidget from './App';
+import { Profile, IContentClickDetails } from '@akashaorg/typings/ui';
 
 export interface IEntryRenderer {
   itemId?: string;
   itemSpacing?: number;
   sharePostUrl: string;
-  loginState: LoginState;
   locale: ILocale;
   style?: React.CSSProperties;
   onFlag?: (
@@ -59,7 +57,7 @@ export interface IEntryRenderer {
   logger: ILogger;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (props: ModalNavigationOptions) => void;
-  loggedProfile?: IProfileData;
+  loggedProfileData?: Profile;
   i18n: i18n;
 }
 
@@ -69,7 +67,6 @@ const EntryRenderer = (
   props: IEntryRenderer & { replyFragmentItem: boolean; showReplyFragment: boolean },
 ) => {
   const {
-    loginState,
     locale,
     itemId,
     itemType,
@@ -82,6 +79,7 @@ const EntryRenderer = (
     parentIsProfilePage,
     accentBorderTop,
     itemSpacing,
+    loggedProfileData,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -105,6 +103,7 @@ const EntryRenderer = (
     return undefined;
   }, [commentReq.data, itemType]);
 
+  // @TODO fix hooks
   const itemData = React.useMemo(() => {
     if (itemType === EntityTypes.POST) {
       return postData;
@@ -195,10 +194,10 @@ const EntryRenderer = (
     if (accountAwaitingModeration) return `the author of this ${itemTypeName}`;
     return `this ${itemTypeName}`;
   }, [accountAwaitingModeration, itemTypeName]);
-
+  // @TODO fix author
   const showEditButton = React.useMemo(
-    () => loginState.isReady && loginState.ethAddress === itemData?.author?.ethAddress,
-    [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
+    () => false, //loggedProfileData?.did.id === itemData?.author?.did.id,
+    [itemData?.author, loggedProfileData],
   );
 
   const isComment = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
@@ -209,14 +208,13 @@ const EntryRenderer = (
     !accountAwaitingModeration &&
     !itemData.delisted &&
     !itemData.isRemoved;
-
   const repliesReq = useInfiniteReplies(
     {
       limit: REPLY_FRAGMENT_SIZE,
       postID: !!commentData && 'postId' in commentData && commentData?.postId,
       commentID: commentData?.entryId,
     },
-    canShowEntry && props.showReplyFragment,
+    Boolean(canShowEntry) && props.showReplyFragment,
   );
 
   const replyPages = React.useMemo(() => {
@@ -272,11 +270,10 @@ const EntryRenderer = (
               <EntryCard
                 className={props.className}
                 isRemoved={itemData.isRemoved}
-                entryData={itemData}
+                entryData={{ ...itemData, author: itemData.author as unknown as Profile }}
                 onClickAvatar={handleAvatarClick}
                 editedLabel={t('Last edited')}
                 flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
-                loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
                 locale={locale || 'en'}
                 style={{
                   ...(style as React.CSSProperties),
@@ -302,7 +299,7 @@ const EntryRenderer = (
                 removedByMeLabel={props.removedByMeLabel}
                 removedByAuthorLabel={props.removedByAuthorLabel}
                 disableReposting={itemData.isRemoved || isComment}
-                disableReporting={loginState.waitForAuth || loginState.isSigningIn}
+                disableReporting={!loggedProfileData?.did?.id}
                 border={!isComment}
                 accentBorderTop={accentBorderTop}
                 actionsRightExt={
@@ -330,8 +327,8 @@ const EntryRenderer = (
                 <Box customStyle={replyPages.length ? `mb-1` : ''} data-testid="reply-fragment">
                   <FeedWidget
                     modalSlotId={props.modalSlotId}
-                    logger={props.logger}
                     pages={replyPages}
+                    logger={props.logger}
                     itemType={EntityTypes.REPLY}
                     onLoadMore={() => ({})}
                     getShareUrl={(itemId: string) =>
@@ -348,12 +345,11 @@ const EntryRenderer = (
                       },
                       limit: REPLY_FRAGMENT_SIZE,
                     }}
-                    loginState={loginState}
                     navigateTo={navigateTo}
                     navigateToModal={props.navigateToModal}
                     requestStatus={repliesReq.status}
                     hasNextPage={repliesReq.hasNextPage}
-                    loggedProfile={props.loggedProfile}
+                    loggedProfileData={props.loggedProfileData}
                     contentClickable={true}
                     onEntryFlag={props.onFlag}
                     onEntryRemove={props.onEntryRemove}

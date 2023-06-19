@@ -19,11 +19,7 @@ const reactLifecycles = singleSpaReact({
     }
     return (
       <ThemeWrapper {...props}>
-        <ErrorLoader
-          type="script-error"
-          title="Error in bookmarks plugin"
-          details={error.message}
-        />
+        <ErrorLoader type="script-error" title="Error in lists plugin" details={error.message} />
       </ThemeWrapper>
     );
   },

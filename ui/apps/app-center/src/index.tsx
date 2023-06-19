@@ -19,14 +19,14 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   title: 'App center',
   menuItems: {
-    label: 'Integration Center',
+    label: 'AKASHAVerse',
     area: [MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
     subRoutes: [],
   },
   extends: (matcher, loader) => {
     matcher({
-      'install-modal': loader(() => import('./extensions/install-modal')),
+      'install-app': loader(() => import('./extensions/install-app')),
     });
   },
 });

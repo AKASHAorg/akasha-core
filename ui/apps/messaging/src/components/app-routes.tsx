@@ -1,23 +1,25 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import routes, { CHAT, MESSAGING, SETTINGS } from '../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import InboxPage from './inbox/inbox-page';
 import SettingsPage from './settings-page';
 import ChatPage from './chat-page';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { getHubUser, getMessages } from '../api/message';
 import { db } from '../db/messages-db';
 
-const { Helmet } = DS;
-
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const loginQuery = useGetLogin();
-  const loginState = loginQuery?.data;
-  const loggedUserPubKey = React.useMemo(() => loginState?.pubKey, [loginState]);
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
+  const loggedUserId = React.useMemo(() => loggedProfileData?.did?.id, [loggedProfileData]);
 
-  const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
+  // const getHubUserCallback = React.useCallback(getHubUser, [loggedUserId]);
 
   const [fetchingMessages, setFetchingMessages] = React.useState(false);
 
@@ -28,7 +30,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     const allMessages = messagesData.data
       ?.map(res => {
         if (res.body.content) {
-          const chatPartnerPubKey = res.from === loggedUserPubKey ? res.to : res.from;
+          const chatPartnerId = res.from === loggedUserId ? res.to : res.from;
           return {
             content: res.body.content?.slateContent,
             ethAddress: res.body.content?.author,
@@ -38,17 +40,17 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             to: res.to,
             read: res.read,
             id: res.id,
-            loggedUserPubKey: loggedUserPubKey,
-            chatPartnerPubKey,
+            loggedUserId: loggedUserId,
+            chatPartnerId,
           };
         }
         return null;
       })
       .filter(Boolean);
     // add new messages, key second param is not required since we have id as inbound index
-    db.messages.bulkPut(allMessages);
+    // db.messages.bulkPut(allMessages);
     setFetchingMessages(false);
-  }, [loggedUserPubKey]);
+  }, [loggedUserId]);
 
   React.useEffect(() => {
     fetchMessagesCallback();
@@ -62,18 +64,18 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       <Routes>
         <Route
           path={`${routes[MESSAGING]}`}
-          element={<InboxPage {...props} loginState={loginQuery?.data} />}
+          element={<InboxPage {...props} loggedProfileData={loggedProfileData} />}
         ></Route>
         <Route
           path={`${routes[SETTINGS]}`}
-          element={<SettingsPage {...props} loginState={loginQuery?.data} />}
+          element={<SettingsPage {...props} loggedProfileData={loggedProfileData} />}
         ></Route>
         <Route
           path={`${routes[CHAT]}/:pubKey`}
           element={
             <ChatPage
               {...props}
-              loginState={loginQuery?.data}
+              loggedProfileData={loggedProfileData}
               fetchingMessages={fetchingMessages}
             />
           }

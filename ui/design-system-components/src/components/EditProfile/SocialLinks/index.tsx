@@ -1,12 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import * as z from 'zod';
+import { apply, tw } from '@twind/core';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SocialLink } from './SocialLink';
 import { ButtonType } from '../types';
+import { Link } from '../../types/common.types';
 
 type SocialLinkFormValue = {
   links: string[];
@@ -16,10 +18,12 @@ export type SocialLinksProp = {
   title: string;
   addNewButtonLabel: string;
   description: string;
-  socialLinks: string[];
+  socialLinks: Link[];
   cancelButton: ButtonType;
-  saveButton: { label: string; handleClick: (formValues: SocialLinkFormValue) => void };
+  saveButton: { label: string; handleClick: (formValues: { links: Link[] }) => void };
+  customStyle?: string;
   onDelete: (index: number) => void;
+  onFormValid?: (valid: boolean) => void;
 };
 
 export const SocialLinks: React.FC<SocialLinksProp> = ({
@@ -29,7 +33,9 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   socialLinks,
   cancelButton,
   saveButton,
+  customStyle = '',
   onDelete,
+  onFormValid,
 }) => {
   const {
     control,
@@ -38,27 +44,31 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
     formState: { isDirty, isValid },
   } = useForm<SocialLinkFormValue>({
     resolver: zodResolver(schema),
-    mode: 'onBlur',
+    mode: 'onChange',
   });
 
   const linkWithPseudoId = useMemo(
-    () => socialLinks.map((link, index) => ({ _id: index, value: link })),
+    () => socialLinks.map((link, index) => ({ _id: index, ...link })),
     [socialLinks],
   );
 
   const [links, setLinks] = useState(
-    socialLinks.length === 0 ? [{ _id: 0, value: '' }] : linkWithPseudoId,
+    socialLinks.length === 0 ? [{ _id: 0, href: '' }] : linkWithPseudoId,
   );
-
-  const onSave = (formValues: SocialLinkFormValue) => saveButton.handleClick(formValues);
-
+  const onSave = (formValues: SocialLinkFormValue) =>
+    saveButton.handleClick({ links: formValues.links.map(link => ({ href: link })) });
   const onAddNew = () => {
-    setLinks([...links, { _id: links.length, value: '' }]);
+    setLinks([...links, { _id: links.length, href: '' }]);
   };
 
+  useEffect(() => {
+    if (onFormValid) onFormValid(isValid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isValid]);
+
   return (
-    <form onSubmit={handleSubmit(onSave)}>
-      <Stack direction="column" spacing="gap-y-4">
+    <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
+      <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
         <Stack spacing="gap-y-1" direction="column">
           <Stack spacing="gap-x-2" justify="between" align="center">
             <Text variant="h6">{title}</Text>
@@ -75,7 +85,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
           </Text>
         </Stack>
         {links.map((link, index) => {
-          const defaultValue = link.value ? { defaultValue: link.value } : {};
+          const defaultValue = link.href ? { defaultValue: link.href } : {};
           return (
             <Controller
               key={link._id}
@@ -106,7 +116,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
           <Button
             variant="primary"
             label={saveButton.label}
-            disabled={!isDirty || !isValid || links.length === 0}
+            disabled={!isDirty && !isValid}
             onClick={handleSubmit(onSave)}
             type="submit"
           />
@@ -117,9 +127,8 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
 };
 
 const schema = z.object({
-  links: z.array(
-    z
-      .string({ required_error: 'Url is required' })
-      .url({ message: `Hmm this doesn't look like a URL 🤔` }),
-  ),
+  links: z
+    .string({ required_error: 'Url is required' })
+    .url({ message: `Hmm this doesn't look like a URL 🤔` })
+    .array(),
 });

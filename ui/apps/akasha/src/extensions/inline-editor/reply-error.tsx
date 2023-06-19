@@ -1,8 +1,8 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 
-import { IEntryData, IPublishData } from '@akashaorg/typings/ui';
-import { createPendingEntry, useMutationListener, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import { IEntryData, IPublishData, Profile } from '@akashaorg/typings/ui';
+import { createPendingEntry, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { POST } from '../../routes';
 import { PUBLISH_PENDING_KEY } from '@akashaorg/ui-awf-hooks/lib/use-comments';
@@ -16,18 +16,15 @@ export interface IReplyErrorState {
 
 type Props = {
   postId: string;
-  pubKey: string;
+  loggedProfileData: Profile;
   onChange?: (props: IReplyErrorState) => void;
 };
 
-export function ReplyError({ postId, pubKey, onChange }: Props) {
+export function ReplyError({ postId, loggedProfileData, onChange }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutation: publishCommentMutation, clear } = useMutationListener<
     IPublishData & { postID: string }
-  >(PUBLISH_PENDING_KEY);
-
-  const profileDataReq = useGetProfile(pubKey);
-  const loggedProfileData = profileDataReq.data;
+  >([PUBLISH_PENDING_KEY]);
 
   React.useEffect(() => {
     if (publishCommentMutation && publishCommentMutation.state.status === 'error') {

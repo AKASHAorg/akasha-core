@@ -26,17 +26,21 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     footerIcons,
   } = props;
 
-  const guestEthAddress = '0x00000000000000000000000000000';
+  const guestPofileId = 'did:pkh:eip155:1:0x00000000000000000000000000000';
 
   const titleText = apply('text-sm font-bold');
 
   const subtitleText = apply('text-xs text-grey5');
 
+  const avatar = {
+    default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 },
+  };
+
   return (
     <div className={tw('h-screen bg-white dark:bg-grey2 rounded-[20px]')}>
       <div className={tw('flex flex-row p-4 border-b-1 border-grey8')}>
         <div className={tw('w-fit h-fit mr-2')}>
-          <Avatar ethAddress={guestEthAddress} src={{ url: 'https://placebeard.it/360x360' }} />
+          <Avatar profileId={guestPofileId} avatar={avatar} />
         </div>
         <div className={tw('w-fit pr-10')}>
           <p className={tw(titleText)}>{guestTitle}</p>
@@ -54,7 +58,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               <Accordion
                 titleNode={
                   <div className={tw('flex flex-row items-center')}>
-                    <Avatar src={{ url: 'https://placebeard.it/360x360' }} />
+                    <Avatar avatar={avatar} />
                     <p className={tw('ml-2.5 text-black dark:text-white')}>{item.title}</p>
                   </div>
                 }
@@ -62,7 +66,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               />
             ) : (
               <div className={tw('flex flex-row items-center p-2 cursor-pointer')}>
-                <Avatar src={{ url: 'https://placebeard.it/360x360' }} />
+                <Avatar avatar={avatar} />
                 <p className={tw('ml-2.5 text-black dark:text-white')}>{item.title}</p>
               </div>
             )}

@@ -23,7 +23,7 @@ export type Variant = Heading | BodyText | ButtonText;
 
 export type Alignment = 'start' | 'center' | 'end' | 'justify';
 
-export type Weight = 'normal' | 'bold' | 'light' | 'medium';
+export type Weight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
 
 export type TextProps = {
   customStyle?: string; // pass only the string classes without 'apply' or 'tw'
@@ -33,7 +33,9 @@ export type TextProps = {
   align?: Alignment;
   truncate?: boolean;
   breakWord?: boolean;
+  lineClamp?: number;
   weight?: Weight;
+  ref?: React.Ref<HTMLElement>;
 };
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
@@ -63,24 +65,29 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   color = { dark: 'white', light: 'black' },
   truncate,
   breakWord,
+  lineClamp,
   weight,
   children,
+  ref,
 }) => {
   const tag = as ?? getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
   const colorStyle = getColorClasses(color, 'text');
   const truncateStyle = truncate ? 'truncate' : '';
   const wordBreakStyle = breakWord ? 'break-all' : '';
+  const lineClampStyle = lineClamp ? `line-clamp-${lineClamp}` : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
 
   const baseStyles = VARIANT_TO_CSS_CLASSES_MAPPER[variant];
 
   return React.createElement(
     tag,
+
     {
       className: tw(
-        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${customStyle}`,
+        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
       ),
+      ref,
     },
     children,
   );

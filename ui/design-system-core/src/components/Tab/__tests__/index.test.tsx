@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, cleanup } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { customRender } from '../../../test-utils';
 import Tab from '../';
 
@@ -12,18 +12,25 @@ const TabContent = (
   </>
 );
 
+const TabComponent = ({ labels }) => {
+  const [value, setValue] = React.useState(0);
+  return (
+    <Tab value={value} onChange={setValue} labels={labels}>
+      {TabContent}
+    </Tab>
+  );
+};
+
 describe('<Tab /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Tab labels={TabLabels}> {TabContent}</Tab>, {});
+      componentWrapper = customRender(<TabComponent labels={TabLabels} />, {});
     });
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
-    cleanup();
     jest.clearAllMocks();
   });
 

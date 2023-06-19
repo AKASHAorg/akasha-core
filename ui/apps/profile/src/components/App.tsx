@@ -1,10 +1,8 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
+import AppRoutes from './app-routes';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { I18nextProvider } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import AppRoutes from './routes';
-
-const { Box } = DS;
 
 const App = (props: RootComponentProps) => {
   return (

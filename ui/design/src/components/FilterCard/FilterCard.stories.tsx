@@ -7,6 +7,7 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import lightTheme from '../../styles/themes/light/light-theme';
+import { userData } from '../../utils/dummy-data';
 
 export default {
   title: 'Cards/FilterCard',
@@ -31,12 +32,12 @@ const Template = (args: IFilterCard) => (
 
 const titleElement = (
   <ProfileAvatarButton
-    avatarImage={{ url: 'https://placebeard.it/360x360' }}
+    avatarImage={userData[0].avatar}
     onClick={() => null}
     label="@ivacarter"
     info="ivacarter.akasha.eth"
     size="sm"
-    ethAddress={'0x000000'}
+    profileId={'did:pkh:0x000000'}
   />
 );
 

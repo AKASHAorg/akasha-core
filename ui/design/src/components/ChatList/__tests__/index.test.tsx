@@ -19,7 +19,7 @@ describe('<ChatList /> Component', () => {
 
   window.IntersectionObserver = jest.fn().mockImplementation(mock);
 
-  const ethAddress = '0x003410490050000320006570034567114572000';
+  const profileId = 'did:0x003410490050000320006570034567114572000';
   const emptyChatLabel = 'Start by saying hello! 👋🏼';
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('<ChatList /> Component', () => {
         wrapWithTheme(
           <ChatList
             emptyChatLabel={emptyChatLabel}
-            loggedUserEthAddress={ethAddress}
+            loggedUserProfileId={profileId}
             itemCard={<BubbleCard locale="en" youLabel="You" />}
             oldMessages={[]}
           />,

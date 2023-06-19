@@ -1,18 +1,17 @@
 import React from 'react';
-import AppIcon, { IAppIcon } from '.';
+import AppIcon, { AppIconProps } from '.';
 
 export default {
   title: 'Icons/AppIcon',
   component: AppIcon,
 };
 
-const Template = (args: IAppIcon) => <AppIcon {...args} />;
+const Template = (args: AppIconProps) => <AppIcon {...args} />;
 
 export const BaseIcon = Template.bind({});
 
 BaseIcon.args = {
   placeholderIconType: 'notifications',
-  plain: true,
   stackedIcon: true,
   hasNewNotifs: true,
 };
@@ -20,7 +19,6 @@ BaseIcon.args = {
 export const ExtraSmallIcon = Template.bind({});
 ExtraSmallIcon.args = {
   placeholderIconType: 'notifications',
-  plain: true,
   stackedIcon: true,
   hasNewNotifs: true,
   size: 'xs',
@@ -29,7 +27,6 @@ ExtraSmallIcon.args = {
 export const SmallIcon = Template.bind({});
 SmallIcon.args = {
   placeholderIconType: 'notifications',
-  plain: true,
   stackedIcon: true,
   hasNewNotifs: true,
   size: 'sm',
@@ -38,8 +35,17 @@ SmallIcon.args = {
 export const LargeIcon = Template.bind({});
 LargeIcon.args = {
   placeholderIconType: 'notifications',
-  plain: true,
   stackedIcon: true,
   hasNewNotifs: true,
   size: 'lg',
+};
+
+export const CustomColoredIcon = Template.bind({});
+CustomColoredIcon.args = {
+  placeholderIconType: 'CheckIcon',
+  stackedIcon: true,
+  size: 'xs',
+  iconColor: 'white',
+  background: 'secondaryDark',
+  onClick: () => ({}),
 };

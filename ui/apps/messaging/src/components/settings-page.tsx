@@ -1,15 +1,18 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { getTextileUsage } from '../api/message';
-import { LoginState, useUninstallApp } from '@akashaorg/ui-awf-hooks';
-
-const { BasicCardBox, Box, Icon, Text, TextLine, Button } = DS;
+import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 export interface SettingsPageProps extends RootComponentProps {
-  loginState: LoginState;
+  loggedProfileData: Profile;
 }
 
 const InboxPage = (props: SettingsPageProps) => {
@@ -58,28 +61,21 @@ const InboxPage = (props: SettingsPageProps) => {
   };
 
   return (
-    <BasicCardBox style={{ maxHeight: '92vh' }}>
-      <Box
-        direction="row"
-        pad="medium"
-        align="center"
-        border={{ side: 'bottom', color: 'lightBorder' }}
-      >
-        <Icon type="chevronLeft" onClick={onChevronLeftClick} />
-        <Text weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
+    <BasicCardBox customStyle="max-h-[92vh]">
+      <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
+        <button onClick={onChevronLeftClick}>
+          <Icon type="ChevronLeftIcon" />
+        </button>
+
+        <Text variant="h5" customStyle="mx-auto">
           {t('Message App Settings')}
         </Text>
       </Box>
-      <Box border={{ side: 'bottom', color: 'lightBorder' }} pad="medium">
-        <Text weight={'bold'}>{t('Storage and data')}</Text>
+      <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
+        <Text variant="h6">{t('Storage and data')}</Text>
       </Box>
-      <Box
-        border={{ side: 'bottom', color: 'lightBorder' }}
-        pad={{ horizontal: 'xlarge', vertical: 'medium' }}
-        direction="row"
-        justify="between"
-      >
-        <Text weight={'bold'}>{t('Message storage')}</Text>
+      <Box customStyle="flex flex-row py-4 px-8 justify-between border(b grey8 dark:grey3)">
+        <Text variant="h6">{t('Message storage')}</Text>
         {!storageTotal && <TextLine title="textileStorage" animated={false} width="80px" />}
         {storageTotal && (
           <Text>{`${convertFromBytes(storageUsed)} of ${convertFromBytes(
@@ -87,22 +83,14 @@ const InboxPage = (props: SettingsPageProps) => {
           )} used`}</Text>
         )}
       </Box>
-      <Box border={{ side: 'bottom', color: 'lightBorder' }} pad="medium">
+      <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
         <Text weight={'bold'}>{t('Ethereum Public Key')}</Text>
       </Box>
-      <Box
-        border={{ side: 'bottom', color: 'lightBorder' }}
-        pad={{ horizontal: 'xlarge', vertical: 'medium' }}
-        direction="row"
-        justify="between"
-      >
-        <Text>{props.loginState.ethAddress}</Text>
+      <Box customStyle="flex flex-row py-4 px-8 justify-between border(b grey8 dark:grey3)">
+        <Text>{props.loggedProfileData?.did?.id}</Text>
       </Box>
-      <Box direction="row" justify="end" pad="medium">
-        <Button
-          label={t('Uninstall')}
-          icon={<Icon type="close" accentColor={true} onClick={handleUninstall} />}
-        />
+      <Box customStyle="flex flex-row justify-end p-4">
+        <Button label={t('Uninstall')} onClick={handleUninstall} icon="XMarkIcon" />
       </Box>
     </BasicCardBox>
   );

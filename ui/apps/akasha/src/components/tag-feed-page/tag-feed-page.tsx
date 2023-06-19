@@ -2,45 +2,41 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import {
   RootComponentProps,
   EntityTypes,
   ModalNavigationOptions,
-  IProfileData,
+  Profile,
 } from '@akashaorg/typings/ui';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
   useGetTag,
-  LoginState,
   useInfinitePostsByTag,
 } from '@akashaorg/ui-awf-hooks';
-
-const { Box, TagProfileCard, Helmet, styled, Spinner } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
+import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
 
 interface ITagFeedPage {
-  loggedProfileData?: IProfileData;
-  loginState: LoginState;
+  loggedProfileData?: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
-const TagInfoCard = styled(TagProfileCard)`
-  margin-bottom: 0.5rem;
-`;
-
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
-  const { showLoginModal, loggedProfileData, loginState } = props;
+  const { showLoginModal, loggedProfileData } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { tagName } = useParams<{ tagName: string }>();
 
+  // @TODO fix hooks
   const getTagQuery = useGetTag(tagName);
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 
-  const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
+  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
   const tagSubscriptions = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
@@ -53,13 +49,13 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   }, [reqPosts.data]);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState?.fromCache) {
+    if (!reqPosts.isLoading && reqPosts.hasNextPage) {
       reqPosts.fetchNextPage();
     }
-  }, [reqPosts, loginState?.fromCache]);
+  }, [reqPosts]);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loginState?.pubKey) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     props.navigateToModal({ name: 'report-modal', itemId, itemType });
@@ -74,7 +70,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   const handleTagSubscribe = (tagName: string) => {
-    if (!loginState?.ethAddress) {
+    if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
     }
@@ -82,10 +78,10 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   return (
-    <Box fill="horizontal">
-      <Helmet>
+    <Box customStyle="w-full">
+      <Helmet.Helmet>
         <title>Ethereum World</title>
-      </Helmet>
+      </Helmet.Helmet>
       {getTagQuery.status === 'loading' && <Spinner />}
       {getTagQuery.status === 'error' && (
         <ErrorLoader
@@ -96,12 +92,15 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       )}
       {getTagQuery.status === 'success' && (
         <>
-          <TagInfoCard
-            tag={getTagQuery.data}
-            subscribedTags={tagSubscriptions}
-            handleSubscribeTag={handleTagSubscribe}
-            handleUnsubscribeTag={handleTagSubscribe}
-          />
+          <Box customStyle="mb-2">
+            <TagProfileCard
+              tag={getTagQuery.data}
+              subscribedTags={tagSubscriptions}
+              handleSubscribeTag={handleTagSubscribe}
+              handleUnsubscribeTag={handleTagSubscribe}
+            />
+          </Box>
+
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}
             itemType={EntityTypes.POST}
@@ -112,8 +111,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
               `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
             }
             requestStatus={reqPosts.status}
-            loginState={loginState}
-            loggedProfile={loggedProfileData}
+            loggedProfileData={loggedProfileData}
             navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
             navigateToModal={props.navigateToModal}
             onLoginModalOpen={showLoginModal}

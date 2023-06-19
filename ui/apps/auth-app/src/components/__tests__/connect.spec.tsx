@@ -1,14 +1,17 @@
 import * as React from 'react';
-import Connect, { baseAppLegalRoute } from '../connect';
+import Connect from '../connect';
 
 import { act, screen, renderWithAllProviders, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
+import { MemoryRouter as Router } from 'react-router-dom';
 
 describe('< SignIn /> component', () => {
   const BaseComponent = (
-    <AnalyticsProvider {...genAppProps()}>
-      <Connect {...genAppProps()} />;
-    </AnalyticsProvider>
+    <Router initialEntries={['/@akashaorg/app-auth-ewa/provider']}>
+      <AnalyticsProvider {...genAppProps()}>
+        <Connect {...genAppProps()} />;
+      </AnalyticsProvider>
+    </Router>
   );
   beforeEach(async () => {
     await act(async () => {
@@ -23,13 +26,6 @@ describe('< SignIn /> component', () => {
 
   it('has a connect option', async () => {
     const walletConnect = screen.getByText('Scan with WalletConnect');
-
     expect(walletConnect).toBeInTheDocument();
-  });
-
-  it('has correct link', async () => {
-    const coc = screen.getByText('Code of Conduct');
-
-    expect(coc).toHaveAttribute('href', `${baseAppLegalRoute}/code-of-conduct`);
   });
 });

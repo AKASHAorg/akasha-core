@@ -1,24 +1,24 @@
 import React from 'react';
 
-import DS from '@akashaorg/design-system';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-const { Box, Icon, Text } = DS;
-
-export interface INoItemsFound {
+export type NoItemsFoundProps = {
   titleLabel: string;
   subtitleLabel: string;
-}
+};
 
-const NoItemsFound: React.FC<INoItemsFound> = ({ titleLabel, subtitleLabel }) => {
+const NoItemsFound: React.FC<NoItemsFoundProps> = ({ titleLabel, subtitleLabel }) => {
   return (
-    <Box pad={{ top: 'xlarge', horizontal: 'small', bottom: 'small' }} align="center">
-      <Icon type="appModeration" size="xxl" accentColor={true} />
-      <Text size="large" textAlign="center" weight="bold">
+    <Box customStyle="pt-6 px-2 pb-2">
+      <Icon type="appModeration" size="lg" accentColor={true} />
+
+      <Text align="center" weight="bold">
         {titleLabel}
       </Text>
-      <Text size="large" textAlign="center" margin={{ top: 'small' }}>
-        {subtitleLabel}
-      </Text>
+
+      <Text align="center">{subtitleLabel}</Text>
     </Box>
   );
 };

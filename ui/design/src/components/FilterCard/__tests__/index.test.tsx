@@ -5,21 +5,19 @@ import FilterCard from '../';
 import ProfileAvatarButton from '../../ProfileAvatarButton';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import userEvent from '@testing-library/user-event';
+import { userData } from '../../../utils/dummy-data';
 
 describe('<FilterCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const titleElement = (
     <ProfileAvatarButton
-      avatarImage={{
-        url: 'https://placebeard.it/360x360',
-        fallbackUrl: 'https://placebeard.it/360x360',
-      }}
+      avatarImage={userData[0].avatar}
       onClick={() => null}
       label="@ivacarter"
       info="ivacarter.akasha.eth"
       size="sm"
-      ethAddress={'0x000000'}
+      profileId={'0x000000'}
     />
   );
 
@@ -55,11 +53,11 @@ describe('<FilterCard /> Component', () => {
   });
 
   it('has correct profile avatar', () => {
-    const { getByRole } = componentWrapper;
-    const image = getByRole('img');
+    const { getByTestId } = componentWrapper;
+    const image = getByTestId('avatar-image');
 
     expect(image).toBeDefined();
-    expect(image).toHaveAttribute('src', 'https://placebeard.it/360x360');
+    expect(image).toHaveAttribute('srcSet', 'https://placebeard.it/360x360');
   });
 
   it('has correct profile name and username', () => {

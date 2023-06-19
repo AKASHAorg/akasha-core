@@ -1,14 +1,26 @@
 import React, { ReactNode } from 'react';
 import Card from '../Card';
 import Stack from '../Stack';
-import Text from '../Text';
+import Text, { TextProps } from '../Text';
+import { tw } from '@twind/core';
 
 export type InfoCardProps = {
+  assetName?: string;
+  publicImgPath?: string;
   titleLabel: ReactNode;
-  subTitleLabel?: ReactNode;
+  titleVariant?: TextProps['variant'];
+  bodyVariant?: TextProps['variant'];
+  bodyLabel?: ReactNode;
 };
 
-const InfoCard: React.FC<InfoCardProps> = ({ titleLabel, subTitleLabel }) => {
+const InfoCard: React.FC<InfoCardProps> = ({
+  titleLabel,
+  titleVariant = 'h6',
+  bodyVariant = 'footnotes2',
+  bodyLabel,
+  assetName,
+  publicImgPath = '/images',
+}) => {
   return (
     <Stack
       direction="column"
@@ -17,21 +29,30 @@ const InfoCard: React.FC<InfoCardProps> = ({ titleLabel, subTitleLabel }) => {
       spacing="gap-y-3"
       customStyle="sm:gap-y-4"
     >
-      <Card
-        radius={20}
-        background={{ light: 'grey8', dark: 'grey5' }}
-        customStyle="h-32 w-32 sm:h-52 sm:w-52"
-      ></Card>
-      <Stack direction="column" align="center" justify="center">
-        <Text variant="h6">{titleLabel}</Text>
-        {subTitleLabel && (
+      {assetName ? (
+        <img
+          className={tw('object-contain h-56')}
+          aria-label={assetName}
+          src={`${publicImgPath}/${assetName}.webp`}
+          alt={assetName}
+        />
+      ) : (
+        <Card
+          radius={20}
+          background={{ light: 'grey8', dark: 'grey5' }}
+          customStyle="h-32 w-32 sm:h-52 sm:w-52"
+        ></Card>
+      )}
+      <Stack direction="column" align="center" justify="center" spacing="gap-y-2">
+        <Text variant={titleVariant}>{titleLabel}</Text>
+        {bodyLabel && (
           <Text
-            variant="footnotes2"
+            variant={bodyVariant}
             color={{ light: 'grey5', dark: 'grey6' }}
             weight="normal"
             align="center"
           >
-            {subTitleLabel}
+            {bodyLabel}
           </Text>
         )}
       </Stack>

@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -11,14 +10,11 @@ import ModeratorDetailCard from '../components/moderator';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
-import { moderators } from '../utils/dummy-data';
-import { formatDate } from '../utils/format-date';
 
-export interface IModeratorDetailPageProps {
-  navigateTo: (args: NavigateToParams) => void;
-}
+import { BasePageProps } from './dashboard';
+import { generateModerators, formatDate, generateTenureInfoLabel } from '../utils';
 
-export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props => {
+export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
   const [pages, setPages] = React.useState<PaginatedItem[]>([]);
@@ -26,11 +22,13 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
   const [curPage, setCurPage] = React.useState<number>(1);
 
   /**
-   * get the pubkey from parm and use this to fetch the moderator detail
+   * get the profileId from parm and use this to fetch the moderator detail
    */
-  const { moderatorPubKey } = useParams<{ moderatorPubKey: string }>();
+  const { moderatorProfileId } = useParams<{ moderatorProfileId: string }>();
 
-  const moderator = moderators[1];
+  const moderator = generateModerators()[1];
+
+  const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -50,7 +48,7 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
   const handleClickDismissModerator = () => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
-      getNavigationUrl: () => `/moderator/${moderatorPubKey}/dismiss`,
+      getNavigationUrl: () => `/moderator/${moderatorProfileId}/dismiss`,
     });
   };
 
@@ -90,15 +88,7 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
       <ModeratorDetailCard
         moderator={moderator}
         viewProfileLabel={t('View Profile')}
-        tenureInfoLabel={
-          moderator.status === 'active'
-            ? t('Moderator since')
-            : t(`{{status}} on`, {
-                status: moderator.status
-                  ? moderator.status[0].toUpperCase() + moderator.status.slice(1)
-                  : '',
-              })
-        }
+        tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
         dismissModeratorLabel={t('Dismiss Moderator')}
         dismissModeratorDescLabel={t(
           "You can dismiss this moderator anytime if they have been inactive or if they violated AKASHA's code of conduct",

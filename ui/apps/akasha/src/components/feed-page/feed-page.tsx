@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import {
   ModalNavigationOptions,
   IPublishData,
-  IProfileData,
   RootComponentProps,
   EntityTypes,
   AnalyticsCategories,
@@ -15,26 +13,26 @@ import {
   CREATE_POST_MUTATION_KEY,
   useMutationsListener,
   createPendingEntry,
-  LoginState,
   useAnalytics,
   useDismissedCard,
 } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
-
-const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, BasicCardBox, Text } =
-  DS;
+import { Profile } from '@akashaorg/typings/ui';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
+import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-
-  loggedProfileData?: IProfileData;
-  loginState: LoginState;
+  loggedProfileData?: Profile;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { logger, loggedProfileData, loginState } = props;
+  const { logger, loggedProfileData } = props;
 
   const { t } = useTranslation('app-akasha-integration');
   const locale = (props.plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
@@ -61,8 +59,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const dismissedCardId = 'dismiss-private-alpha-notification';
   const [dismissed, setDismissed] = useDismissedCard();
 
-  const { mutations: pendingPostStates } =
-    useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const { mutations: pendingPostStates } = useMutationsListener<IPublishData>([
+    CREATE_POST_MUTATION_KEY,
+  ]);
 
   const postsReq = useInfinitePosts(15);
 
@@ -70,10 +69,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const showLoginModal = React.useRef(props.showLoginModal);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage && loginState?.fromCache) {
+    if (!postsReq.isLoading && postsReq.hasNextPage) {
       postsReq.fetchNextPage();
     }
-  }, [postsReq, loginState?.fromCache]);
+  }, [postsReq]);
 
   const postPages = React.useMemo(() => {
     if (postsReq.data) {
@@ -84,12 +83,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
-      if (!loginState.pubKey) {
+      if (!loggedProfileData?.did?.id) {
         return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
       navigateToModal.current({ name: 'report-modal', itemId, itemType });
     },
-    [loginState.pubKey],
+    [loggedProfileData?.did?.id],
   );
 
   const handleEntryRemove = React.useCallback((itemId: string) => {
@@ -111,21 +110,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   return (
-    <Box fill="horizontal">
-      <Helmet>
+    <Box customStyle={'w-full'}>
+      <Helmet.Helmet>
         <title>Ethereum World</title>
-      </Helmet>
-      {loginState?.ethAddress ? (
+      </Helmet.Helmet>
+      {loggedProfileData?.did?.id ? (
         <>
-          <BasicCardBox pad="medium" gap="xsmall" margin={{ bottom: 'xsmall' }}>
-            <Box fill="horizontal">
-              <Text size="xlarge" weight="bold">
-                {t('General Social Feed')}
-              </Text>
-            </Box>
-            <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
-          </BasicCardBox>
-          <Box margin={{ bottom: 'xsmall' }}>
+          <Box customStyle="mb-1">
             {postId ? (
               <Extension
                 name={`inline-editor_repost_${postId}`}
@@ -143,8 +134,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         </>
       ) : (
         !dismissed.includes(dismissedCardId) && (
-          <Box margin={{ bottom: 'small' }}>
-            <LoginCTAWidgetCard
+          <Box customStyle="mb-2">
+            <LoginCTACard
               title={`${t('Welcome, fellow Ethereans!')} 💫`}
               subtitle={t('We are in private alpha at this time. ')}
               beforeLinkLabel={t("If you'd like to participate, just ")}
@@ -182,15 +173,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               key={pendingPostState.mutationId}
               style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
               entryData={createPendingEntry(loggedProfileData, pendingPostState.state.variables)}
-              sharePostLabel={t('Share Post')}
-              shareTextLabel={t('Share this post with your friends')}
-              repliesLabel=""
-              repostLabel={t('Reposts')}
-              repostWithCommentLabel={t('Repost with comment')}
-              shareLabel={t('Share')}
-              copyLinkLabel={t('Copy Link')}
               flagAsLabel={t('Report Post')}
-              loggedProfileEthAddress={loggedProfileData.ethAddress}
               locale={locale || 'en'}
               showMore={true}
               profileAnchorLink={'/profile'}
@@ -198,7 +181,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               contentClickable={false}
               hidePublishTime={true}
               disableActions={true}
-              modalSlotId={props.layoutConfig.modalSlotId}
             />
           ),
       )}
@@ -211,13 +193,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         getShareUrl={(itemId: string) =>
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
         }
-        loginState={loginState}
+        loggedProfileData={loggedProfileData}
         navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={props.showLoginModal}
         requestStatus={postsReq.status}
         hasNextPage={postsReq.hasNextPage}
-        loggedProfile={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}

@@ -1,22 +1,21 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import {
   uploadMediaToTextile,
   getLinkPreview,
   useTagSearch,
   useMentionSearch,
-  useGetProfile,
-  useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
-import { CommentEditorProps } from '@akashaorg/design-system/lib/components/EditorCard/comment-editor';
 import { IEntryData, RootExtensionProps } from '@akashaorg/typings/ui';
 import { IReplyErrorState, ReplyError } from './reply-error';
-
-const { CommentEditor, EntryCardLoading } = DS;
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import ReflectionEditor, {
+  ReflectionEditorProps,
+} from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 
 export function Base(
-  props: Partial<CommentEditorProps> & {
+  props: Partial<ReflectionEditorProps> & {
     singleSpa: RootExtensionProps['singleSpa'];
     entryData: IEntryData;
     isReply: boolean;
@@ -26,18 +25,19 @@ export function Base(
 
   const [replyState, setReplyState] = React.useState<IReplyErrorState>();
 
-  const loginQuery = useGetLogin();
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.profile;
+    },
+  });
+  const loggedProfileData = profileDataReq.data;
+
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionSearch = useMentionSearch(mentionQuery);
   const tagSearch = useTagSearch(tagQuery);
 
-  const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
-
-  const disablePublishing = React.useMemo(
-    () => loginQuery.data.waitForAuth || !loginQuery.data.isReady,
-    [loginQuery.data],
-  );
+  const disablePublishing = React.useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
 
   const handleMentionQueryChange = (query: string) => {
     setMentionQuery(query);
@@ -54,7 +54,7 @@ export function Base(
   return (
     <>
       {profileDataReq.status === 'success' && (!replyState || replyState.state === 'retry') && (
-        <CommentEditor
+        <ReflectionEditor
           {...props}
           editorState={
             replyState && replyState.state === 'retry' ? replyState.content : props.editorState
@@ -69,7 +69,7 @@ export function Base(
           onCancelClick={() => props.singleSpa.navigateToUrl(location.pathname)}
           cancelButtonLabel={t('Cancel')}
           avatar={profileDataReq.data?.avatar}
-          ethAddress={loginQuery.data?.ethAddress}
+          profileId={loggedProfileData?.did?.id}
           emojiPlaceholderLabel={t('Search')}
           disablePublishLabel={t('Authenticating')}
           disablePublish={disablePublishing}
@@ -79,13 +79,13 @@ export function Base(
           tags={tagSearch.data}
           mentions={mentionSearch.data}
           uploadRequest={uploadMediaToTextile}
-          background={props.entryData ? 'entryEditorBackground' : 'cardBackground'}
+          background={props.entryData ? 'bg(grey9 dark:grey3)' : 'bg(white grey2'}
         />
       )}
       {props.isReply && (
         <ReplyError
           postId={props.entryData?.postId}
-          pubKey={profileDataReq?.data?.pubKey}
+          loggedProfileData={loggedProfileData}
           onChange={({ state, content }) => {
             switch (state) {
               case 'error':

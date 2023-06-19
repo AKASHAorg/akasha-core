@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import Avatar, {
-  AvatarSrc,
-  IAvatarProps,
-} from '@akashaorg/design-system-core/lib/components/Avatar';
+import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-import { ImageSrc } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import { tw } from '@twind/core';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
@@ -17,13 +13,14 @@ import { EditImageModal } from './EditImageModal';
 import { DeleteImageModal } from './DeleteImageModal';
 import { CropperProps } from 'react-easy-crop';
 import { useEffect } from 'react';
+import { Profile } from '@akashaorg/typings/ui';
 
 type ImageType = 'avatar' | 'cover-image';
 
 export type HeaderProps = {
-  coverImage: ImageSrc;
-  avatar: IAvatarProps['src'];
-  ethAddress: IAvatarProps['ethAddress'];
+  coverImage: Profile['background'];
+  avatar: Profile['avatar'];
+  profileId: Profile['did']['id'];
   title: string;
   cancelLabel: string;
   deleteLabel: string;
@@ -31,14 +28,15 @@ export type HeaderProps = {
   imageTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   deleteTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   confirmationLabel: { avatar: string; coverImage: string };
-  onAvatarChange: (avatar?: AvatarSrc) => void;
-  onCoverImageChange: (coverImage?: ImageSrc) => void;
+  dragToRepositionLabel: string;
+  onAvatarChange: (avatar?: Profile['avatar']) => void;
+  onCoverImageChange: (coverImage?: Profile['background']) => void;
 };
 
 export const Header: React.FC<HeaderProps> = ({
   title,
   coverImage,
-  ethAddress,
+  profileId,
   avatar,
   cancelLabel,
   deleteLabel,
@@ -46,6 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
   imageTitle,
   deleteTitle,
   confirmationLabel,
+  dragToRepositionLabel,
   onAvatarChange,
   onCoverImageChange,
 }) => {
@@ -96,10 +95,10 @@ export const Header: React.FC<HeaderProps> = ({
     if (image) {
       switch (imageType) {
         case 'avatar':
-          setAvatarUrl({ url: URL.createObjectURL(image) });
+          setAvatarUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
           break;
         case 'cover-image':
-          setCoverImageUrl({ url: URL.createObjectURL(image) });
+          setCoverImageUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
       }
     }
     setShowEditImage(false);
@@ -120,10 +119,10 @@ export const Header: React.FC<HeaderProps> = ({
     if (image) {
       switch (imageType) {
         case 'avatar':
-          setAvatarUrl({ url: URL.createObjectURL(image) });
+          setAvatarUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
           break;
         case 'cover-image':
-          setCoverImageUrl({ url: URL.createObjectURL(image) });
+          setCoverImageUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
       }
     }
     uploadInputRef.current.value = null;
@@ -146,9 +145,7 @@ export const Header: React.FC<HeaderProps> = ({
         <Card
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
-          customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
-            coverImageUrl?.url || coverImageUrl?.fallbackUrl
-          })]`}
+          customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${coverImageUrl?.default?.src})]`}
         >
           <Stack direction="column" spacing="gap-y-1" customStyle="relative mt-auto ml-auto">
             <Button
@@ -170,9 +167,9 @@ export const Header: React.FC<HeaderProps> = ({
         </Card>
         <Stack align="center" justify="center" customStyle="absolute left-6 -bottom-8">
           <Avatar
-            ethAddress={ethAddress}
+            profileId={profileId}
             size="lg"
-            src={avatarUrl}
+            avatar={avatarUrl}
             customStyle={`border-2 ${getColorClasses(
               {
                 light: 'white',
@@ -211,6 +208,7 @@ export const Header: React.FC<HeaderProps> = ({
         saveLabel={saveLabel}
         onClose={() => setShowEditImage(false)}
         image={imageType === 'avatar' ? avatarUrl : coverImageUrl}
+        dragToRepositionLabel={dragToRepositionLabel}
         onSave={onSave}
         {...imageModalProps}
       />

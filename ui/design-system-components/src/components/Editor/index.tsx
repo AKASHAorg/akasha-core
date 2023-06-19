@@ -17,7 +17,7 @@ import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
 import { tw, tx } from '@twind/core';
 import { Popover } from '@headlessui/react';
-import { IEntryData, IMetadata, IPublishData, IProfileData } from '@akashaorg/typings/ui';
+import { IEntryData, IMetadata, IPublishData } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -38,6 +38,7 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import isUrl from 'is-url';
+import { Profile } from '@akashaorg/typings/ui';
 
 const MAX_LENGTH = 280;
 
@@ -46,9 +47,9 @@ const MAX_LENGTH = 280;
  * @param editorState - the state of the editor is controlled from the parent component
  */
 export interface IEditorBox {
-  avatar?: IProfileData['avatar'];
+  avatar?: Profile['avatar'];
   showAvatar?: boolean;
-  ethAddress: string | null;
+  profileId: string | null;
   postLabel?: string;
   placeholderLabel?: string;
   emojiPlaceholderLabel?: string;
@@ -67,15 +68,7 @@ export interface IEditorBox {
   getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
-  mentions?: {
-    name?: string;
-    userName?: string;
-    pubKey: string;
-    avatar?: IProfileData['avatar'];
-    ethAddress: string;
-    description?: string;
-    coverImage?: IProfileData['coverImage'];
-  }[];
+  mentions?: Profile[];
   tags?: { name: string; totalPosts: number }[];
   uploadRequest?: (
     data: string | File,
@@ -99,7 +92,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     avatar,
     showAvatar = true,
     showDraft = false,
-    ethAddress,
+    profileId,
     postLabel,
     placeholderLabel,
     uploadFailedLabel,
@@ -280,7 +273,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     const initContent: { children: Descendant[] } = { children: slateContent };
     (function getMetadata(node: Descendant | { children: Descendant[] }) {
       if (Element.isElement(node) && node.type === 'mention') {
-        metadata.mentions.push(node.pubKey);
+        metadata.mentions.push(node.id);
       }
       if (Element.isElement(node) && node.type === 'tag') {
         metadata.tags.push(node.name);
@@ -290,7 +283,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       }
     })(initContent);
     const textContent: string = serializeToPlainText({ children: slateContent });
-    const data = { metadata, slateContent, textContent, author: ethAddress };
+    const data = { metadata, slateContent, textContent, author: profileId };
     CustomEditor.clearEditor(editor);
     ReactEditor.focus(editor);
     onPublish(data);
@@ -585,7 +578,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       >
         {showAvatar && (
           <div className={tw(`flex shrink-0 pb-2`)}>
-            <Avatar src={avatar} ethAddress={ethAddress} />
+            <Avatar avatar={avatar} profileId={profileId} />
           </div>
         )}
         <div className={tw(`w-full px-2 flex flex-row justify-between`)}>

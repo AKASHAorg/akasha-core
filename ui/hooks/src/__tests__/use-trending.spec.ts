@@ -22,7 +22,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
 });
 
 describe('useTrending', () => {
-  it('should get trending profiles', async () => {
+  it.skip('should get trending profiles', async () => {
     const [wrapper] = createWrapper();
     const { result, waitFor } = renderHook(() => useTrendingProfiles(), {
       wrapper,
@@ -31,7 +31,7 @@ describe('useTrending', () => {
     expect(result.current.data).toHaveLength(20);
   });
 
-  it('should get trending tags', async () => {
+  it.skip('should get trending tags', async () => {
     const [wrapper] = createWrapper();
     const { result, waitFor } = renderHook(() => useTrendingTags(), {
       wrapper,

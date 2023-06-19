@@ -1,9 +1,11 @@
-export const STAT = 'stat';
 export const EDIT = 'edit';
+export const FOLLOWERS = 'followers';
+export const FOLLOWING = 'following';
 
 export const rootRoute = '';
 
 export default {
-  [STAT]: `/stat`,
+  [FOLLOWERS]: `/followers`,
+  [FOLLOWING]: `/following`,
   [EDIT]: `/edit`,
 };

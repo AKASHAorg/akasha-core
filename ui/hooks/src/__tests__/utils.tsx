@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WrapperComponent } from '@testing-library/react-hooks';
 
-export const createWrapper = () => {
+export const createWrapper = (): [WrapperComponent<React.ReactNode>, QueryClient] => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -10,12 +11,8 @@ export const createWrapper = () => {
       },
     },
   });
-  return [
-    ({ children }) => (
-      <QueryClientProvider contextSharing={true} client={queryClient}>
-        {children}
-      </QueryClientProvider>
-    ),
-    queryClient,
-  ];
+  const wrapper = ({ children }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+  return [wrapper as WrapperComponent<React.ReactNode>, queryClient];
 };

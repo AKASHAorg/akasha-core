@@ -36,7 +36,6 @@
     "@akashaorg/design-system-core": "*",
     "@akashaorg/design-system-components": "*",
     "@akashaorg/awf-sdk": "*",
-    "@akashaorg/design-system": "*",
     "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/ui-lib-feed": "*",
     "i18next": "22.4.14",

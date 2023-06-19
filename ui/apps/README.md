@@ -5,11 +5,11 @@
 ## Components
 
 - [Akasha App](./akasha/README.md)
-- [Moderation App](./moderation/README.md)
+- [Vibe](./moderation/README.md)
 - [Auth App](./auth-app/README.md)
 - [Settings App](./settings-app/README.md)
 - [Integration Center](./app-center/README.md)
-- [Bookmarks](./bookmarks/README.md)
+- [Lists](./bookmarks/README.md)
 - [Legal](./legal/README.md)
 - [Notifcations](./notifications/README.md)
 - [Profile](./profile/README.md)

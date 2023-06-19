@@ -3,12 +3,6 @@ import { tw, css } from '@twind/core';
 import { isMobile } from 'react-device-detect';
 import { ImageGridItem, ImageObject } from './image-grid-item';
 
-const hideScrollbarStyles = css({
-  '::-webkit-scrollbar': { display: 'none' },
-  '-ms-overflow-style': 'none',
-  'scrollbar-width': 'none',
-});
-
 export interface IImageGallery {
   images: ImageObject[];
   handleDeleteImage?: (image: ImageObject) => void;
@@ -17,6 +11,12 @@ export interface IImageGallery {
 
 const ImageGallery: React.FC<IImageGallery> = props => {
   const { images, handleDeleteImage, handleClickImage } = props;
+
+  const hideScrollbarStyles = css({
+    '::-webkit-scrollbar': { display: 'none' },
+    '-ms-overflow-style': 'none',
+    'scrollbar-width': 'none',
+  });
 
   if (isMobile) {
     return (

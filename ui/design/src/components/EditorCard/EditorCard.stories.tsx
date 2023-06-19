@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Box, Grommet } from 'grommet';
-
 import EditorCard, { IEditorCard } from '.';
-
 import { editorDefaultValue } from '../Editor/initialValue';
-
 import { USERNAMES, TAGS } from '../../utils/dummy-data';
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -33,7 +30,7 @@ const EditorComponent = ({ ...args }) => {
     <EditorCard
       avatar={args.avatar}
       withMeter={args.withMeter}
-      ethAddress={args.ethAddress}
+      profileId={args.profileId}
       tags={tags}
       mentions={mentionables}
       editorState={editorState}
@@ -52,7 +49,7 @@ export default {
   component: EditorComponent,
   argTypes: {
     avatar: { control: 'text' },
-    ethAddress: { control: 'text' },
+    profileId: { control: 'text' },
     withMeter: { control: 'boolean' },
     getTags: { action: 'clicked get tags' },
     onPublish: { action: 'clicked publish' },
@@ -83,6 +80,6 @@ export const BaseEditorCard = Template.bind({});
 
 BaseEditorCard.args = {
   avatar: 'https://www.stevensegallery.com/360/360',
-  ethAddress: '0x003410499401674320006570047391024572000',
+  profileId: 'did:0x003410499401674320006570047391024572000',
   withMeter: true,
 };

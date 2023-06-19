@@ -1,96 +1,126 @@
-import { Moderator } from '@akashaorg/typings/ui';
+import { Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/ui';
 
-export const moderators: Moderator[] = [
-  {
-    _id: '0',
-    _mod: new Date('Jan 01 2021'),
-    creationDate: new Date('Jan 01 2021'),
-    active: false,
-    admin: false,
-    coverImage: '',
-    pubKey: 'bbaaryenljnbjtgmike',
-    ethAddress: '0x3626237234mike',
+const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2022') => {
+  const timeStart = new Date(start).getTime();
+  const timeEnd = new Date(end).getTime();
 
-    name: 'Mike Torello',
-    userName: 'miketorello',
-    avatar: {
-      url: '',
-      fallbackUrl: '',
-    },
-    moderatorEndDate: new Date('Dec 31 2021').toISOString(),
-    status: 'revoked',
-    social: {
-      discord: 'miketorello',
-      email: 'miketorello',
-    },
-  },
-  {
-    _id: '1',
-    _mod: new Date('Oct 01 2020'),
-    creationDate: new Date('Oct 01 2020'),
-    active: true,
-    admin: false,
-    coverImage: '',
-    pubKey: 'bbaaryenljnbjtgapril',
-    ethAddress: '0x3626237234april',
+  return new Date(timeStart + Math.random() * (timeEnd - timeStart));
+};
 
-    name: 'April Curtis',
-    userName: 'aprilcurtis',
-    avatar: {
-      url: '',
-      fallbackUrl: '',
-    },
-    // moderatorEndDate?: string,
-    status: 'active',
-    social: {
-      discord: 'aprilcurtis',
-      email: 'aprilcurtis',
-    },
-  },
-  {
-    _id: '2',
-    _mod: new Date('Nov 01 2022'),
-    creationDate: new Date('Nov 01 2022'),
-    active: true,
-    admin: false,
-    coverImage: '',
-    pubKey: 'bbaaryenljnbjtgmurdock',
-    ethAddress: '0x3626237234murdock',
+const moderatorStatus = ['active', 'resigned', 'revoked'];
+const moderatorNames = ['Mike Torello', 'April Curtis', 'Murdock', 'B.A. Baracus'];
 
-    name: 'Murdock',
-    userName: 'murdock',
-    avatar: {
-      url: '',
-      fallbackUrl: '',
-    },
-    // moderatorEndDate?: string,
-    status: 'active',
-    social: {
-      discord: 'murdock',
-      email: 'murdock',
-    },
-  },
-  {
-    _id: '3',
-    _mod: new Date('Jan 01 2020'),
-    creationDate: new Date('Jan 01 2020'),
-    active: false,
-    admin: false,
-    coverImage: '',
-    pubKey: 'bbaaryenljnbjtgba',
-    ethAddress: '0x3626237234ba',
+export const generateModerators = () => {
+  const moderators = moderatorNames.map((name, idx) => {
+    const id = (Math.random() + 1).toString(36).substring(2);
 
-    name: 'B.A. Baracus',
-    userName: 'babaracus',
-    avatar: {
-      url: '',
-      fallbackUrl: '',
-    },
-    moderatorEndDate: new Date('Jun 30 2020').toISOString(),
-    status: 'resigned',
-    social: {
-      discord: 'babaracus',
-      email: 'babaracus',
-    },
-  },
+    const status = moderatorStatus[Math.floor(Math.random() * moderatorStatus.length)];
+    const isAdmin = idx === 0;
+
+    return {
+      id: `${idx + 1}`,
+      createdAt: randomDateBetweenValues(),
+      active: isAdmin ? true : status === 'active',
+      admin: isAdmin,
+      did: { id },
+      name: name,
+      status: isAdmin ? 'active' : status,
+      social: {
+        discord: id,
+        email: id,
+      },
+      ...(status !== 'active' && { moderatorEndDate: new Date('Dec 31 2021').toISOString() }),
+    };
+  });
+
+  return moderators as Moderator[];
+};
+
+const activeModeratorNames = [
+  'Mr. Bigote',
+  'Pugstenson',
+  'Jordan Lake',
+  'Joan Jett',
+  'Rocker Mill',
+  'Dudez Jillz',
 ];
+
+export const generateActiveModerators = () => {
+  const activeModerators = activeModeratorNames.map((name, idx) => ({
+    id: `${idx + 1}`,
+    createdAt: randomDateBetweenValues(),
+    did: { id: (Math.random() + 1).toString(36).substring(2) },
+    name: name,
+    avatar: {
+      default: {
+        height: 320,
+        src: '',
+        width: 320,
+      },
+    },
+  }));
+
+  return activeModerators as Profile[];
+};
+
+const applicantNames = [
+  'Radioman',
+  'Mr. Bigote',
+  'Pugstenson',
+  'John Wick',
+  'Wizard Odd',
+  'Jamie Oliver',
+  'Cheese Oil',
+];
+
+export const generateApplicants = () => {
+  const applicants = applicantNames.map((name, idx) => {
+    const id = (Math.random() + 1).toString(36).substring(2);
+
+    return {
+      id: `${idx + 1}`,
+      createdAt: randomDateBetweenValues(),
+      did: { id },
+      name: name,
+      avatar: {
+        default: {
+          height: 320,
+          src: '',
+          width: 320,
+        },
+      },
+      applicationDate: new Date('Jan 18 2023').toISOString(),
+      reports: [],
+      history: [],
+    };
+  });
+
+  return applicants as ModeratorApplicantData[];
+};
+
+const applicantHistoryNames = [
+  'mrbigote',
+  'pugstenson',
+  'johnwick',
+  'pugstenson',
+  'pugstenson',
+  'pugstenson',
+  'pugstenson',
+  'pugstenson',
+];
+
+export const generateApplicationsHistory = () => {
+  const logItems = applicantHistoryNames.map((name, idx) => {
+    const id = (Math.random() + 1).toString(36).substring(2);
+
+    return {
+      id: `${idx + 1}`,
+      contentID: id,
+      reviewDate: randomDateBetweenValues(),
+      name: name,
+      approved: idx % 2 === 0,
+    };
+  });
+
+  return logItems;
+};

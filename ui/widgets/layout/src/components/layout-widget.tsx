@@ -158,7 +158,7 @@ const Layout: React.FC<RootComponentProps> = props => {
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   const layoutStyle = apply`
-      grid md:(grid-flow-row)
+      grid md:(grid-flow-row) min-h-screen
       lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
       ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '}
       xl:max-w-7xl xl:mx-auto gap-x-4
@@ -176,13 +176,16 @@ const Layout: React.FC<RootComponentProps> = props => {
       `;
 
   return (
-    <div className={tw('bg(white dark:black) min-h-screen mx-4')}>
-      <div className={tw('h-full w-full')} onClick={handleClickOutside}>
+    <div className={tw('bg(white dark:black) min-h-screen')}>
+      <div
+        className={tw('h-full w-11/12 m-auto lg:w-full min-h-screen')}
+        onClick={handleClickOutside}
+      >
         <div className={tw(layoutStyle)}>
           <ScrollRestorer />
           <div className={tw(mobileLayoverStyle)}>
             <div className={tw(sidebarSlotStyle)}>
-              <div className={tw('pt-0 xl:pt-4')} ref={sidebarWrapperRef}>
+              <div className={tw('pt-0 xl:pt-4 h-screen')} ref={sidebarWrapperRef}>
                 <Extension
                   fullHeight
                   name={props.layoutConfig.sidebarSlotId}
@@ -247,15 +250,13 @@ const Layout: React.FC<RootComponentProps> = props => {
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </div>
           </div>
-          <div>
-            <div className={tw('sticky top-0')}>
-              <div className={tw(`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`)}>
-                <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
-                <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
-              </div>
-              <div className={tw('fixed bottom-0 xl:static')}>
-                <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
-              </div>
+          <div className={tw('sticky top-0 h-screen')}>
+            <div className={tw(`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`)}>
+              <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
+              <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
+            </div>
+            <div className={tw('fixed bottom-0 mr-4 mb-4')}>
+              <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
             </div>
           </div>
         </div>

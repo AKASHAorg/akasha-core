@@ -6,12 +6,13 @@ import Icon from '../Icon';
 import { Point, Area } from 'react-easy-crop/types';
 import { apply, tw } from '@twind/core';
 import { getRadiusClasses } from '../../utils/getRadiusClasses';
-import { ImageSrc } from '../types/common.types';
+import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 
 import getCroppedImage from '../../utils/get-cropped-image';
 
 export type ImageCropperProps = Partial<Omit<CropperProps, 'image'>> & {
-  image: string | ImageSrc;
+  image: string | ProfileImageVersions;
+  dragToRepositionLabel: string;
   onCrop: (image: Blob) => void;
 };
 
@@ -22,10 +23,16 @@ const ZOOM_STEP = 0.01;
 const CROPPER_WIDTH = 320;
 const CROPPWER_HEIGHT = 224;
 
-const ImageCropper: React.FC<ImageCropperProps> = ({ image, onCrop, ...rest }) => {
+const ImageCropper: React.FC<ImageCropperProps> = ({
+  image,
+  dragToRepositionLabel,
+  onCrop,
+  ...rest
+}) => {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const imageUrl = typeof image === 'string' ? image : image?.url || image?.fallbackUrl;
+  const imageUrl =
+    typeof image === 'string' ? image : image?.default.src || image?.alternatives[0].src;
 
   const onCropComplete = useCallback(
     async (_: Area, croppedAreaPixels: Area) => {
@@ -59,11 +66,12 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ image, onCrop, ...rest }) =
         />
       </div>
       <Text variant="footnotes2" align="center" weight="normal">
-        Drag the image to reposition
+        {dragToRepositionLabel}
       </Text>
       <Stack justify="evenly" spacing="gap-x-2">
         <Icon type="MagnifyingGlassMinusIcon" size="lg" />
         <input
+          aria-label="range-input"
           type="range"
           value={zoom}
           min={MIN_ZOOM}

@@ -6,7 +6,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
 
-import routes, { STAT } from './routes';
+import routes, { EDIT, FOLLOWERS, FOLLOWING } from './routes';
 /**
  * All plugins must export an object like this:
  */
@@ -34,8 +34,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     });
   },
   routes: {
-    stat: routes[STAT],
-    edit: routes['edit'],
+    edit: routes[EDIT],
+    followers: routes[FOLLOWERS],
+    following: routes[FOLLOWING],
     rootRoute: '',
   },
 });
