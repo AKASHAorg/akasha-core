@@ -327,10 +327,6 @@ class Web3Connector {
       events: ['chainChanged', 'accountsChanged'],
     });
 
-    provider.on('connect', info => {
-      console.info('signed in with walletconnect');
-      console.info(info);
-    });
     // must wait for the approval
     await provider.enable();
     return provider;
