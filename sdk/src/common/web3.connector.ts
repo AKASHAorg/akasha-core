@@ -9,15 +9,16 @@ import {
   WEB3_EVENTS,
 } from '@akashaorg/typings/sdk';
 import detectEthereumProvider from '@metamask/detect-provider';
-import WalletConnectProvider from '@walletconnect/web3-provider';
+import { EthereumProvider } from '@walletconnect/ethereum-provider';
 import Logging from '../logging';
-import OpenLogin from '@toruslabs/openlogin';
 import EventBus from './event-bus';
 import { throwError } from 'rxjs';
 import pino from 'pino';
 import { createFormattedValue } from '../helpers/observable';
 import { validate } from './validator';
 import { z } from 'zod';
+import { IEthereumProvider } from '@walletconnect/ethereum-provider/dist/types/EthereumProvider';
+
 
 @injectable()
 class Web3Connector {
@@ -26,8 +27,7 @@ class Web3Connector {
   #web3Instance: ethers.providers.BaseProvider | ethers.providers.Web3Provider | null;
   #globalChannel: EventBus;
   #wallet: ethers.Wallet | null;
-  #openLogin: OpenLogin | null;
-  #walletConnect: WalletConnectProvider | null;
+  #walletConnect: IEthereumProvider | null;
   #currentProviderId: EthProviders | null;
   readonly network = 'goerli';
   #networkId = '0x5';
@@ -53,7 +53,6 @@ class Web3Connector {
     this.#globalChannel = globalChannel;
     this.#web3Instance = null;
     this.#wallet = null;
-    this.#openLogin = null;
     this.#walletConnect = null;
     this.#currentProviderId = null;
   }
@@ -116,10 +115,7 @@ class Web3Connector {
       data: undefined,
       event: WEB3_EVENTS.DISCONNECTED,
     });
-    if (this.#openLogin instanceof OpenLogin) {
-      await this.#openLogin.logout();
-    }
-    if (this.#walletConnect instanceof WalletConnectProvider) {
+    if (this.#walletConnect instanceof EthereumProvider) {
       await this.#walletConnect.disconnect();
     }
   }
@@ -247,13 +243,6 @@ class Web3Connector {
       return new ethers.providers.InfuraProvider(network, process.env.INFURA_ID);
     }
 
-    if (provider === EthProviders.Torus) {
-      const openLogin = await this.#_getTorusProvider();
-      const provider = new ethers.providers.InfuraProvider(network, process.env.INFURA_ID);
-      this.#wallet = new ethers.Wallet(openLogin.privKey, provider);
-      return provider;
-    }
-
     if (provider === EthProviders.Web3Injected) {
       ethProvider = await this.#_getInjectedProvider();
     }
@@ -328,36 +317,19 @@ class Web3Connector {
   }
 
   /**
-   * Connects to Torus and retrieves private key
-   * @returns OpenLogin instance
-   */
-  async #_getTorusProvider() {
-    this.#openLogin = new OpenLogin({
-      clientId: process.env.TORUS_PROJECT as string,
-      network: 'testnet',
-      uxMode: 'popup',
-    });
-    await this.#openLogin.init();
-    if (!this.#openLogin.privKey) {
-      await this.#openLogin.login();
-    }
-    return this.#openLogin;
-  }
-
-  /**
    * Enables qr code scan to connect from a mobile wallet
    */
   async #_getWalletConnectProvider() {
-    const provider = new WalletConnectProvider({
-      infuraId: process.env.INFURA_ID || '',
-      chainId: this.networkId[this.network],
-      qrcode: true,
-      clientMeta: {
-        description: 'WC Here, WC there, WC everywhere!',
-        name: 'Some wallet',
-        icons: [],
-        url: 'https://example.com',
-      },
+    const provider = await EthereumProvider.init({
+      projectId: process.env.WALLETCONNECT_PROJECT_ID as string,
+      chains: [this.networkId[this.network]],
+      showQrModal: true,
+      events: ['chainChanged', 'accountsChanged'],
+    });
+
+    provider.on('connect', info => {
+      console.info('signed in with walletconnect');
+      console.info(info);
     });
     // must wait for the approval
     await provider.enable();

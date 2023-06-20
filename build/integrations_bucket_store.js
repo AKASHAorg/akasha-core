@@ -1,6 +1,5 @@
 /* eslint-disable */
 const dotenv = require("dotenv");
-const buckr = require("@textile/buckr");
 const fs = require("fs");
 const ethers = require("ethers");
 const path = require("path");
