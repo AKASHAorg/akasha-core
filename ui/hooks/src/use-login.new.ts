@@ -7,8 +7,6 @@ import { useGlobalLogin } from '.';
 import { logError } from './utils/error-handler';
 
 const LOGIN_STATE_KEY = 'LOGIN_STATE';
-const CHECK_SIGNUP_KEY = 'CHECK_SIGNUP_KEY';
-const CURRENT_USER_KEY = 'CURRENT_USER_KEY';
 
 export interface LoginState extends CurrentUser {
   isReady?: boolean;
@@ -19,18 +17,6 @@ export interface LoginState extends CurrentUser {
   // if this is true, we can assume that the user is logged in
   // otherwise, we can assume that the user is not logged in
   fromCache?: boolean;
-}
-
-const initialData = {
-  ethAddress: null,
-  pubKey: null,
-  isReady: false,
-  waitForAuth: false,
-  isSigningIn: false,
-};
-
-export function useCurrentUser() {
-  return useQuery([CURRENT_USER_KEY], () => getSDK().api.auth.getCurrentUser());
 }
 
 export function useConnectWallet(provider: EthProviders) {
@@ -57,17 +43,15 @@ export function useGetLogin(onError?: (error: Error) => void) {
       queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
         ...prev,
         ...data,
-        isSigningIn: true,
       }));
     },
     onLogout: () => {
-      queryClient.setQueryData([LOGIN_STATE_KEY], { ethAddress: null, pubKey: null });
+      queryClient.setQueryData([LOGIN_STATE_KEY], null);
     },
     onLoadFromCache: data => {
       queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
         ...prev,
         ...data,
-        fromCache: true,
       }));
     },
     onError: payload => {
@@ -83,11 +67,8 @@ export function useGetLogin(onError?: (error: Error) => void) {
     () =>
       new Promise<LoginState>(() => {
         const currentData = queryClient.getQueryData<LoginState>([LOGIN_STATE_KEY]);
-        return currentData || initialData;
+        return currentData;
       }),
-    {
-      initialData: initialData,
-    },
   );
 }
 
@@ -153,34 +134,6 @@ export function useLogout() {
     },
     {
       onError: (err: Error) => logError('use-logout', err),
-    },
-  );
-}
-
-/**
- * Hook to check if a user is already registered
- * @example useCheckSignup hook
- * ```typescript
- * const checkSignupQuery = useCheckSignup('0x42b35jk53ifq');
- * // checkSignupQuery.data returns a boolean value which determines if one should proceed with signup process or not
- * ```
- */
-export function useCheckSignup(ethAddress: string) {
-  const sdk = getSDK();
-  return useQuery(
-    [CHECK_SIGNUP_KEY],
-    async () => {
-      try {
-        return await sdk.api.auth.checkIfSignedUp(ethAddress);
-      } catch (err) {
-        return false;
-      }
-    },
-    {
-      enabled: !!ethAddress,
-      refetchOnWindowFocus: true,
-      retry: false,
-      onError: (err: Error) => logError('useCheckSignup', err),
     },
   );
 }
