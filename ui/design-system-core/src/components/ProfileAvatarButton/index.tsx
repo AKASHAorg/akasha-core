@@ -4,6 +4,7 @@ import { tw } from '@twind/core';
 import { Profile } from '@akashaorg/typings/ui';
 
 import Avatar, { AvatarSize } from '../Avatar';
+import Box from '../Box';
 import Text from '../Text';
 
 export interface ProfileAvatarButtonProps {
@@ -23,7 +24,7 @@ export interface ProfileAvatarButtonProps {
 }
 
 const ProfileAvatarButton = React.forwardRef(
-  (props: ProfileAvatarButtonProps, ref: React.Ref<HTMLElement>) => {
+  (props: ProfileAvatarButtonProps, ref: React.LegacyRef<HTMLDivElement>) => {
     const {
       customStyle = '',
       size,
@@ -52,9 +53,11 @@ const ProfileAvatarButton = React.forwardRef(
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <Text ref={ref} variant="button-sm" weight="bold" truncate={true} customStyle={textStyle}>
-            {label || profileId}
-          </Text>
+          <Box ref={ref}>
+            <Text variant="button-sm" weight="bold" truncate={true} customStyle={textStyle}>
+              {label || profileId}
+            </Text>
+          </Box>
 
           <Text variant="footnotes2" color="grey7" truncate={true}>
             {info}
