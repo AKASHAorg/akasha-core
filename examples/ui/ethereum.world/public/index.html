@@ -48,8 +48,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.10.2/extras/named-exports.min.js"
           integrity="sha512-R1m4kK4v2B7kiU+dGztkBxEfMnJkPaQA+WNjSkIWq7+DYEuA1t/UguVwHKjh8SAUJV9yg6uarhA/weCCdV1r2Q=="
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <meta name="importmap-type" content="systemjs-importmap" />
+  <script src="/scripts/theme.js"></script>
 
+  <meta name="importmap-type" content="systemjs-importmap" />
   <script type="systemjs-importmap">
         {
           "imports": {
@@ -89,29 +90,6 @@
           console.log("SW registration failed: ", registrationError);
         });
     });
-  }
-</script>
-<script>
-  let theme = "";
-
-  window.addEventListener("theme-change", (ev) => {
-    if (ev.detail.theme === "Dark-Theme") {
-      return document.body.classList.add("dark");
-    } else {
-      if (document.body.classList.contains("dark")) {
-        return document.body.classList.remove("dark");
-      }
-    }
-  });
-
-  if (window.localStorage) {
-    if (window.localStorage.getItem("Theme") === "Dark-Theme") {
-      theme = "dark";
-    }
-  }
-
-  if (theme) {
-    document.body.classList.add(theme);
   }
 </script>
 <script type="module" src="/main.js" async></script>

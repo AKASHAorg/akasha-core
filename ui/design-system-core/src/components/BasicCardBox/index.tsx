@@ -40,7 +40,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
       return 'border(1 solid grey9 dark:grey3)';
     }
     if (accentBorder) {
-      return 'border(1 solid secondaryLight dark:secondaryDark';
+      return 'border(1 solid secondaryLight dark:secondaryDark)';
     }
 
     /**

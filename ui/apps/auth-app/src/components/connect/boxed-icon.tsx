@@ -16,7 +16,7 @@ const BoxedIcon: React.FC<BoxedIconProps> = props => {
   return (
     <BasicCardBox
       pad="0"
-      elevation={'none'}
+      elevation="none"
       round={props.round || 'rounded-lg'}
       customStyle={`flex flex-row justify-center items-center w-${props.boxSize} h-${props.boxSize} ${props.background}`}
     >
