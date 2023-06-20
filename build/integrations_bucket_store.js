@@ -53,7 +53,7 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
       path: path.resolve(__dirname, "../ui/build/apps", "moderation")
     };
     yield {
-      package: require("../ui/apps/app-center/package.json"),
+      package: require("../ui/apps/akasha-verse/package.json"),
       type: TYPE_APP,
       path: path.resolve(__dirname, "../ui/build/apps", "app-center")
     };
