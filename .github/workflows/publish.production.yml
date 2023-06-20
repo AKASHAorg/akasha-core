@@ -35,14 +35,14 @@ jobs:
           CI: 1
         run: |
           yarn install --frozen-lockfile
-      - name: Publish new versions
-        env:
-          INFURA_ID: ${{ secrets.INFURA_ID_PRODUCTION }}
-          ETH_DEPLOY_KEY: ${{ secrets.ETH_DEPLOY_KEY_PRODUCTION }}
-          INTEGRATION_REGISTRY_ADDRESS:  ${{ secrets.INTEGRATION_REGISTRY_ADDRESS_PRODUCTION }}
-          DEPLOY_PRODUCTION_REGISTRY: true
-        run: |
-          yarn run compile:sc
+#      - name: Publish new versions
+#        env:
+#          INFURA_ID: ${{ secrets.INFURA_ID_PRODUCTION }}
+#          ETH_DEPLOY_KEY: ${{ secrets.ETH_DEPLOY_KEY_PRODUCTION }}
+#          INTEGRATION_REGISTRY_ADDRESS:  ${{ secrets.INTEGRATION_REGISTRY_ADDRESS_PRODUCTION }}
+#          DEPLOY_PRODUCTION_REGISTRY: true
+#        run: |
+#          yarn run compile:sc
 #          yarn run deploy:sc
       - name: Trigger update message
         run: |

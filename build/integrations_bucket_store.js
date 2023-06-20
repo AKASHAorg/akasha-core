@@ -232,5 +232,6 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
   } else {
     outputFile = "./integrations_bucket.json";
   }
+
   fs.writeFileSync(path.resolve(__dirname, outputFile), JSON.stringify(results, null, 2));
 })();
