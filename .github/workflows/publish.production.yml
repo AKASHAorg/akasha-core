@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 16.13.0
+          node-version: 18.16.0
           cache: 'yarn'
       - name: Checkout
         uses: actions/checkout@v2
@@ -43,7 +43,7 @@ jobs:
           DEPLOY_PRODUCTION_REGISTRY: true
         run: |
           yarn run compile:sc
-          yarn run deploy:sc
+#          yarn run deploy:sc
       - name: Trigger update message
         run: |
           curl ${{secrets.WEBHOOK_BOT_PRODUCTION}}
