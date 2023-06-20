@@ -64,7 +64,7 @@ import {
 } from './use-network-state';
 import { useMentionSearch } from './use-mentions';
 
-export * from './use-login';
+export * from './use-login.new';
 import { useLegalDoc } from './use-legal';
 import { useIsFollowingMultiple, useIsContactMultiple, useFollow, useUnfollow } from './use-follow';
 import {
