@@ -2,6 +2,9 @@ require('@testing-library/jest-dom/extend-expect');
 
 import { install } from '@twind/core';
 import twindConfig from './src/twind/twind.config.js';
+import ResizeObserver from 'resize-observer-polyfill';
+
+global.ResizeObserver = ResizeObserver;
 
 install(twindConfig);
 

@@ -19,7 +19,6 @@ import { validate } from './validator';
 import { z } from 'zod';
 import { IEthereumProvider } from '@walletconnect/ethereum-provider/dist/types/EthereumProvider';
 
-
 @injectable()
 class Web3Connector {
   #logFactory: Logging;
