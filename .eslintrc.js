@@ -51,5 +51,13 @@ module.exports = {
     'unicorn/no-unreadable-array-destructuring': 'error',
     'unicorn/no-unreadable-iife': 'error',
   },
-  ignorePatterns: ['**/lib/*.js', '*.d.ts', '*.mjs', '*.cjs'],
+  ignorePatterns: [
+    '**/lib/*.js',
+    '*.d.ts',
+    '*.mjs',
+    '*.cjs',
+    '*.setup.js',
+    '*.conf.js',
+    '*.config.js',
+  ],
 };
