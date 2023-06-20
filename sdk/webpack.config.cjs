@@ -56,6 +56,7 @@ const config = {
     libraryTarget: 'system',
     publicPath: 'auto',
     crossOriginLoading: 'anonymous',
+    clean: true
   },
   target: ['web', 'es2020'],
   optimization: {
@@ -99,7 +100,7 @@ const config = {
     }),
     new WebpackAssetsManifest({ integrity: true }),
   ],
-  devtool: process.env.NODE_ENV === 'production' ? undefined : 'eval-source-map',
+  devtool: process.env.NODE_ENV === 'production' ? undefined : 'eval-cheap-module-source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
     function ({ request }, callback) {

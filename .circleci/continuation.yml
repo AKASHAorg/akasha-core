@@ -11,7 +11,7 @@ parameters:
 executors:
   shared-executor:
     docker:
-      - image: cimg/node:16.19.1
+      - image: cimg/node:18.16.0
     working_directory: ~/akasha-world-framework
 
 jobs:
