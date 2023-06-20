@@ -26,8 +26,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-settings-ewa');
 
-  console.log(theme, '<<< the theme');
-
   const routing = props.plugins['@akashaorg/app-routing']?.routing;
 
   const handlePrivacyPolicyClick = () => {
