@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Route, Router, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { EthProviders } from '@akashaorg/typings/sdk';
-import { AnalyticsCategories, RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useAnalytics,
   useGetLogin,
@@ -64,7 +64,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   const handleSignIn = provider => {
-    loginMutation.mutate({ selectedProvider: provider, checkRegistered: true });
+    loginMutation.mutate({ selectedProvider: provider });
   };
 
   return (

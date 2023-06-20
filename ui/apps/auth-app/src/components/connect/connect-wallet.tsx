@@ -1,5 +1,5 @@
 import React from 'react';
-import { EthAddressSchema, EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
+import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import BoxedIcon from './boxed-icon';
@@ -24,13 +24,13 @@ export interface IConnectWalletProps {
 }
 
 const ConnectWallet: React.FC<IConnectWalletProps> = props => {
-  const { selectedProvider, onSignIn, worldName, signInError } = props;
+  const { selectedProvider, onSignIn, onDisconnect, worldName, signInError } = props;
   const [errors, setErrors] = React.useState<{ title: string; subtitle: string }[]>([]);
   const [isSignInRetry, setIsSignInRetry] = React.useState(false);
 
-  const connectWalletCall = useConnectWallet(props.selectedProvider);
+  const connectWalletCall = useConnectWallet(selectedProvider);
   const signInCall = React.useRef(onSignIn);
-  const signOutCall = React.useRef(props.onDisconnect);
+  const signOutCall = React.useRef(onDisconnect);
 
   const { t } = useTranslation('app-auth-ewa');
   const requiredNetworkQuery = useRequiredNetwork();
@@ -221,9 +221,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
         {!!connectWalletCall.data?.length && (
           <Box customStyle="items-center">
             <Text variant="subtitle2">{t('Your Address')}</Text>
-            <Text variant="subtitle2" color="secondaryText">
-              {connectWalletCall.data}
-            </Text>
+            <Text variant="subtitle2">{connectWalletCall.data}</Text>
           </Box>
         )}
         <Box customStyle="flex flex-row justify-center items-center">

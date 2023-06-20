@@ -133,10 +133,10 @@ export function useLogin(onError?: (err: Error) => void) {
   return useMutation(
     async ({
       selectedProvider,
-      checkRegistered = true,
+      checkRegistered = false,
     }: {
       selectedProvider: EthProviders;
-      checkRegistered: boolean;
+      checkRegistered?: boolean; // optional, use if we need to check registered status
     }) => {
       const resp = await sdk.api.auth.signIn({
         provider: selectedProvider,
