@@ -99,5 +99,8 @@ export function useNetworkChangeListener() {
       setCurrentNetwork(event.data);
     }
   });
-  return currentNetwork;
+  const unsubscribe = () => {
+    sub.unsubscribe();
+  };
+  return [currentNetwork, unsubscribe];
 }
