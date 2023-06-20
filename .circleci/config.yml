@@ -36,9 +36,6 @@ jobs:
             - dependency-cache-v1-{{ checksum "yarn.lock" }}
             - dependency-cache-v1
       - run:
-          name: Python set up
-          command: 'npm config set python /usr/bin/python3'
-      - run:
           name: Install yarn packages
           command: yarn install --frozen-lockfile
       - save_cache:
