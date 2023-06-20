@@ -2,7 +2,7 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
 import NotificationsCard from '../';
-import { customRender } from '../../../test-utils';
+import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
 
 describe('<NotificationsCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});

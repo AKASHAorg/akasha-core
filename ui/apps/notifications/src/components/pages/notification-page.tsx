@@ -7,7 +7,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import NotificationsCard from '@akashaorg/design-system-core/lib/components/NotificationsCard';
+import NotificationsCard from '@akashaorg/design-system-components/lib/components/NotificationsCard';
 import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
