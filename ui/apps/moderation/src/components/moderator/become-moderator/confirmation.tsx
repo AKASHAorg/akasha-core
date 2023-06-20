@@ -4,10 +4,10 @@ import { tw } from '@twind/core';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import {
   SteppedActionWrapperProps,
-  SubtitleRendererProps,
   SteppedActionWrapper,
-  SubtitleRenderer,
-} from '../../common';
+} from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
+
+import { SubtitleRendererProps, SubtitleRenderer } from '../../common';
 
 export type BMConfirmationProps = SteppedActionWrapperProps &
   SubtitleRendererProps & {

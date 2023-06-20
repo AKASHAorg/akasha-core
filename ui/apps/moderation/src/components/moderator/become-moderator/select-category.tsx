@@ -1,13 +1,12 @@
 import React from 'react';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
 import {
-  CategoryPills,
-  CategoryPillsProps,
   SteppedActionWrapperProps,
   SteppedActionWrapper,
-} from '../../common';
+} from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
+
+import { CategoryPills, CategoryPillsProps } from '../../common';
 
 export type BMSelectCategoryProps = SteppedActionWrapperProps &
   CategoryPillsProps & {

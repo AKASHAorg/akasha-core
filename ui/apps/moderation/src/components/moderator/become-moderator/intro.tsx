@@ -4,13 +4,12 @@ import { tw } from '@twind/core';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
 import {
   PageButtonsProps,
-  SubtitleRendererProps,
   PageButtons,
-  SubtitleRenderer,
-} from '../../common';
+} from '@akashaorg/design-system-components/lib/components/PageButtons';
+
+import { SubtitleRendererProps, SubtitleRenderer } from '../../common';
 
 export type BMIntroProps = PageButtonsProps &
   SubtitleRendererProps & {

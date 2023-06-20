@@ -5,7 +5,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import StepIndicator from '@akashaorg/design-system-core/lib/components/Stepper';
 
-import { PageButtons, PageButtonsProps } from './page-buttons';
+import { PageButtons, PageButtonsProps } from '../PageButtons';
 
 export type SteppedActionWrapperProps = PageButtonsProps & {
   stepLabels: string[];

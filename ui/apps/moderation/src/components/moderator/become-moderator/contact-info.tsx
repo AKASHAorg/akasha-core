@@ -5,8 +5,10 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-
-import { SteppedActionWrapperProps, SteppedActionWrapper } from '../../common';
+import {
+  SteppedActionWrapperProps,
+  SteppedActionWrapper,
+} from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
 export type BMContactInfoProps = SteppedActionWrapperProps & {
   titleLabel: string;
