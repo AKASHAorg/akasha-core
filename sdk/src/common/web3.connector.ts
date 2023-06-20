@@ -323,7 +323,24 @@ class Web3Connector {
       projectId: process.env.WALLETCONNECT_PROJECT_ID as string,
       chains: [this.networkId[this.network]],
       showQrModal: true,
-      events: ['chainChanged', 'accountsChanged'],
+      events: ['chainChanged', 'accountsChanged', 'connect', 'disconnect'],
+      qrModalOptions: {
+        chainImages: undefined,
+        themeVariables: {
+          '--w3m-font-family': 'Inter, Content-font, Roboto, sans-serif',
+          '--w3m-background-color': '#7222d2 ',
+          '--w3m-accent-color': '#4e71ff',
+        },
+        privacyPolicyUrl: 'https://akasha.org/privacy-policy/', //example
+        termsOfServiceUrl: 'https://akasha.org/legal/',
+        explorerRecommendedWalletIds: [
+          'ecc4036f814562b41a5268adc86270fba1365471402006302e70169465b7ac18', //zerion
+          'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', //metamask
+          '1ae92b26df02f0abca6304df07debccd18262fdf5fe82daa81593582dac9a369', //rainbow
+          '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', //trust
+          'ef333840daf915aafdc4a004525502d6d49d77bd9c65e0642dbaefb3c2893bef', //imToken
+        ],
+      },
     });
 
     // must wait for the approval
