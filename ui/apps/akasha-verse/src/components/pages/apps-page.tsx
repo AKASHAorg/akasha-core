@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 const AppsPage: React.FC<RootComponentProps> = () => {
-  const { t } = useTranslation('app-integration-center');
+  const { t } = useTranslation('app-akasha-verse');
 
   /*@TODO: replace with the relevant hook once it's ready */
   const dummyNewestApps = [

@@ -364,7 +364,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={<Title title={t('Integration Center')} />}
+            titleNode={<Title title={t('AKASHAVerse')} />}
             contentNode={
               <Content checkboxArray={integrationCenterCheckboxes} section={'integrationCenter'} />
             }
