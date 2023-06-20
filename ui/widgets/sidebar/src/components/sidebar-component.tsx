@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { RootComponentProps, EventTypes, MenuItemAreaType } from '@akashaorg/typings/ui';
@@ -16,8 +16,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     plugins,
     worldConfig: { defaultApps, homepageApp },
   } = props;
-  const [routeData, setRouteData] = React.useState(null);
-  const [activeIntegrations, setActiveIntegrations] = React.useState(null);
+  const [routeData, setRouteData] = useState(null);
+  const [activeIntegrations, setActiveIntegrations] = useState(null);
   const { t } = useTranslation('ui-widget-sidebar');
 
   const currentLocation = useLocation();
@@ -31,7 +31,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
-  React.useEffect(() => {
+  useEffect(() => {
     let sub;
     if (routing) {
       sub = routing.routeObserver.subscribe({
@@ -47,8 +47,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       }
     };
   }, [routing]);
+
   // sort according to worldConfig index
-  const worldApps = React.useMemo(() => {
+  const worldApps = useMemo(() => {
     return routeData?.[MenuItemAreaType.AppArea]?.sort(
       (a: { name: string }, b: { name: string }) => {
         if (defaultApps.indexOf(a.name) < defaultApps.indexOf(b.name)) {
@@ -60,24 +61,29 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       },
     );
   }, [defaultApps, routeData]);
-  const userInstalledApps = React.useMemo(() => {
+
+  const userInstalledApps = useMemo(() => {
     return routeData?.[MenuItemAreaType.UserAppArea];
   }, [routeData]);
-  const allApps = React.useMemo(() => {
+
+  const allApps = useMemo(() => {
     return [...(worldApps || []), ...(userInstalledApps || [])];
   }, [worldApps, userInstalledApps]);
+
   const handleNavigation = (appName: string, route: string) => {
     routing?.navigateTo({
       appName,
       getNavigationUrl: () => route,
     });
   };
+
   const handleClickExplore = () => {
     routing?.navigateTo({
       appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => routes.explore,
     });
   };
+
   const handleBrandClick = () => {
     if (!homepageApp) {
       return;
@@ -96,18 +102,21 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     // close sidebar after navigation
     handleSidebarClose();
   };
+
   const handleSidebarClose = () => {
     // emit HideSidebar event to trigger corresponding action in associated widgets
     uiEvents.next({
       event: EventTypes.HideSidebar,
     });
   };
+
   const handleLoginClick = () => {
     routing.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: () => '/',
     });
   };
+
   return (
     <Sidebar
       versionLabel={__DEV__ && 'DEV'}
@@ -147,7 +156,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         */
       menuItem={
         <MenuItem
-          plugins={props.plugins}
+          plugins={plugins}
           profileId={myProfileQuery.data?.did.id}
           {...({} as SidebarMenuItemProps)}
         />

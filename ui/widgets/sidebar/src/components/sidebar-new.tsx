@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { IMenuItem } from '@akashaorg/typings/ui';
+import { IMenuItem, Profile } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -9,7 +9,6 @@ import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ListSidebarApps from './list-sidebar-apps';
-import { Profile } from '@akashaorg/typings/ui';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -62,11 +61,12 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     onLoginClick,
   } = props;
 
-  const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
-  const [activeOption, setActiveOption] = React.useState<IMenuItem | null>(null);
-  React.useEffect(() => {
+  const [currentAppData, setCurrentAppData] = useState<IMenuItem | null>(null);
+  const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
+
+  useEffect(() => {
     if (allMenuItems && currentRoute) {
-      const [, , , ...path] = currentRoute.split('/');
+      const path = currentRoute.split('/').slice(3);
       const activeApp = allMenuItems.find(menuItem => activeApps?.includes?.(menuItem.name));
       if (activeApp && activeApp.index !== currentAppData?.index) {
         setCurrentAppData(activeApp);
@@ -82,6 +82,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       }
     }
   }, [currentRoute, allMenuItems, currentAppData, activeOption, activeApps]);
+
   const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       // if the current app has no subroutes, set as active and redirect to its route
@@ -93,6 +94,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       }
     }
   };
+
   const handleOptionClick = (
     menuItem: IMenuItem,
     subrouteMenuItem: IMenuItem,
@@ -105,6 +107,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       onSidebarClose();
     }
   };
+
   return (
     <BasicCardBox
       customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
