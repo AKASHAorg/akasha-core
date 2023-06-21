@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "@akashaorg/awf-sdk": "*",
-    "@akashaorg/design-system": "*",
     "@akashaorg/design-system-core": "*",
     "@akashaorg/design-system-components": "*",
     "@akashaorg/ui-awf-hooks": "*",
