@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 16.19.0
+          node-version: 18.16.0
           cache: 'yarn'
       - name: Checkout
         uses: actions/checkout@v2

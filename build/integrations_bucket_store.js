@@ -1,6 +1,5 @@
 /* eslint-disable */
 const dotenv = require("dotenv");
-const buckr = require("@textile/buckr");
 const fs = require("fs");
 const ethers = require("ethers");
 const path = require("path");
@@ -54,7 +53,7 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
       path: path.resolve(__dirname, "../ui/build/apps", "moderation")
     };
     yield {
-      package: require("../ui/apps/app-center/package.json"),
+      package: require("../ui/apps/akasha-verse/package.json"),
       type: TYPE_APP,
       path: path.resolve(__dirname, "../ui/build/apps", "app-center")
     };
@@ -233,5 +232,6 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
   } else {
     outputFile = "./integrations_bucket.json";
   }
+
   fs.writeFileSync(path.resolve(__dirname, outputFile), JSON.stringify(results, null, 2));
 })();

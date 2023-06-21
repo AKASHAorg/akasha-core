@@ -1,0 +1,21 @@
+type ContentBlock @loadModel(id: "kjzl6hvfrbw6ca1zrucigo7omosdzqozp6kbon6op3voac1iss170aqefhn6ycs") {
+  id: ID!
+}
+
+
+type BlockRecord{
+  order: Int! @int(min: 0, max: 10)
+  blockID: StreamID! @documentReference(model: "ContentBlock")
+ # block: ContentBlock! @relationDocument(property: "blockID")
+}
+
+
+
+type BeamNew @createModel(accountRelation: LIST, description: "AKASHA Beam") {
+  author: DID! @documentAccount
+  content: [BlockRecord!]! @list(maxLength: 10)
+  tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32)
+  version: CommitID! @documentVersion
+  active: Boolean!
+  createdAt: DateTime!
+}

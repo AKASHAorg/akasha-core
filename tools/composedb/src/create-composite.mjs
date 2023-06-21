@@ -79,3 +79,15 @@ ceramic.did = did
 // const _5_beams = await createComposite(ceramic, path.resolve(__dirname, '../models/5_beams.graphql'))
 //
 // await writeEncodedComposite(_5_beams, path.resolve(__dirname, '../build/5_beams.json'))
+
+
+// const _6_main_blocks = await createComposite(ceramic, path.resolve(__dirname, '../models/6_main_blocks.graphql'))
+//
+// await writeEncodedComposite(_6_main_blocks, path.resolve(__dirname, '../build/6_main_blocks.json'))
+
+
+
+
+const _8_blocks = await createComposite(ceramic, path.resolve(__dirname, '../models/8_blocks.graphql'))
+
+await writeEncodedComposite(_8_blocks, path.resolve(__dirname, '../build/8_blocks.json'))

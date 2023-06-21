@@ -1,6 +1,5 @@
 import { EthProviders } from './index';
 import { CurrentUser } from './common';
-import { Buckets, Client, InboxListOptions, Users } from '@textile/hub';
 import { Observable } from 'rxjs';
 
 /**
@@ -22,9 +21,9 @@ interface AWF_IAuth {
 
   getSession(): Observable<{
     data: {
-      buck: Buckets;
-      client: Client;
-      user: Users;
+      buck: never;
+      never: never;
+      user: never;
     };
   }>;
 
@@ -61,7 +60,7 @@ interface AWF_IAuth {
     };
   }>;
 
-  getMessages(args: InboxListOptions): Observable<{
+  getMessages(args: never): Observable<{
     data: IMessage[];
   }>;
 

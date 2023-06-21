@@ -198,7 +198,7 @@ const Layout: React.FC<RootComponentProps> = props => {
             className={tw(apply(`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`))}
           >
             <div className={tw('sticky top-0 z-50')}>
-              <div className={tw('pt-4 bg(white dark:black)')}>
+              <div className={tw('pt-4 bg(white dark:black) rounded-b-2xl')}>
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { EthAddressSchema, EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
+import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import BoxedIcon from './boxed-icon';
@@ -24,25 +24,26 @@ export interface IConnectWalletProps {
 }
 
 const ConnectWallet: React.FC<IConnectWalletProps> = props => {
-  const { selectedProvider, onSignIn, worldName, signInError } = props;
+  const { selectedProvider, onSignIn, onDisconnect, worldName, signInError } = props;
   const [errors, setErrors] = React.useState<{ title: string; subtitle: string }[]>([]);
   const [isSignInRetry, setIsSignInRetry] = React.useState(false);
 
-  const connectWalletCall = useConnectWallet(props.selectedProvider);
+  const connectWalletCall = useConnectWallet(selectedProvider);
   const signInCall = React.useRef(onSignIn);
-  const signOutCall = React.useRef(props.onDisconnect);
+  const signOutCall = React.useRef(onDisconnect);
 
   const { t } = useTranslation('app-auth-ewa');
   const requiredNetworkQuery = useRequiredNetwork();
   const injectedProviderQuery = useInjectedProvider();
 
-  const changedNetwork = useNetworkChangeListener();
+  const [changedNetwork, changedNetworkUnsubscribe] = useNetworkChangeListener();
 
   React.useEffect(() => {
     if (
       requiredNetworkQuery.isSuccess &&
       +changedNetwork?.chainId === requiredNetworkQuery.data.chainId &&
-      !connectWalletCall.isSuccess
+      !connectWalletCall.isSuccess &&
+      !connectWalletCall.isLoading
     ) {
       setErrors([]);
       connectWalletCall.mutate();
@@ -59,6 +60,9 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
       }
       setErrors(prev => [...prev, { title: errorTitle, subtitle: errorSubtitle }]);
     }
+    return () => {
+      changedNetworkUnsubscribe();
+    };
   }, [changedNetwork, requiredNetworkQuery.data]);
 
   const requiredNetworkName = React.useMemo(() => {
@@ -100,7 +104,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     }
   }, [connectWalletCall.isSuccess, isSignInRetry]);
 
-  const handleChangeNetwork = React.useCallback(() => {
+  const handleChangeNetwork = () => {
     // change network to requiredNetwork
     // avoid spamming the user with errors
     switchToRequiredNetwork().catch(err => {
@@ -118,11 +122,17 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
       if (errors.find(err => err.title === errorTitle)) {
         return;
       }
-      setErrors(prevState => [...prevState, { title: errorTitle, subtitle: errorSubtitle }]);
+      setErrors(prevState => {
+        if (prevState.find(err => err.title === errorTitle)) {
+          return [...prevState, { title: errorTitle, subtitle: errorSubtitle }];
+        }
+        return prevState;
+      });
     });
-  }, [errors]);
+  };
 
   const handleSignInRetry = () => {
+    setErrors([]);
     setIsSignInRetry(true);
     signInCall.current(selectedProvider);
   };
@@ -134,6 +144,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
 
   const errorCardStyles =
     'flex flex-col border border(errorLight dark:errorDark) bg(errorLight/30 dark:errorDark/30) rounded-lg p-2 justify-center items-center';
+
   return (
     <Box customStyle={'p-4'}>
       <Box customStyle="justify-center flex flex-col">
@@ -189,7 +200,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
         </Box>
       )}
       {signInError && (
-        <Box customStyle={errorCardStyles}>
+        <Box customStyle={`${errorCardStyles} my-4`}>
           <Text variant="body1" weight="bold" customStyle="my-2">
             {t('There was an error signing you in')}
           </Text>
@@ -208,7 +219,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
         </Box>
       )}
       {errors.map((errObj, idx) => (
-        <Box key={idx} customStyle={`${errorCardStyles} mt-4`}>
+        <Box key={idx} customStyle={`${errorCardStyles} my-4`}>
           <Text variant="body1" weight="bold" customStyle="my-2">
             {errObj.title}
           </Text>
@@ -220,10 +231,10 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
       <Box>
         {!!connectWalletCall.data?.length && (
           <Box customStyle="items-center">
-            <Text variant="subtitle2">{t('Your Address')}</Text>
-            <Text variant="subtitle2" color="secondaryText">
-              {connectWalletCall.data}
+            <Text variant="subtitle2" weight="bold">
+              {t('Your Address')}
             </Text>
+            <Text variant="subtitle2">{connectWalletCall.data}</Text>
           </Box>
         )}
         <Box customStyle="flex flex-row justify-center items-center">

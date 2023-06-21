@@ -10,7 +10,6 @@ export interface IWeb3ConnectCardProps {
   titleLabel: string;
   subtitleLabel?: string;
   leftIconType: IconType;
-  iconBackground?: string;
   handleClick: () => void;
   iconSize?: IconProps['size'];
   iconColor?: IconProps['color'];
@@ -26,19 +25,21 @@ const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
     handleClick,
     boxSize = 12,
     boxBgColor = 'white',
+    iconColor,
+    iconSize,
   } = props;
 
   return (
     <BasicCardBox
-      border={true}
+      elevation={'none'}
       accentBorder={true}
-      customStyle="cursor-pointer"
+      customStyle="cursor-pointer select-none"
       onClick={handleClick}
     >
       <Box customStyle="flex items-center">
         <BoxedIcon
-          iconColor={props.iconColor}
-          iconSize={props.iconSize || 'lg'}
+          iconColor={iconColor}
+          iconSize={iconSize || 'lg'}
           iconType={leftIconType}
           boxSize={boxSize}
           background={`bg(${boxBgColor} dark:${boxBgColor})`}

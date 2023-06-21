@@ -4,7 +4,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import { useTranslation } from 'react-i18next';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+// import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Web3ConnectCard from './web3-connect-card';
@@ -48,7 +48,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
   };
 
   return (
-    <BasicCardBox data-testid="providers-list">
+    <Box data-testid="providers-list">
       <Text variant="button-lg" align="center" as="h3">
         {`✨ ${t('Welcome to AKASHA World')} ✨`}
       </Text>
@@ -114,10 +114,12 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
               leftIconType={injectedProvider.iconType}
               titleLabel={injectedProvider.titleLabel}
               subtitleLabel={injectedProvider.subtitleLabel}
-              iconBackground="lightGold"
               handleClick={() => handleProviderClick(EthProviders.Web3Injected)}
               iconColor={
                 injectedProvider.name === INJECTED_PROVIDERS.METAMASK ? 'self-color' : undefined
+              }
+              boxBgColor={
+                injectedProvider.name === INJECTED_PROVIDERS.METAMASK ? 'yellow-100' : undefined
               }
             />
           </Box>
@@ -127,7 +129,6 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
             leftIconType="walletconnect"
             subtitleLabel={t('Scan with WalletConnect')}
             titleLabel="WalletConnect"
-            iconBackground="deepBlue"
             handleClick={() => handleProviderClick(EthProviders.WalletConnect)}
             iconSize={{
               width: 48,
@@ -153,7 +154,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
         </Anchor>
         {'.'}
       </Text>
-    </BasicCardBox>
+    </Box>
   );
 };
 

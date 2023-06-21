@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 16.13.0
+          node-version: 18.16.0
           cache: 'yarn'
       - name: Checkout
         uses: actions/checkout@v2
@@ -36,15 +36,15 @@ jobs:
           CI: 1
         run: |
           yarn install --frozen-lockfile
-      - name: Publish new versions
-        env:
-          INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}
-          ETH_DEPLOY_KEY: ${{ secrets.ETH_DEPLOY_KEY_STAGING }}
-          INTEGRATION_REGISTRY_ADDRESS:  ${{ secrets.INTEGRATION_REGISTRY_ADDRESS_STAGING }}
-          RINKEBY_JSONRPC: ${{ secrets.RINKEBY_JSONRPC_STAGING }}
-        run: |
-          yarn run compile:sc
-          yarn run deploy:sc
+#      - name: Publish new versions
+#        env:
+#          INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}
+#          ETH_DEPLOY_KEY: ${{ secrets.ETH_DEPLOY_KEY_STAGING }}
+#          INTEGRATION_REGISTRY_ADDRESS:  ${{ secrets.INTEGRATION_REGISTRY_ADDRESS_STAGING }}
+#          RINKEBY_JSONRPC: ${{ secrets.RINKEBY_JSONRPC_STAGING }}
+#        run: |
+#          yarn run compile:sc
+#          yarn run deploy:sc
       - name: Trigger update message
         run: |
           curl ${{secrets.WEBHOOK_BOT_STAGING}}
