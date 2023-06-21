@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin, useValidateMessage, useAddDevKeyFromMessage } from '@akashaorg/ui-awf-hooks';
 
@@ -20,8 +19,6 @@ import menuRoute, {
   ONBOARDING_STEP_TWO,
 } from '../../routes';
 
-const { SteppedActionCard } = DS;
-
 interface IDevDashOnboardingStepsProps {
   activeIndex?: number;
 }
@@ -29,13 +26,13 @@ interface IDevDashOnboardingStepsProps {
 const DevDashOnboardingSteps: React.FC<
   RootComponentProps & IDevDashOnboardingStepsProps
 > = props => {
-  const { plugins } = props;
+  const { baseRouteName, plugins } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
-  const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
-  const [messageName, setMessageName] = React.useState<string>('');
-  const [message, setMessage] = React.useState<string>('');
+  const [activeIndex, setActiveIndex] = useState<number>(props.activeIndex || 0);
+  const [messageName] = useState<string>('');
+  const [message] = useState<string>('');
 
   const loginQuery = useGetLogin();
 
@@ -49,16 +46,16 @@ const DevDashOnboardingSteps: React.FC<
     ONBOARDING_STEP_TWO,
     ONBOARDING_STEP_THREE,
     ONBOARDING_STEP_FOUR,
-  ].map(el => `${props.baseRouteName}${menuRoute[el]}`);
+  ].map(el => `${baseRouteName}${menuRoute[el]}`);
 
-  React.useEffect(() => {
-    if (!loginQuery.data?.pubKey) {
+  useEffect(() => {
+    if (!loginQuery.data?.ethAddress) {
       // if guest, redirect to onboarding step 1 after authentication
       navigateTo?.({
         appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: (routes: Record<string, string>) => {
           return `${routes.Connect}?${new URLSearchParams({
-            redirectTo: `${props.baseRouteName}${menuRoute[ONBOARDING_STEP_ONE]}`,
+            redirectTo: `${baseRouteName}${menuRoute[ONBOARDING_STEP_ONE]}`,
           }).toString()}`;
         },
       });
@@ -66,7 +63,7 @@ const DevDashOnboardingSteps: React.FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const idx = pathnameArr.indexOf(location.pathname);
     if (idx === -1) {
       return setActiveIndex(0);
@@ -75,39 +72,28 @@ const DevDashOnboardingSteps: React.FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // add key after validating
     if (
       validateMutation.isSuccess &&
-      validateMutation.data?.body?.aud === loginQuery.data?.pubKey
+      validateMutation.data?.body?.aud === loginQuery.data?.ethAddress
     ) {
       addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validateMutation.isSuccess]);
 
-  React.useEffect(() => {
-    if (addKeyMutation.isSuccess) {
-      return navigateTo?.({
-        appName: '@akashaorg/app-dev-dashboard',
-        getNavigationUrl: () => menuRoute[ONBOARDING_STEP_FOUR],
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addKeyMutation.isSuccess]);
-
-  const isOnboarded = React.useMemo(() => {
+  const isOnboarded = useMemo(() => {
     return Boolean(window.localStorage.getItem(ONBOARDING_STATUS));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleIconClick = () => {
-    plugins['@akashaorg/app-routing']?.routing?.navigateTo({
-      appName: '@akashaorg/app-dev-dashboard',
-      getNavigationUrl: () => menuRoute[ONBOARDING],
-    });
-  };
-
+  const stepLabels = [
+    'terms_and_conditions',
+    'download_cli_tool',
+    'sign_message',
+    'key_confirmation',
+  ];
   const handleClick = (step: string) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-dev-dashboard',
@@ -120,22 +106,6 @@ const DevDashOnboardingSteps: React.FC<
       appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: (routes: Record<string, string>) => routes.explore,
     });
-  };
-
-  const handleMessageNameInputChange = ev => {
-    setMessageName(ev.target.value);
-  };
-
-  const handleMessageInputChange = ev => {
-    setMessage(ev.target.value);
-  };
-
-  const handleValidateMessage = () => {
-    validateMutation.mutate(message);
-  };
-
-  const handleCopy = (value: string) => () => {
-    navigator.clipboard.writeText(value);
   };
 
   const handleFinishOnboarding = () => {
@@ -158,19 +128,15 @@ const DevDashOnboardingSteps: React.FC<
   }
 
   return (
-    <SteppedActionCard
-      titleLabel={t('EW Developer')}
-      activeIndex={activeIndex}
-      bottomMargin="small"
-      stepLabels={[t('Terms and Conditions'), t('Download CLI tool'), t('Message')]}
-      extraStepLabel={t('Dev Key Confirmation')}
-      handleIconClick={handleIconClick}
-    >
+    <>
       {activeIndex === 0 && (
         <StepOne
-          titleLabel={t('First things first ✨')}
+          stepLabels={stepLabels}
+          activeIndex={activeIndex}
+          titleLabel={t("Developer's Terms & Conditions")}
+          introLabel={t('First things first ✨')}
           subtitleLabel={t(
-            'To form a part of ethereum world’s developer community you need to accept a few conditions, please make sure to read them carefully 😸',
+            "To form a part of ethereum world's developer community you need to accept a few conditions, please make sure to read them carefully 😸",
           )}
           paragraphs={[
             t(
@@ -186,21 +152,24 @@ const DevDashOnboardingSteps: React.FC<
               'The Applications will not be used to solicit or promote business or custom or present commercial activities or unlawful activity.',
             ),
           ]}
-          acceptLabel={t('Accept')}
-          rejectLabel={t('Reject')}
-          onAcceptClick={handleClick(ONBOARDING_STEP_TWO)}
-          onRejectClick={handleClick(ONBOARDING)}
+          cancelButtonLabel={t('Reject')}
+          confirmButtonLabel={t(' I Accept')}
+          onCancelButtonClick={handleClick(ONBOARDING)}
+          onConfirmButtonClick={handleClick(ONBOARDING_STEP_TWO)}
         />
       )}
       {activeIndex === 1 && (
         <StepTwo
-          titleLabel={t('To generate your first message you need to install the CLI tool')}
+          stepLabels={stepLabels}
+          activeIndex={activeIndex}
+          titleLabel={t('Generating Your First Message')}
+          introLabel={t('To generate your first message you need to install the CLI tool')}
           subtitleLabel={t(
             'if you have installed the CLI tool and generated your key already, you can skip this step',
           )}
           ctaListItem={[t('Install'), t('CLI tool'), t('from the AKASHAVerse.')]}
           paragraphs={[
-            t('Once installed, open it and write the following command.'),
+            // t('Once installed, open it and write the following command.'),
             t(
               'At the prompt, specify the kind of token you want, or press Enter to accept the default.',
             ),
@@ -210,15 +179,18 @@ const DevDashOnboardingSteps: React.FC<
             t('Verify that your selections are correct.'),
             t('Enter your user ID information.'),
           ]}
-          skipLabel={t('Skip')}
-          readyLabel={t("I'm ready")}
+          cancelButtonLabel={t('Skip')}
+          confirmButtonLabel={t("I'm ready!")}
           onCTAClick={handleCTAClick}
-          onSkipClick={handleClick(ONBOARDING_STEP_THREE)}
-          onReadyClick={handleClick(ONBOARDING_STEP_THREE)}
+          onCancelButtonClick={handleClick(ONBOARDING_STEP_THREE)}
+          onConfirmButtonClick={handleClick(ONBOARDING_STEP_THREE)}
         />
       )}
       {activeIndex === 2 && (
         <StepThree
+          stepLabels={stepLabels}
+          activeIndex={activeIndex}
+          titleLabel={t('Generating Your First Message')}
           ctaIntroLabel={[
             t('Make sure that you have generated a message from the CLI tool, if not, you can go'),
             t('back'),
@@ -226,38 +198,35 @@ const DevDashOnboardingSteps: React.FC<
           ]}
           messageNameTitleLabel={t('Message name')}
           messageNameInputPlaceholder={t('Give your message a name (optional)')}
-          messageNameValue={messageName}
           messageTitleLabel={t('Message')}
           messageInputPlaceholder={t('Paste the generated message here')}
-          messageValue={message}
           validationStatus={{
             isError: validateMutation.isError,
             errorMessage: t('{{error}}', { error: validateMutation.error?.message || '' }),
           }}
-          isFetching={validateMutation.isLoading || addKeyMutation.isLoading}
-          buttonLabel={t('Validate Message')}
+          confirmButtonLabel={t('Validate Message')}
           onCTAClick={handleClick(ONBOARDING_STEP_TWO)}
-          onMessageNameInputChange={handleMessageNameInputChange}
-          onMessageInputChange={handleMessageInputChange}
-          onButtonClick={handleValidateMessage}
+          onConfirmButtonClick={handleClick(ONBOARDING_STEP_FOUR)}
         />
       )}
       {activeIndex === 3 && (
         <StepFour
+          stepLabels={stepLabels}
+          activeIndex={activeIndex}
           titleLabel={t('Key Confirmation')}
+          subtitleLabel={t('Please confirm your key before you add it')}
+          assetName="key-confirmation"
           nonameLabel={t('Unnamed Key')}
           unusedLabel={t('Unused')}
           usedLabel={t('Used')}
           pendingConfirmationLabel={t('Pending Confirmation')}
           devPubKeyLabel={t('Dev Public Key 🔑')}
           dateAddedLabel={t('Date added 🗓')}
-          subtitleLabel={t('Please confirm your key before you add it')}
-          buttonLabel={t('Confirm')}
-          onCopyClick={handleCopy}
-          onButtonClick={handleFinishOnboarding}
+          confirmButtonLabel={t('Confirm')}
+          onConfirmButtonClick={handleFinishOnboarding}
         />
       )}
-    </SteppedActionCard>
+    </>
   );
 };
 

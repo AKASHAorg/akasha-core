@@ -1,26 +1,21 @@
 import React from 'react';
 
-import DS from '@akashaorg/design-system';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-const { Box, Text } = DS;
-
-interface IListItemProps {
-  marginBottom?: string;
+export type ListItemProps = {
   listElementText: string;
   item: string;
-}
+};
 
-const ListItem: React.FC<IListItemProps> = props => {
-  const { listElementText, item, marginBottom = 'large' } = props;
+const ListItem: React.FC<ListItemProps> = props => {
+  const { listElementText, item } = props;
 
   return (
-    <Box direction="row" margin={{ top: 'large' }}>
-      <Text size="large" margin={{ right: 'xsmall' }}>
-        {listElementText}
-      </Text>
-      <Text size="large" margin={{ bottom: marginBottom }}>
-        {item}
-      </Text>
+    <Box customStyle="flex space-x-1">
+      <Text>{listElementText}</Text>
+
+      <Text>{item}</Text>
     </Box>
   );
 };

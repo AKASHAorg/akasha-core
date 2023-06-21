@@ -1,44 +1,63 @@
 import React from 'react';
+import { tw } from '@twind/core';
 
-import DS from '@akashaorg/design-system';
-import { useGetDevKeys } from '@akashaorg/ui-awf-hooks';
-import { IDevKeyCardProps } from '@akashaorg/design-system/lib/components/DevKeyCard';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import {
+  DevKeyCard,
+  DevKeyCardProps,
+} from '@akashaorg/design-system-components/lib/components/DevKeyCard';
+import {
+  SteppedActionWrapper,
+  SteppedActionWrapperProps,
+} from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
 import { BaseStepsProps } from './step-one';
-import HeroImageCard, { IHeroImageCard } from '../profile/hero-image-card';
 
-const { Box, Button, DevKeyCard } = DS;
+type ExtendableProps = BaseStepsProps & SteppedActionWrapperProps & DevKeyCardProps;
 
-type ExtendableProps = BaseStepsProps & IDevKeyCardProps & IHeroImageCard;
+export type StepFourProps = ExtendableProps & {
+  assetName?: string;
+  assetExtension?: string;
+  publicImgPath?: string;
+};
 
-interface IStepFourProps extends ExtendableProps {
-  buttonLabel: string;
-  onButtonClick: () => void;
-}
+const StepFour: React.FC<StepFourProps> = props => {
+  const {
+    subtitleLabel,
+    assetName = 'ok',
+    assetExtension = 'webp',
+    publicImgPath = '/images',
+  } = props;
 
-const StepFour: React.FC<IStepFourProps> = props => {
-  const { buttonLabel, onButtonClick } = props;
+  /**
+   * sample, remove when connected to hook
+   */
+  const sampleDevKey = {
+    addedAt: '2022-10-05T22:01:34.889Z',
+    name: 'Sample Key',
+    pubKey: 'bbaareigw7ua7k3thuacm2qpuhkgxone3ynsfo6n2v6pwgzpq2ie3eu7lpi',
+  };
 
-  const getKeysQuery = useGetDevKeys(true);
+  // const getKeysQuery = useGetDevKeys(true);
 
-  const devKeys = getKeysQuery.data || [];
+  // const devKeys = getKeysQuery.data || [];
 
   return (
-    <Box gap="small">
-      <HeroImageCard {...props} assetName="key" wrapperBoxMargin={{ vertical: 'medium' }} />
+    <SteppedActionWrapper {...props}>
+      <Box customStyle="flex flex-col w-full">
+        <Text>{subtitleLabel}</Text>
 
-      <Box
-        round="0.5rem"
-        pad={{ vertical: 'xxsmall', horizontal: 'xsmall' }}
-        border={{ color: 'border' }}
-      >
-        <DevKeyCard {...props} item={devKeys[0]} />
-      </Box>
+        <Box customStyle="w-[17.5rem] h-[17.5rem] my-6 self-center">
+          <img
+            className={tw('object-contain')}
+            src={`${publicImgPath}/${assetName}.${assetExtension}`}
+          />
+        </Box>
 
-      <Box direction="row" justify="end">
-        <Button primary={true} label={buttonLabel} onClick={onButtonClick} />
+        <DevKeyCard {...props} item={sampleDevKey} />
       </Box>
-    </Box>
+    </SteppedActionWrapper>
   );
 };
 

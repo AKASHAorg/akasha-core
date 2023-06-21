@@ -1,55 +1,45 @@
 import React from 'react';
 
-import DS from '@akashaorg/design-system';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import {
+  SteppedActionWrapperProps,
+  SteppedActionWrapper,
+} from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
 import ListItem from './list-item';
 
-const { Box, Button, Text } = DS;
-
-export interface BaseStepsProps {
-  titleLabel?: string;
+export type BaseStepsProps = {
+  introLabel?: string;
   subtitleLabel?: string;
-}
+};
 
-interface IStepOneProps extends BaseStepsProps {
-  paragraphs: string[];
-  acceptLabel: string;
-  rejectLabel: string;
-  onRejectClick: () => void;
-  onAcceptClick: () => void;
-}
+export type StepOneProps = BaseStepsProps &
+  SteppedActionWrapperProps & {
+    paragraphs: string[];
+  };
 
-const StepOne: React.FC<IStepOneProps> = props => {
-  const {
-    titleLabel,
-    subtitleLabel,
-    paragraphs,
-    acceptLabel,
-    rejectLabel,
-    onAcceptClick,
-    onRejectClick,
-  } = props;
+const StepOne: React.FC<StepOneProps> = props => {
+  const { introLabel, subtitleLabel, paragraphs } = props;
 
   return (
-    <Box>
-      {titleLabel && (
-        <Text size="large" margin={{ bottom: 'xsmall' }} weight="bold">
-          {titleLabel}
-        </Text>
-      )}
-      {subtitleLabel && (
-        <Text size="large" margin={{ bottom: 'xsmall' }}>
-          {subtitleLabel}
-        </Text>
-      )}
-      {paragraphs.map((paragraph: string, idx: number) => (
-        <ListItem key={idx} listElementText="•" item={paragraph} />
-      ))}
-      <Box direction="row" justify="end" gap="small">
-        <Button label={rejectLabel} onClick={onRejectClick} />
-        <Button primary={true} label={acceptLabel} onClick={onAcceptClick} />
+    <SteppedActionWrapper {...props}>
+      <Box>
+        {introLabel && (
+          <Text customStyle="mb-2" weight="bold">
+            {introLabel}
+          </Text>
+        )}
+
+        {subtitleLabel && <Text customStyle="mb-2">{subtitleLabel}</Text>}
+
+        <Box customStyle="space-y-4">
+          {paragraphs.map((paragraph: string, idx: number) => (
+            <ListItem key={idx} listElementText="•" item={paragraph} />
+          ))}
+        </Box>
       </Box>
-    </Box>
+    </SteppedActionWrapper>
   );
 };
 

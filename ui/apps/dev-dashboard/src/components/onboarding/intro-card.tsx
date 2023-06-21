@@ -1,66 +1,60 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
+import { tw } from '@twind/core';
 
-const { Box, Image, Text, BasicCardBox } = DS;
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-interface IDevDashOnboardingIntroProps {
+type DevDashOnboardingIntroProps = {
   assetName?: string;
   titleLabel: string;
   introLabel: string;
   descriptionLabel: string;
   publicImgPath?: string;
-  ctaLabel: string;
-  onCTAClick: () => void;
-}
+  ctaButtonLabel: string;
+  onCTAButtonClick: () => void;
+};
 
 export const ONBOARDING_STATUS = 'ewa-dev-dashboard-onboarding-status';
 
-const DevDashOnboardingIntro: React.FC<IDevDashOnboardingIntroProps> = props => {
+const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = props => {
   const {
     assetName = 'dev-dashboard-intro',
+    publicImgPath = '/images',
     titleLabel,
     introLabel,
     descriptionLabel,
-    publicImgPath = '/images',
-    ctaLabel,
-    onCTAClick,
+    ctaButtonLabel,
+    onCTAButtonClick,
   } = props;
 
   return (
     <BasicCardBox>
-      <Box align="start" fill="horizontal" pad="medium">
-        <Box direction="row" fill="horizontal" justify="between" margin={{ bottom: 'xsmall' }}>
-          <Text size="xlarge" weight="bold">
-            {titleLabel}
-          </Text>
+      <Box customStyle="flex flex-col items-center w-full p-2">
+        <Text variant="h5" align="center" weight="bold">
+          {titleLabel}
+        </Text>
+
+        <Box customStyle="w-[17.5rem] h-[17.5rem] my-6">
+          <img className={tw('object-contain')} src={`${publicImgPath}/${assetName}.webp`} />
         </Box>
-        <Box fill="horizontal" pad="medium">
-          <Box height="17.5rem" width="17.5rem" margin={{ bottom: 'small' }} alignSelf="center">
-            <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
-          </Box>
-          <Text size="large" textAlign="center" margin={{ bottom: 'xsmall' }} weight="bold">
-            {introLabel}
-          </Text>
-          <Text
-            size="large"
-            color="secondaryText"
-            textAlign="start"
-            margin={{ bottom: 'xsmall' }}
-            style={{ lineHeight: '1.5' }}
-          >
-            {descriptionLabel}
-          </Text>
-          <Text
-            size="large"
-            color="accentText"
-            textAlign="end"
-            margin={{ top: '2.625rem' }}
-            style={{ cursor: 'pointer' }}
-            onClick={onCTAClick}
-          >
-            {ctaLabel}
-          </Text>
-        </Box>
+
+        <Text variant="h5" align="center" weight="bold" customStyle="mt-2">
+          {introLabel}
+        </Text>
+
+        <Text align="start" customStyle="mt-2">
+          {descriptionLabel}
+        </Text>
+
+        <Button
+          size="md"
+          customStyle="self-end mt-6"
+          variant="primary"
+          label={ctaButtonLabel}
+          onClick={onCTAButtonClick}
+        />
       </Box>
     </BasicCardBox>
   );

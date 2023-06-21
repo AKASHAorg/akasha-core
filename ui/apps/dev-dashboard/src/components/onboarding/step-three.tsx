@@ -1,31 +1,37 @@
 import React from 'react';
 
-import DS from '@akashaorg/design-system';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import {
+  SteppedActionWrapper,
+  SteppedActionWrapperProps,
+} from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
-import DevMessageForm, { IDevMessageFormProps } from '../profile/dev-message-form';
+import DevMessageForm, { DevMessageFormProps } from '../profile/dev-message-form';
 
-const { Box, Text } = DS;
+export type StepThreeProps = DevMessageFormProps &
+  SteppedActionWrapperProps & {
+    ctaIntroLabel: string[];
+    onCTAClick: () => void;
+  };
 
-interface IStepThreeProps extends IDevMessageFormProps {
-  ctaIntroLabel: string[];
-  onCTAClick: () => void;
-}
-
-const StepThree: React.FC<IStepThreeProps> = props => {
+const StepThree: React.FC<StepThreeProps> = props => {
   const { ctaIntroLabel, onCTAClick } = props;
 
   return (
-    <Box gap="xsmall">
-      <Text size="large" margin={{ top: 'xsmall' }}>
+    <SteppedActionWrapper {...props}>
+      <Text>
         {ctaIntroLabel[0]}{' '}
-        <Text size="large" color="accentText" style={{ cursor: 'pointer' }} onClick={onCTAClick}>
-          {ctaIntroLabel[1]}{' '}
-        </Text>
+        <Button plain={true} onClick={onCTAClick}>
+          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }} weight="bold">
+            {ctaIntroLabel[1]}
+          </Text>
+        </Button>{' '}
         {ctaIntroLabel[2]}
       </Text>
 
       <DevMessageForm {...props} />
-    </Box>
+    </SteppedActionWrapper>
   );
 };
 
