@@ -17,6 +17,7 @@ import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../.
 
 interface Notification {
   id: string;
+
   [key: string]: any;
 }
 
@@ -70,11 +71,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const loginQuery = useGetLogin();
 
-  const isLoggedIn = React.useMemo(() => {
-    return loginQuery.data?.ethAddress;
-  }, [loginQuery.data?.ethAddress]);
-
-  const notifReq = useFetchNotifications(loginQuery.data?.isReady && isLoggedIn);
+  const notifReq = useFetchNotifications(!loginQuery.isSuccess && loginQuery.data.id);
 
   // mock data used for displaying something. Change when there's real data
   const allNotifications: Notification[] = [

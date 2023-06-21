@@ -15,7 +15,7 @@ type SignMessagePayload = {
 };
 
 type VerifySignaturePayload = {
-  pubKey: string;
+  did: string;
   data: string | Record<string, unknown> | Uint8Array;
   signature: string;
 };

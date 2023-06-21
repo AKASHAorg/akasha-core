@@ -18,7 +18,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 const EntryCardSaveButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
   const loggedUserReq = useGetLogin();
-  const bookmarkReq = useGetBookmarks(loggedUserReq.data.ethAddress, loggedUserReq.data.isReady);
+  const bookmarkReq = useGetBookmarks(loggedUserReq.data?.id, loggedUserReq.isSuccess);
   const bookmarkCreate = useSaveBookmark();
   const bookmarkDelete = useDeleteBookmark();
   const [analyticsActions] = useAnalytics();

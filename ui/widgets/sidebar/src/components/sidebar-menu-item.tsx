@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/SideBar/sidebar-menu-item';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { LoginState } from '@akashaorg/ui-awf-hooks';
 import DS from '@akashaorg/design-system';
 import { IMessage } from '@akashaorg/typings/sdk';
+
 const { Box, SidebarMenuItem } = DS;
 
 type MenuItemPassedProps = {

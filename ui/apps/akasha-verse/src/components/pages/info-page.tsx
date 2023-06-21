@@ -27,7 +27,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
   const loginQueryReq = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
-    return !!loginQueryReq.data.pubKey;
+    return !!loginQueryReq.data?.id;
   }, [loginQueryReq.data]);
 
   const network = useCurrentNetwork(isLoggedIn).data;

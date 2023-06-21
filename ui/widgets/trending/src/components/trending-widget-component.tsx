@@ -17,8 +17,8 @@ import {
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
-import TrendingTagCard from './TrendingTagCard';
-import TrendingProfileCard from './TrendingProfileCard';
+import TrendingTagCard from './trending-tag-card';
+import TrendingProfileCard from './trending-profile-card';
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -36,14 +36,12 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     .slice(0, 4)
     .map((profile: { pubKey: string }) => profile.pubKey);
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.pubKey, followPubKeyArr);
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.id, followPubKeyArr);
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  const tagSubscriptionsReq = useTagSubscriptions(
-    loginQuery.data?.isReady && loginQuery.data?.ethAddress,
-  );
+  const tagSubscriptionsReq = useTagSubscriptions(loginQuery.data?.id);
   const tagSubscriptions = tagSubscriptionsReq.data;
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 

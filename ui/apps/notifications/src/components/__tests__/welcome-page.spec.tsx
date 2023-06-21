@@ -1,5 +1,5 @@
 import * as React from 'react';
-import WelcomePage from '../newComponents/WelcomePage';
+import WelcomePage from '../pages/welcome-page';
 
 import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 

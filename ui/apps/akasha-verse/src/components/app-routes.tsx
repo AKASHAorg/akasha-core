@@ -8,7 +8,7 @@ import MasterPage from './pages/master-page';
 import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO, APPS } from '../routes';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useGetAllInstalledApps,
   useGetLatestReleaseInfo,
@@ -17,15 +17,15 @@ import {
 import { hiddenIntegrations } from '../hidden-integrations';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const { worldConfig } = props;
+  const { worldConfig, plugins, baseRouteName } = props;
 
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data.pubKey && loginQuery.data.isReady;
+    return !!loginQuery.data.id;
   }, [loginQuery.data]);
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const connect = () => {
     navigateTo({
@@ -76,7 +76,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
   return (
-    <Router basename={props.baseRouteName}>
+    <Router basename={baseRouteName}>
       <MasterPage isLoggedIn={isLoggedIn} onConnect={connect} navigateTo={navigateTo}>
         <Routes>
           <Route

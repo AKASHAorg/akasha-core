@@ -389,8 +389,8 @@ export function useUnfollow() {
         const sdk = getSDK();
         const user = await sdk.api.auth.getCurrentUser();
         if (user) {
-          await queryClient.invalidateQueries([PROFILE_KEY, user.pubKey]);
-          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.pubKey]);
+          await queryClient.invalidateQueries([PROFILE_KEY, user.id]);
+          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.id]);
         }
       }
     },

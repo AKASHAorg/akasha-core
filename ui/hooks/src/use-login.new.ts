@@ -8,17 +8,6 @@ import { logError } from './utils/error-handler';
 
 const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
-export interface LoginState extends CurrentUser {
-  isReady?: boolean;
-  waitForAuth?: boolean;
-  isSigningIn?: boolean;
-  // boolean to indicate if the user was previously logged in
-  // data from cache!
-  // if this is true, we can assume that the user is logged in
-  // otherwise, we can assume that the user is not logged in
-  fromCache?: boolean;
-}
-
 export function useConnectWallet(provider: EthProviders) {
   const sdk = getSDK();
   return useMutation(async () => sdk.api.auth.connectAddress(provider));
@@ -40,19 +29,13 @@ export function useGetLogin(onError?: (error: Error) => void) {
 
   useGlobalLogin({
     onLogin: data => {
-      queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
+      queryClient.setQueryData<CurrentUser>([LOGIN_STATE_KEY], prev => ({
         ...prev,
         ...data,
       }));
     },
     onLogout: () => {
       queryClient.setQueryData([LOGIN_STATE_KEY], null);
-    },
-    onLoadFromCache: data => {
-      queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
-        ...prev,
-        ...data,
-      }));
     },
     onError: payload => {
       if (onError) {
@@ -65,8 +48,8 @@ export function useGetLogin(onError?: (error: Error) => void) {
   return useQuery(
     [LOGIN_STATE_KEY],
     () =>
-      new Promise<LoginState>(() => {
-        const currentData = queryClient.getQueryData<LoginState>([LOGIN_STATE_KEY]);
+      new Promise<CurrentUser>(() => {
+        const currentData = queryClient.getQueryData<CurrentUser>([LOGIN_STATE_KEY]);
         return currentData;
       }),
   );
@@ -122,13 +105,8 @@ export function useLogout() {
     async () => {
       const resp = await sdk.api.auth.signOut();
       if (resp.data) {
-        queryClient.setQueryData([LOGIN_STATE_KEY], {
-          ethAddress: null,
-          pubKey: null,
-          isReady: false,
-          filAddress: null,
-          isNewUser: false,
-        });
+        await queryClient.resetQueries([LOGIN_STATE_KEY]);
+        // queryClient.setQueryData([LOGIN_STATE_KEY], {});
         return resp.data;
       }
     },

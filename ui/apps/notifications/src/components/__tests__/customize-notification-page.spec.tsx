@@ -1,5 +1,5 @@
 import * as React from 'react';
-import CustomizeNotificationPage from '../newComponents/CustomizeNotificationPage';
+import CustomizeNotificationPage from '../pages/customize-notification-page';
 
 import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 
