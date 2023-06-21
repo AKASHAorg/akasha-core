@@ -12,9 +12,6 @@
       "sourceRoot": "typings/src",
       "projectType": "library"
     },
-    "@akashaorg/hub-api": {
-      "root": "api/hub"
-    },
     "@akashaorg/awf-sdk": {
       "root": "sdk",
       "sourceRoot": "sdk/src",

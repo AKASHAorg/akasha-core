@@ -91,6 +91,14 @@ export const UserProfileFragmentDoc = /*#__PURE__*/ `
       height
     }
   }
+  followers(last: 5) {
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+  }
   createdAt
 }
     `;

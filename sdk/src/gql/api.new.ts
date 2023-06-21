@@ -78,6 +78,14 @@ export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
       height
     }
   }
+  followers(last: 5) {
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+  }
   createdAt
 }
     `;

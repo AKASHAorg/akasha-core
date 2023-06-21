@@ -1,0 +1,27 @@
+type AppRelease @loadModel(id: "kjzl6hvfrbw6cb51sm3goew8wbnzev9io25zm0df7kwi0pyd931vdoqxs8sh10d") {
+  id: ID!
+}
+
+type LabeledValue{
+  propertyType: String! @string(minLength: 2, maxLength: 100)
+  label: String! @string(minLength: 6, maxLength: 100)
+  value: String! @string(minLength: 3, maxLength: 2000)
+}
+
+enum BlockDef{
+  TEXT,
+  FORM,
+  OTHER
+}
+
+# model builder
+type ContentBlock @createModel(accountRelation: LIST, description: "AKASHA Basic Content Block") {
+  content: [LabeledValue!]! @list(maxLength: 20)
+  appVersionID: StreamID! @documentReference(model: "AppRelease")
+  appVersion: AppRelease! @relationDocument(property: "appVersionID")
+  version: CommitID! @documentVersion
+  active: Boolean!
+  createdAt: DateTime!
+  author: DID! @documentAccount
+  kind: BlockDef!
+}
