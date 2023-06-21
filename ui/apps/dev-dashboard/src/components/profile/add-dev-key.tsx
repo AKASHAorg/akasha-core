@@ -28,8 +28,8 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const [messageName, setMessageName] = React.useState<string>('');
-  const [message, setmessage] = React.useState<string>('');
+  const [messageName] = React.useState<string>('');
+  const [message] = React.useState<string>('');
 
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
@@ -65,18 +65,6 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
     });
   };
 
-  const handleMessageNameInputChange = ev => {
-    setMessageName(ev.target.value);
-  };
-
-  const handleMessageInputChange = ev => {
-    setmessage(ev.target.value);
-  };
-
-  const handleValidateMessage = () => {
-    validateMutation.mutate(message);
-  };
-
   return (
     <MainAreaCardBox className={className}>
       <CardTitle
@@ -91,19 +79,12 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
         <DevMessageForm
           messageNameTitleLabel={t('Message name')}
           messageNameInputPlaceholder={t('Give your message a name (optional)')}
-          messageNameValue={messageName}
           messageTitleLabel={t('Message')}
           messageInputPlaceholder={t('Paste the generated message here')}
-          messageValue={message}
           validationStatus={{
             isError: validateMutation.isError,
             errorMessage: t('{{error}}', { error: validateMutation.error?.message || '' }),
           }}
-          isFetching={validateMutation.isLoading || addKeyMutation.isLoading}
-          buttonLabel={t('Validate Message')}
-          onMessageNameInputChange={handleMessageNameInputChange}
-          onMessageInputChange={handleMessageInputChange}
-          onButtonClick={handleValidateMessage}
         />
       </Box>
     </MainAreaCardBox>

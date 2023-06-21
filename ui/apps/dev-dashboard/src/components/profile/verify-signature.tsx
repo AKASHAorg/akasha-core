@@ -10,8 +10,6 @@ import SummaryCard, { ISummaryCardProps } from './summary-card';
 
 import menuRoute, { DASHBOARD } from '../../routes';
 
-import { StyledTextArea } from './dev-message-form';
-
 const { Box, Button, HorizontalDivider, MainAreaCardBox, Text, TextInputIconForm, Spinner } = DS;
 
 interface IVerifySignatureCardProps extends ISummaryCardProps {
@@ -31,9 +29,9 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
     pubKeyTitleLabel,
     pubKeyInputPlaceholder,
     messageTitleLabel,
-    messageInputPlaceholder,
+    // messageInputPlaceholder,
     signatureTitleLabel,
-    signatureInputPlaceholder,
+    // signatureInputPlaceholder,
     verifyButtonLabel,
     plugins,
   } = props;
@@ -137,7 +135,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
                     : 'border',
                 }}
               >
-                <StyledTextArea
+                {/* <StyledTextArea
                   resize={false}
                   size="large"
                   rows={8}
@@ -145,7 +143,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
                   value={message}
                   onChange={ev => handleFieldChange(ev, 'message')}
                   placeholder={messageInputPlaceholder}
-                />
+                /> */}
               </Box>
               {verifySignatureMutation.isError && (
                 <Text size="small" color="errorText">
@@ -172,7 +170,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
                     : 'border',
                 }}
               >
-                <StyledTextArea
+                {/* <StyledTextArea
                   resize={false}
                   size="large"
                   rows={8}
@@ -180,7 +178,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
                   value={signature}
                   onChange={ev => handleFieldChange(ev, 'signature')}
                   placeholder={signatureInputPlaceholder}
-                />
+                /> */}
               </Box>
               {verifySignatureMutation.isError && (
                 <Text size="small" color="errorText">

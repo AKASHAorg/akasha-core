@@ -22,18 +22,11 @@ const EditMessageName: React.FC<RootComponentProps & IEditMessageNameProps> = pr
 
   const { t } = useTranslation('app-profile');
 
-  const [messageName] = React.useState<string>('');
-  const [message] = React.useState<string>('');
-
   const handleClickCardTitleIcon = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => menuRoute[DEV_KEYS],
     });
-  };
-
-  const handleButtonClick = () => {
-    /** */
   };
 
   return (
@@ -50,20 +43,12 @@ const EditMessageName: React.FC<RootComponentProps & IEditMessageNameProps> = pr
         <DevMessageForm
           messageNameTitleLabel={t('Message name')}
           messageNameInputPlaceholder={t('Give your message a name (optional)')}
-          messageNameValue={messageName}
           messageTitleLabel={t('Message')}
           messageInputPlaceholder={t('Paste the generated message here')}
-          messageValue={message}
-          canEditMessage={false}
           validationStatus={{
             isError: false,
             extraInfo: t('Messages cannot be edited, but you can delete them and add a new one.'),
           }}
-          isFetching={false}
-          buttonLabel={t('Save')}
-          onMessageNameInputChange={() => null}
-          onMessageInputChange={() => null}
-          onButtonClick={handleButtonClick}
         />
       </Box>
     </MainAreaCardBox>

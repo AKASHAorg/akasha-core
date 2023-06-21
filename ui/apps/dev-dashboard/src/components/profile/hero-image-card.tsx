@@ -3,7 +3,7 @@ import DS from '@akashaorg/design-system';
 
 const { Box, Text, Image } = DS;
 
-export interface IHeroImageCard {
+export type HeroImageCardProps = {
   assetName?: string;
   assetExtension?: string;
   publicImgPath?: string;
@@ -12,9 +12,9 @@ export interface IHeroImageCard {
   wrapperBoxMargin?: Record<string, unknown>;
   titleLabel: string;
   subtitleLabel: string;
-}
+};
 
-const HeroImageCard: React.FC<IHeroImageCard> = props => {
+const HeroImageCard: React.FC<HeroImageCardProps> = props => {
   const {
     assetName = 'ok',
     assetExtension = 'webp',

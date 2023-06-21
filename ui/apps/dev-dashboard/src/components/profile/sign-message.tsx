@@ -10,8 +10,6 @@ import SummaryCard, { ISummaryCardProps } from './summary-card';
 
 import menuRoute, { DASHBOARD } from '../../routes';
 
-import { StyledTextArea } from './dev-message-form';
-
 const { Box, Button, HorizontalDivider, MainAreaCardBox, Spinner, Text } = DS;
 
 interface ISignMessageCardProps extends ISummaryCardProps {
@@ -87,7 +85,7 @@ const SignMessageCard: React.FC<RootComponentProps & ISignMessageCardProps> = pr
                     : 'border',
                 }}
               >
-                <StyledTextArea
+                {/* <StyledTextArea
                   resize={false}
                   size="large"
                   rows={8}
@@ -95,7 +93,7 @@ const SignMessageCard: React.FC<RootComponentProps & ISignMessageCardProps> = pr
                   value={message}
                   onChange={handleMessageInputChange}
                   placeholder={messageInputPlaceholder}
-                />
+                /> */}
               </Box>
               {signMessageMutation.isError && (
                 <Text size="small" color="errorText">

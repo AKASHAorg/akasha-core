@@ -1,10 +1,10 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
-import HeroImageCard, { IHeroImageCard } from './hero-image-card';
+import HeroImageCard, { HeroImageCardProps } from './hero-image-card';
 
 const { Box, Button, HorizontalDivider, Text, Icon } = DS;
 
-export interface ISummaryCardProps extends IHeroImageCard {
+export interface ISummaryCardProps extends HeroImageCardProps {
   paragraph1TitleLabel: string;
   paragraph1Content?: string | Uint8Array;
   paragraph2TitleLabel: string;
