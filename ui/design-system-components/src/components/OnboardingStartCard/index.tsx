@@ -14,7 +14,7 @@ export interface OnboardingStartCardProps {
   handleButtonClick?: () => void;
 }
 
-export const OnboardingStartCard = ({
+const OnboardingStartCard = ({
   inputPlaceholderLabel,
   titleLabel,
   buttonLabel,
@@ -43,3 +43,5 @@ export const OnboardingStartCard = ({
     </BasicCardBox>
   );
 };
+
+export default OnboardingStartCard;

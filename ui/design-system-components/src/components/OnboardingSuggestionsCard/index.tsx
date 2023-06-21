@@ -25,8 +25,7 @@ export interface OnboardingSuggestionsCardProps {
   onClickUnfollow?: (pubKey: string) => void;
   isViewer?: boolean;
 }
-
-export const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = props => {
+const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = props => {
   const {
     topicsLabel,
     peopleLabel,
@@ -96,3 +95,5 @@ export const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps>
     </BasicCardBox>
   );
 };
+
+export default OnboardingSuggestionsCard;

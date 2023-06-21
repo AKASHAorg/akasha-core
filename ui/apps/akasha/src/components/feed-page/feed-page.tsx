@@ -188,7 +188,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         modalSlotId={props.layoutConfig.modalSlotId}
         logger={logger}
         itemType={EntityTypes.POST}
-        pages={postPages}
+        // @TODO replace with real data source
+        pages={[]}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) =>
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
@@ -197,8 +198,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={props.showLoginModal}
-        requestStatus={postsReq.status}
-        hasNextPage={postsReq.hasNextPage}
+        // @TODO replace with real data source
+        requestStatus={null}
+        // @TODO replace with real data source
+        hasNextPage={false}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}

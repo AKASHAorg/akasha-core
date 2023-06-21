@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { OnboardingStartCard, OnboardingStartCardProps } from './index';
+import OnboardingStartCard, { OnboardingStartCardProps } from './index';
 
 export default {
   title: 'Cards/OnboardingStartCard',

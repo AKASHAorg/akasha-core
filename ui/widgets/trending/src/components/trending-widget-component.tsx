@@ -29,17 +29,18 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   const trendingTagsReq = useTrendingTags();
   const trendingTags = trendingTagsReq.data || [];
-  const trendingProfilesReq = useTrendingProfiles();
-  const trendingProfiles = trendingProfilesReq.data || [];
+  // @TODO replace with new hooks
+  // const trendingProfilesReq = useTrendingProfiles();
+  // const trendingProfiles = trendingProfilesReq.data || [];
 
-  const followPubKeyArr = trendingProfiles
-    .slice(0, 4)
-    .map((profile: { pubKey: string }) => profile.pubKey);
+  // const followPubKeyArr = trendingProfiles
+  //   .slice(0, 4)
+  //   .map((profile: { pubKey: string }) => profile.pubKey);
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.pubKey, followPubKeyArr);
-  const followedProfiles = isFollowingMultipleReq.data;
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
+  // const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.pubKey, followPubKeyArr);
+  // const followedProfiles = isFollowingMultipleReq.data;
+  // const followReq = useFollow();
+  // const unfollowReq = useUnfollow();
 
   const tagSubscriptionsReq = useTagSubscriptions(
     loginQuery.data?.isReady && loginQuery.data?.ethAddress,
@@ -88,33 +89,33 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleFollowProfile = (pubKey: string) => {
-    if (!loginQuery.data?.ethAddress) {
-      showLoginModal();
-      return;
-    }
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending People Followed',
-    });
-    followReq.mutate(pubKey);
-  };
+  // const handleFollowProfile = (pubKey: string) => {
+  //   if (!loginQuery.data?.ethAddress) {
+  //     showLoginModal();
+  //     return;
+  //   }
+  //   analyticsActions.trackEvent({
+  //     category: AnalyticsCategories.TRENDING_WIDGET,
+  //     action: 'Trending People Followed',
+  //   });
+  //   followReq.mutate(pubKey);
+  // };
 
-  const handleUnfollowProfile = (pubKey: string) => {
-    if (!loginQuery.data?.ethAddress) {
-      showLoginModal();
-      return;
-    }
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending People Unfollowed',
-    });
-    unfollowReq.mutate(pubKey);
-  };
+  // const handleUnfollowProfile = (pubKey: string) => {
+  //   if (!loginQuery.data?.ethAddress) {
+  //     showLoginModal();
+  //     return;
+  //   }
+  //   analyticsActions.trackEvent({
+  //     category: AnalyticsCategories.TRENDING_WIDGET,
+  //     action: 'Trending People Unfollowed',
+  //   });
+  //   unfollowReq.mutate(pubKey);
+  // };
 
   return (
     <Box customStyle="space-y-4">
-      {(trendingTagsReq.isError || trendingProfilesReq.isError) && (
+      {trendingTagsReq.isError && (
         <ErrorLoader
           type="script-error"
           title={t('Oops, this widget has an error')}
@@ -138,7 +139,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
         handleSubscribeTag={handleTagSubscribe}
         handleUnsubscribeTag={handleTagUnSubscribe}
       />
-      <TrendingProfileCard
+      {/* @TODO: update with real data source */}
+      {/* <TrendingProfileCard
         titleLabel={t('Start Following')}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
@@ -152,7 +154,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
         handleFollowProfile={handleFollowProfile}
         handleUnfollowProfile={handleUnfollowProfile}
         loggedEthAddress={loginQuery.data?.ethAddress}
-      />
+      /> */}
     </Box>
   );
 };
