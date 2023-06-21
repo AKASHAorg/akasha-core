@@ -33,7 +33,7 @@ import routes, {
 const { Helmet } = DS;
 
 const AppRoutes = (props: RootComponentProps) => {
-  const { plugins } = props;
+  const { baseRouteName, plugins } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
@@ -42,26 +42,31 @@ const AppRoutes = (props: RootComponentProps) => {
   const loginQuery = useGetLogin();
 
   const handleOnboardingCTAClick = () => {
-    // if logged in, navigate to step 1
-    if (loginQuery.data?.pubKey) {
+    /**
+     * if logged in, navigate to step 1
+     * */
+    if (loginQuery.data?.ethAddress) {
       return navigateTo?.({
         appName: '@akashaorg/app-dev-dashboard',
         getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
       });
     }
-    // if guest, redirect to onboarding step 1 after authentication
+
+    /**
+     * if guest, redirect to onboarding step 1 after authentication
+     */
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${props.baseRouteName}${routes[ONBOARDING_STEP_ONE]}`,
+          redirectTo: `${baseRouteName}${routes[ONBOARDING_STEP_ONE]}`,
         }).toString()}`;
       },
     });
   };
 
   return (
-    <Router basename={props.baseRouteName}>
+    <Router basename={baseRouteName}>
       <Helmet>
         <title>Dev Dashboard | Ethereum World</title>
       </Helmet>
@@ -73,12 +78,12 @@ const AppRoutes = (props: RootComponentProps) => {
           element={
             <DevDashOnboardingIntro
               titleLabel={t('Developer Dashboard')}
-              introLabel={t('✨ Your journey as a developer begins here ✨')}
+              introLabel={t('✨ Your journey begins here ✨')}
               descriptionLabel={t(
-                'Join our community of developers, start creating and publishing amazing applications that will make Ethereum World better!',
+                'Welcome to our vibrant community of developers! Get ready to embark on an exciting journey where you can unleash your creativity and contribute to making the AKASHA World an even better place. Join us now and start building and publishing incredible applications that will shape the future.',
               )}
-              ctaLabel={t('I want to be a developer')}
-              onCTAClick={handleOnboardingCTAClick}
+              ctaButtonLabel={t('Unleash your creativity')}
+              onCTAButtonClick={handleOnboardingCTAClick}
             />
           }
         />
