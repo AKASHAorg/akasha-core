@@ -96,7 +96,7 @@ const config = {
       exclude: [/.*?/],
     }),
     new SubresourceIntegrityPlugin({
-      enabled: isProduction,
+      enabled: false, // disable until fixed isProduction,
     }),
     new WebpackAssetsManifest({ integrity: true }),
   ],
