@@ -51,7 +51,7 @@ const sidebarItems = [
     title: 'Search',
   },
   {
-    title: 'Bookmarks',
+    title: 'List',
   },
   {
     title: 'Notifications',

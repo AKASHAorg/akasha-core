@@ -11,6 +11,7 @@ export type InfoCardProps = {
   titleVariant?: TextProps['variant'];
   bodyVariant?: TextProps['variant'];
   bodyLabel?: ReactNode;
+  customWidthStyle?: string;
 };
 
 const InfoCard: React.FC<InfoCardProps> = ({
@@ -20,6 +21,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
   bodyLabel,
   assetName,
   publicImgPath = '/images',
+  customWidthStyle,
 }) => {
   return (
     <Stack
@@ -43,7 +45,13 @@ const InfoCard: React.FC<InfoCardProps> = ({
           customStyle="h-32 w-32 sm:h-52 sm:w-52"
         ></Card>
       )}
-      <Stack direction="column" align="center" justify="center" spacing="gap-y-2">
+      <Stack
+        direction="column"
+        align="center"
+        justify="center"
+        spacing="gap-y-2"
+        customStyle={customWidthStyle}
+      >
         <Text variant={titleVariant}>{titleLabel}</Text>
         {bodyLabel && (
           <Text

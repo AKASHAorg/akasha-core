@@ -74,7 +74,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       'profile-card-action-extension': loader(() => import('./extensions/profile-message-button')),
     });
   },
-  title: 'Messaging | Ethereum World',
+  title: 'Messaging | Akasha World',
   menuItems: {
     label: 'Messaging',
     type: MenuItemType.App,

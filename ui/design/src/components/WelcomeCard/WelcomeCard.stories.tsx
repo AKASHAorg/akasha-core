@@ -31,7 +31,7 @@ export const BaseWelcomeCard = Template.bind({});
 
 BaseWelcomeCard.args = {
   titleLabel: 'Welcome to the alpha!',
-  subtitleLabel: 'Congratulations, you are the newest member of Ethereum World!',
+  subtitleLabel: 'Congratulations, you are the newest member of Akasha World!',
   paragraphOneLabel:
     'You can now browse the feed, subscribe to topics, write your own posts, and reply to other Ethereans.',
   paragraphTwoIntroLabel: "While you don't have to do it now,",
@@ -39,6 +39,6 @@ BaseWelcomeCard.args = {
   paragraphTwoNextLabel:
     'You can change your display name and avatar, add a cover image and description, as well as claim your own AKASHA ENS name.',
   paragraphThreeLabel: "We are very happy you've joined us!",
-  primaryButtonLabel: 'Browse Ethereum World',
+  primaryButtonLabel: 'Browse Akasha World',
   secondaryButtonLabel: 'Customize My Profile',
 };

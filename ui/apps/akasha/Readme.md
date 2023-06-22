@@ -15,7 +15,7 @@
 
 ## Background
 
-Akasha Integration App (Ethereum World) is the foremost implementation of the Akasha World Framework. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
+Akasha Integration App (Akasha World) is the foremost implementation of the Akasha World Framework. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
 
 ## Components
 

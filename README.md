@@ -1,4 +1,4 @@
-# AKASHA Framework
+# AKASHA Core
 
 [![CodeFactor](https://www.codefactor.io/repository/github/akashaorg/akasha-core/badge)](https://www.codefactor.io/repository/github/akashaorg/akasha-core)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/AKASHAorg/akasha-core/tree/next.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/AKASHAorg/akasha-core/tree/next)
@@ -7,31 +7,36 @@
 
 | App                                              | Staging                                                                                                                                                                                          | Production                                                       |
 |--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
-| [Ethereum World](https://akasha.ethereum.world/) | [https://next.akasha-world-framework.pages.dev/](https://next.akasha-world-framework.pages.dev/)                                                                                                 | [https://akasha.ethereum.world/](https://akasha.ethereum.world/) |
+| [Akasha World](https://akasha.ethereum.world/) | [https://next.akasha-world-framework.pages.dev/](https://next.akasha-world-framework.pages.dev/)                                                                                                 | [https://akasha.ethereum.world/](https://akasha.ethereum.world/) |
 | [Storybook](https://storybook-awf.netlify.app/)  | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)                               | NA                                                               |
 
 
 
 
-> Monorepo for AWF
+> Monorepo for Akasha Core
 
 ## Table of contents
 
-- [Background](#background)
-- [Install](#install)
-- [Usage](#usage)
-  - [SDK](#sdk)
-    - [Package Components](#package-components)
-    - [Build](#build-the-sdk-package)
-  - [UI](#ui-workspace)
-  - [Examples](#playground-test-app)
-  - [Server Scripts](#scripts-workspace)
-- [Contributors](#contributors-)
-- [License](#license)
+- [AKASHA Core](#akasha-core)
+  - [Table of contents](#table-of-contents)
+  - [Background](#background)
+  - [Install](#install)
+  - [Usage](#usage)
+    - [Run](#run)
+- [](#)
+    - [SDK](#sdk)
+      - [Build the sdk package](#build-the-sdk-package)
+      - [Running Tests](#running-tests)
+    - [UI workspace](#ui-workspace)
+    - [Playground test-app](#playground-test-app)
+    - [Getting started with local development](#getting-started-with-local-development)
+  - [Adding a new package](#adding-a-new-package)
+  - [Contributors ✨](#contributors-)
+  - [License](#license)
 
 ## Background
 
-AWF is one of the results of [initiative](https://ethereum.world/manifesto) to accelerate the adoption of Ethereum-based apps and services by transforming how they attract, engage and delight users.
+Akasha Core is one of the results of an [initiative](https://ethereum.world/manifesto) to accelerate the adoption of blockchain-based apps and services by transforming how they attract, engage and delight users.
 
 ## Install
 
@@ -86,6 +91,8 @@ where `<package-group>` can be one of `apps`, `widgets`, `plugins`, `design-syst
 ### UI workspace
 
 - [Design system](./ui/design/README.md)
+- [Design system core](./ui/design-system-core/README.md)
+- [Design system components](./ui/design-system-components/README.md)
 - [React hooks](./ui/hooks/README.md)
 - [Plugins](./ui/plugins/README.md)
 - [Widgets](./ui/widgets/README.md)
@@ -93,7 +100,7 @@ where `<package-group>` can be one of `apps`, `widgets`, `plugins`, `design-syst
 
 ### Playground test-app
 
-This [workspace](./examples) contains examples of applications that showcase the usage of AWF.
+This [workspace](./examples) contains examples of applications that showcase the usage of Akasha Core.
 
 ### Getting started with local development
 

@@ -117,7 +117,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   return (
     <Box customStyle={'w-full'}>
       <Helmet.Helmet>
-        <title>Ethereum World</title>
+        <title>Akasha World</title>
       </Helmet.Helmet>
       {loggedProfileData?.did?.id ? (
         <>
@@ -145,7 +145,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               subtitle={t('We are in private alpha at this time. ')}
               beforeLinkLabel={t("If you'd like to participate, just ")}
               afterLinkLabel={t(
-                " and we'll send you a ticket for the next shuttle going to Ethereum World.",
+                " and we'll send you a ticket for the next shuttle going to Akasha World.",
               )}
               disclaimerLabel={t(
                 "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",

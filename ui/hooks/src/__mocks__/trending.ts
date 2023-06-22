@@ -207,7 +207,7 @@ export const mockTrendingProfiles = {
     },
     {
       pubKey: 'bbaareigtmorcvl6etui553cbrtywxhbczgopnm4ygf3h75wt2o26hqqzxa',
-      name: 'Ethereum World',
+      name: 'Akasha World',
       userName: 'gnosistestlul',
       avatar: 'bafkreie3c2fxvqjoywsbpebdgdtldtne5xd6bct7kejzqsqlxkuqawr55i',
       coverImage: null,

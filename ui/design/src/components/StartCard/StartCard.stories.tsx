@@ -28,7 +28,7 @@ const Template = (args: StartProps) => {
 export const BaseStartCard = Template.bind({});
 
 BaseStartCard.args = {
-  title: 'Bookmarks',
+  title: 'List',
   heading: '✨ Save what inspires you ✨',
   image: 'https://placekitten.com/300/300',
   description:

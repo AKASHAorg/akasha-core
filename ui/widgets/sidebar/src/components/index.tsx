@@ -6,7 +6,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
 
-import Widget from './Sidebar-widget';
+import Widget from './sidebar-widget';
 
 const reactLifecycles = singleSpaReact({
   React,

@@ -1,10 +1,10 @@
-AKASHA Social App is the foremost implementation of the AKASHA framework. It consists of various standalone components, services and widgets which interact with each other and form the basis of your experience in the World. Some of the core components in the Social App are the Feed page, Post page and Tag Feed page. 
+AKASHA Social App is the foremost implementation of the AKASHA Core. It consists of various standalone components, services and widgets which interact with each other and form the basis of your experience in the World. Some of the core components in the Social App are the Feed page, Post page and Tag Feed page. 
 
-The AKASHA Foundation created Ethereum World as the first use case of the Social App. It enables the Ethereum community to come together, get the word out about any projects, stories or interesting developments and help the participants stay tuned to the latest news in the Ethereum space.  
+The AKASHA Foundation created Akasha World as the first use case of the Social App. It enables the Ethereum community to come together, get the word out about any projects, stories or interesting developments and help the participants stay tuned to the latest news in the Ethereum space.  
 
-This is a place to share ideas and connect with the Ethereum World community. You can talk to everything and everyone and collaborate with the wonderful members of the community to support ideas, causes and projects. You can share your thoughts (links, photos and videos), find out what's going on in the Ethereum World and join fascinating conversations. 
+This is a place to share ideas and connect with the Akasha World community. You can talk to everything and everyone and collaborate with the wonderful members of the community to support ideas, causes and projects. You can share your thoughts (links, photos and videos), find out what's going on in the Akasha World and join fascinating conversations. 
 
-Here are some tips to get the most out of your Ethereum World experience:
+Here are some tips to get the most out of your Akasha World experience:
 
 - mention people in any of your posts in order to create and expand your network or create personal connections. These people will get notified and chances are they’ll come back to you in a blink of an eye!
 - create hashtags by adding a “#” at the beginning of a word when posting so you make it easier for you and the community to follow topics.
