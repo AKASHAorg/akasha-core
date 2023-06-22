@@ -1,3 +1,3 @@
-# Ethereum World Settings App 
+# Akasha World Settings App 
 
-> Global settings for Ethereum World
+> Global settings for Akasha World

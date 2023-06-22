@@ -124,7 +124,7 @@ const SignInModal: React.FC<SignInModalProps> = props => {
             <ErrorLoader
               type="not-registered"
               title={'No account associated with this Ethereum address'}
-              details={'Please sign up to create an Ethereum World account'}
+              details={'Please sign up to create an Akasha World account'}
               style={{ padding: '1em 3em' }}
             >
               <Button

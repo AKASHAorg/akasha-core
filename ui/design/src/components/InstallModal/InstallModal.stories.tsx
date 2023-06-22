@@ -63,9 +63,9 @@ BaseInstallModal.args = {
     'To check out your new app visit the Integration centre and look under Your Apps. You can also open the side bar menu.',
   successSubInfoLabel: 'Enjoy!',
   successSubtitleLabel:
-    'Moderating Tools App is now installed in Ethereum World, and is currently active.',
+    'Moderating Tools App is now installed in Akasha World, and is currently active.',
   errorInfoLabel: 'Please check your network connection and try again.',
   errorSubInfoLabel: 'Thank you!',
-  errorSubtitleLabel: 'could not be installed in Ethereum World.',
+  errorSubtitleLabel: 'could not be installed in Akasha World.',
   errorTitleLabel: 'Oops!',
 };

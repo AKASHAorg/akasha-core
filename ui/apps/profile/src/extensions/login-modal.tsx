@@ -46,9 +46,9 @@ const LoginModal = (props: RootExtensionProps) => {
 
         <Box customStyle="flex flex-col items-center" data-testid="modal-card-login">
           <Box customStyle="flex flex-col items-center w-full gap-y-2">
-            <Text variant="h6">{t('Ethereum World')}</Text>
+            <Text variant="h6">{t('Akasha World')}</Text>
             <Text variant="body1" align="center">
-              {t('To continue you need an Ethereum World account')}
+              {t('To continue you need an Akasha World account')}
             </Text>
           </Box>
           <Box customStyle="flex flex-row items-center justify-center gap-x-2 w-full pt-4">

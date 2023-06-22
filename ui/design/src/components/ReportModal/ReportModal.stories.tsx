@@ -86,7 +86,7 @@ export const BaseReportModal = Template.bind({});
 
 BaseReportModal.args = {
   titleLabel: 'Report a Post',
-  successTitleLabel: 'Thank you for helping us keep Ethereum World safe! 🙌',
+  successTitleLabel: 'Thank you for helping us keep Akasha World safe! 🙌',
   successMessageLabel: 'We have received your message',
   reasonPrefix: 'OT',
   contentId: '0845',
@@ -129,7 +129,7 @@ BaseReportModal.args = {
 export const BaseReportSuccessModal = Template2.bind({});
 
 BaseReportSuccessModal.args = {
-  successTitleLabel: 'Thank you for helping us keep Ethereum World safe! 🙌',
+  successTitleLabel: 'Thank you for helping us keep Akasha World safe! 🙌',
   successMessageLabel: 'We have received your message',
   reason: 'Other',
   reasonPrefix: 'OT',

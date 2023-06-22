@@ -43,7 +43,7 @@ BaseTopbar.args = {
   loggedProfileData: profileData,
   quickAccessItems: quickAccessItems,
   searchAreaItem: searchAreaItem,
-  brandLabel: 'Ethereum World',
+  brandLabel: 'Akasha World',
 };
 BaseTopbar.parameters = {
   design: {
