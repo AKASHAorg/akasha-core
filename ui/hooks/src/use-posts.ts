@@ -13,9 +13,7 @@ import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
 import { SEARCH_KEY } from './use-search';
 import { TRENDING_TAGS_KEY } from './use-trending';
-import { PROFILE_KEY } from './use-profile';
 import { checkEntryActive } from './utils/checkEntryActive';
-import { Profile } from '@akashaorg/typings/ui';
 
 /**
  * @internal
@@ -45,7 +43,7 @@ export const CREATE_POST_MUTATION_KEY = 'CreatePost';
 export type usePostParam = {
   postId: string;
   loggedUser?: string;
-  enabler: boolean;
+  enabler?: boolean;
 };
 
 export type usePostsParam = {
@@ -275,12 +273,12 @@ const getPost = async (postID: string, loggedUser?: string) => {
   const user = await sdk.api.auth.getCurrentUser();
   // check entry's moderation status
   const modStatus = await checkStatus({
-    user: loggedUser || user?.pubKey || '',
+    user: loggedUser || user?.id || '',
     contentIds: [postID],
   });
   const res = await sdk.api.entries.getEntry(postID);
   const modStatusAuthor = await checkStatus({
-    user: loggedUser || user?.pubKey || '',
+    user: loggedUser || user?.id || '',
     contentIds: [res.getPost?.author?.pubKey],
   });
   return {
@@ -418,7 +416,7 @@ export function useCreatePost() {
     {
       onMutate: async (publishObj: IPublishData) => {
         await queryClient.cancelQueries([ENTRIES_KEY]);
-        await queryClient.cancelQueries([ENTRIES_BY_AUTHOR_KEY, publishObj.pubKey]);
+        await queryClient.cancelQueries([ENTRIES_BY_AUTHOR_KEY, publishObj.userId]);
         const optimisticEntry = Object.assign({}, publishObj, { isPublishing: true });
 
         return { optimisticEntry, entryId: pendingID };

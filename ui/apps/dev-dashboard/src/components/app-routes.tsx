@@ -33,7 +33,7 @@ import routes, {
 const { Helmet } = DS;
 
 const AppRoutes = (props: RootComponentProps) => {
-  const { plugins } = props;
+  const { plugins, baseRouteName } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
@@ -43,7 +43,7 @@ const AppRoutes = (props: RootComponentProps) => {
 
   const handleOnboardingCTAClick = () => {
     // if logged in, navigate to step 1
-    if (loginQuery.data?.pubKey) {
+    if (loginQuery.data?.id) {
       return navigateTo?.({
         appName: '@akashaorg/app-dev-dashboard',
         getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
@@ -54,14 +54,14 @@ const AppRoutes = (props: RootComponentProps) => {
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${props.baseRouteName}${routes[ONBOARDING_STEP_ONE]}`,
+          redirectTo: `${baseRouteName}${routes[ONBOARDING_STEP_ONE]}`,
         }).toString()}`;
       },
     });
   };
 
   return (
-    <Router basename={props.baseRouteName}>
+    <Router basename={baseRouteName}>
       <Helmet>
         <title>Dev Dashboard | Ethereum World</title>
       </Helmet>

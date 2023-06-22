@@ -59,6 +59,11 @@
     "lib"
   ],
   "akasha": {
-    "displayName": "My Apps"
+    "displayName": "My Apps",
+    "tags": [
+      "widget",
+      "my-apps",
+      "akasha-verse"
+    ]
   }
 }

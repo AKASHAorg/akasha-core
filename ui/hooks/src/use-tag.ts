@@ -83,9 +83,8 @@ export function useToggleTagSubscription() {
     },
     onSuccess: async data => {
       const user = await sdk.api.auth.getCurrentUser();
-      const ownPubKey = user.pubKey;
       if (user) {
-        queryClient.setQueryData<Profile>([PROFILE_KEY, ownPubKey], profile => {
+        queryClient.setQueryData<Profile>([PROFILE_KEY, user.id], profile => {
           const operation = data?.toggleInterestSub ? +1 : -1;
           let totalInterests: number;
           return {

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { IMenuItem } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
@@ -7,9 +6,10 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
 import ListSidebarApps from './list-sidebar-apps';
 import { Profile } from '@akashaorg/typings/ui';
+import { useGetLogin, useLogout } from '@akashaorg/ui-awf-hooks';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -64,9 +64,12 @@ const Sidebar: React.FC<ISidebarProps> = props => {
 
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
   const [activeOption, setActiveOption] = React.useState<IMenuItem | null>(null);
+  const loginQuery = useGetLogin();
+  const logoutQuery = useLogout();
+
   React.useEffect(() => {
     if (allMenuItems && currentRoute) {
-      const [, , , ...path] = currentRoute.split('/');
+      const path = currentRoute.split('/').slice(3);
       const activeApp = allMenuItems.find(menuItem => activeApps?.includes?.(menuItem.name));
       if (activeApp && activeApp.index !== currentAppData?.index) {
         setCurrentAppData(activeApp);
@@ -82,6 +85,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       }
     }
   }, [currentRoute, allMenuItems, currentAppData, activeOption, activeApps]);
+
   const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       // if the current app has no subroutes, set as active and redirect to its route
@@ -93,6 +97,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       }
     }
   };
+
   const handleOptionClick = (
     menuItem: IMenuItem,
     subrouteMenuItem: IMenuItem,
@@ -105,27 +110,44 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       onSidebarClose();
     }
   };
+
+  const handleLogout = () => {
+    logoutQuery.mutate();
+  };
+
   return (
     <BasicCardBox
       customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
       round="rounded-r-2xl xl:rounded-2xl"
       pad="p-0"
     >
-      <Box customStyle="flex flex-row p-4 border-b-1 border(grey9 dark:grey3)">
+      <Box customStyle="flex flex-row justify-items-stretch p-4 border-b-1 border(grey9 dark:grey3)">
         <Box customStyle="w-fit h-fit mr-2">
           <Avatar
             profileId={loggedProfileData?.did?.id}
             avatar={loggedProfileData?.avatar?.default.src}
           />
         </Box>
-        <Box customStyle="w-fit">
-          <Text customStyle="font-bold">{title}</Text>
-          <Text variant="footnotes2" customStyle="text-grey5">
+        <Box customStyle="w-fit flex flex-grow flex-col">
+          <Text variant="button-md">{title}</Text>
+          <Text variant="footnotes1" customStyle="text-grey5">
             {subtitle}
           </Text>
         </Box>
-        <Box customStyle="w-fit h-fit ml-6 self-end">
-          <Button icon="BoltIcon" variant="primary" iconOnly={true} onClick={onLoginClick} />
+        <Box customStyle="w-fit h-fit ml-6 self-center">
+          {loginQuery.data?.id && (
+            <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogout} />
+          )}
+          {!loginQuery.data?.id && loginQuery.isStale && (
+            <Button
+              icon="BoltIcon"
+              size="xs"
+              variant="primary"
+              iconOnly={true}
+              onClick={onLoginClick}
+            />
+          )}
+          {loginQuery.isLoading && !loginQuery.isStale && <Spinner size="sm" />}
         </Box>
       </Box>
       {/*

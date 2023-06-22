@@ -29,6 +29,7 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
             return JSON.parse(doc.data.options[bookmarkedEntries][1] as string);
           }
         }
+        return [];
       } catch (error) {
         logError('useBookmarks.getBookmarks', error);
         throw error;
