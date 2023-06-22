@@ -45,7 +45,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
       <IconOnlyButton
         icon={icon}
         size={size}
-        variant="primary"
+        variant={variant}
         loading={loading}
         greyBg={greyBg}
         disabled={disabled}

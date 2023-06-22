@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "@akashaorg/awf-sdk": "*",
-    "@akashaorg/design-system": "*",
     "@akashaorg/design-system-core": "*",
     "@akashaorg/design-system-components": "*",
     "@akashaorg/ui-awf-hooks": "*",
@@ -44,7 +43,7 @@
     "i18next-localstorage-backend": "4.1.1",
     "react-i18next": "12.2.0",
     "react-router-dom": "6.3.0",
-    "single-spa-react": "4.6.0"
+    "single-spa-react": "5.0.2"
   },
   "devDependencies": {
     "@akashaorg/typings": "*",

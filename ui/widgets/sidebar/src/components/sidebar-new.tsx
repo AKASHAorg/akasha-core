@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 import { IMenuItem, Profile } from '@akashaorg/typings/ui';
+import { useGetLogin, useLogout } from '@akashaorg/ui-awf-hooks';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 import ListSidebarApps from './list-sidebar-apps';
 
@@ -64,6 +67,9 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   const [currentAppData, setCurrentAppData] = useState<IMenuItem | null>(null);
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
 
+  const loginQuery = useGetLogin();
+  const logoutQuery = useLogout();
+
   useEffect(() => {
     if (allMenuItems && currentRoute) {
       const path = currentRoute.split('/').slice(3);
@@ -108,27 +114,43 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     }
   };
 
+  const handleLogout = () => {
+    logoutQuery.mutate();
+  };
+
   return (
     <BasicCardBox
       customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
       round="rounded-r-2xl xl:rounded-2xl"
       pad="p-0"
     >
-      <Box customStyle="flex flex-row p-4 border-b-1 border(grey9 dark:grey3)">
+      <Box customStyle="flex flex-row justify-items-stretch p-4 border-b-1 border(grey9 dark:grey3)">
         <Box customStyle="w-fit h-fit mr-2">
           <Avatar
             profileId={loggedProfileData?.did?.id}
             avatar={loggedProfileData?.avatar?.default.src}
           />
         </Box>
-        <Box customStyle="w-fit">
-          <Text customStyle="font-bold">{title}</Text>
-          <Text variant="footnotes2" customStyle="text-grey5">
+        <Box customStyle="w-fit flex flex-grow flex-col">
+          <Text variant="button-md">{title}</Text>
+          <Text variant="footnotes1" customStyle="text-grey5">
             {subtitle}
           </Text>
         </Box>
-        <Box customStyle="w-fit h-fit ml-6 self-end">
-          <Button icon="BoltIcon" variant="primary" iconOnly={true} onClick={onLoginClick} />
+        <Box customStyle="w-fit h-fit ml-6 self-center">
+          {loginQuery.data?.id && (
+            <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogout} />
+          )}
+          {!loginQuery.data?.id && loginQuery.isStale && (
+            <Button
+              icon="BoltIcon"
+              size="xs"
+              variant="primary"
+              iconOnly={true}
+              onClick={onLoginClick}
+            />
+          )}
+          {loginQuery.isLoading && !loginQuery.isStale && <Spinner size="sm" />}
         </Box>
       </Box>
       {/*

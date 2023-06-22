@@ -1,11 +1,10 @@
 import * as React from 'react';
 import BaseEntryPage from './common/base-page';
 import { useParams } from 'react-router-dom';
-import { LoginState, mapEntry, useComment } from '@akashaorg/ui-awf-hooks';
+import { mapEntry, useComment } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 
 type ReplyPageProps = {
-  loginState?: LoginState;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 

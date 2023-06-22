@@ -11,7 +11,7 @@ describe('<StartCard /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         <StartCard
-          title="Bookmarks"
+          title="List"
           heading="✨ Save what inspires you ✨"
           image={null}
           description="To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community."
@@ -32,7 +32,7 @@ describe('<StartCard /> Component', () => {
   });
   it('contains title', () => {
     const { getByText } = componentWrapper;
-    const title = getByText('Bookmarks');
+    const title = getByText('List');
     expect(title).toBeDefined();
   });
   it('contains heading', () => {

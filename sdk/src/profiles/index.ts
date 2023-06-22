@@ -288,7 +288,7 @@ class AWF_Profile {
       autoRotate?: boolean;
       mimeType?: string;
     };
-    email?: string; // temporary workaround until space delegation works
+    email?: `${string}@${string}`; // temporary workaround until space delegation works
   }) {
     let file;
     let path;

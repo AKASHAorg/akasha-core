@@ -33,9 +33,21 @@ type BaseEntryProps = {
 };
 
 const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
-  const { postId, commentId, itemType, entryData, entryReq, showLoginModal, logger, children } =
-    props;
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const {
+    postId,
+    commentId,
+    itemType,
+    entryData,
+    entryReq,
+    showLoginModal,
+    logger,
+    plugins,
+    children,
+    layoutConfig,
+    uiEvents,
+    navigateToModal,
+  } = props;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const { t } = useTranslation('app-akasha-integration');
 
@@ -45,7 +57,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     }
     return entryReq.isSuccess && entryData?.reported;
   }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
-
+  // @TODO replace with new hooks
   const reqComments = useInfiniteComments({ limit: 15, postID: postId }, !commentId);
   const reqReplies = useInfiniteReplies(
     { limit: 15, postID: postId, commentID: commentId },
@@ -127,12 +139,12 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             itemType={itemType}
             entryReq={entryReq}
             loggedProfileData={loggedProfileData}
-            uiEvents={props.uiEvents}
-            plugins={props.plugins}
-            layoutConfig={props.layoutConfig}
+            uiEvents={uiEvents}
+            plugins={plugins}
+            layoutConfig={layoutConfig}
             entryData={entryData}
-            navigateToModal={props.navigateToModal}
-            showLoginModal={props.showLoginModal}
+            navigateToModal={navigateToModal}
+            showLoginModal={showLoginModal}
           />
           <PendingReply
             postId={postId}
@@ -140,9 +152,10 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             commentIds={commentPages[0]?.results || []}
           />
           <FeedWidget
-            modalSlotId={props.layoutConfig.modalSlotId}
+            modalSlotId={layoutConfig.modalSlotId}
             logger={logger}
-            pages={commentPages}
+            // @TODO replace with real data source
+            pages={[]}
             itemType={EntityTypes.REPLY}
             onLoadMore={handleLoadMore}
             getShareUrl={(itemId: string) =>
@@ -150,7 +163,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             }
             loggedProfileData={loggedProfileData}
             navigateTo={navigateTo}
-            navigateToModal={props.navigateToModal}
+            navigateToModal={navigateToModal}
             onLoginModalOpen={showLoginModal}
             requestStatus={reqCommentsOrReplies.status}
             hasNextPage={reqCommentsOrReplies.hasNextPage}
@@ -160,9 +173,9 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             removeEntryLabel={t('Delete Reply')}
             removedByMeLabel={t('You deleted this reply')}
             removedByAuthorLabel={t('This reply was deleted by its author')}
-            uiEvents={props.uiEvents}
+            uiEvents={uiEvents}
             itemSpacing={8}
-            i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+            i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
             trackEvent={analyticsActions.trackEvent}
             showReplyFragment={true}
           />

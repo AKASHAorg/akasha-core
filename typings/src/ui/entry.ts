@@ -74,7 +74,7 @@ export interface IPublishData {
   slateContent: (Descendant & { url?: string; type?: string; fallbackUrl?: string })[];
   textContent: string;
   author: string | null;
-  pubKey?: string;
+  userId?: string;
 }
 
 export interface IMetadata {

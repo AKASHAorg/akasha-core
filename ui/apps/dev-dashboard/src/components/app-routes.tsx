@@ -42,10 +42,8 @@ const AppRoutes = (props: RootComponentProps) => {
   const loginQuery = useGetLogin();
 
   const handleOnboardingCTAClick = () => {
-    /**
-     * if logged in, navigate to step 1
-     * */
-    if (loginQuery.data?.ethAddress) {
+    // if logged in, navigate to step 1
+    if (loginQuery.data?.id) {
       return navigateTo?.({
         appName: '@akashaorg/app-dev-dashboard',
         getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],

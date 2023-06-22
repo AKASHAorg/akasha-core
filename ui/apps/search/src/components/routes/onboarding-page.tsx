@@ -1,5 +1,4 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import {
   useTrendingProfiles,
@@ -12,7 +11,10 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
 
-const { Helmet, Box, OnboardingStartCard, OnboardingSuggestionsCard } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
+import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
+import OnboardingStartCard from '@akashaorg/design-system-components/lib/components/OnboardingStartCard';
 
 interface OnboardingPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
@@ -98,11 +100,11 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   };
 
   return (
-    <Box fill="horizontal">
+    <Box customStyle="w-full">
       <Helmet>
         <title>{t('Onboarding')}</title>
       </Helmet>
-      <Box gap="medium">
+      <Box customStyle="gap-4">
         <OnboardingStartCard
           inputPlaceholderLabel={t('Search')}
           titleLabel={t('Search')}
@@ -112,6 +114,7 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
           handleButtonClick={handleShowMyFeed}
         />
         <OnboardingSuggestionsCard
+          loggedProfileId={loggedProfileData?.did?.id}
           topicsLabel={t('Topics to follow')}
           peopleLabel={t('People to follow')}
           followLabel={t('Follow')}

@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import CustomizeNotificationPage from './newComponents/CustomizeNotificationPage';
-import NotificationsPage from './newComponents/NotificationsPage';
-import WelcomePage from './newComponents/WelcomePage';
+import CustomizeNotificationPage from './pages/customize-notification-page';
+import NotificationsPage from './pages/notifications-page';
+import WelcomePage from './pages/welcome-page';
 
 import routes, {
   CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,

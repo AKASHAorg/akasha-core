@@ -31,7 +31,7 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaorg/design-system": "*",
+    "@akashaorg/design-system-components": "*",
     "@akashaorg/design-system-core": "*",
     "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/ui-widget-trending": "*",
@@ -42,7 +42,7 @@
     "i18next-localstorage-backend": "4.1.1",
     "react-i18next": "12.2.0",
     "react-router-dom": "6.3.0",
-    "single-spa-react": "4.6.0"
+    "single-spa-react": "5.0.2"
   },
   "devDependencies": {
     "@akashaorg/af-testing": "*",

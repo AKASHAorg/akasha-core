@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "qs": "6.10.3",
-    "single-spa": "5.9.3",
+    "single-spa": "5.9.5",
     "path-to-regexp": "6.2.1"
   },
   "devDependencies": {

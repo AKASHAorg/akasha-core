@@ -49,7 +49,7 @@ const DevDashOnboardingSteps: React.FC<
   ].map(el => `${baseRouteName}${menuRoute[el]}`);
 
   useEffect(() => {
-    if (!loginQuery.data?.ethAddress) {
+    if (!loginQuery.data?.id) {
       // if guest, redirect to onboarding step 1 after authentication
       navigateTo?.({
         appName: '@akashaorg/app-auth-ewa',
@@ -74,10 +74,7 @@ const DevDashOnboardingSteps: React.FC<
 
   useEffect(() => {
     // add key after validating
-    if (
-      validateMutation.isSuccess &&
-      validateMutation.data?.body?.aud === loginQuery.data?.ethAddress
-    ) {
+    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loginQuery.data?.id) {
       addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -94,7 +94,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         scrollTo(0, 0);
       } else {
         routing.navigateTo({
-          appName: 'Ethereum World',
+          appName: 'Akasha World',
           getNavigationUrl: () => homeAppRoutes.defaultRoute,
         });
       }
@@ -135,7 +135,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       isLoggedIn={!!myProfileQuery.data?.did}
       loadingUserInstalledApps={false}
       title={myProfileQuery.data?.name ?? t('Guest')}
-      subtitle={myProfileQuery.data?.name ?? t('Connect to see exclusive member only features.')}
+      subtitle={myProfileQuery.data?.did.id ?? t('Connect to see exclusive member only features.')}
       ctaText={t('Add magic to your world by installing cool apps developed by the community')}
       ctaButtonLabel={t('Check them out!')}
       footerLabel={t('Get in touch')}

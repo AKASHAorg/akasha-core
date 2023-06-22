@@ -13,8 +13,8 @@ import { validate } from './validator';
 class AWF_IpfsConnector {
   private _log: pino.Logger;
   readonly gateway = 'https://cloudflare-ipfs.com/ipfs/';
-  readonly originGateway = 'ipfs.cf-ipfs.com';
-  readonly fallbackGateway = 'ipfs.w3s.link';
+  readonly originGateway = 'ipfs.w3s.link';
+  readonly fallbackGateway = 'ipfs.cf-ipfs.com';
   private readonly LEGAL_DOCS_SOURCE = {
     [LEGAL_DOCS.TERMS_OF_USE]: 'bafkreie3pa22hfttuuier6rp6sm7nngfc5jgfjzre7wc5a2ww7z375fhwm',
     [LEGAL_DOCS.TERMS_OF_SERVICE]: 'bafkreib5jg73c6bmbzkrokpusraiwwycnkypol3xh3uadsu7hhzefp6g2e',
@@ -39,7 +39,7 @@ class AWF_IpfsConnector {
 
   // email is just temporary until delegation works
   @validate(z.instanceof(Blob), z.string().optional())
-  async uploadFile(file: Blob, email?: string) {
+  async uploadFile(file: Blob, email?: `${string}@${string}`) {
     const spaces = this.#w3upClient.spaces();
     if (!spaces.length) {
       const newSpace = await this.#w3upClient.createSpace(`akasha-uploads.${new Date().getTime()}`);
@@ -50,11 +50,19 @@ class AWF_IpfsConnector {
       if (!email) {
         throw new Error('Must specify an email address');
       }
+
+      this._log.info(`Sending email to ${email}`);
+      await this.#w3upClient.authorize(email);
+      this._log.info(`registering space for ${email}`);
       await this.#w3upClient.registerSpace(email);
-      this._log.info(`Check email received on ${email}`);
     }
+    //claim existing spaces
+    await this.#w3upClient.capability.access.claim();
+
+    this._log.info('uploading file');
     return this.#w3upClient.uploadFile(file);
   }
+
   @validate(z.union([z.string(), z.instanceof(CID)]), z.boolean().optional())
   async catDocument<T>(docHash: string | CID, jsonResponse = false): Promise<T> {
     const controller = new AbortController();
@@ -93,6 +101,7 @@ class AWF_IpfsConnector {
     }
     return { cid };
   }
+
   @validate(z.union([z.string(), z.instanceof(CID)]))
   buildOriginLink(hash: string | CID) {
     const { link, cid } = this.validateCid(hash);
@@ -101,6 +110,7 @@ class AWF_IpfsConnector {
     }
     return `https://${cid?.toV1().toString()}.${this.originGateway}`;
   }
+
   @validate(z.union([z.string(), z.instanceof(CID)]))
   buildFallBackLink(hash: string | CID) {
     const { link, cid } = this.validateCid(hash);
@@ -109,6 +119,7 @@ class AWF_IpfsConnector {
     }
     return `https://${cid?.toV1().toString()}.${this.fallbackGateway}`;
   }
+
   @validate(z.union([z.string(), z.instanceof(CID)]))
   buildPathLink(hash: string | CID) {
     const { link, cid } = this.validateCid(hash);
@@ -117,6 +128,7 @@ class AWF_IpfsConnector {
     }
     return `${this.gateway}${cid?.toV1().toString()}`;
   }
+
   @validate(z.union([z.string(), z.instanceof(CID)]))
   buildIpfsLinks(hash: string | CID) {
     const originLink = this.buildOriginLink(hash);
@@ -129,6 +141,7 @@ class AWF_IpfsConnector {
       pathLink,
     };
   }
+
   @validate(z.string())
   transformBase16HashToV1(hash: string) {
     const cid = CID.parse(hash, base16.decoder);

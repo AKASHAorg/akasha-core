@@ -145,13 +145,13 @@ const getComment = async commentID => {
   const user = await sdk.api.auth.getCurrentUser();
   // check entry's moderation status
   const modStatus = await checkStatus({
-    user: user ? user.pubKey : '',
+    user: user ? user.id : '',
     contentIds: [commentID],
   });
   const res = await sdk.api.comments.getComment(commentID);
   // check author's moderation status
   const modStatusAuthor = await checkStatus({
-    user: user?.pubKey || '',
+    user: user?.id || '',
     contentIds: [res.getComment?.author?.pubKey],
   });
   return {
