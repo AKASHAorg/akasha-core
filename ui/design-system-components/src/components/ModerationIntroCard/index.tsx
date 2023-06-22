@@ -3,6 +3,7 @@ import { tw } from '@twind/core';
 
 import { IconType } from '@akashaorg/typings/ui';
 
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -88,17 +89,14 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
             {overviewCTAArr.map(({ url, label, iconType }) => (
               <Box key={label + iconType} customStyle="grid gap-1 grid-cols-1 w-[30%]">
                 <Icon size="sm" accentColor={true} type={iconType} customStyle="mx-auto my-0" />
-                <a
+
+                <Anchor
                   href={url}
-                  className={tw(
-                    'text-sm text-center font-bold no-underline text-secondaryLight dark:text-secondaryDark',
-                  )}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  data-testid={`${iconType}-link`}
+                  dataTestId={`${iconType}-link`}
+                  customStyle="text-sm text-center font-bold"
                 >
                   {label}
-                </a>
+                </Anchor>
               </Box>
             ))}
           </Box>
