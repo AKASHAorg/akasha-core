@@ -37,17 +37,10 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   //   .slice(0, 4)
   //   .map((profile: { pubKey: string }) => profile.pubKey);
 
-<<<<<<< HEAD
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.id, followPubKeyArr);
-  const followedProfiles = isFollowingMultipleReq.data;
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
-=======
   // const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.pubKey, followPubKeyArr);
   // const followedProfiles = isFollowingMultipleReq.data;
   // const followReq = useFollow();
   // const unfollowReq = useUnfollow();
->>>>>>> 9fa06280ad6a9dfb3496728c5d8514568664fc68
 
   const tagSubscriptionsReq = useTagSubscriptions(loginQuery.data?.id);
   const tagSubscriptions = tagSubscriptionsReq.data;
