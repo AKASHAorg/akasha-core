@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- PROD HTML FILE -->
+  <!-- DEV HTML FILE -->
   <meta charset="utf-8" />
   <meta
     http-equiv="Content-Security-Policy"
@@ -28,27 +28,23 @@
   <script src="https://cdn.jsdelivr.net/npm/@twind/core@1" crossorigin></script>
   <script src="/setup.twind.js"></script>
   <script
-    src="https://cdn.jsdelivr.net/npm/react@18.1.0/umd/react.production.min.js"
-    integrity="sha256-jZ7REICtj3fBbBmJnVaiC5WfYBLqh2yHrcRGG33uaQg="
+    src="https://cdn.jsdelivr.net/npm/react@18.1.0/umd/react.development.js"
+    integrity="sha256-O0ZCbs+1va83WjpVQuSLmQY0xV3jHyeThUup7w0xE4s="
     crossorigin="anonymous"
   ></script>
   <script
-    src="https://cdn.jsdelivr.net/npm/react-dom@18.1.0/umd/react-dom.production.min.js"
-    integrity="sha256-BeltXRd9g0ocrTTHTHk1Lw34g/Wy8yrKM0QyGcNUflg="
+    src="https://cdn.jsdelivr.net/npm/react-dom@18.1.0/umd/react-dom.development.js"
+    integrity="sha256-zGUasBCF4XVxXwdYz3CtwN81aeFeU7UzG1kQ4k+X2Dk="
     crossorigin="anonymous"
   ></script>
   <script
-    src="https://cdn.jsdelivr.net/npm/rxjs@7.3.0/dist/bundles/rxjs.umd.min.js"
-    integrity="sha256-+LajWfl9lUQH5nq7ZlXg9PPXKELAHI+XplMxfyHswhU="
+    src="https://cdn.jsdelivr.net/npm/rxjs@7.3.0/dist/bundles/rxjs.umd.js"
+    integrity="sha256-BjMWRiizxkmQwQ1IObv4XcdPDQxRQi6KBORApabpcD4="
     crossorigin="anonymous"
   ></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.5/lib/umd/single-spa.min.js"
-          integrity="sha256-45Eozt1VWw1uUdz1Kky3okigg//xCnxE/LZJdy1t25I=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@5.0.2/lib/umd/single-spa-react.js"
-          integrity="sha256-JIQDgDH4WQZ6a9YCreoISXaYNxROMuRdz34l5Xv3h4M=" crossorigin="anonymous"></script>
   <script
-    src="https://cdn.jsdelivr.net/npm/@tanstack/react-query@4.29.3/build/umd/index.production.js"
-    integrity="sha256-H83ofoc0e3U5CUjfExIMbY1dNgtdmUSGPcq2u3NlPYc="
+    src="https://cdn.jsdelivr.net/npm/@tanstack/react-query@4.29.3/build/umd/index.development.js"
+    integrity="sha256-hMVIjMWgkSd4HVOEA+VSp0EZI8BnKOGekyDGIkZniNA="
     crossorigin="anonymous"
   ></script>
   <script
@@ -63,9 +59,13 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.5/lib/umd/single-spa.dev.js"
+          integrity="sha256-Px9B1v3wMkR1sHpxZbDfaM8U45nyMD9BaS49pLGzG7w=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@5.0.2/lib/umd/single-spa-react.js"
+          integrity="sha256-JIQDgDH4WQZ6a9YCreoISXaYNxROMuRdz34l5Xv3h4M=" crossorigin="anonymous"></script>
   <script src="/scripts/theme.js"></script>
-
   <meta name="importmap-type" content="systemjs-importmap" />
+
   <script type="systemjs-importmap">
       {
         "imports": {
@@ -75,6 +75,9 @@
           "@akashaorg/ui-awf-hooks": "/hooks/index.js"
         }
       }
+
+
+
   </script>
 </head>
 
