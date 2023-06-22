@@ -42,16 +42,10 @@
     integrity="sha256-+LajWfl9lUQH5nq7ZlXg9PPXKELAHI+XplMxfyHswhU="
     crossorigin="anonymous"
   ></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/single-spa@5.9.3/lib/umd/single-spa.min.js"
-    integrity="sha256-G1442ZjAn2fRKrCRUZJlS34+YaEP94xz0i8tXPpTBDI="
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/single-spa-react@4.6.0/lib/umd/single-spa-react.min.js"
-    integrity="sha384-aHN9K5XHaqVq7O0h3G2T1c7fDNJJ9VK7SY65s+c4R6KMm1ETy93mxntyhSwHPwl+"
-    crossorigin="anonymous"
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.5/lib/umd/single-spa.min.js"
+          integrity="sha256-45Eozt1VWw1uUdz1Kky3okigg//xCnxE/LZJdy1t25I=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@5.0.2/lib/umd/single-spa-react.js"
+          integrity="sha256-JIQDgDH4WQZ6a9YCreoISXaYNxROMuRdz34l5Xv3h4M=" crossorigin="anonymous"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/@tanstack/react-query@4.29.3/build/umd/index.production.js"
     integrity="sha256-H83ofoc0e3U5CUjfExIMbY1dNgtdmUSGPcq2u3NlPYc="
@@ -69,7 +63,7 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  <script type="text/javascript" src="/scripts/theme.js"></script>
+  <script src="/scripts/theme.js"></script>
 
   <meta name="importmap-type" content="systemjs-importmap" />
   <script type="systemjs-importmap">
@@ -81,6 +75,7 @@
           "@akashaorg/ui-awf-hooks": "/hooks/index.js"
         }
       }
+
 
   </script>
 </head>
@@ -101,18 +96,18 @@
   </div>
 </template>
 <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker
-                .register('/sw.js', { scope: '/' })
-                .then(registration => {
-                    console.log('SW registered: ', registration);
-                })
-                .catch(registrationError => {
-                    console.log('SW registration failed: ', registrationError);
-                });
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("/sw.js", { scope: "/" })
+        .then(registration => {
+          console.log("SW registered: ", registration);
+        })
+        .catch(registrationError => {
+          console.log("SW registration failed: ", registrationError);
         });
-    }
+    });
+  }
 </script>
 <script type="module" src="/main.js" async></script>
 </body>
