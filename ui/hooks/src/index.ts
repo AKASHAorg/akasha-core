@@ -1,4 +1,7 @@
 import 'systemjs-webpack-interop/auto-public-path';
+
+export * from './dummy-hooks';
+
 import constants from './constants';
 import { logError } from './utils/error-handler';
 import { validateType } from './utils/generic-utils';

@@ -9,12 +9,12 @@ import {
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
 import {
-  useInfinitePosts,
   CREATE_POST_MUTATION_KEY,
   useMutationsListener,
   createPendingEntry,
   useAnalytics,
   useDismissedCard,
+  useInfiniteDummy,
 } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -32,10 +32,18 @@ export interface FeedPageProps {
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { logger, loggedProfileData } = props;
+  const {
+    logger,
+    loggedProfileData,
+    plugins,
+    uiEvents,
+    layoutConfig,
+    showLoginModal,
+    navigateToModal,
+  } = props;
 
   const { t } = useTranslation('app-akasha-integration');
-  const locale = (props.plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
+  const locale = (plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
     'en') as ILocale;
 
   const [analyticsActions] = useAnalytics();
@@ -63,10 +71,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     CREATE_POST_MUTATION_KEY,
   ]);
 
-  const postsReq = useInfinitePosts(15);
-
-  const navigateToModal = React.useRef(props.navigateToModal);
-  const showLoginModal = React.useRef(props.showLoginModal);
+  const postsReq = useInfiniteDummy([]);
 
   const handleLoadMore = React.useCallback(() => {
     if (!postsReq.isLoading && postsReq.hasNextPage) {
@@ -84,15 +89,15 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
       if (!loggedProfileData?.did?.id) {
-        return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
+        return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
       }
-      navigateToModal.current({ name: 'report-modal', itemId, itemType });
+      navigateToModal({ name: 'report-modal', itemId, itemType });
     },
     [loggedProfileData?.did?.id],
   );
 
   const handleEntryRemove = React.useCallback((itemId: string) => {
-    navigateToModal.current({
+    navigateToModal({
       name: 'entry-remove-confirmation',
       itemType: EntityTypes.POST,
       itemId,
@@ -120,13 +125,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             {postId ? (
               <Extension
                 name={`inline-editor_repost_${postId}`}
-                uiEvents={props.uiEvents}
+                uiEvents={uiEvents}
                 data={{ itemId: postId, itemType: EntityTypes.POST, action: 'repost' }}
               />
             ) : (
               <Extension
                 name="inline-editor_feed_page"
-                uiEvents={props.uiEvents}
+                uiEvents={uiEvents}
                 data={{ action: 'post' }}
               />
             )}
@@ -168,7 +173,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           (pendingPostState.state.status === 'loading' ||
             /*The following line ensures that even if the post is published pending post UI should be shown till the new entry appears on the feed */
             (pendingPostState.state.status === 'success' &&
-              !postPages[0]?.results.includes(pendingPostState.state.data.toString()))) && (
+              !postPages?.includes(pendingPostState.state.data.toString() as any))) && (
             <EntryCard
               key={pendingPostState.mutationId}
               style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
@@ -185,7 +190,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           ),
       )}
       <FeedWidget
-        modalSlotId={props.layoutConfig.modalSlotId}
+        modalSlotId={layoutConfig.modalSlotId}
         logger={logger}
         itemType={EntityTypes.POST}
         // @TODO replace with real data source
@@ -195,9 +200,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
         }
         loggedProfileData={loggedProfileData}
-        navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-        navigateToModal={props.navigateToModal}
-        onLoginModalOpen={props.showLoginModal}
+        navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+        navigateToModal={navigateToModal}
+        onLoginModalOpen={showLoginModal}
         // @TODO replace with real data source
         requestStatus={null}
         // @TODO replace with real data source
@@ -208,9 +213,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         removeEntryLabel={t('Delete Post')}
         removedByMeLabel={t('You deleted this post')}
         removedByAuthorLabel={t('This post was deleted by its author')}
-        uiEvents={props.uiEvents}
+        uiEvents={uiEvents}
         itemSpacing={8}
-        i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
       />
     </Box>
   );
