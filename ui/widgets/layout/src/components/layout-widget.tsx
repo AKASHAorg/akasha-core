@@ -167,7 +167,7 @@ const Layout: React.FC<RootComponentProps> = props => {
       fixed xl:sticky z-[9999] h-full
       ${
         showSidebar && !window.matchMedia('(min-width: 1440px)').matches
-          ? 'min-w-[100vw] xl:min-w-max bg-black/30'
+          ? 'min-w-[100vw] xl:min-w-max'
           : ''
       }
       `;
