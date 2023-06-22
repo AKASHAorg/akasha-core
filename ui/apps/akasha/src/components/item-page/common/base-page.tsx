@@ -57,7 +57,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     }
     return entryReq.isSuccess && entryData?.reported;
   }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
-
+  // @TODO replace with new hooks
   const reqComments = useInfiniteComments({ limit: 15, postID: postId }, !commentId);
   const reqReplies = useInfiniteReplies(
     { limit: 15, postID: postId, commentID: commentId },
@@ -154,7 +154,8 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
           <FeedWidget
             modalSlotId={layoutConfig.modalSlotId}
             logger={logger}
-            pages={commentPages}
+            // @TODO replace with real data source
+            pages={[]}
             itemType={EntityTypes.REPLY}
             onLoadMore={handleLoadMore}
             getShareUrl={(itemId: string) =>

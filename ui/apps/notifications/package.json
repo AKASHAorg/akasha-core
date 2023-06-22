@@ -31,7 +31,7 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaorg/design-system": "*",
+    "@akashaorg/design-system-components": "*",
     "@akashaorg/design-system-core": "*",
     "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/ui-widget-trending": "*",

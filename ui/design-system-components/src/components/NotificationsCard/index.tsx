@@ -1,12 +1,12 @@
 import React from 'react';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import { formatRelativeTime } from '../../utils/time';
-import BasicCardBox from '../BasicCardBox';
-import BasicInfoCard from '../BasicInfoCard';
-import Box from '../Box';
-import Divider from '../Divider';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import BasicInfoCard from '@akashaorg/design-system-core/lib/components/BasicInfoCard';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ProfileAvatarNotificationApp from './ProfileAvatarNotificationApp';
-import Spinner from '../Spinner';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 export interface INotificationsCard {
   // data
