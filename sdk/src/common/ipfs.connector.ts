@@ -13,8 +13,8 @@ import { validate } from './validator';
 class AWF_IpfsConnector {
   private _log: pino.Logger;
   readonly gateway = 'https://cloudflare-ipfs.com/ipfs/';
-  readonly originGateway = 'ipfs.cf-ipfs.com';
-  readonly fallbackGateway = 'ipfs.w3s.link';
+  readonly originGateway = 'ipfs.w3s.link';
+  readonly fallbackGateway = 'ipfs.cf-ipfs.com';
   private readonly LEGAL_DOCS_SOURCE = {
     [LEGAL_DOCS.TERMS_OF_USE]: 'bafkreie3pa22hfttuuier6rp6sm7nngfc5jgfjzre7wc5a2ww7z375fhwm',
     [LEGAL_DOCS.TERMS_OF_SERVICE]: 'bafkreib5jg73c6bmbzkrokpusraiwwycnkypol3xh3uadsu7hhzefp6g2e',
