@@ -11,6 +11,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
+    'plugin:jsx-a11y/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -20,7 +21,14 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'react-hooks', 'eslint-plugin-tsdoc', 'unicorn'],
+  plugins: [
+    'react',
+    '@typescript-eslint',
+    'react-hooks',
+    'eslint-plugin-tsdoc',
+    'jsx-a11y',
+    'unicorn',
+  ],
   rules: {
     'tsdoc/syntax': 'warn',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
