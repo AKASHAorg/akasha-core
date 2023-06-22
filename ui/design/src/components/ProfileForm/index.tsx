@@ -761,7 +761,7 @@ ProfileForm.defaultProps = {
   usernameLabel: 'Username',
   usernameFieldPlaceholder: 'username',
   usernameFieldInfo:
-    "Your username identifies you in Ethereum World. Once you choose one, you won't be able to change it.",
+    "Your username identifies you in Akasha World. Once you choose one, you won't be able to change it.",
   descriptionLabel: 'About',
   titleLabel: 'Ethereum Address',
   avatarLabel: 'Avatar',

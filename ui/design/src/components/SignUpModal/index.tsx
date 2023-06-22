@@ -87,9 +87,7 @@ const SignUpModal = (props: {
                         label={' Code of Conduct '}
                         target={'_blank'}
                       />
-                      {
-                        'as the basis for respectful interactions with each other on Ethereum World.'
-                      }
+                      {'as the basis for respectful interactions with each other on Akasha World.'}
                     </Text>
                   </Box>
                   <Box align="start" justify="start" pad="small">

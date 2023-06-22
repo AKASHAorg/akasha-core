@@ -143,7 +143,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
         justify="between"
         border={{ size: '1px', color: 'accent' }}
       >
-        <Text size="large">{t(' ✨😸Share your articles with Ethereum World 😸✨')}</Text>
+        <Text size="large">{t(' ✨😸Share your articles with Akasha World 😸✨')}</Text>
         <Button
           slimBorder={true}
           primary={true}

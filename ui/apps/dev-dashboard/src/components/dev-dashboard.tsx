@@ -45,7 +45,7 @@ const DevDashboard = (props: RootComponentProps) => {
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Dev Dashboard | Ethereum World</title>
+        <title>Dev Dashboard | Akasha World</title>
       </Helmet>
 
       <>

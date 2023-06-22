@@ -98,7 +98,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   return (
     <Box customStyle="w-full">
       <Helmet.Helmet>
-        <title>Ethereum World</title>
+        <title>Akasha World</title>
       </Helmet.Helmet>
 
       <Box customStyle="mb-2">
@@ -108,7 +108,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           description={t(
             'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
           )}
-          secondaryDescription={t('Your customized view of Ethereum World')}
+          secondaryDescription={t('Your customized view of Akasha World')}
           image="/images/news-feed.webp"
           showMainArea={!userHasSubscriptions}
           hideMainAreaOnMobile={false}
@@ -149,7 +149,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         <MyFeedCard
           title={t('✨ Add a little magic to your feed ✨')}
           description={t(
-            'Follow topics and wonderful people you care about most to feel at home every time you visit Ethereum World. ',
+            'Follow topics and wonderful people you care about most to feel at home every time you visit Akasha World. ',
           )}
           noPostsTitle={t('No Posts Yet')}
           noPostsDescription={t(

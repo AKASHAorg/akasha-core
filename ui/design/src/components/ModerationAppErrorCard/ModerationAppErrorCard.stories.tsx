@@ -26,9 +26,9 @@ export const BaseModerationAppErrorCard = Template.bind({});
 BaseModerationAppErrorCard.args = {
   boxSize: '18.75rem',
   errorType: 'no-authentication',
-  titleLabel: 'This page is for our marvelous Ethereum World moderators',
+  titleLabel: 'This page is for our marvelous Akasha World moderators',
   subtitleLabel:
-    'To view this page, you must be an Ethereum World Moderator and log in with your wallet to continue.',
+    'To view this page, you must be an Akasha World Moderator and log in with your wallet to continue.',
   buttonLabel: 'Connect a wallet',
   textMarginBottom: true,
   hasButton: true,

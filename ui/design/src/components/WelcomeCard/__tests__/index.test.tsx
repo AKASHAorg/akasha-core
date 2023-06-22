@@ -17,13 +17,13 @@ describe('<WelcomeCard /> Component', () => {
         wrapWithTheme(
           <WelcomeCard
             titleLabel="Welcome to the alpha!"
-            subtitleLabel="Congratulations, you are the newest member of Ethereum World!"
+            subtitleLabel="Congratulations, you are the newest member of Akasha World!"
             paragraphOneLabel="You can now browse the feed, subscribe to topics, write your own posts, and reply to other Ethereans."
             paragraphTwoIntroLabel="While you don't have to do it now,"
             paragraphTwoBoldLabel="we do recommend you take the time to customize your profile"
             paragraphTwoNextLabel="You can change your display name and avatar, add a cover image and description, as well as claim your own AKASHA ENS name."
             paragraphThreeLabel="We are very happy you've joined us!"
-            primaryButtonLabel="Browse Ethereum World"
+            primaryButtonLabel="Browse Akasha World"
             secondaryButtonLabel="Customize My Profile"
             handlePrimaryButtonClick={handlePrimaryButtonClick}
             handleSecondaryButtonClick={handleSecondaryButtonClick}
@@ -54,7 +54,7 @@ describe('<WelcomeCard /> Component', () => {
   it('calls button handlers when clicked', async () => {
     const { getByText } = componentWrapper;
 
-    const primaryButtonLabel = getByText('Browse Ethereum World');
+    const primaryButtonLabel = getByText('Browse Akasha World');
     const secondaryButtonLabel = getByText('Customize My Profile');
 
     expect(handlePrimaryButtonClick).toBeCalledTimes(0);

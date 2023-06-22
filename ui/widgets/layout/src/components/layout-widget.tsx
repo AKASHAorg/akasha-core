@@ -229,7 +229,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                   <Box width="100%">
                     <Text size="medium">
                       {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
-                        'We have migrated Ethereum World to the Goerli testnet',
+                        'We have migrated Akasha World to the Goerli testnet',
                       )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
                         'But some functionalities such as claiming ENS names won’t be possible',
                       )}. ${t('We are working hard on mitigating any issues')}. ${t(

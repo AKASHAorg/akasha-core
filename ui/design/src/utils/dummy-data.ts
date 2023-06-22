@@ -76,7 +76,7 @@ const installedAppsData: IMenuItem[] = [
     area: [MenuItemAreaType.AppArea],
   },
   {
-    label: 'Bookmarks',
+    label: 'List',
     index: 10,
     route: '/social-app/bookmarks',
     type: MenuItemType.App,
@@ -482,7 +482,7 @@ const ICWorldAppsData: IntegrationReleaseInfo[] = [
     enabled: true,
   },
   {
-    name: 'Bookmarks',
+    name: 'List',
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
@@ -490,7 +490,7 @@ const ICWorldAppsData: IntegrationReleaseInfo[] = [
     version: '0.1.0',
     manifestData: {
       mainFile: 'index.js',
-      displayName: 'Bookmarks',
+      displayName: 'List',
       keywords: ['saving', 'bookmarks'],
       license: 'wtfpl',
     },
