@@ -23,13 +23,13 @@ import EntryCardLoading from '@akashaorg/design-system-components/lib/components
 type Props = {
   appName: string;
   postId: string;
-  pubKey: string;
+  userId: string;
   singleSpa: RootExtensionProps['singleSpa'];
   action: 'post' | 'reply' | 'repost' | 'edit';
   draftStorage: IDraftStorage;
 };
 
-export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftStorage }: Props) {
+export function PostEditor({ appName, postId, userId, singleSpa, action, draftStorage }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
 
@@ -45,13 +45,13 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
   const postDraft = new Draft<Partial<IEntryData>>({
     storage: draftStorage,
     appName,
-    pubKey,
+    userId,
     action: 'post',
   });
   const repostDraft = new Draft<IEntryData>({
     storage: draftStorage,
     appName,
-    pubKey,
+    userId,
     action: 'repost',
   });
   const canSaveDraft = action === 'post' || action === 'repost';
@@ -123,7 +123,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
         case 'post':
         case 'repost':
           publishPost.mutate(
-            { ...data, pubKey },
+            { ...data, userId },
             {
               onSuccess: () => {
                 analyticsActions.trackEvent({
@@ -152,7 +152,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
           singleSpa.navigateToUrl(location.pathname);
       }
     },
-    [action, postId, pubKey, singleSpa, editPost, publishPost, publishComment, analyticsActions],
+    [action, postId, userId, singleSpa, editPost, publishPost, publishComment, analyticsActions],
   );
 
   const entryAuthorName =

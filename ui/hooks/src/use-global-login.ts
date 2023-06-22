@@ -12,7 +12,6 @@ export interface UseGlobalLoginProps {
   onLogin: OnLoginSuccessHandler;
   onLogout: OnLogoutSuccessHandler;
   onError?: OnErrorHandler;
-  onLoadFromCache?: (data: CurrentUser) => void;
 }
 
 /**
@@ -30,11 +29,10 @@ export interface UseGlobalLoginProps {
  * ```
  */
 const useGlobalLogin = (props: UseGlobalLoginProps): void => {
-  const { onError, onLogin, onLogout, onLoadFromCache } = props;
+  const { onError, onLogin, onLogout } = props;
   const onErrorHandler = React.useRef(onError);
   const onLoginHandler = React.useRef(onLogin);
   const onLogoutHandler = React.useRef(onLogout);
-  const onLoadFromCacheHandler = React.useRef(onLoadFromCache);
 
   const sdk = React.useRef(getSDK());
 
@@ -67,14 +65,6 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
       error: createErrorHandler('useGlobalLogin.logoutCall', false, onErrorHandler.current),
     });
     return () => sub.unsubscribe();
-  }, []);
-  React.useLayoutEffect(() => {
-    // make an attempt to load the eth address from cache;
-    sdk.current.api.auth.getCurrentUser().then(resp => {
-      if (onLoadFromCacheHandler.current) {
-        onLoadFromCacheHandler.current(resp);
-      }
-    });
   }, []);
 };
 

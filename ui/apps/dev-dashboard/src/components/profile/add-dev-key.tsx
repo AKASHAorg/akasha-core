@@ -32,7 +32,7 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
   const [message, setmessage] = React.useState<string>('');
 
   const loginQuery = useGetLogin();
-  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
+  const loggedProfileQuery = useGetProfile(loginQuery.data?.id);
 
   const validateMutation = useValidateMessage();
   const addKeyMutation = useAddDevKeyFromMessage();

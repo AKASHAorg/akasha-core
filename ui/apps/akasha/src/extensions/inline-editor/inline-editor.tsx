@@ -30,7 +30,7 @@ export const InlineEditor = (
       <PostEditor
         appName={props?.worldConfig?.homepageApp || 'inline-editor'}
         postId={itemId}
-        pubKey={loginQuery?.data?.pubKey}
+        userId={loginQuery?.data?.id}
         singleSpa={props.singleSpa}
         action={action}
         draftStorage={draftStorage}

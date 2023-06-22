@@ -38,7 +38,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
     plugins,
   } = props;
 
-  const [pubKey, setPubKey] = React.useState<string>('');
+  const [did, setDid] = React.useState<string>('');
   const [message, setMessage] = React.useState<string>('');
   const [signature, setSignature] = React.useState<string>('');
 
@@ -52,7 +52,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
 
   React.useEffect(() => {
     if (loginQuery.data) {
-      setPubKey(loginQuery.data.pubKey);
+      setDid(loginQuery.data.id);
     }
   }, [loginQuery.data]);
 
@@ -66,7 +66,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
   const handleFieldChange = (ev, field: string) => {
     switch (field) {
       case 'pubKey':
-        setPubKey(ev.target.value);
+        setDid(ev.target.value);
         break;
       case 'message':
         setMessage(ev.target.value);
@@ -80,7 +80,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
   };
 
   const handleVerifySignature = () => {
-    verifySignatureMutation.mutate({ pubKey, signature, data: message });
+    verifySignatureMutation.mutate({ did, signature, data: message });
   };
 
   const handleButtonClick = () => {
@@ -111,7 +111,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
               </Text>
               <TextInputIconForm
                 inputPlaceholder={pubKeyInputPlaceholder}
-                inputValue={pubKey}
+                inputValue={did}
                 elevation="shadow"
                 margin="0rem"
                 noArrowRight={true}
@@ -202,7 +202,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
         {verifySignatureMutation.isSuccess && (
           <SummaryCard
             {...props}
-            paragraph1Content={pubKey}
+            paragraph1Content={did}
             paragraph2Content={message}
             onButtonClick={handleButtonClick}
           />

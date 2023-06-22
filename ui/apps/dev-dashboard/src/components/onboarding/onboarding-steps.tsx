@@ -29,7 +29,7 @@ interface IDevDashOnboardingStepsProps {
 const DevDashOnboardingSteps: React.FC<
   RootComponentProps & IDevDashOnboardingStepsProps
 > = props => {
-  const { plugins } = props;
+  const { plugins, baseRouteName } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
@@ -49,16 +49,16 @@ const DevDashOnboardingSteps: React.FC<
     ONBOARDING_STEP_TWO,
     ONBOARDING_STEP_THREE,
     ONBOARDING_STEP_FOUR,
-  ].map(el => `${props.baseRouteName}${menuRoute[el]}`);
+  ].map(el => `${baseRouteName}${menuRoute[el]}`);
 
   React.useEffect(() => {
-    if (!loginQuery.data?.pubKey) {
+    if (!loginQuery.data?.id) {
       // if guest, redirect to onboarding step 1 after authentication
       navigateTo?.({
         appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: (routes: Record<string, string>) => {
           return `${routes.Connect}?${new URLSearchParams({
-            redirectTo: `${props.baseRouteName}${menuRoute[ONBOARDING_STEP_ONE]}`,
+            redirectTo: `${baseRouteName}${menuRoute[ONBOARDING_STEP_ONE]}`,
           }).toString()}`;
         },
       });
@@ -77,10 +77,7 @@ const DevDashOnboardingSteps: React.FC<
 
   React.useEffect(() => {
     // add key after validating
-    if (
-      validateMutation.isSuccess &&
-      validateMutation.data?.body?.aud === loginQuery.data?.pubKey
-    ) {
+    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loginQuery.data?.id) {
       addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

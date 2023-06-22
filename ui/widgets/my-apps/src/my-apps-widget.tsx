@@ -22,12 +22,12 @@ const { Box, ICWidgetCard } = DS;
 const ICWidget: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-akasha-verse');
 
-  const { worldConfig } = props;
+  const { worldConfig, plugins } = props;
 
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data.pubKey && loginQuery.data.isReady;
+    return !!loginQuery.data.id;
   }, [loginQuery.data]);
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -99,7 +99,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
     });

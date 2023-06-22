@@ -6,10 +6,9 @@ import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typing
  */
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
   mountsIn: opts.layoutConfig?.widgetSlotId,
-  loadingFn: () => import('./MyAppsWidget'),
+  loadingFn: () => import('./my-apps-widget'),
   activeWhen: (location, pathToActiveWhen) =>
     pathToActiveWhen('/@akashaorg/app-akasha-verse/', false)(location),
   name: 'ui-widget-my-apps',
   i18nNamespace: [],
-  tags: ['my-apps', 'akasha-verse'],
 });
