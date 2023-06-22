@@ -11,9 +11,7 @@ import EditMessageName from './profile/edit-message-name';
 import PublishedAppsCard from './profile/published-apps';
 import SignMessageCard from './profile/sign-message';
 import VerifySignatureCard from './profile/verify-signature';
-import DevDashOnboardingIntro from './onboarding/intro-card';
-import DevDashOnboardingSteps from './onboarding/onboarding-steps';
-import DevDashboard from './dev-dashboard';
+import { DevDashOnboardingIntro, DevDashOnboardingSteps, DevDashboard } from '../pages';
 
 import routes, {
   ONBOARDING,
@@ -68,9 +66,12 @@ const AppRoutes = (props: RootComponentProps) => {
       <Helmet>
         <title>Dev Dashboard | Ethereum World</title>
       </Helmet>
+
       <Routes>
         <Route path="/" element={<Navigate to={routes[DASHBOARD]} replace />} />
+
         <Route path={routes[DASHBOARD]} element={<DevDashboard {...props} />} />
+
         <Route
           path={routes[ONBOARDING]}
           element={
@@ -85,6 +86,7 @@ const AppRoutes = (props: RootComponentProps) => {
             />
           }
         />
+
         {[
           routes[ONBOARDING_STEP_ONE],
           routes[ONBOARDING_STEP_TWO],
@@ -97,6 +99,7 @@ const AppRoutes = (props: RootComponentProps) => {
             element={<DevDashOnboardingSteps {...props} activeIndex={idx} />}
           />
         ))}
+
         <Route
           path={routes[DEV_KEYS]}
           element={
@@ -113,9 +116,13 @@ const AppRoutes = (props: RootComponentProps) => {
             />
           }
         />
+
         <Route path={routes[ADD_DEV_KEY]} element={<AddDevKeyCard {...props} />} />
+
         <Route path={routes[EDIT_MESSAGE_NAME]} element={<EditMessageName {...props} />} />
+
         <Route path={routes[PUBLISHED_APPS]} element={<PublishedAppsCard {...props} />} />
+
         <Route
           path={routes[SIGN_MESSAGE]}
           element={
@@ -132,6 +139,7 @@ const AppRoutes = (props: RootComponentProps) => {
             />
           }
         />
+
         <Route
           path={routes[VERIFY_SIGNATURE]}
           element={

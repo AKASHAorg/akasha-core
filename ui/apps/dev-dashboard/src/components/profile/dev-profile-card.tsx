@@ -1,28 +1,33 @@
 import React from 'react';
 
-import DS from '@akashaorg/design-system';
 import { NavigateToParams } from '@akashaorg/typings/ui';
-import { DevKeyCardType } from '@akashaorg/design-system/lib/components/DevKeyCard';
+
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { DevKeyCardType } from '@akashaorg/design-system-components/lib/components/DevKeyCard';
 
 import menuRoute from '../../routes';
-
-const { Anchor, Box, HorizontalDivider, Icon, MainAreaCardBox, Text } = DS;
 
 type CardMenuItem = {
   label: string;
   route: string;
-  value?: DevKeyCardType[] | Record<string, unknown>[];
+  value?: DevKeyCardType[] | Record<string, unknown>[] | number;
 };
 
-interface IDevProfileCardProps {
+export type DevProfileCardProps = {
   titleLabel: string;
   subtitleLabels: string[];
   cardMenuItems: CardMenuItem[];
   ctaUrl: string;
   navigateTo: (params: NavigateToParams) => void;
-}
+};
 
-const DevProfileCard: React.FC<IDevProfileCardProps> = props => {
+const DevProfileCard: React.FC<DevProfileCardProps> = props => {
   const { titleLabel, subtitleLabels, cardMenuItems, ctaUrl, navigateTo } = props;
 
   const handleClickMenuItem = (route: string) => () => {
@@ -33,56 +38,50 @@ const DevProfileCard: React.FC<IDevProfileCardProps> = props => {
   };
 
   return (
-    <MainAreaCardBox>
-      <Box pad="medium">
-        {titleLabel && (
-          <Text size="large" margin={{ bottom: 'xsmall' }} weight="bold">
-            {titleLabel}
-          </Text>
-        )}
-        {subtitleLabels && (
-          <Text size="large" margin={{ bottom: 'xsmall' }}>
-            {subtitleLabels[0]}{' '}
-            <Anchor
-              href={ctaUrl}
-              size="large"
-              weight="normal"
-              target="_blank"
-              color="accentText"
-              style={{ textDecoration: 'none' }}
-            >
-              {subtitleLabels[1]}
-            </Anchor>{' '}
-            {subtitleLabels[2]}
-          </Text>
-        )}
+    <BasicCardBox pad="p-0">
+      <Box customStyle="p-4">
+        <Text variant="h5" align="center" weight="bold">
+          {titleLabel}
+        </Text>
+
+        <Text color={{ light: 'grey4', dark: 'grey6' }} customStyle="mt-2">
+          {subtitleLabels[0]}{' '}
+          <Anchor href={ctaUrl} customStyle="font-bold">
+            {subtitleLabels[1]}
+          </Anchor>{' '}
+          {subtitleLabels[2]}
+        </Text>
       </Box>
-      <HorizontalDivider />
+
       {cardMenuItems.map((item, idx) => (
-        <React.Fragment key={idx}>
-          <Box
-            pad={{ vertical: 'large', horizontal: 'medium' }}
-            align="center"
-            direction="row"
-            justify="between"
-            onClick={handleClickMenuItem(item.route)}
-          >
-            <Text size="large" weight={500}>
-              {item.label}
-            </Text>
-            <Box direction="row" align="center" gap="xsmall">
-              {item.value && (
-                <Text size="large" color="secondaryText">
-                  {item.value.length}
+        <Box key={idx}>
+          <Divider />
+
+          <Box customStyle="p-4">
+            <Button plain={true} onClick={handleClickMenuItem(item.route)} customStyle="w-full">
+              <Box customStyle="flex justify-between items-center">
+                <Text variant="h6" weight="bold">
+                  {item.label}
                 </Text>
-              )}
-              <Icon type="chevronRight" />
-            </Box>
+
+                <Box customStyle="flex items-center space-x-1">
+                  {item.value && (
+                    <Text variant="subtitle1" color={{ light: 'grey4', dark: 'grey6' }}>
+                      {typeof item.value === 'number' ? item.value : item.value.length}
+                    </Text>
+                  )}
+
+                  <Icon
+                    type="ChevronRightIcon"
+                    color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                  />
+                </Box>
+              </Box>
+            </Button>
           </Box>
-          {idx < cardMenuItems.length - 1 && <HorizontalDivider />}
-        </React.Fragment>
+        </Box>
       ))}
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

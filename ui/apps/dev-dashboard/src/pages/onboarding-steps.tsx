@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin, useValidateMessage, useAddDevKeyFromMessage } from '@akashaorg/ui-awf-hooks';
 
-import StepOne from './step-one';
-import StepTwo from './step-two';
-import StepThree from './step-three';
-import StepFour from './step-four';
+import StepOne from '../components/onboarding/step-one';
+import StepTwo from '../components/onboarding/step-two';
+import StepThree from '../components/onboarding/step-three';
+import StepFour from '../components/onboarding/step-four';
 import { ONBOARDING_STATUS } from './intro-card';
 
 import menuRoute, {
@@ -17,13 +17,13 @@ import menuRoute, {
   ONBOARDING_STEP_ONE,
   ONBOARDING_STEP_THREE,
   ONBOARDING_STEP_TWO,
-} from '../../routes';
+} from '../routes';
 
 interface IDevDashOnboardingStepsProps {
   activeIndex?: number;
 }
 
-const DevDashOnboardingSteps: React.FC<
+export const DevDashOnboardingSteps: React.FC<
   RootComponentProps & IDevDashOnboardingStepsProps
 > = props => {
   const { baseRouteName, plugins } = props;
@@ -226,5 +226,3 @@ const DevDashOnboardingSteps: React.FC<
     </>
   );
 };
-
-export default DevDashOnboardingSteps;

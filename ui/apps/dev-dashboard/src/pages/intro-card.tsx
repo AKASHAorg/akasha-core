@@ -18,7 +18,7 @@ type DevDashOnboardingIntroProps = {
 
 export const ONBOARDING_STATUS = 'ewa-dev-dashboard-onboarding-status';
 
-const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = props => {
+export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = props => {
   const {
     assetName = 'dev-dashboard-intro',
     publicImgPath = '/images',
@@ -37,7 +37,11 @@ const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = props => {
         </Text>
 
         <Box customStyle="w-[17.5rem] h-[17.5rem] my-6">
-          <img className={tw('object-contain')} src={`${publicImgPath}/${assetName}.webp`} />
+          <img
+            alt={`${assetName}`}
+            className={tw('object-contain')}
+            src={`${publicImgPath}/${assetName}.webp`}
+          />
         </Box>
 
         <Text variant="h5" align="center" weight="bold" customStyle="mt-2">
@@ -59,5 +63,3 @@ const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = props => {
     </BasicCardBox>
   );
 };
-
-export default DevDashOnboardingIntro;

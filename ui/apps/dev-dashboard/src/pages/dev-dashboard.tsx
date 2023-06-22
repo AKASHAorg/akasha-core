@@ -5,8 +5,8 @@ import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetDevKeys } from '@akashaorg/ui-awf-hooks';
 
-import DevProfileCard from './profile/dev-profile-card';
-import { ONBOARDING_STATUS } from './onboarding/intro-card';
+import DevProfileCard from '../components/profile/dev-profile-card';
+import { ONBOARDING_STATUS } from './intro-card';
 
 import menuRoute, {
   DEV_KEYS,
@@ -18,7 +18,7 @@ import menuRoute, {
 
 const { Box, Helmet } = DS;
 
-const DevDashboard = (props: RootComponentProps) => {
+export const DevDashboard = (props: RootComponentProps) => {
   const { plugins } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
@@ -50,7 +50,7 @@ const DevDashboard = (props: RootComponentProps) => {
 
       <>
         <DevProfileCard
-          titleLabel={t('Welcome to your developer Dashboard')}
+          titleLabel={t('Your Developer Dashboard')}
           subtitleLabels={[
             t('Not sure where to start? Check our'),
             t('developer documentation'),
@@ -65,6 +65,7 @@ const DevDashboard = (props: RootComponentProps) => {
             {
               label: t('Published Apps'),
               route: PUBLISHED_APPS,
+              value: 30,
             },
             { label: t('Sign a Message'), route: SIGN_MESSAGE },
             { label: t('Verify a Signature'), route: VERIFY_SIGNATURE },
@@ -76,5 +77,3 @@ const DevDashboard = (props: RootComponentProps) => {
     </Box>
   );
 };
-
-export default DevDashboard;
