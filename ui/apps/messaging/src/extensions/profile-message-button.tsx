@@ -68,9 +68,8 @@ const MessageIconButtonWrapper = (props: RootExtensionProps) => (
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOM,
+  ReactDOMClient: ReactDOM,
   rootComponent: withProviders(MessageIconButtonWrapper),
-  renderType: 'createRoot',
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);

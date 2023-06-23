@@ -49,9 +49,8 @@ const ShareProfileModal: React.FC<RootExtensionProps> = props => {
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOM,
+  ReactDOMClient: ReactDOM,
   rootComponent: withProviders(ShareProfileModal),
-  renderType: 'createRoot',
   errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
