@@ -98,9 +98,8 @@ const ModalWrapper: React.FC<RootExtensionProps> = props => {
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOM,
+  ReactDOMClient: ReactDOM,
   rootComponent: withProviders(ModalWrapper),
-  renderType: 'createRoot',
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);

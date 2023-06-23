@@ -18,9 +18,8 @@ const Wrapped = (props: RootExtensionProps) => {
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOM,
+  ReactDOMClient: ReactDOM,
   rootComponent: withProviders(Wrapped),
-  renderType: 'createRoot',
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
