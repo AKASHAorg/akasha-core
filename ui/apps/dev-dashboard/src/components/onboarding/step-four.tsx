@@ -13,6 +13,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
 import { BaseStepsProps } from './step-one';
+import { sampleDevKeys } from '../../utils/dummy-data';
 
 type ExtendableProps = BaseStepsProps & SteppedActionWrapperProps & DevKeyCardProps;
 
@@ -30,19 +31,6 @@ const StepFour: React.FC<StepFourProps> = props => {
     publicImgPath = '/images',
   } = props;
 
-  /**
-   * sample, remove when connected to hook
-   */
-  const sampleDevKey = {
-    addedAt: '2022-10-05T22:01:34.889Z',
-    name: 'Sample Key',
-    pubKey: 'bbaareigw7ua7k3thuacm2qpuhkgxone3ynsfo6n2v6pwgzpq2ie3eu7lpi',
-  };
-
-  // const getKeysQuery = useGetDevKeys(true);
-
-  // const devKeys = getKeysQuery.data || [];
-
   return (
     <SteppedActionWrapper {...props}>
       <Box customStyle="flex flex-col w-full">
@@ -50,12 +38,13 @@ const StepFour: React.FC<StepFourProps> = props => {
 
         <Box customStyle="w-[17.5rem] h-[17.5rem] my-6 self-center">
           <img
+            alt={assetName}
             className={tw('object-contain')}
             src={`${publicImgPath}/${assetName}.${assetExtension}`}
           />
         </Box>
 
-        <DevKeyCard {...props} item={sampleDevKey} />
+        <DevKeyCard {...props} item={sampleDevKeys[0]} />
       </Box>
     </SteppedActionWrapper>
   );

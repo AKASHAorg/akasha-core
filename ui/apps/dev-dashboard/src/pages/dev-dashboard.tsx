@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetDevKeys } from '@akashaorg/ui-awf-hooks';
+
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
 import DevProfileCard from '../components/profile/dev-profile-card';
 import { ONBOARDING_STATUS } from './intro-card';
@@ -15,8 +16,7 @@ import menuRoute, {
   SIGN_MESSAGE,
   VERIFY_SIGNATURE,
 } from '../routes';
-
-const { Box, Helmet } = DS;
+import { sampleDevKeys } from '../utils/dummy-data';
 
 export const DevDashboard = (props: RootComponentProps) => {
   const { plugins } = props;
@@ -24,10 +24,6 @@ export const DevDashboard = (props: RootComponentProps) => {
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
   const { t } = useTranslation('app-dev-dashboard');
-
-  const getKeysQuery = useGetDevKeys(true);
-
-  const devKeys = getKeysQuery.data || [];
 
   const isOnboarded = React.useMemo(() => {
     return Boolean(window.localStorage.getItem(ONBOARDING_STATUS));
@@ -43,7 +39,7 @@ export const DevDashboard = (props: RootComponentProps) => {
   }
 
   return (
-    <Box fill="horizontal">
+    <Box customStyle="w-full">
       <Helmet>
         <title>Dev Dashboard | Akasha World</title>
       </Helmet>
@@ -60,7 +56,7 @@ export const DevDashboard = (props: RootComponentProps) => {
             {
               label: t('Dev Keys'),
               route: DEV_KEYS,
-              value: devKeys,
+              value: sampleDevKeys,
             },
             {
               label: t('Published Apps'),
