@@ -77,6 +77,7 @@
       }
 
 
+
   </script>
 </head>
 
@@ -96,18 +97,18 @@
   </div>
 </template>
 <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/sw.js", { scope: "/" })
-        .then(registration => {
-          console.log("SW registered: ", registration);
-        })
-        .catch(registrationError => {
-          console.log("SW registration failed: ", registrationError);
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker
+                .register('/sw.js', { scope: '/' })
+                .then(registration => {
+                    console.log('SW registered: ', registration);
+                })
+                .catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
         });
-    });
-  }
+    }
 </script>
 <script type="module" src="/main.js" async></script>
 </body>
