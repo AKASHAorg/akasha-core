@@ -5,13 +5,17 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
-import DevKeysCard from './profile/dev-keys';
 import AddDevKeyCard from './profile/add-dev-key';
 import EditMessageName from './profile/edit-message-name';
 import PublishedAppsCard from './profile/published-apps';
 import SignMessageCard from './profile/sign-message';
 import VerifySignatureCard from './profile/verify-signature';
-import { DevDashOnboardingIntro, DevDashOnboardingSteps, DevDashboard } from '../pages';
+import {
+  DevDashOnboardingIntro,
+  DevDashOnboardingSteps,
+  DevDashboard,
+  DevKeysCard,
+} from '../pages';
 
 import routes, {
   ONBOARDING,
