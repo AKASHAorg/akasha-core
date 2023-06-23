@@ -14,7 +14,7 @@ export type IMenuItem = {
 };
 
 export type DevKeyCardType = {
-  pubKey: string;
+  id: string;
   name?: string;
   addedAt: string;
   usedAt?: string;
@@ -72,7 +72,7 @@ export const DevKeyCard: React.FC<DevKeyCardProps> = props => {
           {devPubKeyLabel}
         </Text>
 
-        <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{item?.pubKey}</Text>
+        <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{item?.id}</Text>
       </Box>
 
       {/* date added section */}
