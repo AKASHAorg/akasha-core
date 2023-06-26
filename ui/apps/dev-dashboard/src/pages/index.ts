@@ -1,3 +1,4 @@
+export * from './add-dev-key';
 export * from './dev-dashboard';
 export * from './dev-keys';
 export * from './intro-card';

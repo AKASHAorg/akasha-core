@@ -1,16 +1,18 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import * as React from 'react';
-import DS from '@akashaorg/design-system';
+
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
 
-import AddDevKeyCard from './profile/add-dev-key';
+import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
+
 import EditMessageName from './profile/edit-message-name';
 import PublishedAppsCard from './profile/published-apps';
 import SignMessageCard from './profile/sign-message';
 import VerifySignatureCard from './profile/verify-signature';
 import {
+  AddDevKey,
   DevDashOnboardingIntro,
   DevDashOnboardingSteps,
   DevDashboard,
@@ -31,8 +33,6 @@ import routes, {
   VERIFY_SIGNATURE,
   EDIT_MESSAGE_NAME,
 } from '../routes';
-
-const { Helmet } = DS;
 
 const AppRoutes = (props: RootComponentProps) => {
   const { baseRouteName, plugins } = props;
@@ -117,11 +117,12 @@ const AppRoutes = (props: RootComponentProps) => {
               usedLabel={t('Active')}
               devPubKeyLabel={t('Dev Public Key 🔑')}
               dateAddedLabel={t('Date added 🗓')}
+              editable={true}
             />
           }
         />
 
-        <Route path={routes[ADD_DEV_KEY]} element={<AddDevKeyCard {...props} />} />
+        <Route path={routes[ADD_DEV_KEY]} element={<AddDevKey {...props} />} />
 
         <Route path={routes[EDIT_MESSAGE_NAME]} element={<EditMessageName {...props} />} />
 
