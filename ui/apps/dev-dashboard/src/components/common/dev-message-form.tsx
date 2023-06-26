@@ -12,7 +12,7 @@ export type DevMessageFormProps = {
   validationStatus: { isError: boolean; errorMessage?: string; extraInfo?: string };
 };
 
-const DevMessageForm: React.FC<DevMessageFormProps> = props => {
+export const DevMessageForm: React.FC<DevMessageFormProps> = props => {
   const {
     messageNameTitleLabel,
     messageTitleLabel,
@@ -22,7 +22,7 @@ const DevMessageForm: React.FC<DevMessageFormProps> = props => {
   } = props;
 
   return (
-    <Box customStyle="mt-2">
+    <Box customStyle="mt-2 space-y-6">
       <TextField
         label={messageNameTitleLabel}
         placeholder={messageNameInputPlaceholder}
@@ -49,5 +49,3 @@ const DevMessageForm: React.FC<DevMessageFormProps> = props => {
     </Box>
   );
 };
-
-export default DevMessageForm;

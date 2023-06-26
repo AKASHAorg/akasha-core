@@ -7,7 +7,7 @@ import {
   SteppedActionWrapperProps,
 } from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
-import DevMessageForm, { DevMessageFormProps } from '../profile/dev-message-form';
+import { DevMessageForm, DevMessageFormProps } from '../common';
 
 export type GenerateMessageProps = DevMessageFormProps &
   SteppedActionWrapperProps & {

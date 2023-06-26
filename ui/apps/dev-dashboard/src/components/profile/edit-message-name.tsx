@@ -7,7 +7,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import CardTitle from './card-title';
 
 import menuRoute, { DEV_KEYS } from '../../routes';
-import DevMessageForm from './dev-message-form';
+import { DevMessageForm } from '../common';
 
 const { Box, HorizontalDivider, MainAreaCardBox } = DS;
 
