@@ -8,7 +8,7 @@ export type ListItemProps = {
   item: string;
 };
 
-const ListItem: React.FC<ListItemProps> = props => {
+export const ListItem: React.FC<ListItemProps> = props => {
   const { listElementText, item } = props;
 
   return (
@@ -19,5 +19,3 @@ const ListItem: React.FC<ListItemProps> = props => {
     </Box>
   );
 };
-
-export default ListItem;

@@ -8,17 +8,17 @@ import {
   SteppedActionWrapperProps,
 } from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
-import ListItem from './list-item';
-import { BaseStepsProps } from './step-one';
+import { ListItem } from './list-item';
+import { BaseStepsProps } from './terms-and-conditions';
 
-export type StepTwoProps = BaseStepsProps &
+export type DownloadCLIToolProps = BaseStepsProps &
   SteppedActionWrapperProps & {
     ctaListItem: string[];
     paragraphs: string[];
     onCTAClick: () => void;
   };
 
-const StepTwo: React.FC<StepTwoProps> = props => {
+export const DownloadCLITool: React.FC<DownloadCLIToolProps> = props => {
   const { introLabel, subtitleLabel, ctaListItem, paragraphs, onCTAClick } = props;
 
   return (
@@ -66,5 +66,3 @@ const StepTwo: React.FC<StepTwoProps> = props => {
     </SteppedActionWrapper>
   );
 };
-
-export default StepTwo;

@@ -9,13 +9,13 @@ import {
 
 import DevMessageForm, { DevMessageFormProps } from '../profile/dev-message-form';
 
-export type StepThreeProps = DevMessageFormProps &
+export type GenerateMessageProps = DevMessageFormProps &
   SteppedActionWrapperProps & {
     ctaIntroLabel: string[];
     onCTAClick: () => void;
   };
 
-const StepThree: React.FC<StepThreeProps> = props => {
+export const GenerateMessage: React.FC<GenerateMessageProps> = props => {
   const { ctaIntroLabel, onCTAClick } = props;
 
   return (
@@ -34,5 +34,3 @@ const StepThree: React.FC<StepThreeProps> = props => {
     </SteppedActionWrapper>
   );
 };
-
-export default StepThree;

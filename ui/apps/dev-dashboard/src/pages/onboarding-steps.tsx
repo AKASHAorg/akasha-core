@@ -4,11 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin, useValidateMessage, useAddDevKeyFromMessage } from '@akashaorg/ui-awf-hooks';
 
-import StepOne from '../components/onboarding/step-one';
-import StepTwo from '../components/onboarding/step-two';
-import StepThree from '../components/onboarding/step-three';
-import StepFour from '../components/onboarding/step-four';
 import { ONBOARDING_STATUS } from './intro-card';
+
+import {
+  TermsAndConditions,
+  DownloadCLITool,
+  GenerateMessage,
+  KeyConfirmation,
+} from '../components/onboarding';
 
 import menuRoute, {
   DASHBOARD,
@@ -19,12 +22,12 @@ import menuRoute, {
   ONBOARDING_STEP_TWO,
 } from '../routes';
 
-interface IDevDashOnboardingStepsProps {
+type DevDashOnboardingStepsProps = {
   activeIndex?: number;
-}
+};
 
 export const DevDashOnboardingSteps: React.FC<
-  RootComponentProps & IDevDashOnboardingStepsProps
+  RootComponentProps & DevDashOnboardingStepsProps
 > = props => {
   const { baseRouteName, plugins } = props;
 
@@ -91,6 +94,7 @@ export const DevDashOnboardingSteps: React.FC<
     'sign_message',
     'key_confirmation',
   ];
+
   const handleClick = (step: string) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-dev-dashboard',
@@ -127,7 +131,7 @@ export const DevDashOnboardingSteps: React.FC<
   return (
     <>
       {activeIndex === 0 && (
-        <StepOne
+        <TermsAndConditions
           stepLabels={stepLabels}
           activeIndex={activeIndex}
           titleLabel={t("Developer's Terms & Conditions")}
@@ -156,7 +160,7 @@ export const DevDashOnboardingSteps: React.FC<
         />
       )}
       {activeIndex === 1 && (
-        <StepTwo
+        <DownloadCLITool
           stepLabels={stepLabels}
           activeIndex={activeIndex}
           titleLabel={t('Generating Your First Message')}
@@ -184,7 +188,7 @@ export const DevDashOnboardingSteps: React.FC<
         />
       )}
       {activeIndex === 2 && (
-        <StepThree
+        <GenerateMessage
           stepLabels={stepLabels}
           activeIndex={activeIndex}
           titleLabel={t('Generating Your First Message')}
@@ -207,7 +211,7 @@ export const DevDashOnboardingSteps: React.FC<
         />
       )}
       {activeIndex === 3 && (
-        <StepFour
+        <KeyConfirmation
           stepLabels={stepLabels}
           activeIndex={activeIndex}
           titleLabel={t('Key Confirmation')}

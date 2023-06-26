@@ -12,18 +12,18 @@ import {
   SteppedActionWrapperProps,
 } from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
-import { BaseStepsProps } from './step-one';
+import { BaseStepsProps } from './terms-and-conditions';
 import { sampleDevKeys } from '../../utils/dummy-data';
 
 type ExtendableProps = BaseStepsProps & SteppedActionWrapperProps & DevKeyCardProps;
 
-export type StepFourProps = ExtendableProps & {
+export type KeyConfirmationProps = ExtendableProps & {
   assetName?: string;
   assetExtension?: string;
   publicImgPath?: string;
 };
 
-const StepFour: React.FC<StepFourProps> = props => {
+export const KeyConfirmation: React.FC<KeyConfirmationProps> = props => {
   const {
     subtitleLabel,
     assetName = 'ok',
@@ -49,5 +49,3 @@ const StepFour: React.FC<StepFourProps> = props => {
     </SteppedActionWrapper>
   );
 };
-
-export default StepFour;

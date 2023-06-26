@@ -7,19 +7,19 @@ import {
   SteppedActionWrapper,
 } from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
-import ListItem from './list-item';
+import { ListItem } from './list-item';
 
 export type BaseStepsProps = {
   introLabel?: string;
   subtitleLabel?: string;
 };
 
-export type StepOneProps = BaseStepsProps &
+export type TermsAndConditionsProps = BaseStepsProps &
   SteppedActionWrapperProps & {
     paragraphs: string[];
   };
 
-const StepOne: React.FC<StepOneProps> = props => {
+export const TermsAndConditions: React.FC<TermsAndConditionsProps> = props => {
   const { introLabel, subtitleLabel, paragraphs } = props;
 
   return (
@@ -42,5 +42,3 @@ const StepOne: React.FC<StepOneProps> = props => {
     </SteppedActionWrapper>
   );
 };
-
-export default StepOne;
