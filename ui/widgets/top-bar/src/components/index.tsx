@@ -10,9 +10,8 @@ import Widget from './topbar-widget';
 
 const reactLifecycles = singleSpaReact<RootComponentProps>({
   React,
-  ReactDOM,
+  ReactDOMClient: ReactDOM,
   rootComponent: withProviders(Widget),
-  renderType: 'createRoot',
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
