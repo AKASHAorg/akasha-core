@@ -7,10 +7,21 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useTranslation } from 'react-i18next';
 import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
-import { GeneralForm } from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
+import {
+  GeneralForm,
+  GeneralFormValues,
+} from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
 import { SocialLinks } from '@akashaorg/design-system-components/lib/components/EditProfile/SocialLinks';
 import { Interests } from '@akashaorg/design-system-components/lib/components/EditProfile/Interests';
-import { useUpdateProfileMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import {
+  useCreateProfileMutation,
+  useGetInterestsByDidQuery,
+  useGetProfileByDidQuery,
+  useUpdateProfileMutation,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { getMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useQueryClient } from '@tanstack/react-query';
+import { saveMediaFile } from '../saveMedia';
 
 type EditProfilePageProps = {
   profileId: string;
@@ -19,9 +30,9 @@ type EditProfilePageProps = {
 };
 
 const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
-  const { profileId, profileData } = props;
   const { t } = useTranslation('app-profile');
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { profileId, profileData, plugins } = props;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   // const ENSReq = useEnsByAddress(profileData.ethAddress);
 
@@ -30,14 +41,34 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   const [generalValid, setGeneralValid] = useState(true);
   const [socialLinksValid, setSocialLinksValid] = useState(true);
   const [interestsValid, setInterestsValid] = useState(true);
+  const [isAvatarSaving, setIsAvatarSaving] = useState(false);
+  const [isCoverImageSaving, setIsCoverImageSaving] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const [showModal, setShowModal] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
-  const profileMutation = useUpdateProfileMutation();
+  const createProfileMutation = useCreateProfileMutation();
+  const updateProfileMutation = useUpdateProfileMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
+      });
+    },
+  });
 
-  const loggedIn =
-    false; /* @TODO use a login hook when it's ready to check if user is logged in or not */
+  const myInterestsQueryReq = useGetInterestsByDidQuery(
+    { id: profileId },
+    { select: response => response.node },
+  );
+
+  const myInterests =
+    myInterestsQueryReq.data && 'isViewer' in myInterestsQueryReq.data
+      ? myInterestsQueryReq.data.interests
+      : null;
+
+  const loginQuery = useGetLogin();
 
   const modalMessage = t(
     "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
@@ -62,12 +93,135 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     }
   };
 
-  if (!loggedIn) {
+  if (!loginQuery.data?.id) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
   }
+
+  const navigateToProfileInfoPage = () => {
+    navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}`,
+    });
+  };
+
+  const createProfile = (formValues: GeneralFormValues) => {
+    const avatarObj = getAvatarObj(formValues.avatar);
+    const coverImageObj = getCoverImageObj(formValues.coverImage);
+    createProfileMutation.mutate({
+      i: {
+        content: {
+          name: formValues.name,
+          description: formValues.bio,
+          createdAt: new Date().toISOString(),
+          ...avatarObj,
+          ...coverImageObj,
+        },
+      },
+    });
+  };
+
+  const saveAvatarImage = async (avatar: GeneralFormValues['avatar']) => {
+    const ENABLED = false; /*@(For local development only) set to true */
+
+    if (!ENABLED) return null;
+
+    setIsAvatarSaving(true);
+    try {
+      const avatarMediaFile = await saveMediaFile({
+        isUrl: false,
+        content: avatar,
+        name: 'avatar',
+        email: 'email@email' /*@(For local development only) saving avatar image requires email */,
+      });
+      setIsAvatarSaving(false);
+      return avatarMediaFile;
+    } catch (ex) {
+      console.error(ex);
+      setIsAvatarSaving(false);
+      return null;
+    }
+  };
+
+  const saveCoverImage = async (coverImage: GeneralFormValues['avatar']) => {
+    const ENABLED = false; /*@(For local development only) set to true */
+
+    if (!ENABLED) return null;
+
+    setIsCoverImageSaving(true);
+    try {
+      const coverImageMediaFile = await saveMediaFile({
+        isUrl: false,
+        content: coverImage,
+        name: 'coverImage',
+        email: 'email@email' /*@(For local development only) saving cover image requires email */,
+      });
+      setIsCoverImageSaving(false);
+      return coverImageMediaFile;
+    } catch (ex) {
+      console.error(ex);
+      setIsCoverImageSaving(false);
+      return null;
+    }
+  };
+
+  const getAvatarObj = async (avatar?: GeneralFormValues['avatar']) => {
+    if (!avatar) return {};
+
+    const avatarMediaFile = await saveAvatarImage(avatar);
+
+    if (!avatarMediaFile) return {};
+
+    const avatarMediaUri = `ipfs://${avatarMediaFile.CID}`;
+
+    return {
+      avatar: {
+        default: {
+          height: avatarMediaFile.size.height,
+          width: avatarMediaFile.size.width,
+          src: avatarMediaUri,
+        },
+      },
+    };
+  };
+
+  const getCoverImageObj = async (coverImage?: GeneralFormValues['coverImage']) => {
+    if (!coverImage) return {};
+
+    const coverImageMediaFile = await saveCoverImage(coverImage);
+    const coverImageMediaUri = `ipfs://${coverImageMediaFile.CID}`;
+
+    return {
+      background: {
+        default: {
+          height: coverImageMediaFile.size.height,
+          width: coverImageMediaFile.size.width,
+          src: coverImageMediaUri,
+        },
+      },
+    };
+  };
+
+  const background = profileData?.background
+    ? {
+        default: {
+          ...profileData.background.default,
+          src: getMediaUrl(profileData.background.default.src.replace(/(^\w+:|^)\/\//, ''))
+            .originLink,
+        },
+      }
+    : null;
+
+  const avatar = profileData?.avatar
+    ? {
+        default: {
+          ...profileData.avatar.default,
+          src: getMediaUrl(profileData.avatar.default.src.replace(/(^\w+:|^)\/\//, '')).originLink,
+        },
+      }
+    : null;
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
@@ -83,10 +237,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             <GeneralForm
               header={{
                 title: t('Avatar & Cover Image'),
-                coverImage: profileData.background,
-                avatar: profileData.avatar,
+                coverImage: background,
+                avatar: avatar,
                 dragToRepositionLabel: t('Drag the image to reposition'),
-                profileId: profileData.did.id,
+                profileId,
                 cancelLabel: t('Cancel'),
                 deleteLabel: t('Delete'),
                 saveLabel: t('Save'),
@@ -103,9 +257,9 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   coverImage: t('Are you sure you want to delete your cover?'),
                 },
               }}
-              name={{ label: t('Name'), initialValue: profileData.name }}
+              name={{ label: t('Name'), initialValue: profileData?.name }}
               // userName={{ label: t('Username'), initialValue: profileData.userName }}
-              bio={{ label: t('Bio'), initialValue: profileData.description }}
+              bio={{ label: t('Bio'), initialValue: profileData?.description }}
               // ens={{
               //   label: t('ENS Name'),
               //   initialValue:
@@ -124,18 +278,32 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               cancelButton={{
                 label: t('Cancel'),
                 handleClick: () => {
-                  navigateTo({
-                    appName: '@akashaorg/app-profile',
-                    getNavigationUrl: () => `/${profileId}`,
-                  });
+                  navigateToProfileInfoPage();
                 },
               }}
               saveButton={{
                 label: t('Save'),
-                handleClick: formValues => {
-                  profileMutation.mutate({
-                    i: { id: profileId, content: formValues },
+                loading: isAvatarSaving || isCoverImageSaving,
+                handleClick: async formValues => {
+                  if (!profileData?.id) {
+                    createProfile(formValues);
+                    return;
+                  }
+                  const avatarObj = await getAvatarObj(formValues.avatar);
+                  const coverImageObj = await getCoverImageObj(formValues.coverImage);
+                  updateProfileMutation.mutate({
+                    i: {
+                      id: profileData.id,
+                      content: {
+                        name: formValues.name,
+                        description: formValues.bio,
+                        createdAt: new Date().toISOString(),
+                        ...avatarObj,
+                        ...coverImageObj,
+                      },
+                    },
                   });
+                  navigateToProfileInfoPage();
                   handleFeedback();
                 },
               }}
@@ -148,22 +316,28 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               description={t(
                 'You can add your personal websites or social links to be shared on your profile',
               )}
-              socialLinks={profileData.links}
+              socialLinks={profileData?.links || []}
               cancelButton={{
                 label: t('Cancel'),
                 handleClick: () => {
-                  navigateTo({
-                    appName: '@akashaorg/app-profile',
-                    getNavigationUrl: () => `/${profileId}`,
-                  });
+                  navigateToProfileInfoPage();
                 },
               }}
               saveButton={{
                 label: 'Save',
                 handleClick: formValues => {
-                  profileMutation.mutate({
-                    i: { id: profileId, content: formValues },
-                  });
+                  if (profileData?.id) {
+                    updateProfileMutation.mutate({
+                      i: {
+                        id: profileData.id,
+                        content: {
+                          links: formValues.links,
+                          createdAt: new Date().toISOString(),
+                        },
+                      },
+                    });
+                  }
+                  navigateToProfileInfoPage();
                   handleFeedback();
                 },
               }}
@@ -183,15 +357,12 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   'You can find more interests and add them to your list of interests!',
                 )}
                 moreInterestPlaceholder={t('Search for interests')}
-                myInterests={[]} /* TODO: when hook is ready connect it */
-                interests={[]} /* TODO: when hook is ready connect it */
+                myInterests={myInterests ? myInterests.topics.map(topic => topic.value) : []}
+                interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
                 cancelButton={{
                   label: t('Cancel'),
                   handleClick: () => {
-                    navigateTo({
-                      appName: '@akashaorg/app-profile',
-                      getNavigationUrl: () => `/${profileId}`,
-                    });
+                    navigateToProfileInfoPage();
                   },
                 }}
                 saveButton={{

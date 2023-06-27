@@ -28,22 +28,24 @@ const AppList: React.FC<AppListProp> = ({ apps, onAppSelected }) => {
     <Stack direction="column" spacing="gap-y-4">
       {apps.map((app, index, array) => (
         <Button key={app.name} onClick={onAppSelected} plain>
-          <Stack spacing="gap-x-2">
-            <div className={tw(apply(iconStyle))} />
-            <Stack direction="column" customStyle="h-[3.75rem] w-[25rem]">
-              <Text variant="button-sm">{app.name}</Text>
-              <Text
-                variant="footnotes2"
-                weight="normal"
-                color={{ light: 'grey4', dark: 'grey7' }}
-                lineClamp={2}
-              >
-                {app.description}
-              </Text>
+          <Stack direction="column" spacing="gap-y-4">
+            <Stack spacing="gap-x-2">
+              <div className={tw(apply(iconStyle))} />
+              <Stack direction="column" customStyle="h-[3.75rem] w-[25rem]">
+                <Text variant="button-sm">{app.name}</Text>
+                <Text
+                  variant="footnotes2"
+                  weight="normal"
+                  color={{ light: 'grey4', dark: 'grey7' }}
+                  lineClamp={2}
+                >
+                  {app.description}
+                </Text>
+              </Stack>
+              <div className={tw('ml-auto')}>{app.action}</div>
             </Stack>
-            <div className={tw('ml-auto')}>{app.action}</div>
+            {index < array.length - 1 && <Divider />}
           </Stack>
-          {index < array.length - 1 && <Divider />}
         </Button>
       ))}
     </Stack>

@@ -61,8 +61,8 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
                   placeholderIconType={stat.icon}
                   size="sm"
                   breakPointSize={{ breakPoint: 'sm', size: 'lg' }}
-                  accentColor
                   customStyle={stat.className}
+                  accentColor
                   hover
                 />
                 <Text {...labelProp}>{stat.label}</Text>

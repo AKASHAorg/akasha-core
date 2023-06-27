@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Stack from '../Stack';
 import IconByType from './IconByType';
-import Button from '../Button';
 import { IconType, LogoSourceType } from '@akashaorg/typings/ui';
 import { apply, tw } from '@twind/core';
 import { BasicIconSize, BreakPointSize, Color } from '../types/common.types';
@@ -22,9 +21,9 @@ export type AppIconProps = {
   iconColor?: Color;
   background?: Color;
   customStyle?: string;
-} & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+};
 
-const AppIcon: React.FC<AppIconProps> = React.forwardRef((props, ref) => {
+const AppIcon: React.FC<AppIconProps> = props => {
   const {
     appImg,
     placeholderIconType,
@@ -38,7 +37,6 @@ const AppIcon: React.FC<AppIconProps> = React.forwardRef((props, ref) => {
     iconColor,
     background,
     customStyle = '',
-    ...rest
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -56,35 +54,8 @@ const AppIcon: React.FC<AppIconProps> = React.forwardRef((props, ref) => {
   const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${iconContainerBackground} ${customStyle}`;
   const notifyStyle = NOTIFY_MAP[size];
 
-  const Wrapper = Object.keys(rest).length
-    ? ({ children }) => (
-        <Button ref={ref} {...rest} plain>
-          {children}
-        </Button>
-      )
-    : ({ children }) => <div>{children}</div>;
-
   if (stackedIcon)
     return (
-      <Wrapper>
-        <Stack align="center" justify="center" customStyle={iconContainerStyle}>
-          <IconByType
-            appImg={appImg}
-            size={size}
-            breakPointSize={breakPointSize}
-            placeholderIconType={placeholderIconType}
-            accentColor={accentColor}
-            color={iconColor}
-          />
-          {hasNewNotifs && (
-            <div className={tw(`rounded-full absolute top-0  bg-secondaryDark ${notifyStyle})`)} />
-          )}
-        </Stack>
-      </Wrapper>
-    );
-
-  return (
-    <Wrapper>
       <Stack align="center" justify="center" customStyle={iconContainerStyle}>
         <IconByType
           appImg={appImg}
@@ -94,10 +65,25 @@ const AppIcon: React.FC<AppIconProps> = React.forwardRef((props, ref) => {
           accentColor={accentColor}
           color={iconColor}
         />
+        {hasNewNotifs && (
+          <div className={tw(`rounded-full absolute top-0  bg-secondaryDark ${notifyStyle})`)} />
+        )}
       </Stack>
-    </Wrapper>
+    );
+
+  return (
+    <Stack align="center" justify="center" customStyle={iconContainerStyle}>
+      <IconByType
+        appImg={appImg}
+        size={size}
+        breakPointSize={breakPointSize}
+        placeholderIconType={placeholderIconType}
+        accentColor={accentColor}
+        color={iconColor}
+      />
+    </Stack>
   );
-});
+};
 
 const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicIconSize, string> = {
   xs: 'h-6 w-6',
