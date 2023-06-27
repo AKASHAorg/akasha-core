@@ -2,7 +2,7 @@ import { CeramicAccount } from '@akashaorg/typings/sdk/graphql-types-new';
 import { IArticleData } from '@akashaorg/typings/ui';
 import { Profile } from '@akashaorg/typings/ui';
 
-export const apps1 = Array(4).fill({
+export const apps = Array(4).fill({
   title: 'Image Editor',
   author: 'Author',
   type: 'App',
