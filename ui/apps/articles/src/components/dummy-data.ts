@@ -2,28 +2,11 @@ import { CeramicAccount } from '@akashaorg/typings/sdk/graphql-types-new';
 import { IArticleData } from '@akashaorg/typings/ui';
 import { Profile } from '@akashaorg/typings/ui';
 
-export const apps = [
-  {
-    title: 'Image Editor',
-    author: 'Author',
-    type: 'App',
-  },
-  {
-    title: 'Image Editor',
-    author: 'Author',
-    type: 'App',
-  },
-  {
-    title: 'Image Editor',
-    author: 'Author',
-    type: 'App',
-  },
-  {
-    title: 'Image Editor',
-    author: 'Author',
-    type: 'App',
-  },
-];
+export const apps1 = Array(4).fill({
+  title: 'Image Editor',
+  author: 'Author',
+  type: 'App',
+});
 
 export const topics = [
   'Amazon',
@@ -65,27 +48,22 @@ export const topics = [
   'Figma',
 ];
 
+const userAvatar = (width = 360, height = 360) => {
+  return {
+    default: { src: `https://placebeard.it/${width}x${height}`, width: width, height: height },
+  };
+};
+
+const createUser = n => {
+  return {
+    did: { id: `41049005000032000657003456711457200${n}` },
+    avatar: userAvatar(),
+  };
+};
 export const userData: {
   did: Partial<CeramicAccount>;
   avatar?: Profile['avatar'];
-}[] = [
-  {
-    did: { id: '0x003410490050000320006570034567114572000' },
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
-  },
-  {
-    did: { id: '0x004410490050000320006570034567114572001' },
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
-  },
-  {
-    did: { id: '0x005410490050000320006570034567114572002' },
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
-  },
-  {
-    did: { id: '0x006410490050000320006570034567114572003' },
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
-  },
-];
+}[] = Array.from({ length: 4 }, (v, k) => createUser(k));
 
 export const articles: IArticleData[] = [
   {
