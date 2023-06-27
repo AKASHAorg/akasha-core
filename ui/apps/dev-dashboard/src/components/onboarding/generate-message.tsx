@@ -18,6 +18,8 @@ export type GenerateMessageProps = DevMessageFormProps &
 export const GenerateMessage: React.FC<GenerateMessageProps> = props => {
   const { ctaIntroLabel, onCTAClick } = props;
 
+  const [introStart, introCTA, introCompletion] = ctaIntroLabel;
+
   const handleCTAClick = () => {
     if (onCTAClick && typeof onCTAClick === 'function') onCTAClick();
   };
@@ -26,13 +28,13 @@ export const GenerateMessage: React.FC<GenerateMessageProps> = props => {
     <SteppedActionWrapper {...props}>
       {ctaIntroLabel && ctaIntroLabel.length && (
         <Text>
-          {ctaIntroLabel[0]}{' '}
+          {introStart}{' '}
           <Button plain={true} onClick={handleCTAClick}>
             <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }} weight="bold">
-              {ctaIntroLabel[1]}
+              {introCTA}
             </Text>
           </Button>{' '}
-          {ctaIntroLabel[2]}
+          {introCompletion}
         </Text>
       )}
 

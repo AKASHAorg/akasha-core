@@ -30,6 +30,8 @@ export type DevProfileCardProps = {
 const DevProfileCard: React.FC<DevProfileCardProps> = props => {
   const { titleLabel, subtitleLabels, cardMenuItems, ctaUrl, navigateTo } = props;
 
+  const [subtitleStart, subtitleCTA, subtitleCompletion] = subtitleLabels;
+
   const handleClickMenuItem = (route: string) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-dev-dashboard',
@@ -45,11 +47,11 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
         </Text>
 
         <Text color={{ light: 'grey4', dark: 'grey6' }} customStyle="mt-2">
-          {subtitleLabels[0]}{' '}
+          {subtitleStart}{' '}
           <Anchor href={ctaUrl} customStyle="font-bold">
-            {subtitleLabels[1]}
+            {subtitleCTA}
           </Anchor>{' '}
-          {subtitleLabels[2]}
+          {subtitleCompletion}
         </Text>
       </Box>
 

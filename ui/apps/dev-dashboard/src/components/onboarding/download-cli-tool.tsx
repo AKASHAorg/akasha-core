@@ -21,6 +21,8 @@ export type DownloadCLIToolProps = BaseStepsProps &
 export const DownloadCLITool: React.FC<DownloadCLIToolProps> = props => {
   const { introLabel, subtitleLabel, ctaListItem, paragraphs, onCTAClick } = props;
 
+  const [listStart, listCTA, listCompletion] = ctaListItem;
+
   return (
     <SteppedActionWrapper {...props}>
       <Box>
@@ -37,13 +39,13 @@ export const DownloadCLITool: React.FC<DownloadCLIToolProps> = props => {
             <Text>•</Text>
 
             <Text>
-              {ctaListItem[0]}{' '}
+              {listStart}{' '}
               <Button plain={true} onClick={onCTAClick}>
                 <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }} weight="bold">
-                  {ctaListItem[1]}{' '}
+                  {listCTA}
                 </Text>
               </Button>{' '}
-              {ctaListItem[2]}
+              {listCompletion}
             </Text>
           </Box>
         )}
