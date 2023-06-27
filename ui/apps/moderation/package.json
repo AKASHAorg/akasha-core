@@ -39,7 +39,6 @@
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
-    "@akashaorg/design-system": "*",
     "@akashaorg/design-system-core": "*",
     "@akashaorg/design-system-components": "*",
     "@akashaorg/ui-awf-hooks": "*",
