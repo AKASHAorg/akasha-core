@@ -1,9 +1,7 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
@@ -35,35 +33,7 @@ import routes, {
 } from '../routes';
 
 const AppRoutes = (props: RootComponentProps) => {
-  const { baseRouteName, plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
-
-  const { t } = useTranslation('app-dev-dashboard');
-
-  const loginQuery = useGetLogin();
-
-  const handleOnboardingCTAClick = () => {
-    // if logged in, navigate to step 1
-    if (loginQuery.data?.id) {
-      return navigateTo?.({
-        appName: '@akashaorg/app-dev-dashboard',
-        getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
-      });
-    }
-
-    /**
-     * if guest, redirect to onboarding step 1 after authentication
-     */
-    navigateTo?.({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: (routes: Record<string, string>) => {
-        return `${routes.Connect}?${new URLSearchParams({
-          redirectTo: `${baseRouteName}${routes[ONBOARDING_STEP_ONE]}`,
-        }).toString()}`;
-      },
-    });
-  };
+  const { baseRouteName } = props;
 
   return (
     <Router basename={baseRouteName}>
@@ -76,20 +46,7 @@ const AppRoutes = (props: RootComponentProps) => {
 
         <Route path={routes[DASHBOARD]} element={<DevDashboard {...props} />} />
 
-        <Route
-          path={routes[ONBOARDING]}
-          element={
-            <DevDashOnboardingIntro
-              titleLabel={t('Developer Dashboard')}
-              introLabel={t('✨ Your journey begins here ✨')}
-              descriptionLabel={t(
-                'Welcome to our vibrant community of developers! Get ready to embark on an exciting journey where you can unleash your creativity and contribute to making the AKASHA World an even better place. Join us now and start building and publishing incredible applications that will shape the future.',
-              )}
-              ctaButtonLabel={t('Unleash your creativity')}
-              onCTAButtonClick={handleOnboardingCTAClick}
-            />
-          }
-        />
+        <Route path={routes[ONBOARDING]} element={<DevDashOnboardingIntro {...props} />} />
 
         {[
           routes[ONBOARDING_STEP_ONE],

@@ -1,63 +1,81 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { tw } from '@twind/core';
+
+import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-type DevDashOnboardingIntroProps = {
-  assetName?: string;
-  titleLabel: string;
-  introLabel: string;
-  descriptionLabel: string;
-  publicImgPath?: string;
-  ctaButtonLabel: string;
-  onCTAButtonClick: () => void;
-};
+import routes, { ONBOARDING_STEP_ONE } from '../routes';
 
 export const ONBOARDING_STATUS = 'ewa-dev-dashboard-onboarding-status';
 
-export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = props => {
-  const {
-    assetName = 'dev-dashboard-intro',
-    publicImgPath = '/images',
-    titleLabel,
-    introLabel,
-    descriptionLabel,
-    ctaButtonLabel,
-    onCTAButtonClick,
-  } = props;
+export const DevDashOnboardingIntro: React.FC<RootComponentProps> = props => {
+  const { baseRouteName, plugins } = props;
+
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+
+  const { t } = useTranslation('app-dev-dashboard');
+
+  const loginQuery = useGetLogin();
+
+  const handleOnboardingCTAClick = () => {
+    // if logged in, navigate to step 1
+    if (loginQuery.data?.id) {
+      return navigateTo?.({
+        appName: '@akashaorg/app-dev-dashboard',
+        getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
+      });
+    }
+
+    /**
+     * if guest, redirect to onboarding step 1 after authentication
+     */
+    navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: (routes: Record<string, string>) => {
+        return `${routes.Connect}?${new URLSearchParams({
+          redirectTo: `${baseRouteName}${routes[ONBOARDING_STEP_ONE]}`,
+        }).toString()}`;
+      },
+    });
+  };
 
   return (
     <BasicCardBox>
       <Box customStyle="flex flex-col items-center w-full p-2">
         <Text variant="h5" align="center" weight="bold">
-          {titleLabel}
+          {t('Developer Dashboard')}
         </Text>
 
         <Box customStyle="w-[17.5rem] h-[17.5rem] my-6">
           <img
-            alt={`${assetName}`}
+            alt="dev-dashboard-intro"
             className={tw('object-contain')}
-            src={`${publicImgPath}/${assetName}.webp`}
+            src="/images/dev-dashboard-intro.webp"
           />
         </Box>
 
         <Text variant="h5" align="center" weight="bold" customStyle="mt-2">
-          {introLabel}
+          {t('✨ Your journey begins here ✨')}
         </Text>
 
         <Text align="start" customStyle="mt-2">
-          {descriptionLabel}
+          {t(
+            'Welcome to our vibrant community of developers! Get ready to embark on an exciting journey where you can unleash your creativity and contribute to making the AKASHA World an even better place. Join us now and start building and publishing incredible applications that will shape the future.',
+          )}
         </Text>
 
         <Button
           size="md"
           customStyle="self-end mt-6"
           variant="primary"
-          label={ctaButtonLabel}
-          onClick={onCTAButtonClick}
+          label={t('Unleash your creativity')}
+          onClick={handleOnboardingCTAClick}
         />
       </Box>
     </BasicCardBox>
