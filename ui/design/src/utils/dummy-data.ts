@@ -6,24 +6,16 @@ import { IAppData } from '../components/AppsWidgetCard';
 import { IntegrationInfo, IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import { Profile } from '@akashaorg/typings/ui';
 
-const userData: { did: Profile['did']; avatar?: Profile['avatar'] }[] = [
-  {
-    did: { id: 'did:0x003410490050000320006570034567114572000' },
+const createUser = n => {
+  return {
+    did: { id: `did:0x00341049005000032000657003456711457200${n}` },
     avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
-  },
-  {
-    did: { id: 'did:0x003410490050000320006570034567114572001' },
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
-  },
-  {
-    did: { id: 'did:0x003410490050000320006570034567114572002' },
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
-  },
-  {
-    did: { id: 'did:0x003410490050000320006570034567114572003' },
-    avatar: { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } },
-  },
-];
+  };
+};
+const userData: { did: Profile['did']; avatar?: Profile['avatar'] }[] = Array.from(
+  { length: 4 },
+  (v, k) => createUser(k),
+);
 
 const installedAppsData: IMenuItem[] = [
   {
@@ -208,45 +200,45 @@ const TAGS = [
   'bhfyp',
 ];
 
-const USERNAMES: Profile[] = [
-  {
-    id: '123',
-    name: 'John',
-    did: { id: ' 13131mknnksbshl' },
-    avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
-    description: 'hello',
-    background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
-    createdAt: '2020-01-01',
-  },
-  {
-    id: '1234',
-    name: 'Alex',
-    did: { id: '13131mknnksbsho' },
-    avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
-    description: 'hello world',
-    background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
-    createdAt: '2020-01-01',
-  },
-  {
-    id: '12345',
-    name: 'Zeno',
-    did: { id: '13131mknnksbshr' },
-    avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
-    description: 'nono',
-    background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
-    createdAt: '2020-01-01',
-  },
+const nameList = [
+  'Jon Gilbert',
+  'Alexei Gilbertovich',
+  'Jon Silbert',
+  'Jon Wilbert',
+  'Jon Bilbert',
+];
+const didList = [
+  '13131mknnksbshr',
+  '13131mknnksbsho',
+  '13131mknnksbshl',
+  '14232mknnksbskr',
+  '13131mknnksbskr',
+];
+const descriptionList = [
+  'nono',
+  'hello world',
+  'hello',
+  'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
 ];
 
-const chartData = [
-  { mentions: Math.floor(Math.random() * 100), date: 1590994625 },
-  { mentions: Math.floor(Math.random() * 10), date: 1591081025 },
-  { mentions: Math.floor(Math.random() * 100), date: 1591167425 },
-  { mentions: Math.floor(Math.random() * 300), date: 1591253825 },
-  { mentions: Math.floor(Math.random() * 280), date: 1591340225 },
-  { mentions: Math.floor(Math.random() * 120), date: 1591426625 },
-  { mentions: Math.floor(Math.random() * 120), date: 1591513025 },
-];
+const USERNAMES = Array.from({ length: 3 }, (k, v) => {
+  return {
+    id: (v + 1).toString(),
+    name: nameList[v],
+    did: { id: didList[v] },
+    avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
+    description: descriptionList[v],
+    background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
+    createdAt: '2020-01-01',
+  };
+});
+
+const randomMentions = n => {
+  return { mentions: Math.floor(Math.random() * n), date: 1590994625 };
+};
+const chartData = Array.from({ length: 7 }, (k, v) => {
+  return randomMentions(Math.floor(Math.random() * 300 + 10));
+});
 
 const trendingTagsData = [
   { name: 'AKASHA', totalPosts: 176, tagHistoricData: chartData, subscribed: true },
@@ -256,59 +248,17 @@ const trendingTagsData = [
   { name: 'Crypto', totalPosts: 6, tagHistoricData: chartData, subscribed: false },
 ];
 
-const trendingProfilesData: Profile[] = [
-  {
-    id: '123',
-    did: { id: '13131mknnksbshr' },
-    name: 'Jon Gilbert',
+const trendingProfilesData: Profile[] = Array.from({ length: 4 }, (k, v) => {
+  return {
+    id: (123 + v).toString(),
+    name: nameList[v],
+    did: { id: didList[v] },
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
+    description: descriptionList[3],
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
     createdAt: '2020-01-01',
-
-    description:
-      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-  },
-  {
-    id: '124',
-    did: { id: '13131mknnksbskr' },
-    name: 'Alexei Gilbertovich',
-    avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
-    background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
-    description:
-      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-    createdAt: '2020-01-01',
-  },
-  {
-    id: '125',
-    did: { id: '14131mknnksbskr' },
-    name: 'Jon Silbert',
-    avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
-    background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
-    description:
-      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-    createdAt: '2020-01-01',
-  },
-  {
-    id: '125',
-    did: { id: '14132mknnksbskr' },
-    name: 'Jon Wilbert',
-    avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
-    background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
-    description:
-      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-    createdAt: '2020-01-01',
-  },
-  {
-    id: '126',
-    did: { id: '14232mknnksbskr' },
-    name: 'Jon Bilbert',
-    avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
-    background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
-    description:
-      'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-    createdAt: '2020-01-01',
-  },
-];
+  };
+});
 
 const ICDetailAppsData: (IntegrationInfo & Partial<{ releases: ReleaseInfo[] }>)[] = [
   {
@@ -373,130 +323,69 @@ const ICDetailAppsData: (IntegrationInfo & Partial<{ releases: ReleaseInfo[] }>)
   },
 ];
 
-const ICInstalledAppsData: IntegrationReleaseInfo[] = [
-  {
-    name: 'Theme Wizard',
-    id: 'bbaryfskgshgirsnxnbv',
-    author: '@akasha',
-    integrationType: 1,
-    integrationID: '3182731927391',
-    version: '0.1.0',
-    manifestData: {
-      mainFile: 'index.js',
-      displayName: 'Theme Wiz',
-      keywords: ['theme'],
-      license: 'wtfpl',
-    },
-    enabled: true,
-  },
-  {
-    name: 'Moderating Tools',
-    id: 'bbaryfskgshgirsnxnbv',
-    author: '@akasha',
-    integrationType: 1,
-    integrationID: '3182731927391',
-    version: '0.1.0',
-    manifestData: {
-      mainFile: 'index.js',
-      displayName: 'Mod Tools',
-      keywords: ['moderation'],
-      license: 'wtfpl',
-    },
-    enabled: true,
-  },
-  {
-    name: 'Quick Moderation',
-    id: 'bbaryfskgshgirsnxnbv',
-    author: '@akasha',
-    integrationType: 1,
-    integrationID: '3182731924391',
-    version: '0.1.0',
-    manifestData: {
-      mainFile: 'index.js',
-      displayName: 'Quik Mod',
-      keywords: ['moderation'],
-      license: 'wtfpl',
-    },
-    enabled: true,
-  },
-  {
-    name: 'Confetti Replies',
-    id: 'bbaryfskgshgirsnxnbv',
-    author: '@akasha',
-    integrationType: 1,
-    integrationID: '3182731923391',
-    version: '0.1.0',
-    manifestData: {
-      mainFile: 'index.js',
-      displayName: 'Confetti Replies',
-      keywords: ['replies'],
-      license: 'wtfpl',
-    },
-    enabled: true,
-  },
+const installedAppNameList = [
+  { name: 'Theme Wizard', displayName: 'Theme Wiz', keyword: ['theme'] },
+  { name: 'Moderating Tools', displayName: 'Mod Tools', keyword: ['moderation'] },
+  { name: 'Quick Moderation', displayName: 'Quik Mod', keyword: ['moderation'] },
+  { name: 'Confetti Replies', displayName: 'Confetti Replies', keyword: ['replies'] },
 ];
-const ICWorldAppsData: IntegrationReleaseInfo[] = [
-  {
-    name: 'Feed',
-    id: '#bbaryfskgshgirsnxnbv',
+
+const ICInstalledAppsData: IntegrationReleaseInfo[] = Array.from({ length: 4 }, (k, v) => {
+  return {
+    name: installedAppNameList[v].name,
+    id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '3182731927321',
+    integrationID: '3182731927391',
     version: '0.1.0',
     manifestData: {
       mainFile: 'index.js',
-      displayName: 'Feed',
-      keywords: ['feed'],
+      displayName: installedAppNameList[v].displayName,
+      keywords: installedAppNameList[v].keyword,
       license: 'wtfpl',
     },
     enabled: true,
-  },
+  };
+});
+
+const worldAppsList = [
+  { name: 'Feed', displayName: 'Feed', keyword: ['feed'], integrationID: '3182731927321' },
   {
     name: 'Settings',
-    id: '#bbaryfskgshgirsnxnbv',
-    author: '@akasha',
-    integrationType: 1,
+    displayName: 'Settings',
+    keyword: ['settings'],
     integrationID: '3182731927124',
-    version: '0.1.0',
-    manifestData: {
-      mainFile: 'index.js',
-      displayName: 'Settings',
-      keywords: ['settings'],
-      license: 'wtfpl',
-    },
-    enabled: true,
   },
   {
     name: 'Search',
-    id: '#bbaryfskgshgirsnxnbv',
-    author: '@akasha',
-    integrationType: 1,
+    displayName: 'Search',
+    keyword: ['search'],
     integrationID: '3182731927392',
-    version: '0.1.0',
-    manifestData: {
-      mainFile: 'index.js',
-      displayName: 'Search',
-      keywords: ['search'],
-      license: 'wtfpl',
-    },
-    enabled: true,
   },
   {
     name: 'List',
+    displayName: 'List',
+    keyword: ['saving', 'bookmarks'],
+    integrationID: '3182731927396',
+  },
+];
+const ICWorldAppsData: IntegrationReleaseInfo[] = Array.from({ length: 4 }, (k, v) => {
+  return {
+    name: worldAppsList[v].name,
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '3182731927396',
+    integrationID: worldAppsList[v].integrationID,
     version: '0.1.0',
     manifestData: {
       mainFile: 'index.js',
-      displayName: 'List',
-      keywords: ['saving', 'bookmarks'],
+      displayName: worldAppsList[v].displayName,
+      keywords: worldAppsList[v].keyword,
       license: 'wtfpl',
     },
     enabled: true,
-  },
-];
+  };
+});
 
 // const topicsDataSource = [
 //   { title: '#ethereumworld', subtitle: '6576 mentions' },
@@ -725,6 +614,46 @@ const slateContent = [
   },
 ];
 
+const replyEntries = [
+  {
+    userName: '@marianagomes',
+    ensName: 'marianagomes.world.eth',
+    content: 'Great Job!',
+  },
+  {
+    userName: '@gigipatratel',
+    ensName: 'gigipatratel.world.eth',
+    content: 'Amazing!',
+  },
+];
+
+const replyContent = Array.from({ length: 2 }, (k, v) => {
+  return {
+    entryId: (412413 + v).toString(),
+    ipfsLink: 'ipfs.io/placeholder',
+    permalink: `ethereum.world/akasha/marianagomes/${412413 + v}`,
+    author: {
+      ethAddress: '0x003410490050000320006570047391024572000',
+      userName: replyEntries[v].userName,
+      ensName: replyEntries[v].ensName,
+      avatar: {
+        url: 'https://placebeard.it/480/480',
+        fallbackUrl: 'https://placebeard.it/480/480',
+      },
+      coverImage: { url: 'teal', fallbackUrl: 'teal' },
+      totalPosts: '12',
+      _id: '3123123',
+      totalFollowers: 15,
+      totalFollowing: 1876 + v,
+      totalInterests: 3,
+    },
+
+    content: replyEntries[v].content,
+
+    time: '1572036522',
+  };
+});
+
 const entryData = {
   entryId: '412412',
   ipfsLink: 'ipfs.io/placeholder',
@@ -733,55 +662,7 @@ const entryData = {
   slateContent: slateContent as Descendant[],
   time: '2011-10-05T14:48:00.000Z',
   replies: 2,
-  repliesContent: [
-    {
-      entryId: '412413',
-      ipfsLink: 'ipfs.io/placeholder',
-      permalink: 'ethereum.world/akasha/marianagomes/412413',
-      author: {
-        ethAddress: '0x003410490050000320006570047391024572000',
-        userName: '@marianagomes',
-        ensName: 'marianagomes.world.eth',
-        avatar: {
-          url: 'https://placebeard.it/480/480',
-          fallbackUrl: 'https://placebeard.it/480/480',
-        },
-        coverImage: { url: 'teal', fallbackUrl: 'teal' },
-        totalPosts: '12',
-        _id: '3123123',
-        totalFollowers: 15,
-        totalFollowing: 1876,
-        totalInterests: 3,
-      },
-
-      content: 'Great Job!',
-
-      time: '1572036522',
-    },
-    {
-      entryId: '412414',
-      ipfsLink: 'ipfs.io/placeholder',
-      permalink: 'ethereum.world/akasha/gigipatratel/412414',
-      author: {
-        ethAddress: '0x003410490050000320006570047391024572000',
-        userName: '@gigipatratel',
-        ensName: 'gigipatratel.world.eth',
-        avatar: {
-          url: 'https://placebeard.it/480/480',
-          fallbackUrl: 'https://placebeard.it/480/480',
-        },
-        coverImage: { url: 'teal', fallbackUrl: 'teal' },
-        totalPosts: '123',
-        _id: '3123143',
-        totalFollowers: 15,
-        totalFollowing: 1877,
-        totalInterests: 3,
-      },
-      content: 'Amazing!',
-
-      time: '1572036522',
-    },
-  ],
+  repliesContent: replyContent,
   reposts: 11,
 };
 
@@ -814,78 +695,28 @@ const entryData = {
 //   ],
 // };
 
-const notificationsData = [
-  {
-    profileId: '0x003410490050000320006570034567114572000',
-    user: 'Mariana Gomes',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Comment',
-    time: '22 July 2019 | 20h30',
-  },
-  {
-    profileId: '0x003420490050000320006570034567114572000',
-    user: 'Gigi Patratel',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Upvote',
-    time: '22 July 2019 | 20h30',
-  },
-  {
-    profileId: '0x003410490050000320006570034567114572000',
-    user: 'Mariana Gomes',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Comment',
-    time: '22 July 2019 | 20h30',
-  },
-  {
-    profileId: '0x003420490050000320006570034567114572000',
-    user: 'Gigi Patratel',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Upvote',
-    time: '22 July 2019 | 20h30',
-  },
-  {
-    profileId: '0x003410490050000320006570034567114572000',
-    user: 'Mariana Gomes',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Comment',
-    time: '22 July 2019 | 20h30',
-  },
-  {
-    profileId: '0x003420490050000320006570034567114572000',
-    user: 'Gigi Patratel',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Upvote',
-    time: '22 July 2019 | 20h30',
-  },
-  {
-    profileId: '0x003410490050000320006570034567114572000',
-    user: 'Mariana Gomes',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Comment',
-    time: '22 July 2019 | 20h30',
-  },
-  {
-    profileId: '0x003420490050000320006570034567114572000',
-    user: 'Gigi Patratel',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Upvote',
-    time: '22 July 2019 | 20h30',
-  },
-  {
-    profileId: '0x003410490050000320006570034567114572000',
-    user: 'Mariana Gomes',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Comment',
-    time: '22 July 2019 | 20h30',
-  },
-  {
-    profileId: '0x003420490050000320006570034567114572000',
-    user: 'Gigi Patratel',
-    userAvatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    action: 'Upvote',
-    time: '22 July 2019 | 20h30',
-  },
-];
+const userAvatar = () => {
+  return { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } };
+};
+
+const notificationsData = Array(5)
+  .fill([
+    {
+      profileId: '0x003410490050000320006570034567114572000',
+      user: 'Mariana Gomes',
+      userAvatar: userAvatar(),
+      action: 'Comment',
+      time: '22 July 2019 | 20h30',
+    },
+    {
+      profileId: '0x003420490050000320006570034567114572000',
+      user: 'Gigi Patratel',
+      userAvatar: userAvatar(),
+      action: 'Upvote',
+      time: '22 July 2019 | 20h30',
+    },
+  ])
+  .flat();
 
 const changeCoverImageLabel = 'Change Cover Image';
 const cancelLabel = 'Cancel';
@@ -918,8 +749,8 @@ const dummyChatArr: IChatMessage[] = [
   {
     name: 'Jerry Mil',
     id: '6',
-    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    avatar: userAvatar(),
+    background: userAvatar(),
     did: { id: '0x003410490050000320006570034567114572000' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
@@ -951,8 +782,8 @@ const dummyChatArr: IChatMessage[] = [
   {
     name: 'Estelle Collier',
     id: '5',
-    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    avatar: userAvatar(),
+    background: userAvatar(),
     did: { id: '0x003410490050000320006570034567114572021' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
@@ -977,8 +808,8 @@ const dummyChatArr: IChatMessage[] = [
   {
     name: 'Jerry Mil',
     id: '1',
-    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    avatar: userAvatar(),
+    background: userAvatar(),
     did: { id: '0x003410490050000320006570034567114572001' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
@@ -997,8 +828,8 @@ const dummyChatArr: IChatMessage[] = [
   {
     name: 'Jerry Mil',
     id: '2',
-    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    avatar: userAvatar(),
+    background: userAvatar(),
     did: { id: '0x003410490050000320006570034567114572002' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
@@ -1018,8 +849,8 @@ const dummyChatArr: IChatMessage[] = [
   {
     name: 'Estelle Collier',
     id: '3',
-    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    avatar: userAvatar(),
+    background: userAvatar(),
     did: { id: '0x003410490050000320006570034567114572003' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
@@ -1039,8 +870,8 @@ const dummyChatArr: IChatMessage[] = [
   {
     name: 'Jerry Mil',
     id: '4',
-    avatar: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
-    background: { default: { src: 'https://placebeard.it/640/480', width: 640, height: 480 } },
+    avatar: userAvatar(),
+    background: userAvatar(),
     did: { id: '0x003410490050000320006570034567114572006' },
 
     createdAt: '2021-06-22T10:07:15.000Z',
