@@ -223,7 +223,7 @@ const descriptionList = [
 
 const USERNAMES = Array.from({ length: 3 }, (k, v) => {
   return {
-    id: v + 1,
+    id: (v + 1).toString(),
     name: nameList[v],
     did: { id: didList[v] },
     avatar: { default: { src: 'https://placebeard.it/480/480', height: 480, width: 480 } },
