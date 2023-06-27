@@ -28,9 +28,7 @@ export const CardWrapper: React.FC<React.PropsWithChildren<ICardWrapperProps>> =
 
       <>{children}</>
 
-      <Divider />
-
-      <Box customStyle="flex p-4 items-center justify-end">
+      <Box customStyle="flex p-4 space-x-6 items-center justify-end">
         <PageButtons {...props} />
       </Box>
     </BasicCardBox>

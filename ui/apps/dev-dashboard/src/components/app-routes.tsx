@@ -7,8 +7,6 @@ import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
-import EditMessageName from './profile/edit-message-name';
-import PublishedAppsCard from './profile/published-apps';
 import SignMessageCard from './profile/sign-message';
 import VerifySignatureCard from './profile/verify-signature';
 import {
@@ -17,6 +15,8 @@ import {
   DevDashOnboardingSteps,
   DevDashboard,
   DevKeysCard,
+  EditMessageName,
+  PublishedApps,
 } from '../pages';
 
 import routes, {
@@ -126,7 +126,7 @@ const AppRoutes = (props: RootComponentProps) => {
 
         <Route path={routes[EDIT_MESSAGE_NAME]} element={<EditMessageName {...props} />} />
 
-        <Route path={routes[PUBLISHED_APPS]} element={<PublishedAppsCard {...props} />} />
+        <Route path={routes[PUBLISHED_APPS]} element={<PublishedApps {...props} />} />
 
         <Route
           path={routes[SIGN_MESSAGE]}

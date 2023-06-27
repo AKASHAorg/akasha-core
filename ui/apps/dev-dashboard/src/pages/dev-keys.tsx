@@ -59,7 +59,7 @@ export const DevKeysCard: React.FC<RootComponentProps & DevKeysCardProps> = prop
       confirmButtonLabel={t('New Dev Key')}
       onConfirmButtonClick={handleAddDevKey}
     >
-      <Box customStyle={`${getKeysQuery.isFetching && !!devKeys.length ? 'p-4' : 'p-0'}`}>
+      <Box customStyle={`${!getKeysQuery.isFetching && !!devKeys.length ? 'p-0' : 'p-4'}`}>
         {getKeysQuery.isFetching && <Spinner />}
 
         {!getKeysQuery.isFetching && (
@@ -71,7 +71,7 @@ export const DevKeysCard: React.FC<RootComponentProps & DevKeysCardProps> = prop
             )}
 
             {!!devKeys.length &&
-              devKeys.map((item, idx) => (
+              devKeys.map(item => (
                 <React.Fragment key={`${item.id} ${item.name}`}>
                   <DevKeyCard
                     {...props}
@@ -80,7 +80,7 @@ export const DevKeysCard: React.FC<RootComponentProps & DevKeysCardProps> = prop
                     onDeleteButtonClick={handleDeleteClick(item.id, item.name)}
                   />
 
-                  {idx < devKeys.length - 1 && <Divider />}
+                  <Divider />
                 </React.Fragment>
               ))}
           </>
