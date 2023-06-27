@@ -8,24 +8,15 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import {
-  DevKeyCard,
-  DevKeyCardProps,
-} from '@akashaorg/design-system-components/lib/components/DevKeyCard';
+import { DevKeyCard } from '@akashaorg/design-system-components/lib/components/DevKeyCard';
 
 import { CardWrapper } from '../components/common';
 
 import menuRoute, { ADD_DEV_KEY, DEV_KEYS } from '../routes';
 import { sampleDevKeys } from '../utils/dummy-data';
 
-export type DevKeysCardProps = DevKeyCardProps & {
-  noKeysLabel: string;
-  editLabel: string;
-  deleteLabel: string;
-};
-
-export const DevKeysCard: React.FC<RootComponentProps & DevKeysCardProps> = props => {
-  const { plugins, noKeysLabel } = props;
+export const DevKeysCard: React.FC<RootComponentProps> = props => {
+  const { plugins } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
@@ -66,7 +57,7 @@ export const DevKeysCard: React.FC<RootComponentProps & DevKeysCardProps> = prop
           <>
             {!devKeys.length && (
               <Text variant="subtitle1" align="center">
-                {noKeysLabel}
+                {t('You have not added any keys yet. Use the button to add some')}
               </Text>
             )}
 
@@ -74,7 +65,12 @@ export const DevKeysCard: React.FC<RootComponentProps & DevKeysCardProps> = prop
               devKeys.map(item => (
                 <React.Fragment key={`${item.id} ${item.name}`}>
                   <DevKeyCard
-                    {...props}
+                    nonameLabel={t('Unnamed Key')}
+                    unusedLabel={t('Inactive')}
+                    usedLabel={t('Active')}
+                    devPubKeyLabel={t('Dev Public Key 🔑')}
+                    dateAddedLabel={t('Date added 🗓')}
+                    editable={true}
                     item={item}
                     onEditButtonClick={handleEditClick(item.id)}
                     onDeleteButtonClick={handleDeleteClick(item.id, item.name)}

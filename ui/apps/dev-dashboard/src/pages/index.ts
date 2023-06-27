@@ -6,3 +6,4 @@ export * from './intro-card';
 export * from './onboarding-steps';
 export * from './published-apps';
 export * from './sign-message';
+export * from './verify-signature';

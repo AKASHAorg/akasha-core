@@ -60,8 +60,8 @@ export const SignMessage: React.FC<RootComponentProps> = props => {
           <SummaryCard
             titleLabel={t('Message Signed correctly 🙌🏽')}
             subtitleLabel={t('Here are the details of the signature')}
-            paragraph1TitleLabel={t('Signature String  🖋')}
-            paragraph2TitleLabel={t('Signed Message  ✉️')}
+            paragraph1TitleLabel={t('Signature String 🖋')}
+            paragraph2TitleLabel={t('Signed Message ✉️')}
             paragraph1Content={sampleSignature}
             paragraph2Content={sampleSignature}
           />

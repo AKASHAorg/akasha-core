@@ -7,7 +7,6 @@ import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
-import VerifySignatureCard from './profile/verify-signature';
 import {
   AddDevKey,
   DevDashOnboardingIntro,
@@ -17,6 +16,7 @@ import {
   EditMessageName,
   PublishedApps,
   SignMessage,
+  VerifySignature,
 } from '../pages';
 
 import routes, {
@@ -104,23 +104,7 @@ const AppRoutes = (props: RootComponentProps) => {
           />
         ))}
 
-        <Route
-          path={routes[DEV_KEYS]}
-          element={
-            <DevKeysCard
-              {...props}
-              noKeysLabel={t('You have not added any keys yet. Use the button to add some')}
-              editLabel={t('Edit')}
-              deleteLabel={t('Delete')}
-              nonameLabel={t('Unnamed Key')}
-              unusedLabel={t('Inactive')}
-              usedLabel={t('Active')}
-              devPubKeyLabel={t('Dev Public Key 🔑')}
-              dateAddedLabel={t('Date added 🗓')}
-              editable={true}
-            />
-          }
-        />
+        <Route path={routes[DEV_KEYS]} element={<DevKeysCard {...props} />} />
 
         <Route path={routes[ADD_DEV_KEY]} element={<AddDevKey {...props} />} />
 
@@ -130,25 +114,7 @@ const AppRoutes = (props: RootComponentProps) => {
 
         <Route path={routes[SIGN_MESSAGE]} element={<SignMessage {...props} />} />
 
-        <Route
-          path={routes[VERIFY_SIGNATURE]}
-          element={
-            <VerifySignatureCard
-              {...props}
-              pubKeyTitleLabel={t('Public Key')}
-              pubKeyInputPlaceholder={t('Paste your public key here')}
-              messageTitleLabel={t('Original Message')}
-              messageInputPlaceholder={t('Place the original message here')}
-              signatureTitleLabel={t('Signature String')}
-              signatureInputPlaceholder={t('Place the signature string here')}
-              titleLabel={t('Signature Verified Correctly 🙌🏽')}
-              subtitleLabel={t('The message was successfully verified using the public key below')}
-              paragraph1TitleLabel={t('Public Key 🔑')}
-              paragraph2TitleLabel={t('Original Message ✉️')}
-              verifyButtonLabel={t('Verify')}
-            />
-          }
-        />
+        <Route path={routes[VERIFY_SIGNATURE]} element={<VerifySignature {...props} />} />
       </Routes>
     </Router>
   );

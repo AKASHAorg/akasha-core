@@ -62,7 +62,7 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
       ]}
       onClose={handleModalClose}
     >
-      <Text align="center">{t(`Are you sure you wish to delete "${keyName}"`)}?</Text>
+      <Text align="center">{`${t('Are you sure you wish to delete')} "${keyName}"?`}</Text>
 
       {/* <BasicCardBox pad="p-4">
         <Box customStyle="w-[36rem] space-y-3">
