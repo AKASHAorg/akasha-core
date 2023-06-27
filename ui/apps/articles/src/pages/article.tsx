@@ -2,23 +2,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
+
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import MiniHeader from '../components/mini-header';
 import ArticleCard from '../components/article-card';
 
 import { articles } from '../components/dummy-data';
 
-const { Box } = DS;
-
-export interface IArticlePageProps {
-  className?: string;
-}
-
-const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
-  const { className, plugins } = props;
+const ArticlePage: React.FC<RootComponentProps> = props => {
+  const { plugins } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
@@ -113,7 +108,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
   ];
 
   return (
-    <Box gap="small" className={className}>
+    <Box customStyle="gap-2">
       <MiniHeader titleLabel={t('Articles')} onClickIcon={handleClickIcon} />
       <ArticleCard
         articleData={sampleArticleData}

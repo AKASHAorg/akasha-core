@@ -1,8 +1,7 @@
 import React from 'react';
-
-import DS from '@akashaorg/design-system';
-
-const { Box, Icon, Text } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export interface IInputTagsProps {
   values: string[];
@@ -14,24 +13,17 @@ const InputTags: React.FC<IInputTagsProps> = props => {
   return (
     <>
       {values.map((tag, idx) => (
-        <Box
-          key={`${tag}${idx}`}
-          direction="row"
-          round="1rem"
-          gap="xxsmall"
-          margin="xxsmall"
-          pad={{
-            horizontal: 'xsmall',
-            vertical: '1.5px',
-          }}
-          border={{
-            color: 'primaryText',
-          }}
-          onClick={onClickTag(tag)}
-        >
-          <Text color={'primaryText'}>{tag}</Text>
-          <Icon type="close" />
-        </Box>
+        <button onClick={onClickTag(tag)}>
+          <Box
+            key={`${tag}${idx}`}
+            customStyle={
+              'flex flex-row rounded-lg gap-0.5 m-0.5 px-1 py-0.5 border(grey8 dark:grey3)'
+            }
+          >
+            <Text variant="body1">{tag}</Text>
+            <Icon type="XMarkIcon" />
+          </Box>
+        </button>
       ))}
     </>
   );

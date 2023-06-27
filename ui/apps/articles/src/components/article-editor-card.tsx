@@ -3,11 +3,12 @@ import { withHistory } from 'slate-history';
 import { createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 
-import DS from '@akashaorg/design-system';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { articles } from './dummy-data';
-
-const { Box, Button, StackedAvatar, Text } = DS;
 
 export interface IArticleEditorCardProps {
   inviteCollaboratorsLabel: string;
@@ -48,12 +49,7 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
 
   return (
     <>
-      <Box
-        gap="medium"
-        pad={{ horizontal: 'medium' }}
-        margin={{ vertical: 'medium' }}
-        style={{ maxHeight: '73vh', overflowY: 'scroll' }}
-      >
+      <Box customStyle="flex gap-4 px-4 my-4 max-h-[73vh] overflow-y-scroll">
         {/* slate editors for the article title and content */}
         <Slate editor={titleEditor} value={initialValue} onChange={() => null}>
           <Editable placeholder="Your Title" />
@@ -62,29 +58,26 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
           <Editable placeholder="Start sharing knowledge" />
         </Slate>
       </Box>
-      <Box direction="row" justify="between" pad="medium" border={{ side: 'top', color: 'border' }}>
-        <Box direction="row" gap="small" align="center" onClick={onManageCollaborators}>
-          {articleCollaborators.length > 0 && (
-            <StackedAvatar size="md" userData={articleCollaborators} maxAvatars={4} />
-          )}
-          <Text size="large" color={articleCollaborators.length > 0 ? 'primaryText' : 'accentText'}>
-            {articleCollaborators.length > 0 ? collaboratingLabel : inviteCollaboratorsLabel}
-          </Text>
-        </Box>
-        <Box direction="row" justify="end" align="center" gap="small">
+      <Box customStyle="flex flex-row justify-between p-4 border(t grey8 dark:grey3)">
+        <button onClick={onManageCollaborators}>
+          <Box customStyle="flex flex-row gap-2 items-center">
+            {articleCollaborators.length > 0 && (
+              <StackedAvatar size="md" userData={articleCollaborators} maxAvatars={4} />
+            )}
+            <Text
+              variant="h6"
+              color={articleCollaborators.length > 0 && 'secondaryLight dark:secondaryDark'}
+            >
+              {articleCollaborators.length > 0 ? collaboratingLabel : inviteCollaboratorsLabel}
+            </Text>
+          </Box>
+        </button>
+        <Box customStyle="flex flex-row justify-end items-center gap-2">
+          <Button size="lg" label={saveDraftLabel} onClick={onSaveDraft} />
           <Button
-            slimBorder={true}
-            size="large"
-            height={2.5}
-            label={saveDraftLabel}
-            onClick={onSaveDraft}
-          />
-          <Button
-            slimBorder={true}
-            size="large"
-            height={2.5}
+            size="lg"
             disabled={!canPublish}
-            primary={true}
+            variant="primary"
             label={publishLabel}
             onClick={onPublish}
           />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from 'grommet';
-import { ISearchBar, SearchBar } from './index';
+import SearchBar, { ISearchBar } from './index';
 
 export default {
   title: 'Bars/SearchBar',

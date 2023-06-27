@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SearchBar } from '../SearchBar';
+import SearchBar from '../SearchBar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';

@@ -1,9 +1,11 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { apps } from '../dummy-data';
-
-const { Box, Button, Text, MainAreaCardBox, Icon } = DS;
 
 export interface IStepTwoProps {
   titleLabel: string;
@@ -27,53 +29,38 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
   } = props;
 
   return (
-    <MainAreaCardBox margin={{ bottom: '1rem' }}>
-      <Box align="start" fill="horizontal" pad="medium">
-        <Box direction="row" fill="horizontal" margin={{ bottom: 'medium' }}>
-          <Icon type="chevronLeft" style={{ cursor: 'pointer' }} onClick={onClickIcon} />
-          <Text size="xlarge" weight="bold">
-            {titleLabel}
-          </Text>
+    <BasicCardBox customStyle="mb-4">
+      <Box customStyle="flex items-start w-full p-4">
+        <Box customStyle="flex flex-row w-full mb-4">
+          <button onClick={onClickIcon}>
+            <Icon type="ChevronLeftIcon" />{' '}
+          </button>
+          <Text variant="h2">{titleLabel}</Text>
         </Box>
-        <Text size="large" margin={{ bottom: 'xsmall' }}>
+        <Text variant="h6" customStyle="mb-1">
           {textLine1Label}
         </Text>
-        <Box margin={{ vertical: 'medium' }} gap="medium">
+        <Box customStyle="flex my-4 gap-4">
           {apps.map((app, idx) => (
-            <Box key={idx} gap="xsmall" direction="row" align="center">
-              <Box pad="small" background="border" round="xxsmall">
-                <Icon size="xl" type="integrationAppLarge" plain={true} />
+            <Box customStyle="flex flex-row items-center gap-1" key={idx}>
+              <Box customStyle="flex rounded-sm p-2 bg(grey8 dark:grey3)">
+                <Icon size="lg" type="CircleStackIcon" />
               </Box>
-              <Box gap="xxsmall">
-                <Text size="large" weight="bold">
-                  {app.title}
-                </Text>
-                <Text color="secondaryText">
+              <Box customStyle="flex gap-0.5">
+                <Text variant="h2">{app.title}</Text>
+                <Text variant="subtitle1">
                   @{app.author} · {app.type}
                 </Text>
               </Box>
             </Box>
           ))}
         </Box>
-        <Box direction="row" fill="horizontal" justify="end" align="center" gap="small">
-          <Button
-            slimBorder={true}
-            size="large"
-            height={2.5}
-            label={skipLabel}
-            onClick={onClickSkip}
-          />
-          <Button
-            slimBorder={true}
-            size="large"
-            height={2.5}
-            primary={true}
-            label={nextLabel}
-            onClick={onClickNext}
-          />
+        <Box customStyle="flex flex-row w-full justify-end items-center gap-2">
+          <Button size="lg" label={skipLabel} onClick={onClickSkip} />
+          <Button size="lg" variant="primary" label={nextLabel} onClick={onClickNext} />
         </Box>
       </Box>
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

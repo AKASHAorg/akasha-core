@@ -1,7 +1,8 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
-
-const { Box, Icon, MainAreaCardBox, Text } = DS;
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export interface IMiniHeaderProps {
   titleLabel: string;
@@ -12,14 +13,14 @@ const MiniHeader: React.FC<IMiniHeaderProps> = props => {
   const { titleLabel, onClickIcon } = props;
 
   return (
-    <MainAreaCardBox pad="medium">
-      <Box direction="row" fill="horizontal">
-        <Icon type="chevronLeft" style={{ cursor: 'pointer' }} onClick={onClickIcon} />
-        <Text size="xlarge" weight="bold">
-          {titleLabel}
-        </Text>
+    <BasicCardBox pad="p-2">
+      <Box customStyle="flex flex-row w-full">
+        <button onClick={onClickIcon}>
+          <Icon type="ChevronLeftIcon" />
+        </button>
+        <Text variant="h2">{titleLabel}</Text>
       </Box>
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

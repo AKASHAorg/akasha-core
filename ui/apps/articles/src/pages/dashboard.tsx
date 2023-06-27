@@ -1,9 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
+
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import ArticleHeader from '../components/articles-header';
 import ArticlesMiniCard from '../components/articles-mini-card';
@@ -12,14 +13,8 @@ import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboard
 import routes, { ONBOARDING_STEP_ONE, SETTINGS, WRITE_ARTICLE } from '../routes';
 import { articles } from '../components/dummy-data';
 
-const { Box } = DS;
-
-export interface IDashboardProps {
-  className?: string;
-}
-
-const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
-  const { className, plugins } = props;
+const Dashboard: React.FC<RootComponentProps> = props => {
+  const { plugins } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
@@ -129,7 +124,7 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
   }
 
   return (
-    <Box gap="small" className={className}>
+    <Box customStyle="gap-2">
       <ArticleHeader
         titleLabel={t('Articles')}
         subtitleLabel={t('Browse articles or write a new one 📝')}

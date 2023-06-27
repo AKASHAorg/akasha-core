@@ -1,9 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
+
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import MyArticlesHeader from '../components/my-articles-header';
 import ArticlesMiniCard from '../components/articles-mini-card';
@@ -12,14 +16,8 @@ import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboard
 import routes, { ONBOARDING_STEP_ONE, WRITE_ARTICLE } from '../routes';
 import { articles } from '../components/dummy-data';
 
-const { Box, Button, Text, MainAreaCardBox } = DS;
-
-export interface IMyArticlesProps {
-  className?: string;
-}
-
-const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
-  const { className, plugins } = props;
+const MyArticles: React.FC<RootComponentProps> = props => {
+  const { plugins } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
@@ -128,7 +126,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   }
 
   return (
-    <Box gap="small" className={className}>
+    <Box customStyle="gap-2">
       <MyArticlesHeader
         titleLabel={t('My Articles')}
         subtitleLabel={t('You can check all the articles that you published as well as the drafts')}
@@ -136,21 +134,10 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
         activeTabIndex={activeTabIndex}
         onClickTab={handleClickTab}
       />
-      <MainAreaCardBox
-        direction="row"
-        pad="medium"
-        align="center"
-        justify="between"
-        border={{ size: '1px', color: 'accent' }}
-      >
-        <Text size="large">{t(' ✨😸Share your articles with Akasha World 😸✨')}</Text>
-        <Button
-          slimBorder={true}
-          primary={true}
-          label={t('Start writing')}
-          onClick={handleClickWriteArticle}
-        />
-      </MainAreaCardBox>
+      <BasicCardBox customStyle="flex flex-row p-4 items-center justify-between border(secondaryLight dark:secondaryDark">
+        <Text variant="h6">{t(' ✨😸Share your articles with Akasha World 😸✨')}</Text>
+        <Button variant="primary" label={t('Start writing')} onClick={handleClickWriteArticle} />
+      </BasicCardBox>
       {activeTabIndex === 0 &&
         articles
           .filter(article => article.isPublished)

@@ -5,7 +5,7 @@ import Avatar, { AvatarSize } from '../Avatar';
 import { Profile } from '@akashaorg/typings/ui';
 
 export interface IStackedAvatarProps {
-  userData: Profile[];
+  userData: { did: Profile['did']; avatar?: Profile['avatar'] }[];
   maxAvatars?: number;
   size?: AvatarSize;
 }
