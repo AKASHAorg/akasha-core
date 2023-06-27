@@ -67,16 +67,12 @@ const profileData: Profile = {
   id: '31231',
 };
 
-const randomMentions = n => Math.floor(Math.random() * n);
-const chartData = [
-  { mentions: randomMentions(100), date: 1590994625 },
-  { mentions: randomMentions(10), date: 1591081025 },
-  { mentions: randomMentions(100), date: 1591167425 },
-  { mentions: randomMentions(300), date: 1591253825 },
-  { mentions: randomMentions(280), date: 1591340225 },
-  { mentions: randomMentions(120), date: 1591426625 },
-  { mentions: randomMentions(120), date: 1591513025 },
-];
+const randomMentions = n => {
+  return { mentions: Math.floor(Math.random() * n), date: 1590994625 };
+};
+const chartData = Array.from({ length: 7 }, (k, v) => {
+  return randomMentions(Math.floor(Math.random() * 300 + 10));
+});
 const trendingTagsData = [
   { name: 'AKASHA', totalPosts: 176, tagHistoricData: chartData, subscribed: true },
   { name: 'AKASHAWorld', totalPosts: 94, tagHistoricData: chartData, subscribed: false },
