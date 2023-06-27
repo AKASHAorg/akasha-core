@@ -1,5 +1,4 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
 
 import { NavigateToParams } from '@akashaorg/typings/ui';
@@ -8,6 +7,7 @@ import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type GuestProps = {
@@ -33,12 +33,7 @@ const GuestDashboard: React.FC<GuestProps> = props => {
         </Text>
 
         <Box customStyle="w-40 h-40 my-2 mx-auto">
-          <img
-            className={tw('object-contain')}
-            aria-label="moderation"
-            src={`/images/moderation.webp`}
-            alt="moderation"
-          />
+          <Image assetName="moderation" />
         </Box>
 
         <Text weight="bold" align="center">

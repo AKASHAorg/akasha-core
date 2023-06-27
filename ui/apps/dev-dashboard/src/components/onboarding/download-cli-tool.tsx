@@ -56,11 +56,13 @@ export const DownloadCLITool: React.FC<DownloadCLIToolProps> = props => {
               <ListItem listElementText="•" item={paragraph} />
               {/* re-enable this, if we need to show the console image */}
 
-              {/* {idx === 0 && (
-              <Box customStyle="h-[3rem] my-2">
-                <img className={tw('object-contain')} src={`${publicImgPath}/${assetName}.webp`} />
-              </Box>
-            )} */}
+              {/* <Box customStyle="h-[3rem] my-2">
+                <Image
+                  assetName={assetName}
+                  assetExtension={assetExtension}
+                  publicImgPath={publicImgPath}
+                />
+              </Box> */}
             </React.Fragment>
           ))}
         </Box>

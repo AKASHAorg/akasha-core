@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { tw } from '@twind/core';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
@@ -8,6 +7,7 @@ import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import routes, { ONBOARDING_STEP_ONE } from '../routes';
@@ -53,11 +53,7 @@ export const DevDashOnboardingIntro: React.FC<RootComponentProps> = props => {
         </Text>
 
         <Box customStyle="w-[17.5rem] h-[17.5rem] my-6">
-          <img
-            alt="dev-dashboard-intro"
-            className={tw('object-contain')}
-            src="/images/dev-dashboard-intro.webp"
-          />
+          <Image assetName="dev-dashboard-intro" />
         </Box>
 
         <Text variant="h5" align="center" weight="bold" customStyle="mt-2">

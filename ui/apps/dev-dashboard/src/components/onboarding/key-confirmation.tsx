@@ -1,7 +1,7 @@
 import React from 'react';
-import { tw } from '@twind/core';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
   DevKeyCard,
@@ -37,10 +37,10 @@ export const KeyConfirmation: React.FC<KeyConfirmationProps> = props => {
         <Text>{subtitleLabel}</Text>
 
         <Box customStyle="w-[17.5rem] h-[17.5rem] my-6 self-center">
-          <img
-            alt={assetName}
-            className={tw('object-contain')}
-            src={`${publicImgPath}/${assetName}.${assetExtension}`}
+          <Image
+            assetName={assetName}
+            assetExtension={assetExtension}
+            publicImgPath={publicImgPath}
           />
         </Box>
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import { tw } from '@twind/core';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
   PageButtonsProps,
@@ -29,12 +29,10 @@ const BMIntro: React.FC<BMIntroProps> = props => {
         </Text>
 
         <Box customStyle="w-40 h-40 my-2 mx-auto">
-          <img
-            className={tw('object-contain')}
-            aria-label={assetName}
-            src={`${publicImgPath}/${assetName}.webp`}
-            alt={assetName}
-            data-testid={`${assetName}-image`}
+          <Image
+            assetName={assetName}
+            publicImgPath={publicImgPath}
+            dataTestId={`${assetName}-image`}
           />
         </Box>
 
