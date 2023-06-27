@@ -7,7 +7,6 @@ import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
-import SignMessageCard from './profile/sign-message';
 import VerifySignatureCard from './profile/verify-signature';
 import {
   AddDevKey,
@@ -17,6 +16,7 @@ import {
   DevKeysCard,
   EditMessageName,
   PublishedApps,
+  SignMessage,
 } from '../pages';
 
 import routes, {
@@ -128,22 +128,7 @@ const AppRoutes = (props: RootComponentProps) => {
 
         <Route path={routes[PUBLISHED_APPS]} element={<PublishedApps {...props} />} />
 
-        <Route
-          path={routes[SIGN_MESSAGE]}
-          element={
-            <SignMessageCard
-              {...props}
-              messageTitleLabel={t('Message')}
-              messageInputPlaceholder={t('Place the message to be signed here')}
-              titleLabel={t('Message Signed correctly 🙌🏽')}
-              subtitleLabel={t('Here are the details of the signature')}
-              paragraph1TitleLabel={t('Signature String 🖋 ')}
-              paragraph2TitleLabel={t('Signed Message ✉️')}
-              signButtonLabel={t('Sign')}
-              doneButtonLabel={t('Done')}
-            />
-          }
-        />
+        <Route path={routes[SIGN_MESSAGE]} element={<SignMessage {...props} />} />
 
         <Route
           path={routes[VERIFY_SIGNATURE]}
@@ -161,7 +146,6 @@ const AppRoutes = (props: RootComponentProps) => {
               paragraph1TitleLabel={t('Public Key 🔑')}
               paragraph2TitleLabel={t('Original Message ✉️')}
               verifyButtonLabel={t('Verify')}
-              doneButtonLabel={t('Done')}
             />
           }
         />

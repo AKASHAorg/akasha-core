@@ -1,51 +1,47 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
+import { tw } from '@twind/core';
 
-const { Box, Text, Image } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export type HeroImageCardProps = {
+export type HeroImageProps = {
   assetName?: string;
   assetExtension?: string;
   publicImgPath?: string;
-  wrapperBoxWidth?: string;
-  wrapperBoxHeight?: string;
-  wrapperBoxMargin?: Record<string, unknown>;
   titleLabel: string;
   subtitleLabel: string;
 };
 
-const HeroImageCard: React.FC<HeroImageCardProps> = props => {
+export const HeroImage: React.FC<HeroImageProps> = props => {
   const {
     assetName = 'ok',
     assetExtension = 'webp',
     publicImgPath = '/images',
-    wrapperBoxWidth = '16rem',
-    wrapperBoxHeight = '13rem',
-    wrapperBoxMargin = { bottom: 'medium' },
     titleLabel,
     subtitleLabel,
   } = props;
 
   return (
-    <Box gap="small">
-      <Box
-        width={wrapperBoxWidth}
-        height={wrapperBoxHeight}
-        margin={wrapperBoxMargin}
-        alignSelf="center"
-      >
-        <Image fit="contain" src={`${publicImgPath}/${assetName}.${assetExtension}`} />
+    <Box customStyle="flex flex-col items-center space-y-4">
+      <Box customStyle="w-[16rem] h-[13rem]">
+        <img
+          alt={`${assetName}`}
+          className={tw('object-contain')}
+          src={`${publicImgPath}/${assetName}.${assetExtension}`}
+        />
       </Box>
+
       {titleLabel && (
-        <Text size="large" weight="bold" textAlign="center">
+        <Text variant="h5" weight="bold" align="center">
           {titleLabel}
         </Text>
       )}
-      <Text size="large" textAlign="center">
-        {subtitleLabel}
-      </Text>
+
+      {subtitleLabel && (
+        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }} align="center">
+          {subtitleLabel}
+        </Text>
+      )}
     </Box>
   );
 };
-
-export default HeroImageCard;
