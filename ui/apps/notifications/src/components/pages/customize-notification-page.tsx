@@ -151,6 +151,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
 
   const snoozeChangeHandler = () => {
     setSnoozed(!snoozed);
+    setIsChanged(true);
   };
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
@@ -356,7 +357,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={<Title title={t('Moderation App')} />}
+            titleNode={<Title title={t('Vibe App')} />}
             contentNode={
               <Content checkboxArray={moderationAppCheckboxes} section={'moderationApp'} />
             }
