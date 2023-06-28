@@ -23,6 +23,17 @@ export interface ITopbarProps {
   onLoginClick: () => void;
   modalSlotId: string;
 }
+const notificationIcon = function (snoozeNotifications, hasNewNotifications) {
+  if (snoozeNotifications) {
+    return 'BellSnoozeIcon';
+  } else {
+    if (hasNewNotifications) {
+      return 'BellAlertIcon';
+    }
+    return 'BellIcon';
+  }
+};
+
 const Topbar: React.FC<ITopbarProps> = props => {
   const {
     isLoggedIn,
@@ -81,8 +92,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onClick={onBackClick}
         />
       </div>
-      <div
-        className={tw('p-0 m-0 cursor-pointer flex(& col) justify-center items-center')}
+      <Button
+        plain={true}
+        customStyle={tw('p-0 m-0 cursor-pointer flex(& col) justify-center items-center')}
         onClick={onBrandClick}
       >
         <Icon type="akasha" customStyle="w-18 h-8" />
@@ -91,7 +103,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         >
           Akasha World
         </span>
-      </div>
+      </Button>
       <div className={tw('flex space-x-2')}>
         {displayWidgetTogglingButton ? (
           isLoggedIn ? (
@@ -104,13 +116,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
               />
               <Button
                 iconOnly={true}
-                icon={
-                  snoozeNotifications
-                    ? 'BellSnoozeIcon'
-                    : hasNewNotifications
-                    ? 'BellAlertIcon'
-                    : 'BellIcon'
-                }
+                icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
                 onClick={onNotificationClick}
                 greyBg={true}
                 variant="primary"
@@ -122,13 +128,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         ) : (
           <Button
             iconOnly={true}
-            icon={
-              snoozeNotifications
-                ? 'BellSnoozeIcon'
-                : hasNewNotifications
-                ? 'BellAlertIcon'
-                : 'BellIcon'
-            }
+            icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
             onClick={onNotificationClick}
             greyBg={true}
             variant="primary"
