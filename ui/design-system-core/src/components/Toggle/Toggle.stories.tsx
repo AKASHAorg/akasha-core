@@ -13,7 +13,7 @@ const Template = args => {
   const changeHandler = e => {
     setSelected(!selected);
   };
-  return <Toggle {...args} checked={selected} onChange={changeHandler} />;
+  return <Toggle checked={selected} {...args} onChange={changeHandler} />;
 };
 
 export const BaseToggle = Template.bind({});
@@ -31,6 +31,13 @@ export const IconToggle = Template.bind({});
 IconToggle.args = {
   iconChecked: 'SunIcon',
   iconUnchecked: 'MoonIcon',
+};
+
+export const IconToggleWithLabel = Template.bind({});
+IconToggle.args = {
+  iconChecked: 'SunIcon',
+  iconUnchecked: 'MoonIcon',
+  label: 'small toggle',
 };
 
 export const DisabledToggle = Template.bind({});
