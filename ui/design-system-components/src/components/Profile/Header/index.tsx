@@ -10,6 +10,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { tw } from '@twind/core';
 import { Profile } from '@akashaorg/typings/ui';
+import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 
 export type HeaderProps = {
   did: Profile['did'];
@@ -49,7 +50,9 @@ const Header: React.FC<HeaderProps> = ({
         radius={{ top: 20 }}
         background={{ light: 'grey7', dark: 'grey5' }}
         customStyle={`h-32 ${
-          background?.default ? `bg-center bg-[url(${background?.default.src})]` : ''
+          background?.default
+            ? `bg-center bg-no-repeat	bg-cover bg-[url(${background?.default.src})]`
+            : ''
         }`}
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
@@ -60,7 +63,13 @@ const Header: React.FC<HeaderProps> = ({
                 profileId={did.id}
                 size="xl"
                 avatar={avatar}
-                customStyle="absolute -top-6 border-2 border-white dark:border-grey2"
+                customStyle={`absolute -top-6 border-2 border-white dark:border-grey2 ${getColorClasses(
+                  {
+                    light: 'grey8',
+                    dark: 'grey4',
+                  },
+                  'bg',
+                )}`}
               />
             </div>
             <Stack direction="column">
@@ -68,27 +77,37 @@ const Header: React.FC<HeaderProps> = ({
             </Stack>
             <div className={tw(`ml-auto mt-2`)}>
               {viewerIsOwner ? (
-                <Button icon="Cog6ToothIcon" onClick={handleEdit} greyBg iconOnly />
+                <Button
+                  icon="Cog6ToothIcon"
+                  variant="primary"
+                  onClick={handleEdit}
+                  greyBg
+                  iconOnly
+                />
               ) : (
                 <div className="relative">
                   <Stack spacing="gap-x-2">
-                    <Button icon="EnvelopeIcon" greyBg iconOnly />
+                    <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
                     {isFollowing ? (
-                      <>
-                        <Button
-                          size="sm"
-                          icon="UserPlusIcon"
-                          onClick={handleUnfollow}
-                          variant="primary"
-                          iconOnly
-                        />
-                      </>
-                    ) : (
                       <Button onClick={handleFollow} icon="UsersIcon" greyBg iconOnly />
+                    ) : (
+                      <Button
+                        size="sm"
+                        icon="UserPlusIcon"
+                        onClick={handleUnfollow}
+                        variant="primary"
+                        iconOnly
+                      />
                     )}
                     <Menu
                       anchorElement={
-                        <Button onClick={handleFlag} icon="EllipsisVerticalIcon" greyBg iconOnly />
+                        <Button
+                          onClick={handleFlag}
+                          icon="EllipsisVerticalIcon"
+                          variant="primary"
+                          greyBg
+                          iconOnly
+                        />
                       }
                       items={[
                         {

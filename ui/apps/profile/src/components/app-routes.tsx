@@ -2,13 +2,10 @@ import React from 'react';
 import menuRoute, { EDIT, FOLLOWERS, FOLLOWING } from '../routes';
 import ProfilePage from './pages/profile-page';
 import ProfileEngagementsPage from './pages/profile-engagement';
-import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation('app-profile');
-
   return (
     <Router basename={props.baseRouteName}>
       <Routes>

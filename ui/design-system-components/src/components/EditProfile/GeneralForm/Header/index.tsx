@@ -29,8 +29,8 @@ export type HeaderProps = {
   deleteTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   confirmationLabel: { avatar: string; coverImage: string };
   dragToRepositionLabel: string;
-  onAvatarChange: (avatar?: Profile['avatar']) => void;
-  onCoverImageChange: (coverImage?: Profile['background']) => void;
+  onAvatarChange: (avatar?: File) => void;
+  onCoverImageChange: (coverImage?: File) => void;
 };
 
 export const Header: React.FC<HeaderProps> = ({
@@ -56,6 +56,8 @@ export const Header: React.FC<HeaderProps> = ({
   const [showDeleteImage, setShowDeleteImage] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(avatar);
   const [coverImageUrl, setCoverImageUrl] = useState(coverImage);
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [coverImageFile, setCoverImageFile] = useState(null);
 
   const editAvatarRef = useCloseActions(() => {
     setShowAvatarActions(false);
@@ -95,9 +97,11 @@ export const Header: React.FC<HeaderProps> = ({
     if (image) {
       switch (imageType) {
         case 'avatar':
+          setAvatarFile(image);
           setAvatarUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
           break;
         case 'cover-image':
+          setCoverImageFile(image);
           setCoverImageUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
       }
     }
@@ -119,9 +123,11 @@ export const Header: React.FC<HeaderProps> = ({
     if (image) {
       switch (imageType) {
         case 'avatar':
+          setAvatarFile(image);
           setAvatarUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
           break;
         case 'cover-image':
+          setCoverImageFile(image);
           setCoverImageUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
       }
     }
@@ -129,14 +135,12 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   useEffect(() => {
-    onAvatarChange(avatarUrl);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [avatarUrl]);
+    onAvatarChange(avatarFile);
+  }, [onAvatarChange, avatarFile]);
 
   useEffect(() => {
-    onCoverImageChange(coverImageUrl);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [coverImageUrl]);
+    onCoverImageChange(coverImageFile);
+  }, [onCoverImageChange, coverImageFile]);
 
   return (
     <Stack direction="column" spacing="gap-y-2">

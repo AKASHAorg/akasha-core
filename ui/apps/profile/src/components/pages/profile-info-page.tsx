@@ -14,6 +14,7 @@ import {
   useGetFollowingListByDidQuery,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
 
 type ProfileInfoPageProps = {
   profileId: string;
@@ -22,13 +23,13 @@ type ProfileInfoPageProps = {
 };
 
 const ProfileInfoPage: React.FC<RootComponentProps & ProfileInfoPageProps> = props => {
-  const { profileId, isViewer, profileData } = props;
+  const { profileId, isViewer, profileData, plugins } = props;
 
   const { t } = useTranslation('app-profile');
 
   const [showFeedback, setShowFeedback] = React.useState(false);
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const followingListReq = useGetFollowingListByDidQuery(
     { id: profileId },
@@ -66,13 +67,32 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfileInfoPageProps> = pro
     props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
   };
 
+  const background = profileData?.background
+    ? {
+        default: {
+          ...profileData.background.default,
+          src: getMediaUrl(profileData.background.default.src.replace(/(^\w+:|^)\/\//, ''))
+            .originLink,
+        },
+      }
+    : null;
+
+  const avatar = profileData?.avatar
+    ? {
+        default: {
+          ...profileData.avatar.default,
+          src: getMediaUrl(profileData.avatar.default.src.replace(/(^\w+:|^)\/\//, '')).originLink,
+        },
+      }
+    : null;
+
   return (
     <>
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         <ProfileHeader
           did={profileData.did}
-          background={profileData.background}
-          avatar={profileData.avatar}
+          background={background}
+          avatar={avatar}
           name={profileData.name}
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           isFollowing={isFollowing}
@@ -88,7 +108,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfileInfoPageProps> = pro
           handleEdit={() => {
             navigateTo({
               appName: '@akashaorg/app-profile',
-              getNavigationUrl: () => `${profileId}/${routes[EDIT]}`,
+              getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
             });
           }}
         />
