@@ -23,6 +23,8 @@ import { getMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { saveMediaFile } from '../saveMedia';
 
+export const MEDIA_UPLOAD_EMAIL = '@mediaUploadEmail';
+
 type EditProfilePageProps = {
   profileId: string;
   isViewer: boolean;
@@ -31,7 +33,7 @@ type EditProfilePageProps = {
 
 const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
   const { t } = useTranslation('app-profile');
-  const { profileId, profileData, plugins } = props;
+  const { profileId, profileData, plugins, logger } = props;
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   // const ENSReq = useEnsByAddress(profileData.ethAddress);
@@ -124,9 +126,9 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   };
 
   const saveAvatarImage = async (avatar: GeneralFormValues['avatar']) => {
-    const ENABLED = false; /*@(For local development only) set to true */
+    const mediaUploadEmail = window.localStorage.getItem(MEDIA_UPLOAD_EMAIL);
 
-    if (!ENABLED) return null;
+    if (!mediaUploadEmail) return null;
 
     setIsAvatarSaving(true);
     try {
@@ -134,21 +136,21 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
         isUrl: false,
         content: avatar,
         name: 'avatar',
-        email: 'email@email' /*@(For local development only) saving avatar image requires email */,
+        email: mediaUploadEmail,
       });
       setIsAvatarSaving(false);
       return avatarMediaFile;
     } catch (ex) {
-      console.error(ex);
+      logger.error(ex);
       setIsAvatarSaving(false);
       return null;
     }
   };
 
   const saveCoverImage = async (coverImage: GeneralFormValues['avatar']) => {
-    const ENABLED = false; /*@(For local development only) set to true */
+    const mediaUploadEmail = window.localStorage.getItem(MEDIA_UPLOAD_EMAIL);
 
-    if (!ENABLED) return null;
+    if (!mediaUploadEmail) return null;
 
     setIsCoverImageSaving(true);
     try {
@@ -156,12 +158,12 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
         isUrl: false,
         content: coverImage,
         name: 'coverImage',
-        email: 'email@email' /*@(For local development only) saving cover image requires email */,
+        email: mediaUploadEmail,
       });
       setIsCoverImageSaving(false);
       return coverImageMediaFile;
     } catch (ex) {
-      console.error(ex);
+      logger.error(ex);
       setIsCoverImageSaving(false);
       return null;
     }
@@ -204,12 +206,15 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     };
   };
 
+  const backgroundSrc = getMediaUrl(profileData.background.default.src);
+
+  const avatarSrc = getMediaUrl(profileData.avatar.default.src);
+
   const background = profileData?.background
     ? {
         default: {
           ...profileData.background.default,
-          src: getMediaUrl(profileData.background.default.src.replace(/(^\w+:|^)\/\//, ''))
-            .originLink,
+          src: backgroundSrc.originLink || backgroundSrc.fallbackLink,
         },
       }
     : null;
@@ -218,7 +223,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     ? {
         default: {
           ...profileData.avatar.default,
-          src: getMediaUrl(profileData.avatar.default.src.replace(/(^\w+:|^)\/\//, '')).originLink,
+          src: avatarSrc.originLink || avatarSrc.fallbackLink,
         },
       }
     : null;
