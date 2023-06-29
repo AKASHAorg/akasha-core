@@ -4,6 +4,7 @@ import { RootComponentProps, EventTypes, MenuItemAreaType, IMenuItem } from '@ak
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -114,6 +115,20 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
 
+  const subtitleUi = React.useMemo(
+    () => (
+      <Text
+        variant="footnotes1"
+        customStyle={`text-grey5 ${myProfileQuery.data?.did?.id ? 'w-48' : 'whitespace-normal'}`}
+        truncate
+        breakWord
+      >
+        {myProfileQuery.data?.did.id ?? t('Connect to see exclusive member only features.')}
+      </Text>
+    ),
+    [myProfileQuery],
+  );
+
   return (
     <BasicCardBox
       customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
@@ -129,9 +144,11 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         </Box>
         <Box customStyle="w-fit flex flex-grow flex-col">
           <Text variant="button-md">{myProfileQuery.data?.name || t('Guest')}</Text>
-          <Text variant="footnotes1" customStyle="text-grey5">
-            {myProfileQuery.data?.did.id ?? t('Connect to see exclusive member only features.')}
-          </Text>
+          {myProfileQuery.data?.did?.id ? (
+            <CopyToClipboard value={myProfileQuery.data.did.id}>{subtitleUi}</CopyToClipboard>
+          ) : (
+            subtitleUi
+          )}
         </Box>
         <Box customStyle="w-fit h-fit ml-6 self-center">
           {loginQuery.data?.id && (
