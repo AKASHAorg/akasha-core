@@ -1,8 +1,9 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface ITopbarProps {
   // data
@@ -23,6 +24,7 @@ export interface ITopbarProps {
   onLoginClick: () => void;
   modalSlotId: string;
 }
+
 const Topbar: React.FC<ITopbarProps> = props => {
   const {
     isLoggedIn,
@@ -53,9 +55,20 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
   const customStyle =
     'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-50)';
+
+  const notificationIcon = React.useMemo(() => {
+    if (snoozeNotifications) {
+      return 'BellSnoozeIcon';
+    }
+    if (hasNewNotifications) {
+      return 'BellAlertIcon';
+    }
+    return 'BellIcon';
+  }, [snoozeNotifications, hasNewNotifications]);
+
   return (
     <BasicCardBox customStyle={customStyle}>
-      <div className={tw('flex space-x-2')}>
+      <Box customStyle="flex space-x-2">
         {!sidebarVisible ? (
           <Button
             iconOnly={true}
@@ -80,19 +93,17 @@ const Topbar: React.FC<ITopbarProps> = props => {
           icon="ChevronLeftIcon"
           onClick={onBackClick}
         />
-      </div>
-      <div
-        className={tw('p-0 m-0 cursor-pointer flex(& col) justify-center items-center')}
+      </Box>
+      <Box
+        customStyle="p-0 m-0 cursor-pointer flex(& col) justify-center items-center"
         onClick={onBrandClick}
       >
         <Icon type="akasha" customStyle="w-18 h-8" />
-        <span
-          className={tw('uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md')}
-        >
+        <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
           Akasha World
-        </span>
-      </div>
-      <div className={tw('flex space-x-2')}>
+        </Text>
+      </Box>
+      <Box customStyle="flex space-x-2">
         {displayWidgetTogglingButton ? (
           isLoggedIn ? (
             <>
@@ -104,13 +115,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
               />
               <Button
                 iconOnly={true}
-                icon={
-                  snoozeNotifications
-                    ? 'BellSnoozeIcon'
-                    : hasNewNotifications
-                    ? 'BellAlertIcon'
-                    : 'BellIcon'
-                }
+                icon={notificationIcon}
                 onClick={onNotificationClick}
                 greyBg={true}
                 variant="primary"
@@ -122,19 +127,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
         ) : (
           <Button
             iconOnly={true}
-            icon={
-              snoozeNotifications
-                ? 'BellSnoozeIcon'
-                : hasNewNotifications
-                ? 'BellAlertIcon'
-                : 'BellIcon'
-            }
+            icon={notificationIcon}
             onClick={onNotificationClick}
             greyBg={true}
             variant="primary"
           />
         )}
-      </div>
+      </Box>
     </BasicCardBox>
   );
 };
