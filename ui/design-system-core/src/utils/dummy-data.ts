@@ -1,39 +1,29 @@
 import { FollowConnection, Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
-const userData: Profile[] = [
-  {
-    name: 'Alice',
-    id: '410490050000320006570034567114572000',
-    did: { id: 'did:pkh:eip155:1:0x003410490050000320006570034567114572000', isViewer: true },
-    avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
+const userAvatar = (width = 360, height = 360) => {
+  return {
+    default: { src: `https://placebeard.it/${width}x${height}`, width: width, height: height },
+  };
+};
+
+const userNames = ['Alice', 'Bob', 'Charlie', 'Dave'];
+
+const isViewer = true;
+
+const createUser = n => {
+  return {
+    name: userNames[n],
+    id: `41049005000032000657003456711457200${n}`,
+    did: {
+      id: `did:pkh:eip155:1:0x00341049005000032000657003456711457200${n}`,
+      isViewer: n % 2 === 0 ? isViewer : !isViewer,
+    },
+    avatar: userAvatar(),
     createdAt: '2021-03-01T00:00:00.000Z',
     followers: {} as FollowConnection,
-  },
-  {
-    name: 'Bob',
-    id: '410490050000320006570034567114572001',
-    did: { id: 'did:pkh:eip155:1:0x004410490050000320006570034567114572001', isViewer: false },
-    avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
-    createdAt: '2020-03-01T00:00:00.000Z',
-    followers: {} as FollowConnection,
-  },
-  {
-    name: 'Charlie',
-    id: '410490050000320006570034567114572002',
-    did: { id: 'did:pkh:eip155:1:0x005410490050000320006570034567114572002', isViewer: true },
-    avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
-    createdAt: '2023-03-01T00:00:00.000Z',
-    followers: {} as FollowConnection,
-  },
-  {
-    name: 'Dave',
-    id: '410490050000320006570034567114572003',
-    did: { id: 'did:pkh:eip155:1:0x006410490050000320006570034567114572003', isViewer: false },
-    avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
-    createdAt: '2022-03-01T00:00:00.000Z',
-    followers: {} as FollowConnection,
-  },
-];
+  };
+};
+const userData: Profile[] = Array.from({ length: 4 }, (v, k) => createUser(k));
 
 const sidebarItems = [
   {
@@ -67,8 +57,8 @@ const sidebarItems = [
 
 const profileData: Profile = {
   did: { id: 'did:pkh:eip155:1:0x003410490050000320006570034567114572000', isViewer: true },
-  avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
-  background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
+  avatar: userAvatar(),
+  background: userAvatar(540, 320),
   name: 'Gilbert The Bearded',
   description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Management. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
@@ -77,16 +67,12 @@ const profileData: Profile = {
   id: '31231',
 };
 
-const chartData = [
-  { mentions: Math.floor(Math.random() * 100), date: 1590994625 },
-  { mentions: Math.floor(Math.random() * 10), date: 1591081025 },
-  { mentions: Math.floor(Math.random() * 100), date: 1591167425 },
-  { mentions: Math.floor(Math.random() * 300), date: 1591253825 },
-  { mentions: Math.floor(Math.random() * 280), date: 1591340225 },
-  { mentions: Math.floor(Math.random() * 120), date: 1591426625 },
-  { mentions: Math.floor(Math.random() * 120), date: 1591513025 },
-];
-
+const randomMentions = n => {
+  return { mentions: Math.floor(Math.random() * n), date: 1590994625 };
+};
+const chartData = Array.from({ length: 7 }, (k, v) => {
+  return randomMentions(Math.floor(Math.random() * 300 + 10));
+});
 const trendingTagsData = [
   { name: 'AKASHA', totalPosts: 176, tagHistoricData: chartData, subscribed: true },
   { name: 'AKASHAWorld', totalPosts: 94, tagHistoricData: chartData, subscribed: false },
