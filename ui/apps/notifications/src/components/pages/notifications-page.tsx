@@ -71,7 +71,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const loginQuery = useGetLogin();
 
-  const notifReq = useFetchNotifications(!loginQuery.isSuccess && loginQuery.data.id);
+  const notifReq = useFetchNotifications(!loginQuery.isSuccess && loginQuery.data?.id);
 
   // mock data used for displaying something. Change when there's real data
   const allNotifications: Notification[] = [

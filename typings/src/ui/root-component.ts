@@ -6,7 +6,7 @@ import { AnalyticsEventData } from './analytics';
 import { ModalNavigationOptions } from './navigation';
 import i18n from 'i18next';
 import { IPluginsMap } from './plugins';
-import { ILoaderConfig, QueryStringType } from './app-loader';
+import { WorldConfig, QueryStringType } from './app-loader';
 import { ILogger } from '../sdk/log';
 
 export interface RootComponentProps {
@@ -30,7 +30,7 @@ export interface RootComponentProps {
   uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: ModalNavigationOptions) => void;
   getAppRoutes?: (appId: string) => IAppConfig['routes'];
-  worldConfig: ILoaderConfig;
+  worldConfig: WorldConfig;
   parseQueryString: (queryString: string) => QueryStringType;
   encodeAppName: (name: string) => string;
   decodeAppName: (name: string) => string;

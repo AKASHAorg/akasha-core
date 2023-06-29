@@ -22,7 +22,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data.id;
+    return !!loginQuery.data?.id;
   }, [loginQuery.data]);
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;

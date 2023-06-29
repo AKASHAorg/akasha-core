@@ -6,7 +6,7 @@ import ScrollRestorer from './scroll-restorer';
 import { apply, tw } from '@twind/core';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
-import Extension from '../../../../design-system-components/src/components/Extension';
+import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -173,36 +173,34 @@ const Layout: React.FC<RootComponentProps> = props => {
             </div>
             <div id="scrollTopStop"></div>
             <div className={tw('pt-4')}>
-              {
-                /*!isPlatformHealthy*/ true && (
-                  <BasicCardBox
-                    margin="mb-4"
-                    customStyle="bg(warningLight dark:warningDark) border(errorLight dark:errorDark)"
-                  >
-                    <Box customStyle="flex flex-row">
-                      <Icon
-                        color={{ light: 'grey3', dark: 'grey3' }}
-                        type="ExclamationTriangleIcon"
-                        customStyle="mr-4"
-                      />
-                      <Box>
-                        <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
-                          {`${t(
-                            'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
-                          )}. ${t('Please check back soon')}.`}
-                        </Text>
-                        <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>{`${t(
-                          'Thank you for your patience',
-                        )} 😸`}</Text>
-                      </Box>
+              {!isPlatformHealthy && (
+                <BasicCardBox
+                  margin="mb-4"
+                  customStyle="bg(warningLight dark:warningDark) border(errorLight dark:errorDark)"
+                >
+                  <Box customStyle="flex flex-row">
+                    <Icon
+                      color={{ light: 'grey3', dark: 'grey3' }}
+                      type="ExclamationTriangleIcon"
+                      customStyle="mr-4"
+                    />
+                    <Box>
+                      <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
+                        {`${t(
+                          'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
+                        )}. ${t('Please check back soon')}.`}
+                      </Text>
+                      <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>{`${t(
+                        'Thank you for your patience',
+                      )} 😸`}</Text>
                     </Box>
-                  </BasicCardBox>
-                )
-              }
+                  </Box>
+                </BasicCardBox>
+              )}
               {!dismissed.includes(dismissedCardId) && (
                 <BasicCardBox
                   margin="mb-4"
-                  customStyle="bg(warningLight/70 dark:warningDark) border(errorLight dark:errorDark)"
+                  customStyle="bg-warningLight/70 dark:bg-warningDark border(errorLight dark:errorDark)"
                   data-testid="the-merge-notification"
                 >
                   <Box customStyle="flex flex-row items-start">

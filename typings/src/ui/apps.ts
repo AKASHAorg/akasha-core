@@ -103,5 +103,3 @@ export interface IAppConfig {
    */
   menuItems: IMenuItem | IMenuItem[];
 }
-
-export type AppRegistrationFn = (props: IntegrationRegistrationOptions) => IAppConfig;

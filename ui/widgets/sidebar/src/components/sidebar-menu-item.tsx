@@ -3,8 +3,9 @@ import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/Si
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import { IMessage } from '@akashaorg/typings/sdk';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
-const { Box, SidebarMenuItem } = DS;
+const { SidebarMenuItem } = DS;
 
 type MenuItemPassedProps = {
   plugins?: RootComponentProps['plugins'];
@@ -12,14 +13,14 @@ type MenuItemPassedProps = {
 };
 
 export const MenuItem: React.FC<SidebarMenuItemProps & MenuItemPassedProps> = props => {
-  const { menuItem, profileId } = props;
+  const { menuItem, profileId, plugins } = props;
 
   const [notificationsCount, setNotificationsCount] = React.useState(0);
 
   React.useEffect(() => {
     let notifSub: { unsubscribe: () => void };
-    if (props.plugins['@akashaorg/app-notifications']?.notification) {
-      notifSub = props.plugins['@akashaorg/app-notifications'].notification.listen(menuItem.name, {
+    if (plugins['@akashaorg/app-notifications']?.notification) {
+      notifSub = plugins['@akashaorg/app-notifications'].notification.listen(menuItem.name, {
         next: (messages?: IMessage[]) => {
           if (messages) {
             const fromOthers = messages.filter(msg => msg.from !== profileId);
@@ -33,10 +34,10 @@ export const MenuItem: React.FC<SidebarMenuItemProps & MenuItemPassedProps> = pr
         notifSub.unsubscribe();
       }
     };
-  }, [props.plugins, menuItem, profileId]);
+  }, [plugins, menuItem, profileId]);
 
   return (
-    <Box flex={true} direction="row">
+    <Box customStyle="flex flex-row">
       <SidebarMenuItem {...props} notificationsCount={notificationsCount ?? 0} />
     </Box>
   );
