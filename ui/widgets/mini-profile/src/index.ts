@@ -6,7 +6,7 @@ import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typing
  */
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
   mountsIn: opts.layoutConfig?.widgetSlotId,
-  loadingFn: () => import('./MiniProfileWidget'),
+  loadingFn: () => import('./mini-profile-widget'),
   activeWhen: (location, pathToActiveWhen) => {
     return pathToActiveWhen('/@akashaorg/app-akasha-integration/post/', false)(location);
   },

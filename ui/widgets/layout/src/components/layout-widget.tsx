@@ -1,30 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
 import { apply, tw } from '@twind/core';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
-
-const { Box, BasicCardBox, Icon, styled, Text, Extension, ExtensionPoint } = DS;
-
-const WarningCard = styled(BasicCardBox)`
-  background-color: ${props => props.theme.colors.warning};
-  color: ${props => props.theme.colors.secondary};
-  user-select: none;
-  border-width: 1px;
-  border-color: ${props => props.theme.colors.warningBorder};
-  border-style: solid;
-  display: inline-flex;
-  align-items: start;
-`;
-
-const WarningIcon = styled(Icon)`
-  margin-right: 0.5rem;
-  margin-top: 0.2rem;
-`;
+import Extension from '../../../../design-system-components/src/components/Extension';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
@@ -65,27 +51,6 @@ const Layout: React.FC<RootComponentProps> = props => {
   };
   const handleWidgetsHide = () => {
     setshowWidgets(false);
-  };
-
-  /**
-   * Handler for modal mount events
-   * This event is only triggered when `navigateToModal` fn is called
-   */
-  const handleModalNodeMount = React.useCallback(() => {
-    uiEvents.current.next({
-      event: EventTypes.ExtensionPointMount,
-      data: activeModal,
-    });
-  }, [activeModal]);
-
-  const handleModalNodeUnmount = (name: string) => {
-    if (!name) {
-      return;
-    }
-    uiEvents.current.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: { name },
-    });
   };
 
   const handleModal = React.useCallback(
@@ -180,6 +145,10 @@ const Layout: React.FC<RootComponentProps> = props => {
       <div
         className={tw('h-full w-11/12 m-auto lg:w-full min-h-screen')}
         onClick={handleClickOutside}
+        onKeyDown={() => {
+          void 0;
+        }}
+        role="presentation"
       >
         <div className={tw(layoutStyle)}>
           <ScrollRestorer />
@@ -204,48 +173,67 @@ const Layout: React.FC<RootComponentProps> = props => {
             </div>
             <div id="scrollTopStop"></div>
             <div className={tw('pt-4')}>
-              {!isPlatformHealthy && (
-                <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
-                  <WarningIcon type="error" themeColor="secondary" />
-                  <Box width="100%">
-                    <Text size="medium">
-                      {`${t(
-                        'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
-                      )}. ${t('Please check back soon')}.`}
-                    </Text>
-                    <Text size="medium">{`${t('Thank you for your patience')} 😸`}</Text>
-                  </Box>
-                </WarningCard>
-              )}
+              {
+                /*!isPlatformHealthy*/ true && (
+                  <BasicCardBox
+                    margin="mb-4"
+                    customStyle="bg(warningLight dark:warningDark) border(errorLight dark:errorDark)"
+                  >
+                    <Box customStyle="flex flex-row">
+                      <Icon
+                        color={{ light: 'grey3', dark: 'grey3' }}
+                        type="ExclamationTriangleIcon"
+                        customStyle="mr-4"
+                      />
+                      <Box>
+                        <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
+                          {`${t(
+                            'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
+                          )}. ${t('Please check back soon')}.`}
+                        </Text>
+                        <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>{`${t(
+                          'Thank you for your patience',
+                        )} 😸`}</Text>
+                      </Box>
+                    </Box>
+                  </BasicCardBox>
+                )
+              }
               {!dismissed.includes(dismissedCardId) && (
-                <WarningCard
-                  margin={{ bottom: 'small' }}
-                  pad="small"
-                  direction="row"
-                  key={dismissedCardId}
+                <BasicCardBox
+                  margin="mb-4"
+                  customStyle="bg(warningLight/70 dark:warningDark) border(errorLight dark:errorDark)"
                   data-testid="the-merge-notification"
                 >
-                  <WarningIcon type="error" themeColor="secondary" />
-                  <Box width="100%">
-                    <Text size="medium">
+                  <Box customStyle="flex flex-row items-start">
+                    <Icon
+                      color={{ light: 'grey3', dark: 'grey3' }}
+                      type="ExclamationTriangleIcon"
+                      customStyle="mr-4"
+                    />
+                    <Text
+                      color={{ light: 'grey3', dark: 'grey3' }}
+                      selectable={false}
+                      variant="footnotes2"
+                    >
                       {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
                         'We have migrated Akasha World to the Goerli testnet',
                       )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
                         'But some functionalities such as claiming ENS names won’t be possible',
                       )}. ${t('We are working hard on mitigating any issues')}. ${t(
-                        'Bear with us 🙏🏽',
-                      )}.`}
+                        'Bear with us',
+                      )} 🙏🏽.`}
                     </Text>
+                    <button onClick={onCloseButtonClick}>
+                      <Icon
+                        type="XMarkIcon"
+                        size="xs"
+                        color={{ light: 'grey3', dark: 'grey3' }}
+                        data-testid="the-merge-notification-close-button"
+                      />
+                    </button>
                   </Box>
-                  <Icon
-                    type="close"
-                    clickable={true}
-                    onClick={onCloseButtonClick}
-                    size="xs"
-                    accentColor={true}
-                    data-testid="the-merge-notification-close-button"
-                  />
-                </WarningCard>
+                </BasicCardBox>
               )}
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </div>
@@ -261,17 +249,16 @@ const Layout: React.FC<RootComponentProps> = props => {
           </div>
         </div>
         {activeModal && (
-          <ExtensionPoint
+          <Extension
             name={activeModal.name}
-            onMount={handleModalNodeMount}
-            onUnmount={handleModalNodeUnmount}
-            style={{ position: 'relative', zIndex: 9999 }}
+            uiEvents={props.uiEvents}
+            customStyle="relative z-999"
           />
         )}
         <Extension
           name={props.layoutConfig.modalSlotId}
           uiEvents={props.uiEvents}
-          style={{ position: 'relative', zIndex: 9999 }}
+          customStyle="relative z-999"
         />
       </div>
     </div>
