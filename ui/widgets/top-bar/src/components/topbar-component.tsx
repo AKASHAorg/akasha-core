@@ -1,19 +1,17 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Topbar from './topbar';
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
-  const { uiEvents } = props;
+  const { uiEvents, layoutConfig } = props;
 
   const location = useLocation();
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
 
-  const myProfileQuery = useGetMyProfileQuery(null, {
-    select: data => data.viewer?.profile,
-  });
+  const loginQuery = useGetLogin();
 
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
@@ -172,7 +170,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <Topbar
-      isLoggedIn={!!myProfileQuery.data?.did}
+      isLoggedIn={!!loginQuery.data?.id}
       sidebarVisible={sidebarVisible}
       onSidebarToggle={handleSidebarToggle}
       onAppWidgetClick={handleWidgetToggle}
@@ -181,7 +179,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       onLoginClick={handleLoginClick}
       currentLocation={location?.pathname}
       onBrandClick={handleBrandClick}
-      modalSlotId={props.layoutConfig.modalSlotId}
+      modalSlotId={layoutConfig.modalSlotId}
       snoozeNotifications={snoozeNotifications}
     />
   );

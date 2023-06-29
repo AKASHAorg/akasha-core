@@ -211,7 +211,12 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     },
   ];
 
-  if (!loginQuery.isSuccess) return null;
+  if (!loginQuery.isSuccess) {
+    return navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: navRoutes => navRoutes.CONNECT,
+    });
+  }
 
   if (!savedPreferences) {
     return navigateTo?.({

@@ -2,8 +2,7 @@ import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 export interface ITopbarProps {
   // data
@@ -24,6 +23,12 @@ export interface ITopbarProps {
   onLoginClick: () => void;
   modalSlotId: string;
 }
+const notificationIcon = function (snoozeNotifications, hasNewNotifications) {
+  if (snoozeNotifications) {
+    return 'BellSnoozeIcon';
+  }
+  return hasNewNotifications ? 'BellAlertIcon' : 'BellIcon';
+};
 
 const Topbar: React.FC<ITopbarProps> = props => {
   const {
@@ -55,17 +60,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
   const customStyle =
     'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-50)';
-
-  const notificationIcon = React.useMemo(() => {
-    if (snoozeNotifications) {
-      return 'BellSnoozeIcon';
-    }
-    if (hasNewNotifications) {
-      return 'BellAlertIcon';
-    }
-    return 'BellIcon';
-  }, [snoozeNotifications, hasNewNotifications]);
-
   return (
     <BasicCardBox customStyle={customStyle}>
       <Box customStyle="flex space-x-2">
@@ -94,15 +88,16 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onClick={onBackClick}
         />
       </Box>
-      <Box
-        customStyle="p-0 m-0 cursor-pointer flex(& col) justify-center items-center"
-        onClick={onBrandClick}
-      >
-        <Icon type="akasha" customStyle="w-18 h-8" />
-        <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
-          Akasha World
-        </Text>
-      </Box>
+      <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
+        <Stack align="center" justify="center" direction="column">
+          <Icon type="akasha" customStyle="w-18 h-8" />
+          <span
+            className={tw('uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md')}
+          >
+            Akasha World
+          </span>
+        </Stack>
+      </Button>
       <Box customStyle="flex space-x-2">
         {displayWidgetTogglingButton ? (
           isLoggedIn ? (
@@ -115,7 +110,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
               />
               <Button
                 iconOnly={true}
-                icon={notificationIcon}
+                icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
                 onClick={onNotificationClick}
                 greyBg={true}
                 variant="primary"
@@ -127,7 +122,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         ) : (
           <Button
             iconOnly={true}
-            icon={notificationIcon}
+            icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
             onClick={onNotificationClick}
             greyBg={true}
             variant="primary"

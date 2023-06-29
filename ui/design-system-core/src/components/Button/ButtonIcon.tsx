@@ -35,6 +35,7 @@ export const ButtonIcon: React.FC<
       }
       hoverColor={getHoverColor(variant)}
       hover={!disabled && !loading}
+      customStyle={loading ? 'animate-spin' : ''}
       disabled={disabled}
     />
   );

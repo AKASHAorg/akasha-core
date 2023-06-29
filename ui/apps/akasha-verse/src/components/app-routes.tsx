@@ -30,7 +30,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const connect = () => {
     navigateTo({
       appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: () => '/connect',
+      getNavigationUrl: navRoutes => navRoutes.CONNECT,
     });
   };
 

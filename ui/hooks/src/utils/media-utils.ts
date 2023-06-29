@@ -21,9 +21,21 @@ export const getMediaUrl = (hash?: string) => {
         pathLink: string;
       }
     | undefined;
-  if (hash) {
-    ipfsLinks = sdk.services.common.ipfs.buildIpfsLinks(hash);
+
+  let _hash = hash;
+
+  if (typeof hash === 'string' && hash.startsWith('ipfs://')) {
+    _hash = hash.substring(7);
   }
+
+  if (typeof hash === 'string' && hash.startsWith('/ipfs/')) {
+    _hash = hash.substring(6);
+  }
+
+  if (_hash) {
+    ipfsLinks = sdk.services.common.ipfs.buildIpfsLinks(_hash);
+  }
+
   return ipfsLinks;
 };
 
