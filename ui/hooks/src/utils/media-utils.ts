@@ -24,11 +24,11 @@ export const getMediaUrl = (hash?: string) => {
 
   let _hash = hash;
 
-  if (hash?.startsWith('ipfs://')) {
+  if (typeof hash === 'string' && hash.startsWith('ipfs://')) {
     _hash = hash.substring(7);
   }
 
-  if (hash?.startsWith('/ipfs/')) {
+  if (typeof hash === 'string' && hash.startsWith('/ipfs/')) {
     _hash = hash.substring(6);
   }
 
