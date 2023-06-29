@@ -3,6 +3,7 @@ import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 export interface ITopbarProps {
   // data
@@ -26,12 +27,8 @@ export interface ITopbarProps {
 const notificationIcon = function (snoozeNotifications, hasNewNotifications) {
   if (snoozeNotifications) {
     return 'BellSnoozeIcon';
-  } else {
-    if (hasNewNotifications) {
-      return 'BellAlertIcon';
-    }
-    return 'BellIcon';
   }
+  return hasNewNotifications ? 'BellAlertIcon' : 'BellIcon';
 };
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -92,19 +89,17 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onClick={onBackClick}
         />
       </div>
-      <Button
-        plain={true}
-        customStyle={tw('p-0 m-0 cursor-pointer flex(& col) justify-center items-center')}
-        onClick={onBrandClick}
-      >
-        <Icon type="akasha" customStyle="w-18 h-8" />
-        <span
-          className={tw('uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md')}
-        >
-          Akasha World
-        </span>
+      <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
+        <Stack align="center" justify="center" direction="column">
+          <Icon type="akasha" customStyle="w-18 h-8" />
+          <span
+            className={tw('uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md')}
+          >
+            Akasha World
+          </span>
+        </Stack>
       </Button>
-      <div className={tw('flex space-x-2')}>
+      <div className={tw('flex space-x-2 !ml-0')}>
         {displayWidgetTogglingButton ? (
           isLoggedIn ? (
             <>
