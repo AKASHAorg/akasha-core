@@ -71,7 +71,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const loginQuery = useGetLogin();
 
-  const notifReq = useFetchNotifications(!loginQuery.isSuccess && loginQuery.data.id);
+  const notifReq = useFetchNotifications(!loginQuery.isSuccess && loginQuery.data?.id);
 
   // mock data used for displaying something. Change when there's real data
   const allNotifications: Notification[] = [
@@ -211,7 +211,12 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     },
   ];
 
-  if (!loginQuery.isSuccess) return null;
+  if (!loginQuery.isSuccess) {
+    return navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: navRoutes => navRoutes.CONNECT,
+    });
+  }
 
   if (!savedPreferences) {
     return navigateTo?.({
