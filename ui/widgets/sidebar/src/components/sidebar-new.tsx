@@ -1,15 +1,16 @@
 import React from 'react';
-import { IMenuItem } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListSidebarApps from './list-sidebar-apps';
-import { Profile } from '@akashaorg/typings/ui';
-import { useGetLogin, useLogout } from '@akashaorg/ui-awf-hooks';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
+import { Profile } from '@akashaorg/typings/ui';
+import { IMenuItem } from '@akashaorg/typings/ui';
+import { useGetLogin, useLogout } from '@akashaorg/ui-awf-hooks';
+import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -115,6 +116,17 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     logoutQuery.mutate();
   };
 
+  const subtitleUi = (
+    <Text
+      variant="footnotes1"
+      customStyle={`text-grey5 ${loggedProfileData?.did?.id ? 'w-48' : 'whitespace-normal'}`}
+      truncate
+      breakWord
+    >
+      {subtitle}
+    </Text>
+  );
+
   return (
     <BasicCardBox
       customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
@@ -130,13 +142,22 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         </Box>
         <Box customStyle="w-fit flex flex-grow flex-col">
           <Text variant="button-md">{title}</Text>
-          <Text variant="footnotes1" customStyle="text-grey5">
-            {subtitle}
-          </Text>
+          {loggedProfileData?.did?.id ? (
+            <CopyToClipboard value={loggedProfileData.did.id}>{subtitleUi}</CopyToClipboard>
+          ) : (
+            subtitleUi
+          )}
         </Box>
         <Box customStyle="w-fit h-fit ml-6 self-center">
           {loginQuery.data?.id && (
-            <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogout} />
+            <Button
+              icon="PowerIcon"
+              variant="primary"
+              size="xs"
+              iconOnly={true}
+              greyBg
+              onClick={handleLogout}
+            />
           )}
           {!loginQuery.data?.id && loginQuery.isStale && (
             <Button

@@ -3,6 +3,7 @@ import ProfileInfoPage from './profile-info-page';
 import EditProfilePage from './edit-profile';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -36,7 +37,7 @@ const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
 
   const hasError = status === 'error' || (status === 'success' && !profileData);
 
-  if (hasError)
+  if (hasError && !props.editMode)
     return (
       <ErrorLoader
         type="script-error"
@@ -48,9 +49,12 @@ const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
   if (status === 'loading') return <ProfileLoading />;
 
   return (
-    <>
+    <Box customStyle="mb-4">
       <Helmet>
-        <title>{t("{{name}}'s Page", { name: `${profileData.name}` })} | AKASHA World</title>
+        <title>
+          {profileData?.name ? t("{{name}}'s Page | ", { name: `${profileData.name}` }) : ''}AKASHA
+          World
+        </title>
       </Helmet>
       {props.editMode ? (
         <EditProfilePage
@@ -67,7 +71,7 @@ const ProfilePage = (props: RootComponentProps & ProfilePageProps) => {
           {...props}
         />
       )}
-    </>
+    </Box>
   );
 };
 

@@ -74,7 +74,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
   const colorStyle = getColorClasses(color, 'text');
   const truncateStyle = truncate ? 'truncate' : '';
-  const wordBreakStyle = breakWord ? 'break-all' : '';
+  const wordBreakStyle = breakWord ? 'break-word' : '';
   const lineClampStyle = lineClamp ? `line-clamp-${lineClamp}` : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
 
