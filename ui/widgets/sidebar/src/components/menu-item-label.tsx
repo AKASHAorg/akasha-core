@@ -1,9 +1,8 @@
 import React from 'react';
-import { tw } from '@twind/core';
-
 import { IMenuItem } from '@akashaorg/typings/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 export interface IMenuItemLabelProps {
   menuItem: IMenuItem;
@@ -22,18 +21,8 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
   };
 
   return (
-    <div
-      className={tw('flex flex-row items-center')}
-      onClick={e => {
-        e.preventDefault();
-        handleClick();
-      }}
-    >
-      <div
-        className={tw(
-          'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
-        )}
-      >
+    <Box customStyle={'flex flex-row items-center'} onClick={handleClick}>
+      <Box customStyle="w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3">
         {menuItem.logo.type === 'icon' && (
           <AppIcon
             size="md"
@@ -41,11 +30,11 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
             placeholderIconType={menuItem.logo.value}
           />
         )}
-      </div>
+      </Box>
       <Text customStyle={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}>
         {menuItem.label}
       </Text>
-    </div>
+    </Box>
   );
 };
 

@@ -1,9 +1,10 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface ITopbarProps {
   // data
@@ -24,6 +25,7 @@ export interface ITopbarProps {
   onLoginClick: () => void;
   modalSlotId: string;
 }
+
 const notificationIcon = function (snoozeNotifications, hasNewNotifications) {
   if (snoozeNotifications) {
     return 'BellSnoozeIcon';
@@ -63,7 +65,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-50)';
   return (
     <BasicCardBox customStyle={customStyle}>
-      <div className={tw('flex space-x-2')}>
+      <Box customStyle="flex space-x-2">
         {!sidebarVisible ? (
           <Button
             iconOnly={true}
@@ -88,18 +90,16 @@ const Topbar: React.FC<ITopbarProps> = props => {
           icon="ChevronLeftIcon"
           onClick={onBackClick}
         />
-      </div>
+      </Box>
       <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
         <Stack align="center" justify="center" direction="column">
           <Icon type="akasha" customStyle="w-18 h-8" />
-          <span
-            className={tw('uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md')}
-          >
+          <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
             Akasha World
-          </span>
+          </Text>
         </Stack>
       </Button>
-      <div className={tw('flex space-x-2 !ml-0')}>
+      <Box customStyle="flex space-x-2">
         {displayWidgetTogglingButton ? (
           isLoggedIn ? (
             <>
@@ -129,7 +129,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
             variant="primary"
           />
         )}
-      </div>
+      </Box>
     </BasicCardBox>
   );
 };

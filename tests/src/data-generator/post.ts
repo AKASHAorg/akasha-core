@@ -1,4 +1,3 @@
-import { PendingEntry } from '@akashaorg/typings/ui';
 import faker from 'faker';
 import { genUser } from './user';
 
@@ -67,7 +66,7 @@ const genSlatePost = () => {
   };
 };
 
-const genPendingPost = (): PendingEntry => {
+const genPendingPost = () => {
   return {
     quote: null,
     images: [],

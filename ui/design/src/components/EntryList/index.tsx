@@ -6,11 +6,10 @@ import styled from 'styled-components';
 import ScrollTopButton from '../ScrollTopButton';
 import useIntersectionObserver from '../../utils/intersection-observer';
 import { Anchor, Box } from 'grommet';
-import { IEntryPage } from '@akashaorg/typings/ui';
 import { elementIntersectionObserver } from './elementIntersectionObserver';
 
 export interface EntryListProps {
-  pages: IEntryPage[];
+  pages: any[];
   itemCard: React.ReactElement;
   onLoadMore: () => void;
   itemSpacing?: number;
@@ -65,7 +64,7 @@ const EntryList = (props: EntryListProps) => {
     return () => observer.disconnect();
   }, [startScrollRef]);
 
-  const items = (page: IEntryPage) =>
+  const items = (page: any) =>
     viewAllEntry ? page?.results.slice(0, viewAllEntry.limit) : page?.results;
 
   const scrollTopButtonPlacement = React.useMemo(() => {

@@ -6,9 +6,9 @@ import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import ExtensionPoint from '@akashaorg/design-system-components/lib/utils/extension-point';
+import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
-import { RootExtensionProps, EventTypes } from '@akashaorg/typings/ui';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateFollowMutation,
@@ -21,6 +21,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
+  const { uiEvents, plugins } = props;
   const params: { beamId?: string } = useParams();
   const { t } = useTranslation('app-akasha-integration');
 
@@ -116,28 +117,9 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   };
 
   const handleProfileClick = (pubKey: string) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorProfileDataReq}`,
-    });
-  };
-
-  const handleExtPointMount = (name: string) => {
-    props.uiEvents.next({
-      event: EventTypes.ExtensionPointMount,
-      data: {
-        name,
-        did: authorProfileDataReq.data.profile.did.id,
-      },
-    });
-  };
-
-  const handleExtPointUnmount = (name: string) => {
-    props.uiEvents.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: {
-        name,
-      },
     });
   };
 
@@ -156,13 +138,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         followingLabel={t('Following')}
         followersLabel={t('Followers')}
         postsLabel={t('Posts')}
-        footerExt={
-          <ExtensionPoint
-            name={`profile-mini-card-footer-extension`}
-            onMount={handleExtPointMount}
-            onUnmount={handleExtPointUnmount}
-          />
-        }
+        footerExt={<Extension name={`profile-mini-card-footer-extension`} uiEvents={uiEvents} />}
       />
     </Box>
   );

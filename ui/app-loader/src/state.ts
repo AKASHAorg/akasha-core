@@ -2,12 +2,12 @@ import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import {
   ModalNavigationOptions,
-  ILoaderConfig,
+  WorldConfig,
   IAppConfig,
   UIEventData,
   EventTypes,
-  IntegrationModule,
   PluginConf,
+  IntegrationRegistrationOptions,
 } from '@akashaorg/typings/ui';
 import {
   Observable,
@@ -45,7 +45,19 @@ export interface LoaderState {
    * @param key - name of the application
    * @param value - SystemJS Module - all exported functions of an app.
    */
-  modules: Map<string, IntegrationModule>;
+  modules: Map<
+    string,
+    {
+      register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
+      initialize?: (opts: Partial<IntegrationRegistrationOptions>) => Promise<void> | void;
+      getPlugin?: (
+        opts: IntegrationRegistrationOptions & {
+          encodeAppName: (name: string) => string;
+          decodeAppName: (name: string) => string;
+        },
+      ) => Promise<PluginConf>;
+    }
+  >;
 
   /**
    * When an extension point mounts, it will fire an event with the name of the
@@ -115,7 +127,7 @@ interface EventDataTypes {
 }
 
 export const initState = (
-  worldConfig: ILoaderConfig,
+  worldConfig: WorldConfig,
   globalChannel: ReplaySubject<unknown>,
   initialState?: LoaderState,
 ): Observable<LoaderState> => {

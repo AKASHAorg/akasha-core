@@ -7,7 +7,7 @@ import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/
 import EntryCardHidden from '@akashaorg/design-system-components/lib/components/Entry/EntryCardHidden';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
-import ExtensionPoint from '@akashaorg/design-system-components/lib/utils/extension-point';
+import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import { ILogger } from '@akashaorg/typings/sdk/log';
@@ -80,6 +80,22 @@ const EntryRenderer = (
     accentBorderTop,
     itemSpacing,
     loggedProfileData,
+    replyFragmentItem,
+    uiEvents,
+    showReplyFragment,
+    index,
+    totalEntry,
+    className,
+    onEntryRemove,
+    removeEntryLabel,
+    removedByMeLabel,
+    removedByAuthorLabel,
+    modalSlotId,
+    logger,
+    navigateToModal,
+    onLoginModalOpen,
+    trackEvent,
+    i18n,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -146,7 +162,7 @@ const EntryRenderer = (
   };
 
   const handleExtensionMount = (name: string) => {
-    props.uiEvents.next({
+    uiEvents.next({
       event: EventTypes.ExtensionPointMount,
       data: {
         name,
@@ -158,7 +174,7 @@ const EntryRenderer = (
   };
 
   const handleExtensionUnmount = (name: string) => {
-    props.uiEvents.next({
+    uiEvents.next({
       event: EventTypes.ExtensionPointUnmount,
       data: {
         name,
@@ -214,7 +230,7 @@ const EntryRenderer = (
       postID: !!commentData && 'postId' in commentData && commentData?.postId,
       commentID: commentData?.entryId,
     },
-    Boolean(canShowEntry) && props.showReplyFragment,
+    Boolean(canShowEntry) && showReplyFragment,
   );
 
   const replyPages = React.useMemo(() => {
@@ -227,10 +243,10 @@ const EntryRenderer = (
   const entryCardStyle = () => {
     if (!isComment) return '';
 
-    if (props.replyFragmentItem) return;
+    if (replyFragmentItem) return;
     `ml-6 border-l-1 border(grey8 dark:grey3)`;
 
-    if (props.index !== props.totalEntry) return;
+    if (index !== totalEntry) return;
     `border-b-1 border(grey8 dark:grey3)`;
   };
 
@@ -268,7 +284,7 @@ const EntryRenderer = (
           {canShowEntry && (
             <Box customStyle={entryCardStyle()}>
               <EntryCard
-                className={props.className}
+                className={className}
                 isRemoved={itemData.isRemoved}
                 entryData={{ ...itemData, author: itemData.author as unknown as Profile }}
                 onClickAvatar={handleAvatarClick}
@@ -294,41 +310,32 @@ const EntryRenderer = (
                 moderatedContentLabel={t('This content has been moderated')}
                 ctaLabel={t('See it anyway')}
                 handleFlipCard={handleFlipCard}
-                onEntryRemove={props.onEntryRemove}
-                removeEntryLabel={props.removeEntryLabel}
-                removedByMeLabel={props.removedByMeLabel}
-                removedByAuthorLabel={props.removedByAuthorLabel}
+                onEntryRemove={onEntryRemove}
+                removeEntryLabel={removeEntryLabel}
+                removedByMeLabel={removedByMeLabel}
+                removedByAuthorLabel={removedByAuthorLabel}
                 disableReposting={itemData.isRemoved || isComment}
                 disableReporting={!loggedProfileData?.did?.id}
                 border={!isComment}
                 accentBorderTop={accentBorderTop}
                 actionsRightExt={
                   !isComment && (
-                    <ExtensionPoint
-                      name={`entry-card-actions-right_${itemId}`}
-                      onMount={handleExtensionMount}
-                      onUnmount={handleExtensionUnmount}
-                    />
+                    <Extension name={`entry-card-actions-right_${itemId}`} uiEvents={uiEvents} />
                   )
                 }
                 headerMenuExt={
                   showEditButton && (
-                    <ExtensionPoint
-                      style={{ width: '100%' }}
-                      name={`entry-card-edit-button_${itemId}`}
-                      onMount={handleExtensionMount}
-                      onUnmount={handleExtensionUnmount}
-                    />
+                    <Extension name={`entry-card-edit-button_${itemId}`} uiEvents={uiEvents} />
                   )
                 }
               />
 
-              {props.showReplyFragment && (
+              {showReplyFragment && (
                 <Box customStyle={replyPages.length ? `mb-1` : ''} data-testid="reply-fragment">
                   <FeedWidget
-                    modalSlotId={props.modalSlotId}
+                    modalSlotId={modalSlotId}
                     pages={replyPages}
-                    logger={props.logger}
+                    logger={logger}
                     itemType={EntityTypes.REPLY}
                     onLoadMore={() => ({})}
                     getShareUrl={(itemId: string) =>
@@ -346,21 +353,21 @@ const EntryRenderer = (
                       limit: REPLY_FRAGMENT_SIZE,
                     }}
                     navigateTo={navigateTo}
-                    navigateToModal={props.navigateToModal}
+                    navigateToModal={navigateToModal}
                     requestStatus={repliesReq.status}
                     hasNextPage={repliesReq.hasNextPage}
-                    loggedProfileData={props.loggedProfileData}
+                    loggedProfileData={loggedProfileData}
                     contentClickable={true}
-                    onEntryFlag={props.onFlag}
-                    onEntryRemove={props.onEntryRemove}
+                    onEntryFlag={onFlag}
+                    onEntryRemove={onEntryRemove}
                     removeEntryLabel={t('Delete Reply')}
                     removedByMeLabel={t('You deleted this reply')}
                     removedByAuthorLabel={t('This reply was deleted by its author')}
-                    uiEvents={props.uiEvents}
+                    uiEvents={uiEvents}
                     itemSpacing={8}
-                    i18n={props.i18n}
-                    trackEvent={props.trackEvent}
-                    onLoginModalOpen={props.onLoginModalOpen}
+                    i18n={i18n}
+                    trackEvent={trackEvent}
+                    onLoginModalOpen={onLoginModalOpen}
                     replyFragmentItem={true}
                   />
                 </Box>
