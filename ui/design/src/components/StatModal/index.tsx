@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Tabs, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
-import { ITag, QueryStatus } from '@akashaorg/typings/ui';
+import { ITag } from '@akashaorg/typings/ui';
 
 import ListEmpty from './list-empty';
 import ListError from './list-error';
@@ -35,9 +35,9 @@ export interface IStatModal extends IProfileEntry, ITagEntry {
   following?: Profile[];
   interests?: ITag[];
 
-  followersReqStatus: QueryStatus;
-  followingReqStatus: QueryStatus;
-  interestsReqStatus: QueryStatus;
+  followersReqStatus: any;
+  followingReqStatus: any;
+  interestsReqStatus: any;
 
   loadMoreFollowers: () => void;
   loadMoreFollowing: () => void;

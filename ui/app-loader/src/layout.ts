@@ -1,4 +1,4 @@
-import { ILoaderConfig, RootComponentProps } from '@akashaorg/typings/ui';
+import type { WorldConfig, RootComponentProps } from '@akashaorg/typings/ui';
 import { Observable, mergeMap, from, filter, tap, catchError, map, withLatestFrom } from 'rxjs';
 import { uiEvents, pipelineEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
@@ -7,7 +7,7 @@ import * as singleSpa from 'single-spa';
 import { Logger } from '@akashaorg/awf-sdk';
 
 export const loadLayout = (
-  worldConfig: ILoaderConfig,
+  worldConfig: WorldConfig,
   state$: Observable<LoaderState>,
   logger: Logger,
 ) => {

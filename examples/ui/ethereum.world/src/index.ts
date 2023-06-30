@@ -1,7 +1,7 @@
 import '@akashaorg/design-system-core/src/twind/main.css';
 import '@akashaorg/design-system-core/src/twind/globals.css';
 
-import { ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
+import { WorldConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 import { missingRequiredFields } from './registry-overrides';
 
 console.time('AppLoader:firstMount');
@@ -62,7 +62,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
     registryOverrides = (await import('./registry-overrides')).default;
   }
 
-  const loaderConfig: ILoaderConfig = {
+  const loaderConfig: WorldConfig = {
     title: 'AKASHA World',
     // main layout (shell)
     layout: '@akashaorg/ui-widget-layout',
@@ -98,6 +98,12 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       siteId: process.env.MATOMO_SITE_ID,
     },
     registryOverrides,
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/AKASHAorg' },
+      { icon: 'discord', link: '' },
+      { icon: 'telegram', link: 'https://t.me/worldofethereum' },
+      { icon: 'twitter', link: 'https://twitter.com/AKASHAworld' },
+    ],
   };
 
   const sdk = getSDK();

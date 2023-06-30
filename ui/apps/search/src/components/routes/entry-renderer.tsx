@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  EventTypes,
   EntityTypes,
   ModalNavigationOptions,
   IEntryData,
@@ -13,8 +12,7 @@ import {
 import { Logger } from '@akashaorg/awf-sdk';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-// import EntryCardHidden from '@akashaorg/design-system-components/lib/components/Entry/EntryCardHidden';
-import ExtensionPoint from '@akashaorg/design-system-components/lib/utils/extension-point';
+import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 
 export interface IEntryCardRendererProps {
   logger: Logger;
@@ -48,6 +46,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     contentClickable,
     onRebeam,
     navigateTo,
+    uiEvents,
+    onMentionClick,
+    onTagClick,
+    navigateToModal,
+    onContentClick,
   } = props;
 
   const { entryId } = itemData || {};
@@ -67,7 +70,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   const handleContentClick = () => {
-    props.onContentClick(
+    onContentClick(
       {
         id: itemData.entryId,
         authorId: itemData.author.did.id,
@@ -103,24 +106,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   //   }
   // }, [t, itemType]);
 
-  const handleExtPointMount = (name: string) => {
-    props.uiEvents.next({
-      event: EventTypes.ExtensionPointMount,
-      data: {
-        name,
-        itemId: entryId,
-        itemType: itemType,
-      },
-    });
-  };
-
-  const handleExtPointUnmount = () => {
-    /* todo */
-  };
-
   const handleEntryRemove = (itemId: string) => {
     if (itemId)
-      props.navigateToModal({
+      navigateToModal({
         name: 'entry-remove-confirmation',
         itemType: EntityTypes.POST,
         itemId,
@@ -128,7 +116,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    props.navigateToModal({ name: 'login', redirectTo });
+    navigateToModal({ name: 'login', redirectTo });
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
@@ -139,7 +127,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
 
     if (itemId)
-      props.navigateToModal({
+      navigateToModal({
         name: 'report-modal',
         itemId,
         itemType: itemType as unknown as EntityTypes,
@@ -192,9 +180,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               }`}
               onRepost={handleRebeam}
               onContentClick={handleContentClick}
-              onMentionClick={props.onMentionClick}
-              onTagClick={props.onTagClick}
-              navigateTo={props.navigateTo}
+              onMentionClick={onMentionClick}
+              onTagClick={onTagClick}
+              navigateTo={navigateTo}
               contentClickable={contentClickable}
               disableReposting={itemData.isRemoved}
               removeEntryLabel={t('Delete Post')}
@@ -202,20 +190,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               onEntryFlag={handleEntryFlag(itemData.entryId, EntityTypes.POST)}
               hideActionButtons={hideActionButtons}
               actionsRightExt={
-                <ExtensionPoint
-                  name={`entry-card-actions-right_${entryId}`}
-                  onMount={handleExtPointMount}
-                  onUnmount={handleExtPointUnmount}
-                />
+                <Extension name={`entry-card-actions-right_${entryId}`} uiEvents={uiEvents} />
               }
               headerMenuExt={
                 itemData.author.did.isViewer && (
-                  <ExtensionPoint
-                    style={{ width: '100%' }}
-                    name={`entry-card-edit-button_${entryId}`}
-                    onMount={handleExtPointMount}
-                    onUnmount={handleExtPointUnmount}
-                  />
+                  <Extension name={`entry-card-edit-button_${entryId}`} uiEvents={uiEvents} />
                 )
               }
             />

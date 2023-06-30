@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { EngagementType, QueryStatus } from '@akashaorg/typings/ui';
+import { EngagementType } from '@akashaorg/typings/ui';
 import { Profile } from '@akashaorg/typings/ui';
 import { Engagement } from './Engagement';
 
 export type EngagementItem = {
   label: string;
-  status: QueryStatus['status'];
+  status: 'loading' | 'error' | 'success';
   data: { isFollowing: boolean; profile?: Profile }[];
 };
 

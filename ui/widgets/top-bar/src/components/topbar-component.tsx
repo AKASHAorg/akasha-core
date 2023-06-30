@@ -2,10 +2,10 @@ import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import Topbar from './Topbar';
+import Topbar from './topbar';
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
-  const { uiEvents } = props;
+  const { uiEvents, layoutConfig, worldConfig, plugins } = props;
 
   const location = useLocation();
   const historyCount = React.useRef(0);
@@ -130,19 +130,19 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleBrandClick = () => {
-    if (!props.worldConfig.homepageApp) {
+    if (!worldConfig.homepageApp) {
       return;
     }
 
-    props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: props.worldConfig.homepageApp,
+    plugins['@akashaorg/app-routing']?.routing.navigateTo({
+      appName: worldConfig.homepageApp,
       getNavigationUrl: appRoutes => {
         if (appRoutes.hasOwnProperty('defaultRoute')) {
           // if the current pathname is the same as the one we want to navigate to,
           // it means that we want to scroll to the top of the page
           if (
             location.pathname ===
-            `/${props.encodeAppName(props.worldConfig.homepageApp)}${appRoutes.defaultRoute}`
+            `/${props.encodeAppName(worldConfig.homepageApp)}${appRoutes.defaultRoute}`
           ) {
             scrollTo(0, 0);
           }
@@ -153,7 +153,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleNotificationClick = () => {
-    props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
+    plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: routes => {
         return routes.myProfile;
@@ -162,7 +162,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleLoginClick = () => {
-    props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
+    plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: () => '/',
     });
@@ -179,7 +179,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       onLoginClick={handleLoginClick}
       currentLocation={location?.pathname}
       onBrandClick={handleBrandClick}
-      modalSlotId={props.layoutConfig.modalSlotId}
+      modalSlotId={layoutConfig.modalSlotId}
       snoozeNotifications={snoozeNotifications}
     />
   );

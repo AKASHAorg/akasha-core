@@ -69,11 +69,14 @@ const Icon: React.FC<IconProps> = props => {
       : ''
   }`;
 
-  const colorStyle = color
-    ? `${getColorClasses(color, isFillOnlyIcon ? '[&>*]:fill' : '[&>*]:stroke')}`
-    : isFillOnlyIcon
-    ? '[&>*]:fill-black dark:[&>*]:fill-white'
-    : '[&>*]:stroke-black dark:[&>*]:stroke-white';
+  let colorStyle: string;
+  if (color) {
+    colorStyle = `${getColorClasses(color, isFillOnlyIcon ? '[&>*]:fill' : '[&>*]:stroke')}`;
+  } else {
+    colorStyle = isFillOnlyIcon
+      ? '[&>*]:fill-black dark:[&>*]:fill-white'
+      : '[&>*]:stroke-black dark:[&>*]:stroke-white';
+  }
 
   const accentColorStyle = accentColor
     ? `${

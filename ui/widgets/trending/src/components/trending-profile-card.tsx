@@ -4,7 +4,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { tw, apply } from '@twind/core';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { Profile } from '@akashaorg/typings/ui';
 
 export interface ITrendingProfileCardProps {
@@ -30,13 +30,9 @@ export interface ITrendingProfileCardProps {
   isViewer?: boolean;
 }
 
-const BaseTabPanelStyles = apply`
-    ring(white opacity-60  offset(2 blue-400)) focus:outline-none px-4
-    `;
+const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none px-4';
 
-const BaseItemStyles = apply`
-    flex justify-between items-center py-2
-    `;
+const BaseItemStyles = 'flex justify-between items-center py-2';
 
 const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
   const {
@@ -58,35 +54,35 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
 
   return (
     <BasicCardBox pad="0">
-      <div className={tw('py-4 pl-4')}>
+      <Box customStyle="py-4 pl-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}
         </Text>
-      </div>
-      <div className={tw(BaseTabPanelStyles)}>
+      </Box>
+      <Box customStyle={BaseTabPanelStyles}>
         <ul>
           {profiles.length === 0 && !isLoadingProfiles && (
-            <div className={tw('flex justify-center items-center py-2')}>
-              <p>{noProfilesLabel}</p>
-            </div>
+            <Box customStyle="flex justify-center items-center py-2">
+              <Text>{noProfilesLabel}</Text>
+            </Box>
           )}
           {profiles.length === 0 &&
             isLoadingProfiles &&
             Array.from({ length: 3 }, (_el, index: number) => (
-              <div key={index} className={tw(BaseItemStyles)}>
-                <div className={tw('py-2')}>
+              <Box key={index} customStyle={BaseItemStyles}>
+                <Box customStyle="py-2">
                   <TextLine title="avatar" width="40px" height="40px" customStyle="rounded-full" />
-                  <div className={tw('py-1')}>
+                  <Box customStyle="py-1">
                     <TextLine title="tagName" animated={false} width="140px" />
                     <TextLine title="tagName" animated={false} width="80px" />
-                  </div>
-                </div>
+                  </Box>
+                </Box>
                 <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
-              </div>
+              </Box>
             ))}
           {profiles.length !== 0 &&
             profiles.slice(0, 3).map((profile, index) => (
-              <div key={index} className={tw(BaseItemStyles)}>
+              <Box key={index} customStyle={BaseItemStyles}>
                 <a
                   onClick={e => {
                     e.preventDefault();
@@ -104,7 +100,7 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
                   />
                 </a>
                 {!isViewer && (
-                  <div>
+                  <Box>
                     <DuplexButton
                       inactiveLabel={followLabel}
                       activeLabel={unfollowLabel}
@@ -113,12 +109,12 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
                       active={followedProfiles?.includes(profile.did.id)}
                       allowMinimization={false}
                     />
-                  </div>
+                  </Box>
                 )}
-              </div>
+              </Box>
             ))}
         </ul>
-      </div>
+      </Box>
     </BasicCardBox>
   );
 };
