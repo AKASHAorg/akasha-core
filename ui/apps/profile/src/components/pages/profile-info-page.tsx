@@ -3,27 +3,26 @@ import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import routes, { EDIT } from '../../routes';
 import { useTranslation } from 'react-i18next';
-import { Profile, RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
+import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
 import {
   ProfileHeader,
   ProfileBio,
   ProfileLinks,
+  ProfileLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import ProfileStatsPresentation from '../profile-stats-presentation';
 import {
   useGetFollowingListByDidQuery,
+  useGetProfileByDidQuery,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
+import { useParams } from 'react-router';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { getImageObj } from '../utils';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
-type ProfileInfoPageProps = {
-  profileId: string;
-  isViewer: boolean;
-  profileData: Profile;
-};
-
-const ProfileInfoPage: React.FC<RootComponentProps & ProfileInfoPageProps> = props => {
-  const { profileId, isViewer, profileData, plugins } = props;
+const ProfileInfoPage: React.FC<RootComponentProps> = props => {
+  const { plugins } = props;
 
   const { t } = useTranslation('app-profile');
 
@@ -31,12 +30,48 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfileInfoPageProps> = pro
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
+  const { profileId } = useParams<{ profileId: string }>();
+
+  const loginQuery = useGetLogin();
+
+  const profileDataReq = useGetProfileByDidQuery(
+    {
+      id: profileId,
+    },
+    {
+      select: response => response.node,
+    },
+  );
   const followingListReq = useGetFollowingListByDidQuery(
     { id: profileId },
     { select: resp => resp.node },
   );
-
   const updateFollowReq = useUpdateFollowMutation();
+  const status = profileDataReq.status;
+  const { isViewer, profile: profileData } =
+    profileDataReq.data && 'isViewer' in profileDataReq.data
+      ? profileDataReq.data
+      : { isViewer: null, profile: null };
+
+  if (status === 'loading') return <ProfileLoading />;
+
+  if (loginQuery.data?.id && !profileData) {
+    return navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
+    });
+  }
+
+  const hasError = status === 'error' || (status === 'success' && !profileData);
+
+  if (hasError)
+    return (
+      <ErrorLoader
+        type="script-error"
+        title={t('There was an error loading this profile')}
+        details={t('We cannot show this profile right now')}
+      />
+    );
 
   const isFollowing =
     followingListReq.data && 'isViewer' in followingListReq.data
@@ -67,24 +102,8 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfileInfoPageProps> = pro
     props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
   };
 
-  const background = profileData?.background
-    ? {
-        default: {
-          ...profileData.background.default,
-          src: getMediaUrl(profileData.background.default.src.replace(/(^\w+:|^)\/\//, ''))
-            .originLink,
-        },
-      }
-    : null;
-
-  const avatar = profileData?.avatar
-    ? {
-        default: {
-          ...profileData.avatar.default,
-          src: getMediaUrl(profileData.avatar.default.src.replace(/(^\w+:|^)\/\//, '')).originLink,
-        },
-      }
-    : null;
+  const background = getImageObj(profileData?.background);
+  const avatar = getImageObj(profileData?.avatar);
 
   return (
     <>

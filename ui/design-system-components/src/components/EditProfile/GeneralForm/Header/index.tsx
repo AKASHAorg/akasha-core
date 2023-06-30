@@ -31,6 +31,7 @@ export type HeaderProps = {
   dragToRepositionLabel: string;
   onAvatarChange: (avatar?: File) => void;
   onCoverImageChange: (coverImage?: File) => void;
+  onImageDelete: (type: ImageType) => void;
 };
 
 export const Header: React.FC<HeaderProps> = ({
@@ -47,6 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
   dragToRepositionLabel,
   onAvatarChange,
   onCoverImageChange,
+  onImageDelete,
 }) => {
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
   const [showAvatarActions, setShowAvatarActions] = useState(false);
@@ -111,9 +113,11 @@ export const Header: React.FC<HeaderProps> = ({
   const onDelete = () => {
     switch (imageType) {
       case 'avatar':
+        onImageDelete('avatar');
         setAvatarUrl(null);
         break;
       case 'cover-image':
+        onImageDelete('cover-image');
         setCoverImageUrl(null);
     }
     setShowDeleteImage(false);
@@ -150,6 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
           customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${coverImageUrl?.default?.src})]`}
+          ref={editCoverRef}
         >
           <Stack direction="column" spacing="gap-y-1" customStyle="relative mt-auto ml-auto">
             <Button
@@ -160,7 +165,6 @@ export const Header: React.FC<HeaderProps> = ({
                 setShowCoverDropdown(!showCoverActions);
                 setImageType('cover-image');
               }}
-              ref={editCoverRef}
               greyBg
               iconOnly
             />
@@ -169,7 +173,12 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </Stack>
         </Card>
-        <Stack align="center" justify="center" customStyle="absolute left-6 -bottom-8">
+        <Stack
+          align="center"
+          justify="center"
+          customStyle="absolute left-6 -bottom-8"
+          ref={editAvatarRef}
+        >
           <Avatar
             profileId={profileId}
             size="lg"
@@ -197,7 +206,6 @@ export const Header: React.FC<HeaderProps> = ({
                 setShowAvatarActions(!showAvatarActions);
                 setImageType('avatar');
               }}
-              ref={editAvatarRef}
               greyBg
               iconOnly
             />
