@@ -13,7 +13,7 @@ import { AUTH_EVENTS } from '@akashaorg/typings/sdk';
 import { Logger } from '@akashaorg/awf-sdk';
 
 export const initialize = (options: IntegrationRegistrationOptions & { logger: Logger }) => {
-  const notification: any = options.plugins['@akashaorg/app-notifications'].notification;
+  const notification: any = options.plugins['@akashaorg/app-notifications']?.notification;
   const sdk = getSDK();
 
   if (notification && typeof notification.notify === 'function') {
