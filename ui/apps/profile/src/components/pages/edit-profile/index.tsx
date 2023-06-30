@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { useTranslation } from 'react-i18next';
-import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   GeneralForm,
   GeneralFormValues,
@@ -19,39 +20,55 @@ import {
   useGetProfileByDidQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
-import { saveMediaFile } from '../saveMedia';
+import { getImageObj, saveAndGetImageObj } from '../../utils';
+import { useParams } from 'react-router';
+import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
-export const MEDIA_UPLOAD_EMAIL = '@mediaUploadEmail';
+const EditProfilePage: React.FC<RootComponentProps> = props => {
+  const { plugins } = props;
 
-type EditProfilePageProps = {
-  profileId: string;
-  isViewer: boolean;
-  profileData: Profile;
-};
-
-const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
   const { t } = useTranslation('app-profile');
-  const { profileId, profileData, plugins, logger } = props;
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   // const ENSReq = useEnsByAddress(profileData.ethAddress);
+
+  const { profileId } = useParams<{ profileId: string }>();
+
+  const profileDataReq = useGetProfileByDidQuery(
+    {
+      id: profileId,
+    },
+    {
+      select: response => response.node,
+    },
+  );
+
+  const status = profileDataReq.status;
+
+  const { profile: profileData } =
+    profileDataReq.data && 'isViewer' in profileDataReq.data
+      ? profileDataReq.data
+      : { profile: null };
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
   const [generalValid, setGeneralValid] = useState(true);
   const [socialLinksValid, setSocialLinksValid] = useState(true);
   const [interestsValid, setInterestsValid] = useState(true);
-  const [isAvatarSaving, setIsAvatarSaving] = useState(false);
-  const [isCoverImageSaving, setIsCoverImageSaving] = useState(false);
-
-  const queryClient = useQueryClient();
-
+  const [isImageSaving, setIsImageSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
-  const createProfileMutation = useCreateProfileMutation();
+  const queryClient = useQueryClient();
+  const createProfileMutation = useCreateProfileMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
+      });
+    },
+  });
   const updateProfileMutation = useUpdateProfileMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -59,18 +76,36 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       });
     },
   });
-
   const myInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node },
   );
-
   const myInterests =
     myInterestsQueryReq.data && 'isViewer' in myInterestsQueryReq.data
       ? myInterestsQueryReq.data.interests
       : null;
-
   const loginQuery = useGetLogin();
+
+  const background = useMemo(() => getImageObj(profileData?.background), [profileData?.background]);
+  const avatar = useMemo(() => getImageObj(profileData?.avatar), [profileData?.avatar]);
+
+  if (status === 'loading') return <ProfileLoading />;
+
+  if (!loginQuery.data?.id) {
+    return navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}`,
+    });
+  }
+
+  if (status === 'error')
+    return (
+      <ErrorLoader
+        type="script-error"
+        title={t('There was an error loading this profile')}
+        details={t('We cannot show this profile right now')}
+      />
+    );
 
   const modalMessage = t(
     "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
@@ -95,13 +130,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     }
   };
 
-  if (!loginQuery.data?.id) {
-    return navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
-    });
-  }
-
   const navigateToProfileInfoPage = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
@@ -109,124 +137,33 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     });
   };
 
-  const createProfile = (formValues: GeneralFormValues) => {
-    const avatarObj = getAvatarObj(formValues.avatar);
-    const coverImageObj = getCoverImageObj(formValues.coverImage);
+  const saveImage = async (avatarImage?: File, coverImage?: File) => {
+    setIsImageSaving(true);
+    const avatarImageObj = await saveAndGetImageObj('avatar', avatarImage);
+    const coverImageObj = await saveAndGetImageObj('coverImage', coverImage);
+
+    const avatarObj = avatarImageObj ? { avatar: avatarImageObj } : {};
+    const backgroundObj = coverImageObj ? { background: coverImageObj } : {};
+
+    setIsImageSaving(false);
+
+    return { avatarObj, backgroundObj };
+  };
+
+  const createProfile = async (formValues: GeneralFormValues) => {
+    const imageObj = await saveImage(formValues?.avatar, formValues?.coverImage);
     createProfileMutation.mutate({
       i: {
         content: {
           name: formValues.name,
           description: formValues.bio,
           createdAt: new Date().toISOString(),
-          ...avatarObj,
-          ...coverImageObj,
+          ...imageObj.avatarObj,
+          ...imageObj.backgroundObj,
         },
       },
     });
   };
-
-  const saveAvatarImage = async (avatar: GeneralFormValues['avatar']) => {
-    const mediaUploadEmail = window.localStorage.getItem(MEDIA_UPLOAD_EMAIL);
-
-    if (!mediaUploadEmail) return null;
-
-    setIsAvatarSaving(true);
-    try {
-      const avatarMediaFile = await saveMediaFile({
-        isUrl: false,
-        content: avatar,
-        name: 'avatar',
-        email: mediaUploadEmail,
-      });
-      setIsAvatarSaving(false);
-      return avatarMediaFile;
-    } catch (ex) {
-      logger.error(ex);
-      setIsAvatarSaving(false);
-      return null;
-    }
-  };
-
-  const saveCoverImage = async (coverImage: GeneralFormValues['avatar']) => {
-    const mediaUploadEmail = window.localStorage.getItem(MEDIA_UPLOAD_EMAIL);
-
-    if (!mediaUploadEmail) return null;
-
-    setIsCoverImageSaving(true);
-    try {
-      const coverImageMediaFile = await saveMediaFile({
-        isUrl: false,
-        content: coverImage,
-        name: 'coverImage',
-        email: mediaUploadEmail,
-      });
-      setIsCoverImageSaving(false);
-      return coverImageMediaFile;
-    } catch (ex) {
-      logger.error(ex);
-      setIsCoverImageSaving(false);
-      return null;
-    }
-  };
-
-  const getAvatarObj = async (avatar?: GeneralFormValues['avatar']) => {
-    if (!avatar) return {};
-
-    const avatarMediaFile = await saveAvatarImage(avatar);
-
-    if (!avatarMediaFile) return {};
-
-    const avatarMediaUri = `ipfs://${avatarMediaFile.CID}`;
-
-    return {
-      avatar: {
-        default: {
-          height: avatarMediaFile.size.height,
-          width: avatarMediaFile.size.width,
-          src: avatarMediaUri,
-        },
-      },
-    };
-  };
-
-  const getCoverImageObj = async (coverImage?: GeneralFormValues['coverImage']) => {
-    if (!coverImage) return {};
-
-    const coverImageMediaFile = await saveCoverImage(coverImage);
-    const coverImageMediaUri = `ipfs://${coverImageMediaFile.CID}`;
-
-    return {
-      background: {
-        default: {
-          height: coverImageMediaFile.size.height,
-          width: coverImageMediaFile.size.width,
-          src: coverImageMediaUri,
-        },
-      },
-    };
-  };
-
-  const backgroundSrc = getMediaUrl(profileData.background.default.src);
-
-  const avatarSrc = getMediaUrl(profileData.avatar.default.src);
-
-  const background = profileData?.background
-    ? {
-        default: {
-          ...profileData.background.default,
-          src: backgroundSrc.originLink || backgroundSrc.fallbackLink,
-        },
-      }
-    : null;
-
-  const avatar = profileData?.avatar
-    ? {
-        default: {
-          ...profileData.avatar.default,
-          src: avatarSrc.originLink || avatarSrc.fallbackLink,
-        },
-      }
-    : null;
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
@@ -261,6 +198,9 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   avatar: t('Are you sure you want to delete your avatar?'),
                   coverImage: t('Are you sure you want to delete your cover?'),
                 },
+                onImageDelete: () => {
+                  /*TODO: */
+                },
               }}
               name={{ label: t('Name'), initialValue: profileData?.name }}
               // userName={{ label: t('Username'), initialValue: profileData.userName }}
@@ -282,34 +222,36 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               }}
               cancelButton={{
                 label: t('Cancel'),
+                disabled: isImageSaving,
                 handleClick: () => {
                   navigateToProfileInfoPage();
                 },
               }}
               saveButton={{
                 label: t('Save'),
-                loading: isAvatarSaving || isCoverImageSaving,
+                loading: isImageSaving,
                 handleClick: async formValues => {
                   if (!profileData?.id) {
                     createProfile(formValues);
+                    handleFeedback();
+                    navigateToProfileInfoPage();
                     return;
                   }
-                  const avatarObj = await getAvatarObj(formValues.avatar);
-                  const coverImageObj = await getCoverImageObj(formValues.coverImage);
+
+                  const imageObj = await saveImage(formValues?.avatar, formValues?.coverImage);
                   updateProfileMutation.mutate({
                     i: {
                       id: profileData.id,
                       content: {
                         name: formValues.name,
                         description: formValues.bio,
-                        createdAt: new Date().toISOString(),
-                        ...avatarObj,
-                        ...coverImageObj,
+                        ...imageObj.avatarObj,
+                        ...imageObj.backgroundObj,
                       },
                     },
                   });
-                  navigateToProfileInfoPage();
                   handleFeedback();
+                  navigateToProfileInfoPage();
                 },
               }}
               onFormValid={setGeneralValid}
