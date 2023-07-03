@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -26,8 +25,12 @@ import { getImageObj, saveAndGetImageObj } from '../../utils';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
-const EditProfilePage: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
+type EditProfilePageProps = {
+  handleFeedback: () => void;
+};
+
+const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
+  const { plugins, handleFeedback } = props;
 
   const { t } = useTranslation('app-profile');
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -57,23 +60,38 @@ const EditProfilePage: React.FC<RootComponentProps> = props => {
   const [generalValid, setGeneralValid] = useState(true);
   const [socialLinksValid, setSocialLinksValid] = useState(true);
   const [interestsValid, setInterestsValid] = useState(true);
-  const [isImageSaving, setIsImageSaving] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showFeedback, setShowFeedback] = useState(false);
 
   const queryClient = useQueryClient();
   const createProfileMutation = useCreateProfileMutation({
+    onMutate: () => {
+      setIsProcessing(true);
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
       });
     },
+    onSettled: () => {
+      handleFeedback();
+      setIsProcessing(false);
+      navigateToProfileInfoPage();
+    },
   });
   const updateProfileMutation = useUpdateProfileMutation({
+    onMutate: () => {
+      setIsProcessing(true);
+    },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
       });
+    },
+    onSettled: () => {
+      handleFeedback();
+      setIsProcessing(false);
+      navigateToProfileInfoPage();
     },
   });
   const myInterestsQueryReq = useGetInterestsByDidQuery(
@@ -111,13 +129,6 @@ const EditProfilePage: React.FC<RootComponentProps> = props => {
     "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
   );
 
-  const handleFeedback = () => {
-    setShowFeedback(true);
-    setTimeout(() => {
-      setShowFeedback(false);
-    }, 5000);
-  };
-
   const onTabChange = (selectedIndex: number, previousIndex: number) => {
     if (selectedIndex != previousIndex) {
       //check if one of the forms has invalid state
@@ -138,14 +149,14 @@ const EditProfilePage: React.FC<RootComponentProps> = props => {
   };
 
   const saveImage = async (avatarImage?: File, coverImage?: File) => {
-    setIsImageSaving(true);
+    setIsProcessing(true);
     const avatarImageObj = await saveAndGetImageObj('avatar', avatarImage);
     const coverImageObj = await saveAndGetImageObj('coverImage', coverImage);
 
     const avatarObj = avatarImageObj ? { avatar: avatarImageObj } : {};
     const backgroundObj = coverImageObj ? { background: coverImageObj } : {};
 
-    setIsImageSaving(false);
+    setIsProcessing(false);
 
     return { avatarObj, backgroundObj };
   };
@@ -222,19 +233,17 @@ const EditProfilePage: React.FC<RootComponentProps> = props => {
               }}
               cancelButton={{
                 label: t('Cancel'),
-                disabled: isImageSaving,
+                disabled: isProcessing,
                 handleClick: () => {
                   navigateToProfileInfoPage();
                 },
               }}
               saveButton={{
                 label: t('Save'),
-                loading: isImageSaving,
+                loading: isProcessing,
                 handleClick: async formValues => {
                   if (!profileData?.id) {
-                    createProfile(formValues);
-                    handleFeedback();
-                    navigateToProfileInfoPage();
+                    await createProfile(formValues);
                     return;
                   }
 
@@ -250,8 +259,6 @@ const EditProfilePage: React.FC<RootComponentProps> = props => {
                       },
                     },
                   });
-                  handleFeedback();
-                  navigateToProfileInfoPage();
                 },
               }}
               onFormValid={setGeneralValid}
@@ -266,12 +273,14 @@ const EditProfilePage: React.FC<RootComponentProps> = props => {
               socialLinks={profileData?.links || []}
               cancelButton={{
                 label: t('Cancel'),
+                disabled: isProcessing,
                 handleClick: () => {
                   navigateToProfileInfoPage();
                 },
               }}
               saveButton={{
                 label: 'Save',
+                loading: isProcessing,
                 handleClick: formValues => {
                   if (profileData?.id) {
                     updateProfileMutation.mutate({
@@ -284,8 +293,6 @@ const EditProfilePage: React.FC<RootComponentProps> = props => {
                       },
                     });
                   }
-                  navigateToProfileInfoPage();
-                  handleFeedback();
                 },
               }}
               onDelete={() => ({})}
@@ -308,15 +315,16 @@ const EditProfilePage: React.FC<RootComponentProps> = props => {
                 interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
                 cancelButton={{
                   label: t('Cancel'),
+                  disabled: isProcessing,
                   handleClick: () => {
                     navigateToProfileInfoPage();
                   },
                 }}
                 saveButton={{
                   label: 'Save',
+                  loading: isProcessing,
                   handleClick: () => {
                     //@TODO
-                    handleFeedback();
                   },
                 }}
                 onFormValid={setInterestsValid}
@@ -326,17 +334,6 @@ const EditProfilePage: React.FC<RootComponentProps> = props => {
           </Tab>
         </Stack>
       </Card>
-      {showFeedback && (
-        <Snackbar
-          title={t('Profile updated successfully')}
-          type="success"
-          iconType="CheckCircleIcon"
-          handleDismiss={() => {
-            setShowFeedback(false);
-          }}
-          customStyle="mb-4"
-        />
-      )}
       <Modal
         title={{ label: t('Unsaved Changes') }}
         show={showModal}

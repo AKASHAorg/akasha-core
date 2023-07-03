@@ -18,7 +18,7 @@ export type InterestsProps = {
   myInterests: string[];
   interests: string[];
   cancelButton: ButtonType;
-  saveButton: { label: string; handleClick: (interets: string[]) => void };
+  saveButton: { label: string; loading?: boolean; handleClick: (interets: string[]) => void };
   customStyle?: string;
   onFormValid?: (valid: boolean) => void;
 };
@@ -106,9 +106,15 @@ export const Interests: React.FC<InterestsProps> = ({
           />
         </Stack>
         <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
-          <Button variant="text" label={cancelButton.label} onClick={cancelButton.handleClick} />
+          <Button
+            variant="text"
+            label={cancelButton.label}
+            onClick={cancelButton.handleClick}
+            disabled={cancelButton.disabled}
+          />
           <Button
             variant="primary"
+            loading={saveButton.loading}
             label={saveButton.label}
             onClick={() => onSave(newInterests)}
             disabled={validForm}
