@@ -1,5 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { ILoaderConfig } from '@akashaorg/typings/ui';
+import type { WorldConfig } from '@akashaorg/typings/ui';
 import { hidePageSplash, showPageSplash } from './splash-screen';
 import { merge, of } from 'rxjs';
 import * as singleSpa from 'single-spa';
@@ -27,10 +27,10 @@ import { loadPlugins } from './plugins';
  * import startLoader from '@akashaorg/ui-app-loader';
  * startLoader(worldConfig);
  * ```
- * @param worldConfig - {@link ILoaderConfig}
+ * @param worldConfig - {@link WorldConfig}
  */
 
-const startLoader = (worldConfig: ILoaderConfig) => {
+const startLoader = (worldConfig: WorldConfig) => {
   showPageSplash();
 
   singleSpa.start({
@@ -48,7 +48,7 @@ const startLoader = (worldConfig: ILoaderConfig) => {
      * get integration info from registry
      * @internal
      */
-    of(getDefaultIntegrationManifests(worldConfig, logger)),
+    of(getDefaultIntegrationManifests(worldConfig)),
 
     /**
      * get user installed integrations after login

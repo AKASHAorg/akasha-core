@@ -1,5 +1,4 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { IAkashaError } from '@akashaorg/typings/ui';
 import { Logger } from '@akashaorg/awf-sdk';
 
 const logger = new Map<string, Logger>();
@@ -26,8 +25,7 @@ export const logError = (name: string, errorInfo: Error) => {
  * Utility to handle error
  */
 export const createErrorHandler =
-  (errorKey: string, critical?: boolean, onError?: (errorObj: IAkashaError) => void) =>
-  (err: Error) => {
+  (errorKey: string, critical?: boolean, onError?: (errorObj: any) => void) => (err: Error) => {
     if (onError) {
       onError({
         errorKey,

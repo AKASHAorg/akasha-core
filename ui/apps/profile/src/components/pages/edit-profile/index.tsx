@@ -1,43 +1,111 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { useTranslation } from 'react-i18next';
-import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
-import { GeneralForm } from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
+import { RootComponentProps } from '@akashaorg/typings/ui';
+import {
+  GeneralForm,
+  GeneralFormValues,
+} from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
 import { SocialLinks } from '@akashaorg/design-system-components/lib/components/EditProfile/SocialLinks';
 import { Interests } from '@akashaorg/design-system-components/lib/components/EditProfile/Interests';
-import { useUpdateProfileMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import {
+  useCreateProfileMutation,
+  useGetInterestsByDidQuery,
+  useGetProfileByDidQuery,
+  useUpdateProfileMutation,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useQueryClient } from '@tanstack/react-query';
+import { getImageObj, saveAndGetImageObj } from '../../utils';
+import { useParams } from 'react-router';
+import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
-type EditProfilePageProps = {
-  profileId: string;
-  isViewer: boolean;
-  profileData: Profile;
-};
+const EditProfilePage: React.FC<RootComponentProps> = props => {
+  const { plugins } = props;
 
-const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
-  const { profileId, profileData } = props;
   const { t } = useTranslation('app-profile');
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   // const ENSReq = useEnsByAddress(profileData.ethAddress);
+
+  const { profileId } = useParams<{ profileId: string }>();
+
+  const profileDataReq = useGetProfileByDidQuery(
+    {
+      id: profileId,
+    },
+    {
+      select: response => response.node,
+    },
+  );
+
+  const status = profileDataReq.status;
+
+  const { profile: profileData } =
+    profileDataReq.data && 'isViewer' in profileDataReq.data
+      ? profileDataReq.data
+      : { profile: null };
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
   const [generalValid, setGeneralValid] = useState(true);
   const [socialLinksValid, setSocialLinksValid] = useState(true);
   const [interestsValid, setInterestsValid] = useState(true);
-
+  const [isImageSaving, setIsImageSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
 
-  const profileMutation = useUpdateProfileMutation();
+  const queryClient = useQueryClient();
+  const createProfileMutation = useCreateProfileMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
+      });
+    },
+  });
+  const updateProfileMutation = useUpdateProfileMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
+      });
+    },
+  });
+  const myInterestsQueryReq = useGetInterestsByDidQuery(
+    { id: profileId },
+    { select: response => response.node },
+  );
+  const myInterests =
+    myInterestsQueryReq.data && 'isViewer' in myInterestsQueryReq.data
+      ? myInterestsQueryReq.data.interests
+      : null;
+  const loginQuery = useGetLogin();
 
-  const loggedIn =
-    false; /* @TODO use a login hook when it's ready to check if user is logged in or not */
+  const background = useMemo(() => getImageObj(profileData?.background), [profileData?.background]);
+  const avatar = useMemo(() => getImageObj(profileData?.avatar), [profileData?.avatar]);
+
+  if (status === 'loading') return <ProfileLoading />;
+
+  if (!loginQuery.data?.id) {
+    return navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}`,
+    });
+  }
+
+  if (status === 'error')
+    return (
+      <ErrorLoader
+        type="script-error"
+        title={t('There was an error loading this profile')}
+        details={t('We cannot show this profile right now')}
+      />
+    );
 
   const modalMessage = t(
     "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
@@ -62,12 +130,40 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     }
   };
 
-  if (!loggedIn) {
-    return navigateTo({
+  const navigateToProfileInfoPage = () => {
+    navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
-  }
+  };
+
+  const saveImage = async (avatarImage?: File, coverImage?: File) => {
+    setIsImageSaving(true);
+    const avatarImageObj = await saveAndGetImageObj('avatar', avatarImage);
+    const coverImageObj = await saveAndGetImageObj('coverImage', coverImage);
+
+    const avatarObj = avatarImageObj ? { avatar: avatarImageObj } : {};
+    const backgroundObj = coverImageObj ? { background: coverImageObj } : {};
+
+    setIsImageSaving(false);
+
+    return { avatarObj, backgroundObj };
+  };
+
+  const createProfile = async (formValues: GeneralFormValues) => {
+    const imageObj = await saveImage(formValues?.avatar, formValues?.coverImage);
+    createProfileMutation.mutate({
+      i: {
+        content: {
+          name: formValues.name,
+          description: formValues.bio,
+          createdAt: new Date().toISOString(),
+          ...imageObj.avatarObj,
+          ...imageObj.backgroundObj,
+        },
+      },
+    });
+  };
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
@@ -83,10 +179,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             <GeneralForm
               header={{
                 title: t('Avatar & Cover Image'),
-                coverImage: profileData.background,
-                avatar: profileData.avatar,
+                coverImage: background,
+                avatar: avatar,
                 dragToRepositionLabel: t('Drag the image to reposition'),
-                profileId: profileData.did.id,
+                profileId,
                 cancelLabel: t('Cancel'),
                 deleteLabel: t('Delete'),
                 saveLabel: t('Save'),
@@ -102,10 +198,13 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   avatar: t('Are you sure you want to delete your avatar?'),
                   coverImage: t('Are you sure you want to delete your cover?'),
                 },
+                onImageDelete: () => {
+                  /*TODO: */
+                },
               }}
-              name={{ label: t('Name'), initialValue: profileData.name }}
+              name={{ label: t('Name'), initialValue: profileData?.name }}
               // userName={{ label: t('Username'), initialValue: profileData.userName }}
-              bio={{ label: t('Bio'), initialValue: profileData.description }}
+              bio={{ label: t('Bio'), initialValue: profileData?.description }}
               // ens={{
               //   label: t('ENS Name'),
               //   initialValue:
@@ -123,20 +222,36 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               }}
               cancelButton={{
                 label: t('Cancel'),
+                disabled: isImageSaving,
                 handleClick: () => {
-                  navigateTo({
-                    appName: '@akashaorg/app-profile',
-                    getNavigationUrl: () => `/${profileId}`,
-                  });
+                  navigateToProfileInfoPage();
                 },
               }}
               saveButton={{
                 label: t('Save'),
-                handleClick: formValues => {
-                  profileMutation.mutate({
-                    i: { id: profileId, content: formValues },
+                loading: isImageSaving,
+                handleClick: async formValues => {
+                  if (!profileData?.id) {
+                    createProfile(formValues);
+                    handleFeedback();
+                    navigateToProfileInfoPage();
+                    return;
+                  }
+
+                  const imageObj = await saveImage(formValues?.avatar, formValues?.coverImage);
+                  updateProfileMutation.mutate({
+                    i: {
+                      id: profileData.id,
+                      content: {
+                        name: formValues.name,
+                        description: formValues.bio,
+                        ...imageObj.avatarObj,
+                        ...imageObj.backgroundObj,
+                      },
+                    },
                   });
                   handleFeedback();
+                  navigateToProfileInfoPage();
                 },
               }}
               onFormValid={setGeneralValid}
@@ -148,22 +263,28 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               description={t(
                 'You can add your personal websites or social links to be shared on your profile',
               )}
-              socialLinks={profileData.links}
+              socialLinks={profileData?.links || []}
               cancelButton={{
                 label: t('Cancel'),
                 handleClick: () => {
-                  navigateTo({
-                    appName: '@akashaorg/app-profile',
-                    getNavigationUrl: () => `/${profileId}`,
-                  });
+                  navigateToProfileInfoPage();
                 },
               }}
               saveButton={{
                 label: 'Save',
                 handleClick: formValues => {
-                  profileMutation.mutate({
-                    i: { id: profileId, content: formValues },
-                  });
+                  if (profileData?.id) {
+                    updateProfileMutation.mutate({
+                      i: {
+                        id: profileData.id,
+                        content: {
+                          links: formValues.links,
+                          createdAt: new Date().toISOString(),
+                        },
+                      },
+                    });
+                  }
+                  navigateToProfileInfoPage();
                   handleFeedback();
                 },
               }}
@@ -183,15 +304,12 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   'You can find more interests and add them to your list of interests!',
                 )}
                 moreInterestPlaceholder={t('Search for interests')}
-                myInterests={[]} /* TODO: when hook is ready connect it */
-                interests={[]} /* TODO: when hook is ready connect it */
+                myInterests={myInterests ? myInterests.topics.map(topic => topic.value) : []}
+                interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
                 cancelButton={{
                   label: t('Cancel'),
                   handleClick: () => {
-                    navigateTo({
-                      appName: '@akashaorg/app-profile',
-                      getNavigationUrl: () => `/${profileId}`,
-                    });
+                    navigateToProfileInfoPage();
                   },
                 }}
                 saveButton={{

@@ -13,7 +13,7 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import { Developer } from '../types/common.types';
-import { DuplexAppIcon } from './duplex-app-icon';
+import { DuplexAppButton } from './duplex-app-button';
 
 export type AppInfoProps = {
   integrationName: string;
@@ -93,9 +93,15 @@ const AppInfo: React.FC<AppInfoProps> = ({
               </Stack>
               <Stack spacing="gap-x-2" customStyle="ml-auto">
                 {status === 'not-installed' && (
-                  <Button icon="ArrowDownIcon" size="xs" iconOnly onClick={onInstall} />
+                  <Button
+                    icon="ArrowDownIcon"
+                    variant="primary"
+                    size="xs"
+                    iconOnly
+                    onClick={onInstall}
+                  />
                 )}
-                {status === 'installed' && <DuplexAppIcon onUninstall={onUninstall} />}
+                {status === 'installed' && <DuplexAppButton onUninstall={onUninstall} />}
                 {status === 'loading' && (
                   <AppIcon
                     placeholderIconType="ArrowPathIcon"
@@ -105,7 +111,15 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   />
                 )}
                 <Menu
-                  anchorElement={<Button icon="EllipsisVerticalIcon" size="xs" greyBg iconOnly />}
+                  anchorElement={
+                    <Button
+                      icon="EllipsisVerticalIcon"
+                      variant="primary"
+                      size="xs"
+                      greyBg
+                      iconOnly
+                    />
+                  }
                   items={[share, report]}
                 />
               </Stack>

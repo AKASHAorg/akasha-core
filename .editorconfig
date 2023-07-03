@@ -6,6 +6,10 @@ end_of_line = lf
 insert_final_newline = true
 charset = utf-8
 trim_trailing_whitespace = true
+# for Webstorm
+ij_typescript_force_quote_style = true
+ij_typescript_use_double_quotes = false
+ij_typescript_enforce_trailing_comma = whenmultiline
 
 [*.{js,ts,tsx}]
 indent_style = space
