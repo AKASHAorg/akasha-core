@@ -16,11 +16,8 @@ import { sampleMessage } from '../utils/dummy-data';
 export const VerifySignature: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
 
-  const [did, setDid] = React.useState<string>('');
   const [message] = React.useState<string>('');
   const [signature] = React.useState<string>('');
-
-  const loginQuery = useGetLogin();
 
   const verifySignatureMutation = useVerifySignature();
 
@@ -28,11 +25,9 @@ export const VerifySignature: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  React.useEffect(() => {
-    if (loginQuery.data) {
-      setDid(loginQuery.data.id);
-    }
-  }, [loginQuery.data]);
+  const loginQuery = useGetLogin();
+
+  const did = loginQuery.data?.id;
 
   // const handleFieldChange = (ev, field: string) => {
   //   switch (field) {
@@ -51,7 +46,7 @@ export const VerifySignature: React.FC<RootComponentProps> = props => {
   // };
 
   const handleVerifySignature = () => {
-    verifySignatureMutation.mutate({ did, signature, data: message });
+    verifySignatureMutation.mutate({ did: did, signature, data: message });
   };
 
   const handleButtonClick = () => {
