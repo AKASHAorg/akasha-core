@@ -1,9 +1,11 @@
+import { IconType } from '@akashaorg/typings/ui';
+
 export type License = {
   id: string;
   label: string;
-  icon: string;
+  icon: IconType;
   description: {
-    icon?: string;
+    icon?: IconType;
     text: string;
   }[];
 };

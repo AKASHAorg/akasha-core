@@ -49,7 +49,7 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
 
   return (
     <>
-      <Box customStyle="flex gap-4 px-4 my-4 max-h-[73vh] overflow-y-scroll">
+      <Box customStyle="flex flex-col gap-4 px-4 my-4 max-h-[73vh] overflow-y-scroll">
         {/* slate editors for the article title and content */}
         <Slate editor={titleEditor} value={initialValue} onChange={() => null}>
           <Editable placeholder="Your Title" />
@@ -58,7 +58,7 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
           <Editable placeholder="Start sharing knowledge" />
         </Slate>
       </Box>
-      <Box customStyle="flex flex-row justify-between p-4 border(t grey8 dark:grey3)">
+      <Box customStyle="flex flex-col justify-between p-4 border(t grey8 dark:grey3)">
         <button onClick={onManageCollaborators}>
           <Box customStyle="flex flex-row gap-2 items-center">
             {articleCollaborators.length > 0 && (
@@ -66,7 +66,12 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
             )}
             <Text
               variant="h6"
-              color={articleCollaborators.length > 0 && 'secondaryLight dark:secondaryDark'}
+              color={
+                articleCollaborators.length > 0 && {
+                  light: 'secondaryLight',
+                  dark: 'secondaryDark',
+                }
+              }
             >
               {articleCollaborators.length > 0 ? collaboratingLabel : inviteCollaboratorsLabel}
             </Text>
