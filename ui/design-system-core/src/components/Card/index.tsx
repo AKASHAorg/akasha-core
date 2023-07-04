@@ -24,7 +24,8 @@ const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => 
   const {
     elevation = 'none',
     background = { light: 'white', dark: 'grey2' },
-    radius,
+    // default radius as in the design system specs
+    radius = 'rounded-2xl',
     padding,
     direction,
     customStyle = '',

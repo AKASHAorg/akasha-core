@@ -25,6 +25,10 @@ BaseCoverImage.args = {
     avatar: 'Are you sure you want to delete your avatar? ',
     coverImage: 'Are you sure you want to delete your cover?',
   },
-  onAvatarChange: () => ({}),
-  onCoverImageChange: () => ({}),
+  onAvatarChange: avatar => {
+    console.log(avatar);
+  },
+  onCoverImageChange: coverImage => {
+    console.log(coverImage);
+  },
 };

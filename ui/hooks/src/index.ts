@@ -7,7 +7,12 @@ import { logError } from './utils/error-handler';
 import { validateType } from './utils/generic-utils';
 import { createPendingEntry, mapEntry } from './utils/entry-utils';
 import { checkEntryActive } from './utils/checkEntryActive';
-import { getMediaUrl, uploadMediaToTextile, getLinkPreview } from './utils/media-utils';
+import {
+  getMediaUrl,
+  saveMediaFile,
+  uploadMediaToTextile,
+  getLinkPreview,
+} from './utils/media-utils';
 import useGlobalLogin from './use-global-login';
 import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-analytics';
 import withProviders from './utils/provider-hoc';
@@ -155,6 +160,7 @@ export {
   // media-utils
   getLinkPreview,
   getMediaUrl,
+  saveMediaFile,
   uploadMediaToTextile,
   // use-query-listener
   useQueryListener,

@@ -7,11 +7,10 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import useIntersectionObserver from '@akashaorg/design-system-core/lib/utils/intersection-observer';
-import { IEntryPage } from '@akashaorg/typings/ui';
 import { elementIntersectionObserver } from './elementIntersectionObserver';
 
 export type EntryListProps = {
-  pages: IEntryPage[];
+  pages: any[];
   itemCard: React.ReactElement;
   onLoadMore: () => void;
   itemSpacing?: number;
@@ -31,6 +30,8 @@ const EntryList = (props: EntryListProps) => {
     onLoadMore,
     pageKeyPrefix = 'page',
     viewAllEntry,
+    languageDirection = 'ltr',
+    hasNextPage,
   } = props;
   const [hideScrollTop, setHideScrollTop] = React.useState(true);
   const scrollStopElement = document.getElementById('scrollTopStop');
@@ -66,15 +67,14 @@ const EntryList = (props: EntryListProps) => {
     return () => observer.disconnect();
   }, [startScrollRef]);
 
-  const items = (page: IEntryPage) =>
-    viewAllEntry ? page?.results.slice(0, viewAllEntry.limit) : page?.results;
+  const items = page => (viewAllEntry ? page?.results.slice(0, viewAllEntry.limit) : page?.results);
 
   const scrollTopButtonPlacement = React.useMemo(() => {
-    if (props.languageDirection === 'rtl') return 0;
+    if (languageDirection === 'rtl') return 0;
     return rootElementRef.current ? rootElementRef.current.clientWidth - 64 : null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    props.languageDirection,
+    languageDirection,
     rootElementRef,
     //We want to calculate scroll top button placement whenever the scroll top flag changes as browser may have resized
     hideScrollTop,
@@ -111,7 +111,7 @@ const EntryList = (props: EntryListProps) => {
           {viewAllEntry.label}
         </Anchor>
       )}
-      {!viewAllEntry && (props.status === 'loading' || props.hasNextPage) && (
+      {!viewAllEntry && (props.status === 'loading' || hasNextPage) && (
         <Box customStyle="p-8" ref={loadmoreRef}>
           <Spinner />
         </Box>

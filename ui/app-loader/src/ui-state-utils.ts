@@ -1,12 +1,13 @@
 import { Logger } from '@akashaorg/awf-sdk';
-import { EventTypes, ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
+import type { WorldConfig } from '@akashaorg/typings/ui';
+import { EventTypes, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 import { combineLatest, filter, Observable, tap, withLatestFrom } from 'rxjs';
 import { getStateSlice, LoaderState } from './state';
 import * as singleSpa from 'single-spa';
 import { uiEvents } from './events';
 
 export const handleAppLoadingScreens = (
-  worldConfig: ILoaderConfig,
+  worldConfig: WorldConfig,
   state$: Observable<LoaderState>,
   _logger: Logger,
 ) => {
@@ -23,7 +24,7 @@ export const handleAppLoadingScreens = (
         }),
       ),
       tap(([, combined]) => {
-        const { user, manifests } = combined;
+        const { user, manifests, integrationConfigs, plugins } = combined;
         const defaultWidgets = worldConfig.defaultWidgets;
         const layout = worldConfig.layout;
         // const eventDetail = event.detail;
@@ -42,9 +43,9 @@ export const handleAppLoadingScreens = (
         if (!mountedApps.length) {
           if (location.pathname === '/') {
             const homeApp = worldConfig.homepageApp;
-            const config = combined.integrationConfigs.get(homeApp);
+            const config = integrationConfigs.get(homeApp);
             if (config) {
-              const { navigateTo } = combined.plugins['@akashaorg/app-routing']?.routing as {
+              const { navigateTo } = plugins['@akashaorg/app-routing']?.routing as {
                 navigateTo: (opts: unknown) => void;
               };
               navigateTo({

@@ -1,6 +1,7 @@
 import { ReplaySubject, Subject } from 'rxjs';
 import { ParcelConfigObject } from 'single-spa';
-import { RootComponentProps, RootExtensionProps } from './index';
+import { IconType, RootComponentProps, RootExtensionProps } from './index';
+
 import { UIEventData } from './ui-events';
 import { Extensions, IAppConfig } from './apps';
 import { PluginConf } from './plugins';
@@ -23,8 +24,6 @@ export interface IntegrationRegistrationOptions {
   plugins?: PluginConf;
   logger: unknown;
 }
-
-export type IntegrationInitOptions = Partial<IntegrationRegistrationOptions>;
 
 export interface ExtensionMatcherFn<G = ReplaySubject<GlobalEventBusData>> {
   (
@@ -69,29 +68,10 @@ export enum INTEGRATION_TYPES {
   WIDGET,
 }
 
-export interface IntegrationModule {
-  register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
-  initialize?: (opts: IntegrationInitOptions) => Promise<void> | void;
-  getPlugin?: (
-    opts: IntegrationRegistrationOptions & {
-      encodeAppName: (name: string) => string;
-      decodeAppName: (name: string) => string;
-    },
-  ) => Promise<PluginConf>;
-}
-
-export interface ISdkConfig {
-  /**
-   * Define the log level
-   */
-  logLevel: LogLevels;
-}
-
 /**
  * World configuration object
  */
-
-export interface ILoaderConfig {
+export type WorldConfig = {
   /**
    * Apps that are installed by default on this world.
    * homePageApp is loaded by default, no need to be specified here
@@ -119,7 +99,8 @@ export interface ILoaderConfig {
     trackerUrl: string;
   };
   registryOverrides?: IntegrationReleaseInfoFragmentFragment[];
-}
+  socialLinks?: { icon: IconType; link: string }[];
+};
 
 export interface QueryStringType {
   [key: string]: string | string[] | unknown | undefined;

@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-
-import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 import {
@@ -14,10 +12,16 @@ import {
   useGetLogin,
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
-
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { hiddenIntegrations } from './hidden-integrations';
-
-const { Box, ICWidgetCard } = DS;
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import TabList from '@akashaorg/design-system-core/lib/components/TabList';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import AppsList from './apps-list';
+import Button from '@akashaorg/design-system/lib/components/Button';
+import NoAppsMessage from './no-apps-message';
 
 const ICWidget: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-akasha-verse');
@@ -25,9 +29,10 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   const { worldConfig, plugins } = props;
 
   const loginQuery = useGetLogin();
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data.id;
+    return !!loginQuery.data?.id;
   }, [loginQuery.data]);
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -80,11 +85,20 @@ const ICWidget: React.FC<RootComponentProps> = props => {
         (acc, app) => {
           // select default apps from list of apps
           if (defaultApps.includes(app.name)) {
-            acc.filteredDefaultApps.push(app);
+            // prepare for AppList component
+            acc.filteredDefaultApps.push({
+              name: app.manifestData.displayName,
+              appId: app.name,
+              appIcon: 'PaperAirplaneIcon',
+            });
           } else {
             // select user installed apps from list of installed apps
             if (installedAppsReq.data?.some(installedApp => installedApp.name === app.name)) {
-              acc.filteredInstalledApps.push(app);
+              acc.filteredInstalledApps.push({
+                name: app.manifestData.displayName,
+                appId: app.name,
+                appIcon: 'PaperAirplaneIcon',
+              });
             }
           }
           return acc;
@@ -95,32 +109,68 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     return { filteredDefaultApps: [], filteredInstalledApps: [] };
   }, [defaultApps, installedAppsReq.data, integrationsInfoReq.data?.getLatestRelease]);
 
-  const handleAppClick = (integrationId: string) => {
+  const handleAppClick = (appName: string) => () => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
     plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-akasha-verse',
-      getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
+      getNavigationUrl: navRoutes => `${navRoutes['info']}/${appName}`,
     });
   };
 
+  const handleInstalledAppActionClick = (appName: string) => {
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+      appName: appName,
+      getNavigationUrl: navRoutes => navRoutes.rootRoute,
+    });
+  };
+
+  const onTabChange = (index: number, prevIndex) => {
+    if (index === prevIndex) return;
+    setActiveTabIndex(index);
+  };
+
   return (
-    <Box pad={{ bottom: 'small' }}>
-      <ICWidgetCard
-        worldApps={filteredDefaultApps}
-        installedApps={filteredInstalledApps}
-        isLoadingWorldApps={integrationsInfoReq.isFetching}
-        isLoadingInstalledApps={integrationsInfoReq.isFetching}
-        titleLabel={t('My Apps')}
-        worldAppsLabel={t('World Apps')}
-        installedAppsLabel={t('Installed')}
-        noWorldAppsLabel={t('No World Apps. Please check later')}
-        noInstalledAppsLabel={t('You have no installed apps')}
-        noInstalledAppsSubLabel={t('Try some out for extra functionality!')}
-        onClickWorldApp={handleAppClick}
-        onClickInstalledApp={handleAppClick}
-      />
+    <Box customStyle="pb-4">
+      <Card elevation="1">
+        <Box customStyle="pl-4 pt-4 pb-6">
+          <Text weight="bold" variant="body1">
+            {t('My Apps')}
+          </Text>
+        </Box>
+        <Box>
+          <TabList
+            labels={[t('World Apps'), t('Installed')]}
+            selected={activeTabIndex}
+            onChange={onTabChange}
+            tabListDivider
+          />
+        </Box>
+        <Box customStyle="pt-4 pb-4">
+          {activeTabIndex === 0 && filteredDefaultApps.length === 0 && <NoAppsMessage />}
+          {activeTabIndex === 1 && filteredInstalledApps.length === 0 && <NoAppsMessage />}
+
+          {activeTabIndex === 0 && filteredDefaultApps.length > 0 && (
+            <AppsList
+              apps={filteredDefaultApps.slice(0, 4)}
+              onAppClick={handleAppClick}
+              appAction={<Icon type="CheckIcon" />}
+            />
+          )}
+
+          {activeTabIndex === 1 && filteredInstalledApps.length > 0 && (
+            <Stack direction="column" spacing="gap-y-4">
+              <AppsList
+                apps={filteredInstalledApps.slice(0, 4)}
+                onAppClick={handleAppClick}
+                appAction={<Button secondary={true}>{t('Open')}</Button>}
+                onAppActionClick={handleInstalledAppActionClick}
+              />
+            </Stack>
+          )}
+        </Box>
+      </Card>
     </Box>
   );
 };

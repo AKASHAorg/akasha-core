@@ -6,7 +6,7 @@ import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typing
  */
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
   mountsIn: opts.layoutConfig?.sidebarSlotId,
-  loadingFn: () => import('./components'),
+  loadingFn: () => import('./sidebar'),
   activeWhen: () => true,
   name: 'ui-widget-sidebar',
   i18nNamespace: ['ui-widget-sidebar'],

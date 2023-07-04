@@ -8,14 +8,13 @@ import { useForm, Controller } from 'react-hook-form';
 import { useMedia } from 'react-use';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types';
-import { Profile } from '@akashaorg/typings/ui';
 import * as z from 'zod';
 
-type GeneralFormValues = {
+export type GeneralFormValues = {
   userName?: string;
   name?: string;
-  avatar?: Profile['avatar'];
-  coverImage?: Profile['background'];
+  avatar?: File;
+  coverImage?: File;
   ens?: string;
   bio?: string;
 };
@@ -30,7 +29,11 @@ export type GeneralFormProps = {
   bio: InputType;
   ensButton: ButtonType;
   cancelButton: ButtonType;
-  saveButton: { label: string; handleClick: (formValues: GeneralFormValues) => void };
+  saveButton: {
+    label: string;
+    loading?: boolean;
+    handleClick: (formValues: GeneralFormValues) => void;
+  };
   customStyle?: string;
   onFormValid?: (valid: boolean) => void;
 };
@@ -86,28 +89,30 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
               inputRef={ref}
             />
           )}
-          defaultValue={nameField.initialValue}
+          defaultValue={nameField.initialValue || ''}
         />
-        <Controller
-          control={control}
-          name="userName"
-          render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-            <TextField
-              type="text"
-              name={name}
-              label={userNameField.label}
-              value={value}
-              caption={error?.message}
-              status={error?.message ? 'error' : null}
-              onChange={onChange}
-              inputRef={ref}
-              required
-              readOnly
-            />
-          )}
-          defaultValue={userNameField.initialValue ? userNameField.initialValue : ''}
-        />
-        {isLargeScreen && (
+        {userNameField && (
+          <Controller
+            control={control}
+            name="userName"
+            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
+              <TextField
+                type="text"
+                name={name}
+                label={userNameField.label}
+                value={value}
+                caption={error?.message}
+                status={error?.message ? 'error' : null}
+                onChange={onChange}
+                inputRef={ref}
+                required
+                readOnly
+              />
+            )}
+            defaultValue={userNameField.initialValue || ''}
+          />
+        )}
+        {isLargeScreen && ensField && (
           <Stack align="end" justify="between" spacing="gap-x-6" fullWidth>
             <Controller
               control={control}
@@ -128,7 +133,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
             <Button label={ensButton.label} customStyle="ml-auto" />
           </Stack>
         )}
-        {!isLargeScreen && (
+        {!isLargeScreen && ensField && (
           <>
             <Controller
               control={control}
@@ -137,17 +142,17 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
                 <TextField
                   type="text"
                   name={name}
-                  label={ensField.label}
+                  label={ensField?.label}
                   value={value}
                   onChange={onChange}
                   inputRef={ref}
                 />
               )}
-              defaultValue={ensField.initialValue}
+              defaultValue={ensField.initialValue || ''}
             />
             <Button
-              label={ensButton.label}
-              onClick={ensButton.handleClick}
+              label={ensButton?.label}
+              onClick={ensButton?.handleClick}
               customStyle="w-fit ml-auto"
             />
           </>
@@ -165,13 +170,19 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
               type="multiline"
             />
           )}
-          defaultValue={bioField.initialValue}
+          defaultValue={bioField.initialValue || ''}
         />
         <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
-          <Button variant="text" label={cancelButton.label} onClick={cancelButton.handleClick} />
+          <Button
+            variant="text"
+            label={cancelButton.label}
+            onClick={cancelButton.handleClick}
+            disabled={cancelButton.disabled}
+          />
           <Button
             variant="primary"
             label={saveButton.label}
+            loading={saveButton.loading}
             disabled={!isDirty && !isValid}
             onClick={handleSubmit(onSave)}
             type="submit"
@@ -183,7 +194,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
 };
 const schema = z.object({
   name: z.string().optional(),
-  userName: z.string().min(1, 'User name is required'),
+  userName: z.string().optional(),
   avatar: z.any().optional(),
   coverImage: z.any().optional(),
   ens: z.string().optional(),

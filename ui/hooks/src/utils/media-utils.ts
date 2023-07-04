@@ -1,5 +1,8 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { logError } from './error-handler';
+
+export const MEDIA_UPLOAD_EMAIL = '@mediaUploadEmail';
 
 export interface IConfig {
   quality?: number;
@@ -21,9 +24,21 @@ export const getMediaUrl = (hash?: string) => {
         pathLink: string;
       }
     | undefined;
-  if (hash) {
-    ipfsLinks = sdk.services.common.ipfs.buildIpfsLinks(hash);
+
+  let _hash = hash;
+
+  if (typeof hash === 'string' && hash.startsWith('ipfs://')) {
+    _hash = hash.substring(7);
   }
+
+  if (typeof hash === 'string' && hash.startsWith('/ipfs/')) {
+    _hash = hash.substring(6);
+  }
+
+  if (_hash) {
+    ipfsLinks = sdk.services.common.ipfs.buildIpfsLinks(_hash);
+  }
+
   return ipfsLinks;
 };
 
@@ -128,4 +143,41 @@ export const getLinkPreview = async (url: string) => {
     faviconSources: faviconSources,
   };
   return Object.assign({}, linkPreview, sources);
+};
+
+interface ISaveMediaFile {
+  name: string;
+  content: File;
+  isUrl: boolean;
+  email?: string;
+}
+
+/**
+ * Utility to save media file
+ */
+export const saveMediaFile = async ({ name, content, isUrl, email }: ISaveMediaFile) => {
+  const mediaUploadEmail = email || window.localStorage.getItem(MEDIA_UPLOAD_EMAIL);
+
+  if (
+    !mediaUploadEmail ||
+    !mediaUploadEmail.indexOf(
+      '@',
+    ) /*Check if @ symbol is somewhere besides the beginning of the string*/
+  )
+    return null;
+
+  const sdk = getSDK();
+
+  try {
+    const mediaFile = await sdk.api.profile.saveMediaFile({
+      isUrl,
+      content,
+      name,
+      email: mediaUploadEmail as 'string@string',
+    });
+    return mediaFile;
+  } catch (ex) {
+    logError('saveMediaFile', ex);
+    return null;
+  }
 };

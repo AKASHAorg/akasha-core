@@ -20,7 +20,11 @@ export type SocialLinksProp = {
   description: string;
   socialLinks: Link[];
   cancelButton: ButtonType;
-  saveButton: { label: string; handleClick: (formValues: { links: Link[] }) => void };
+  saveButton: {
+    label: string;
+    loading?: boolean;
+    handleClick: (formValues: { links: Link[] }) => void;
+  };
   customStyle?: string;
   onDelete: (index: number) => void;
   onFormValid?: (valid: boolean) => void;
@@ -112,9 +116,15 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
           );
         })}
         <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
-          <Button variant="text" label={cancelButton.label} onClick={cancelButton.handleClick} />
+          <Button
+            variant="text"
+            label={cancelButton.label}
+            onClick={cancelButton.handleClick}
+            disabled={cancelButton.disabled}
+          />
           <Button
             variant="primary"
+            loading={saveButton.loading}
             label={saveButton.label}
             disabled={!isDirty && !isValid}
             onClick={handleSubmit(onSave)}
