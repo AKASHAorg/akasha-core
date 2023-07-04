@@ -13,6 +13,7 @@ export type CardProps = {
   radius?: Radius;
   padding?: Padding;
   direction?: 'row' | 'column';
+  accentBorder?: boolean;
   customStyle?: string;
   testId?: string;
   ref?: LegacyRef<HTMLDivElement>;
@@ -28,14 +29,19 @@ const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => 
     radius = 'rounded-2xl',
     padding,
     direction,
+    accentBorder,
     customStyle = '',
     testId,
+    children,
   } = props;
 
   const elevationStyle = getElevationClasses(elevation);
   const radiusStyle = getRadiusClasses(radius);
   const paddingStyle = getPaddingClasses(padding);
   const backgroundStyle = getColorClasses(background, 'bg');
+  const accentBorderStyle = accentBorder
+    ? `border ${getColorClasses({ light: 'secondaryLight', dark: 'secondaryDark' }, 'border')}`
+    : '';
 
   const instanceStyles = apply`
     ${baseStyles}
@@ -43,12 +49,13 @@ const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => 
     ${elevationStyle}
     ${radiusStyle}
     ${paddingStyle}
+    ${accentBorderStyle}
     ${customStyle}
   `;
 
   return (
     <Stack direction={direction} customStyle={instanceStyles} testId={testId} ref={ref}>
-      {props.children}
+      {children}
     </Stack>
   );
 });

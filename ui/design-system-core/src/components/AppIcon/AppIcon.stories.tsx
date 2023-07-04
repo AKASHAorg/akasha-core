@@ -40,6 +40,14 @@ LargeIcon.args = {
   size: 'lg',
 };
 
+export const ExtraLargeIcon = Template.bind({});
+ExtraLargeIcon.args = {
+  placeholderIconType: 'notifications',
+  stackedIcon: true,
+  hasNewNotifs: true,
+  size: 'xl',
+};
+
 export const CustomColoredIcon = Template.bind({});
 CustomColoredIcon.args = {
   placeholderIconType: 'CheckIcon',

@@ -49,7 +49,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
             {`${headerTextLabel}:`}
             {reason.length > 0 && (
               <div className={tw(`flex w-fit mb-2 px-[0.2rem] rounded-xs bg-secondary/10`)}>
-                <Text color={'secondary'} weight={'bold'}>
+                <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }} weight={'bold'}>
                   {reason}
                 </Text>
               </div>
@@ -63,7 +63,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
             {headerTextLabel && `${headerTextLabel}:`}
             {reason && reason.length > 0 && (
               <div className={tw(`flex w-fit mb-2 px-[0.2rem] rounded-xs bg-secondary/10`)}>
-                <Text color={'secondary'} weight={'bold'}>
+                <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }} weight={'bold'}>
                   {reason}
                 </Text>
               </div>
@@ -78,7 +78,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
                   ctaUrl ? onCTAClick() : handleFlipCard();
                 }}
               >
-                <Text variant={'h4'} color={'text-secondary'}>
+                <Text variant={'h4'} color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                   {ctaLabel}
                 </Text>
               </div>

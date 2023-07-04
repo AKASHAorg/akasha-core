@@ -1,4 +1,5 @@
 export type Colors =
+  | 'transparent'
   | 'primary'
   | 'primaryStart'
   | 'primaryStop'
@@ -20,6 +21,10 @@ export type Colors =
   | 'warningDark'
   | 'errorLight'
   | 'errorDark'
+  | 'blue'
+  | 'red'
+  | 'orange'
+  | 'self-color'
   | `primary/${number}`
   | `primaryStart/${number}`
   | `primaryStop/${number}`
@@ -40,4 +45,7 @@ export type Colors =
   | `warningLight/${number}`
   | `warningDark/${number}`
   | `errorLight/${number}`
-  | `errorDark/${number}`;
+  | `errorDark/${number}`
+  | `blue-${number}`
+  | `red-${number}`
+  | `orange-${number}`;

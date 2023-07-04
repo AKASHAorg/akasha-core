@@ -1,8 +1,9 @@
-import React from 'react';
-
+import React, { useCallback, useMemo } from 'react';
 import Box from '../Box';
 import Button from '../Button';
 import Icon from '../Icon';
+import Stack from '../Stack';
+import Divider from '../Divider';
 
 export interface IAccordionProps {
   customStyle?: string;
@@ -10,32 +11,52 @@ export interface IAccordionProps {
   titleNode: React.ReactNode;
   contentNode: React.ReactNode;
   open?: boolean;
+  headerDivider?: boolean;
 }
 
 const Accordion: React.FC<IAccordionProps> = props => {
-  const { customStyle = '', contentStyle = '', titleNode, contentNode, open } = props;
+  const {
+    customStyle = '',
+    contentStyle = '',
+    titleNode,
+    contentNode,
+    open,
+    headerDivider,
+  } = props;
 
   // internal state for accordion toggle
   const [isToggled, setIsToggled] = React.useState<boolean>(open);
 
-  const handleToggle = () => setIsToggled(!isToggled);
+  const handleToggle = useCallback(() => setIsToggled(!isToggled), [isToggled]);
 
-  return (
-    <>
+  const headerUi = useMemo(
+    () => (
       <Button plain={true} onClick={handleToggle} customStyle="w-full">
-        <Box
-          customStyle={`flex flex-row justify-between items-center cursor-pointer ${customStyle}`}
-        >
+        <Stack align="center" justify="between" customStyle={customStyle}>
           {titleNode}
           <Icon
             accentColor={true}
             customStyle="h-4, w-4 secondaryDark"
             type={isToggled ? 'ChevronUpIcon' : 'ChevronDownIcon'}
           />
-        </Box>
+        </Stack>
       </Button>
+    ),
+    [customStyle, handleToggle, isToggled, titleNode],
+  );
 
-      {isToggled && <Box customStyle={`p-2 ${contentStyle}`}>{contentNode}</Box>}
+  return (
+    <>
+      {headerDivider ? (
+        <Stack direction="column" spacing="gap-y-4">
+          {headerUi}
+          <Divider />
+        </Stack>
+      ) : (
+        <>{headerUi}</>
+      )}
+
+      {isToggled && <Box customStyle={`${contentStyle}`}>{contentNode}</Box>}
     </>
   );
 };

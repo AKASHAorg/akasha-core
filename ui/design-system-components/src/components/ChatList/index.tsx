@@ -99,7 +99,9 @@ const ChatList: React.FC<IChatListProps> = props => {
             `flex shrink-0 rounded-[100px] px-4 py-1 bg(secondaryLight/30 dark:secondaryDark/30)`,
           )}
         >
-          <Text color="accent">{unreadMessagesLabel}</Text>
+          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+            {unreadMessagesLabel}
+          </Text>
         </div>
       )}
 

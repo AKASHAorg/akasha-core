@@ -12,6 +12,7 @@ type MessageCardProps = {
   titleVariant?: TextProps['variant'];
   background?: Color;
   elevation?: Elevation;
+  testId?: string;
   onClose: () => void;
 };
 
@@ -21,10 +22,11 @@ const MessageCard: React.FC<MessageCardProps> = ({
   message,
   background = 'white',
   elevation = 'none',
+  testId,
   onClose,
 }) => {
   return (
-    <Card elevation={elevation} background={background} radius={20} padding={16}>
+    <Card elevation={elevation} background={background} radius={20} padding={16} testId={testId}>
       <Stack direction="column" spacing="gap-y-2">
         <Stack justify="between">
           <Text variant={titleVariant} align="center" customStyle="grow">

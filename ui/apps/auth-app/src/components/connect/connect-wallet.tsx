@@ -1,9 +1,12 @@
 import React from 'react';
-import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import BoxedIcon from './boxed-icon';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import IndicatorDots from './indicator-dots';
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
 import { useTranslation } from 'react-i18next';
 import {
   switchToRequiredNetwork,
@@ -12,7 +15,6 @@ import {
   useNetworkChangeListener,
   useRequiredNetwork,
 } from '@akashaorg/ui-awf-hooks';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { getInjectedProviderDetails } from '../../utils/getInjectedProvider';
 
 export interface IConnectWalletProps {
@@ -142,12 +144,9 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     signOutCall.current(selectedProvider);
   };
 
-  const errorCardStyles =
-    'flex flex-col border border(errorLight dark:errorDark) bg(errorLight/30 dark:errorDark/30) rounded-lg p-2 justify-center items-center';
-
   return (
-    <Box customStyle={'p-4'}>
-      <Box customStyle="justify-center flex flex-col">
+    <Stack direction="column" spacing="gap-y-4">
+      <Box>
         <Text variant="body1" align="center" weight="bold">
           {t('Connect to {{worldName}}', { worldName })}
         </Text>
@@ -155,14 +154,19 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           {t('using your wallet')}
         </Text>
       </Box>
-      <Box customStyle="flex flex-row justify-center items-center p-4">
-        <BoxedIcon
-          iconType={selectedProvider === EthProviders.Web3Injected ? 'metamask' : 'walletconnect'}
-          background="bg(yellow-50 dark:yellow-50)"
-          iconSize={{
-            width: 'w-16',
-            height: 'w-16',
-          }}
+      <Stack align="center" justify="center">
+        <AppIcon
+          placeholderIconType={
+            selectedProvider === EthProviders.Web3Injected ? 'metamask' : 'walletconnect'
+          }
+          background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
+          radius={24}
+          size={
+            selectedProvider === EthProviders.Web3Injected
+              ? { width: 88, height: 88 }
+              : { width: 120, height: 120 }
+          }
+          backgroundSize={120}
           iconColor="self-color"
         />
         <IndicatorDots
@@ -170,74 +174,42 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
             Boolean(networkNotSupportedError) || Boolean(errors.length) || Boolean(signInError)
           }
         />
-        <BoxedIcon
-          iconType="akasha"
-          background="bg-gradient-to-b from-blue-200 to-red-200 dark:from-blue-200 dark:to-red-200"
-          iconSize={{
-            width: 'w-16',
-            height: 'w-16',
-          }}
+        <AppIcon
+          placeholderIconType="akasha"
+          background={{ gradient: 'gradient-to-b', from: 'blue-200', to: 'red-200' }}
+          radius={24}
+          size={{ width: 54, height: 54 }}
+          backgroundSize={120}
           iconColor="black"
         />
-      </Box>
+      </Stack>
       {networkNotSupportedError && (
-        <Box customStyle={errorCardStyles}>
-          <Text variant="body1" weight="bold" customStyle="my-2">
-            {t("Switch Your Wallet's Network")}
-          </Text>
-          <Text variant="body1" align="center" customStyle="my-2">
-            {networkNotSupportedError}.
-          </Text>
-          <Button
-            variant="primary"
-            customStyle="my-4"
-            onClick={handleChangeNetwork}
-            label={t('Change Network')}
-            size="md"
-          >
-            {t('Change Network')}
-          </Button>
-        </Box>
+        <ConnectErrorCard
+          title={t("Switch Your Wallet's Network")}
+          message={networkNotSupportedError}
+          action={{ onClick: handleChangeNetwork, label: t('Change Network') }}
+        />
       )}
       {signInError && (
-        <Box customStyle={`${errorCardStyles} my-4`}>
-          <Text variant="body1" weight="bold" customStyle="my-2">
-            {t('There was an error signing you in')}
-          </Text>
-          <Text variant="body1" align="center" customStyle="my-2">
-            {signInError.message}.
-          </Text>
-          <Button
-            variant="primary"
-            customStyle="my-4"
-            onClick={handleSignInRetry}
-            label={t('Retry')}
-            size="md"
-          >
-            {t('Retry')}
-          </Button>
-        </Box>
+        <ConnectErrorCard
+          title={t('Request Rejected!')}
+          message={signInError.message}
+          action={{ onClick: handleSignInRetry, label: t('Retry Network') }}
+        />
       )}
       {errors.map((errObj, idx) => (
-        <Box key={idx} customStyle={`${errorCardStyles} my-4`}>
-          <Text variant="body1" weight="bold" customStyle="my-2">
-            {errObj.title}
-          </Text>
-          <Text variant="body1" customStyle="my-2 text-center">
-            {errObj.subtitle}
-          </Text>
-        </Box>
+        <ConnectErrorCard key={idx} title={errObj.title} message={errObj.subtitle} />
       ))}
       <Box>
         {!!connectWalletCall.data?.length && (
-          <Box customStyle="items-center">
+          <Box>
             <Text variant="subtitle2" weight="bold">
               {t('Your Address')}
             </Text>
             <Text variant="subtitle2">{connectWalletCall.data}</Text>
           </Box>
         )}
-        <Box customStyle="flex flex-row justify-center items-center">
+        <Stack align="center" justify="center">
           <Button
             variant="text"
             size="lg"
@@ -246,9 +218,9 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           >
             {t('Disconnect or change way to connect')}
           </Button>
-        </Box>
+        </Stack>
       </Box>
-    </Box>
+    </Stack>
   );
 };
 
