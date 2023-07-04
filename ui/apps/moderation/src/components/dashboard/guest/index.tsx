@@ -11,11 +11,19 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type GuestProps = {
+  publicImgPath?: string;
+  assetName?: string;
+  assetExtension?: string;
   navigateTo: (args: NavigateToParams) => void;
 };
 
 const GuestDashboard: React.FC<GuestProps> = props => {
-  const { navigateTo } = props;
+  const {
+    assetName = 'moderation',
+    assetExtension = 'webp',
+    publicImgPath = '/images',
+    navigateTo,
+  } = props;
   const { t } = useTranslation('app-moderation-ewa');
 
   const handleCodeOfConductClick = () => {
@@ -33,7 +41,7 @@ const GuestDashboard: React.FC<GuestProps> = props => {
         </Text>
 
         <Box customStyle="w-40 h-40 my-2 mx-auto">
-          <Image assetName="moderation" />
+          <Image src={`${publicImgPath}/${assetName}.${assetExtension}`} />
         </Box>
 
         <Text weight="bold" align="center">

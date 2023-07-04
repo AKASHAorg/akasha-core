@@ -10,6 +10,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 export type ReportItemConfirmationProps = {
   assetName?: string;
   publicImgPath?: string;
+  assetExtension?: string;
   titleLabel: string;
   subtitleLabel: string;
   footnoteLabel: string;
@@ -22,6 +23,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
   const {
     assetName = 'moderation',
     publicImgPath = '/images',
+    assetExtension = 'webp',
     titleLabel,
     subtitleLabel,
     footnoteLabel,
@@ -43,8 +45,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
 
         <Box customStyle="w-40 h-40 my-2 mx-auto">
           <Image
-            assetName={assetName}
-            publicImgPath={publicImgPath}
+            src={`${publicImgPath}/${assetName}.${assetExtension}`}
             dataTestId={`${assetName}-image`}
           />
         </Box>

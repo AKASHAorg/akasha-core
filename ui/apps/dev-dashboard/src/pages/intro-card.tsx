@@ -12,10 +12,22 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import routes, { ONBOARDING_STEP_ONE } from '../routes';
 
+export type DevDashOnboardingIntroProps = RootComponentProps & {
+  publicImgPath?: string;
+  assetName?: string;
+  assetExtension?: string;
+};
+
 export const ONBOARDING_STATUS = 'ewa-dev-dashboard-onboarding-status';
 
-export const DevDashOnboardingIntro: React.FC<RootComponentProps> = props => {
-  const { baseRouteName, plugins } = props;
+export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = props => {
+  const {
+    assetName = 'dev-dashboard-intro',
+    assetExtension = 'webp',
+    publicImgPath = '/images',
+    baseRouteName,
+    plugins,
+  } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
@@ -53,7 +65,7 @@ export const DevDashOnboardingIntro: React.FC<RootComponentProps> = props => {
         </Text>
 
         <Box customStyle="w-[17.5rem] h-[17.5rem] my-6">
-          <Image assetName="dev-dashboard-intro" />
+          <Image src={`${publicImgPath}/${assetName}.${assetExtension}`} />
         </Box>
 
         <Text variant="h5" align="center" weight="bold" customStyle="mt-2">

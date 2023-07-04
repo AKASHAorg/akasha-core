@@ -24,11 +24,7 @@ export const HeroImage: React.FC<HeroImageProps> = props => {
   return (
     <Box customStyle="flex flex-col items-center space-y-4">
       <Box customStyle="w-[16rem] h-[13rem]">
-        <Image
-          assetName={assetName}
-          assetExtension={assetExtension}
-          publicImgPath={publicImgPath}
-        />
+        <Image src={`${publicImgPath}/${assetName}.${assetExtension}`} />
       </Box>
 
       {titleLabel && (

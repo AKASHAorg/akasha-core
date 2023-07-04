@@ -37,11 +37,7 @@ export const KeyConfirmation: React.FC<KeyConfirmationProps> = props => {
         <Text>{subtitleLabel}</Text>
 
         <Box customStyle="w-[17.5rem] h-[17.5rem] my-6 self-center">
-          <Image
-            assetName={assetName}
-            assetExtension={assetExtension}
-            publicImgPath={publicImgPath}
-          />
+          <Image src={`${publicImgPath}/${assetName}.${assetExtension}`} />
         </Box>
 
         <DevKeyCard {...props} item={sampleDevKeys[0]} />
