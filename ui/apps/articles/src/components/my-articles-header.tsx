@@ -33,7 +33,15 @@ const MyArticlesHeader: React.FC<IMyArticlesHeaderProps> = props => {
                 variant="h6"
                 align="center"
                 color={
-                  activeTabIndex === idx ? 'secondaryLight dark:secondaryDark' : 'grey4 dark:grey7'
+                  activeTabIndex === idx
+                    ? {
+                        light: 'secondaryLight',
+                        dark: 'secondaryDark',
+                      }
+                    : {
+                        light: 'grey4',
+                        dark: 'grey7',
+                      }
                 }
               >
                 {tab}
