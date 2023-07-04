@@ -31,22 +31,26 @@ const Toggle: React.FC<IToggleProps> = ({
 }) => {
   const sizeMap = {
     large: {
-      dimension: 'h-8 w-16 after:h-7 after:w-7 after:top-[2px] after:left-[4px]',
+      dimension: 'h-8 w-16 after:h-7 after:w-7 peer-checked:after:translate-x-[1.9rem]',
       iconSize: 'h-6 w-6 peer-checked:translate-x-[1.95rem]',
     },
     small: {
-      dimension: 'h-5 w-9 after:h-4 after:w-4 after:top-[2px] after:left-[2px]',
-      iconSize: 'h-3 w-3 peer-checked:translate-x-[0.95rem]',
+      dimension: 'h-5 w-9 after:h-4 after:w-4 peer-checked:after:translate-x-3.5',
+      iconSize: 'h-3 w-3 peer-checked:translate-x-[0.90rem]',
     },
   };
 
   const color = disabled
     ? 'bg(grey7 after:grey4) border(1 grey4 after:grey7)'
-    : `bg(white dark:grey3 after:grey6 dark:after:grey4 peer-checked:secondaryDark peer-checked:dark:secondaryLight peer-checked:after:secondaryLight peer-checked:dark:after:secondaryDark) border(1 secondaryLight dark:secondaryDark peer-checked:after:secondaryLight peer-checked:dark:after:secondaryDark)`;
+    : `bg(white dark:grey3 ${
+        iconUnchecked ? 'after:secondaryDark' : 'after:grey6'
+      } dark:after:secondaryDark peer-checked:after:secondaryLight peer-checked:dark:after:secondaryDark) peer-checked:after:border-secondaryLight border(1 secondaryLight dark:secondaryDark peer-checked:after:red-500 peer-checked:dark:after:red-500)`;
 
-  const knobStyle = apply`${sizeMap[size].dimension} rounded(full after:full) hover:shadow-md peer-focus:outline-none peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:transition-all ${color}`;
+  const transitionStyle = 'transition-all duration-300';
 
-  const iconStyle = apply`flex items-center justify-center ${sizeMap[size].iconSize} absolute ml-1 rounded(full after:full) hover:shadow-md peer-focus:outline-none peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:transition-all ${color}`;
+  const knobStyle = apply`after:top-px after:left-0.5 ${sizeMap[size].dimension} relative rounded(full after:full) hover:shadow-md peer-focus:outline-none peer after:content-[''] after:absolute after:${transitionStyle} ${color}`;
+
+  const iconStyle = apply`flex items-center justify-center ${sizeMap[size].iconSize} absolute ml-1 rounded(full after:full) hover:shadow-md peer-focus:outline-none peer after:content-[''] after:absolute after:${transitionStyle}`;
 
   const handleChange = e => {
     if (typeof onChange === 'function') {
@@ -56,7 +60,7 @@ const Toggle: React.FC<IToggleProps> = ({
   };
 
   return (
-    <label className={tw('relative inline-flex items-center cursor-pointer')}>
+    <label className={tw('inline-flex items-center cursor-pointer')}>
       <input
         type="checkbox"
         value=""
@@ -64,16 +68,17 @@ const Toggle: React.FC<IToggleProps> = ({
         checked={checked}
         disabled={disabled}
         onChange={handleChange}
-        className={tw('sr-only peer')}
+        className={tw('sr-only peer relative')}
       />
       <div className={tw(knobStyle)} />
 
       {iconChecked && iconUnchecked && (
         <div className={tw(iconStyle)}>
           <Icon
-            size={size === 'small' ? { width: 'w-2', height: 'h-2' } : 'sm'}
+            size={size === 'small' ? { width: 'w-3', height: 'h-3' } : 'sm'}
             type={checked ? iconChecked : iconUnchecked}
-            customStyle="fill-white stroke-white"
+            solid={true}
+            color="white"
           />
         </div>
       )}

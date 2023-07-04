@@ -6,6 +6,7 @@ import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexBut
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { tw, apply } from '@twind/core';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 export interface ITrendingTagCardProps {
   // data
@@ -52,33 +53,33 @@ const TrendingTagCard: React.FC<ITrendingTagCardProps> = props => {
 
   return (
     <BasicCardBox pad="0">
-      <div className={tw('py-4 pl-4')}>
+      <Box customStyle="py-4 pl-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}
         </Text>
-      </div>
+      </Box>
 
-      <div className={tw(BaseTabPanelStyles)}>
+      <Box customStyle={BaseTabPanelStyles}>
         <ul>
           {tags.length === 0 && !isLoadingTags && (
-            <div className={tw('flex justify-center items-center')}>
-              <p>{noTagsLabel}</p>
-            </div>
+            <Box customStyle="flex justify-center items-center">
+              <Text>{noTagsLabel}</Text>
+            </Box>
           )}
           {tags.length === 0 &&
             isLoadingTags &&
             Array.from({ length: 3 }, (_el, index: number) => (
-              <div key={index} className={tw(BaseItemStyles)}>
-                <div>
+              <Box key={index} customStyle={BaseItemStyles}>
+                <Box>
                   <TextLine title="tagName" animated={false} width="140px" />
                   <TextLine title="tagName" animated={false} width="80px" />
-                </div>
+                </Box>
                 <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
-              </div>
+              </Box>
             ))}
           {tags.length !== 0 &&
             tags.slice(0, 3).map((tag, index) => (
-              <div key={index} className={tw(BaseItemStyles)}>
+              <Box key={index} customStyle={BaseItemStyles}>
                 <a
                   onClick={e => {
                     e.preventDefault();
@@ -94,7 +95,7 @@ const TrendingTagCard: React.FC<ITrendingTagCardProps> = props => {
                     backgroundColor={true}
                   />
                 </a>
-                <div>
+                <Box>
                   <DuplexButton
                     inactiveLabel={subscribeLabel}
                     activeLabel={unsubscribeLabel}
@@ -103,11 +104,11 @@ const TrendingTagCard: React.FC<ITrendingTagCardProps> = props => {
                     active={subscribedTags?.includes(tag.name)}
                     allowMinimization={false}
                   />
-                </div>
-              </div>
+                </Box>
+              </Box>
             ))}
         </ul>
-      </div>
+      </Box>
     </BasicCardBox>
   );
 };

@@ -13,6 +13,8 @@ export interface IBasicCardBox {
   noBorderRadius?: boolean;
   customStyle?: string;
   onClick?: () => void;
+  tabIndex?: number;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
@@ -28,6 +30,10 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
     border,
     noBorderRadius,
     customStyle = '',
+    tabIndex = 0,
+    onKeyDown = () => {
+      void 0;
+    },
     onClick,
   } = props;
 
@@ -59,7 +65,14 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
   );
 
   return (
-    <div className={tw(className)} ref={rootNodeRef} onClick={onClick}>
+    <div
+      className={tw(className)}
+      role={onClick ? 'button' : 'presentation'}
+      tabIndex={tabIndex}
+      ref={rootNodeRef}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+    >
       {children}
     </div>
   );

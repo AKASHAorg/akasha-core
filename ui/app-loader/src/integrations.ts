@@ -1,11 +1,11 @@
-import {
+import type {
   RootComponentProps,
   RootExtensionProps,
-  EventTypes,
   IAppConfig,
-  ILoaderConfig,
+  WorldConfig,
   EventDataTypes,
 } from '@akashaorg/typings/ui';
+import { EventTypes } from '@akashaorg/typings/ui';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import {
   Observable,
@@ -109,7 +109,7 @@ export const importIntegrationModules = (state$: Observable<LoaderState>, logger
 };
 
 export const processSystemModules = (
-  worldConfig: ILoaderConfig,
+  worldConfig: WorldConfig,
   state$: Observable<LoaderState>,
   logger: Logger,
 ) => {
@@ -145,7 +145,7 @@ export const processSystemModules = (
     .pipe(filter(({ layoutConfig }) => !!layoutConfig))
     .pipe(
       mergeMap(results => {
-        const { modules, layoutConfig, integrationConfigs, integrationsByMountPoint } = results;
+        const { layoutConfig, modules, integrationConfigs, integrationsByMountPoint } = results;
 
         const registrationProps = {
           layoutConfig: layoutConfig.extensions,
@@ -183,7 +183,7 @@ export const processSystemModules = (
               configs,
               integrationConfigs,
               integrationsByMountPoint,
-              layoutConfig: results.layoutConfig,
+              layoutConfig,
             })),
           );
       }),
@@ -254,7 +254,7 @@ export const processSystemModules = (
 };
 
 export const handleExtPointMountOfApps = (
-  worldConfig: ILoaderConfig,
+  worldConfig: WorldConfig,
   state$: Observable<LoaderState>,
   logger: Logger,
 ) => {
@@ -333,7 +333,11 @@ export const handleExtPointMountOfApps = (
         ),
       ),
       tap(results => {
-        const { config } = results.data;
+        const {
+          data: { config },
+          layoutConfig,
+          integrationConfigs,
+        } = results;
         const { manifests, plugins, modules } = results;
         const manifest = manifests.find(m => m.name === config.name);
 
@@ -366,11 +370,11 @@ export const handleExtPointMountOfApps = (
             parseQueryString: parseQueryString,
             worldConfig: worldConfig,
             uiEvents: uiEvents,
-            layoutConfig: results.layoutConfig.extensions,
+            layoutConfig: layoutConfig.extensions,
             logger: sdk.services.log.create(manifest.name),
             domElementGetter: () => domElement,
             navigateToModal: navigateToModal,
-            getAppRoutes: appName => results.integrationConfigs.get(appName).routes,
+            getAppRoutes: appName => integrationConfigs.get(appName).routes,
             encodeAppName: encodeName,
             decodeAppName: decodeName,
           },
@@ -493,7 +497,7 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
  * Disable integration (by user)
  */
 export const handleDisableIntegration = (
-  worldConfig: ILoaderConfig,
+  worldConfig: WorldConfig,
   state$: Observable<LoaderState>,
 ) => {
   return state$

@@ -1,12 +1,12 @@
 import { Logger } from '@akashaorg/awf-sdk';
-import { ILoaderConfig } from '@akashaorg/typings/ui';
+import type { WorldConfig } from '@akashaorg/typings/ui';
 import { from, mergeMap, Observable, tap, withLatestFrom } from 'rxjs';
 import { getStateSlice, LoaderState } from './state';
 import { pipelineEvents, uiEvents } from './events';
 import { decodeName, encodeName } from './utils';
 
 export const loadPlugins = (
-  worldConfig: ILoaderConfig,
+  worldConfig: WorldConfig,
   state$: Observable<LoaderState>,
   logger: Logger,
 ) => {

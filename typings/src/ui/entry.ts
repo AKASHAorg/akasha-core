@@ -1,22 +1,6 @@
 import { Descendant } from 'slate';
-import { Comment, Post, LinkPreview } from '../sdk/graphql-types';
+import { LinkPreview } from '../sdk/graphql-types';
 import { Profile } from './profile';
-
-export interface PostResponse extends Post {
-  moderated?: boolean;
-  reason?: string;
-  reported?: boolean;
-  delisted?: boolean;
-  isPublishing?: boolean;
-}
-
-export interface CommentResponse extends Comment {
-  moderated?: boolean;
-  reason?: string;
-  reported?: boolean;
-  delisted?: boolean;
-  isPublishing?: boolean;
-}
 
 export type ITag = {
   name: string;
@@ -55,20 +39,6 @@ export interface IEntryData {
   postId?: string;
 }
 
-export interface PendingEntry {
-  author: Profile;
-  slateContent: IEntryData['slateContent'];
-  ipfsLink: string;
-  permalink: string;
-  entryId: string;
-  replies?: number;
-  reposts?: number;
-  time: string;
-  quote: IEntryData['quote'];
-  linkPreview?: IEntryData['linkPreview'];
-  images?: IEntryData['images'];
-}
-
 export interface IPublishData {
   metadata: IMetadata;
   slateContent: (Descendant & { url?: string; type?: string; fallbackUrl?: string })[];
@@ -90,9 +60,4 @@ export interface IMetadata {
   quote?: IEntryData;
   tags: string[];
   mentions: string[];
-}
-
-export interface IEntryPage {
-  results: string[];
-  total?: number;
 }

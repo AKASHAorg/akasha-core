@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IAkashaError, Reason } from '@akashaorg/typings/ui';
+import { Reason } from '@akashaorg/typings/ui';
 
 import { logError } from './utils/error-handler';
 import { getModerationReasons } from './moderation-requests';
@@ -16,7 +16,7 @@ export interface IReasonsState {
 }
 
 export interface UseReasonsProps {
-  onError?: (error: IAkashaError) => void;
+  onError?: (error: any) => void;
 }
 
 const initialReasonstate = {

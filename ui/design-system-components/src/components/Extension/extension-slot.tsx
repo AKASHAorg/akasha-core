@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { apply } from '@twind/core';
+
 export interface ExtensionPointProps {
   name: string;
-  className?: string;
+  customStyle?: string;
   style?: React.CSSProperties;
   mountOnRequest?: boolean;
   shouldMount?: boolean;
@@ -13,8 +15,17 @@ export interface ExtensionPointProps {
   children?: React.ReactNode;
 }
 
-const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
-  const { mountOnRequest = false, shouldMount = true } = props;
+const ExtensionSlot: React.FC<ExtensionPointProps> = props => {
+  const {
+    children,
+    customStyle,
+    mountOnRequest = false,
+    shouldMount = true,
+    onClick,
+    onWrapperClick,
+    data,
+    name,
+  } = props;
 
   const isMounted = React.useRef(false);
 
@@ -23,26 +34,28 @@ const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
 
   const nodeRef = React.useRef(null);
   const clickHandler = React.useRef(() => {
-    if (props.onClick) {
+    if (onClick) {
       props.onClick();
     }
-    if (props.onWrapperClick) {
+    if (onWrapperClick) {
       props.onWrapperClick();
     }
   });
+
   React.useEffect(() => {
     if (!mountOnRequest || (mountOnRequest && shouldMount)) {
       if (!isMounted.current) {
-        onMount.current(`${props.name}`, props.data);
+        onMount.current(`${name}`, data);
         isMounted.current = true;
       }
-      const node = document.querySelector(`#${props.name}`);
+      const node = document.querySelector(`#${name}`);
       if (node) {
         nodeRef.current = node;
         node.addEventListener('click', clickHandler.current);
       }
     }
-  }, [mountOnRequest, shouldMount, props.name, props.data]);
+  }, [mountOnRequest, shouldMount, name, data]);
+
   React.useEffect(() => {
     const onClick = clickHandler.current;
     const unmount = onUnmount.current;
@@ -50,19 +63,18 @@ const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
       if (nodeRef.current) {
         nodeRef.current.removeEventListener('click', onClick);
       }
-      unmount(`${props.name}`);
+      unmount(`${name}`);
       isMounted.current = false;
     };
-  }, [props.name]);
+  }, [name]);
 
   if (!mountOnRequest || (mountOnRequest && shouldMount)) {
     return (
-      <div id={props.name} className={props.className} style={props.style}>
-        {props.children}
+      <div id={name} className={apply(customStyle)}>
+        {children}
       </div>
     );
   }
   return null;
 };
-
-export default ExtensionPoint;
+export default ExtensionSlot;

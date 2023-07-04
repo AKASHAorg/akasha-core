@@ -1,9 +1,7 @@
 import React from 'react';
-import { tw } from '@twind/core';
-
 import { IMenuItem } from '@akashaorg/typings/ui';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
-
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import MenuItemLabel from './menu-item-label';
 import MenuSubItems from './menu-sub-items';
 
@@ -20,32 +18,44 @@ const ListSidebarApps: React.FC<IListSidebarAppsProps> = props => {
 
   const borderStyle = hasBorderTop ? 'border-t-1 border-grey8' : '';
 
+  const [appsWithSubroutes, otherApps]: IMenuItem[][] = React.useMemo(() => {
+    return list.reduce(
+      (acc, app) => {
+        if (app.subRoutes.length > 0) {
+          acc[0].push(app);
+        } else {
+          acc[1].push(app);
+        }
+        return acc;
+      },
+      [[], []],
+    );
+  }, [list]);
+
   return (
-    <div className={tw(`flex flex-col py-2 ${borderStyle}`)}>
-      {list?.map((app, idx) => (
-        <React.Fragment key={app.label + idx}>
-          {app.subRoutes.length > 0 ? (
-            <Accordion
-              customStyle="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
-              titleNode={<MenuItemLabel menuItem={app} isActive={false} />}
-              contentNode={
-                <MenuSubItems
-                  menuItem={app}
-                  activeOption={activeOption}
-                  onOptionClick={onOptionClick}
-                />
-              }
+    <Box customStyle={`flex flex-col py-2 ${borderStyle}`}>
+      {appsWithSubroutes.map((app, idx) => (
+        <Accordion
+          key={app.label + idx}
+          customStyle="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
+          titleNode={<MenuItemLabel menuItem={app} isActive={false} />}
+          contentNode={
+            <MenuSubItems
+              menuItem={app}
+              activeOption={activeOption}
+              onOptionClick={onOptionClick}
             />
-          ) : (
-            <div key={app.label + idx} className={tw('px-4 hover:bg-grey8 dark:hover:bg-grey5')}>
-              <div className={tw('p-2 cursor-pointer')}>
-                <MenuItemLabel menuItem={app} isActive={false} onClickMenuItem={onClickMenuItem} />
-              </div>
-            </div>
-          )}
-        </React.Fragment>
+          }
+        />
       ))}
-    </div>
+      {otherApps.map((app, idx) => (
+        <Box key={app.label + idx} customStyle={'px-4 hover:bg-grey8 dark:hover:bg-grey5'}>
+          <Box customStyle={'p-2 cursor-pointer'}>
+            <MenuItemLabel menuItem={app} isActive={false} onClickMenuItem={onClickMenuItem} />
+          </Box>
+        </Box>
+      ))}
+    </Box>
   );
 };
 

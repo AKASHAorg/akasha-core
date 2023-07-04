@@ -1,11 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  EntityTypes,
-  IEntryPage,
-  ModalNavigationOptions,
-  RootComponentProps,
-} from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { Profile } from '@akashaorg/typings/ui';
 import {
@@ -122,7 +117,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         modalSlotId={props.layoutConfig.modalSlotId}
         logger={logger}
         itemType={EntityTypes.POST}
-        pages={postPages as IEntryPage[]}
+        pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) =>
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`

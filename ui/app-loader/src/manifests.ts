@@ -1,19 +1,6 @@
 import getSDK, { Logger } from '@akashaorg/awf-sdk';
-import { ILoaderConfig } from '@akashaorg/typings/ui';
-import {
-  Observable,
-  mergeMap,
-  tap,
-  forkJoin,
-  from,
-  map,
-  partition,
-  toArray,
-  catchError,
-  switchMap,
-  filter,
-  withLatestFrom,
-} from 'rxjs';
+import type { WorldConfig } from '@akashaorg/typings/ui';
+import { Observable, mergeMap, tap, catchError, switchMap, filter, withLatestFrom } from 'rxjs';
 import { pipelineEvents } from './events';
 import { getStateSlice, LoaderState } from './state';
 
@@ -23,10 +10,7 @@ export const getLatestReleaseInfo = async (integrations: { name: string }[]) => 
   return data.getLatestRelease;
 };
 
-export const getIntegrationsData = async (
-  integrationNames: string[],
-  worldConfig: ILoaderConfig,
-) => {
+export const getIntegrationsData = async (integrationNames: string[], worldConfig: WorldConfig) => {
   const remote = integrationNames.filter(integrationName => {
     return !worldConfig.registryOverrides.find(int => int.name === integrationName);
   });
@@ -42,10 +26,7 @@ export const getIntegrationsData = async (
 /*
  * Get default integrations manifests from registry
  */
-export const getDefaultIntegrationManifests = async (
-  worldConfig: ILoaderConfig,
-  logger: Logger,
-) => {
+export const getDefaultIntegrationManifests = async (worldConfig: WorldConfig) => {
   const defaultIntegrations = [
     worldConfig.layout,
     worldConfig.homepageApp,
@@ -58,7 +39,7 @@ export const getDefaultIntegrationManifests = async (
 };
 
 export const getUserIntegrationManifests = (
-  worldConfig: ILoaderConfig,
+  worldConfig: WorldConfig,
   state$: Observable<LoaderState>,
   logger: Logger,
 ) => {

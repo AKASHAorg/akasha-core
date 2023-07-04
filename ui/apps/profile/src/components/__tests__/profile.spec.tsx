@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ProfilePage from '../pages/profile-page';
+import ProfilePage from '../pages/profile-info-page';
 import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 import { renderWithAllProviders, act, screen, genAppProps, genUser } from '@akashaorg/af-testing';

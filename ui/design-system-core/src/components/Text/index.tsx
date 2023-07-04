@@ -36,6 +36,7 @@ export type TextProps = {
   lineClamp?: number;
   weight?: Weight;
   ref?: React.Ref<HTMLElement>;
+  selectable?: boolean;
 };
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
@@ -69,14 +70,16 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   weight,
   children,
   ref,
+  selectable = true,
 }) => {
   const tag = as ?? getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
   const colorStyle = getColorClasses(color, 'text');
   const truncateStyle = truncate ? 'truncate' : '';
-  const wordBreakStyle = breakWord ? 'break-all' : '';
+  const wordBreakStyle = breakWord ? 'break-word' : '';
   const lineClampStyle = lineClamp ? `line-clamp-${lineClamp}` : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
+  const noSelectClass = selectable ? '' : 'select-none';
 
   const baseStyles = VARIANT_TO_CSS_CLASSES_MAPPER[variant];
 
@@ -85,7 +88,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
 
     {
       className: tw(
-        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
+        apply`${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
       ),
       ref,
     },

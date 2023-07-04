@@ -18,7 +18,6 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 import TrendingTagCard from './trending-tag-card';
-import TrendingProfileCard from './trending-profile-card';
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
