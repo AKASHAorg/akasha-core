@@ -69,24 +69,42 @@ export const Header: React.FC<HeaderProps> = ({
     setShowCoverDropdown(false);
   });
 
+  const closeActionsDropDown = () => {
+    switch (imageType) {
+      case 'avatar':
+        setShowAvatarActions(false);
+        return;
+      case 'cover-image':
+        setShowCoverDropdown(false);
+        return;
+    }
+  };
+
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
       icon: 'ArrowUpOnSquareIcon',
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
+        closeActionsDropDown();
       },
     },
     {
       label: 'Edit',
       icon: 'PencilIcon',
-      onClick: () => setShowEditImage(true),
+      onClick: () => {
+        setShowEditImage(true);
+        closeActionsDropDown();
+      },
     },
     {
       label: 'Delete',
       icon: 'TrashIcon',
       color: { light: 'errorLight', dark: 'errorDark' },
-      onClick: () => setShowDeleteImage(true),
+      onClick: () => {
+        setShowDeleteImage(true);
+        closeActionsDropDown();
+      },
     },
   ];
 
