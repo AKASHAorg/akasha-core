@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { useTagSearch } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { CropValue } from '@akashaorg/design-system/lib/components/ImageCropper';
+import { CropValue } from '@akashaorg/design-system-core/lib/components/ImageCropper';
+import getCroppedImage from '@akashaorg/design-system-core/lib/utils/get-cropped-image';
 
 import ArticleCardSettings, {
   CardFormValues,
@@ -13,8 +13,6 @@ import ArticleCardSettings, {
 } from '../components/article-card-settings';
 
 import { licences } from '../utils/licenses';
-
-const { getCroppedImage } = DS;
 
 const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
   // state values to handle image cropping

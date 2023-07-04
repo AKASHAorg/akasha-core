@@ -10,8 +10,15 @@ import InputTags from './input-tags';
 
 import { License } from '../utils/licenses';
 import { StyledImageInput, StyledTextArea, StyledTextInput } from './styled';
+// import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+// import ImageCropper from '@akashaorg/design-system-core/lib/components/ImageCropper';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+// import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-const { Box, Button, EditorMeter, Icon, Image, ImageCropper, MainAreaCardBox, Select, Text } = DS;
+const { Image, ImageCropper, MainAreaCardBox, Select, Box, Text } = DS;
 
 export type CardFormValues = {
   coverImage: IImageSrc | null;
@@ -148,7 +155,9 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
   return (
     <MainAreaCardBox>
       <Box direction="row" pad="medium" fill="horizontal">
-        <Icon type="chevronLeft" style={{ cursor: 'pointer' }} onClick={handleClickIcon} />
+        <Button plain={true} onClick={handleClickIcon}>
+          <Icon type="ChevronLeftIcon" customStyle="cursor-pointer" />
+        </Button>
         <Text size="xlarge" weight="bold">
           {titleLabel}
         </Text>
@@ -166,24 +175,17 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
           <Text size="large" color="secondaryText">
             {coverImageSubtitleLabel}
           </Text>
-          <Button
-            slimBorder={true}
-            size="large"
-            height={2.5}
-            label={
-              <>
-                <StyledImageInput
-                  onChange={onCoverImageUpload}
-                  type="file"
-                  accept="image/*"
-                  ref={coverImageInputRef}
-                />
-                <Text size="large">{uploadLabel}</Text>
-              </>
-            }
-            margin={{ left: 'large' }}
-            onClick={onUploadClick}
-          />
+          <Button size="lg" customStyle="ml-16" onClick={onUploadClick}>
+            <>
+              <StyledImageInput
+                onChange={onCoverImageUpload}
+                type="file"
+                accept="image/*"
+                ref={coverImageInputRef}
+              />
+              <Text size="lg">{uploadLabel}</Text>
+            </>
+          </Button>
         </Box>
         {!showCropper && (
           <Box
@@ -253,7 +255,7 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
             placeholder={descriptiveTextPlaceholder}
           />
           <Box width="fit-content" alignSelf="end" margin={{ top: 'xsmall' }}>
-            <EditorMeter counter={charCount} maxValue={MAX_CHARS} />
+            <EditorMeter value={charCount} max={MAX_CHARS} />
           </Box>
         </InputWrapper>
       </SectionWrapper>
@@ -320,17 +322,17 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
       </SectionWrapper>
       <Box direction="row" fill="horizontal" justify="end" align="center" pad="medium" gap="small">
         <Button
-          slimBorder={true}
-          size="large"
-          height={2.5}
+          // slimBorder={true}
+          size="lg"
+          // height={2.5}
           label={saveDraftLabel}
           onClick={onClickSaveDraft}
         />
         <Button
-          slimBorder={true}
-          size="large"
-          height={2.5}
-          primary={true}
+          // slimBorder={true}
+          size="lg"
+          // height={2.5}
+          variant="primary"
           label={confirmLabel}
           onClick={onClickConfirm}
         />

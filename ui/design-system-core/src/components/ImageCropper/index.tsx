@@ -10,6 +10,8 @@ import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 
 import getCroppedImage from '../../utils/get-cropped-image';
 
+export type CropValue = { x: number; y: number };
+
 export type ImageCropperProps = Partial<Omit<CropperProps, 'image'>> & {
   image: string | ProfileImageVersions;
   dragToRepositionLabel: string;
