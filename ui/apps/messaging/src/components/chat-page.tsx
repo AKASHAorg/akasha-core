@@ -88,6 +88,7 @@ const ChatPage = (props: ChatPageProps) => {
         }
         return null;
       },
+      enabled: !!profileId,
     },
   );
 
