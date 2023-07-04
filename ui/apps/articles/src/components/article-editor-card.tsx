@@ -66,7 +66,12 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
             )}
             <Text
               variant="h6"
-              color={articleCollaborators.length > 0 && 'secondaryLight dark:secondaryDark'}
+              color={
+                articleCollaborators.length > 0 && {
+                  light: 'secondaryLight',
+                  dark: 'secondaryDark',
+                }
+              }
             >
               {articleCollaborators.length > 0 ? collaboratingLabel : inviteCollaboratorsLabel}
             </Text>
