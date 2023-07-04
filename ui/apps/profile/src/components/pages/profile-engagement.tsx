@@ -30,6 +30,7 @@ const ProfileEngagementsPage: React.FC<
     },
     {
       select: response => response.node,
+      enabled: !!profileId,
     },
   );
 

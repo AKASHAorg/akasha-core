@@ -22,6 +22,7 @@ const Connect: React.FC<RootComponentProps> = props => {
       select: resp => {
         return resp.node;
       },
+      enabled: !!loginQuery.data?.id,
     },
   );
 

@@ -40,6 +40,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     },
     {
       select: response => response.node,
+      enabled: !!profileId,
     },
   );
   const followingListReq = useGetFollowingListByDidQuery(
