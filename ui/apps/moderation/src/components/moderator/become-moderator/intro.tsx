@@ -1,26 +1,31 @@
 import React from 'react';
-import { tw } from '@twind/core';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
 import {
   PageButtonsProps,
-  SubtitleRendererProps,
   PageButtons,
-  SubtitleRenderer,
-} from '../../common';
+} from '@akashaorg/design-system-components/lib/components/PageButtons';
+
+import { SubtitleRendererProps, SubtitleRenderer } from '../../common';
 
 export type BMIntroProps = PageButtonsProps &
   SubtitleRendererProps & {
     assetName?: string;
     publicImgPath?: string;
+    assetExtension?: string;
     titleLabel: string;
   };
 
 const BMIntro: React.FC<BMIntroProps> = props => {
-  const { assetName = 'moderation', publicImgPath = '/images', titleLabel } = props;
+  const {
+    assetName = 'moderation',
+    assetExtension = 'webp',
+    publicImgPath = '/images',
+    titleLabel,
+  } = props;
 
   return (
     <BasicCardBox pad="p-4">
@@ -30,12 +35,9 @@ const BMIntro: React.FC<BMIntroProps> = props => {
         </Text>
 
         <Box customStyle="w-40 h-40 my-2 mx-auto">
-          <img
-            className={tw('object-contain')}
-            aria-label={assetName}
-            src={`${publicImgPath}/${assetName}.webp`}
-            alt={assetName}
-            data-testid={`${assetName}-image`}
+          <Image
+            src={`${publicImgPath}/${assetName}.${assetExtension}`}
+            dataTestId={`${assetName}-image`}
           />
         </Box>
 

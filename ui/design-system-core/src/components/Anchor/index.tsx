@@ -1,18 +1,18 @@
 import React, { PropsWithChildren } from 'react';
 import { apply, tw } from '@twind/core';
 
-export interface IAnchorProps {
+export type AnchorProps = {
   customStyle?: string;
   dataTestId?: string;
-}
+};
 
 const Anchor: React.FC<
   PropsWithChildren<
-    IAnchorProps &
+    AnchorProps &
       React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
   >
 > = props => {
-  const { href, customStyle = '', target = '_blank', dataTestId, children } = props;
+  const { href, customStyle = '', target = '_blank', dataTestId, children, ...rest } = props;
 
   // if onClick is defined, use cursor pointer, unless otherwise
   const baseStyle =
@@ -27,6 +27,7 @@ const Anchor: React.FC<
       target={target}
       rel="noreferrer noopener"
       data-testid={dataTestId}
+      {...rest}
     >
       {children}
     </a>
