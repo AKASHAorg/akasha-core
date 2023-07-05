@@ -9,7 +9,7 @@ import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/Pr
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
-export type TrendingProfilesProps = {
+export type LatestProfilesProps = {
   // data
   profiles: Profile[];
   followedProfiles?: string[];
@@ -27,11 +27,7 @@ export type TrendingProfilesProps = {
   handleUnfollowProfile: (ethAddress: string) => void;
 };
 
-const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none';
-
-const BaseItemStyles = 'flex justify-between items-center space-y-2';
-
-export const TrendingProfiles: React.FC<TrendingProfilesProps> = props => {
+export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
   const {
     onClickProfile,
     handleFollowProfile,
@@ -45,6 +41,10 @@ export const TrendingProfiles: React.FC<TrendingProfilesProps> = props => {
     followedProfiles,
     isViewer,
   } = props;
+
+  const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none';
+
+  const BaseItemStyles = 'flex justify-between items-center space-y-2';
 
   return (
     <BasicCardBox pad="p-4">
@@ -86,7 +86,7 @@ export const TrendingProfiles: React.FC<TrendingProfilesProps> = props => {
                   <ProfileAvatarButton
                     profileId={profile.did.id}
                     label={profile.name}
-                    info={profile.did.id.substring(0, 40)}
+                    info={profile.did.id}
                     size="md"
                     avatarImage={profile.avatar}
                     onClick={() => onClickProfile(profile.did.id)}
