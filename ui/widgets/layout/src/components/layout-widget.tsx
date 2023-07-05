@@ -6,6 +6,8 @@ import ScrollRestorer from './scroll-restorer';
 import { apply, tw } from '@twind/core';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
+import { useClickAway } from 'react-use';
+
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -14,13 +16,22 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
-  const sidebarWrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
+  const [needSidebarToggling, setNeedSidebarToggling] = React.useState(
+    window.matchMedia('(max-width: 1440px)').matches,
+  );
+
+  React.useEffect(() => {
+    setNeedSidebarToggling(window.matchMedia('(max-width: 1440px)').matches);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.matchMedia('(max-width: 1440px)').matches]);
+
   // sidebar is open by default on larger screens >=1440px
   const [showSidebar, setShowSidebar] = React.useState(
-    window.matchMedia('(min-width: 1440px)').matches ? true : false,
+    window.matchMedia('(min-width: 1440px)').matches,
   );
+
   const [showWidgets, setshowWidgets] = React.useState(
-    window.matchMedia('(min-width: 769px)').matches ? true : false,
+    window.matchMedia('(min-width: 769px)').matches,
   );
 
   const maintenanceReq = usePlaformHealthCheck();
@@ -71,19 +82,13 @@ const Layout: React.FC<RootComponentProps> = props => {
     [activeModal],
   );
 
-  const handleClickOutside = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (
-      window.matchMedia('(max-width: 1439px)').matches &&
-      showSidebar &&
-      sidebarWrapperRef.current &&
-      !sidebarWrapperRef.current.contains(e.target as Node)
-    ) {
-      uiEvents.current.next({
-        event: EventTypes.HideSidebar,
-      });
-    }
-  };
+  const wrapperRef = React.useRef(null);
+
+  useClickAway(wrapperRef, () => {
+    uiEvents.current.next({
+      event: EventTypes.HideSidebar,
+    });
+  });
 
   React.useEffect(() => {
     const eventsSub = uiEvents.current.subscribe({
@@ -144,7 +149,6 @@ const Layout: React.FC<RootComponentProps> = props => {
     <div className={tw('bg(white dark:black) min-h-screen')}>
       <div
         className={tw('h-full w-11/12 m-auto lg:w-full min-h-screen')}
-        onClick={handleClickOutside}
         onKeyDown={() => {
           void 0;
         }}
@@ -154,13 +158,26 @@ const Layout: React.FC<RootComponentProps> = props => {
           <ScrollRestorer />
           <div className={tw(mobileLayoverStyle)}>
             <div className={tw(sidebarSlotStyle)}>
-              <div className={tw('pt-0 xl:pt-4 h-screen')} ref={sidebarWrapperRef}>
-                <Extension
-                  fullHeight
-                  name={props.layoutConfig.sidebarSlotId}
-                  uiEvents={props.uiEvents}
-                />
-              </div>
+              {needSidebarToggling ? (
+                <div className={tw('pt-0 xl:pt-4 h-screen')} ref={wrapperRef}>
+                  <Extension
+                    fullHeight
+                    name={props.layoutConfig.sidebarSlotId}
+                    uiEvents={props.uiEvents}
+                  />
+                </div>
+              ) : (
+                <div
+                  className={tw('pt-0 xl:pt-4 h-screen')}
+                  /* sidebarWrapperRef */
+                >
+                  <Extension
+                    fullHeight
+                    name={props.layoutConfig.sidebarSlotId}
+                    uiEvents={props.uiEvents}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div
@@ -236,7 +253,7 @@ const Layout: React.FC<RootComponentProps> = props => {
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </div>
           </div>
-          <div className={tw('sticky top-0 h-screen')}>
+          <div className={tw('sticky top-0')}>
             <div className={tw(`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`)}>
               <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
               <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />

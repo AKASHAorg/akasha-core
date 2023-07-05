@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -109,7 +110,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   };
 
   return (
-    <>
+    <Card direction="row" elevation={'1'} radius={16} padding={16}>
       <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
       {listsReq.status === 'error' && (
         <ErrorLoader
@@ -192,7 +193,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
           {t('Are you sure you want to remove all saved content from your list?')}
         </Text>
       </Modal>
-    </>
+    </Card>
   );
 };
 

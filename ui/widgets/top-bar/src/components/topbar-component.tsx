@@ -55,7 +55,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // show or hide sidebar
+  // show or hide sidebar and widgets
   React.useEffect(() => {
     const eventsSub = uiEventsRef.current.subscribe({
       next: (eventInfo: UIEventData) => {

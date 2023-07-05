@@ -66,23 +66,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
   return (
     <BasicCardBox customStyle={customStyle}>
       <Box customStyle="flex space-x-2">
-        {!sidebarVisible ? (
-          <Button
-            iconOnly={true}
-            icon="ArrowRightOnRectangleIcon"
-            onClick={onSidebarToggle}
-            greyBg={true}
-            variant="primary"
-          />
-        ) : (
-          <Button
-            iconOnly={true}
-            icon="ArrowLeftOnRectangleIcon"
-            onClick={onSidebarToggle}
-            greyBg={true}
-            variant="primary"
-          />
-        )}
+        <Button
+          iconOnly={true}
+          icon={sidebarVisible ? 'ArrowLeftOnRectangleIcon' : 'ArrowRightOnRectangleIcon'}
+          onClick={onSidebarToggle}
+          greyBg={true}
+          variant="primary"
+        />
         <Button
           iconOnly={true}
           greyBg={true}
@@ -93,7 +83,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
       </Box>
       <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
         <Stack align="center" justify="center" direction="column">
-          <Icon type="akasha" customStyle="w-18 h-8" />
+          <Icon type="akasha" customStyle="w-18 h-7" />
           <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
             Akasha World
           </Text>
