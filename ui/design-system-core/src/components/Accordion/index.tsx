@@ -31,29 +31,31 @@ const Accordion: React.FC<IAccordionProps> = props => {
 
   const headerUi = useMemo(
     () => (
-      <Button plain={true} onClick={handleToggle} customStyle="w-full">
-        <Stack align="center" justify="between" customStyle={customStyle}>
-          {titleNode}
-          <Icon
-            accentColor={true}
-            customStyle="h-4, w-4 secondaryDark"
-            type={isToggled ? 'ChevronUpIcon' : 'ChevronDownIcon'}
-          />
-        </Stack>
-      </Button>
+      <Stack align="center" justify="between" customStyle={customStyle}>
+        {titleNode}
+        <Icon
+          accentColor={true}
+          customStyle="h-4, w-4 secondaryDark"
+          type={isToggled ? 'ChevronUpIcon' : 'ChevronDownIcon'}
+        />
+      </Stack>
     ),
-    [customStyle, handleToggle, isToggled, titleNode],
+    [customStyle, isToggled, titleNode],
   );
 
   return (
     <>
       {headerDivider ? (
-        <Stack direction="column" spacing="gap-y-4">
-          {headerUi}
-          <Divider />
-        </Stack>
+        <Button plain={true} onClick={handleToggle} customStyle="w-full">
+          <Stack direction="column" spacing="gap-y-4">
+            {headerUi}
+            <Divider />
+          </Stack>
+        </Button>
       ) : (
-        <>{headerUi}</>
+        <Button plain={true} onClick={handleToggle} customStyle="w-full">
+          {headerUi}
+        </Button>
       )}
 
       {isToggled && <Box customStyle={`${contentStyle}`}>{contentNode}</Box>}
