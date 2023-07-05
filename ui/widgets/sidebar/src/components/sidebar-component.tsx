@@ -13,6 +13,12 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import { useGetLogin, useLogout } from '@akashaorg/ui-awf-hooks';
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
+  const [isMobile, setIsMobile] = React.useState(window.matchMedia('(max-width: 1439px)').matches);
+
+  React.useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 1439px)').matches);
+  }, [window.matchMedia('(max-width: 1439px)').matches]);
+
   const {
     uiEvents,
     plugins,
@@ -77,6 +83,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => routes.explore,
     });
+
+    if (isMobile) {
+      handleSidebarClose();
+    }
   };
   const handleSidebarClose = () => {
     // emit HideSidebar event to trigger corresponding action in associated widgets
@@ -89,11 +99,15 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: () => '/',
     });
+
+    if (isMobile) {
+      handleSidebarClose();
+    }
   };
   const handleLogoutClick = () => {
     logoutQuery.mutate();
   };
-  const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => {
+  const handleAppIconClick = (menuItem: IMenuItem) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       setActiveOption(null);
       handleNavigation(menuItem.name, menuItem.route);
@@ -103,11 +117,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
 
-  const handleOptionClick = (
-    menuItem: IMenuItem,
-    subrouteMenuItem: IMenuItem,
-    isMobile?: boolean,
-  ) => {
+  const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => {
     setActiveOption(subrouteMenuItem);
     handleNavigation(menuItem.name, subrouteMenuItem.route);
     if (isMobile) {
@@ -150,18 +160,12 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
             subtitleUi
           )}
         </Box>
-        <Box customStyle="w-fit h-fit ml-6 self-center">
+        <Box customStyle="w-fit h-fit ml-6 self-start">
           {loginQuery.data?.id && (
             <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
           )}
           {!loginQuery.data?.id && loginQuery.isStale && (
-            <Button
-              icon="BoltIcon"
-              size="xs"
-              variant="primary"
-              iconOnly={true}
-              onClick={handleLoginClick}
-            />
+            <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
           )}
           {loginQuery.isLoading && !loginQuery.isStale && <Spinner size="sm" />}
         </Box>
@@ -194,8 +198,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         <Text variant="footnotes2" customStyle="text-grey5">
           {t('Add magic to your world by installing cool apps developed by the community')}
         </Text>
-        <Box customStyle="w-fit h-fit mt-6">
-          <Button onClick={handleClickExplore} label={t('Check them out!')} variant="primary" />
+        <Box customStyle="w-fit h-fit mt-6 self-end">
+          <Button onClick={handleClickExplore} label={t('Check them out!')} variant="secondary" />
         </Box>
       </Box>
       {socialLinks.length > 0 && (
