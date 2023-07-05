@@ -84,7 +84,7 @@ export function OriginalItem({
     }
   }
 
-  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
+  const handleAvatarClick = (ev, pubKey: string) => {
     ev.preventDefault();
     navigateTo?.({
       appName: '@akashaorg/app-profile',
@@ -153,9 +153,7 @@ export function OriginalItem({
         <EntryBox
           isRemoved={entryData?.isRemoved}
           entryData={entryData}
-          onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-            handleAvatarClick(ev, entryData?.author?.did?.id)
-          }
+          onClickAvatar={ev => handleAvatarClick(ev, entryData?.author?.did?.id)}
           flagAsLabel={t('Report Post')}
           locale={locale}
           showMore={true}

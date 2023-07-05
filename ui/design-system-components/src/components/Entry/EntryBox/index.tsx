@@ -1,15 +1,7 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-import CardHeaderMenu from './card-header-menu';
-import CardActions from './card-actions';
+import isEqual from 'lodash.isequal';
 
-import EntryCardHidden from '../EntryCardHidden';
-
-import EmbedBox from '../../EmbedBox';
-import ReadOnlyEditor from '../../ReadOnlyEditor';
-import LinkPreview from '../../LinkPreview';
-
-import { formatDate, formatRelativeTime, ILocale } from '../../../utils/time';
 import {
   IEntryData,
   EntityTypes,
@@ -17,17 +9,29 @@ import {
   IContentClickDetails,
 } from '@akashaorg/typings/ui';
 
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+
+import CardHeaderMenu from './card-header-menu';
+import CardActions from './card-actions';
+
+import EntryCardError from '../EntryCardError';
+import EntryCardHidden from '../EntryCardHidden';
 import EntryCardRemoved from '../EntryCardRemoved';
+
+import { editorDefaultValue } from '../../Editor/initialValue';
+import EmbedBox from '../../EmbedBox';
 import { EntryImageGallery } from '../../ImageGallery/entry-image-gallery';
 import { ImageObject } from '../../ImageGallery/image-grid-item';
 import MultipleImageOverlay from '../../ImageOverlay/multiple-image-overlay';
-import { editorDefaultValue } from '../../Editor/initialValue';
-import isEqual from 'lodash.isequal';
-import EntryCardError from '../EntryCardError';
+import LinkPreview from '../../LinkPreview';
+import ReadOnlyEditor from '../../ReadOnlyEditor';
 
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import { formatDate, formatRelativeTime, ILocale } from '../../../utils/time';
 
 export interface IEntryBoxProps {
   // data
@@ -49,7 +53,7 @@ export interface IEntryBoxProps {
   profileAnchorLink?: string;
   repliesAnchorLink?: string;
   // handlers
-  onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
+  onClickAvatar?: React.MouseEventHandler<HTMLButtonElement>;
   onRepost?: (withComment: boolean, itemId: string) => void;
   onEntryFlag?: (itemId?: string, itemType?: string) => void;
   // redirects
@@ -107,6 +111,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     ctaLabel,
     handleFlipCard,
     isModerated,
+    isRemoved,
     scrollHiddenContent,
     onEntryRemove,
     removeEntryLabel,
@@ -118,6 +123,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     hideRepost,
     error,
     onRetry,
+    headerMenuExt,
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
@@ -136,7 +142,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const handleEntryRemove = () => {
     if (onEntryRemove) {
-      onEntryRemove(props.entryData.entryId);
+      onEntryRemove(entryData.entryId);
     }
   };
 
@@ -165,18 +171,18 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   const showLinkPreview = React.useMemo(
-    () => !props.isRemoved && entryData?.linkPreview,
-    [entryData?.linkPreview, props.isRemoved],
+    () => !isRemoved && entryData?.linkPreview,
+    [entryData?.linkPreview, isRemoved],
   );
 
   const showQuote = React.useMemo(
     () =>
-      !props.isRemoved &&
+      !isRemoved &&
       entryData.quote &&
       !entryData.quote.isRemoved &&
       !entryData.quote.delisted &&
       !entryData.quote.reported,
-    [entryData.quote, props.isRemoved],
+    [entryData.quote, isRemoved],
   );
 
   const showRemovedQuote = React.useMemo(
@@ -185,14 +191,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   );
 
   const showReportedQuote = React.useMemo(
-    () =>
-      !props.isRemoved && entryData.quote && !entryData.quote.delisted && entryData.quote.reported,
-    [entryData.quote, props.isRemoved],
+    () => !isRemoved && entryData.quote && !entryData.quote.delisted && entryData.quote.reported,
+    [entryData.quote, isRemoved],
   );
 
   const showDelistedQuote = React.useMemo(
-    () => !props.isRemoved && entryData.quote && entryData.quote.delisted,
-    [entryData.quote, props.isRemoved],
+    () => !isRemoved && entryData.quote && entryData.quote.delisted,
+    [entryData.quote, isRemoved],
   );
 
   const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
@@ -212,10 +217,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <>
-      <div className={tw(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
-        <div className={tw(`flex flex-row justify-between p-4 shrink-0`)}>
-          <a
-            className={tw(`flex min-w-0 no-underline`)}
+      <Box customStyle={`${error && 'bg-[#FFFDF1]'}`} style={style}>
+        <Box customStyle="flex flex-row justify-between p-4 shrink-0">
+          <Anchor
+            customStyle="flex min-w-0 no-underline"
             onClick={(e: React.SyntheticEvent) => {
               e.preventDefault();
               return false;
@@ -229,7 +234,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               label={entryData.author?.name}
               info={entryData.author?.id && `@${entryData.author?.id}`}
               avatarImage={entryData.author?.avatar}
-              onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
+              onClick={ev => {
                 if (disableActions) {
                   return;
                 }
@@ -239,14 +244,14 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               }}
               ref={profileRef}
             />
-          </a>
+          </Anchor>
 
-          <div className={tw(`flex flex-row gap-2 items-center shrink-0`)}>
+          <Box customStyle={tw(`flex flex-row gap-2 items-center shrink-0`)}>
             {entryData.time && !hidePublishTime && (
               <Tooltip placement={'top'} content={formatDate(entryData.time, locale)}>
-                <p className={tw(`flex shrink-0 text(grey4 dark:grey7)`)}>
+                <Text customStyle={tw(`flex shrink-0 text(grey4 dark:grey7)`)}>
                   {formatRelativeTime(entryData.time, locale)}
-                </p>
+                </Text>
               </Tooltip>
             )}
             {!!entryData?.updatedAt && (
@@ -281,22 +286,22 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                       ]
                     : []),
                 ]}
-                headerMenuExt={props.headerMenuExt}
+                headerMenuExt={headerMenuExt}
               />
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
-        {props.isRemoved && (
+        {isRemoved && (
           <EntryCardRemoved
             isAuthor={entryData.author?.did?.isViewer}
             removedByAuthorLabel={removedByAuthorLabel}
             removedByMeLabel={removedByMeLabel}
           />
         )}
-        {!props.isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
-          <div
-            className={tw(
+        {!isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
+          <Box
+            customStyle={tw(
               `px-4 max-h-[50rem] ${scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'} ${
                 contentClickable ? 'cursor-pointer' : 'cursor-default'
               }`,
@@ -310,20 +315,20 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               handleTagClick={onTagClick}
               handleLinkClick={handleLinkClick}
             />
-          </div>
+          </Box>
         )}
         {showLinkPreview && (
-          <div className={tw(`flex p-4`)}>
+          <Box customStyle="flex p-4">
             <LinkPreview
               linkPreviewData={entryData.linkPreview}
               handleLinkClick={handleLinkClick}
             />
-          </div>
+          </Box>
         )}
         {entryData.images && (
-          <div className={tw(`flex p-4`)}>
+          <Box customStyle="flex p-4">
             <EntryImageGallery images={entryData.images} handleClickImage={handleClickImage} />
-          </div>
+          </Box>
         )}
         {imageOverlayOpen && (
           <MultipleImageOverlay
@@ -333,9 +338,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {showQuote && (
-          <div className={tw(`flex p-4`)} onClick={() => handleContentClick(entryData.quote)}>
+          <Box customStyle="flex p-4" onClick={() => handleContentClick(entryData.quote)}>
             <EmbedBox embedEntryData={entryData.quote} />
-          </div>
+          </Box>
         )}
         {showRemovedQuote && (
           <EntryCardRemoved
@@ -345,7 +350,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {showReportedQuote && (
-          <div className={tw(`flex p-4`)} onClick={() => null}>
+          <Box customStyle="flex p-4" onClick={() => null}>
             <EntryCardHidden
               reason={entryData.reason}
               headerTextLabel={headerTextLabel}
@@ -353,12 +358,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ctaLabel={ctaLabel}
               handleFlipCard={handleFlipCard}
             />
-          </div>
+          </Box>
         )}
         {showDelistedQuote && (
-          <div className={tw(`flex p-4`)} onClick={() => null}>
+          <Box customStyle="flex p-4" onClick={() => null}>
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
-          </div>
+          </Box>
         )}
         {!hideActionButtons && (
           <CardActions
@@ -374,7 +379,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {error && <EntryCardError error={error} onRetry={onRetry} />}
-      </div>
+      </Box>
     </>
   );
 };
