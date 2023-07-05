@@ -1,10 +1,12 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
 
-import AvatarImage from './AvatarImage';
+import { Profile } from '@akashaorg/typings/ui';
+
+import Box from '../Box';
+
+import AvatarImage from './avatar-image';
 
 import { getAvatarFromSeed } from '../../utils/get-avatar-from-seed';
-import { Profile } from '@akashaorg/typings/ui';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
@@ -12,7 +14,7 @@ export type AvatarBorderSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 export type AvatarBorderColor = 'white' | 'darkerBlue' | 'accent';
 
-export interface IAvatarProps {
+export type AvatarProps = {
   profileId?: string | null;
   alt?: string;
   publicImgPath?: string;
@@ -26,7 +28,7 @@ export interface IAvatarProps {
   isClickable?: boolean;
   customStyle?: string;
   onClick?: () => void;
-}
+};
 
 export const avatarSizesMap = {
   xs: 'w-6 h-6',
@@ -52,7 +54,7 @@ export const avatarBorderColorsMap = {
   accent: 'secondaryDark',
 };
 
-const Avatar: React.FC<IAvatarProps> = props => {
+const Avatar: React.FC<AvatarProps> = props => {
   const {
     profileId = '0x0000000000000000000000000000000',
     alt,
@@ -76,7 +78,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
     avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
   }
 
-  const containerStyle = apply`box-border cursor-${
+  const containerStyle = `box-border cursor-${
     isClickable ? 'pointer' : 'default'
   } select-none relative overflow-hidden ${avatarSizesMap[size]} rounded-full bg-${
     backgroundColor ? backgroundColor : 'white'
@@ -84,16 +86,16 @@ const Avatar: React.FC<IAvatarProps> = props => {
     borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'
   } ${customStyle}`;
 
-  const activeOverlayClass = apply(
-    'bg-grey6 dark:bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full',
-  );
+  const activeOverlayClass =
+    'bg-grey6 dark:bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';
 
   return (
-    <div className={tw(containerStyle)} onClick={onClick}>
-      {avatar && (
+    <Box customStyle={containerStyle} onClick={onClick}>
+      {/* updating this logic, so that avatarImage loads with fallbackUrl even when avatar is null */}
+      {(avatar || avatarImageFallback) && (
         <React.Suspense fallback={<></>}>
           <AvatarImage
-            url={avatar.default?.src}
+            url={avatar?.default?.src}
             alt={alt}
             fallbackUrl={avatarImageFallback}
             faded={faded}
@@ -101,8 +103,8 @@ const Avatar: React.FC<IAvatarProps> = props => {
         </React.Suspense>
       )}
 
-      {active && <div className={tw(activeOverlayClass)}></div>}
-    </div>
+      {active && <Box customStyle={activeOverlayClass} />}
+    </Box>
   );
 };
 

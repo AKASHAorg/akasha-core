@@ -1,21 +1,21 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
-
 import { IntegrationTypes } from '@akashaorg/typings/ui';
 
-import AvatarImage from '../Avatar/AvatarImage';
 import {
   avatarBorderColorsMap,
   avatarBorderSizesMap,
   avatarSizesMap,
-  IAvatarProps,
+  AvatarProps,
 } from '../Avatar';
+import Box from '../Box';
 
-export interface IAppAvatarProps extends IAvatarProps {
+import AvatarImage from '../Avatar/avatar-image';
+
+export type AppAvatarProps = AvatarProps & {
   appType: IntegrationTypes;
-}
+};
 
-const AppAvatar: React.FC<IAppAvatarProps> = props => {
+const AppAvatar: React.FC<AppAvatarProps> = props => {
   const {
     appType,
     alt,
@@ -51,7 +51,7 @@ const AppAvatar: React.FC<IAppAvatarProps> = props => {
     }.webp`;
   }
 
-  const className = apply`box-border cursor-${
+  const className = `box-border cursor-${
     isClickable ? 'pointer' : 'default'
   } select-none relative overflow-hidden w-${avatarSizesMap[size]} h-${
     avatarSizesMap[size]
@@ -59,21 +59,21 @@ const AppAvatar: React.FC<IAppAvatarProps> = props => {
     border ? avatarBorderSizesMap[border] : '0'
   } border-${borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'}`;
 
-  const activeOverlayClass = apply('bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full');
+  const activeOverlayClass = 'bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';
 
   return (
-    <div className={tw(className)} onClick={onClick}>
+    <Box customStyle={className} onClick={onClick}>
       <React.Suspense fallback={<></>}>
         <AvatarImage
-          url={avatar?.default.src}
+          url={avatar?.default?.src}
           alt={alt}
           fallbackUrl={avatarImageFallback}
           faded={faded}
         />
       </React.Suspense>
 
-      {active && <div className={tw(activeOverlayClass)}></div>}
-    </div>
+      {active && <div className={activeOverlayClass}></div>}
+    </Box>
   );
 };
 
