@@ -4,20 +4,21 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import {
   useTrendingTags,
-  useTrendingProfiles,
+  // useTrendingProfiles,
   useTagSubscriptions,
   useToggleTagSubscription,
-  useIsFollowingMultiple,
-  useFollow,
-  useUnfollow,
+  // useIsFollowingMultiple,
+  // useFollow,
+  // useUnfollow,
   useGetLogin,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
+import { useGetProfilesQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
-import TrendingTagCard from './trending-tag-card';
+import { LatestProfiles, TrendingTags } from './cards';
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -28,9 +29,13 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   const trendingTagsReq = useTrendingTags();
   const trendingTags = trendingTagsReq.data || [];
-  // @TODO replace with new hooks
-  // const trendingProfilesReq = useTrendingProfiles();
-  // const trendingProfiles = trendingProfilesReq.data || [];
+
+  const latestProfilesReq = useGetProfilesQuery(
+    { last: 4 },
+    { select: result => result?.profileIndex?.edges.map(profile => profile.node) },
+  );
+
+  const trendingProfiles = latestProfilesReq.data || [];
 
   // const followPubKeyArr = trendingProfiles
   //   .slice(0, 4)
@@ -86,33 +91,37 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     });
   };
 
-  // const handleFollowProfile = (pubKey: string) => {
-  //   if (!loginQuery.data?.ethAddress) {
-  //     showLoginModal();
-  //     return;
-  //   }
-  //   analyticsActions.trackEvent({
-  //     category: AnalyticsCategories.TRENDING_WIDGET,
-  //     action: 'Trending People Followed',
-  //   });
-  //   followReq.mutate(pubKey);
-  // };
+  const handleFollowProfile = (did: string) => {
+    if (!loginQuery.data?.ethAddress) {
+      showLoginModal();
+      return;
+    }
 
-  // const handleUnfollowProfile = (pubKey: string) => {
-  //   if (!loginQuery.data?.ethAddress) {
-  //     showLoginModal();
-  //     return;
-  //   }
-  //   analyticsActions.trackEvent({
-  //     category: AnalyticsCategories.TRENDING_WIDGET,
-  //     action: 'Trending People Unfollowed',
-  //   });
-  //   unfollowReq.mutate(pubKey);
-  // };
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending People Followed',
+    });
+
+    // followReq.mutate(did);
+  };
+
+  const handleUnfollowProfile = (did: string) => {
+    if (!loginQuery.data?.ethAddress) {
+      showLoginModal();
+      return;
+    }
+
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending People Unfollowed',
+    });
+
+    // unfollowReq.mutate(did);
+  };
 
   return (
     <Box customStyle="space-y-4">
-      {trendingTagsReq.isError && (
+      {(trendingTagsReq.isError || latestProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
           title={t('Oops, this widget has an error')}
@@ -123,35 +132,38 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
           }
         />
       )}
-      <TrendingTagCard
-        titleLabel={t('Trending Topics')}
-        subscribeLabel={t('Subscribe')}
-        unsubscribeLabel={t('Unsubscribe')}
-        tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
-        noTagsLabel={t('No tags found!')}
-        isLoadingTags={trendingTagsReq.isFetching}
-        tags={trendingTags}
-        subscribedTags={tagSubscriptions}
-        onClickTag={handleTagClick}
-        handleSubscribeTag={handleTagSubscribe}
-        handleUnsubscribeTag={handleTagUnSubscribe}
-      />
-      {/* @TODO: update with real data source */}
-      {/* <TrendingProfileCard
-        titleLabel={t('Start Following')}
-        followLabel={t('Follow')}
-        unfollowLabel={t('Unfollow')}
-        followersLabel={t('Followers')}
-        profileAnchorLink={'/@akashaorg/app-profile'}
-        noProfilesLabel={t('No profiles found!')}
-        isLoadingProfiles={trendingProfilesReq.isFetching}
-        profiles={trendingProfiles}
-        followedProfiles={followedProfiles}
-        onClickProfile={handleProfileClick}
-        handleFollowProfile={handleFollowProfile}
-        handleUnfollowProfile={handleUnfollowProfile}
-        loggedEthAddress={loginQuery.data?.ethAddress}
-      /> */}
+
+      {!trendingTagsReq.isError && (
+        <TrendingTags
+          titleLabel={t('Trending Topics')}
+          tagSubtitleLabel={t('mentions')}
+          subscribeLabel={t('Subscribe')}
+          unsubscribeLabel={t('Unsubscribe')}
+          noTagsLabel={t('No tags found!')}
+          isLoadingTags={trendingTagsReq.isFetching}
+          tags={trendingTags}
+          subscribedTags={tagSubscriptions}
+          onClickTag={handleTagClick}
+          handleSubscribeTag={handleTagSubscribe}
+          handleUnsubscribeTag={handleTagUnSubscribe}
+        />
+      )}
+
+      {!latestProfilesReq.isError && (
+        <LatestProfiles
+          titleLabel={t('Latest Profiles')}
+          followLabel={t('Follow')}
+          unfollowLabel={t('Unfollow')}
+          followersLabel={t('Followers')}
+          noProfilesLabel={t('No profiles found!')}
+          isLoadingProfiles={latestProfilesReq.isFetching}
+          profiles={trendingProfiles}
+          followedProfiles={['followedProfiles']}
+          onClickProfile={handleProfileClick}
+          handleFollowProfile={handleFollowProfile}
+          handleUnfollowProfile={handleUnfollowProfile}
+        />
+      )}
     </Box>
   );
 };
