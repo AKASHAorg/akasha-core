@@ -10,6 +10,7 @@ import { checkEntryActive } from './utils/checkEntryActive';
 import {
   getMediaUrl,
   saveMediaFile,
+  getProfileImageVersionsWithMediaUrl,
   uploadMediaToTextile,
   getLinkPreview,
 } from './utils/media-utils';
@@ -161,6 +162,7 @@ export {
   getLinkPreview,
   getMediaUrl,
   saveMediaFile,
+  getProfileImageVersionsWithMediaUrl,
   uploadMediaToTextile,
   // use-query-listener
   useQueryListener,

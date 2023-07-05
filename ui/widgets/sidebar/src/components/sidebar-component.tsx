@@ -10,7 +10,11 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ListSidebarApps from './list-sidebar-apps';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import { useGetLogin, useLogout } from '@akashaorg/ui-awf-hooks';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  useGetLogin,
+  useLogout,
+} from '@akashaorg/ui-awf-hooks';
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
@@ -142,7 +146,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         <Box customStyle="w-fit h-fit mr-2">
           <Avatar
             profileId={myProfileQuery.data?.did?.id}
-            avatar={myProfileQuery.data?.avatar?.default.src}
+            avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.avatar)}
           />
         </Box>
         <Box customStyle="w-fit flex flex-grow flex-col">
