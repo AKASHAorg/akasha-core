@@ -3,65 +3,60 @@ import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import {
-  useTrendingTags,
-  // useTrendingProfiles,
   useTagSubscriptions,
   useToggleTagSubscription,
-  // useIsFollowingMultiple,
-  // useFollow,
-  // useUnfollow,
   useGetLogin,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
-import { useGetProfilesQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import {
+  useGetProfilesQuery,
+  useGetInterestsQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
-import { LatestProfiles, TrendingTags } from './cards';
+import { LatestProfiles, LatestTopics } from './cards';
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { plugins, navigateToModal } = props;
+
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('ui-widget-trending');
   const loginQuery = useGetLogin();
+
   const [analyticsActions] = useAnalytics();
-
-  const trendingTagsReq = useTrendingTags();
-  const trendingTags = trendingTagsReq.data || [];
-
   const latestProfilesReq = useGetProfilesQuery(
     { last: 4 },
     { select: result => result?.profileIndex?.edges.map(profile => profile.node) },
   );
-
-  const trendingProfiles = latestProfilesReq.data || [];
-
-  // const followPubKeyArr = trendingProfiles
-  //   .slice(0, 4)
-  //   .map((profile: { pubKey: string }) => profile.pubKey);
-
-  // const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.pubKey, followPubKeyArr);
-  // const followedProfiles = isFollowingMultipleReq.data;
-  // const followReq = useFollow();
-  // const unfollowReq = useUnfollow();
-
+  const latestTopicsReq = useGetInterestsQuery(
+    { last: 4 },
+    {
+      select: result => result?.interestsIndex?.edges.flatMap(interest => interest.node?.topics),
+    },
+  );
   const tagSubscriptionsReq = useTagSubscriptions(loginQuery.data?.id);
-  const tagSubscriptions = tagSubscriptionsReq.data;
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
+  const latestProfiles = latestProfilesReq.data || [];
+  const latestTopics = latestTopicsReq.data || [];
+
+  const tagSubscriptions = tagSubscriptionsReq.data;
+
   const showLoginModal = () => {
-    props.navigateToModal({ name: 'login' });
+    navigateToModal({ name: 'login' });
   };
 
-  const handleTagClick = (tagName: string) => {
+  const handleTopicClick = (topic: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${tagName}`,
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${topic}`,
     });
   };
 
-  const handleTagSubscribe = (tagName: string) => {
+  const handleTopicSubscribe = (topic: string) => {
     if (!loginQuery.data?.ethAddress) {
       showLoginModal();
       return;
@@ -70,9 +65,9 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       category: AnalyticsCategories.TRENDING_WIDGET,
       action: 'Trending Topic Subscribed',
     });
-    toggleTagSubscriptionReq.mutate(tagName);
+    toggleTagSubscriptionReq.mutate(topic);
   };
-  const handleTagUnSubscribe = (tagName: string) => {
+  const handleTopicUnSubscribe = (topic: string) => {
     if (!loginQuery.data?.ethAddress) {
       showLoginModal();
       return;
@@ -81,7 +76,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       category: AnalyticsCategories.TRENDING_WIDGET,
       action: 'Trending Topic Unsubscribed',
     });
-    toggleTagSubscriptionReq.mutate(tagName);
+    toggleTagSubscriptionReq.mutate(topic);
   };
 
   const handleProfileClick = (pubKey: string) => {
@@ -121,43 +116,44 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <Box customStyle="space-y-4">
-      {(trendingTagsReq.isError || latestProfilesReq.isError) && (
+      {(latestTopicsReq.isError || latestProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
           title={t('Oops, this widget has an error')}
           details={
-            trendingTagsReq.isError
-              ? t('Cannot load trending topics')
-              : t('Cannot load trending profiles')
+            latestTopicsReq.isError
+              ? t('Cannot load latest topics')
+              : t('Cannot load latest profiles')
           }
         />
       )}
 
-      {!trendingTagsReq.isError && (
-        <TrendingTags
-          titleLabel={t('Trending Topics')}
+      {!latestTopicsReq.isError && (
+        <LatestTopics
+          titleLabel={t('Latest Topics')}
           tagSubtitleLabel={t('mentions')}
           subscribeLabel={t('Subscribe')}
           unsubscribeLabel={t('Unsubscribe')}
-          noTagsLabel={t('No tags found!')}
-          isLoadingTags={trendingTagsReq.isFetching}
-          tags={trendingTags}
+          noTagsLabel={t('No topics found!')}
+          isLoadingTags={latestTopicsReq.isFetching}
+          tags={latestTopics}
           subscribedTags={tagSubscriptions}
-          onClickTag={handleTagClick}
-          handleSubscribeTag={handleTagSubscribe}
-          handleUnsubscribeTag={handleTagUnSubscribe}
+          onClickTopic={handleTopicClick}
+          handleSubscribeTopic={handleTopicSubscribe}
+          handleUnsubscribeTopic={handleTopicUnSubscribe}
         />
       )}
 
       {!latestProfilesReq.isError && (
         <LatestProfiles
-          titleLabel={t('Latest Profiles')}
+          titleLabel={t('Start Following')}
           followLabel={t('Follow')}
           unfollowLabel={t('Unfollow')}
           followersLabel={t('Followers')}
           noProfilesLabel={t('No profiles found!')}
           isLoadingProfiles={latestProfilesReq.isFetching}
-          profiles={trendingProfiles}
+          profiles={latestProfiles}
+          loggedUserDid={loginQuery?.data?.id}
           followedProfiles={['followedProfiles']}
           onClickProfile={handleProfileClick}
           handleFollowProfile={handleFollowProfile}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ITag } from '@akashaorg/typings/ui';
+import { Interest } from '@akashaorg/typings/ui';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -9,9 +9,9 @@ import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/Subti
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export type TrendingTagsProps = {
+export type LatestTopicsProps = {
   // data
-  tags: ITag[];
+  tags: Interest[];
   subscribedTags?: string[];
   isLoadingTags?: boolean;
   // labels
@@ -21,16 +21,16 @@ export type TrendingTagsProps = {
   subscribeLabel?: string;
   unsubscribeLabel?: string;
   // handlers
-  onClickTag: (tagName: string) => void;
-  handleSubscribeTag: (tagName: string) => void;
-  handleUnsubscribeTag: (tagName: string) => void;
+  onClickTopic: (topic: string) => void;
+  handleSubscribeTopic: (topic: string) => void;
+  handleUnsubscribeTopic: (topic: string) => void;
 };
 
-export const TrendingTags: React.FC<TrendingTagsProps> = props => {
+export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const {
-    onClickTag,
-    handleSubscribeTag,
-    handleUnsubscribeTag,
+    onClickTopic,
+    handleSubscribeTopic,
+    handleUnsubscribeTopic,
     titleLabel,
     tagSubtitleLabel,
     tags,
@@ -79,23 +79,21 @@ export const TrendingTags: React.FC<TrendingTagsProps> = props => {
               tags.slice(0, 4).map((tag, index) => (
                 <Box key={index} customStyle={baseItemStyles}>
                   <SubtitleTextIcon
-                    label={tag.name}
-                    subtitle={`${tag.totalPosts} ${tagSubtitleLabel}`}
+                    label={tag.labelType}
+                    subtitle={`${tag.totalPosts || 0} ${tagSubtitleLabel}`}
                     iconType="HashtagIcon"
                     backgroundColor={true}
-                    onClick={() => onClickTag(tag.name)}
+                    onClick={() => onClickTopic(tag.labelType)}
                   />
 
-                  <Box>
-                    <DuplexButton
-                      inactiveLabel={subscribeLabel}
-                      activeLabel={unsubscribeLabel}
-                      onClickInactive={() => handleSubscribeTag(tag.name)}
-                      onClickActive={() => handleUnsubscribeTag(tag.name)}
-                      active={subscribedTags?.includes(tag.name)}
-                      allowMinimization={false}
-                    />
-                  </Box>
+                  <DuplexButton
+                    inactiveLabel={subscribeLabel}
+                    activeLabel={unsubscribeLabel}
+                    onClickInactive={() => handleSubscribeTopic(tag.labelType)}
+                    onClickActive={() => handleUnsubscribeTopic(tag.labelType)}
+                    active={subscribedTags?.includes(tag.labelType)}
+                    allowMinimization={false}
+                  />
                 </Box>
               ))}
           </Box>

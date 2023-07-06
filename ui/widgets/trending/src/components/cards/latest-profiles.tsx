@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Profile } from '@akashaorg/typings/ui';
+import { getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
@@ -13,7 +14,7 @@ export type LatestProfilesProps = {
   // data
   profiles: Profile[];
   followedProfiles?: string[];
-  isViewer?: boolean;
+  loggedUserDid?: string | null;
   isLoadingProfiles?: boolean;
   // labels
   noProfilesLabel?: string;
@@ -22,9 +23,9 @@ export type LatestProfilesProps = {
   followersLabel?: string;
   unfollowLabel?: string;
   // handlers
-  onClickProfile: (ethAddress: string) => void;
-  handleFollowProfile: (ethAddress: string) => void;
-  handleUnfollowProfile: (ethAddress: string) => void;
+  onClickProfile: (did: string) => void;
+  handleFollowProfile: (did: string) => void;
+  handleUnfollowProfile: (did: string) => void;
 };
 
 export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
@@ -39,7 +40,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
     followLabel,
     unfollowLabel,
     followedProfiles,
-    isViewer,
+    loggedUserDid,
   } = props;
 
   const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none';
@@ -88,21 +89,19 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                     label={profile.name}
                     info={profile.did.id}
                     size="md"
-                    avatarImage={profile.avatar}
+                    avatarImage={getProfileImageVersionsWithMediaUrl(profile.avatar)}
                     onClick={() => onClickProfile(profile.did.id)}
                   />
 
-                  {!isViewer && (
-                    <Box>
-                      <DuplexButton
-                        inactiveLabel={followLabel}
-                        activeLabel={unfollowLabel}
-                        onClickInactive={() => handleFollowProfile(profile.did.id)}
-                        onClickActive={() => handleUnfollowProfile(profile.did.id)}
-                        active={followedProfiles?.includes(profile.did.id)}
-                        allowMinimization={false}
-                      />
-                    </Box>
+                  {loggedUserDid !== profile.did.id && (
+                    <DuplexButton
+                      inactiveLabel={followLabel}
+                      activeLabel={unfollowLabel}
+                      onClickInactive={() => handleFollowProfile(profile.did.id)}
+                      onClickActive={() => handleUnfollowProfile(profile.did.id)}
+                      active={followedProfiles?.includes(profile.did.id)}
+                      allowMinimization={false}
+                    />
                   )}
                 </Box>
               ))}
