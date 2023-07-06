@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
-import { apply, tw } from '@twind/core';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 import {
@@ -35,6 +34,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
+  // widgets are autohidden starting on screens <=768px
   const [showWidgets, setshowWidgets] = React.useState(
     window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
@@ -132,7 +132,7 @@ const Layout: React.FC<RootComponentProps> = props => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
-  const layoutStyle = apply`
+  const layoutStyle = `
       grid md:(grid-flow-row) min-h-screen
       lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
       ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '}
@@ -140,7 +140,7 @@ const Layout: React.FC<RootComponentProps> = props => {
       `;
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
-  const mobileLayoverStyle = apply`
+  const mobileLayoverStyle = `
       fixed xl:sticky z-[9999] h-full
       ${
         showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
@@ -149,7 +149,7 @@ const Layout: React.FC<RootComponentProps> = props => {
       }
       `;
 
-  const sidebarSlotStyle = apply`
+  const sidebarSlotStyle = `
       sticky top-0 h-screen transition-all duration-300 transform ${
         showSidebar ? 'w-fit translate-x-0' : '-translate-x-full xl:hidden'
       } ${needSidebarToggling ? 'fixed left-0' : ''}
@@ -164,10 +164,10 @@ const Layout: React.FC<RootComponentProps> = props => {
         }}
         role="presentation"
       >
-        <div className={tw(layoutStyle)}>
+        <Box customStyle={layoutStyle}>
           <ScrollRestorer />
-          <div className={tw(mobileLayoverStyle)}>
-            <div className={tw(sidebarSlotStyle)}>
+          <Box customStyle={mobileLayoverStyle}>
+            <Box customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
                 <Box customStyle="pt-0 xl:pt-4 h-screen" ref={wrapperRef}>
                   <Extension
@@ -185,11 +185,9 @@ const Layout: React.FC<RootComponentProps> = props => {
                   />
                 </Box>
               )}
-            </div>
-          </div>
-          <div
-            className={tw(apply(`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`))}
-          >
+            </Box>
+          </Box>
+          <Box customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
             <Box customStyle="sticky top-0 z-50">
               <Box customStyle="pt-4 bg(white dark:black) rounded-b-2xl">
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
@@ -259,9 +257,9 @@ const Layout: React.FC<RootComponentProps> = props => {
               )}
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </Box>
-          </div>
+          </Box>
           <Box customStyle="sticky top-0">
-            <Box customStyle={`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`}>
+            <Box customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
               <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
               <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
             </Box>
@@ -269,7 +267,7 @@ const Layout: React.FC<RootComponentProps> = props => {
               <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
             </Box>
           </Box>
-        </div>
+        </Box>
         {activeModal && (
           <Extension
             name={activeModal.name}

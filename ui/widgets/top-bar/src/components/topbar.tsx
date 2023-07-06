@@ -5,6 +5,7 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 
 export interface ITopbarProps {
   // data
@@ -48,12 +49,12 @@ const Topbar: React.FC<ITopbarProps> = props => {
   } = props;
 
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
-    window.matchMedia('(max-width: 768px)').matches,
+    !window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
   React.useEffect(() => {
-    const mql = window.matchMedia('(max-width: 768px)');
+    const mql = window.matchMedia(startWidgetsTogglingBreakpoint);
     const resize = e => {
-      setDisplayWidgetTogglingButton(e.matches);
+      setDisplayWidgetTogglingButton(!e.matches);
     };
     mql.addEventListener('change', resize);
     return () => {
