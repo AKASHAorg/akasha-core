@@ -11,13 +11,17 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ListSidebarApps from './list-sidebar-apps';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import { useGetLogin, useLogout } from '@akashaorg/ui-awf-hooks';
+import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
-  const [isMobile, setIsMobile] = React.useState(window.matchMedia('(max-width: 1439px)').matches);
+  const [isMobile, setIsMobile] = React.useState(
+    window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
+  );
 
   React.useEffect(() => {
-    setIsMobile(window.matchMedia('(max-width: 1439px)').matches);
-  }, [window.matchMedia('(max-width: 1439px)').matches]);
+    setIsMobile(window.matchMedia(startMobileSidebarHidingBreakpoint).matches);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.matchMedia(startMobileSidebarHidingBreakpoint).matches]);
 
   const {
     uiEvents,
@@ -141,7 +145,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <BasicCardBox
-      customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
+      customStyle="w-[19.5rem] max-w-[19.5rem] max-h-screen min-[1440px]:max-h-[calc(100vh-20px)]"
       round="rounded-r-2xl xl:rounded-2xl"
       pad="p-0"
     >
