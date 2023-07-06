@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { tw } from '@twind/core';
 import isEqual from 'lodash.isequal';
 
 import {
@@ -246,10 +245,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             />
           </Anchor>
 
-          <Box customStyle={tw(`flex flex-row gap-2 items-center shrink-0`)}>
+          <Box customStyle="flex flex-row gap-2 items-center shrink-0">
             {entryData.time && !hidePublishTime && (
               <Tooltip placement={'top'} content={formatDate(entryData.time, locale)}>
-                <Text customStyle={tw(`flex shrink-0 text(grey4 dark:grey7)`)}>
+                <Text customStyle="flex shrink-0 text(grey4 dark:grey7)">
                   {formatRelativeTime(entryData.time, locale)}
                 </Text>
               </Tooltip>
@@ -301,11 +300,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {!isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
           <Box
-            customStyle={tw(
-              `px-4 max-h-[50rem] ${scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'} ${
-                contentClickable ? 'cursor-pointer' : 'cursor-default'
-              }`,
-            )}
+            customStyle={`px-4 max-h-[50rem] ${
+              scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'
+            } ${contentClickable ? 'cursor-pointer' : 'cursor-default'}`}
             onClick={() => handleContentClick(entryData)}
             data-testid="entry-content"
           >
