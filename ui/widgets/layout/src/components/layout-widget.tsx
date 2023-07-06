@@ -6,10 +6,15 @@ import ScrollRestorer from './scroll-restorer';
 import { apply, tw } from '@twind/core';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
+import {
+  startMobileSidebarHidingBreakpoint,
+  startWidgetsTogglingBreakpoint,
+} from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import { useClickAway } from 'react-use';
 
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
@@ -17,21 +22,21 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
   const [needSidebarToggling, setNeedSidebarToggling] = React.useState(
-    window.matchMedia('(max-width: 1440px)').matches,
+    window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
   React.useEffect(() => {
-    setNeedSidebarToggling(window.matchMedia('(max-width: 1440px)').matches);
+    setNeedSidebarToggling(window.matchMedia(startMobileSidebarHidingBreakpoint).matches);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.matchMedia('(max-width: 1440px)').matches]);
+  }, [window.matchMedia(startMobileSidebarHidingBreakpoint).matches]);
 
   // sidebar is open by default on larger screens >=1440px
   const [showSidebar, setShowSidebar] = React.useState(
-    window.matchMedia('(min-width: 1440px)').matches,
+    !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
   const [showWidgets, setshowWidgets] = React.useState(
-    window.matchMedia('(min-width: 769px)').matches,
+    window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
 
   const maintenanceReq = usePlaformHealthCheck();
@@ -133,22 +138,27 @@ const Layout: React.FC<RootComponentProps> = props => {
       ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '}
       xl:max-w-7xl xl:mx-auto gap-x-4
       `;
+
+  // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = apply`
       fixed xl:sticky z-[9999] h-full
       ${
-        showSidebar && !window.matchMedia('(min-width: 1440px)').matches
-          ? 'min-w-[100vw] xl:min-w-max'
+        showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
+          ? 'min-w-[100vw] xl:min-w-max bg(black/30 dark:white/30)'
           : ''
       }
       `;
+
   const sidebarSlotStyle = apply`
-      sticky top-0 h-screen w-fit ${showSidebar ? '' : 'hidden'}
+      sticky top-0 h-screen transition-all duration-300 transform ${
+        showSidebar ? 'w-fit translate-x-0' : '-translate-x-full xl:hidden'
+      } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
 
   return (
-    <div className={tw('bg(white dark:black) min-h-screen')}>
-      <div
-        className={tw('h-full w-11/12 m-auto lg:w-full min-h-screen')}
+    <Box customStyle="bg(white dark:black) min-h-screen">
+      <Box
+        customStyle="h-full w-11/12 m-auto lg:w-[95%] xl:w-full min-h-screen"
         onKeyDown={() => {
           void 0;
         }}
@@ -159,37 +169,34 @@ const Layout: React.FC<RootComponentProps> = props => {
           <div className={tw(mobileLayoverStyle)}>
             <div className={tw(sidebarSlotStyle)}>
               {needSidebarToggling ? (
-                <div className={tw('pt-0 xl:pt-4 h-screen')} ref={wrapperRef}>
+                <Box customStyle="pt-0 xl:pt-4 h-screen" ref={wrapperRef}>
                   <Extension
                     fullHeight
                     name={props.layoutConfig.sidebarSlotId}
                     uiEvents={props.uiEvents}
                   />
-                </div>
+                </Box>
               ) : (
-                <div
-                  className={tw('pt-0 xl:pt-4 h-screen')}
-                  /* sidebarWrapperRef */
-                >
+                <Box customStyle="pt-0 xl:pt-4 h-screen">
                   <Extension
                     fullHeight
                     name={props.layoutConfig.sidebarSlotId}
                     uiEvents={props.uiEvents}
                   />
-                </div>
+                </Box>
               )}
             </div>
           </div>
           <div
             className={tw(apply(`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`))}
           >
-            <div className={tw('sticky top-0 z-50')}>
-              <div className={tw('pt-4 bg(white dark:black) rounded-b-2xl')}>
+            <Box customStyle="sticky top-0 z-50">
+              <Box customStyle="pt-4 bg(white dark:black) rounded-b-2xl">
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
-              </div>
-            </div>
-            <div id="scrollTopStop"></div>
-            <div className={tw('pt-4')}>
+              </Box>
+            </Box>
+            <Box id="scrollTopStop"></Box>
+            <Box customStyle="pt-4">
               {!isPlatformHealthy && (
                 <BasicCardBox
                   margin="mb-4"
@@ -239,29 +246,29 @@ const Layout: React.FC<RootComponentProps> = props => {
                         'Bear with us',
                       )} 🙏🏽.`}
                     </Text>
-                    <button onClick={onCloseButtonClick}>
+                    <Button plain={true} onClick={onCloseButtonClick}>
                       <Icon
                         type="XMarkIcon"
                         size="xs"
                         color={{ light: 'grey3', dark: 'grey3' }}
                         data-testid="the-merge-notification-close-button"
                       />
-                    </button>
+                    </Button>
                   </Box>
                 </BasicCardBox>
               )}
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
-            </div>
+            </Box>
           </div>
-          <div className={tw('sticky top-0')}>
-            <div className={tw(`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`)}>
+          <Box customStyle="sticky top-0">
+            <Box customStyle={`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`}>
               <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
               <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
-            </div>
-            <div className={tw('fixed bottom-0 mr-4 mb-4')}>
+            </Box>
+            <Box customStyle="fixed bottom-0 mr-4 mb-4">
               <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
-            </div>
-          </div>
+            </Box>
+          </Box>
         </div>
         {activeModal && (
           <Extension
@@ -275,8 +282,8 @@ const Layout: React.FC<RootComponentProps> = props => {
           uiEvents={props.uiEvents}
           customStyle="relative z-999"
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
