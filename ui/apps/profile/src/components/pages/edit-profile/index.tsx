@@ -19,9 +19,9 @@ import {
   useGetProfileByDidQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
-import { getImageObj, saveAndGetImageObj } from '../../utils';
+import { saveAndGetImageObj } from '../../utils';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
@@ -104,8 +104,14 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       : null;
   const loginQuery = useGetLogin();
 
-  const background = useMemo(() => getImageObj(profileData?.background), [profileData?.background]);
-  const avatar = useMemo(() => getImageObj(profileData?.avatar), [profileData?.avatar]);
+  const background = useMemo(
+    () => getProfileImageVersionsWithMediaUrl(profileData?.background),
+    [profileData?.background],
+  );
+  const avatar = useMemo(
+    () => getProfileImageVersionsWithMediaUrl(profileData?.avatar),
+    [profileData?.avatar],
+  );
 
   if (status === 'loading') return <ProfileLoading />;
 

@@ -13,12 +13,23 @@ function getBaseColorClasses(color: Color, directive?: string) {
     return directive ? `${directive}-${color}` : color;
   }
 
-  if (typeof color === 'object') {
+  if (typeof color === 'object' && 'light' in color) {
     const light = color.light;
     const dark = color.dark;
 
     return directive ? `${directive}-${light} dark:${directive}-${dark}` : `${light} dark:${dark}`;
   }
+
+  if (typeof color === 'object' && 'from' in color) {
+    const gradient = color.gradient;
+    const from = color.from;
+    const via = color.via;
+    const to = color.to;
+    const viaStyle = via ? `via-${via}` : '';
+    const viaDarkStyle = via ? `dark:via-${via}` : '';
+    return `bg-${gradient} from-${from} ${viaStyle} to-${to} dark:from-${from} ${viaDarkStyle} dark:to-${to}`;
+  }
+
   return '';
 }
 

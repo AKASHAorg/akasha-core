@@ -11,6 +11,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCard';
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
@@ -198,40 +199,24 @@ const Layout: React.FC<RootComponentProps> = props => {
                 </BasicCardBox>
               )}
               {!dismissed.includes(dismissedCardId) && (
-                <BasicCardBox
-                  margin="mb-4"
-                  customStyle="bg-warningLight/70 dark:bg-warningDark border(errorLight dark:errorDark)"
-                  data-testid="the-merge-notification"
-                >
-                  <Box customStyle="flex flex-row items-start">
-                    <Icon
-                      color={{ light: 'grey3', dark: 'grey3' }}
-                      type="ExclamationTriangleIcon"
-                      customStyle="mr-4"
-                    />
-                    <Text
-                      color={{ light: 'grey3', dark: 'grey3' }}
-                      selectable={false}
-                      variant="footnotes2"
-                    >
-                      {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
-                        'We have migrated Akasha World to the Goerli testnet',
-                      )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
-                        'But some functionalities such as claiming ENS names won’t be possible',
-                      )}. ${t('We are working hard on mitigating any issues')}. ${t(
-                        'Bear with us',
-                      )} 🙏🏽.`}
-                    </Text>
-                    <button onClick={onCloseButtonClick}>
-                      <Icon
-                        type="XMarkIcon"
-                        size="xs"
-                        color={{ light: 'grey3', dark: 'grey3' }}
-                        data-testid="the-merge-notification-close-button"
-                      />
-                    </button>
-                  </Box>
-                </BasicCardBox>
+                <MessageCard
+                  testId="the-merge-notification"
+                  title={t('Goerli Test Network')}
+                  titleIconType="ExclamationTriangleIcon"
+                  background={{ light: 'warningDark/30', dark: 'warningDark/30' }}
+                  borderColor={{ light: 'warningLight', dark: 'warningDark' }}
+                  message={`${t(
+                    'Following the merge, the Rinkeby network has been deprecated',
+                  )}. ${t('We have migrated Akasha World to the Goerli testnet')}. ${t(
+                    'This will not affect your content or posts, they are saved',
+                  )}! ${t(
+                    'But some functionalities such as claiming ENS names won’t be possible',
+                  )}. ${t('We are working hard on mitigating any issues')}. ${t(
+                    'Bear with us',
+                  )} 🙏🏽.`}
+                  customStyle="mb-4"
+                  onClose={onCloseButtonClick}
+                />
               )}
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </div>

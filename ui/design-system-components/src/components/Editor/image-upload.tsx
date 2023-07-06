@@ -160,7 +160,9 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
               `${flexCenteredClass} mb-2 rounded-sm w-full h-12 border(secondary dashed)`,
             )}
           >
-            <Text color={'secondary'}>{dropZoneActiveLabel}</Text>
+            <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+              {dropZoneActiveLabel}
+            </Text>
           </div>
         ) : (
           <div className={tx(`h-full min-h-[3rem]`)} />

@@ -1,5 +1,4 @@
-import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
-import { getMediaUrl, saveMediaFile } from '@akashaorg/ui-awf-hooks';
+import { saveMediaFile } from '@akashaorg/ui-awf-hooks';
 
 export const saveAndGetImageObj = async (name: 'avatar' | 'coverImage', content?: File) => {
   if (!content) return null;
@@ -16,19 +15,5 @@ export const saveAndGetImageObj = async (name: 'avatar' | 'coverImage', content?
       width: mediaFile.size.width,
       src: mediaUri,
     },
-  };
-};
-
-export const getImageObj = (image?: ProfileImageVersions): ProfileImageVersions => {
-  if (!image) return null;
-
-  const mediaUrl = getMediaUrl(image.default.src);
-
-  return {
-    default: {
-      ...image.default,
-      src: mediaUrl.originLink || mediaUrl.fallbackLink,
-    },
-    alternatives: image.alternatives,
   };
 };

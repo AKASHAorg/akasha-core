@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
-import { useTranslation } from 'react-i18next';
-// import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Web3ConnectCard from './web3-connect-card';
+import { useTranslation } from 'react-i18next';
 import { IconType, RootComponentProps } from '@akashaorg/typings/ui';
-import BoxedIcon from './boxed-icon';
+import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
 
 interface ChooseProviderProps {
   injectedProvider: {
@@ -23,10 +23,10 @@ interface ChooseProviderProps {
 }
 
 const ChooseProvider: React.FC<ChooseProviderProps> = props => {
-  const { injectedProvider, onProviderSelect } = props;
+  const { injectedProvider, plugins, onProviderSelect } = props;
   const { t } = useTranslation('app-auth-ewa');
 
-  const routingPlugin = React.useRef(props.plugins['@akashaorg/app-routing']?.routing);
+  const routingPlugin = React.useRef(plugins['@akashaorg/app-routing']?.routing);
 
   const termsUrl = routingPlugin.current?.getUrlForApp({
     appName: '@akashaorg/app-legal',
@@ -48,27 +48,30 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
   };
 
   return (
-    <Box data-testid="providers-list">
-      <Text variant="button-lg" align="center" as="h3">
+    <Stack testId="providers-list" direction="column" spacing="gap-y-4">
+      <Text variant="h5" align="center">
         {`✨ ${t('Welcome to AKASHA World')} ✨`}
       </Text>
-      <Text variant="button-sm" weight="normal" align="center">
+      <Text
+        variant="subtitle2"
+        weight="light"
+        align="center"
+        color={{ light: 'grey4', dark: 'grey7' }}
+      >
         {t('Choose a way to connect')}
       </Text>
-      <Box customStyle="mt-4 mb-2">
-        <Text variant="button-lg" weight="bold">
-          {t('Web3 Wallets')}
-        </Text>
+      <Stack direction="column" spacing="gap-y-4">
+        <Text variant="h6">{t('Web3 Wallets')}</Text>
         <Accordion
-          customStyle="mb-2"
+          headerDivider={true}
           titleNode={
-            <Text variant="button-md" weight="normal">
+            <Text variant="footnotes2" weight="normal" color={{ light: 'black', dark: 'grey7' }}>
               {t('What is a wallet?')}
             </Text>
           }
           contentNode={
-            <>
-              <Text variant="button-sm" weight="normal">
+            <Stack direction="column" spacing="gap-y-4">
+              <Text variant="button-sm" weight="normal" customStyle="p-2">
                 {t(
                   'A web3 wallet is simply a digital wallet that can be used to store digital assets. These digital assets include Non-fungible tokens (NFTs).',
                 )}
@@ -76,40 +79,40 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                   "It's also a tool that allows people to interact with Dapps and platforms like AKASHA world with out storing any personal data.",
                 )}
               </Text>
-              <hr className="my-4" />
-              <Box>
-                <Text variant="button-md" align="center" weight="bold">
-                  {t('Get your own wallet')}
-                </Text>
-                <Box customStyle="flex flex-row items-center justify-center">
-                  <BoxedIcon
-                    iconType="metamask"
-                    iconSize="sm"
-                    boxSize={6}
-                    background="bg(white dark:white)"
-                    iconColor="self-color"
-                    round="rounded-md"
-                  />
-                  <Anchor
-                    title={t('Get a MetaMask Wallet')}
-                    href="https://metamask.io"
-                    target="_blank"
-                  >
-                    <Box customStyle="flex flex-row">
-                      <Text variant="button-md" customStyle="mx-1">
-                        {t('Get MetaMask Wallet')}
-                      </Text>
-                      <Icon type="ArrowTopRightOnSquareIcon" size="lg" />
-                    </Box>
-                  </Anchor>
-                </Box>
-              </Box>
-              <hr className="my-4" />
-            </>
+              <Divider />
+              <Text variant="button-md" align="center" weight="bold">
+                {t('Get your own wallet')}
+              </Text>
+              <Stack align="center" justify="center" spacing="gap-x-2">
+                <AppIcon
+                  placeholderIconType="metamask"
+                  background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
+                  size="sm"
+                  radius={4}
+                  iconColor="self-color"
+                />
+                <Anchor
+                  title={t('Get a MetaMask Wallet')}
+                  href="https://metamask.io"
+                  target="_blank"
+                >
+                  <Stack align="center" spacing="gap-x-2">
+                    <Text
+                      variant="button-sm"
+                      weight="bold"
+                      color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                    >
+                      {t('Get MetaMask Wallet')}
+                    </Text>
+                    <Icon type="ArrowTopRightOnSquareIcon" size="md" accentColor />
+                  </Stack>
+                </Anchor>
+              </Stack>
+            </Stack>
           }
         />
-        {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
-          <Box customStyle="mb-2">
+        <Stack direction="column" spacing="gap-y-2">
+          {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
             <Web3ConnectCard
               leftIconType={injectedProvider.iconType}
               titleLabel={injectedProvider.titleLabel}
@@ -119,42 +122,66 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                 injectedProvider.name === INJECTED_PROVIDERS.METAMASK ? 'self-color' : undefined
               }
               boxBgColor={
-                injectedProvider.name === INJECTED_PROVIDERS.METAMASK ? 'yellow-100' : undefined
+                injectedProvider.name === INJECTED_PROVIDERS.METAMASK
+                  ? { gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }
+                  : undefined
               }
+              iconSize={{ width: 32, height: 32 }}
+              boxSize={{ width: 40, height: 40 }}
             />
-          </Box>
-        )}
-        <Box customStyle="mb-4">
+          )}
           <Web3ConnectCard
             leftIconType="walletconnect"
             subtitleLabel={t('Scan with WalletConnect')}
             titleLabel="WalletConnect"
             handleClick={() => handleProviderClick(EthProviders.WalletConnect)}
-            iconSize={{
-              width: 48,
-              height: 48,
-            }}
             iconColor="self-color"
             boxBgColor="transparent"
+            iconSize={{ width: 40, height: 40 }}
+            boxSize={{ width: 40, height: 40 }}
           />
-        </Box>
-      </Box>
-      <Text align="center" variant="button-sm" weight="normal">
+        </Stack>
+      </Stack>
+      <Divider />
+      <Text
+        align="center"
+        variant="footnotes2"
+        weight="normal"
+        color={{ light: 'grey4', dark: 'grey7' }}
+      >
         {t('By connecting to AKASHA world, you agree to our ')}
         <Anchor href={termsUrl} title={t('Terms & Conditions')} target="_blank">
-          {t('Terms & Conditions')}
+          <Text
+            variant="button-sm"
+            weight="bold"
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+          >
+            {t('Terms & Conditions')}
+          </Text>
         </Anchor>
         {', '}
         <Anchor href={privacyUrl} title={t('Privacy Policy')} target="_blank">
-          {t('Privacy Policy')}
+          <Text
+            variant="button-sm"
+            weight="bold"
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+          >
+            {t('Privacy Policy')}
+          </Text>
         </Anchor>
         {', and '}
         <Anchor href={cocUrl} title={t('Code of Conduct')} target="_blank">
-          {t('Code of Conduct')}
+          <Text
+            variant="button-sm"
+            weight="bold"
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+          >
+            {t('Code of Conduct')}
+          </Text>
         </Anchor>
         {'.'}
       </Text>
-    </Box>
+    </Stack>
   );
 };
 
