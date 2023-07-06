@@ -3,6 +3,10 @@ import { useLocation } from 'react-router-dom';
 import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import Topbar from './topbar';
+import {
+  startWidgetsTogglingBreakpoint,
+  startMobileSidebarHidingBreakpoint,
+} from '@akashaorg/design-system-core/lib/utils/breakpoints';
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
   const { uiEvents, layoutConfig, worldConfig, plugins } = props;
@@ -15,12 +19,12 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
-    window.matchMedia('(min-width: 1440px)').matches ? true : false,
+    !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
-  // widgets are displayeed by default on larger screens >=768px
+  // starting hiding widgets by default on screens <=768px
   const [widgetVisible, setWidgetVisible] = React.useState<boolean>(
-    window.matchMedia('(min-width: 769px)').matches ? true : false,
+    !window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
 
   const uiEventsRef = React.useRef(uiEvents);
@@ -55,7 +59,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // show or hide sidebar
+  // show or hide sidebar and widgets
   React.useEffect(() => {
     const eventsSub = uiEventsRef.current.subscribe({
       next: (eventInfo: UIEventData) => {
@@ -89,6 +93,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   // show or hide widgets
 
   const handleWidgetToggle = () => {
+    console.log('widgetVisible ', widgetVisible);
     uiEvents.next({
       event: widgetVisible ? EventTypes.HideWidgets : EventTypes.ShowWidgets,
     });
