@@ -3,9 +3,19 @@ import Stack from '../Stack';
 import IconByType from './IconByType';
 import { IconType, LogoSourceType } from '@akashaorg/typings/ui';
 import { apply, tw } from '@twind/core';
-import { BasicIconSize, BreakPointSize, Color } from '../types/common.types';
+import {
+  BasicIconSize,
+  BasicSize,
+  BreakPointSize,
+  Color,
+  Padding,
+  Radius,
+} from '../types/common.types';
 import { getElevationClasses } from '../../utils/getElevationClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
+import { getRadiusClasses } from '../../utils/getRadiusClasses';
+import { getWidthClasses } from '../../utils/getWidthClasses';
+import { getHeightClasses } from '../../utils/getHeightClasses';
 
 export type AppIconProps = {
   appImg?: LogoSourceType;
@@ -20,6 +30,8 @@ export type AppIconProps = {
   active?: boolean;
   iconColor?: Color;
   background?: Color;
+  backgroundSize?: number | { width: number; height: number };
+  radius?: Radius;
   customStyle?: string;
 };
 
@@ -36,6 +48,8 @@ const AppIcon: React.FC<AppIconProps> = props => {
     active,
     iconColor,
     background,
+    backgroundSize,
+    radius,
     customStyle = '',
   } = props;
 
@@ -43,16 +57,31 @@ const AppIcon: React.FC<AppIconProps> = props => {
     ? APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
     : '';
 
-  const sizeStyle = `${APP_ICON_CONTAINER_SIZE_MAP[size]} ${breakPointStyle}`;
+  const sizeStyle = `${
+    typeof size === 'object'
+      ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
+      : APP_ICON_CONTAINER_SIZE_MAP[size]
+  } ${breakPointStyle}`;
 
   const hoverStyle = hover
     ? `${`hover:${getElevationClasses('4')}`} ${`group-hover:${getElevationClasses('4')}`}`
     : '';
 
   const activeStyle = active ? 'bg-secondaryLight/30 hover:bg-secondaryDark' : '';
+  const iconContainerRadius = radius ? getRadiusClasses(radius) : '';
+  const iconContainerBackgroundSize = backgroundSize
+    ? `${getWidthClasses(
+        typeof backgroundSize === 'object' ? backgroundSize.width : backgroundSize,
+      )} ${getHeightClasses(
+        typeof backgroundSize === 'object' ? backgroundSize.height : backgroundSize,
+      )}`
+    : '';
   const iconContainerBackground = background ? getColorClasses(background, 'bg') : '';
-  const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${iconContainerBackground} ${customStyle}`;
-  const notifyStyle = NOTIFY_MAP[size];
+  const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${iconContainerBackground} ${iconContainerRadius} ${iconContainerBackgroundSize} ${customStyle}`;
+  const notifyStyle =
+    typeof size === 'object'
+      ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
+      : NOTIFY_MAP[size];
 
   if (stackedIcon)
     return (
@@ -85,27 +114,30 @@ const AppIcon: React.FC<AppIconProps> = props => {
   );
 };
 
-const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicIconSize, string> = {
+const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicSize, string> = {
   xs: 'h-6 w-6',
   sm: 'h-8 w-8',
   md: 'h-10 w-10',
   lg: 'h-12 w-12',
+  xl: 'h-14 w-14',
 };
 
 const APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT = (
   breakPoint: string,
-): Record<BasicIconSize, string> => ({
+): Record<BasicSize, string> => ({
   xs: `${breakPoint}:h-6 ${breakPoint}:w-6`,
   sm: `${breakPoint}:h-8 ${breakPoint}:w-8`,
   md: `${breakPoint}:h-10 ${breakPoint}:w-10`,
   lg: `${breakPoint}:h-12 ${breakPoint}:w-12`,
+  xl: `${breakPoint}:h-14 ${breakPoint}:w-14`,
 });
 
-const NOTIFY_MAP: Record<BasicIconSize, string> = {
+const NOTIFY_MAP: Record<BasicSize, string> = {
   xs: 'right-[0.1875rem] w-1 h-1',
   sm: 'right-[0.1875rem] w-2 h-2',
   md: 'right-[0.125rem] w-3 h-3',
-  lg: 'right-1 w-3 h-3',
+  lg: 'right-1.5 w-3 h-3',
+  xl: 'right-2 w-3 h-3',
 };
 
 export default AppIcon;

@@ -12,9 +12,7 @@ export const DismissableNotificationCard = () => {
     cy.get('[data-testid="the-merge-notification"]', { timeout: TIMEOUT }).should('exist');
   });
   it('should close the merge notification when button clicked', () => {
-    cy.get('[data-testid="the-merge-notification-close-button"]', { timeout: TIMEOUT })
-      .first()
-      .click();
+    cy.get('[aria-label="close"]', { timeout: TIMEOUT }).first().click();
     cy.get('[data-testid="the-merge-notification"]', { timeout: TIMEOUT }).should('not.exist');
   });
   it('should not display the merge notification on next visit', () => {

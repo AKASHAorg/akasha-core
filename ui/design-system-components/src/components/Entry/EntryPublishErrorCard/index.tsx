@@ -18,7 +18,7 @@ const EntryPublishErrorCard: React.FC<PublishErrorCardProps> = props => {
           `absolute inset-2 p-2 border(dashed secondaryLight dark:secondaryDark) rounded-lg flex justify-center items-center`,
         )}
       >
-        <Icon type="Square3Stack3DIcon" color="#8b9FFF" />
+        <Icon type="Square3Stack3DIcon" color="grey1" />
         {props.message}
         <div>{props.children}</div>
       </div>
