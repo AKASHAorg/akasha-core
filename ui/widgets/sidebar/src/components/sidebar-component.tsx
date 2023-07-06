@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/ui';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -26,10 +26,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
     uiEvents,
     plugins,
-    worldConfig: { defaultApps, homepageApp, socialLinks },
+    worldConfig: { defaultApps, socialLinks },
   } = props;
-  const [routeData, setRouteData] = React.useState(null);
-  const [activeOption, setActiveOption] = React.useState<IMenuItem | null>(null);
+  const [routeData, setRouteData] = useState(null);
+  const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const { t } = useTranslation('ui-widget-sidebar');
 
   const myProfileQuery = useGetMyProfileQuery(null, {
@@ -40,7 +40,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
-  React.useEffect(() => {
+  useEffect(() => {
     let sub;
     if (routing) {
       sub = routing.routeObserver.subscribe({
@@ -55,8 +55,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       }
     };
   }, [routing]);
+
   // sort according to worldConfig index
-  const worldApps = React.useMemo(() => {
+  const worldApps = useMemo(() => {
     return routeData?.[MenuItemAreaType.AppArea]?.sort(
       (a: { name: string }, b: { name: string }) => {
         if (defaultApps.indexOf(a.name) < defaultApps.indexOf(b.name)) {
@@ -69,7 +70,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     );
   }, [defaultApps, routeData]);
 
-  const userInstalledApps = React.useMemo(() => {
+  const userInstalledApps = useMemo(() => {
     return routeData?.[MenuItemAreaType.UserAppArea];
   }, [routeData]);
 
@@ -82,6 +83,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       getNavigationUrl: () => route,
     });
   };
+
   const handleClickExplore = () => {
     routing?.navigateTo({
       appName: '@akashaorg/app-akasha-verse',
@@ -98,6 +100,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       event: EventTypes.HideSidebar,
     });
   };
+
   const handleLoginClick = () => {
     routing.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
@@ -129,7 +132,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
 
-  const subtitleUi = React.useMemo(
+  const subtitleUi = useMemo(
     () => (
       <Text
         variant="footnotes1"

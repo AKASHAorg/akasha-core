@@ -4,8 +4,10 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
-
-import { PageButtons, PageButtonsProps } from './page-buttons';
+import {
+  PageButtons,
+  PageButtonsProps,
+} from '@akashaorg/design-system-components/lib/components/PageButtons';
 
 export type PageHeaderProps = PageButtonsProps & {
   label: string;
@@ -13,7 +15,7 @@ export type PageHeaderProps = PageButtonsProps & {
 };
 
 export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props => {
-  const { labelTextVariant = 'h5', label, children } = props;
+  const { labelTextVariant = 'h5', label, cancelButtonLabel, confirmButtonLabel, children } = props;
 
   return (
     <BasicCardBox pad="p-0">
@@ -28,7 +30,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
       <Box customStyle="p-4">{children}</Box>
 
       {/* show buttons only when the labels are specified */}
-      {(props.cancelButtonLabel || props.confirmButtonLabel) && (
+      {(cancelButtonLabel || confirmButtonLabel) && (
         <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
           <PageButtons {...props} />
         </Box>

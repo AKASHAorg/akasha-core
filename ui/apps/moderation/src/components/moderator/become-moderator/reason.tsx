@@ -2,8 +2,10 @@ import React from 'react';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-
-import { SteppedActionWrapperProps, SteppedActionWrapper } from '../../common';
+import {
+  SteppedActionWrapper,
+  SteppedActionWrapperProps,
+} from '@akashaorg/design-system-components/lib/components/SteppedActionWrapper';
 
 export type BMSelectReasonProps = SteppedActionWrapperProps & {
   titleLabel: string;
