@@ -2,15 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
-import {
-  useTagSubscriptions,
-  useToggleTagSubscription,
-  useGetLogin,
-  useAnalytics,
-} from '@akashaorg/ui-awf-hooks';
+import { useToggleTagSubscription, useGetLogin, useAnalytics } from '@akashaorg/ui-awf-hooks';
 import {
   useGetProfilesQuery,
   useGetInterestsQuery,
+  useGetInterestsByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -37,7 +33,20 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       select: result => result?.interestsIndex?.edges.flatMap(interest => interest.node?.topics),
     },
   );
-  const tagSubscriptionsReq = useTagSubscriptions(loginQuery.data?.id);
+  const tagSubscriptionsReq = useGetInterestsByDidQuery(
+    { id: loginQuery.data?.id },
+    {
+      enabled: !!loginQuery.data?.id,
+      select: resp => {
+        const { interests } = resp.node as {
+          interests: { topics: { value: string; labelType: string }[] };
+        };
+
+        return interests.topics.map(el => el.value);
+      },
+    },
+  );
+
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
   const latestProfiles = latestProfilesReq.data || [];
@@ -133,6 +142,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
           titleLabel={t('Latest Topics')}
           tagSubtitleLabel={t('mentions')}
           subscribeLabel={t('Subscribe')}
+          subscribedLabel={t('Subscribed')}
           unsubscribeLabel={t('Unsubscribe')}
           noTagsLabel={t('No topics found!')}
           isLoadingTags={latestTopicsReq.isFetching}

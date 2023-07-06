@@ -18,8 +18,9 @@ export type LatestTopicsProps = {
   noTagsLabel?: string;
   titleLabel: string;
   tagSubtitleLabel: string;
-  subscribeLabel?: string;
-  unsubscribeLabel?: string;
+  subscribeLabel: string;
+  subscribedLabel: string;
+  unsubscribeLabel: string;
   // handlers
   onClickTopic: (topic: string) => void;
   handleSubscribeTopic: (topic: string) => void;
@@ -37,6 +38,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     isLoadingTags,
     noTagsLabel,
     subscribeLabel,
+    subscribedLabel,
     unsubscribeLabel,
     subscribedTags,
   } = props;
@@ -79,19 +81,20 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               tags.slice(0, 4).map((tag, index) => (
                 <Box key={index} customStyle={baseItemStyles}>
                   <SubtitleTextIcon
-                    label={tag.labelType}
+                    label={tag.value}
                     subtitle={`${tag.totalPosts || 0} ${tagSubtitleLabel}`}
                     iconType="HashtagIcon"
                     backgroundColor={true}
-                    onClick={() => onClickTopic(tag.labelType)}
+                    onClick={() => onClickTopic(tag.value)}
                   />
 
                   <DuplexButton
                     inactiveLabel={subscribeLabel}
-                    activeLabel={unsubscribeLabel}
-                    onClickInactive={() => handleSubscribeTopic(tag.labelType)}
-                    onClickActive={() => handleUnsubscribeTopic(tag.labelType)}
-                    active={subscribedTags?.includes(tag.labelType)}
+                    activeLabel={subscribedLabel}
+                    activeHoverLabel={unsubscribeLabel}
+                    onClickInactive={() => handleSubscribeTopic(tag.value)}
+                    onClickActive={() => handleUnsubscribeTopic(tag.value)}
+                    active={subscribedTags?.includes(tag.value)}
                     allowMinimization={false}
                   />
                 </Box>
