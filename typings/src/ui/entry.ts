@@ -7,6 +7,12 @@ export type ITag = {
   totalPosts: number;
 };
 
+export type Interest = {
+  labelType: string;
+  value: string;
+  totalPosts?: number;
+};
+
 export interface LinkPreviewExt extends LinkPreview {
   imageSources?: { url: string; fallbackUrl: string };
   faviconSources?: { url: string; fallbackUrl: string };
