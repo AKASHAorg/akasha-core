@@ -25,10 +25,8 @@ function getBaseColorClasses(color: Color, directive?: string) {
     const from = color.from;
     const via = color.via;
     const to = color.to;
-
     const viaStyle = via ? `via-${via}` : '';
     const viaDarkStyle = via ? `dark:via-${via}` : '';
-
     return `bg-${gradient} from-${from} ${viaStyle} to-${to} dark:from-${from} ${viaDarkStyle} dark:to-${to}`;
   }
 
