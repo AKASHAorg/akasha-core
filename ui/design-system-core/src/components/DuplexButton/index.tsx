@@ -89,9 +89,9 @@ const DuplexButton = (props: DuplexButtonProps) => {
 };
 
 DuplexButton.defaultProps = {
-  inactiveLabel: 'Follow',
-  activeLabel: 'Following',
-  activeHoverLabel: 'Unfollow',
+  inactiveLabel: 'Activate',
+  activeLabel: 'Activated',
+  activeHoverLabel: 'Deactivate',
   active: false,
 };
 

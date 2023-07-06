@@ -42,19 +42,24 @@ const ProfileAvatarButton = React.forwardRef(
     const textTruncateStyle = `${truncateText ? 'max-w([7rem] xs:[2rem])' : ''}`;
 
     return (
-      <Box customStyle={`inline-flex items-center space-x-2 ${customStyle}`}>
+      <Button
+        plain={true}
+        customStyle={`inline-flex items-center space-x-2 ${customStyle}`}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
         <Box title="avatar-box" customStyle="shrink-0">
-          <Avatar size={size} avatar={avatarImage} profileId={profileId} onClick={onClickAvatar} />
+          <Avatar
+            size={size}
+            avatar={avatarImage}
+            profileId={profileId}
+            customStyle="cursor-pointer"
+            onClick={onClickAvatar}
+          />
         </Box>
 
-        <Button
-          plain={true}
-          title="info-box"
-          customStyle="justify-center align-top"
-          onClick={onClick}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-        >
+        <Box title="info-box" customStyle="justify-center align-top">
           <Box ref={ref}>
             <Text variant="button-sm" weight="bold" truncate={true} customStyle={textTruncateStyle}>
               {label || profileId}
@@ -64,8 +69,8 @@ const ProfileAvatarButton = React.forwardRef(
           <Text variant="footnotes2" color="grey7" truncate={true} customStyle={textTruncateStyle}>
             {info}
           </Text>
-        </Button>
-      </Box>
+        </Box>
+      </Button>
     );
   },
 );
