@@ -18,8 +18,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useParams } from 'react-router';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { getImageObj } from '../utils';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
@@ -103,8 +102,8 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
   };
 
-  const background = getImageObj(profileData?.background);
-  const avatar = getImageObj(profileData?.avatar);
+  const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
+  const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
 
   return (
     <>

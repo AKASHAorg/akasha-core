@@ -11,7 +11,7 @@ const Template = args => <MessageCard {...args} />;
 export const BasicMessageCard = Template.bind({});
 BasicMessageCard.args = {
   title: 'Title',
-  message: 'A sample message ...',
   elevation: '1',
+  children: 'A sample message ...',
   onClose: () => ({}),
 };

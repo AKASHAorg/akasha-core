@@ -1,6 +1,7 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { logError } from './error-handler';
+import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export const MEDIA_UPLOAD_EMAIL = '@mediaUploadEmail';
 
@@ -180,4 +181,23 @@ export const saveMediaFile = async ({ name, content, isUrl, email }: ISaveMediaF
     logError('saveMediaFile', ex);
     return null;
   }
+};
+
+/**
+ * Utility to get profile image versions with media url
+ */
+export const getProfileImageVersionsWithMediaUrl = (
+  image?: ProfileImageVersions,
+): ProfileImageVersions => {
+  if (!image) return null;
+
+  const mediaUrl = getMediaUrl(image.default.src);
+
+  return {
+    default: {
+      ...image.default,
+      src: mediaUrl.originLink || mediaUrl.fallbackLink,
+    },
+    alternatives: image.alternatives,
+  };
 };

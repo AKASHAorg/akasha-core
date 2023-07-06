@@ -2,18 +2,16 @@ import React from 'react';
 import Stack from '../Stack';
 import { IconType } from '@akashaorg/typings/ui';
 import { PassedIcon } from './PassedIcon';
-import { BasicIconSize, BreakPointSize, Color } from '../types/common.types';
+import { BasicIconSize, BasicSize, BreakPointSize, Color } from '../types/common.types';
 import { getWidthClasses } from '../../utils/getWidthClasses';
 import { getHeightClasses } from '../../utils/getHeightClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
-
-export type IconSize = BasicIconSize | { width?: string | number; height?: string | number };
 
 export interface IconProps {
   color?: Color;
   ref?: React.Ref<HTMLDivElement>;
   type: IconType;
-  size?: IconSize;
+  size?: BasicIconSize;
   breakPointSize?: BreakPointSize;
   accentColor?: boolean;
   disabled?: boolean;
@@ -100,18 +98,20 @@ const Icon: React.FC<IconProps> = props => {
   );
 };
 
-const ICON_SIZE_MAP: Record<BasicIconSize, string> = {
+const ICON_SIZE_MAP: Record<BasicSize, string> = {
   xs: 'h-3 w-3',
   sm: 'h-4 w-4',
   md: 'h-5 w-5',
   lg: 'h-6 w-6',
+  xl: 'h-7 w-7',
 };
 
-const ICON_SIZE_MAP_BY_BREAKPOINT = (breakPoint: string): Record<BasicIconSize, string> => ({
+const ICON_SIZE_MAP_BY_BREAKPOINT = (breakPoint: string): Record<BasicSize, string> => ({
   xs: `${breakPoint}:h-3 ${breakPoint}:w-3`,
   sm: `${breakPoint}:h-4 ${breakPoint}:w-4`,
   md: `${breakPoint}:h-5 ${breakPoint}:w-5`,
   lg: `${breakPoint}:h-6 ${breakPoint}:w-6`,
+  xl: `${breakPoint}:h-7 ${breakPoint}:w-7`,
 });
 
 export default Icon;

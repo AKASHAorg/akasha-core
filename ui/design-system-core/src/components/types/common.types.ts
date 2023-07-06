@@ -2,7 +2,11 @@ import { Colors } from '@akashaorg/typings/ui';
 
 export type Status = 'warning' | 'error' | 'success';
 
-export type Color = { light: Colors; dark: Colors } | Status | string;
+export type Color =
+  | { light: Colors; dark: Colors }
+  | { gradient: 'gradient-to-b' | 'gradient-to-r'; from: Colors; via?: Colors; to: Colors }
+  | Status
+  | Colors;
 
 export type BaseElevation = 'none' | '1' | '2' | '4';
 
@@ -14,7 +18,7 @@ export type Padding = number | { x: number; y: number } | `p${string}`;
 
 export type BasicSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-export type BasicIconSize = Exclude<BasicSize, 'xl'>;
+export type BasicIconSize = BasicSize | { width?: string | number; height?: string | number };
 
 export type BreakPointSize = { breakPoint: string; size: BasicSize };
 
