@@ -216,7 +216,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <>
-      <Box customStyle={`${error && 'bg-(errorLight dark:errorDark)'}`} style={style}>
+      <Box customStyle={`${error && 'bg-(errorLight/10 dark:errorDark/40)'}`} style={style}>
         <Box customStyle="flex flex-row justify-between p-4 shrink-0">
           <Anchor
             customStyle="flex min-w-0 no-underline"
