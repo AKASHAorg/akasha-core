@@ -84,10 +84,10 @@ export function OriginalItem({
     }
   }
 
-  const handleAvatarClick = (pubKey: string) => () => {
+  const handleAvatarClick = (id: string) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `${routes.rootRoute}/${pubKey}`,
+      getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
     });
   };
 
