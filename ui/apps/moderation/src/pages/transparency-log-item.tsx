@@ -16,7 +16,7 @@ export const TransparencyLogItem: React.FC = () => {
     <BasicCardBox pad="p-0 space-y-3">
       <Box
         customStyle={`p-4 space-y-2 rounded-t-2xl bg-(${
-          value === 'Kept' ? 'success/10 dark:success/30' : 'error/10 dark:errorDark/40'
+          value === 'Kept' ? 'success/10 dark:success/30' : 'errorLight/10 dark:errorDark/40'
         })`}
       >
         <Box customStyle={flexStyle}>

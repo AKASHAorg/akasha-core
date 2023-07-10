@@ -1,11 +1,11 @@
-import * as React from 'react';
-import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 
-import AppRoutes from './app-routes';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 
-const { Box } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+
+import AppRoutes from './app-routes';
 
 const Application: React.FC<RootComponentProps> = props => {
   return (

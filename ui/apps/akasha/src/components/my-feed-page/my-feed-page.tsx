@@ -59,7 +59,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   }, [postsReq.data]);
 
   const userHasSubscriptions = React.useMemo(() => {
-    return loggedProfileData?.followers.edges.length > 0 || tagSubsReq.data?.topics.length > 0;
+    return loggedProfileData?.followers?.edges?.length > 0 || tagSubsReq.data?.topics?.length > 0;
   }, [loggedProfileData, tagSubsReq.data]);
 
   const handleEntryFlag = React.useCallback(
@@ -152,7 +152,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           )}
           CTALabel={t('Find topics and people')}
           onClickCTA={handleCTAClick}
-          hasPosts={postsReq.hasNextPage && postsReq.data?.pages.length > 0}
+          hasPosts={postsReq.hasNextPage && postsReq.data?.pages?.length > 0}
         />
       )}
     </Box>

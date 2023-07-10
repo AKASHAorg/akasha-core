@@ -84,11 +84,10 @@ export function OriginalItem({
     }
   }
 
-  const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
-    ev.preventDefault();
+  const handleAvatarClick = (id: string) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `${routes.rootRoute}/${pubKey}`,
+      getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
     });
   };
 
@@ -153,9 +152,7 @@ export function OriginalItem({
         <EntryBox
           isRemoved={entryData?.isRemoved}
           entryData={entryData}
-          onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-            handleAvatarClick(ev, entryData?.author?.did?.id)
-          }
+          onClickAvatar={handleAvatarClick(entryData?.author?.did?.id)}
           flagAsLabel={t('Report Post')}
           locale={locale}
           showMore={true}
