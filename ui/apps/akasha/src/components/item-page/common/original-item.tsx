@@ -84,8 +84,7 @@ export function OriginalItem({
     }
   }
 
-  const handleAvatarClick = (ev, pubKey: string) => {
-    ev.preventDefault();
+  const handleAvatarClick = (pubKey: string) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: routes => `${routes.rootRoute}/${pubKey}`,
@@ -153,7 +152,7 @@ export function OriginalItem({
         <EntryBox
           isRemoved={entryData?.isRemoved}
           entryData={entryData}
-          onClickAvatar={ev => handleAvatarClick(ev, entryData?.author?.did?.id)}
+          onClickAvatar={handleAvatarClick(entryData?.author?.did?.id)}
           flagAsLabel={t('Report Post')}
           locale={locale}
           showMore={true}

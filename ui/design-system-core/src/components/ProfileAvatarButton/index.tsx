@@ -41,6 +41,14 @@ const ProfileAvatarButton = React.forwardRef(
 
     const textTruncateStyle = `${truncateText ? 'max-w([7rem] xs:[2rem])' : ''}`;
 
+    const handleClickAvatar = ev => {
+      ev.preventDefault();
+
+      if (onClickAvatar) {
+        onClickAvatar();
+      }
+    };
+
     return (
       <Button
         plain={true}
@@ -55,7 +63,7 @@ const ProfileAvatarButton = React.forwardRef(
             avatar={avatarImage}
             profileId={profileId}
             customStyle="cursor-pointer"
-            onClick={onClickAvatar}
+            onClick={handleClickAvatar}
           />
         </Box>
 

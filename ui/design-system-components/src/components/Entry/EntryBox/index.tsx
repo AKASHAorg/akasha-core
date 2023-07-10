@@ -52,7 +52,7 @@ export interface IEntryBoxProps {
   profileAnchorLink?: string;
   repliesAnchorLink?: string;
   // handlers
-  onClickAvatar?: React.MouseEventHandler<HTMLButtonElement>;
+  onClickAvatar?: () => void;
   onRepost?: (withComment: boolean, itemId: string) => void;
   onEntryFlag?: (itemId?: string, itemType?: string) => void;
   // redirects
@@ -214,6 +214,15 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     setImageOverlayOpen(false);
   };
 
+  const handleClickAvatar = () => {
+    if (disableActions) {
+      return;
+    }
+    if (onClickAvatar) {
+      onClickAvatar();
+    }
+  };
+
   return (
     <>
       <Box customStyle={`${error && 'bg-(errorLight/10 dark:errorDark/40)'}`} style={style}>
@@ -233,14 +242,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               label={entryData.author?.name}
               info={entryData.author?.id && `@${entryData.author?.id}`}
               avatarImage={entryData.author?.avatar}
-              onClick={ev => {
-                if (disableActions) {
-                  return;
-                }
-                if (onClickAvatar) {
-                  onClickAvatar(ev);
-                }
-              }}
+              onClick={handleClickAvatar}
               ref={profileRef}
             />
           </Anchor>

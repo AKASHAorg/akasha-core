@@ -27,7 +27,7 @@ export type AvatarProps = {
   active?: boolean;
   isClickable?: boolean;
   customStyle?: string;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 export const avatarSizesMap = {
