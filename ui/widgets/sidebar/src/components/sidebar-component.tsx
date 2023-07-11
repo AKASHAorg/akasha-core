@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/ui';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
+import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -16,7 +17,6 @@ import {
   useGetLogin,
   useLogout,
 } from '@akashaorg/ui-awf-hooks';
-
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const [isMobile, setIsMobile] = React.useState(
@@ -138,16 +138,14 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   };
 
   const subtitleUi = useMemo(
-    () => (
-      <Text
-        variant="footnotes1"
-        customStyle={`text-grey5 ${myProfileQuery.data?.did?.id ? 'w-48' : 'whitespace-normal'}`}
-        truncate
-        breakWord
-      >
-        {myProfileQuery.data?.did.id ?? t('Connect to see exclusive member only features.')}
-      </Text>
-    ),
+    () =>
+      myProfileQuery.data?.did?.id ? (
+        <DidField did={myProfileQuery.data?.did?.id} textColor="grey7" />
+      ) : (
+        <Text variant="footnotes1" customStyle="text-grey5 whitespace-normal" truncate breakWord>
+          {t('Connect to see exclusive member only features.')}
+        </Text>
+      ),
     [myProfileQuery],
   );
 
