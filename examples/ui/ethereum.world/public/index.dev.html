@@ -61,8 +61,8 @@
   ></script>
   <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.5/lib/umd/single-spa.dev.js"
           integrity="sha256-Px9B1v3wMkR1sHpxZbDfaM8U45nyMD9BaS49pLGzG7w=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@5.1.1/lib/umd/single-spa-react.js"
-          integrity="sha256-P+6zaRNN7wSQbSvWXDYxl7ckS2QF5pI9CxmBZPffYMY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@5.0.2/lib/umd/single-spa-react.js"
+          integrity="sha256-JIQDgDH4WQZ6a9YCreoISXaYNxROMuRdz34l5Xv3h4M=" crossorigin="anonymous"></script>
   <script src="/scripts/theme.js"></script>
   <meta name="importmap-type" content="systemjs-importmap" />
 
@@ -75,7 +75,6 @@
           "@akashaorg/ui-awf-hooks": "/hooks/index.js"
         }
       }
-
 
 
 
@@ -98,18 +97,18 @@
   </div>
 </template>
 <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/sw.js", { scope: "/" })
-        .then(registration => {
-          console.log("SW registered: ", registration);
-        })
-        .catch(registrationError => {
-          console.log("SW registration failed: ", registrationError);
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker
+                .register('/sw.js', { scope: '/' })
+                .then(registration => {
+                    console.log('SW registered: ', registration);
+                })
+                .catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
         });
-    });
-  }
+    }
 </script>
 <script type="module" src="/main.js" async></script>
 </body>

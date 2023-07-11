@@ -72,7 +72,6 @@
     "@storybook/addon-links": "7.0.0-beta.29",
     "@storybook/react": "7.0.0-beta.29",
     "@storybook/react-webpack5": "7.0.0-beta.29",
-    "@tanstack/react-virtual": "^3.0.0-beta.54",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
     "@types/react-test-renderer": "18.0.0",
