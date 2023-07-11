@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
@@ -17,15 +16,6 @@ const Dashboard: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
-  const [menuDropOpen, setMenuDropOpen] = React.useState<string | null>(null);
-
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.profile;
-    },
-  });
-  const loggedProfileData = profileDataReq.data;
 
   const { t } = useTranslation('app-articles');
 
@@ -46,34 +36,6 @@ const Dashboard: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[SETTINGS],
     });
-  };
-
-  const closeMenuDrop = () => {
-    setMenuDropOpen(null);
-  };
-
-  const toggleMenuDrop = (ev: React.SyntheticEvent, id: string) => {
-    ev.stopPropagation();
-    setMenuDropOpen(id);
-  };
-
-  const handleDropItemClick = (id: string, action?: 'edit' | 'settings') => () => {
-    if (action) {
-      navigateTo({
-        appName: '@akashaorg/app-articles',
-        getNavigationUrl: () => `/article/${id}/${action}`,
-      });
-    }
-  };
-
-  const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData?.did?.id) {
-      return props.navigateToModal({
-        name: 'login',
-        redirectTo: { name: 'report-modal', itemId, itemType },
-      });
-    }
-    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleClickWriteArticle = () => {
@@ -140,39 +102,12 @@ const Dashboard: React.FC<RootComponentProps> = props => {
             articleData={article}
             readTimeLabel={t('min read')}
             copyrightLabel={t('copyrighted')}
-            menuDropOpen={menuDropOpen === article.id}
-            menuItems={[
-              ...(loggedProfileData?.did?.id === article.authorProfileId
-                ? [
-                    {
-                      icon: 'editSimple',
-                      handler: handleDropItemClick(article.id, 'edit'),
-                      label: t('Edit'),
-                      iconColor: 'primaryText',
-                    },
-                    {
-                      icon: 'settingsAlt',
-                      handler: handleDropItemClick(article.id, 'settings'),
-                      label: t('Settings'),
-                      iconColor: 'primaryText',
-                    },
-                  ]
-                : [
-                    {
-                      icon: 'report',
-                      handler: handleFlagArticle(article.id, EntityTypes.ARTICLE),
-                      label: t('Report'),
-                    },
-                  ]),
-            ]}
             mentionsLabel={t('Mentions')}
             repliesLabel={t('Replies')}
             isSaved={idx === 0}
             saveLabel={t('Save')}
             savedLabel={t('Saved')}
             onClickArticle={handleClickArticle}
-            toggleMenuDrop={toggleMenuDrop}
-            closeMenuDrop={closeMenuDrop}
             onTagClick={handleTagClick}
             onMentionsClick={handleMentionsClick}
             onRepliesClick={handleRepliesClick}
