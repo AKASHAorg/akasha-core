@@ -6737,6 +6737,18 @@
     "@tanstack/query-core" "4.29.1"
     use-sync-external-store "^1.2.0"
 
+"@tanstack/react-virtual@^3.0.0-beta.54":
+  version "3.0.0-beta.54"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.0.0-beta.54.tgz#755979455adf13f2584937204a3f38703e446037"
+  integrity sha512-D1mDMf4UPbrtHRZZriCly5bXTBMhylslm4dhcHqTtDJ6brQcgGmk8YD9JdWBGWfGSWPKoh2x1H3e7eh+hgPXtQ==
+  dependencies:
+    "@tanstack/virtual-core" "3.0.0-beta.54"
+
+"@tanstack/virtual-core@3.0.0-beta.54":
+  version "3.0.0-beta.54"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.0.0-beta.54.tgz#12259d007911ad9fce1388385c54a9141f4ecdc4"
+  integrity sha512-jtkwqdP2rY2iCCDVAFuaNBH3fiEi29aTn2RhtIoky8DTTiCdc48plpHHreLwmv1PICJ4AJUUESaq3xa8fZH8+g==
+
 "@testing-library/dom@^8.5.0":
   version "8.20.1"
   resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-8.20.1.tgz#2e52a32e46fc88369eef7eef634ac2a192decd9f"
@@ -23271,10 +23283,10 @@ simple-update-notifier@^1.0.0, simple-update-notifier@^1.0.7:
   dependencies:
     semver "~7.0.0"
 
-single-spa-react@5.0.0, single-spa-react@5.0.1, single-spa-react@5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/single-spa-react/-/single-spa-react-5.0.2.tgz#7cfbc100de212c0b74a8e9b12e5b03db2c07201b"
-  integrity sha512-KNgdURY5NKliiqa/qtRaIeRNqe5v4sjl1AlPYwr5J3Go8KW+w8JPqvIMkzXz+R0bFC3ET/fiq/w3CbQ02lB56g==
+single-spa-react@5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/single-spa-react/-/single-spa-react-5.1.1.tgz#b2f0f3a37c3476554a48f7e109dd880b2f00a2a2"
+  integrity sha512-YoVg/28BW6zeFjCkJcCLHBHI0Nr9yYXUr693ubQjMPLWqUWoCE0BQ2zC3Xc9qggOHI8bzq3x7BctudhmG+vEmg==
   dependencies:
     browserslist-config-single-spa "^1.0.1"
 
