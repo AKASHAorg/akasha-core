@@ -139,14 +139,14 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const subtitleUi = useMemo(
     () =>
-      myProfileQuery.data?.did?.id ? (
-        <DidField did={myProfileQuery.data?.did?.id} textColor="grey7" />
+      loginQuery.data?.id ? (
+        <DidField did={loginQuery.data?.id} textColor="grey7" />
       ) : (
         <Text variant="footnotes1" customStyle="text-grey5 whitespace-normal" truncate breakWord>
           {t('Connect to see exclusive member only features.')}
         </Text>
       ),
-    [myProfileQuery],
+    [loginQuery.data?.id],
   );
 
   return (
