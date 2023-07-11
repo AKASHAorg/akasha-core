@@ -19,7 +19,7 @@ export type AppListProp = {
 };
 
 const AppList: React.FC<AppListProp> = ({ apps, onAppSelected }) => {
-  const iconStyle = `${getRadiusClasses(10)} ${getColorClasses(
+  const iconStyle = `shrink-0	${getRadiusClasses(10)} ${getColorClasses(
     { light: 'grey6', dark: 'grey5' },
     'bg',
   )} w-[3.75rem] h-[3.75rem]`;
@@ -32,7 +32,7 @@ const AppList: React.FC<AppListProp> = ({ apps, onAppSelected }) => {
             <Button onClick={onAppSelected} plain>
               <Stack spacing="gap-x-2">
                 <div className={tw(apply(iconStyle))} />
-                <Stack direction="column" customStyle="h-[3.75rem] w-[25rem]">
+                <Stack direction="column" customStyle="h-[3.75rem]">
                   <Text variant="button-sm">{app.name}</Text>
                   <Text
                     variant="footnotes2"

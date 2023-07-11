@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
+
 import Anchor from '../';
 import { customRender } from '../../../test-utils';
 

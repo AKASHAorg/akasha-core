@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@akashaorg/awf-sdk": "*",
-    "@akashaorg/design-system": "*",
     "@akashaorg/design-system-core": "*",
     "@akashaorg/ui-awf-hooks": "*",
     "i18next": "22.4.14",

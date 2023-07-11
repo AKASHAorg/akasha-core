@@ -1,85 +1,45 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
-import HeroImageCard, { IHeroImageCard } from './hero-image-card';
 
-const { Box, Button, HorizontalDivider, Text, Icon } = DS;
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface ISummaryCardProps extends IHeroImageCard {
+import { HeroImage, HeroImageProps } from './hero-image-card';
+
+export type SummaryCardProps = HeroImageProps & {
   paragraph1TitleLabel: string;
   paragraph1Content?: string | Uint8Array;
   paragraph2TitleLabel: string;
   paragraph2Content?: string;
-  doneButtonLabel: string;
-  onButtonClick?: () => void;
-}
+};
 
-const SummaryCard: React.FC<ISummaryCardProps> = props => {
-  const {
-    paragraph1TitleLabel,
-    paragraph1Content,
-    paragraph2TitleLabel,
-    paragraph2Content,
-    doneButtonLabel,
-    onButtonClick,
-  } = props;
-
-  const handleCopy = (value: string) => () => {
-    navigator.clipboard.writeText(value);
-  };
-
-  const handleButtonClick = () => {
-    if (onButtonClick) {
-      onButtonClick();
-    }
-  };
+export const SummaryCard: React.FC<SummaryCardProps> = props => {
+  const { paragraph1TitleLabel, paragraph1Content, paragraph2TitleLabel, paragraph2Content } =
+    props;
 
   return (
-    <Box gap="large">
-      <HeroImageCard {...props} />
+    <Box customStyle="space-y-3">
+      <HeroImage {...props} />
 
-      <Box round="xsmall" pad="xsmall" gap="small" border={{ color: 'border' }}>
-        <Box direction="row" gap="xsmall">
-          <Text size="large" weight="bold">
-            {paragraph1TitleLabel}
-          </Text>
-          <Icon
-            type="copy"
-            color="secondaryText"
-            style={{ cursor: 'pointer' }}
-            onClick={handleCopy(paragraph1Content as string)}
-          />
-        </Box>
+      <Box customStyle="rounded-lg space-y-2 p-4 bg-(grey9 dark:grey3)">
+        <Text weight="bold">{paragraph1TitleLabel}</Text>
+
         {paragraph1Content && (
-          <Text size="large" wordBreak="break-word">
+          <Text customStyle="break-all" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {paragraph1Content}
           </Text>
         )}
 
-        <HorizontalDivider />
+        <Divider />
 
-        <Box direction="row" gap="xsmall">
-          <Text size="large" weight="bold">
-            {paragraph2TitleLabel}
-          </Text>
-          <Icon
-            type="copy"
-            color="secondaryText"
-            style={{ cursor: 'pointer' }}
-            onClick={handleCopy(paragraph2Content as string)}
-          />
-        </Box>
+        <Text weight="bold">{paragraph2TitleLabel}</Text>
+
         {paragraph2Content && (
-          <Text size="large" wordBreak="break-word">
+          <Text customStyle="break-all" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {paragraph2Content}
           </Text>
         )}
       </Box>
-
-      <Box direction="row" justify="end">
-        <Button primary={true} label={doneButtonLabel} onClick={handleButtonClick} />
-      </Box>
     </Box>
   );
 };
-
-export default SummaryCard;

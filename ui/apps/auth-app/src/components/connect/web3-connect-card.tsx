@@ -1,20 +1,21 @@
 import * as React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
-import { IconType } from '@akashaorg/typings/ui';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import BoxedIcon, { BoxedIconProps } from './boxed-icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import AppIcon, { AppIconProps } from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
+import { Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
 
 export interface IWeb3ConnectCardProps {
   titleLabel: string;
+  leftIconType: AppIconProps['placeholderIconType'];
   subtitleLabel?: string;
-  leftIconType: IconType;
-  handleClick: () => void;
-  iconSize?: IconProps['size'];
+  iconSize: AppIconProps['size'];
+  boxSize: AppIconProps['backgroundSize'];
   iconColor?: IconProps['color'];
-  boxSize?: BoxedIconProps['boxSize'];
-  boxBgColor?: string;
+  boxBgColor?: Color;
+  handleClick: () => void;
 }
 
 const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
@@ -22,34 +23,42 @@ const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
     titleLabel,
     subtitleLabel,
     leftIconType,
-    handleClick,
-    boxSize = 12,
+    iconSize,
+    boxSize,
     boxBgColor = 'white',
     iconColor,
-    iconSize,
+    handleClick,
   } = props;
 
   return (
-    <BasicCardBox
-      elevation={'none'}
-      accentBorder={true}
-      customStyle="cursor-pointer select-none"
-      onClick={handleClick}
-    >
-      <Box customStyle="flex items-center">
-        <BoxedIcon
-          iconColor={iconColor}
-          iconSize={iconSize || 'lg'}
-          iconType={leftIconType}
-          boxSize={boxSize}
-          background={`bg(${boxBgColor} dark:${boxBgColor})`}
-        />
-        <Box customStyle="flex flex-col ml-4">
-          <Text weight="bold">{titleLabel}</Text>
-          {subtitleLabel && <Text variant="body2">{subtitleLabel}</Text>}
-        </Box>
-      </Box>
-    </BasicCardBox>
+    <Button plain onClick={handleClick}>
+      <Card
+        elevation="none"
+        radius={8}
+        padding={8}
+        accentBorder={true}
+        customStyle="select-none w-full"
+      >
+        <Stack align="center" spacing="gap-x-2">
+          <AppIcon
+            iconColor={iconColor}
+            placeholderIconType={leftIconType}
+            radius={8}
+            size={iconSize}
+            backgroundSize={boxSize}
+            background={boxBgColor}
+          />
+          <Stack direction="column">
+            <Text variant="h6">{titleLabel}</Text>
+            {subtitleLabel && (
+              <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+                {subtitleLabel}
+              </Text>
+            )}
+          </Stack>
+        </Stack>
+      </Card>
+    </Button>
   );
 };
 

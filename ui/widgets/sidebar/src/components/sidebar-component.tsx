@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/ui';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -10,16 +10,31 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ListSidebarApps from './list-sidebar-apps';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import { useGetLogin, useLogout } from '@akashaorg/ui-awf-hooks';
+import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  useGetLogin,
+  useLogout,
+} from '@akashaorg/ui-awf-hooks';
+
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
+  const [isMobile, setIsMobile] = React.useState(
+    window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
+  );
+
+  React.useEffect(() => {
+    setIsMobile(window.matchMedia(startMobileSidebarHidingBreakpoint).matches);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.matchMedia(startMobileSidebarHidingBreakpoint).matches]);
+
   const {
     uiEvents,
     plugins,
-    worldConfig: { defaultApps, homepageApp, socialLinks },
+    worldConfig: { defaultApps, socialLinks },
   } = props;
-  const [routeData, setRouteData] = React.useState(null);
-  const [activeOption, setActiveOption] = React.useState<IMenuItem | null>(null);
+  const [routeData, setRouteData] = useState(null);
+  const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const { t } = useTranslation('ui-widget-sidebar');
 
   const myProfileQuery = useGetMyProfileQuery(null, {
@@ -30,7 +45,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
-  React.useEffect(() => {
+  useEffect(() => {
     let sub;
     if (routing) {
       sub = routing.routeObserver.subscribe({
@@ -45,8 +60,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       }
     };
   }, [routing]);
+
   // sort according to worldConfig index
-  const worldApps = React.useMemo(() => {
+  const worldApps = useMemo(() => {
     return routeData?.[MenuItemAreaType.AppArea]?.sort(
       (a: { name: string }, b: { name: string }) => {
         if (defaultApps.indexOf(a.name) < defaultApps.indexOf(b.name)) {
@@ -59,7 +75,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     );
   }, [defaultApps, routeData]);
 
-  const userInstalledApps = React.useMemo(() => {
+  const userInstalledApps = useMemo(() => {
     return routeData?.[MenuItemAreaType.UserAppArea];
   }, [routeData]);
 
@@ -72,11 +88,16 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       getNavigationUrl: () => route,
     });
   };
+
   const handleClickExplore = () => {
     routing?.navigateTo({
       appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => routes.explore,
     });
+
+    if (isMobile) {
+      handleSidebarClose();
+    }
   };
   const handleSidebarClose = () => {
     // emit HideSidebar event to trigger corresponding action in associated widgets
@@ -84,16 +105,21 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       event: EventTypes.HideSidebar,
     });
   };
+
   const handleLoginClick = () => {
     routing.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: () => '/',
     });
+
+    if (isMobile) {
+      handleSidebarClose();
+    }
   };
   const handleLogoutClick = () => {
     logoutQuery.mutate();
   };
-  const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => {
+  const handleAppIconClick = (menuItem: IMenuItem) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       setActiveOption(null);
       handleNavigation(menuItem.name, menuItem.route);
@@ -103,11 +129,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
 
-  const handleOptionClick = (
-    menuItem: IMenuItem,
-    subrouteMenuItem: IMenuItem,
-    isMobile?: boolean,
-  ) => {
+  const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => {
     setActiveOption(subrouteMenuItem);
     handleNavigation(menuItem.name, subrouteMenuItem.route);
     if (isMobile) {
@@ -115,7 +137,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
 
-  const subtitleUi = React.useMemo(
+  const subtitleUi = useMemo(
     () => (
       <Text
         variant="footnotes1"
@@ -131,7 +153,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <BasicCardBox
-      customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)]"
+      customStyle="w-[19.5rem] max-w-[19.5rem] max-h-screen min-[1440px]:max-h-[calc(100vh-20px)]"
       round="rounded-r-2xl xl:rounded-2xl"
       pad="p-0"
     >
@@ -139,7 +161,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         <Box customStyle="w-fit h-fit mr-2">
           <Avatar
             profileId={myProfileQuery.data?.did?.id}
-            avatar={myProfileQuery.data?.avatar?.default.src}
+            avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.avatar)}
           />
         </Box>
         <Box customStyle="w-fit flex flex-grow flex-col">
@@ -150,18 +172,12 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
             subtitleUi
           )}
         </Box>
-        <Box customStyle="w-fit h-fit ml-6 self-center">
+        <Box customStyle="w-fit h-fit ml-6 self-start">
           {loginQuery.data?.id && (
             <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
           )}
           {!loginQuery.data?.id && loginQuery.isStale && (
-            <Button
-              icon="BoltIcon"
-              size="xs"
-              variant="primary"
-              iconOnly={true}
-              onClick={handleLoginClick}
-            />
+            <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
           )}
           {loginQuery.isLoading && !loginQuery.isStale && <Spinner size="sm" />}
         </Box>
@@ -194,8 +210,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         <Text variant="footnotes2" customStyle="text-grey5">
           {t('Add magic to your world by installing cool apps developed by the community')}
         </Text>
-        <Box customStyle="w-fit h-fit mt-6">
-          <Button onClick={handleClickExplore} label={t('Check them out!')} variant="primary" />
+        <Box customStyle="w-fit h-fit mt-6 self-end">
+          <Button onClick={handleClickExplore} label={t('Check them out!')} variant="secondary" />
         </Box>
       </Box>
       {socialLinks.length > 0 && (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { IntegrationTypes } from '@akashaorg/typings/ui';
 
-import AppAvatar, { IAppAvatarProps } from '.';
+import AppAvatar, { AppAvatarProps } from '.';
 
 export default {
   title: 'Avatars/AppAvatar',
@@ -10,7 +10,7 @@ export default {
 
 const ethAddress = '0x003410490050000320006570034567114572000';
 
-const Template = (args: IAppAvatarProps) => <AppAvatar {...args} />;
+const Template = (args: AppAvatarProps) => <AppAvatar {...args} />;
 
 export const BaseAvatar = Template.bind({});
 

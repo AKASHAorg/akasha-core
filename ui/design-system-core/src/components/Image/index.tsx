@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { apply, tw } from '@twind/core';
 
 export type ImageProps = {
   customStyle?: string;
-  testId?: string;
-  src: string;
+  dataTestId?: string;
 };
 
-const Box: React.FC<ImageProps> = props => {
-  const { customStyle = '', testId, src } = props;
+const Image: React.FC<
+  PropsWithChildren<
+    ImageProps &
+      React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
+  >
+> = props => {
+  const { src, customStyle, dataTestId, ...rest } = props;
 
-  const className = apply`${customStyle}`;
+  const className = apply`object-contain ${customStyle}`;
 
-  return <img className={tw(className)} data-testid={testId} src={src} />;
+  return (
+    <img
+      alt={src}
+      src={src}
+      className={tw(className)}
+      aria-label={src}
+      data-testid={dataTestId}
+      {...rest}
+    />
+  );
 };
 
-export default Box;
+export default Image;

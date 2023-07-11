@@ -15,18 +15,20 @@ export const ButtonIcon: React.FC<
     active?: ButtonProps['active'];
   }
 > = ({ size, type, variant, greyBg, loading, breakPointSize, disabled, active }) => {
+  let color = null;
+
+  if (variant === 'primary' && !greyBg) {
+    color = 'white';
+  } else if (active) {
+    color = { light: 'secondaryLight', dark: 'black' };
+  }
+
   return (
     <Icon
       type={type}
       size={size}
       breakPointSize={breakPointSize}
-      color={
-        variant === 'primary' && !greyBg
-          ? 'white'
-          : active
-          ? { light: 'secondaryLight', dark: 'black' }
-          : ''
-      }
+      color={color}
       accentColor={
         (variant !== 'primary' && loading) ||
         variant === 'text' ||

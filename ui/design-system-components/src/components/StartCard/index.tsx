@@ -58,7 +58,7 @@ const StartCard: React.FC<StartProps> = ({
           )}
         </div>
       )}
-      {showSecondaryArea && <Text color="grey">{secondaryDescription}</Text>}
+      {showSecondaryArea && <Text color="grey1">{secondaryDescription}</Text>}
     </BasicCardBox>
   );
 };

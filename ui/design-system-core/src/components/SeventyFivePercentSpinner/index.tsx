@@ -18,7 +18,7 @@ const spinnerSizesMap = {
 };
 
 const SeventyFivePercentSpinner: React.FC<ISpinnerProps> = props => {
-  const { size = 'md', color = 'current', loadingLabel } = props;
+  const { size = 'md', color = 'black', loadingLabel } = props;
 
   return (
     <div
