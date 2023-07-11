@@ -18,7 +18,7 @@ const DidField: React.FC<DidFieldProps> = ({
 
   return (
     <Stack spacing="gap-x-1.5" align="center">
-      <Icon type={icon} />
+      {icon && <Icon type={icon} />}
       <Text variant="footnotes1" color={textColor}>
         {truncatedDid}
       </Text>
