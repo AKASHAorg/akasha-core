@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
@@ -11,8 +10,6 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ArticleEditorCard from '../components/article-editor-card';
-
-const { EditorToolbar } = DS;
 
 const ArticleEditor: React.FC<RootComponentProps> = props => {
   const [dropOpen, setDropOpen] = React.useState<string | null>(null);
@@ -69,7 +66,7 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
 
         <Text variant="h2">{t('Article Editor')}</Text>
       </Box>
-      <EditorToolbar
+      {/* <EditorToolbar
         dropOpen={dropOpen}
         caseStyle={caseStyle}
         listStyle={listStyle}
@@ -78,19 +75,19 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
         closeDrop={() => setDropOpen(null)}
         onDropOpen={type => setDropOpen(type)}
         onBoldClick={() => {
-          /** */
+          return;
         }}
         onItalicClick={() => {
-          /** */
+          return;
         }}
         onUnderlineClick={() => {
-          /** */
+          return;
         }}
         onStrikeThroughClick={() => {
-          /** */
+          return;
         }}
         onIconClick={handleIconClick}
-      />
+      /> */}
       <ArticleEditorCard
         inviteCollaboratorsLabel={t('Invite collaborators')}
         collaboratingLabel={t('Collaborating')}

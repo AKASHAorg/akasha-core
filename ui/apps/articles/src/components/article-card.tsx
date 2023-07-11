@@ -1,7 +1,5 @@
 import React from 'react';
-import { isMobileOnly } from 'react-device-detect';
 
-import DS from '@akashaorg/design-system';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -12,7 +10,6 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 
 import { IArticlesMiniCardProps } from '../components/articles-mini-card';
 import { userData } from './dummy-data';
-const { CardHeaderMenuDropdown } = DS;
 
 export interface IArticleCardProps extends IArticlesMiniCardProps {
   tagsLabel: string;
@@ -26,7 +23,6 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
     readTimeLabel,
     copyrightLabel,
     menuDropOpen,
-    menuItems,
     collaboratorsLabel,
     mentionsLabel,
     repliesLabel,
@@ -40,14 +36,6 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
     onRepliesClick,
     onSaveClick,
   } = props;
-
-  const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
-
-  const showCardMenu = React.useMemo(
-    () => !isMobileOnly && menuItems.length > 0 && menuIconRef.current && menuDropOpen,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [menuDropOpen],
-  );
 
   return (
     <BasicCardBox customStyle="mb-2">
@@ -73,16 +61,9 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           <Box customStyle="flex flex-row gap-2">
             <Icon type="akasha" />
             <button onClick={toggleMenuDrop}>
-              <Icon type="EllipsisVerticalIcon" accentColor={menuDropOpen} ref={menuIconRef} />
+              <Icon type="EllipsisVerticalIcon" accentColor={menuDropOpen} />
             </button>
           </Box>
-          {showCardMenu && (
-            <CardHeaderMenuDropdown
-              target={menuIconRef.current}
-              onMenuClose={closeMenuDrop}
-              menuItems={menuItems}
-            />
-          )}
         </Box>
       </Box>
       <Box customStyle="px-4 pb-4 border(b grey8 dark:grey3 gap-2)">

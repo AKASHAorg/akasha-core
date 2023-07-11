@@ -1,10 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { useTagSearch } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { CropValue } from '@akashaorg/design-system/lib/components/ImageCropper';
+import getCroppedImage from '@akashaorg/design-system-core/lib/utils/get-cropped-image';
 
 import ArticleCardSettings, {
   CardFormValues,
@@ -14,11 +13,9 @@ import ArticleCardSettings, {
 
 import { licences } from '../utils/licenses';
 
-const { getCroppedImage } = DS;
-
 const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
   // state values to handle image cropping
-  const [coverImageCrop, setCoverImageCrop] = React.useState<CropValue>({
+  const [coverImageCrop, setCoverImageCrop] = React.useState<any>({
     x: 0,
     y: 0,
   });
@@ -296,18 +293,18 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
 
   return (
     <ArticleCardSettings
-      subtitleLabel={t('Drag the image to reposition')}
-      cancelCroppingLabel={t('Cancel')}
-      saveCropLabel={t('Save')}
-      imgSrc={coverImageSrc}
-      imgCrop={coverImageCrop}
-      imgZoom={coverImageZoom}
+      dragToRepositionLabel={t('Drag the image to reposition')}
+      // cancelCroppingLabel={t('Cancel')}
+      // saveCropLabel={t('Save')}
+      image={coverImageSrc.url}
+      // imgCrop={coverImageCrop}
+      // imgZoom={coverImageZoom}
       minZoom={minZoom}
       maxZoom={maxZoom}
-      zoomStep={zoomStep}
-      isLoading={false}
-      setImgCrop={setCoverImageCrop}
-      setImgZoom={setCoverImageZoom}
+      // zoomStep={zoomStep}
+      // isLoading={false}
+      onCrop={setCoverImageCrop}
+      // setImgZoom={setCoverImageZoom}
       showCropper={showCropper}
       formValues={formValues}
       titleLabel={t('Article Settings')}
@@ -340,10 +337,10 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
       onCoverImageUpload={handleCoverImageUpload}
       onClickEditImage={handleEditImage}
       onCropComplete={handleCoverImageCropComplete}
-      onZoomInClick={handleZoomInClick}
-      onZoomOutClick={handleZoomOutClick}
-      onSaveCrop={handleCropCoverImage}
-      onRevertCropping={resetCropperFields}
+      // onZoomInClick={handleZoomInClick}
+      // onZoomOutClick={handleZoomOutClick}
+      // onSaveCrop={handleCropCoverImage}
+      // onRevertCropping={resetCropperFields}
       onDescriptiveTextChange={handleDescriptiveTextChange}
       onAddTag={handleAddTag}
       onTagInputChange={handleTagInputChange}
