@@ -114,7 +114,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
             {articleData.topics.map((tag, idx) => (
               <button key={idx} onClick={() => onTagClick(tag)}>
                 <Box customStyle="flex flex-row rounded-lg gap-0.5 mb-2 px-1 py-0.5 border(secondaryLight dark:secondaryDark)">
-                  <Text color="accentText">{tag}</Text>
+                  <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{tag}</Text>
                 </Box>
               </button>
             ))}

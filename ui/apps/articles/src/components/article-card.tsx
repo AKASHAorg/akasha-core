@@ -22,7 +22,6 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
     tagsLabel,
     readTimeLabel,
     copyrightLabel,
-    menuDropOpen,
     collaboratorsLabel,
     mentionsLabel,
     repliesLabel,
@@ -61,7 +60,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           <Box customStyle="flex flex-row gap-2">
             <Icon type="akasha" />
             <button onClick={toggleMenuDrop}>
-              <Icon type="EllipsisVerticalIcon" accentColor={menuDropOpen} />
+              <Icon type="EllipsisVerticalIcon" />
             </button>
           </Box>
         </Box>

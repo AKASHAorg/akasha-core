@@ -17,8 +17,6 @@ const ArticlePage: React.FC<RootComponentProps> = props => {
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
-
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
       return resp.viewer?.profile;
@@ -33,15 +31,6 @@ const ArticlePage: React.FC<RootComponentProps> = props => {
 
   const handleClickIcon = () => {
     navigate(-1);
-  };
-
-  const closeMenuDrop = () => {
-    setMenuDropOpen(false);
-  };
-
-  const toggleMenuDrop = (ev: React.SyntheticEvent) => {
-    ev.stopPropagation();
-    setMenuDropOpen(!menuDropOpen);
   };
 
   const handleDropItemClick = (id: string, action?: 'edit' | 'settings') => () => {
@@ -82,30 +71,30 @@ const ArticlePage: React.FC<RootComponentProps> = props => {
     /** do something */
   };
 
-  const menutItems = [
-    ...(loggedProfileData?.did?.id === sampleArticleData.authorProfileId
-      ? [
-          {
-            icon: 'editSimple',
-            handler: handleDropItemClick(sampleArticleData.id, 'edit'),
-            label: t('Edit'),
-            iconColor: 'primaryText',
-          },
-          {
-            icon: 'settingsAlt',
-            handler: handleDropItemClick(sampleArticleData.id, 'settings'),
-            label: t('Settings'),
-            iconColor: 'primaryText',
-          },
-        ]
-      : [
-          {
-            icon: 'report',
-            handler: handleFlagArticle(sampleArticleData.id, EntityTypes.ARTICLE),
-            label: t('Report'),
-          },
-        ]),
-  ];
+  // const menutItems = [
+  //   ...(loggedProfileData?.did?.id === sampleArticleData.authorProfileId
+  //     ? [
+  //         {
+  //           icon: 'editSimple',
+  //           handler: handleDropItemClick(sampleArticleData.id, 'edit'),
+  //           label: t('Edit'),
+  //           iconColor: 'primaryText',
+  //         },
+  //         {
+  //           icon: 'settingsAlt',
+  //           handler: handleDropItemClick(sampleArticleData.id, 'settings'),
+  //           label: t('Settings'),
+  //           iconColor: 'primaryText',
+  //         },
+  //       ]
+  //     : [
+  //         {
+  //           icon: 'report',
+  //           handler: handleFlagArticle(sampleArticleData.id, EntityTypes.ARTICLE),
+  //           label: t('Report'),
+  //         },
+  //       ]),
+  // ];
 
   return (
     <Box customStyle="gap-2">
@@ -114,8 +103,6 @@ const ArticlePage: React.FC<RootComponentProps> = props => {
         articleData={sampleArticleData}
         readTimeLabel={t('min read')}
         copyrightLabel={t('copyrighted article')}
-        menuDropOpen={menuDropOpen}
-        menuItems={menutItems}
         tagsLabel={t('tags')}
         collaboratorsLabel={t('collaborators')}
         mentionsLabel={t('Mentions')}
@@ -123,8 +110,6 @@ const ArticlePage: React.FC<RootComponentProps> = props => {
         isSaved={true}
         saveLabel={t('Save')}
         savedLabel={t('Saved')}
-        toggleMenuDrop={toggleMenuDrop}
-        closeMenuDrop={closeMenuDrop}
         onTagClick={handleTagClick}
         onMentionsClick={handleMentionsClick}
         onRepliesClick={handleRepliesClick}

@@ -22,7 +22,6 @@ const MyArticles: React.FC<RootComponentProps> = props => {
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
-  const [menuDropOpen, setMenuDropOpen] = React.useState<string | null>(null);
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
@@ -43,15 +42,6 @@ const MyArticles: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
     });
-  };
-
-  const closeMenuDrop = () => {
-    setMenuDropOpen(null);
-  };
-
-  const toggleMenuDrop = (ev: React.SyntheticEvent, id: string) => {
-    ev.stopPropagation();
-    setMenuDropOpen(id);
   };
 
   const handleDropItemClick = (id: string, action?: 'edit' | 'settings') => () => {
@@ -147,39 +137,12 @@ const MyArticles: React.FC<RootComponentProps> = props => {
               articleData={article}
               readTimeLabel={t('min read')}
               copyrightLabel={t('copyrighted')}
-              menuDropOpen={menuDropOpen === article.id}
-              menuItems={[
-                ...(loggedProfileData?.did?.id !== article.authorProfileId
-                  ? [
-                      {
-                        icon: 'editSimple',
-                        handler: handleDropItemClick(article.id, 'edit'),
-                        label: t('Edit'),
-                        iconColor: 'primaryText',
-                      },
-                      {
-                        icon: 'settingsAlt',
-                        handler: handleDropItemClick(article.id, 'settings'),
-                        label: t('Settings'),
-                        iconColor: 'primaryText',
-                      },
-                    ]
-                  : [
-                      {
-                        icon: 'report',
-                        handler: handleFlagArticle(article.id, EntityTypes.ARTICLE),
-                        label: t('Report'),
-                      },
-                    ]),
-              ]}
               mentionsLabel={t('Mentions')}
               repliesLabel={t('Replies')}
               isSaved={idx === 0}
               saveLabel={t('Save')}
               savedLabel={t('Saved')}
               onClickArticle={handleClickArticle}
-              toggleMenuDrop={toggleMenuDrop}
-              closeMenuDrop={closeMenuDrop}
               onTagClick={handleTagClick}
               onMentionsClick={handleMentionsClick}
               onRepliesClick={handleRepliesClick}
@@ -196,35 +159,8 @@ const MyArticles: React.FC<RootComponentProps> = props => {
               activeTabIndex={activeTabIndex}
               lastUpdatedLabel={t('Last updated')}
               draftLabel={t('Draft')}
-              menuDropOpen={menuDropOpen === article.id}
-              menuItems={[
-                ...(loggedProfileData?.did?.id === article.authorProfileId
-                  ? [
-                      {
-                        icon: 'editSimple',
-                        handler: handleDropItemClick(article.id, 'edit'),
-                        label: t('Edit'),
-                        iconColor: 'primaryText',
-                      },
-                      {
-                        icon: 'settingsAlt',
-                        handler: handleDropItemClick(article.id, 'settings'),
-                        label: t('Settings'),
-                        iconColor: 'primaryText',
-                      },
-                    ]
-                  : [
-                      {
-                        icon: 'report',
-                        handler: handleFlagArticle(article.id, EntityTypes.ARTICLE),
-                        label: t('Report'),
-                      },
-                    ]),
-              ]}
               collaboratingLabel={t('Collaborating')}
               onClickArticle={handleClickArticle}
-              toggleMenuDrop={toggleMenuDrop}
-              closeMenuDrop={closeMenuDrop}
             />
           ))}
       {activeTabIndex === 2 &&
@@ -237,35 +173,8 @@ const MyArticles: React.FC<RootComponentProps> = props => {
               activeTabIndex={activeTabIndex}
               lastUpdatedLabel={t('Last updated')}
               draftLabel={t('Draft')}
-              menuDropOpen={menuDropOpen === article.id}
-              menuItems={[
-                ...(loggedProfileData?.did?.id === article.authorProfileId
-                  ? [
-                      {
-                        icon: 'editSimple',
-                        handler: handleDropItemClick(article.id, 'edit'),
-                        label: t('Edit'),
-                        iconColor: 'primaryText',
-                      },
-                      {
-                        icon: 'settingsAlt',
-                        handler: handleDropItemClick(article.id, 'settings'),
-                        label: t('Settings'),
-                        iconColor: 'primaryText',
-                      },
-                    ]
-                  : [
-                      {
-                        icon: 'report',
-                        handler: handleFlagArticle(article.id, EntityTypes.ARTICLE),
-                        label: t('Report'),
-                      },
-                    ]),
-              ]}
               collaboratingLabel={t('You are a collaborator in this article')}
               onClickArticle={handleClickArticle}
-              toggleMenuDrop={toggleMenuDrop}
-              closeMenuDrop={closeMenuDrop}
             />
           ))}
     </Box>
