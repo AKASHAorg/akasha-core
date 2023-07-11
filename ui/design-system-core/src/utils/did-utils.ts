@@ -6,8 +6,6 @@ export const truncateDid = (didKey: string, type = 'eth') => {
     const address = didKey.split(':').pop();
     switch (type) {
       case 'eth':
-        return truncateMiddle(address, 6, 6);
-        break;
       case 'solana':
         return truncateMiddle(address, 6, 6);
         break;
@@ -19,14 +17,14 @@ export const truncateDid = (didKey: string, type = 'eth') => {
   return '';
 };
 
-const EthIdentifier = 'eip155';
-const SolanaIdentifier = 'solana';
-const DidKeyIdentifier = 'key';
+const ethIdentifier = 'eip155';
+const solanaIdentifier = 'solana';
+const didKeyIdentifier = 'key';
 
 export const iconForDid = (didKey: string): IconType => {
-  if (didKey.includes(EthIdentifier)) {
+  if (didKey.includes(ethIdentifier)) {
     return 'eth';
   }
   // modify if we recognize more than 3 types of keys
-  return didKey.includes(SolanaIdentifier) ? 'solana' : 'didKey';
+  return didKey.includes(solanaIdentifier) ? 'solana' : 'didKey';
 };
