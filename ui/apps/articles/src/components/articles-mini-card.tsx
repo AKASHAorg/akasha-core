@@ -1,9 +1,6 @@
 import React from 'react';
-import { isMobileOnly } from 'react-device-detect';
 
-import DS from '@akashaorg/design-system';
 import { IArticleData } from '@akashaorg/typings/ui';
-import { IMenuItem } from '@akashaorg/design-system/lib/components/MobileListModal';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
@@ -13,8 +10,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 
-const { CardHeaderMenuDropdown } = DS;
-
 export interface IArticlesMiniCardProps {
   articleData: IArticleData;
   activeTabIndex?: number;
@@ -22,8 +17,6 @@ export interface IArticlesMiniCardProps {
   copyrightLabel?: string;
   lastUpdatedLabel?: string;
   draftLabel?: string;
-  menuDropOpen?: boolean;
-  menuItems?: IMenuItem[];
   collaboratingLabel?: string;
   mentionsLabel?: string;
   repliesLabel?: string;
@@ -47,8 +40,6 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
     copyrightLabel,
     lastUpdatedLabel,
     draftLabel,
-    menuDropOpen,
-    menuItems,
     collaboratingLabel,
     mentionsLabel,
     repliesLabel,
@@ -64,13 +55,6 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
     onSaveClick,
   } = props;
 
-  const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
-
-  const showCardMenu = React.useMemo(
-    () => !isMobileOnly && menuItems.length > 0 && menuIconRef.current && menuDropOpen,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [menuDropOpen],
-  );
   // @TODO replace with real data when available
   const loggedProfileId = '0x003410490050000320006570034567114572000';
 
@@ -107,16 +91,9 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
           )}
           <Icon type="akasha" />
           <button onClick={ev => toggleMenuDrop(ev, articleData.id)}>
-            <Icon type="EllipsisVerticalIcon" accentColor={menuDropOpen} ref={menuIconRef} />
+            <Icon type="EllipsisVerticalIcon" />
           </button>
         </Box>
-        {showCardMenu && (
-          <CardHeaderMenuDropdown
-            target={menuIconRef.current}
-            onMenuClose={closeMenuDrop}
-            menuItems={menuItems}
-          />
-        )}
       </Box>
       <button onClick={() => onClickArticle(articleData.id)}>
         <Box customStyle="flex flex-row justify-between items-center">
