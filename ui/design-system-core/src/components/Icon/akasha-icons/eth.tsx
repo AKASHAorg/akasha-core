@@ -4,7 +4,7 @@ const Eth = () => (
   <div className="[&>*]:fill-grey9 dark:[&>*]:fill-grey5">
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="8" cy="8" r="8" fill={'grey9 dark:grey5'} />
-      <g clip-path="url(#clip0_105_16033)">
+      <g clipPath="url(#clip0_105_16033)">
         <path d="M8.07213 10.8287V1.5L4 8.39513L8.07213 10.8287Z" fill="#FFE644" />
         <path d="M8.07227 1.5L12.1444 8.39513L8.07227 10.8285V1.5Z" fill="#EC7463" />
         <path d="M4 8.91895L8.07213 11.3524V14.5001" fill="#009ECB" />
