@@ -66,6 +66,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     hideRepost,
     error,
     onRetry,
+    headerMenuExt,
+    actionsRightExt,
   } = props;
 
   return (
@@ -116,8 +118,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         isRemoved={isRemoved}
         removedByMeLabel={removedByMeLabel}
         removedByAuthorLabel={removedByAuthorLabel}
-        headerMenuExt={props.headerMenuExt}
-        actionsRightExt={props.actionsRightExt}
+        headerMenuExt={headerMenuExt}
+        actionsRightExt={actionsRightExt}
         hideRepost={hideRepost}
         error={error}
         onRetry={onRetry}

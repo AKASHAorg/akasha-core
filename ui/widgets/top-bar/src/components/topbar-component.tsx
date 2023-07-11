@@ -93,7 +93,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   // show or hide widgets
 
   const handleWidgetToggle = () => {
-    console.log('widgetVisible ', widgetVisible);
     uiEvents.next({
       event: widgetVisible ? EventTypes.HideWidgets : EventTypes.ShowWidgets,
     });

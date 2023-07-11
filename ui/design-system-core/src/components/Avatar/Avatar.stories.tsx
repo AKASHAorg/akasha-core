@@ -1,5 +1,5 @@
 import React from 'react';
-import Avatar, { IAvatarProps } from '.';
+import Avatar, { AvatarProps } from '.';
 
 export default {
   title: 'Avatars/Avatar',
@@ -16,7 +16,7 @@ const avatar = {
   },
 };
 
-const Template = (args: IAvatarProps) => <Avatar {...args} />;
+const Template = (args: AvatarProps) => <Avatar {...args} />;
 
 export const BaseAvatar = Template.bind({});
 
