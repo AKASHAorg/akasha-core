@@ -7,7 +7,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import useIntersectionObserver from '@akashaorg/design-system-core/lib/utils/intersection-observer';
-import { elementIntersectionObserver } from './elementIntersectionObserver';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 export type EntryListProps = {
   pages: any[];
@@ -22,6 +22,14 @@ export type EntryListProps = {
   languageDirection?: 'ltr' | 'rtl';
 };
 
+const handleScrollToTop = () => {
+  const currentScrollPos = document.documentElement.scrollTop || document.body.scrollTop;
+  document.documentElement.scrollTo({
+    top: 0,
+    behavior: currentScrollPos > 10000 ? 'auto' : 'smooth',
+  });
+};
+
 const EntryList = (props: EntryListProps) => {
   const {
     pages,
@@ -34,38 +42,21 @@ const EntryList = (props: EntryListProps) => {
     hasNextPage,
   } = props;
   const [hideScrollTop, setHideScrollTop] = React.useState(true);
-  const scrollStopElement = document.getElementById('scrollTopStop');
   const rootElementRef = React.useRef<HTMLDivElement>();
   const loadmoreRef = React.createRef<HTMLDivElement>();
   const startScrollRef = React.createRef<HTMLDivElement>();
 
-  useIntersectionObserver({
-    target: loadmoreRef,
-    onIntersect: onLoadMore,
-    threshold: 0,
-  });
+  const virtualizer = useVirtualizer({});
 
-  React.useEffect(() => {
-    const observer = elementIntersectionObserver({
-      element: scrollStopElement,
-      onIntersect: () => {
-        setHideScrollTop(true);
-      },
-    });
-    return () => observer.disconnect();
-  }, [scrollStopElement]);
-
-  React.useEffect(() => {
-    const observer = elementIntersectionObserver({
-      element: startScrollRef?.current,
-      onIntersect: () => {
-        //scrollY check prevents the scroll top button from showing on page load
-        if (window.scrollY > 0) setHideScrollTop(false);
-      },
-    });
-
-    return () => observer.disconnect();
-  }, [startScrollRef]);
+  React.useLayoutEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > 0) {
+        return setHideScrollTop(false);
+      }
+      return setHideScrollTop(true);
+    };
+    window.addEventListener('scroll', onScroll);
+  }, []);
 
   const items = page => (viewAllEntry ? page?.results.slice(0, viewAllEntry.limit) : page?.results);
 
@@ -117,16 +108,7 @@ const EntryList = (props: EntryListProps) => {
         </Box>
       )}
       <ScrollTopWrapper placement={scrollTopButtonPlacement}>
-        <ScrollTopButton
-          hide={hideScrollTop}
-          onClick={() => {
-            const currentScrollPos = document.documentElement.scrollTop || document.body.scrollTop;
-            document.documentElement.scrollTo({
-              top: 0,
-              behavior: currentScrollPos > 10000 ? 'auto' : 'smooth',
-            });
-          }}
-        />
+        <ScrollTopButton hide={hideScrollTop} onClick={handleScrollToTop} />
       </ScrollTopWrapper>
     </div>
   );

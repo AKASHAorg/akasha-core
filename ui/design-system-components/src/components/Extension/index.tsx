@@ -33,7 +33,7 @@ const Extension: React.FC<ExtensionProps> = props => {
   return (
     <ExtensionSlot
       name={name}
-      customStyle={`${customStyle} ${fullHeight ? 'h-full' : undefined}`}
+      customStyle={`${customStyle} ${fullHeight ? 'h-full' : ''}`}
       onMount={handleExtensionMount}
       onUnmount={handleExtensionUnmount}
       style={style}
@@ -42,4 +42,7 @@ const Extension: React.FC<ExtensionProps> = props => {
   );
 };
 
+Extension.defaultProps = {
+  customStyle: '',
+};
 export default Extension;

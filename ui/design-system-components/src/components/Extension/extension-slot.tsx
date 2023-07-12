@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { apply } from '@twind/core';
+import { tw } from '@twind/core';
 
 export interface ExtensionPointProps {
   name: string;
@@ -70,7 +70,7 @@ const ExtensionSlot: React.FC<ExtensionPointProps> = props => {
 
   if (!mountOnRequest || (mountOnRequest && shouldMount)) {
     return (
-      <div id={name} className={apply(customStyle)}>
+      <div id={name} className={tw(customStyle)}>
         {children}
       </div>
     );
