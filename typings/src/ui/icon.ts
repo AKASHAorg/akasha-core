@@ -16,15 +16,18 @@ export type AppIcons =
 export type IconType =
   | keyof typeof HeroIcons
   | 'akasha'
+  | 'didKey'
   | 'discord'
+  | 'eth'
   | 'faq'
   | 'github'
+  | 'metamask'
   | 'shield'
+  | 'solana'
   | 'telegram'
   | 'twitter'
-  | 'widget'
-  | 'metamask'
   | 'walletconnect'
+  | 'widget'
   | AppIcons;
 
 /* @TODO: remove the following once the old design system is fully replaced */
