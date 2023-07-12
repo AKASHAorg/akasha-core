@@ -1,7 +1,7 @@
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-// import { ReactQueryDevtools } from 'react-query/devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import TrendingWidgetComponent from './trending-widget-component';
 
 const TrendingWidgetRoot: React.FC<RootComponentProps> = props => {
@@ -13,7 +13,7 @@ const TrendingWidgetRoot: React.FC<RootComponentProps> = props => {
       >
         <TrendingWidgetComponent {...props} />
       </I18nextProvider>
-      {/* <ReactQueryDevtools position={'bottom-right'} /> */}
+      <ReactQueryDevtools position={'bottom-right'} initialIsOpen={false} />
     </>
   );
 };

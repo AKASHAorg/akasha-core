@@ -1,12 +1,17 @@
 import { IconType } from '@akashaorg/typings/ui';
 
 import akasha from './akasha';
+<<<<<<< HEAD
 import alignCenter from './align-center';
 import alignJustify from './align-justify';
 import alignLeft from './align-left';
 import alignRight from './align-right';
 import boldAlt from './bold-alt';
+=======
+import didKey from './didKey';
+>>>>>>> next
 import discord from './discord';
+import eth from './eth';
 import faq from './faq';
 import github from './github';
 import integrationAppCTA from './integration-app-cta';
@@ -23,6 +28,7 @@ import listBulleted from './list-bulleted';
 import listNumbered from './list-numbered';
 import shield from './shield';
 import strikethrough from './strikethrough';
+import solana from './solana';
 import telegram from './telegram';
 import textcaseLower from './textcase-lower';
 import textcaseSentence from './textcase-sentence';
@@ -43,7 +49,9 @@ export type CustomIconTypes = Extract<
   | 'alignRight'
   | 'alignJustify'
   | 'boldAlt'
+  | 'didKey'
   | 'discord'
+  | 'eth'
   | 'faq'
   | 'github'
   | 'integrationAppCTA'
@@ -61,6 +69,7 @@ export type CustomIconTypes = Extract<
   | 'metamask'
   | 'shield'
   | 'strikethrough'
+  | 'solana'
   | 'telegram'
   | 'textcaseLower'
   | 'textcaseSentence'
@@ -92,14 +101,16 @@ export {
   licenseSomeRights,
   listBulleted,
   listNumbered,
-  metamask,
-  shield,
   strikethrough,
-  telegram,
-  twitter,
   textcaseLower,
   textcaseSentence,
   textcaseUpper,
+  eth,
+  metamask,
+  shield,
+  solana,
+  telegram,
+  twitter,
   walletconnect,
   widget,
 };
