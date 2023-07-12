@@ -71,7 +71,7 @@ export default class CeramicService {
 
   async restoreSession(serialisedSession: string): Promise<DIDSession> {
     this._didSession = await DIDSession.fromSession(serialisedSession);
-    if (this._didSession.hasSession && this._didSession.hasSession) {
+    if (!this._didSession || (this._didSession.hasSession && this._didSession.isExpired)) {
       return this.connect();
     }
     this._composeClient.setDID(this._didSession.did);
