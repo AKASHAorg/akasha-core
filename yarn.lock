@@ -1533,7 +1533,7 @@
     query-string "^7.1.0"
     rxjs "^7.5.2"
 
-"@ceramicnetwork/http-client@2.23.0", "@ceramicnetwork/http-client@^2.20.0", "@ceramicnetwork/http-client@^2.21.0":
+"@ceramicnetwork/http-client@^2.21.0", "@ceramicnetwork/http-client@^2.23.0":
   version "2.23.0"
   resolved "https://registry.yarnpkg.com/@ceramicnetwork/http-client/-/http-client-2.23.0.tgz#a90a34337aedd3298b92c2bcf3256d4c5024a5e5"
   integrity sha512-wu4RWW4mTR0ISAR3PA58k5l5XvNxik8fPJsQ4oh3ymIZmwibQuMky/51jGn4ZwT92b6tbFqNQX83md7r1K2DoQ==
@@ -1643,7 +1643,7 @@
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
   integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
 
-"@composedb/cli@^0.4.3":
+"@composedb/cli@^0.4.5":
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/@composedb/cli/-/cli-0.4.5.tgz#19c091bf6f539ff915619efdc416b0ed7de56938"
   integrity sha512-zzDPMiX5DJg+MresuDT19rRG6+UUfWdYJvhwz56MxkYFiEJDSilOJdsINQ7ZGpdntsUyb0NXcx3PVh2reiojFw==
@@ -1696,7 +1696,7 @@
   resolved "https://registry.yarnpkg.com/@composedb/constants/-/constants-0.4.0.tgz#67749c629580e7fb0271401a06e949ed979b6f9f"
   integrity sha512-juphxE0LPqzOh9Yojw6JrkvV3UI1RIhiI11MUHfsxC4m6KP8uxq0or1xKP7jQPNHGhqgtOomMezCXFUTcPVotQ==
 
-"@composedb/devtools-node@^0.4.3", "@composedb/devtools-node@^0.4.4":
+"@composedb/devtools-node@^0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@composedb/devtools-node/-/devtools-node-0.4.4.tgz#874f804fd44adaf18443ee8893d216c163affd42"
   integrity sha512-iNN9+GIlP+3oixBSbBxMl3XNhYiWNzqABL/gT+c5zuUdcHghgcRZP3/0JqC/4NU/YDlga2myp44PXLqG8jC7xw==
@@ -1707,7 +1707,7 @@
     "@composedb/server" "^0.4.2"
     fs-extra "^11.1.1"
 
-"@composedb/devtools@^0.4.3", "@composedb/devtools@^0.4.4":
+"@composedb/devtools@^0.4.4":
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/@composedb/devtools/-/devtools-0.4.4.tgz#c506827e26789d6b73e16b2b75f2827415cead15"
   integrity sha512-ACfTIrTDRH/A4vZU66k+jnVmVqTvQn7vThSjoDOMdqwI4BMp3BAGoNHRJJv60AXAMrC0qDvhr/td2VcNOcwKqQ==
@@ -12479,12 +12479,7 @@ dotenv-webpack@8.0.1:
   dependencies:
     dotenv-defaults "^2.0.2"
 
-dotenv@16.0.3:
-  version "16.0.3"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
-  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
-
-dotenv@^16.0.0:
+dotenv@16.3.1, dotenv@^16.0.0:
   version "16.3.1"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
   integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
@@ -24937,7 +24932,7 @@ uglify-js@^3.1.4:
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.17.4.tgz#61678cf5fa3f5b7eb789bb345df29afb8257c22c"
   integrity sha512-T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==
 
-uint8arrays@4.0.4, uint8arrays@^4.0.2, uint8arrays@^4.0.3:
+uint8arrays@4.0.4, uint8arrays@^4.0.2, uint8arrays@^4.0.3, uint8arrays@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-4.0.4.tgz#3254e01aeb166a3f35e66e60e4e37002f4ea13fd"
   integrity sha512-AOoA66e/A7zoXm1mgzQjGmkWDTvCrS3ttWXLHFtlVAwMobLcaOA7G7WRNNAcyfjjYdFDtkEK6njRDX7hZLIO9Q==

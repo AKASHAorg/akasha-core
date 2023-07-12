@@ -5,7 +5,6 @@
   "type": "module",
   "dependencies": {
     "@akashaorg/composedb-models": "*",
-    "@ceramicnetwork/http-client": "2.23.0",
     "@composedb/client": "0.4.4",
     "@didtools/cacao": "2.1.0",
     "@didtools/pkh-ethereum": "0.4.0",
