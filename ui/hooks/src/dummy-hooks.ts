@@ -1,10 +1,12 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export function useInfiniteDummy(initialData: any[]) {
+type DataGeneratorFn = () => any[];
+
+export function useInfiniteDummy(queryKey: string, dataGeneratorFn: DataGeneratorFn) {
   const qc = useQueryClient();
-  return useInfiniteQuery([initialData], () => Promise.resolve(), {
-    onSuccess: () => {
-      qc.setQueryData([initialData], initialData);
+  return useInfiniteQuery([`infinite_dummy_${queryKey}`], () => dataGeneratorFn(), {
+    onSuccess: data => {
+      qc.setQueryData([`infinite_dummy_${queryKey}`], data);
     },
   });
 }

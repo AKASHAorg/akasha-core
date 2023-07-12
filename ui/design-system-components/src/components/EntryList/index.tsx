@@ -6,8 +6,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import useIntersectionObserver from '@akashaorg/design-system-core/lib/utils/intersection-observer';
-import { useVirtualizer } from '@tanstack/react-virtual';
+import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
 export type EntryListProps = {
   pages: any[];
@@ -43,11 +42,30 @@ const EntryList = (props: EntryListProps) => {
   } = props;
   const [hideScrollTop, setHideScrollTop] = React.useState(true);
   const rootElementRef = React.useRef<HTMLDivElement>();
+  const rootElementOffset = React.useRef(0);
   const loadmoreRef = React.createRef<HTMLDivElement>();
-  const startScrollRef = React.createRef<HTMLDivElement>();
+  // const startScrollRef = React.createRef<HTMLDivElement>();
 
-  const virtualizer = useVirtualizer({});
+  const allEntries = React.useMemo(() => {
+    if (pages) {
+      console.log(pages);
+      return pages.flatMap(page => page);
+    }
+    return [];
+  }, [pages]);
 
+  React.useLayoutEffect(() => {
+    rootElementOffset.current = rootElementRef.current?.offsetTop || 0;
+  }, []);
+
+  const virtualizer = useWindowVirtualizer({
+    count: hasNextPage ? allEntries.length + 1 : allEntries.length,
+    estimateSize: () => 100,
+    scrollMargin: rootElementOffset.current,
+  });
+  /**
+   * Handle scroll to top button visibility
+   **/
   React.useLayoutEffect(() => {
     const onScroll = () => {
       if (window.scrollY > 0) {
@@ -57,8 +75,6 @@ const EntryList = (props: EntryListProps) => {
     };
     window.addEventListener('scroll', onScroll);
   }, []);
-
-  const items = page => (viewAllEntry ? page?.results.slice(0, viewAllEntry.limit) : page?.results);
 
   const scrollTopButtonPlacement = React.useMemo(() => {
     if (languageDirection === 'rtl') return 0;
@@ -70,46 +86,82 @@ const EntryList = (props: EntryListProps) => {
     //We want to calculate scroll top button placement whenever the scroll top flag changes as browser may have resized
     hideScrollTop,
   ]);
+  const items = virtualizer.getVirtualItems();
+
+  if (items.length === 0) {
+    return null;
+  }
 
   return (
     <div ref={rootElementRef}>
-      {(viewAllEntry ? pages.slice(0, 1) : pages).map((page, pageIndex) => (
-        <div data-page-idx={pageIndex} key={`${pageKeyPrefix}-${pageIndex}`}>
-          {items(page)?.map((itemId, itemIndex, items) => (
-            <React.Fragment key={itemId}>
-              {pageIndex === 0 && itemIndex === 2 && <div ref={startScrollRef}></div>}
-              {React.cloneElement(itemCard, {
-                itemId,
-                index: itemIndex,
-                itemSpacing,
-                totalEntry: items.length,
-                className: `entry-${itemId}`,
-              })}
-            </React.Fragment>
-          ))}
-        </div>
-      ))}
-      {viewAllEntry && pages[0]?.total > viewAllEntry.limit && (
-        <Anchor
-          onClick={e => {
-            e.preventDefault();
-            viewAllEntry.onClick();
+      <div style={{ height: virtualizer.getTotalSize(), position: 'relative' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            transform: `translateY(${items[0].start - virtualizer.options.scrollMargin}px)`,
           }}
-          target="_self"
-          color="accentText"
-          customStyle="font-bold text-lg ml-2 no-underline	"
         >
-          {viewAllEntry.label}
-        </Anchor>
-      )}
-      {!viewAllEntry && (props.status === 'loading' || hasNextPage) && (
-        <Box customStyle="p-8" ref={loadmoreRef}>
-          <Spinner />
-        </Box>
-      )}
-      <ScrollTopWrapper placement={scrollTopButtonPlacement}>
-        <ScrollTopButton hide={hideScrollTop} onClick={handleScrollToTop} />
-      </ScrollTopWrapper>
+          {items.map(vItem => {
+            const { key, index, size, start } = vItem;
+            const item = allEntries[index];
+            return (
+              <div key={key} data-index={index} ref={virtualizer.measureElement}>
+                <div>
+                  {' '}
+                  Item with index {index} {JSON.stringify(item.content)}
+                </div>
+                {/*{React.cloneElement(itemCard, {*/}
+                {/*  itemId: item?.id,*/}
+                {/*  index: index,*/}
+                {/*  itemSpacing,*/}
+                {/*  totalEntry: allEntries.length,*/}
+                {/*  className: `entry-${item?.id}`,*/}
+                {/*})}*/}
+              </div>
+            );
+          })}
+        </div>
+        {/*{(viewAllEntry ? pages.slice(0, 1) : pages).map((page, pageIndex) => (*/}
+        {/*  <div data-page-idx={pageIndex} key={`${pageKeyPrefix}-${pageIndex}`}>*/}
+        {/*    {items(page)?.map((itemId, itemIndex, items) => (*/}
+        {/*      <React.Fragment key={itemId}>*/}
+        {/*        {pageIndex === 0 && itemIndex === 2 && <div ref={startScrollRef}></div>}*/}
+        {/*        {React.cloneElement(itemCard, {*/}
+        {/*          itemId,*/}
+        {/*          index: itemIndex,*/}
+        {/*          itemSpacing,*/}
+        {/*          totalEntry: items.length,*/}
+        {/*          className: `entry-${itemId}`,*/}
+        {/*        })}*/}
+        {/*      </React.Fragment>*/}
+        {/*    ))}*/}
+        {/*  </div>*/}
+        {/*))}*/}
+        {viewAllEntry && pages[0]?.total > viewAllEntry.limit && (
+          <Anchor
+            onClick={e => {
+              e.preventDefault();
+              viewAllEntry.onClick();
+            }}
+            target="_self"
+            color="accentText"
+            customStyle="font-bold text-lg ml-2 no-underline	"
+          >
+            {viewAllEntry.label}
+          </Anchor>
+        )}
+        {!viewAllEntry && (props.status === 'loading' || hasNextPage) && (
+          <Box customStyle="p-8" ref={loadmoreRef}>
+            <Spinner />
+          </Box>
+        )}
+        <ScrollTopWrapper placement={scrollTopButtonPlacement}>
+          <ScrollTopButton hide={hideScrollTop} onClick={handleScrollToTop} />
+        </ScrollTopWrapper>
+      </div>
     </div>
   );
 };

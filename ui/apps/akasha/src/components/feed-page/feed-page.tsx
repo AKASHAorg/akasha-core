@@ -25,6 +25,7 @@ import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
+import { createDummyPosts } from './create-dummy-posts';
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -71,7 +72,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     CREATE_POST_MUTATION_KEY,
   ]);
 
-  const postsReq = useInfiniteDummy([]);
+  const postsReq = useInfiniteDummy('feed_page_get_posts', createDummyPosts(5));
 
   const handleLoadMore = React.useCallback(() => {
     if (!postsReq.isLoading && postsReq.hasNextPage) {
@@ -114,6 +115,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
+  React.useEffect(() => {
+    console.log(postsReq, '<< posts request');
+    console.log(postPages, '<< generated data');
+  }, [postsReq, postPages]);
+  
   return (
     <Box customStyle={'w-full'}>
       <Helmet.Helmet>
@@ -194,7 +200,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         logger={logger}
         itemType={EntityTypes.POST}
         // @TODO replace with real data source
-        pages={[]}
+        pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) =>
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
@@ -204,9 +210,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         navigateToModal={navigateToModal}
         onLoginModalOpen={showLoginModal}
         // @TODO replace with real data source
-        requestStatus={null}
+        requestStatus={postsReq.status}
         // @TODO replace with real data source
-        hasNextPage={false}
+        hasNextPage={postsReq.hasNextPage}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}

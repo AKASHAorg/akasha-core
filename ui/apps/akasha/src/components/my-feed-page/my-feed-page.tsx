@@ -19,9 +19,9 @@ export interface MyFeedPageProps {
 }
 
 const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
-  const { logger, loggedProfileData } = props;
+  const { logger, loggedProfileData, layoutConfig, plugins, uiEvents } = props;
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const isLoggedUser = React.useMemo(() => !!loggedProfileData?.did.id, [loggedProfileData]);
 
@@ -114,19 +114,19 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       </Box>
 
       <FeedWidget
-        modalSlotId={props.layoutConfig.modalSlotId}
+        modalSlotId={layoutConfig.modalSlotId}
         logger={logger}
         itemType={EntityTypes.POST}
-        pages={postPages}
+        pages={[]}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) =>
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
         }
-        navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-        navigateToModal={props.navigateToModal}
-        onLoginModalOpen={props.showLoginModal}
-        requestStatus={postsReq.status}
-        hasNextPage={postsReq.hasNextPage}
+        navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+        navigateToModal={navigateToModal.current}
+        onLoginModalOpen={showLoginModal.current}
+        requestStatus={null}
+        hasNextPage={false}
         loggedProfileData={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
@@ -134,9 +134,9 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         removeEntryLabel={t('Delete Post')}
         removedByMeLabel={t('You deleted this post')}
         removedByAuthorLabel={t('This post was deleted by its author')}
-        uiEvents={props.uiEvents}
+        uiEvents={uiEvents}
         itemSpacing={8}
-        i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
         accentBorderTop={true}
       />
 

@@ -21,7 +21,7 @@ import {
   RootComponentProps,
   ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
-import { usePost, useComment, mapEntry } from '@akashaorg/ui-awf-hooks';
+import { usePost, useComment, mapEntry, useDummyQuery } from '@akashaorg/ui-awf-hooks';
 
 import FeedWidget from './App';
 import { Profile, IContentClickDetails } from '@akashaorg/typings/ui';
@@ -102,7 +102,7 @@ const EntryRenderer = (
 
   const { t } = useTranslation('ui-lib-feed');
 
-  const postReq = usePost({ postId: itemId, enabler: itemType === EntityTypes.POST });
+  const postReq = useDummyQuery({ postId: itemId, enabler: itemType === EntityTypes.POST });
   const commentReq = useComment(itemId, itemType === EntityTypes.REPLY);
 
   const postData = React.useMemo(() => {
@@ -265,7 +265,7 @@ const EntryRenderer = (
           type="script-error"
           title={t('There was an error loading the {{itemTypeName}}', { itemTypeName })}
           details={t('We cannot show this {{itemTypeName}} now', { itemTypeName })}
-          devDetails={postReq.error.message}
+          devDetails={(postReq.error as Error).message}
         />
       )}
       {(postReq.isSuccess || commentReq.isSuccess) && (
