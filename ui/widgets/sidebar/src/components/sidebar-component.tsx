@@ -88,6 +88,15 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       getNavigationUrl: () => route,
     });
   };
+  const handleAvatarClick = function (did: string) {
+    if (!did) {
+      return;
+    }
+    routing?.navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${did}`,
+    });
+  };
 
   const handleClickExplore = () => {
     routing?.navigateTo({
@@ -160,6 +169,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
           <Avatar
             profileId={myProfileQuery.data?.did?.id}
             avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.avatar)}
+            isClickable={!!myProfileQuery.data?.did?.id}
+            onClick={() => handleAvatarClick(myProfileQuery.data?.did?.id)}
           />
         </Box>
         <Box customStyle="w-fit flex flex-grow flex-col">
