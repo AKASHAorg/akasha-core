@@ -1,0 +1,16 @@
+{
+  "name": "@akashaorg/af-testing",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tests/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/workspace:run-commands",
+      "options": {
+        "commands": ["yarn build"],
+        "cwd": "tests",
+        "parallel": false
+      }
+    }
+  }
+}

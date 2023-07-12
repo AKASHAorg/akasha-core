@@ -35,14 +35,14 @@
     "url": "https://github.com/AKASHAorg/akasha-framework/issues"
   },
   "devDependencies": {
-    "@ceramicnetwork/http-client": "^2.20.0",
-    "@composedb/cli": "^0.4.3",
-    "@composedb/devtools": "^0.4.3",
-    "@composedb/devtools-node": "^0.4.3",
-    "dids": "^4.0.0",
-    "dotenv": "16.0.3",
-    "key-did-provider-ed25519": "^3.0.0",
+    "@ceramicnetwork/http-client": "^2.23.0",
+    "@composedb/cli": "^0.4.5",
+    "@composedb/devtools": "^0.4.4",
+    "@composedb/devtools-node": "^0.4.4",
+    "dids": "^4.0.3",
+    "dotenv": "16.3.1",
+    "key-did-provider-ed25519": "^3.0.1",
     "key-did-resolver": "^3.0.0",
-    "uint8arrays": "^4.0.3"
+    "uint8arrays": "^4.0.4"
   }
 }

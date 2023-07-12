@@ -3,6 +3,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
@@ -72,8 +73,9 @@ const Header: React.FC<HeaderProps> = ({
                 )}`}
               />
             </div>
-            <Stack direction="column">
+            <Stack direction="column" spacing="gap-y-1">
               <Text variant="button-lg">{name}</Text>
+              <DidField did={did.id} />
             </Stack>
             <div className={tw(`ml-auto mt-2`)}>
               {viewerIsOwner ? (

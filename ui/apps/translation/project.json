@@ -1,0 +1,17 @@
+{
+  "name": "@akashaorg/app-translation",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "ui/apps/translation/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/workspace:run-commands",
+      "outputs": ["ui/apps/translation"],
+      "options": {
+        "commands": ["yarn run pack"],
+        "cwd": "ui/apps/translation",
+        "parallel": false
+      }
+    }
+  }
+}
