@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { CropperProps } from 'react-easy-crop';
+
+import { Profile } from '@akashaorg/typings/ui';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-import { tw } from '@twind/core';
+
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
+
 import { EditImageModal } from './EditImageModal';
 import { DeleteImageModal } from './DeleteImageModal';
-import { CropperProps } from 'react-easy-crop';
-import { useEffect } from 'react';
-import { Profile } from '@akashaorg/typings/ui';
 
 type ImageType = 'avatar' | 'cover-image';
 
@@ -167,7 +170,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <Stack direction="column" spacing="gap-y-2">
       <Text variant="h6">{title}</Text>
-      <div className={tw('relative mb-8')}>
+      <Box customStyle="relative mb-8">
         <Card
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
@@ -215,7 +218,7 @@ export const Header: React.FC<HeaderProps> = ({
               'bg',
             )}`}
           />
-          <div className={tw('absolute')}>
+          <Box customStyle="absolute">
             <Button
               icon="PencilSquareIcon"
               size="xs"
@@ -228,9 +231,9 @@ export const Header: React.FC<HeaderProps> = ({
               iconOnly
             />
             {showAvatarActions && <List items={dropDownActions} customStyle="absolute top-7" />}
-          </div>
+          </Box>
         </Stack>
-      </div>
+      </Box>
       <EditImageModal
         show={showEditImage}
         title={imageType === 'avatar' ? imageTitle.avatar : imageTitle.coverImage}
