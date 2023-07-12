@@ -47,3 +47,5 @@ export enum StepStatus {
 }
 
 export type EngagementType = 'followers' | 'following';
+
+export type ProfileImageType = 'avatar' | 'cover-image';
