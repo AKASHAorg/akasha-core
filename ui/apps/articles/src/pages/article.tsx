@@ -71,30 +71,30 @@ const ArticlePage: React.FC<RootComponentProps> = props => {
     /** do something */
   };
 
-  // const menutItems = [
-  //   ...(loggedProfileData?.did?.id === sampleArticleData.authorProfileId
-  //     ? [
-  //         {
-  //           icon: 'editSimple',
-  //           handler: handleDropItemClick(sampleArticleData.id, 'edit'),
-  //           label: t('Edit'),
-  //           iconColor: 'primaryText',
-  //         },
-  //         {
-  //           icon: 'settingsAlt',
-  //           handler: handleDropItemClick(sampleArticleData.id, 'settings'),
-  //           label: t('Settings'),
-  //           iconColor: 'primaryText',
-  //         },
-  //       ]
-  //     : [
-  //         {
-  //           icon: 'report',
-  //           handler: handleFlagArticle(sampleArticleData.id, EntityTypes.ARTICLE),
-  //           label: t('Report'),
-  //         },
-  //       ]),
-  // ];
+  const menuItems = [
+    ...(loggedProfileData?.did?.id === sampleArticleData.authorProfileId
+      ? [
+          {
+            icon: 'editSimple',
+            handler: handleDropItemClick(sampleArticleData.id, 'edit'),
+            label: t('Edit'),
+            iconColor: 'primaryText',
+          },
+          {
+            icon: 'settingsAlt',
+            handler: handleDropItemClick(sampleArticleData.id, 'settings'),
+            label: t('Settings'),
+            iconColor: 'primaryText',
+          },
+        ]
+      : [
+          {
+            icon: 'report',
+            handler: handleFlagArticle(sampleArticleData.id, EntityTypes.ARTICLE),
+            label: t('Report'),
+          },
+        ]),
+  ];
 
   return (
     <Box customStyle="gap-2">

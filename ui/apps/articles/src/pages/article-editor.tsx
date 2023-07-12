@@ -8,41 +8,16 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import EditorToolbar from '@akashaorg/design-system-components/lib/EditorToolbar';
 
 import ArticleEditorCard from '../components/article-editor-card';
 
 const ArticleEditor: React.FC<RootComponentProps> = props => {
-  const [dropOpen, setDropOpen] = React.useState<string | null>(null);
-  const [caseStyle, setCaseStyle] = React.useState<string>('textcaseSentence');
-  const [listStyle, setListStyle] = React.useState<string>('listBulleted');
-
-  const [alignStyle, setAlignStyle] = React.useState<string>('alignLeft');
-
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
 
   const handleNavigateBack = () => {
     navigate(-1);
-  };
-
-  const handleIconClick = (iconType: string) => {
-    switch (dropOpen) {
-      case 'align':
-        setAlignStyle(iconType);
-        setDropOpen(null);
-        break;
-      case 'list':
-        setListStyle(iconType);
-        setDropOpen(null);
-        break;
-      case 'case':
-        setCaseStyle(iconType);
-        setDropOpen(null);
-        break;
-      default:
-        setDropOpen(null);
-        break;
-    }
   };
 
   const handleManageCollaborators = () => {
@@ -66,28 +41,7 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
 
         <Text variant="h2">{t('Article Editor')}</Text>
       </Box>
-      {/* <EditorToolbar
-        dropOpen={dropOpen}
-        caseStyle={caseStyle}
-        listStyle={listStyle}
-        alignStyle={alignStyle}
-        wrapperBorder={{ side: 'horizontal', color: 'border' }}
-        closeDrop={() => setDropOpen(null)}
-        onDropOpen={type => setDropOpen(type)}
-        onBoldClick={() => {
-          return;
-        }}
-        onItalicClick={() => {
-          return;
-        }}
-        onUnderlineClick={() => {
-          return;
-        }}
-        onStrikeThroughClick={() => {
-          return;
-        }}
-        onIconClick={handleIconClick}
-      /> */}
+      <EditorToolbar />
       <ArticleEditorCard
         inviteCollaboratorsLabel={t('Invite collaborators')}
         collaboratingLabel={t('Collaborating')}
