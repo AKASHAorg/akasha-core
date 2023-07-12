@@ -32,7 +32,7 @@ const CopyToClipboard: React.FC<PropsWithChildren<CopyToClipboardChildren>> = ({
 
   return (
     <Button onClick={onCopy} plain>
-      <Tooltip content={copied ? copiedText : copyText} placement="right">
+      <Tooltip content={copied ? copiedText : copyText} placement="bottom">
         {children}
       </Tooltip>
     </Button>

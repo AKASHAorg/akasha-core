@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/ui';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
+import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -16,7 +17,6 @@ import {
   useGetLogin,
   useLogout,
 } from '@akashaorg/ui-awf-hooks';
-
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const [isMobile, setIsMobile] = React.useState(
@@ -88,6 +88,15 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       getNavigationUrl: () => route,
     });
   };
+  const handleAvatarClick = function (did: string) {
+    if (!did) {
+      return;
+    }
+    routing?.navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${did}`,
+    });
+  };
 
   const handleClickExplore = () => {
     routing?.navigateTo({
@@ -138,17 +147,15 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   };
 
   const subtitleUi = useMemo(
-    () => (
-      <Text
-        variant="footnotes1"
-        customStyle={`text-grey5 ${myProfileQuery.data?.did?.id ? 'w-48' : 'whitespace-normal'}`}
-        truncate
-        breakWord
-      >
-        {myProfileQuery.data?.did.id ?? t('Connect to see exclusive member only features.')}
-      </Text>
-    ),
-    [myProfileQuery],
+    () =>
+      loginQuery.data?.id ? (
+        <DidField did={loginQuery.data?.id} textColor="grey7" />
+      ) : (
+        <Text variant="footnotes1" customStyle="text-grey5 whitespace-normal" truncate breakWord>
+          {t('Connect to see exclusive member only features.')}
+        </Text>
+      ),
+    [loginQuery.data?.id],
   );
 
   return (
@@ -162,6 +169,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
           <Avatar
             profileId={myProfileQuery.data?.did?.id}
             avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.avatar)}
+            isClickable={!!myProfileQuery.data?.did?.id}
+            onClick={() => handleAvatarClick(myProfileQuery.data?.did?.id)}
           />
         </Box>
         <Box customStyle="w-fit flex flex-grow flex-col">

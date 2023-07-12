@@ -166,7 +166,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           element={
             <ThemeOption
               titleLabel="Theme"
-              themeIntroLabel={t('What mode your feeling today?')}
+              themeIntroLabel={t('What mode are you feeling today?')}
               themeSubtitleLabel={t(
                 'You can change your theme between dark mode or light mode! Which side are you on 😼',
               )}
