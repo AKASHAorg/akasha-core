@@ -1,0 +1,23 @@
+{
+  "name": "@akashaorg/app-akasha-verse",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "ui/apps/akasha-verse/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/workspace:run-commands",
+      "outputs": ["ui/apps/akasha-verse"],
+      "options": {
+        "commands": ["yarn run pack", "yarn postpack"],
+        "cwd": "ui/apps/akasha-verse",
+        "parallel": false
+      }
+    },
+    "extract:translations": {
+      "executor": "./tools/executors/i18n:extract",
+      "options": {
+        "cwd": "ui/apps/akasha-verse"
+      }
+    }
+  }
+}
