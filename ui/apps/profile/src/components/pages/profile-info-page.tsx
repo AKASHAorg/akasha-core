@@ -117,6 +117,8 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           isFollowing={isFollowing}
           viewerIsOwner={isViewer}
           flagLabel={t('Report')}
+          copyLabel={t('Copy to clipboard')}
+          copiedLabel={t('Copied')}
           handleUnfollow={handleUnfollow}
           handleFollow={handleFollow}
           handleFlag={handleEntryFlag(
