@@ -4,7 +4,6 @@ import { RootComponentProps, EventTypes, MenuItemAreaType, IMenuItem } from '@ak
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -17,6 +16,7 @@ import {
   useGetLogin,
   useLogout,
 } from '@akashaorg/ui-awf-hooks';
+import { useQueryClient } from '@tanstack/react-query';
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const [isMobile, setIsMobile] = React.useState(
@@ -37,11 +37,30 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const { t } = useTranslation('ui-widget-sidebar');
 
-  const myProfileQuery = useGetMyProfileQuery(null, {
-    select: data => data.viewer?.profile,
-  });
   const loginQuery = useGetLogin();
   const logoutQuery = useLogout();
+  const queryClient = useQueryClient();
+
+  const myProfileQuery = useGetMyProfileQuery(null, {
+    enabled: !!loginQuery.data?.id,
+    select: data => data.viewer?.profile,
+  });
+
+  useEffect(() => {
+    const invalidateQuery = async () => {
+      await queryClient.invalidateQueries({
+        queryKey: useGetMyProfileQuery.getKey(),
+      });
+      return;
+    };
+    if (!loginQuery.data?.id) {
+      invalidateQuery();
+    }
+
+    myProfileQuery.refetch();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginQuery.data?.id]);
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
@@ -149,13 +168,25 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const subtitleUi = useMemo(
     () =>
       loginQuery.data?.id ? (
-        <DidField did={loginQuery.data?.id} textColor="grey7" />
+        <DidField
+          did={loginQuery.data?.id}
+          textColor="grey7"
+          copyLabel={t('Copy to clipboard')}
+          copiedLabel={t('Copied')}
+        />
       ) : (
         <Text variant="footnotes1" customStyle="text-grey5 whitespace-normal" truncate breakWord>
           {t('Connect to see exclusive member only features.')}
         </Text>
       ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [loginQuery.data?.id],
+  );
+
+  const profileName = useMemo(
+    () => (myProfileQuery.data?.did?.id ? myProfileQuery.data?.name : t('Guest')),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [myProfileQuery.data?.did?.id],
   );
 
   return (
@@ -174,20 +205,18 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
           />
         </Box>
         <Box customStyle="w-fit flex flex-grow flex-col">
-          <Text variant="button-md">{myProfileQuery.data?.name || t('Guest')}</Text>
-          {myProfileQuery.data?.did?.id ? (
-            <CopyToClipboard value={myProfileQuery.data.did.id}>{subtitleUi}</CopyToClipboard>
-          ) : (
-            subtitleUi
-          )}
+          <Text variant="button-md">{profileName}</Text>
+          {subtitleUi}
         </Box>
         <Box customStyle="w-fit h-fit ml-6 self-start">
           {loginQuery.data?.id && (
             <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
           )}
-          {!loginQuery.data?.id && loginQuery.isStale && (
-            <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
-          )}
+          {
+            /* !myProfileQuery.data?.did?.id */ !loginQuery.data?.id && loginQuery.isStale && (
+              <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
+            )
+          }
           {loginQuery.isLoading && !loginQuery.isStale && <Spinner size="sm" />}
         </Box>
       </Box>
