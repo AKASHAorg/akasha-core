@@ -41,7 +41,20 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
 
         <Text variant="h2">{t('Article Editor')}</Text>
       </Box>
-      <EditorToolbar />
+      <EditorToolbar
+        onBoldClick={() => {
+          return;
+        }}
+        onItalicClick={() => {
+          return;
+        }}
+        onStrikeThroughClick={() => {
+          return;
+        }}
+        onUnderlineClick={() => {
+          return;
+        }}
+      />
       <ArticleEditorCard
         inviteCollaboratorsLabel={t('Invite collaborators')}
         collaboratingLabel={t('Collaborating')}
