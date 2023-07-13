@@ -6,6 +6,7 @@ import Avatar, { AvatarSize } from '../Avatar';
 import Box from '../Box';
 import Button from '../Button';
 import Text from '../Text';
+import DidField from '../DidField';
 
 export interface ProfileAvatarButtonProps {
   customStyle?: string;
@@ -67,16 +68,13 @@ const ProfileAvatarButton = React.forwardRef(
           />
         </Box>
 
-        <Box title="info-box" customStyle="justify-center align-top">
+        <Box customStyle="justify-center align-top space-y-1">
           <Box ref={ref}>
             <Text variant="button-sm" weight="bold" truncate={true} customStyle={textTruncateStyle}>
               {label || profileId}
             </Text>
           </Box>
-
-          <Text variant="footnotes2" color="grey7" truncate={true} customStyle={textTruncateStyle}>
-            {info}
-          </Text>
+          <DidField did={profileId} copiable={false} />
         </Box>
       </Button>
     );
