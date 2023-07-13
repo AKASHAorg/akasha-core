@@ -40,6 +40,7 @@ export type IconType =
   | 'listBulleted'
   | 'metamask'
   | 'shield'
+  | 'underline'
   | 'strikethrough'
   | 'solana'
   | 'telegram'

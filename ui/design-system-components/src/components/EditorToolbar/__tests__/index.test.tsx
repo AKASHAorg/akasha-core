@@ -8,9 +8,23 @@ import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
 describe('<EditorToolbar /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const handleBoldClick = jest.fn();
+  const handleItalicClick = jest.fn();
+  const handleUnderlineClick = jest.fn();
+  const handleStrikeThroughClick = jest.fn();
+
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<EditorToolbar />, {});
+      componentWrapper = customRender(
+        <EditorToolbar
+          onBoldClick={handleBoldClick}
+          onItalicClick={handleItalicClick}
+          onUnderlineClick={handleUnderlineClick}
+          onStrikeThroughClick={handleStrikeThroughClick}
+        />,
+
+        {},
+      );
     });
   });
 

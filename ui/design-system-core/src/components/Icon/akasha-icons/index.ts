@@ -23,6 +23,7 @@ import licenseShareAlike from './license-share-alike';
 import licenseSomeRights from './license-some-rights';
 import listBulleted from './list-bulleted';
 import listNumbered from './list-numbered';
+import underline from './underline';
 import shield from './shield';
 import strikethrough from './strikethrough';
 import solana from './solana';
@@ -64,6 +65,7 @@ export type CustomIconTypes = Extract<
   | 'listNumbered'
   | 'listBulleted'
   | 'metamask'
+  | 'underline'
   | 'shield'
   | 'strikethrough'
   | 'solana'
@@ -105,6 +107,7 @@ export {
   textcaseUpper,
   eth,
   metamask,
+  underline,
   shield,
   solana,
   telegram,
