@@ -13,12 +13,13 @@ export type EntryListProps = {
   itemCard: React.ReactElement;
   onLoadMore: () => void;
   itemSpacing?: number;
-  status: 'loading' | 'success' | 'error' | 'idle';
+  requestStatus: 'success' | 'loading' | 'error' | 'idle';
   hasNextPage?: boolean;
   /* string to be prepended to the page iteration index */
   pageKeyPrefix?: string;
   viewAllEntry?: { onClick: () => void; label: string; limit: number };
   languageDirection?: 'ltr' | 'rtl';
+  isFetchingNextPage?: boolean;
 };
 
 const handleScrollToTop = () => {
@@ -39,6 +40,8 @@ const EntryList = (props: EntryListProps) => {
     viewAllEntry,
     languageDirection = 'ltr',
     hasNextPage,
+    isFetchingNextPage,
+    requestStatus,
   } = props;
   const [hideScrollTop, setHideScrollTop] = React.useState(true);
   const rootElementRef = React.useRef<HTMLDivElement>();
@@ -48,7 +51,6 @@ const EntryList = (props: EntryListProps) => {
 
   const allEntries = React.useMemo(() => {
     if (pages) {
-      console.log(pages);
       return pages.flatMap(page => page);
     }
     return [];
@@ -63,9 +65,22 @@ const EntryList = (props: EntryListProps) => {
     estimateSize: () => 100,
     scrollMargin: rootElementOffset.current,
   });
+  const items = virtualizer.getVirtualItems();
+  /**
+   * Handle load more
+   */
+  React.useEffect(() => {
+    const [lastItem] = [...items].reverse();
+    if (!lastItem) {
+      return;
+    }
+    if (lastItem.index >= allEntries.length - 1 && hasNextPage && !isFetchingNextPage) {
+      onLoadMore();
+    }
+  }, [hasNextPage, items, onLoadMore]);
   /**
    * Handle scroll to top button visibility
-   **/
+   */
   React.useLayoutEffect(() => {
     const onScroll = () => {
       if (window.scrollY > 0) {
@@ -86,7 +101,6 @@ const EntryList = (props: EntryListProps) => {
     //We want to calculate scroll top button placement whenever the scroll top flag changes as browser may have resized
     hideScrollTop,
   ]);
-  const items = virtualizer.getVirtualItems();
 
   if (items.length === 0) {
     return null;
@@ -107,11 +121,16 @@ const EntryList = (props: EntryListProps) => {
           {items.map(vItem => {
             const { key, index, size, start } = vItem;
             const item = allEntries[index];
+            const isLoaderRow = index > items.length - 1;
             return (
               <div key={key} data-index={index} ref={virtualizer.measureElement}>
                 <div>
-                  {' '}
-                  Item with index {index} {JSON.stringify(item.content)}
+                  {isLoaderRow && <div>Loading items</div>}
+                  {!isLoaderRow && (
+                    <div>
+                      Item with index {index} {JSON.stringify(item.content)}
+                    </div>
+                  )}
                 </div>
                 {/*{React.cloneElement(itemCard, {*/}
                 {/*  itemId: item?.id,*/}
@@ -153,7 +172,7 @@ const EntryList = (props: EntryListProps) => {
             {viewAllEntry.label}
           </Anchor>
         )}
-        {!viewAllEntry && (props.status === 'loading' || hasNextPage) && (
+        {!viewAllEntry && (requestStatus === 'loading' || hasNextPage) && (
           <Box customStyle="p-8" ref={loadmoreRef}>
             <Spinner />
           </Box>

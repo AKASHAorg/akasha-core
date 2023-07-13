@@ -15,7 +15,6 @@ import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import {
   TrackEventData,
-  EventTypes,
   EntityTypes,
   NavigateToParams,
   RootComponentProps,
@@ -23,16 +22,16 @@ import {
 } from '@akashaorg/typings/ui';
 import { usePost, useComment, mapEntry, useDummyQuery } from '@akashaorg/ui-awf-hooks';
 
-import FeedWidget from './App';
+import FeedWidget from './app';
 import { Profile, IContentClickDetails } from '@akashaorg/typings/ui';
 
-export interface IEntryRenderer {
+export type EntryRendererProps = {
   itemId?: string;
   itemSpacing?: number;
   sharePostUrl: string;
   locale: ILocale;
   style?: React.CSSProperties;
-  onFlag?: (
+  onEntryFlag?: (
     entryId: string,
     itemType: EntityTypes,
     reporterEthAddress?: string | null,
@@ -59,19 +58,19 @@ export interface IEntryRenderer {
   navigateToModal: (props: ModalNavigationOptions) => void;
   loggedProfileData?: Profile;
   i18n: i18n;
-}
+  replyFragmentItem: boolean;
+  showReplyFragment: boolean;
+};
 
 const REPLY_FRAGMENT_SIZE = 2;
 
-const EntryRenderer = (
-  props: IEntryRenderer & { replyFragmentItem: boolean; showReplyFragment: boolean },
-) => {
+const EntryRenderer = (props: EntryRendererProps) => {
   const {
     locale,
     itemId,
     itemType,
     style,
-    onFlag,
+    onEntryFlag,
     onEntryNavigate,
     navigateTo,
     onRepost,
@@ -160,29 +159,6 @@ const EntryRenderer = (
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
     });
   };
-
-  const handleExtensionMount = (name: string) => {
-    uiEvents.next({
-      event: EventTypes.ExtensionPointMount,
-      data: {
-        name,
-        itemId,
-        itemType,
-        hideLabel: itemType === EntityTypes.POST,
-      },
-    });
-  };
-
-  const handleExtensionUnmount = (name: string) => {
-    uiEvents.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: {
-        name,
-        itemId,
-        itemType,
-      },
-    });
-  };
   const handleFlipCard = () => {
     setShowAnyway(true);
   };
@@ -210,6 +186,7 @@ const EntryRenderer = (
     if (accountAwaitingModeration) return `the author of this ${itemTypeName}`;
     return `this ${itemTypeName}`;
   }, [accountAwaitingModeration, itemTypeName]);
+
   // @TODO fix author
   const showEditButton = React.useMemo(
     () => false, //loggedProfileData?.did.id === itemData?.author?.did.id,
@@ -240,7 +217,7 @@ const EntryRenderer = (
     return [];
   }, [repliesReq.data]);
 
-  const entryCardStyle = () => {
+  const entryCardStyle = React.useMemo(() => {
     if (!isComment) return '';
 
     if (replyFragmentItem) return;
@@ -248,7 +225,7 @@ const EntryRenderer = (
 
     if (index !== totalEntry) return;
     `border-b-1 border(grey8 dark:grey3)`;
-  };
+  }, [index, totalEntry, isComment, replyFragmentItem]);
 
   const entryLoading = postReq.isLoading || commentReq.isLoading;
 
@@ -282,7 +259,7 @@ const EntryRenderer = (
             />
           )}
           {canShowEntry && (
-            <Box customStyle={entryCardStyle()}>
+            <Box customStyle={entryCardStyle}>
               <EntryCard
                 className={className}
                 isRemoved={itemData.isRemoved}
@@ -301,7 +278,7 @@ const EntryRenderer = (
                 }`}
                 hideRepost={isComment}
                 onRepost={onRepost}
-                onEntryFlag={onFlag && onFlag(itemData.entryId, itemType)}
+                onEntryFlag={onEntryFlag && onEntryFlag(itemData.entryId, itemType)}
                 onContentClick={handleContentClick}
                 onMentionClick={handleMentionClick}
                 onTagClick={handleTagClick}
@@ -320,12 +297,28 @@ const EntryRenderer = (
                 accentBorderTop={accentBorderTop}
                 actionsRightExt={
                   !isComment && (
-                    <Extension name={`entry-card-actions-right_${itemId}`} uiEvents={uiEvents} />
+                    <Extension
+                      name={`entry-card-actions-right_${itemId}`}
+                      uiEvents={uiEvents}
+                      data={{
+                        itemId,
+                        itemType,
+                        hideLabel: itemType === EntityTypes.POST,
+                      }}
+                    />
                   )
                 }
                 headerMenuExt={
                   showEditButton && (
-                    <Extension name={`entry-card-edit-button_${itemId}`} uiEvents={uiEvents} />
+                    <Extension
+                      name={`entry-card-edit-button_${itemId}`}
+                      uiEvents={uiEvents}
+                      data={{
+                        itemId,
+                        itemType,
+                        hideLabel: itemType === EntityTypes.POST,
+                      }}
+                    />
                   )
                 }
               />
@@ -338,9 +331,6 @@ const EntryRenderer = (
                     logger={logger}
                     itemType={EntityTypes.REPLY}
                     onLoadMore={() => ({})}
-                    getShareUrl={(itemId: string) =>
-                      `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${itemId}`
-                    }
                     viewAllEntry={{
                       label: 'View all replies',
                       onClick: () => {
@@ -358,7 +348,7 @@ const EntryRenderer = (
                     hasNextPage={repliesReq.hasNextPage}
                     loggedProfileData={loggedProfileData}
                     contentClickable={true}
-                    onEntryFlag={onFlag}
+                    onEntryFlag={onEntryFlag}
                     onEntryRemove={onEntryRemove}
                     removeEntryLabel={t('Delete Reply')}
                     removedByMeLabel={t('You deleted this reply')}

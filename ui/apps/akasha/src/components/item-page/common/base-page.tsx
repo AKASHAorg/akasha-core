@@ -158,9 +158,6 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             pages={[]}
             itemType={EntityTypes.REPLY}
             onLoadMore={handleLoadMore}
-            getShareUrl={(itemId: string) =>
-              `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${itemId}`
-            }
             loggedProfileData={loggedProfileData}
             navigateTo={navigateTo}
             navigateToModal={navigateToModal}

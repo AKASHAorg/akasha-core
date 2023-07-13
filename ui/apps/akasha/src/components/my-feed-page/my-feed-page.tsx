@@ -119,9 +119,6 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         itemType={EntityTypes.POST}
         pages={[]}
         onLoadMore={handleLoadMore}
-        getShareUrl={(itemId: string) =>
-          `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-        }
         navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={navigateToModal.current}
         onLoginModalOpen={showLoginModal.current}

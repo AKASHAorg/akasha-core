@@ -2,18 +2,47 @@ import * as React from 'react';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes } from '@akashaorg/typings/ui';
-import { FeedWidgetProps } from './App';
+import { FeedWidgetProps } from './app';
 import EntryRenderer from './entry-renderer';
 import EntryList from '@akashaorg/design-system-components/lib/components/EntryList';
 
 const EntryFeed = (props: FeedWidgetProps) => {
-  const handleEntryNavigate = useEntryNavigation(props.navigateTo);
+  const {
+    uiEvents,
+    removedByAuthorLabel,
+    removedByMeLabel,
+    removeEntryLabel,
+    onEntryRemove,
+    contentClickable,
+    parentIsProfilePage,
+    onEntryFlag,
+    modalSlotId,
+    navigateTo,
+    navigateToModal,
+    i18n,
+    loggedProfileData,
+    viewAllEntry,
+    itemType,
+    hasNextPage,
+    requestStatus,
+    isFetchingNextPage,
+    onLoadMore,
+    pages,
+    itemSpacing,
+    trackEvent,
+    accentBorderTop,
+    replyFragmentItem,
+    showReplyFragment,
+    logger,
+    onLoginModalOpen,
+  } = props;
+  const handleEntryNavigate = useEntryNavigation(navigateTo);
 
   const handleRepost = (_withComment: boolean, entryId: string) => {
-    if (!props.loggedProfileData?.did.id) {
-      props.navigateToModal({ name: 'login' });
+    if (!loggedProfileData?.did.id) {
+      navigateToModal({ name: 'login' });
     } else {
-      props.navigateTo?.({
+      navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: () => `/feed?repost=${entryId}`,
       });
@@ -22,40 +51,41 @@ const EntryFeed = (props: FeedWidgetProps) => {
 
   return (
     <EntryList
-      onLoadMore={props.onLoadMore}
-      status={props.requestStatus}
-      pages={props.pages}
-      itemSpacing={props.itemSpacing}
-      hasNextPage={props.hasNextPage}
-      pageKeyPrefix={props.itemType === EntityTypes.POST ? 'entry-page' : 'comment-page'}
-      viewAllEntry={props.viewAllEntry}
-      languageDirection={props.i18n?.dir() || 'ltr'}
+      onLoadMore={onLoadMore}
+      requestStatus={requestStatus}
+      isFetchingNextPage={isFetchingNextPage}
+      pages={pages}
+      itemSpacing={itemSpacing}
+      hasNextPage={hasNextPage}
+      pageKeyPrefix={itemType === EntityTypes.POST ? 'entry-page' : 'comment-page'}
+      viewAllEntry={viewAllEntry}
+      languageDirection={i18n?.dir() || 'ltr'}
       itemCard={
         <EntryRenderer
-          modalSlotId={props.modalSlotId}
-          itemType={props.itemType}
+          modalSlotId={modalSlotId}
+          itemType={itemType}
           sharePostUrl={`${window.location.origin}/@akashaorg/app-akasha-integration/post/`}
-          locale={props.i18n?.languages[0] as ILocale}
+          locale={i18n?.languages[0] as ILocale}
           onEntryNavigate={handleEntryNavigate}
-          navigateTo={props.navigateTo}
-          onFlag={props.onEntryFlag}
+          navigateTo={navigateTo}
+          onEntryFlag={onEntryFlag}
           onRepost={handleRepost}
-          parentIsProfilePage={props.parentIsProfilePage}
-          contentClickable={props.contentClickable}
-          onEntryRemove={props.onEntryRemove}
-          removeEntryLabel={props.removeEntryLabel}
-          removedByMeLabel={props.removedByMeLabel}
-          removedByAuthorLabel={props.removedByAuthorLabel}
-          uiEvents={props.uiEvents}
-          trackEvent={props.trackEvent}
-          accentBorderTop={props.accentBorderTop}
-          replyFragmentItem={props.replyFragmentItem}
-          showReplyFragment={props.showReplyFragment}
-          logger={props.logger}
-          onLoginModalOpen={props.onLoginModalOpen}
-          navigateToModal={props.navigateToModal}
-          loggedProfileData={props.loggedProfileData}
-          i18n={props.i18n}
+          parentIsProfilePage={parentIsProfilePage}
+          contentClickable={contentClickable}
+          onEntryRemove={onEntryRemove}
+          removeEntryLabel={removeEntryLabel}
+          removedByMeLabel={removedByMeLabel}
+          removedByAuthorLabel={removedByAuthorLabel}
+          uiEvents={uiEvents}
+          trackEvent={trackEvent}
+          accentBorderTop={accentBorderTop}
+          replyFragmentItem={replyFragmentItem}
+          showReplyFragment={showReplyFragment}
+          logger={logger}
+          onLoginModalOpen={onLoginModalOpen}
+          navigateToModal={navigateToModal}
+          loggedProfileData={loggedProfileData}
+          i18n={i18n}
         />
       }
     />

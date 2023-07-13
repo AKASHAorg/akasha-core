@@ -142,9 +142,6 @@ const ListsPage: React.FC<ListsPageProps> = props => {
               onLoadMore={() => {
                 /* if next page, load more */
               }}
-              getShareUrl={(itemId: string) =>
-                `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-              }
               pages={[{ results: bookmarkedBeamsIds, total: bookmarkedBeamsIds.length }]}
               requestStatus={listsReq.status}
               loggedProfileData={loggedProfileData}

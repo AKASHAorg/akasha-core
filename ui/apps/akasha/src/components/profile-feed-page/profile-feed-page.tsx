@@ -5,22 +5,26 @@ import { useParams } from 'react-router-dom';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useInfinitePostsByAuthor, useGetProfile } from '@akashaorg/ui-awf-hooks';
-import {
-  RootComponentProps,
-  EntityTypes,
-  Profile,
-  ModalNavigationOptions,
-} from '@akashaorg/typings/ui';
+import type { RootComponentProps, Profile, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { EntityTypes } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 
-export interface ProfilePageProps extends RootComponentProps {
+export type ProfilePageProps = RootComponentProps & {
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
 const ProfileFeedPage = (props: ProfilePageProps) => {
-  const { loggedProfileData, showLoginModal } = props;
+  const {
+    uiEvents,
+    plugins,
+    logger,
+    navigateToModal,
+    layoutConfig,
+    loggedProfileData,
+    showLoginModal,
+  } = props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
   const { t } = useTranslation('app-profile');
@@ -95,18 +99,15 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
         {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
         {reqPosts.isSuccess && postPages && (
           <FeedWidget
-            modalSlotId={props.layoutConfig.modalSlotId}
+            modalSlotId={layoutConfig.modalSlotId}
             itemType={EntityTypes.POST}
-            logger={props.logger}
+            logger={logger}
             onLoadMore={handleLoadMore}
-            getShareUrl={(itemId: string) =>
-              `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-            }
             pages={postPages}
             requestStatus={reqPosts.status}
             loggedProfileData={loggedProfileData}
-            navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-            navigateToModal={props.navigateToModal}
+            navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+            navigateToModal={navigateToModal}
             onLoginModalOpen={showLoginModal}
             hasNextPage={reqPosts.hasNextPage}
             contentClickable={true}
@@ -116,9 +117,9 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
             removedByMeLabel={t('You deleted this post')}
             removedByAuthorLabel={t('This post was deleted by its author')}
             parentIsProfilePage={true}
-            uiEvents={props.uiEvents}
+            uiEvents={uiEvents}
             itemSpacing={8}
-            i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+            i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
           />
         )}
       </>

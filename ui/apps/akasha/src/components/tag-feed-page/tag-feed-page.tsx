@@ -27,7 +27,15 @@ interface ITagFeedPage {
 }
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
-  const { showLoginModal, loggedProfileData } = props;
+  const {
+    uiEvents,
+    layoutConfig,
+    plugins,
+    logger,
+    navigateToModal,
+    showLoginModal,
+    loggedProfileData,
+  } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { tagName } = useParams<{ tagName: string }>();
 
@@ -102,18 +110,15 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
           </Box>
 
           <FeedWidget
-            modalSlotId={props.layoutConfig.modalSlotId}
+            modalSlotId={layoutConfig.modalSlotId}
             itemType={EntityTypes.POST}
-            logger={props.logger}
+            logger={logger}
             onLoadMore={handleLoadMore}
             pages={postPages}
-            getShareUrl={(itemId: string) =>
-              `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-            }
             requestStatus={reqPosts.status}
             loggedProfileData={loggedProfileData}
-            navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-            navigateToModal={props.navigateToModal}
+            navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+            navigateToModal={navigateToModal}
             onLoginModalOpen={showLoginModal}
             hasNextPage={reqPosts.hasNextPage}
             contentClickable={true}
@@ -122,9 +127,9 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             removeEntryLabel={t('Delete Post')}
             removedByMeLabel={t('You deleted this post')}
             removedByAuthorLabel={t('This post was deleted by its author')}
-            uiEvents={props.uiEvents}
+            uiEvents={uiEvents}
             itemSpacing={8}
-            i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+            i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
           />
         </>
       )}

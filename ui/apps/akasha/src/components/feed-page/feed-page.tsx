@@ -62,7 +62,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       signal: controller.signal,
     });
     return () => controller.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dismissedCardId = 'dismiss-private-alpha-notification';
@@ -119,7 +118,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     console.log(postsReq, '<< posts request');
     console.log(postPages, '<< generated data');
   }, [postsReq, postPages]);
-  
+
   return (
     <Box customStyle={'w-full'}>
       <Helmet.Helmet>
@@ -202,9 +201,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         // @TODO replace with real data source
         pages={postPages}
         onLoadMore={handleLoadMore}
-        getShareUrl={(itemId: string) =>
-          `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-        }
         loggedProfileData={loggedProfileData}
         navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={navigateToModal}

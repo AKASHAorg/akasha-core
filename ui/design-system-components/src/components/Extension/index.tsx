@@ -26,7 +26,7 @@ const Extension: React.FC<ExtensionProps> = props => {
   const handleExtensionUnmount = (name: string) => {
     uiEvents.next({
       event: EventTypes.ExtensionPointUnmount,
-      data: { name },
+      data: { name, ...data },
     });
   };
 
