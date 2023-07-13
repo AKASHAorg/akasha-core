@@ -8,7 +8,7 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import EditorToolbar from '@akashaorg/design-system-components/lib/EditorToolbar';
+import EditorToolbar from '@akashaorg/design-system-components/lib/components/EditorToolbar';
 
 import ArticleEditorCard from '../components/article-editor-card';
 
