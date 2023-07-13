@@ -1,15 +1,12 @@
 import { IconType } from '@akashaorg/typings/ui';
 
 import akasha from './akasha';
-<<<<<<< HEAD
 import alignCenter from './align-center';
 import alignJustify from './align-justify';
 import alignLeft from './align-left';
 import alignRight from './align-right';
 import boldAlt from './bold-alt';
-=======
 import didKey from './didKey';
->>>>>>> next
 import discord from './discord';
 import eth from './eth';
 import faq from './faq';
@@ -87,6 +84,7 @@ export {
   alignRight,
   boldAlt,
   discord,
+  didKey,
   faq,
   github,
   integrationAppCTA,
