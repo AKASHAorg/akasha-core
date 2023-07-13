@@ -8,6 +8,7 @@ import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexBut
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 
 export type LatestTopicsProps = {
   // data
@@ -43,8 +44,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     subscribedTags,
   } = props;
 
-  const baseTabPanelStyles = 'ring(white opacity-60 offset(2 blue-400)) focus:outline-none';
-
   const baseItemStyles = 'flex justify-between items-center space-y-2';
 
   return (
@@ -55,7 +54,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
         </Text>
       </Box>
 
-      <Box customStyle={baseTabPanelStyles}>
+      <Box>
         <ul>
           {tags.length === 0 && !isLoadingTags && (
             <Box customStyle="flex justify-center items-center">
@@ -66,14 +65,9 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           {tags.length === 0 &&
             isLoadingTags &&
             Array.from({ length: 4 }, (_el, index: number) => (
-              <Box key={index} customStyle={baseItemStyles}>
-                <Box>
-                  <TextLine title="tagName" animated={false} width="140px" />
-                  <TextLine title="tagName" animated={false} width="80px" />
-                </Box>
-
-                <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
-              </Box>
+              <React.Fragment key={index}>
+                <TrendingWidgetLoadingCard />
+              </React.Fragment>
             ))}
 
           <Box customStyle="space-y-4">
