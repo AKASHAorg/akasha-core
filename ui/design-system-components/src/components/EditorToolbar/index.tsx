@@ -87,35 +87,36 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
 
         {caseStyleRef.current && dropOpen === 'case' && <IconDrop dropItems={caseIcons} />}
       </Stack>
-
-      <Icon type="boldAlt" onClick={onBoldClick} />
-      <Icon type="italic" onClick={onItalicClick} />
-      <Icon type="underline" onClick={onUnderlineClick} />
-      <Icon type="strikethrough" onClick={onStrikeThroughClick} />
+      <button onClick={onBoldClick}>
+        <Icon type="boldAlt" />
+      </button>
+      <button onClick={onItalicClick}>
+        <Icon type="italic" />
+      </button>
+      <button onClick={onUnderlineClick}>
+        <Icon type="underline" />
+      </button>
+      <button onClick={onStrikeThroughClick}>
+        <Icon type="strikethrough" />
+      </button>
 
       <Stack customStyle="relative">
-        <Box
-          customStyle="flex flex-row items-center"
-          onClick={() => setDropOpen('list')}
-          ref={listStyleRef}
-        >
-          <Icon type={listStyle as IconType} size="sm" />
-          <Icon type="ChevronDownIcon" />
-        </Box>
-
+        <button onClick={() => setDropOpen('list')}>
+          <Box customStyle="flex flex-row items-center" ref={listStyleRef}>
+            <Icon type={listStyle as IconType} size="sm" />
+            <Icon type="ChevronDownIcon" />
+          </Box>
+        </button>
         {listStyleRef.current && dropOpen === 'list' && <IconDrop dropItems={listIcons} />}
       </Stack>
 
       <Stack customStyle="flex flex-row">
-        <Box
-          customStyle="flex flex-row items-center"
-          onClick={() => setDropOpen('align')}
-          ref={alignStyleRef}
-        >
-          <Icon type={alignStyle as IconType} size="sm" />
-          <Icon type="ChevronDownIcon" />
-        </Box>
-
+        <button onClick={() => setDropOpen('align')}>
+          <Box customStyle="flex flex-row items-center" ref={alignStyleRef}>
+            <Icon type={alignStyle as IconType} size="sm" />
+            <Icon type="ChevronDownIcon" />
+          </Box>
+        </button>
         {alignStyleRef.current && dropOpen === 'align' && <IconDrop dropItems={alignIcons} />}
       </Stack>
     </Box>
