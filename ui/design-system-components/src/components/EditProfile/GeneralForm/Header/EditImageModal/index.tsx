@@ -9,6 +9,7 @@ type EditImageModalProps = {
   show: ModalProps['show'];
   cancelLabel: string;
   saveLabel: string;
+  isSavingImage: boolean;
   onSave: (image: Blob) => void;
   onClose: ModalProps['onClose'];
 } & Pick<ImageCropperProps, 'image' | 'dragToRepositionLabel'>;
@@ -19,6 +20,7 @@ export const EditImageModal: React.FC<EditImageModalProps> = ({
   image,
   cancelLabel,
   saveLabel,
+  isSavingImage,
   onSave,
   onClose,
   ...rest
@@ -31,8 +33,13 @@ export const EditImageModal: React.FC<EditImageModalProps> = ({
       show={show}
       onClose={onClose}
       actions={[
-        { variant: 'text', label: cancelLabel, onClick: onClose },
-        { variant: 'primary', label: saveLabel, onClick: () => onSave(croppedImage) },
+        { variant: 'text', disabled: isSavingImage, label: cancelLabel, onClick: onClose },
+        {
+          variant: 'primary',
+          label: saveLabel,
+          loading: isSavingImage,
+          onClick: () => onSave(croppedImage),
+        },
       ]}
     >
       <ImageCropper image={image} onCrop={setCroppedImage} {...rest} />
