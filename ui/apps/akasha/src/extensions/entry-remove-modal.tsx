@@ -1,16 +1,8 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import {
-  RootExtensionProps,
-  AnalyticsCategories,
-  EntityTypes,
-  EntityTypesMap,
-} from '@akashaorg/typings/ui';
 import {
   useDeletePost,
   useDeleteComment,
@@ -18,23 +10,36 @@ import {
   useAnalytics,
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
+import {
+  RootExtensionProps,
+  AnalyticsCategories,
+  EntityTypes,
+  EntityTypesMap,
+} from '@akashaorg/typings/ui';
 
-const { ConfirmationModal, ModalContainer } = DS;
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
-  const { extensionData, logger } = props;
+  const { extensionData, logger, singleSpa } = props;
+
+  const [showModal, setShowModal] = useState(true);
+
   const { t } = useTranslation('app-akasha-integration');
 
   const postDeleteQuery = useDeletePost(extensionData.itemId);
   const commentDeleteQuery = useDeleteComment(extensionData.itemId);
   const [analyticsActions] = useAnalytics();
 
-  const handleModalClose = React.useCallback(() => {
-    props.singleSpa.navigateToUrl(location.pathname);
-  }, [props.singleSpa]);
+  const handleModalClose = useCallback(() => {
+    setShowModal(false);
+    singleSpa.navigateToUrl(location.pathname);
+  }, [singleSpa]);
 
   // extensionData.itemType comes as a string from navigateToModal this can lead to bugs
-  const handleDelete = React.useCallback(() => {
+  const handleDelete = useCallback(() => {
     if (!!extensionData && extensionData.itemType !== undefined) {
       if (extensionData.itemType === EntityTypes.REPLY) {
         analyticsActions.trackEvent({
@@ -58,7 +63,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
-  const entryLabelText = React.useMemo(() => {
+  const entryLabelText = useMemo(() => {
     if (extensionData.itemType === EntityTypes.POST) {
       return t('post');
     }
@@ -67,24 +72,25 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [extensionData.itemType]);
 
   return (
-    <ConfirmationModal
+    <Modal
+      show={showModal}
+      title={{ label: `${t('Delete')} ${entryLabelText}`, variant: 'h5' }}
+      actions={[
+        { label: 'Cancel', variant: 'secondary', onClick: handleModalClose },
+        { label: 'Delete', variant: 'primary', onClick: handleDelete },
+      ]}
       onClose={handleModalClose}
-      onConfirm={handleDelete}
-      onCancel={handleModalClose}
-      modalTitle={`${t('Delete')} ${entryLabelText}`}
-      closeLabel={t('Close')}
-      textDetails={
-        <>
-          <div>
-            {t('Are you sure you want to delete your')} {entryLabelText}?
-          </div>
-          <div>{t('This cannot be undone')}.</div>
-        </>
-      }
-      cancelLabel={t('Cancel')}
-      confirmLabel={t('Delete')}
-      error={(postDeleteQuery.error || commentDeleteQuery.error) as Error | null}
-    />
+    >
+      <Stack>
+        <Text align="center">{`${t(
+          'Are you sure you want to delete your',
+        )} "${entryLabelText}"?`}</Text>
+
+        <Text align="center" variant="subtitle1">
+          {t('This cannot be undone')}
+        </Text>
+      </Stack>
+    </Modal>
   );
 };
 
@@ -106,13 +112,11 @@ const reactLifecycles = singleSpaReact({
     }
     return (
       <ThemeWrapper {...props}>
-        <ModalContainer>
-          <ErrorLoader
-            type="script-error"
-            title="Error in entry remove modal"
-            details={err.message}
-          />
-        </ModalContainer>
+        <ErrorLoader
+          type="script-error"
+          title="Error in entry remove modal"
+          details={err.message}
+        />
       </ThemeWrapper>
     );
   },

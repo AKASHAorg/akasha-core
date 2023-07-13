@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootExtensionProps, EntityTypes } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
-const { MenuItemButton, ModalContainer } = DS;
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 const EntryEditButton: React.FC<RootExtensionProps> = props => {
   const { t } = useTranslation('app-akasha-integration');
@@ -33,11 +35,13 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
   }, [props.extensionData.itemType, t]);
 
   return (
-    <MenuItemButton
-      icon={'edit'}
-      label={t('Edit {{ itemTypeLabel }}', { itemTypeLabel })}
-      onClick={handleClick}
-    />
+    <Button plain={true} onClick={handleClick}>
+      <Stack align="center" spacing="gap-x-3" customStyle="py-2 px-4">
+        <Icon type="PencilIcon" size="sm" />
+
+        <Text variant="body1">{t('Edit {{ itemTypeLabel }}', { itemTypeLabel })}</Text>
+      </Stack>
+    </Button>
   );
 };
 
@@ -61,9 +65,7 @@ const reactLifecycles = singleSpaReact({
     }
     return (
       <ThemeWrapper {...props}>
-        <ModalContainer>
-          <ErrorLoader type="script-error" title="Error in edit button" details={err.message} />
-        </ModalContainer>
+        <ErrorLoader type="script-error" title="Error in edit button" details={err.message} />
       </ThemeWrapper>
     );
   },

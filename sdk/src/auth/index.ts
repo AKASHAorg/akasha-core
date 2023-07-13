@@ -136,9 +136,11 @@ class AWF_Auth {
    */
   @validate(EthAddressSchema)
   async checkIfSignedUp(ethAddress: EthAddress) {
-    const variables = { ethAddress };
-    const prof = await this._gql.getAPI().GetProfile(variables);
-    return !!prof?.getProfile?.pubKey;
+    // const variables = { ethAddress };
+    // const prof = await this._gql.getAPI().GetProfile(variables);
+    // return !!prof?.getProfile?.pubKey;
+    // @Todo: replace this when ready
+    return true;
   }
 
   @validate(
@@ -204,7 +206,7 @@ class AWF_Auth {
         const sessValue = localStorage.getItem(this.sessKey);
         if (localUser && sessValue) {
           const tmpSession = JSON.parse(localUser);
-          if (address && tmpSession?.ethAddress === address) {
+          if (address && tmpSession?.ethAddress === address?.toLowerCase()) {
             this._globalChannel.next({
               data: tmpSession,
               event: AUTH_EVENTS.SIGN_IN,

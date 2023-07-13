@@ -21,9 +21,11 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
-import { saveAndGetImageObj } from '../../utils';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
+import { useSaveImage } from '../../use-save-image';
+import { PartialProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import { deleteImageAndGetProfileContent } from '../../delete-image-and-get-profile-content';
 
 type EditProfilePageProps = {
   handleFeedback: () => void;
@@ -45,6 +47,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     },
     {
       select: response => response.node,
+      enabled: !!profileId,
     },
   );
 
@@ -62,6 +65,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   const [interestsValid, setInterestsValid] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
+    useState<PartialProfileInput | null>(null);
+
+  const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
 
   const queryClient = useQueryClient();
   const createProfileMutation = useCreateProfileMutation({
@@ -94,9 +101,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       navigateToProfileInfoPage();
     },
   });
+
   const myInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
-    { select: response => response.node },
+    { select: response => response.node, enabled: !!profileData?.id },
   );
   const myInterests =
     myInterestsQueryReq.data && 'isViewer' in myInterestsQueryReq.data
@@ -154,32 +162,46 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     });
   };
 
-  const saveImage = async (avatarImage?: File, coverImage?: File) => {
-    setIsProcessing(true);
-    const avatarImageObj = await saveAndGetImageObj('avatar', avatarImage);
-    const coverImageObj = await saveAndGetImageObj('coverImage', coverImage);
-
-    const avatarObj = avatarImageObj ? { avatar: avatarImageObj } : {};
-    const backgroundObj = coverImageObj ? { background: coverImageObj } : {};
-
-    setIsProcessing(false);
-
-    return { avatarObj, backgroundObj };
-  };
-
-  const createProfile = async (formValues: GeneralFormValues) => {
-    const imageObj = await saveImage(formValues?.avatar, formValues?.coverImage);
+  const createProfile = async (
+    formValues: GeneralFormValues,
+    profileImages: Pick<PartialProfileInput, 'avatar' | 'background'>,
+  ) => {
     createProfileMutation.mutate({
       i: {
         content: {
           name: formValues.name,
           description: formValues.bio,
           createdAt: new Date().toISOString(),
-          ...imageObj.avatarObj,
-          ...imageObj.backgroundObj,
+          ...profileImages,
         },
       },
     });
+  };
+
+  const updateGeneralForm = async (
+    formValues: GeneralFormValues,
+    profileImages: Pick<PartialProfileInput, 'avatar' | 'background'>,
+  ) => {
+    updateProfileMutation.mutate({
+      i: {
+        id: profileData.id,
+        content: {
+          name: formValues.name,
+          description: formValues.bio,
+          ...profileImages,
+        },
+      },
+    });
+  };
+
+  const getProfileImageVersions = (
+    avatarImage: PartialProfileInput['avatar'],
+    coverImage: PartialProfileInput['background'],
+  ) => {
+    const avatarImageObj = avatarImage ? { avatar: avatarImage } : {};
+    const coverImageObj = coverImage ? { background: coverImage } : {};
+
+    return { ...avatarImageObj, ...coverImageObj };
   };
 
   return (
@@ -215,9 +237,12 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   avatar: t('Are you sure you want to delete your avatar?'),
                   coverImage: t('Are you sure you want to delete your cover?'),
                 },
-                onImageDelete: () => {
-                  /*TODO: */
-                },
+                isSavingImage: isSavingImage,
+                onImageSave: async (type, image) => saveImage(type, image),
+                onImageDelete: type =>
+                  setProfileContentOnImageDelete(
+                    deleteImageAndGetProfileContent({ profileData, type }),
+                  ),
               }}
               name={{ label: t('Name'), initialValue: profileData?.name }}
               // userName={{ label: t('Username'), initialValue: profileData.userName }}
@@ -249,22 +274,26 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 loading: isProcessing,
                 handleClick: async formValues => {
                   if (!profileData?.id) {
-                    await createProfile(formValues);
+                    await createProfile(
+                      formValues,
+                      getProfileImageVersions(avatarImage, coverImage),
+                    );
                     return;
                   }
 
-                  const imageObj = await saveImage(formValues?.avatar, formValues?.coverImage);
-                  updateProfileMutation.mutate({
-                    i: {
-                      id: profileData.id,
-                      content: {
-                        name: formValues.name,
-                        description: formValues.bio,
-                        ...imageObj.avatarObj,
-                        ...imageObj.backgroundObj,
+                  if (profileContentOnImageDelete) {
+                    updateProfileMutation.mutate({
+                      i: {
+                        id: profileData.id,
+                        content: profileContentOnImageDelete,
+                        options: { replace: true },
                       },
-                    },
-                  });
+                    });
+                    setProfileContentOnImageDelete(null);
+                    return;
+                  }
+
+                  updateGeneralForm(formValues, getProfileImageVersions(avatarImage, coverImage));
                 },
               }}
               onFormValid={setGeneralValid}
