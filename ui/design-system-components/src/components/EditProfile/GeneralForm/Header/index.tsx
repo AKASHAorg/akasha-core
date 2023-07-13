@@ -13,9 +13,7 @@ import { EditImageModal } from './EditImageModal';
 import { DeleteImageModal } from './DeleteImageModal';
 import { CropperProps } from 'react-easy-crop';
 import { useEffect } from 'react';
-import { Profile } from '@akashaorg/typings/ui';
-
-type ImageType = 'avatar' | 'cover-image';
+import { ProfileImageType, Profile } from '@akashaorg/typings/ui';
 
 export type HeaderProps = {
   coverImage: Profile['background'];
@@ -29,9 +27,11 @@ export type HeaderProps = {
   deleteTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   confirmationLabel: { avatar: string; coverImage: string };
   dragToRepositionLabel: string;
+  isSavingImage: boolean;
   onAvatarChange: (avatar?: File) => void;
   onCoverImageChange: (coverImage?: File) => void;
-  onImageDelete: (type: ImageType) => void;
+  onImageSave: (type: ProfileImageType, image?: File) => void;
+  onImageDelete: (type: ProfileImageType) => void;
 };
 
 export const Header: React.FC<HeaderProps> = ({
@@ -46,20 +46,28 @@ export const Header: React.FC<HeaderProps> = ({
   deleteTitle,
   confirmationLabel,
   dragToRepositionLabel,
+  isSavingImage,
   onAvatarChange,
   onCoverImageChange,
+  onImageSave,
   onImageDelete,
 }) => {
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
   const [showAvatarActions, setShowAvatarActions] = useState(false);
   const [showCoverActions, setShowCoverDropdown] = useState(false);
-  const [imageType, setImageType] = useState<ImageType>();
+  const [ProfileImageType, setProfileImageType] = useState<ProfileImageType>();
   const [showEditImage, setShowEditImage] = useState(false);
   const [showDeleteImage, setShowDeleteImage] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(avatar);
   const [coverImageUrl, setCoverImageUrl] = useState(coverImage);
   const [avatarFile, setAvatarFile] = useState(null);
   const [coverImageFile, setCoverImageFile] = useState(null);
+
+  useEffect(() => {
+    if (!isSavingImage) {
+      setShowEditImage(false);
+    }
+  }, [isSavingImage]);
 
   const editAvatarRef = useCloseActions(() => {
     setShowAvatarActions(false);
@@ -70,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({
   });
 
   const closeActionsDropDown = () => {
-    switch (imageType) {
+    switch (ProfileImageType) {
       case 'avatar':
         setShowAvatarActions(false);
         return;
@@ -109,27 +117,28 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   const imageModalProps: Partial<CropperProps> =
-    imageType === 'avatar'
+    ProfileImageType === 'avatar'
       ? { aspect: 250 / 250, cropShape: 'round' }
       : { aspect: 560 / 169, objectFit: 'contain' };
 
   const onSave = image => {
     if (image) {
-      switch (imageType) {
+      switch (ProfileImageType) {
         case 'avatar':
+          onImageSave('avatar', image);
           setAvatarFile(image);
           setAvatarUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
           break;
         case 'cover-image':
+          onImageSave('cover-image', image);
           setCoverImageFile(image);
           setCoverImageUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
       }
     }
-    setShowEditImage(false);
   };
 
   const onDelete = () => {
-    switch (imageType) {
+    switch (ProfileImageType) {
       case 'avatar':
         onImageDelete('avatar');
         setAvatarUrl(null);
@@ -143,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   const onUpload = (image: File) => {
     if (image) {
-      switch (imageType) {
+      switch (ProfileImageType) {
         case 'avatar':
           setAvatarFile(image);
           setAvatarUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
@@ -152,6 +161,7 @@ export const Header: React.FC<HeaderProps> = ({
           setCoverImageFile(image);
           setCoverImageUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
       }
+      setShowEditImage(true);
     }
     uploadInputRef.current.value = null;
   };
@@ -181,7 +191,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="primary"
               onClick={() => {
                 setShowCoverDropdown(!showCoverActions);
-                setImageType('cover-image');
+                setProfileImageType('cover-image');
               }}
               greyBg
               iconOnly
@@ -222,7 +232,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="primary"
               onClick={() => {
                 setShowAvatarActions(!showAvatarActions);
-                setImageType('avatar');
+                setProfileImageType('avatar');
               }}
               greyBg
               iconOnly
@@ -233,22 +243,23 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
       <EditImageModal
         show={showEditImage}
-        title={imageType === 'avatar' ? imageTitle.avatar : imageTitle.coverImage}
+        title={ProfileImageType === 'avatar' ? imageTitle.avatar : imageTitle.coverImage}
         cancelLabel={cancelLabel}
         saveLabel={saveLabel}
-        onClose={() => setShowEditImage(false)}
-        image={imageType === 'avatar' ? avatarUrl : coverImageUrl}
+        onClose={() => (isSavingImage ? undefined : setShowEditImage(false))}
+        image={ProfileImageType === 'avatar' ? avatarUrl : coverImageUrl}
         dragToRepositionLabel={dragToRepositionLabel}
+        isSavingImage={isSavingImage}
         onSave={onSave}
         {...imageModalProps}
       />
       <DeleteImageModal
         show={showDeleteImage}
-        title={imageType === 'avatar' ? deleteTitle.avatar : deleteTitle.coverImage}
+        title={ProfileImageType === 'avatar' ? deleteTitle.avatar : deleteTitle.coverImage}
         cancelLabel={cancelLabel}
         deleteLabel={deleteLabel}
         confirmationLabel={
-          imageType === 'avatar' ? confirmationLabel.avatar : confirmationLabel.coverImage
+          ProfileImageType === 'avatar' ? confirmationLabel.avatar : confirmationLabel.coverImage
         }
         onDelete={onDelete}
         onClose={() => setShowDeleteImage(false)}

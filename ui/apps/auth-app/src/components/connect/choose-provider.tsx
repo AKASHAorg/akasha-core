@@ -126,7 +126,11 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                   ? { gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }
                   : undefined
               }
-              iconSize={{ width: 32, height: 32 }}
+              iconSize={
+                injectedProvider.name === INJECTED_PROVIDERS.METAMASK
+                  ? { width: 32, height: 32 }
+                  : { width: 40, height: 40 }
+              }
               boxSize={{ width: 40, height: 40 }}
             />
           )}
