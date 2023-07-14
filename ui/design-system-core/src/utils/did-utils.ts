@@ -3,6 +3,8 @@ import { truncateMiddle } from './string-utils';
 
 export const truncateDid = (didKey: string, type = 'eth') => {
   if (didKey) {
+    if (didKey.length <= 12) return didKey;
+
     const address = didKey.split(':').pop();
     switch (type) {
       case 'eth':
