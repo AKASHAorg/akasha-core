@@ -6,9 +6,8 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
+// import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 
 export type LatestTopicsProps = {
   // data
@@ -65,9 +64,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           {tags.length === 0 &&
             isLoadingTags &&
             Array.from({ length: 4 }, (_el, index: number) => (
-              <React.Fragment key={index}>
-                <TrendingWidgetLoadingCard />
-              </React.Fragment>
+              <React.Fragment key={index}>{/* <TrendingWidgetLoadingCard /> */}</React.Fragment>
             ))}
 
           <Box customStyle="space-y-4">
