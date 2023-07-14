@@ -1,13 +1,11 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 
 import { IEntryData, IPublishData, Profile } from '@akashaorg/typings/ui';
 import { createPendingEntry, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { POST } from '../../routes';
 import { PUBLISH_PENDING_KEY } from '@akashaorg/ui-awf-hooks/lib/use-comments';
-
-const { EntryBox } = DS;
+import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
 export interface IReplyErrorState {
   state: 'error' | 'retry';
@@ -48,7 +46,6 @@ export function ReplyError({ postId, loggedProfileData, onChange }: Props) {
       {entryData && (
         <EntryBox
           entryData={createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
-          repliesLabel={t('Replies')}
           locale={'en'}
           showMore={true}
           profileAnchorLink={'/profile'}
@@ -57,8 +54,7 @@ export function ReplyError({ postId, loggedProfileData, onChange }: Props) {
           hidePublishTime={true}
           disableActions={true}
           hideActionButtons={true}
-          modalSlotId={null}
-          error="Oops! Something went wrong."
+          error={t('Oops! Something went wrong.')}
           onRetry={() => {
             clear();
             onChange({ state: 'retry', content: entryData.slateContent });
