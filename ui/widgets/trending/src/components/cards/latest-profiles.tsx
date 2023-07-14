@@ -8,7 +8,7 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-// import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
+import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 
 export type LatestProfilesProps = {
   // data
@@ -66,7 +66,9 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
           {profiles.length === 0 &&
             isLoadingProfiles &&
             Array.from({ length: 4 }, (_el, index: number) => (
-              <React.Fragment key={index}>{/* <TrendingWidgetLoadingCard /> */}</React.Fragment>
+              <React.Fragment key={index}>
+                <TrendingWidgetLoadingCard />
+              </React.Fragment>
             ))}
 
           <Box customStyle="space-y-4">
