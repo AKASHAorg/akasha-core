@@ -14,7 +14,7 @@ export interface ProfileAvatarButtonProps {
   avatarImage?: Profile['avatar'];
   label?: string;
   size?: AvatarSize;
-  profileId: string;
+  profileId: Profile['did']['id'];
   bold?: boolean;
   active?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -58,7 +58,7 @@ const ProfileAvatarButton = React.forwardRef(
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        <Box title="avatar-box" customStyle="shrink-0">
+        <Box role="img" aria-label="avatar-box" customStyle="shrink-0">
           <Avatar
             size={size}
             avatar={avatarImage}
@@ -68,7 +68,7 @@ const ProfileAvatarButton = React.forwardRef(
           />
         </Box>
 
-        <Box customStyle="justify-center align-top space-y-1">
+        <Box role="listitem" aria-label="info-box" customStyle="justify-center align-top space-y-1">
           <Box ref={ref}>
             <Text variant="button-sm" weight="bold" truncate={true} customStyle={textTruncateStyle}>
               {label || profileId}
