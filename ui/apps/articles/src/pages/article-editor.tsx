@@ -2,51 +2,22 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
+
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import EditorToolbar from '@akashaorg/design-system-components/lib/components/EditorToolbar';
 
 import ArticleEditorCard from '../components/article-editor-card';
 
-const { Box, EditorToolbar, Icon, MainAreaCardBox, Text } = DS;
-
-export interface IArticleEditorProps {
-  className?: string;
-}
-
-const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props => {
-  const { className } = props;
-
-  const [dropOpen, setDropOpen] = React.useState<string | null>(null);
-  const [caseStyle, setCaseStyle] = React.useState<string>('textcaseSentence');
-  const [listStyle, setListStyle] = React.useState<string>('listBulleted');
-
-  const [alignStyle, setAlignStyle] = React.useState<string>('alignLeft');
-
+const ArticleEditor: React.FC<RootComponentProps> = props => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
 
   const handleNavigateBack = () => {
     navigate(-1);
-  };
-
-  const handleIconClick = (iconType: string) => {
-    switch (dropOpen) {
-      case 'align':
-        setAlignStyle(iconType);
-        setDropOpen(null);
-        break;
-      case 'list':
-        setListStyle(iconType);
-        setDropOpen(null);
-        break;
-      case 'case':
-        setCaseStyle(iconType);
-        setDropOpen(null);
-        break;
-      default:
-        setDropOpen(null);
-        break;
-    }
   };
 
   const handleManageCollaborators = () => {
@@ -62,34 +33,27 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
   };
 
   return (
-    <MainAreaCardBox className={className}>
-      <Box direction="row" pad="medium" fill="horizontal">
-        <Icon type="chevronLeft" style={{ cursor: 'pointer' }} onClick={handleNavigateBack} />
-        <Text size="xlarge" weight="bold">
-          {t('Article Editor')}
-        </Text>
+    <BasicCardBox>
+      <Box customStyle="flex flex-row p-4 w-full">
+        <button onClick={handleNavigateBack}>
+          <Icon type="ChevronLeftIcon" />
+        </button>
+
+        <Text variant="h2">{t('Article Editor')}</Text>
       </Box>
       <EditorToolbar
-        dropOpen={dropOpen}
-        caseStyle={caseStyle}
-        listStyle={listStyle}
-        alignStyle={alignStyle}
-        wrapperBorder={{ side: 'horizontal', color: 'border' }}
-        closeDrop={() => setDropOpen(null)}
-        onDropOpen={type => setDropOpen(type)}
         onBoldClick={() => {
-          /** */
+          return;
         }}
         onItalicClick={() => {
-          /** */
-        }}
-        onUnderlineClick={() => {
-          /** */
+          return;
         }}
         onStrikeThroughClick={() => {
-          /** */
+          return;
         }}
-        onIconClick={handleIconClick}
+        onUnderlineClick={() => {
+          return;
+        }}
       />
       <ArticleEditorCard
         inviteCollaboratorsLabel={t('Invite collaborators')}
@@ -101,7 +65,7 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
         onSaveDraft={handleSaveDraft}
         onPublish={handlePublish}
       />
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

@@ -37,8 +37,8 @@ const LoginModal = (props: RootExtensionProps) => {
 
   return (
     <ModalContainer onModalClose={handleModalClose}>
-      <BasicCardBox customStyle="py-3 px-6 md:px-24">
-        <Box customStyle={`flex flex-row justify-end`}>
+      <BasicCardBox customStyle="py-4 px-6 md:px-24 relative">
+        <Box customStyle={`absolute top-4 right-4`}>
           <button onClick={handleModalClose}>
             <Icon type="XMarkIcon" color={{ light: 'grey7', dark: 'grey4' }} />
           </button>

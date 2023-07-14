@@ -1,20 +1,33 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import DS from '@akashaorg/design-system';
-
-import { IImageSrc } from '@akashaorg/design-system/lib/components/ProfileForm';
-import { IImageCropperProps } from '@akashaorg/design-system/lib/components/ImageCropper';
-
 import InputTags from './input-tags';
 
 import { License } from '../utils/licenses';
-import { StyledImageInput, StyledTextArea, StyledTextInput } from './styled';
 
-const { Box, Button, EditorMeter, Icon, Image, ImageCropper, MainAreaCardBox, Select, Text } = DS;
+import { Profile } from '@akashaorg/typings/ui';
+
+import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
+import ImageCropper, {
+  ImageCropperProps,
+} from '@akashaorg/design-system-core/lib/components/ImageCropper';
+
+export interface ImageSrc {
+  src: { url?: string; fallbackUrl?: string } | null;
+  type?: string;
+  prefix: string | null;
+  preview?: string;
+  isUrl: boolean;
+}
 
 export type CardFormValues = {
-  coverImage: IImageSrc | null;
+  coverImage: ImageSrc | null;
   description: string;
   newTag: string;
   tags: string[];
@@ -28,7 +41,7 @@ export type KeyPressEvent = {
   target: EventTarget & { value?: string };
 };
 
-export interface IArticleCardSettingsProps extends IImageCropperProps {
+export interface IArticleCardSettingsProps extends ImageCropperProps {
   formValues: CardFormValues;
   titleLabel: string;
   addCoverImageLabel: string;
@@ -69,11 +82,7 @@ export interface IArticleCardSettingsProps extends IImageCropperProps {
 const SectionWrapper: React.FC<{ topBorderOnly?: boolean; children: React.ReactNode }> = props => {
   const { topBorderOnly, children } = props;
   return (
-    <Box
-      pad="medium"
-      gap="xsmall"
-      border={{ side: topBorderOnly ? 'top' : 'horizontal', color: 'border' }}
-    >
+    <Box customStyle={`flex p-4 gap-1 border(${topBorderOnly ? 't' : 'y'} grey8 dark:grey3)`}>
       {children}
     </Box>
   );
@@ -84,12 +93,9 @@ const InputWrapper: React.FC<{ children: React.ReactNode; accentBorder?: boolean
 
   return (
     <Box
-      fill="horizontal"
-      pad="xsmall"
-      round="0.25rem"
-      color="secondaryText"
-      border={{ color: accentBorder ? 'accent' : 'border' }}
-      margin={{ vertical: 'xsmall' }}
+      customStyle={`flex my-1 w-full p-1 rounded-sm border(${
+        accentBorder ? 'secondaryLight dark: secondaryDark' : 'grey8 dark:grey3'
+      })`}
     >
       {children}
     </Box>
@@ -146,105 +152,63 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
   };
 
   return (
-    <MainAreaCardBox>
-      <Box direction="row" pad="medium" fill="horizontal">
-        <Icon type="chevronLeft" style={{ cursor: 'pointer' }} onClick={handleClickIcon} />
-        <Text size="xlarge" weight="bold">
-          {titleLabel}
-        </Text>
+    <BasicCardBox>
+      <Box customStyle="flex flex-row p-4 w-full">
+        <button onClick={handleClickIcon}>
+          <Icon type="ChevronLeftIcon" />
+        </button>
+        <Text variant="h2">{titleLabel}</Text>
       </Box>
       <SectionWrapper>
-        <Box direction="row" align="center" gap="xsmall">
-          <Text size="xlarge" weight="bold">
-            {addCoverImageLabel}
-          </Text>
-          <Text size="medium" color="secondaryText">
-            {`(${optionalLabel})`}
-          </Text>
+        <Box customStyle="flex flex-row items-center gap-1">
+          <Text variant="h2">{addCoverImageLabel}</Text>
+          <Text variant="subtitle1">{`(${optionalLabel})`}</Text>
         </Box>
-        <Box direction="row" justify="between" align="center">
-          <Text size="large" color="secondaryText">
-            {coverImageSubtitleLabel}
-          </Text>
-          <Button
-            slimBorder={true}
-            size="large"
-            height={2.5}
-            label={
-              <>
-                <StyledImageInput
-                  onChange={onCoverImageUpload}
-                  type="file"
-                  accept="image/*"
-                  ref={coverImageInputRef}
-                />
-                <Text size="large">{uploadLabel}</Text>
-              </>
-            }
-            margin={{ left: 'large' }}
-            onClick={onUploadClick}
+        <Box customStyle="flex flex-row items-center justify-between">
+          <Text variant="subtitle1">{coverImageSubtitleLabel}</Text>
+          <Button size="lg" label={uploadLabel} customStyle="ml-6" onClick={onUploadClick} />
+          <input
+            style={{ display: 'none' }}
+            onChange={onCoverImageUpload}
+            type="file"
+            accept="image/*"
+            ref={coverImageInputRef}
           />
         </Box>
         {!showCropper && (
-          <Box
-            fill="horizontal"
-            height="8.55rem"
-            round="0.25rem"
-            background="activePanelBackground"
-            justify="center"
-            align="center"
-            margin={{ vertical: 'xsmall' }}
-            style={{ position: 'relative' }}
-          >
-            {!formValues.coverImage.preview && (
-              <Text size="large" color="secondaryText">
-                {coverImagePlaceholder}
-              </Text>
-            )}
+          <Box customStyle="flex w-full h-[8.55rem] rounded-sm justify-center items-center mx-1 relative bg(secondaryLight/20 dark:secondaryDark/20)">
+            {!formValues.coverImage && <Text variant="subtitle2">{coverImagePlaceholder}</Text>}
 
-            {formValues.coverImage.preview && (
+            {formValues.coverImage && (
               <>
                 <Box
-                  pad="xxsmall"
-                  round="0.15rem"
-                  border={{ color: 'accent' }}
-                  style={{ position: 'absolute', right: '0.5rem', top: '0.5rem' }}
+                  customStyle="flex p-0.5 rounded-sm border(secondaryLight dark:secondaryDark) absolute top-2 right-2"
                   onClick={onClickEditImage}
                 >
                   <Icon type="integrationAppCTA" accentColor={true} />
                 </Box>
                 <Image
-                  fill="horizontal"
-                  src={formValues.coverImage.preview}
-                  fit="cover"
-                  style={{ borderRadius: '0.25rem' }}
+                  customStyle="w-full object-cover rounded-sm"
+                  src={formValues.coverImage?.src.url}
                 />
               </>
             )}
           </Box>
         )}
         {showCropper && (
-          <Box margin={{ vertical: 'xsmall' }}>
-            <ImageCropper hasPadding={false} isLoading={false} {...props} />
+          <Box customStyle="flex my-1">
+            <ImageCropper {...props} />
           </Box>
         )}
       </SectionWrapper>
       <SectionWrapper>
-        <Box direction="row" align="center" gap="xsmall">
-          <Text size="xlarge" weight="bold">
-            {addDescriptiveTextLabel}
-          </Text>
-          <Text size="medium" color="secondaryText">
-            {`(${optionalLabel})`}
-          </Text>
+        <Box customStyle="flex flex-row items-center gap-1">
+          <Text variant="h2">{addDescriptiveTextLabel}</Text>
+          <Text variant="subtitle1">{`(${optionalLabel})`}</Text>
         </Box>
-        <Text size="large" color="secondaryText">
-          {descriptiveTextSubtitleLabel}
-        </Text>
+        <Text variant="subtitle1">{descriptiveTextSubtitleLabel}</Text>
         <InputWrapper>
-          <StyledTextArea
-            resize={false}
-            size="large"
+          <textarea
             rows={2}
             id="article-card-settings-description"
             name="description"
@@ -252,23 +216,20 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
             onChange={ev => onDescriptiveTextChange(ev.target.value)}
             placeholder={descriptiveTextPlaceholder}
           />
-          <Box width="fit-content" alignSelf="end" margin={{ top: 'xsmall' }}>
-            <EditorMeter counter={charCount} maxValue={MAX_CHARS} />
+          <Box customStyle="flex w-fit self-end mt-1">
+            <EditorMeter value={charCount} max={MAX_CHARS} />
           </Box>
         </InputWrapper>
       </SectionWrapper>
       <SectionWrapper>
-        <Text size="xlarge" weight="bold">
-          {tagsLabel}
-        </Text>
-        <Text size="large" color="secondaryText">
-          {tagsSubtitleLabel}
-        </Text>
+        <Text variant="h2">{tagsLabel}</Text>
+        <Text variant="subtitle1">{tagsSubtitleLabel}</Text>
         <InputWrapper accentBorder={formValues.tags.length > 0}>
-          <Box direction="row" align="center" ref={tagBoxRef} wrap>
+          <Box customStyle="flex flex-row items-center flex-wrap" ref={tagBoxRef}>
             <InputTags values={formValues.tags} onClickTag={onClickTag} />
-            <Box flex margin="xxsmall" style={{ minWidth: '150px' }}>
-              <StyledTextInput
+            <Box customStyle="flex m-1 min-w-[150px]">
+              {/* TODO: search input with suggestions dropdown */}
+              {/* <StyledTextInput
                 type="search"
                 plain
                 dropTarget={tagBoxRef.current}
@@ -278,64 +239,40 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
                 onChange={(ev: { target: { value: string } }) => onTagInputChange(ev.target.value)}
                 value={formValues.newTag}
                 onSuggestionSelect={(event: { suggestion: string }) => onAddTag(event.suggestion)}
-              />
+              /> */}
             </Box>
           </Box>
         </InputWrapper>
       </SectionWrapper>
       <SectionWrapper topBorderOnly>
-        <Text size="xlarge" weight="bold">
-          {licenseLabel}
-        </Text>
-        <Text size="large" color="secondaryText">
-          {licenseSubtitleLabel}
-        </Text>
-        <Select
+        <Text variant="h2">{licenseLabel}</Text>
+        <Text variant="subtitle1">{licenseSubtitleLabel}</Text>
+        {/* TODO select core component */}
+        {/* <Select
           options={licensesArr}
           value={formValues.license}
           placeholder={selectLicensePlaceholder}
           onChange={({ option }) => onSelectLicense(option)}
-        />
+        /> */}
         {selectedLicense && (
-          <Box
-            direction="row"
-            gap="xsmall"
-            align="center"
-            margin={{ top: 'small' }}
-            pad={{ horizontal: 'xsmall' }}
-          >
+          <Box customStyle="flex flex-row items-center mt-2 px-1">
             <Icon type={selectedLicense.icon} size="lg" accentColor={true} />
-            <Box gap="xxsmall">
+            <Box customStyle="flex gap-1">
               {selectedLicense.description.map((el, idx) => (
-                <Box key={idx} direction="row" gap="xsmall">
+                <Box key={idx} customStyle="flex flex-row gap-2">
                   {el.icon && <Icon type={el.icon} size="sm" accentColor={true} />}
-                  <Text size="medium" color="secondaryText">
-                    {el.text}
-                  </Text>
+                  <Text variant="subtitle2">{el.text}</Text>
                 </Box>
               ))}
             </Box>
           </Box>
         )}
       </SectionWrapper>
-      <Box direction="row" fill="horizontal" justify="end" align="center" pad="medium" gap="small">
-        <Button
-          slimBorder={true}
-          size="large"
-          height={2.5}
-          label={saveDraftLabel}
-          onClick={onClickSaveDraft}
-        />
-        <Button
-          slimBorder={true}
-          size="large"
-          height={2.5}
-          primary={true}
-          label={confirmLabel}
-          onClick={onClickConfirm}
-        />
+      <Box customStyle="flex flex-row w-full justify-end items-center p-4 gap-2">
+        <Button size="lg" label={saveDraftLabel} onClick={onClickSaveDraft} />
+        <Button size="lg" variant="primary" label={confirmLabel} onClick={onClickConfirm} />
       </Box>
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

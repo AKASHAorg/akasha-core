@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-
 import ArticlesOnboardingSteps from './onboarding/onboarding-steps';
 import Dashboard from '../pages/dashboard';
 import ArticlePage from '../pages/article';
@@ -25,42 +22,38 @@ import routes, {
   WRITE_ARTICLE,
 } from '../routes';
 
-const { Box } = DS;
-
 const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
-    <Box>
-      <Router basename={props.baseRouteName}>
-        <Routes>
-          <Route path={routes[HOME]} element={<Dashboard {...props} />} />
+    <Router basename={props.baseRouteName}>
+      <Routes>
+        <Route path={routes[HOME]} element={<Dashboard {...props} />} />
 
-          <Route path={routes[MY_ARTICLES]} element={<MyArticles {...props} />} />
+        <Route path={routes[MY_ARTICLES]} element={<MyArticles {...props} />} />
 
-          {[routes[WRITE_ARTICLE], routes[EDIT_ARTICLE]].map((path, idx) => (
-            <Route key={path + idx} path={path} element={<ArticleEditor {...props} />} />
-          ))}
+        {[routes[WRITE_ARTICLE], routes[EDIT_ARTICLE]].map((path, idx) => (
+          <Route key={path + idx} path={path} element={<ArticleEditor {...props} />} />
+        ))}
 
-          {[
-            routes[ONBOARDING_STEP_ONE],
-            routes[ONBOARDING_STEP_TWO],
-            routes[ONBOARDING_STEP_THREE],
-          ].map((path, idx) => (
-            <Route
-              key={path + idx}
-              path={path}
-              element={<ArticlesOnboardingSteps {...props} activeIndex={idx} />}
-            />
-          ))}
-          <Route path={routes[SETTINGS]} element={<ArticleSettingsPage {...props} />} />
+        {[
+          routes[ONBOARDING_STEP_ONE],
+          routes[ONBOARDING_STEP_TWO],
+          routes[ONBOARDING_STEP_THREE],
+        ].map((path, idx) => (
+          <Route
+            key={path + idx}
+            path={path}
+            element={<ArticlesOnboardingSteps {...props} activeIndex={idx} />}
+          />
+        ))}
+        <Route path={routes[SETTINGS]} element={<ArticleSettingsPage {...props} />} />
 
-          <Route path={routes[ARTICLE]} element={<ArticlePage {...props} />} />
+        <Route path={routes[ARTICLE]} element={<ArticlePage {...props} />} />
 
-          <Route path={routes[ARTICLE_SETTINGS]} element={<ArticleCardSettingsPage {...props} />} />
+        <Route path={routes[ARTICLE_SETTINGS]} element={<ArticleCardSettingsPage {...props} />} />
 
-          <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
-        </Routes>
-      </Router>
-    </Box>
+        <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
+      </Routes>
+    </Router>
   );
 };
 

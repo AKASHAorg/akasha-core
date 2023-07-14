@@ -1,9 +1,11 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { topics } from '../dummy-data';
-
-const { Box, Button, Text, MainAreaCardBox, Icon } = DS;
 
 export interface IStepThreeProps {
   titleLabel: string;
@@ -31,63 +33,46 @@ const StepThree: React.FC<IStepThreeProps> = props => {
   } = props;
 
   return (
-    <MainAreaCardBox margin={{ bottom: '1rem' }}>
-      <Box align="start" fill="horizontal" pad="medium">
-        <Box direction="row" fill="horizontal" margin={{ bottom: 'medium' }}>
-          <Icon type="chevronLeft" style={{ cursor: 'pointer' }} onClick={onClickIcon} />
-          <Text size="xlarge" weight="bold">
-            {titleLabel}
-          </Text>
+    <BasicCardBox customStyle="mb-2">
+      <Box customStyle="flex items-start w-full p-4">
+        <Box customStyle="flex flex-row w-full mb-4">
+          <button onClick={onClickIcon}>
+            <Icon type="ChevronLeftIcon" />
+          </button>
+          <Text variant="h2">{titleLabel}</Text>
         </Box>
-        <Text size="large" margin={{ bottom: 'xsmall' }}>
+        <Text variant="h6" customStyle="mb-1">
           {textLine1Label}
         </Text>
-        <Box
-          direction="row"
-          wrap={true}
-          gap="xsmall"
-          pad={{ horizontal: 'large', vertical: 'medium' }}
-        >
+        <Box customStyle="flex flex-row flex-wrap gap-1 px-6 py-4">
           {topics.map((topic, idx) => (
-            <Box
-              key={idx}
-              direction="row"
-              round="1rem"
-              gap="xxsmall"
-              margin={{ bottom: 'small' }}
-              pad={{
-                horizontal: selectedTopics.includes(topic) ? 'xxsmall' : 'xsmall',
-                vertical: '1.5px',
-              }}
-              border={{ color: selectedTopics.includes(topic) ? 'accentText' : 'secondaryText' }}
-              onClick={onClickTopic(topic)}
-            >
-              <Text color={selectedTopics.includes(topic) ? 'primaryText' : 'secondaryText'}>
-                {topic}
-              </Text>
-              {selectedTopics.includes(topic) && <Icon type="close" />}
-            </Box>
+            <button key={idx} onClick={onClickTopic(topic)}>
+              <Box
+                customStyle={`flex flex-row rounded-lg gap-0.5 px-1 py-0.5 border(${
+                  selectedTopics.includes(topic)
+                    ? 'secondaryLight dark:secondaryDark'
+                    : 'grey8 dark:grey3'
+                })`}
+              >
+                <Text variant={selectedTopics.includes(topic) ? 'body1' : 'subtitle1'}>
+                  {topic}
+                </Text>
+                {selectedTopics.includes(topic) && <Icon type="XMarkIcon" />}
+              </Box>
+            </button>
           ))}
         </Box>
-        <Box direction="row" fill="horizontal" justify="end" align="center" gap="small">
+        <Box customStyle="flex flex-row w-full justify-end items-center gap-2">
+          <Button size="lg" label={readArticleLabel} onClick={onClickReadArticle} />
           <Button
-            slimBorder={true}
-            size="large"
-            height={2.5}
-            label={readArticleLabel}
-            onClick={onClickReadArticle}
-          />
-          <Button
-            slimBorder={true}
-            size="large"
-            height={2.5}
-            primary={true}
+            size="lg"
+            variant="primary"
             label={writeFirstArticleLabel}
             onClick={onClickWriteArticle}
           />
         </Box>
       </Box>
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

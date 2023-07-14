@@ -43,7 +43,7 @@ const ModalContainer: React.FC<PropsWithChildren<IModalContainerProps>> = props 
       </Box>
 
       <Box
-        customStyle={`absolute ${positionClass} bg-white/60 ${fadeInClass}`}
+        customStyle={`absolute ${positionClass} bg-black/50 ${fadeInClass} z-9`}
         onClick={onModalClose}
       />
     </Box>

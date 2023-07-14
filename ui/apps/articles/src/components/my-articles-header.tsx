@@ -1,7 +1,7 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
-
-const { Box, MainAreaCardBox, Text } = DS;
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IMyArticlesHeaderProps {
   titleLabel: string;
@@ -13,40 +13,44 @@ export interface IMyArticlesHeaderProps {
 
 const MyArticlesHeader: React.FC<IMyArticlesHeaderProps> = props => {
   const { titleLabel, subtitleLabel, tabs, activeTabIndex, onClickTab } = props;
+  const tabWidth = 100 / tabs.length;
   return (
-    <MainAreaCardBox
-      style={{
-        borderBottom: 'none',
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
-      }}
-    >
-      <Box pad="medium" gap="medium">
-        <Text size="xlarge" weight="bold">
-          {titleLabel}
-        </Text>
-        <Text size="large">{subtitleLabel}</Text>
+    <BasicCardBox customStyle="border-b-0 rounded-b-none">
+      <Box customStyle="p-4 gap-4">
+        <Text variant="h2">{titleLabel}</Text>
+        <Text variant="h6">{subtitleLabel}</Text>
       </Box>
-      <Box direction="row">
+      <Box customStyle="flex flex-row">
         {tabs.map((tab, idx) => (
-          <Box
-            key={idx}
-            width={`${100 / tabs.length}%`}
-            pad="medium"
-            border={{ side: 'bottom', color: activeTabIndex === idx ? 'accent' : 'border' }}
-            onClick={onClickTab(idx)}
-          >
-            <Text
-              size="large"
-              textAlign="center"
-              color={activeTabIndex === idx ? 'accentText' : 'secondaryText'}
+          <button onClick={onClickTab(idx)}>
+            <Box
+              key={idx}
+              customStyle={`w-[${tabWidth}%}] p-4 border(b ${
+                activeTabIndex === idx ? 'secondaryLight dark:secondaryDark' : 'grey8 dark:grey3'
+              })`}
             >
-              {tab}
-            </Text>
-          </Box>
+              <Text
+                variant="h6"
+                align="center"
+                color={
+                  activeTabIndex === idx
+                    ? {
+                        light: 'secondaryLight',
+                        dark: 'secondaryDark',
+                      }
+                    : {
+                        light: 'grey4',
+                        dark: 'grey7',
+                      }
+                }
+              >
+                {tab}
+              </Text>
+            </Box>
+          </button>
         ))}
       </Box>
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

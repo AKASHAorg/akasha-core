@@ -4,17 +4,15 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Profile, RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { trendingProfilesData } from '@akashaorg/design-system/lib/utils/dummy-data';
 
-const { ManageCollaboratorsModal } = DS;
+import ManageCollaboratorsModal from '@akashaorg/design-system-components/lib/components/ManageCollaboratorsModal';
 
 const ManageCollaborators = (props: RootExtensionProps) => {
   const [inputValue, setInputValue] = React.useState<string>('');
-  const [dropOpen, setDropOpen] = React.useState<boolean>(false);
   const [collaborators, setCollaborators] = React.useState<Profile[]>([]);
   const [searchResults, setSearchResults] = React.useState<Profile[]>([]);
 
@@ -40,7 +38,6 @@ const ManageCollaborators = (props: RootExtensionProps) => {
           !collaborators.some(el => el.did.id === c.did.id),
       );
       setSearchResults(results);
-      setDropOpen(true);
     }
   };
 
@@ -60,11 +57,6 @@ const ManageCollaborators = (props: RootExtensionProps) => {
     }
   };
 
-  const handleDropClose = () => {
-    setDropOpen(false);
-    setSearchResults([]);
-  };
-
   return (
     <ManageCollaboratorsModal
       titleLabel={t('Collaborators')}
@@ -74,14 +66,12 @@ const ManageCollaborators = (props: RootExtensionProps) => {
       searchResults={searchResults}
       noCollaboratorsLabel={t('You have not invited any collaborators yet')}
       noSearchItemsLabel={t("We couldn't find matching profiles")}
-      dropOpen={dropOpen}
       addButtonLabel={t('Add')}
       removeButtonLabel={t('Remove')}
       onInputChange={handleInputChange}
       onSearch={handleSearch}
       closeModal={handleModalClose}
       onClickCollaborator={handleClickCollaborator}
-      closeDrop={handleDropClose}
     />
   );
 };
