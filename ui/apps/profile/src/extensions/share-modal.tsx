@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { useTranslation } from 'react-i18next';
@@ -14,18 +14,23 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-const ShareProfileModal: React.FC<RootExtensionProps> = props => {
-  const { profileId } = props.extensionData;
+const ShareModal: React.FC<RootExtensionProps> = props => {
+  const { singleSpa, parseQueryString } = props;
 
   const [showModal, setShowModal] = useState(true);
-
   const { t } = useTranslation('app-profile');
 
-  const url = `${window.location.origin}/@akashaorg/app-profile/${profileId}`;
+  const [title, url] = useMemo(() => {
+    const { modal } = parseQueryString(location.search) as { modal: Record<string, string> };
+
+    if (modal) {
+      return [modal.title, `${location.protocol}://${location.host}/${modal.appPath}`];
+    }
+  }, [parseQueryString]);
 
   const socialApps: IconType[] = ['twitter', 'telegram', 'ClipboardDocumentIcon'];
 
-  const handleProfileShare = (service: IconType, url: string) => () => {
+  const handleProfileShare = (service: IconType) => () => {
     let shareUrl: string;
 
     switch (service) {
@@ -41,6 +46,7 @@ const ShareProfileModal: React.FC<RootExtensionProps> = props => {
       default:
         break;
     }
+
     if (shareUrl) {
       window.open(shareUrl, '_blank');
     }
@@ -48,28 +54,26 @@ const ShareProfileModal: React.FC<RootExtensionProps> = props => {
 
   const closeShareModal = () => {
     setShowModal(false);
-    props.singleSpa.navigateToUrl(location.pathname);
+    singleSpa.navigateToUrl(location.pathname);
   };
 
   return (
     <Modal
       show={showModal}
-      title={{ label: `${t('Share profile: ')} ${profileId}`, variant: 'h5' }}
+      title={{ label: `${t('Share')} ${title}`, variant: 'h5' }}
       actions={[{ label: 'Cancel', variant: 'secondary', onClick: closeShareModal }]}
       onClose={closeShareModal}
     >
-      <Stack spacing="gap-y-2">
-        <Text variant="body2">{t('Share to your social platforms')}</Text>
+      <Stack direction="column" align="center" spacing="gap-y-2">
+        <Stack direction="row" spacing="gap-x-2">
+          <Icon type="LinkIcon" />
 
-        <Stack direction="row">
-          <Box customStyle="flex w-[2em] h-[2em] items-center justify-center rounded-full">
-            <Icon type="LinkIcon" />
-          </Box>
+          <Text variant="body2">{url}</Text>
         </Stack>
 
         <Stack direction="row">
           {socialApps.map((app, idx) => (
-            <Button key={app + idx} plain={true} onClick={handleProfileShare(app, url)}>
+            <Button key={app + idx} plain={true} onClick={handleProfileShare(app)}>
               <Box customStyle="flex w-[2em] h-[2em] items-center justify-center rounded-[50%]">
                 <Icon type={app} color="white" testId={app} />
               </Box>
@@ -84,7 +88,7 @@ const ShareProfileModal: React.FC<RootExtensionProps> = props => {
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
-  rootComponent: withProviders(ShareProfileModal),
+  rootComponent: withProviders(ShareModal),
   errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
