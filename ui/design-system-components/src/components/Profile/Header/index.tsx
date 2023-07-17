@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
@@ -19,13 +19,12 @@ export type HeaderProps = {
   avatar?: Profile['avatar'];
   name: Profile['name'];
   ensName?: 'loading' | string;
-  isFollowing: boolean;
+
   viewerIsOwner: boolean;
   flagLabel: string;
-  handleEdit: (event: React.SyntheticEvent<Element, Event>) => void;
-  handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
-  handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
-  handleFlag: (event: React.SyntheticEvent<Element, Event>) => void;
+  followExt: ReactElement;
+  handleEdit: () => void;
+  handleFlag: () => void;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -34,12 +33,11 @@ const Header: React.FC<HeaderProps> = ({
   avatar,
   name,
   ensName,
-  isFollowing,
+
   viewerIsOwner,
   flagLabel,
+  followExt,
   handleEdit,
-  handleUnfollow,
-  handleFollow,
   handleFlag,
 }) => {
   const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
@@ -90,31 +88,16 @@ const Header: React.FC<HeaderProps> = ({
                 <div className="relative">
                   <Stack spacing="gap-x-2">
                     <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
-                    {isFollowing ? (
-                      <Button onClick={handleFollow} icon="UsersIcon" greyBg iconOnly />
-                    ) : (
-                      <Button
-                        size="sm"
-                        icon="UserPlusIcon"
-                        onClick={handleUnfollow}
-                        variant="primary"
-                        iconOnly
-                      />
-                    )}
+                    {followExt}
                     <Menu
                       anchorElement={
-                        <Button
-                          onClick={handleFlag}
-                          icon="EllipsisVerticalIcon"
-                          variant="primary"
-                          greyBg
-                          iconOnly
-                        />
+                        <Button icon="EllipsisVerticalIcon" variant="primary" greyBg iconOnly />
                       }
                       items={[
                         {
                           label: flagLabel,
                           icon: 'FlagIcon',
+                          onClick: handleFlag,
                           color: { light: 'errorLight', dark: 'errorDark' },
                         },
                       ]}

@@ -1,42 +1,29 @@
-import React from 'react';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import React, { ReactElement } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { Profile } from '@akashaorg/typings/ui';
-import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
 
 export type EntryProps = {
-  followLabel: string;
-  unFollowLabel: string;
-  followingLabel: string;
   profileAnchorLink: string;
   profileId: string;
   avatar: Profile['avatar'];
   name: string;
-  isFollowing: boolean;
   borderBottom?: boolean;
+  renderFollowExt: (profileId) => ReactElement;
   onProfileClick: (profileId: string) => void;
-  onFollow: (profileId: string) => void;
-  onUnfollow: (profileId: string) => void;
 };
 
 const Entry: React.FC<EntryProps> = props => {
   const {
-    followLabel,
-    unFollowLabel,
-    followingLabel,
     profileAnchorLink,
     profileId,
     avatar,
     name,
-    isFollowing,
     borderBottom = true,
+    renderFollowExt,
     onProfileClick,
-    onFollow,
-    onUnfollow,
   } = props;
 
   const borderBottomStyle = borderBottom
@@ -61,16 +48,7 @@ const Entry: React.FC<EntryProps> = props => {
             onClick={() => onProfileClick(profileId)}
           />
         </Anchor>
-        <DuplexButton
-          inactiveLabel={followLabel}
-          activeLabel={followingLabel}
-          activeHoverLabel={unFollowLabel}
-          onClickInactive={() => onFollow(profileId)}
-          onClickActive={() => onUnfollow(profileId)}
-          active={isFollowing}
-          size="sm"
-          allowMinimization
-        />
+        {renderFollowExt(profileId)}
       </Stack>
     </Stack>
   );

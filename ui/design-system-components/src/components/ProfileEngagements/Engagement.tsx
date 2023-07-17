@@ -18,16 +18,12 @@ type EngagementProps = {
 export const Engagement: React.FC<EngagementProps> = ({
   type,
   engagements,
-  followLabel,
-  followingLabel,
-  unFollowLabel,
   profileAnchorLink,
   ownerUserName,
   viewerIsOwner,
+  renderFollowExt,
   onError,
   onProfileClick,
-  onFollow,
-  onUnfollow,
 }) => {
   const isEmptyEntry = engagements.status === 'success' && engagements.data.length === 0;
   if (isEmptyEntry) {
@@ -63,17 +59,12 @@ export const Engagement: React.FC<EngagementProps> = ({
         engagements.data.map((engagement, index) => (
           <Entry
             key={`${engagement?.profile.id}-${index}`}
-            followLabel={followLabel}
-            unFollowLabel={unFollowLabel}
-            followingLabel={followingLabel}
             profileAnchorLink={profileAnchorLink}
             profileId={engagement?.profile.id}
             avatar={engagement?.profile.avatar}
             name={engagement?.profile.name}
-            isFollowing={engagement.isFollowing}
+            renderFollowExt={renderFollowExt}
             onProfileClick={onProfileClick}
-            onFollow={onFollow}
-            onUnfollow={onUnfollow}
           />
         ))}
     </Stack>
