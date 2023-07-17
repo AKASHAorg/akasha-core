@@ -1,10 +1,10 @@
 import React from 'react';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import routes, { EDIT } from '../../routes';
+import FollowProfile from '../follow-profile';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import ProfileStatsPresentation from '../profile-stats-presentation';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import routes, { EDIT } from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
 import {
@@ -18,7 +18,7 @@ import { useParams } from 'react-router';
 import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 const ProfileInfoPage: React.FC<RootComponentProps> = props => {
-  const { plugins, uiEvents } = props;
+  const { plugins } = props;
 
   const { t } = useTranslation('app-profile');
 
@@ -97,12 +97,8 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           viewerIsOwner={isViewer}
           flagLabel={t('Report')}
-          followExt={
-            <Extension
-              name="follow-profile_edit_page"
-              uiEvents={uiEvents}
-              data={{ profileId, isIconButton: true }}
-            />
+          followElement={
+            <FollowProfile profileId={profileId} isIconButton={true} navigateTo={navigateTo} />
           }
           handleFlag={checkAuth(
             handleEntryFlag(

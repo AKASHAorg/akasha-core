@@ -1,6 +1,6 @@
 import React from 'react';
 import ProfileEngagements from '@akashaorg/design-system-components/lib/components/ProfileEngagements';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import FollowProfile from '../follow-profile';
 import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, EngagementType } from '@akashaorg/typings/ui';
@@ -96,12 +96,8 @@ const ProfileEngagementsPage: React.FC<
       profileAnchorLink={'/@akashaorg/app-profile'}
       ownerUserName={profileData.name}
       viewerIsOwner={isViewer}
-      renderFollowExt={profileId => (
-        <Extension
-          name={`follow-profile_engagements_${profileId}`}
-          uiEvents={props.uiEvents}
-          data={{ profileId }}
-        />
+      renderFollowElement={profileId => (
+        <FollowProfile profileId={profileId} navigateTo={navigateTo} />
       )}
       onError={onError}
       onProfileClick={onProfileClick}

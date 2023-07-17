@@ -11,7 +11,7 @@ export type EntryProps = {
   avatar: Profile['avatar'];
   name: string;
   borderBottom?: boolean;
-  renderFollowExt: (profileId) => ReactElement;
+  renderFollowElement: (profileId) => ReactElement;
   onProfileClick: (profileId: string) => void;
 };
 
@@ -22,7 +22,7 @@ const Entry: React.FC<EntryProps> = props => {
     avatar,
     name,
     borderBottom = true,
-    renderFollowExt,
+    renderFollowElement,
     onProfileClick,
   } = props;
 
@@ -48,7 +48,7 @@ const Entry: React.FC<EntryProps> = props => {
             onClick={() => onProfileClick(profileId)}
           />
         </Anchor>
-        {renderFollowExt(profileId)}
+        {renderFollowElement(profileId)}
       </Stack>
     </Stack>
   );

@@ -21,7 +21,7 @@ export const Engagement: React.FC<EngagementProps> = ({
   profileAnchorLink,
   ownerUserName,
   viewerIsOwner,
-  renderFollowExt,
+  renderFollowElement,
   onError,
   onProfileClick,
 }) => {
@@ -63,7 +63,7 @@ export const Engagement: React.FC<EngagementProps> = ({
             profileId={engagement?.profile.id}
             avatar={engagement?.profile.avatar}
             name={engagement?.profile.name}
-            renderFollowExt={renderFollowExt}
+            renderFollowElement={renderFollowElement}
             onProfileClick={onProfileClick}
           />
         ))}

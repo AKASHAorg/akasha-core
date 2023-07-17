@@ -19,7 +19,7 @@ export type EngagementsProps = {
   loadingMoreLabel: string;
   ownerUserName: string;
   viewerIsOwner: boolean;
-  renderFollowExt: (profileId) => ReactElement;
+  renderFollowElement: (profileId) => ReactElement;
   onError: () => void;
   onProfileClick: (profileId: string) => void;
   onChange: (engagementType: EngagementType) => void;

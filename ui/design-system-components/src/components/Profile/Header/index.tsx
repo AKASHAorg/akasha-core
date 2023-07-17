@@ -22,7 +22,7 @@ export type HeaderProps = {
 
   viewerIsOwner: boolean;
   flagLabel: string;
-  followExt: ReactElement;
+  followElement: ReactElement;
   handleEdit: () => void;
   handleFlag: () => void;
 };
@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({
 
   viewerIsOwner,
   flagLabel,
-  followExt,
+  followElement,
   handleEdit,
   handleFlag,
 }) => {
@@ -88,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({
                 <div className="relative">
                   <Stack spacing="gap-x-2">
                     <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
-                    {followExt}
+                    {followElement}
                     <Menu
                       anchorElement={
                         <Button icon="EllipsisVerticalIcon" variant="primary" greyBg iconOnly />
