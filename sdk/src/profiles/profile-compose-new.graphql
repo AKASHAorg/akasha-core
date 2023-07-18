@@ -147,6 +147,7 @@ query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: I
       followList(after: $after, before: $before, first: $first, last: $last){
         edges {
           node {
+            id
             isFollowing
             profile {
              ...UserProfileFragment
@@ -173,6 +174,7 @@ query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: I
         followers(after: $after, before: $before, first: $first, last: $last){
           edges {
             node {
+              id
               isFollowing
               profile {
                 ...UserProfileFragment
