@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/filename-case */
 import React from 'react';
 import TrendingWidgetLoadingCard from '.';
 import { tw } from '@twind/core';

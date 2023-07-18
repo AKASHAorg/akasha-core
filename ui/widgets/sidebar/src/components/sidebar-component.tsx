@@ -7,7 +7,6 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ListSidebarApps from './list-sidebar-apps';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
@@ -35,6 +34,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   } = props;
   const [routeData, setRouteData] = useState(null);
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [profileName, setProfileName] = React.useState('Guest');
   const { t } = useTranslation('ui-widget-sidebar');
 
   const loginQuery = useGetLogin();
@@ -44,6 +45,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const myProfileQuery = useGetMyProfileQuery(null, {
     enabled: !!loginQuery.data?.id,
     select: data => data.viewer?.profile,
+    onSuccess: () => setIsLoading(false),
   });
 
   useEffect(() => {
@@ -53,14 +55,26 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       });
       return;
     };
+
     if (!loginQuery.data?.id) {
       invalidateQuery();
+      myProfileQuery.refetch();
     }
-
-    myProfileQuery.refetch();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginQuery.data?.id]);
+
+  useEffect(() => {
+    if (myProfileQuery.isFetching && !myProfileQuery.data?.did) {
+      setIsLoading(true);
+    }
+  }, [myProfileQuery.isFetching, myProfileQuery.data?.did]);
+
+  useEffect(() => {
+    if (logoutQuery.status === 'success') {
+      setIsLoading(false);
+    }
+  }, [logoutQuery.status]);
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
@@ -145,8 +159,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
   const handleLogoutClick = () => {
-    logoutQuery.mutate();
+    setIsLoading(true);
+    logoutQuery.mutateAsync();
   };
+
   const handleAppIconClick = (menuItem: IMenuItem) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       setActiveOption(null);
@@ -165,28 +181,68 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
 
-  const subtitleUi = useMemo(
-    () =>
-      loginQuery.data?.id ? (
+  const subtitleUi = React.useRef(null);
+  // const subtitleUi = React.useCallback(
+  //   () =>
+  //     myProfileQuery.data?.did?.id ? (
+  //       <DidField
+  //         did={myProfileQuery.data?.did?.id}
+  //         textColor="grey7"
+  //         copyLabel={t('Copy to clipboard')}
+  //         copiedLabel={t('Copied')}
+  //       />
+  //     ) : (
+  //       <Text variant="footnotes1" customStyle="text-grey5 whitespace-normal" truncate breakWord>
+  //         {t('Connect to see exclusive member only features.')}
+  //       </Text>
+  //     ),
+
+  //   [myProfileQuery.data?.did?.id, t],
+  // );
+
+  React.useEffect(() => {
+    if (myProfileQuery.data?.did?.id) {
+      subtitleUi.current = (
         <DidField
-          did={loginQuery.data?.id}
+          did={myProfileQuery.data?.did?.id}
           textColor="grey7"
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
         />
-      ) : (
+      );
+    } else {
+      subtitleUi.current = (
         <Text variant="footnotes1" customStyle="text-grey5 whitespace-normal" truncate breakWord>
           {t('Connect to see exclusive member only features.')}
         </Text>
+      );
+    }
+  }, [myProfileQuery.data?.did?.id, t]);
+
+  React.useEffect(() => {
+    if (myProfileQuery.data?.did?.id) {
+      setProfileName(myProfileQuery.data?.name);
+    } else {
+      setProfileName('Guest');
+    }
+  }, [myProfileQuery.data?.did?.id, myProfileQuery.data?.name]);
+
+  const ConnectButton = useMemo(
+    () =>
+      isLoading ? (
+        <Button size="sm" loading />
+      ) : (
+        <>
+          {myProfileQuery.data?.did?.id && (
+            <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
+          )}
+          {!myProfileQuery.data?.did?.id /* !loginQuery.data?.id */ && loginQuery.isStale && (
+            <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
+          )}
+        </>
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [loginQuery.data?.id],
-  );
-
-  const profileName = useMemo(
-    () => (myProfileQuery.data?.did?.id ? myProfileQuery.data?.name : t('Guest')),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [myProfileQuery.data?.did?.id],
+    [isLoading, loginQuery.isStale, myProfileQuery.data?.did?.id],
   );
 
   return (
@@ -206,19 +262,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         </Box>
         <Box customStyle="w-fit flex flex-grow flex-col">
           <Text variant="button-md">{profileName}</Text>
-          {subtitleUi}
+          {subtitleUi.current}
         </Box>
-        <Box customStyle="w-fit h-fit ml-6 self-start">
-          {loginQuery.data?.id && (
-            <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
-          )}
-          {
-            /* !myProfileQuery.data?.did?.id */ !loginQuery.data?.id && loginQuery.isStale && (
-              <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
-            )
-          }
-          {loginQuery.isLoading && !loginQuery.isStale && <Spinner size="sm" />}
-        </Box>
+        <Box customStyle="w-fit h-fit ml-6 self-start">{ConnectButton}</Box>
       </Box>
       {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
