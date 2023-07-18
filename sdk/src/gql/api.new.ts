@@ -448,6 +448,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
       followList(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
+            id
             isFollowing
             profile {
               ...UserProfileFragment
@@ -474,6 +475,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
         followers(after: $after, before: $before, first: $first, last: $last) {
           edges {
             node {
+              id
               isFollowing
               profile {
                 ...UserProfileFragment
