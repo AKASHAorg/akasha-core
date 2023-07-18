@@ -13,7 +13,7 @@ export const Dropzone: React.FC<IDropzone> = props => {
   const { onDrop, accept, dropzoneLabel, testId } = props;
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept,
+    accept: accept as any /*Fixing a build failing on this line */,
     multiple: false,
   });
 
