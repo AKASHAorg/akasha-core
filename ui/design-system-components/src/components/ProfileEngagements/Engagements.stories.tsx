@@ -10,14 +10,9 @@ const Template = (args: EngagementsProps) => <Engagements {...args} />;
 
 const COMMON_PROPS = {
   engagementType: 'followers',
-  followLabel: 'Follow',
-  unFollowLabel: 'Unfollow',
-  followingLabel: 'Following',
   profileAnchorLink: '#',
   onError: () => ({}),
   onProfileClick: () => ({}),
-  onFollow: () => ({}),
-  onUnfollow: () => ({}),
   onChange: () => ({}),
 };
 

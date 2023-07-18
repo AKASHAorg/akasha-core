@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { EngagementType } from '@akashaorg/typings/ui';
@@ -15,17 +15,13 @@ export type EngagementsProps = {
   engagementType: EngagementType;
   followers: EngagementItem;
   following: EngagementItem;
-  followLabel: string;
-  unFollowLabel: string;
-  followingLabel: string;
   profileAnchorLink: string;
   loadingMoreLabel: string;
   ownerUserName: string;
   viewerIsOwner: boolean;
+  renderFollowElement: (profileId) => ReactElement;
   onError: () => void;
   onProfileClick: (profileId: string) => void;
-  onFollow: (profileId: string) => void;
-  onUnfollow: (profileId: string) => void;
   onChange: (engagementType: EngagementType) => void;
 };
 
