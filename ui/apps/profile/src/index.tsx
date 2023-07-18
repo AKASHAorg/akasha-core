@@ -31,7 +31,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     matcher({
       login: loader(() => import('./extensions/login-modal')),
       share: loader(() => import('./extensions/share-modal')),
-      'follow-profile_*': loader(() => import('./extensions/follow-profile')),
+      'follow_*': loader(() => import('./extensions/follow-profile')),
     });
   },
   routes: {
