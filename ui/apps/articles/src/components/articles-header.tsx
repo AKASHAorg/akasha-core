@@ -1,7 +1,9 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
-
-const { Box, Button, MainAreaCardBox, Icon, Text } = DS;
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IArticleHeaderProps {
   titleLabel: string;
@@ -14,24 +16,18 @@ export interface IArticleHeaderProps {
 const ArticleHeader: React.FC<IArticleHeaderProps> = props => {
   const { titleLabel, subtitleLabel, writeArticleLabel, onIconClick, onClickWriteArticle } = props;
   return (
-    <MainAreaCardBox pad="medium" gap="medium">
-      <Box direction="row" justify="between">
-        <Text size="xlarge" weight="bold">
-          {titleLabel}
-        </Text>
-        <Icon type="settingsAlt" style={{ cursor: 'pointer' }} onClick={onIconClick} />
+    <BasicCardBox customStyle="p-4 gap-4">
+      <Box customStyle="flex-flex-row justify-between">
+        <Text variant="h2">{titleLabel}</Text>
+        <button onClick={onIconClick}>
+          <Icon type="settingsAlt" />
+        </button>
       </Box>
-      <Box direction="row" justify="between" align="center">
-        <Text size="large">{subtitleLabel}</Text>
-        <Button
-          slimBorder={true}
-          size="large"
-          height={2.5}
-          label={writeArticleLabel}
-          onClick={onClickWriteArticle}
-        />
+      <Box customStyle="flex-flex-row justify-between items-center">
+        <Text variant="h6">{subtitleLabel}</Text>
+        <Button size="lg" label={writeArticleLabel} onClick={onClickWriteArticle} />
       </Box>
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

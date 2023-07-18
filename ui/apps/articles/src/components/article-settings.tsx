@@ -1,8 +1,10 @@
 import React from 'react';
-
-import DS from '@akashaorg/design-system';
-
-const { Box, Button, Icon, MainAreaCardBox, SearchBar, Text } = DS;
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 
 export interface IArticlesSettingsProps {
   titleLabel: string;
@@ -36,19 +38,16 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
   const [inputValue, setInputValue] = React.useState<string>(searchKeyword);
 
   return (
-    <MainAreaCardBox>
-      <Box
-        direction="row"
-        fill="horizontal"
-        pad="medium"
-        border={{ color: 'border', side: 'bottom' }}
-      >
-        <Icon type="close" style={{ cursor: 'pointer' }} onClick={onClickCloseSettings} />
-        <Text size="xlarge" weight="bold" margin={{ vertical: '0', horizontal: 'auto' }}>
+    <BasicCardBox>
+      <Box customStyle="flex flex-row w-full p-4 border(b grey8 dark:grey3)">
+        <button onClick={onClickCloseSettings}>
+          <Icon type="XMarkIcon" />
+        </button>
+        <Text variant="h2" customStyle="mx-auto">
           {titleLabel}
         </Text>
       </Box>
-      <Box fill="horizontal" pad={{ horizontal: 'medium', top: 'medium' }} align="center">
+      <Box customStyle="flex w-full px-4 pt-4 items-center">
         <SearchBar
           inputValue={inputValue}
           inputPlaceholderLabel={inputPlaceholderLabel}
@@ -58,50 +57,24 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
           iconSize="sm"
         />
       </Box>
-      <Box pad="medium" border={{ color: 'border', side: 'bottom' }} gap="xsmall">
-        <Text size="large" weight="bold">
-          {subscribedTopicsTitleLabel}:
-        </Text>
-        <Text size="medium" color="secondaryText">
-          {subscribedTopicsSubtitleLabel}
-        </Text>
-        <Box direction="row" wrap={true} gap="xsmall">
+      <Box customStyle="flex p-4 border(b grey8 dark:grey3) gap-1">
+        <Text variant="h2">{subscribedTopicsTitleLabel}:</Text>
+        <Text variant="subtitle2">{subscribedTopicsSubtitleLabel}</Text>
+        <Box customStyle="flex flex-row flex-wrap gap-1">
           {subscribedTopics.map((topic, idx) => (
-            <Box
-              key={idx}
-              direction="row"
-              round="1rem"
-              gap="xxsmall"
-              margin={{ bottom: 'small' }}
-              pad={{
-                horizontal: 'xxsmall',
-                vertical: '1.5px',
-              }}
-              border={{ color: 'accentText' }}
-              style={{ cursor: 'pointer' }}
-              onClick={onClickTopic(topic)}
-            >
-              <Text color={'primaryText'}>{topic}</Text>
-              <Icon type="close" />
-            </Box>
+            <button key={idx} onClick={onClickTopic(topic)}>
+              <Box customStyle="flex flex-row rounded-lg gap-0.5 border(secondaryLight dark:secondaryDark)">
+                <Text>{topic}</Text>
+                <Icon type="XMarkIcon" />
+              </Box>
+            </button>
           ))}
         </Box>
       </Box>
-      <Box direction="row" fill="horizontal" justify="end" align="center" pad="medium">
-        <Button
-          slimBorder={true}
-          size="large"
-          height={2.5}
-          label={
-            <Box direction="row" gap="xsmall">
-              <Icon type="close" accentColor={true} />
-              <Text size="large">{uninstallLabel}</Text>
-            </Box>
-          }
-          onClick={onClickUninstall}
-        />
+      <Box customStyle="flex flex-row w-full justify-end items-center p-4">
+        <Button size="lg" icon="XMarkIcon" label={uninstallLabel} onClick={onClickUninstall} />
       </Box>
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

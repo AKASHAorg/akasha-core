@@ -1,7 +1,9 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
-
-const { Box, Button, Text, Image, MainAreaCardBox } = DS;
+import Image from '@akashaorg/design-system-core/lib/components/Image';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IArticleOnboardingIntroProps {
   assetName?: string;
@@ -27,38 +29,30 @@ const ArticleOnboardingIntro: React.FC<IArticleOnboardingIntroProps> = props => 
   } = props;
 
   return (
-    <MainAreaCardBox margin={{ bottom: '1rem' }}>
-      <Box align="start" fill="horizontal" pad="medium">
-        <Box direction="row" fill="horizontal" justify="between" margin={{ bottom: 'xsmall' }}>
-          <Text size="xlarge" weight="bold">
-            {titleLabel}
-          </Text>
+    <BasicCardBox customStyle="mb-4">
+      <Box customStyle="flex items-start w-full p-4">
+        <Box customStyle="flex flex-row w-full justify-between mb-1">
+          <Text variant="h2">{titleLabel}</Text>
         </Box>
-        <Box fill="horizontal" pad="medium">
-          <Box height="10rem" width="10rem" margin={{ bottom: 'small' }} alignSelf="center">
-            <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
+        <Box customStyle="flex w-full p-4">
+          <Box customStyle="h-40 w-40 mb-1 flex self-center">
+            <Image customStyle="object-contain" src={`${publicImgPath}/${assetName}.webp`} />
           </Box>
-          <Text size="large" textAlign="center" margin={{ bottom: 'xsmall' }} weight="bold">
+          <Text variant="h6" align="center" customStyle="mb-1" weight="bold">
             {introLabel}
           </Text>
-          <Text
-            size="large"
-            color="secondaryText"
-            textAlign="center"
-            margin={{ bottom: 'xsmall' }}
-            style={{ lineHeight: '1.5' }}
-          >
+          <Text variant="subtitle1" align="center" customStyle="mb-1">
             {descriptionLabel}
           </Text>
         </Box>
-        <Box direction="row" fill="horizontal" justify="end" align="center" gap="small">
+        <Box customStyle="flex flex-row w-full justify-end items-center gap-2">
           {/* <Text size="large" style={{ cursor: 'pointer' }} onClick={onSkip}>
             {skipLabel}
           </Text> */}
-          <Button size="large" height={2.5} primary={true} label={buttonLabel} onClick={onStart} />
+          <Button size="lg" variant="primary" label={buttonLabel} onClick={onStart} />
         </Box>
       </Box>
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

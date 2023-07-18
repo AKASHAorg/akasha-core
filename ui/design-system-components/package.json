@@ -87,6 +87,7 @@
     "react-zoom-pan-pinch": "2.3.2",
     "is-url": "1.2.4",
     "lodash.isequal": "4.5.0",
+    "react-dropzone": "14.2.3",
     "slate": "0.93.0",
     "slate-history": "0.93.0",
     "slate-react": "0.93.0"

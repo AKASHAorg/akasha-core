@@ -1,21 +1,17 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { I18nextProvider } from 'react-i18next';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 import AppRoutes from './app-routes';
 
-const { Box, Spinner } = DS;
-
 const Application: React.FC<RootComponentProps> = props => {
   return (
-    <Box>
-      <React.Suspense fallback={<Spinner />}>
-        <I18nextProvider i18n={props.plugins?.translation?.i18n}>
-          <AppRoutes {...props} />
-        </I18nextProvider>
-      </React.Suspense>
-    </Box>
+    <React.Suspense fallback={<Spinner />}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+        <AppRoutes {...props} />
+      </I18nextProvider>
+    </React.Suspense>
   );
 };
 
