@@ -1089,6 +1089,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ `
       followList(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
+            id
             isFollowing
             profile {
               ...UserProfileFragment
@@ -1153,6 +1154,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ `
         followers(after: $after, before: $before, first: $first, last: $last) {
           edges {
             node {
+              id
               isFollowing
               profile {
                 ...UserProfileFragment

@@ -1,0 +1,57 @@
+type Profile @loadModel(id: "kjzl6hvfrbw6c7i4k7vffsms9flppqephozynftoaqcttt0q33xr5wbelna4bsb"){
+  id: ID!
+}
+enum ProfileType{
+  DEFAULT,
+  ADMIN,
+  MODERATOR,
+  CURATOR,
+  OTHER
+}
+
+type ProfilesList @createModel(accountRelation: LIST, description: "AKASHA indexed profile") {
+  profileID: StreamID! @documentReference(model: "Profile")
+  profile: Profile! @relationDocument(property: "profileID")
+  profileType: [ProfileType!]! @list(maxLength: 5)
+  createdAt: DateTime!
+  active: Boolean!
+  nsfw: Boolean!
+}
+
+type AkashaApp @loadModel(id: "kjzl6hvfrbw6c9kiklnpmjxf4tnsq6fi99sos6syajchxuybeb8ksjwohbebyyf") {
+  id: ID!
+}
+
+type AkashaAppsList @createModel(accountRelation: LIST, description: "AKASHA indexed apps") {
+  applicationID: StreamID! @documentReference(model: "AkashaApp")
+  application: AkashaApp! @relationDocument(property: "applicationID")
+  labels: [String!] @list(maxLength: 8) @string(minLength:3, maxLength: 32)
+  createdAt: DateTime!
+  active: Boolean!
+  nsfw: Boolean!
+}
+
+
+type Beam @loadModel(id: "kjzl6hvfrbw6cafhm2pw8ced1h0rix5qh1s8xhfy79lhjvf39jo83h2koyrunp2") {
+  id: ID!
+}
+
+type BeamsList @createModel(accountRelation: LIST, description: "AKASHA indexed beams") {
+  beamID: StreamID! @documentReference(model: "Beam")
+  beam: Beam! @relationDocument(property: "beamID")
+  createdAt: DateTime!
+  active: Boolean!
+  nsfw: Boolean!
+}
+
+type Reflect @loadModel(id: "kjzl6hvfrbw6c6bw7gfhlo2viqypg3hjg9sdik12w5nq044qi8xxop5xh768wq1"){
+  id: ID!
+}
+
+type ReflectionsList @createModel(accountRelation: LIST, description: "AKASHA indexed reflections") {
+  reflectID: StreamID! @documentReference(model: "Reflect")
+  reflect: Reflect! @relationDocument(property: "reflectID")
+  createdAt: DateTime!
+  active: Boolean!
+  nsfw: Boolean!
+}
