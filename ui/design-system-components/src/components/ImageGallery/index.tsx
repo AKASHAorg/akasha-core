@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { tw, css } from '@twind/core';
-import { isMobile } from 'react-device-detect';
+import { tw, css, apply } from '@twind/core';
 import { ImageGridItem, ImageObject } from './image-grid-item';
 
 export interface IImageGallery {
@@ -17,23 +16,9 @@ const ImageGallery: React.FC<IImageGallery> = props => {
     '-ms-overflow-style': 'none',
     'scrollbar-width': 'none',
   });
+  const mobileStyle = apply(`flex flex-row overflow-auto whitespace-nowrap ${hideScrollbarStyles}`);
+  const desktopStyle = apply(`grid grid-cols-6 gap-1`);
 
-  if (isMobile) {
-    return (
-      <div className={tw(`flex flex-row overflow-auto whitespace-nowrap ${hideScrollbarStyles}`)}>
-        {images.map((image, index) => (
-          <ImageGridItem
-            image={image}
-            key={index}
-            handleDeleteImage={handleDeleteImage}
-            handleClickImage={handleClickImage}
-            images={images}
-            editorStyle={true}
-          />
-        ))}
-      </div>
-    );
-  }
   if (images.length === 1) {
     return (
       <div className={tw('flex')}>
@@ -51,7 +36,7 @@ const ImageGallery: React.FC<IImageGallery> = props => {
     );
   }
   return (
-    <div className={tw('grid grid-cols-6 gap-1')}>
+    <div className={tw(`${mobileStyle} sm:${desktopStyle}`)}>
       {images.map((image, index) => (
         <ImageGridItem
           image={image}

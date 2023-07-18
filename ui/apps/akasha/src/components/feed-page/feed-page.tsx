@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ILocale } from '@akashaorg/design-system/src/utils/time';
+import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import {
   ModalNavigationOptions,
   IPublishData,
@@ -16,7 +16,7 @@ import {
   useDismissedCard,
   useInfiniteDummy,
 } from '@akashaorg/ui-awf-hooks';
-import { Extension } from '@akashaorg/design-system/lib/utils/extension';
+import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 import { Profile } from '@akashaorg/typings/ui';

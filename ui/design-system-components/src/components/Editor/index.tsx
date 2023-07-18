@@ -36,7 +36,6 @@ import { ImageData, ImageUpload } from './image-upload';
 import { MentionPopover } from './mention-popover';
 import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
-import { isMobile } from 'react-device-detect';
 import isUrl from 'is-url';
 import { Profile } from '@akashaorg/typings/ui';
 
@@ -565,11 +564,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   return (
     <div
-      className={tx(
-        `flex justify-between w-full bg(grey9 dark:grey1) ${
-          isMobile ? 'h-[45vh]' : 'max-h-[38rem]'
-        }`,
-      )}
+      className={tx(`flex justify-between w-full bg(grey9 dark:grey1) h-[45vh] sm:max-h-[38rem]`)}
     >
       <div
         className={tx(
@@ -592,7 +587,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 placeholder={placeholderLabel}
                 autoComplete="off"
                 spellCheck={false}
-                autoFocus={true}
+                // autoFocus={true}
                 renderElement={(renderProps: RenderElementProps) =>
                   renderElement(
                     renderProps,
@@ -652,7 +647,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       </div>
       <div className={tw(`w-full px-4 pt-2 pb-4 justify-between flex flex-row`)}>
         <div className={tw(`flex flex-row gap-2 items-center`)}>
-          {!isMobile && (
+          <div className={tw('sm:hidden')}>
             <Popover className="relative">
               <Popover.Button>
                 <Icon type="FaceSmileIcon" />
@@ -663,7 +658,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 </Popover.Button>
               </Popover.Panel>
             </Popover>
-          )}
+          </div>
           {uploadRequest && (
             <button className={tw(`flex items-center`)} onClick={handleMediaClick}>
               <Icon type="PhotoIcon" disabled={uploading || imageUploadDisabled} />
@@ -677,18 +672,16 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
               {!publishDisabled && (
                 <p className={tw(`text(secondaryLight dark:secondaryDark)`)}>Draft</p>
               )}
-              <a
-                className={tw(`text-color-secondary no-underline`)}
+              <button
+                className={tw(`text-color-secondaryLight dark:textColorSecondaryDark`)}
                 onClick={e => {
                   e.preventDefault();
                   CustomEditor.clearEditor(editor);
                   if (onClear) onClear();
                 }}
-                target="_self"
-                style={{ textDecoration: 'none' }}
               >
                 Clear
-              </a>
+              </button>
             </div>
           )}
           {withMeter && (

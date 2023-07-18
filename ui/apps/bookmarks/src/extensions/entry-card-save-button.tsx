@@ -9,7 +9,6 @@ import {
   useSaveBookmark,
   withProviders,
   useAnalytics,
-  ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -80,11 +79,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
-    return (
-      <ThemeWrapper {...props}>
-        <Icon type="ExclamationCircleIcon" />
-      </ThemeWrapper>
-    );
+    return <Icon type="ExclamationCircleIcon" />;
   },
 });
 

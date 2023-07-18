@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 import App from './App';
 
@@ -16,9 +16,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in profile plugin" details={error.message} />
-      </ThemeWrapper>
+      <ErrorLoader type="script-error" title="Error in profile plugin" details={error.message} />
     );
   },
 });

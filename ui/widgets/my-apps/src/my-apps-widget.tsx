@@ -10,17 +10,17 @@ import {
   useGetLatestReleaseInfo,
   withProviders,
   useGetLogin,
-  ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { hiddenIntegrations } from './hidden-integrations';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TabList from '@akashaorg/design-system-core/lib/components/TabList';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppsList from './apps-list';
-import Button from '@akashaorg/design-system/lib/components/Button';
+
 import NoAppsMessage from './no-apps-message';
 
 const ICWidget: React.FC<RootComponentProps> = props => {
@@ -164,7 +164,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
               <AppsList
                 apps={filteredInstalledApps.slice(0, 4)}
                 onAppClick={handleAppClick}
-                appAction={<Button secondary={true}>{t('Open')}</Button>}
+                appAction={<Button>{t('Open')}</Button>}
                 onAppActionClick={handleInstalledAppActionClick}
               />
             </Stack>
@@ -190,13 +190,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader
-          type="script-error"
-          title="Error in AKASHAVerse widget"
-          details={err.message}
-        />
-      </ThemeWrapper>
+      <ErrorLoader type="script-error" title="Error in AKASHAVerse widget" details={err.message} />
     );
   },
 });

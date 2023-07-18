@@ -1,9 +1,6 @@
 module.exports = {
   externals: [
     {
-      '@akashaorg/design-system': '@akashaorg/design-system',
-    },
-    {
       '@akashaorg/awf-sdk': '@akashaorg/awf-sdk',
     },
     {

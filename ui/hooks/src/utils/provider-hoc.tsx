@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AnalyticsProvider } from '../use-analytics';
-// @TODO remove after replacing old DS components in apps
-import ThemeWrapper from './theme-wrapper';
 
 const queryClient = new QueryClient();
 
@@ -15,11 +13,9 @@ export default function withProviders<T>(WrappedComponent: React.ComponentType<T
   const ComponentWithProviders = props => {
     return (
       <QueryClientProvider client={queryClient}>
-        <ThemeWrapper {...props}>
-          <AnalyticsProvider {...props}>
-            <WrappedComponent {...props} />
-          </AnalyticsProvider>
-        </ThemeWrapper>
+        <AnalyticsProvider {...props}>
+          <WrappedComponent {...props} />
+        </AnalyticsProvider>
       </QueryClientProvider>
     );
   };

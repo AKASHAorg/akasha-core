@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { tx, apply } from '@twind/core';
 import { useDropzone } from 'react-dropzone';
-import { isMobile } from 'react-device-detect';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Meter from '@akashaorg/design-system-core/lib/components/Meter';
@@ -154,10 +153,11 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
       )}
       <div {...getRootProps()}>
         <input {...getInputProps({ ref, accept: 'image/*', type: 'file' })} />
-        {!isMobile && isDragActive ? (
+
+        {isDragActive ? (
           <div
             className={tx(
-              `${flexCenteredClass} mb-2 rounded-sm w-full h-12 border(secondary dashed)`,
+              `hidden sm:${flexCenteredClass} mb-2 rounded-sm w-full h-12 border(secondary dashed)`,
             )}
           >
             <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>

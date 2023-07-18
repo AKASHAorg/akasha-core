@@ -12,7 +12,7 @@ import {
   Profile,
 } from '@akashaorg/typings/ui';
 
-import { ILocale } from '@akashaorg/design-system/src/utils/time';
+import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { SETTINGS } from '../../routes';
 
 import {

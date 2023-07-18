@@ -39,7 +39,6 @@
   },
   "devDependencies": {
     "@akashaorg/typings": "*",
-    "@akashaorg/design-system": "*",
     "@akashaorg/af-testing": "*",
     "@types/react": "18.0.33"
   },

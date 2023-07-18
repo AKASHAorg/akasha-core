@@ -4,10 +4,6 @@
     "outDir": "./lib",
     "rootDir": "./src"
   },
-  "references": [
-    {
-      "path": "../../design"
-    }
-  ],
+  
   "include": ["./src/**/*"]
 }
