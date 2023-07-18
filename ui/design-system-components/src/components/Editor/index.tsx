@@ -564,7 +564,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   return (
     <div
-      className={tx(`flex justify-between w-full bg(grey9 dark:grey1) h-[45vh] sm:max-h-[38rem]`)}
+      className={tx(`flex justify-between w-full bg(grey9 dark:grey1) h-[45vh] md:max-h-[38rem]`)}
     >
       <div
         className={tx(
@@ -647,7 +647,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       </div>
       <div className={tw(`w-full px-4 pt-2 pb-4 justify-between flex flex-row`)}>
         <div className={tw(`flex flex-row gap-2 items-center`)}>
-          <div className={tw('sm:hidden')}>
+          <div className={tw('md:hidden')}>
             <Popover className="relative">
               <Popover.Button>
                 <Icon type="FaceSmileIcon" />

@@ -157,7 +157,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
         {isDragActive ? (
           <div
             className={tx(
-              `hidden sm:${flexCenteredClass} mb-2 rounded-sm w-full h-12 border(secondary dashed)`,
+              `hidden md:${flexCenteredClass} mb-2 rounded-sm w-full h-12 border(secondary dashed)`,
             )}
           >
             <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>

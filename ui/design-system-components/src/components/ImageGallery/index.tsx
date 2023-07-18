@@ -36,7 +36,7 @@ const ImageGallery: React.FC<IImageGallery> = props => {
     );
   }
   return (
-    <div className={tw(`${mobileStyle} sm:${desktopStyle}`)}>
+    <div className={tw(`${mobileStyle} md:${desktopStyle}`)}>
       {images.map((image, index) => (
         <ImageGridItem
           image={image}
