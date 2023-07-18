@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FeedPage from '../feed-page/feed-page';
-import * as extension from '@akashaorg/design-system/lib/utils/extension';
+import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import userEvent from '@testing-library/user-event';
 
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
@@ -43,7 +43,7 @@ describe('< FeedPage /> component', () => {
 
   beforeAll(() => {
     jest
-      .spyOn(extension, 'Extension')
+      .spyOn(Extension, 'default')
       .mockReturnValue(
         <InlineEditor
           {...genAppProps()}
@@ -97,7 +97,7 @@ describe('< FeedPage /> component', () => {
     //TODO: change URLSearchParams usage on feed page(and elsewhere) with a search param hook and mock the hook here
     history.pushState(null, '', `${location.origin}?repost=oxfceee`);
 
-    const spiedExtension = jest.spyOn(extension, 'Extension');
+    const spiedExtension = jest.spyOn(Extension, 'default');
 
     when(spiedExtension)
       .calledWith(
