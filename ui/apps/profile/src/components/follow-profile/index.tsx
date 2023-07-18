@@ -4,12 +4,13 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
-import { useFollowIds } from './use-follow-ids';
+import { useFollowingsOfLoggedInProfile } from './use-followings-of-logged-in-profile';
 import {
   useCreateFollowMutation,
   useGetMyProfileQuery,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { Follow } from './type';
 
 type FollowProfileProps = {
   profileId: string;
@@ -26,7 +27,11 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
 
   const [loading, setLoading] = useState(false);
 
-  const { followProfile, unFollowProfile, getFollowId } = useFollowIds(loginQuery.data?.id);
+  const { followProfile, unFollowProfile, getFollowing } = useFollowingsOfLoggedInProfile(
+    loginQuery.data?.id,
+  );
+
+  const following = getFollowing(loginQuery.data?.id, String(profileId));
 
   const createFollowMutation = useCreateFollowMutation({
     onMutate: () => {
@@ -45,7 +50,14 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
       setLoading(true);
     },
     onSuccess: () => {
-      unFollowProfile(loginQuery.data?.id, String(profileId));
+      if (!following) return null;
+
+      if (following.isFollowing) {
+        unFollowProfile(loginQuery.data?.id, String(profileId));
+        return;
+      }
+
+      followProfile(loginQuery.data?.id, String(profileId), following.streamId);
     },
     onSettled: () => {
       setLoading(false);
@@ -56,10 +68,6 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
     select: response => response?.viewer?.profile,
     enabled: !!loginQuery.data?.id,
   });
-
-  const followId = getFollowId(loginQuery.data?.id, String(profileId));
-
-  const isFollowing = !!followId;
 
   const checkAuth = () => {
     if (!loginQuery.data?.id && navigateTo) {
@@ -72,27 +80,28 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
     return true;
   };
 
-  const handleFollow = (profileStreamId: string) => {
+  const handleFollow = (profileStreamId: string, following?: Follow) => {
     if (!checkAuth()) return;
-    if (!isFollowing) {
+    if (!following) {
       createFollowMutation.mutate({
         i: { content: { isFollowing: true, profileID: profileStreamId } },
       });
     } else {
       updateFollowMutation.mutate({
         i: {
-          id: followId,
+          id: following.streamId,
           content: { isFollowing: true, profileID: profileStreamId },
         },
       });
     }
   };
 
-  const handleUnfollow = (profileStreamId: string, followStreamId: string) => {
+  const handleUnfollow = (profileStreamId: string, following?: Follow) => {
+    if (!following) return null;
     if (!checkAuth()) return;
     updateFollowMutation.mutate({
       i: {
-        id: followStreamId,
+        id: following.streamId,
         content: { isFollowing: false, profileID: profileStreamId },
       },
     });
@@ -101,18 +110,18 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
   if (isIconButton) {
     return (
       <>
-        {isFollowing ? (
+        {following?.isFollowing ? (
           <Button
             size="sm"
             icon="UserPlusIcon"
-            onClick={() => handleUnfollow(profileDataReq.data?.id, followId)}
+            onClick={() => handleUnfollow(profileDataReq.data?.id, following)}
             variant="primary"
             loading={loading}
             iconOnly
           />
         ) : (
           <Button
-            onClick={() => handleFollow(profileDataReq.data?.id)}
+            onClick={() => handleFollow(profileDataReq.data?.id, following)}
             icon="UsersIcon"
             loading={loading}
             greyBg
@@ -129,8 +138,8 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
       activeLabel={t('Following')}
       activeHoverLabel={t('Following')}
       onClickInactive={() => handleFollow(String(profileId))}
-      onClickActive={() => handleUnfollow(String(profileId), followId)}
-      active={!!isFollowing}
+      onClickActive={() => handleUnfollow(String(profileId), following)}
+      active={following?.isFollowing}
       size="sm"
       loading={loading}
       allowMinimization
