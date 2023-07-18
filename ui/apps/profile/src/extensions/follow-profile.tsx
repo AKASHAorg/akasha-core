@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FollowProfile from '../components/follow-profile';
 import singleSpaReact from 'single-spa-react';
-import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { RootExtensionProps } from '@akashaorg/typings/ui';
 
 const App = (props: RootExtensionProps) => {
@@ -26,13 +26,11 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader
-          type="script-error"
-          title="Error in share profile modal"
-          details={error.message}
-        />
-      </ThemeWrapper>
+      <ErrorLoader
+        type="script-error"
+        title="Error in share profile modal"
+        details={error.message}
+      />
     );
   },
 });
