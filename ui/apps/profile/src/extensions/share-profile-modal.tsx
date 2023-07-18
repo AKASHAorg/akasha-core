@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { useTranslation } from 'react-i18next';
 
-import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { IconType, RootExtensionProps } from '@akashaorg/typings/ui';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -90,13 +90,11 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader
-          type="script-error"
-          title="Error in share profile modal"
-          details={error.message}
-        />
-      </ThemeWrapper>
+      <ErrorLoader
+        type="script-error"
+        title="Error in share profile modal"
+        details={error.message}
+      />
     );
   },
 });

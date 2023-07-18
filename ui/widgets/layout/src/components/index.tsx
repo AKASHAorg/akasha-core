@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 import LayoutWidget from './layout-widget';
 
@@ -25,9 +25,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in layout widget" details={error.message} />
-      </ThemeWrapper>
+      <ErrorLoader type="script-error" title="Error in layout widget" details={error.message} />
     );
   },
 });

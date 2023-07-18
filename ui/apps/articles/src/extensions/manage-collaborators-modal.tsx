@@ -6,8 +6,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Profile, RootExtensionProps } from '@akashaorg/typings/ui';
-import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
-import { trendingProfilesData } from '@akashaorg/design-system/lib/utils/dummy-data';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { trendingProfilesData } from '@akashaorg/design-system-components/lib/utils/dummy-data';
 
 import ManageCollaboratorsModal from '@akashaorg/design-system-components/lib/components/ManageCollaboratorsModal';
 
@@ -95,13 +95,11 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader
-          type="script-error"
-          title="Error in manage collaborators modal"
-          details={err.message}
-        />
-      </ThemeWrapper>
+      <ErrorLoader
+        type="script-error"
+        title="Error in manage collaborators modal"
+        details={err.message}
+      />
     );
   },
 });

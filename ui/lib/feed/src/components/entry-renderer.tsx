@@ -11,7 +11,7 @@ import Extension from '@akashaorg/design-system-components/lib/components/Extens
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import { ILogger } from '@akashaorg/typings/sdk/log';
-import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import {
   TrackEventData,

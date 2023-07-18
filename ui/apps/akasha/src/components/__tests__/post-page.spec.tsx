@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PostPage from '../item-page/post-page';
-import * as extension from '@akashaorg/design-system/lib/utils/extension';
+import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 import * as commentHooks from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
@@ -34,7 +34,7 @@ const MockedInlineEditor = ({ action }) => (
 describe('< PostPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <PostPage {...genAppProps()} showLoginModal={jest.fn()} loginState={genLoggedInState(true)} />
+      <PostPage {...genAppProps()} showLoginModal={jest.fn()} />
     </AnalyticsProvider>
   );
 
@@ -61,7 +61,7 @@ describe('< PostPage /> component', () => {
 
   // @TODO fix after replacing hooks
   it.skip('should render post page', async () => {
-    const spiedExtension = jest.spyOn(extension, 'Extension');
+    const spiedExtension = jest.spyOn(Extension, 'default');
 
     when(spiedExtension)
       .calledWith(

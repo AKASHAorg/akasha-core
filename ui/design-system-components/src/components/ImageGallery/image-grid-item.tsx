@@ -2,7 +2,6 @@ import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { DelayLoad } from '../../utils/delay-load';
-import { isMobile } from 'react-device-detect';
 
 export interface ImageObject {
   originalSrc?: string;
@@ -57,12 +56,11 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
   };
 
   const singleImageStyle = apply`${images.length === 1 && 'max-w-full'}`;
-  const mobileStyle = apply`${isMobile && editorStyle && 'h-40 pr-1'}`;
+  const mobileStyle = apply`${editorStyle && 'h-40 pr-1 sm:h-full sm:pr-0'}`;
 
   return (
-    <div
+    <button
       className={tw('flex relative border(solid grey1) rounded')}
-      role="img"
       style={style}
       onClick={ev => {
         if (handleClickImage && typeof handleClickImage === 'function' && imgLoaded) {
@@ -74,7 +72,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
       }}
     >
       {handleDeleteImage && (
-        <div
+        <button
           className={tw(
             'flex items-center justify-items-center z-1 absolute top-5 right-5 w-6 h-6 rounded-full bg-grey7',
           )}
@@ -88,7 +86,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
           }}
         >
           <Icon type="TrashIcon" />
-        </div>
+        </button>
       )}
       {/* when we have a single image we need to keep the original aspect ratio,
           otherwise give images a 1:1 ratio */}
@@ -96,6 +94,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
         <source srcSet={imageSrc.originalSrc} />
         <source srcSet={imageSrc.src.url} />
         <img
+          alt={imageSrc.src.fallbackUrl}
           className={tx(
             `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
           )}
@@ -108,6 +107,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
         <DelayLoad>
           <div className={tw('flex')}>
             <img
+              alt={'placeholder'}
               className={tx(
                 `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
               )}
@@ -117,6 +117,6 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
           </div>
         </DelayLoad>
       )}
-    </div>
+    </button>
   );
 };

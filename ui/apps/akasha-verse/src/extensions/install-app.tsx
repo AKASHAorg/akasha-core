@@ -8,10 +8,10 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import { EventTypes, UIEventData, RootExtensionProps } from '@akashaorg/typings/ui';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useInstallApp, withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+import { useInstallApp, withProviders } from '@akashaorg/ui-awf-hooks';
 
 const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
-  const { extensionData } = props;
+  const { extensionData, uiEvents, singleSpa } = props;
   const sdk = getSDK();
   const { t } = useTranslation('app-akasha-integration');
 
@@ -39,7 +39,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
         }
       },
     });
-    const sub = props.uiEvents.subscribe({
+    const sub = uiEvents.subscribe({
       next: (eventData: UIEventData) => {
         if (
           eventData.event === EventTypes.RegisterIntegration &&
@@ -74,10 +74,10 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   }, []);
 
   const handleModalClose = React.useCallback(() => {
-    if (props.singleSpa) {
-      props.singleSpa.navigateToUrl(location.pathname);
+    if (singleSpa) {
+      singleSpa.navigateToUrl(location.pathname);
     }
-  }, [props.singleSpa]);
+  }, [singleSpa]);
 
   return (
     /*@TODO: revisit props when new install/uninstall hooks are ready to be integrated*/
@@ -107,11 +107,7 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`Error in InstallModal: ${JSON.stringify(err)}, ${errorInfo}`);
     }
-    return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in install modal" details={err.message} />
-      </ThemeWrapper>
-    );
+    return <ErrorLoader type="script-error" title="Error in install modal" details={err.message} />;
   },
 });
 
