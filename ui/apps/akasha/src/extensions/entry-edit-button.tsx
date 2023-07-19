@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import { RootExtensionProps, EntityTypes } from '@akashaorg/typings/ui';
-import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -63,11 +63,7 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
-    return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in edit button" details={err.message} />
-      </ThemeWrapper>
-    );
+    return <ErrorLoader type="script-error" title="Error in edit button" details={err.message} />;
   },
 });
 

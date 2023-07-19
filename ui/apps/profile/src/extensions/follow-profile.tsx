@@ -1,25 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import singleSpaReact from 'single-spa-react';
-
-import { RootComponentProps } from '@akashaorg/typings/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import FollowProfile from '../components/follow-profile';
+import singleSpaReact from 'single-spa-react';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
 
-import App from './app';
+const App = (props: RootExtensionProps) => {
+  const { profileId, isIconButton } = props.extensionData;
+  return (
+    <FollowProfile
+      profileId={String(profileId)}
+      isIconButton={!!isIconButton}
+      navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+    />
+  );
+};
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(App),
-  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
       <ErrorLoader
         type="script-error"
-        title="Error in notifications plugin"
+        title="Error in share profile modal"
         details={error.message}
       />
     );

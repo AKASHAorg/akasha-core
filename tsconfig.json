@@ -24,9 +24,6 @@
   },
   "references": [
     {
-      "path": "./ui/design"
-    },
-    {
       "path": "./ui/design-system-core"
     },
     {

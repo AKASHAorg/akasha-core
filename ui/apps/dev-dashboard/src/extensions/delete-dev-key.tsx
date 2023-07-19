@@ -5,7 +5,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 
 import { RootExtensionProps } from '@akashaorg/typings/ui';
-import { withProviders, ThemeWrapper, useDeleteDevKey } from '@akashaorg/ui-awf-hooks';
+import { withProviders, useDeleteDevKey } from '@akashaorg/ui-awf-hooks';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
@@ -107,13 +107,11 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader
-          type="script-error"
-          title="Error in delete dev key modal"
-          details={err.message}
-        />
-      </ThemeWrapper>
+      <ErrorLoader
+        type="script-error"
+        title="Error in delete dev key modal"
+        details={err.message}
+      />
     );
   },
 });
