@@ -1,11 +1,23 @@
+import { GetBeamsQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
+
 export const createDummyPosts =
   (count: number) =>
-  ({ pageParam = 0 }) => {
+  ({ pageParam = 0 }): GetBeamsQuery => {
     const content = [
       {
         type: 'paragraph',
         value:
           "Odds are you've heard about the Ethereum blockchain, whether or not you know what it is. It's been in the news a lot lately, including the cover of some major magazines, but reading those articles can be like gibberish if you don't have a foundation for what exactly Ethereum is. So what is it? In essence, a public database that keeps a permanent record of digital transactions. Importantly, this database doesn't require any central authority to maintain and secure it. Instead it operates as a “trustless” transactional system — a framework in which individuals can make peer-to-peer transactions without needing to trust a third party OR one another.",
+      },
+      {
+        type: 'paragraph',
+        value:
+          'An Application Programming Interface (API) is a set of definitions for how to use a piece of software. An API sits between an application and a web server, and facilitates the transfer of data between them.',
+      },
+      {
+        type: 'paragraph',
+        value:
+          'bootnode: The nodes which can be used to initiate the discovery process when running a node. The endpoints of these nodes are recorded in the Ethereum source code.',
       },
       {
         type: 'paragraph',
@@ -23,8 +35,35 @@ export const createDummyPosts =
           "Many of the topics covered in this post are a breakdown of the concepts discussed in the yellow paper.I've added my own explanations and diagrams to make understanding Ethereum easier.Those brave enough to take on the technical challenge can also read the Ethereum yellow paper.",
       },
     ];
-    return Array.from({ length: count }, (_, i) => ({
-      id: `${pageParam}_${Math.floor(Math.random() * 100)}`,
-      content,
-    }));
+    return {
+      beamIndex: {
+        edges: Array.from({ length: count }, (_, i) => ({
+          node: {
+            id: `${pageParam}_${Math.floor(Math.random() * 100)}`,
+            reflectionsCount: 1,
+            rebeamsCount: 1,
+            active: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            author: { id: 'some-author-id' },
+            version: 0,
+            content: [
+              {
+                provider: 'akasha-beams',
+                property: 'slate-content',
+                value: JSON.stringify(content.sort(() => Math.random() - 0.5)),
+              },
+            ],
+          },
+        })),
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false,
+        },
+      },
+    };
+    // return Array.from({ length: count }, (_, i) => ({
+    //   id: `${pageParam}_${Math.floor(Math.random() * 100)}`,
+    //   content,
+    // }));
   };

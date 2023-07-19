@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { Profile } from '@akashaorg/typings/ui';
 import {
   useGetFollowingListByDidQuery,
@@ -113,29 +113,29 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         />
       </Box>
 
-      <FeedWidget
-        modalSlotId={layoutConfig.modalSlotId}
-        logger={logger}
-        itemType={EntityTypes.POST}
-        pages={[]}
-        onLoadMore={handleLoadMore}
-        navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-        navigateToModal={navigateToModal.current}
-        onLoginModalOpen={showLoginModal.current}
-        requestStatus={null}
-        hasNextPage={false}
-        loggedProfileData={loggedProfileData}
-        contentClickable={true}
-        onEntryFlag={handleEntryFlag}
-        onEntryRemove={handleEntryRemove}
-        removeEntryLabel={t('Delete Post')}
-        removedByMeLabel={t('You deleted this post')}
-        removedByAuthorLabel={t('This post was deleted by its author')}
-        uiEvents={uiEvents}
-        itemSpacing={8}
-        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
-        accentBorderTop={true}
-      />
+      {/*<FeedWidget*/}
+      {/*  modalSlotId={layoutConfig.modalSlotId}*/}
+      {/*  logger={logger}*/}
+      {/*  itemType={EntityTypes.POST}*/}
+      {/*  pages={[]}*/}
+      {/*  onLoadMore={handleLoadMore}*/}
+      {/*  navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}*/}
+      {/*  navigateToModal={navigateToModal.current}*/}
+      {/*  onLoginModalOpen={showLoginModal.current}*/}
+      {/*  requestStatus={null}*/}
+      {/*  hasNextPage={false}*/}
+      {/*  loggedProfileData={loggedProfileData}*/}
+      {/*  contentClickable={true}*/}
+      {/*  onEntryFlag={handleEntryFlag}*/}
+      {/*  onEntryRemove={handleEntryRemove}*/}
+      {/*  removeEntryLabel={t('Delete Post')}*/}
+      {/*  removedByMeLabel={t('You deleted this post')}*/}
+      {/*  removedByAuthorLabel={t('This post was deleted by its author')}*/}
+      {/*  uiEvents={uiEvents}*/}
+      {/*  itemSpacing={8}*/}
+      {/*  i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}*/}
+      {/*  accentBorderTop={true}*/}
+      {/*/>*/}
 
       {userHasSubscriptions && !postsReq.isFetching && (
         <MyFeedCard

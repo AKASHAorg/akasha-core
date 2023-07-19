@@ -8,7 +8,7 @@ import EntryCardLoading from '@akashaorg/design-system-components/lib/components
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import { Logger } from '@akashaorg/awf-sdk';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { useInfiniteComments } from '@akashaorg/ui-awf-hooks';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';

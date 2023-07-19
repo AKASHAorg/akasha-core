@@ -24,10 +24,9 @@ import { usePost, useComment, mapEntry, useDummyQuery } from '@akashaorg/ui-awf-
 
 import FeedWidget from './app';
 import { Profile, IContentClickDetails } from '@akashaorg/typings/ui';
+import { EntryGetterProps } from '@akashaorg/design-system-components/lib/components/EntryList';
 
-export type EntryRendererProps = {
-  itemId?: string;
-  itemSpacing?: number;
+export type EntryRendererProps = EntryGetterProps & {
   sharePostUrl: string;
   locale: ILocale;
   style?: React.CSSProperties;
@@ -51,8 +50,7 @@ export type EntryRendererProps = {
   modalSlotId: string;
   accentBorderTop?: boolean;
   trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
-  index?: number;
-  totalEntry?: number;
+  totalEntryCount?: number;
   logger: ILogger;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (props: ModalNavigationOptions) => void;
@@ -67,7 +65,7 @@ const REPLY_FRAGMENT_SIZE = 2;
 const EntryRenderer = (props: EntryRendererProps) => {
   const {
     locale,
-    itemId,
+    entryData,
     itemType,
     style,
     onEntryFlag,
@@ -82,8 +80,8 @@ const EntryRenderer = (props: EntryRendererProps) => {
     replyFragmentItem,
     uiEvents,
     showReplyFragment,
-    index,
-    totalEntry,
+    entryIndex,
+    totalEntryCount,
     className,
     onEntryRemove,
     removeEntryLabel,
@@ -101,44 +99,33 @@ const EntryRenderer = (props: EntryRendererProps) => {
 
   const { t } = useTranslation('ui-lib-feed');
 
-  const postReq = useDummyQuery({ postId: itemId, enabler: itemType === EntityTypes.POST });
-  const commentReq = useComment(itemId, itemType === EntityTypes.REPLY);
+  // const commentData = React.useMemo(() => {
+  //   if (entryData && itemType === EntityTypes.REPLY) {
+  //     return mapEntry(entryData);
+  //   }
+  //   return undefined;
+  // }, [entryData, itemType]);
 
-  const postData = React.useMemo(() => {
-    if (postReq.data && itemType === EntityTypes.POST) {
-      return mapEntry(postReq.data);
-    }
-    return undefined;
-  }, [postReq.data, itemType]);
+  // // @TODO fix hooks
+  // const itemData = React.useMemo(() => {
+  //   if (itemType === EntityTypes.POST) {
+  //     return entryData;
+  //   } else if (itemType === EntityTypes.REPLY) {
+  //     return commentData;
+  //   }
+  // }, [entryData, commentData, itemType]);
 
-  const commentData = React.useMemo(() => {
-    if (commentReq.data && itemType === EntityTypes.REPLY) {
-      return mapEntry(commentReq.data);
-    }
-    return undefined;
-  }, [commentReq.data, itemType]);
-
-  // @TODO fix hooks
-  const itemData = React.useMemo(() => {
-    if (itemType === EntityTypes.POST) {
-      return postData;
-    } else if (itemType === EntityTypes.REPLY) {
-      return commentData;
-    }
-  }, [postData, commentData, itemType]);
-
-  const [isReported, isAccountReported] = React.useMemo(() => {
-    if (showAnyway) {
-      return [false, false];
-    }
-    const reqSuccess = postReq.isSuccess || commentReq.isSuccess;
-    return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
-  }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
+  // const [isReported, isAccountReported] = React.useMemo(() => {
+  //   if (showAnyway) {
+  //     return [false, false];
+  //   }
+  //   return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
+  // }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
 
   const handleAvatarClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${itemData?.author.pubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${entryData?.author.did.id}`,
     });
   };
 
@@ -178,44 +165,29 @@ const EntryRenderer = (props: EntryRendererProps) => {
     }
   }, [t, itemType]);
 
-  const accountAwaitingModeration =
-    !itemData?.author?.moderated && isAccountReported && !parentIsProfilePage;
-  const entryAwaitingModeration = !itemData?.moderated && isReported;
-
-  const reportedTypeName = React.useMemo(() => {
-    if (accountAwaitingModeration) return `the author of this ${itemTypeName}`;
-    return `this ${itemTypeName}`;
-  }, [accountAwaitingModeration, itemTypeName]);
-
   // @TODO fix author
   const showEditButton = React.useMemo(
     () => false, //loggedProfileData?.did.id === itemData?.author?.did.id,
-    [itemData?.author, loggedProfileData],
+    [entryData?.author.did.id, loggedProfileData],
   );
 
   const isComment = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
 
-  const canShowEntry =
-    itemData &&
-    !entryAwaitingModeration &&
-    !accountAwaitingModeration &&
-    !itemData.delisted &&
-    !itemData.isRemoved;
-  const repliesReq = useInfiniteReplies(
-    {
-      limit: REPLY_FRAGMENT_SIZE,
-      postID: !!commentData && 'postId' in commentData && commentData?.postId,
-      commentID: commentData?.entryId,
-    },
-    Boolean(canShowEntry) && showReplyFragment,
-  );
+  // const repliesReq = useInfiniteReplies(
+  //   {
+  //     limit: REPLY_FRAGMENT_SIZE,
+  //     postID: !!commentData && 'postId' in commentData && commentData?.postId,
+  //     commentID: commentData?.entryId,
+  //   },
+  //   Boolean(canShowEntry) && showReplyFragment,
+  // );
 
-  const replyPages = React.useMemo(() => {
-    if (repliesReq.data) {
-      return repliesReq.data.pages;
-    }
-    return [];
-  }, [repliesReq.data]);
+  // const replyPages = React.useMemo(() => {
+  //   if (repliesReq.data) {
+  //     return repliesReq.data.pages;
+  //   }
+  //   return [];
+  // }, [repliesReq.data]);
 
   const entryCardStyle = React.useMemo(() => {
     if (!isComment) return '';
@@ -223,149 +195,147 @@ const EntryRenderer = (props: EntryRendererProps) => {
     if (replyFragmentItem) return;
     `ml-6 border-l-1 border(grey8 dark:grey3)`;
 
-    if (index !== totalEntry) return;
+    if (entryIndex !== totalEntryCount) return;
     `border-b-1 border(grey8 dark:grey3)`;
-  }, [index, totalEntry, isComment, replyFragmentItem]);
+  }, [entryIndex, totalEntryCount, isComment, replyFragmentItem]);
 
-  const entryLoading = postReq.isLoading || commentReq.isLoading;
-
-  const hasItemSpacingStyle = React.useMemo(
-    () => itemSpacing && (entryLoading || canShowEntry),
-    [itemSpacing, entryLoading, canShowEntry],
-  );
+  // const hasItemSpacingStyle = React.useMemo(
+  //   () => itemSpacing && (entryLoading || canShowEntry),
+  //   [itemSpacing, entryLoading, canShowEntry],
+  // );
 
   return (
-    <Box customStyle={hasItemSpacingStyle ? `mb-[${itemSpacing}px]` : ''}>
-      {entryLoading && <EntryCardLoading />}
-      {(postReq.isError || commentReq.isError) && (
-        <ErrorLoader
-          type="script-error"
-          title={t('There was an error loading the {{itemTypeName}}', { itemTypeName })}
-          details={t('We cannot show this {{itemTypeName}} now', { itemTypeName })}
-          devDetails={(postReq.error as Error).message}
-        />
-      )}
-      {(postReq.isSuccess || commentReq.isSuccess) && (
-        <>
-          {(accountAwaitingModeration || entryAwaitingModeration) && (
-            <EntryCardHidden
-              reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
-              headerTextLabel={t('You reported {{reportedTypeName}} for the following reason', {
-                reportedTypeName,
-              })}
-              footerTextLabel={t('It is awaiting moderation.')}
-              ctaLabel={t('See it anyway')}
-              handleFlipCard={handleFlipCard}
-            />
-          )}
-          {canShowEntry && (
-            <Box customStyle={entryCardStyle}>
-              <EntryCard
-                className={className}
-                isRemoved={itemData.isRemoved}
-                entryData={{ ...itemData, author: itemData.author as unknown as Profile }}
-                onClickAvatar={handleAvatarClick}
-                editedLabel={t('Last edited')}
-                flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
-                locale={locale || 'en'}
-                style={{
-                  ...(style as React.CSSProperties),
-                }}
-                showMore={true}
-                profileAnchorLink={'/@akashaorg/app-profile'}
-                repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
-                  isComment ? 'reply' : 'post'
-                }`}
-                hideRepost={isComment}
-                onRepost={onRepost}
-                onEntryFlag={onEntryFlag && onEntryFlag(itemData.entryId, itemType)}
-                onContentClick={handleContentClick}
-                onMentionClick={handleMentionClick}
-                onTagClick={handleTagClick}
-                navigateTo={navigateTo}
-                contentClickable={contentClickable}
-                moderatedContentLabel={t('This content has been moderated')}
-                ctaLabel={t('See it anyway')}
-                handleFlipCard={handleFlipCard}
-                onEntryRemove={onEntryRemove}
-                removeEntryLabel={removeEntryLabel}
-                removedByMeLabel={removedByMeLabel}
-                removedByAuthorLabel={removedByAuthorLabel}
-                disableReposting={itemData.isRemoved || isComment}
-                disableReporting={!loggedProfileData?.did?.id}
-                border={!isComment}
-                accentBorderTop={accentBorderTop}
-                actionsRightExt={
-                  !isComment && (
-                    <Extension
-                      name={`entry-card-actions-right_${itemId}`}
-                      uiEvents={uiEvents}
-                      data={{
-                        itemId,
-                        itemType,
-                        hideLabel: itemType === EntityTypes.POST,
-                      }}
-                    />
-                  )
-                }
-                headerMenuExt={
-                  showEditButton && (
-                    <Extension
-                      name={`entry-card-edit-button_${itemId}`}
-                      uiEvents={uiEvents}
-                      data={{
-                        itemId,
-                        itemType,
-                        hideLabel: itemType === EntityTypes.POST,
-                      }}
-                    />
-                  )
-                }
-              />
+    <Box customStyle="">
+      {/*{entryLoading && <EntryCardLoading />}*/}
+      {/*{(postReq.isError || commentReq.isError) && (*/}
+      {/*  <ErrorLoader*/}
+      {/*    type="script-error"*/}
+      {/*    title={t('There was an error loading the {{itemTypeName}}', { itemTypeName })}*/}
+      {/*    details={t('We cannot show this {{itemTypeName}} now', { itemTypeName })}*/}
+      {/*    devDetails={(postReq.error as Error).message}*/}
+      {/*  />*/}
+      {/*)}*/}
+      {/*{(postReq.isSuccess || commentReq.isSuccess) && (*/}
+      {/*  <>*/}
+      {/*    {(accountAwaitingModeration || entryAwaitingModeration) && (*/}
+      {/*      <EntryCardHidden*/}
+      {/*        reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}*/}
+      {/*        headerTextLabel={t('You reported {{reportedTypeName}} for the following reason', {*/}
+      {/*          reportedTypeName,*/}
+      {/*        })}*/}
+      {/*        footerTextLabel={t('It is awaiting moderation.')}*/}
+      {/*        ctaLabel={t('See it anyway')}*/}
+      {/*        handleFlipCard={handleFlipCard}*/}
+      {/*      />*/}
+      {/*    )}*/}
+      {/*    {canShowEntry && (*/}
+      {/*      <Box customStyle={entryCardStyle}>*/}
+      {/*        <EntryCard*/}
+      {/*          className={className}*/}
+      {/*          isRemoved={itemData.isRemoved}*/}
+      {/*          entryData={{ ...itemData, author: itemData.author as unknown as Profile }}*/}
+      {/*          onClickAvatar={handleAvatarClick}*/}
+      {/*          editedLabel={t('Last edited')}*/}
+      {/*          flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}*/}
+      {/*          locale={locale || 'en'}*/}
+      {/*          style={{*/}
+      {/*            ...(style as React.CSSProperties),*/}
+      {/*          }}*/}
+      {/*          showMore={true}*/}
+      {/*          profileAnchorLink={'/@akashaorg/app-profile'}*/}
+      {/*          repliesAnchorLink={`/@akashaorg/app-akasha-integration/${*/}
+      {/*            isComment ? 'reply' : 'post'*/}
+      {/*          }`}*/}
+      {/*          hideRepost={isComment}*/}
+      {/*          onRepost={onRepost}*/}
+      {/*          onEntryFlag={onEntryFlag && onEntryFlag(itemData.entryId, itemType)}*/}
+      {/*          onContentClick={handleContentClick}*/}
+      {/*          onMentionClick={handleMentionClick}*/}
+      {/*          onTagClick={handleTagClick}*/}
+      {/*          navigateTo={navigateTo}*/}
+      {/*          contentClickable={contentClickable}*/}
+      {/*          moderatedContentLabel={t('This content has been moderated')}*/}
+      {/*          ctaLabel={t('See it anyway')}*/}
+      {/*          handleFlipCard={handleFlipCard}*/}
+      {/*          onEntryRemove={onEntryRemove}*/}
+      {/*          removeEntryLabel={removeEntryLabel}*/}
+      {/*          removedByMeLabel={removedByMeLabel}*/}
+      {/*          removedByAuthorLabel={removedByAuthorLabel}*/}
+      {/*          disableReposting={itemData.isRemoved || isComment}*/}
+      {/*          disableReporting={!loggedProfileData?.did?.id}*/}
+      {/*          border={!isComment}*/}
+      {/*          accentBorderTop={accentBorderTop}*/}
+      {/*          actionsRightExt={*/}
+      {/*            !isComment && (*/}
+      {/*              <Extension*/}
+      {/*                name={`entry-card-actions-right_${itemId}`}*/}
+      {/*                uiEvents={uiEvents}*/}
+      {/*                data={{*/}
+      {/*                  itemId,*/}
+      {/*                  itemType,*/}
+      {/*                  hideLabel: itemType === EntityTypes.POST,*/}
+      {/*                }}*/}
+      {/*              />*/}
+      {/*            )*/}
+      {/*          }*/}
+      {/*          headerMenuExt={*/}
+      {/*            showEditButton && (*/}
+      {/*              <Extension*/}
+      {/*                name={`entry-card-edit-button_${itemId}`}*/}
+      {/*                uiEvents={uiEvents}*/}
+      {/*                data={{*/}
+      {/*                  itemId,*/}
+      {/*                  itemType,*/}
+      {/*                  hideLabel: itemType === EntityTypes.POST,*/}
+      {/*                }}*/}
+      {/*              />*/}
+      {/*            )*/}
+      {/*          }*/}
+      {/*        />*/}
 
-              {showReplyFragment && (
-                <Box customStyle={replyPages.length ? `mb-1` : ''} data-testid="reply-fragment">
-                  <FeedWidget
-                    modalSlotId={modalSlotId}
-                    pages={replyPages}
-                    logger={logger}
-                    itemType={EntityTypes.REPLY}
-                    onLoadMore={() => ({})}
-                    viewAllEntry={{
-                      label: 'View all replies',
-                      onClick: () => {
-                        props.navigateTo?.({
-                          appName: '@akashaorg/app-akasha-integration',
-                          getNavigationUrl: navRoutes =>
-                            `${navRoutes.Reply}/${commentData?.entryId}`,
-                        });
-                      },
-                      limit: REPLY_FRAGMENT_SIZE,
-                    }}
-                    navigateTo={navigateTo}
-                    navigateToModal={navigateToModal}
-                    requestStatus={repliesReq.status}
-                    hasNextPage={repliesReq.hasNextPage}
-                    loggedProfileData={loggedProfileData}
-                    contentClickable={true}
-                    onEntryFlag={onEntryFlag}
-                    onEntryRemove={onEntryRemove}
-                    removeEntryLabel={t('Delete Reply')}
-                    removedByMeLabel={t('You deleted this reply')}
-                    removedByAuthorLabel={t('This reply was deleted by its author')}
-                    uiEvents={uiEvents}
-                    itemSpacing={8}
-                    i18n={i18n}
-                    trackEvent={trackEvent}
-                    onLoginModalOpen={onLoginModalOpen}
-                    replyFragmentItem={true}
-                  />
-                </Box>
-              )}
-            </Box>
-          )}
-        </>
-      )}
+      {/*        {showReplyFragment && (*/}
+      {/*          <Box customStyle={replyPages.length ? `mb-1` : ''} data-testid="reply-fragment">*/}
+      {/*            <FeedWidget*/}
+      {/*              modalSlotId={modalSlotId}*/}
+      {/*              pages={replyPages}*/}
+      {/*              logger={logger}*/}
+      {/*              itemType={EntityTypes.REPLY}*/}
+      {/*              onLoadMore={() => ({})}*/}
+      {/*              viewAllEntry={{*/}
+      {/*                label: 'View all replies',*/}
+      {/*                onClick: () => {*/}
+      {/*                  props.navigateTo?.({*/}
+      {/*                    appName: '@akashaorg/app-akasha-integration',*/}
+      {/*                    getNavigationUrl: navRoutes =>*/}
+      {/*                      `${navRoutes.Reply}/${commentData?.entryId}`,*/}
+      {/*                  });*/}
+      {/*                },*/}
+      {/*                limit: REPLY_FRAGMENT_SIZE,*/}
+      {/*              }}*/}
+      {/*              navigateTo={navigateTo}*/}
+      {/*              navigateToModal={navigateToModal}*/}
+      {/*              requestStatus={repliesReq.status}*/}
+      {/*              hasNextPage={repliesReq.hasNextPage}*/}
+      {/*              loggedProfileData={loggedProfileData}*/}
+      {/*              contentClickable={true}*/}
+      {/*              onEntryFlag={onEntryFlag}*/}
+      {/*              onEntryRemove={onEntryRemove}*/}
+      {/*              removeEntryLabel={t('Delete Reply')}*/}
+      {/*              removedByMeLabel={t('You deleted this reply')}*/}
+      {/*              removedByAuthorLabel={t('This reply was deleted by its author')}*/}
+      {/*              uiEvents={uiEvents}*/}
+      {/*              itemSpacing={8}*/}
+      {/*              i18n={i18n}*/}
+      {/*              trackEvent={trackEvent}*/}
+      {/*              onLoginModalOpen={onLoginModalOpen}*/}
+      {/*              replyFragmentItem={true}*/}
+      {/*            />*/}
+      {/*          </Box>*/}
+      {/*        )}*/}
+      {/*      </Box>*/}
+      {/*    )}*/}
+      {/*  </>*/}
+      {/*)}*/}
     </Box>
   );
 };

@@ -17,7 +17,7 @@ import {
   useInfiniteDummy,
 } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import routes, { POST } from '../../routes';
 import { Profile } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -26,6 +26,7 @@ import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
 import { createDummyPosts } from './create-dummy-posts';
+import { GetBeamsQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -71,20 +72,29 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     CREATE_POST_MUTATION_KEY,
   ]);
 
-  const postsReq = useInfiniteDummy('feed_page_get_posts', createDummyPosts(5));
+  const beamsReq = useInfiniteDummy<GetBeamsQuery, GetBeamsQuery['beamIndex']['edges'][0]['node']>(
+    'feed_page_get_posts',
+    createDummyPosts(5),
+    {
+      select: data => ({
+        pages: data.pages.flatMap(page => page.beamIndex.edges.flatMap(edge => edge.node)),
+        pageParams: data.pageParams,
+      }),
+    },
+  );
 
   const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage) {
-      postsReq.fetchNextPage();
+    if (!beamsReq.isLoading && beamsReq.hasNextPage) {
+      beamsReq.fetchNextPage();
     }
-  }, [postsReq]);
+  }, [beamsReq]);
 
   const postPages = React.useMemo(() => {
-    if (postsReq.data) {
-      return postsReq.data.pages;
+    if (beamsReq.data) {
+      return beamsReq.data.pages;
     }
     return [];
-  }, [postsReq.data]);
+  }, [beamsReq.data]);
 
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
@@ -115,9 +125,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   React.useEffect(() => {
-    console.log(postsReq, '<< posts request');
-    console.log(postPages, '<< generated data');
-  }, [postsReq, postPages]);
+    console.log(beamsReq, '<< posts request');
+  }, [beamsReq, postPages]);
 
   return (
     <Box customStyle={'w-full'}>
@@ -206,9 +215,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         navigateToModal={navigateToModal}
         onLoginModalOpen={showLoginModal}
         // @TODO replace with real data source
-        requestStatus={postsReq.status}
+        requestStatus={beamsReq.status}
         // @TODO replace with real data source
-        hasNextPage={postsReq.hasNextPage}
+        hasNextPage={beamsReq.hasNextPage}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
