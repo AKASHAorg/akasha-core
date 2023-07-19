@@ -12,6 +12,9 @@ export default {
   hash: false,
   theme: {
     extend: {
+      fontFamily: {
+        sans: 'Inter, sans-serif',
+      },
       colors: {
         primary: 'linear-gradient(90deg, var(--foundation-primary))',
         primaryStart: withOpacity('--gradient-primary-start'),

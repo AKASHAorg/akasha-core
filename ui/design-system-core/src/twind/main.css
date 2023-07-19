@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+
+  html {
+    font-family: Inter, sans-serif;
+  }
+
   /* Define CSS vars as color channels because want them to work with the opacity modifier syntax
     For more info check https://tailwindcss.com/docs/customizing-colors#using-css-variables
   */
@@ -30,4 +35,5 @@
     --feedback-error-dark: 255 146 113; /* #ff9271 */
     --elevation: 49 50 53; /* #313235 */
   }
+
 }
