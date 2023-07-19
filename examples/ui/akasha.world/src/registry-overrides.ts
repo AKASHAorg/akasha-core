@@ -21,7 +21,7 @@ const overrides = [
   {
     name: '@akashaorg/app-lists',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`/apps/bookmarks/index.js`],
+    sources: [`/apps/lists/index.js`],
     ...missingRequiredFields,
   },
   {

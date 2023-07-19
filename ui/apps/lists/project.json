@@ -1,15 +1,15 @@
 {
   "name": "@akashaorg/app-lists",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "ui/apps/bookmarks/src",
+  "sourceRoot": "ui/apps/lists/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nx/workspace:run-commands",
-      "outputs": ["ui/apps/bookmarks"],
+      "outputs": ["ui/apps/lists"],
       "options": {
         "commands": ["yarn run pack", "yarn postpack"],
-        "cwd": "ui/apps/bookmarks",
+        "cwd": "ui/apps/lists",
         "parallel": false
       }
     },

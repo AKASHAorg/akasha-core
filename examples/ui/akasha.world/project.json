@@ -1,14 +1,14 @@
 {
-  "name": "@akashaorg/ethereum.world",
+  "name": "@akashaorg/akasha.world",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "examples/ui/ethereum.world/src",
+  "sourceRoot": "examples/ui/akasha.world/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nx/workspace:run-commands",
       "options": {
         "commands": ["yarn build"],
-        "cwd": "examples/ui/ethereum.world",
+        "cwd": "examples/ui/akasha.world",
         "parallel": false
       }
     },
@@ -16,7 +16,7 @@
       "executor": "@nx/workspace:run-commands",
       "options": {
         "commands": ["yarn start"],
-        "cwd": "examples/ui/ethereum.world"
+        "cwd": "examples/ui/akasha.world"
       }
     }
   }
