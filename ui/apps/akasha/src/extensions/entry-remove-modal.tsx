@@ -8,7 +8,6 @@ import {
   useDeleteComment,
   withProviders,
   useAnalytics,
-  ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
 import {
   RootExtensionProps,
@@ -111,13 +110,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader
-          type="script-error"
-          title="Error in entry remove modal"
-          details={err.message}
-        />
-      </ThemeWrapper>
+      <ErrorLoader type="script-error" title="Error in entry remove modal" details={err.message} />
     );
   },
 });

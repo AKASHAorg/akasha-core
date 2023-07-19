@@ -58,9 +58,9 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
       path: path.resolve(__dirname, "../ui/build/apps", "app-center")
     };
     yield {
-      package: require("../ui/apps/bookmarks/package.json"),
+      package: require("../ui/apps/lists/package.json"),
       type: TYPE_APP,
-      path: path.resolve(__dirname, "../ui/build/apps", "bookmarks")
+      path: path.resolve(__dirname, "../ui/build/apps", "lists")
     };
     yield {
       package: require("../ui/apps/legal/package.json"),

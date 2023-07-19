@@ -24,7 +24,6 @@ BasicProfileHeader.args = {
 export const BasicProfileHeaderFollowing = Template.bind({});
 BasicProfileHeaderFollowing.args = {
   ...BasicProfileHeader.args,
-  isFollowing: true,
 };
 
 export const BasicProfileHeaderOwnProfile = Template.bind({});

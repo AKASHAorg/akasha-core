@@ -60,22 +60,6 @@
         }
       }
     },
-    "@akashaorg/design-system": {
-      "root": "ui/design",
-      "sourceRoot": "ui/design/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "builder": "@nrwl/workspace:run-commands",
-          "outputPath": "ui/build/design",
-          "options": {
-            "commands": ["yarn run pack"],
-            "cwd": "ui/design",
-            "parallel": false
-          }
-        }
-      }
-    },
     "@akashaorg/ui-awf-hooks": {
       "root": "ui/hooks",
       "sourceRoot": "ui/hooks/src",
@@ -360,23 +344,23 @@
       }
     },
     "@akashaorg/app-lists": {
-      "root": "ui/apps/bookmarks",
-      "sourceRoot": "ui/apps/bookmarks/src",
+      "root": "ui/apps/lists",
+      "sourceRoot": "ui/apps/lists/src",
       "projectType": "application",
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": ["ui/apps/bookmarks"],
+          "outputs": ["ui/apps/lists"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/bookmarks",
+            "cwd": "ui/apps/lists",
             "parallel": false
           }
         },
         "extract:translations": {
           "builder": "./tools/executors/i18n:extract",
           "options": {
-            "cwd": "ui/apps/bookmarks"
+            "cwd": "ui/apps/lists"
           }
         }
       }
@@ -611,16 +595,16 @@
         }
       }
     },
-    "@akashaorg/ethereum.world": {
-      "root": "examples/ui/ethereum.world",
-      "sourceRoot": "examples/ui/ethereum.world/src",
+    "@akashaorg/akasha.world": {
+      "root": "examples/ui/akasha.world",
+      "sourceRoot": "examples/ui/akasha.world/src",
       "projectType": "application",
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
             "commands": ["yarn build"],
-            "cwd": "examples/ui/ethereum.world",
+            "cwd": "examples/ui/akasha.world",
             "parallel": false
           }
         },
@@ -628,7 +612,7 @@
           "builder": "@nrwl/workspace:run-commands",
           "options": {
             "commands": ["yarn start"],
-            "cwd": "examples/ui/ethereum.world"
+            "cwd": "examples/ui/akasha.world"
           }
         }
       }

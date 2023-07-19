@@ -48,8 +48,7 @@
     "@akashaorg/typings": "*",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
-    "@types/react-router-dom": "5.3.3",
-    "@types/styled-components": "5.1.14"
+    "@types/react-router-dom": "5.3.3"
   },
   "peerDependencies": {
     "react": "^18.1.0",

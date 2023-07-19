@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 import { RootExtensionProps } from '@akashaorg/typings/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import { InlineEditor } from './inline-editor';
 
@@ -25,11 +25,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
-    return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />
-      </ThemeWrapper>
-    );
+    return <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />;
   },
 });
 

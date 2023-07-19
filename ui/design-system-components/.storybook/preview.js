@@ -1,6 +1,7 @@
-import '../src/twind/main.css';
+import '@akashaorg/design-system-core/src/twind/main.css';
+import '@akashaorg/design-system-core/src/twind/globals.css';
 import { install } from '@twind/core';
-import twindConfig from '../src/twind/twind.config.js';
+import twindConfig from './twind.config.js';
 
 install(twindConfig);
 

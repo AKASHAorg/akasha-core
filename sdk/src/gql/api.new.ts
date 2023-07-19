@@ -89,6 +89,54 @@ export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
   createdAt
 }
     `;
+export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaAppFragment on AkashaApp {
+  id
+  applicationType
+  description
+  licence
+  name
+  displayName
+  keywords
+  releases {
+    edges {
+      node {
+        id
+        createdAt
+        source
+        version
+      }
+    }
+  }
+  releasessCount
+  author {
+    id
+    isViewer
+    profile {
+      ...UserProfileFragment
+    }
+  }
+  contributors {
+    id
+    isViewer
+    profile {
+      ...UserProfileFragment
+    }
+  }
+}
+    `;
+export const AppReleaseFragmentDoc = /*#__PURE__*/ gql`
+    fragment AppReleaseFragment on AppRelease {
+  application {
+    ...AkashaAppFragment
+  }
+  applicationID
+  id
+  source
+  version
+  createdAt
+}
+    `;
 export const GetBeamsDocument = /*#__PURE__*/ gql`
     query GetBeams($after: String, $before: String, $first: Int, $last: Int) {
   beamIndex(after: $after, before: $before, first: $first, last: $last) {
@@ -448,6 +496,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
       followList(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
+            id
             isFollowing
             profile {
               ...UserProfileFragment
@@ -474,6 +523,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
         followers(after: $after, before: $before, first: $first, last: $last) {
           edges {
             node {
+              id
               isFollowing
               profile {
                 ...UserProfileFragment
@@ -588,6 +638,110 @@ export const UpdateFollowDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
+export const CreateAppDocument = /*#__PURE__*/ gql`
+    mutation CreateApp($i: CreateAkashaAppInput!) {
+  createAkashaApp(input: $i) {
+    document {
+      ...AkashaAppFragment
+    }
+    clientMutationId
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const UpdateAppDocument = /*#__PURE__*/ gql`
+    mutation UpdateApp($i: UpdateAkashaAppInput!) {
+  updateAkashaApp(input: $i) {
+    document {
+      ...AkashaAppFragment
+    }
+    clientMutationId
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetAppsDocument = /*#__PURE__*/ gql`
+    query GetApps($after: String, $before: String, $first: Int, $last: Int) {
+  akashaAppIndex(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        ...AkashaAppFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetAppsByIdDocument = /*#__PURE__*/ gql`
+    query GetAppsByID($id: ID!) {
+  node(id: $id) {
+    ... on AkashaApp {
+      ...AkashaAppFragment
+    }
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const CreateAppReleaseDocument = /*#__PURE__*/ gql`
+    mutation CreateAppRelease($i: CreateAppReleaseInput!) {
+  createAppRelease(input: $i) {
+    document {
+      ...AppReleaseFragment
+    }
+    clientMutationId
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const UpdateAppReleaseDocument = /*#__PURE__*/ gql`
+    mutation UpdateAppRelease($i: UpdateAppReleaseInput!) {
+  updateAppRelease(input: $i) {
+    document {
+      ...AppReleaseFragment
+    }
+    clientMutationId
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetAppsReleasesDocument = /*#__PURE__*/ gql`
+    query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int) {
+  appReleaseIndex(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        ...AppReleaseFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetAppReleaseByIdDocument = /*#__PURE__*/ gql`
+    query GetAppReleaseByID($id: ID!) {
+  node(id: $id) {
+    ... on AppRelease {
+      ...AppReleaseFragment
+    }
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
@@ -683,6 +837,30 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     UpdateFollow(variables: Types.UpdateFollowMutationVariables, options?: C): Promise<Types.UpdateFollowMutation> {
       return requester<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options) as Promise<Types.UpdateFollowMutation>;
+    },
+    CreateApp(variables: Types.CreateAppMutationVariables, options?: C): Promise<Types.CreateAppMutation> {
+      return requester<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables, options) as Promise<Types.CreateAppMutation>;
+    },
+    UpdateApp(variables: Types.UpdateAppMutationVariables, options?: C): Promise<Types.UpdateAppMutation> {
+      return requester<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables, options) as Promise<Types.UpdateAppMutation>;
+    },
+    GetApps(variables?: Types.GetAppsQueryVariables, options?: C): Promise<Types.GetAppsQuery> {
+      return requester<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options) as Promise<Types.GetAppsQuery>;
+    },
+    GetAppsByID(variables: Types.GetAppsByIdQueryVariables, options?: C): Promise<Types.GetAppsByIdQuery> {
+      return requester<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options) as Promise<Types.GetAppsByIdQuery>;
+    },
+    CreateAppRelease(variables: Types.CreateAppReleaseMutationVariables, options?: C): Promise<Types.CreateAppReleaseMutation> {
+      return requester<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options) as Promise<Types.CreateAppReleaseMutation>;
+    },
+    UpdateAppRelease(variables: Types.UpdateAppReleaseMutationVariables, options?: C): Promise<Types.UpdateAppReleaseMutation> {
+      return requester<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options) as Promise<Types.UpdateAppReleaseMutation>;
+    },
+    GetAppsReleases(variables?: Types.GetAppsReleasesQueryVariables, options?: C): Promise<Types.GetAppsReleasesQuery> {
+      return requester<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables, options) as Promise<Types.GetAppsReleasesQuery>;
+    },
+    GetAppReleaseByID(variables: Types.GetAppReleaseByIdQueryVariables, options?: C): Promise<Types.GetAppReleaseByIdQuery> {
+      return requester<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, variables, options) as Promise<Types.GetAppReleaseByIdQuery>;
     }
   };
 }

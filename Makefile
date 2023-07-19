@@ -17,7 +17,7 @@ install:
 build.staging.feed:
 	export NODE_OPTIONS='--max-old-space-size=4096' && \
   export NODE_ENV='production' && \
-	yarn run build:ewa
+	yarn run build:example
 build.staging.feed.static: build build.staging.feed
 build.staging.storybook:
 	yarn run build:storybook
