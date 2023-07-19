@@ -73,7 +73,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
     });
   };
 
@@ -111,7 +111,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
           <FeedWidget
             modalSlotId={layoutConfig.modalSlotId}
-            itemType={EntityTypes.POST}
+            itemType={EntityTypes.BEAM}
             logger={logger}
             onLoadMore={handleLoadMore}
             pages={postPages}

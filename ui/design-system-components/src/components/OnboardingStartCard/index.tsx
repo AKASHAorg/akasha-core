@@ -2,7 +2,7 @@ import * as React from 'react';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { SearchBar } from '../SearchBar';
+import SearchBar from '../SearchBar';
 import { tw } from '@twind/core';
 
 export interface OnboardingStartCardProps {

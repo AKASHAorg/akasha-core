@@ -4,12 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { I18nextProvider } from 'react-i18next';
-import {
-  ThemeWrapper,
-  useAnalytics,
-  withProviders,
-  useIsContactMultiple,
-} from '@akashaorg/ui-awf-hooks';
+import { useAnalytics, withProviders, useIsContactMultiple } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -75,11 +70,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
-    return (
-      <ThemeWrapper {...props}>
-        <Icon type="ExclamationCircleIcon" />
-      </ThemeWrapper>
-    );
+    return <Icon type="ExclamationCircleIcon" />;
   },
 });
 

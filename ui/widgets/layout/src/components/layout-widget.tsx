@@ -145,8 +145,8 @@ const Layout: React.FC<RootComponentProps> = props => {
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = `
-      fixed xl:sticky z-[9999] h-full
-      ${showSidebar ? 'min-w-[100vw] xl:min-w-max' : ''}
+      fixed xl:sticky h-full
+      ${showSidebar ? 'min-w-[100vw] xl:min-w-max z-[99]' : ''}
       ${needSidebarToggling ? 'hidden' : ''}
       `;
 
@@ -183,7 +183,7 @@ const Layout: React.FC<RootComponentProps> = props => {
             </Box>
           </Box>
           <Box customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
-            <Box customStyle="sticky top-0 z-50">
+            <Box customStyle="sticky top-0 z-8">
               <Box customStyle="pt-4 bg(white dark:black) rounded-b-2xl">
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
               </Box>

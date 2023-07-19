@@ -2,27 +2,20 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
+
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import MiniHeader from '../components/mini-header';
 import ArticleCard from '../components/article-card';
 
 import { articles } from '../components/dummy-data';
 
-const { Box } = DS;
-
-export interface IArticlePageProps {
-  className?: string;
-}
-
-const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
-  const { className, plugins } = props;
+const ArticlePage: React.FC<RootComponentProps> = props => {
+  const { plugins } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
-  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
@@ -38,15 +31,6 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
 
   const handleClickIcon = () => {
     navigate(-1);
-  };
-
-  const closeMenuDrop = () => {
-    setMenuDropOpen(false);
-  };
-
-  const toggleMenuDrop = (ev: React.SyntheticEvent) => {
-    ev.stopPropagation();
-    setMenuDropOpen(!menuDropOpen);
   };
 
   const handleDropItemClick = (id: string, action?: 'edit' | 'settings') => () => {
@@ -87,7 +71,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
     /** do something */
   };
 
-  const menutItems = [
+  const menuItems = [
     ...(loggedProfileData?.did?.id === sampleArticleData.authorProfileId
       ? [
           {
@@ -113,14 +97,12 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
   ];
 
   return (
-    <Box gap="small" className={className}>
+    <Box customStyle="gap-2">
       <MiniHeader titleLabel={t('Articles')} onClickIcon={handleClickIcon} />
       <ArticleCard
         articleData={sampleArticleData}
         readTimeLabel={t('min read')}
         copyrightLabel={t('copyrighted article')}
-        menuDropOpen={menuDropOpen}
-        menuItems={menutItems}
         tagsLabel={t('tags')}
         collaboratorsLabel={t('collaborators')}
         mentionsLabel={t('Mentions')}
@@ -128,8 +110,6 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
         isSaved={true}
         saveLabel={t('Save')}
         savedLabel={t('Saved')}
-        toggleMenuDrop={toggleMenuDrop}
-        closeMenuDrop={closeMenuDrop}
         onTagClick={handleTagClick}
         onMentionsClick={handleMentionsClick}
         onRepliesClick={handleRepliesClick}

@@ -55,4 +55,4 @@ SearchBar.defaultProps = {
   inputPlaceholderLabel: 'Search',
 };
 
-export { SearchBar };
+export default SearchBar;

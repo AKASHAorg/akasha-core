@@ -10,7 +10,7 @@ import {
   IContentClickDetails,
 } from '@akashaorg/typings/ui';
 import { Logger } from '@akashaorg/awf-sdk';
-import { ILocale } from '@akashaorg/design-system/src/utils/time';
+import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 

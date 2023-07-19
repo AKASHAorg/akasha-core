@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReplyPage from '../item-page/reply-page';
-import * as extension from '@akashaorg/design-system/lib/utils/extension';
+import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 
 import {
@@ -33,11 +33,7 @@ const MockedInlineEditor = ({ action }) => (
 describe('< ReplyPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <ReplyPage
-        {...genAppProps()}
-        showLoginModal={jest.fn()}
-        loginState={genLoggedInState(true)}
-      />
+      <ReplyPage {...genAppProps()} showLoginModal={jest.fn()} />
     </AnalyticsProvider>
   );
 
@@ -51,7 +47,7 @@ describe('< ReplyPage /> component', () => {
   });
   // @TODO fix after new hooks
   it.skip('should render reply page', async () => {
-    const spiedExtension = jest.spyOn(extension, 'Extension');
+    const spiedExtension = jest.spyOn(Extension, 'default');
 
     when(spiedExtension)
       .calledWith(

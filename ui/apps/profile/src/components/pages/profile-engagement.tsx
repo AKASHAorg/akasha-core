@@ -1,5 +1,6 @@
 import React from 'react';
 import ProfileEngagements from '@akashaorg/design-system-components/lib/components/ProfileEngagements';
+import FollowProfile from '../follow-profile';
 import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, EngagementType } from '@akashaorg/typings/ui';
@@ -9,7 +10,6 @@ import {
   useGetFollowersListByDidQuery,
   useGetFollowingListByDidQuery,
   useGetProfileByDidQuery,
-  useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 type ProfileEngagementsPageProps = {
@@ -44,8 +44,6 @@ const ProfileEngagementsPage: React.FC<
     { select: resp => resp.node },
   );
 
-  const followMutation = useUpdateFollowMutation();
-
   if (
     followersReq.status === 'loading' ||
     followingReq.status === 'loading' ||
@@ -74,14 +72,6 @@ const ProfileEngagementsPage: React.FC<
     });
   };
 
-  const onFollow = (profileId: string) => {
-    followMutation.mutate({ i: { id: profileId, content: { isFollowing: true } } });
-  };
-
-  const onUnfollow = (profileId: string) => {
-    followMutation.mutate({ i: { id: profileId, content: { isFollowing: false } } });
-  };
-
   const onError = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
@@ -102,17 +92,15 @@ const ProfileEngagementsPage: React.FC<
         status: followingReq.status,
         data: following,
       }}
-      followLabel={t('Follow')}
-      unFollowLabel={t('Unfollow')}
-      followingLabel={t('Following')}
       loadingMoreLabel={`${t('Loading more')} ...`}
       profileAnchorLink={'/@akashaorg/app-profile'}
       ownerUserName={profileData.name}
       viewerIsOwner={isViewer}
+      renderFollowElement={profileId => (
+        <FollowProfile profileId={profileId} navigateTo={navigateTo} />
+      )}
       onError={onError}
       onProfileClick={onProfileClick}
-      onFollow={onFollow}
-      onUnfollow={onUnfollow}
       onChange={engagementType => {
         navigateTo?.({
           appName: '@akashaorg/app-profile',

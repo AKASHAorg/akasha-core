@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
-  ThemeWrapper,
   useAnalytics,
   withProviders,
   useIsContactMultiple,
@@ -86,11 +85,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
-    return (
-      <ThemeWrapper {...props}>
-        <Icon type="ExclamationCircleIcon" />
-      </ThemeWrapper>
-    );
+    return <Icon type="ExclamationCircleIcon" />;
   },
 });
 

@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 import App from './app';
 
@@ -16,11 +16,7 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
-    return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in feed widget" details={error.message} />
-      </ThemeWrapper>
-    );
+    return <ErrorLoader type="script-error" title="Error in feed widget" details={error.message} />;
   },
 });
 

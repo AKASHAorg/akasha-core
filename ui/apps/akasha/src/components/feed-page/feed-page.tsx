@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ILocale } from '@akashaorg/design-system/src/utils/time';
+import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import {
   ModalNavigationOptions,
   IPublishData,
@@ -16,8 +16,8 @@ import {
   useDismissedCard,
   useInfiniteDummy,
 } from '@akashaorg/ui-awf-hooks';
-import { Extension } from '@akashaorg/design-system/lib/utils/extension';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
+import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 import { Profile } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -109,7 +109,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryRemove = React.useCallback((itemId: string) => {
     navigateToModal({
       name: 'entry-remove-confirmation',
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
       itemId,
     });
   }, []);
@@ -140,7 +140,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               <Extension
                 name={`inline-editor_repost_${postId}`}
                 uiEvents={uiEvents}
-                data={{ itemId: postId, itemType: EntityTypes.POST, action: 'repost' }}
+                data={{ itemId: postId, itemType: EntityTypes.BEAM, action: 'repost' }}
               />
             ) : (
               <Extension
@@ -206,7 +206,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <FeedWidget
         modalSlotId={layoutConfig.modalSlotId}
         logger={logger}
-        itemType={EntityTypes.POST}
+        itemType={EntityTypes.BEAM}
         // @TODO replace with real data source
         pages={postPages}
         onLoadMore={handleLoadMore}

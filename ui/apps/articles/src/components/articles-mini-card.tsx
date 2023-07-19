@@ -1,12 +1,14 @@
 import React from 'react';
-import { isMobileOnly } from 'react-device-detect';
 
-import DS from '@akashaorg/design-system';
 import { IArticleData } from '@akashaorg/typings/ui';
-import { IMenuItem } from '@akashaorg/design-system/lib/components/MobileListModal';
 
-const { Avatar, Box, CardHeaderMenuDropdown, MainAreaCardBox, Icon, Image, StackedAvatar, Text } =
-  DS;
+import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 
 export interface IArticlesMiniCardProps {
   articleData: IArticleData;
@@ -15,8 +17,6 @@ export interface IArticlesMiniCardProps {
   copyrightLabel?: string;
   lastUpdatedLabel?: string;
   draftLabel?: string;
-  menuDropOpen?: boolean;
-  menuItems?: IMenuItem[];
   collaboratingLabel?: string;
   mentionsLabel?: string;
   repliesLabel?: string;
@@ -27,7 +27,7 @@ export interface IArticlesMiniCardProps {
   toggleMenuDrop?: (ev: React.SyntheticEvent, id?: string) => void;
   closeMenuDrop?: () => void;
   onTagClick?: (name: string) => void;
-  onMentionsClick?: (pubKey: string) => void;
+  onMentionsClick?: () => void;
   onRepliesClick?: () => void;
   onSaveClick?: () => void;
 }
@@ -40,8 +40,6 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
     copyrightLabel,
     lastUpdatedLabel,
     draftLabel,
-    menuDropOpen,
-    menuItems,
     collaboratingLabel,
     mentionsLabel,
     repliesLabel,
@@ -57,157 +55,108 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
     onSaveClick,
   } = props;
 
-  const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
-
-  const showCardMenu = React.useMemo(
-    () => !isMobileOnly && menuItems.length > 0 && menuIconRef.current && menuDropOpen,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [menuDropOpen],
-  );
   // @TODO replace with real data when available
   const loggedProfileId = '0x003410490050000320006570034567114572000';
 
   const isCollaborator = articleData.collaborators?.find(el => el.did?.id === loggedProfileId);
 
   return (
-    <MainAreaCardBox pad="medium" gap="medium">
-      <Box direction="row" justify="between">
-        <Box direction="row" gap="xxsmall" align="center">
+    <BasicCardBox customStyle="p-4 gap-4">
+      <Box customStyle="flex flex-row justify-between">
+        <Box customStyle="flex flex-row gap-0.5 items-center">
           <Avatar
             avatar={articleData.authorAvatar}
             profileId={articleData.authorProfileId}
             size="xs"
-            onClick={() => null}
           />
-          <Text size="large">{articleData.authorName}</Text>
+          <Text variant="h5">{articleData.authorName}</Text>
           {articleData.isPublished && (
             <>
-              <Text size="medium" color="secondaryText">
-                {articleData.publishDate}
-              </Text>
-              <Text
-                size="medium"
-                color="secondaryText"
-              >{`· ${articleData.readTime} ${readTimeLabel}`}</Text>
+              <Text variant="subtitle2">{articleData.publishDate}</Text>
+              <Text variant="subtitle2">{`· ${articleData.readTime} ${readTimeLabel}`}</Text>
               {articleData.isCopyrighted && (
-                <Text size="medium" color="secondaryText">{`· ${copyrightLabel}`}</Text>
+                <Text variant="subtitle2">{`· ${copyrightLabel}`}</Text>
               )}
             </>
           )}
           {articleData.isDraft && (
-            <Text
-              size="medium"
-              color="secondaryText"
-            >{`· ${lastUpdatedLabel} ${articleData.lastUpdateDate}`}</Text>
+            <Text variant="subtitle2">{`· ${lastUpdatedLabel} ${articleData.lastUpdateDate}`}</Text>
           )}
         </Box>
-        <Box direction="row" gap="small" align="center">
+        <Box customStyle="flex-flex-row gap-2 items-center">
           {articleData.isDraft && (
-            <Box
-              round="1rem"
-              pad={{
-                horizontal: 'xsmall',
-                vertical: '1px',
-              }}
-              background="secondaryText"
-            >
+            <Box customStyle="rounded-lg px-1 py-px bg(grey4 dark:grey7)">
               <Text color="white">{draftLabel}</Text>
             </Box>
           )}
           <Icon type="akasha" />
-          <Icon
-            type="moreDark"
-            accentColor={menuDropOpen}
-            style={{ cursor: 'pointer' }}
-            ref={menuIconRef}
-            onClick={ev => toggleMenuDrop(ev, articleData.id)}
-          />
+          <button onClick={ev => toggleMenuDrop(ev, articleData.id)}>
+            <Icon type="EllipsisVerticalIcon" />
+          </button>
         </Box>
-        {showCardMenu && (
-          <CardHeaderMenuDropdown
-            target={menuIconRef.current}
-            onMenuClose={closeMenuDrop}
-            menuItems={menuItems}
-          />
-        )}
       </Box>
-      <Box
-        direction="row"
-        justify="between"
-        align="center"
-        onClick={() => onClickArticle(articleData.id)}
-      >
-        <Box gap="small">
-          <Text size="xlarge" weight="bold">
-            {articleData.title}
-          </Text>
-          <Text size="large">{articleData.subtitle}</Text>
-        </Box>
-        <Box>
-          <Box height="5.1875rem" width="17.25rem" alignSelf="center">
-            <Image fit="contain" src={articleData.image} />
+      <button onClick={() => onClickArticle(articleData.id)}>
+        <Box customStyle="flex flex-row justify-between items-center">
+          <Box customStyle="gap-2">
+            <Text variant="h2">{articleData.title}</Text>
+            <Text variant="h6">{articleData.subtitle}</Text>
+          </Box>
+          <Box>
+            <Box customStyle="h-[5.1875rem] w-[17.25rem] self-center">
+              <Image customStyle="object-contain" src={articleData.image} />
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </button>
       {articleData.isPublished && (
         <>
-          <Box direction="row" wrap={true} gap="xsmall">
+          <Box customStyle="flex flex-row flex-wrap gap-1">
             {articleData.topics.map((tag, idx) => (
-              <Box
-                key={idx}
-                direction="row"
-                round="1rem"
-                gap="xxsmall"
-                margin={{ bottom: 'small' }}
-                pad={{
-                  horizontal: 'xsmall',
-                  vertical: '1.5px',
-                }}
-                background="activePanelBackground"
-                border={{ color: 'accentText' }}
-                style={{ cursor: 'pointer' }}
-                onClick={() => onTagClick(tag)}
-              >
-                <Text color="accentText">{tag}</Text>
-              </Box>
+              <button key={idx} onClick={() => onTagClick(tag)}>
+                <Box customStyle="flex flex-row rounded-lg gap-0.5 mb-2 px-1 py-0.5 border(secondaryLight dark:secondaryDark)">
+                  <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{tag}</Text>
+                </Box>
+              </button>
             ))}
           </Box>
 
-          <Box direction="row" justify="between" align="center">
-            <Box direction="row" gap="xsmall" onClick={onMentionsClick}>
-              <Icon type="reply" />
-              <Text size="large">{articleData.mentions}</Text>
-              <Text size="large">{mentionsLabel}</Text>
-            </Box>
-            <Box direction="row" gap="xsmall" onClick={onRepliesClick}>
-              <Icon type="comments" />
-              <Text size="large">{articleData.replies}</Text>
-              <Text size="large">{repliesLabel}</Text>
-            </Box>
-            <Box direction="row" gap="xsmall" onClick={onSaveClick}>
-              <Icon type="bookmark" />
-              <Text size="large">{isSaved ? savedLabel : saveLabel}</Text>
-            </Box>
+          <Box customStyle="flex flex-row justify-between items-center">
+            <button onClick={onMentionsClick}>
+              <Box customStyle="flex flex-row gap-1">
+                <Icon type="AtSymbolIcon" />
+                <Text variant="h6">{articleData.mentions}</Text>
+                <Text variant="h6">{mentionsLabel}</Text>
+              </Box>
+            </button>
+            <button onClick={onRepliesClick}>
+              <Box customStyle="flex flex-row gap-1">
+                <Icon type="ArrowPathIcon" />
+                <Text variant="h6">{articleData.replies}</Text>
+                <Text variant="h6">{repliesLabel}</Text>
+              </Box>
+            </button>
+            <button onClick={onSaveClick}>
+              <Box customStyle="flex flex-row gap-1" onClick={onSaveClick}>
+                <Icon type="bookmark" />
+                <Text variant="h6">{isSaved ? savedLabel : saveLabel}</Text>
+              </Box>
+            </button>
           </Box>
         </>
       )}
       {activeTabIndex === 1 && articleData.collaborators?.length > 0 && (
-        <Box direction="row" gap="small" align="center">
+        <Box customStyle="flex flex-row gap-2 items-center">
           <StackedAvatar size="md" userData={articleData.collaborators} maxAvatars={4} />
-          <Text size="medium" color="secondaryText">
-            {collaboratingLabel}
-          </Text>
+          <Text variant="subtitle2">{collaboratingLabel}</Text>
         </Box>
       )}
       {activeTabIndex === 2 && isCollaborator && (
-        <Box direction="row" gap="small" align="center">
+        <Box customStyle="flex flex-row gap-2 items-center">
           <Avatar size="md" profileId={loggedProfileId} />
-          <Text size="medium" color="secondaryText">
-            {collaboratingLabel}
-          </Text>
+          <Text variant="subtitle2">{collaboratingLabel}</Text>
         </Box>
       )}
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

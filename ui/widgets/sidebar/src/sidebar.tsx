@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import SidebarComponent from './components/sidebar-component';
@@ -28,9 +28,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in sidebar widget" details={error.message} />
-      </ThemeWrapper>
+      <ErrorLoader type="script-error" title="Error in sidebar widget" details={error.message} />
     );
   },
 });

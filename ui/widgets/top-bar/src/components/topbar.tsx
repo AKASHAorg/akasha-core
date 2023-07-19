@@ -63,7 +63,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   }, []);
 
   const customStyle =
-    'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-50)';
+    'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-8)';
   return (
     <BasicCardBox customStyle={customStyle}>
       <Box customStyle="flex space-x-2">

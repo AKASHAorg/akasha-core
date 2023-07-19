@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { saveAndGetImageObj } from './utils';
+import { saveAndGetImageObj } from './save-and-get-image-obj';
 import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 import { ProfileImageType } from '@akashaorg/typings/ui';
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box } from 'grommet';
-import { ISearchBar, SearchBar } from './index';
+import SearchBar, { ISearchBar } from './index';
 
 export default {
   title: 'Bars/SearchBar',
@@ -19,9 +18,7 @@ const Template = (args: ISearchBar) => {
   };
   return (
     <div>
-      <Box pad="large" align="center">
-        <SearchBar {...args} onInputChange={handleInputChange} inputValue={inputValue} />
-      </Box>
+      <SearchBar {...args} onInputChange={handleInputChange} inputValue={inputValue} />
     </div>
   );
 };
