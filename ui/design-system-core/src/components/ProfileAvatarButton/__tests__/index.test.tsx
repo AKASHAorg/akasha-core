@@ -53,17 +53,17 @@ describe('<ProfileAvatarButton /> Component', () => {
   it('shows info and label', () => {
     const { getByText } = componentWrapper;
 
-    const infoLabel = getByText(info);
+    const profileIdText = getByText(profileId);
     const labelText = getByText(label);
 
-    expect(infoLabel).toBeDefined();
+    expect(profileIdText).toBeDefined();
     expect(labelText).toBeDefined();
   });
 
   it('calls avatar handler', () => {
-    const { getByTitle } = componentWrapper;
+    const { getByRole } = componentWrapper;
 
-    const avatarBox = getByTitle('avatar-box');
+    const avatarBox = getByRole('img', { name: /avatar-box/i });
     expect(avatarBox.childNodes[0]).toBeDefined();
     expect(handleClickAvatar).toBeCalledTimes(0);
 
@@ -73,9 +73,9 @@ describe('<ProfileAvatarButton /> Component', () => {
   });
 
   it('calls info handlers', () => {
-    const { getByTitle } = componentWrapper;
+    const { getByRole } = componentWrapper;
 
-    const infoBox = getByTitle('info-box');
+    const infoBox = getByRole('listitem', { name: /info-box/i });
     expect(infoBox).toBeDefined();
     expect(handleClick).toBeCalledTimes(0);
     expect(handleMouseEnter).toBeCalledTimes(0);
