@@ -76,6 +76,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     });
     toggleTagSubscriptionReq.mutate(topic);
   };
+
   const handleTopicUnSubscribe = (topic: string) => {
     if (!loginQuery.data?.ethAddress) {
       showLoginModal();
@@ -88,15 +89,15 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     toggleTagSubscriptionReq.mutate(topic);
   };
 
-  const handleProfileClick = (pubKey: string) => {
+  const handleProfileClick = (did: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${did}`,
     });
   };
 
   const handleFollowProfile = (did: string) => {
-    if (!loginQuery.data?.ethAddress) {
+    if (!loginQuery.data?.id) {
       showLoginModal();
       return;
     }
@@ -110,7 +111,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleUnfollowProfile = (did: string) => {
-    if (!loginQuery.data?.ethAddress) {
+    if (!loginQuery.data?.id) {
       showLoginModal();
       return;
     }
