@@ -60,9 +60,16 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
-  const [generalValid, setGeneralValid] = useState(true);
-  const [socialLinksValid, setSocialLinksValid] = useState(true);
-  const [interestsValid, setInterestsValid] = useState(true);
+
+  // dirty state for tabs
+  const [isGeneralFormDirty, setGeneralFormDirty] = useState(false);
+  const [isSocialLinksDirty, setSocialLinksDirty] = useState(false);
+  const [isInterestsListDirty, setInterestsListDirty] = useState(false);
+
+  // valid states for tabs
+  const [, setGeneralValid] = useState(true);
+  const [, setSocialLinksValid] = useState(true);
+  const [, setInterestsValid] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
@@ -144,12 +151,18 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   );
 
   const onTabChange = (selectedIndex: number, previousIndex: number) => {
+    const matcher =
+      (previousIndex === 0 && !isGeneralFormDirty) ||
+      (previousIndex === 1 && !isSocialLinksDirty) ||
+      (previousIndex === 2 && !isInterestsListDirty);
+
     if (selectedIndex != previousIndex) {
-      //check if one of the forms has invalid state
-      if (!generalValid || !socialLinksValid || !interestsValid) {
+      if (matcher) {
+        setShowModal(false);
+        setSelectedActiveTab(selectedIndex);
+      } else {
         setShowModal(true);
         setSelectedActiveTab(selectedIndex);
-        return;
       }
       setActiveTab(selectedIndex);
     }
@@ -215,7 +228,20 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             value={activeTab}
             onChange={onTabChange}
           >
+            {/* general form tab */}
             <GeneralForm
+              defaultValues={
+                profileData
+                  ? {
+                      avatar: null,
+                      coverImage: null,
+                      name: profileData.name,
+                      bio: profileData.description,
+                      ens: '',
+                      userName: '',
+                    }
+                  : undefined
+              }
               header={{
                 title: t('Avatar & Cover Image'),
                 coverImage: background,
@@ -296,9 +322,12 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   updateGeneralForm(formValues, getProfileImageVersions(avatarImage, coverImage));
                 },
               }}
+              onFormDirty={setGeneralFormDirty}
               onFormValid={setGeneralValid}
               customStyle="h-full"
             />
+
+            {/* social links / external urls tab */}
             <SocialLinks
               title={t('External URLs')}
               addNewButtonLabel={t('Add new')}
@@ -331,9 +360,12 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 },
               }}
               onDelete={() => ({})}
+              onFormDirty={setSocialLinksDirty}
               onFormValid={setSocialLinksValid}
               customStyle="h-full"
             />
+
+            {/* interests tab */}
             {/*@TODO: Create loading and error states for interests list */}
             {
               <Interests
@@ -362,6 +394,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                     //@TODO
                   },
                 }}
+                onFormDirty={setInterestsListDirty}
                 onFormValid={setInterestsValid}
                 customStyle="h-full"
               />
@@ -369,6 +402,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
           </Tab>
         </Stack>
       </Card>
+
       <Modal
         title={{ label: t('Unsaved Changes') }}
         show={showModal}
