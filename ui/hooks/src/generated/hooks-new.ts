@@ -102,6 +102,54 @@ export const UserProfileFragmentDoc = /*#__PURE__*/ `
   createdAt
 }
     `;
+export const AkashaAppFragmentDoc = /*#__PURE__*/ `
+    fragment AkashaAppFragment on AkashaApp {
+  id
+  applicationType
+  description
+  licence
+  name
+  displayName
+  keywords
+  releases {
+    edges {
+      node {
+        id
+        createdAt
+        source
+        version
+      }
+    }
+  }
+  releasessCount
+  author {
+    id
+    isViewer
+    profile {
+      ...UserProfileFragment
+    }
+  }
+  contributors {
+    id
+    isViewer
+    profile {
+      ...UserProfileFragment
+    }
+  }
+}
+    `;
+export const AppReleaseFragmentDoc = /*#__PURE__*/ `
+    fragment AppReleaseFragment on AppRelease {
+  application {
+    ...AkashaAppFragment
+  }
+  applicationID
+  id
+  source
+  version
+  createdAt
+}
+    `;
 export const GetBeamsDocument = /*#__PURE__*/ `
     query GetBeams($after: String, $before: String, $first: Int, $last: Int) {
   beamIndex(after: $after, before: $before, first: $first, last: $last) {
@@ -1417,3 +1465,307 @@ export const useUpdateFollowMutation = <
 useUpdateFollowMutation.getKey = () => ['UpdateFollow'];
 
 useUpdateFollowMutation.fetcher = (variables: Types.UpdateFollowMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options);
+export const CreateAppDocument = /*#__PURE__*/ `
+    mutation CreateApp($i: CreateAkashaAppInput!) {
+  createAkashaApp(input: $i) {
+    document {
+      ...AkashaAppFragment
+    }
+    clientMutationId
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useCreateAppMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.CreateAppMutation, TError, Types.CreateAppMutationVariables, TContext>) =>
+    useMutation<Types.CreateAppMutation, TError, Types.CreateAppMutationVariables, TContext>(
+      ['CreateApp'],
+      (variables?: Types.CreateAppMutationVariables) => fetcher<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables)(),
+      options
+    );
+useCreateAppMutation.getKey = () => ['CreateApp'];
+
+useCreateAppMutation.fetcher = (variables: Types.CreateAppMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables, options);
+export const UpdateAppDocument = /*#__PURE__*/ `
+    mutation UpdateApp($i: UpdateAkashaAppInput!) {
+  updateAkashaApp(input: $i) {
+    document {
+      ...AkashaAppFragment
+    }
+    clientMutationId
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useUpdateAppMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.UpdateAppMutation, TError, Types.UpdateAppMutationVariables, TContext>) =>
+    useMutation<Types.UpdateAppMutation, TError, Types.UpdateAppMutationVariables, TContext>(
+      ['UpdateApp'],
+      (variables?: Types.UpdateAppMutationVariables) => fetcher<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables)(),
+      options
+    );
+useUpdateAppMutation.getKey = () => ['UpdateApp'];
+
+useUpdateAppMutation.fetcher = (variables: Types.UpdateAppMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables, options);
+export const GetAppsDocument = /*#__PURE__*/ `
+    query GetApps($after: String, $before: String, $first: Int, $last: Int) {
+  akashaAppIndex(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        ...AkashaAppFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useGetAppsQuery = <
+      TData = Types.GetAppsQuery,
+      TError = unknown
+    >(
+      variables?: Types.GetAppsQueryVariables,
+      options?: UseQueryOptions<Types.GetAppsQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetAppsQuery, TError, TData>(
+      variables === undefined ? ['GetApps'] : ['GetApps', variables],
+      fetcher<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables),
+      options
+    );
+useGetAppsQuery.document = GetAppsDocument;
+
+
+useGetAppsQuery.getKey = (variables?: Types.GetAppsQueryVariables) => variables === undefined ? ['GetApps'] : ['GetApps', variables];
+;
+
+export const useInfiniteGetAppsQuery = <
+      TData = Types.GetAppsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetAppsQueryVariables,
+      variables?: Types.GetAppsQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetAppsQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetAppsQuery, TError, TData>(
+      variables === undefined ? ['GetApps.infinite'] : ['GetApps.infinite', variables],
+      (metaData) => fetcher<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetAppsQuery.getKey = (variables?: Types.GetAppsQueryVariables) => variables === undefined ? ['GetApps.infinite'] : ['GetApps.infinite', variables];
+;
+
+useGetAppsQuery.fetcher = (variables?: Types.GetAppsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options);
+export const GetAppsByIdDocument = /*#__PURE__*/ `
+    query GetAppsByID($id: ID!) {
+  node(id: $id) {
+    ... on AkashaApp {
+      ...AkashaAppFragment
+    }
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useGetAppsByIdQuery = <
+      TData = Types.GetAppsByIdQuery,
+      TError = unknown
+    >(
+      variables: Types.GetAppsByIdQueryVariables,
+      options?: UseQueryOptions<Types.GetAppsByIdQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetAppsByIdQuery, TError, TData>(
+      ['GetAppsByID', variables],
+      fetcher<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables),
+      options
+    );
+useGetAppsByIdQuery.document = GetAppsByIdDocument;
+
+
+useGetAppsByIdQuery.getKey = (variables: Types.GetAppsByIdQueryVariables) => ['GetAppsByID', variables];
+;
+
+export const useInfiniteGetAppsByIdQuery = <
+      TData = Types.GetAppsByIdQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetAppsByIdQueryVariables,
+      variables: Types.GetAppsByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetAppsByIdQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetAppsByIdQuery, TError, TData>(
+      ['GetAppsByID.infinite', variables],
+      (metaData) => fetcher<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetAppsByIdQuery.getKey = (variables: Types.GetAppsByIdQueryVariables) => ['GetAppsByID.infinite', variables];
+;
+
+useGetAppsByIdQuery.fetcher = (variables: Types.GetAppsByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options);
+export const CreateAppReleaseDocument = /*#__PURE__*/ `
+    mutation CreateAppRelease($i: CreateAppReleaseInput!) {
+  createAppRelease(input: $i) {
+    document {
+      ...AppReleaseFragment
+    }
+    clientMutationId
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useCreateAppReleaseMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.CreateAppReleaseMutation, TError, Types.CreateAppReleaseMutationVariables, TContext>) =>
+    useMutation<Types.CreateAppReleaseMutation, TError, Types.CreateAppReleaseMutationVariables, TContext>(
+      ['CreateAppRelease'],
+      (variables?: Types.CreateAppReleaseMutationVariables) => fetcher<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables)(),
+      options
+    );
+useCreateAppReleaseMutation.getKey = () => ['CreateAppRelease'];
+
+useCreateAppReleaseMutation.fetcher = (variables: Types.CreateAppReleaseMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options);
+export const UpdateAppReleaseDocument = /*#__PURE__*/ `
+    mutation UpdateAppRelease($i: UpdateAppReleaseInput!) {
+  updateAppRelease(input: $i) {
+    document {
+      ...AppReleaseFragment
+    }
+    clientMutationId
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useUpdateAppReleaseMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.UpdateAppReleaseMutation, TError, Types.UpdateAppReleaseMutationVariables, TContext>) =>
+    useMutation<Types.UpdateAppReleaseMutation, TError, Types.UpdateAppReleaseMutationVariables, TContext>(
+      ['UpdateAppRelease'],
+      (variables?: Types.UpdateAppReleaseMutationVariables) => fetcher<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables)(),
+      options
+    );
+useUpdateAppReleaseMutation.getKey = () => ['UpdateAppRelease'];
+
+useUpdateAppReleaseMutation.fetcher = (variables: Types.UpdateAppReleaseMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options);
+export const GetAppsReleasesDocument = /*#__PURE__*/ `
+    query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int) {
+  appReleaseIndex(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        ...AppReleaseFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useGetAppsReleasesQuery = <
+      TData = Types.GetAppsReleasesQuery,
+      TError = unknown
+    >(
+      variables?: Types.GetAppsReleasesQueryVariables,
+      options?: UseQueryOptions<Types.GetAppsReleasesQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetAppsReleasesQuery, TError, TData>(
+      variables === undefined ? ['GetAppsReleases'] : ['GetAppsReleases', variables],
+      fetcher<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables),
+      options
+    );
+useGetAppsReleasesQuery.document = GetAppsReleasesDocument;
+
+
+useGetAppsReleasesQuery.getKey = (variables?: Types.GetAppsReleasesQueryVariables) => variables === undefined ? ['GetAppsReleases'] : ['GetAppsReleases', variables];
+;
+
+export const useInfiniteGetAppsReleasesQuery = <
+      TData = Types.GetAppsReleasesQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetAppsReleasesQueryVariables,
+      variables?: Types.GetAppsReleasesQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetAppsReleasesQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetAppsReleasesQuery, TError, TData>(
+      variables === undefined ? ['GetAppsReleases.infinite'] : ['GetAppsReleases.infinite', variables],
+      (metaData) => fetcher<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetAppsReleasesQuery.getKey = (variables?: Types.GetAppsReleasesQueryVariables) => variables === undefined ? ['GetAppsReleases.infinite'] : ['GetAppsReleases.infinite', variables];
+;
+
+useGetAppsReleasesQuery.fetcher = (variables?: Types.GetAppsReleasesQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables, options);
+export const GetAppReleaseByIdDocument = /*#__PURE__*/ `
+    query GetAppReleaseByID($id: ID!) {
+  node(id: $id) {
+    ... on AppRelease {
+      ...AppReleaseFragment
+    }
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const useGetAppReleaseByIdQuery = <
+      TData = Types.GetAppReleaseByIdQuery,
+      TError = unknown
+    >(
+      variables: Types.GetAppReleaseByIdQueryVariables,
+      options?: UseQueryOptions<Types.GetAppReleaseByIdQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetAppReleaseByIdQuery, TError, TData>(
+      ['GetAppReleaseByID', variables],
+      fetcher<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, variables),
+      options
+    );
+useGetAppReleaseByIdQuery.document = GetAppReleaseByIdDocument;
+
+
+useGetAppReleaseByIdQuery.getKey = (variables: Types.GetAppReleaseByIdQueryVariables) => ['GetAppReleaseByID', variables];
+;
+
+export const useInfiniteGetAppReleaseByIdQuery = <
+      TData = Types.GetAppReleaseByIdQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetAppReleaseByIdQueryVariables,
+      variables: Types.GetAppReleaseByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetAppReleaseByIdQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetAppReleaseByIdQuery, TError, TData>(
+      ['GetAppReleaseByID.infinite', variables],
+      (metaData) => fetcher<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetAppReleaseByIdQuery.getKey = (variables: Types.GetAppReleaseByIdQueryVariables) => ['GetAppReleaseByID.infinite', variables];
+;
+
+useGetAppReleaseByIdQuery.fetcher = (variables: Types.GetAppReleaseByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, variables, options);

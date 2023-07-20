@@ -1,9 +1,0 @@
-import { CustomEditor, CustomElement, CustomText } from '@akashaorg/typings/ui';
-
-declare module 'slate' {
-  interface CustomTypes {
-    Editor: CustomEditor;
-    Element: CustomElement;
-    Text: CustomText;
-  }
-}

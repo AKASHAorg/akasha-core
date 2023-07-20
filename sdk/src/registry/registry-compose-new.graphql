@@ -1,0 +1,130 @@
+fragment AkashaAppFragment on AkashaApp{
+  id
+  applicationType
+  description
+  licence
+  name
+  displayName
+  keywords
+  releases{
+    edges {
+      node {
+        id
+        createdAt
+        source
+        version
+      }
+    }
+  }
+  releasessCount
+  author {
+    id
+    isViewer
+    profile {
+     ...UserProfileFragment
+    }
+  }
+  contributors {
+    id
+    isViewer
+    profile {
+      ...UserProfileFragment
+    }
+  }
+}
+
+fragment AppReleaseFragment on AppRelease{
+  application {
+    ...AkashaAppFragment
+  }
+  applicationID
+  id
+  source
+  version
+  createdAt
+}
+
+mutation CreateApp($i: CreateAkashaAppInput!){
+  createAkashaApp(input: $i){
+    document {
+      ...AkashaAppFragment
+    }
+    clientMutationId
+  }
+}
+
+mutation UpdateApp($i: UpdateAkashaAppInput!){
+  updateAkashaApp(input: $i){
+    document {
+      ...AkashaAppFragment
+    }
+    clientMutationId
+  }
+}
+
+query GetApps($after: String, $before: String, $first: Int, $last: Int){
+  akashaAppIndex(after: $after, before: $before, first: $first, last: $last ){
+    edges {
+      node {
+        ...AkashaAppFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
+query GetAppsByID($id: ID!) {
+  node(id: $id) {
+    ...on AkashaApp {
+      ...AkashaAppFragment
+    }
+  }
+}
+
+mutation CreateAppRelease($i: CreateAppReleaseInput!){
+  createAppRelease(input: $i){
+    document {
+      ...AppReleaseFragment
+    }
+    clientMutationId
+  }
+}
+
+
+mutation UpdateAppRelease($i: UpdateAppReleaseInput!){
+  updateAppRelease(input: $i){
+    document {
+      ...AppReleaseFragment
+    }
+    clientMutationId
+  }
+}
+
+query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int){
+  appReleaseIndex(after: $after, before: $before, first: $first, last: $last ){
+    edges {
+      node {
+        ...AppReleaseFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
+query GetAppReleaseByID($id: ID!) {
+  node(id: $id) {
+    ...on AppRelease {
+      ...AppReleaseFragment
+    }
+  }
+}

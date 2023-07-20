@@ -44,7 +44,7 @@
     { "path": "./ui/widgets/trending" },
     { "path": "./ui/widgets/analytics" },
     { "path": "./ui/apps/akasha-verse" },
-    { "path": "./ui/apps/bookmarks" },
+    { "path": "./ui/apps/lists" },
     { "path": "./ui/apps/legal" },
     { "path": "./ui/apps/notifications" },
     { "path": "./ui/apps/profile" },
