@@ -10,6 +10,7 @@ import { IEntryData, IPublishData, ModerationStatus } from '@akashaorg/typings/u
 
 import { getMediaUrl } from './media-utils';
 import { Profile } from '@akashaorg/typings/ui';
+import { GetBeamsQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';
@@ -103,10 +104,7 @@ export const mapEntry = (
         Partial<ModerationStatus> & {
           author: Omit<UserProfile, '_id'> & Partial<ModerationStatus>;
         })
-    | (Omit<GetEntryQuery['getPost'], 'author'> &
-        Partial<ModerationStatus> & {
-          author: Omit<UserProfile, '_id'> & Partial<ModerationStatus>;
-        }),
+    | GetBeamsQuery['beamIndex']['edges'][0]['node'],
   logger?: Logger,
 ) => {
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
@@ -254,23 +252,20 @@ export const mapEntry = (
     ...entry,
     author: {
       ...entry.author,
-      avatar: {
-        url: getMediaUrl(entry.author.avatar)?.originLink,
-        fallbackUrl: getMediaUrl(entry.author.avatar)?.fallbackLink,
-      },
-      coverImage: {
-        url: getMediaUrl(entry.author.coverImage)?.originLink,
-        fallbackUrl: getMediaUrl(entry.author.coverImage)?.fallbackLink,
-      },
+      // avatar: {
+      //   url: getMediaUrl(entry.author.avatar)?.originLink,
+      //   fallbackUrl: getMediaUrl(entry.author.avatar)?.fallbackLink,
+      // },
+      // coverImage: {
+      //   url: getMediaUrl(entry.author.coverImage)?.originLink,
+      //   fallbackUrl: getMediaUrl(entry.author.coverImage)?.fallbackLink,
+      // },
     },
     isRemoved,
     slateContent: content,
     linkPreview,
     images,
     quote: quotedEntry,
-    entryId: entry._id,
-    time: entry.creationDate,
-    updatedAt: entry.updatedAt,
     reposts: entry['quotedBy']?.length,
     // ipfsLink: entry._id,
     replies: totalComments,

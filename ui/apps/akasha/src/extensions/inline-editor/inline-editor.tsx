@@ -22,7 +22,7 @@ export const InlineEditor = (
   /*PostEditor handles reply to a post, repost, and editing a post*/
   if (
     action === 'post' ||
-    (itemType === EntityTypes.POST &&
+    (itemType === EntityTypes.BEAM &&
       itemId &&
       (action === 'repost' || action === 'edit' || action === 'reply'))
   ) {

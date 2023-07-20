@@ -24,9 +24,9 @@ import { usePost, useComment, mapEntry, useDummyQuery } from '@akashaorg/ui-awf-
 
 import FeedWidget from './app';
 import { Profile, IContentClickDetails } from '@akashaorg/typings/ui';
-import { EntryGetterProps } from '@akashaorg/design-system-components/lib/components/EntryList';
+import { CardListProps } from '@akashaorg/design-system-components/lib/components/EntryList';
 
-export type EntryRendererProps = EntryGetterProps & {
+export type EntryRendererProps = CardListProps & {
   sharePostUrl: string;
   locale: ILocale;
   style?: React.CSSProperties;
@@ -65,7 +65,6 @@ const REPLY_FRAGMENT_SIZE = 2;
 const EntryRenderer = (props: EntryRendererProps) => {
   const {
     locale,
-    entryData,
     itemType,
     style,
     onEntryFlag,
@@ -80,7 +79,6 @@ const EntryRenderer = (props: EntryRendererProps) => {
     replyFragmentItem,
     uiEvents,
     showReplyFragment,
-    entryIndex,
     totalEntryCount,
     className,
     onEntryRemove,
@@ -122,12 +120,12 @@ const EntryRenderer = (props: EntryRendererProps) => {
   //   return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
   // }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
 
-  const handleAvatarClick = () => {
-    navigateTo?.({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${entryData?.author.did.id}`,
-    });
-  };
+  // const handleAvatarClick = () => {
+  //   navigateTo?.({
+  //     appName: '@akashaorg/app-profile',
+  //     getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${entryData?.author.did.id}`,
+  //   });
+  // };
 
   const handleContentClick = (details: IContentClickDetails) => {
     onEntryNavigate(details, itemType);
@@ -152,8 +150,8 @@ const EntryRenderer = (props: EntryRendererProps) => {
 
   const itemTypeName = React.useMemo(() => {
     switch (itemType) {
-      case EntityTypes.POST:
-        return t('post');
+      case EntityTypes.BEAM:
+        return t('beam');
       case EntityTypes.PROFILE:
         return t('account');
       case EntityTypes.REPLY:
@@ -166,10 +164,10 @@ const EntryRenderer = (props: EntryRendererProps) => {
   }, [t, itemType]);
 
   // @TODO fix author
-  const showEditButton = React.useMemo(
-    () => false, //loggedProfileData?.did.id === itemData?.author?.did.id,
-    [entryData?.author.did.id, loggedProfileData],
-  );
+  // const showEditButton = React.useMemo(
+  //   () => false, //loggedProfileData?.did.id === itemData?.author?.did.id,
+  //   [entryData?.author.did.id, loggedProfileData],
+  // );
 
   const isComment = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
 
@@ -189,15 +187,15 @@ const EntryRenderer = (props: EntryRendererProps) => {
   //   return [];
   // }, [repliesReq.data]);
 
-  const entryCardStyle = React.useMemo(() => {
-    if (!isComment) return '';
-
-    if (replyFragmentItem) return;
-    `ml-6 border-l-1 border(grey8 dark:grey3)`;
-
-    if (entryIndex !== totalEntryCount) return;
-    `border-b-1 border(grey8 dark:grey3)`;
-  }, [entryIndex, totalEntryCount, isComment, replyFragmentItem]);
+  // const entryCardStyle = React.useMemo(() => {
+  //   if (!isComment) return '';
+  //
+  //   if (replyFragmentItem) return;
+  //   `ml-6 border-l-1 border(grey8 dark:grey3)`;
+  //
+  //   if (entryIndex !== totalEntryCount) return;
+  //   `border-b-1 border(grey8 dark:grey3)`;
+  // }, [entryIndex, totalEntryCount, isComment, replyFragmentItem]);
 
   // const hasItemSpacingStyle = React.useMemo(
   //   () => itemSpacing && (entryLoading || canShowEntry),

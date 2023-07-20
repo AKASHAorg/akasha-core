@@ -153,7 +153,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const handleContentClick = (data?: IEntryData) => {
     if (typeof onContentClick === 'function' && !disableActions && contentClickable && data) {
       const replyTo = data.postId ? { itemId: data.postId } : null;
-      const itemType = replyTo ? EntityTypes.REPLY : EntityTypes.POST;
+      const itemType = replyTo ? EntityTypes.REPLY : EntityTypes.BEAM;
       onContentClick(
         {
           authorId: data.author.did.id,

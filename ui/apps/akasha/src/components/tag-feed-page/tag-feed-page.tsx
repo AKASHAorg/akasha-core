@@ -9,6 +9,7 @@ import {
   EntityTypes,
   ModalNavigationOptions,
   Profile,
+  IContentClickDetails,
 } from '@akashaorg/typings/ui';
 import {
   useTagSubscriptions,
@@ -85,6 +86,9 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
+  const handleRebeam = (withComment: boolean, beamId: string) => {};
+  const handleBeamNavigate = (details: IContentClickDetails, contentType: EntityTypes) => {};
+
   return (
     <Box customStyle="w-full">
       <Helmet.Helmet>
@@ -124,12 +128,11 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             contentClickable={true}
             onEntryRemove={handleEntryRemove}
             onEntryFlag={handleEntryFlag}
-            removeEntryLabel={t('Delete Post')}
-            removedByMeLabel={t('You deleted this post')}
-            removedByAuthorLabel={t('This post was deleted by its author')}
             uiEvents={uiEvents}
             itemSpacing={8}
             i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+            onRebeam={handleRebeam}
+            onBeamNavigate={handleBeamNavigate}
           />
         </>
       )}

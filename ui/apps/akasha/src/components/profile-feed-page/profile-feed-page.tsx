@@ -5,7 +5,12 @@ import { useParams } from 'react-router-dom';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { useInfinitePostsByAuthor, useGetProfile } from '@akashaorg/ui-awf-hooks';
-import type { RootComponentProps, Profile, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import type {
+  RootComponentProps,
+  Profile,
+  ModalNavigationOptions,
+  IContentClickDetails,
+} from '@akashaorg/typings/ui';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
@@ -75,9 +80,12 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
     });
   };
+
+  const handleRebeam = (withComment: boolean, beamId: string) => {};
+  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {};
 
   return (
     <Box customStyle="w-full">
@@ -100,7 +108,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
         {reqPosts.isSuccess && postPages && (
           <FeedWidget
             modalSlotId={layoutConfig.modalSlotId}
-            itemType={EntityTypes.POST}
+            itemType={EntityTypes.BEAM}
             logger={logger}
             onLoadMore={handleLoadMore}
             pages={postPages}
@@ -113,13 +121,11 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
             contentClickable={true}
             onEntryFlag={handleEntryFlag}
             onEntryRemove={handleEntryRemove}
-            removeEntryLabel={t('Delete Post')}
-            removedByMeLabel={t('You deleted this post')}
-            removedByAuthorLabel={t('This post was deleted by its author')}
-            parentIsProfilePage={true}
             uiEvents={uiEvents}
             itemSpacing={8}
             i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+            onRebeam={handleRebeam}
+            onBeamNavigate={handleBeamNavigate}
           />
         )}
       </>

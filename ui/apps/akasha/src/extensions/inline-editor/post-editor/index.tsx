@@ -34,10 +34,10 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
   const [analyticsActions] = useAnalytics();
 
   // @TODO replace with new hooks
-  const post = usePost({
-    postId,
-    enabler: action !== 'post',
-  });
+  // const post = usePost({
+  //   postId,
+  //   enabler: action !== 'post',
+  // });
   const editPost = useEditPost();
   const publishPost = useCreatePost();
   const publishComment = useCreateComment();
@@ -58,24 +58,29 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
   const draftPostData = canSaveDraft ? postDraft.get() : null;
   const draftRepostData = canSaveDraft ? repostDraft.get() : null;
 
-  const entryData = React.useMemo(() => {
-    if (post.status === 'success') {
-      return mapEntry(post.data);
-    }
-    return undefined;
-  }, [post.data, post.status]);
+  const entryData = React.useMemo(
+    () => {
+      // if (post.status === 'success') {
+      //   return mapEntry(post.data);
+      // }
+      return undefined;
+    },
+    [
+      /*post.data, post.status*/
+    ],
+  );
 
   const embedEntryData = React.useMemo(() => {
     if (entryData && action === 'repost') {
       return entryData;
     }
     if (action === 'repost' || action === 'edit') {
-      if (post.data?.quotes.length) {
-        return mapEntry(post.data?.quotes[0]);
-      }
+      // if (post.data?.quotes.length) {
+      //   return mapEntry(post.data?.quotes[0]);
+      // }
     }
     return undefined;
-  }, [action, entryData, post.data?.quotes]);
+  }, [action, entryData /*post.data?.quotes*/]);
 
   const [editorState, setEditorState] = React.useState(
     action === 'edit' ? entryData?.slateContent : draftPostData,
@@ -158,15 +163,24 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
-  if (post.error) return <>Error loading {action === 'repost' && 'embedded'} post</>;
+  // if (post.error) return <>Error loading {action === 'repost' && 'embedded'} post</>;
+  //
+  // if (post.status === 'loading') return <EntryCardLoading />;
 
-  if (post.status === 'loading') return <EntryCardLoading />;
+  const postLabelAction = React.useMemo(() => {
+    switch (action) {
+      case 'edit':
+        return t('Save Changes');
+      case 'reply':
+        return t('Reply');
+      default:
+        return t('Publish');
+    }
+  }, [action]);
 
   return (
     <Base
-      postLabel={
-        action === 'edit' ? t('Save Changes') : action === 'reply' ? t('Reply') : t('Publish')
-      }
+      postLabel={postLabelAction}
       placeholderLabel={
         action === 'reply' ? `${t('Reply to')} ${entryAuthorName || ''}` : t('Share your thoughts')
       }

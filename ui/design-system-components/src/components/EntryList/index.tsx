@@ -5,19 +5,20 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { elementScroll, useWindowVirtualizer } from '@tanstack/react-virtual';
+import { elementScroll, useWindowVirtualizer, VirtualItem } from '@tanstack/react-virtual';
 import { IEntryData } from '@akashaorg/typings/ui';
 
-export type EntryGetterProps = {
-  entryData: IEntryData;
-  entryIndex: number;
+export type CardListProps = {
+  items: VirtualItem[];
+  allEntries: IEntryData[];
   itemSpacing?: number;
-  totalEntryCount: number;
+  measureElementRef: (node: Element) => void;
+  isFetchingNextPage?: boolean;
 };
 
 export type EntryListProps = {
   pages: Record<string, any>[];
-  children?: (props: EntryGetterProps) => React.ReactElement;
+  children?: (props: CardListProps) => React.ReactElement[];
   onLoadMore: () => void;
   itemSpacing?: number;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';
@@ -30,7 +31,7 @@ function easeInOutQuint(t) {
   return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
 }
 
-const EntryList = (props: EntryListProps) => {
+const EntryList: React.FC<EntryListProps> = props => {
   const {
     pages,
     itemSpacing = 0,
@@ -40,6 +41,7 @@ const EntryList = (props: EntryListProps) => {
     hasNextPage,
     isFetchingNextPage,
     requestStatus,
+    children,
   } = props;
   const [hideScrollTop, setHideScrollTop] = React.useState(true);
   const rootElementRef = React.useRef<HTMLDivElement>();
@@ -144,29 +146,12 @@ const EntryList = (props: EntryListProps) => {
             transform: `translateY(${items[0].start - virtualizer.options.scrollMargin}px)`,
           }}
         >
-          {items.map(vItem => {
-            const { key, index } = vItem;
-            const item = allEntries[index];
-            const isLoader = index > allEntries.length - 1;
-            const Card = props.children?.({
-              entryData: item,
-              entryIndex: index,
-              itemSpacing,
-              totalEntryCount: allEntries.length,
-            });
-            return (
-              <div key={key} data-index={index} ref={virtualizer.measureElement}>
-                <div>
-                  {(isLoader || isFetchingNextPage) && (
-                    <Box customStyle="p-8 w-full">
-                      <Spinner />
-                    </Box>
-                  )}
-                  {!isLoader && Card && <>{Card}</>}
-                  {!Card && <>Nothing to render, children props missing in EntryList</>}
-                </div>
-              </div>
-            );
+          {props.children({
+            items,
+            allEntries,
+            measureElementRef: virtualizer.measureElement,
+            isFetchingNextPage,
+            itemSpacing,
           })}
           {requestStatus === 'loading' && !isFetchingNextPage && (
             <Box customStyle="p-8 w-full">

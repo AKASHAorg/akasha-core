@@ -15,6 +15,8 @@ export interface IBasicCardBox {
   onClick?: () => void;
   tabIndex?: number;
   onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  // required for virtual list
+  index?: number;
 }
 
 const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
@@ -35,6 +37,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
       void 0;
     },
     onClick,
+    index,
   } = props;
 
   const generatedBorder = React.useMemo(() => {
@@ -72,6 +75,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
       ref={rootNodeRef}
       onClick={onClick}
       onKeyDown={onKeyDown}
+      data-index={index}
     >
       {children}
     </div>

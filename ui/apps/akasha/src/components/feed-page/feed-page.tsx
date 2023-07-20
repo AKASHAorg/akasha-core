@@ -7,6 +7,7 @@ import {
   RootComponentProps,
   EntityTypes,
   AnalyticsCategories,
+  IContentClickDetails,
 } from '@akashaorg/typings/ui';
 import {
   CREATE_POST_MUTATION_KEY,
@@ -15,6 +16,7 @@ import {
   useAnalytics,
   useDismissedCard,
   useInfiniteDummy,
+  mapEntry,
 } from '@akashaorg/ui-awf-hooks';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -72,12 +74,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     CREATE_POST_MUTATION_KEY,
   ]);
 
-  const beamsReq = useInfiniteDummy<GetBeamsQuery, GetBeamsQuery['beamIndex']['edges'][0]['node']>(
+  const beamsReq = useInfiniteDummy<GetBeamsQuery, ReturnType<typeof mapEntry>>(
     'feed_page_get_posts',
     createDummyPosts(5),
     {
       select: data => ({
-        pages: data.pages.flatMap(page => page.beamIndex.edges.flatMap(edge => edge.node)),
+        pages: data.pages.flatMap(page =>
+          page.beamIndex.edges.flatMap(edge => mapEntry(edge.node)),
+        ),
         pageParams: data.pageParams,
       }),
     },
@@ -124,9 +128,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
-  React.useEffect(() => {
-    console.log(beamsReq, '<< posts request');
-  }, [beamsReq, postPages]);
+  const handleRebeam = (withComment: boolean, beamId: string) => {};
+  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {};
 
   return (
     <Box customStyle={'w-full'}>
@@ -221,12 +224,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
-        removeEntryLabel={t('Delete Post')}
-        removedByMeLabel={t('You deleted this post')}
-        removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={uiEvents}
         itemSpacing={8}
         i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+        onRebeam={handleRebeam}
+        onBeamNavigate={handleBeamNavigate}
       />
     </Box>
   );

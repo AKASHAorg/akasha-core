@@ -68,8 +68,20 @@ const initSearchState = {
   [ButtonValues.TAGS]: { page: 1, results: [], done: false, isLoading: false },
 };
 
+const onNavBack = () => {
+  history.back();
+};
+
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { singleSpa, loggedProfileData, showLoginModal } = props;
+  const {
+    singleSpa,
+    loggedProfileData,
+    showLoginModal,
+    plugins,
+    logger,
+    uiEvents,
+    navigateToModal,
+  } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
@@ -84,7 +96,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const handleEntryNavigation = useEntryNavigation(navigateTo);
 
   // const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.CONTENT, [activeButton]);
@@ -273,7 +285,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     const trimmedValue = inputValue.trim();
     if (!trimmedValue) return;
     const encodedSearchKey = encodeURIComponent(trimmedValue);
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-search',
       getNavigationUrl: routes => `${routes.Results}/${encodedSearchKey}`,
     });
@@ -363,10 +375,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const onTabClick = (value: ButtonValues) => () => {
     setActiveButton(value);
-  };
-
-  const onNavBack = () => {
-    history.back();
   };
 
   const searchCount =
@@ -542,8 +550,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 <EntryCardRenderer
                   key={itemData.itemId}
                   itemData={itemData}
-                  itemType={EntityTypes.POST}
-                  logger={props.logger}
+                  itemType={EntityTypes.BEAM}
+                  logger={logger}
                   singleSpa={singleSpa}
                   onContentClick={handleEntryNavigation}
                   navigateTo={navigateTo}
@@ -555,8 +563,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   locale={locale}
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}
-                  uiEvents={props.uiEvents}
-                  navigateToModal={props.navigateToModal}
+                  uiEvents={uiEvents}
+                  navigateToModal={navigateToModal}
                 />
               ))}
             </>

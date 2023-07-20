@@ -46,7 +46,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.itemId);
-      } else if (extensionData.itemType === EntityTypes.POST) {
+      } else if (extensionData.itemType === EntityTypes.BEAM) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
@@ -63,7 +63,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = useMemo(() => {
-    if (extensionData.itemType === EntityTypes.POST) {
+    if (extensionData.itemType === EntityTypes.BEAM) {
       return t('post');
     }
     return t('reply');

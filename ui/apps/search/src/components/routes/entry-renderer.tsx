@@ -110,7 +110,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     if (itemId)
       navigateToModal({
         name: 'entry-remove-confirmation',
-        itemType: EntityTypes.POST,
+        itemType: EntityTypes.BEAM,
         itemId,
       });
   };
@@ -187,7 +187,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               disableReposting={itemData.isRemoved}
               removeEntryLabel={t('Delete Post')}
               onEntryRemove={handleEntryRemove}
-              onEntryFlag={handleEntryFlag(itemData.entryId, EntityTypes.POST)}
+              onEntryFlag={handleEntryFlag(itemData.entryId, EntityTypes.BEAM)}
               hideActionButtons={hideActionButtons}
               actionsRightExt={
                 <Extension name={`entry-card-actions-right_${entryId}`} uiEvents={uiEvents} />

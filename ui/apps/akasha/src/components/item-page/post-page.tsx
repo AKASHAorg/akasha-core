@@ -19,18 +19,23 @@ const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
     loggedUser: userId,
   });
 
-  const entryData = React.useMemo(() => {
-    if (postReq.data) {
-      return mapEntry(postReq.data);
-    }
-    return undefined;
-  }, [postReq.data]);
+  const entryData = React.useMemo(
+    () => {
+      // if (postReq.data) {
+      //   return mapEntry(postReq.data);
+      // }
+      return undefined;
+    },
+    [
+      /*postReq.data*/
+    ],
+  );
 
   return (
     <BaseEntryPage
       {...props}
       postId={postId}
-      itemType={EntityTypes.POST}
+      itemType={EntityTypes.BEAM}
       // @TODO replace with real data after hooks
       entryData={null}
       entryReq={postReq}

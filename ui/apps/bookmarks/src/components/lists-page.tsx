@@ -9,7 +9,12 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import {
+  RootComponentProps,
+  EntityTypes,
+  ModalNavigationOptions,
+  IContentClickDetails,
+} from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import {
   useGetBookmarks,
@@ -71,7 +76,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
     });
   };
 
@@ -109,6 +114,8 @@ const ListsPage: React.FC<ListsPageProps> = props => {
     bookmarkedBeamsIds.forEach(itemId => bookmarkDelete.mutate(itemId));
   };
 
+  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {};
+
   return (
     <Card direction="row" elevation={'1'} radius={16} padding={16}>
       <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
@@ -137,7 +144,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
           {listsReq.status === 'success' && lists.length > 0 && (
             <FeedWidget
               modalSlotId={props.layoutConfig.modalSlotId}
-              itemType={EntityTypes.POST}
+              itemType={EntityTypes.BEAM}
               logger={props.logger}
               onLoadMore={() => {
                 /* if next page, load more */
@@ -152,9 +159,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
               contentClickable={true}
               onEntryFlag={handleEntryFlag}
               onEntryRemove={handleEntryRemove}
-              removeEntryLabel={t('Delete Beam')}
-              removedByMeLabel={t('You deleted this beam')}
-              removedByAuthorLabel={t('This beam was deleted by its author')}
+              onBeamNavigate={handleBeamNavigate}
               uiEvents={props.uiEvents}
               itemSpacing={8}
               i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}

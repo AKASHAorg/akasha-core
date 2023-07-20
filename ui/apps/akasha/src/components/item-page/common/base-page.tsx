@@ -17,6 +17,7 @@ import {
   EntityTypes,
   ModalNavigationOptions,
   IEntryData,
+  IContentClickDetails,
 } from '@akashaorg/typings/ui';
 
 import { OriginalItem } from './original-item';
@@ -105,6 +106,9 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     });
   };
 
+  const handleRebeam = (withComment: boolean, beamId: string) => {};
+  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {};
+
   return (
     <BasicCardBox customStyle="h-auto overflow-hidden" pad="p-0">
       {children}
@@ -167,14 +171,13 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             contentClickable={true}
             onEntryFlag={handleEntryFlag}
             onEntryRemove={handleCommentRemove}
-            removeEntryLabel={t('Delete Reply')}
-            removedByMeLabel={t('You deleted this reply')}
-            removedByAuthorLabel={t('This reply was deleted by its author')}
             uiEvents={uiEvents}
             itemSpacing={8}
             i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
             trackEvent={analyticsActions.trackEvent}
             showReplyFragment={true}
+            onRebeam={handleRebeam}
+            onBeamNavigate={handleBeamNavigate}
           />
         </>
       )}

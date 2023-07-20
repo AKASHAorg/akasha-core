@@ -159,7 +159,7 @@ export function OriginalItem({
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[POST]}
           onRepost={handleRepost}
-          onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.POST)}
+          onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.BEAM)}
           onContentClick={handleEntryNavigate}
           navigateTo={navigateTo}
           contentClickable={true}

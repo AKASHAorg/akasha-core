@@ -156,7 +156,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   };
 
   const handleEntryClick = (itemId: string, itemType: EntityTypes) => {
-    if (itemType === EntityTypes.POST) {
+    if (itemType === EntityTypes.BEAM) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemId}`,

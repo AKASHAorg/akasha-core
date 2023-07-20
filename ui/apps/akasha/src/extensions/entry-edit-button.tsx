@@ -19,7 +19,7 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
     if (props.extensionData && props.extensionData.hasOwnProperty('itemId')) {
       props.singleSpa.navigateToUrl(
         `${window.location.origin}/@akashaorg/app-akasha-integration/${
-          props.extensionData?.itemType === EntityTypes.POST ? 'post' : 'reply'
+          props.extensionData?.itemType === EntityTypes.BEAM ? 'post' : 'reply'
         }/${props.extensionData.itemId}?action=edit`,
       );
     }
@@ -29,8 +29,8 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
     if (props.extensionData.itemType === EntityTypes.REPLY) {
       return t('reply');
     }
-    if (props.extensionData.itemType === EntityTypes.POST) {
-      return t('post');
+    if (props.extensionData.itemType === EntityTypes.BEAM) {
+      return t('beam');
     }
   }, [props.extensionData.itemType, t]);
 

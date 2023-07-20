@@ -75,7 +75,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   const handleEntryRemove = React.useCallback((itemId: string) => {
     navigateToModal.current({
       name: 'entry-remove-confirmation',
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
       itemId,
     });
   }, []);
