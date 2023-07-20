@@ -16,6 +16,7 @@ import {
   getProfileImageVersionsWithMediaUrl,
   useGetLogin,
   useLogout,
+  LOGIN_STATE_KEY,
 } from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
@@ -199,7 +200,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   async function handleLogout() {
     await logoutQuery.mutateAsync();
     await queryClient.invalidateQueries({
-      queryKey: ['LOGIN_STATE'],
+      queryKey: [LOGIN_STATE_KEY],
     });
   }
   const handleLogoutClick = () => {
