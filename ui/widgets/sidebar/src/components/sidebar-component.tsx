@@ -86,7 +86,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       await queryClient.invalidateQueries({
         queryKey: useGetMyProfileQuery.getKey(),
       });
-      return;
     };
 
     if (!loginQuery.data?.id) {
@@ -199,7 +198,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   async function handleLogout() {
     await logoutQuery.mutateAsync();
-    // add other logic after logout
+    await queryClient.invalidateQueries({
+      queryKey: ['LOGIN_STATE'],
+    });
   }
   const handleLogoutClick = () => {
     handleLogout();
