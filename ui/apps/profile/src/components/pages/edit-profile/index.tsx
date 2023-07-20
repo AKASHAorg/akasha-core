@@ -151,20 +151,24 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   );
 
   const onTabChange = (selectedIndex: number, previousIndex: number) => {
-    const matcher =
+    const canSwitchTab =
       (previousIndex === 0 && !isGeneralFormDirty) ||
       (previousIndex === 1 && !isSocialLinksDirty) ||
       (previousIndex === 2 && !isInterestsListDirty);
 
     if (selectedIndex != previousIndex) {
-      if (matcher) {
-        setShowModal(false);
+      /**
+       * if can switch tab, set active and selected tab states,
+       * else, set modal to true and set only selected state.
+       * the modal will handle the active tab switching
+       */
+      if (canSwitchTab) {
         setSelectedActiveTab(selectedIndex);
+        setActiveTab(selectedIndex);
       } else {
         setShowModal(true);
         setSelectedActiveTab(selectedIndex);
       }
-      setActiveTab(selectedIndex);
     }
   };
 
@@ -407,6 +411,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
         title={{ label: t('Unsaved Changes') }}
         show={showModal}
         onClose={() => {
+          setSelectedActiveTab(activeTab);
           setShowModal(false);
         }}
         actions={[
@@ -422,6 +427,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             variant: 'primary',
             label: 'Save',
             onClick: () => {
+              setShowModal(false);
               //@TODO
             },
           },
