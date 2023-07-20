@@ -8,7 +8,7 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 
 export type LatestProfilesProps = {
   // data
@@ -66,18 +66,9 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
           {profiles.length === 0 &&
             isLoadingProfiles &&
             Array.from({ length: 4 }, (_el, index: number) => (
-              <Box key={index} customStyle={BaseItemStyles}>
-                <Box customStyle="py-2">
-                  <TextLine title="avatar" width="40px" height="40px" customStyle="rounded-full" />
-
-                  <Box customStyle="py-1">
-                    <TextLine title="tagName" animated={false} width="140px" />
-                    <TextLine title="tagName" animated={false} width="80px" />
-                  </Box>
-                </Box>
-
-                <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
-              </Box>
+              <React.Fragment key={index}>
+                <TrendingWidgetLoadingCard />
+              </React.Fragment>
             ))}
 
           <Box customStyle="space-y-4">

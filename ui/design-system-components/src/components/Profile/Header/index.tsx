@@ -22,6 +22,8 @@ export type HeaderProps = {
 
   viewerIsOwner: boolean;
   flagLabel: string;
+  copyLabel: string;
+  copiedLabel: string;
   followElement: ReactElement;
   handleEdit: () => void;
   handleFlag: () => void;
@@ -33,9 +35,10 @@ const Header: React.FC<HeaderProps> = ({
   avatar,
   name,
   ensName,
-
   viewerIsOwner,
   flagLabel,
+  copyLabel,
+  copiedLabel,
   followElement,
   handleEdit,
   handleFlag,
@@ -73,7 +76,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
             <Stack direction="column" spacing="gap-y-1">
               <Text variant="button-lg">{name}</Text>
-              <DidField did={did.id} />
+              <DidField did={did.id} copyLabel={copyLabel} copiedLabel={copiedLabel} />
             </Stack>
             <div className={tw(`ml-auto mt-2`)}>
               {viewerIsOwner ? (
@@ -108,17 +111,6 @@ const Header: React.FC<HeaderProps> = ({
             </div>
           </Stack>
           <Stack direction="column" spacing="gap-y-4">
-            <Stack direction="column" spacing="gap-y-1.5">
-              <Text variant="label">Ethereum Address</Text>
-              <CopyToClipboard value={did.id}>
-                <Text
-                  variant="footnotes2"
-                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                >
-                  {did.id}
-                </Text>
-              </CopyToClipboard>
-            </Stack>
             {ensName === 'loading' ? (
               <>
                 <TextLine width="w-24" animated />

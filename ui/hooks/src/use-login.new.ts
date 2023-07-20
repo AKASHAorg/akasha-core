@@ -6,7 +6,7 @@ import { CurrentUser, EthProviders } from '@akashaorg/typings/sdk';
 import { useGlobalLogin } from '.';
 import { logError } from './utils/error-handler';
 
-const LOGIN_STATE_KEY = 'LOGIN_STATE';
+export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
 export function useConnectWallet(provider: EthProviders) {
   const sdk = getSDK();

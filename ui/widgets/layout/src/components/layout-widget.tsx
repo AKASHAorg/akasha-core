@@ -183,7 +183,7 @@ const Layout: React.FC<RootComponentProps> = props => {
             </Box>
           </Box>
           <Box customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
-            <Box customStyle="sticky top-0 z-8">
+            <Box customStyle="sticky top-0 z-10">
               <Box customStyle="pt-4 bg(white dark:black) rounded-b-2xl">
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
               </Box>
