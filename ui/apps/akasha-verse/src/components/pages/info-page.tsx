@@ -6,19 +6,15 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
-  useGetAllInstalledApps,
-  useGetAllIntegrationReleaseIds,
-  useGetIntegrationInfo,
-  useGetIntegrationsReleaseInfo,
-  useGetIntegrationReleaseInfo,
   useGetLogin,
   useGetProfileByEthAddress,
   useCurrentNetwork,
   useAppDescription,
 } from '@akashaorg/ui-awf-hooks';
+import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const InfoPage: React.FC<RootComponentProps> = props => {
-  const { integrationId } = useParams<{ integrationId: string }>();
+  const { appId } = useParams<{ appId: string }>();
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 

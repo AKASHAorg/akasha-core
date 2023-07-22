@@ -23,7 +23,15 @@ export interface IExplorePage extends RootComponentProps {
 }
 
 const ExplorePage: React.FC<IExplorePage> = props => {
-  const { installableApps, isFetching, reqError, installedAppsInfo, isUserLoggedIn } = props;
+  const {
+    installableApps,
+    isFetching,
+    reqError,
+    installedAppsInfo,
+    isUserLoggedIn,
+    plugins,
+    navigateToModal,
+  } = props;
   const sdk = getSDK();
   const { t } = useTranslation('app-akasha-verse');
 
@@ -51,14 +59,14 @@ const ExplorePage: React.FC<IExplorePage> = props => {
   const uninstallAppReq = useUninstallApp();
 
   const handleAppClick = (app: IntegrationReleaseInfo) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });
   };
 
   const handleAppInstall = (integrationName: string) => {
-    props.navigateToModal({
+    navigateToModal({
       name: 'install-modal',
       integrationName: integrationName,
     });

@@ -18,8 +18,14 @@ export interface IMyAppsPage extends RootComponentProps {
 }
 
 const MyAppsPage: React.FC<IMyAppsPage> = props => {
-  const { worldConfig, latestReleasesInfo, installedAppsInfo, defaultIntegrations, isFetching } =
-    props;
+  const {
+    worldConfig,
+    latestReleasesInfo,
+    installedAppsInfo,
+    defaultIntegrations,
+    isFetching,
+    plugins,
+  } = props;
 
   const { t } = useTranslation('app-akasha-verse');
 
@@ -55,7 +61,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
     .filter(Boolean);
 
   const handleAppClick = (app: IntegrationReleaseInfoFragmentFragment) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });

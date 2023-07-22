@@ -10,10 +10,9 @@ import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-d
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
-  useGetAllInstalledApps,
-  useGetLatestReleaseInfo,
-  useGetAllIntegrationsIds,
-} from '@akashaorg/ui-awf-hooks';
+  useGetAppsQuery,
+  useGetAppsReleasesQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hiddenIntegrations } from '../hidden-integrations';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
@@ -26,13 +25,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   }, [loginQuery.data]);
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
-  const connect = () => {
-    navigateTo({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: navRoutes => navRoutes.CONNECT,
-    });
-  };
 
   const defaultIntegrations = [].concat(
     worldConfig.defaultApps,
@@ -77,7 +69,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Router basename={baseRouteName}>
-      <MasterPage isLoggedIn={isLoggedIn} onConnect={connect} navigateTo={navigateTo}>
+      <MasterPage isLoggedIn={isLoggedIn} navigateTo={navigateTo} {...props}>
         <Routes>
           <Route
             path={routes[EXPLORE]}
@@ -115,7 +107,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
-          <Route path={`${routes[INFO]}/:integrationId`} element={<InfoPage {...props} />} />
+          <Route path={`${routes[INFO]}/:appId`} element={<InfoPage {...props} />} />
           <Route path="/" element={<Navigate to={routes[EXPLORE]} replace />} />
         </Routes>
       </MasterPage>

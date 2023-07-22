@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import TabList from '@akashaorg/design-system-core/lib/components/TabList';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCard';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import routes, { APPS, EXPLORE, MY_APPS, MY_WIDGETS } from '../../routes';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams } from '@akashaorg/typings/ui';
+import { NavigateToParams, RootComponentProps } from '@akashaorg/typings/ui';
+
 import { useLocation } from 'react-router';
 import { useDismissedCard } from '@akashaorg/ui-awf-hooks';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export type MasterPageProps = {
+export interface MasterPageProps extends RootComponentProps {
   isLoggedIn: boolean;
-  onConnect: () => void;
   navigateTo: (args: NavigateToParams) => void;
-};
+}
 
 const TAB_INDEX_TO_ROUTE_MAP = {
   0: [routes[EXPLORE]],
@@ -35,15 +33,18 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
 const dismissedCardId = 'welcome-message';
 
 const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => {
-  const { isLoggedIn, onConnect, navigateTo, children } = props;
+  const { isLoggedIn, navigateTo, navigateToModal, children } = props;
 
   const { t } = useTranslation('app-akasha-verse');
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(
     isLoggedIn ? ROUTE_TO_TAB_INDEX_MAP[location.pathname] || 0 : 0,
   );
-  const [showModal, setShowModal] = useState(false);
   const [dismissed, setDismissed] = useDismissedCard();
+
+  const showLoginModal = () => {
+    navigateToModal({ name: 'login' });
+  };
 
   const handleTabChange = (selectedIndex: number) => {
     if (navigateTo) {
@@ -90,14 +91,14 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
                 setActiveTab(selectedIndex);
                 return;
               }
-              setShowModal(true);
+              showLoginModal();
             }
           }}
           labels={[t('Explore'), t('My Apps'), t('Apps'), t('Widgets')]}
           tabListDivider
         />
         <Box customStyle="p-4">{children}</Box>
-        <Modal
+        {/* <Modal
           title={{ label: t('Members only action'), variant: 'h5' }}
           show={showModal}
           onClose={() => {
@@ -121,7 +122,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
           <Text variant="body1">
             {t('Sorry! but you need to be connected in order to preform that action')}
           </Text>
-        </Modal>
+        </Modal> */}
       </Card>
     </Stack>
   );
