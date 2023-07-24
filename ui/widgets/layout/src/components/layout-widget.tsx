@@ -4,7 +4,7 @@ import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
 
-import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
+import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
 import {
   startMobileSidebarHidingBreakpoint,
   startWidgetsTogglingBreakpoint,
@@ -16,7 +16,6 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCard';
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
@@ -51,9 +50,6 @@ const Layout: React.FC<RootComponentProps> = props => {
   );
 
   const maintenanceReq = usePlaformHealthCheck();
-
-  const dismissedCardId = 'dismiss-the-merge-notification';
-  const [dismissed, setDismissed] = useDismissedCard();
 
   const isPlatformHealthy = React.useMemo(() => {
     if (maintenanceReq.status === 'success') {
@@ -139,9 +135,6 @@ const Layout: React.FC<RootComponentProps> = props => {
       }
     };
   }, [handleModal]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   const layoutStyle = `
       grid md:(grid-flow-row) min-h-screen
@@ -229,26 +222,6 @@ const Layout: React.FC<RootComponentProps> = props => {
                     </Box>
                   </Box>
                 </BasicCardBox>
-              )}
-              {!dismissed.includes(dismissedCardId) && (
-                <MessageCard
-                  testId="the-merge-notification"
-                  title={t('Goerli Test Network')}
-                  titleIconType="ExclamationTriangleIcon"
-                  background={{ light: 'warningDark/30', dark: 'warningDark/30' }}
-                  borderColor={{ light: 'warningLight', dark: 'warningDark' }}
-                  message={`${t(
-                    'Following the merge, the Rinkeby network has been deprecated',
-                  )}. ${t('We have migrated Akasha World to the Goerli testnet')}. ${t(
-                    'This will not affect your content or posts, they are saved',
-                  )}! ${t(
-                    'But some functionalities such as claiming ENS names won’t be possible',
-                  )}. ${t('We are working hard on mitigating any issues')}. ${t(
-                    'Bear with us',
-                  )} 🙏🏽.`}
-                  customStyle="mb-4"
-                  onClose={onCloseButtonClick}
-                />
               )}
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </Box>

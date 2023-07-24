@@ -7,14 +7,14 @@ import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import PageLayout from './base-layout';
 import { BaseOption } from './settings-page';
 
-export interface IAppearanceOption extends BaseOption {
+export interface IThemeOption extends BaseOption {
   themeIntroLabel: string;
   themeSubtitleLabel: string;
   theme: string;
   onThemeSelect: () => void;
 }
 
-const AppearanceOption: React.FC<IAppearanceOption> = props => {
+const ThemeOption: React.FC<IThemeOption> = props => {
   const { titleLabel, themeIntroLabel, themeSubtitleLabel, theme, onThemeSelect } = props;
 
   return (
@@ -37,4 +37,4 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
   );
 };
 
-export default AppearanceOption;
+export default ThemeOption;
