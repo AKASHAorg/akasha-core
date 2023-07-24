@@ -28,9 +28,15 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   );
 
   React.useEffect(() => {
-    setIsMobile(window.matchMedia(startMobileSidebarHidingBreakpoint).matches);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.matchMedia(startMobileSidebarHidingBreakpoint).matches]);
+    const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
+    const resize = () => {
+      setIsMobile(mql.matches);
+    };
+    window.addEventListener('resize', resize);
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
 
   const {
     uiEvents,
@@ -76,9 +82,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const myProfileQuery = useGetMyProfileQuery(null, {
     enabled: !!loginQuery.data?.id,
-    select: data => data.viewer?.profile,
+    select: data => data.viewer,
     onSuccess: data => {
-      if (data?.did) setIsLoading(false);
+      if (data) setIsLoading(false);
     },
   });
 
@@ -87,22 +93,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       await queryClient.invalidateQueries({
         queryKey: useGetMyProfileQuery.getKey(),
       });
-    };
-
-    if (!loginQuery.data?.id) {
-      invalidateQuery();
-      myProfileQuery.refetch();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loginQuery.data?.id]);
-
-  useEffect(() => {
-    const invalidateQuery = async () => {
-      await queryClient.invalidateQueries({
-        queryKey: useGetMyProfileQuery.getKey(),
-      });
-      return;
     };
 
     if (!loginQuery.data?.id) {
@@ -166,6 +156,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${did}`,
     });
+
+    if (isMobile) {
+      handleSidebarClose();
+    }
   };
 
   const handleClickExplore = () => {
@@ -186,15 +180,11 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleLoginClick = () => {
+    handleNavigation('@akashaorg/app-auth-ewa', '/');
+
     if (isMobile) {
       handleSidebarClose();
     }
-
-    if (location.pathname.includes('@akashaorg/app-auth-ewa')) return;
-    routing.navigateTo({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: () => '/',
-    });
   };
 
   async function handleLogout() {
@@ -228,10 +218,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const subtitleUi = React.useRef(null);
 
   React.useEffect(() => {
-    if (myProfileQuery.data?.did?.id) {
+    if (loginQuery.data?.id) {
       subtitleUi.current = (
         <DidField
-          did={myProfileQuery.data?.did?.id}
+          did={loginQuery.data?.id}
           textColor="grey7"
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
@@ -244,32 +234,44 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         </Text>
       );
     }
-  }, [isLoading, myProfileQuery.data?.did?.id, t]);
+  }, [isLoading, loginQuery.data?.id, t]);
 
   React.useEffect(() => {
-    if (myProfileQuery.data?.did?.id) {
-      setProfileName(myProfileQuery.data?.name);
+    if (myProfileQuery.data?.profile?.did?.id) {
+      setProfileName(myProfileQuery.data?.profile?.name);
+    } else if (loginQuery.data?.id) {
+      setProfileName('Logged-in User');
     } else {
       setProfileName('Guest');
     }
-  }, [isLoading, myProfileQuery.data?.did?.id, myProfileQuery.data?.name]);
+  }, [
+    isLoading,
+    loginQuery.data?.id,
+    myProfileQuery.data?.profile?.did?.id,
+    myProfileQuery.data?.profile?.name,
+  ]);
 
   const ConnectButton = useMemo(
     () =>
       isLoading ? (
-        <Button size="sm" loading />
+        <Button size="sm" loading onClick={handleLogout} />
       ) : (
         <>
-          {myProfileQuery.data?.did?.id && (
-            <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
-          )}
-          {!myProfileQuery.data?.did?.id /* !loginQuery.data?.id */ && loginQuery.isStale && (
-            <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
-          )}
+          {
+            /* myProfileQuery.data */ loginQuery.data?.id && (
+              <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
+            )
+          }
+          {
+            /* !myProfileQuery.data?.profile?.did?.id */ !loginQuery.data?.id &&
+              loginQuery.isStale && (
+                <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
+              )
+          }
         </>
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isLoading, loginQuery.isStale, myProfileQuery.data?.did?.id],
+    [isLoading, loginQuery.isStale, myProfileQuery.data?.profile?.did?.id],
   );
 
   return (
@@ -281,10 +283,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       <Box customStyle="flex flex-row justify-items-stretch p-4 border-b-1 border(grey9 dark:grey3)">
         <Box customStyle="w-fit h-fit mr-2">
           <Avatar
-            profileId={myProfileQuery.data?.did?.id}
-            avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.avatar)}
-            isClickable={!!myProfileQuery.data?.did?.id}
-            onClick={() => handleAvatarClick(myProfileQuery.data?.did?.id)}
+            profileId={loginQuery.data?.id}
+            avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.profile?.avatar)}
+            isClickable={!!loginQuery.data?.id}
+            onClick={() => handleAvatarClick(loginQuery.data?.id)}
           />
         </Box>
         {isLoading ? (
