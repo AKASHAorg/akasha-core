@@ -1,6 +1,6 @@
 ## Examples
 
-- [Simple feed app](./ui/feed-app)
+- [Simple feed app](./ui/akasha.world/)
 
 ## The apps from playground require a build from the sdk and plugins/widgets
 
