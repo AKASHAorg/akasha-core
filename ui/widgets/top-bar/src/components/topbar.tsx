@@ -53,8 +53,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
   );
   React.useEffect(() => {
     const mql = window.matchMedia(startWidgetsTogglingBreakpoint);
-    const resize = e => {
-      setDisplayWidgetTogglingButton(!e.matches);
+    const resize = () => {
+      setDisplayWidgetTogglingButton(!mql.matches);
     };
     mql.addEventListener('change', resize);
     return () => {

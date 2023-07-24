@@ -33,6 +33,17 @@ const Layout: React.FC<RootComponentProps> = props => {
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
+  React.useEffect(() => {
+    const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
+    const resize = () => {
+      setShowSidebar(!mql.matches);
+    };
+    window.addEventListener('resize', resize);
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
   // widgets are autohidden starting on screens <=768px
   const [showWidgets, setshowWidgets] = React.useState(
     window.matchMedia(startWidgetsTogglingBreakpoint).matches,
