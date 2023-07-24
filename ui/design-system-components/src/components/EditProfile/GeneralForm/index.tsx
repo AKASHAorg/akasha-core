@@ -37,7 +37,6 @@ export type GeneralFormProps = {
   };
   customStyle?: string;
   onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
-  onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const GeneralForm: React.FC<GeneralFormProps> = ({
@@ -52,7 +51,6 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
   saveButton,
   customStyle = '',
   onFormDirty,
-  onFormValid,
 }) => {
   const {
     control,
@@ -67,11 +65,6 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
   const onSave = (formValues: GeneralFormValues) => saveButton.handleClick(formValues);
 
   const isLargeScreen = useMedia('(min-width: 640px)');
-
-  useEffect(() => {
-    if (onFormValid) onFormValid(isValid);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValid]);
 
   useEffect(() => {
     if (onFormDirty) onFormDirty(isDirty);

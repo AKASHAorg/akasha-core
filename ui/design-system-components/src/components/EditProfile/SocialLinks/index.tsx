@@ -28,7 +28,6 @@ export type SocialLinksProp = {
   customStyle?: string;
   onDelete: (index: number) => void;
   onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
-  onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const SocialLinks: React.FC<SocialLinksProp> = ({
@@ -41,7 +40,6 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   customStyle = '',
   onDelete,
   onFormDirty,
-  onFormValid,
 }) => {
   const {
     control,
@@ -66,11 +64,6 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   const onAddNew = () => {
     setLinks([...links, { _id: links.length, href: '' }]);
   };
-
-  useEffect(() => {
-    if (onFormValid) onFormValid(isValid);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValid]);
 
   useEffect(() => {
     if (onFormDirty) onFormDirty(isDirty);

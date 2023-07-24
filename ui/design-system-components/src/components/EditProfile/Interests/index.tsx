@@ -21,7 +21,6 @@ export type InterestsProps = {
   saveButton: { label: string; loading?: boolean; handleClick: (interets: string[]) => void };
   customStyle?: string;
   onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
-  onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Interests: React.FC<InterestsProps> = ({
@@ -36,7 +35,6 @@ export const Interests: React.FC<InterestsProps> = ({
   saveButton,
   customStyle = '',
   onFormDirty,
-  onFormValid,
 }) => {
   const [query, setQuery] = useState('');
   const [newInterests, setNewInterests] = useState(myInterests);
@@ -60,11 +58,6 @@ export const Interests: React.FC<InterestsProps> = ({
   };
 
   const validForm = allMyInteretstsAreActive && newInterests.length === myInterests.length;
-
-  useEffect(() => {
-    if (onFormValid) onFormValid(validForm);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validForm]);
 
   useEffect(() => {
     if (onFormDirty) onFormDirty(newInterests.length === 0);

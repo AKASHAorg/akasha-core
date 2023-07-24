@@ -66,10 +66,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   const [isSocialLinksDirty, setSocialLinksDirty] = useState(false);
   const [isInterestsListDirty, setInterestsListDirty] = useState(false);
 
-  // valid states for tabs
-  const [, setGeneralValid] = useState(true);
-  const [, setSocialLinksValid] = useState(true);
-  const [, setInterestsValid] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
@@ -327,7 +323,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 },
               }}
               onFormDirty={setGeneralFormDirty}
-              onFormValid={setGeneralValid}
               customStyle="h-full"
             />
 
@@ -365,7 +360,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               }}
               onDelete={() => ({})}
               onFormDirty={setSocialLinksDirty}
-              onFormValid={setSocialLinksValid}
               customStyle="h-full"
             />
 
@@ -399,7 +393,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   },
                 }}
                 onFormDirty={setInterestsListDirty}
-                onFormValid={setInterestsValid}
                 customStyle="h-full"
               />
             }
