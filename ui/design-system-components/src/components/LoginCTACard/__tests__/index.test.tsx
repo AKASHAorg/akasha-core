@@ -8,6 +8,8 @@ import { customRender } from '@akashaorg/design-system-core/src/test-utils';
 describe('<LoginCTAWidgetCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const mailLink = 'mailto:alpha@akasha.world';
+
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
@@ -18,7 +20,7 @@ describe('<LoginCTAWidgetCard /> Component', () => {
           afterLinkLabel="and we'll send you a ticket for the next shuttle going to Akasha World."
           disclaimerLabel="Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀"
           writeToUsLabel="drop us a message"
-          writeToUsUrl="mailto:alpha@ethereum.world"
+          writeToUsUrl={mailLink}
         />,
 
         {},
@@ -50,6 +52,6 @@ describe('<LoginCTAWidgetCard /> Component', () => {
     const cta = getByRole('link');
     await userEvent.click(cta);
 
-    expect(cta).toHaveAttribute('href', 'mailto:alpha@ethereum.world');
+    expect(cta).toHaveAttribute('href', mailLink);
   });
 });

@@ -25,7 +25,7 @@ BaseCookieCard.args = {
   paragraphThree: {
     ctaLabel: 'For more info, see our ',
     urlLabel: 'Privacy Policy',
-    url: 'https://ethereum.world/privacy-policy',
+    url: 'https://beta.akasha.world/@akashaorg/app-legal/privacy-policy',
   },
   onlyEssentialLabel: 'Only essential',
   acceptAllLabel: 'Accept all',

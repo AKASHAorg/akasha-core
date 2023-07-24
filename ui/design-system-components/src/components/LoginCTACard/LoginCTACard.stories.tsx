@@ -19,5 +19,5 @@ BaseLoginCTAWidgetCard.args = {
   disclaimerLabel:
     "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",
   writeToUsLabel: 'drop us a message',
-  writeToUsUrl: 'mailto:alpha@ethereum.world',
+  writeToUsUrl: 'mailto:alpha@akasha.world',
 };
