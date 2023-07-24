@@ -20,7 +20,7 @@ export type InterestsProps = {
   cancelButton: ButtonType;
   saveButton: { label: string; loading?: boolean; handleClick: (interets: string[]) => void };
   customStyle?: string;
-  onFormValid?: (valid: boolean) => void;
+  onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Interests: React.FC<InterestsProps> = ({
@@ -34,7 +34,7 @@ export const Interests: React.FC<InterestsProps> = ({
   cancelButton,
   saveButton,
   customStyle = '',
-  onFormValid,
+  onFormDirty,
 }) => {
   const [query, setQuery] = useState('');
   const [newInterests, setNewInterests] = useState(myInterests);
@@ -60,9 +60,9 @@ export const Interests: React.FC<InterestsProps> = ({
   const validForm = allMyInteretstsAreActive && newInterests.length === myInterests.length;
 
   useEffect(() => {
-    if (onFormValid) onFormValid(validForm);
+    if (onFormDirty) onFormDirty(newInterests.length === 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validForm]);
+  }, [newInterests]);
 
   return (
     <form className={tw(apply`h-full ${customStyle}`)}>
