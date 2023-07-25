@@ -22,11 +22,20 @@ describe('<Menu /> Component', () => {
     },
   ];
 
-  const anchor = <p>Show menu</p>;
-
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Menu anchorElement={anchor} items={items} />, {});
+      componentWrapper = customRender(
+        <Menu
+          anchor={{
+            icon: 'EllipsisVerticalIcon',
+            variant: 'primary',
+            greyBg: true,
+            iconOnly: true,
+          }}
+          items={items}
+        />,
+        {},
+      );
     });
   });
 
