@@ -87,7 +87,9 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     /** handle copy */
     const profileUrl = `${location.origin}/@akashaorg/app-profile/${profileId}`;
 
-    navigator.clipboard.writeText(profileUrl);
+    navigator.clipboard.writeText(profileUrl).then(() => {
+      setShowFeedback(true);
+    });
   };
 
   const handleFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
@@ -160,7 +162,8 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
         )}
         {showFeedback && (
           <Snackbar
-            title={t('You unfollowed {{name}}', { userName: profileData.name })}
+            title={`${t('Profile link copied')}!`}
+            type="success"
             iconType="CheckCircleIcon"
             handleDismiss={() => {
               setShowFeedback(false);
