@@ -1,21 +1,25 @@
 import React from 'react';
+import { useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
+
+import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
+import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import FollowProfile from '../follow-profile';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import ProfileStatsPresentation from '../profile-stats-presentation';
-import routes, { EDIT } from '../../routes';
-import { useTranslation } from 'react-i18next';
-import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
 import {
   ProfileHeader,
   ProfileBio,
   ProfileLinks,
   ProfileLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { useParams } from 'react-router';
-import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+
+import FollowProfile from '../follow-profile';
+import ProfileStatsPresentation from '../profile-stats-presentation';
+import routes, { EDIT } from '../../routes';
 
 const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
@@ -79,12 +83,50 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     cb();
   };
 
-  const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
+  const handleCopy = () => {
+    /** handle copy */
+    const profileUrl = `${location.origin}/@akashaorg/app-profile/${profileId}`;
+
+    navigator.clipboard.writeText(profileUrl);
+  };
+
+  const handleFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
     props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
+  };
+
+  const handleEdit = () => {
+    navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
+    });
   };
 
   const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
   const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
+
+  const menuItems: MenuProps['items'] = [
+    {
+      label: t('Copy link'),
+      icon: 'LinkIcon',
+      onClick: handleCopy,
+    },
+    ...(!isViewer
+      ? ([
+          {
+            label: t('Report'),
+            icon: 'FlagIcon',
+            onClick: checkAuth(
+              handleFlag(
+                profileData.did.id ? profileData.did.id : '',
+                EntityTypes.PROFILE,
+                profileData.name,
+              ),
+            ),
+            color: { light: 'errorLight', dark: 'errorDark' },
+          },
+        ] as MenuProps['items'])
+      : []),
+  ];
 
   return (
     <>
@@ -96,25 +138,13 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           name={profileData.name}
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           viewerIsOwner={isViewer}
-          flagLabel={t('Report')}
+          menuItems={menuItems}
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
           followElement={
             <FollowProfile profileId={profileId} isIconButton={true} navigateTo={navigateTo} />
           }
-          handleFlag={checkAuth(
-            handleEntryFlag(
-              profileData.did.id ? profileData.did.id : '',
-              EntityTypes.PROFILE,
-              profileData.name,
-            ),
-          )}
-          handleEdit={() => {
-            navigateTo({
-              appName: '@akashaorg/app-profile',
-              getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
-            });
-          }}
+          handleEdit={handleEdit}
         />
         {profileData.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
