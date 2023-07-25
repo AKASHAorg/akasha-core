@@ -124,14 +124,14 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     [profileData?.avatar],
   );
 
-  if (status === 'loading') return <ProfileLoading />;
-
   if (!loginQuery.data?.id) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
   }
+
+  if (status === 'loading') return <ProfileLoading />;
 
   if (status === 'error')
     return (

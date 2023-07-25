@@ -10,8 +10,10 @@ export type EntryProps = {
   profileId: string;
   avatar: Profile['avatar'];
   name: string;
+  streamId: string;
+  isFollowing: boolean;
   borderBottom?: boolean;
-  renderFollowElement: (profileId) => ReactElement;
+  renderFollowElement: (streamId: string, isFollowing: boolean) => ReactElement;
   onProfileClick: (profileId: string) => void;
 };
 
@@ -21,6 +23,8 @@ const Entry: React.FC<EntryProps> = props => {
     profileId,
     avatar,
     name,
+    streamId,
+    isFollowing,
     borderBottom = true,
     renderFollowElement,
     onProfileClick,
@@ -48,7 +52,7 @@ const Entry: React.FC<EntryProps> = props => {
             onClick={() => onProfileClick(profileId)}
           />
         </Anchor>
-        {renderFollowElement(profileId)}
+        {renderFollowElement(streamId, isFollowing)}
       </Stack>
     </Stack>
   );

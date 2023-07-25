@@ -7,11 +7,10 @@ import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { RootExtensionProps } from '@akashaorg/typings/ui';
 
 const App = (props: RootExtensionProps) => {
-  const { profileId, isIconButton } = props.extensionData;
+  const { profileId } = props.extensionData;
   return (
     <FollowProfile
       profileId={String(profileId)}
-      isIconButton={!!isIconButton}
       navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
     />
   );

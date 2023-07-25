@@ -32,12 +32,12 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
   );
 
   const followers = useGetFollowersListByDidQuery(
-    { id: profileId },
+    { id: profileId, last: 100 },
     { select: response => response.node },
   );
 
   const following = useGetFollowingListByDidQuery(
-    { id: profileId },
+    { id: profileId, last: 100 },
     { select: response => response.node },
   );
 
