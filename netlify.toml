@@ -8,5 +8,5 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' cloudflare.com *.cloudflare.com unpkg.com *.akasha.network *.ethereum.world *.walletconnect.org *.infura.io https://* wss://*; img-src https: data: blob:"
+    Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' cloudflare.com *.cloudflare.com unpkg.com *.akasha.network *.akasha.world *.walletconnect.org *.infura.io https://* wss://*; img-src https: data: blob:"
 

@@ -17,7 +17,6 @@ import {
 import useGlobalLogin from './use-global-login';
 import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-analytics';
 import withProviders from './utils/provider-hoc';
-import ThemeWrapper from './utils/theme-wrapper';
 import useReasons from './use-reasons';
 import { useQueryListener, useMutationListener, useMutationsListener } from './use-query-listener';
 import {
@@ -148,7 +147,6 @@ export {
   CookieConsentTypes,
   COOKIE_CONSENT_NAME,
   withProviders,
-  ThemeWrapper,
   useReasons,
   // generic-utils
   validateType,

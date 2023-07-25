@@ -60,9 +60,12 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
-  const [generalValid, setGeneralValid] = useState(true);
-  const [socialLinksValid, setSocialLinksValid] = useState(true);
-  const [interestsValid, setInterestsValid] = useState(true);
+
+  // dirty state for tabs
+  const [isGeneralFormDirty, setGeneralFormDirty] = useState(false);
+  const [isSocialLinksDirty, setSocialLinksDirty] = useState(false);
+  const [isInterestsListDirty, setInterestsListDirty] = useState(false);
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
@@ -144,14 +147,24 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   );
 
   const onTabChange = (selectedIndex: number, previousIndex: number) => {
+    const canSwitchTab =
+      (previousIndex === 0 && !isGeneralFormDirty) ||
+      (previousIndex === 1 && !isSocialLinksDirty) ||
+      (previousIndex === 2 && !isInterestsListDirty);
+
     if (selectedIndex != previousIndex) {
-      //check if one of the forms has invalid state
-      if (!generalValid || !socialLinksValid || !interestsValid) {
+      /**
+       * if can switch tab, set active and selected tab states,
+       * else, set modal to true and set only selected state.
+       * the modal will handle the active tab switching
+       */
+      if (canSwitchTab) {
+        setSelectedActiveTab(selectedIndex);
+        setActiveTab(selectedIndex);
+      } else {
         setShowModal(true);
         setSelectedActiveTab(selectedIndex);
-        return;
       }
-      setActiveTab(selectedIndex);
     }
   };
 
@@ -215,7 +228,20 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             value={activeTab}
             onChange={onTabChange}
           >
+            {/* general form tab */}
             <GeneralForm
+              defaultValues={
+                profileData
+                  ? {
+                      avatar: null,
+                      coverImage: null,
+                      name: profileData.name,
+                      bio: profileData.description,
+                      ens: '',
+                      userName: '',
+                    }
+                  : undefined
+              }
               header={{
                 title: t('Avatar & Cover Image'),
                 coverImage: background,
@@ -296,9 +322,11 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   updateGeneralForm(formValues, getProfileImageVersions(avatarImage, coverImage));
                 },
               }}
-              onFormValid={setGeneralValid}
+              onFormDirty={setGeneralFormDirty}
               customStyle="h-full"
             />
+
+            {/* social links / external urls tab */}
             <SocialLinks
               title={t('External URLs')}
               addNewButtonLabel={t('Add new')}
@@ -331,9 +359,11 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 },
               }}
               onDelete={() => ({})}
-              onFormValid={setSocialLinksValid}
+              onFormDirty={setSocialLinksDirty}
               customStyle="h-full"
             />
+
+            {/* interests tab */}
             {/*@TODO: Create loading and error states for interests list */}
             {
               <Interests
@@ -362,17 +392,19 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                     //@TODO
                   },
                 }}
-                onFormValid={setInterestsValid}
+                onFormDirty={setInterestsListDirty}
                 customStyle="h-full"
               />
             }
           </Tab>
         </Stack>
       </Card>
+
       <Modal
         title={{ label: t('Unsaved Changes') }}
         show={showModal}
         onClose={() => {
+          setSelectedActiveTab(activeTab);
           setShowModal(false);
         }}
         actions={[
@@ -388,6 +420,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
             variant: 'primary',
             label: 'Save',
             onClick: () => {
+              setShowModal(false);
               //@TODO
             },
           },

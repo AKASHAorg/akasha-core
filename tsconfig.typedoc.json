@@ -3,7 +3,6 @@
     {
       "path": "./typings"
     },
-    { "path": "./ui/design" },
     { "path": "./ui/design-system-core" },
     { "path": "./ui/design-system-components" },
     { "path": "./tests" },
@@ -20,7 +19,7 @@
     { "path": "./ui/widgets/top-bar" },
     { "path": "./ui/widgets/trending" },
     { "path": "./ui/apps/akasha-verse" },
-    { "path": "./ui/apps/bookmarks" },
+    { "path": "./ui/apps/lists" },
     { "path": "./ui/apps/legal" },
     { "path": "./ui/apps/notifications" },
     { "path": "./ui/apps/profile" },

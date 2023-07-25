@@ -97,6 +97,8 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           viewerIsOwner={isViewer}
           flagLabel={t('Report')}
+          copyLabel={t('Copy to clipboard')}
+          copiedLabel={t('Copied')}
           followElement={
             <FollowProfile profileId={profileId} isIconButton={true} navigateTo={navigateTo} />
           }

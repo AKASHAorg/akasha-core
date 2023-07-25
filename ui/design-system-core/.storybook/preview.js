@@ -1,4 +1,5 @@
 import '../src/twind/main.css';
+import '../src/twind/globals.css';
 import { install } from '@twind/core';
 import twindConfig from '../src/twind/twind.config.js';
 
