@@ -2,6 +2,7 @@ import React, { useState, PropsWithChildren } from 'react';
 import TabList from '@akashaorg/design-system-core/lib/components/TabList';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { FOLLOWERS, FOLLOWING } from '../../../routes';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -26,8 +27,10 @@ const MasterPage: React.FC<PropsWithChildren<MasterEngagementsPageProps>> = prop
   const { t } = useTranslation('app-profile');
   const { profileId } = useParams<{ profileId: string }>();
 
+  const pathname = location.pathname.substring(location.pathname.lastIndexOf('/'));
+
   const [activeTab, setActiveTab] = useState(
-    isLoggedIn ? ROUTE_TO_TAB_INDEX_MAP[location.pathname] || 0 : 0,
+    isLoggedIn ? ROUTE_TO_TAB_INDEX_MAP[pathname] || 0 : 0,
   );
 
   const onTabChange = (selectedIndex: number) => {
@@ -44,11 +47,11 @@ const MasterPage: React.FC<PropsWithChildren<MasterEngagementsPageProps>> = prop
         selected={activeTab}
         labels={[t('Followers'), t('Following')]}
         onChange={selectedIndex => {
-          onTabChange(selectedIndex);
           setActiveTab(selectedIndex);
+          onTabChange(selectedIndex);
         }}
       />
-      {children}
+      <Box customStyle="mt-4">{children}</Box>
     </Card>
   );
 };

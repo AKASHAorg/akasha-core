@@ -5,12 +5,12 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useFollowingsOfLoggedInProfile } from './use-followings-of-logged-in-profile';
 import {
   useCreateFollowMutation,
-  useGetMyProfileQuery,
+  useGetProfileByDidQuery,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { Follow } from '../type';
+import { Follow } from '../follow-profile/type';
 
-type IconButtonFollow = {
+export type IconButtonFollowProps = {
   profileId: string;
   navigateTo?: (args: NavigateToParams) => void;
 };
@@ -18,7 +18,7 @@ type IconButtonFollow = {
 /* TODO: Some of the logic inside this component is a work around until we have a hook that fetches the isFollowing flag and stream id of a profile being viewed.
  **      The component will be refactored once the hook is ready.
  */
-const IconButtonFollow: React.FC<IconButtonFollow> = props => {
+const IconButtonFollow: React.FC<IconButtonFollowProps> = props => {
   const { profileId, navigateTo } = props;
 
   const loginQuery = useGetLogin();
@@ -62,10 +62,15 @@ const IconButtonFollow: React.FC<IconButtonFollow> = props => {
     },
   });
 
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: response => response?.viewer?.profile,
-    enabled: !!loginQuery.data?.id,
-  });
+  const profileDataReq = useGetProfileByDidQuery(
+    { id: profileId },
+    {
+      select: response => response?.node,
+      enabled: !!loginQuery.data?.id,
+    },
+  );
+
+  const profileData = 'isViewer' in profileDataReq.data ? profileDataReq.data.profile : null;
 
   const checkAuth = () => {
     if (!loginQuery.data?.id && navigateTo) {
@@ -111,14 +116,14 @@ const IconButtonFollow: React.FC<IconButtonFollow> = props => {
         <Button
           size="sm"
           icon="UserPlusIcon"
-          onClick={() => handleUnfollow(profileDataReq.data?.id, following)}
+          onClick={() => handleUnfollow(profileData?.id, following)}
           variant="primary"
           loading={loading}
           iconOnly
         />
       ) : (
         <Button
-          onClick={() => handleFollow(profileDataReq.data?.id, following)}
+          onClick={() => handleFollow(profileData?.id, following)}
           icon="UsersIcon"
           loading={loading}
           greyBg

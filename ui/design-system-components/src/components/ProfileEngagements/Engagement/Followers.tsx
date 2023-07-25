@@ -1,22 +1,22 @@
 import React from 'react';
 import Entry from '../Entry';
-import EntryError from '../Entry/EntryError';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EmptyEntry from '../Entry/EmptyEntry';
 import { tw } from '@twind/core';
-import { EngagementProps } from '../types';
-import { ProfileEngagementLoading } from '../placeholders/ProfileEngagementLoading';
+import { Engagement, EngagementProps } from '../types';
 
-export type FollowersProps = EngagementProps;
+export type FollowersProps = {
+  followers: Engagement;
+} & EngagementProps;
 
 const Followers: React.FC<FollowersProps> = ({
-  engagement,
+  followers,
   profileAnchorLink,
+  getMediaUrl,
   renderFollowElement,
-  onError,
   onProfileClick,
 }) => {
-  const isEmptyEntry = engagement.status === 'success' && engagement.data.length === 0;
+  const isEmptyEntry = followers.length === 0;
 
   if (isEmptyEntry) {
     return (
@@ -28,26 +28,21 @@ const Followers: React.FC<FollowersProps> = ({
 
   return (
     <Stack direction="column" spacing="gap-y-4">
-      {engagement.status === 'loading' && <ProfileEngagementLoading />}
-      {engagement.status === 'error' && (
-        <div className={tw('mt-12')}>
-          <EntryError onError={onError} />{' '}
-        </div>
-      )}
-      {engagement.status === 'success' &&
-        engagement.data.map((engagement, index) => (
-          <Entry
-            key={`${engagement?.profile.id}-${index}`}
-            profileAnchorLink={profileAnchorLink}
-            profileId={engagement?.profile.id}
-            avatar={engagement?.profile.avatar}
-            name={engagement?.profile.name}
-            streamId={engagement.id}
-            isFollowing={engagement.isFollowing}
-            renderFollowElement={renderFollowElement}
-            onProfileClick={onProfileClick}
-          />
-        ))}
+      {followers.map((engagement, index) => (
+        <Entry
+          key={`${engagement?.profile.id}-${index}`}
+          profileAnchorLink={profileAnchorLink}
+          profileId={engagement?.profile?.did.id}
+          profileStreamId={engagement?.profile?.id}
+          avatar={engagement?.profile.avatar}
+          name={engagement?.profile.name}
+          followStreamId={engagement.id}
+          isFollowing={engagement.isFollowing}
+          getMediaUrl={getMediaUrl}
+          renderFollowElement={renderFollowElement}
+          onProfileClick={onProfileClick}
+        />
+      ))}
     </Stack>
   );
 };

@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import FollowProfile from '../../follow-profile';
 import Following from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Following';
 import MasterPage from './master-page';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useParams } from 'react-router-dom';
@@ -9,10 +11,12 @@ import {
   useGetProfileByDidQuery,
   useInfiniteGetFollowingListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 
 const FollowingPage: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-profile');
+
   const { profileId } = useParams<{ profileId: string }>();
 
   const loginQuery = useGetLogin();
@@ -30,7 +34,7 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
   );
 
   const followingReq = useInfiniteGetFollowingListByDidQuery(
-    null,
+    'last',
     {
       id: profileId,
       last: 10,
@@ -40,20 +44,17 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
     },
   );
 
-  const following = [];
-
-  /*TODO: Fix the following */
-  // useMemo(
-  //   () =>
-  //     followingReq.data?.pages
-  //       ? followingReq.data.pages?.flatMap(page =>
-  //           'isViewer' in page.node
-  //             ? page?.node?.followList?.edges?.map(edge => edge?.node) || []
-  //             : [],
-  //         )
-  //       : [],
-  //   [followingReq.data?.pages],
-  // );
+  const following = useMemo(
+    () =>
+      followingReq.data?.pages
+        ? followingReq.data.pages?.flatMap(page =>
+            'isViewer' in page.node
+              ? page?.node?.followList?.edges?.map(edge => edge?.node) || []
+              : [],
+          )
+        : [],
+    [followingReq.data],
+  );
 
   if (!loginQuery.data?.id) {
     return navigateTo({
@@ -81,21 +82,33 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
 
   return (
     <MasterPage isLoggedIn={!!loginQuery.data?.id} navigateTo={navigateTo}>
-      <Following
-        engagement={{
-          status: followingReq.status,
-          data: following,
-        }}
-        loadingMoreLabel={`${t('Loading more')} ...`}
-        profileAnchorLink={'/@akashaorg/app-profile'}
-        ownerUserName={profileData.name}
-        viewerIsOwner={isViewer}
-        renderFollowElement={(streamId, isFollowing) => (
-          <FollowProfile streamId={streamId} isFollowing={isFollowing} navigateTo={navigateTo} />
-        )}
-        onError={onError}
-        onProfileClick={onProfileClick}
-      />
+      {followingReq.status === 'loading' && <ProfileEngagementLoading />}
+      {followingReq.status === 'error' && (
+        <Box customStyle="mt-8">
+          <EntryError onError={onError} />
+        </Box>
+      )}
+      {followingReq.status === 'success' && (
+        <Following
+          following={following}
+          loadingMoreLabel={`${t('Loading more')} ...`}
+          profileAnchorLink={'/@akashaorg/app-profile'}
+          ownerUserName={profileData.name}
+          viewerIsOwner={isViewer}
+          renderFollowElement={(profileStreamId, followStreamId, isFollowing) => (
+            <FollowProfile
+              loggedInProfileId={loginQuery.data?.id}
+              profileStreamId={profileStreamId}
+              isLoggedIn={!!loginQuery.data?.id}
+              followStreamId={followStreamId}
+              isFollowing={isFollowing}
+              navigateTo={navigateTo}
+            />
+          )}
+          onProfileClick={onProfileClick}
+          getMediaUrl={getProfileImageVersionsWithMediaUrl}
+        />
+      )}
     </MasterPage>
   );
 };

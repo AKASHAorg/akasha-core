@@ -25,28 +25,19 @@ const followingData = {
 export const BaseFollowings = Template.bind({});
 BaseFollowings.args = {
   ...COMMON_PROPS,
-  engagement: {
-    status: 'success',
-    data: [{ profile: followingData, isFollowing: true }],
-  },
+  following: [{ profile: followingData, isFollowing: true }],
 };
 
 export const NoFollowing = Template.bind({});
 NoFollowing.args = {
   ...COMMON_PROPS,
-  engagement: {
-    status: 'success',
-    data: [],
-  },
+  following: [],
 };
 
 export const OtherViewerNoFollowing = Template.bind({});
 OtherViewerNoFollowing.args = {
   ...COMMON_PROPS,
-  engagement: {
-    status: 'success',
-    data: [],
-  },
+  following: [],
   viewerIsOwner: false,
   ownerUserName: 'espressolover',
 };
@@ -54,11 +45,11 @@ OtherViewerNoFollowing.args = {
 export const FollowingLoading = Template.bind({});
 FollowingLoading.args = {
   ...COMMON_PROPS,
-  engagement: { status: 'loading', data: [] },
+  following: [],
 };
 
 export const ErrorFollowing = Template.bind({});
 ErrorFollowing.args = {
   ...COMMON_PROPS,
-  engagement: { status: 'error', data: [] },
+  following: [],
 };

@@ -2,14 +2,18 @@ import React, { useMemo } from 'react';
 import FollowProfile from '../../follow-profile';
 import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
 import MasterPage from './master-page';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useParams } from 'react-router-dom';
 import { useInfiniteGetFollowersListByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 
 const FollowersPage: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-profile');
+
   const { profileId } = useParams<{ profileId: string }>();
 
   const loginQuery = useGetLogin();
@@ -17,7 +21,7 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const followersReq = useInfiniteGetFollowersListByDidQuery(
-    null,
+    'last',
     {
       id: profileId,
       last: 10,
@@ -27,19 +31,17 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
     },
   );
 
-  const followers = [];
-  /*TODO: Fix the following */
-  //  useMemo(
-  //   () =>
-  //     followersReq.data?.pages
-  //       ? followersReq.data.pages?.flatMap(page =>
-  //           'isViewer' in page.node
-  //             ? page.node?.profile?.followers?.edges?.map(edge => edge?.node) || []
-  //             : [],
-  //         )
-  //       : [],
-  //   [followersReq.data?.pages],
-  // );
+  const followers = useMemo(
+    () =>
+      followersReq.data?.pages
+        ? followersReq.data.pages?.flatMap(page =>
+            'isViewer' in page.node
+              ? page.node?.profile?.followers?.edges?.map(edge => edge?.node) || []
+              : [],
+          )
+        : [],
+    [followersReq.data],
+  );
 
   if (!loginQuery.data?.id) {
     return navigateTo({
@@ -64,19 +66,31 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
 
   return (
     <MasterPage isLoggedIn={!!loginQuery.data?.id} navigateTo={navigateTo}>
-      <Followers
-        engagement={{
-          status: followersReq.status,
-          data: followers,
-        }}
-        loadingMoreLabel={`${t('Loading more')} ...`}
-        profileAnchorLink={'/@akashaorg/app-profile'}
-        renderFollowElement={(streamId, isFollowing) => (
-          <FollowProfile streamId={streamId} isFollowing={isFollowing} navigateTo={navigateTo} />
-        )}
-        onError={onError}
-        onProfileClick={onProfileClick}
-      />
+      {followersReq.status === 'loading' && <ProfileEngagementLoading />}
+      {followersReq.status === 'error' && (
+        <Box customStyle="mt-8">
+          <EntryError onError={onError} />
+        </Box>
+      )}
+      {followersReq.status === 'success' && (
+        <Followers
+          followers={followers}
+          loadingMoreLabel={`${t('Loading more')} ...`}
+          profileAnchorLink={'/@akashaorg/app-profile'}
+          renderFollowElement={(profileStreamId, followStreamId, isFollowing) => (
+            <FollowProfile
+              loggedInProfileId={loginQuery.data?.id}
+              profileStreamId={profileStreamId}
+              isLoggedIn={!!loginQuery.data?.id}
+              followStreamId={followStreamId}
+              isFollowing={isFollowing}
+              navigateTo={navigateTo}
+            />
+          )}
+          onProfileClick={onProfileClick}
+          getMediaUrl={getProfileImageVersionsWithMediaUrl}
+        />
+      )}
     </MasterPage>
   );
 };

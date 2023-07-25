@@ -4,16 +4,23 @@ import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { Profile } from '@akashaorg/typings/ui';
+import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type EntryProps = {
   profileAnchorLink: string;
   profileId: string;
+  profileStreamId: string;
   avatar: Profile['avatar'];
   name: string;
-  streamId: string;
+  followStreamId: string;
   isFollowing: boolean;
   borderBottom?: boolean;
-  renderFollowElement: (streamId: string, isFollowing: boolean) => ReactElement;
+  getMediaUrl: (image?: ProfileImageVersions) => ProfileImageVersions;
+  renderFollowElement: (
+    profileStreamId: string,
+    followStreamId: string,
+    isFollowing: boolean,
+  ) => ReactElement;
   onProfileClick: (profileId: string) => void;
 };
 
@@ -21,11 +28,13 @@ const Entry: React.FC<EntryProps> = props => {
   const {
     profileAnchorLink,
     profileId,
+    profileStreamId,
     avatar,
     name,
-    streamId,
+    followStreamId,
     isFollowing,
     borderBottom = true,
+    getMediaUrl,
     renderFollowElement,
     onProfileClick,
   } = props;
@@ -46,13 +55,13 @@ const Entry: React.FC<EntryProps> = props => {
         <Anchor href={`${profileAnchorLink}/${profileId}`}>
           <AvatarBlock
             profileId={profileId}
-            avatar={avatar}
+            avatar={getMediaUrl(avatar)}
             name={name}
             userName={'' /*@TODO: revisit this part when username is implemented on the API side */}
             onClick={() => onProfileClick(profileId)}
           />
         </Anchor>
-        {renderFollowElement(streamId, isFollowing)}
+        {renderFollowElement(profileStreamId, followStreamId, isFollowing)}
       </Stack>
     </Stack>
   );

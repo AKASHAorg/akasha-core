@@ -1,10 +1,10 @@
 import React from 'react';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import FollowProfile from '../follow-profile';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import ProfileStatsPresentation from '../profile-stats-presentation';
 import routes, { EDIT } from '../../routes';
+import IconButtonFollow from '../icon-button-follow/icon-button-follow';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
 import {
@@ -99,7 +99,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           flagLabel={t('Report')}
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
-          followElement={<FollowProfile profileId={profileId} navigateTo={navigateTo} />}
+          followElement={<IconButtonFollow profileId={profileId} navigateTo={navigateTo} />}
           handleFlag={checkAuth(
             handleEntryFlag(
               profileData.did.id ? profileData.did.id : '',
