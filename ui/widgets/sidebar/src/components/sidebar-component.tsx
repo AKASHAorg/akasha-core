@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -42,8 +42,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [profileName, setProfileName] = useState('Guest');
-
-  const subtitleUi = useRef(null);
 
   const { t } = useTranslation('ui-widget-sidebar');
 
@@ -130,29 +128,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       }
     };
   }, [routing]);
-
-  // const allApps = useMemo(() => {
-  //   return [...(worldApps || []), ...(userInstalledApps || [])];
-  // }, [worldApps, userInstalledApps]);
-
-  useEffect(() => {
-    if (loginQuery.data?.id) {
-      subtitleUi.current = (
-        <DidField
-          did={loginQuery.data?.id}
-          textColor="grey7"
-          copyLabel={t('Copy to clipboard')}
-          copiedLabel={t('Copied')}
-        />
-      );
-    } else {
-      subtitleUi.current = (
-        <Text variant="footnotes1" customStyle="text-grey5 whitespace-normal" truncate breakWord>
-          {t('Connect to see exclusive member only features.')}
-        </Text>
-      );
-    }
-  }, [isLoading, loginQuery.data?.id, t]);
 
   useEffect(() => {
     if (myProfileQuery.data?.profile?.did?.id) {
@@ -294,7 +269,25 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         ) : (
           <Box customStyle="w-fit flex flex-grow flex-col">
             <Text variant="button-md">{profileName}</Text>
-            {subtitleUi.current}
+            {loginQuery.data?.id && (
+              <DidField
+                did={loginQuery.data?.id}
+                textColor="grey7"
+                copyLabel={t('Copy to clipboard')}
+                copiedLabel={t('Copied')}
+              />
+            )}
+
+            {!loginQuery.data?.id && (
+              <Text
+                variant="footnotes1"
+                customStyle="text-grey5 whitespace-normal"
+                truncate
+                breakWord
+              >
+                {t('Connect to see exclusive member only features.')}
+              </Text>
+            )}
           </Box>
         )}
 
