@@ -62,7 +62,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const sdk = getSDK();
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
-  const dismissedCardId = 'dismiss-sidebar-cta-card';
+  const dismissedCardId = `@akashaorg/ui-widget-sidebar_cta-card`;
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
@@ -158,10 +158,11 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     if (myProfileQuery.data?.profile?.did?.id) {
       setProfileName(myProfileQuery.data?.profile?.name);
     } else if (loginQuery.data?.id) {
-      setProfileName('Logged-in User');
+      setProfileName(t('Logged-in User'));
     } else {
-      setProfileName('Guest');
+      setProfileName(t('Guest'));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isLoading,
     loginQuery.data?.id,
@@ -186,29 +187,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const userInstalledApps = useMemo(() => {
     return routeData?.[MenuItemAreaType.UserAppArea];
   }, [routeData]);
-
-  const ConnectButton = useMemo(
-    () =>
-      isLoading ? (
-        <Button size="sm" loading onClick={handleLogout} />
-      ) : (
-        <>
-          {
-            /* myProfileQuery.data */ loginQuery.data?.id && (
-              <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
-            )
-          }
-          {
-            /* !myProfileQuery.data?.profile?.did?.id */ !loginQuery.data?.id &&
-              loginQuery.isStale && (
-                <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
-              )
-          }
-        </>
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isLoading, loginQuery.isStale, myProfileQuery.data?.profile?.did?.id],
-  );
 
   const handleNavigation = (appName: string, route: string) => {
     routing?.navigateTo({
@@ -320,7 +298,19 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
           </Box>
         )}
 
-        <Box customStyle="w-fit h-fit ml-6 self-start">{ConnectButton}</Box>
+        <Box customStyle="w-fit h-fit ml-6 self-start">
+          {isLoading && <Button size="sm" loading />}
+          {!isLoading && (
+            <>
+              {loginQuery.data?.id && (
+                <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
+              )}
+              {!loginQuery.data?.id && loginQuery.isStale && (
+                <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
+              )}
+            </>
+          )}
+        </Box>
       </Box>
 
       {/*
@@ -351,10 +341,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
       {!dismissed.includes(dismissedCardId) && (
         <SidebarCTACard
-          ctaText={`🪄${t(
-            'Add magic to your world by installing cool apps developed by the community',
-          )}`}
-          ctaButtonLabel={t('Check them out')}
           onClickCTAButton={handleClickExplore}
           onDismissCard={handleDismissCTACard}
         />
