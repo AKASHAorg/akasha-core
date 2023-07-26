@@ -32,21 +32,23 @@ const Following: React.FC<FollowingProps> = ({
 
   return (
     <Stack direction="column" spacing="gap-y-4">
-      {following.map((engagement, index) => (
-        <Entry
-          key={`${engagement?.profile.id}-${index}`}
-          profileAnchorLink={profileAnchorLink}
-          profileId={engagement?.profile?.did.id}
-          profileStreamId={engagement?.profile?.id}
-          avatar={engagement?.profile.avatar}
-          name={engagement?.profile.name}
-          followStreamId={engagement.id}
-          isFollowing={engagement.isFollowing}
-          getMediaUrl={getMediaUrl}
-          renderFollowElement={renderFollowElement}
-          onProfileClick={onProfileClick}
-        />
-      ))}
+      {following.map((engagement, index) =>
+        engagement.isFollowing ? (
+          <Entry
+            key={`${engagement?.profile.id}-${index}`}
+            profileAnchorLink={profileAnchorLink}
+            profileId={engagement?.profile?.did.id}
+            profileStreamId={engagement?.profile?.id}
+            avatar={engagement?.profile.avatar}
+            name={engagement?.profile.name}
+            followStreamId={engagement.id}
+            isFollowing={engagement.isFollowing}
+            getMediaUrl={getMediaUrl}
+            renderFollowElement={renderFollowElement}
+            onProfileClick={onProfileClick}
+          />
+        ) : null,
+      )}
     </Stack>
   );
 };

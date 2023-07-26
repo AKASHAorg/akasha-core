@@ -5,13 +5,13 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useFollowingsOfLoggedInProfile } from './use-followings-of-logged-in-profile';
 import {
   useCreateFollowMutation,
-  useGetProfileByDidQuery,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { Follow } from '../follow-profile/type';
+import { Follow } from './type';
 
 export type IconButtonFollowProps = {
   profileId: string;
+  profileStreamId: string;
   navigateTo?: (args: NavigateToParams) => void;
 };
 
@@ -19,7 +19,7 @@ export type IconButtonFollowProps = {
  **      The component will be refactored once the hook is ready.
  */
 const IconButtonFollow: React.FC<IconButtonFollowProps> = props => {
-  const { profileId, navigateTo } = props;
+  const { profileId, profileStreamId, navigateTo } = props;
 
   const loginQuery = useGetLogin();
 
@@ -61,16 +61,6 @@ const IconButtonFollow: React.FC<IconButtonFollowProps> = props => {
       setLoading(false);
     },
   });
-
-  const profileDataReq = useGetProfileByDidQuery(
-    { id: profileId },
-    {
-      select: response => response?.node,
-      enabled: !!loginQuery.data?.id,
-    },
-  );
-
-  const profileData = 'isViewer' in profileDataReq.data ? profileDataReq.data.profile : null;
 
   const checkAuth = () => {
     if (!loginQuery.data?.id && navigateTo) {
@@ -116,14 +106,14 @@ const IconButtonFollow: React.FC<IconButtonFollowProps> = props => {
         <Button
           size="sm"
           icon="UserPlusIcon"
-          onClick={() => handleUnfollow(profileData?.id, following)}
+          onClick={() => handleUnfollow(profileStreamId, following)}
           variant="primary"
           loading={loading}
           iconOnly
         />
       ) : (
         <Button
-          onClick={() => handleFollow(profileData?.id, following)}
+          onClick={() => handleFollow(profileStreamId, following)}
           icon="UsersIcon"
           loading={loading}
           greyBg

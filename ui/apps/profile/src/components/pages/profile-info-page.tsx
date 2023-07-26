@@ -99,7 +99,13 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           flagLabel={t('Report')}
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
-          followElement={<IconButtonFollow profileId={profileId} navigateTo={navigateTo} />}
+          followElement={
+            <IconButtonFollow
+              profileId={profileId}
+              profileStreamId={profileData?.id}
+              navigateTo={navigateTo}
+            />
+          }
           handleFlag={checkAuth(
             handleEntryFlag(
               profileData.did.id ? profileData.did.id : '',
