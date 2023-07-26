@@ -45,10 +45,6 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
       await queryClient.invalidateQueries(
         useInfiniteGetFollowersListByDidQuery.getKey({ id: loggedInProfileId }),
       );
-      //@TODO: commenting out to prevent un-followed profiles from disappearing right away, but this logic needs revisit
-      /* await queryClient.invalidateQueries(
-         useInfiniteGetFollowingListByDidQuery.getKey({ id: loggedInProfileId }),
-       ); */
     },
     onSettled: () => {
       setLoading(false);
@@ -64,10 +60,6 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
       await queryClient.invalidateQueries(
         useInfiniteGetFollowersListByDidQuery.getKey({ id: loggedInProfileId }),
       );
-      //@TODO: commenting out to prevent un-followed profiles from disappearing right away, but this logic needs revisit
-      /* await queryClient.invalidateQueries(
-        useInfiniteGetFollowingListByDidQuery.getKey({ id: loggedInProfileId }),
-      ); */
     },
     onSettled: () => {
       setLoading(false);
