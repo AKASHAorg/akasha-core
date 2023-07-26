@@ -56,7 +56,8 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
     [followersReq.data],
   );
 
-  const isViewer = 'isViewer' in profileDataReq.data ? profileDataReq.data.isViewer : null;
+  const isViewer =
+    profileDataReq.data && 'isViewer' in profileDataReq.data ? profileDataReq.data.isViewer : null;
 
   if (!loginQuery.data?.id) {
     return navigateTo({

@@ -64,7 +64,9 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
   }
 
   const { isViewer, profile: profileData } =
-    'isViewer' in profileDataReq.data ? profileDataReq.data : { isViewer: null, profile: null };
+    profileDataReq.data && 'isViewer' in profileDataReq.data
+      ? profileDataReq.data
+      : { isViewer: null, profile: null };
 
   const onProfileClick = (profileId: string) => {
     navigateTo?.({
