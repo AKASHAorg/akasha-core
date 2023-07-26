@@ -51,6 +51,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   if (status === 'loading') return <ProfileLoading />;
 
   if (isLoggedIn && !profileData) {
+    /*TODO: convert to login modal once it's fixed */
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,

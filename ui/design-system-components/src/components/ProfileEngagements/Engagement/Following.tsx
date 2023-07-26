@@ -20,7 +20,9 @@ const Following: React.FC<FollowingProps> = ({
   renderFollowElement,
   onProfileClick,
 }) => {
-  const isEmptyEntry = following.length === 0;
+  /*TODO: filter items having isFollowing false when calling the hook and not here*/
+  const isEmptyEntry =
+    following.length === 0 || following.filter(item => item.isFollowing).length === 0;
 
   if (isEmptyEntry) {
     return (
@@ -32,21 +34,23 @@ const Following: React.FC<FollowingProps> = ({
 
   return (
     <Stack direction="column" spacing="gap-y-4">
-      {following.map((engagement, index) => (
-        <Entry
-          key={`${engagement?.profile.id}-${index}`}
-          profileAnchorLink={profileAnchorLink}
-          profileId={engagement?.profile?.did.id}
-          profileStreamId={engagement?.profile?.id}
-          avatar={engagement?.profile.avatar}
-          name={engagement?.profile.name}
-          followStreamId={engagement.id}
-          isFollowing={engagement.isFollowing}
-          getMediaUrl={getMediaUrl}
-          renderFollowElement={viewerIsOwner ? renderFollowElement : null}
-          onProfileClick={onProfileClick}
-        />
-      ))}
+      {following.map((engagement, index) =>
+        engagement.isFollowing ? (
+          <Entry
+            key={`${engagement?.profile.id}-${index}`}
+            profileAnchorLink={profileAnchorLink}
+            profileId={engagement?.profile?.did.id}
+            profileStreamId={engagement?.profile?.id}
+            avatar={engagement?.profile.avatar}
+            name={engagement?.profile.name}
+            followStreamId={engagement.id}
+            isFollowing={engagement.isFollowing}
+            getMediaUrl={getMediaUrl}
+            renderFollowElement={viewerIsOwner ? renderFollowElement : null}
+            onProfileClick={onProfileClick}
+          />
+        ) : null,
+      )}
     </Stack>
   );
 };

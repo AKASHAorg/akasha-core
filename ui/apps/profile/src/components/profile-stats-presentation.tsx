@@ -8,6 +8,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
 import { EngagementType, NavigateToParams } from '@akashaorg/typings/ui';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 type ProfileStatsPresentationProps = {
   profileId: string;
@@ -19,6 +20,8 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
   navigateTo,
 }) => {
   const { t } = useTranslation('app-profile');
+
+  const loginQuery = useGetLogin();
 
   /*@TODO: replace the following hook calls when stats are supported via indexing */
   const beams = useGetBeamsByAuthorDidQuery(
@@ -58,6 +61,19 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
     following.data && 'followList' in following.data
       ? following.data?.followList?.edges?.length || 0
       : 0;
+
+  const checkAuth = (cb: () => void) => () => {
+    if (!loginQuery.data?.id && navigateTo) {
+      /*TODO: convert to login modal once it's fixed */
+      navigateTo({
+        appName: '@akashaorg/app-auth-ewa',
+        getNavigationUrl: navRoutes => navRoutes.CONNECT,
+      });
+      return;
+    }
+    return cb();
+  };
+
   const handleNavigateToProfilePosts = () => {
     navigateTo({
       appName: '@akashaorg/app-akasha-integration',
@@ -77,7 +93,7 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
       posts={{
         label: t('Beams'),
         total: beamsTotal,
-        onClick: handleNavigateToProfilePosts,
+        onClick: checkAuth(handleNavigateToProfilePosts),
       }}
       interests={{
         label: t('Interests'),
@@ -86,12 +102,12 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
       followers={{
         label: t('Followers'),
         total: followersTotal,
-        onClick: onStatClick('followers'),
+        onClick: checkAuth(onStatClick('followers')),
       }}
       following={{
         label: t('Following'),
         total: followingTotal,
-        onClick: onStatClick('following'),
+        onClick: checkAuth(onStatClick('following')),
       }}
     />
   );

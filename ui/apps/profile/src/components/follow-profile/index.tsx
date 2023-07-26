@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import {
   useCreateFollowMutation,
   useInfiniteGetFollowersListByDidQuery,
-  useInfiniteGetFollowingListByDidQuery,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useQueryClient } from '@tanstack/react-query';
@@ -46,9 +45,10 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
       await queryClient.invalidateQueries(
         useInfiniteGetFollowersListByDidQuery.getKey({ id: loggedInProfileId }),
       );
-      await queryClient.invalidateQueries(
-        useInfiniteGetFollowingListByDidQuery.getKey({ id: loggedInProfileId }),
-      );
+      //@TODO: commenting out to prevent un-followed profiles from disappearing right away, but this logic needs revisit
+      /* await queryClient.invalidateQueries(
+         useInfiniteGetFollowingListByDidQuery.getKey({ id: loggedInProfileId }),
+       ); */
     },
     onSettled: () => {
       setLoading(false);
@@ -64,9 +64,10 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
       await queryClient.invalidateQueries(
         useInfiniteGetFollowersListByDidQuery.getKey({ id: loggedInProfileId }),
       );
-      await queryClient.invalidateQueries(
+      //@TODO: commenting out to prevent un-followed profiles from disappearing right away, but this logic needs revisit
+      /* await queryClient.invalidateQueries(
         useInfiniteGetFollowingListByDidQuery.getKey({ id: loggedInProfileId }),
-      );
+      ); */
     },
     onSettled: () => {
       setLoading(false);
