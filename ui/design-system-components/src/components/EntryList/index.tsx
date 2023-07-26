@@ -5,7 +5,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { elementScroll, useWindowVirtualizer, VirtualItem } from '@tanstack/react-virtual';
+import { useWindowVirtualizer, VirtualItem } from '@tanstack/react-virtual';
 import { IEntryData } from '@akashaorg/typings/ui';
 
 export type CardListProps = {
@@ -27,16 +27,11 @@ export type EntryListProps = {
   isFetchingNextPage?: boolean;
 };
 
-function easeInOutQuint(t) {
-  return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
-}
-
 const EntryList: React.FC<EntryListProps> = props => {
   const {
     pages,
     itemSpacing = 0,
     onLoadMore,
-    // viewAllEntry,
     languageDirection = 'ltr',
     hasNextPage,
     isFetchingNextPage,
@@ -45,7 +40,6 @@ const EntryList: React.FC<EntryListProps> = props => {
   } = props;
   const [hideScrollTop, setHideScrollTop] = React.useState(true);
   const rootElementRef = React.useRef<HTMLDivElement>();
-  const scrollingRef = React.useRef<number>();
 
   const rootElementOffset = React.useRef(0);
 
@@ -60,34 +54,10 @@ const EntryList: React.FC<EntryListProps> = props => {
     rootElementOffset.current = rootElementRef.current?.offsetTop || 0;
   }, []);
 
-  const scrollToFn = React.useCallback((offset, canSmooth, instance) => {
-    const duration = 1000;
-    const start = rootElementRef.current?.scrollTop || 0;
-    const startTime = (scrollingRef.current = Date.now());
-
-    const run = () => {
-      if (scrollingRef.current !== startTime) return;
-      const now = Date.now();
-      const elapsed = now - startTime;
-      const progress = easeInOutQuint(Math.min(elapsed / duration, 1));
-      const interpolated = start + (offset - start) * progress;
-
-      if (elapsed < duration) {
-        elementScroll(interpolated, canSmooth, instance);
-        requestAnimationFrame(run);
-      } else {
-        elementScroll(interpolated, canSmooth, instance);
-      }
-    };
-
-    requestAnimationFrame(run);
-  }, []);
-
   const virtualizer = useWindowVirtualizer({
     count: hasNextPage ? allEntries.length + 1 : allEntries.length,
     estimateSize: () => 100,
     scrollMargin: rootElementOffset.current,
-    scrollToFn,
   });
   const items = virtualizer.getVirtualItems();
   /**
@@ -118,13 +88,7 @@ const EntryList: React.FC<EntryListProps> = props => {
   const scrollTopButtonPlacement = React.useMemo(() => {
     if (languageDirection === 'rtl') return 0;
     return rootElementRef.current ? rootElementRef.current.clientWidth - 64 : null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    languageDirection,
-    rootElementRef,
-    //We want to calculate scroll top button placement whenever the scroll top flag changes as browser may have resized
-    hideScrollTop,
-  ]);
+  }, [languageDirection, rootElementRef]);
 
   const handleScrollToTop = () => {
     virtualizer.scrollToIndex(0);
@@ -135,18 +99,20 @@ const EntryList: React.FC<EntryListProps> = props => {
   }
 
   return (
-    <div ref={rootElementRef}>
-      <div style={{ height: virtualizer.getTotalSize(), position: 'relative' }}>
-        <div
+    <Box ref={rootElementRef}>
+      <Box
+        customStyle="relative"
+        style={{
+          height: virtualizer.getTotalSize(),
+        }}
+      >
+        <Box
+          customStyle={`absolute w-full top-0 left-0`}
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
             transform: `translateY(${items[0].start - virtualizer.options.scrollMargin}px)`,
           }}
         >
-          {props.children({
+          {children({
             items,
             allEntries,
             measureElementRef: virtualizer.measureElement,
@@ -158,46 +124,12 @@ const EntryList: React.FC<EntryListProps> = props => {
               <Spinner />
             </Box>
           )}
-        </div>
-        {/*{(viewAllEntry ? pages.slice(0, 1) : pages).map((page, pageIndex) => (*/}
-        {/*  <div data-page-idx={pageIndex} key={`${pageKeyPrefix}-${pageIndex}`}>*/}
-        {/*    {items(page)?.map((itemId, itemIndex, items) => (*/}
-        {/*      <React.Fragment key={itemId}>*/}
-        {/*        {pageIndex === 0 && itemIndex === 2 && <div ref={startScrollRef}></div>}*/}
-        {/*        {React.cloneElement(itemCard, {*/}
-        {/*          itemId,*/}
-        {/*          index: itemIndex,*/}
-        {/*          itemSpacing,*/}
-        {/*          totalEntry: items.length,*/}
-        {/*          className: `entry-${itemId}`,*/}
-        {/*        })}*/}
-        {/*      </React.Fragment>*/}
-        {/*    ))}*/}
-        {/*  </div>*/}
-        {/*))}*/}
-        {/*{viewAllEntry && pages[0]?.total > viewAllEntry.limit && (*/}
-        {/*  <Anchor*/}
-        {/*    onClick={e => {*/}
-        {/*      e.preventDefault();*/}
-        {/*      viewAllEntry.onClick();*/}
-        {/*    }}*/}
-        {/*    target="_self"*/}
-        {/*    color="accentText"*/}
-        {/*    customStyle="font-bold text-lg ml-2 no-underline	"*/}
-        {/*  >*/}
-        {/*    {viewAllEntry.label}*/}
-        {/*  </Anchor>*/}
-        {/*)}*/}
-        {/*{!viewAllEntry && (requestStatus === 'loading' || hasNextPage) && (*/}
-        {/*  <Box customStyle="p-8" ref={loadmoreRef}>*/}
-        {/*    <Spinner />*/}
-        {/*  </Box>*/}
-        {/*)}*/}
+        </Box>
         <ScrollTopWrapper placement={scrollTopButtonPlacement}>
           <ScrollTopButton hide={hideScrollTop} onClick={handleScrollToTop} />
         </ScrollTopWrapper>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

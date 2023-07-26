@@ -3,6 +3,7 @@ import { I18nextProvider } from 'react-i18next';
 import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import type { EntryRendererProps } from './entry-renderer';
 import BeamFeed, { BeamFeedProps } from './beam-feed';
+import ReflectFeed from './reflect-feed';
 
 export type FeedWidgetProps = BeamFeedProps & {
   itemType: EntityTypes;

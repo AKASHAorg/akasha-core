@@ -20,8 +20,6 @@ export interface IEntryCardProps extends IEntryBoxProps {
   accentBorderTop?: boolean;
   navigateTo?: (args: NavigateToParams) => void;
   hideRepost?: boolean;
-  // required for virtual list
-  index?: number;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -70,7 +68,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onRetry,
     headerMenuExt,
     actionsRightExt,
-    index,
   } = props;
 
   return (
@@ -79,7 +76,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
       border={border}
       noBorderRadius={noBorderRadius}
       pad="p-0"
-      index={index}
     >
       {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
         <SocialBox

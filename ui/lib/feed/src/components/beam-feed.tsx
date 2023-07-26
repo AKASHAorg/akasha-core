@@ -2,7 +2,6 @@ import * as React from 'react';
 import EntryList, {
   EntryListProps,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
-import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import {
   EntityTypes,
   IContentClickDetails,
@@ -17,6 +16,7 @@ import { i18n } from 'i18next';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 
 export type BeamFeedProps = Omit<EntryListProps, 'itemCard'> & {
   locale?: ILocale;
@@ -90,7 +90,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
           const isLoader = index > allEntries.length - 1;
           if (isLoader || isFetchingNextPage) {
             return (
-              <Box customStyle="p-8 w-full">
+              <Box key={key} customStyle="p-8 w-full">
                 <Spinner />
               </Box>
             );
@@ -100,7 +100,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
               key={key}
               data-index={index}
               ref={measureElementRef}
-              style={{ paddingBottom: '1rem' }}
+              style={{ paddingBottom: itemSpacing }}
             >
               <EntryCard
                 showMore={true}
@@ -113,15 +113,6 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
           );
         });
       }}
-      {/*{getterProps => (*/}
-      {/*  <EntryCard*/}
-      {/*    showMore={true}*/}
-      {/*    entryData={getterProps.entryData}*/}
-      {/*    locale={locale}*/}
-      {/*    onRepost={handleRepost}*/}
-      {/*    onContentClick={onBeamNavigate}*/}
-      {/*  />*/}
-      {/*)}*/}
     </EntryList>
   );
 };
