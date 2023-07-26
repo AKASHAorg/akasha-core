@@ -18,6 +18,6 @@ export type EngagementProps = {
     profileStreamId: string,
     followStreamId: string,
     isFollowing: boolean,
-  ) => ReactElement;
+  ) => ReactElement | null;
   onProfileClick: (profileId: string) => void;
 };

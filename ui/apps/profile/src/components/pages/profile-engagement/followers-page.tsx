@@ -7,7 +7,10 @@ import EntryError from '@akashaorg/design-system-components/lib/components/Profi
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useParams } from 'react-router-dom';
-import { useInfiniteGetFollowersListByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import {
+  useGetProfileByDidQuery,
+  useInfiniteGetFollowersListByDidQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 
@@ -19,6 +22,16 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
+  const profileDataReq = useGetProfileByDidQuery(
+    {
+      id: profileId,
+    },
+    {
+      select: response => response.node,
+      enabled: !!loginQuery.data?.id,
+    },
+  );
 
   const followersReq = useInfiniteGetFollowersListByDidQuery(
     'last',
@@ -42,6 +55,8 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
         : [],
     [followersReq.data],
   );
+
+  const isViewer = 'isViewer' in profileDataReq.data ? profileDataReq.data.isViewer : null;
 
   if (!loginQuery.data?.id) {
     return navigateTo({
@@ -77,6 +92,7 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
           followers={followers}
           loadingMoreLabel={`${t('Loading more')} ...`}
           profileAnchorLink={'/@akashaorg/app-profile'}
+          viewerIsOwner={isViewer}
           renderFollowElement={(profileStreamId, followStreamId, isFollowing) => (
             <FollowProfile
               loggedInProfileId={loginQuery.data?.id}

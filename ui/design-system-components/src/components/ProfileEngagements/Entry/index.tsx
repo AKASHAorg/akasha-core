@@ -20,7 +20,7 @@ export type EntryProps = {
     profileStreamId: string,
     followStreamId: string,
     isFollowing: boolean,
-  ) => ReactElement;
+  ) => ReactElement | null;
   onProfileClick: (profileId: string) => void;
 };
 
@@ -61,7 +61,7 @@ const Entry: React.FC<EntryProps> = props => {
             onClick={() => onProfileClick(profileId)}
           />
         </Anchor>
-        {renderFollowElement(profileStreamId, followStreamId, isFollowing)}
+        {renderFollowElement && renderFollowElement(profileStreamId, followStreamId, isFollowing)}
       </Stack>
     </Stack>
   );

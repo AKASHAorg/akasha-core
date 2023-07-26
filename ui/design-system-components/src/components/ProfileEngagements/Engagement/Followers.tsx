@@ -7,10 +7,12 @@ import { Engagement, EngagementProps } from '../types';
 
 export type FollowersProps = {
   followers: Engagement;
+  viewerIsOwner: boolean;
 } & EngagementProps;
 
 const Followers: React.FC<FollowersProps> = ({
   followers,
+  viewerIsOwner,
   profileAnchorLink,
   getMediaUrl,
   renderFollowElement,
@@ -39,7 +41,7 @@ const Followers: React.FC<FollowersProps> = ({
           followStreamId={engagement.id}
           isFollowing={engagement.isFollowing}
           getMediaUrl={getMediaUrl}
-          renderFollowElement={renderFollowElement}
+          renderFollowElement={viewerIsOwner ? renderFollowElement : null}
           onProfileClick={onProfileClick}
         />
       ))}
