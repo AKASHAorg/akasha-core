@@ -52,13 +52,18 @@ const Entry: React.FC<EntryProps> = props => {
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle={`px-4 pb-4 ${borderBottomStyle}`}>
       <Stack align="center" justify="between">
-        <Anchor href={`${profileAnchorLink}/${profileId}`}>
+        <Anchor
+          href={`${profileAnchorLink}/${profileId}`}
+          onClick={event => {
+            event.preventDefault();
+            onProfileClick(profileId);
+          }}
+        >
           <AvatarBlock
             profileId={profileId}
             avatar={getMediaUrl(avatar)}
             name={name}
             userName={'' /*@TODO: revisit this part when username is implemented on the API side */}
-            onClick={() => onProfileClick(profileId)}
           />
         </Anchor>
         {renderFollowElement && renderFollowElement(profileStreamId, followStreamId, isFollowing)}
