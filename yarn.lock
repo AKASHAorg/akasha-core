@@ -19457,6 +19457,13 @@ pkg-up@^3.1.0:
   dependencies:
     find-up "^3.0.0"
 
+pkh-did-resolver@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/pkh-did-resolver/-/pkh-did-resolver-1.2.0.tgz#823a1045261f97bba1f0d49bb1e5f40eb51f91dc"
+  integrity sha512-pl4kEGEifOiQL9lJjeJO0PD0dyuWsRihoCMlTPUxWxhrbBHP44+MJSwYF+nRaCQnYvm/C9xRKN6vfye3s0frzw==
+  dependencies:
+    caip "~1.1.0"
+
 pluralize@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-8.0.0.tgz#1a6fa16a38d12a1901e0320fa017051c539ce3b1"
