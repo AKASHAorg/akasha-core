@@ -20,10 +20,15 @@ class AWF_Misc {
   private _setupDidResolver() {
     const pkhResolver = getResolver();
     const keyDidResolver = KeyResolver.getResolver();
-    this.resolver = new Resolver({
-      ...pkhResolver,
-      ...keyDidResolver,
-    });
+    this.resolver = new Resolver(
+      {
+        ...pkhResolver,
+        ...keyDidResolver,
+      },
+      {
+        cache: true,
+      },
+    );
   }
 
   public async getApiStatus() {
