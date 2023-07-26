@@ -27,7 +27,7 @@ export type SocialLinksProp = {
   };
   customStyle?: string;
   onDelete: (index: number) => void;
-  onFormValid?: (valid: boolean) => void;
+  onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const SocialLinks: React.FC<SocialLinksProp> = ({
@@ -39,7 +39,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   saveButton,
   customStyle = '',
   onDelete,
-  onFormValid,
+  onFormDirty,
 }) => {
   const {
     control,
@@ -66,9 +66,9 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   };
 
   useEffect(() => {
-    if (onFormValid) onFormValid(isValid);
+    if (onFormDirty) onFormDirty(isDirty);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValid]);
+  }, [isDirty]);
 
   return (
     <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
@@ -126,7 +126,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
             variant="primary"
             loading={saveButton.loading}
             label={saveButton.label}
-            disabled={!isDirty && !isValid}
+            disabled={!isDirty || !isValid}
             onClick={handleSubmit(onSave)}
             type="submit"
           />
