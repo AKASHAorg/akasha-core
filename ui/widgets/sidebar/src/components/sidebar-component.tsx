@@ -54,6 +54,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const queryClient = useQueryClient();
 
   const sdk = getSDK();
+  sdk.services.common.misc.resolveDID(
+    'did:pkh:eip155:5:0x72f4c40f8253f871d7d7d0ead78dc86ab471e3ec',
+  );
 
   React.useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
@@ -240,7 +243,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     if (myProfileQuery.data?.profile?.did?.id) {
       setProfileName(myProfileQuery.data?.profile?.name);
     } else if (loginQuery.data?.id) {
-      setProfileName('Logged-in User');
+      setProfileName('');
     } else {
       setProfileName('Guest');
     }
@@ -295,8 +298,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
             <TextLine title="tagName" animated={true} width="w-[100px]" />
           </Stack>
         ) : (
-          <Box customStyle="w-fit flex flex-grow flex-col">
-            <Text variant="button-md">{profileName}</Text>
+          <Box customStyle="w-fit flex flex-grow flex-col justify-center">
+            {profileName && <Text variant="button-md">{profileName}</Text>}
             {subtitleUi.current}
           </Box>
         )}
