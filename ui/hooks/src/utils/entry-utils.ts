@@ -1,16 +1,13 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { Logger } from '@akashaorg/awf-sdk';
-import {
-  GetCommentQuery,
-  GetEntryQuery,
-  PostResultFragment,
-} from '@akashaorg/typings/sdk/graphql-operation-types';
 import { Comment, UserProfile } from '@akashaorg/typings/sdk/graphql-types';
 import { IEntryData, IPublishData, ModerationStatus } from '@akashaorg/typings/ui';
 
 import { getMediaUrl } from './media-utils';
 import { Profile } from '@akashaorg/typings/ui';
 import { GetBeamsQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
+import { Reflect } from '@akashaorg/typings/sdk/graphql-types-new';
+import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';
@@ -98,15 +95,37 @@ export const serializeSlateToBase64 = (slateContent: unknown) => {
  * profile images - append ipfs gateway
  * entry images - append ipfs gateway
  */
-export const mapEntry = (
-  entry:
-    | (Omit<GetCommentQuery['getComment'], 'author'> &
-        Partial<ModerationStatus> & {
-          author: Omit<UserProfile, '_id'> & Partial<ModerationStatus>;
-        })
-    | GetBeamsQuery['beamIndex']['edges'][0]['node'],
-  logger?: Logger,
-) => {
+type Reflection = {
+  version: any;
+  active: boolean;
+  reflectionsCount: number;
+  author: {
+    id: string;
+  };
+  content: Array<{ provider: string; property: string; value: string }>;
+  // diff
+  beam?: {
+    id: string;
+    author: { id: string };
+  };
+  isReply: boolean;
+};
+
+type Beam = {
+  version: any;
+  active: boolean;
+  reflectionsCount: number;
+  author: { id: string };
+  content: Array<{ property: string; provider: string; value: string }>;
+  // diff
+  id: string;
+  rebeamsCount: number;
+  tags?: Array<string | null> | null;
+};
+
+type BeamNodeType = GetBeamsQuery['beamIndex']['edges'][0]['node'];
+
+export const mapEntry = (entry: Reflect | Beam, logger?: Logger) => {
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
   const linkPreviewData = entry.content.find(elem => elem.property === PROPERTY_LINK_PREVIEW);
   const imagesData = entry.content.find(elem => elem.property === PROPERTY_IMAGES);

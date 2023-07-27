@@ -15,8 +15,6 @@ import {
   createPendingEntry,
   useAnalytics,
   useDismissedCard,
-  useInfiniteDummy,
-  mapEntry,
 } from '@akashaorg/ui-awf-hooks';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -27,8 +25,6 @@ import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
-import { createDummyPosts } from './create-dummy-posts';
-import { GetBeamsQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -74,32 +70,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     CREATE_POST_MUTATION_KEY,
   ]);
 
-  const beamsReq = useInfiniteDummy<GetBeamsQuery, ReturnType<typeof mapEntry>>(
-    'feed_page_get_posts',
-    createDummyPosts(5),
-    {
-      select: data => ({
-        pages: data.pages.flatMap(page =>
-          page.beamIndex.edges.flatMap(edge => mapEntry(edge.node)),
-        ),
-        pageParams: data.pageParams,
-      }),
-    },
-  );
-
-  const handleLoadMore = React.useCallback(() => {
-    if (!beamsReq.isLoading && beamsReq.hasNextPage) {
-      beamsReq.fetchNextPage();
-    }
-  }, [beamsReq]);
-
-  const postPages = React.useMemo(() => {
-    if (beamsReq.data) {
-      return beamsReq.data.pages;
-    }
-    return [];
-  }, [beamsReq.data]);
-
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
       if (!loggedProfileData?.did?.id) {
@@ -128,8 +98,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
-  const handleRebeam = (withComment: boolean, beamId: string) => {};
-  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {};
+  const handleRebeam = (withComment: boolean, beamId: string) => {
+    logger.info('Rebeam');
+    // void
+  };
+  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {
+    // void
+  };
 
   return (
     <Box customStyle={'w-full'}>
@@ -185,42 +160,34 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             />
           ),
       )}
-      {pendingPostStates?.map(
-        pendingPostState =>
-          (pendingPostState.state.status === 'loading' ||
-            /*The following line ensures that even if the post is published pending post UI should be shown till the new entry appears on the feed */
-            (pendingPostState.state.status === 'success' &&
-              !postPages?.includes(pendingPostState.state.data.toString() as any))) && (
-            <EntryCard
-              key={pendingPostState.mutationId}
-              style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
-              entryData={createPendingEntry(loggedProfileData, pendingPostState.state.variables)}
-              flagAsLabel={t('Report Post')}
-              locale={locale || 'en'}
-              showMore={true}
-              profileAnchorLink={'/profile'}
-              repliesAnchorLink={routes[POST]}
-              contentClickable={false}
-              hidePublishTime={true}
-              disableActions={true}
-            />
-          ),
-      )}
+      {/*{pendingPostStates?.map(*/}
+      {/*  pendingPostState =>*/}
+      {/*    (pendingPostState.state.status === 'loading' ||*/}
+      {/*      The following line ensures that even if the post is published pending post UI should be shown till the new entry appears on the feed */}
+      {/*      (pendingPostState.state.status === 'success' &&*/}
+      {/*        !postPages?.includes(pendingPostState.state.data.toString() as any))) && (*/}
+      {/*      <EntryCard*/}
+      {/*        key={pendingPostState.mutationId}*/}
+      {/*        style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}*/}
+      {/*        entryData={createPendingEntry(loggedProfileData, pendingPostState.state.variables)}*/}
+      {/*        flagAsLabel={t('Report Post')}*/}
+      {/*        locale={locale || 'en'}*/}
+      {/*        showMore={true}*/}
+      {/*        profileAnchorLink={'/profile'}*/}
+      {/*        repliesAnchorLink={routes[POST]}*/}
+      {/*        contentClickable={false}*/}
+      {/*        hidePublishTime={true}*/}
+      {/*        disableActions={true}*/}
+      {/*      />*/}
+      {/*    ),*/}
+      {/*)}*/}
       <FeedWidget
         modalSlotId={layoutConfig.modalSlotId}
-        logger={logger}
         itemType={EntityTypes.BEAM}
-        // @TODO replace with real data source
-        pages={postPages}
-        onLoadMore={handleLoadMore}
         loggedProfileData={loggedProfileData}
         navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={navigateToModal}
         onLoginModalOpen={showLoginModal}
-        // @TODO replace with real data source
-        requestStatus={beamsReq.status}
-        // @TODO replace with real data source
-        hasNextPage={beamsReq.hasNextPage}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
@@ -228,7 +195,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         itemSpacing={8}
         i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
         onRebeam={handleRebeam}
-        onBeamNavigate={handleBeamNavigate}
+        onNavigate={handleBeamNavigate}
       />
     </Box>
   );

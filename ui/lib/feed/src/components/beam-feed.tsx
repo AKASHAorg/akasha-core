@@ -11,7 +11,6 @@ import {
   RootComponentProps,
   TrackEventData,
 } from '@akashaorg/typings/ui';
-import { ILogger } from '@akashaorg/typings/sdk/log';
 import { i18n } from 'i18next';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -19,6 +18,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 
 export type BeamFeedProps = Omit<EntryListProps, 'itemCard'> & {
+  itemType: EntityTypes.BEAM;
   locale?: ILocale;
   onEntryFlag?: (
     entryId: string,
@@ -34,15 +34,12 @@ export type BeamFeedProps = Omit<EntryListProps, 'itemCard'> & {
   accentBorderTop?: boolean;
   trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
   totalEntryCount?: number;
-  logger: ILogger;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (props: ModalNavigationOptions) => void;
   loggedProfileData?: Profile;
   i18n: i18n;
-  replyFragmentItem?: boolean;
-  showReplyFragment?: boolean;
   onRebeam?: (withComment: boolean, beamId: string) => void;
-  onBeamNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
+  onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
 };
 
 const BeamFeed: React.FC<BeamFeedProps> = props => {
@@ -58,7 +55,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     loggedProfileData,
     navigateToModal,
     navigateTo,
-    onBeamNavigate,
+    onNavigate,
   } = props;
 
   const handleRepost = (_withComment: boolean, entryId: string) => {
@@ -107,7 +104,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
                 entryData={entryData}
                 locale={locale}
                 onRepost={handleRepost}
-                onContentClick={onBeamNavigate}
+                onContentClick={onNavigate}
               />
             </div>
           );
