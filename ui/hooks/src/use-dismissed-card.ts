@@ -15,13 +15,12 @@ const writeToLocalStorage = (storage: IStorage, key: string, value: string[]): v
   }
 };
 
-export function useDismissedCard(
-  statusStorage?: IStorage,
-): [string[], (newClosedValue: string) => void] {
+export function useDismissedCard(statusStorage?: IStorage): [string[], (newId: string) => void] {
   const storage = statusStorage || window.localStorage;
-  const [closed, setClosed] = useState<string[]>(() => {
+
+  const [ids, setIds] = useState<string[]>(() => {
     if (storage) {
-      const currentClosedStatus = JSON.parse(storage.getItem(LOCAL_STORAGE_KEY));
+      const currentClosedStatus = JSON.parse(storage.getItem(LOCAL_STORAGE_KEY)) as string[];
 
       if (currentClosedStatus) {
         return currentClosedStatus;
@@ -30,15 +29,20 @@ export function useDismissedCard(
     }
   });
 
-  const setValue = (newClosedValue: string) => {
-    setClosed(prevClosed => {
-      if (prevClosed.includes(newClosedValue)) {
-        return prevClosed;
+  const setValue = (newId: string) => {
+    setIds(prevIds => {
+      const uniqueIds = new Set(prevIds);
+
+      if (uniqueIds.has(newId)) {
+        return [...uniqueIds];
       }
-      const newClosedValues = prevClosed.concat(newClosedValue);
-      writeToLocalStorage(storage, LOCAL_STORAGE_KEY, newClosedValues);
-      return newClosedValues;
+
+      uniqueIds.add(newId);
+      writeToLocalStorage(storage, LOCAL_STORAGE_KEY, [...uniqueIds]);
+
+      return [...uniqueIds];
     });
   };
-  return [closed, setValue];
+
+  return [ids, setValue];
 }
