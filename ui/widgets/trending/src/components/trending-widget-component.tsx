@@ -42,7 +42,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
           interests: { topics: { value: string; labelType: string }[] };
         };
 
-        return interests.topics.map(el => el.value);
+        return interests?.topics.map(el => el.value);
       },
     },
   );
