@@ -84,9 +84,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   };
 
   const handleCopy = () => {
-    /** handle copy */
-
-    const profileUrl = new URL(`${location.origin}${location.pathname}`).href;
+    const profileUrl = new URL(location.pathname, location.origin).href;
 
     navigator.clipboard.writeText(profileUrl).then(() => {
       setShowFeedback(true);
