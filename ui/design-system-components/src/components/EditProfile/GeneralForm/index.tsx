@@ -56,7 +56,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
     control,
     setValue,
     handleSubmit,
-    formState: { isDirty, isValid },
+    formState: { errors, isDirty, isValid },
   } = useForm<GeneralFormValues>({
     defaultValues,
     resolver: zodResolver(schema),
@@ -83,16 +83,20 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           control={control}
           name="name"
           render={({ field: { name, value, onChange, ref } }) => (
-            <TextField
-              type="text"
-              name={name}
-              label={nameField.label}
-              value={value}
-              onChange={onChange}
-              inputRef={ref}
-            />
+            <>
+              <TextField
+                type="text"
+                name={name}
+                label={nameField.label}
+                value={value}
+                onChange={onChange}
+                inputRef={ref}
+              />
+              {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>}
+            </>
           )}
           defaultValue={nameField.initialValue || ''}
+          rules={{ required: true }}
         />
         {userNameField && (
           <Controller
@@ -196,7 +200,14 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
   );
 };
 const schema = z.object({
-  name: z.string(),
+  name: z
+    .string()
+    .trim()
+    .min(3, { message: 'Must be at least 3 characters' })
+    .refine(
+      value => /^[a-zA-Z0-9-_.]+$/.test(value),
+      'Name should contain only alphabets, numbers or -_.',
+    ),
   userName: z.string().optional(),
   avatar: z.any().optional(),
   coverImage: z.any().optional(),
