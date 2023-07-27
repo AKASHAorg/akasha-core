@@ -54,9 +54,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const queryClient = useQueryClient();
 
   const sdk = getSDK();
-  sdk.services.common.misc.resolveDID(
-    'did:pkh:eip155:5:0x72f4c40f8253f871d7d7d0ead78dc86ab471e3ec',
-  );
 
   React.useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
