@@ -86,8 +86,13 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
-  const handleRebeam = (withComment: boolean, beamId: string) => {};
-  const handleBeamNavigate = (details: IContentClickDetails, contentType: EntityTypes) => {};
+  const handleRebeam = (withComment: boolean, beamId: string) => {
+    logger.info('rebeam');
+    // void;
+  };
+  const handleBeamNavigate = (details: IContentClickDetails, contentType: EntityTypes) => {
+    // void;
+  };
 
   return (
     <Box customStyle="w-full">
@@ -116,15 +121,10 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
           <FeedWidget
             modalSlotId={layoutConfig.modalSlotId}
             itemType={EntityTypes.BEAM}
-            logger={logger}
-            onLoadMore={handleLoadMore}
-            pages={postPages}
-            requestStatus={reqPosts.status}
             loggedProfileData={loggedProfileData}
             navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
             navigateToModal={navigateToModal}
             onLoginModalOpen={showLoginModal}
-            hasNextPage={reqPosts.hasNextPage}
             contentClickable={true}
             onEntryRemove={handleEntryRemove}
             onEntryFlag={handleEntryFlag}
@@ -132,7 +132,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             itemSpacing={8}
             i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
             onRebeam={handleRebeam}
-            onBeamNavigate={handleBeamNavigate}
+            onNavigate={handleBeamNavigate}
           />
         </>
       )}

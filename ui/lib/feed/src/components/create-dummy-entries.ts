@@ -1,8 +1,4 @@
 import {
-  GetBeamsQuery,
-  GetReflectionsFromBeamQuery,
-} from '@akashaorg/typings/sdk/graphql-operation-types-new';
-import {
   PROPERTY_SLATE_CONTENT,
   serializeSlateToBase64,
 } from '@akashaorg/ui-awf-hooks/lib/utils/entry-utils';
@@ -13,7 +9,7 @@ const randomBetween = (min, max) => {
 
 export const createDummyBeams =
   (count: number) =>
-  ({ pageParam = 0 }): GetBeamsQuery => {
+  ({ pageParam = 0 }) => {
     return {
       beamIndex: {
         edges: Array.from({ length: count }, (_, i) => ({
@@ -22,6 +18,7 @@ export const createDummyBeams =
             reflectionsCount: 1,
             rebeamsCount: 1,
             active: true,
+            isReply: false,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
             author: { id: 'some-author-id' },
@@ -49,12 +46,13 @@ export const createDummyBeams =
 
 export const createDummyReflections =
   (count: number) =>
-  ({ pageParam = 0 }): GetReflectionsFromBeamQuery => {
+  ({ pageParam = 0 }) => {
     return {
       node: {
         reflections: {
           edges: Array.from({ length: count }, (_, i) => ({
             node: {
+              beamId: 'some-beam-id',
               id: `${pageParam}_${Math.floor(Math.random() * 100)}`,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
@@ -62,6 +60,7 @@ export const createDummyReflections =
               active: true,
               isReply: false,
               reflectionsCount: 2,
+              reflections: {},
               author: { id: 'some-author-id' },
               content: [
                 {

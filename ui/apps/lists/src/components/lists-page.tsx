@@ -145,21 +145,14 @@ const ListsPage: React.FC<ListsPageProps> = props => {
             <FeedWidget
               modalSlotId={props.layoutConfig.modalSlotId}
               itemType={EntityTypes.BEAM}
-              logger={props.logger}
-              onLoadMore={() => {
-                /* if next page, load more */
-              }}
-              pages={[{ results: bookmarkedBeamsIds, total: bookmarkedBeamsIds.length }]}
-              requestStatus={listsReq.status}
               loggedProfileData={loggedProfileData}
               navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               navigateToModal={props.navigateToModal}
               onLoginModalOpen={showLoginModal}
-              hasNextPage={false}
               contentClickable={true}
               onEntryFlag={handleEntryFlag}
               onEntryRemove={handleEntryRemove}
-              onBeamNavigate={handleBeamNavigate}
+              onNavigate={handleBeamNavigate}
               uiEvents={props.uiEvents}
               itemSpacing={8}
               i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}

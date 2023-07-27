@@ -29,7 +29,7 @@ const FeedWidgetRoot: React.FC<
       enabled: itemType === EntityTypes.BEAM,
       select: data => ({
         pages: data.pages.flatMap(page =>
-          page.beamIndex.edges.flatMap(edge => mapEntry(edge.node)),
+          page.beamIndex.edges.flatMap(edge => mapEntry({ ...edge.node, type: EntityTypes.BEAM })),
         ),
         pageParams: data.pageParams,
       }),
@@ -44,7 +44,9 @@ const FeedWidgetRoot: React.FC<
       select: data => ({
         pages: data.pages.flatMap(page => {
           if ('reflections' in page.node) {
-            return page.node.reflections.edges.flatMap(edge => mapEntry(edge.node));
+            return page.node.reflections.edges.flatMap(edge =>
+              mapEntry({ ...edge.node, type: EntityTypes.REPLY }),
+            );
           }
         }),
         pageParams: data.pageParams,
@@ -67,7 +69,7 @@ const FeedWidgetRoot: React.FC<
         <BeamFeed
           {...props}
           requestStatus={beamsReq.status}
-          pages={beamsReq.data.pages}
+          pages={beamsReq.data?.pages}
           isFetchingNextPage={beamsReq.isFetchingNextPage}
           hasNextPage={beamsReq.hasNextPage}
           onLoadMore={handleLoadMore}
@@ -77,7 +79,7 @@ const FeedWidgetRoot: React.FC<
         <ReflectFeed
           {...props}
           requestStatus={reflectReq.status}
-          pages={reflectReq.data.pages}
+          pages={reflectReq.data?.pages}
           isFetchingNextPage={reflectReq.isFetchingNextPage}
           hasNextPage={reflectReq.hasNextPage}
           onLoadMore={handleLoadMore}

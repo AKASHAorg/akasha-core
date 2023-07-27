@@ -57,11 +57,6 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     }
   }, [reqPosts, erroredHooks]);
 
-  const handleLoadMore = React.useCallback(() => {
-    if (!reqPosts.isLoading && reqPosts.hasNextPage) {
-      reqPosts.fetchNextPage();
-    }
-  }, [reqPosts]);
   const postPages = React.useMemo(() => {
     if (reqPosts.data) {
       return reqPosts.data.pages;
@@ -84,8 +79,13 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     });
   };
 
-  const handleRebeam = (withComment: boolean, beamId: string) => {};
-  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {};
+  const handleRebeam = (withComment: boolean, beamId: string) => {
+    logger.info('Rebeam');
+    // void;
+  };
+  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {
+    // void;
+  };
 
   return (
     <Box customStyle="w-full">
@@ -109,15 +109,10 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
           <FeedWidget
             modalSlotId={layoutConfig.modalSlotId}
             itemType={EntityTypes.BEAM}
-            logger={logger}
-            onLoadMore={handleLoadMore}
-            pages={postPages}
-            requestStatus={reqPosts.status}
             loggedProfileData={loggedProfileData}
             navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
             navigateToModal={navigateToModal}
             onLoginModalOpen={showLoginModal}
-            hasNextPage={reqPosts.hasNextPage}
             contentClickable={true}
             onEntryFlag={handleEntryFlag}
             onEntryRemove={handleEntryRemove}
@@ -125,7 +120,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
             itemSpacing={8}
             i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
             onRebeam={handleRebeam}
-            onBeamNavigate={handleBeamNavigate}
+            onNavigate={handleBeamNavigate}
           />
         )}
       </>

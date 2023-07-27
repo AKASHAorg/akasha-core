@@ -106,7 +106,6 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     });
   };
 
-  const handleRebeam = (withComment: boolean, beamId: string) => {};
   const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {};
 
   return (
@@ -157,27 +156,18 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
           />
           <FeedWidget
             modalSlotId={layoutConfig.modalSlotId}
-            logger={logger}
-            // @TODO replace with real data source
-            pages={[]}
             itemType={EntityTypes.REPLY}
-            onLoadMore={handleLoadMore}
             loggedProfileData={loggedProfileData}
             navigateTo={navigateTo}
             navigateToModal={navigateToModal}
             onLoginModalOpen={showLoginModal}
-            requestStatus={reqCommentsOrReplies.status}
-            hasNextPage={reqCommentsOrReplies.hasNextPage}
-            contentClickable={true}
             onEntryFlag={handleEntryFlag}
             onEntryRemove={handleCommentRemove}
             uiEvents={uiEvents}
             itemSpacing={8}
             i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
             trackEvent={analyticsActions.trackEvent}
-            showReplyFragment={true}
-            onRebeam={handleRebeam}
-            onBeamNavigate={handleBeamNavigate}
+            onNavigate={handleBeamNavigate}
           />
         </>
       )}
