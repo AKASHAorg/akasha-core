@@ -18,7 +18,7 @@ import EntryList, {
 } from '@akashaorg/design-system-components/lib/components/EntryList';
 
 export type ReflectFeedProps = Omit<EntryListProps, 'itemCard'> & {
-  itemType: EntityTypes.REPLY;
+  itemType: EntityTypes.REFLECT;
   pages: Record<string, any>[];
   locale?: ILocale;
   onEntryFlag?: (

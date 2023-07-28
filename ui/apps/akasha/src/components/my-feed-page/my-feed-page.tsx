@@ -4,7 +4,6 @@ import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akasha
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { Profile } from '@akashaorg/typings/ui';
 import {
-  useGetFollowingListByDidQuery,
   useGetInterestsByDidQuery,
   useInfiniteGetBeamsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -12,6 +11,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
 import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
+import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 
 export interface MyFeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -19,7 +19,7 @@ export interface MyFeedPageProps {
 }
 
 const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
-  const { logger, loggedProfileData, layoutConfig, plugins, uiEvents } = props;
+  const { loggedProfileData, layoutConfig, plugins, uiEvents } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
@@ -41,22 +41,8 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       },
     },
   );
-  const followingReq = useGetFollowingListByDidQuery({ id: loggedProfileData?.did.id });
   const navigateToModal = React.useRef(props.navigateToModal);
   const showLoginModal = React.useRef(props.showLoginModal);
-
-  const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage) {
-      postsReq.fetchNextPage();
-    }
-  }, [postsReq]);
-
-  const postPages = React.useMemo(() => {
-    if (postsReq.data) {
-      return postsReq.data.pages;
-    }
-    return [];
-  }, [postsReq.data]);
 
   const userHasSubscriptions = React.useMemo(() => {
     return loggedProfileData?.followers?.edges?.length > 0 || tagSubsReq.data?.topics?.length > 0;
@@ -113,29 +99,21 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         />
       </Box>
 
-      {/*<FeedWidget*/}
-      {/*  modalSlotId={layoutConfig.modalSlotId}*/}
-      {/*  logger={logger}*/}
-      {/*  itemType={EntityTypes.POST}*/}
-      {/*  pages={[]}*/}
-      {/*  onLoadMore={handleLoadMore}*/}
-      {/*  navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}*/}
-      {/*  navigateToModal={navigateToModal.current}*/}
-      {/*  onLoginModalOpen={showLoginModal.current}*/}
-      {/*  requestStatus={null}*/}
-      {/*  hasNextPage={false}*/}
-      {/*  loggedProfileData={loggedProfileData}*/}
-      {/*  contentClickable={true}*/}
-      {/*  onEntryFlag={handleEntryFlag}*/}
-      {/*  onEntryRemove={handleEntryRemove}*/}
-      {/*  removeEntryLabel={t('Delete Post')}*/}
-      {/*  removedByMeLabel={t('You deleted this post')}*/}
-      {/*  removedByAuthorLabel={t('This post was deleted by its author')}*/}
-      {/*  uiEvents={uiEvents}*/}
-      {/*  itemSpacing={8}*/}
-      {/*  i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}*/}
-      {/*  accentBorderTop={true}*/}
-      {/*/>*/}
+      <FeedWidget
+        modalSlotId={layoutConfig.modalSlotId}
+        itemType={EntityTypes.BEAM}
+        navigateToModal={navigateToModal.current}
+        onLoginModalOpen={showLoginModal.current}
+        loggedProfileData={loggedProfileData}
+        contentClickable={true}
+        onEntryFlag={handleEntryFlag}
+        onEntryRemove={handleEntryRemove}
+        uiEvents={uiEvents}
+        itemSpacing={8}
+        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+        accentBorderTop={true}
+        onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
+      />
 
       {userHasSubscriptions && !postsReq.isFetching && (
         <MyFeedCard

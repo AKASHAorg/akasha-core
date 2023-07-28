@@ -67,7 +67,6 @@ const ProfileAvatarButton = React.forwardRef(
             onClick={handleClickAvatar}
           />
         </Box>
-
         <Box role="listitem" aria-label="info-box" customStyle="justify-center align-top space-y-1">
           <Box ref={ref}>
             <Text variant="button-sm" weight="bold" truncate={true} customStyle={textTruncateStyle}>

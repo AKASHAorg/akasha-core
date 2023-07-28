@@ -9,18 +9,14 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import {
-  RootComponentProps,
-  EntityTypes,
-  ModalNavigationOptions,
-  IContentClickDetails,
-} from '@akashaorg/typings/ui';
+import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import {
   useGetBookmarks,
   useDeleteBookmark,
   usePosts,
   checkEntryActive,
+  useEntryNavigation,
 } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
@@ -30,8 +26,8 @@ type ListsPageProps = Omit<
 >;
 
 const ListsPage: React.FC<ListsPageProps> = props => {
+  const { uiEvents, plugins, navigateToModal, layoutConfig } = props;
   const { t } = useTranslation('app-lists');
-
   const [showModal, setShowModal] = React.useState(false);
   const bookmarkDelete = useDeleteBookmark();
 
@@ -114,8 +110,6 @@ const ListsPage: React.FC<ListsPageProps> = props => {
     bookmarkedBeamsIds.forEach(itemId => bookmarkDelete.mutate(itemId));
   };
 
-  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {};
-
   return (
     <Card direction="row" elevation={'1'} radius={16} padding={16}>
       <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
@@ -126,9 +120,9 @@ const ListsPage: React.FC<ListsPageProps> = props => {
           details={listsReq.error as string}
         />
       )}
-      {listsReq.status !== 'error' && (
-        <Box data-testid="lists" customStyle="space-x-8 space-y-8">
-          {/* <StartCard
+
+      <Box data-testid="lists" customStyle="space-x-8 space-y-8">
+        {/* <StartCard
             title={t('Lists')}
             subtitle={getSubtitleText()}
             heading={t('✨ Save what inspires you ✨')}
@@ -137,29 +131,27 @@ const ListsPage: React.FC<ListsPageProps> = props => {
             showMainArea={!isLoggedIn}
           /> */}
 
-          {!listsReq.isFetched && isLoggedIn && <Spinner />}
-          {(!isLoggedIn || (listsReq.isFetched && (!lists || !lists.length))) && (
-            <DefaultEmptyCard infoText={t('You don’t have any saved content in your List')} />
-          )}
-          {listsReq.status === 'success' && lists.length > 0 && (
-            <FeedWidget
-              modalSlotId={props.layoutConfig.modalSlotId}
-              itemType={EntityTypes.BEAM}
-              loggedProfileData={loggedProfileData}
-              navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-              navigateToModal={props.navigateToModal}
-              onLoginModalOpen={showLoginModal}
-              contentClickable={true}
-              onEntryFlag={handleEntryFlag}
-              onEntryRemove={handleEntryRemove}
-              onNavigate={handleBeamNavigate}
-              uiEvents={props.uiEvents}
-              itemSpacing={8}
-              i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
-            />
-          )}
-        </Box>
-      )}
+        {!listsReq.isFetched && isLoggedIn && <Spinner />}
+        {(!isLoggedIn || (listsReq.isFetched && (!lists || !lists.length))) && (
+          <DefaultEmptyCard infoText={t('You don’t have any saved content in your List')} />
+        )}
+
+        <FeedWidget
+          modalSlotId={layoutConfig.modalSlotId}
+          // @TODO: create an entry for lists
+          itemType={EntityTypes.BEAM}
+          loggedProfileData={loggedProfileData}
+          navigateToModal={navigateToModal}
+          onLoginModalOpen={showLoginModal}
+          contentClickable={true}
+          onEntryFlag={handleEntryFlag}
+          onEntryRemove={handleEntryRemove}
+          uiEvents={uiEvents}
+          itemSpacing={8}
+          onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
+          i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+        />
+      </Box>
       <Modal
         title={{ label: t('Remove Content') }}
         show={showModal}

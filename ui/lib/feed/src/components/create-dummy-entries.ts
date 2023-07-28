@@ -21,7 +21,10 @@ export const createDummyBeams =
             isReply: false,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            author: { id: 'some-author-id' },
+            author: {
+              name: 'Testing (dummy)',
+              id: 'did:pkh:eip155:5:0x72f4c40f8253f871d7d7d0ead78dc86ab471e3ec',
+            },
             version: 0,
             content: [
               {
@@ -52,7 +55,7 @@ export const createDummyReflections =
         reflections: {
           edges: Array.from({ length: count }, (_, i) => ({
             node: {
-              beamId: 'some-beam-id',
+              beamId: `some-beam-id-${i}-${pageParam}`,
               id: `${pageParam}_${Math.floor(Math.random() * 100)}`,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
@@ -61,7 +64,10 @@ export const createDummyReflections =
               isReply: false,
               reflectionsCount: 2,
               reflections: {},
-              author: { id: 'some-author-id' },
+              author: {
+                name: 'Testing (dummy)',
+                id: 'did:pkh:eip155:5:0x72f4c40f8253f871d7d7d0ead78dc86ab471e3ec',
+              },
               content: [
                 {
                   provider: 'akasha-reflections',

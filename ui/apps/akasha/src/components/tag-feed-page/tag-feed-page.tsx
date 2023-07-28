@@ -16,6 +16,7 @@ import {
   useToggleTagSubscription,
   useGetTag,
   useInfinitePostsByTag,
+  useEntryNavigation,
 } from '@akashaorg/ui-awf-hooks';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -87,11 +88,14 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   const handleRebeam = (withComment: boolean, beamId: string) => {
-    logger.info('rebeam');
-    // void;
-  };
-  const handleBeamNavigate = (details: IContentClickDetails, contentType: EntityTypes) => {
-    // void;
+    if (!loggedProfileData?.did.id) {
+      navigateToModal({ name: 'login' });
+    } else {
+      plugins['@akashaorg/app-routing'].navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: () => `/feed?repost=${beamId}`,
+      });
+    }
   };
 
   return (
@@ -108,34 +112,31 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         />
       )}
       {getTagQuery.status === 'success' && (
-        <>
-          <Box customStyle="mb-2">
-            <TagProfileCard
-              tag={getTagQuery.data}
-              subscribedTags={tagSubscriptions}
-              handleSubscribeTag={handleTagSubscribe}
-              handleUnsubscribeTag={handleTagSubscribe}
-            />
-          </Box>
-
-          <FeedWidget
-            modalSlotId={layoutConfig.modalSlotId}
-            itemType={EntityTypes.BEAM}
-            loggedProfileData={loggedProfileData}
-            navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-            navigateToModal={navigateToModal}
-            onLoginModalOpen={showLoginModal}
-            contentClickable={true}
-            onEntryRemove={handleEntryRemove}
-            onEntryFlag={handleEntryFlag}
-            uiEvents={uiEvents}
-            itemSpacing={8}
-            i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
-            onRebeam={handleRebeam}
-            onNavigate={handleBeamNavigate}
+        <Box customStyle="mb-2">
+          <TagProfileCard
+            tag={getTagQuery.data}
+            subscribedTags={tagSubscriptions}
+            handleSubscribeTag={handleTagSubscribe}
+            handleUnsubscribeTag={handleTagSubscribe}
           />
-        </>
+        </Box>
       )}
+      <FeedWidget
+        modalSlotId={layoutConfig.modalSlotId}
+        // @TODO add a new entry for tags
+        itemType={EntityTypes.BEAM}
+        loggedProfileData={loggedProfileData}
+        navigateToModal={navigateToModal}
+        onLoginModalOpen={showLoginModal}
+        contentClickable={true}
+        onEntryRemove={handleEntryRemove}
+        onEntryFlag={handleEntryFlag}
+        uiEvents={uiEvents}
+        itemSpacing={8}
+        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+        onRebeam={handleRebeam}
+        onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
+      />
     </Box>
   );
 };

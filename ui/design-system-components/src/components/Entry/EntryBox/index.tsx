@@ -145,7 +145,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     }
   };
 
-  const handleRepliesClick = () => {
+  const handleRepliesClick = ev => {
     handleContentClick(entryData);
     if (typeof onRepliesClick === 'function') onRepliesClick();
   };
@@ -153,7 +153,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const handleContentClick = (data?: IEntryData) => {
     if (typeof onContentClick === 'function' && !disableActions && contentClickable && data) {
       const replyTo = data.postId ? { itemId: data.postId } : null;
-      const itemType = replyTo ? EntityTypes.REPLY : EntityTypes.BEAM;
+      const itemType = replyTo ? EntityTypes.REFLECT : EntityTypes.BEAM;
       onContentClick(
         {
           authorId: data.author.did.id,
@@ -229,12 +229,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         <Box customStyle="flex flex-row justify-between p-4 shrink-0">
           <Anchor
             customStyle="flex min-w-0 no-underline"
-            onClick={(e: React.SyntheticEvent) => {
-              e.preventDefault();
-              return false;
-            }}
             href={`${profileAnchorLink}/${entryData.author.id}`}
             data-testid="entry-profile-detail"
+            target="_self"
           >
             <ProfileAvatarButton
               customStyle={'grow shrink'}
@@ -369,7 +366,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             entryData={entryData}
             repliesAnchorLink={repliesAnchorLink}
             onRepost={handleRepost(false)}
-            handleRepliesClick={handleRepliesClick}
+            handleRepliesClick={ev => {
+              ev.stopPropagation();
+              handleRepliesClick(ev);
+            }}
             disableReposting={disableReposting}
             disableActions={disableActions}
             isModerated={isModerated}

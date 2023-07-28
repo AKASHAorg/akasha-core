@@ -4,7 +4,11 @@ import { useParams } from 'react-router-dom';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { useInfinitePostsByAuthor, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import {
+  useInfinitePostsByAuthor,
+  useGetProfile,
+  useEntryNavigation,
+} from '@akashaorg/ui-awf-hooks';
 import type {
   RootComponentProps,
   Profile,
@@ -21,15 +25,8 @@ export type ProfilePageProps = RootComponentProps & {
 };
 
 const ProfileFeedPage = (props: ProfilePageProps) => {
-  const {
-    uiEvents,
-    plugins,
-    logger,
-    navigateToModal,
-    layoutConfig,
-    loggedProfileData,
-    showLoginModal,
-  } = props;
+  const { uiEvents, plugins, navigateToModal, layoutConfig, loggedProfileData, showLoginModal } =
+    props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
   const { t } = useTranslation('app-profile');
@@ -80,11 +77,14 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
   };
 
   const handleRebeam = (withComment: boolean, beamId: string) => {
-    logger.info('Rebeam');
-    // void;
-  };
-  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {
-    // void;
+    if (!loggedProfileData?.did.id) {
+      navigateToModal({ name: 'login' });
+    } else {
+      plugins['@akashaorg/app-routing'].navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: () => `/feed?repost=${beamId}`,
+      });
+    }
   };
 
   return (
@@ -105,24 +105,21 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
           />
         )}
         {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
-        {reqPosts.isSuccess && postPages && (
-          <FeedWidget
-            modalSlotId={layoutConfig.modalSlotId}
-            itemType={EntityTypes.BEAM}
-            loggedProfileData={loggedProfileData}
-            navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-            navigateToModal={navigateToModal}
-            onLoginModalOpen={showLoginModal}
-            contentClickable={true}
-            onEntryFlag={handleEntryFlag}
-            onEntryRemove={handleEntryRemove}
-            uiEvents={uiEvents}
-            itemSpacing={8}
-            i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
-            onRebeam={handleRebeam}
-            onNavigate={handleBeamNavigate}
-          />
-        )}
+        <FeedWidget
+          modalSlotId={layoutConfig.modalSlotId}
+          itemType={EntityTypes.BEAM}
+          loggedProfileData={loggedProfileData}
+          navigateToModal={navigateToModal}
+          onLoginModalOpen={showLoginModal}
+          contentClickable={true}
+          onEntryFlag={handleEntryFlag}
+          onEntryRemove={handleEntryRemove}
+          uiEvents={uiEvents}
+          itemSpacing={8}
+          i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+          onRebeam={handleRebeam}
+          onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
+        />
       </>
     </Box>
   );

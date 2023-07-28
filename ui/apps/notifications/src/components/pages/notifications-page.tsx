@@ -161,7 +161,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemId}`,
       });
-    } else if (itemType === EntityTypes.REPLY) {
+    } else if (itemType === EntityTypes.REFLECT) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Reply}/${itemId}`,

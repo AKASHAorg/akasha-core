@@ -24,7 +24,7 @@ const MockedInlineEditor = ({ action }) => (
     extensionData={{
       name: 'name',
       itemId: '01gf',
-      itemType: EntityTypes.REPLY,
+      itemType: EntityTypes.REFLECT,
       action,
     }}
   />

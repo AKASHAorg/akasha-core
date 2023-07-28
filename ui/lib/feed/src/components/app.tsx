@@ -40,12 +40,12 @@ const FeedWidgetRoot: React.FC<
     'feed_page_get_reflections',
     createDummyReflections(5),
     {
-      enabled: itemType === EntityTypes.REPLY,
+      enabled: itemType === EntityTypes.REFLECT,
       select: data => ({
         pages: data.pages.flatMap(page => {
           if ('reflections' in page.node) {
             return page.node.reflections.edges.flatMap(edge =>
-              mapEntry({ ...edge.node, type: EntityTypes.REPLY }),
+              mapEntry({ ...edge.node, type: EntityTypes.REFLECT }),
             );
           }
         }),
@@ -58,7 +58,7 @@ const FeedWidgetRoot: React.FC<
     if (itemType === EntityTypes.BEAM && !beamsReq.isLoading && beamsReq.hasNextPage) {
       beamsReq.fetchNextPage();
     }
-    if (itemType === EntityTypes.REPLY && reflectReq.isLoading && reflectReq.hasNextPage) {
+    if (itemType === EntityTypes.REFLECT && reflectReq.isLoading && reflectReq.hasNextPage) {
       reflectReq.fetchNextPage();
     }
   }, [beamsReq, itemType]);
@@ -75,7 +75,7 @@ const FeedWidgetRoot: React.FC<
           onLoadMore={handleLoadMore}
         />
       )}
-      {itemType === EntityTypes.REPLY && (
+      {itemType === EntityTypes.REFLECT && (
         <ReflectFeed
           {...props}
           requestStatus={reflectReq.status}

@@ -36,7 +36,7 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
 
   const entryData = React.useMemo(() => {
     if (comment.status === 'success') {
-      return mapEntry({ ...comment.data, type: EntityTypes.REPLY });
+      return mapEntry({ ...comment.data, type: EntityTypes.REFLECT });
     }
     return undefined;
   }, [comment.data, comment.status]);

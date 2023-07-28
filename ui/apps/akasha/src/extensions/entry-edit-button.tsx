@@ -26,7 +26,7 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
   };
 
   const itemTypeLabel = React.useMemo(() => {
-    if (props.extensionData.itemType === EntityTypes.REPLY) {
+    if (props.extensionData.itemType === EntityTypes.REFLECT) {
       return t('reply');
     }
     if (props.extensionData.itemType === EntityTypes.BEAM) {

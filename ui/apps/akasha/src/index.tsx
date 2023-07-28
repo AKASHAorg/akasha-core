@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { FEED, MY_FEED, POST, PROFILE_FEED, REPLY, TAGS } from './routes';
+import routes, { FEED, MY_FEED, BEAM, PROFILE_FEED, REFLECT, TAGS } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -41,9 +41,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     defaultRoute: routes[FEED],
     [MY_FEED]: routes[MY_FEED],
     [PROFILE_FEED]: routes[PROFILE_FEED],
-    [POST]: routes[POST],
+    [BEAM]: routes[BEAM],
     [TAGS]: routes[TAGS],
-    [REPLY]: routes[REPLY],
+    [REFLECT]: routes[REFLECT],
   },
   title: 'Akasha World',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },

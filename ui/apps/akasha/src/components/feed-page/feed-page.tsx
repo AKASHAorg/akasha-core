@@ -12,17 +12,15 @@ import {
 import {
   CREATE_POST_MUTATION_KEY,
   useMutationsListener,
-  createPendingEntry,
   useAnalytics,
   useDismissedCard,
+  useEntryNavigation,
 } from '@akashaorg/ui-awf-hooks';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import routes, { POST } from '../../routes';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { Profile } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
-import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
 
@@ -99,11 +97,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   const handleRebeam = (withComment: boolean, beamId: string) => {
-    logger.info('Rebeam');
-    // void
-  };
-  const handleBeamNavigate = (details: IContentClickDetails, entityType: EntityTypes) => {
-    // void
+    if (!loggedProfileData?.did.id) {
+      navigateToModal({ name: 'login' });
+    } else {
+      plugins['@akashaorg/app-routing'].navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: () => `/feed?repost=${beamId}`,
+      });
+    }
   };
 
   return (
@@ -185,7 +186,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         modalSlotId={layoutConfig.modalSlotId}
         itemType={EntityTypes.BEAM}
         loggedProfileData={loggedProfileData}
-        navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={navigateToModal}
         onLoginModalOpen={showLoginModal}
         contentClickable={true}
@@ -195,7 +195,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         itemSpacing={8}
         i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
         onRebeam={handleRebeam}
-        onNavigate={handleBeamNavigate}
+        onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
       />
     </Box>
   );

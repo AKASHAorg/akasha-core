@@ -40,7 +40,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   // extensionData.itemType comes as a string from navigateToModal this can lead to bugs
   const handleDelete = useCallback(() => {
     if (!!extensionData && extensionData.itemType !== undefined) {
-      if (extensionData.itemType === EntityTypes.REPLY) {
+      if (extensionData.itemType === EntityTypes.REFLECT) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',

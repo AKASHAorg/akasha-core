@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
-import routes, { POST } from '../../../routes';
+import routes, { BEAM } from '../../../routes';
 import { UseQueryResult } from '@tanstack/react-query';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -157,7 +157,7 @@ export function OriginalItem({
           locale={locale}
           showMore={true}
           profileAnchorLink={'/profile'}
-          repliesAnchorLink={routes[POST]}
+          repliesAnchorLink={routes[BEAM]}
           onRepost={handleRepost}
           onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.BEAM)}
           onContentClick={handleEntryNavigate}
@@ -174,8 +174,8 @@ export function OriginalItem({
           removeEntryLabel={t('Delete Post')}
           removedByMeLabel={t('You deleted this post')}
           removedByAuthorLabel={t('This post was deleted by its author')}
-          disableReposting={entryData?.isRemoved || itemType === EntityTypes.REPLY}
-          hideRepost={itemType === EntityTypes.REPLY}
+          disableReposting={entryData?.isRemoved || itemType === EntityTypes.REFLECT}
+          hideRepost={itemType === EntityTypes.REFLECT}
           headerMenuExt={
             showEditButton && (
               <Extension

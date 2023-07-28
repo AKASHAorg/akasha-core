@@ -127,7 +127,10 @@ export const serializeSlateToBase64 = (slateContent: unknown) => {
 // };
 type ReflectionsFromBeam = Extract<GetReflectionsFromBeamQuery['node'], { reflections }>;
 type MergedEntries =
-  | Omit<ReflectionsFromBeam['reflections']['edges'][0]['node'] & { type: EntityTypes.REPLY }, 'id'>
+  | Omit<
+      ReflectionsFromBeam['reflections']['edges'][0]['node'] & { type: EntityTypes.REFLECT },
+      'id'
+    >
   | (GetBeamsQuery['beamIndex']['edges'][0]['node'] & { type: EntityTypes.BEAM });
 type ExtractedEntries = Extract<MergedEntries, { type: EntityTypes }>;
 

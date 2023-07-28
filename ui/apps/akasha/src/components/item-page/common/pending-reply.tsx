@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IPublishData, Profile } from '@akashaorg/typings/ui';
 import { createPendingEntry, useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import routes, { REPLY } from '../../../routes';
+import routes, { REFLECT } from '../../../routes';
 import { PUBLISH_PENDING_KEY } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
@@ -40,7 +40,7 @@ export function PendingReply({ postId, loggedProfileData, commentIds }: PendingR
                 locale={'en'}
                 showMore={true}
                 profileAnchorLink={'/profile'}
-                repliesAnchorLink={routes[REPLY]}
+                repliesAnchorLink={routes[REFLECT]}
                 contentClickable={false}
                 hidePublishTime={true}
                 disableActions={true}

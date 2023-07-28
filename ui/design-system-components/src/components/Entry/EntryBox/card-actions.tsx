@@ -3,6 +3,9 @@ import { IEntryData } from '@akashaorg/typings/ui';
 import { tw } from '@twind/core';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { SyntheticEvent } from 'react';
 
 export interface CardActionProps {
   // data
@@ -11,7 +14,7 @@ export interface CardActionProps {
   repliesAnchorLink?: string;
   // handlers
   onRepost: () => void;
-  handleRepliesClick: () => void;
+  handleRepliesClick: (ev: SyntheticEvent) => void;
   disableActions?: boolean;
   disableReposting?: boolean;
   hideRepost?: boolean;
@@ -59,15 +62,15 @@ const CardActions: React.FC<CardActionProps> = props => {
   }
 
   return (
-    <div className={tw(`p-4 flex flex-row items-center justify-end space-x-4`)}>
+    <Stack direction="row" align="center" justify="end" spacing="gap-x-4" customStyle="p-4">
       <>{actionsRightExt}</>
-      <a
+      <Anchor
+        href={`${repliesAnchorLink}/${entryData.id}`}
+        customStyle="no-underline"
         onClick={e => {
           e.preventDefault();
           return false;
         }}
-        href={`${repliesAnchorLink}/${entryData.entryId}`}
-        className={tw(`no-underline`)}
       >
         <button
           onClick={handleRepliesClick}
@@ -77,7 +80,7 @@ const CardActions: React.FC<CardActionProps> = props => {
           <Icon type="ChatBubbleLeftRightIcon" accentColor={true} />
           <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repliesBtnText}</Text>
         </button>
-      </a>
+      </Anchor>
 
       {!hideRepost && (
         <button
@@ -89,7 +92,7 @@ const CardActions: React.FC<CardActionProps> = props => {
           <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repostsBtnText}</Text>
         </button>
       )}
-    </div>
+    </Stack>
   );
 };
 

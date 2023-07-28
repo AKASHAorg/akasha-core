@@ -26,9 +26,7 @@ const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
       {...props}
       postId={!!entryData && 'postId' in entryData && (entryData?.postId as string)}
       commentId={commentId}
-      itemType={EntityTypes.REPLY}
-      // @TODO add data after new hooks
-      entryData={null}
+      itemType={EntityTypes.REFLECT}
       entryReq={comment}
     />
   );

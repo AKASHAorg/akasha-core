@@ -37,7 +37,7 @@ export enum EventTypes {
 export const enum EntityTypes {
   BEAM = 0,
   PROFILE = 1,
-  REPLY = 2,
+  REFLECT = 2,
   TAG = 3,
   ARTICLE = 4,
 }
@@ -48,7 +48,7 @@ export const enum EntityTypes {
 export const EntityTypesMap = {
   [EntityTypes.BEAM]: 'beam',
   [EntityTypes.PROFILE]: 'profile',
-  [EntityTypes.REPLY]: 'reply',
+  [EntityTypes.REFLECT]: 'reply',
   [EntityTypes.TAG]: 'tag',
   [EntityTypes.ARTICLE]: 'article',
 } as const;

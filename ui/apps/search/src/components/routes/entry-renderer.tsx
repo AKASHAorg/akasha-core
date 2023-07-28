@@ -140,7 +140,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
   };
 
-  const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
+  const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REFLECT, [itemType]);
 
   return (
     <>
@@ -176,7 +176,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               showMore={true}
               profileAnchorLink={'/@akashaorg/app-profile'}
               repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
-                itemType === EntityTypes.REPLY ? 'reply' : 'post'
+                itemType === EntityTypes.REFLECT ? 'reply' : 'post'
               }`}
               onRepost={handleRebeam}
               onContentClick={handleContentClick}

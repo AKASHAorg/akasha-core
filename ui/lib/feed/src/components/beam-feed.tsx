@@ -6,7 +6,6 @@ import {
   EntityTypes,
   IContentClickDetails,
   ModalNavigationOptions,
-  NavigateToParams,
   Profile,
   RootComponentProps,
   TrackEventData,
@@ -25,7 +24,6 @@ export type BeamFeedProps = Omit<EntryListProps, 'itemCard'> & {
     itemType: EntityTypes,
     reporterEthAddress?: string | null,
   ) => () => void;
-  navigateTo: (args: NavigateToParams) => void;
   contentClickable?: boolean;
   onEntryRemove?: (entryId: string) => void;
   uiEvents: RootComponentProps['uiEvents'];
@@ -35,7 +33,6 @@ export type BeamFeedProps = Omit<EntryListProps, 'itemCard'> & {
   trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
   totalEntryCount?: number;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  navigateToModal: (props: ModalNavigationOptions) => void;
   loggedProfileData?: Profile;
   i18n: i18n;
   onRebeam?: (withComment: boolean, beamId: string) => void;
@@ -52,22 +49,9 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     pages,
     itemSpacing,
     hasNextPage,
-    loggedProfileData,
-    navigateToModal,
-    navigateTo,
     onNavigate,
+    onRebeam,
   } = props;
-
-  const handleRepost = (_withComment: boolean, entryId: string) => {
-    if (!loggedProfileData?.did.id) {
-      navigateToModal({ name: 'login' });
-    } else {
-      navigateTo?.({
-        appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: () => `/feed?repost=${entryId}`,
-      });
-    }
-  };
 
   return (
     <EntryList
@@ -103,8 +87,10 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
                 showMore={true}
                 entryData={entryData}
                 locale={locale}
-                onRepost={handleRepost}
+                onRepost={onRebeam}
                 onContentClick={onNavigate}
+                repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
+                profileAnchorLink="/@akashaorg/app-profile"
               />
             </div>
           );
