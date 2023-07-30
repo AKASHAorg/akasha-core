@@ -91,8 +91,9 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
                 value={value}
                 onChange={onChange}
                 inputRef={ref}
+                {...(errors.name && { status: 'error' })}
+                {...(errors.name && { caption: errors.name.message })}
               />
-              {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>}
             </>
           )}
           defaultValue={nameField.initialValue || ''}
