@@ -97,7 +97,6 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
             </>
           )}
           defaultValue={nameField.initialValue || ''}
-          rules={{ required: true }}
         />
         {userNameField && (
           <Controller
