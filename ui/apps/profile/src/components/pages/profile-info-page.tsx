@@ -70,6 +70,10 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
 
   const isLoggedIn = !!loginQuery.data?.id;
 
+  const hasProfile = status === 'success' && profileData;
+
+  const profile = !hasProfile ? { id: profileId } : profileData.did;
+
   if (status === 'loading' || isLoading) return <ProfileLoading />;
 
   if (isLoggedIn && !profileData) {
@@ -108,69 +112,14 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
   const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
 
-  if (profileDataReq.data && profileData)
-    return (
-      <>
-        <Stack direction="column" spacing="gap-y-4" fullWidth>
-          <ProfileHeader
-            did={profileData.did}
-            background={background}
-            avatar={avatar}
-            name={profileData.name}
-            ensName={null /*@TODO: integrate ENS when the API is ready */}
-            viewerIsOwner={isViewer}
-            flagLabel={t('Report')}
-            copyLabel={t('Copy to clipboard')}
-            copiedLabel={t('Copied')}
-            followElement={
-              <FollowProfile profileId={profileId} isIconButton={true} navigateTo={navigateTo} />
-            }
-            handleFlag={checkAuth(
-              handleEntryFlag(
-                profileData.did.id ? profileData.did.id : '',
-                EntityTypes.PROFILE,
-                profileData.name,
-              ),
-            )}
-            handleEdit={() => {
-              navigateTo({
-                appName: '@akashaorg/app-profile',
-                getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
-              });
-            }}
-          />
-          {profileData.description && (
-            <ProfileBio title={t('Bio')} biography={profileData.description} />
-          )}
-          <ProfileStatsPresentation profileId={profileId} navigateTo={navigateTo} />
-          {profileData.links?.length > 0 && (
-            <ProfileLinks
-              title={t('Find me on')}
-              links={profileData.links}
-              copiedLabel={t('Copied')}
-              copyLabel={t('Copy to clipboard')}
-            />
-          )}
-          {showFeedback && (
-            <Snackbar
-              title={t('You unfollowed {{name}}', { userName: profileData.name })}
-              iconType="CheckCircleIcon"
-              handleDismiss={() => {
-                setShowFeedback(false);
-              }}
-              customStyle="mb-4"
-            />
-          )}
-        </Stack>
-      </>
-    );
-
-  if (validDid) {
-    return (
+  return (
+    <>
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         <ProfileHeader
-          did={{ id: profileId }}
-          name={null}
+          did={profile}
+          background={background}
+          avatar={avatar}
+          name={profileData?.name}
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           viewerIsOwner={isViewer}
           flagLabel={t('Report')}
@@ -180,7 +129,11 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
             <FollowProfile profileId={profileId} isIconButton={true} navigateTo={navigateTo} />
           }
           handleFlag={checkAuth(
-            handleEntryFlag(profileId ? profileId : '', EntityTypes.PROFILE, null),
+            handleEntryFlag(
+              profileData?.did.id ? profileData.did.id : '',
+              EntityTypes.PROFILE,
+              profileData?.name,
+            ),
           )}
           handleEdit={() => {
             navigateTo({
@@ -189,12 +142,36 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
             });
           }}
         />
-        <DefaultEmptyCard
-          infoText={t('It seems this user hasn`t filled in their information just yet. 🤔')}
-        />
+        {profileData?.description && (
+          <ProfileBio title={t('Bio')} biography={profileData.description} />
+        )}
+        {!hasProfile && (
+          <DefaultEmptyCard
+            infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
+          />
+        )}
+        <ProfileStatsPresentation profileId={profileId} navigateTo={navigateTo} />
+        {profileData?.links?.length > 0 && (
+          <ProfileLinks
+            title={t('Find me on')}
+            links={profileData?.links}
+            copiedLabel={t('Copied')}
+            copyLabel={t('Copy to clipboard')}
+          />
+        )}
+        {showFeedback && (
+          <Snackbar
+            title={t('You unfollowed {{name}}', { userName: profileData?.name })}
+            iconType="CheckCircleIcon"
+            handleDismiss={() => {
+              setShowFeedback(false);
+            }}
+            customStyle="mb-4"
+          />
+        )}
       </Stack>
-    );
-  }
+    </>
+  );
 };
 
 export default ProfileInfoPage;
