@@ -9,10 +9,7 @@ import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO, APPS } from '../routes';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import {
-  useGetAppsQuery,
-  useGetAppsReleasesQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hiddenIntegrations } from '../hidden-integrations';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
@@ -33,39 +30,35 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     [worldConfig.layout],
   );
 
-  const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
+  const appsReq = useGetAppsQuery(
+    {
+      last: 50,
+    },
+    {
+      select: response => response.akashaAppIndex.edges,
+      enabled: !!isLoggedIn,
+    },
+  );
+
+  const availableApps = appsReq.data;
 
   const filteredIntegrations = React.useMemo(() => {
-    return availableIntegrationsReq?.data?.filter(
-      id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+    return availableApps.filter(
+      app => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === app.node?.id),
     );
-  }, [availableIntegrationsReq?.data]);
-
-  const integrationIdsNormalized = React.useMemo(() => {
-    if (filteredIntegrations) {
-      return filteredIntegrations.map(integrationId => {
-        return { id: integrationId };
-      });
-    }
-    return [];
-  }, [filteredIntegrations]);
-
-  const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
-
-  const latestReleasesInfo = React.useMemo(() => {
-    return integrationsInfoReq.data?.getLatestRelease;
-  }, [integrationsInfoReq.data?.getLatestRelease]);
+  }, [availableApps]);
 
   const installableApps = React.useMemo(() => {
-    return latestReleasesInfo?.filter(releaseInfo => {
-      if (defaultIntegrations?.includes(releaseInfo.name)) {
+    return filteredIntegrations?.filter(app => {
+      if (defaultIntegrations?.includes(app.node?.name)) {
         return;
       }
-      return releaseInfo;
+      return app.node;
     });
-  }, [defaultIntegrations, latestReleasesInfo]);
+  }, [defaultIntegrations, filteredIntegrations]);
 
-  const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
+  // @TODO update with new hooks
+  // const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
   return (
     <Router basename={baseRouteName}>
@@ -76,9 +69,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             element={
               <ExplorePage
                 installableApps={installableApps}
-                installedAppsInfo={installedAppsReq.data}
-                isFetching={integrationsInfoReq.isFetching}
-                reqError={integrationsInfoReq.error}
+                installedAppsInfo={[]}
+                isFetching={appsReq.isFetching}
+                reqError={appsReq.error}
                 isUserLoggedIn={isLoggedIn}
                 {...props}
               />
@@ -88,10 +81,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             path={routes[MY_APPS]}
             element={
               <MyAppsPage
-                latestReleasesInfo={latestReleasesInfo}
+                availableApps={availableApps}
                 defaultIntegrations={defaultIntegrations}
-                installedAppsInfo={installedAppsReq.data}
-                isFetching={integrationsInfoReq.isFetching}
+                installedAppsInfo={[]}
+                isFetching={appsReq.isFetching}
                 {...props}
               />
             }
@@ -101,8 +94,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             path={routes[MY_WIDGETS]}
             element={
               <MyWidgetsPage
-                latestReleasesInfo={latestReleasesInfo}
-                isFetching={integrationsInfoReq.isFetching}
+                availableApps={availableApps}
+                isFetching={appsReq.isFetching}
                 {...props}
               />
             }

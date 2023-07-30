@@ -10,13 +10,13 @@ import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import { INFO } from '../../routes';
 
 export interface IExplorePage extends RootComponentProps {
-  installableApps: IntegrationReleaseInfoFragmentFragment[];
-  installedAppsInfo?: IntegrationReleaseInfo[];
+  installableApps: GetAppsQuery['akashaAppIndex']['edges'];
+  installedAppsInfo?: GetAppsByIdQuery['node'][];
   isFetching?: boolean;
   reqError?: Error;
   isUserLoggedIn?: boolean;
