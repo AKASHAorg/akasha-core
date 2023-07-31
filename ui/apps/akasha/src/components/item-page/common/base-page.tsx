@@ -30,6 +30,7 @@ type BaseEntryProps = {
   entryData?: IEntryData;
   logger: Logger;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  feedQueryKey: string;
 };
 
 const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
@@ -45,6 +46,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     layoutConfig,
     uiEvents,
     navigateToModal,
+    feedQueryKey,
   } = props;
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -143,6 +145,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
         commentIds={commentPages[0]?.results || []}
       />
       <FeedWidget
+        queryKey={feedQueryKey}
         modalSlotId={layoutConfig.modalSlotId}
         itemType={EntityTypes.REFLECT}
         loggedProfileData={loggedProfileData}

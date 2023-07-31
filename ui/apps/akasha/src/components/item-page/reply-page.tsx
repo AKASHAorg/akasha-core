@@ -28,6 +28,7 @@ const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
       commentId={commentId}
       itemType={EntityTypes.REFLECT}
       entryReq={comment}
+      feedQueryKey="akasha-reflect-page-query"
     />
   );
 };

@@ -183,6 +183,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       {/*    ),*/}
       {/*)}*/}
       <FeedWidget
+        queryKey="akashaorg-antenna-page-query"
         modalSlotId={layoutConfig.modalSlotId}
         itemType={EntityTypes.BEAM}
         loggedProfileData={loggedProfileData}

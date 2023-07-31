@@ -122,6 +122,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         </Box>
       )}
       <FeedWidget
+        queryKey="akasha-tag-feed-query"
         modalSlotId={layoutConfig.modalSlotId}
         // @TODO add a new entry for tags
         itemType={EntityTypes.BEAM}

@@ -106,6 +106,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
         )}
         {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
         <FeedWidget
+          queryKey="akasha-profile-beams-query-key"
           modalSlotId={layoutConfig.modalSlotId}
           itemType={EntityTypes.BEAM}
           loggedProfileData={loggedProfileData}

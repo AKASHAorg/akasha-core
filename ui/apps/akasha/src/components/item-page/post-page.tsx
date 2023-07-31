@@ -12,12 +12,20 @@ type PostPageProps = {
 const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
   const { userId } = props;
 
-  const { postId } = useParams<{ postId: string }>();
+  const { postId } = useParams<{
+    postId: string;
+  }>();
   // @TODO replace with new hooks
   const postReq = useDummyQuery({});
 
   return (
-    <BaseEntryPage {...props} postId={postId} itemType={EntityTypes.BEAM} entryReq={postReq} />
+    <BaseEntryPage
+      {...props}
+      feedQueryKey="akasha-beam-page-query"
+      postId={postId}
+      itemType={EntityTypes.BEAM}
+      entryReq={postReq}
+    />
   );
 };
 

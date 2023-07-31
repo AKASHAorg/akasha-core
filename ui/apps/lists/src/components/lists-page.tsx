@@ -137,6 +137,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
         )}
 
         <FeedWidget
+          queryKey="akasha-lists-page-query"
           modalSlotId={layoutConfig.modalSlotId}
           // @TODO: create an entry for lists
           itemType={EntityTypes.BEAM}

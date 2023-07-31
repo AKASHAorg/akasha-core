@@ -100,6 +100,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       </Box>
 
       <FeedWidget
+        queryKey="akasha-my-feed-query"
         modalSlotId={layoutConfig.modalSlotId}
         itemType={EntityTypes.BEAM}
         navigateToModal={navigateToModal.current}
