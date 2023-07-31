@@ -29,7 +29,7 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
         </Text>
 
         <Button plain={true} onClick={onDismissCard}>
-          <Icon type="XMarkIcon" accentColor={true} />
+          <Icon type="XMarkIcon" size="sm" accentColor={true} />
         </Button>
       </Stack>
 

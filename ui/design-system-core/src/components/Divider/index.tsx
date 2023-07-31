@@ -7,7 +7,7 @@ export interface DividerProps {
 
 const Divider: React.FC<DividerProps> = ({ customStyle = '' }) => {
   return (
-    <div
+    <hr
       className={tw(apply`rounded-[1.25rem] h-px w-full bg-grey8 dark:bg-grey5 ${customStyle}`)}
     />
   );
