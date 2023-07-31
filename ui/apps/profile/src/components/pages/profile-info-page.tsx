@@ -30,7 +30,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     return await sdk.services.common.misc.resolveDID(did);
   }
 
-  const [validDid, setValidDid] = React.useState(false);
+  const [validDid, setValidDid] = React.useState<boolean | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const [showFeedback, setShowFeedback] = React.useState(false);
@@ -83,7 +83,9 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const hasError = status === 'error'; /*  || (status === 'success' && !profileData) */
+  const hasError =
+    status === 'error' ||
+    (!hasProfile && !validDid); /*  || (status === 'success' && !profileData) */
 
   if (hasError)
     return (
