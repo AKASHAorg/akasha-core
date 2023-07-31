@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -48,7 +48,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
   const logoutQuery = useLogout();
   const queryClient = useQueryClient();
-  const [dismissed, setDismissed] = useDismissedCard();
+  const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
   const myProfileQuery = useGetMyProfileQuery(null, {
     enabled: !!loginQuery.data?.id,
     select: data => data.viewer,
@@ -59,8 +59,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const sdk = getSDK();
   const routing = plugins['@akashaorg/app-routing']?.routing;
-
-  const dismissedCardId = `@akashaorg/ui-widget-sidebar_cta-card`;
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
@@ -239,11 +237,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
 
-  const handleDismissCTACard = useCallback(() => {
-    setDismissed(dismissedCardId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dismissed]);
-
   return (
     <BasicCardBox
       customStyle="w-[19.5rem] max-w-[19.5rem] max-h-screen min-[1440px]:max-h-[calc(100vh-20px)]"
@@ -332,11 +325,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         )}
       </Box>
 
-      {!dismissed.includes(dismissedCardId) && (
-        <SidebarCTACard
-          onClickCTAButton={handleClickExplore}
-          onDismissCard={handleDismissCTACard}
-        />
+      {!dismissed && (
+        <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
       )}
 
       {socialLinks.length > 0 && (

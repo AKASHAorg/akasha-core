@@ -1,7 +1,4 @@
-import { useState } from 'react';
-
-const INITIAL_CLOSE_STATE = [];
-const LOCAL_STORAGE_KEY = 'dismissed-card-ids';
+import { useEffect, useState } from 'react';
 
 interface IStorage {
   setItem(key: string, value: string): void;
@@ -9,40 +6,31 @@ interface IStorage {
   removeItem(key: string): void;
 }
 
-const writeToLocalStorage = (storage: IStorage, key: string, value: string[]): void => {
-  if (storage) {
-    storage.setItem(key, JSON.stringify(value));
-  }
+const LOCAL_STORAGE_KEY = 'dismissed-card-ids';
+
+const writeToStorage = (storage: IStorage, key: string, value: string[]): void => {
+  storage.setItem(key, JSON.stringify(value));
 };
 
-export function useDismissedCard(statusStorage?: IStorage): [string[], (newId: string) => void] {
+export function useDismissedCard(id: string, statusStorage?: IStorage): [boolean, () => void] {
+  const [dismissed, setDismissed] = useState<boolean>(true);
+
   const storage = statusStorage || window.localStorage;
 
-  const [ids, setIds] = useState<string[]>(() => {
-    if (storage) {
-      const currentClosedStatus = JSON.parse(storage.getItem(LOCAL_STORAGE_KEY)) as string[];
+  const dismissedIds = new Set<string>(JSON.parse(storage.getItem(LOCAL_STORAGE_KEY)));
 
-      if (currentClosedStatus) {
-        return currentClosedStatus;
-      }
-      return INITIAL_CLOSE_STATE;
-    }
-  });
+  useEffect(() => {
+    setDismissed(dismissedIds.has(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dismissed]);
 
-  const setValue = (newId: string) => {
-    setIds(prevIds => {
-      const uniqueIds = new Set(prevIds);
+  const dismissCard = () => {
+    dismissedIds.add(id);
 
-      if (uniqueIds.has(newId)) {
-        return [...uniqueIds];
-      }
+    writeToStorage(storage, LOCAL_STORAGE_KEY, [...dismissedIds]);
 
-      uniqueIds.add(newId);
-      writeToLocalStorage(storage, LOCAL_STORAGE_KEY, [...uniqueIds]);
-
-      return [...uniqueIds];
-    });
+    setDismissed(true);
   };
 
-  return [ids, setValue];
+  return [dismissed, dismissCard];
 }
