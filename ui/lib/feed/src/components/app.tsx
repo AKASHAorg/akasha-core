@@ -11,6 +11,7 @@ import {
 import { createDummyBeams, createDummyReflections } from './create-dummy-entries';
 
 export type FeedWidgetCommonProps = {
+  queryKey: string;
   navigateToModal: (props: ModalNavigationOptions) => void;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
 };
@@ -21,9 +22,9 @@ type FeedProps = Omit<BeamFeedProps, OmitProps> | Omit<ReflectFeedProps, OmitPro
 const FeedWidgetRoot: React.FC<
   FeedWidgetCommonProps & Extract<FeedProps, { itemType: EntityTypes }>
 > = props => {
-  const { itemType, i18n } = props;
+  const { itemType, i18n, queryKey } = props;
   const beamsReq = useInfiniteDummy<GetBeamsQuery, ReturnType<typeof mapEntry>>(
-    'feed_page_get_beams',
+    queryKey,
     createDummyBeams(5),
     {
       enabled: itemType === EntityTypes.BEAM,
@@ -37,7 +38,7 @@ const FeedWidgetRoot: React.FC<
   );
 
   const reflectReq = useInfiniteDummy<GetReflectionsFromBeamQuery, ReturnType<typeof mapEntry>>(
-    'feed_page_get_reflections',
+    queryKey,
     createDummyReflections(5),
     {
       enabled: itemType === EntityTypes.REFLECT,

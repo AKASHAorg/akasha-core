@@ -221,7 +221,7 @@ const Layout: React.FC<RootComponentProps> = props => {
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </Box>
           </Box>
-          <Box customStyle="sticky top-0">
+          <Box customStyle="sticky top-0 h-screen">
             <Box customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
               <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
               <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
