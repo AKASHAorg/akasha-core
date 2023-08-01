@@ -58,7 +58,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   React.useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
-        console.log('event data', eventData);
         if (
           eventData.event === AUTH_EVENTS.WAIT_FOR_AUTH ||
           eventData.event === AUTH_EVENTS.CONNECT_ADDRESS
