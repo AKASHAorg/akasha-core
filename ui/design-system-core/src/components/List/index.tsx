@@ -1,17 +1,19 @@
 import React, { LegacyRef, forwardRef } from 'react';
-import Stack from '../Stack';
-import Text from '../Text';
-import Icon from '../Icon';
-import Card from '../Card';
-import Button from '../Button';
+
 import { IconType } from '@akashaorg/typings/ui';
-import { TextProps } from '../Text';
+
+import Button from '../Button';
+import Card from '../Card';
+import Icon from '../Icon';
+import Stack from '../Stack';
+import Text, { TextProps } from '../Text';
+
 import { getColorClasses } from '../../utils/getColorClasses';
 
 export type ListItem = {
   label: string;
   icon?: IconType;
-  onClick?: (label: string) => void;
+  onClick?: (label?: string) => void;
 } & TextProps;
 
 export type ListProps = {
@@ -19,10 +21,11 @@ export type ListProps = {
   customStyle?: string;
   showDivider?: boolean;
   ref?: LegacyRef<HTMLDivElement>;
+  onCloseList?: () => void;
 };
 
 const List: React.FC<ListProps> = forwardRef(
-  ({ items, customStyle = '', showDivider = true }, ref) => {
+  ({ items, customStyle = '', showDivider = true, onCloseList }, ref) => {
     const borderStyle = showDivider
       ? `border-b ${getColorClasses(
           {
@@ -35,14 +38,23 @@ const List: React.FC<ListProps> = forwardRef(
     const baseStyle = borderStyle;
     const hoverStyle = getColorClasses({ light: 'grey8', dark: 'grey5' }, 'hover:bg');
 
+    const handleItemClick = (item: ListItem) => () => {
+      if (item.onClick) {
+        item.onClick();
+      }
+      if (onCloseList) {
+        onCloseList();
+      }
+    };
+
     return (
-      <Card elevation="1" radius={8} customStyle={`z-50	w-fit ${customStyle}`} ref={ref}>
+      <Card elevation="1" radius={8} customStyle={`w-fit ${customStyle}`} ref={ref}>
         <Stack direction="column">
           {items.map((item, index) => (
             <Button
               key={item.label + index}
               customStyle={`${baseStyle} ${hoverStyle} first:rounded-t-lg	last:rounded-b-lg`}
-              onClick={() => (item.onClick ? item.onClick(item.label) : undefined)}
+              onClick={handleItemClick(item)}
               plain
             >
               <Stack align="center" spacing="gap-x-3" customStyle="py-2 px-4">

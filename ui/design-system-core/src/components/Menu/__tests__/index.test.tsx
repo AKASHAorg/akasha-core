@@ -22,11 +22,20 @@ describe('<Menu /> Component', () => {
     },
   ];
 
-  const anchor = <p>Show menu</p>;
-
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Menu anchorElement={anchor} items={items} />, {});
+      componentWrapper = customRender(
+        <Menu
+          anchor={{
+            icon: 'EllipsisVerticalIcon',
+            variant: 'primary',
+            greyBg: true,
+            iconOnly: true,
+          }}
+          items={items}
+        />,
+        {},
+      );
     });
   });
 
@@ -39,9 +48,9 @@ describe('<Menu /> Component', () => {
   });
 
   it('shows list when clicked', async () => {
-    const { getByText, findByText } = componentWrapper;
+    const { getByRole, findByText } = componentWrapper;
 
-    const anchorEl = getByText('Show menu');
+    const anchorEl = getByRole('button');
     expect(anchorEl).toBeDefined();
 
     fireEvent.click(anchorEl);
@@ -51,9 +60,9 @@ describe('<Menu /> Component', () => {
   });
 
   it('calls correct handler for each option', async () => {
-    const { getByText, findByText } = componentWrapper;
+    const { getByRole, findByText } = componentWrapper;
 
-    const anchorEl = getByText('Show menu');
+    const anchorEl = getByRole('button');
     fireEvent.click(anchorEl);
 
     const uploadOption = await findByText('Upload');
