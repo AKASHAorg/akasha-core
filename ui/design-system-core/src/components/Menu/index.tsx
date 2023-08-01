@@ -1,31 +1,35 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import { tw } from '@twind/core';
 
+import Button from '../Button';
 import Stack from '../Stack';
 import List, { ListProps } from '../List';
 
+import { ButtonProps } from '../Button/types';
 import { useCloseActions } from '../../utils/useCloseActions';
 
-type MenuProps = {
-  anchorElement: ReactNode;
+export type MenuProps = {
+  anchor: ButtonProps;
 } & ListProps;
 
-const Menu: React.FC<MenuProps> = ({ anchorElement, ...rest }) => {
+const Menu: React.FC<MenuProps> = ({ anchor, ...rest }) => {
   const [showList, setShowList] = useState(false);
   const anchorRef = useCloseActions(() => {
     setShowList(false);
   });
 
+  const handleCloseList = () => {
+    setShowList(false);
+  };
+
   return (
-    <Stack direction="column" spacing="gap-y-1">
-      <div ref={anchorRef} onClick={() => setShowList(!showList)}>
-        {anchorElement}
-      </div>
+    <Stack ref={anchorRef} direction="column" spacing="gap-y-1">
+      <Button {...anchor} onClick={() => setShowList(!showList)} />
 
       <div className={tw('relative')}>
         {showList && (
-          <div className={tw('absolute right-0')}>
-            <List {...rest} />{' '}
+          <div className={tw('absolute right-0 z-50')}>
+            <List {...rest} onCloseList={handleCloseList} />
           </div>
         )}
       </div>
