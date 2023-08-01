@@ -60,7 +60,7 @@ const LoginCTACard: React.FC<ILoginCTACardProps> = props => {
           </div>
         </div>
         <button onClick={onCloseIconClick}>
-          <Icon type="XMarkIcon" size="xs" data-testid="close-icon-alpha-notification" />
+          <Icon type="XMarkIcon" size="sm" data-testid="close-icon-alpha-notification" />
         </button>
       </div>
     </BasicCardBox>

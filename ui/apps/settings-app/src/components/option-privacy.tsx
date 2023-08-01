@@ -2,6 +2,7 @@ import React from 'react';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
@@ -74,7 +75,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
               {worldLabel}
             </Text>
             {essentialCookiesInfo2}
-            <span onClick={onPrivacyPolicyClick}>
+            <Button plain={true} onClick={onPrivacyPolicyClick}>
               <Text
                 customStyle="inline-block cursor-pointer"
                 as="span"
@@ -83,7 +84,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
               >
                 {privacyPolicyLabel}
               </Text>
-            </span>
+            </Button>
             {essentialCookiesInfo3}
             {essentialCookiesInfo4}
           </Text>

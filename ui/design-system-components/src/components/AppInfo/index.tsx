@@ -111,15 +111,13 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   />
                 )}
                 <Menu
-                  anchorElement={
-                    <Button
-                      icon="EllipsisVerticalIcon"
-                      variant="primary"
-                      size="xs"
-                      greyBg
-                      iconOnly
-                    />
-                  }
+                  anchor={{
+                    icon: 'EllipsisVerticalIcon',
+                    variant: 'primary',
+                    size: 'xs',
+                    greyBg: true,
+                    iconOnly: true,
+                  }}
                   items={[share, report]}
                 />
               </Stack>

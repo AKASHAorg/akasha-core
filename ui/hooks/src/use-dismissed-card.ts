@@ -1,7 +1,4 @@
-import { useState } from 'react';
-
-const INITIAL_CLOSE_STATE = [];
-const LOCAL_STORAGE_KEY = 'dismissed-card-ids';
+import { useEffect, useState } from 'react';
 
 interface IStorage {
   setItem(key: string, value: string): void;
@@ -9,36 +6,31 @@ interface IStorage {
   removeItem(key: string): void;
 }
 
-const writeToLocalStorage = (storage: IStorage, key: string, value: string[]): void => {
-  if (storage) {
-    storage.setItem(key, JSON.stringify(value));
-  }
+const LOCAL_STORAGE_KEY = 'dismissed-card-ids';
+
+const writeToStorage = (storage: IStorage, key: string, value: string[]): void => {
+  storage.setItem(key, JSON.stringify(value));
 };
 
-export function useDismissedCard(
-  statusStorage?: IStorage,
-): [string[], (newClosedValue: string) => void] {
+export function useDismissedCard(id: string, statusStorage?: IStorage): [boolean, () => void] {
+  const [dismissed, setDismissed] = useState<boolean>(true);
+
   const storage = statusStorage || window.localStorage;
-  const [closed, setClosed] = useState<string[]>(() => {
-    if (storage) {
-      const currentClosedStatus = JSON.parse(storage.getItem(LOCAL_STORAGE_KEY));
 
-      if (currentClosedStatus) {
-        return currentClosedStatus;
-      }
-      return INITIAL_CLOSE_STATE;
-    }
-  });
+  const dismissedIds = new Set<string>(JSON.parse(storage.getItem(LOCAL_STORAGE_KEY)));
 
-  const setValue = (newClosedValue: string) => {
-    setClosed(prevClosed => {
-      if (prevClosed.includes(newClosedValue)) {
-        return prevClosed;
-      }
-      const newClosedValues = prevClosed.concat(newClosedValue);
-      writeToLocalStorage(storage, LOCAL_STORAGE_KEY, newClosedValues);
-      return newClosedValues;
-    });
+  useEffect(() => {
+    setDismissed(dismissedIds.has(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dismissed]);
+
+  const dismissCard = () => {
+    dismissedIds.add(id);
+
+    writeToStorage(storage, LOCAL_STORAGE_KEY, [...dismissedIds]);
+
+    setDismissed(true);
   };
-  return [closed, setValue];
+
+  return [dismissed, dismissCard];
 }

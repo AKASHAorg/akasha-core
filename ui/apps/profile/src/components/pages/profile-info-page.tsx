@@ -1,21 +1,25 @@
 import React from 'react';
+import { useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
+
+import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import FollowProfile from '../follow-profile';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import ProfileStatsPresentation from '../profile-stats-presentation';
-import routes, { EDIT } from '../../routes';
-import { useTranslation } from 'react-i18next';
-import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import {
   ProfileHeader,
   ProfileBio,
   ProfileLinks,
   ProfileLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { useParams } from 'react-router';
-import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+
+import FollowProfile from '../follow-profile';
+import ProfileStatsPresentation from '../profile-stats-presentation';
+import routes, { EDIT } from '../../routes';
 
 export interface ProfilePageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -54,7 +58,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
       ? profileDataReq.data
       : { isViewer: null, profile: null };
 
-  const handleEntryFlag = React.useCallback(
+  const handleFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes, user: string) => () => {
       if (!isLoggedIn) {
         return showLoginModal({ modal: { name: 'report-modal', itemId, itemType, user } });
@@ -84,8 +88,41 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
       />
     );
 
+  const handleCopy = () => {
+    const profileUrl = new URL(location.pathname, location.origin).href;
+
+    navigator.clipboard.writeText(profileUrl).then(() => {
+      setShowFeedback(true);
+    });
+  };
+
+  const handleEdit = () => {
+    navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
+    });
+  };
+
   const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
   const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
+
+  const menuItems: MenuProps['items'] = [
+    {
+      label: t('Copy link'),
+      icon: 'LinkIcon',
+      onClick: handleCopy,
+    },
+    ...(!isViewer
+      ? ([
+          {
+            label: t('Report'),
+            icon: 'FlagIcon',
+            onClick: handleFlag(profileData.did.id, EntityTypes.PROFILE, profileData.name),
+            color: { light: 'errorLight', dark: 'errorDark' },
+          },
+        ] as MenuProps['items'])
+      : []),
+  ];
 
   return (
     <>
@@ -97,7 +134,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
           name={profileData.name}
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           viewerIsOwner={isViewer}
-          flagLabel={t('Report')}
+          menuItems={menuItems}
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
           followElement={
@@ -107,13 +144,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
               showLoginModal={showLoginModal}
             />
           }
-          handleFlag={handleEntryFlag(profileData.did.id, EntityTypes.PROFILE, profileData.name)}
-          handleEdit={() => {
-            navigateTo({
-              appName: '@akashaorg/app-profile',
-              getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
-            });
-          }}
+          handleEdit={handleEdit}
         />
         {profileData.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
@@ -129,7 +160,8 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
         )}
         {showFeedback && (
           <Snackbar
-            title={t('You unfollowed {{name}}', { userName: profileData.name })}
+            title={`${t('Profile link copied')}!`}
+            type="success"
             iconType="CheckCircleIcon"
             handleDismiss={() => {
               setShowFeedback(false);
