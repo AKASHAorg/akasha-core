@@ -71,7 +71,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 installableApps={installableApps}
                 installedAppsInfo={[]}
                 isFetching={appsReq.isFetching}
-                reqError={appsReq.error}
+                reqError={appsReq.error as Error}
                 isUserLoggedIn={isLoggedIn}
                 {...props}
               />

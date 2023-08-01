@@ -3,7 +3,7 @@ import ProfileEngagements from '@akashaorg/design-system-components/lib/componen
 import FollowProfile from '../follow-profile';
 import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps, EngagementType } from '@akashaorg/typings/ui';
+import { RootComponentProps, EngagementType, ModalNavigationOptions } from '@akashaorg/typings/ui';
 
 import { useParams } from 'react-router-dom';
 import {
@@ -14,15 +14,17 @@ import {
 
 type ProfileEngagementsPageProps = {
   engagementType: EngagementType;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const ProfileEngagementsPage: React.FC<
   RootComponentProps & ProfileEngagementsPageProps
 > = props => {
+  const { engagementType, plugins, showLoginModal } = props;
   const { t } = useTranslation('app-profile');
   const { profileId } = useParams<{ profileId: string }>();
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const profileDataReq = useGetProfileByDidQuery(
     {
@@ -81,7 +83,7 @@ const ProfileEngagementsPage: React.FC<
 
   return (
     <ProfileEngagements
-      engagementType={props.engagementType}
+      engagementType={engagementType}
       followers={{
         label: t('Followers'),
         status: followersReq.status,
@@ -97,7 +99,7 @@ const ProfileEngagementsPage: React.FC<
       ownerUserName={profileData.name}
       viewerIsOwner={isViewer}
       renderFollowElement={profileId => (
-        <FollowProfile profileId={profileId} navigateTo={navigateTo} />
+        <FollowProfile profileId={profileId} showLoginModal={showLoginModal} />
       )}
       onError={onError}
       onProfileClick={onProfileClick}

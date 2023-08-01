@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { NavigateToParams } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useFollowingsOfLoggedInProfile } from './use-followings-of-logged-in-profile';
 import {
   useCreateFollowMutation,
@@ -12,16 +12,20 @@ import { Follow } from '../type';
 
 type IconButtonFollow = {
   profileId: string;
-  navigateTo?: (args: NavigateToParams) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 /* TODO: Some of the logic inside this component is a work around until we have a hook that fetches the isFollowing flag and stream id of a profile being viewed.
  **      The component will be refactored once the hook is ready.
  */
 const IconButtonFollow: React.FC<IconButtonFollow> = props => {
-  const { profileId, navigateTo } = props;
+  const { profileId, showLoginModal } = props;
 
   const loginQuery = useGetLogin();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data?.id;
+  }, [loginQuery.data]);
 
   const [loading, setLoading] = useState(false);
 
@@ -64,22 +68,13 @@ const IconButtonFollow: React.FC<IconButtonFollow> = props => {
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: response => response?.viewer?.profile,
-    enabled: !!loginQuery.data?.id,
+    enabled: isLoggedIn,
   });
 
-  const checkAuth = () => {
-    if (!loginQuery.data?.id && navigateTo) {
-      navigateTo({
-        appName: '@akashaorg/app-auth-ewa',
-        getNavigationUrl: navRoutes => navRoutes.CONNECT,
-      });
-      return false;
-    }
-    return true;
-  };
-
   const handleFollow = (profileStreamId: string, following?: Follow) => {
-    if (!checkAuth()) return;
+    if (!isLoggedIn) {
+      return showLoginModal();
+    }
     if (!following) {
       createFollowMutation.mutate({
         i: { content: { isFollowing: true, profileID: profileStreamId } },
@@ -96,7 +91,9 @@ const IconButtonFollow: React.FC<IconButtonFollow> = props => {
 
   const handleUnfollow = (profileStreamId: string, following?: Follow) => {
     if (!following) return null;
-    if (!checkAuth()) return;
+    if (!isLoggedIn) {
+      return showLoginModal();
+    }
     updateFollowMutation.mutate({
       i: {
         id: following.streamId,

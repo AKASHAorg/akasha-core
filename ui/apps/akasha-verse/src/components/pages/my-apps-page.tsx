@@ -6,13 +6,12 @@ import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
+import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import { INFO } from '../../routes';
 
 export interface IMyAppsPage extends RootComponentProps {
-  latestReleasesInfo?: IntegrationReleaseInfoFragmentFragment[];
-  installedAppsInfo?: IntegrationReleaseInfo[];
+  availableApps?: GetAppsQuery['akashaAppIndex']['edges'];
+  installedAppsInfo?: GetAppsByIdQuery['node'][];
   defaultIntegrations?: string[];
   isFetching?: boolean;
 }
@@ -20,7 +19,7 @@ export interface IMyAppsPage extends RootComponentProps {
 const MyAppsPage: React.FC<IMyAppsPage> = props => {
   const {
     worldConfig,
-    latestReleasesInfo,
+    availableApps,
     installedAppsInfo,
     defaultIntegrations,
     isFetching,
@@ -43,27 +42,27 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
   }, [defaultApps]);
 
   // select default apps from list of installed apps
-  const filteredDefaultApps = latestReleasesInfo?.filter(app => {
-    if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
+  const filteredDefaultApps = availableApps?.filter(app => {
+    if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.node?.name)) {
       return app;
     }
   });
   // select user installed apps from list of installed apps
-  const filteredInstalledApps = latestReleasesInfo
+  const filteredInstalledApps = availableApps
     ?.filter(app => {
       if (!installedAppsInfo?.length) {
         return null;
       }
-      if (!defaultIntegrations?.some(defaultApp => defaultApp === app.name)) {
+      if (!defaultIntegrations?.some(defaultApp => defaultApp === app.node?.name)) {
         return app;
       }
     })
     .filter(Boolean);
 
-  const handleAppClick = (app: IntegrationReleaseInfoFragmentFragment) => {
+  const handleAppClick = appId => {
     plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-akasha-verse',
-      getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
+      getNavigationUrl: routes => `${routes[INFO]}/${appId}`,
     });
   };
 

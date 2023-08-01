@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { NavigateToParams } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateFollowMutation,
@@ -12,15 +12,19 @@ import {
 type FollowProfileProps = {
   isFollowing?: string;
   streamId?: string;
-  navigateTo?: (args: NavigateToParams) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const FollowProfile: React.FC<FollowProfileProps> = props => {
-  const { isFollowing, streamId, navigateTo } = props;
+  const { isFollowing, streamId, showLoginModal } = props;
 
   const { t } = useTranslation('app-profile');
 
   const loginQuery = useGetLogin();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data?.id;
+  }, [loginQuery.data]);
 
   const [loading, setLoading] = useState(false);
 
@@ -44,22 +48,13 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: response => response?.viewer?.profile,
-    enabled: !!loginQuery.data?.id,
+    enabled: isLoggedIn,
   });
 
-  const checkAuth = () => {
-    if (!loginQuery.data?.id && navigateTo) {
-      navigateTo({
-        appName: '@akashaorg/app-auth-ewa',
-        getNavigationUrl: navRoutes => navRoutes.CONNECT,
-      });
-      return false;
-    }
-    return true;
-  };
-
   const handleFollow = (profileStreamId: string, streamId?: string) => {
-    if (!checkAuth()) return;
+    if (!isLoggedIn) {
+      return showLoginModal();
+    }
     if (!streamId) {
       createFollowMutation.mutate({
         i: { content: { isFollowing: true, profileID: profileStreamId } },
@@ -75,7 +70,9 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
   };
 
   const handleUnfollow = (profileStreamId: string, streamId?: string) => {
-    if (!checkAuth()) return;
+    if (!isLoggedIn) {
+      return showLoginModal();
+    }
     updateFollowMutation.mutate({
       i: {
         id: streamId,

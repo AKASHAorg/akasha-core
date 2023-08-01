@@ -6,7 +6,7 @@ import ProfileEngagementsPage from './pages/profile-engagement';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
@@ -21,19 +21,38 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     }, 5000);
   };
 
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    props.navigateToModal({ name: 'login', redirectTo });
+  };
+
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="mb-8">
       <Router basename={props.baseRouteName}>
         <Routes>
           <Route path="/">
-            <Route path={':profileId'} element={<ProfileInfoPage {...props} />} />
+            <Route
+              path={':profileId'}
+              element={<ProfileInfoPage showLoginModal={showLoginModal} {...props} />}
+            />
             <Route
               path={`:profileId${menuRoute[FOLLOWERS]}`}
-              element={<ProfileEngagementsPage {...props} engagementType={'followers'} />}
+              element={
+                <ProfileEngagementsPage
+                  {...props}
+                  showLoginModal={showLoginModal}
+                  engagementType={'followers'}
+                />
+              }
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWING]}`}
-              element={<ProfileEngagementsPage {...props} engagementType={'following'} />}
+              element={
+                <ProfileEngagementsPage
+                  {...props}
+                  showLoginModal={showLoginModal}
+                  engagementType={'following'}
+                />
+              }
             />
             <Route
               path={`:profileId${menuRoute[EDIT]}`}

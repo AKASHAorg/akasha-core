@@ -6,7 +6,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import ProfileStatsPresentation from '../profile-stats-presentation';
 import routes, { EDIT } from '../../routes';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
+import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import {
   ProfileHeader,
   ProfileBio,
@@ -17,8 +17,12 @@ import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/h
 import { useParams } from 'react-router';
 import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
-const ProfileInfoPage: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
+export interface ProfilePageProps {
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+}
+
+const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props => {
+  const { plugins, navigateToModal, showLoginModal } = props;
 
   const { t } = useTranslation('app-profile');
 
@@ -29,6 +33,10 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const { profileId } = useParams<{ profileId: string }>();
 
   const loginQuery = useGetLogin();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data?.id;
+  }, [loginQuery.data]);
 
   const profileDataReq = useGetProfileByDidQuery(
     {
@@ -46,7 +54,15 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       ? profileDataReq.data
       : { isViewer: null, profile: null };
 
-  const isLoggedIn = !!loginQuery.data?.id;
+  const handleEntryFlag = React.useCallback(
+    (itemId: string, itemType: EntityTypes, user: string) => () => {
+      if (!isLoggedIn) {
+        return showLoginModal({ modal: { name: 'report-modal', itemId, itemType, user } });
+      }
+      navigateToModal({ name: 'report-modal', itemId, itemType, user });
+    },
+    [isLoggedIn],
+  );
 
   if (status === 'loading') return <ProfileLoading />;
 
@@ -68,21 +84,6 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       />
     );
 
-  const checkAuth = (cb: () => void) => () => {
-    if (!isLoggedIn) {
-      navigateTo({
-        appName: '@akashaorg/app-auth-ewa',
-        getNavigationUrl: navRoutes => navRoutes.CONNECT,
-      });
-      return;
-    }
-    cb();
-  };
-
-  const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
-    props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
-  };
-
   const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
   const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
 
@@ -100,15 +101,13 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
           followElement={
-            <FollowProfile profileId={profileId} isIconButton={true} navigateTo={navigateTo} />
+            <FollowProfile
+              profileId={profileId}
+              isIconButton={true}
+              showLoginModal={showLoginModal}
+            />
           }
-          handleFlag={checkAuth(
-            handleEntryFlag(
-              profileData.did.id ? profileData.did.id : '',
-              EntityTypes.PROFILE,
-              profileData.name,
-            ),
-          )}
+          handleFlag={handleEntryFlag(profileData.did.id, EntityTypes.PROFILE, profileData.name)}
           handleEdit={() => {
             navigateTo({
               appName: '@akashaorg/app-profile',

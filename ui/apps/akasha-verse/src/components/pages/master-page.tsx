@@ -98,31 +98,6 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
           tabListDivider
         />
         <Box customStyle="p-4">{children}</Box>
-        {/* <Modal
-          title={{ label: t('Members only action'), variant: 'h5' }}
-          show={showModal}
-          onClose={() => {
-            setShowModal(false);
-          }}
-          actions={[
-            {
-              variant: 'secondary',
-              label: t('Cancel'),
-              onClick: () => {
-                setShowModal(false);
-              },
-            },
-            {
-              variant: 'primary',
-              label: 'Connect',
-              onClick: onConnect,
-            },
-          ]}
-        >
-          <Text variant="body1">
-            {t('Sorry! but you need to be connected in order to preform that action')}
-          </Text>
-        </Modal> */}
       </Card>
     </Stack>
   );
