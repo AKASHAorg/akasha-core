@@ -32,8 +32,6 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
   [routes[MY_WIDGETS]]: 3,
 };
 
-const dismissedCardId = 'welcome-message';
-
 const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => {
   const { isLoggedIn, onConnect, navigateTo, children } = props;
 
@@ -43,7 +41,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
     isLoggedIn ? ROUTE_TO_TAB_INDEX_MAP[location.pathname] || 0 : 0,
   );
   const [showModal, setShowModal] = useState(false);
-  const [dismissed, setDismissed] = useDismissedCard();
+  const [dismissed, dismissCard] = useDismissedCard('@akashaorg/app-akasha-verse_welcome-message');
 
   const handleTabChange = (selectedIndex: number) => {
     if (navigateTo) {
@@ -67,7 +65,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
 
   return (
     <Stack direction="column" spacing="gap-y-2">
-      {!dismissed.includes(dismissedCardId) && (
+      {!dismissed && (
         <MessageCard
           title={t('Welcome to AKASHAVerse')}
           message={t(
@@ -75,9 +73,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
           )}
           background="secondaryLight/30"
           elevation="none"
-          onClose={() => {
-            setDismissed(dismissedCardId);
-          }}
+          onClose={dismissCard}
         />
       )}
       <Card elevation="1" radius={20}>

@@ -12,14 +12,13 @@ const BaseLayout: React.FC<PropsWithChildren<IBaseLayout>> = props => {
   const { title, children } = props;
   return (
     <BasicCardBox pad="p-0">
-      <React.Fragment>
-        <Box customStyle="p-4 border(b-1 solid grey8)">
-          <Text variant="h5" align="center">
-            {title}
-          </Text>
-        </Box>
-        {children}
-      </React.Fragment>
+      <Box customStyle="p-4 border(b-1 solid grey8 dark:grey5)">
+        <Text variant="h5" align="center">
+          {title}
+        </Text>
+      </Box>
+
+      {children}
     </BasicCardBox>
   );
 };
