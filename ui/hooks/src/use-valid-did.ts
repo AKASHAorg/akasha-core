@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 
 async function resolveDid(did: string): Promise<DIDDocument> {
   const sdk = getSDK();
-  return await sdk.services.common.misc.resolveDID(did);
+  return sdk.services.common.misc.resolveDID(did);
 }
 
 export function useValidDid(profileId: string, enabled?: boolean) {
