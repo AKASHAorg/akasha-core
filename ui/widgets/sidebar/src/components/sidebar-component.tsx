@@ -273,12 +273,13 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
             {!loginQuery.data?.id && (
               <Text
-                variant="footnotes1"
-                customStyle="text-grey5 whitespace-normal"
+                variant="footnotes2"
+                color="grey7"
+                customStyle="whitespace-normal"
                 truncate
                 breakWord
               >
-                {t('Connect to see exclusive member only features.')}
+                {t('Connect to see member only features.')}
               </Text>
             )}
           </Box>
@@ -331,17 +332,19 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
       {socialLinks.length > 0 && (
         <Box customStyle="flex flex-col px-8 py-4 border-t-1 border(grey9 dark:grey3)">
-          <Text variant="footnotes2" customStyle="text-grey5">
-            {t('Get in touch')}
-          </Text>
+          <Text variant="footnotes2">{t('Get in touch')}</Text>
 
           <Box customStyle="flex w-fit h-fit mt-6">
             {socialLinks.map((socialLink, idx) => (
-              <Box key={socialLink.icon + idx} customStyle="mr-4">
-                <Anchor href={socialLink.link} target="_blank" rel="noreferrer noopener">
-                  <Button icon={socialLink.icon} variant="primary" greyBg={true} iconOnly={true} />
-                </Anchor>
-              </Box>
+              <Anchor
+                key={socialLink.icon + idx}
+                href={socialLink.link}
+                target="_blank"
+                rel="noreferrer noopener"
+                customStyle="mr-4"
+              >
+                <Button icon={socialLink.icon} variant="primary" greyBg={true} iconOnly={true} />
+              </Anchor>
             ))}
           </Box>
         </Box>

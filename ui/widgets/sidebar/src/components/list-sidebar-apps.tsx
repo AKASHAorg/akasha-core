@@ -41,7 +41,7 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
         <Accordion
           key={app.label + idx}
           customStyle="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
-          titleNode={<MenuItemLabel menuItem={app} isActive={false} />}
+          titleNode={<MenuItemLabel menuItem={app} />}
           contentNode={
             <MenuSubItems
               menuItem={app}
@@ -55,7 +55,7 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
       {otherApps.map((app, idx) => (
         <Box key={app.label + idx} customStyle={'px-4 hover:bg-grey8 dark:hover:bg-grey5'}>
           <Box customStyle={'p-2 cursor-pointer'}>
-            <MenuItemLabel menuItem={app} isActive={false} onClickMenuItem={onClickMenuItem} />
+            <MenuItemLabel menuItem={app} onClickMenuItem={onClickMenuItem} />
           </Box>
         </Box>
       ))}
