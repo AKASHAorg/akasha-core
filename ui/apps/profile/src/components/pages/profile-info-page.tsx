@@ -16,22 +16,16 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useParams } from 'react-router';
-import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
-import getSDK from '@akashaorg/awf-sdk';
-import { DIDDocument } from 'did-resolver';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  useGetLogin,
+  useValidDid,
+} from '@akashaorg/ui-awf-hooks';
 
 const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
 
   const { t } = useTranslation('app-profile');
-  const sdk = getSDK();
-
-  async function resolveDid(did: string): Promise<DIDDocument> {
-    return await sdk.services.common.misc.resolveDID(did);
-  }
-
-  const [validDid, setValidDid] = React.useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = React.useState(false);
 
   const [showFeedback, setShowFeedback] = React.useState(false);
 
@@ -57,16 +51,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       ? profileDataReq.data
       : { isViewer: null, profile: null };
 
-  React.useEffect(() => {
-    if (profileDataReq.data && !profileData) {
-      setIsLoading(true);
-      resolveDid(profileId).then(res => {
-        setValidDid(Boolean(res));
-        setIsLoading(false);
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileDataReq.data, profileId, profileData]);
+  const { validDid, isLoading } = useValidDid(profileId, profileDataReq.data && !profileData);
 
   const isLoggedIn = !!loginQuery.data?.id;
 
@@ -83,9 +68,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const hasError =
-    status === 'error' ||
-    (!hasProfile && !validDid); /*  || (status === 'success' && !profileData) */
+  const hasError = status === 'error'; /*  || (status === 'success' && !profileData) */
 
   if (hasError)
     return (
@@ -93,6 +76,15 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
         type="script-error"
         title={t('There was an error loading this profile')}
         details={t('We cannot show this profile right now')}
+      />
+    );
+
+  if (!hasProfile && !validDid)
+    return (
+      <ErrorLoader
+        type="script-error"
+        title={t('There is no such DID')}
+        details={t('The DID you provided is not correct.')}
       />
     );
 
