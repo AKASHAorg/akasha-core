@@ -58,6 +58,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   React.useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
+        console.log('event data', eventData);
         if (
           eventData.event === AUTH_EVENTS.WAIT_FOR_AUTH ||
           eventData.event === AUTH_EVENTS.CONNECT_ADDRESS
@@ -271,7 +272,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         </>
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isLoading, loginQuery.isStale, myProfileQuery.data?.profile?.did?.id],
+    [isLoading, loginQuery.isStale, loginQuery.data?.id, myProfileQuery.data?.profile?.did?.id],
   );
 
   return (
