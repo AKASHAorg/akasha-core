@@ -1,15 +1,11 @@
 import React from 'react';
 import { IntegrationTypes } from '@akashaorg/typings/ui';
 
-import {
-  avatarBorderColorsMap,
-  avatarBorderSizesMap,
-  avatarSizesMap,
-  AvatarProps,
-} from '../Avatar';
+import { AvatarProps } from '../Avatar';
 import Box from '../Box';
 
 import AvatarImage from '../Avatar/avatar-image';
+import { generateActiveOverlayClass, generateAvatarContainerStyle } from '../../utils';
 
 export type AppAvatarProps = AvatarProps & {
   appType: IntegrationTypes;
@@ -28,6 +24,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     faded,
     active,
     isClickable = false,
+    customStyle = '',
     onClick,
   } = props;
 
@@ -51,15 +48,16 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     }.webp`;
   }
 
-  const className = `box-border cursor-${
-    isClickable ? 'pointer' : 'default'
-  } select-none relative overflow-hidden w-${avatarSizesMap[size]} h-${
-    avatarSizesMap[size]
-  } rounded-full bg-${backgroundColor ? backgroundColor : 'white'} border-${
-    border ? avatarBorderSizesMap[border] : '0'
-  } border-${borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'}`;
+  const className = generateAvatarContainerStyle({
+    size,
+    border,
+    borderColor,
+    customStyle,
+    isClickable,
+    backgroundColor,
+  });
 
-  const activeOverlayClass = 'bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';
+  const activeOverlayClass = generateActiveOverlayClass();
 
   return (
     <Box customStyle={className} onClick={onClick}>
