@@ -2,16 +2,16 @@ import React from 'react';
 
 import { IMenuItem } from '@akashaorg/typings/ui';
 
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IMenuSubItemsProps {
+export type MenuSubItemsProps = {
   menuItem: IMenuItem;
   activeOption: IMenuItem | null;
   onOptionClick: (menu: IMenuItem, submenu: IMenuItem) => void;
-}
+};
 
-const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
+const MenuSubItems: React.FC<MenuSubItemsProps> = props => {
   const { menuItem, activeOption, onOptionClick } = props;
 
   const subRoutes = React.useMemo(() => {

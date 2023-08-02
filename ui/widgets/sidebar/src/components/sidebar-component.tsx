@@ -219,7 +219,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     handleLogout();
   };
 
-  const handleAppIconClick = (menuItem: IMenuItem) => {
+  const handleAppIconClick = (menuItem: IMenuItem) => () => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       setActiveOption(null);
       handleNavigation(menuItem.name, menuItem.route);
