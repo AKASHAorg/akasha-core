@@ -303,7 +303,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
-      <Box customStyle="flex flex-col max-h-[68vh] overflow-auto">
+      <Stack direction="column" customStyle="overflow-auto">
         {/* container for world apps */}
         {worldApps?.length > 0 && (
           <ListSidebarApps
@@ -324,7 +324,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
             onClickMenuItem={handleAppIconClick}
           />
         )}
-      </Box>
+      </Stack>
 
       {!dismissed && (
         <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
