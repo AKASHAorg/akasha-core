@@ -32,7 +32,7 @@ const ModalContainer: React.FC<PropsWithChildren<IModalContainerProps>> = props 
 
   return (
     <Box
-      customStyle={`flex w-full items-center justify-items-center justify-center fixed ${positionClass}`}
+      customStyle={`flex w-full items-center justify-items-center justify-center fixed z-[11] ${positionClass}`}
       style={style}
     >
       <Box

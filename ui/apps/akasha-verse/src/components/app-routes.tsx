@@ -43,7 +43,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const availableApps = appsReq.data;
 
   const filteredIntegrations = React.useMemo(() => {
-    return availableApps.filter(
+    return availableApps?.filter(
       app => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === app.node?.id),
     );
   }, [availableApps]);
