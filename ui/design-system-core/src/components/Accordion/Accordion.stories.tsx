@@ -1,23 +1,24 @@
 import React from 'react';
 import { tw } from '@twind/core';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Accordion, { IAccordionProps } from '.';
+import Accordion from '.';
 import Avatar from '../Avatar';
 
-export default {
+/**
+ * Define metadata to compose stories for the component
+ */
+const meta: Meta<typeof Accordion> = {
   title: 'Accordion/Accordion',
   component: Accordion,
 };
 
+export default meta;
+type Story = StoryObj<typeof Accordion>;
+
 const ethAddress = '0x003410490050000320006570034567114572000';
 
-const Template = (args: IAccordionProps) => (
-  <div className={tw('w-[15%]')}>
-    <Accordion {...args} />
-  </div>
-);
-
-const Title = (
+const title = (
   <div className={tw('flex flex-row items-center')}>
     <Avatar
       profileId={ethAddress}
@@ -27,17 +28,18 @@ const Title = (
   </div>
 );
 
-const Content = (
-  <div className={tw('text-white dark:text-black')}>
+const content = (
+  <div className={tw('text(white dark:black)')}>
     <p>Accordion content</p>
     <p>Accordion content</p>
     <p>Accordion content</p>
   </div>
 );
 
-export const BaseAccordion = Template.bind({});
-
-BaseAccordion.args = {
-  titleNode: Title,
-  contentNode: Content,
+export const BaseAccordion: Story = {
+  render: () => (
+    <div className={tw('w-[15%]')}>
+      <Accordion titleNode={title} contentNode={content} />
+    </div>
+  ),
 };
