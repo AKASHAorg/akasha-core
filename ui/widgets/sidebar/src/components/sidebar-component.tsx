@@ -248,6 +248,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     );
 
     if (matchedRoute) setActiveOption(matchedRoute.route);
+    else setActiveOption(null);
   };
 
   useEffect(() => {
