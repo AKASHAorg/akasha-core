@@ -1,10 +1,11 @@
 import React from 'react';
+
 import { IntegrationTypes } from '@akashaorg/typings/ui';
 
 import { AvatarProps } from '../Avatar';
+import AvatarImage from '../Avatar/avatar-image';
 import Box from '../Box';
 
-import AvatarImage from '../Avatar/avatar-image';
 import { generateActiveOverlayClass, generateAvatarContainerStyle } from '../../utils';
 
 export type AppAvatarProps = AvatarProps & {

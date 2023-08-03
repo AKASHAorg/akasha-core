@@ -6,7 +6,7 @@ import List, { ListItem } from '../List';
 import TextField from '../TextField';
 import { InputProps } from '../TextField/types';
 
-import { useCloseActions } from '../../utils/useCloseActions';
+import { useCloseActions } from '../../utils';
 
 export type AutoCompleteProps = {
   options: string[];
