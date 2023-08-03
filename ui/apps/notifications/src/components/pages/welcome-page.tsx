@@ -8,7 +8,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-interface IWelcomePageProps {
+type WelcomePageProps = {
   header: string;
   description: string;
   leftButtonLabel?: string;
@@ -17,9 +17,9 @@ interface IWelcomePageProps {
   // rightButtonClickHandler?: () => void;
   finalStep?: boolean;
   isLoggedIn: boolean;
-}
+};
 
-const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
+const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
   const {
     plugins,
     leftButtonLabel,
