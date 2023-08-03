@@ -1,15 +1,16 @@
 import React from 'react';
 import { tw } from '@twind/core';
+
 import BasicCardBox from '../BasicCardBox';
 import Card from '../Card';
 import Text from '../Text';
 
-interface IBasicInfoCardProps {
+export type BasicInfoCardProps = {
   titleLabel: string;
   subtitleLabel?: string;
-}
+};
 
-const BasicInfoCard: React.FC<IBasicInfoCardProps> = ({ titleLabel, subtitleLabel }) => {
+const BasicInfoCard: React.FC<BasicInfoCardProps> = ({ titleLabel, subtitleLabel }) => {
   return (
     <Card padding={8} customStyle="border-none">
       <div className={tw('flex(& col) justify-center align-center mb-32')}>

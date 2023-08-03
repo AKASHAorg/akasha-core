@@ -1,18 +1,16 @@
 import React from 'react';
 import { tw } from '@twind/core';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import BasicCardBox, { IBasicCardBox } from '.';
+import BasicCardBox, { BasicCardBoxProps } from '.';
 
-export default {
+const meta: Meta<BasicCardBoxProps> = {
   title: 'Cards/BasicCardBox',
   component: BasicCardBox,
 };
 
-const Template = (args: IBasicCardBox) => (
-  <div className={tw('w-[50%]')}>
-    <BasicCardBox {...args} />
-  </div>
-);
+export default meta;
+type Story = StoryObj<BasicCardBoxProps>;
 
 const CardContents = (
   <>
@@ -22,29 +20,26 @@ const CardContents = (
   </>
 );
 
-export const BasicCard = Template.bind({});
-
-BasicCard.args = {
-  children: CardContents,
+export const BaseBasicCardBox: Story = {
+  render: () => (
+    <div className={tw('w-[25%]')}>
+      <BasicCardBox>{CardContents}</BasicCardBox>
+    </div>
+  ),
 };
 
-export const BasicCardWithElevation = Template.bind({});
-
-BasicCardWithElevation.args = {
-  children: CardContents,
-  elevation: 'md',
+export const BasicCardBoxWithElevation: Story = {
+  render: () => (
+    <div className={tw('w-[25%]')}>
+      <BasicCardBox elevation="md">{CardContents}</BasicCardBox>
+    </div>
+  ),
 };
 
-export const BasicCardWithDashedBorder = Template.bind({});
-
-BasicCardWithDashedBorder.args = {
-  children: CardContents,
-  dashedBorder: true,
-};
-
-export const BasicCardWithoutBorder = Template.bind({});
-
-BasicCardWithoutBorder.args = {
-  children: CardContents,
-  noBorder: true,
+export const BasicCardBoxWithDashedBorder: Story = {
+  render: () => (
+    <div className={tw('w-[25%]')}>
+      <BasicCardBox dashedBorder={true}>{CardContents}</BasicCardBox>
+    </div>
+  ),
 };

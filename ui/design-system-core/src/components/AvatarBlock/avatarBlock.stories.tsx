@@ -15,7 +15,7 @@ const ethAddress = '0x003410490050000320006570034567114572000';
 
 const avatar = { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } };
 
-export const BaseAvataBlock: Story = {
+export const BaseAvatarBlock: Story = {
   render: () => (
     <AvatarBlock
       profileId={ethAddress}

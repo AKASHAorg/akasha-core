@@ -1,7 +1,7 @@
-import { apply, tw } from '@twind/core';
 import React, { PropsWithChildren } from 'react';
+import { apply, tw } from '@twind/core';
 
-export interface IBasicCardBox {
+export type BasicCardBoxProps = {
   elevation?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'inner' | 'none';
   dashedBorder?: boolean;
   accentBorder?: boolean;
@@ -15,9 +15,9 @@ export interface IBasicCardBox {
   onClick?: () => void;
   tabIndex?: number;
   onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
-}
+};
 
-const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
+const BasicCardBox: React.FC<PropsWithChildren<BasicCardBoxProps>> = props => {
   const {
     children,
     elevation = '[0_0_4px_rgba(0,0,0,0.2)]',
@@ -61,6 +61,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
       apply`flex flex-col shadow-${elevation} w-full ${pad} ${margin} bg(white dark:grey2) ${
         noBorderRadius ? 'rounded-none' : round
       } ${generatedBorder} ${customStyle}`,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [generatedBorder],
   );
 

@@ -1,9 +1,11 @@
 import React, { forwardRef, HTMLAttributes } from 'react';
-import Stack from '../../Stack';
-import { getContainerClasses } from '../getContainerClasses';
-import { ButtonProps, ButtonSize } from '../types';
-import { ButtonIcon } from '../ButtonIcon';
 import { apply, tw } from '@twind/core';
+
+import { ButtonIcon } from '../ButtonIcon';
+import { ButtonProps, ButtonSize } from '../types';
+import Stack from '../../Stack';
+
+import { getContainerClasses } from '../getContainerClasses';
 
 type IconOnlyButtonProps = {
   icon: ButtonProps['icon'];
