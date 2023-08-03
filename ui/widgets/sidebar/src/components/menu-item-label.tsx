@@ -1,27 +1,24 @@
 import React from 'react';
+
 import { IMenuItem } from '@akashaorg/typings/ui';
+
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IMenuItemLabelProps {
+export type MenuItemLabelProps = {
   menuItem: IMenuItem;
-  isActive: boolean;
   hasNewNotifs?: boolean;
-  onClickMenuItem?: (menuItem: IMenuItem, isMobile?: boolean) => void;
-}
+};
 
-const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
-  const { menuItem, isActive, onClickMenuItem } = props;
+const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
+  const { menuItem } = props;
 
-  const handleClick = () => {
-    if (typeof onClickMenuItem === 'function') {
-      onClickMenuItem(menuItem);
-    }
-  };
+  const isActive = location.pathname.includes(menuItem.name);
 
   return (
-    <Box customStyle={'flex flex-row items-center'} onClick={handleClick}>
+    <Stack align="center">
       <Box customStyle="w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3">
         {menuItem.logo.type === 'icon' && (
           <AppIcon
@@ -31,10 +28,19 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
           />
         )}
       </Box>
-      <Text customStyle={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}>
+
+      <Text
+        variant="button-md"
+        color={
+          isActive
+            ? { light: 'secondaryLight', dark: 'secondaryDark' }
+            : { light: 'black', dark: 'white' }
+        }
+        customStyle={`ml-2.5 ${isActive ? 'text-secondary' : 'text(black dark:white)'}`}
+      >
         {menuItem.label}
       </Text>
-    </Box>
+    </Stack>
   );
 };
 
