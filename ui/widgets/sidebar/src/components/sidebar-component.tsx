@@ -40,6 +40,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   );
   const [routeData, setRouteData] = useState(null);
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
+  const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [profileName, setProfileName] = useState('Guest');
 
@@ -230,12 +231,29 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => {
+    setClickedOptions(oldClickedOptions => [
+      ...oldClickedOptions,
+      { name: menuItem.name, route: subrouteMenuItem },
+    ]);
     setActiveOption(subrouteMenuItem);
     handleNavigation(menuItem.name, subrouteMenuItem.route);
     if (isMobile) {
       handleSidebarClose();
     }
   };
+
+  const handleBackNavEvent = () => {
+    const matchedRoute = clickedOptions.find(option =>
+      location.pathname.includes(`${option.name}${option.route?.route}`),
+    );
+
+    if (matchedRoute) setActiveOption(matchedRoute.route);
+  };
+
+  useEffect(() => {
+    window.addEventListener('popstate', handleBackNavEvent);
+    return () => window.removeEventListener('popstate', handleBackNavEvent);
+  });
 
   return (
     <BasicCardBox
