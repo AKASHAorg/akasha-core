@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
-import AutoComplete from '.';
+import React from 'react';
+import { tw } from '@twind/core';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import AutoComplete, { AutoCompleteProps } from '.';
+
+const meta: Meta<AutoCompleteProps> = {
   title: 'Fields/AutoComplete',
   component: AutoComplete,
 };
 
-const Template = args => {
-  const [query, setQuery] = useState('');
-  return <AutoComplete value={query} onChange={setQuery} {...args} />;
-};
+export default meta;
+type Story = StoryObj<AutoCompleteProps>;
 
-export const BaseAutoComplete = Template.bind({});
-BaseAutoComplete.args = {
-  options: ['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance'],
+export const BaseAutoComplete: Story = {
+  render: () => (
+    <div className={tw('w-fit')}>
+      <AutoComplete
+        value=""
+        onChange={() => ({})}
+        options={['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance']}
+      />
+    </div>
+  ),
 };

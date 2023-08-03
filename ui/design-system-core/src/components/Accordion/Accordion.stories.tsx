@@ -2,19 +2,19 @@ import React from 'react';
 import { tw } from '@twind/core';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Accordion from '.';
+import Accordion, { AccordionProps } from '.';
 import Avatar from '../Avatar';
 
 /**
  * Define metadata to compose stories for the component
  */
-const meta: Meta<typeof Accordion> = {
+const meta: Meta<AccordionProps> = {
   title: 'Accordion/Accordion',
   component: Accordion,
 };
 
 export default meta;
-type Story = StoryObj<typeof Accordion>;
+type Story = StoryObj<AccordionProps>;
 
 const ethAddress = '0x003410490050000320006570034567114572000';
 
