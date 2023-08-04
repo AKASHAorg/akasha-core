@@ -1,13 +1,15 @@
 import React from 'react';
-import { iconForDid, truncateDid } from '../../utils/did-utils';
-import Stack from '../Stack';
+
 import Icon from '../Icon';
+import Stack from '../Stack';
 import Text from '../Text';
+
 import CopyToClipboard from '../CopyToClipboard';
 
 import { Color } from '../types/common.types';
+import { iconForDid, truncateDid } from '../../utils/did-utils';
 
-type DidFieldProps = {
+export type DidFieldProps = {
   did: string;
   textColor?: Color;
   copyLabel?: string;

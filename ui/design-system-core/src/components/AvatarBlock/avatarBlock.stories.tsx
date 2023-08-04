@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import AvatarBlock, { AvatarBlockProps } from '.';
 
 const meta: Meta<AvatarBlockProps> = {
-  title: 'Avatars/AvatarBlock',
+  title: 'Blocks/AvatarBlock',
   component: AvatarBlock,
 };
 

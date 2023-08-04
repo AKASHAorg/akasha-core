@@ -1,5 +1,4 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import BasicCardBox, { BasicCardBoxProps } from '.';
@@ -21,25 +20,21 @@ const CardContents = (
 );
 
 export const BaseBasicCardBox: Story = {
-  render: () => (
-    <div className={tw('w-[25%]')}>
-      <BasicCardBox>{CardContents}</BasicCardBox>
-    </div>
-  ),
+  render: () => <BasicCardBox customStyle="w-[25%]">{CardContents}</BasicCardBox>,
 };
 
 export const BasicCardBoxWithElevation: Story = {
   render: () => (
-    <div className={tw('w-[25%]')}>
-      <BasicCardBox elevation="md">{CardContents}</BasicCardBox>
-    </div>
+    <BasicCardBox elevation="md" customStyle="w-[25%]">
+      {CardContents}
+    </BasicCardBox>
   ),
 };
 
 export const BasicCardBoxWithDashedBorder: Story = {
   render: () => (
-    <div className={tw('w-[25%]')}>
-      <BasicCardBox dashedBorder={true}>{CardContents}</BasicCardBox>
-    </div>
+    <BasicCardBox dashedBorder={true} customStyle="w-[25%]">
+      {CardContents}
+    </BasicCardBox>
   ),
 };

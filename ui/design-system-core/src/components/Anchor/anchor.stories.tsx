@@ -1,5 +1,4 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Anchor, { AnchorProps } from '.';
@@ -14,10 +13,8 @@ type Story = StoryObj<AnchorProps>;
 
 export const BaseAnchor: Story = {
   render: () => (
-    <div className={tw('w-[15%]')}>
-      <Anchor href="https://beta.akasha.world">
-        <p>Click me</p>
-      </Anchor>
-    </div>
+    <Anchor href="https://beta.akasha.world" customStyle="w-[15%]">
+      <p>Click me</p>
+    </Anchor>
   ),
 };

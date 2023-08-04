@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import Accordion, { AccordionProps } from '.';
 import Avatar from '../Avatar';
+import Stack from '../Stack';
 
 /**
  * Define metadata to compose stories for the component
@@ -19,13 +20,13 @@ type Story = StoryObj<AccordionProps>;
 const ethAddress = '0x003410490050000320006570034567114572000';
 
 const title = (
-  <div className={tw('flex flex-row items-center')}>
+  <Stack align="center">
     <Avatar
       profileId={ethAddress}
       avatar={{ default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } }}
     />
     <p className={tw('ml-2.5 text-white dark:text-black')}>Item name</p>
-  </div>
+  </Stack>
 );
 
 const content = (
