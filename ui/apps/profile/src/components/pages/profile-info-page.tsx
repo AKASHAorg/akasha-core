@@ -1,21 +1,22 @@
 import React from 'react';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import ProfileStatsPresentation from '../profile-stats-presentation';
 import routes, { EDIT } from '../../routes';
 import IconButtonFollow from '../icon-button-follow/icon-button-follow';
-import { useTranslation } from 'react-i18next';
-import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
 import {
   ProfileHeader,
   ProfileBio,
   ProfileLinks,
   ProfileLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
 import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 
 const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
@@ -80,12 +81,51 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     cb();
   };
 
-  const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
+  const handleCopy = () => {
+    const profileUrl = new URL(location.pathname, location.origin).href;
+
+    navigator.clipboard.writeText(profileUrl).then(() => {
+      setShowFeedback(true);
+    });
+  };
+
+  const handleFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
     props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
+  };
+
+  const handleEdit = () => {
+    navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
+    });
   };
 
   const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
   const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
+
+  const menuItems: MenuProps['items'] = [
+    {
+      label: t('Copy link'),
+      icon: 'LinkIcon',
+      onClick: handleCopy,
+    },
+    ...(!isViewer
+      ? ([
+          {
+            label: t('Report'),
+            icon: 'FlagIcon',
+            onClick: checkAuth(
+              handleFlag(
+                profileData.did.id ? profileData.did.id : '',
+                EntityTypes.PROFILE,
+                profileData.name,
+              ),
+            ),
+            color: { light: 'errorLight', dark: 'errorDark' },
+          },
+        ] as MenuProps['items'])
+      : []),
+  ];
 
   return (
     <>
@@ -97,7 +137,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           name={profileData.name}
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           viewerIsOwner={isViewer}
-          flagLabel={t('Report')}
+          menuItems={menuItems}
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
           followElement={
@@ -107,19 +147,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
               navigateTo={navigateTo}
             />
           }
-          handleFlag={checkAuth(
-            handleEntryFlag(
-              profileData.did.id ? profileData.did.id : '',
-              EntityTypes.PROFILE,
-              profileData.name,
-            ),
-          )}
-          handleEdit={() => {
-            navigateTo({
-              appName: '@akashaorg/app-profile',
-              getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
-            });
-          }}
+          handleEdit={handleEdit}
         />
         {profileData.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
@@ -135,7 +163,8 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
         )}
         {showFeedback && (
           <Snackbar
-            title={t('You unfollowed {{name}}', { userName: profileData.name })}
+            title={`${t('Profile link copied')}!`}
+            type="success"
             iconType="CheckCircleIcon"
             handleDismiss={() => {
               setShowFeedback(false);
