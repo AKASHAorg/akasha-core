@@ -138,6 +138,7 @@ import {
 } from './use-dev-profile';
 import { useDismissedCard } from './use-dismissed-card';
 import useModerationCategory from './use-moderation-categories';
+import { useValidDid } from './use-valid-did';
 
 export {
   constants,
@@ -286,4 +287,5 @@ export {
   // use-dismissed-card
   useDismissedCard,
   useModerationCategory,
+  useValidDid,
 };

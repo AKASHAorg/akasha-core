@@ -1,9 +1,14 @@
 import React from 'react';
+import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
-import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  useGetLogin,
+  useValidDid,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -20,6 +25,7 @@ import {
 import FollowProfile from '../follow-profile';
 import ProfileStatsPresentation from '../profile-stats-presentation';
 import routes, { EDIT } from '../../routes';
+import ProfileNotFoundPage from './profile-not-found-page';
 
 const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
@@ -50,9 +56,18 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       ? profileDataReq.data
       : { isViewer: null, profile: null };
 
+  const { validDid, isLoading, isEthAddress } = useValidDid(
+    profileId,
+    profileDataReq.data && !profileData,
+  );
+
   const isLoggedIn = !!loginQuery.data?.id;
 
-  if (status === 'loading') return <ProfileLoading />;
+  const hasProfile = status === 'success' && profileData;
+
+  const did = !hasProfile ? { id: profileId } : profileData.did;
+
+  if (status === 'loading' || isLoading) return <ProfileLoading />;
 
   if (isLoggedIn && !profileData) {
     return navigateTo({
@@ -61,7 +76,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const hasError = status === 'error' || (status === 'success' && !profileData);
+  const hasError = status === 'error';
 
   if (hasError)
     return (
@@ -71,6 +86,8 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
         details={t('We cannot show this profile right now')}
       />
     );
+
+  if (!hasProfile && !validDid) return <ProfileNotFoundPage {...props} />;
 
   const checkAuth = (cb: () => void) => () => {
     if (!isLoggedIn) {
@@ -118,9 +135,9 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
             icon: 'FlagIcon',
             onClick: checkAuth(
               handleFlag(
-                profileData.did.id ? profileData.did.id : '',
+                profileData?.did.id ? profileData?.did.id : '',
                 EntityTypes.PROFILE,
-                profileData.name,
+                profileData?.name,
               ),
             ),
             color: { light: 'errorLight', dark: 'errorDark' },
@@ -133,10 +150,11 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     <>
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         <ProfileHeader
-          did={profileData.did}
+          did={did}
+          validAddress={hasProfile ? true : isEthAddress ?? validDid}
           background={background}
           avatar={avatar}
-          name={profileData.name}
+          name={profileData?.name}
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           viewerIsOwner={isViewer}
           menuItems={menuItems}
@@ -147,14 +165,19 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           }
           handleEdit={handleEdit}
         />
-        {profileData.description && (
+        {profileData?.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
+        {!hasProfile && (
+          <DefaultEmptyCard
+            infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
+          />
+        )}
         <ProfileStatsPresentation profileId={profileId} navigateTo={navigateTo} />
-        {profileData.links?.length > 0 && (
+        {profileData?.links?.length > 0 && (
           <ProfileLinks
             title={t('Find me on')}
-            links={profileData.links}
+            links={profileData?.links}
             copiedLabel={t('Copied')}
             copyLabel={t('Copy to clipboard')}
           />
