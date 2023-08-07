@@ -25,6 +25,7 @@ import {
 import FollowProfile from '../follow-profile';
 import ProfileStatsPresentation from '../profile-stats-presentation';
 import routes, { EDIT } from '../../routes';
+import ProfileNotFoundPage from './profile-not-found-page';
 
 const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
@@ -55,13 +56,16 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       ? profileDataReq.data
       : { isViewer: null, profile: null };
 
-  const { validDid, isLoading } = useValidDid(profileId, profileDataReq.data && !profileData);
+  const { validDid, isLoading, isEthAddress } = useValidDid(
+    profileId,
+    profileDataReq.data && !profileData,
+  );
 
   const isLoggedIn = !!loginQuery.data?.id;
 
   const hasProfile = status === 'success' && profileData;
 
-  const profile = !hasProfile ? { id: profileId } : profileData.did;
+  const did = !hasProfile ? { id: profileId } : profileData.did;
 
   if (status === 'loading' || isLoading) return <ProfileLoading />;
 
@@ -72,7 +76,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const hasError = status === 'error'; /*  || (status === 'success' && !profileData) */
+  const hasError = status === 'error';
 
   if (hasError)
     return (
@@ -83,14 +87,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       />
     );
 
-  if (!hasProfile && !validDid)
-    return (
-      <ErrorLoader
-        type="script-error"
-        title={t('There is no such DID')}
-        details={t('The DID you provided is not correct.')}
-      />
-    );
+  if (!hasProfile && !validDid) return <ProfileNotFoundPage {...props} />;
 
   const checkAuth = (cb: () => void) => () => {
     if (!isLoggedIn) {
@@ -153,7 +150,8 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     <>
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         <ProfileHeader
-          did={profile}
+          did={did}
+          validAddress={hasProfile ? true : isEthAddress ?? validDid}
           background={background}
           avatar={avatar}
           name={profileData?.name}
