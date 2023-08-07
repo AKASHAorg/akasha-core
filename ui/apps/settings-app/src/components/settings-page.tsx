@@ -29,7 +29,7 @@ const SettingsPage: React.FC<BaseOption & RootComponentProps> = props => {
       <Box customStyle="px-4">
         {settingsItems.map((item: ISettingsItem, idx: number) => {
           const baseStyle = `flex py-4 justify-between items-center ${
-            idx !== settingsItems.length - 1 ? 'border(b-1 solid grey8)' : 'border-none'
+            idx !== settingsItems.length - 1 ? 'border(b-1 solid grey8 dark:grey5)' : 'border-none'
           }`;
 
           const children = (

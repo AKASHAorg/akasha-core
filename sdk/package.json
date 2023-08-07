@@ -8,7 +8,7 @@
     "@composedb/client": "0.4.4",
     "@didtools/cacao": "2.1.0",
     "@didtools/pkh-ethereum": "0.4.0",
-    "@ensdomains/ens-contracts": "^0.0.21",
+    "@ensdomains/ens-contracts": "^0.0.22",
     "@lit-protocol/sdk-browser": "1.1.250",
     "@metamask/detect-provider": "2.0.0",
     "@openzeppelin/contracts": "^4.9.2",
