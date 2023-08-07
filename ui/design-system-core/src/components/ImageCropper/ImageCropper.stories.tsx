@@ -1,21 +1,30 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+
 import ImageCropper, { ImageCropperProps } from '.';
 
-export default {
+const meta: Meta<ImageCropperProps> = {
   title: 'Cropper/ImageCropper',
   component: ImageCropper,
 };
 
-const Template = (args: ImageCropperProps) => <ImageCropper {...args} />;
+export default meta;
+type Story = StoryObj<ImageCropperProps>;
 
-export const BaseImageCropper = Template.bind({});
-BaseImageCropper.args = {
-  image: {
-    default: {
-      height: 320,
-      src: '',
-      width: 320,
-    },
+const avatar = {
+  default: {
+    height: 320,
+    src: 'https://placebeard.it/320x320',
+    width: 320,
   },
-  dragToRepositionLabel: 'Drag the image to reposition',
+};
+
+export const BaseImageCropper: Story = {
+  render: () => (
+    <ImageCropper
+      image={avatar}
+      dragToRepositionLabel="Drag the image to reposition"
+      onCrop={() => ({})}
+    />
+  ),
 };

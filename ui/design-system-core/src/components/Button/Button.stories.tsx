@@ -192,8 +192,8 @@ const variants: ButtonProps[] = [
 export const ButtonVariants: Story = {
   render: () => (
     <Stack direction="column" spacing="gap-y-2">
-      {variants.map(variant => (
-        <Button customStyle="w-fit" {...variant} />
+      {variants.map((variant, idx) => (
+        <Button key={idx} customStyle="w-fit" {...variant} />
       ))}
     </Stack>
   ),

@@ -33,8 +33,8 @@ const variants: CircularPlaceholderProps[] = [
 export const BaseCircularPlaceholderVariants: Story = {
   render: () => (
     <Stack direction="column" spacing="gap-y-2">
-      {variants.map(variant => (
-        <CircularPlaceholder {...variant} />
+      {variants.map((variant, idx) => (
+        <CircularPlaceholder key={idx} {...variant} />
       ))}
     </Stack>
   ),

@@ -3,7 +3,7 @@ import { tw } from '@twind/core';
 
 import Button from '../Button';
 
-export interface IErrorCardProps {
+export type ErrorCardProps = {
   boxSize: string;
   errorType: string;
   titleLabel: string;
@@ -16,9 +16,9 @@ export interface IErrorCardProps {
   /* Path to public folder */
   publicImgPath?: string;
   onClick?: () => void;
-}
+};
 
-const ErrorCard: React.FC<IErrorCardProps> = props => {
+const ErrorCard: React.FC<ErrorCardProps> = props => {
   const {
     boxSize,
     errorType,

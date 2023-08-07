@@ -49,8 +49,8 @@ const Component = () => {
   const [selected, setSelected] = React.useState<DropdownMenuItemType | null>();
   return (
     <Stack spacing="gap-x-2">
-      {variants.map(variant => (
-        <Dropdown selected={selected} setSelected={setSelected} {...variant} />
+      {variants.map((variant, idx) => (
+        <Dropdown key={idx} selected={selected} setSelected={setSelected} {...variant} />
       ))}
     </Stack>
   );
