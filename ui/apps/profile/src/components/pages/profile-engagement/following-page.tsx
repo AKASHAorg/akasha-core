@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import FollowProfile from '../../follow-profile';
 import Following from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Following';
-import MasterPage from './master-page';
+import EngagementTab from './engagement-tab';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import { useTranslation } from 'react-i18next';
@@ -83,7 +83,7 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <MasterPage isLoggedIn={!!loginQuery.data?.id} navigateTo={navigateTo}>
+    <EngagementTab isLoggedIn={!!loginQuery.data?.id} navigateTo={navigateTo}>
       {followingReq.status === 'loading' && <ProfileEngagementLoading />}
       {followingReq.status === 'error' && (
         <Box customStyle="mt-8">
@@ -111,7 +111,7 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
           getMediaUrl={getProfileImageVersionsWithMediaUrl}
         />
       )}
-    </MasterPage>
+    </EngagementTab>
   );
 };
 

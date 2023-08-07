@@ -42,6 +42,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   );
 
   const status = profileDataReq.status;
+  
   const { isViewer, profile: profileData } =
     profileDataReq.data && 'isViewer' in profileDataReq.data
       ? profileDataReq.data
