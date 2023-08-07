@@ -15,6 +15,7 @@ import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColo
 
 export type HeaderProps = {
   did: Profile['did'];
+  validAddress?: boolean;
   background?: Profile['background'];
   avatar?: Profile['avatar'];
   name: Profile['name'];
@@ -30,6 +31,7 @@ export type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({
   did,
+  validAddress = true,
   background,
   avatar,
   name,
@@ -74,7 +76,12 @@ const Header: React.FC<HeaderProps> = ({
             </div>
             <Stack direction="column" spacing="gap-y-1">
               <Text variant="button-lg">{name}</Text>
-              <DidField did={did.id} copyLabel={copyLabel} copiedLabel={copiedLabel} />
+              <DidField
+                did={did.id}
+                isValid={validAddress}
+                copyLabel={copyLabel}
+                copiedLabel={copiedLabel}
+              />
             </Stack>
             <div className={tw(`relative ml-auto mt-2`)}>
               <Stack spacing="gap-x-2">

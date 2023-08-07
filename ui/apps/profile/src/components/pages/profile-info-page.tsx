@@ -1,10 +1,12 @@
 import React from 'react';
+import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileStatsPresentation from '../profile-stats-presentation';
 import routes, { EDIT } from '../../routes';
 import IconButtonFollow from '../icon-button-follow/icon-button-follow';
+import ProfileNotFoundPage from './profile-not-found-page';
 import {
   ProfileHeader,
   ProfileBio,
@@ -14,7 +16,11 @@ import {
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
-import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  useGetLogin,
+  useValidDid,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 
@@ -40,9 +46,19 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     profileDataReq.data && 'isViewer' in profileDataReq.data
       ? profileDataReq.data
       : { isViewer: null, profile: null };
+
+  const { validDid, isLoading, isEthAddress } = useValidDid(
+    profileId,
+    profileDataReq.data && !profileData,
+  );
+
   const isLoggedIn = !!loginQuery.data?.id;
 
-  if (status === 'loading') return <ProfileLoading />;
+  const hasProfile = status === 'success' && profileData;
+
+  const did = !hasProfile ? { id: profileId } : profileData.did;
+
+  if (status === 'loading' || isLoading) return <ProfileLoading />;
 
   if (isLoggedIn && !profileData) {
     /*TODO: convert to login modal once it's fixed */
@@ -52,7 +68,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const hasError = status === 'error' || (status === 'success' && !profileData);
+  const hasError = status === 'error';
 
   if (hasError)
     return (
@@ -65,6 +81,8 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
 
   const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
   const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
+
+  if (!hasProfile && !validDid) return <ProfileNotFoundPage {...props} />;
 
   const checkAuth = (cb: () => void) => () => {
     if (!isLoggedIn) {
@@ -109,9 +127,9 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
             icon: 'FlagIcon',
             onClick: checkAuth(
               handleFlag(
-                profileData.did.id ? profileData.did.id : '',
+                profileData?.did.id ? profileData?.did.id : '',
                 EntityTypes.PROFILE,
-                profileData.name,
+                profileData?.name,
               ),
             ),
             color: { light: 'errorLight', dark: 'errorDark' },
@@ -124,10 +142,11 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     <>
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         <ProfileHeader
-          did={profileData.did}
+          did={did}
+          validAddress={hasProfile ? true : isEthAddress ?? validDid}
           background={background}
           avatar={avatar}
-          name={profileData.name}
+          name={profileData?.name}
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           viewerIsOwner={isViewer}
           menuItems={menuItems}
@@ -142,14 +161,19 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           }
           handleEdit={handleEdit}
         />
-        {profileData.description && (
+        {profileData?.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
+        {!hasProfile && (
+          <DefaultEmptyCard
+            infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
+          />
+        )}
         <ProfileStatsPresentation profileId={profileId} navigateTo={navigateTo} />
-        {profileData.links?.length > 0 && (
+        {profileData?.links?.length > 0 && (
           <ProfileLinks
             title={t('Find me on')}
-            links={profileData.links}
+            links={profileData?.links}
             copiedLabel={t('Copied')}
             copyLabel={t('Copy to clipboard')}
           />
