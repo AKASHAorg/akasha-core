@@ -42,20 +42,16 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     },
   );
   const status = profileDataReq.status;
-  const { isViewer, profile: profileData } =
-    profileDataReq.data && 'isViewer' in profileDataReq.data
-      ? profileDataReq.data
-      : { isViewer: null, profile: null };
-
+  const { isViewer, profile: profileData } = {
+    ...{ isViewer: null, profile: null },
+    ...profileDataReq.data,
+  };
   const { validDid, isLoading, isEthAddress } = useValidDid(
     profileId,
     profileDataReq.data && !profileData,
   );
-
   const isLoggedIn = !!loginQuery.data?.id;
-
   const hasProfile = status === 'success' && profileData;
-
   const did = !hasProfile ? { id: profileId } : profileData.did;
 
   if (status === 'loading' || isLoading) return <ProfileLoading />;
@@ -68,9 +64,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const hasError = status === 'error';
-
-  if (hasError)
+  if (status === 'error')
     return (
       <ErrorLoader
         type="script-error"
