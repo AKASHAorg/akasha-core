@@ -16,13 +16,9 @@ import { ProfileEngagementLoading } from '@akashaorg/design-system-components/li
 
 const FollowingPage: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-profile');
-
   const { profileId } = useParams<{ profileId: string }>();
-
   const loginQuery = useGetLogin();
-
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -32,7 +28,6 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
       enabled: !!loginQuery.data?.id,
     },
   );
-
   const followingReq = useInfiniteGetFollowingListByDidQuery(
     'last',
     {
@@ -43,7 +38,6 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
       enabled: !!loginQuery.data?.id,
     },
   );
-
   const following = useMemo(
     () =>
       followingReq.data?.pages

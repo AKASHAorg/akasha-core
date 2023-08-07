@@ -22,15 +22,10 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
 
   const { t } = useTranslation('app-profile');
-
-  const [showFeedback, setShowFeedback] = React.useState(false);
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
   const { profileId } = useParams<{ profileId: string }>();
-
+  const [showFeedback, setShowFeedback] = React.useState(false);
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const loginQuery = useGetLogin();
-
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -40,14 +35,11 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       enabled: !!profileId,
     },
   );
-
   const status = profileDataReq.status;
-  
   const { isViewer, profile: profileData } =
     profileDataReq.data && 'isViewer' in profileDataReq.data
       ? profileDataReq.data
       : { isViewer: null, profile: null };
-
   const isLoggedIn = !!loginQuery.data?.id;
 
   if (status === 'loading') return <ProfileLoading />;
@@ -70,6 +62,9 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
         details={t('We cannot show this profile right now')}
       />
     );
+
+  const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
+  const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
 
   const checkAuth = (cb: () => void) => () => {
     if (!isLoggedIn) {
@@ -100,9 +95,6 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
     });
   };
-
-  const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
-  const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
 
   const menuItems: MenuProps['items'] = [
     {

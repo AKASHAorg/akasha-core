@@ -16,13 +16,9 @@ import { ProfileEngagementLoading } from '@akashaorg/design-system-components/li
 
 const FollowersPage: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-profile');
-
   const { profileId } = useParams<{ profileId: string }>();
-
   const loginQuery = useGetLogin();
-
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -32,7 +28,6 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
       enabled: !!loginQuery.data?.id,
     },
   );
-
   const followersReq = useInfiniteGetFollowersListByDidQuery(
     'last',
     {
@@ -43,7 +38,6 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
       enabled: !!loginQuery.data?.id,
     },
   );
-
   const followers = useMemo(
     () =>
       followersReq.data?.pages
@@ -55,7 +49,6 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
         : [],
     [followersReq.data],
   );
-
   const isViewer =
     profileDataReq.data && 'isViewer' in profileDataReq.data ? profileDataReq.data.isViewer : null;
 
