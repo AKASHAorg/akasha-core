@@ -9,20 +9,21 @@ async function resolveDid(did: string) {
 export function useValidDid(profileId: string, enabled?: boolean) {
   const [validDid, setValidDid] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEthAddress, setIsEthAddress] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (enabled) {
       setIsLoading(true);
       resolveDid(profileId).then(res => {
-        if (res && 'isEthAddress' in res) {
-          res.isEthAddress ? setValidDid(true) : setValidDid(false);
-        } else {
-          setValidDid(Boolean(res));
+        if (res && Object.hasOwn(res, 'isEthAddress')) {
+          setIsEthAddress(res['isEthAddress']);
         }
+        setValidDid(Boolean(res));
+
         setIsLoading(false);
       });
     }
   }, [enabled, profileId]);
 
-  return { validDid, isLoading };
+  return { validDid, isLoading, isEthAddress };
 }
