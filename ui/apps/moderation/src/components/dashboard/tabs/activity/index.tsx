@@ -4,14 +4,14 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Table, { ITableProps } from '@akashaorg/design-system-core/lib/components/Table';
+import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/Table';
 
 export type ActivityTabProps = {
   applicationsTitleLabel: string;
   moderationTitleLabel: string;
   viewAllLabel: string;
-  moderationRows: ITableProps['rows'];
-  applicationsRows: ITableProps['rows'];
+  moderationRows: TableProps['rows'];
+  applicationsRows: TableProps['rows'];
   onClickViewAll: (activity: 'applications' | 'moderation') => () => void;
   onApplicationsRowClick: (id: string) => void;
   onModerationRowClick: (id: string) => void;
