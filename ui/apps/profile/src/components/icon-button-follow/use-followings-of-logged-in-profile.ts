@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Follow } from '../type';
+import { Follow } from './type';
 
 const FOLLOWINGS = '@followings';
 
