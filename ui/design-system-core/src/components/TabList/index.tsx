@@ -44,7 +44,7 @@ const TabList: React.FC<TabListProps> = ({
     <div className={tw(apply`grid grid-cols-${labels.length} ${tabListDividerStyle}`)}>
       {labels.map((label, index) => (
         <Button
-          key={index}
+          key={label}
           onClick={() => onChange(index, selected)}
           customStyle={`${baseStyle} ${hoverStyle} ${selected === index ? activeStyle : ''}`}
           plain

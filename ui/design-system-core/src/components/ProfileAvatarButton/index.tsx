@@ -72,7 +72,7 @@ const ProfileAvatarButton = React.forwardRef(
               {label || profileId}
             </Text>
           </Box>
-          <DidField did={profileId} copiable={false} />
+          <DidField did={profileId} isValid={true} copiable={false} />
         </Box>
       </Button>
     );

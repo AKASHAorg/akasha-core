@@ -132,7 +132,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     if (myProfileQuery.data?.profile?.did?.id) {
       setProfileName(myProfileQuery.data?.profile?.name);
     } else if (loginQuery.data?.id) {
-      setProfileName(t('Logged-in User'));
+      setProfileName('');
     } else {
       setProfileName(t('Guest'));
     }
@@ -279,8 +279,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
             <TextLine title="tagName" animated={true} width="w-[100px]" />
           </Stack>
         ) : (
-          <Box customStyle="w-fit flex flex-grow flex-col">
-            <Text variant="button-md">{profileName}</Text>
+          <Box customStyle="w-fit flex flex-grow flex-col justify-center">
+            {profileName && <Text variant="button-md">{profileName}</Text>}
             {loginQuery.data?.id && (
               <DidField
                 did={loginQuery.data?.id}

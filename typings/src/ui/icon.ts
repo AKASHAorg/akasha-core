@@ -39,6 +39,7 @@ export type IconType =
   | 'listNumbered'
   | 'listBulleted'
   | 'metamask'
+  | 'noEth'
   | 'shield'
   | 'underline'
   | 'strikethrough'

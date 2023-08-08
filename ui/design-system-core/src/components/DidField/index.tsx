@@ -11,6 +11,7 @@ import { iconForDid, truncateDid } from '../../utils/did-utils';
 
 export type DidFieldProps = {
   did: string;
+  isValid?: boolean;
   textColor?: Color;
   copyLabel?: string;
   copiedLabel?: string;
@@ -18,6 +19,7 @@ export type DidFieldProps = {
 };
 const DidField: React.FC<DidFieldProps> = ({
   did,
+  isValid = true,
   textColor = { light: 'secondaryLight', dark: 'secondaryDark' },
   copiable = true,
   copyLabel,
@@ -27,7 +29,7 @@ const DidField: React.FC<DidFieldProps> = ({
   const truncatedDid = truncateDid(did, networkType);
   const didDisplayBlock = (
     <Stack spacing="gap-x-1.5" align="center">
-      {networkType && <Icon type={networkType} />}
+      {networkType && <Icon type={isValid ? networkType : 'noEth'} />}
       <Text variant="footnotes1" color={textColor}>
         {truncatedDid}
       </Text>
