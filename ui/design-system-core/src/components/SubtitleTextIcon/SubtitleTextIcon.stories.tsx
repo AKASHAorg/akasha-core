@@ -1,31 +1,37 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import SubtitleTextIcon from './';
+import SubtitleTextIcon, { SubtitleTextIconProps } from '.';
+import Stack from '../Stack';
 
-export default {
+const meta: Meta<SubtitleTextIconProps> = {
   title: 'Icons/SubtitleTextIcon',
   component: SubtitleTextIcon,
 };
 
-const Template = args => <SubtitleTextIcon {...args} />;
+export default meta;
+type Story = StoryObj<SubtitleTextIconProps>;
 
-export const BaseSubtitleTextIcon = Template.bind({});
-BaseSubtitleTextIcon.args = {
-  labelColor: 'text-red-300',
-  subtitleColor: 'text-amber-700',
-  label: 'Text',
-  subtitle: 'Some text',
-  labelSize: 'text-sm',
-  iconType: 'BeakerIcon',
-  backgroundColor: true,
-};
+const variants: SubtitleTextIconProps[] = [
+  {
+    label: 'Text',
+    subtitle: 'Some text',
+    iconType: 'BeakerIcon',
+    backgroundColor: true,
+  },
+  {
+    label: 'Text',
+    subtitle: 'Some text',
+    backgroundColor: true,
+  },
+];
 
-export const SubtitleTextIconNoImage = Template.bind({});
-SubtitleTextIconNoImage.args = {
-  labelColor: 'text-red-300',
-  subtitleColor: 'text-amber-700',
-  label: 'Text',
-  subtitle: 'Some text',
-  labelSize: 'text-sm',
-  backgroundColor: true,
+export const SubtitleTextIconVariants: Story = {
+  render: () => (
+    <Stack direction="column" spacing="gap-y-4">
+      {variants.map((variant, idx) => (
+        <SubtitleTextIcon key={idx} {...variant} />
+      ))}
+    </Stack>
+  ),
 };

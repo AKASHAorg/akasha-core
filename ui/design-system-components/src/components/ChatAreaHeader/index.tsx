@@ -18,7 +18,6 @@ const ChatAreaHeader: React.FC<IChatAreaHeaderProps> = props => {
     >
       <ProfileAvatarButton
         label={name}
-        // info={userName && `@${userName}`}
         profileId={did.id}
         avatarImage={avatar}
         onClick={onClickAvatar}

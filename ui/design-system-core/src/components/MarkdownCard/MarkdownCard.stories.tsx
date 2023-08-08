@@ -1,16 +1,16 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import MarkdownCard, { IMarkdownCard } from '.';
+import MarkdownCard, { MarkdownCardProps } from '.';
 
-export default {
+const meta: Meta<MarkdownCardProps> = {
   title: 'Cards/MarkdownCard',
   component: MarkdownCard,
 };
 
-const Template = (args: IMarkdownCard) => <MarkdownCard {...args} />;
+export default meta;
+type Story = StoryObj<MarkdownCardProps>;
 
-export const BaseMarkdownCard = Template.bind({});
-
-BaseMarkdownCard.args = {
-  mdText: '`**Hello**`',
+export const BaseMarkdownCard: Story = {
+  render: () => <MarkdownCard mdText="**Hello World**" />,
 };

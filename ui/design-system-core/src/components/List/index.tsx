@@ -8,7 +8,7 @@ import Icon from '../Icon';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
 
-import { getColorClasses } from '../../utils/getColorClasses';
+import { getColorClasses } from '../../utils';
 
 export type ListItem = {
   label: string;

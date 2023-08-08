@@ -6,7 +6,7 @@ import Stack from '../Stack';
 import List, { ListProps } from '../List';
 
 import { ButtonProps } from '../Button/types';
-import { useCloseActions } from '../../utils/useCloseActions';
+import { useCloseActions } from '../../utils';
 
 export type MenuProps = {
   anchor: ButtonProps;

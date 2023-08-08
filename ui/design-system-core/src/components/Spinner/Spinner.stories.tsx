@@ -1,29 +1,38 @@
 import React from 'react';
-import Spinner, { ISpinnerProps } from './index';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
-  title: 'Spinner/Spinner',
+import Spinner, { SpinnerProps } from '.';
+import Stack from '../Stack';
+
+const meta: Meta<SpinnerProps> = {
+  title: 'Spinners/Spinner',
   component: Spinner,
 };
 
-const Template = (args: ISpinnerProps) => <Spinner {...args} />;
+export default meta;
+type Story = StoryObj<SpinnerProps>;
 
-export const SpinnerSmall = Template.bind({});
-SpinnerSmall.args = {
-  size: 'sm',
-};
+const variants: SpinnerProps[] = [
+  {
+    size: 'sm',
+  },
+  {
+    color: 'green',
+  },
+  {
+    size: 'lg',
+  },
+  {
+    size: 'xxl',
+  },
+];
 
-export const SpinnerSmallWithColor = Template.bind({});
-SpinnerSmallWithColor.args = {
-  color: 'green',
-};
-
-export const SpinnerLarge = Template.bind({});
-SpinnerLarge.args = {
-  size: 'lg',
-};
-
-export const SpinnerXXLarge = Template.bind({});
-SpinnerXXLarge.args = {
-  size: 'xxl',
+export const SpinnerVariants: Story = {
+  render: () => (
+    <Stack direction="column" spacing="gap-y-2">
+      {variants.map((variant, idx) => (
+        <Spinner key={idx} {...variant} />
+      ))}
+    </Stack>
+  ),
 };

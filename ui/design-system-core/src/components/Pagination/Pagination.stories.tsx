@@ -1,16 +1,30 @@
-import React from 'react';
-import { tw } from '@twind/core';
+import React, { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Pagination, { IPaginationProps } from '.';
+import Pagination, { PaginationProps } from '.';
+import Stack from '../Stack';
 
-export default {
+const meta: Meta<PaginationProps> = {
   title: 'Pagination/Pagination',
   component: Pagination,
 };
 
-const Template = (args: IPaginationProps) => {
+export default meta;
+type Story = StoryObj<PaginationProps>;
+
+const variants: Pick<PaginationProps, 'prevButtonLabel' | 'nextButtonLabel' | 'hasButtons'>[] = [
+  {
+    prevButtonLabel: 'Prev',
+    nextButtonLabel: 'Next',
+  },
+  {
+    hasButtons: false,
+  },
+];
+
+const Component = () => {
   const pages = 10;
-  const [curPage, setCurPage] = React.useState<number>(1);
+  const [curPage, setCurPage] = useState<number>(1);
 
   const handleClickPage = (page: number) => () => {
     setCurPage(page);
@@ -29,30 +43,24 @@ const Template = (args: IPaginationProps) => {
   };
 
   return (
-    <div className={tw('w-[50%]')}>
-      <Pagination
-        {...args}
-        pageCount={pages}
-        currentPage={curPage}
-        prevButtonDisabled={curPage === 1}
-        nextButtonDisabled={curPage === pages}
-        onClickPage={handleClickPage}
-        onClickPrev={handleClickPrev}
-        onClickNext={handleClickNext}
-      />
-    </div>
+    <Stack direction="column" spacing="gap-y-2" customStyle="w-[50%]">
+      {variants.map((variant, idx) => (
+        <Pagination
+          key={idx}
+          {...variant}
+          pageCount={pages}
+          currentPage={curPage}
+          prevButtonDisabled={curPage === 1}
+          nextButtonDisabled={curPage === pages}
+          onClickPage={handleClickPage}
+          onClickPrev={handleClickPrev}
+          onClickNext={handleClickNext}
+        />
+      ))}
+    </Stack>
   );
 };
 
-export const BasicPagination = Template.bind({});
-
-BasicPagination.args = {
-  prevButtonLabel: 'Prev',
-  nextButtonLabel: 'Next',
-};
-
-export const PaginationWithoutButtons = Template.bind({});
-
-PaginationWithoutButtons.args = {
-  hasButtons: false,
+export const PaginationVariants: Story = {
+  render: () => <Component />,
 };

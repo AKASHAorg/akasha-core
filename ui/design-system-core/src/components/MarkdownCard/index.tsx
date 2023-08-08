@@ -1,16 +1,17 @@
 import * as React from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import Spinner from '../Spinner/index';
-import BasicCardBox from '../BasicCardBox';
 import { tw } from '@twind/core';
+import remarkGfm from 'remark-gfm';
+import ReactMarkdown from 'react-markdown';
 
-export interface IMarkdownCard {
+import BasicCardBox from '../BasicCardBox';
+import Spinner from '../Spinner';
+
+export type MarkdownCardProps = {
   mdText: string | null;
   hasWrapper?: boolean;
-}
+};
 
-const MarkdownCard: React.FC<IMarkdownCard> = props => {
+const MarkdownCard: React.FC<MarkdownCardProps> = props => {
   const { mdText, hasWrapper = true } = props;
   const renderContent = () => (
     <>

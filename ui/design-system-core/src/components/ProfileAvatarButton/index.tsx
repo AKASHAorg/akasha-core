@@ -5,12 +5,11 @@ import { Profile } from '@akashaorg/typings/ui';
 import Avatar, { AvatarSize } from '../Avatar';
 import Box from '../Box';
 import Button from '../Button';
-import Text from '../Text';
 import DidField from '../DidField';
+import Text from '../Text';
 
 export interface ProfileAvatarButtonProps {
   customStyle?: string;
-  info?: string | React.ReactElement;
   avatarImage?: Profile['avatar'];
   label?: string;
   size?: AvatarSize;
@@ -31,7 +30,6 @@ const ProfileAvatarButton = React.forwardRef(
       size = 'md',
       avatarImage,
       label,
-      info,
       profileId,
       truncateText = true,
       onClick,
