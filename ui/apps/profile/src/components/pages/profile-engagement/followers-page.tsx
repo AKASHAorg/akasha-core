@@ -11,7 +11,7 @@ import {
   useGetProfileByDidQuery,
   useInfiniteGetFollowersListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 
 const FollowersPage: React.FC<RootComponentProps> = props => {
@@ -42,7 +42,7 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
     () =>
       followersReq.data?.pages
         ? followersReq.data.pages?.flatMap(page =>
-            'isViewer' in page.node
+            hasOwn(page.node, 'isViewer')
               ? page.node?.profile?.followers?.edges?.map(edge => edge?.node) || []
               : [],
           )
