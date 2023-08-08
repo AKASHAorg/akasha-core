@@ -1,10 +1,11 @@
 import React, { PropsWithChildren } from 'react';
 import { apply, tw } from '@twind/core';
+
 import { getTag } from './getTag';
 import { getAlignmentClasses } from './getAlignmentClasses';
-import { getColorClasses } from '../../utils/getColorClasses';
 import { getWeightClasses } from './getWeightClasses';
 import { Color } from '../types/common.types';
+import { getColorClasses } from '../../utils';
 
 export type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 

@@ -1,8 +1,10 @@
 import React from 'react';
+import { apply, tw } from '@twind/core';
+
 import Button from '../Button';
 import Text, { TextProps } from '../Text';
-import { getColorClasses } from '../../utils/getColorClasses';
-import { apply, tw } from '@twind/core';
+
+import { getColorClasses } from '../../utils';
 
 export type TabListProps = {
   labels: string[];

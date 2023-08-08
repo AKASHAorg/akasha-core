@@ -8,7 +8,7 @@ import Text from '../Text';
 
 export type toggleSize = 'small' | 'large';
 
-export interface IToggleProps {
+export type ToggleProps = {
   label?: string;
   size?: toggleSize;
   // status
@@ -18,9 +18,9 @@ export interface IToggleProps {
   iconUnchecked?: IconType;
   iconChecked?: IconType;
   onChange?: (ev: React.SyntheticEvent) => void;
-}
+};
 
-const Toggle: React.FC<IToggleProps> = ({
+const Toggle: React.FC<ToggleProps> = ({
   label,
   size = 'small',
   checked = false,

@@ -1,63 +1,69 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Toggle from './index';
+import Stack from '../Stack';
+import Toggle, { ToggleProps } from '.';
 
-export default {
+const meta: Meta<ToggleProps> = {
   title: 'Buttons/Toggle',
   component: Toggle,
 };
 
-const Template = args => {
+export default meta;
+type Story = StoryObj<ToggleProps>;
+
+const variants: ToggleProps[] = [
+  {
+    label: 'small toggle',
+  },
+
+  {
+    label: 'large toggle',
+    size: 'large',
+  },
+  {
+    iconChecked: 'SunIcon',
+    iconUnchecked: 'MoonIcon',
+  },
+  {
+    iconChecked: 'SunIcon',
+    iconUnchecked: 'MoonIcon',
+    label: 'small toggle',
+  },
+  {
+    checked: false,
+    size: 'large',
+    disabled: true,
+  },
+  {
+    checked: true,
+    size: 'large',
+    disabled: true,
+  },
+  {
+    checked: true,
+    iconChecked: 'SunIcon',
+    iconUnchecked: 'MoonIcon',
+    disabled: true,
+  },
+];
+
+const Component = () => {
   const [selected, setSelected] = React.useState(false);
 
-  const changeHandler = e => {
+  const handleChange = () => {
     setSelected(!selected);
   };
-  return <Toggle checked={selected} {...args} onChange={changeHandler} />;
+
+  return (
+    <Stack direction="column" spacing="gap-y-2" customStyle="w-[25%]">
+      {variants.map((variant, idx) => (
+        <Toggle key={idx} {...variant} checked={selected} onChange={handleChange} />
+      ))}
+    </Stack>
+  );
 };
 
-export const BaseToggle = Template.bind({});
-BaseToggle.args = {
-  label: 'small toggle',
-};
-
-export const LargeToggle = Template.bind({});
-LargeToggle.args = {
-  label: 'large toggle',
-  size: 'large',
-};
-
-export const IconToggle = Template.bind({});
-IconToggle.args = {
-  iconChecked: 'SunIcon',
-  iconUnchecked: 'MoonIcon',
-};
-
-export const IconToggleWithLabel = Template.bind({});
-IconToggle.args = {
-  iconChecked: 'SunIcon',
-  iconUnchecked: 'MoonIcon',
-  label: 'small toggle',
-};
-
-export const DisabledToggle = Template.bind({});
-DisabledToggle.args = {
-  checked: false,
-  size: 'large',
-  disabled: true,
-};
-
-export const DisabledCheckedToggle = Template.bind({});
-DisabledCheckedToggle.args = {
-  checked: true,
-  size: 'large',
-  disabled: true,
-};
-
-export const DisabledCheckedIconToggle = Template.bind({});
-DisabledCheckedIconToggle.args = {
-  checked: true,
-  iconChecked: 'SunIcon',
-  iconUnchecked: 'MoonIcon',
-  disabled: true,
+export const ToggleVariants: Story = {
+  render: () => <Component />,
 };
