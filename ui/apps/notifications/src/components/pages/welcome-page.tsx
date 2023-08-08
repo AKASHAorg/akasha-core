@@ -5,7 +5,11 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
+import routes, {
+  CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE,
+  SHOW_NOTIFICATIONS_PAGE,
+  CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
+} from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 type WelcomePageProps = {
@@ -21,6 +25,7 @@ type WelcomePageProps = {
 
 const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
   const {
+    baseRouteName,
     plugins,
     leftButtonLabel,
     // leftButtonClickHandler,
@@ -60,9 +65,13 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
   };
 
   const connect = () => {
-    navigateTo({
+    navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: navRoutes => navRoutes.CONNECT,
+      getNavigationUrl: (routes: Record<string, string>) => {
+        return `${routes.Connect}?${new URLSearchParams({
+          redirectTo: `${baseRouteName}`,
+        }).toString()}`;
+      },
     });
   };
 

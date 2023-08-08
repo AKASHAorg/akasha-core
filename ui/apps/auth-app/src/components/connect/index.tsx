@@ -39,7 +39,15 @@ const Connect: React.FC<RootComponentProps> = props => {
   }, [injectedProviderQuery.data, t]);
 
   React.useEffect(() => {
-    const searchParam = new URLSearchParams(location.search);
+    let existingRedirectToRoute = '';
+    if (!location.search) {
+      existingRedirectToRoute = JSON.parse(localStorage.getItem('@app-auth-ewa/redirectTo'));
+    } else {
+      localStorage.setItem('@app-auth-ewa/redirectTo', JSON.stringify(location.search));
+      existingRedirectToRoute = location.search;
+    }
+    const searchParam = new URLSearchParams(existingRedirectToRoute);
+
     // if user is logged in, do not show the connect page
     if (loginQuery.data?.id && profileDataReq.status !== 'loading') {
       if (!profile) {
@@ -49,6 +57,10 @@ const Connect: React.FC<RootComponentProps> = props => {
         });
         return;
       }
+      if (localStorage.getItem('@app-auth-ewa/redirectTo')) {
+        localStorage.removeItem('@app-auth-ewa/redirectTo');
+      }
+
       routingPlugin.current?.handleRedirect({
         search: searchParam,
         fallback: {

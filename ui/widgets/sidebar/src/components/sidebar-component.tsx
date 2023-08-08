@@ -285,7 +285,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         )}
 
         <Box customStyle="w-fit h-fit ml-6 self-start">
-          {isLoading && <Button size="sm" loading />}
+          {isLoading && <Button size="sm" loading onClick={handleLogoutClick} />}
           {!isLoading && (
             <>
               {loginQuery.data?.id && (
