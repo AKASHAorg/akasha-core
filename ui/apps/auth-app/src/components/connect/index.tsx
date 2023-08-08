@@ -39,14 +39,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   }, [injectedProviderQuery.data, t]);
 
   React.useEffect(() => {
-    let existingRedirectToRoute = '';
-    if (!location.search) {
-      existingRedirectToRoute = JSON.parse(localStorage.getItem('@app-auth-ewa/redirectTo'));
-    } else {
-      localStorage.setItem('@app-auth-ewa/redirectTo', JSON.stringify(location.search));
-      existingRedirectToRoute = location.search;
-    }
-    const searchParam = new URLSearchParams(existingRedirectToRoute);
+    const searchParam = new URLSearchParams(location.search);
 
     // if user is logged in, do not show the connect page
     if (loginQuery.data?.id && profileDataReq.status !== 'loading') {
@@ -56,9 +49,6 @@ const Connect: React.FC<RootComponentProps> = props => {
           getNavigationUrl: () => `/${loginQuery.data?.id}/edit`,
         });
         return;
-      }
-      if (localStorage.getItem('@app-auth-ewa/redirectTo')) {
-        localStorage.removeItem('@app-auth-ewa/redirectTo');
       }
 
       routingPlugin.current?.handleRedirect({
@@ -78,7 +68,8 @@ const Connect: React.FC<RootComponentProps> = props => {
     }
     routingPlugin.current?.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: appRoutes => `${appRoutes[CONNECT]}${appRoutes[provider]}`,
+      getNavigationUrl: appRoutes =>
+        `${appRoutes[CONNECT]}${appRoutes[provider]}${location.search ? `${location.search}` : ''}`,
     });
   };
 
