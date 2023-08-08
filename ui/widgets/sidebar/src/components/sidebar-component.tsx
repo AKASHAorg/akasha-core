@@ -40,6 +40,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   );
   const [routeData, setRouteData] = useState(null);
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
+  const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [profileName, setProfileName] = useState('Guest');
 
@@ -131,7 +132,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     if (myProfileQuery.data?.profile?.did?.id) {
       setProfileName(myProfileQuery.data?.profile?.name);
     } else if (loginQuery.data?.id) {
-      setProfileName(t('Logged-in User'));
+      setProfileName('');
     } else {
       setProfileName(t('Guest'));
     }
@@ -219,7 +220,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     handleLogout();
   };
 
-  const handleAppIconClick = (menuItem: IMenuItem) => {
+  const handleAppIconClick = (menuItem: IMenuItem) => () => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       setActiveOption(null);
       handleNavigation(menuItem.name, menuItem.route);
@@ -230,12 +231,30 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => {
+    setClickedOptions(oldClickedOptions => [
+      ...oldClickedOptions,
+      { name: menuItem.name, route: subrouteMenuItem },
+    ]);
     setActiveOption(subrouteMenuItem);
     handleNavigation(menuItem.name, subrouteMenuItem.route);
     if (isMobile) {
       handleSidebarClose();
     }
   };
+
+  const handleBackNavEvent = () => {
+    const matchedRoute = clickedOptions.find(option =>
+      location.pathname.includes(`${option.name}${option.route?.route}`),
+    );
+
+    if (matchedRoute) setActiveOption(matchedRoute.route);
+    else setActiveOption(null);
+  };
+
+  useEffect(() => {
+    window.addEventListener('popstate', handleBackNavEvent);
+    return () => window.removeEventListener('popstate', handleBackNavEvent);
+  });
 
   return (
     <BasicCardBox
@@ -260,8 +279,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
             <TextLine title="tagName" animated={true} width="w-[100px]" />
           </Stack>
         ) : (
-          <Box customStyle="w-fit flex flex-grow flex-col">
-            <Text variant="button-md">{profileName}</Text>
+          <Box customStyle="w-fit flex flex-grow flex-col justify-center">
+            {profileName && <Text variant="button-md">{profileName}</Text>}
             {loginQuery.data?.id && (
               <DidField
                 did={loginQuery.data?.id}
@@ -273,12 +292,13 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
             {!loginQuery.data?.id && (
               <Text
-                variant="footnotes1"
-                customStyle="text-grey5 whitespace-normal"
+                variant="footnotes2"
+                color="grey7"
+                customStyle="whitespace-normal"
                 truncate
                 breakWord
               >
-                {t('Connect to see exclusive member only features.')}
+                {t('Connect to see member only features.')}
               </Text>
             )}
           </Box>
@@ -302,7 +322,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
-      <Box customStyle="flex flex-col max-h-[68vh] overflow-auto">
+      <Stack direction="column" customStyle="overflow-auto">
         {/* container for world apps */}
         {worldApps?.length > 0 && (
           <ListSidebarApps
@@ -323,7 +343,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
             onClickMenuItem={handleAppIconClick}
           />
         )}
-      </Box>
+      </Stack>
 
       {!dismissed && (
         <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
@@ -331,17 +351,19 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
       {socialLinks.length > 0 && (
         <Box customStyle="flex flex-col px-8 py-4 border-t-1 border(grey9 dark:grey3)">
-          <Text variant="footnotes2" customStyle="text-grey5">
-            {t('Get in touch')}
-          </Text>
+          <Text variant="footnotes2">{t('Get in touch')}</Text>
 
           <Box customStyle="flex w-fit h-fit mt-6">
             {socialLinks.map((socialLink, idx) => (
-              <Box key={socialLink.icon + idx} customStyle="mr-4">
-                <Anchor href={socialLink.link} target="_blank" rel="noreferrer noopener">
-                  <Button icon={socialLink.icon} variant="primary" greyBg={true} iconOnly={true} />
-                </Anchor>
-              </Box>
+              <Anchor
+                key={socialLink.icon + idx}
+                href={socialLink.link}
+                target="_blank"
+                rel="noreferrer noopener"
+                customStyle="mr-4"
+              >
+                <Button icon={socialLink.icon} variant="primary" greyBg={true} iconOnly={true} />
+              </Anchor>
             ))}
           </Box>
         </Box>
