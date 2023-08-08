@@ -1,4 +1,4 @@
-/* TODO: this a temporary solution till hasOwn is officially supported by TypeScript as narrowing operator. */
+/* TODO: this a temporary solution till hasOwn is officially supported by TypeScript to perform type narrowing. */
 type ExtractByKey<T, K extends keyof any> = T extends infer R
   ? K extends keyof R
     ? R
