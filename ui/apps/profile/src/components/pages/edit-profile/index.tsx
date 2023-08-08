@@ -47,7 +47,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     },
   );
   const status = profileDataReq.status;
-  const { profile: profileData } = { ...{ profile: null }, ...profileDataReq.data };
+  const { profile: profileData } = Object.assign(
+    { isViewer: null, profile: null },
+    profileDataReq.data,
+  );
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);

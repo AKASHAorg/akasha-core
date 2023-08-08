@@ -57,11 +57,10 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const { isViewer, profile: profileData } = {
-    ...{ isViewer: null, profile: null },
-    ...profileDataReq.data,
-  };
-
+  const { isViewer, profile: profileData } = Object.assign(
+    { isViewer: null, profile: null },
+    profileDataReq.data,
+  );
   const onProfileClick = (profileId: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',

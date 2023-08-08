@@ -42,10 +42,10 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     },
   );
   const status = profileDataReq.status;
-  const { isViewer, profile: profileData } = {
-    ...{ isViewer: null, profile: null },
-    ...profileDataReq.data,
-  };
+  const { isViewer, profile: profileData } = Object.assign(
+    { isViewer: null, profile: null },
+    profileDataReq.data,
+  );
   const { validDid, isLoading, isEthAddress } = useValidDid(
     profileId,
     profileDataReq.data && !profileData,
