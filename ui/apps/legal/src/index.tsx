@@ -23,7 +23,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     label: 'Legal',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'DocumentTextIcon' },
-    area: [MenuItemAreaType.OtherArea],
+    area: [MenuItemAreaType.AppArea],
     subRoutes: Object.keys(routes).map((routeLabel, idx) => ({
       label: routeLabel,
       index: idx,
