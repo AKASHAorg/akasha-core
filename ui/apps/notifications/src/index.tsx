@@ -68,7 +68,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Notifications',
     area: [MenuItemAreaType.AppArea],
-    logo: { type: LogoTypeSource.ICON, value: 'notifications' },
+    logo: { type: LogoTypeSource.ICON, value: 'BellIcon' },
     subRoutes: [],
   },
 });
