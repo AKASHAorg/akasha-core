@@ -56,13 +56,12 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
 
   if (status === 'loading' || isLoading) return <ProfileLoading />;
 
-  if (isLoggedIn && !profileData) {
-    /*TODO: convert to login modal once it's fixed */
+  const goEditProfile = () => {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
     });
-  }
+  };
 
   if (status === 'error')
     return (
@@ -158,9 +157,17 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
         {profileData?.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
-        {!hasProfile && (
+        {!isLoggedIn && !hasProfile && (
           <DefaultEmptyCard
             infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
+          />
+        )}
+
+        {isLoggedIn && !profileData && (
+          <DefaultEmptyCard
+            infoText={t('Uh-uh! it looks like you haven’t filled your information!')}
+            buttonLabel={t('Fill my info')}
+            buttonClickHandler={goEditProfile}
           />
         )}
         <ProfileStatsPresentation profileId={profileId} navigateTo={navigateTo} />
