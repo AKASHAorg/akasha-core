@@ -115,7 +115,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
         </button>
         <button onClick={onSaveClick}>
           <Box customStyle="flex flex-row gap-1" onClick={onSaveClick}>
-            <Icon type="bookmark" />
+            <Icon type="BookmarkIcon" />
             <Text variant="h6">{isSaved ? savedLabel : saveLabel}</Text>
           </Box>
         </button>

@@ -94,12 +94,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         {displayWidgetTogglingButton ? (
           isLoggedIn ? (
             <>
-              <Button
-                iconOnly={true}
-                icon="appCenter"
-                onClick={onAppWidgetClick}
-                variant="primary"
-              />
+              <Button iconOnly={true} icon="akasha" onClick={onAppWidgetClick} variant="primary" />
               <Button
                 iconOnly={true}
                 icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
