@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { tw } from '@twind/core';
-
 import Button from '../Button';
 import Stack from '../Stack';
 import List, { ListProps } from '../List';
-
+import { tw } from '@twind/core';
 import { ButtonProps } from '../Button/types';
 import { useCloseActions } from '../../utils/useCloseActions';
 
@@ -29,7 +27,7 @@ const Menu: React.FC<MenuProps> = ({ anchor, ...rest }) => {
       <div className={tw('relative')}>
         {showList && (
           <div className={tw('absolute right-0 z-50')}>
-            <List {...rest} onCloseList={handleCloseList} />
+            <List {...rest} onSelected={handleCloseList} />
           </div>
         )}
       </div>

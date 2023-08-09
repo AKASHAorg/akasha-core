@@ -9,7 +9,7 @@ export interface IPillProps {
   iconDirection?: ButtonProps['iconDirection'];
   customStyle?: ButtonProps['customStyle'];
   active?: boolean;
-  onPillClick?: (active?: boolean) => void;
+  onPillClick?: (active: boolean) => void;
 }
 
 const Pill: React.FC<IPillProps> = ({
@@ -23,7 +23,7 @@ const Pill: React.FC<IPillProps> = ({
 }) => {
   const handlePillClick = () => {
     if (onPillClick) {
-      onPillClick();
+      onPillClick(!active);
     }
   };
 
