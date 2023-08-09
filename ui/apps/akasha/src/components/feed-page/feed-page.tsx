@@ -23,6 +23,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
+import { useInfiniteGetProfilesQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -44,6 +45,38 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const locale = (plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
     'en') as ILocale;
 
+  const profileQuery = useInfiniteGetProfilesQuery(
+    'first',
+    {
+      first: 5,
+    },
+    {
+      getNextPageParam: (lastPage, pages) => {
+        if (lastPage.profileIndex.pageInfo.hasNextPage) {
+          return { after: lastPage.profileIndex.pageInfo.endCursor };
+        }
+      },
+      getPreviousPageParam: (firstPage, pages) => {
+        if (firstPage.profileIndex.pageInfo.hasPreviousPage) {
+          return { before: firstPage.profileIndex.pageInfo.startCursor };
+        }
+      },
+    },
+  );
+
+  // get the pageInfo of the last loaded page
+  const lastPageInfo = React.useMemo(() => {
+    const lastPage = profileQuery.data?.pages?.[profileQuery.data?.pages?.length - 1];
+    return lastPage?.profileIndex?.pageInfo;
+  }, [profileQuery]);
+
+  React.useEffect(() => {
+    // call fetchnextpage like: profileQuery.fetchNextPage({ pageParam: { after: 'lastcursor-from-page' }})
+    if (profileQuery.hasNextPage) {
+      profileQuery.fetchNextPage();
+    }
+    console.log(profileQuery, lastPageInfo, 'profileQ');
+  }, [profileQuery]);
   const [analyticsActions] = useAnalytics();
 
   //get the post id for repost from the search param

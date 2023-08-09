@@ -6,46 +6,53 @@ import {
 const randomBetween = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
-
-export const createDummyBeams =
-  (count: number) =>
-  ({ pageParam = 0 }) => {
-    return {
-      beamIndex: {
-        edges: Array.from({ length: count }, (_, i) => ({
-          node: {
-            id: `${pageParam}_${Math.floor(Math.random() * 100)}`,
-            reflectionsCount: 1,
-            rebeamsCount: 1,
-            active: true,
-            isReply: false,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            author: {
-              name: 'Testing (dummy)',
-              id: 'did:pkh:eip155:5:0x72f4c40f8253f871d7d7d0ead78dc86ab471e3ec',
-            },
-            version: 0,
-            content: [
-              {
-                provider: 'akasha-beams',
-                property: PROPERTY_SLATE_CONTENT,
-                value: serializeSlateToBase64(
-                  slateContent
-                    .slice(0, randomBetween(1, slateContent.length))
-                    .sort(() => Math.random() - 0.5),
-                ),
-              },
-            ],
+const generateBeamPages = (pageCount, itemCount) => {
+  return Array.from({ length: pageCount }, (_, i) => ({
+    beamIndex: {
+      edges: Array.from({ length: itemCount }, (_, j) => ({
+        node: {
+          id: `${i}_${j}_${Math.floor(Math.random() * 100)}`,
+          reflectionsCount: 1,
+          rebeamsCount: 1,
+          active: true,
+          isReply: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          author: {
+            name: 'Testing (dummy)',
+            id: 'did:pkh:eip155:5:0x72f4c40f8253f871d7d7d0ead78dc86ab471e3ec',
           },
-        })),
-        pageInfo: {
-          hasNextPage: true,
-          hasPreviousPage: false,
+          version: 0,
+          content: [
+            {
+              provider: 'akasha-beams',
+              property: PROPERTY_SLATE_CONTENT,
+              value: serializeSlateToBase64(
+                slateContent
+                  .slice(0, randomBetween(1, slateContent.length))
+                  .sort(() => Math.random() - 0.5),
+              ),
+            },
+          ],
         },
+      })),
+      pageInfo: {
+        hasNextPage: i < pageCount - 1,
+        hasPreviousPage: i > 0,
       },
-    };
+    },
+  }));
+};
+let beamPages = [];
+export const createDummyBeams = (count: number) => {
+  if (!beamPages.length) {
+    beamPages = generateBeamPages(10, count);
+  }
+  return ({ pageParam = 0 }) => {
+    console.log('requesting page', pageParam, 'pages', beamPages);
+    return beamPages[pageParam];
   };
+};
 
 export const createDummyReflections =
   (count: number) =>

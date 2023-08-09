@@ -9,6 +9,7 @@ import {
   GetReflectionsFromBeamQuery,
 } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import { createDummyBeams, createDummyReflections } from './create-dummy-entries';
+import { useLocalstorage } from './use-localstorage';
 
 export type FeedWidgetCommonProps = {
   queryKey: string;
@@ -16,53 +17,123 @@ export type FeedWidgetCommonProps = {
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
 };
 
-type OmitProps = 'requestStatus' | 'pages' | 'isFetchingNextPage' | 'hasNextPage' | 'onLoadMore';
+type OmitProps =
+  | 'requestStatus'
+  | 'pages'
+  | 'isFetchingNextPage'
+  | 'hasNextPage'
+  | 'onLoadMore'
+  | 'onScrollStateChange'
+  | 'initialScrollState'
+  | 'onScrollStateReset';
 type FeedProps = Omit<BeamFeedProps, OmitProps> | Omit<ReflectFeedProps, OmitProps>;
 
 const FeedWidgetRoot: React.FC<
   FeedWidgetCommonProps & Extract<FeedProps, { itemType: EntityTypes }>
 > = props => {
   const { itemType, i18n, queryKey } = props;
+
+  const queryKeyWithSuffix = React.useMemo(() => {
+    switch (itemType) {
+      case EntityTypes.BEAM:
+        return `${queryKey}-beams`;
+      default:
+        return `${queryKey}-reflections`;
+    }
+  }, [itemType, queryKey]);
+
+  const [scrollState, saveScrollState, removeScrollState] = useLocalstorage(queryKeyWithSuffix);
+
   const beamsReq = useInfiniteDummy<GetBeamsQuery, ReturnType<typeof mapEntry>>(
-    queryKey,
+    queryKeyWithSuffix,
     createDummyBeams(5),
     {
       enabled: itemType === EntityTypes.BEAM,
-      select: data => ({
-        pages: data.pages.flatMap(page =>
-          page.beamIndex.edges.flatMap(edge => mapEntry({ ...edge.node, type: EntityTypes.BEAM })),
-        ),
-        pageParams: data.pageParams,
-      }),
+      select: data => {
+        if (itemType !== EntityTypes.BEAM) return;
+        return {
+          pages: data.pages.flatMap(page =>
+            page.beamIndex.edges.flatMap(edge =>
+              mapEntry({ ...edge.node, type: EntityTypes.BEAM }),
+            ),
+          ),
+          pageParams: data.pageParams,
+        };
+      },
+      keepPreviousData: true,
+      getNextPageParam: (last, all) => {
+        if (itemType !== EntityTypes.BEAM) return;
+        if (last.beamIndex.pageInfo.hasNextPage) {
+          return all.length;
+        }
+      },
+      getPreviousPageParam: firstPage => {
+        if (itemType !== EntityTypes.BEAM) return;
+        if (firstPage.beamIndex.pageInfo.hasPreviousPage) {
+          return { before: firstPage.beamIndex.pageInfo.startCursor };
+        }
+      },
     },
   );
 
   const reflectReq = useInfiniteDummy<GetReflectionsFromBeamQuery, ReturnType<typeof mapEntry>>(
-    queryKey,
+    queryKeyWithSuffix,
     createDummyReflections(5),
     {
       enabled: itemType === EntityTypes.REFLECT,
-      select: data => ({
-        pages: data.pages.flatMap(page => {
-          if ('reflections' in page.node) {
-            return page.node.reflections.edges.flatMap(edge =>
-              mapEntry({ ...edge.node, type: EntityTypes.REFLECT }),
-            );
-          }
-        }),
-        pageParams: data.pageParams,
-      }),
+      select: data => {
+        if (itemType !== EntityTypes.REFLECT) return;
+        return {
+          pages: data.pages.flatMap(page => {
+            if (page.node && page.node['reflections']) {
+              return page.node['reflections'].edges.flatMap(edge =>
+                mapEntry({ ...edge.node, type: EntityTypes.REFLECT }),
+              );
+            }
+          }),
+          pageParams: data.pageParams,
+        };
+      },
+      getNextPageParam: (last, all) => {
+        if (itemType !== EntityTypes.REFLECT) return;
+        if (last.node['reflections'].edges.pageInfo.hasNextPage) {
+          return all.length;
+        }
+      },
+      getPreviousPageParam: firstPage => {
+        if (itemType !== EntityTypes.REFLECT) return;
+        if (firstPage.node['reflections'].edges.pageInfo.hasNextPage) {
+          return firstPage.node['reflections'].edges.pageInfo.startCursor;
+        }
+      },
     },
   );
 
   const handleLoadMore = React.useCallback(() => {
-    if (itemType === EntityTypes.BEAM && !beamsReq.isLoading && beamsReq.hasNextPage) {
+    if (
+      itemType === EntityTypes.BEAM &&
+      !beamsReq.isFetchingNextPage &&
+      beamsReq.hasNextPage &&
+      !beamsReq.isError
+    ) {
       beamsReq.fetchNextPage();
     }
-    if (itemType === EntityTypes.REFLECT && reflectReq.isLoading && reflectReq.hasNextPage) {
+    if (
+      itemType === EntityTypes.REFLECT &&
+      reflectReq.isFetchingNextPage &&
+      reflectReq.hasNextPage &&
+      !reflectReq.isError
+    ) {
       reflectReq.fetchNextPage();
     }
   }, [beamsReq, itemType]);
+
+  const handleScrollStateChange = React.useCallback(
+    scrollState => {
+      saveScrollState(scrollState);
+    },
+    [queryKeyWithSuffix, reflectReq, beamsReq],
+  );
 
   return (
     <I18nextProvider i18n={i18n}>
@@ -74,6 +145,9 @@ const FeedWidgetRoot: React.FC<
           isFetchingNextPage={beamsReq.isFetchingNextPage}
           hasNextPage={beamsReq.hasNextPage}
           onLoadMore={handleLoadMore}
+          onScrollStateChange={handleScrollStateChange}
+          initialScrollState={scrollState}
+          onScrollStateReset={removeScrollState}
         />
       )}
       {itemType === EntityTypes.REFLECT && (
@@ -84,6 +158,9 @@ const FeedWidgetRoot: React.FC<
           isFetchingNextPage={reflectReq.isFetchingNextPage}
           hasNextPage={reflectReq.hasNextPage}
           onLoadMore={handleLoadMore}
+          onScrollStateChange={handleScrollStateChange}
+          initialScrollState={scrollState}
+          onScrollStateReset={removeScrollState}
         />
       )}
     </I18nextProvider>

@@ -37,6 +37,9 @@ export type BeamFeedProps = Omit<EntryListProps, 'itemCard'> & {
   i18n: i18n;
   onRebeam?: (withComment: boolean, beamId: string) => void;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
+  onScrollStateChange: (scrollState: any) => void;
+  initialScrollState: any;
+  onScrollStateReset: () => void;
 };
 
 const BeamFeed: React.FC<BeamFeedProps> = props => {
@@ -47,10 +50,12 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     requestStatus,
     isFetchingNextPage,
     pages,
-    itemSpacing,
+    itemSpacing = 8,
     hasNextPage,
     onNavigate,
     onRebeam,
+    onScrollStateChange,
+    initialScrollState,
   } = props;
 
   return (
@@ -62,6 +67,8 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
       itemSpacing={itemSpacing}
       hasNextPage={hasNextPage}
       languageDirection={i18n?.dir() || 'ltr'}
+      onScrollStateChange={onScrollStateChange}
+      initialScrollState={initialScrollState}
     >
       {cardProps => {
         const { items, allEntries, measureElementRef } = cardProps;

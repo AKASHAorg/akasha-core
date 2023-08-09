@@ -25,6 +25,9 @@ export type EntryListProps = {
   hasNextPage?: boolean;
   languageDirection?: 'ltr' | 'rtl';
   isFetchingNextPage?: boolean;
+  onScrollStateChange?: (scrollerState: any) => void;
+  onScrollStateReset?: () => void;
+  initialScrollState?: any;
 };
 
 const EntryList: React.FC<EntryListProps> = props => {
@@ -37,6 +40,9 @@ const EntryList: React.FC<EntryListProps> = props => {
     isFetchingNextPage,
     requestStatus,
     children,
+    onScrollStateChange,
+    initialScrollState,
+    onScrollStateReset,
   } = props;
   const [hideScrollTop, setHideScrollTop] = React.useState(true);
   const rootElementRef = React.useRef<HTMLDivElement>();
@@ -58,6 +64,32 @@ const EntryList: React.FC<EntryListProps> = props => {
     count: hasNextPage ? allEntries.length + 1 : allEntries.length,
     estimateSize: () => 100,
     scrollMargin: rootElementOffset.current,
+    initialOffset: initialScrollState?.startItemOffset || 0,
+    initialMeasurementsCache: initialScrollState?.measurementsCache,
+    scrollingDelay: 250,
+    onChange: vInstance => {
+      // only save the state when isScrolling
+      if (!vInstance.isScrolling) {
+        return;
+      }
+      const vItems = vInstance.getVirtualItems();
+      if (!vItems.length || !allEntries.length) {
+        return;
+      }
+      const startItemId = allEntries[vItems[0].index].id;
+      const { startIndex } = vInstance.range;
+      const [offset] = vInstance.getOffsetForIndex(startIndex, 'center');
+      if (onScrollStateChange) {
+        onScrollStateChange({
+          startItemId,
+          startItemOffset: offset,
+          measurementsCache: vInstance.measurementsCache,
+        });
+      }
+    },
+    // scrollToFn: (offset, params, instance) => {
+    //   console.log('scroll to', params, offset);
+    // },
   });
   const items = virtualizer.getVirtualItems();
   /**
@@ -91,7 +123,12 @@ const EntryList: React.FC<EntryListProps> = props => {
   }, [languageDirection, rootElementRef]);
 
   const handleScrollToTop = () => {
-    virtualizer.scrollToIndex(0);
+    virtualizer.scrollToIndex(0, {
+      align: 'start',
+    });
+    if (onScrollStateReset) {
+      onScrollStateReset();
+    }
   };
 
   if (items.length === 0) {
