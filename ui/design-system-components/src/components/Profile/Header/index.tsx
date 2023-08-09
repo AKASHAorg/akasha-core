@@ -8,40 +8,40 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Menu from '@akashaorg/design-system-core/lib/components/Menu';
+import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import { tw } from '@twind/core';
 import { Profile } from '@akashaorg/typings/ui';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 
 export type HeaderProps = {
   did: Profile['did'];
+  validAddress?: boolean;
   background?: Profile['background'];
   avatar?: Profile['avatar'];
   name: Profile['name'];
   ensName?: 'loading' | string;
 
   viewerIsOwner: boolean;
-  flagLabel: string;
+  menuItems: MenuProps['items'];
   copyLabel: string;
   copiedLabel: string;
   followElement: ReactElement;
   handleEdit: () => void;
-  handleFlag: () => void;
 };
 
 const Header: React.FC<HeaderProps> = ({
   did,
+  validAddress = true,
   background,
   avatar,
   name,
   ensName,
   viewerIsOwner,
-  flagLabel,
+  menuItems,
   copyLabel,
   copiedLabel,
   followElement,
   handleEdit,
-  handleFlag,
 }) => {
   const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
 
@@ -76,38 +76,42 @@ const Header: React.FC<HeaderProps> = ({
             </div>
             <Stack direction="column" spacing="gap-y-1">
               <Text variant="button-lg">{name}</Text>
-              <DidField did={did.id} copyLabel={copyLabel} copiedLabel={copiedLabel} />
+              <DidField
+                did={did.id}
+                isValid={validAddress}
+                copyLabel={copyLabel}
+                copiedLabel={copiedLabel}
+              />
             </Stack>
-            <div className={tw(`ml-auto mt-2`)}>
-              {viewerIsOwner ? (
-                <Button
-                  icon="Cog6ToothIcon"
-                  variant="primary"
-                  onClick={handleEdit}
-                  greyBg
-                  iconOnly
-                />
-              ) : (
-                <div className="relative">
-                  <Stack spacing="gap-x-2">
+            <div className={tw(`relative ml-auto mt-2`)}>
+              <Stack spacing="gap-x-2">
+                {viewerIsOwner ? (
+                  <Button
+                    icon="Cog6ToothIcon"
+                    variant="primary"
+                    onClick={handleEdit}
+                    greyBg
+                    iconOnly
+                  />
+                ) : (
+                  <>
                     <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
+
                     {followElement}
-                    <Menu
-                      anchorElement={
-                        <Button icon="EllipsisVerticalIcon" variant="primary" greyBg iconOnly />
-                      }
-                      items={[
-                        {
-                          label: flagLabel,
-                          icon: 'FlagIcon',
-                          onClick: handleFlag,
-                          color: { light: 'errorLight', dark: 'errorDark' },
-                        },
-                      ]}
-                    />
-                  </Stack>
-                </div>
-              )}
+                  </>
+                )}
+
+                <Menu
+                  anchor={{
+                    icon: 'EllipsisVerticalIcon',
+                    variant: 'primary',
+                    greyBg: true,
+                    iconOnly: true,
+                  }}
+                  items={menuItems}
+                  customStyle="w-max z-99"
+                />
+              </Stack>
             </div>
           </Stack>
           <Stack direction="column" spacing="gap-y-4">

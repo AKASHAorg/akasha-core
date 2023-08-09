@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import menuRoute, { EDIT, FOLLOWERS, FOLLOWING } from '../routes';
 import EditProfilePage from './pages/edit-profile';
 import ProfileInfoPage from './pages/profile-info-page';
-import ProfileEngagementsPage from './pages/profile-engagement';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
+import FollowingPage from './pages/profile-engagement/following-page';
+import FollowersPage from './pages/profile-engagement/followers-page';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
@@ -29,11 +30,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <Route path={':profileId'} element={<ProfileInfoPage {...props} />} />
             <Route
               path={`:profileId${menuRoute[FOLLOWERS]}`}
-              element={<ProfileEngagementsPage {...props} engagementType={'followers'} />}
+              element={<FollowersPage {...props} />}
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWING]}`}
-              element={<ProfileEngagementsPage {...props} engagementType={'following'} />}
+              element={<FollowingPage {...props} />}
             />
             <Route
               path={`:profileId${menuRoute[EDIT]}`}

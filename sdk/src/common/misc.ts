@@ -5,6 +5,7 @@ import { AccountId } from 'caip';
 import { Resolver } from 'did-resolver';
 import { getResolver } from 'pkh-did-resolver';
 import KeyResolver from 'key-did-resolver';
+import { utils } from 'ethers';
 
 @injectable()
 class AWF_Misc {
@@ -49,6 +50,15 @@ class AWF_Misc {
       this._setupDidResolver();
     }
     const info = await this.resolver?.resolve(serialisedID);
+    const id = info?.didDocument?.id;
+    if (id) {
+      const segments = id.split(':');
+      if (segments.includes('eip155')) {
+        const address = segments.at(-1);
+        if (address)
+          return Object.assign({}, info.didDocument, { isEthAddress: utils.isAddress(address) });
+      }
+    }
     return info?.didDocument;
   }
 }

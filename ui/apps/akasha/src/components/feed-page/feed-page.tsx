@@ -94,8 +94,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return () => controller.abort();
   }, []);
 
-  const dismissedCardId = 'dismiss-private-alpha-notification';
-  const [dismissed, setDismissed] = useDismissedCard();
+  const dismissedCardId = '@akashaorg/app-akasha-integration_private-alpha-notification';
+
+  const [dismissed, dismissCard] = useDismissedCard(dismissedCardId);
 
   const { mutations: pendingPostStates } = useMutationsListener<IPublishData>([
     CREATE_POST_MUTATION_KEY,
@@ -126,8 +127,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       name: 'Feed',
     });
   };
-
-  const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   const handleRebeam = (withComment: boolean, beamId: string) => {
     if (!loggedProfileData?.did.id) {
@@ -164,7 +163,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           </Box>
         </>
       ) : (
-        !dismissed.includes(dismissedCardId) && (
+        !dismissed && (
           <Box customStyle="mb-2">
             <LoginCTACard
               title={`${t('Welcome, fellow Ethereans!')} 💫`}
@@ -179,7 +178,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               writeToUsLabel={t('drop us a message')}
               writeToUsUrl={'mailto:alpha@ethereum.world'}
               onWriteToUsLabelClick={handleWriteToUsLabelClick}
-              onCloseIconClick={onCloseButtonClick}
+              onCloseIconClick={dismissCard}
               key={dismissedCardId}
             />
           </Box>
