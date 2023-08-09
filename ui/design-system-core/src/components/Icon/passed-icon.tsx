@@ -1,12 +1,11 @@
 import React from 'react';
-
+import { apply, tw } from '@twind/core';
 import * as HeroIconsOutline from '@heroicons/react/24/outline';
 import * as HeroIconsSolid from '@heroicons/react/24/solid';
 
+import { IconType } from '@akashaorg/typings/ui';
+
 import * as CustomIcons from './akasha-icons';
-import { APP_ICON_TO_HERO_ICON_MAP, IconType } from '@akashaorg/typings/ui';
-import { isAppIcon } from './isAppIcon';
-import { apply, tw } from '@twind/core';
 
 type PassedIconProps = {
   type: IconType;
@@ -21,22 +20,9 @@ export const PassedIcon: React.FC<PassedIconProps> = ({
   customStyle = '',
   testId,
 }) => {
-  let iconStyle = customStyle;
   let PassedIcon = null;
 
   const HeroIcons = solid ? HeroIconsSolid : HeroIconsOutline;
-
-  /* @TODO: change the following logic once the old design system is fully replaced */
-  if (isAppIcon(type)) {
-    PassedIcon = HeroIcons[APP_ICON_TO_HERO_ICON_MAP[type]];
-    if (type === 'appModeration') {
-      iconStyle = `scale-x-flip ${customStyle}`;
-    }
-
-    if (type === 'appCenter') {
-      iconStyle = `-rotate-90 ${customStyle}`;
-    }
-  }
 
   if (HeroIcons[type]) PassedIcon = HeroIcons[type];
 
@@ -47,5 +33,5 @@ export const PassedIcon: React.FC<PassedIconProps> = ({
     console.error('There is no such icon', type);
   }
 
-  return <PassedIcon className={tw(apply`${iconStyle}`)} data-testid={testId} />;
+  return <PassedIcon className={tw(apply`${customStyle}`)} data-testid={testId} />;
 };
