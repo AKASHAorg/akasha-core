@@ -1,8 +1,20 @@
 import React from 'react';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import ProfileStatsPresentation from '../profile-stats-presentation';
+import routes, { EDIT } from '../../routes';
+import IconButtonFollow from '../icon-button-follow/icon-button-follow';
+import ProfileNotFoundPage from './profile-not-found-page';
+import {
+  ProfileHeader,
+  ProfileBio,
+  ProfileLinks,
+  ProfileLoading,
+} from '@akashaorg/design-system-components/lib/components/Profile';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-
 import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
 import {
   getProfileImageVersionsWithMediaUrl,
@@ -10,36 +22,16 @@ import {
   useValidDid,
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import {
-  ProfileHeader,
-  ProfileBio,
-  ProfileLinks,
-  ProfileLoading,
-} from '@akashaorg/design-system-components/lib/components/Profile';
-
-import FollowProfile from '../follow-profile';
-import ProfileStatsPresentation from '../profile-stats-presentation';
-import routes, { EDIT } from '../../routes';
-import ProfileNotFoundPage from './profile-not-found-page';
 
 const ProfileInfoPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
 
   const { t } = useTranslation('app-profile');
-
-  const [showFeedback, setShowFeedback] = React.useState(false);
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
   const { profileId } = useParams<{ profileId: string }>();
-
+  const [showFeedback, setShowFeedback] = React.useState(false);
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const loginQuery = useGetLogin();
-
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -49,36 +41,30 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       enabled: !!profileId,
     },
   );
-
   const status = profileDataReq.status;
-  const { isViewer, profile: profileData } =
-    profileDataReq.data && 'isViewer' in profileDataReq.data
-      ? profileDataReq.data
-      : { isViewer: null, profile: null };
-
+  const { isViewer, profile: profileData } = Object.assign(
+    { isViewer: null, profile: null },
+    profileDataReq.data,
+  );
   const { validDid, isLoading, isEthAddress } = useValidDid(
     profileId,
     profileDataReq.data && !profileData,
   );
-
   const isLoggedIn = !!loginQuery.data?.id;
-
   const hasProfile = status === 'success' && profileData;
-
   const did = !hasProfile ? { id: profileId } : profileData.did;
 
   if (status === 'loading' || isLoading) return <ProfileLoading />;
 
   if (isLoggedIn && !profileData) {
+    /*TODO: convert to login modal once it's fixed */
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
     });
   }
 
-  const hasError = status === 'error';
-
-  if (hasError)
+  if (status === 'error')
     return (
       <ErrorLoader
         type="script-error"
@@ -86,6 +72,9 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
         details={t('We cannot show this profile right now')}
       />
     );
+
+  const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
+  const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
 
   if (!hasProfile && !validDid) return <ProfileNotFoundPage {...props} />;
 
@@ -118,9 +107,6 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
     });
   };
-
-  const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
-  const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
 
   const menuItems: MenuProps['items'] = [
     {
@@ -161,7 +147,11 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
           followElement={
-            <FollowProfile profileId={profileId} isIconButton={true} navigateTo={navigateTo} />
+            <IconButtonFollow
+              profileId={profileId}
+              profileStreamId={profileData?.id}
+              navigateTo={navigateTo}
+            />
           }
           handleEdit={handleEdit}
         />
