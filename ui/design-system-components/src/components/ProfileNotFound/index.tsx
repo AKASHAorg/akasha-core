@@ -19,21 +19,19 @@ const ProfileNotFound: React.FC<ProfileNotFoundProps> = ({
   const publicImgPath = '/images';
 
   return (
-    <>
-      <Stack direction="column" spacing="gap-y-4" fullWidth>
-        <Card direction="row" elevation={'1'} radius={16} padding={8}>
-          <Stack direction="column" customStyle="mb-32">
-            <Default404Image url={`${publicImgPath}/new404.webp`} />
-            <Text variant={'h6'} align="center">
-              {titleLabel}
-            </Text>
-          </Stack>
-          <Stack direction="row" customStyle="pr-2 pb-2" justify="end" fullWidth>
-            <Button variant="primary" label={buttonLabel} onClick={onClickGoToHomepage} />
-          </Stack>
-        </Card>
-      </Stack>
-    </>
+    <Stack direction="column" spacing="gap-y-4" fullWidth>
+      <Card direction="row" elevation={'1'} radius={16} padding={8}>
+        <Stack direction="column" customStyle="mb-32">
+          <Default404Image url={`${publicImgPath}/new404.webp`} />
+          <Text variant={'h6'} align="center">
+            {titleLabel}
+          </Text>
+        </Stack>
+        <Stack direction="row" customStyle="pr-2 pb-2" justify="end" fullWidth>
+          <Button variant="primary" label={buttonLabel} onClick={onClickGoToHomepage} />
+        </Stack>
+      </Card>
+    </Stack>
   );
 };
 
