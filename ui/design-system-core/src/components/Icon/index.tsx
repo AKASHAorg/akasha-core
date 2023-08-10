@@ -1,7 +1,7 @@
 import React from 'react';
 import Stack from '../Stack';
 import { IconType } from '@akashaorg/typings/ui';
-import { PassedIcon } from './PassedIcon';
+import { PassedIcon } from './passed-icon';
 import { BasicIconSize, BasicSize, BreakPointSize, Color } from '../types/common.types';
 import { getWidthClasses } from '../../utils/getWidthClasses';
 import { getHeightClasses } from '../../utils/getHeightClasses';
