@@ -20,7 +20,7 @@ const ArticleHeader: React.FC<IArticleHeaderProps> = props => {
       <Box customStyle="flex-flex-row justify-between">
         <Text variant="h2">{titleLabel}</Text>
         <button onClick={onIconClick}>
-          <Icon type="settingsAlt" />
+          <Icon type="Cog8ToothIcon" />
         </button>
       </Box>
       <Box customStyle="flex-flex-row justify-between items-center">

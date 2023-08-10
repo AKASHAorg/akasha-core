@@ -75,17 +75,17 @@ export const Overview: React.FC<OverviewPageProps> = props => {
           {
             label: t('CoC discussions'),
             url: externalLinks.discourse.CoC,
-            iconType: 'explore',
+            iconType: 'SparklesIcon',
           },
           {
             label: t('Moderation thoughts'),
             url: externalLinks.discord,
-            iconType: 'chatBubble',
+            iconType: 'ChatBubbleOvalLeftEllipsisIcon',
           },
           {
             label: t('Send us a message'),
             url: externalLinks.email,
-            iconType: 'message',
+            iconType: 'EnvelopeIcon',
           },
         ]}
         onCodeOfConductClick={handleCodeOfConductClick}
