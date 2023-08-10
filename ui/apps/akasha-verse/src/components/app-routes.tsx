@@ -32,7 +32,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const appsReq = useGetAppsQuery(
     {
-      last: 50,
+      first: 50,
     },
     {
       select: response => response.akashaAppIndex.edges,

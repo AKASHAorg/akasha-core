@@ -8,6 +8,7 @@ import { getRadiusClasses } from '@akashaorg/design-system-core/lib/utils/getRad
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 
 type App = {
+  id?: string;
   name: string;
   description: string;
   action: ReactNode;
@@ -15,7 +16,7 @@ type App = {
 
 export type AppListProp = {
   apps: App[];
-  onAppSelected: () => void;
+  onAppSelected: (appId: string) => void;
 };
 
 const AppList: React.FC<AppListProp> = ({ apps, onAppSelected }) => {
@@ -26,10 +27,10 @@ const AppList: React.FC<AppListProp> = ({ apps, onAppSelected }) => {
 
   return (
     <Stack direction="column" spacing="gap-y-4">
-      {apps.map((app, index, array) => (
+      {apps?.map((app, index, array) => (
         <Stack key={app.name} direction="column" spacing="gap-y-4">
           <Stack justify="between">
-            <Button onClick={onAppSelected} plain>
+            <Button onClick={() => onAppSelected(app.id)} plain>
               <Stack spacing="gap-x-2">
                 <div className={tw(apply(iconStyle))} />
                 <Stack direction="column" customStyle="h-[3.75rem]">

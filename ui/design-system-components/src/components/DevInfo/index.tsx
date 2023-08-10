@@ -11,7 +11,7 @@ export type DevInfoProps = {
   developerTitle: string;
   developers: Developer[];
   apps: AppListProp['apps'];
-  onAppSelected: () => void;
+  onAppSelected: (appId: string) => void;
 };
 
 const DevInfo: React.FC<DevInfoProps> = ({ developerTitle, developers, apps, onAppSelected }) => {

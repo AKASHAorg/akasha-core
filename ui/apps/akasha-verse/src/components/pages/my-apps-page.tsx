@@ -31,7 +31,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
   const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
 
   const defaultAppsNamesNormalized = React.useMemo(() => {
-    return defaultApps.map(app => {
+    return defaultApps?.map(app => {
       if (typeof app === 'string') {
         return {
           name: app,
@@ -46,6 +46,19 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
     if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.node?.name)) {
       return app;
     }
+  });
+
+  const defaultAppsInfo = filteredDefaultApps?.map(app => {
+    return {
+      id: app.node.id,
+      name: app.node.displayName,
+      description: app.node.description,
+      action: (
+        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+          Default App
+        </Text>
+      ),
+    };
   });
   // select user installed apps from list of installed apps
   const filteredInstalledApps = availableApps
@@ -82,40 +95,6 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
     },
   ];
 
-  /*@TODO: replace with the relevant hook once it's ready */
-  const dummyDefaultApps = [
-    {
-      name: 'Social Feed',
-      description:
-        'Keep up with what’s happening in the world! The social feed is the star app of AKASHA World.',
-      action: (
-        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-          Default App
-        </Text>
-      ),
-    },
-    {
-      name: 'Profile App',
-      description:
-        'Control your profile, your preferences and everything else about you from the profile app.',
-      action: (
-        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-          Default App
-        </Text>
-      ),
-    },
-    {
-      name: 'Settings App',
-      description:
-        'You can control many things through the Settings app, like changing your theme, analytics options among many other things.',
-      action: (
-        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-          Default App
-        </Text>
-      ),
-    },
-  ];
-
   return (
     <Stack direction="column" spacing="gap-y-4">
       <Text variant="h6">{t('Installed Apps')}</Text>
@@ -135,12 +114,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
         />
       )}
       <Text variant="h6">{t('Default Apps')}</Text>
-      <AppList
-        apps={dummyDefaultApps}
-        onAppSelected={() => {
-          /*TODO: get app id from new hooks when they are ready and navigate to info page*/
-        }}
-      />
+      <AppList apps={defaultAppsInfo} onAppSelected={handleAppClick} />
     </Stack>
   );
 };
