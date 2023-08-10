@@ -32,20 +32,13 @@ const FeedWidgetRoot: React.FC<
   FeedWidgetCommonProps & Extract<FeedProps, { itemType: EntityTypes }>
 > = props => {
   const { itemType, i18n, queryKey } = props;
-
-  const queryKeyWithSuffix = React.useMemo(() => {
-    switch (itemType) {
-      case EntityTypes.BEAM:
-        return `${queryKey}-beams`;
-      default:
-        return `${queryKey}-reflections`;
-    }
-  }, [itemType, queryKey]);
-
-  const [scrollState, saveScrollState, removeScrollState] = useLocalstorage(queryKeyWithSuffix);
+  const { pathname } = window.location;
+  const [scrollState, saveScrollState, removeScrollState] = useLocalstorage(
+    `${pathname}_${queryKey}`,
+  );
 
   const beamsReq = useInfiniteDummy<GetBeamsQuery, ReturnType<typeof mapEntry>>(
-    queryKeyWithSuffix,
+    queryKey,
     createDummyBeams(5),
     {
       enabled: itemType === EntityTypes.BEAM,
@@ -77,7 +70,7 @@ const FeedWidgetRoot: React.FC<
   );
 
   const reflectReq = useInfiniteDummy<GetReflectionsFromBeamQuery, ReturnType<typeof mapEntry>>(
-    queryKeyWithSuffix,
+    queryKey,
     createDummyReflections(5),
     {
       enabled: itemType === EntityTypes.REFLECT,
@@ -128,12 +121,9 @@ const FeedWidgetRoot: React.FC<
     }
   }, [beamsReq, itemType]);
 
-  const handleScrollStateChange = React.useCallback(
-    scrollState => {
-      saveScrollState(scrollState);
-    },
-    [queryKeyWithSuffix, reflectReq, beamsReq],
-  );
+  const handleScrollStateChange = React.useCallback(scrollState => {
+    saveScrollState(scrollState);
+  }, []);
 
   return (
     <I18nextProvider i18n={i18n}>

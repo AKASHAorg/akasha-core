@@ -45,38 +45,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const locale = (plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
     'en') as ILocale;
 
-  const profileQuery = useInfiniteGetProfilesQuery(
-    'first',
-    {
-      first: 5,
-    },
-    {
-      getNextPageParam: (lastPage, pages) => {
-        if (lastPage.profileIndex.pageInfo.hasNextPage) {
-          return { after: lastPage.profileIndex.pageInfo.endCursor };
-        }
-      },
-      getPreviousPageParam: (firstPage, pages) => {
-        if (firstPage.profileIndex.pageInfo.hasPreviousPage) {
-          return { before: firstPage.profileIndex.pageInfo.startCursor };
-        }
-      },
-    },
-  );
-
-  // get the pageInfo of the last loaded page
-  const lastPageInfo = React.useMemo(() => {
-    const lastPage = profileQuery.data?.pages?.[profileQuery.data?.pages?.length - 1];
-    return lastPage?.profileIndex?.pageInfo;
-  }, [profileQuery]);
-
-  React.useEffect(() => {
-    // call fetchnextpage like: profileQuery.fetchNextPage({ pageParam: { after: 'lastcursor-from-page' }})
-    if (profileQuery.hasNextPage) {
-      profileQuery.fetchNextPage();
-    }
-    console.log(profileQuery, lastPageInfo, 'profileQ');
-  }, [profileQuery]);
   const [analyticsActions] = useAnalytics();
 
   //get the post id for repost from the search param
@@ -193,27 +161,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             />
           ),
       )}
-      {/*{pendingPostStates?.map(*/}
-      {/*  pendingPostState =>*/}
-      {/*    (pendingPostState.state.status === 'loading' ||*/}
-      {/*      The following line ensures that even if the post is published pending post UI should be shown till the new entry appears on the feed */}
-      {/*      (pendingPostState.state.status === 'success' &&*/}
-      {/*        !postPages?.includes(pendingPostState.state.data.toString() as any))) && (*/}
-      {/*      <EntryCard*/}
-      {/*        key={pendingPostState.mutationId}*/}
-      {/*        style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}*/}
-      {/*        entryData={createPendingEntry(loggedProfileData, pendingPostState.state.variables)}*/}
-      {/*        flagAsLabel={t('Report Post')}*/}
-      {/*        locale={locale || 'en'}*/}
-      {/*        showMore={true}*/}
-      {/*        profileAnchorLink={'/profile'}*/}
-      {/*        repliesAnchorLink={routes[POST]}*/}
-      {/*        contentClickable={false}*/}
-      {/*        hidePublishTime={true}*/}
-      {/*        disableActions={true}*/}
-      {/*      />*/}
-      {/*    ),*/}
-      {/*)}*/}
       <FeedWidget
         queryKey="akashaorg-antenna-page-query"
         modalSlotId={layoutConfig.modalSlotId}
