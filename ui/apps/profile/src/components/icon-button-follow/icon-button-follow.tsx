@@ -101,19 +101,18 @@ const IconButtonFollow: React.FC<IconButtonFollowProps> = props => {
     <>
       {following?.isFollowing ? (
         <Button
-          size="sm"
-          icon="UserPlusIcon"
+          icon="UsersIcon"
           onClick={() => handleUnfollow(profileStreamId, following)}
-          variant="primary"
           loading={loading}
+          greyBg
           iconOnly
         />
       ) : (
         <Button
           onClick={() => handleFollow(profileStreamId, following)}
-          icon="UsersIcon"
+          icon="UserPlusIcon"
+          variant="primary"
           loading={loading}
-          greyBg
           iconOnly
         />
       )}

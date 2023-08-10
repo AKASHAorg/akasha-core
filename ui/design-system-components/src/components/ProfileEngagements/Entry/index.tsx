@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { Profile } from '@akashaorg/typings/ui';
 import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 
@@ -14,7 +13,6 @@ export type EntryProps = {
   name: string;
   followStreamId: string;
   isFollowing: boolean;
-  borderBottom?: boolean;
   getMediaUrl: (image?: ProfileImageVersions) => ProfileImageVersions;
   renderFollowElement: (
     profileStreamId: string,
@@ -33,24 +31,13 @@ const Entry: React.FC<EntryProps> = props => {
     name,
     followStreamId,
     isFollowing,
-    borderBottom = true,
     getMediaUrl,
     renderFollowElement,
     onProfileClick,
   } = props;
 
-  const borderBottomStyle = borderBottom
-    ? `border-b ${getColorClasses(
-        {
-          light: 'grey8',
-          dark: 'grey5',
-        },
-        'border',
-      )}`
-    : '';
-
   return (
-    <Stack direction="column" spacing="gap-y-4" customStyle={`px-4 pb-4 ${borderBottomStyle}`}>
+    <Stack direction="column" spacing="gap-y-4" customStyle={`px-4 pb-4`}>
       <Stack align="center" justify="between">
         <Anchor
           href={`${profileAnchorLink}/${profileId}`}
