@@ -1,10 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import FollowProfile from '../../follow-profile';
 import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
 import EngagementTab from './engagement-tab';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
-import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useParams } from 'react-router-dom';
 import {
@@ -15,10 +14,13 @@ import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akash
 import { ProfileEngagementLoading } from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/ProfileEngagementLoading';
 
 const FollowersPage: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation('app-profile');
+  const { plugins } = props;
   const { profileId } = useParams<{ profileId: string }>();
+
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
+  const [loadMore, setLoadingMore] = useState(false);
   const loginQuery = useGetLogin();
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -29,12 +31,33 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
     },
   );
   const followersReq = useInfiniteGetFollowersListByDidQuery(
-    'last',
+    'first',
     {
       id: profileId,
-      last: 10,
+      first: 10,
     },
     {
+      getNextPageParam: lastPage => {
+        const pageInfo =
+          lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
+            ? lastPage.node?.profile?.followers?.pageInfo
+            : null;
+        if (pageInfo && pageInfo.hasNextPage) {
+          return { after: pageInfo.endCursor };
+        }
+      },
+      getPreviousPageParam: firstPage => {
+        const pageInfo =
+          firstPage?.node && hasOwn(firstPage?.node, 'isViewer')
+            ? firstPage.node?.profile?.followers?.pageInfo
+            : null;
+        if (pageInfo && pageInfo.hasPreviousPage) {
+          return { before: pageInfo.startCursor };
+        }
+      },
+      onSettled: () => {
+        setLoadingMore(false);
+      },
       enabled: !!loginQuery.data?.id,
     },
   );
@@ -51,6 +74,13 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
   );
   const isViewer =
     profileDataReq.data && 'isViewer' in profileDataReq.data ? profileDataReq.data.isViewer : null;
+
+  const lastPageInfo = React.useMemo(() => {
+    const lastPage = followersReq.data?.pages?.[followersReq.data?.pages?.length - 1];
+    return lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
+      ? lastPage?.node.profile?.followers?.pageInfo
+      : null;
+  }, [followersReq]);
 
   if (!loginQuery.data?.id) {
     return navigateTo({
@@ -84,9 +114,15 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
       {followersReq.status === 'success' && (
         <Followers
           followers={followers}
-          loadingMoreLabel={`${t('Loading more')} ...`}
           profileAnchorLink={'/@akashaorg/app-profile'}
           viewerIsOwner={isViewer}
+          loadMore={loadMore}
+          onLoadMore={() => {
+            if (lastPageInfo && lastPageInfo.hasNextPage) {
+              setLoadingMore(true);
+              followersReq.fetchNextPage();
+            }
+          }}
           renderFollowElement={(profileStreamId, followStreamId, isFollowing) => (
             <FollowProfile
               loggedInProfileId={loginQuery.data?.id}
