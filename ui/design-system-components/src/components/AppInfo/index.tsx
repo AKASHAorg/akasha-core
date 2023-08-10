@@ -2,7 +2,7 @@ import React from 'react';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -138,11 +138,12 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   plain
                 >
                   <Stack align="center">
-                    <AvatarBlock
+                    <ProfileAvatarButton
                       profileId={developer.profileId}
-                      avatar={developer.avatar}
-                      name={developer.name}
-                      userName={developer.userName}
+                      label={developer.name}
+                      info={developer.profileId}
+                      size="md"
+                      avatarImage={developer.avatar}
                     />
                     <Icon
                       type="ChevronRightIcon"
