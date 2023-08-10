@@ -23,7 +23,8 @@ const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
         {menuItem.logo.type === 'icon' && (
           <AppIcon
             size="md"
-            stackedIcon={menuItem.logo.value === 'notifications'}
+            accentColor={true}
+            stackedIcon={menuItem.logo.value === 'BellIcon'}
             placeholderIconType={menuItem.logo.value}
           />
         )}

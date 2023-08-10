@@ -7,7 +7,7 @@ import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import FollowingPage from './pages/profile-engagement/following-page';
 import FollowersPage from './pages/profile-engagement/followers-page';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
@@ -22,12 +22,19 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     }, 5000);
   };
 
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    props.navigateToModal({ name: 'login', redirectTo });
+  };
+
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="mb-8">
       <Router basename={props.baseRouteName}>
         <Routes>
           <Route path="/">
-            <Route path={':profileId'} element={<ProfileInfoPage {...props} />} />
+            <Route
+              path={':profileId'}
+              element={<ProfileInfoPage showLoginModal={showLoginModal} {...props} />}
+            />
             <Route
               path={`:profileId${menuRoute[FOLLOWERS]}`}
               element={<FollowersPage {...props} />}

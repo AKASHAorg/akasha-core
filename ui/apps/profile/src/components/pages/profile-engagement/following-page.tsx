@@ -4,7 +4,7 @@ import Following from '@akashaorg/design-system-components/lib/components/Profil
 import EngagementTab from './engagement-tab';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useParams } from 'react-router-dom';
 import {
   useGetProfileByDidQuery,
@@ -21,6 +21,10 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
 
   const [loadMore, setLoadingMore] = useState(false);
   const loginQuery = useGetLogin();
+
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    props.navigateToModal({ name: 'login', redirectTo });
+  };
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -133,7 +137,7 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
               isLoggedIn={!!loginQuery.data?.id}
               followStreamId={followStreamId}
               isFollowing={isFollowing}
-              navigateTo={navigateTo}
+              showLoginModal={showLoginModal}
             />
           )}
           onProfileClick={onProfileClick}
