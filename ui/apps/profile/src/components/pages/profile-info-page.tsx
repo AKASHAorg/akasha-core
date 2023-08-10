@@ -181,7 +181,11 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
             buttonClickHandler={goEditProfile}
           />
         )}
-        <ProfileStatsPresentation profileId={profileId} navigateTo={navigateTo} />
+        <ProfileStatsPresentation
+          profileId={profileId}
+          navigateTo={navigateTo}
+          showLoginModal={showLoginModal}
+        />
         {profileData?.links?.length > 0 && (
           <ProfileLinks
             title={t('Find me on')}
