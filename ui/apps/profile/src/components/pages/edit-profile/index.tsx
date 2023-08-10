@@ -35,12 +35,8 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   const { plugins, handleFeedback } = props;
 
   const { t } = useTranslation('app-profile');
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
-  // const ENSReq = useEnsByAddress(profileData.ethAddress);
-
   const { profileId } = useParams<{ profileId: string }>();
-
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -50,13 +46,11 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       enabled: !!profileId,
     },
   );
-
   const status = profileDataReq.status;
-
-  const { profile: profileData } =
-    profileDataReq.data && 'isViewer' in profileDataReq.data
-      ? profileDataReq.data
-      : { profile: null };
+  const { profile: profileData } = Object.assign(
+    { isViewer: null, profile: null },
+    profileDataReq.data,
+  );
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
@@ -70,9 +64,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   const [showModal, setShowModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialProfileInput | null>(null);
-
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
-
   const queryClient = useQueryClient();
   const createProfileMutation = useCreateProfileMutation({
     onMutate: () => {
@@ -104,7 +96,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       navigateToProfileInfoPage();
     },
   });
-
   const myInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node, enabled: !!profileData?.id },
@@ -114,7 +105,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       ? myInterestsQueryReq.data.interests
       : null;
   const loginQuery = useGetLogin();
-
   const background = useMemo(
     () => getProfileImageVersionsWithMediaUrl(profileData?.background),
     [profileData?.background],
@@ -124,14 +114,14 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     [profileData?.avatar],
   );
 
-  if (status === 'loading') return <ProfileLoading />;
-
   if (!loginQuery.data?.id) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
   }
+
+  if (status === 'loading') return <ProfileLoading />;
 
   if (status === 'error')
     return (

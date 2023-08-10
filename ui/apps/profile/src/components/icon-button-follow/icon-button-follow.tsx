@@ -5,21 +5,21 @@ import { ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useFollowingsOfLoggedInProfile } from './use-followings-of-logged-in-profile';
 import {
   useCreateFollowMutation,
-  useGetMyProfileQuery,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { Follow } from '../type';
+import { Follow } from './type';
 
-type IconButtonFollow = {
+export type IconButtonFollowProps = {
   profileId: string;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  profileStreamId: string;
 };
 
 /* TODO: Some of the logic inside this component is a work around until we have a hook that fetches the isFollowing flag and stream id of a profile being viewed.
  **      The component will be refactored once the hook is ready.
  */
-const IconButtonFollow: React.FC<IconButtonFollow> = props => {
-  const { profileId, showLoginModal } = props;
+const IconButtonFollow: React.FC<IconButtonFollowProps> = props => {
+  const { profileId, profileStreamId, showLoginModal } = props;
 
   const loginQuery = useGetLogin();
 
@@ -66,11 +66,6 @@ const IconButtonFollow: React.FC<IconButtonFollow> = props => {
     },
   });
 
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: response => response?.viewer?.profile,
-    enabled: isLoggedIn,
-  });
-
   const handleFollow = (profileStreamId: string, following?: Follow) => {
     if (!isLoggedIn) {
       return showLoginModal();
@@ -108,14 +103,14 @@ const IconButtonFollow: React.FC<IconButtonFollow> = props => {
         <Button
           size="sm"
           icon="UserPlusIcon"
-          onClick={() => handleUnfollow(profileDataReq.data?.id, following)}
+          onClick={() => handleUnfollow(profileStreamId, following)}
           variant="primary"
           loading={loading}
           iconOnly
         />
       ) : (
         <Button
-          onClick={() => handleFollow(profileDataReq.data?.id, following)}
+          onClick={() => handleFollow(profileStreamId, following)}
           icon="UsersIcon"
           loading={loading}
           greyBg

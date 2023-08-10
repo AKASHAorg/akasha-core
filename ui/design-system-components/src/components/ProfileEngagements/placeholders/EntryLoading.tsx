@@ -13,6 +13,7 @@ const EntryLoading: React.FC = () => {
     },
     'border',
   )}`;
+
   return (
     <Stack align="center" justify="between" customStyle={`px-4 pb-4 ${borderBottomStyle}`}>
       <Stack spacing="gap-1">

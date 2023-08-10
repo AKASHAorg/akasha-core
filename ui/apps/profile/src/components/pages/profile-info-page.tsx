@@ -1,25 +1,28 @@
 import React from 'react';
-import { useParams } from 'react-router';
-import { useTranslation } from 'react-i18next';
-
-import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-
+import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import ProfileStatsPresentation from '../profile-stats-presentation';
+import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
+import routes, { EDIT } from '../../routes';
+import IconButtonFollow from '../icon-button-follow/icon-button-follow';
 import {
   ProfileHeader,
   ProfileBio,
   ProfileLinks,
   ProfileLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
-
-import FollowProfile from '../follow-profile';
-import ProfileStatsPresentation from '../profile-stats-presentation';
-import routes, { EDIT } from '../../routes';
+import { useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  useGetLogin,
+  useValidDid,
+} from '@akashaorg/ui-awf-hooks';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 
 export interface ProfilePageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -29,13 +32,9 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
   const { plugins, navigateToModal, showLoginModal } = props;
 
   const { t } = useTranslation('app-profile');
-
-  const [showFeedback, setShowFeedback] = React.useState(false);
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
   const { profileId } = useParams<{ profileId: string }>();
-
+  const [showFeedback, setShowFeedback] = React.useState(false);
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
@@ -51,12 +50,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
       enabled: !!profileId,
     },
   );
-
   const status = profileDataReq.status;
-  const { isViewer, profile: profileData } =
-    profileDataReq.data && 'isViewer' in profileDataReq.data
-      ? profileDataReq.data
-      : { isViewer: null, profile: null };
 
   const handleFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes, user: string) => () => {
@@ -67,24 +61,51 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
     },
     [isLoggedIn],
   );
+  const { isViewer, profile: profileData } = Object.assign(
+    { isViewer: null, profile: null },
+    profileDataReq.data,
+  );
+  const { validDid, isLoading, isEthAddress } = useValidDid(
+    profileId,
+    profileDataReq.data && !profileData,
+  );
+  const hasProfile = status === 'success' && profileData;
+  const did = !hasProfile ? { id: profileId } : profileData.did;
 
-  if (status === 'loading') return <ProfileLoading />;
+  if (status === 'loading' || isLoading) return <ProfileLoading />;
 
-  if (isLoggedIn && !profileData) {
+  const goToHomepage = () => {
+    navigateTo({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: navRoutes => navRoutes.defaultRoute,
+    });
+  };
+
+  const goEditProfile = () => {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
     });
-  }
+  };
 
-  const hasError = status === 'error' || (status === 'success' && !profileData);
-
-  if (hasError)
+  if (status === 'error')
     return (
       <ErrorLoader
         type="script-error"
         title={t('There was an error loading this profile')}
         details={t('We cannot show this profile right now')}
+      />
+    );
+
+  const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
+  const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
+
+  if (!hasProfile && !validDid)
+    return (
+      <ProfileNotFound
+        titleLabel={t('This profile doesn’t exist')}
+        buttonLabel={t('Go back home')}
+        onClickGoToHomepage={goToHomepage}
       />
     );
 
@@ -102,9 +123,6 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
       getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
     });
   };
-
-  const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
-  const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
 
   const menuItems: MenuProps['items'] = [
     {
@@ -128,32 +146,46 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
     <>
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         <ProfileHeader
-          did={profileData.did}
+          did={did}
+          validAddress={hasProfile ? true : isEthAddress ?? validDid}
           background={background}
           avatar={avatar}
-          name={profileData.name}
+          name={profileData?.name}
           ensName={null /*@TODO: integrate ENS when the API is ready */}
           viewerIsOwner={isViewer}
           menuItems={menuItems}
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
           followElement={
-            <FollowProfile
+            <IconButtonFollow
               profileId={profileId}
-              isIconButton={true}
+              profileStreamId={profileData?.id}
               showLoginModal={showLoginModal}
             />
           }
           handleEdit={handleEdit}
         />
-        {profileData.description && (
+        {profileData?.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
+        {!isLoggedIn && !hasProfile && (
+          <DefaultEmptyCard
+            infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
+          />
+        )}
+
+        {isLoggedIn && !profileData && (
+          <DefaultEmptyCard
+            infoText={t('Uh-uh! it looks like you haven’t filled your information!')}
+            buttonLabel={t('Fill my info')}
+            buttonClickHandler={goEditProfile}
+          />
+        )}
         <ProfileStatsPresentation profileId={profileId} navigateTo={navigateTo} />
-        {profileData.links?.length > 0 && (
+        {profileData?.links?.length > 0 && (
           <ProfileLinks
             title={t('Find me on')}
-            links={profileData.links}
+            links={profileData?.links}
             copiedLabel={t('Copied')}
             copyLabel={t('Copy to clipboard')}
           />

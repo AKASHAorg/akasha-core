@@ -18,6 +18,7 @@ import useGlobalLogin from './use-global-login';
 import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-analytics';
 import withProviders from './utils/provider-hoc';
 import useReasons from './use-reasons';
+import { hasOwn } from './utils/has-own';
 import { useQueryListener, useMutationListener, useMutationsListener } from './use-query-listener';
 import {
   useUpdateUsernameProvider,
@@ -138,6 +139,7 @@ import {
 } from './use-dev-profile';
 import { useDismissedCard } from './use-dismissed-card';
 import useModerationCategory from './use-moderation-categories';
+import { useValidDid } from './use-valid-did';
 
 export {
   constants,
@@ -147,6 +149,7 @@ export {
   CookieConsentTypes,
   COOKIE_CONSENT_NAME,
   withProviders,
+  hasOwn,
   useReasons,
   // generic-utils
   validateType,
@@ -286,4 +289,5 @@ export {
   // use-dismissed-card
   useDismissedCard,
   useModerationCategory,
+  useValidDid,
 };
