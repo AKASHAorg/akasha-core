@@ -13,11 +13,11 @@ export interface InboxPageProps extends RootComponentProps {
 }
 
 const InboxPage: React.FC<InboxPageProps> = props => {
-  const { loggedProfileData } = props;
+  const { loggedProfileData, plugins } = props;
 
   const { t } = useTranslation('app-messaging');
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [pinnedConvos, setPinnedConvos] = React.useState([]);
 
@@ -80,7 +80,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   };
 
   const handleCardClick = (pubKey: string) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
       getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
     });
@@ -99,7 +99,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
         <Box customStyle="flex flex-row justify-between">
           <Text variant="h1">{t('Messaging App')}</Text>
           <button onClick={handleSettingsClick}>
-            <Icon type="settingsAlt" />
+            <Icon type="Cog8ToothIcon" />
           </button>
         </Box>
         <Text>{t('Write and send private, encrypted messages 🔐 to people in Akasha World.')}</Text>
