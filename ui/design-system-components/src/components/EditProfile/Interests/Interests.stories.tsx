@@ -16,8 +16,60 @@ BaseInterests.args = {
   moreInterestTitle: 'Find more interests',
   moreInterestDescription: 'You can find more interests and add them to your list of interests!',
   moreInterestPlaceholder: 'Search for interests',
-  myInterests: ['Akasha', 'Ethereum', 'Finance', 'Politics', 'Travel', 'Cooking'],
-  interests: ['Akira', 'Akela', 'Sports', 'Reading', 'Swimming'],
+  myInterests: [
+    {
+      value: 'AKASHA',
+      labelType: 'TOPIC',
+    },
+    {
+      value: 'Ethereum',
+      labelType: 'TOPIC',
+    },
+    {
+      value: 'Finance',
+      labelType: 'TOPIC',
+    },
+    {
+      value: 'Politics',
+      labelType: 'TOPIC',
+    },
+    {
+      value: 'Travel',
+      labelType: 'TOPIC',
+    },
+    {
+      value: 'Cooking',
+      labelType: 'TOPIC',
+    },
+  ],
+  interests: [
+    {
+      value: 'Akira',
+      labelType: 'TOPIC',
+    },
+    {
+      value: 'Akela',
+      labelType: 'TOPIC',
+    },
+    {
+      value: 'Sports',
+      labelType: 'TOPIC',
+    },
+    {
+      value: 'Reading',
+      labelType: 'TOPIC',
+    },
+    {
+      value: 'Swimming',
+      labelType: 'TOPIC',
+    },
+  ],
+  labelType: 'TOPIC',
   cancelButton: { label: 'Cancel', handleClick: () => ({}) },
-  saveButton: { label: 'Save', handleClick: () => ({}) },
+  saveButton: {
+    label: 'Save',
+    handleClick: interests => {
+      console.log(interests);
+    },
+  },
 };
