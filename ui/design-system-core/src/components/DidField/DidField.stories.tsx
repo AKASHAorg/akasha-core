@@ -1,31 +1,37 @@
-// eslint-disable-next-line unicorn/filename-case
 import React from 'react';
-import DidField from '.';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import DidField, { DidFieldProps } from '.';
+
+const meta: Meta<DidFieldProps> = {
   title: 'Fields/DidField',
   component: DidField,
 };
 
-const Template = args => <DidField {...args} />;
+export default meta;
+type Story = StoryObj<DidFieldProps>;
 
-export const EthDidField = Template.bind({});
-EthDidField.args = {
-  did: 'did:pkh:eip155:5:0xc1cb6a6dd8099718157b20467311486c1fa8b415',
+export const BaseDidField: Story = {
+  render: () => (
+    <DidField did="did:pkh:bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6" />
+  ),
 };
 
-export const SolanaDidField = Template.bind({});
-SolanaDidField.args = {
-  did: 'did:pkh:solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ:CKg5d12Jhpej1JqtmxLJgaFqqeYjxgPqToJ4LBdvG9Ev',
+export const BaseDidFieldWithGreyText: Story = {
+  render: () => (
+    <DidField
+      did="did:pkh:bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6"
+      textColor="grey7"
+    />
+  ),
 };
 
-export const BasicDidField = Template.bind({});
-BasicDidField.args = {
-  did: 'did:pkh:bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6',
+export const EthDidField: Story = {
+  render: () => <DidField did="did:pkh:eip155:5:0xc1cb6a6dd8099718157b20467311486c1fa8b415" />,
 };
 
-export const BasicDidFieldGreyText = Template.bind({});
-BasicDidFieldGreyText.args = {
-  did: 'did:pkh:bip122:000000000019d6689c085ae165831e93:128Lkh3S7CkDTBZ8W7BbpsN3YYizJMp8p6',
-  textColor: 'grey7',
+export const SolanaDidField: Story = {
+  render: () => (
+    <DidField did="did:pkh:solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ:CKg5d12Jhpej1JqtmxLJgaFqqeYjxgPqToJ4LBdvG9Ev" />
+  ),
 };

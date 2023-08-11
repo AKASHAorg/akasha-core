@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
-import AutoComplete from '.';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import AutoComplete, { AutoCompleteProps } from '.';
+
+const meta: Meta<AutoCompleteProps> = {
   title: 'Fields/AutoComplete',
   component: AutoComplete,
 };
 
-const Template = args => {
+export default meta;
+type Story = StoryObj<AutoCompleteProps>;
+
+const Component = () => {
   const [query, setQuery] = useState('');
-  return <AutoComplete value={query} onChange={setQuery} {...args} />;
+
+  return (
+    <AutoComplete
+      value={query}
+      onChange={setQuery}
+      options={['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance']}
+      customStyle="w-fit"
+    />
+  );
 };
 
-export const BaseAutoComplete = Template.bind({});
-BaseAutoComplete.args = {
-  options: ['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance'],
+export const BaseAutoComplete: Story = {
+  render: () => <Component />,
 };

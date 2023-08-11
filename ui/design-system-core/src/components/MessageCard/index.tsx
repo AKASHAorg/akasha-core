@@ -1,13 +1,15 @@
 import React from 'react';
-import Card from '../Card';
-import Text, { TextProps } from '../Text';
-import Stack from '../Stack';
-import Icon, { IconProps } from '../Icon';
-import Button from '../Button';
-import { Color, Elevation } from '../types/common.types';
-import { getColorClasses } from '../../utils/getColorClasses';
 
-type MessageCardProps = {
+import Button from '../Button';
+import Card from '../Card';
+import Icon, { IconProps } from '../Icon';
+import Stack from '../Stack';
+import Text, { TextProps } from '../Text';
+
+import { Color, Elevation } from '../types/common.types';
+import { getColorClasses } from '../../utils';
+
+export type MessageCardProps = {
   title: string;
   message: string;
   titleVariant?: TextProps['variant'];

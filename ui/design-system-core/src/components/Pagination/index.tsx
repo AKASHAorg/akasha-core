@@ -8,22 +8,22 @@ import PageBubble from './page-bubble';
 
 import { Color } from '../types/common.types';
 
-export interface IPaginationProps {
+export type PaginationProps = {
   pageCount: number;
   currentPage: number;
   maxPagesToShow?: number;
   customStyle?: string;
-  prevButtonLabel: string;
-  nextButtonLabel: string;
+  prevButtonLabel?: string;
+  nextButtonLabel?: string;
   hasButtons?: boolean;
   prevButtonDisabled?: boolean;
   nextButtonDisabled?: boolean;
   onClickPage: (page: number) => () => void;
   onClickPrev: () => void;
   onClickNext: () => void;
-}
+};
 
-const Pagination: React.FC<IPaginationProps> = props => {
+const Pagination: React.FC<PaginationProps> = props => {
   const {
     pageCount,
     currentPage,

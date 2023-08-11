@@ -41,7 +41,7 @@ const createImage = (url: string): Promise<HTMLImageElement> =>
  * @param ImageSrcType - string
  * @param flip - object
  */
-export default async function getCroppedImage(
+export async function getCroppedImage(
   imageSrc: string,
   pixelCrop: Record<string, number>,
   rotation = 0,

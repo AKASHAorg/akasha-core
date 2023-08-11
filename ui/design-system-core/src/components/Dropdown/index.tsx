@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
+
 import { IconType } from '@akashaorg/typings/ui';
 
 import Box from '../Box';
@@ -8,16 +9,16 @@ import Text from '../Text';
 
 export type DropdownMenuItemType = { id: string; iconName?: IconType; title: string };
 
-export interface IDropdownProps {
+export type DropdownProps = {
   name?: string;
   label?: string;
   placeholderLabel?: string;
   selected?: DropdownMenuItemType;
   menuItems: DropdownMenuItemType[];
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemType>>;
-}
+};
 
-const Dropdown: React.FC<IDropdownProps> = ({
+const Dropdown: React.FC<DropdownProps> = ({
   label,
   placeholderLabel,
   menuItems,

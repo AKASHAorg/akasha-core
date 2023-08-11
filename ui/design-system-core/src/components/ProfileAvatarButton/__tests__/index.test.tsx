@@ -6,7 +6,6 @@ import { customRender } from '../../../test-utils';
 describe('<ProfileAvatarButton /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const info = 'info';
   const label = 'label';
 
   const profileId = 'profileId';
@@ -28,7 +27,6 @@ describe('<ProfileAvatarButton /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         <ProfileAvatarButton
-          info={info}
           label={label}
           avatarImage={avatar}
           profileId={profileId}

@@ -1,23 +1,20 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Card, { CardProps } from './index';
+import Card, { CardProps } from '.';
 
-export default {
+const meta: Meta<CardProps> = {
   title: 'Cards/Card',
   component: Card,
 };
 
-const Template = (args: CardProps) => <Card {...args} />;
+export default meta;
+type Story = StoryObj<CardProps>;
 
-const CardContents = (
-  <>
-    <div>Card content</div>
-  </>
-);
-
-export const Default = Template.bind({});
-Default.args = {
-  margin: 'auto',
-  radius: 8,
-  children: CardContents,
+export const BaseCard: Story = {
+  render: () => (
+    <Card radius={8} customStyle="w-[25%]">
+      <div>Card content</div>
+    </Card>
+  ),
 };

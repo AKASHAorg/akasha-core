@@ -1,52 +1,58 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Snackbar from './';
+import Snackbar, { SnackbarProps } from '.';
+import Stack from '../Stack';
 
-export default {
-  title: 'Snackbar/Snackbar',
+const meta: Meta<SnackbarProps> = {
+  title: 'Snackbars/Snackbar',
   component: Snackbar,
 };
 
-const Template = args => {
-  const handleClick = () => {
-    console.log('clicked');
-  };
-  return <Snackbar {...args} handleButtonClick={handleClick} handleDismiss={handleClick} />;
-};
+export default meta;
+type Story = StoryObj<SnackbarProps>;
 
-export const BaseSnackbar = Template.bind({});
-BaseSnackbar.args = {
-  title: 'Cooler Info Snackbar',
-  type: 'info',
-};
+const variants: SnackbarProps[] = [
+  {
+    title: 'Info Snackbar',
+    type: 'info',
+  },
+  {
+    title: 'Alert Snackbar',
+    description: 'Some important information will appear here',
+    type: 'alert',
+    actionButtonLabel: 'OK',
+  },
+  {
+    title: 'Success Alert Snackbar',
+    description: 'Some important information will appear here',
+    type: 'success',
+    actionButtonLabel: 'OK',
+  },
+  {
+    title: 'Caution Alert Snackbar',
+    description: 'Some important information will appear here',
+    type: 'caution',
+    actionButtonLabel: 'OK',
+  },
+  {
+    title: 'Success Info Snackbar',
+    type: 'success',
+    iconType: 'CheckCircleIcon',
+  },
+];
 
-export const ActionableAlertSnackbar = Template.bind({});
-ActionableAlertSnackbar.args = {
-  title: 'Cooler Alert Snackbar',
-  description: 'Some important information will appear here',
-  type: 'alert',
-  actionButtonLabel: 'OK',
-};
-
-export const ActionableSuccessSnackbar = Template.bind({});
-ActionableSuccessSnackbar.args = {
-  title: 'Cooler Alert Snackbar',
-  description: 'Some important information will appear here',
-  type: 'success',
-  actionButtonLabel: 'OK',
-};
-
-export const ActionableCautionSnackbar = Template.bind({});
-ActionableCautionSnackbar.args = {
-  title: 'Cooler Alert Snackbar',
-  description: 'Some important information will appear here',
-  type: 'caution',
-  actionButtonLabel: 'OK',
-};
-
-export const ActionableSuccessSnackbarWithCustomIcon = Template.bind({});
-ActionableSuccessSnackbarWithCustomIcon.args = {
-  title: 'Cooler Info Snackbar',
-  type: 'success',
-  iconType: 'CheckCircleIcon',
+export const SnackbarVariants: Story = {
+  render: () => (
+    <Stack direction="column" spacing="gap-y-2" customStyle="w-[50%]">
+      {variants.map((variant, idx) => (
+        <Snackbar
+          key={idx}
+          {...variant}
+          handleButtonClick={() => ({})}
+          handleDismiss={() => ({})}
+        />
+      ))}
+    </Stack>
+  ),
 };

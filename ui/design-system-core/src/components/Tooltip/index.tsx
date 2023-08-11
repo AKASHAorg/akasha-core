@@ -1,12 +1,14 @@
 import React, { useState, PropsWithChildren, ReactNode } from 'react';
-import Text, { TextProps } from '../Text';
-import Stack from '../Stack';
-import { usePopper } from 'react-popper';
 import { apply, tw } from '@twind/core';
+import { usePopper } from 'react-popper';
+import { useClickAway } from 'react-use';
+import { Placement } from '@popperjs/core';
+
+import Stack from '../Stack';
+import Text, { TextProps } from '../Text';
+
 import { getArrowClasses } from './getArrowClasses';
 import { getContentClasses } from './getContentClasses';
-import { Placement } from '@popperjs/core';
-import { useClickAway } from 'react-use';
 
 export type TooltipProps = {
   placement: 'top' | 'left' | 'bottom' | 'right';

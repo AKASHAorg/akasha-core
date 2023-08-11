@@ -1,12 +1,17 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+
 import DatePicker from '.';
 
-export default {
+const meta: Meta = {
   title: 'DatePicker/DatePicker',
+
   component: DatePicker,
 };
 
-const Template = () => <DatePicker />;
+export default meta;
+type Story = StoryObj;
 
-export const BasicDatePicker = Template.bind({});
-BasicDatePicker.args = {};
+export const BaseDatePicker: Story = {
+  render: () => <DatePicker />,
+};

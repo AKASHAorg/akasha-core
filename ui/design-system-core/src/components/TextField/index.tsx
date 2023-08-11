@@ -1,10 +1,13 @@
 import React from 'react';
-import Caption from './Caption';
-import Label from './Label';
+
 import Stack from '../Stack';
+
+import Caption from './Caption';
 import { Input } from './Input';
-import { TextFieldProps } from './types';
+import Label from './Label';
 import { Multiline } from './Multiline';
+
+import { TextFieldProps } from './types';
 
 const TextField: React.FC<TextFieldProps> = props => {
   const { required, label, status, caption, disabled, customStyle = '', inputRef, ...rest } = props;

@@ -14,7 +14,7 @@ import { Color } from '../types/common.types';
 
 export type SnackBarType = 'alert' | 'caution' | 'success' | 'info';
 
-export interface ISnackbar {
+export type SnackbarProps = {
   title: string;
   type?: SnackBarType;
   iconType?: IconType;
@@ -23,9 +23,9 @@ export interface ISnackbar {
   customStyle?: string;
   handleButtonClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   handleDismiss?: (event: React.SyntheticEvent<Element, Event>) => void;
-}
+};
 
-const Snackbar: React.FC<ISnackbar> = ({
+const Snackbar: React.FC<SnackbarProps> = ({
   title,
   type = 'info',
   iconType = 'InformationCircleIcon',

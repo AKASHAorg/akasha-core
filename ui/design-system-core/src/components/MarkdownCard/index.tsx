@@ -5,12 +5,12 @@ import ReactMarkdown from 'react-markdown';
 
 import BasicCardBox from '../BasicCardBox';
 
-export interface IMarkdownCard {
+export type MarkdownCardProps = {
   mdText: string | null;
   hasWrapper?: boolean;
-}
+};
 
-const MarkdownCard: React.FC<IMarkdownCard> = props => {
+const MarkdownCard: React.FC<MarkdownCardProps> = props => {
   const { mdText, hasWrapper = true } = props;
 
   return (

@@ -1,12 +1,16 @@
 import React from 'react';
+
 import { EntityTypes } from '@akashaorg/typings/ui';
-import { formatRelativeTime } from '../../utils/time';
+
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import BasicInfoCard from '@akashaorg/design-system-core/lib/components/BasicInfoCard';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import ProfileAvatarNotificationApp from './ProfileAvatarNotificationApp';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+
+import ProfileAvatarNotificationApp from './ProfileAvatarNotificationApp';
+
+import { formatRelativeTime } from '../../utils/time';
+import BasicInfoCard from './basic-info-card';
 
 export interface INotificationsCard {
   // data
@@ -202,6 +206,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     </BasicCardBox>
   );
 };
+
 NotificationsCard.defaultProps = {
   mentionedPostLabel: 'mentioned you in a post',
   mentionedCommentLabel: 'mentioned you in a comment',

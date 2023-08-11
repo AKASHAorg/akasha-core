@@ -1,59 +1,46 @@
 import React from 'react';
-import AppIcon, { AppIconProps } from '.';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import AppIcon, { AppIconProps } from '.';
+import Stack from '../Stack';
+
+import { BasicIconSize } from '../types/common.types';
+
+const meta: Meta<AppIconProps> = {
   title: 'Icons/AppIcon',
   component: AppIcon,
 };
 
-const Template = (args: AppIconProps) => <AppIcon {...args} />;
+export default meta;
+type Story = StoryObj<AppIconProps>;
 
-export const BaseIcon = Template.bind({});
-
-BaseIcon.args = {
-  placeholderIconType: 'notifications',
-  stackedIcon: true,
-  hasNewNotifs: true,
+export const BaseAppIcon: Story = {
+  render: () => <AppIcon placeholderIconType="BellIcon" stackedIcon={true} hasNewNotifs={true} />,
 };
 
-export const ExtraSmallIcon = Template.bind({});
-ExtraSmallIcon.args = {
-  placeholderIconType: 'notifications',
-  stackedIcon: true,
-  hasNewNotifs: true,
-  size: 'xs',
+export const VariedSizesAppIcon: Story = {
+  render: () => (
+    <Stack spacing="gap-x-2">
+      {['xs', 'sm', 'lg', 'xl'].map(size => (
+        <AppIcon
+          placeholderIconType="BellIcon"
+          stackedIcon={true}
+          hasNewNotifs={true}
+          size={size as BasicIconSize}
+        />
+      ))}
+    </Stack>
+  ),
 };
 
-export const SmallIcon = Template.bind({});
-SmallIcon.args = {
-  placeholderIconType: 'notifications',
-  stackedIcon: true,
-  hasNewNotifs: true,
-  size: 'sm',
-};
-
-export const LargeIcon = Template.bind({});
-LargeIcon.args = {
-  placeholderIconType: 'notifications',
-  stackedIcon: true,
-  hasNewNotifs: true,
-  size: 'lg',
-};
-
-export const ExtraLargeIcon = Template.bind({});
-ExtraLargeIcon.args = {
-  placeholderIconType: 'notifications',
-  stackedIcon: true,
-  hasNewNotifs: true,
-  size: 'xl',
-};
-
-export const CustomColoredIcon = Template.bind({});
-CustomColoredIcon.args = {
-  placeholderIconType: 'CheckIcon',
-  stackedIcon: true,
-  size: 'xs',
-  iconColor: 'white',
-  background: 'secondaryDark',
-  onClick: () => ({}),
+export const CustomColoredAppIcon: Story = {
+  render: () => (
+    <AppIcon
+      placeholderIconType="BellIcon"
+      stackedIcon={true}
+      size="xs"
+      iconColor="white"
+      background="secondaryDark"
+    />
+  ),
 };

@@ -1,35 +1,45 @@
 import React from 'react';
-import Menu, { MenuProps } from './index';
+import { tw } from '@twind/core';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import Menu, { MenuProps } from '.';
+
+const meta: Meta<MenuProps> = {
   title: 'Menu/Menu',
   component: Menu,
 };
 
-const Template = (args: MenuProps) => <Menu {...args} />;
-export const BaseMenu = Template.bind({});
-BaseMenu.args = {
-  anchor: {
-    icon: 'EllipsisVerticalIcon',
-    variant: 'primary',
-    greyBg: true,
-    iconOnly: true,
-  },
-  items: [
-    {
-      label: 'Copy',
-      icon: 'LinkIcon',
-      onClick: () => {
-        /** */
-      },
-    },
-    {
-      label: 'Report',
-      icon: 'FlagIcon',
-      color: { light: 'errorLight', dark: 'errorDark' },
-      onClick: () => {
-        /** */
-      },
-    },
-  ],
+export default meta;
+type Story = StoryObj<MenuProps>;
+
+export const BaseMenu: Story = {
+  render: () => (
+    <div className={tw('w-[50%]')}>
+      <Menu
+        anchor={{
+          icon: 'EllipsisVerticalIcon',
+          variant: 'primary',
+          greyBg: true,
+          iconOnly: true,
+        }}
+        items={[
+          {
+            label: 'Copy',
+            icon: 'LinkIcon',
+            onClick: () => {
+              /** */
+            },
+          },
+          {
+            label: 'Report',
+            icon: 'FlagIcon',
+            color: { light: 'errorLight', dark: 'errorDark' },
+            onClick: () => {
+              /** */
+            },
+          },
+        ]}
+      />
+    </div>
+  ),
 };

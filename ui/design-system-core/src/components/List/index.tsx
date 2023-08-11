@@ -1,11 +1,14 @@
 import React, { LegacyRef, forwardRef } from 'react';
+
+import { IconType } from '@akashaorg/typings/ui';
+
 import Button from '../Button';
 import Card from '../Card';
 import Icon from '../Icon';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
-import { IconType } from '@akashaorg/typings/ui';
-import { getColorClasses } from '../../utils/getColorClasses';
+
+import { getColorClasses } from '../../utils';
 
 type Selected = { index: number; label?: string };
 

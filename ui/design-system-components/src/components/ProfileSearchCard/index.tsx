@@ -52,7 +52,6 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
         <ProfileAvatarButton
           onClick={onClickProfile}
           label={profileData.name}
-          info={profileData.did.id}
           size="md"
           avatarImage={profileData.avatar}
           truncateText={false}

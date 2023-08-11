@@ -1,14 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import Stack from '../Stack';
-import Cropper, { CropperProps } from 'react-easy-crop';
-import Text from '../Text';
-import Icon from '../Icon';
-import { Point, Area } from 'react-easy-crop/types';
 import { apply, tw } from '@twind/core';
-import { getRadiusClasses } from '../../utils/getRadiusClasses';
+import Cropper, { CropperProps } from 'react-easy-crop';
+import { Point, Area } from 'react-easy-crop/types';
+
 import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 
-import getCroppedImage from '../../utils/get-cropped-image';
+import Icon from '../Icon';
+import Stack from '../Stack';
+import Text from '../Text';
+import { getCroppedImage, getRadiusClasses } from '../../utils';
 
 export type ImageCropperProps = Partial<Omit<CropperProps, 'image'>> & {
   image: string | ProfileImageVersions;

@@ -1,41 +1,46 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Pill from './';
+import Pill, { PillProps } from '.';
+import Stack from '../Stack';
 
-export default {
+const meta: Meta<PillProps> = {
   title: 'Buttons/Pill',
   component: Pill,
 };
 
-const Template = args => <Pill {...args} />;
+export default meta;
+type Story = StoryObj<PillProps>;
 
-export const BasePill = Template.bind({});
-BasePill.args = {
-  label: 'Base pill',
-};
+const variants: PillProps[] = [
+  {
+    label: 'Base pill',
+  },
+  {
+    label: 'Large pill',
+    size: 'lg',
+  },
+  {
+    label: 'Large pill',
+  },
+  {
+    label: 'Leading icon pill',
+    icon: 'EnvelopeIcon',
+    iconDirection: 'left',
+  },
+  {
+    label: 'Trailing icon pill',
+    icon: 'XMarkIcon',
+    iconDirection: 'right',
+  },
+];
 
-export const LargePill = Template.bind({});
-LargePill.args = {
-  label: 'Large pill',
-  size: 'lg',
-};
-
-export const ClickablePill = Template.bind({});
-ClickablePill.args = {
-  label: 'Large pill',
-  clickable: true,
-};
-
-export const LeadingIconPill = Template.bind({});
-LeadingIconPill.args = {
-  label: 'Leading icon pill',
-  icon: 'EnvelopeIcon',
-  iconDirection: 'left',
-};
-
-export const TrailingIconPill = Template.bind({});
-TrailingIconPill.args = {
-  label: 'Trailing icon pill',
-  icon: 'XMarkIcon',
-  iconDirection: 'right',
+export const PillVariants: Story = {
+  render: () => (
+    <Stack spacing="gap-x-2">
+      {variants.map((variant, idx) => (
+        <Pill key={idx} {...variant} />
+      ))}
+    </Stack>
+  ),
 };

@@ -3,10 +3,10 @@ import React from 'react';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Table, { ITableProps } from '@akashaorg/design-system-core/lib/components/Table';
+import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/Table';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export type ApplicationsActivityProps = ITableProps & {
+export type ApplicationsActivityProps = TableProps & {
   label: string;
 };
 

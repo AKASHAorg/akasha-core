@@ -1,9 +1,10 @@
 import React, { PropsWithChildren } from 'react';
+
+import Divider from '../Divider';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
-import Divider from '../Divider';
 
-type ContentBlockProps = {
+export type ContentBlockProps = {
   blockTitle: string;
   blockVariant?: TextProps['variant'];
   showDivider?: boolean;

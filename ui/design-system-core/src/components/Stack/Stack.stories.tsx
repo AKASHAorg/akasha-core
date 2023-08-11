@@ -1,24 +1,39 @@
 import React from 'react';
-import Stack, { StackProps } from './index';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import Stack, { StackProps } from '.';
+import Text from '../Text';
+
+const meta: Meta<StackProps> = {
   title: 'Stack/Stack',
   component: Stack,
 };
 
-const Template = (args: StackProps) => (
-  <Stack {...args}>
-    <div>Element 1</div>
-    <div>Element 2</div>
-    <div>Element 3</div>
-    <div>Element 4</div>
-  </Stack>
-);
+export default meta;
+type Story = StoryObj<StackProps>;
 
-export const BasicStack = Template.bind({});
-BasicStack.args = {};
+const variants: StackProps[] = [
+  {
+    direction: 'row',
+    spacing: 'gap-x-3',
+  },
+  {
+    direction: 'column',
+    spacing: 'gap-y-3',
+  },
+];
 
-export const VerticalStack = Template.bind({});
-VerticalStack.args = {
-  direction: 'column',
+export const StackVariants: Story = {
+  render: () => (
+    <Stack direction="column" spacing="gap-y-4">
+      {variants.map((variant, idx) => (
+        <Stack key={idx} {...variant}>
+          <Text color="white">item 1</Text>
+          <Text color="white">item 2</Text>
+          <Text color="white">item 3</Text>
+          <Text color="white">item 4</Text>
+        </Stack>
+      ))}
+    </Stack>
+  ),
 };

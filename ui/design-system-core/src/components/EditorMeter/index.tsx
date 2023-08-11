@@ -1,6 +1,8 @@
-import * as React from 'react';
+import React from 'react';
+
 import Meter from '../Meter';
 import Text from '../Text';
+
 import { Color } from '../types/common.types';
 
 export type EditorMeterProps = {
