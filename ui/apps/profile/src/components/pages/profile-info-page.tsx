@@ -184,7 +184,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
         <ProfileStatsPresentation
           profileId={profileId}
           navigateTo={navigateTo}
-          showLoginModal={showLoginModal}
+          showLoginModal={() => showLoginModal({ modal: { name: location.pathname } })}
         />
         {profileData?.links?.length > 0 && (
           <ProfileLinks

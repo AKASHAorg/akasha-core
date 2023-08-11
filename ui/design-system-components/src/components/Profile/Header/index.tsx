@@ -21,11 +21,11 @@ export type HeaderProps = {
   name: Profile['name'];
   ensName?: 'loading' | string;
   viewerIsOwner: boolean;
-  menuItems: MenuProps['items'];
+  menuItems?: MenuProps['items'];
   copyLabel: string;
   copiedLabel: string;
-  followElement: ReactElement;
-  handleEdit: () => void;
+  followElement?: ReactElement;
+  handleEdit?: () => void;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -84,7 +84,7 @@ const Header: React.FC<HeaderProps> = ({
             </Stack>
             <div className={tw(`relative ml-auto mt-2`)}>
               <Stack spacing="gap-x-2">
-                {viewerIsOwner ? (
+                {viewerIsOwner && handleEdit ? (
                   <Button
                     icon="Cog6ToothIcon"
                     variant="primary"
@@ -93,23 +93,27 @@ const Header: React.FC<HeaderProps> = ({
                     iconOnly
                   />
                 ) : (
-                  <>
-                    <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
+                  followElement && (
+                    <>
+                      <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
 
-                    {followElement}
-                  </>
+                      {followElement}
+                    </>
+                  )
                 )}
 
-                <Menu
-                  anchor={{
-                    icon: 'EllipsisVerticalIcon',
-                    variant: 'primary',
-                    greyBg: true,
-                    iconOnly: true,
-                  }}
-                  items={menuItems}
-                  customStyle="w-max z-99"
-                />
+                {menuItems && (
+                  <Menu
+                    anchor={{
+                      icon: 'EllipsisVerticalIcon',
+                      variant: 'primary',
+                      greyBg: true,
+                      iconOnly: true,
+                    }}
+                    items={menuItems}
+                    customStyle="w-max z-99"
+                  />
+                )}
               </Stack>
             </div>
           </Stack>
