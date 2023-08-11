@@ -66,7 +66,8 @@ const Connect: React.FC<RootComponentProps> = props => {
     }
     routingPlugin.current?.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: appRoutes => `${appRoutes[CONNECT]}${appRoutes[provider]}`,
+      getNavigationUrl: appRoutes =>
+        `${appRoutes[CONNECT]}${appRoutes[provider]}${location.search ? `${location.search}` : ''}`,
     });
   };
 
