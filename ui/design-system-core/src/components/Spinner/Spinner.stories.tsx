@@ -17,7 +17,7 @@ const variants: SpinnerProps[] = [
     size: 'sm',
   },
   {
-    color: 'green',
+    color: 'orange',
   },
   {
     size: 'lg',

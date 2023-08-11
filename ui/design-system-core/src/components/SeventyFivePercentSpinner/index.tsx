@@ -3,7 +3,6 @@ import { tw, apply } from '@twind/core';
 
 import { SpinnerProps } from '../Spinner';
 
-import { Color } from '../types/common.types';
 import { getColorClasses } from '../../utils';
 
 const spinnerSizesMap = {
@@ -25,7 +24,7 @@ const SeventyFivePercentSpinner: React.FC<SpinnerProps> = props => {
           `inline-block ${
             spinnerSizesMap[size]
           } animate-spin rounded-full border-4 border-solid ${getColorClasses(
-            color as Color,
+            color,
             'border',
           )} border-r-transparent dark:border-r-white align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`,
         ),
