@@ -18,7 +18,6 @@ import {
   useCreateProfileMutation,
   useGetInterestsByDidQuery,
   useGetProfileByDidQuery,
-  useUpdateInterestsMutation,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
@@ -100,15 +99,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     },
     onSettled,
   });
-  const updateInterest = useUpdateInterestsMutation({
-    onMutate,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: useGetInterestsByDidQuery.getKey({ id: profileId }),
-      });
-    },
-    onSettled,
-  });
+
   const myInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node, enabled: !!profileData?.id },
@@ -392,15 +383,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 saveButton={{
                   label: 'Save',
                   loading: isProcessing,
-                  handleClick: interests => {
-                    if (myInterests?.topics?.length) {
-                      updateInterest.mutate({
-                        i: { id: profileData.id, content: { topics: interests } },
-                      });
-                      return;
-                    }
-                    createInterest.mutate({ i: { content: { topics: interests } } });
-                  },
+                  handleClick: interests =>
+                    createInterest.mutate({
+                      i: { content: { topics: interests } },
+                    }),
                 }}
                 onFormDirty={setInterestsListDirty}
                 customStyle="h-full"
