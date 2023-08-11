@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import CustomizeNotificationPage from './pages/customize-notification-page';
 import NotificationsPage from './pages/notifications-page';
@@ -16,6 +17,11 @@ import routes, {
 
 const AppRoutes = (props: RootComponentProps) => {
   const { t } = useTranslation('app-notifications');
+  const loginQuery = useGetLogin();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data?.id;
+  }, [loginQuery.data]);
 
   return (
     <Router basename={props.baseRouteName}>
@@ -30,6 +36,7 @@ const AppRoutes = (props: RootComponentProps) => {
               )}
               leftButtonLabel={t('Skip')}
               rightButtonLabel={t('Customize your notifications')}
+              isLoggedIn={isLoggedIn}
               {...props}
             />
           }
@@ -48,6 +55,7 @@ const AppRoutes = (props: RootComponentProps) => {
               )}
               finalStep={true}
               rightButtonLabel={t('Go to my notifications')}
+              isLoggedIn={isLoggedIn}
               {...props}
             />
           }
