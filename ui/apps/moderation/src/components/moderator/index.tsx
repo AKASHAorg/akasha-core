@@ -102,7 +102,7 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
             )}
 
             {moderator.social?.email && (
-              <AppIcon placeholderIconType="message" accentColor={true} />
+              <AppIcon placeholderIconType="EnvelopeIcon" accentColor={true} />
             )}
           </Box>
         )}

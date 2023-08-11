@@ -12,6 +12,7 @@ const COMMON_PROPS = {
   profileAnchorLink: '#',
   onError: () => ({}),
   onProfileClick: () => ({}),
+  getMediaUrl: () => ({}),
   renderFollowElement: () => <></>,
 };
 

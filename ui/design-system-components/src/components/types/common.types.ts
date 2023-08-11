@@ -7,5 +7,4 @@ export type Developer = {
   profileId: Profile['did']['id'];
   avatar: Profile['avatar'];
   name: Profile['name'];
-  userName: string;
 };

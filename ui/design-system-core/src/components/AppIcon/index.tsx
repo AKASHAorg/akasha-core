@@ -3,14 +3,7 @@ import Stack from '../Stack';
 import IconByType from './IconByType';
 import { IconType, LogoSourceType } from '@akashaorg/typings/ui';
 import { apply, tw } from '@twind/core';
-import {
-  BasicIconSize,
-  BasicSize,
-  BreakPointSize,
-  Color,
-  Padding,
-  Radius,
-} from '../types/common.types';
+import { BasicIconSize, BasicSize, BreakPointSize, Color, Radius } from '../types/common.types';
 import { getElevationClasses } from '../../utils/getElevationClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
 import { getRadiusClasses } from '../../utils/getRadiusClasses';
