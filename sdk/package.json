@@ -12,7 +12,7 @@
     "@lit-protocol/sdk-browser": "1.1.250",
     "@metamask/detect-provider": "2.0.0",
     "@openzeppelin/contracts": "^4.9.2",
-    "@openzeppelin/contracts-upgradeable": "^4.9.2",
+    "@openzeppelin/contracts-upgradeable": "^4.9.3",
     "@walletconnect/ethereum-provider": "2.9.0",
     "@walletconnect/modal": "2.6.0",
     "@web3modal/ui": "2.7.0",
