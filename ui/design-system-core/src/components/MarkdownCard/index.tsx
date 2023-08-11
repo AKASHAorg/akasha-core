@@ -1,9 +1,9 @@
-import * as React from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import Spinner from '../Spinner/index';
-import BasicCardBox from '../BasicCardBox';
+import React from 'react';
 import { tw } from '@twind/core';
+import remarkGfm from 'remark-gfm';
+import ReactMarkdown from 'react-markdown';
+
+import BasicCardBox from '../BasicCardBox';
 
 export interface IMarkdownCard {
   mdText: string | null;
@@ -12,20 +12,22 @@ export interface IMarkdownCard {
 
 const MarkdownCard: React.FC<IMarkdownCard> = props => {
   const { mdText, hasWrapper = true } = props;
-  const renderContent = () => (
-    <>
-      {!mdText && <Spinner />}
-      {mdText && <ReactMarkdown remarkPlugins={[remarkGfm]}>{mdText}</ReactMarkdown>}
-    </>
-  );
 
-  const renderWrapper = () => {
-    if (!hasWrapper) {
-      return <div className={tw(`flex p-4 sm:p-0`)}>{renderContent()}</div>;
-    }
-    return <BasicCardBox pad="medium">{renderContent()}</BasicCardBox>;
-  };
-  return <div data-testid="md-card">{renderWrapper()}</div>;
+  return (
+    <div data-testid="md-card">
+      {!hasWrapper && (
+        <div className={tw(`flex p-4 sm:p-0`)}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{mdText}</ReactMarkdown>
+        </div>
+      )}
+
+      {hasWrapper && (
+        <BasicCardBox pad="p-4" customStyle="bg(dark:white)">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{mdText}</ReactMarkdown>
+        </BasicCardBox>
+      )}
+    </div>
+  );
 };
 
 export default MarkdownCard;
