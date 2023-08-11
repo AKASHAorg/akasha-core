@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import { ProfileHeader } from '@akashaorg/design-system-components/lib/components/Profile';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { ProfileHeader } from '@akashaorg/design-system-components/lib/components/Profile';
 import {
   useGetProfileByDidQuery,
   useGetInterestsByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 const InterestsPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
@@ -57,6 +57,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
 
   const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
   const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
+
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
       <ProfileHeader
