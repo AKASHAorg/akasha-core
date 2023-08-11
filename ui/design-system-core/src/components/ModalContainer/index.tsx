@@ -13,7 +13,7 @@ export interface IModalContainerProps {
 const ModalContainer: React.FC<PropsWithChildren<IModalContainerProps>> = props => {
   const { style, children, onModalClose } = props;
 
-  const innerStyle = Object.assign({ zIndex: 10 }, props.innerStyle);
+  const innerStyle = Object.assign({ zIndex: 11 }, props.innerStyle);
 
   const positionClass = apply(`top-0 left-0 bottom-0 right-0`);
 
@@ -32,7 +32,7 @@ const ModalContainer: React.FC<PropsWithChildren<IModalContainerProps>> = props 
 
   return (
     <Box
-      customStyle={`flex w-full items-center justify-items-center justify-center fixed ${positionClass}`}
+      customStyle={`flex w-full items-center justify-items-center justify-center fixed z-[11] ${positionClass}`}
       style={style}
     >
       <Box

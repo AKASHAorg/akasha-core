@@ -6,24 +6,22 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
-  useGetAllInstalledApps,
-  useGetAllIntegrationReleaseIds,
-  useGetIntegrationInfo,
-  useGetIntegrationsReleaseInfo,
-  useGetIntegrationReleaseInfo,
   useGetLogin,
-  useGetProfileByEthAddress,
   useCurrentNetwork,
-  useAppDescription,
+  getProfileImageVersionsWithMediaUrl,
 } from '@akashaorg/ui-awf-hooks';
+import {
+  useGetAppReleaseByIdQuery,
+  useGetAppsReleasesQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const InfoPage: React.FC<RootComponentProps> = props => {
-  const { integrationId } = useParams<{ integrationId: string }>();
+  const { appId } = useParams<{ appId: string }>();
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-akasha-verse');
-  // @TODO replace with new hooks
+
   const loginQueryReq = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
@@ -32,23 +30,17 @@ const InfoPage: React.FC<RootComponentProps> = props => {
 
   const network = useCurrentNetwork(isLoggedIn).data;
 
-  const integrationInfoReq = useGetIntegrationInfo(integrationId);
+  const appReleaseInfoReq = useGetAppReleaseByIdQuery(
+    { id: appId },
+    {
+      select: response => response.node,
+      enabled: !!isLoggedIn,
+    },
+  );
 
-  const integrationInfo = integrationInfoReq.data;
+  const appReleaseInfo = 'application' in appReleaseInfoReq.data && appReleaseInfoReq.data;
 
-  const latestReleaseId = integrationInfo?.latestReleaseId;
-
-  const latestReleaseInfoReq = useGetIntegrationReleaseInfo(latestReleaseId);
-
-  const latestReleaseInfo = latestReleaseInfoReq.data;
-
-  const profileDataReq = useGetProfileByEthAddress(integrationInfo?.author);
-  const authorProfileData = null;
-
-  const descriptionLink = latestReleaseInfo?.links?.detailedDescription;
-
-  const detailedDescriptionReq = useAppDescription(descriptionLink);
-  const detailedDescription = detailedDescriptionReq.data;
+  const author = appReleaseInfo.application.author.profile;
 
   const handleAuthorEthAddressClick = (ethAddress: string) => {
     if (network) {
@@ -69,54 +61,62 @@ const InfoPage: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
+  // @TODO update with new hooks when available
+  // const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
-  const isInstalled = React.useMemo(() => {
-    if (installedAppsReq.data) {
-      const installedAppsIds = installedAppsReq.data.map(app => app.id);
-      return installedAppsIds.includes(integrationId);
-    }
-  }, [installedAppsReq.data, integrationId]);
+  // const isInstalled = React.useMemo(() => {
+  //   if (installedAppsReq.data) {
+  //     const installedAppsIds = installedAppsReq.data.map(app => app.id);
+  //     return installedAppsIds.includes(appId);
+  //   }
+  // }, [installedAppsReq.data, appId]);
 
-  const releaseIdsReq = useGetAllIntegrationReleaseIds(integrationInfo?.name);
-  const releaseIds = releaseIdsReq.data?.releaseIds;
+  const releasesInfoReq = useGetAppsReleasesQuery(
+    { last: 10 },
+    {
+      select: resp => resp.appReleaseIndex.edges,
+    },
+  );
 
-  const releasesInfoReq = useGetIntegrationsReleaseInfo(releaseIds);
-  const releasesInfo = releasesInfoReq?.data;
+  const releases = releasesInfoReq.data.map(release => {
+    return release.node;
+  });
+
+  const developers = appReleaseInfo?.application?.contributors?.map(contributor => {
+    const avatarImg = getProfileImageVersionsWithMediaUrl(contributor.profile?.avatar);
+    return {
+      profileId: contributor.profile.did.id,
+      name: contributor.profile.name,
+      avatar: avatarImg,
+    };
+  });
 
   return (
     <Box>
-      {latestReleaseInfoReq.error && (
+      {appReleaseInfoReq.error && (
         <ErrorLoader
           type="script-error"
-          title={t('There was an error loading the integration info')}
-          details={t('We cannot show this integration right now')}
-          devDetails={latestReleaseInfoReq.error.message}
+          title={t('There was an error loading the app info')}
+          details={t('We cannot show this app right now')}
+          // devDetails={appReleaseInfoReq.error.message}
         />
       )}
-      {!latestReleaseInfoReq.error && (
+      {!appReleaseInfoReq.error && (
         <AppInfo
-          integrationName={integrationInfo?.name}
-          packageName={''}
-          developers={[
-            {
-              profileId: '' /*TODO: connect new hooks when they are ready*/,
-              avatar: null /*TODO: connect new hooks when they are ready*/,
-              name: latestReleaseInfo.author,
-              userName: '' /*TODO: connect new hooks when they are ready*/,
-            },
-          ]}
+          integrationName={appReleaseInfo?.application?.displayName}
+          packageName={appReleaseInfo?.application?.name}
+          developers={developers}
           descriptionTitle={t('Description')}
-          descriptionBody={detailedDescription}
+          descriptionBody={appReleaseInfo?.application?.description}
           developersTitle={t('Developers')}
           latestReleaseTitle={t('Latest Release')}
-          version={t('Version') + ` ${latestReleaseInfo.version}`}
+          version={t('Version') + ` ${appReleaseInfo?.version}`}
           versionInfo={t('Latest release')}
           versionDate={t('December 2022')}
-          versionDescription={latestReleaseInfo.manifestData.description}
+          versionDescription={appReleaseInfo?.application?.description}
           linksAndDocumentationTitle={t('Links & Documentation')}
           licenseTitle={t('License')}
-          license={t('AGPL-3.0')}
+          license={appReleaseInfo?.application?.licence}
           share={{ label: 'Share', icon: 'ShareIcon' }}
           report={{
             label: 'Report',
@@ -132,7 +132,10 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           onSelectDeveloper={() => {
             /*TODO: connect new hooks when they are ready*/
           }}
-          status={isInstalled ? 'installed' : 'not-installed'}
+          status={
+            'installed'
+            // isInstalled ? 'installed' : 'not-installed'
+          }
         />
       )}
     </Box>

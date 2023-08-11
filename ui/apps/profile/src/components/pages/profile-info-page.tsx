@@ -15,7 +15,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps, EntityTypes } from '@akashaorg/typings/ui';
+import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import {
   getProfileImageVersionsWithMediaUrl,
   useGetLogin,
@@ -24,14 +24,23 @@ import {
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 
-const ProfileInfoPage: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
+export interface ProfilePageProps {
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+}
+
+const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props => {
+  const { plugins, navigateToModal, showLoginModal } = props;
 
   const { t } = useTranslation('app-profile');
   const { profileId } = useParams<{ profileId: string }>();
   const [showFeedback, setShowFeedback] = React.useState(false);
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const loginQuery = useGetLogin();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data?.id;
+  }, [loginQuery.data]);
+
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -42,6 +51,16 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     },
   );
   const status = profileDataReq.status;
+
+  const handleFlag = React.useCallback(
+    (itemId: string, itemType: EntityTypes, user: string) => () => {
+      if (!isLoggedIn) {
+        return showLoginModal({ modal: { name: 'report-modal', itemId, itemType, user } });
+      }
+      navigateToModal({ name: 'report-modal', itemId, itemType, user });
+    },
+    [isLoggedIn],
+  );
   const { isViewer, profile: profileData } = Object.assign(
     { isViewer: null, profile: null },
     profileDataReq.data,
@@ -50,7 +69,6 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
     profileId,
     profileDataReq.data && !profileData,
   );
-  const isLoggedIn = !!loginQuery.data?.id;
   const hasProfile = status === 'success' && profileData;
   const did = !hasProfile ? { id: profileId } : profileData.did;
 
@@ -91,27 +109,12 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
       />
     );
 
-  const checkAuth = (cb: () => void) => () => {
-    if (!isLoggedIn) {
-      navigateTo({
-        appName: '@akashaorg/app-auth-ewa',
-        getNavigationUrl: navRoutes => navRoutes.CONNECT,
-      });
-      return;
-    }
-    cb();
-  };
-
   const handleCopy = () => {
     const profileUrl = new URL(location.pathname, location.origin).href;
 
     navigator.clipboard.writeText(profileUrl).then(() => {
       setShowFeedback(true);
     });
-  };
-
-  const handleFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
-    props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
   };
 
   const handleEdit = () => {
@@ -132,13 +135,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
           {
             label: t('Report'),
             icon: 'FlagIcon',
-            onClick: checkAuth(
-              handleFlag(
-                profileData?.did.id ? profileData?.did.id : '',
-                EntityTypes.PROFILE,
-                profileData?.name,
-              ),
-            ),
+            onClick: handleFlag(profileData.did.id, EntityTypes.PROFILE, profileData.name),
             color: { light: 'errorLight', dark: 'errorDark' },
           },
         ] as MenuProps['items'])
@@ -163,7 +160,7 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
             <IconButtonFollow
               profileId={profileId}
               profileStreamId={profileData?.id}
-              navigateTo={navigateTo}
+              showLoginModal={showLoginModal}
             />
           }
           handleEdit={handleEdit}
@@ -184,7 +181,11 @@ const ProfileInfoPage: React.FC<RootComponentProps> = props => {
             buttonClickHandler={goEditProfile}
           />
         )}
-        <ProfileStatsPresentation profileId={profileId} navigateTo={navigateTo} />
+        <ProfileStatsPresentation
+          profileId={profileId}
+          navigateTo={navigateTo}
+          showLoginModal={showLoginModal}
+        />
         {profileData?.links?.length > 0 && (
           <ProfileLinks
             title={t('Find me on')}
