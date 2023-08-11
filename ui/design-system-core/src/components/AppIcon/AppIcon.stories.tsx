@@ -15,9 +15,7 @@ export default meta;
 type Story = StoryObj<AppIconProps>;
 
 export const BaseAppIcon: Story = {
-  render: () => (
-    <AppIcon placeholderIconType="notifications" stackedIcon={true} hasNewNotifs={true} />
-  ),
+  render: () => <AppIcon placeholderIconType="BellIcon" stackedIcon={true} hasNewNotifs={true} />,
 };
 
 export const VariedSizesAppIcon: Story = {
@@ -25,7 +23,7 @@ export const VariedSizesAppIcon: Story = {
     <Stack spacing="gap-x-2">
       {['xs', 'sm', 'lg', 'xl'].map(size => (
         <AppIcon
-          placeholderIconType="notifications"
+          placeholderIconType="BellIcon"
           stackedIcon={true}
           hasNewNotifs={true}
           size={size as BasicIconSize}
@@ -38,7 +36,7 @@ export const VariedSizesAppIcon: Story = {
 export const CustomColoredAppIcon: Story = {
   render: () => (
     <AppIcon
-      placeholderIconType="notifications"
+      placeholderIconType="BellIcon"
       stackedIcon={true}
       size="xs"
       iconColor="white"
