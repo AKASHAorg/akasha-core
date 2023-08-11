@@ -20,7 +20,6 @@ export type HeaderProps = {
   avatar?: Profile['avatar'];
   name: Profile['name'];
   ensName?: 'loading' | string;
-
   viewerIsOwner: boolean;
   menuItems: MenuProps['items'];
   copyLabel: string;

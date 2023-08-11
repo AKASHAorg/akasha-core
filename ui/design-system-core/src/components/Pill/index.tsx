@@ -23,7 +23,7 @@ const Pill: React.FC<PillProps> = ({
 }) => {
   const handlePillClick = () => {
     if (onPillClick) {
-      onPillClick();
+      onPillClick(!active);
     }
   };
 

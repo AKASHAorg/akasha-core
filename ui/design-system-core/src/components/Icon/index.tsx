@@ -4,7 +4,7 @@ import { IconType } from '@akashaorg/typings/ui';
 
 import Stack from '../Stack';
 
-import { PassedIcon } from './PassedIcon';
+import { PassedIcon } from './passed-icon';
 
 import { BasicIconSize, BasicSize, BreakPointSize, Color } from '../types/common.types';
 import { getWidthClasses, getHeightClasses, getColorClasses } from '../../utils';

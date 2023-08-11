@@ -5,19 +5,18 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
+import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import { INFO } from '../../routes';
 
 export interface IWidgetsPage extends RootComponentProps {
-  latestReleasesInfo?: IntegrationReleaseInfoFragmentFragment[];
-  installedAppsInfo?: IntegrationReleaseInfo[];
+  availableApps?: GetAppsQuery['akashaAppIndex']['edges'];
+  installedAppsInfo?: GetAppsByIdQuery['node'][];
   defaultIntegrations?: string[];
   isFetching?: boolean;
 }
 
 const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
-  const { worldConfig, latestReleasesInfo, isFetching } = props;
+  const { worldConfig, availableApps, isFetching, plugins } = props;
 
   const { t } = useTranslation('app-akasha-verse');
 
@@ -33,16 +32,18 @@ const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
   }, [worldConfig.defaultWidgets]);
 
   // select default widgets from list of installed integrations
-  const filteredDefaultWidgets = latestReleasesInfo?.filter(app => {
-    if (defaultWidgetNamesNormalized?.some(defaultWidget => defaultWidget.name === app.name)) {
+  const filteredDefaultWidgets = availableApps?.filter(app => {
+    if (
+      defaultWidgetNamesNormalized?.some(defaultWidget => defaultWidget.name === app.node?.name)
+    ) {
       return app;
     }
   });
 
-  const handleAppClick = (app: IntegrationReleaseInfo) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+  const handleAppClick = appId => {
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-akasha-verse',
-      getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
+      getNavigationUrl: routes => `${routes[INFO]}/${appId}`,
     });
   };
 

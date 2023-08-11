@@ -8,6 +8,8 @@ import { InputProps } from '../TextField/types';
 
 import { useCloseActions } from '../../utils';
 
+type Selected = { value: string; index?: number };
+
 export type AutoCompleteProps = {
   options: string[];
   placeholder?: InputProps['placeholder'];
@@ -15,7 +17,7 @@ export type AutoCompleteProps = {
   value?: string;
   customStyle?: string;
   onChange?: (value: string) => void;
-  onSelected?: (value: string) => void;
+  onSelected?: ({ value, index }: Selected) => void;
 };
 
 const AutoComplete: React.FC<AutoCompleteProps> = ({
@@ -46,11 +48,6 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
     () =>
       filters.map(filter => ({
         label: filter,
-        onClick: (label: string) => {
-          setShowSuggestions(false);
-          if (onChange) onChange(label);
-          if (onSelected) onSelected(label);
-        },
         variant: 'subtitle2',
       })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,6 +83,11 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
           <List
             items={suggestions}
             showDivider={false}
+            onSelected={({ label, index }) => {
+              setShowSuggestions(false);
+              if (onChange) onChange(label);
+              if (onSelected) onSelected({ value: label, index });
+            }}
             customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar"
           />
         </div>

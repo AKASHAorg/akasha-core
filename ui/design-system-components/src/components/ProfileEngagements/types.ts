@@ -12,7 +12,8 @@ export type Engagement = {
 
 export type EngagementProps = {
   profileAnchorLink: string;
-  loadingMoreLabel: string;
+  loadMore: boolean;
+  onLoadMore: () => void;
   getMediaUrl: (image?: ProfileImageVersions) => ProfileImageVersions;
   renderFollowElement: (
     profileStreamId: string,

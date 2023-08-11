@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
+import { InterestsLabeled } from '@akashaorg/typings/sdk/graphql-types-new';
 import { ButtonType } from '../types';
 import { apply, tw } from '@twind/core';
 
@@ -15,10 +16,15 @@ export type InterestsProps = {
   moreInterestTitle: string;
   moreInterestDescription: string;
   moreInterestPlaceholder: string;
-  myInterests: string[];
-  interests: string[];
+  myInterests: InterestsLabeled[];
+  interests: InterestsLabeled[];
+  labelType: string;
   cancelButton: ButtonType;
-  saveButton: { label: string; loading?: boolean; handleClick: (interets: string[]) => void };
+  saveButton: {
+    label: string;
+    loading?: boolean;
+    handleClick: (interests: InterestsLabeled[]) => void;
+  };
   customStyle?: string;
   onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -31,38 +37,54 @@ export const Interests: React.FC<InterestsProps> = ({
   moreInterestPlaceholder,
   myInterests,
   interests,
+  labelType,
   cancelButton,
   saveButton,
   customStyle = '',
   onFormDirty,
 }) => {
   const [query, setQuery] = useState('');
-  const [newInterests, setNewInterests] = useState(myInterests);
-  const [myInterestsMap, setMyInterestsMap] = useState(new Map());
+  const [myActiveInterests, setMyActiveInterests] = useState(new Set(myInterests));
+  const [allMyInterests, setAllMyInterests] = useState(new Set(myInterests));
 
-  const allMyInteretstsAreActive = !Array.from(myInterestsMap.values()).includes(false);
-
-  const updateMyInterestMap = (k: string, v: boolean) => {
-    setMyInterestsMap(new Map(myInterestsMap.set(k, v)));
+  const updateMyActiveInterests = (interest: InterestsLabeled, remove?: boolean) => {
+    const newMyActiveInterests = new Set(myActiveInterests);
+    if (remove) {
+      newMyActiveInterests.delete(interest);
+      setMyActiveInterests(newMyActiveInterests);
+      return;
+    }
+    setMyActiveInterests(newMyActiveInterests.add(interest));
   };
 
-  const interestExists = (interests: string[], interest: string) =>
-    interests.find(_interest => _interest.toLocaleLowerCase() === interest.toLocaleLowerCase());
-
-  const onSave = (interets: string[]) => {
-    saveButton.handleClick(
-      interets.filter(interest =>
-        myInterestsMap.has(interest) ? myInterestsMap.get(interest) : true,
-      ),
-    );
+  const updateAllMyInterests = (interest: InterestsLabeled) => {
+    setAllMyInterests(new Set(allMyInterests).add(interest));
   };
 
-  const validForm = allMyInteretstsAreActive && newInterests.length === myInterests.length;
+  const onSave = (interests: InterestsLabeled[]) => {
+    saveButton.handleClick(interests);
+  };
+
+  const isFormDirty =
+    allMyInterests.size !== myInterests.length ||
+    myActiveInterests.size !== myInterests.length ||
+    !!query;
 
   useEffect(() => {
-    if (onFormDirty) onFormDirty(newInterests.length === 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newInterests]);
+    if (onFormDirty) onFormDirty(isFormDirty);
+  }, [isFormDirty, onFormDirty]);
+
+  const getNewInterest = useCallback(() => {
+    if (query) {
+      const foundInterest = [...allMyInterests].find(
+        interest => interest.value.toLowerCase() === query.toLocaleLowerCase(),
+      );
+      if (!foundInterest) {
+        return { value: query, labelType };
+      }
+    }
+    return null;
+  }, [query, labelType, allMyInterests]);
 
   return (
     <form className={tw(apply`h-full ${customStyle}`)}>
@@ -73,14 +95,20 @@ export const Interests: React.FC<InterestsProps> = ({
             {description}
           </Text>
           <Stack spacing="gap-2" customStyle="flex-wrap mt-2">
-            {newInterests.map(myInterest => (
+            {[...allMyInterests].map(interest => (
               <Pill
-                key={myInterest}
-                label={myInterest}
+                key={interest.value}
+                label={interest.value}
                 icon="CheckIcon"
                 iconDirection="right"
-                active={true}
-                onPillClick={active => updateMyInterestMap(myInterest, !active)}
+                active={myActiveInterests.has(interest)}
+                onPillClick={active => {
+                  if (active) {
+                    updateMyActiveInterests(interest);
+                    return;
+                  }
+                  updateMyActiveInterests(interest, true);
+                }}
               />
             ))}
           </Stack>
@@ -92,17 +120,16 @@ export const Interests: React.FC<InterestsProps> = ({
           </Text>
           <AutoComplete
             value={query}
-            options={interests}
+            options={interests.map(interest => interest.value)}
             placeholder={moreInterestPlaceholder}
             customStyle="grow mt-2"
-            onSelected={(interest: string) => {
-              setNewInterests(interests =>
-                interestExists(interests, interest) ? interests : [...interests, interest],
-              );
+            onSelected={({ index }) => {
+              updateMyActiveInterests(interests[index]);
+              updateAllMyInterests(interests[index]);
               setQuery('');
             }}
             onChange={setQuery}
-            disabled={newInterests.length >= MAX_INTERESTS}
+            disabled={allMyInterests.size >= MAX_INTERESTS}
           />
         </Stack>
         <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
@@ -116,8 +143,12 @@ export const Interests: React.FC<InterestsProps> = ({
             variant="primary"
             loading={saveButton.loading}
             label={saveButton.label}
-            onClick={() => onSave(newInterests)}
-            disabled={validForm}
+            onClick={event => {
+              event.preventDefault();
+              const newInterest = getNewInterest();
+              onSave(newInterest ? [...myActiveInterests, newInterest] : [...myActiveInterests]);
+            }}
+            disabled={!isFormDirty}
             type="submit"
           />
         </Stack>
