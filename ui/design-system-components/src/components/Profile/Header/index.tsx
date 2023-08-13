@@ -20,10 +20,10 @@ export type HeaderProps = {
   avatar?: Profile['avatar'];
   name: Profile['name'];
   ensName?: 'loading' | string;
-  viewerIsOwner: boolean;
+  viewerIsOwner?: boolean;
   menuItems?: MenuProps['items'];
-  copyLabel: string;
-  copiedLabel: string;
+  copyLabel?: string;
+  copiedLabel?: string;
   followElement?: ReactElement;
   handleEdit?: () => void;
 };
@@ -78,8 +78,9 @@ const Header: React.FC<HeaderProps> = ({
               <DidField
                 did={did.id}
                 isValid={validAddress}
-                copyLabel={copyLabel}
-                copiedLabel={copiedLabel}
+                {...(!copyLabel && !copiedLabel && { copiable: false })}
+                {...(!!copyLabel && { copyLabel: copyLabel })}
+                {...(!!copiedLabel && { copiedLabel: copiedLabel })}
               />
             </Stack>
             <div className={tw(`relative ml-auto mt-2`)}>
