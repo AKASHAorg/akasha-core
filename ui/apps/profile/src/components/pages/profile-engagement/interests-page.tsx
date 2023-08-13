@@ -55,6 +55,13 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
     profileDataReq.data,
   );
 
+  const handleTopicClick = (topic: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${topic}`,
+    });
+  };
+
   const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
   const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
 
@@ -66,16 +73,19 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
         background={background}
         avatar={avatar}
         name={profileData?.name}
-        ensName={null}
-        viewerIsOwner={isViewer}
-        copyLabel={t('Copy to clipboard')}
-        copiedLabel={t('Copied')}
       />
       <Card elevation="1" radius={20} padding={16}>
         <Stack direction="column" spacing="gap-y-2.5">
           <Text variant="h5">{t('Interests')} </Text>
           <Stack align="center" justify="start" fullWidth spacing="gap-x-2">
-            {topics && topics.map(topic => <Pill label={topic.value} size="sm" />)}
+            {topics &&
+              topics.map(topic => (
+                <Pill
+                  label={topic.value}
+                  size="sm"
+                  onPillClick={() => handleTopicClick(topic.value)}
+                />
+              ))}
           </Stack>
         </Stack>
       </Card>
