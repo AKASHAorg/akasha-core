@@ -8,3 +8,5 @@ export type Developer = {
   avatar: Profile['avatar'];
   name: Profile['name'];
 };
+
+export type EmptyCardSize = { width?: string | number; height?: string | number };
