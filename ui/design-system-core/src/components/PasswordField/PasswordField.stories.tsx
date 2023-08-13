@@ -1,34 +1,41 @@
 import React from 'react';
-import PasswordField from '.';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
-  title: 'Fields/Password',
+import PasswordField, { PasswordFieldProps } from '.';
+import Stack from '../Stack';
+
+const meta: Meta<PasswordFieldProps> = {
+  title: 'Fields/PasswordField',
   component: PasswordField,
 };
 
-const Template = args => <PasswordField {...args} placeholderLabel="Enter your password" />;
+export default meta;
+type Story = StoryObj<PasswordFieldProps>;
 
-export const BasePasswordField = Template.bind({});
-BasePasswordField.args = {
-  strengthLevel: 0,
-};
+const variants = [
+  {
+    strengthLevel: 0,
+  },
+  {
+    strengthLevel: 1,
+  },
+  {
+    strengthLevel: 2,
+  },
+  {
+    strengthLevel: 3,
+  },
+  {
+    strengthLevel: 4,
+  },
+];
 
-export const WeakPasswordField = Template.bind({});
-WeakPasswordField.args = {
-  strengthLevel: 1,
-};
-
-export const FairPasswordField = Template.bind({});
-FairPasswordField.args = {
-  strengthLevel: 2,
-};
-
-export const GoodPasswordField = Template.bind({});
-GoodPasswordField.args = {
-  strengthLevel: 3,
-};
-
-export const StrongPasswordField = Template.bind({});
-StrongPasswordField.args = {
-  strengthLevel: 4,
+export const PasswordFieldVariants: Story = {
+  render: () => (
+    <Stack direction="column" spacing="gap-y-2" customStyle="w-[25%]">
+      {variants.map((variant, idx) => (
+        <PasswordField key={idx} {...variant} placeholderLabel="Enter your password" />
+      ))}
+    </Stack>
+  ),
 };

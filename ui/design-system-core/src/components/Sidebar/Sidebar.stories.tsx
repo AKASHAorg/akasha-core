@@ -1,34 +1,36 @@
 import React from 'react';
 import { tw } from '@twind/core';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Sidebar, { ISidebarProps } from '.';
-import { sidebarItems } from '../../utils/dummy-data';
+import Sidebar, { SidebarProps } from '.';
+import { sidebarItems } from '../../utils';
 
-export default {
-  title: 'Sidebar/Sidebar',
+const meta: Meta<SidebarProps> = {
+  title: 'Sidebars/Sidebar',
   component: Sidebar,
 };
 
-const Template = (args: ISidebarProps) => (
-  <div className={tw('w-[25%]')}>
-    <Sidebar {...args} />
-  </div>
-);
+export default meta;
+type Story = StoryObj<SidebarProps>;
 
-export const BaseSidebar = Template.bind({});
-
-BaseSidebar.args = {
-  guestTitle: 'Guest',
-  guestSubtitle: 'Connect to see exclusive member only features.',
-  ctaText: 'Add magic to your world by installing cool apps developed by the community',
-  ctaButtonLabel: 'Check them out!',
-  footerLabel: 'Get in Touch',
-  listItems: sidebarItems,
-  loggedUser: {},
-  footerIcons: [
-    { name: 'github', link: '', icon: 'akasha' },
-    { name: 'discord', link: '', icon: 'akasha' },
-    { name: 'telegram', link: '', icon: 'akasha' },
-    { name: 'twitter', link: '', icon: 'akasha' },
-  ],
+export const BaseSidebar: Story = {
+  render: () => (
+    <div className={tw('w-[25%]')}>
+      <Sidebar
+        guestTitle="Guest"
+        guestSubtitle="Connect to see exclusive member only features."
+        ctaText="Add magic to your world by installing cool apps developed by the community"
+        ctaButtonLabel="Check them out!"
+        footerLabel="Get in Touch"
+        listItems={sidebarItems}
+        loggedUser={{}}
+        footerIcons={[
+          { name: 'github', link: '', icon: 'akasha' },
+          { name: 'discord', link: '', icon: 'akasha' },
+          { name: 'telegram', link: '', icon: 'akasha' },
+          { name: 'twitter', link: '', icon: 'akasha' },
+        ]}
+      />
+    </div>
+  ),
 };

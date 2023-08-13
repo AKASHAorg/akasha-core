@@ -71,6 +71,10 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const loginQuery = useGetLogin();
 
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data?.id;
+  }, [loginQuery.data]);
+
   const notifReq = useFetchNotifications(!loginQuery.isSuccess && loginQuery.data?.id);
 
   // mock data used for displaying something. Change when there's real data
@@ -211,14 +215,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     },
   ];
 
-  if (!loginQuery.isSuccess) {
-    return navigateTo?.({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: navRoutes => navRoutes.CONNECT,
-    });
-  }
-
-  if (!savedPreferences) {
+  if (!isLoggedIn || !savedPreferences) {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],

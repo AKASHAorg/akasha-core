@@ -1,17 +1,18 @@
 import React from 'react';
-import MessageCard from './index';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import MessageCard, { MessageCardProps } from '.';
+
+const meta: Meta<MessageCardProps> = {
   title: 'Cards/MessageCard',
   component: MessageCard,
 };
 
-const Template = args => <MessageCard {...args} />;
+export default meta;
+type Story = StoryObj<MessageCardProps>;
 
-export const BasicMessageCard = Template.bind({});
-BasicMessageCard.args = {
-  title: 'Title',
-  elevation: '1',
-  children: 'A sample message ...',
-  onClose: () => ({}),
+export const BaseMessageCard: Story = {
+  render: () => (
+    <MessageCard title="Title" elevation="1" message="A sample message ..." onClose={() => ({})} />
+  ),
 };

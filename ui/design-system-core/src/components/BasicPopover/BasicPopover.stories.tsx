@@ -1,34 +1,39 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import BasicPopover, { IBasicPopover } from '.';
+import BasicPopover, { BasicPopoverProps } from '.';
 
-export default {
+const meta: Meta<BasicPopoverProps> = {
   title: 'Popovers/BasicPopover',
   component: BasicPopover,
-  decorators: [],
 };
 
-const Template = (args: IBasicPopover) => (
-  <BasicPopover {...args}>
-    <div>
-      <div onClick={args.closePopover}>text line 1</div>
-      <div onClick={args.closePopover}>text line 2</div>
-    </div>
-  </BasicPopover>
-);
+export default meta;
+type Story = StoryObj<BasicPopoverProps>;
 
 const targetNode = document.createElement('div');
 document.body.appendChild(targetNode);
 
-export const BaseBasicPopover = Template.bind({});
+const Contents = (
+  <>
+    <div>Popover content</div>
+    <div>Popover content</div>
+    <div>Popover content</div>
+  </>
+);
 
-BaseBasicPopover.args = {
-  target: targetNode,
+export const BaseBasicPopover: Story = {
+  render: () => (
+    <BasicPopover target={targetNode} closePopover={() => ({})}>
+      {Contents}
+    </BasicPopover>
+  ),
 };
 
-export const BasicPopoverWithGap = Template.bind({});
-
-BasicPopoverWithGap.args = {
-  target: targetNode,
-  gap: '-0.313rem',
+export const BasicPopoverWithSpecifiedGap: Story = {
+  render: () => (
+    <BasicPopover target={targetNode} gap="-0.313rem" closePopover={() => ({})}>
+      {Contents}
+    </BasicPopover>
+  ),
 };

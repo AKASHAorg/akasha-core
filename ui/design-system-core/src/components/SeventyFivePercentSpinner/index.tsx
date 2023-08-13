@@ -1,13 +1,9 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
-import { Color } from '../types/common.types';
-import { getColorClasses } from '../../utils/getColorClasses';
 
-export interface ISpinnerProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
-  color?: Color;
-  loadingLabel: string;
-}
+import { SpinnerProps } from '../Spinner';
+
+import { getColorClasses } from '../../utils';
 
 const spinnerSizesMap = {
   sm: 'w-6 h-6',
@@ -17,7 +13,7 @@ const spinnerSizesMap = {
   xxl: 'w-24 h-24',
 };
 
-const SeventyFivePercentSpinner: React.FC<ISpinnerProps> = props => {
+const SeventyFivePercentSpinner: React.FC<SpinnerProps> = props => {
   const { size = 'md', color = 'black', loadingLabel } = props;
 
   return (

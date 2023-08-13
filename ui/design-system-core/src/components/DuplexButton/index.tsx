@@ -1,8 +1,10 @@
 import React, { useEffect, useState, EventHandler, SyntheticEvent } from 'react';
+import { tw } from '@twind/core';
+
+import { IconType } from '@akashaorg/typings/ui';
+
 import Button from '../Button';
 import Icon from '../Icon/';
-import { tw } from '@twind/core';
-import { IconType } from '@akashaorg/typings/ui';
 import { ButtonProps } from '../Button/types';
 
 export type DuplexButtonProps = ButtonProps & {

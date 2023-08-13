@@ -3,7 +3,7 @@ import { tw, apply } from '@twind/core';
 
 export type CheckboxSize = 'small' | 'large';
 
-export interface iCheckboxProps {
+export type CheckboxProps = {
   id: string;
   label: string;
   value: string;
@@ -17,11 +17,9 @@ export interface iCheckboxProps {
   //handler
   handleChange?: () => void;
   customStyle?: string;
-}
+};
 
-const baseLabelStyles = apply`
- inline-block ml-2
-`;
+const baseLabelStyles = apply`inline-block ml-2`;
 
 const basePseudoCheckboxStyles = `
 before:absolute after:absolute before:visible after:visible
@@ -30,7 +28,7 @@ before:inline-block after:inline-block
 before:rounded-md
 `;
 
-const Checkbox: React.FC<iCheckboxProps> = ({
+const Checkbox: React.FC<CheckboxProps> = ({
   id,
   label,
   value,

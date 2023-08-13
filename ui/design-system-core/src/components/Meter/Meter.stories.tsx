@@ -1,35 +1,44 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Meter from './index';
-import { MeterProps } from './types';
+import Meter, { MeterProps } from '.';
+import Stack from '../Stack';
 
-export default {
-  title: 'Meter/Meter',
+const meta: Meta<MeterProps> = {
+  title: 'Meters/Meter',
   component: Meter,
 };
 
-const Template = (args: MeterProps) => <Meter {...args} />;
+export default meta;
+type Story = StoryObj<MeterProps>;
 
-export const BaseMeter = Template.bind({});
-BaseMeter.args = {
-  size: 400,
-  value: 60,
-  thickness: 48,
-};
+const variants: MeterProps[] = [
+  {
+    size: 400,
+    value: 60,
+    thickness: 48,
+  },
+  {
+    size: 400,
+    value: 60,
+    thickness: 48,
+    type: 'bar',
+  },
+  {
+    size: 400,
+    value: 90,
+    thickness: 48,
+    type: 'bar',
+    direction: 'vertical',
+  },
+];
 
-export const HorizontalBarMeter = Template.bind({});
-HorizontalBarMeter.args = {
-  size: 400,
-  value: 60,
-  thickness: 48,
-  type: 'bar',
-};
-
-export const VerticalBarMeter = Template.bind({});
-VerticalBarMeter.args = {
-  size: 400,
-  value: 90,
-  thickness: 48,
-  type: 'bar',
-  direction: 'vertical',
+export const MeterVariants: Story = {
+  render: () => (
+    <Stack>
+      {variants.map((variant, idx) => (
+        <Meter key={idx} {...variant} />
+      ))}
+    </Stack>
+  ),
 };

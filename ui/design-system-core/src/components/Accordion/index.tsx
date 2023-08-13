@@ -1,20 +1,21 @@
 import React, { useCallback, useMemo } from 'react';
+
 import Box from '../Box';
 import Button from '../Button';
+import Divider from '../Divider';
 import Icon from '../Icon';
 import Stack from '../Stack';
-import Divider from '../Divider';
 
-export interface IAccordionProps {
+export type AccordionProps = {
   customStyle?: string;
   contentStyle?: string;
   titleNode: React.ReactNode;
   contentNode: React.ReactNode;
   open?: boolean;
   headerDivider?: boolean;
-}
+};
 
-const Accordion: React.FC<IAccordionProps> = props => {
+const Accordion: React.FC<AccordionProps> = props => {
   const {
     customStyle = '',
     contentStyle = '',

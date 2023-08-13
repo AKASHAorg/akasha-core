@@ -1,12 +1,18 @@
-import React from 'react';
-import Checkbox from '.';
+import React, { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import Checkbox, { CheckboxProps, CheckboxSize } from '.';
+import Stack from '../Stack';
+
+const meta: Meta<CheckboxProps> = {
   title: 'Buttons/Checkbox',
   component: Checkbox,
 };
 
-const checkboxes: any[] = [
+export default meta;
+type Story = StoryObj<CheckboxProps>;
+
+const checkboxes = [
   { label: 'Checkbox small' },
   { label: 'Checkbox large', size: 'large' },
   { label: 'Checkbox error', error: true },
@@ -21,8 +27,8 @@ const checkboxes: any[] = [
 ];
 const name = 'checkboxes';
 
-const Template = () => {
-  const [checkedState, setCheckedState] = React.useState(Array(checkboxes.length).fill(false));
+const Component = () => {
+  const [checkedState, setCheckedState] = useState(Array(checkboxes.length).fill(false));
 
   const changeHandler = pos => {
     const updatedCheckedState = checkedState.map((item, idx) => (idx === pos ? !item : item));
@@ -30,7 +36,7 @@ const Template = () => {
   };
 
   return (
-    <>
+    <Stack direction="column" spacing="gap-y-2">
       {checkboxes.map(
         ({ label, error = false, size = 'small', disabled, indeterminate = false }, index) => (
           <Checkbox
@@ -43,12 +49,15 @@ const Template = () => {
             error={error}
             isDisabled={disabled}
             indeterminate={indeterminate}
-            size={size}
+            size={size as CheckboxSize}
             handleChange={() => changeHandler(index)}
           />
         ),
       )}
-    </>
+    </Stack>
   );
 };
-export const Default = Template.bind({});
+
+export const CheckboxVariants: Story = {
+  render: () => <Component />,
+};

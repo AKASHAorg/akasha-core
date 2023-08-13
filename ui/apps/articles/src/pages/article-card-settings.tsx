@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useTagSearch } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import getCroppedImage from '@akashaorg/design-system-core/lib/utils/get-cropped-image';
+import { getCroppedImage } from '@akashaorg/design-system-core/lib/utils/get-cropped-image';
 
 import ArticleCardSettings, {
   CardFormValues,

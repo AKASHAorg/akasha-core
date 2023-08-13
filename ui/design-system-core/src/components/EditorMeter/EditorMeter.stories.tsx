@@ -1,16 +1,16 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import EditorMeter, { EditorMeterProps } from './index';
+import EditorMeter, { EditorMeterProps } from '.';
 
-export default {
+const meta: Meta<EditorMeterProps> = {
   title: 'Meter/EditorMeter',
   component: EditorMeter,
 };
 
-const Template = (args: EditorMeterProps) => <EditorMeter {...args} />;
+export default meta;
+type Story = StoryObj<EditorMeterProps>;
 
-export const BaseMeter = Template.bind({});
-BaseMeter.args = {
-  max: 25,
-  value: 22,
+export const BaseEditorMeter: Story = {
+  render: () => <EditorMeter max={25} value={22} />,
 };

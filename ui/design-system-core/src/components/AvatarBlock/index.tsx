@@ -1,10 +1,12 @@
 import React from 'react';
-import Stack from '../Stack';
-import Avatar from '../Avatar';
-import Text from '../Text';
+
 import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
-type AvatarBlockProps = {
+import Avatar from '../Avatar';
+import Stack from '../Stack';
+import Text from '../Text';
+
+export type AvatarBlockProps = {
   profileId: Profile['did']['id'];
   avatar: Profile['avatar'];
   name: Profile['name'];

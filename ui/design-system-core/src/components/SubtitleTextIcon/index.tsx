@@ -7,7 +7,7 @@ import Button from '../Button';
 import Icon from '../Icon';
 import Text from '../Text';
 
-export interface ISubtitleTextIcon {
+export type SubtitleTextIconProps = {
   customStyle?: string;
   dataTestId?: string;
   iconType?: IconType;
@@ -19,9 +19,9 @@ export interface ISubtitleTextIcon {
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
   maxWidth?: string;
   onClick?: React.EventHandler<React.SyntheticEvent>;
-}
+};
 
-const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
+const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   const {
     customStyle = '',
     iconType,

@@ -1,12 +1,16 @@
 import React from 'react';
-import Divider from './index';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
-  title: 'Divider/Divider',
+import Divider, { DividerProps } from '.';
+
+const meta: Meta<DividerProps> = {
+  title: 'Dividers/Divider',
   component: Divider,
 };
 
-const Template = () => <Divider />;
+export default meta;
+type Story = StoryObj<DividerProps>;
 
-export const BasicDivider = Template.bind({});
-BasicDivider.args = {};
+export const BaseDivider: Story = {
+  render: () => <Divider />,
+};

@@ -1,7 +1,8 @@
 import React, { Children, Fragment, PropsWithChildren } from 'react';
+import { apply, tw } from '@twind/core';
+
 import Stack from '../Stack';
 import TabList from '../TabList';
-import { apply, tw } from '@twind/core';
 import { TextProps } from '../Text';
 
 export type TabProps = {

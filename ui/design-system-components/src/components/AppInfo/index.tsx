@@ -141,7 +141,6 @@ const AppInfo: React.FC<AppInfoProps> = ({
                     <ProfileAvatarButton
                       profileId={developer.profileId}
                       label={developer.name}
-                      info={developer.profileId}
                       size="md"
                       avatarImage={developer.avatar}
                     />

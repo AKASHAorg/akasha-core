@@ -1,30 +1,27 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import StepIndicator, { IStepIndicatorProps } from '.';
+import StepIndicator, { StepIndicatorProps } from '.';
 
-export default {
+const meta: Meta<StepIndicatorProps> = {
   title: 'Indicators/StepIndicator',
   component: StepIndicator,
-  argTypes: {
-    activeIndex: { control: 'number' },
-  },
 };
 
-const Template = (args: IStepIndicatorProps) => (
-  <div className="justify-center">
-    <StepIndicator {...args} />
-  </div>
-);
+export default meta;
+type Story = StoryObj<StepIndicatorProps>;
 
-export const BaseStepIndicator = Template.bind({});
-
-BaseStepIndicator.args = {
-  activeIndex: 2,
-  stepLabels: [
-    'Invitation Code',
-    'Legal Agreements',
-    'Choose How to Sign Up',
-    'Sign Wallet Requests',
-    'Choose Username',
-  ],
+export const BaseStepIndicator: Story = {
+  render: () => (
+    <StepIndicator
+      activeIndex={2}
+      stepLabels={[
+        'Invitation Code',
+        'Legal Agreements',
+        'Choose How to Sign Up',
+        'Sign Wallet Requests',
+        'Choose Username',
+      ]}
+    />
+  ),
 };

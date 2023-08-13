@@ -1,124 +1,122 @@
 import React, { useState } from 'react';
-import { tw, apply } from '@twind/core';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Tooltip, { TooltipProps } from './index';
+import Tooltip, { TooltipProps } from '.';
+import Box from '../Box';
+import Stack from '../Stack';
+import Text from '../Text';
 
-export default {
+const meta: Meta<TooltipProps> = {
   title: 'Tooltip/Tooltip',
   component: Tooltip,
 };
 
-const Template = (args: TooltipProps) => (
-  <div className={tw(apply('flex justify-center items-center h-screen'))}>
-    <Tooltip {...args} />
-  </div>
-);
+export default meta;
+type Story = StoryObj<TooltipProps>;
 
-export const LeftArrowTooltip = Template.bind({});
-LeftArrowTooltip.args = {
-  content: 'I am a tooltip',
-  placement: 'left',
-  children: <>Hover over me to know more</>,
-};
+const variants: TooltipProps[] = [
+  {
+    content: 'Left-placed tooltip',
+    placement: 'left',
+  },
+  {
+    content: 'Right-placed tooltip',
+    placement: 'right',
+  },
+  {
+    content: 'Top-placed tooltip',
+    placement: 'top',
+  },
+  {
+    content: 'Bottom-placed tooltip',
+    placement: 'bottom',
+  },
+];
 
-export const RightArrowTooltip = Template.bind({});
-RightArrowTooltip.args = {
-  content: 'I am a tooltip',
-  placement: 'right',
-  children: <>Hover over me to know more</>,
-};
+const childrenNode = <Text color="white">Hover to learn more</Text>;
 
-export const TopArrowTooltip = Template.bind({});
-TopArrowTooltip.args = {
-  content: 'I am a tooltip',
-  placement: 'top',
-  children: <>Hover over me to know more</>,
-};
-
-export const BottomArrowTooltip = Template.bind({});
-BottomArrowTooltip.args = {
-  content: 'I am a tooltip',
-  placement: 'bottom',
-  children: <>Hover over me to know more</>,
-};
-
-const CenterArrowToReferenceTemplate = (args: TooltipProps) => (
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100px',
-    }}
-  >
-    <Tooltip {...args} />{' '}
-  </div>
-);
-
-export const CenterArrowToReferenceTooltip = CenterArrowToReferenceTemplate.bind({});
-CenterArrowToReferenceTooltip.args = {
-  content: (
-    <>
-      I am a tooltip
-      <br />
-      more content ...
-      <br />
-      more content ...
-      <br />
-      more content ...
-      <br />
-      more content
-      <br />
-      more content ...
-      <br />
-      more content ...
-      <br />
-      more content ...
-      <br />
-      more content ...
-      <br />
-      more content ...
-      <br />
-      more content ...
-      <br />
-      more content ...
-      <br />
-      more content ...
-      <br />
-      more content
-    </>
-  ),
-  arrow: false,
-  placement: 'left',
-  centerArrowToReference: true,
-  children: <>Hover over me to know more ...</>,
-};
-
-const ControlledTemplate = (args: TooltipProps) => {
+const ControlledTooltipComponent = () => {
   const [showToolTip, setShowTooltip] = useState(false);
+
   return (
-    <div className={tw(apply('flex justify-center items-center h-screen'))}>
+    <Box customStyle={'flex justify-center items-center h-screen'}>
       <Tooltip
-        {...args}
+        content="I am a tooltip"
+        placement="bottom"
         open={showToolTip}
         onOpen={() => setShowTooltip(true)}
         onClose={() => setShowTooltip(false)}
-      />
-    </div>
+      >
+        {childrenNode}
+      </Tooltip>
+    </Box>
   );
 };
 
-export const ControlledTooltip = ControlledTemplate.bind({});
-ControlledTooltip.args = {
-  content: 'I am a tooltip',
-  placement: 'bottom',
-  children: <>Hover over me to know more</>,
+export const TooltipVariants: Story = {
+  render: () => (
+    <Stack direction="column" spacing="gap-y-8" customStyle="w-[25%] my-0 mx-auto">
+      {variants.map((variant, idx) => (
+        <Tooltip key={idx} {...variant}>
+          {childrenNode}
+        </Tooltip>
+      ))}
+    </Stack>
+  ),
 };
 
-export const ClickModeTooltip = Template.bind({});
-ClickModeTooltip.args = {
-  content: 'I am a tooltip',
-  placement: 'bottom',
-  trigger: 'click',
-  children: <>Hover over me to know more</>,
+export const ControlledTooltip: Story = {
+  render: () => <ControlledTooltipComponent />,
+};
+
+export const CenterArrowToReferenceTooltip: Story = {
+  render: () => (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100px',
+      }}
+    >
+      <Tooltip
+        content={
+          <Text color="white">
+            I am a tooltip
+            <br />
+            more content ...
+            <br />
+            more content ...
+            <br />
+            more content ...
+            <br />
+            more content
+            <br />
+            more content ...
+            <br />
+            more content ...
+            <br />
+            more content ...
+            <br />
+            more content ...
+            <br />
+            more content ...
+            <br />
+            more content ...
+            <br />
+            more content ...
+            <br />
+            more content ...
+            <br />
+            more content
+          </Text>
+        }
+        arrow={false}
+        placement="left"
+        centerArrowToReference={true}
+      >
+        {childrenNode}
+      </Tooltip>
+    </div>
+  ),
 };

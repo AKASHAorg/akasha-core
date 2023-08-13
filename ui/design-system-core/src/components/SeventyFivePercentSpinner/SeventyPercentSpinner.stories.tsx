@@ -1,16 +1,19 @@
 import React from 'react';
-import SeventyFivePercentSpinner from './index';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
-  title: 'Spinner/SeventyFivePercentSpinner',
+import SeventyFivePercentSpinner from '.';
+import { SpinnerProps } from '../Spinner';
+
+const meta: Meta<SpinnerProps> = {
+  title: 'Spinners/SeventyFivePercentSpinner',
   component: SeventyFivePercentSpinner,
 };
 
-const Template = args => <SeventyFivePercentSpinner {...args} />;
+export default meta;
+type Story = StoryObj<SpinnerProps>;
 
-export const Spinner = Template.bind({});
-Spinner.args = {
-  size: 'xl',
-  color: 'secondaryLight',
-  loadingLabel: 'Loading...',
+export const BaseSeventyFivePercentSpinner: Story = {
+  render: () => (
+    <SeventyFivePercentSpinner size="xl" color="secondaryLight" loadingLabel="Loading..." />
+  ),
 };

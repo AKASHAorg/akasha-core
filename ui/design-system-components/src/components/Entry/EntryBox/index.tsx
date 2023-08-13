@@ -240,7 +240,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               customStyle={'grow shrink'}
               profileId={entryData.author?.id}
               label={entryData.author?.name}
-              info={entryData.author?.id && `@${entryData.author?.id}`}
               avatarImage={entryData.author?.avatar}
               onClick={handleClickAvatar}
               ref={profileRef}

@@ -1,12 +1,28 @@
-import React from 'react';
-import Circle from './Circle';
-import { PropsWithChildren } from 'react';
-import { MeterProps } from './types';
-import Bar from './Bar';
+import React, { PropsWithChildren } from 'react';
 
-const Meter: React.FC<
-  PropsWithChildren<MeterProps & { type?: 'circle' | 'bar'; direction?: 'horizontal' | 'vertical' }>
-> = ({ type = 'circle', direction, children, ...rest }) => {
+import Bar from './Bar';
+import Circle from './Circle';
+
+import { Color } from '../types/common.types';
+
+export type MeterProps = {
+  size: number;
+  thickness: number;
+  value: number;
+  max?: number;
+  progressBg?: Color;
+  background?: Color;
+  type?: 'circle' | 'bar';
+  direction?: 'horizontal' | 'vertical';
+  customStyle?: string;
+};
+
+const Meter: React.FC<PropsWithChildren<MeterProps>> = ({
+  type = 'circle',
+  direction,
+  children,
+  ...rest
+}) => {
   if (type === 'circle') return <Circle {...rest}>{children}</Circle>;
 
   return (
