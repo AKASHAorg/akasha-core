@@ -78,9 +78,9 @@ const Header: React.FC<HeaderProps> = ({
               <DidField
                 did={did.id}
                 isValid={validAddress}
-                {...(!copyLabel && !copiedLabel && { copiable: false })}
-                {...(!!copyLabel && { copyLabel: copyLabel })}
-                {...(!!copiedLabel && { copiedLabel: copiedLabel })}
+                copiable={Boolean(copyLabel && copiedLabel)}
+                copyLabel={copyLabel}
+                copiedLabel={copiedLabel}
               />
             </Stack>
             <div className={tw(`relative ml-auto mt-2`)}>
