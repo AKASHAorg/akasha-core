@@ -145,7 +145,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                             </li>
                           );
                         })}
-                      {divider && <Divider />}
+                      {divider && <Divider customStyle="border-t-0" />}
                     </>
                   );
                 } else {

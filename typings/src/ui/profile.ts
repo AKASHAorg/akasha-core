@@ -46,6 +46,6 @@ export enum StepStatus {
   GETTING_KEYS = 'gettingKeys',
 }
 
-export type EngagementType = 'followers' | 'following';
+export type EngagementType = 'followers' | 'following' | 'interests';
 
 export type ProfileImageType = 'avatar' | 'cover-image';

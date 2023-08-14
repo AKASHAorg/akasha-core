@@ -97,6 +97,7 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
       interests={{
         label: t('Interests'),
         total: interestsTotal,
+        onClick: onStatClick('interests'),
       }}
       followers={{
         label: t('Followers'),

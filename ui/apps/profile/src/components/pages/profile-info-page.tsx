@@ -171,6 +171,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
         {!isLoggedIn && !hasProfile && (
           <DefaultEmptyCard
             infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
+            customCardSize={{ width: '140px', height: '85px' }}
           />
         )}
 
@@ -184,7 +185,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
         <ProfileStatsPresentation
           profileId={profileId}
           navigateTo={navigateTo}
-          showLoginModal={showLoginModal}
+          showLoginModal={() => showLoginModal({ modal: { name: location.pathname } })}
         />
         {profileData?.links?.length > 0 && (
           <ProfileLinks

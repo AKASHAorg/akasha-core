@@ -435,7 +435,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           resetLabel={t('Reset')}
         />
       )}
-      {searchKeyword === '' && <DefaultEmptyCard infoText=" ✨ Start searching for something ✨" />}
+      {searchKeyword === '' && (
+        <DefaultEmptyCard noBorder={true} infoText=" ✨ Start searching for something ✨" />
+      )}
 
       {
         /* allQueriesFinished */ !isFetchingSearch &&

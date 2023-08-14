@@ -20,12 +20,12 @@ export type HeaderProps = {
   avatar?: Profile['avatar'];
   name: Profile['name'];
   ensName?: 'loading' | string;
-  viewerIsOwner: boolean;
-  menuItems: MenuProps['items'];
-  copyLabel: string;
-  copiedLabel: string;
-  followElement: ReactElement;
-  handleEdit: () => void;
+  viewerIsOwner?: boolean;
+  menuItems?: MenuProps['items'];
+  copyLabel?: string;
+  copiedLabel?: string;
+  followElement?: ReactElement;
+  handleEdit?: () => void;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -78,13 +78,14 @@ const Header: React.FC<HeaderProps> = ({
               <DidField
                 did={did.id}
                 isValid={validAddress}
+                copiable={Boolean(copyLabel && copiedLabel)}
                 copyLabel={copyLabel}
                 copiedLabel={copiedLabel}
               />
             </Stack>
             <div className={tw(`relative ml-auto mt-2`)}>
               <Stack spacing="gap-x-2">
-                {viewerIsOwner ? (
+                {viewerIsOwner && handleEdit ? (
                   <Button
                     icon="Cog6ToothIcon"
                     variant="primary"
@@ -93,23 +94,27 @@ const Header: React.FC<HeaderProps> = ({
                     iconOnly
                   />
                 ) : (
-                  <>
-                    <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
+                  followElement && (
+                    <>
+                      <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
 
-                    {followElement}
-                  </>
+                      {followElement}
+                    </>
+                  )
                 )}
 
-                <Menu
-                  anchor={{
-                    icon: 'EllipsisVerticalIcon',
-                    variant: 'primary',
-                    greyBg: true,
-                    iconOnly: true,
-                  }}
-                  items={menuItems}
-                  customStyle="w-max z-99"
-                />
+                {menuItems && (
+                  <Menu
+                    anchor={{
+                      icon: 'EllipsisVerticalIcon',
+                      variant: 'primary',
+                      greyBg: true,
+                      iconOnly: true,
+                    }}
+                    items={menuItems}
+                    customStyle="w-max z-99"
+                  />
+                )}
               </Stack>
             </div>
           </Stack>
