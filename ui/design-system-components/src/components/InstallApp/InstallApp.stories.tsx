@@ -1,40 +1,48 @@
 import React from 'react';
-import InstallApp, { InstallAppProps } from '.';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import InstallApps, { InstallAppProps } from '.';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+const meta: Meta<InstallAppProps> = {
   title: 'AkashaVerse/Install App',
-  component: InstallApp,
+  component: InstallApps,
 };
 
-const Template = (args: InstallAppProps) => <InstallApp {...args} />;
+export default meta;
+type Story = StoryObj<InstallAppProps>;
 
-export const InProgress = Template.bind({});
+const variants: InstallAppProps[] = [
+  {
+    title: 'Installation in progress',
+    appName: 'Direct Messaging',
+    progressInfo: 'Saving application information...',
+    status: 'in-progress',
+    action: { label: 'Cancel installation', onClick: () => ({}) },
+  },
+  {
+    title: 'Installation error',
+    appName: 'Direct Messaging',
+    progressInfo:
+      'Something went wrong while installing the app, please check your network and try again!',
+    status: 'error',
+    action: { label: 'Dismiss', onClick: () => ({}) },
+  },
+  {
+    title: 'Installation completed',
+    appName: 'Direct Messaging',
+    progressInfo: 'Installation Completed!',
+    status: 'complete',
+    action: { label: 'Open the Application', onClick: () => ({}) },
+  },
+];
 
-InProgress.args = {
-  title: 'Installation in progress',
-  appName: 'Direct Messaging',
-  progressInfo: 'Saving install information...',
-  status: 'in-progress',
-  action: { label: 'Cancel installation', onClick: () => ({}) },
-};
-
-export const Error = Template.bind({});
-
-Error.args = {
-  title: 'Installation in progress',
-  appName: 'Direct Messaging',
-  progressInfo:
-    'Something went wrong while installing the app, please check your network and try again!',
-  status: 'error',
-  action: { label: 'Dismiss', onClick: () => ({}) },
-};
-
-export const Complete = Template.bind({});
-
-Complete.args = {
-  title: 'Installation in progress',
-  appName: 'Direct Messaging',
-  progressInfo: 'Installation Completed!',
-  status: 'complete',
-  action: { label: 'Open the Application', onClick: () => ({}) },
+export const InstallAppsSteps: Story = {
+  render: () => (
+    <Stack direction="column" spacing="gap-y-2" customStyle="w-[35%]">
+      {variants.map((variant, idx) => (
+        <InstallApps key={idx} {...variant} />
+      ))}
+    </Stack>
+  ),
 };

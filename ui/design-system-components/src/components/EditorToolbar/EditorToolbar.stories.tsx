@@ -1,26 +1,23 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import EditorToolbar, { IEditorToolbarProps } from '.';
+import EditorToolbar, { EditorToolbarProps } from '.';
 
-export default {
-  title: 'Toolbars/EditorToolbar',
+const meta: Meta<EditorToolbarProps> = {
+  title: 'Cards/EditorToolbar',
   component: EditorToolbar,
-  argTypes: {
-    dropOpen: { control: 'text' },
-    listStyle: { control: 'text' },
-    alignStyle: { control: 'text' },
-    wrapperBorder: { control: 'text' },
-  },
 };
 
-const Template = (args: IEditorToolbarProps) => <EditorToolbar {...args} />;
+export default meta;
+type Story = StoryObj<EditorToolbarProps>;
 
-export const BaseEditorToolbar = Template.bind({});
-
-BaseEditorToolbar.args = {
-  dropOpen: null,
-  caseStyle: 'textcaseSentence',
-  listStyle: 'listNumbered',
-  alignStyle: 'alignRight',
-  wrapperBorder: { side: 'horizontal', color: 'border' },
+export const BaseEditorToolbar: Story = {
+  render: () => (
+    <EditorToolbar
+      onBoldClick={() => ({})}
+      onItalicClick={() => ({})}
+      onStrikeThroughClick={() => ({})}
+      onUnderlineClick={() => ({})}
+    />
+  ),
 };

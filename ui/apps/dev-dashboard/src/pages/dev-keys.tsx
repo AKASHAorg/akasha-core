@@ -8,7 +8,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { DevKeyCard } from '@akashaorg/design-system-components/lib/components/DevKeyCard';
+import DevKeyCard from '@akashaorg/design-system-components/lib/components/DevKeyCard';
 
 import { CardWrapper } from '../components/common';
 

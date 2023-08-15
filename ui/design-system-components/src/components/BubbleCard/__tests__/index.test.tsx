@@ -18,7 +18,6 @@ describe('<BubbleCard /> Component', () => {
           youLabel="You"
           content={editorDefaultValue}
           isFromLoggedUser={false}
-          isRead={true}
           chatTimestamp="2022-06-16T10:07:15.000Z"
         />,
 

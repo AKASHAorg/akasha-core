@@ -45,7 +45,7 @@ const MAX_LENGTH = 280;
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
  * @param editorState - the state of the editor is controlled from the parent component
  */
-export interface IEditorBox {
+export type EditorBoxProps = {
   avatar?: Profile['avatar'];
   showAvatar?: boolean;
   profileId: string | null;
@@ -83,10 +83,10 @@ export interface IEditorBox {
   onPlaceholderClick?: () => void;
   showDraft?: boolean;
   onClear?: () => void;
-}
+};
 
 /* eslint-disable complexity */
-const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
+const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
   const {
     avatar,
     showAvatar = true,
@@ -508,9 +508,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     }
   };
 
-  const handleInsertEmoji = (emojiCode: string) => {
-    CustomEditor.insertText(editor, emojiCode);
-  };
+  // const handleInsertEmoji = (emojiCode: string) => {
+  //   CustomEditor.insertText(editor, emojiCode);
+  // };
 
   // image insertion
 

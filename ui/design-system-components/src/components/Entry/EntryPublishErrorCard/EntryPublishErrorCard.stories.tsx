@@ -1,19 +1,16 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import EntryPublishErrorCard, { PublishErrorCardProps } from '.';
 
-export default {
-  title: 'Errors/EntryPublishErrorCard',
+const meta: Meta<PublishErrorCardProps> = {
+  title: 'Cards/EntryPublishErrorCard',
   component: EntryPublishErrorCard,
-  argTypes: {
-    isCard: { control: 'boolean' },
-  },
 };
 
-const Template = (args: PublishErrorCardProps) => <EntryPublishErrorCard {...args} />;
+export default meta;
+type Story = StoryObj<PublishErrorCardProps>;
 
-export const BaseEntryPublishErrorCard = Template.bind({});
-BaseEntryPublishErrorCard.args = {
-  isCard: true,
-  message: 'Sorry, an error occured!',
+export const BaseEntryPublishErrorCard: Story = {
+  render: () => <EntryPublishErrorCard isCard={true} message="Sorry, an error occured!" />,
 };

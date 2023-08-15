@@ -1,29 +1,24 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import ChatList, { IChatListProps } from '.';
+import ChatList, { ChatListProps } from '.';
 import BubbleCard from '../BubbleCard';
 
-export default {
+const meta: Meta<ChatListProps> = {
   title: 'Cards/ChatList',
   component: ChatList,
-  argType: {
-    emptyChatLabel: { control: 'text' },
-    loggedUserEthAddress: { control: 'text' },
-    onMentionClick: { action: 'clicked mention' },
-    onTagClick: { action: 'clicked tag' },
-    onLinkClick: { action: 'clicked link' },
-  },
 };
 
-const Template = (args: IChatListProps) => <ChatList {...args} />;
+export default meta;
+type Story = StoryObj<ChatListProps>;
 
-const ethAddress = '0x003410490050000320006570034567114572000';
-
-export const BaseChatList = Template.bind({});
-
-BaseChatList.args = {
-  emptyChatLabel: 'Start by saying hello! 👋🏼',
-  loggedUserEthAddress: ethAddress,
-  itemCard: <BubbleCard locale="en" youLabel="You" />,
-  oldMessages: [],
+export const BaseChatList: Story = {
+  render: () => (
+    <ChatList
+      emptyChatLabel="Start by saying hello! 👋🏼"
+      loggedUserProfileId="did:key:003410490050000320006570034567114572000"
+      itemCard={<BubbleCard locale="en" youLabel="You" />}
+      oldMessages={[]}
+    />
+  ),
 };

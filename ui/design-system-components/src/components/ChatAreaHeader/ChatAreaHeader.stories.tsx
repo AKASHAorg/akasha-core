@@ -1,28 +1,24 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import ChatAreaHeader, { IChatAreaHeaderProps } from '.';
+import ChatAreaHeader, { ChatAreaHeaderProps } from '.';
 
-export default {
+const meta: Meta<ChatAreaHeaderProps> = {
   title: 'Cards/ChatAreaHeader',
   component: ChatAreaHeader,
-  argType: {
-    name: { control: 'text' },
-    avatar: { control: 'text' },
-    userName: { control: 'text' },
-    ethAddress: { control: 'text' },
-    onClickAvatar: { action: 'avatar clicked' },
-  },
 };
 
-const Template = (args: IChatAreaHeaderProps) => <ChatAreaHeader {...args} />;
+export default meta;
+type Story = StoryObj<ChatAreaHeaderProps>;
 
-const ethAddress = '0x003410490050000320006570034567114572000';
+const avatar = { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } };
 
-export const BaseChatAreaHeader = Template.bind({});
-
-BaseChatAreaHeader.args = {
-  name: 'Estelle Collier',
-  userName: 'estellecollier',
-  avatar: { url: 'https://placebeard.it/360x360' },
-  ethAddress: ethAddress,
+export const BaseChatAreaHeader: Story = {
+  render: () => (
+    <ChatAreaHeader
+      name="Estelle Collier"
+      avatar={avatar}
+      did={{ id: 'did:key:003410490050000320006570034567114572000' }}
+    />
+  ),
 };

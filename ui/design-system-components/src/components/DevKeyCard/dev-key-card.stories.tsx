@@ -1,31 +1,30 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
+import DevKeyCard, { DevKeyCardProps } from '.';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-
-import { DevKeyCard, DevKeyCardProps } from '.';
 
 import { sampleDevKey } from '../../utils/dummy-data';
 
-export default {
+const meta: Meta<DevKeyCardProps> = {
   title: 'Cards/DevKeyCard',
   component: DevKeyCard,
-  argTypes: {
-    onCopyClick: { action: 'key copied!' },
-  },
 };
 
-const Template = (args: DevKeyCardProps) => (
-  <Box customStyle="w-[30%] p-0 items-center">
-    <DevKeyCard {...args} />
-  </Box>
-);
+export default meta;
+type Story = StoryObj<DevKeyCardProps>;
 
-export const BaseDevKeyCard = Template.bind({});
-
-BaseDevKeyCard.args = {
-  item: sampleDevKey,
-  unusedLabel: 'Unused',
-  usedLabel: 'Used',
-  devPubKeyLabel: 'Dev Public Key 🔑',
-  dateAddedLabel: 'Date added 🗓',
+export const BaseDevKeyCard: Story = {
+  render: () => (
+    <Box customStyle="w-[40%] p-0 items-center">
+      <DevKeyCard
+        item={sampleDevKey}
+        unusedLabel="Unused"
+        usedLabel="Used"
+        nonameLabel="Unnamed key"
+        devPubKeyLabel="Dev Public Key 🔑"
+        dateAddedLabel="Date added 🗓"
+      />
+    </Box>
+  ),
 };

@@ -1,30 +1,25 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import BubbleCard, { IBubbleCardProps } from '.';
-
+import BubbleCard, { BubbleCardProps } from '.';
 import { editorDefaultValue } from '../Editor/initialValue';
 
-export default {
+const meta: Meta<BubbleCardProps> = {
   title: 'Cards/BubbleCard',
   component: BubbleCard,
-  argType: {
-    senderName: { control: 'text' },
-    youLabel: { control: 'text' },
-    content: { control: 'text' },
-    isLoggedUser: { control: 'boolean' },
-    chatTimestamp: { control: 'text' },
-  },
 };
 
-const Template = (args: IBubbleCardProps) => <BubbleCard {...args} />;
+export default meta;
+type Story = StoryObj<BubbleCardProps>;
 
-export const BaseBubbleCard = Template.bind({});
-
-BaseBubbleCard.args = {
-  locale: 'en',
-  senderName: 'Jerry Mil',
-  youLabel: 'You',
-  content: editorDefaultValue,
-  isLoggedUser: true,
-  chatTimestamp: '2022-06-16T10:07:15.000Z',
+export const BaseBubbleCard: Story = {
+  render: () => (
+    <BubbleCard
+      locale="en"
+      senderName="Jerry Mil"
+      youLabel="You"
+      content={editorDefaultValue}
+      chatTimestamp="2022-06-16T10:07:15.000Z"
+    />
+  ),
 };

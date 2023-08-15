@@ -1,5 +1,6 @@
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import React, { useState } from 'react';
+
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 type DuplexAppButtonProps = {
   onUninstall: () => void;

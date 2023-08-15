@@ -1,32 +1,26 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import EditorBox, { IEditorBox } from '.';
+import EditorBox, { EditorBoxProps } from '.';
 
-export default {
-  title: 'Cards/EntryBox',
+const meta: Meta<EditorBoxProps> = {
+  title: 'Cards/EditorBox',
   component: EditorBox,
-  argTypes: {
-    avatar: { control: 'text' },
-    showAvatar: { control: 'boolean' },
-    showDraft: { control: 'boolean' },
-    ethAddress: { control: 'text' },
-    postLabel: { control: 'text' },
-    placeholderLabel: { control: 'text' },
-    emojiPlaceholderLabel: { control: 'text' },
-    uploadFailedLabe: { control: 'text' },
-    uploadingImageLabel: { control: 'text' },
-    disablePublishLabel: { control: 'text' },
-    setEditorState: { control: 'func' },
-  },
 };
 
-const Template = (args: IEditorBox) => <EditorBox {...args} />;
+export default meta;
+type Story = StoryObj<EditorBoxProps>;
 
-export const BaseEditorBox = Template.bind({});
-
-BaseEditorBox.args = {
-  ethAddress: '0x003410490050000320006570034567114572021',
-  postLabel: 'Publish',
-  placeholderLabel: 'Share your thought',
-  setEditorState: () => null,
+export const BaseEditorBox: Story = {
+  render: () => (
+    <EditorBox
+      profileId="some profile id"
+      postLabel="Publish"
+      placeholderLabel="Share your thought"
+      setEditorState={() => ({})}
+      onPublish={() => ({})}
+      getMentions={() => ({})}
+      getTags={() => ({})}
+    />
+  ),
 };

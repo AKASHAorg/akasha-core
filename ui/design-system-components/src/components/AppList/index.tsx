@@ -1,11 +1,12 @@
+import React, { ReactNode } from 'react';
+import { apply, tw } from '@twind/core';
+
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import React, { ReactNode } from 'react';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { apply, tw } from '@twind/core';
-import { getRadiusClasses } from '@akashaorg/design-system-core/lib/utils/getRadiusClasses';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
+
+import { getRadiusClasses, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 
 type App = {
   id?: string;
@@ -14,12 +15,12 @@ type App = {
   action: ReactNode;
 };
 
-export type AppListProp = {
+export type AppListProps = {
   apps: App[];
   onAppSelected: (appId: string) => void;
 };
 
-const AppList: React.FC<AppListProp> = ({ apps, onAppSelected }) => {
+const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
   const iconStyle = `shrink-0	${getRadiusClasses(10)} ${getColorClasses(
     { light: 'grey6', dark: 'grey5' },
     'bg',

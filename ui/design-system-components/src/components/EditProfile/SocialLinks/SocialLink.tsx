@@ -5,11 +5,11 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { TextFieldProps } from '@akashaorg/design-system-core/lib/components/TextField/types';
 
-type SocialLinkProp = {
+export type SocialLinkProps = {
   onDelete: () => void;
 } & TextFieldProps;
 
-export const SocialLink: React.FC<SocialLinkProp> = ({ onDelete, ...textProps }) => {
+export const SocialLink: React.FC<SocialLinkProps> = ({ onDelete, ...textProps }) => {
   return (
     <Stack spacing="gap-x-2" align="baseline">
       <TextField type="text" customStyle="grow" {...textProps} />
