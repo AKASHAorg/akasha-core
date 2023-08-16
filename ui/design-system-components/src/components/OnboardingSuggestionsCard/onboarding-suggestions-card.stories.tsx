@@ -1,22 +1,18 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import OnboardingSuggestionsCard, { OnboardingSuggestionsCardProps } from './index';
+import OnboardingSuggestionsCard, { OnboardingSuggestionsCardProps } from '.';
 
-export default {
+const meta: Meta<OnboardingSuggestionsCardProps> = {
   title: 'Cards/OnboardingSuggestionsCard',
   component: OnboardingSuggestionsCard,
-  argTypes: {
-    title: { control: 'text' },
-  },
 };
 
-const Template = (args: OnboardingSuggestionsCardProps) => {
-  return <OnboardingSuggestionsCard {...args} />;
-};
+export default meta;
+type Story = StoryObj<OnboardingSuggestionsCardProps>;
 
-export const BaseOnboardingSuggestionsCard = Template.bind({});
-
-BaseOnboardingSuggestionsCard.args = {
-  topicsLabel: 'TOPICS TO FOLLOW',
-  peopleLabel: 'PEOPLE TO FOLLOW',
+export const BaseOnboardingSuggestionsCard: Story = {
+  render: () => (
+    <OnboardingSuggestionsCard topicsLabel="TOPICS TO FOLLOW" peopleLabel="PEOPLE TO FOLLOW" />
+  ),
 };

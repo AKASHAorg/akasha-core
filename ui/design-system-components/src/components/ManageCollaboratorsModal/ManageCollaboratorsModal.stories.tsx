@@ -1,55 +1,50 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import ManageCollaboratorsModal from '.';
-import { IManageCollaboratorsModalProps } from '.';
+import ManageCollaboratorsModal, { ManageCollaboratorsModalProps } from '.';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import { trendingProfilesData } from '../../utils/dummy-data';
 
-export default {
+const meta: Meta<ManageCollaboratorsModalProps> = {
   title: 'Modals/ManageCollaboratorsModal',
+
   component: ManageCollaboratorsModal,
-  argTypes: {
-    titleLabel: { control: 'text' },
-    inputValue: { control: 'text' },
-    inputPlaceholderLabel: { control: 'text' },
-    titlenoCollaboratorsLabelLabel: { control: 'text' },
-    noSearchItemsLabel: { control: 'text' },
-    addButtonLabel: { control: 'text' },
-    removeButtonLabel: { control: 'text' },
-    onInputChange: { action: 'modal closed' },
-    onSearch: { action: 'modal closed' },
-    closeModal: { action: 'modal closed' },
-    onClickCollaborator: { action: 'modal closed' },
-    closeDrop: { action: 'modal closed' },
-  },
 };
 
-const Template = (args: IManageCollaboratorsModalProps) => {
+export default meta;
+type Story = StoryObj<ManageCollaboratorsModalProps>;
+
+const Component = () => {
   const [modalOpen, setModalOpen] = React.useState(false);
 
   return (
-    <>
+    <Stack direction="column" spacing="gap-y-2">
       <button
         onClick={() => {
           setModalOpen(true);
         }}
       />
-      {modalOpen && <ManageCollaboratorsModal {...args} closeModal={() => setModalOpen(false)} />}
-    </>
+      {modalOpen && (
+        <ManageCollaboratorsModal
+          titleLabel="Collaborators"
+          inputValue=""
+          collaborators={trendingProfilesData}
+          searchResults={trendingProfilesData.slice(0, 2)}
+          noCollaboratorsLabel="You have not invited any collaborators yet"
+          noSearchItemsLabel="We couldn't find matching profiles"
+          addButtonLabel="Add"
+          removeButtonLabel="Remove"
+          closeModal={() => setModalOpen(false)}
+          onInputChange={() => ({})}
+          onSearch={() => ({})}
+          onClickCollaborator={() => null}
+        />
+      )}
+    </Stack>
   );
 };
 
-export const BaseManageCollaboratorsModal = Template.bind({});
-
-BaseManageCollaboratorsModal.args = {
-  titleLabel: 'Collaborators',
-  inputValue: '',
-  inputPlaceholder: 'Search for a name or @name',
-  collaborators: trendingProfilesData,
-  searchResults: trendingProfilesData.slice(0, 2),
-  noCollaboratorsLabel: 'You have not invited any collaborators yet',
-  noSearchItemsLabel: "We couldn't find matching profiles",
-  dropOpen: false,
-  addButtonLabel: 'Add',
-  removeButtonLabel: 'Remove',
+export const BaseManageCollaboratorsModal: Story = {
+  render: () => <Component />,
 };

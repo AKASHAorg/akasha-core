@@ -2,7 +2,7 @@ import React from 'react';
 import SearchBar, { ISearchBar } from './index';
 
 export default {
-  title: 'Bars/SearchBar',
+  title: 'Search/SearchBar',
   component: SearchBar,
   argTypes: {
     inputValue: { control: 'text' },

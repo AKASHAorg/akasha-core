@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { apply, tw } from '@twind/core';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -7,6 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { getRadiusClasses, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 type App = {
   id?: string;
@@ -30,12 +30,14 @@ const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
     <Stack direction="column" spacing="gap-y-4">
       {apps?.map((app, index, array) => (
         <Stack key={app.name} direction="column" spacing="gap-y-4">
-          <Stack justify="between">
+          <Stack justify="between" align="center">
             <Button onClick={() => onAppSelected(app.id)} plain>
               <Stack spacing="gap-x-2">
-                <div className={tw(apply(iconStyle))} />
+                <Box customStyle={iconStyle} />
+
                 <Stack direction="column" customStyle="h-[3.75rem]">
                   <Text variant="button-sm">{app.name}</Text>
+
                   <Text
                     variant="footnotes2"
                     weight="normal"
@@ -47,7 +49,8 @@ const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
                 </Stack>
               </Stack>
             </Button>
-            <div className={tw('ml-auto')}>{app.action}</div>
+
+            <Box customStyle="ml-auto">{app.action}</Box>
           </Stack>
           {index < array.length - 1 && <Divider />}
         </Stack>

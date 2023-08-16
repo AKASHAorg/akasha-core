@@ -7,12 +7,12 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
+import BasicInfoCard from './basic-info-card';
 import ProfileAvatarNotificationApp from './ProfileAvatarNotificationApp';
 
 import { formatRelativeTime } from '../../utils/time';
-import BasicInfoCard from './basic-info-card';
 
-export interface INotificationsCard {
+export type NotificationsCardProps = {
   // data
   notifications: Record<string, unknown>[];
   isFetching?: boolean;
@@ -33,9 +33,9 @@ export interface INotificationsCard {
   handleEntryClick: (itemId: string, itemType: EntityTypes) => void;
   handleProfileClick: (pubKey: string) => void;
   loggedIn?: boolean;
-}
+};
 
-const NotificationsCard: React.FC<INotificationsCard> = props => {
+const NotificationsCard: React.FC<NotificationsCardProps> = props => {
   const {
     notifications,
     isFetching,

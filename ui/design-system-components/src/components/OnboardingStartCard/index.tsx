@@ -1,18 +1,19 @@
 import * as React from 'react';
+import { tw } from '@twind/core';
+
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import SearchBar from '../SearchBar';
-import { tw } from '@twind/core';
 
-export interface OnboardingStartCardProps {
+export type OnboardingStartCardProps = {
   inputPlaceholderLabel: string;
   titleLabel: string;
   buttonLabel?: string;
   isButtonEnabled?: boolean;
   handleSearch: (val: string) => void;
   handleButtonClick?: () => void;
-}
+};
 
 const OnboardingStartCard = ({
   inputPlaceholderLabel,

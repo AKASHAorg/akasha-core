@@ -1,23 +1,26 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import LoginCTAWidgetCard, { ILoginCTACardProps } from '.';
+import LoginCTACard, { LoginCTACardProps } from '.';
 
-export default {
-  title: 'Cards/LoginCTAWidgetCard',
-  component: LoginCTAWidgetCard,
+const meta: Meta<LoginCTACardProps> = {
+  title: 'Cards/LoginCTACard',
+  component: LoginCTACard,
 };
 
-const Template = (args: ILoginCTACardProps) => <LoginCTAWidgetCard {...args} />;
+export default meta;
+type Story = StoryObj<LoginCTACardProps>;
 
-export const BaseLoginCTAWidgetCard = Template.bind({});
-
-BaseLoginCTAWidgetCard.args = {
-  title: 'Welcome, fellow Ethereans! 💫',
-  subtitle: 'We are in private alpha at this time. ',
-  beforeLinkLabel: "If you'd like to participate,just ",
-  afterLinkLabel: "and we'll send you a ticket for the next shuttle going to AKASHA World.",
-  disclaimerLabel:
-    "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",
-  writeToUsLabel: 'drop us a message',
-  writeToUsUrl: 'mailto:alpha@ethereum.world',
+export const BaseLoginCTACard: Story = {
+  render: () => (
+    <LoginCTACard
+      title="Welcome, fellow Ethereans! 💫"
+      subtitle="We are in private alpha at this time. "
+      beforeLinkLabel="If you'd like to participate,just "
+      afterLinkLabel="and we'll send you a ticket for the next shuttle going to Akasha World."
+      disclaimerLabel="Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀"
+      writeToUsLabel="drop us a message"
+      writeToUsUrl="mailto:alpha@ethereum.world"
+    />
+  ),
 };

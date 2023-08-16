@@ -1,21 +1,16 @@
 import React from 'react';
-import ListAppTopbar, { ListAppTopbarProps } from './';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import ListAppTopbar, { ListAppTopbarProps } from '.';
+
+const meta: Meta<ListAppTopbarProps> = {
   title: 'ListApp/ListAppTopbar',
   component: ListAppTopbar,
 };
 
-const Template = (args: ListAppTopbarProps) => {
-  return (
-    <div>
-      <ListAppTopbar {...args} />
-    </div>
-  );
-};
+export default meta;
+type Story = StoryObj<ListAppTopbarProps>;
 
-export const BaseListAppTopbar = Template.bind({});
-
-BaseListAppTopbar.args = {
-  handleIconMenuClick: () => ({}),
+export const BaseListAppTopbar: Story = {
+  render: () => <ListAppTopbar handleIconMenuClick={() => ({})} />,
 };

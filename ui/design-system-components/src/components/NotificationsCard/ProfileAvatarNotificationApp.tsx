@@ -1,8 +1,10 @@
 import * as React from 'react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Avatar, { AvatarSize } from '@akashaorg/design-system-core/lib/components/Avatar';
 import { tw, apply } from '@twind/core';
+
 import { Profile } from '@akashaorg/typings/ui';
+
+import Avatar, { AvatarSize } from '@akashaorg/design-system-core/lib/components/Avatar';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface ProfileAvatarNotificationAppProps {
   info?: string | React.ReactElement;
