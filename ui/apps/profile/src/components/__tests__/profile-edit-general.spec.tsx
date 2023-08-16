@@ -67,7 +67,7 @@ describe('< ProfileInfoPage />', () => {
     const nameInput = screen.getByLabelText('Name');
 
     userEvent.clear(nameInput);
-    userEvent.type(nameInput, 'Orion');
+    await userEvent.type(nameInput, 'Orion');
     await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled());
   });
 
@@ -75,11 +75,21 @@ describe('< ProfileInfoPage />', () => {
     const nameInput = screen.getByLabelText('Name');
 
     userEvent.clear(nameInput);
-    userEvent.type(nameInput, '&**$$');
+    await userEvent.type(nameInput, '&**$$');
     await waitFor(() =>
       expect(
         screen.getByText('Name should contain only alphabets, numbers or -_.'),
       ).toBeInTheDocument(),
+    );
+  });
+
+  it('should show error when name is less than 3 characters long', async () => {
+    const nameInput = screen.getByLabelText('Name');
+
+    userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'O');
+    await waitFor(() =>
+      expect(screen.getByText('Must be at least 3 characters')).toBeInTheDocument(),
     );
   });
 });
