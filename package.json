@@ -129,7 +129,8 @@
   "resolutions": {
     "@multiformats/murmur3": "2.1.5",
     "single-spa": "5.9.5",
-    "single-spa-react": "5.0.2"
+    "single-spa-react": "5.0.2",
+    "graphql": "16.7.1"
   },
   "workspaces": {
     "packages": [

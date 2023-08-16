@@ -1,0 +1,10 @@
+
+type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c6mt30yrzt4979xricfajvjv08mw23buuxmm1l1kzi41hlzvov4") {
+  id: ID!
+}
+
+type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c7ktaldacpe4a5g4i85qb9il896xxgunaivb5trnsgt14k0a3f1") {
+  id: ID!
+  reflections: [AkashaReflect] @relationFrom(model: "AkashaReflect", property: "beamID")
+  reflectionsCount: Int! @relationCountFrom(model: "AkashaReflect", property: "beamID")
+}

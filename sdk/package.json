@@ -28,7 +28,7 @@
     "dids": "^4.0.3",
     "eth-ens-namehash": "2.0.8",
     "ethers": "5.7.2",
-    "graphql": "16.6.0",
+    "graphql": "16.7.1",
     "graphql-request": "5.0.0",
     "graphql-tag": "2.12.6",
     "idb-keyval": "6.2.0",
@@ -98,8 +98,7 @@
     "sc:deploy:goerli": "npx hardhat run --network goerli --config hardhat.config.cjs src/contracts/scripts/update-app-registry.cjs",
     "sc:test": "npx hardhat test --network development",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
-    "graphql:generate": "graphql-codegen-esm --config codegen.cjs",
-    "graphql:generate:new": "graphql-codegen-esm --config codegen.new.cjs"
+    "graphql:generate": "graphql-codegen-esm --config codegen.cjs"
   },
   "browserslist": [
     "defaults",

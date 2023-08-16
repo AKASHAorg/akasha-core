@@ -12,7 +12,7 @@ import { EthereumWebAuth } from '@didtools/pkh-ethereum';
 import { ComposeClient } from '@composedb/client';
 import { AccountId } from 'caip';
 import { ethers } from 'ethers';
-import { definition } from '@akashaorg/composedb-models/lib/runtime-composite';
+import { definition } from '@akashaorg/composedb-models/lib/runtime-definition';
 
 @injectable()
 export default class CeramicService {
