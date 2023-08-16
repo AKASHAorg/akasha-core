@@ -173,7 +173,7 @@ const mergeComposites = async () => {
     await writeEncodedCompositeRuntime(
       ceramic,
       path.resolve(__dirname, '../lib/runtime-definition.json'),
-      path.resolve(__dirname, '../lib/runtime-definition.ts')
+      path.resolve(__dirname, '../lib/runtime-definition.js')
     )
     const deployedComposite = await readEncodedComposite(ceramic, path.resolve(__dirname, '../lib/runtime-definition.json'))
     await deployedComposite.startIndexingOn(ceramic)
