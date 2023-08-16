@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import SearchBar from '../SearchBar';
@@ -25,7 +25,7 @@ const OnboardingStartCard = ({
   const [inputValue, setInputValue] = React.useState<string>('');
 
   return (
-    <BasicCardBox>
+    <Card>
       <div className={tw(`flex w-ull p-4 items-center gap-8`)}>
         <div className={tw(`flex flex-row justify-between w-full`)}>
           <Text variant="h2">{titleLabel}</Text>
@@ -40,7 +40,7 @@ const OnboardingStartCard = ({
           responsive={false}
         />
       </div>
-    </BasicCardBox>
+    </Card>
   );
 };
 

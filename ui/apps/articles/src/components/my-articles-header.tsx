@@ -1,5 +1,5 @@
 import React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -15,7 +15,7 @@ const MyArticlesHeader: React.FC<IMyArticlesHeaderProps> = props => {
   const { titleLabel, subtitleLabel, tabs, activeTabIndex, onClickTab } = props;
   const tabWidth = 100 / tabs.length;
   return (
-    <BasicCardBox customStyle="border-b-0 rounded-b-none">
+    <Card customStyle="border-b-0 rounded-b-none">
       <Box customStyle="p-4 gap-4">
         <Text variant="h2">{titleLabel}</Text>
         <Text variant="h6">{subtitleLabel}</Text>
@@ -50,7 +50,7 @@ const MyArticlesHeader: React.FC<IMyArticlesHeaderProps> = props => {
           </button>
         ))}
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

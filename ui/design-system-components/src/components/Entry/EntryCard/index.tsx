@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import SocialBox from '../../SocialBox';
 import EntryBox, { IEntryBoxProps } from '../EntryBox';
 import { NavigateToParams } from '@akashaorg/typings/ui';
@@ -12,7 +12,7 @@ export interface IEntryCardProps extends IEntryBoxProps {
   // external css
   className?: string;
   style?: React.CSSProperties;
-  rootNodeRef?: React.Ref<HTMLDivElement>;
+  ref?: React.Ref<HTMLDivElement>;
   contentClickable?: boolean;
   border?: boolean;
   noBorderRadius?: boolean;
@@ -30,7 +30,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     othersLabel,
     onClickAvatar,
     locale,
-    rootNodeRef,
+    ref,
     showMore,
     profileAnchorLink,
     repliesAnchorLink,
@@ -71,12 +71,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox
-      rootNodeRef={rootNodeRef}
-      border={border}
-      noBorderRadius={noBorderRadius}
-      pad="p-0"
-    >
+    <Card ref={ref} border={border} noBorderRadius={noBorderRadius} padding="p-0">
       {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
         <SocialBox
           socialData={entryData.quotedByAuthors}
@@ -124,7 +119,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         error={error}
         onRetry={onRetry}
       />
-    </BasicCardBox>
+    </Card>
   );
 };
 

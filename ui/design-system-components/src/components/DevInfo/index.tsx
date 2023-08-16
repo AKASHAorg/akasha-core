@@ -16,7 +16,7 @@ export type DevInfoProps = {
 
 const DevInfo: React.FC<DevInfoProps> = ({ developerTitle, developers, apps, onAppSelected }) => {
   return (
-    <Card elevation="1" padding={16} radius={20}>
+    <Card elevation="1" padding={'p-4'} radius={20}>
       <Stack direction="column" spacing="gap-y-2">
         <Text variant="h5">{developerTitle}</Text>
         {developers.map(developer => (

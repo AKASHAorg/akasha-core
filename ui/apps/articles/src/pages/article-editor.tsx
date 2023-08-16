@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -33,7 +33,7 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <BasicCardBox>
+    <Card>
       <Box customStyle="flex flex-row p-4 w-full">
         <button onClick={handleNavigateBack}>
           <Icon type="ChevronLeftIcon" />
@@ -65,7 +65,7 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
         onSaveDraft={handleSaveDraft}
         onPublish={handlePublish}
       />
-    </BasicCardBox>
+    </Card>
   );
 };
 

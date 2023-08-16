@@ -1,5 +1,5 @@
 import React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -38,7 +38,7 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
   const [inputValue, setInputValue] = React.useState<string>(searchKeyword);
 
   return (
-    <BasicCardBox>
+    <Card>
       <Box customStyle="flex flex-row w-full p-4 border(b grey8 dark:grey3)">
         <button onClick={onClickCloseSettings}>
           <Icon type="XMarkIcon" />
@@ -74,7 +74,7 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
       <Box customStyle="flex flex-row w-full justify-end items-center p-4">
         <Button size="lg" icon="XMarkIcon" label={uninstallLabel} onClick={onClickUninstall} />
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

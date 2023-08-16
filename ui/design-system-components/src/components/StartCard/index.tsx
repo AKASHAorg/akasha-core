@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { tw } from '@twind/core';
@@ -36,7 +36,7 @@ const StartCard: React.FC<StartProps> = ({
   CTALabel,
 }: StartProps) => {
   return (
-    <BasicCardBox noBorderRadius={noBorderRadius} customStyle="gap-1">
+    <Card noBorderRadius={noBorderRadius} customStyle="gap-1">
       <div className={tw(`flex justify-center w-full`)}>
         {!!title && <Text variant="h5">{title}</Text>}
         {!!subtitle && <Text variant="subtitle1">{subtitle}</Text>}
@@ -59,7 +59,7 @@ const StartCard: React.FC<StartProps> = ({
         </div>
       )}
       {showSecondaryArea && <Text color="grey1">{secondaryDescription}</Text>}
-    </BasicCardBox>
+    </Card>
   );
 };
 

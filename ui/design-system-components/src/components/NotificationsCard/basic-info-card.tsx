@@ -1,6 +1,5 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -18,11 +17,11 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   customStyle = '',
 }) => {
   return (
-    <Card padding={8} customStyle={`border-none ${customStyle}`}>
+    <Card padding={'p-2'} customStyle={`border-none ${customStyle}`}>
       <Stack direction="column" align="center" justify="center" customStyle="mb-32">
-        <BasicCardBox
+        <Card
           customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
-          round="rounded-xl"
+          radius="rounded-xl"
         />
 
         <Box customStyle="w-[50%] m-auto">

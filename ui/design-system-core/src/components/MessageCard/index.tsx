@@ -41,7 +41,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
       elevation={elevation}
       background={background}
       radius={20}
-      padding={16}
+      padding={'p-4'}
       testId={testId}
       customStyle={`${borderStyle} ${customStyle}`}
     >

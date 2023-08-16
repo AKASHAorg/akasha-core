@@ -5,7 +5,7 @@ import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hook
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -124,10 +124,10 @@ const MyArticles: React.FC<RootComponentProps> = props => {
         activeTabIndex={activeTabIndex}
         onClickTab={handleClickTab}
       />
-      <BasicCardBox customStyle="flex flex-row p-4 items-center justify-between border(secondaryLight dark:secondaryDark">
+      <Card customStyle="flex flex-row p-4 items-center justify-between border(secondaryLight dark:secondaryDark">
         <Text variant="h6">{t(' ✨😸Share your articles with Akasha World 😸✨')}</Text>
         <Button variant="primary" label={t('Start writing')} onClick={handleClickWriteArticle} />
-      </BasicCardBox>
+      </Card>
       {activeTabIndex === 0 &&
         articles
           .filter(article => article.isPublished)

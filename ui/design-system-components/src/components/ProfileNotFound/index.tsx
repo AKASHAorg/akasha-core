@@ -20,7 +20,7 @@ const ProfileNotFound: React.FC<ProfileNotFoundProps> = ({
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
-      <Card direction="row" elevation={'1'} radius={16} padding={8}>
+      <Card customStyle={'flex flex-row'} elevation={'1'} radius={16} padding={'p-2'}>
         <Stack direction="column" customStyle="mb-32">
           <Default404Image url={`${publicImgPath}/new404.webp`} />
           <Text variant={'h6'} align="center">

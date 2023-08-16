@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ITag, Profile } from '@akashaorg/typings/ui';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
@@ -45,7 +45,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
   } = props;
 
   return (
-    <BasicCardBox>
+    <Card>
       <div className={tw(`flex p-4 gap-4`)}>
         <div className={tw(`flex gap-4`)}>
           <Text variant="h2">{topicsLabel}</Text>
@@ -92,7 +92,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
           ))}
         </div>
       </div>
-    </BasicCardBox>
+    </Card>
   );
 };
 

@@ -47,7 +47,7 @@ const ProfileLoading: React.FC = () => {
           </Stack>
         </Card>
       </div>
-      <Card elevation="1" radius={20} padding={16}>
+      <Card elevation="1" radius={20} padding={'p-4'}>
         <Stack direction="column" spacing="gap-2">
           <TextLine width="w-24" animated />
           <Stack direction="column" spacing="gap-1">
@@ -57,7 +57,7 @@ const ProfileLoading: React.FC = () => {
           </Stack>
         </Stack>
       </Card>
-      <Card elevation="1" radius={20} padding={16}>
+      <Card elevation="1" radius={20} padding={'p-4'}>
         <Stack direction="column" spacing="gap-4" fullWidth>
           <TextLine width="w-20" animated />
           <Stack justify="between">
@@ -92,7 +92,7 @@ const ProfileLoading: React.FC = () => {
           </Stack>
         </Stack>
       </Card>
-      <Card elevation="1" radius={20} padding={16}>
+      <Card elevation="1" radius={20} padding={'p-4'}>
         <Stack direction="column" spacing="gap-2">
           <TextLine width="w-24" animated />
           <TextLine width="w-full" animated />

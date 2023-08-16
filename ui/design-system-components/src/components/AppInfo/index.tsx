@@ -68,7 +68,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
         radius={{ top: 20 }}
         customStyle="h-[7.3125rem]"
       />
-      <Card elevation="1" padding={16} radius={{ bottom: 20 }}>
+      <Card elevation="1" padding={'p-4'} radius={{ bottom: 20 }}>
         <Stack direction="column" spacing="gap-y-4">
           <Stack direction="column" spacing="gap-y-4">
             <Stack align="start" customStyle="relative">

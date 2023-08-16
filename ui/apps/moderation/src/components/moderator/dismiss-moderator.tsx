@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -34,7 +34,7 @@ const DismissModerator: React.FC<DismissModeratorProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox pad="p-4 space-y-3">
+    <Card padding="p-4 space-y-3">
       <Text variant="h6">{titleLabel}</Text>
 
       <TextField placeholder={placeholderLabel} type="multiline" />
@@ -76,7 +76,7 @@ const DismissModerator: React.FC<DismissModeratorProps> = props => {
           onClick={onConfirmButtonClick}
         />
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

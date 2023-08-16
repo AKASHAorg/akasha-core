@@ -16,7 +16,7 @@ export interface LinksProps {
 
 const Links: React.FC<LinksProps> = ({ title, links }) => {
   return (
-    <Card elevation="1" radius={20} padding={16}>
+    <Card elevation="1" radius={20} padding={'p-4'}>
       <Stack direction="column" spacing="gap-y-2.5">
         <Text variant="label">{title}</Text>
         {links.map((link, index) => (

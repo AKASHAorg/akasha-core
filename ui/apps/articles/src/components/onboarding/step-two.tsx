@@ -1,5 +1,5 @@
 import React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -29,7 +29,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox customStyle="mb-4">
+    <Card customStyle="mb-4">
       <Box customStyle="flex items-start w-full p-4">
         <Box customStyle="flex flex-row w-full mb-4">
           <button onClick={onClickIcon}>
@@ -60,7 +60,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
           <Button size="lg" variant="primary" label={nextLabel} onClick={onClickNext} />
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

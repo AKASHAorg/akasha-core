@@ -15,7 +15,7 @@ import Extension from '@akashaorg/design-system-components/lib/components/Extens
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
@@ -200,7 +200,7 @@ const Layout: React.FC<RootComponentProps> = props => {
             <Box id="scrollTopStop"></Box>
             <Box customStyle="pt-4">
               {!isPlatformHealthy && (
-                <BasicCardBox
+                <Card
                   margin="mb-4"
                   customStyle="bg(warningLight dark:warningDark) border(errorLight dark:errorDark)"
                 >
@@ -221,7 +221,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                       )} 😸`}</Text>
                     </Box>
                   </Box>
-                </BasicCardBox>
+                </Card>
               )}
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </Box>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Descendant } from 'slate';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -46,7 +46,7 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
         <Text variant="body1">{isFromLoggedUser ? youLabel : senderName}</Text>
         <Text variant="subtitle1">{relativeTime}</Text>
       </div>
-      <BasicCardBox
+      <Card
         noBorderRadius
         customStyle="min-h-min" // allows cards to adjust in a y-scrollable container
       >
@@ -75,7 +75,7 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
             {/* {isFromLoggedUser && <Icon size="sm" accentColor={isRead} type={iconType} />} */}
           </div>
         </div>
-      </BasicCardBox>
+      </Card>
     </div>
   );
 };

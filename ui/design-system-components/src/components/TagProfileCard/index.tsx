@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import { ITag } from '@akashaorg/typings/ui';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -37,7 +37,7 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
   } = props;
 
   return (
-    <BasicCardBox customStyle={customStyle}>
+    <Card customStyle={customStyle}>
       <div className={tw(`h(24 sm:36) bg(secondaryLight dark:secondaryDark) rounded-t-lg`)} />
       <div className={tw(`h-16 flex flex-row justify-between pb-2 mx-2`)}>
         <div className={tw(`flex flex-row`)}>
@@ -82,7 +82,7 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
           )}
         </div>
       </div>
-    </BasicCardBox>
+    </Card>
   );
 };
 TagProfileCard.defaultProps = {

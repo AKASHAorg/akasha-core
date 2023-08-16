@@ -110,7 +110,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   };
 
   return (
-    <Card direction="row" elevation={'1'} radius={16} padding={16}>
+    <Card customStyle="flex flex-row" elevation={'1'} radius={16} padding={'p-4'}>
       <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
       {listsReq.status === 'error' && (
         <ErrorLoader

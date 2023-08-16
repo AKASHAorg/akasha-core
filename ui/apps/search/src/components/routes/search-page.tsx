@@ -32,7 +32,7 @@ import {
 import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
 
 import EntryCardRenderer from './entry-renderer';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
@@ -508,7 +508,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   })}
                 />
               }
-              <BasicCardBox customStyle="pb-0">
+              <Card customStyle="pb-0">
                 {searchTagsState?.map((tag: ITag, index: number) => (
                   <Box key={index}>
                     <TagSearchCard
@@ -524,7 +524,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     {index < searchTagsState?.length - 1 && <Divider />}
                   </Box>
                 ))}
-              </BasicCardBox>
+              </Card>
             </>
           )}
         {activeButton === ButtonValues.CONTENT &&

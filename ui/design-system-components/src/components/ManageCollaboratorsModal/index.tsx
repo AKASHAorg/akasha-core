@@ -4,7 +4,7 @@ import Collaborator from './collaborator';
 
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import SearchBar, { ISearchBar } from '../SearchBar';
@@ -52,7 +52,7 @@ const ManageCollaboratorsModal: React.FC<IManageCollaboratorsModalProps> = props
       )}
     >
       <div className={tw(`w-full sm:w-1/2 md:w-1/3 flex h-full justify-center`)}>
-        <BasicCardBox>
+        <Card>
           <div
             className={tw(`flex flex-row mt-1 items-start px-4 pt-2 border(b grey8 dark:grey3)`)}
           >
@@ -110,7 +110,7 @@ const ManageCollaboratorsModal: React.FC<IManageCollaboratorsModalProps> = props
               </div>
             )}
           </div>
-        </BasicCardBox>
+        </Card>
       </div>
     </div>
   );

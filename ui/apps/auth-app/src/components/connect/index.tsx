@@ -9,7 +9,7 @@ import ConnectWallet from './connect-wallet';
 import ChooseProvider from './choose-provider';
 import { getInjectedProviderDetails } from '../../utils/getInjectedProvider';
 import routes, { CONNECT } from '../../routes';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 const Connect: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
@@ -86,7 +86,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <BasicCardBox>
+    <Card>
       <Routes>
         <Route
           path="*"
@@ -123,7 +123,7 @@ const Connect: React.FC<RootComponentProps> = props => {
           }
         />
       </Routes>
-    </BasicCardBox>
+    </Card>
   );
 };
 

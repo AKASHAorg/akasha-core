@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import EntryCardHidden from '@akashaorg/design-system-components/lib/components/Entry/EntryCardHidden';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Logger } from '@akashaorg/awf-sdk';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -106,7 +106,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   };
 
   return (
-    <BasicCardBox customStyle="h-auto overflow-hidden" pad="p-0">
+    <Card customStyle="h-auto overflow-hidden" padding="p-0">
       {children}
       {entryReq.isLoading && <EntryCardLoading />}
       {entryReq.isError && (
@@ -181,7 +181,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
           />
         </>
       )}
-    </BasicCardBox>
+    </Card>
   );
 };
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
@@ -58,7 +58,7 @@ export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = pro
   };
 
   return (
-    <BasicCardBox>
+    <Card>
       <Box customStyle="flex flex-col items-center w-full p-2">
         <Text variant="h5" align="center" weight="bold">
           {t('Developer Dashboard')}
@@ -86,6 +86,6 @@ export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = pro
           onClick={handleOnboardingCTAClick}
         />
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };

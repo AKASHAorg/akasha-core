@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { useFollowers, useFollowing } from '@akashaorg/ui-awf-hooks';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -94,7 +94,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   };
 
   return (
-    <BasicCardBox customStyle="max-h-[92vh]">
+    <Card customStyle="max-h-[92vh]">
       <Box customStyle="flex p-4 gap-2">
         <Box customStyle="flex flex-row justify-between">
           <Text variant="h1">{t('Messaging App')}</Text>
@@ -171,7 +171,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
           </Box>
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

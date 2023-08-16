@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetModerators } from '@akashaorg/ui-awf-hooks';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ModerationSwitchCard from '@akashaorg/design-system-components/lib/components/ModerationSwitchCard';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -42,7 +42,7 @@ export const Moderators: React.FC<BasePageProps> = props => {
   };
 
   return (
-    <BasicCardBox pad="p-0">
+    <Card padding="p-0">
       <ModerationSwitchCard tabs={modTabs} activeTab={activeTab} onTabClick={setActiveTab} />
 
       {getModeratorsQuery.isFetching && (
@@ -70,6 +70,6 @@ export const Moderators: React.FC<BasePageProps> = props => {
           </Box>
         </Box>
       )}
-    </BasicCardBox>
+    </Card>
   );
 };

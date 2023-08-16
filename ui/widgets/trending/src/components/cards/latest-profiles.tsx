@@ -4,7 +4,7 @@ import { Profile } from '@akashaorg/typings/ui';
 import { getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -48,7 +48,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
   const BaseItemStyles = 'flex justify-between items-center space-y-2';
 
   return (
-    <BasicCardBox pad="p-4">
+    <Card padding="p-4">
       <Box customStyle="mb-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}
@@ -98,6 +98,6 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
           </Box>
         </ul>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
