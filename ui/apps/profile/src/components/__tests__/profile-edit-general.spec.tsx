@@ -63,7 +63,7 @@ describe('< ProfileInfoPage />', () => {
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
   });
 
-  it('should initially have a disabled save button', async () => {
+  it('should have an enabled save button when name changes', async () => {
     const nameInput = screen.getByLabelText('Name');
 
     userEvent.clear(nameInput);
