@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -37,7 +37,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox customStyle="mb-2">
+    <Card customStyle="mb-2">
       <Box customStyle="p-4">
         <Box customStyle="flex flex-row justify-between">
           <Box customStyle="gap-1">
@@ -120,7 +120,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           </Box>
         </button>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 export default ArticleCard;

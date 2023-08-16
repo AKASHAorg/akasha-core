@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Interest } from '@akashaorg/typings/ui';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
@@ -48,7 +48,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const baseItemStyles = 'flex justify-between items-center space-y-2';
 
   return (
-    <BasicCardBox pad="p-4">
+    <Card padding="p-4">
       <Box customStyle="mb-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}
@@ -98,6 +98,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           </Box>
         </ul>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };

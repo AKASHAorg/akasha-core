@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -65,7 +65,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const customStyle =
     'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-8)';
   return (
-    <BasicCardBox customStyle={customStyle}>
+    <Card customStyle={customStyle}>
       <Box customStyle="flex space-x-2">
         <Button
           iconOnly={true}
@@ -116,7 +116,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           />
         )}
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 Topbar.defaultProps = {

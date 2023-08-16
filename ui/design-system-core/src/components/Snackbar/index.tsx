@@ -48,7 +48,6 @@ const Snackbar: React.FC<SnackbarProps> = ({
 
   return (
     <Card
-      elevation="1"
       background={{ light: 'white', dark: 'grey1' }}
       radius={8}
       customStyle={`${instanceStyle} ${customStyle}`}

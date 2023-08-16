@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/Table';
@@ -14,7 +14,7 @@ const ApplicationsActivity: React.FC<ApplicationsActivityProps> = props => {
   const { label } = props;
 
   return (
-    <BasicCardBox pad="pt-0 px-0 pb-2">
+    <Card padding="pt-0 px-0 pb-2">
       <Box customStyle="px-4 py-6">
         <Text variant="h5" align="center">
           {label}
@@ -24,7 +24,7 @@ const ApplicationsActivity: React.FC<ApplicationsActivityProps> = props => {
       <Divider />
 
       <Table {...props} />
-    </BasicCardBox>
+    </Card>
   );
 };
 

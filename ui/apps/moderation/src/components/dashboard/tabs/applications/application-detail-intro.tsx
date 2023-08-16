@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ModeratorApplicantData } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -31,7 +31,7 @@ const ApplicationDetailIntro: React.FC<ApplicationDetailIntroProps> = props => {
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
   return (
-    <BasicCardBox pad="p-0">
+    <Card padding="p-0">
       <Box customStyle="flex justify-between items-center p-4">
         <Box customStyle="flex space-x-2 items-center">
           <Avatar size="lg" avatar={selectedApplicant.avatar} />
@@ -79,7 +79,7 @@ const ApplicationDetailIntro: React.FC<ApplicationDetailIntroProps> = props => {
           </Text>
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

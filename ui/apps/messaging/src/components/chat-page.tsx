@@ -8,7 +8,7 @@ import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/h
 import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
 import { useLiveQuery } from 'dexie-react-hooks';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -158,7 +158,7 @@ const ChatPage = (props: ChatPageProps) => {
   };
 
   return (
-    <BasicCardBox customStyle="max-h-[92vh]">
+    <Card customStyle="max-h-[92vh]">
       <Box customStyle="flx flex-row p-4 items-center">
         <button onClick={onChevronLeftClick}>
           <Icon type="ChevronLeftIcon" />
@@ -215,7 +215,7 @@ const ChatPage = (props: ChatPageProps) => {
           />
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

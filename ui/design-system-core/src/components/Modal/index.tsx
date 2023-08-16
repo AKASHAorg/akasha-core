@@ -57,7 +57,7 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
         >
           <Stack align="center" justify="center" customStyle="fixed inset-0">
             <Dialog.Panel className={tw(customStyle)}>
-              <Card elevation="1" radius={20} padding={{ y: 16, x: 0 }}>
+              <Card radius={20} padding={'py-4'}>
                 <Stack direction="column" spacing="gap-y-4">
                   {title && (
                     <Dialog.Title className={tw('px-4')}>

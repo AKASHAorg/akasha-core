@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -33,7 +32,7 @@ const LoginCTACard: React.FC<LoginCTACardProps> = props => {
     onCloseIconClick,
   } = props;
   return (
-    <BasicCardBox accentBorder={true}>
+    <Card accentBorder={true}>
       {image}
       <div className={tw(`flex flex-row items-start justify-between`)}>
         <div className={tw(`flex flex-col-reverse md:flex-row items-center justify-between`)}>
@@ -66,7 +65,7 @@ const LoginCTACard: React.FC<LoginCTACardProps> = props => {
           <Icon type="XMarkIcon" size="sm" data-testid="close-icon-alpha-notification" />
         </button>
       </div>
-    </BasicCardBox>
+    </Card>
   );
 };
 

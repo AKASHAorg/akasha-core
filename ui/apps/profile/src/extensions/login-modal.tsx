@@ -6,7 +6,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -37,7 +37,7 @@ const LoginModal = (props: RootExtensionProps) => {
 
   return (
     <ModalContainer onModalClose={handleModalClose}>
-      <BasicCardBox customStyle="py-4 px-6 md:px-24 relative">
+      <Card customStyle="py-4 px-6 md:px-24 relative">
         <Box customStyle={`absolute top-4 right-4`}>
           <button onClick={handleModalClose}>
             <Icon type="XMarkIcon" color={{ light: 'grey7', dark: 'grey4' }} />
@@ -56,7 +56,7 @@ const LoginModal = (props: RootExtensionProps) => {
             <Button onClick={handleConnectClick} label={t('Connect')} variant="primary" />
           </Box>
         </Box>
-      </BasicCardBox>
+      </Card>
     </ModalContainer>
   );
 };

@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { tw } from '@twind/core';
 import { Descendant } from 'slate';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ReadOnlyEditor from '../ReadOnlyEditor';
@@ -44,7 +44,7 @@ const BubbleCard: React.FC<BubbleCardProps> = props => {
         <Text variant="body1">{isFromLoggedUser ? youLabel : senderName}</Text>
         <Text variant="subtitle1">{relativeTime}</Text>
       </div>
-      <BasicCardBox
+      <Card
         noBorderRadius
         customStyle="min-h-min" // allows cards to adjust in a y-scrollable container
       >
@@ -73,7 +73,7 @@ const BubbleCard: React.FC<BubbleCardProps> = props => {
             {/* {isFromLoggedUser && <Icon size="sm" accentColor={isRead} type={iconType} />} */}
           </div>
         </div>
-      </BasicCardBox>
+      </Card>
     </div>
   );
 };

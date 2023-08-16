@@ -3,7 +3,7 @@ import { tw } from '@twind/core';
 
 import ModerationValueCard from './value-card';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 type ModerationValue = {
@@ -25,7 +25,7 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
   const { titleLabel, subtitleLabel, ctaLabel, ctaUrl, values, onValueClick } = props;
 
   return (
-    <BasicCardBox pad="p-4">
+    <Card padding="p-4">
       <div className={tw('grid gap-4 grid-cols-1 md:px-10')}>
         <Text variant="h5" align="center">
           {titleLabel}
@@ -91,7 +91,7 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
           </div>
         )}
       </div>
-    </BasicCardBox>
+    </Card>
   );
 };
 

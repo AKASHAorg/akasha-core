@@ -8,7 +8,7 @@ import { License } from '../utils/licenses';
 import { Profile } from '@akashaorg/typings/ui';
 
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -152,7 +152,7 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
   };
 
   return (
-    <BasicCardBox>
+    <Card>
       <Box customStyle="flex flex-row p-4 w-full">
         <button onClick={handleClickIcon}>
           <Icon type="ChevronLeftIcon" />
@@ -272,7 +272,7 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
         <Button size="lg" label={saveDraftLabel} onClick={onClickSaveDraft} />
         <Button size="lg" variant="primary" label={confirmLabel} onClick={onClickConfirm} />
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

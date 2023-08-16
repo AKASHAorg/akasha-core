@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import StepIndicator from '@akashaorg/design-system-core/lib/components/Stepper';
@@ -22,7 +22,7 @@ export const SteppedActionWrapper: React.FC<
   const { stepLabels, activeIndex, titleLabel, footerCTALabel, footerCTAUrl, children } = props;
 
   return (
-    <BasicCardBox pad="p-4">
+    <Card padding="p-4">
       <Box customStyle="flex flex-col space-y-4">
         <Box customStyle="self-center">
           <StepIndicator stepLabels={stepLabels} activeIndex={activeIndex} />
@@ -44,6 +44,6 @@ export const SteppedActionWrapper: React.FC<
           </Box>
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
