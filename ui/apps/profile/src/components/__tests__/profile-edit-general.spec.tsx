@@ -92,4 +92,20 @@ describe('< ProfileInfoPage />', () => {
       expect(screen.getByText('Must be at least 3 characters')).toBeInTheDocument(),
     );
   });
+
+  it('should show warning model when user tries to leave unsaved changes', async () => {
+    const nameInput = screen.getByLabelText('Name');
+
+    userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'Orion');
+
+    await userEvent.click(screen.getByText('External URLs'));
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          `It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!`,
+        ),
+      ).toBeInTheDocument(),
+    );
+  });
 });
