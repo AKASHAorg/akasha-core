@@ -9,6 +9,10 @@ const genUser = (ethAddress?: string): Profile => {
     avatar: { default: { src: avatarUrl, width: 200, height: 200 } },
     background: { default: { src: coverImageUrl, width: 200, height: 200 } },
     description: faker.lorem.sentences(3),
+    links: [
+      { href: 'https://github.com/AKASHAorg/akasha-core' },
+      { href: 'https://twitter.com/AKASHAorg' },
+    ],
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
     did: { id: `did:${ethAddress}` },
     createdAt: faker.date.past().toISOString(),
