@@ -32,7 +32,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
   const loggedProfileData = profileDataReq.data;

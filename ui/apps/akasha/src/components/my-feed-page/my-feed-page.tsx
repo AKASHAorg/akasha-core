@@ -33,8 +33,8 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
     {
       select: data => {
         if (data?.node) {
-          if ('interests' in data.node) {
-            return data.node.interests;
+          if ('akashaProfileInterests' in data.node) {
+            return data.node.akashaProfileInterests;
           }
         }
         return null;

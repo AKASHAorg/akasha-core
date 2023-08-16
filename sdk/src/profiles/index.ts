@@ -24,7 +24,7 @@ import { validate } from '../common/validator';
 import { throwError } from '../common/error-handling';
 import GqlNew from '../gql/index.new';
 import { GetProfilesQueryVariables } from '@akashaorg/typings/sdk/graphql-operation-types-new';
-import { ProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import type { AkashaProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
@@ -56,7 +56,7 @@ class AWF_Profile {
    * Create a new profile
    * @param profileData - {@link ProfileInput} - profileData.name is mandatory
    */
-  async createProfile(profileData: ProfileInput) {
+  async createProfile(profileData: AkashaProfileInput) {
     try {
       const result = await this._gql.getAPI().CreateProfile({
         i: {
@@ -66,10 +66,10 @@ class AWF_Profile {
           },
         },
       });
-      if (!result.createProfile) {
+      if (!result.createAkashaProfile) {
         return throwError('Failed to create profile.', ['sdk', 'profile', 'createProfile']);
       }
-      return createFormattedValue(result.createProfile.document);
+      return createFormattedValue(result.createAkashaProfile.document);
     } catch (err) {
       throwError(`Failed to create profile: ${(err as Error).message}`, [
         'sdk',
@@ -86,7 +86,7 @@ class AWF_Profile {
    * @param profileData - ProfileInput - fields of the profile to update
    * @see {@link GetProfileByDidQuery} for the profileData.id
    */
-  async updateProfile(id: string, profileData: ProfileInput) {
+  async updateProfile(id: string, profileData: AkashaProfileInput) {
     try {
       const result = await this._gql.getAPI().UpdateProfile({
         i: {
@@ -96,10 +96,10 @@ class AWF_Profile {
           id,
         },
       });
-      if (!result.updateProfile) {
+      if (!result.updateAkashaProfile) {
         return throwError('Failed to update profile.', ['sdk', 'profile', 'updateProfile']);
       }
-      return createFormattedValue(result.updateProfile.document);
+      return createFormattedValue(result.updateAkashaProfile.document);
     } catch (err) {
       throwError(`Failed to update profile: ${(err as Error).message}`, [
         'sdk',
@@ -122,10 +122,10 @@ class AWF_Profile {
     }
     try {
       const result = await this._gql.getAPI().GetProfiles(options);
-      if (!result.profileIndex) {
+      if (!result.akashaProfileIndex) {
         return throwError('Failed to get profiles.', ['sdk', 'profile', 'getProfiles']);
       }
-      return createFormattedValue(result.profileIndex);
+      return createFormattedValue(result.akashaProfileIndex);
     } catch (err) {
       throwError(`Failed to get profiles: ${(err as Error).message}`, [
         'sdk',
@@ -141,7 +141,7 @@ class AWF_Profile {
   async getMyProfile() {
     try {
       const result = await this._gql.getAPI().GetMyProfile();
-      return createFormattedValue(result.viewer?.profile);
+      return createFormattedValue(result.viewer?.akashaProfile);
     } catch (err) {
       throwError(`Failed to get my profile: ${(err as Error).message}`, [
         'sdk',
@@ -173,8 +173,8 @@ class AWF_Profile {
   async getFollowersByDid(did: string) {
     try {
       const resp = await this._gql.getAPI().GetFollowersListByDid({ id: did });
-      if (resp.node && 'profile' in resp.node) {
-        return createFormattedValue(resp.node.profile?.followers);
+      if (resp.node && 'akashaProfile' in resp.node) {
+        return createFormattedValue(resp.node.akashaProfile?.followers);
       }
     } catch (err) {
       throwError(`Failed to get followers: ${did}: ${(err as Error).message}`, [
@@ -188,8 +188,8 @@ class AWF_Profile {
   async getFollowingByDid(did: string) {
     try {
       const resp = await this._gql.getAPI().GetFollowingListByDid({ id: did });
-      if (resp.node && 'followList' in resp.node) {
-        return createFormattedValue(resp.node.followList);
+      if (resp.node && 'akashaFollowList' in resp.node) {
+        return createFormattedValue(resp.node.akashaFollowList);
       }
     } catch (err) {
       throwError(`Failed to get following: ${did}: ${(err as Error).message}`, [
