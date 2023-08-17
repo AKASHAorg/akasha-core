@@ -81,7 +81,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
             {topics &&
               topics.map((topic, idx) => (
                 <Pill
-                  key={idx}
+                  key={`${idx}-${topic.value}`}
                   label={topic.value}
                   size="sm"
                   onPillClick={() => handleTopicClick(topic.value)}
