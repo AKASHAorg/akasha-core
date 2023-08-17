@@ -85,6 +85,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           render={({ field: { name, value, onChange, ref } }) => (
             <>
               <TextField
+                id={'name'}
                 type="text"
                 name={name}
                 label={nameField.label}
@@ -104,6 +105,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
             name="userName"
             render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <TextField
+                id={'user-name'}
                 type="text"
                 name={name}
                 label={userNameField.label}
@@ -126,6 +128,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
               name="ens"
               render={({ field: { name, value, onChange, ref } }) => (
                 <TextField
+                  id={'ens'}
                   type="text"
                   name={name}
                   label={ensField.label}
@@ -147,6 +150,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
               name="ens"
               render={({ field: { name, value, onChange, ref } }) => (
                 <TextField
+                  id={'ens'}
                   type="text"
                   name={name}
                   label={ensField?.label}
@@ -169,6 +173,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           name="bio"
           render={({ field: { name, value, onChange, ref } }) => (
             <TextField
+              id={'bio'}
               name={name}
               label={bioField.label}
               value={value}
