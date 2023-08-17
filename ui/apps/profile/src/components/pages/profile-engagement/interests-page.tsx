@@ -77,15 +77,11 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
       <Card elevation="1" radius={20} padding={16}>
         <Stack direction="column" spacing="gap-y-2.5">
           <Text variant="h5">{t('Interests')} </Text>
-          <Stack
-            align="center"
-            justify="start"
-            spacing="gap-2"
-            customStyle="flex-wrap w-full md:w-8/12"
-          >
+          <Stack align="center" justify="start" spacing="gap-2" customStyle="flex-wrap w-full">
             {topics &&
-              topics.map(topic => (
+              topics.map((topic, idx) => (
                 <Pill
+                  key={idx}
                   label={topic.value}
                   size="sm"
                   onPillClick={() => handleTopicClick(topic.value)}
