@@ -21,9 +21,7 @@ import {
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
-  useSearchPosts,
   useSearchProfiles,
-  useSearchComments,
   useSearchTags,
   useEntryNavigation,
   useAnalytics,
@@ -69,7 +67,15 @@ const initSearchState = {
 };
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { singleSpa, loggedProfileData, showLoginModal } = props;
+  const {
+    plugins,
+    loggedProfileData,
+    logger,
+    singleSpa,
+    uiEvents,
+    showLoginModal,
+    navigateToModal,
+  } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
@@ -84,7 +90,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const handleEntryNavigation = useEntryNavigation(navigateTo);
 
   // const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.CONTENT, [activeButton]);
@@ -191,30 +197,32 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   );
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
-  const searchBeamsReq = useSearchPosts(
-    decodeURIComponent(searchKeyword),
-    searchState[ButtonValues.CONTENT].page,
-    loggedProfileData?.did?.id,
-  );
+  // const searchBeamsReq = useSearchPosts(
+  //   decodeURIComponent(searchKeyword),
+  //   searchState[ButtonValues.CONTENT].page,
+  //   loggedProfileData?.did?.id,
+  // );
+
   const searchBeamsState = getSearchStateForTab(ButtonValues.CONTENT);
 
-  const searchCommentsReq = useSearchComments(
-    decodeURIComponent(searchKeyword),
-    searchState[ButtonValues.CONTENT].page,
-    loggedProfileData?.did?.id,
-  );
+  // const searchCommentsReq = useSearchComments(
+  //   decodeURIComponent(searchKeyword),
+  //   searchState[ButtonValues.CONTENT].page,
+  //   loggedProfileData?.did?.id,
+  // );
+
   // const searchReflectionsState = searchState[ButtonValues.CONTENT].results;
 
   const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TAGS);
 
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   if (searchBeamsReq.isFetched) {
   //     updateSearchState(ButtonValues.CONTENT, searchBeamsReq.data);
   //   }
   // }, [searchBeamsReq.data, searchBeamsReq.isFetched]);
 
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   if (searchCommentsReq.isFetched) {
   //     updateSearchState(ButtonValues.CONTENT, searchCommentsReq.data);
   //   }
@@ -273,7 +281,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     const trimmedValue = inputValue.trim();
     if (!trimmedValue) return;
     const encodedSearchKey = encodeURIComponent(trimmedValue);
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-search',
       getNavigationUrl: routes => `${routes.Results}/${encodedSearchKey}`,
     });
@@ -330,11 +338,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
   };
 
-  const emptySearchState =
-    searchProfilesState?.length === 0 &&
-    searchBeamsState?.length === 0 &&
-    // searchReflectionsState?.length === 0 &&
-    searchTagsState?.length === 0;
+  // const emptySearchState =
+  //   searchProfilesState?.length === 0 &&
+  //   searchBeamsState?.length === 0 &&
+  //   // searchReflectionsState?.length === 0 &&
+  //   searchTagsState?.length === 0;
 
   React.useEffect(() => {
     if (activeButton !== ButtonValues.CONTENT) {
@@ -365,30 +373,30 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     setActiveButton(value);
   };
 
-  const onNavBack = () => {
-    history.back();
-  };
+  // const onNavBack = () => {
+  //   history.back();
+  // };
 
-  const searchCount =
-    searchProfilesState?.length ||
-    0 + searchBeamsState?.length ||
-    // 0 + searchReflectionsState?.length ||
-    0 + searchTagsState?.length ||
-    0;
+  // const searchCount =
+  //   searchProfilesState?.length ||
+  //   0 + searchBeamsState?.length ||
+  //   // 0 + searchReflectionsState?.length ||
+  //   0 + searchTagsState?.length ||
+  //   0;
 
-  const allQueriesFinished = React.useMemo(() => {
-    return (
-      !searchProfilesReq.isFetching &&
-      !searchBeamsReq.isFetching &&
-      !searchCommentsReq.isFetching &&
-      !searchTagsReq.isFetching
-    );
-  }, [
-    searchCommentsReq.isFetching,
-    searchBeamsReq.isFetching,
-    searchProfilesReq.isFetching,
-    searchTagsReq.isFetching,
-  ]);
+  // const allQueriesFinished = React.useMemo(() => {
+  //   return (
+  //     !searchProfilesReq.isFetching &&
+  //     !searchBeamsReq.isFetching &&
+  //     !searchCommentsReq.isFetching &&
+  //     !searchTagsReq.isFetching
+  //   );
+  // }, [
+  //   searchCommentsReq.isFetching,
+  //   searchBeamsReq.isFetching,
+  //   searchProfilesReq.isFetching,
+  //   searchTagsReq.isFetching,
+  // ]);
 
   const isFetchingSearch = React.useMemo(() => {
     // if (activeButton === ButtonValues.ALL) {
@@ -421,10 +429,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         <SwitchCard
           activeButton={activeButton}
           onTabClick={onTabClick}
-          onIconClick={onNavBack}
           buttonValues={buttonValues}
           loggedUser={loggedProfileData?.did?.id}
-          style="-mb-px" // overlaps border with parent's bottom border
         />
       </SearchStartCard>
       {activeButton === ButtonValues.CONTENT && (
@@ -545,7 +551,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   key={itemData.itemId}
                   itemData={itemData}
                   itemType={EntityTypes.POST}
-                  logger={props.logger}
+                  logger={logger}
                   singleSpa={singleSpa}
                   onContentClick={handleEntryNavigation}
                   navigateTo={navigateTo}
@@ -557,8 +563,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   locale={locale}
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}
-                  uiEvents={props.uiEvents}
-                  navigateToModal={props.navigateToModal}
+                  uiEvents={uiEvents}
+                  navigateToModal={navigateToModal}
                 />
               ))}
             </>

@@ -1,12 +1,16 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+
 import EntryError, { EntryErrorProps } from '.';
 
-export default {
+const meta: Meta<EntryErrorProps> = {
   title: 'Profile/EntryError',
   component: EntryError,
 };
 
-const Template = (args: EntryErrorProps) => <EntryError {...args} />;
+export default meta;
+type Story = StoryObj<EntryErrorProps>;
 
-export const BaseEntryError = Template.bind({});
-BaseEntryError.args = {};
+export const BaseEntryError: Story = {
+  render: () => <EntryError onError={() => ({})} />,
+};

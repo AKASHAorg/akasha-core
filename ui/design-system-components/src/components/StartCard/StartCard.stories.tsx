@@ -1,28 +1,23 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import StartCard, { StartProps } from './index';
+import StartCard, { StartCardProps } from '.';
 
-export default {
+const meta: Meta<StartCardProps> = {
   title: 'Cards/StartCard',
   component: StartCard,
-  argTypes: {
-    title: { control: 'text' },
-    heading: { control: 'text' },
-    description: { control: 'text' },
-    image: { control: 'text' },
-  },
 };
 
-const Template = (args: StartProps) => {
-  return <StartCard {...args} />;
-};
+export default meta;
+type Story = StoryObj<StartCardProps>;
 
-export const BaseStartCard = Template.bind({});
-
-BaseStartCard.args = {
-  title: 'List',
-  heading: '✨ Save what inspires you ✨',
-  image: 'https://placekitten.com/300/300',
-  description:
-    'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community.',
+export const BaseStartCard: Story = {
+  render: () => (
+    <StartCard
+      title="List"
+      heading="✨ Save what inspires you ✨"
+      image="https://placekitten.com/300/300"
+      description="To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community."
+    />
+  ),
 };

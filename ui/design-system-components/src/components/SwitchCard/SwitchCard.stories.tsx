@@ -1,14 +1,17 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import SwitchCard from '.';
+import SwitchCard, { SwitchCardProps } from '.';
 
-export interface ISwitchCardComponent {
-  buttonValues: { value: string; label: string }[];
-  onIconClick: () => void;
-}
+const meta: Meta<SwitchCardProps> = {
+  title: 'Cards/SwitchCard',
+  component: SwitchCard,
+};
 
-const SwitchCardComponent: React.FC<ISwitchCardComponent> = props => {
-  const { buttonValues, onIconClick } = props;
+export default meta;
+type Story = StoryObj<SwitchCardProps>;
+
+const Component = () => {
   const [activeButton, setActiveButton] = React.useState<string>('Kept');
 
   const onTabClick = (value: string) => () => {
@@ -18,37 +21,16 @@ const SwitchCardComponent: React.FC<ISwitchCardComponent> = props => {
   return (
     <SwitchCard
       activeButton={activeButton}
-      buttonValues={buttonValues}
-      onIconClick={onIconClick}
+      buttonValues={[
+        { value: 'Kept', label: 'Kept' },
+        { value: 'Delisted', label: 'Delisted' },
+      ]}
       onTabClick={onTabClick}
       loggedUser={'0x000'}
     />
   );
 };
 
-export default {
-  title: 'Cards/SwitchCard',
-  component: SwitchCardComponent,
-  argType: {
-    count: { control: 'number' },
-    countLabel: { control: 'text' },
-    onIconClick: { action: 'clicked icon' },
-  },
-};
-
-const Template = (args: ISwitchCardComponent) => (
-  <>
-    <SwitchCardComponent {...args} />
-  </>
-);
-
-export const BaseSwitchCard = Template.bind({});
-
-BaseSwitchCard.args = {
-  count: 1276,
-  countLabel: 'results',
-  buttonValues: [
-    { value: 'Kept', label: 'Kept' },
-    { value: 'Delisted', label: 'Delisted' },
-  ],
+export const BaseSwitchCard: Story = {
+  render: () => <Component />,
 };

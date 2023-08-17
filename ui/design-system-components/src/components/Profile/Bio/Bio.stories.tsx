@@ -1,16 +1,21 @@
 import React from 'react';
-import Bio, { BioProps } from './index';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import Bio, { BioProps } from '.';
+
+const meta: Meta<BioProps> = {
   title: 'Profile/ProfileBio',
   component: Bio,
 };
 
-const Template = (args: BioProps) => <Bio {...args} />;
+export default meta;
+type Story = StoryObj<BioProps>;
 
-export const BasicProfileBio = Template.bind({});
-BasicProfileBio.args = {
-  title: 'Bio',
-  biography: `Coffee lover ☕️ Web3.Space traveler 🧑🏼‍🚀 Loves
-  cooking and baking for the shelter in my neighborhood.`,
+export const BaseBio: Story = {
+  render: () => (
+    <Bio
+      title="Bio"
+      biography="Coffee lover ☕️ Web3.Space traveler 🧑🏼‍🚀 Loves cooking and baking for the shelter in my neighborhood."
+    />
+  ),
 };

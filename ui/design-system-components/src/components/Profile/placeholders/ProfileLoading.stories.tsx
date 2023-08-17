@@ -1,12 +1,16 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+
 import ProfileLoading from './ProfileLoading';
 
-export default {
-  title: 'Profile/ProfileLoading',
+const meta: Meta = {
+  title: 'Profile/ProfileProfileLoading',
   component: ProfileLoading,
 };
 
-const Template = () => <ProfileLoading />;
+export default meta;
+type Story = StoryObj;
 
-export const BasicProfileLoading = Template.bind({});
-BasicProfileLoading.args = {};
+export const BaseProfileLoading: Story = {
+  render: () => <ProfileLoading />,
+};

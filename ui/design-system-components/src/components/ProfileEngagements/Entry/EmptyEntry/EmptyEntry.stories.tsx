@@ -1,25 +1,33 @@
 import React from 'react';
-import EmptyEntry, { EmptyEntryProps } from '.';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import EmptyEntry, { EmptyEntryProps } from '.';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+const meta: Meta<EmptyEntryProps> = {
   title: 'Profile/EmptyEntry',
   component: EmptyEntry,
 };
 
-const Template = (args: EmptyEntryProps) => <EmptyEntry {...args} />;
+export default meta;
+type Story = StoryObj<EmptyEntryProps>;
 
-export const FollowersEmptyEntry = Template.bind({});
-FollowersEmptyEntry.args = {
-  viewerIsOwner: false,
-};
+const variants: EmptyEntryProps[] = [
+  {
+    type: 'following',
+  },
+  {
+    type: 'following',
+    viewerIsOwner: false,
+  },
+];
 
-export const FollowingEmptyEntry = Template.bind({});
-FollowingEmptyEntry.args = {
-  type: 'following',
-};
-
-export const OtherViewerFollowingEmptyEntry = Template.bind({});
-OtherViewerFollowingEmptyEntry.args = {
-  type: 'following',
-  viewerIsOwner: false,
+export const BaseCard: Story = {
+  render: () => (
+    <Stack>
+      {variants.map((variant, idx) => (
+        <EmptyEntry key={idx} {...variant} />
+      ))}
+    </Stack>
+  ),
 };

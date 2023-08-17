@@ -1,18 +1,20 @@
 import React from 'react';
-import Header, { HeaderProps } from './index';
-import { Profile } from '@akashaorg/typings/ui';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import Header, { HeaderProps } from '.';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+const meta: Meta<HeaderProps> = {
   title: 'Profile/ProfileHeader',
   component: Header,
 };
 
-const Template = (args: HeaderProps & Profile) => <Header {...args} />;
+export default meta;
+type Story = StoryObj<HeaderProps>;
 
 const profileId = 'did:key:003410490050000320006570034567114572000';
 
-export const BasicProfileHeader = Template.bind({});
-BasicProfileHeader.args = {
+const commonProps = {
   id: 'profile-stream-id',
   did: { id: profileId },
   coverImage: null,
@@ -21,19 +23,21 @@ BasicProfileHeader.args = {
   flagLabel: 'Report',
 };
 
-export const BasicProfileHeaderFollowing = Template.bind({});
-BasicProfileHeaderFollowing.args = {
-  ...BasicProfileHeader.args,
-};
+const variants = [
+  { ...commonProps },
+  { ...commonProps, viewerIsOwner: true },
+  {
+    ...commonProps,
+    ens: null,
+  },
+];
 
-export const BasicProfileHeaderOwnProfile = Template.bind({});
-BasicProfileHeaderOwnProfile.args = {
-  ...BasicProfileHeader.args,
-  viewerIsOwner: true,
-};
-
-export const ProfileHeaderWithoutEns = Template.bind({});
-ProfileHeaderWithoutEns.args = {
-  ...BasicProfileHeader.args,
-  ens: null,
+export const HeaderVariants: Story = {
+  render: () => (
+    <Stack direction="column" spacing="gap-y-2" customStyle="w-[50%]">
+      {variants.map((variant, idx) => (
+        <Header key={idx} {...variant} />
+      ))}
+    </Stack>
+  ),
 };

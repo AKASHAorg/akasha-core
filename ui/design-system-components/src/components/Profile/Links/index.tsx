@@ -1,18 +1,20 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
 import { getIconFromLink } from '../../../utils/get-icon-from-link';
 import { AkashaProfileLinkSource } from '@akashaorg/typings/sdk/graphql-types-new';
 
-export interface LinksProps {
+export type LinksProps = {
   title: string;
   links: AkashaProfileLinkSource[];
   copyLabel?: string;
   copiedLabel?: string;
-}
+};
 
 const Links: React.FC<LinksProps> = ({ title, links }) => {
   return (

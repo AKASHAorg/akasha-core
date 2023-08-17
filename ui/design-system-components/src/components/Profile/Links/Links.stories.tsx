@@ -1,19 +1,25 @@
 import React from 'react';
-import Links, { LinksProps } from './index';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import Links, { LinksProps } from '.';
+
+const meta: Meta<LinksProps> = {
   title: 'Profile/ProfileLinks',
   component: Links,
 };
 
-const Template = (args: LinksProps) => <Links {...args} />;
+export default meta;
+type Story = StoryObj<LinksProps>;
 
-export const BasicProfileLinks = Template.bind({});
-BasicProfileLinks.args = {
-  title: 'Find me on',
-  links: [
-    { href: 'https://lover.coffee' },
-    { href: 'https://github.com/handle' },
-    { href: 'https://telegram.com/handle' },
-  ],
+export const BaseLinks: Story = {
+  render: () => (
+    <Links
+      title="Find me on"
+      links={[
+        { href: 'https://lover.coffee' },
+        { href: 'https://github.com/handle' },
+        { href: 'https://telegram.com/handle' },
+      ]}
+    />
+  ),
 };

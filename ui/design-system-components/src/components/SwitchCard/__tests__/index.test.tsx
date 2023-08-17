@@ -8,7 +8,6 @@ import { customRender } from '@akashaorg/design-system-core/src/test-utils';
 describe('<SwitchCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const handleIconClick = jest.fn();
   const handleTabClick = jest.fn();
 
   beforeEach(() => {
@@ -20,7 +19,6 @@ describe('<SwitchCard /> Component', () => {
             { value: 'Delisted', label: 'Delisted' },
           ]}
           activeButton={'Kept'}
-          onIconClick={() => handleIconClick}
           onTabClick={() => handleTabClick}
           loggedUser="0x000"
         />,

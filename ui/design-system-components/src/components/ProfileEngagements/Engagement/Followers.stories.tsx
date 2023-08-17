@@ -1,57 +1,60 @@
 import React from 'react';
-import Followers, { FollowersProps } from './Followers';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import { Profile } from '@akashaorg/typings/ui';
+
+import Followers, { FollowersProps } from './Followers';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+const meta: Meta<FollowersProps> = {
   title: 'Profile/Followers',
   component: Followers,
 };
 
-const Template = (args: FollowersProps) => <Followers {...args} />;
+export default meta;
+type Story = StoryObj<FollowersProps>;
 
-const COMMON_PROPS = {
+const commonProps = {
+  viewerIsOwner: false,
   profileAnchorLink: '#',
-  onError: () => ({}),
-  onProfileClick: () => ({}),
-  getMediaUrl: () => ({}),
+  loadMore: false,
   onLoadMore: () => ({}),
+  getMediaUrl: () => ({
+    default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },
+  }),
   renderFollowElement: () => <></>,
+  onProfileClick: () => ({}),
 };
 
-const followerData = {
+const followerData: Profile = {
+  id: 'some id',
+  createdAt: Date.now(),
   name: 'Coffee Lover',
-  userName: 'ilovecoffee',
-  avatar: { default: 'https://placebeard.it/360x360' },
   did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377' },
 };
 
-export const BaseFollowers = Template.bind({});
-BaseFollowers.args = {
-  ...COMMON_PROPS,
-  followers: [{ isFollowing: false, profile: followerData }],
-};
+const variants: FollowersProps[] = [
+  {
+    ...commonProps,
+    followers: [{ id: '1', isFollowing: false, profile: followerData }],
+  },
+  {
+    ...commonProps,
+    followers: [],
+  },
+  {
+    ...commonProps,
+    followers: [{ id: '1', isFollowing: false, profile: followerData }],
+    viewerIsOwner: false,
+  },
+];
 
-export const NoFollowers = Template.bind({});
-NoFollowers.args = {
-  ...COMMON_PROPS,
-  followers: [],
-};
-
-export const OtherViewerNoFollowing = Template.bind({});
-OtherViewerNoFollowing.args = {
-  ...COMMON_PROPS,
-  followers: [{ isFollowing: false, profile: followerData }],
-  viewerIsOwner: false,
-  ownerUserName: 'espressolover',
-};
-
-export const FollowersLoading = Template.bind({});
-FollowersLoading.args = {
-  ...COMMON_PROPS,
-  followers: [],
-};
-
-export const FollowersError = Template.bind({});
-FollowersError.args = {
-  ...COMMON_PROPS,
-  followers: [],
+export const FollowersVariants: Story = {
+  render: () => (
+    <Stack direction="column" spacing="gap-y-2" customStyle="w-[50%]">
+      {variants.map((variant, idx) => (
+        <Followers key={idx} {...variant} />
+      ))}
+    </Stack>
+  ),
 };

@@ -1,12 +1,16 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+
 import EntryLoading from './EntryLoading';
 
-export default {
-  title: 'Profile EntryLoading',
+const meta: Meta = {
+  title: 'Profile/EntryLoading',
   component: EntryLoading,
 };
 
-const Template = () => <EntryLoading />;
+export default meta;
+type Story = StoryObj;
 
-export const BasicListEntryLoading = Template.bind({});
-BasicListEntryLoading.args = {};
+export const BaseEntryError: Story = {
+  render: () => <EntryLoading />,
+};
