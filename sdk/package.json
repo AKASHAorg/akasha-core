@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@akashaorg/composedb-models": "*",
-    "@composedb/client": "0.4.4",
+    "@composedb/client": "0.5.0-rc.3",
     "@didtools/cacao": "2.1.0",
     "@didtools/pkh-ethereum": "0.4.0",
     "@ensdomains/ens-contracts": "^0.0.22",
