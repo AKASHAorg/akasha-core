@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ModerationSwitchCard, { ModerationSwitchCardProps } from '.';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+
+import ModerationSwitchCard, { ModerationSwitchCardProps } from '.';
 
 const meta: Meta<ModerationSwitchCardProps> = {
   title: 'Moderation/ModerationSwitchCard',

@@ -5,10 +5,9 @@ import { IconType } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 
 import IconDrop, { IconEntry } from './icon-drop';
-
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 
 export type EditorToolbarProps = {
   onBoldClick: () => void;

@@ -1,10 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import AppInfo, { AppInfoProps } from '.';
-
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+import AppInfo, { AppInfoProps } from '.';
 
 const meta: Meta<AppInfoProps> = {
   title: 'AkashaVerse/AppInfo',

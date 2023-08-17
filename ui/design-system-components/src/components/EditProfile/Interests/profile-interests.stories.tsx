@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Interests, InterestsProps } from '.';
 
 const meta: Meta<InterestsProps> = {
-  title: 'Profile/Interests',
+  title: 'Profile/Edit/Interests',
   component: Interests,
 };
 
@@ -71,9 +71,7 @@ export const BaseInterests: Story = {
       cancelButton={{ label: 'Cancel', handleClick: () => ({}) }}
       saveButton={{
         label: 'Save',
-        handleClick: interests => {
-          console.log(interests);
-        },
+        handleClick: () => ({}),
       }}
     />
   ),

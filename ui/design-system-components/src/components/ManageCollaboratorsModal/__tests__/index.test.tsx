@@ -1,9 +1,9 @@
 import React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import ManageCollaboratorsModal from '..';
-
 import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
+
+import ManageCollaboratorsModal from '..';
 
 describe('<ManageCollaboratorsModal /> Component', () => {
   let componentWrapper = customRender(<></>, {});

@@ -1,9 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import AppList, { AppListProps } from '.';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+
+import AppList, { AppListProps } from '.';
 
 const meta: Meta<AppListProps> = {
   title: 'AkashaVerse/AppList',

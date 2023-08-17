@@ -1,8 +1,9 @@
 import React from 'react';
+
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { TextFieldProps } from '@akashaorg/design-system-core/lib/components/TextField/types';
 
 export type SocialLinkProps = {

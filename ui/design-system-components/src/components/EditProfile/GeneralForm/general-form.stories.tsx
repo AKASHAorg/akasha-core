@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { GeneralForm, GeneralFormProps } from '.';
 
 const meta: Meta<GeneralFormProps> = {
-  title: 'Profile/GeneralForm',
+  title: 'Profile/Edit/GeneralForm',
   component: GeneralForm,
 };
 
@@ -71,9 +71,7 @@ export const BaseGeneralForm: Story = {
       }}
       saveButton={{
         label: 'Save',
-        handleClick: formValues => {
-          console.log(formValues);
-        },
+        handleClick: () => ({}),
       }}
     />
   ),

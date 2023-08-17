@@ -1,8 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import DevKeyCard, { DevKeyCardProps } from '.';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+
+import DevKeyCard, { DevKeyCardProps } from '.';
 
 import { sampleDevKey } from '../../utils/dummy-data';
 

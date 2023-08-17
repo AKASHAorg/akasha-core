@@ -1,31 +1,32 @@
 import React from 'react';
-import SearchBar, { ISearchBar } from './index';
+import type { Meta, StoryObj } from '@storybook/react';
+import SearchBar, { SearchBarProps } from '.';
 
-export default {
+const meta: Meta<SearchBarProps> = {
   title: 'Search/SearchBar',
   component: SearchBar,
-  argTypes: {
-    inputValue: { control: 'text' },
-    inputPlaceholderLabel: { control: 'text' },
-    onInputChange: { action: 'input changed' },
-  },
 };
 
-const Template = (args: ISearchBar) => {
+export default meta;
+type Story = StoryObj<SearchBarProps>;
+
+const Component = () => {
   const [inputValue, setInputValue] = React.useState('');
+
   const handleInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(ev.target.value);
   };
+
   return (
-    <div>
-      <SearchBar {...args} onInputChange={handleInputChange} inputValue={inputValue} />
-    </div>
+    <SearchBar
+      inputValue={inputValue}
+      inputPlaceholderLabel="Search"
+      onInputChange={handleInputChange}
+      onSearch={() => ({})}
+    />
   );
 };
 
-export const BaseSearchBar = Template.bind({});
-
-BaseSearchBar.args = {
-  inputValue: '',
-  inputPlaceholderLabel: 'Search',
+export const BaseSearchBar: Story = {
+  render: () => <Component />,
 };

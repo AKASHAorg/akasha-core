@@ -1,8 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ModerationValueCard, { ModerationValueCardProps } from '.';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+import ModerationValueCard, { ModerationValueCardProps } from '.';
 
 const meta: Meta<ModerationValueCardProps> = {
   title: 'Moderation/ModerationValueCard',

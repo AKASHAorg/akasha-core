@@ -1,8 +1,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { tw } from '@twind/core';
 
 import ModerationIntroCard, { ModerationIntroCardProps } from '.';
-import { tw } from '@twind/core';
 
 const meta: Meta<ModerationIntroCardProps> = {
   title: 'Moderation/ModerationIntroCard',

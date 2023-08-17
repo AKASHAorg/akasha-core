@@ -5,6 +5,7 @@ import { Profile } from '@akashaorg/typings/ui';
 
 import Avatar, { AvatarSize } from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export interface ProfileAvatarNotificationAppProps {
   info?: string | React.ReactElement;
@@ -16,9 +17,9 @@ export interface ProfileAvatarNotificationAppProps {
   customStyle?: string;
   profileId: string;
   onClickAvatar?: () => void;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
-  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
-  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const ProfileAvatarNotificationApp = React.forwardRef(
@@ -52,8 +53,9 @@ const ProfileAvatarNotificationApp = React.forwardRef(
           </div>
           <Avatar size={size} avatar={avatarImage} profileId={profileId} onClick={onClickAvatar} />
         </div>
-        <div
-          className={tw(apply(`pl(lg:4 2) flex h-[50%] my-auto`))}
+        <Button
+          plain={true}
+          customStyle="pl(lg:4 2) flex h-[50%] my-auto"
           onClick={onClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
@@ -63,7 +65,7 @@ const ProfileAvatarNotificationApp = React.forwardRef(
               {label || profileId}
             </Text>
           </div>
-        </div>
+        </Button>
         <div />
         <div className={tw(apply(`pl(lg:4 2)`))}>
           <Text variant="footnotes2" color="grey7" truncate={true}>

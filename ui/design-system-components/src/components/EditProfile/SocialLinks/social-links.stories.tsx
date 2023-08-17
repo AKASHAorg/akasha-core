@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { SocialLinks, SocialLinksProps } from '.';
 
 const meta: Meta<SocialLinksProps> = {
-  title: 'Profile/SocialLinks',
+  title: 'Profile/Edit/SocialLinks',
   component: SocialLinks,
 };
 

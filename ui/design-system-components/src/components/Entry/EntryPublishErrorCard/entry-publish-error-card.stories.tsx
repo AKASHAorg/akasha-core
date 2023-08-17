@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import EntryPublishErrorCard, { PublishErrorCardProps } from '.';
 
 const meta: Meta<PublishErrorCardProps> = {
-  title: 'Cards/EntryPublishErrorCard',
+  title: 'Entry/EntryPublishErrorCard',
   component: EntryPublishErrorCard,
 };
 

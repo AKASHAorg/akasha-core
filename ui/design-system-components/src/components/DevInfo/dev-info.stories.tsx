@@ -1,8 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import DevInfo, { DevInfoProps } from '.';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+
+import DevInfo, { DevInfoProps } from '.';
 
 const meta: Meta<DevInfoProps> = {
   title: 'AkashaVerse/DevInfo',

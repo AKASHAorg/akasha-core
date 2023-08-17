@@ -8,7 +8,7 @@ import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexBut
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import { TagButton } from './TagButton';
+import { TagButton } from './tag-button';
 
 export interface OnboardingSuggestionsCardProps {
   topicsLabel?: string;

@@ -4,6 +4,7 @@ import { act, cleanup } from '@testing-library/react';
 import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
 
 import DevKeyCard from '../';
+
 import { sampleDevKey } from '../../../utils/dummy-data';
 
 describe('<DevKeyCard /> Component', () => {

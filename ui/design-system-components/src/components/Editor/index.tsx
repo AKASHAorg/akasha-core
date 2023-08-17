@@ -8,36 +8,32 @@ import {
   Element,
   Descendant,
 } from 'slate';
-import { withHistory } from 'slate-history';
-import { Editable } from 'slate-react';
-import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
-
-// import data from '@emoji-mart/data';
-// import Picker from '@emoji-mart/react';
-
+import isUrl from 'is-url';
 import { tw, tx } from '@twind/core';
+import { withHistory } from 'slate-history';
 import { Popover } from '@headlessui/react';
-import { IEntryData, IMetadata, IPublishData } from '@akashaorg/typings/ui';
+import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
+
+import { IEntryData, IMetadata, IPublishData, Profile } from '@akashaorg/typings/ui';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Meter from '@akashaorg/design-system-core/lib/components/Meter';
 
-import EmbedBox from '../EmbedBox';
-import { TagPopover } from './tag-popover';
-import LinkPreview from '../LinkPreview';
-import { ImageObject } from '../ImageGallery/image-grid-item';
-import ImageGallery from '../ImageGallery';
-
 import { CustomEditor } from './helpers';
-import { withMentions, withImages, withTags, withLinks } from './plugins';
-import { renderElement, renderLeaf } from './renderers';
-import { ImageData, ImageUpload } from './image-upload';
-import { MentionPopover } from './mention-popover';
+import { TagPopover } from './tag-popover';
 import { serializeToPlainText } from './serialize';
+import { MentionPopover } from './mention-popover';
 import { editorDefaultValue } from './initialValue';
-import isUrl from 'is-url';
-import { Profile } from '@akashaorg/typings/ui';
+import { ImageData, ImageUpload } from './image-upload';
+import { renderElement, renderLeaf } from './renderers';
+import { withMentions, withImages, withTags, withLinks } from './plugins';
+
+import EmbedBox from '../EmbedBox';
+import LinkPreview from '../LinkPreview';
+import ImageGallery from '../ImageGallery';
+import { ImageObject } from '../ImageGallery/image-grid-item';
 
 const MAX_LENGTH = 280;
 

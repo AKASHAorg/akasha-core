@@ -8,7 +8,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 import BasicInfoCard from './basic-info-card';
-import ProfileAvatarNotificationApp from './ProfileAvatarNotificationApp';
+import ProfileAvatarNotificationApp from './profile-avatar-notification-app';
 
 import { formatRelativeTime } from '../../utils/time';
 

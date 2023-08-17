@@ -1,8 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import InstallApps, { InstallAppProps } from '.';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+import InstallApps, { InstallAppProps } from '.';
 
 const meta: Meta<InstallAppProps> = {
   title: 'AkashaVerse/Install App',

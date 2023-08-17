@@ -9,9 +9,9 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import Collaborator from './collaborator';
-import SearchBar, { ISearchBar } from '../SearchBar';
+import SearchBar, { SearchBarProps } from '../SearchBar';
 
-export type ManageCollaboratorsModalProps = Omit<ISearchBar, 'searchInputSize' | 'iconSize'> & {
+export type ManageCollaboratorsModalProps = Omit<SearchBarProps, 'searchInputSize' | 'iconSize'> & {
   assetName?: string;
   publicImgPath?: string;
   titleLabel: string;

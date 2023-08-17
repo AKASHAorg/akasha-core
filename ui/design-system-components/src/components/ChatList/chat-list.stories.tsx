@@ -5,7 +5,7 @@ import ChatList, { ChatListProps } from '.';
 import BubbleCard from '../BubbleCard';
 
 const meta: Meta<ChatListProps> = {
-  title: 'Cards/ChatList',
+  title: 'Chat/ChatList',
   component: ChatList,
 };
 

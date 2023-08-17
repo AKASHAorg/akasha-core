@@ -8,7 +8,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import { SocialLink } from './SocialLink';
+import { SocialLink } from './social-link';
 
 import { ButtonType } from '../types';
 import { AkashaProfileLinkSource } from '@akashaorg/typings/sdk/graphql-types-new';
