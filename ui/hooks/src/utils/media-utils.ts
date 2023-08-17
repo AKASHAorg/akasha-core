@@ -125,7 +125,7 @@ export const getLinkPreview = async (url: string) => {
   const sdk = getSDK();
   const imageSources = { url: '', fallbackUrl: '' };
   const faviconSources = { url: '', fallbackUrl: '' };
-  const linkPreviewResp = await sdk.api.entries.getLinkPreview(url);
+  const linkPreviewResp = { getLinkPreview: undefined };
   const linkPreview = Object.assign({}, linkPreviewResp.getLinkPreview);
 
   // fetch media links for image and favicon sources

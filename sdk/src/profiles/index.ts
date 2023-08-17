@@ -22,7 +22,7 @@ import IpfsConnector from '../common/ipfs.connector';
 import { z } from 'zod';
 import { validate } from '../common/validator';
 import { throwError } from '../common/error-handling';
-import GqlNew from '../gql/index.new';
+import GqlNew from '../gql';
 import { GetProfilesQueryVariables } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import type { AkashaProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
 // tslint:disable-next-line:no-var-requires

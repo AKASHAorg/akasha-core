@@ -12,7 +12,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import { ILogger } from '@akashaorg/typings/sdk/log';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
-import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
+
 import {
   TrackEventData,
   EventTypes,
@@ -21,7 +21,6 @@ import {
   RootComponentProps,
   ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
-import { usePost, useComment, mapEntry } from '@akashaorg/ui-awf-hooks';
 
 import FeedWidget from './App';
 import { Profile, IContentClickDetails } from '@akashaorg/typings/ui';
@@ -102,44 +101,22 @@ const EntryRenderer = (
 
   const { t } = useTranslation('ui-lib-feed');
 
-  const postReq = usePost({ postId: itemId, enabler: itemType === EntityTypes.POST });
-  const commentReq = useComment(itemId, itemType === EntityTypes.REPLY);
-
-  const postData = React.useMemo(() => {
-    if (postReq.data && itemType === EntityTypes.POST) {
-      return mapEntry(postReq.data);
-    }
-    return undefined;
-  }, [postReq.data, itemType]);
-
-  const commentData = React.useMemo(() => {
-    if (commentReq.data && itemType === EntityTypes.REPLY) {
-      return mapEntry(commentReq.data);
-    }
-    return undefined;
-  }, [commentReq.data, itemType]);
+  const postData = [];
 
   // @TODO fix hooks
-  const itemData = React.useMemo(() => {
-    if (itemType === EntityTypes.POST) {
-      return postData;
-    } else if (itemType === EntityTypes.REPLY) {
-      return commentData;
-    }
-  }, [postData, commentData, itemType]);
+  const itemData = [];
 
   const [isReported, isAccountReported] = React.useMemo(() => {
     if (showAnyway) {
       return [false, false];
     }
-    const reqSuccess = postReq.isSuccess || commentReq.isSuccess;
-    return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
-  }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
+    return [false, false];
+  }, [showAnyway]);
 
   const handleAvatarClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${itemData?.author.pubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/itemData?.author.pubKey`,
     });
   };
 
@@ -202,9 +179,8 @@ const EntryRenderer = (
     }
   }, [t, itemType]);
 
-  const accountAwaitingModeration =
-    !itemData?.author?.moderated && isAccountReported && !parentIsProfilePage;
-  const entryAwaitingModeration = !itemData?.moderated && isReported;
+  const accountAwaitingModeration = false;
+  const entryAwaitingModeration = false;
 
   const reportedTypeName = React.useMemo(() => {
     if (accountAwaitingModeration) return `the author of this ${itemTypeName}`;
@@ -213,25 +189,13 @@ const EntryRenderer = (
   // @TODO fix author
   const showEditButton = React.useMemo(
     () => false, //loggedProfileData?.did.id === itemData?.author?.did.id,
-    [itemData?.author, loggedProfileData],
+    [loggedProfileData],
   );
 
   const isComment = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
 
-  const canShowEntry =
-    itemData &&
-    !entryAwaitingModeration &&
-    !accountAwaitingModeration &&
-    !itemData.delisted &&
-    !itemData.isRemoved;
-  const repliesReq = useInfiniteReplies(
-    {
-      limit: REPLY_FRAGMENT_SIZE,
-      postID: !!commentData && 'postId' in commentData && commentData?.postId,
-      commentID: commentData?.entryId,
-    },
-    Boolean(canShowEntry) && showReplyFragment,
-  );
+  const canShowEntry = true;
+  const repliesReq = undefined;
 
   const replyPages = React.useMemo(() => {
     if (repliesReq.data) {
@@ -250,7 +214,7 @@ const EntryRenderer = (
     `border-b-1 border(grey8 dark:grey3)`;
   };
 
-  const entryLoading = postReq.isLoading || commentReq.isLoading;
+  const entryLoading = false;
 
   const hasItemSpacingStyle = React.useMemo(
     () => itemSpacing && (entryLoading || canShowEntry),
@@ -260,19 +224,19 @@ const EntryRenderer = (
   return (
     <Box customStyle={hasItemSpacingStyle ? `mb-[${itemSpacing}px]` : ''}>
       {entryLoading && <EntryCardLoading />}
-      {(postReq.isError || commentReq.isError) && (
+      {false && (
         <ErrorLoader
           type="script-error"
           title={t('There was an error loading the {{itemTypeName}}', { itemTypeName })}
           details={t('We cannot show this {{itemTypeName}} now', { itemTypeName })}
-          devDetails={postReq.error.message}
+          devDetails={'placeholder'}
         />
       )}
-      {(postReq.isSuccess || commentReq.isSuccess) && (
+      {
         <>
           {(accountAwaitingModeration || entryAwaitingModeration) && (
             <EntryCardHidden
-              reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
+              reason={'placeholder'}
               headerTextLabel={t('You reported {{reportedTypeName}} for the following reason', {
                 reportedTypeName,
               })}
@@ -285,8 +249,8 @@ const EntryRenderer = (
             <Box customStyle={entryCardStyle()}>
               <EntryCard
                 className={className}
-                isRemoved={itemData.isRemoved}
-                entryData={{ ...itemData, author: itemData.author as unknown as Profile }}
+                isRemoved={false}
+                entryData={undefined}
                 onClickAvatar={handleAvatarClick}
                 editedLabel={t('Last edited')}
                 flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
@@ -301,7 +265,7 @@ const EntryRenderer = (
                 }`}
                 hideRepost={isComment}
                 onRepost={onRepost}
-                onEntryFlag={onFlag && onFlag(itemData.entryId, itemType)}
+                onEntryFlag={undefined}
                 onContentClick={handleContentClick}
                 onMentionClick={handleMentionClick}
                 onTagClick={handleTagClick}
@@ -314,7 +278,7 @@ const EntryRenderer = (
                 removeEntryLabel={removeEntryLabel}
                 removedByMeLabel={removedByMeLabel}
                 removedByAuthorLabel={removedByAuthorLabel}
-                disableReposting={itemData.isRemoved || isComment}
+                disableReposting={false}
                 disableReporting={!loggedProfileData?.did?.id}
                 border={!isComment}
                 accentBorderTop={accentBorderTop}
@@ -346,8 +310,7 @@ const EntryRenderer = (
                       onClick: () => {
                         props.navigateTo?.({
                           appName: '@akashaorg/app-akasha-integration',
-                          getNavigationUrl: navRoutes =>
-                            `${navRoutes.Reply}/${commentData?.entryId}`,
+                          getNavigationUrl: navRoutes => `${navRoutes.Reply}/commentData?.entryId`,
                         });
                       },
                       limit: REPLY_FRAGMENT_SIZE,
@@ -375,7 +338,7 @@ const EntryRenderer = (
             </Box>
           )}
         </>
-      )}
+      }
     </Box>
   );
 };

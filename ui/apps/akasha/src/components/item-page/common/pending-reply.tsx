@@ -3,7 +3,6 @@ import { IPublishData, Profile } from '@akashaorg/typings/ui';
 import { createPendingEntry, useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { REPLY } from '../../../routes';
-import { PUBLISH_PENDING_KEY } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
@@ -16,7 +15,7 @@ type PendingReplyProps = {
 export function PendingReply({ postId, loggedProfileData, commentIds }: PendingReplyProps) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutations: pendingReplyStates } = useMutationsListener<IPublishData & { postID: string }>(
-    [PUBLISH_PENDING_KEY],
+    ['PUBLISH_PENDING_KEY'],
   );
 
   return (

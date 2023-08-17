@@ -4,7 +4,6 @@ import { IEntryData, IPublishData, Profile } from '@akashaorg/typings/ui';
 import { createPendingEntry, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { POST } from '../../routes';
-import { PUBLISH_PENDING_KEY } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
 export interface IReplyErrorState {
@@ -22,7 +21,7 @@ export function ReplyError({ postId, loggedProfileData, onChange }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutation: publishCommentMutation, clear } = useMutationListener<
     IPublishData & { postID: string }
-  >([PUBLISH_PENDING_KEY]);
+  >(['PUBLISH_PENDING_KEY']);
 
   React.useEffect(() => {
     if (publishCommentMutation && publishCommentMutation.state.status === 'error') {

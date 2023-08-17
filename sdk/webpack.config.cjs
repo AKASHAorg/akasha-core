@@ -31,7 +31,7 @@ const config = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '*.mjs'],
+    extensions: ['.ts', '.tsx', '.js', '*.mjs', '.*.mjs'],
     alias: {
       buffer: require.resolve('buffer/'),
       process: require.resolve('process/browser'),
