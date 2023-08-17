@@ -1,6 +1,9 @@
 import React from 'react';
+
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryLoading from './EntryLoading';
+
+import EntryLoading from './entry-loading';
+
 import { LOADING_LIST_SIZE } from '../types';
 
 const ProfileEngagementLoading: React.FC = () => {

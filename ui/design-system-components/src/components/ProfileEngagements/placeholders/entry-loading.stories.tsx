@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import EntryLoading from './EntryLoading';
+import EntryLoading from './entry-loading';
 
 const meta: Meta = {
   title: 'Profile/EntryLoading',

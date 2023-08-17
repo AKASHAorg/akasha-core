@@ -1,6 +1,6 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
 import { tw } from '@twind/core';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import TrendingWidgetLoadingCard from '.';
 

@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Profile } from '@akashaorg/typings/ui';
+
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';

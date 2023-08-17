@@ -1,10 +1,12 @@
 import React from 'react';
+
+import { IconType } from '@akashaorg/typings/ui';
+
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
-import { IconType } from '@akashaorg/typings/ui';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 
 type Stat = {
   label: string;

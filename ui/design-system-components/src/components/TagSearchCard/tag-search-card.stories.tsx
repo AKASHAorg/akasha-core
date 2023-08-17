@@ -1,8 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import TagSearchCard, { TagSearchCardProps } from '.';
 import { trendingTagsData } from '@akashaorg/design-system-core/lib/utils';
+
+import TagSearchCard, { TagSearchCardProps } from '.';
 
 const meta: Meta<TagSearchCardProps> = {
   title: 'Cards/TagSearchCard',

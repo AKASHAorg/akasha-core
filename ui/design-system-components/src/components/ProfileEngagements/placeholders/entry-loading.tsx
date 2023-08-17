@@ -3,7 +3,7 @@ import React from 'react';
 import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
+import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 
 const EntryLoading: React.FC = () => {
   const borderBottomStyle = `border-b ${getColorClasses(

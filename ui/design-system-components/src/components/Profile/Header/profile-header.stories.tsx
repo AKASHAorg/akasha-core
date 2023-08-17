@@ -1,8 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Header, { HeaderProps } from '.';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+import Header, { HeaderProps } from '.';
 
 const meta: Meta<HeaderProps> = {
   title: 'Profile/ProfileHeader',

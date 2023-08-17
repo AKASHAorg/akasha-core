@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ProfileEngagementLoading from './ProfileEngagementLoading';
+import ProfileEngagementLoading from './profile-engagement-loading';
 
 const meta: Meta = {
   title: 'Profile/ProfileEngagementLoading',

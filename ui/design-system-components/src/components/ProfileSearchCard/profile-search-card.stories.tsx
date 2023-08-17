@@ -1,8 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ProfileSearchCard, { ProfileSearchCardProps } from '.';
 import { profileData } from '@akashaorg/design-system-core/lib/utils';
+
+import ProfileSearchCard, { ProfileSearchCardProps } from '.';
 
 const meta: Meta<ProfileSearchCardProps> = {
   title: 'ProfileSearchCards/ProfileSearchCard',

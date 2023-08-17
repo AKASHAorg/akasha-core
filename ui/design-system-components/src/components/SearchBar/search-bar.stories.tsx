@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+
 import SearchBar, { SearchBarProps } from '.';
 
 const meta: Meta<SearchBarProps> = {
