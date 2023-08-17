@@ -22,7 +22,7 @@ import IpfsConnector from '../common/ipfs.connector';
 import { z } from 'zod';
 import { validate } from '../common/validator';
 import { throwError } from '../common/error-handling';
-import GqlNew from '../gql';
+import Gql from '../gql';
 import { GetProfilesQueryVariables } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import type { AkashaProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
 // tslint:disable-next-line:no-var-requires
@@ -32,7 +32,7 @@ const urlSource = require('ipfs-utils/src/files/url-source');
 @injectable()
 class AWF_Profile {
   private _log: pino.Logger;
-  private _gql: GqlNew;
+  private _gql: Gql;
   private _auth: AWF_Auth;
   private _globalChannel: EventBus;
   private _ipfs: IpfsConnector;
@@ -40,7 +40,7 @@ class AWF_Profile {
 
   constructor(
     @inject(TYPES.Log) log: Logging,
-    @inject(TYPES.GqlNew) gql: GqlNew,
+    @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Auth) auth: AWF_Auth,
     @inject(TYPES.EventBus) globalChannel: EventBus,
     @inject(TYPES.IPFS) ipfs: IpfsConnector,
