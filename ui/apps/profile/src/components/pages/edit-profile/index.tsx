@@ -66,10 +66,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     setIsProcessing(true);
   };
 
-  const onSettled = () => {
+  const onSettled = (gotoProfileInfoPage = true) => {
     handleFeedback();
     setIsProcessing(false);
-    navigateToProfileInfoPage();
+    if (gotoProfileInfoPage) navigateToProfileInfoPage();
   };
 
   const createProfileMutation = useCreateProfileMutation({
@@ -79,7 +79,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
         queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
       });
     },
-    onSettled,
+    onSettled: () => onSettled(),
   });
   const updateProfileMutation = useUpdateProfileMutation({
     onMutate,
@@ -88,7 +88,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
         queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
       });
     },
-    onSettled,
+    onSettled: () => onSettled(),
   });
   const createInterest = useCreateInterestsMutation({
     onMutate,
@@ -97,7 +97,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
         queryKey: useGetInterestsByDidQuery.getKey({ id: profileId }),
       });
     },
-    onSettled,
+    onSettled: () => onSettled(false),
   });
 
   const myInterestsQueryReq = useGetInterestsByDidQuery(
