@@ -47,6 +47,11 @@ export const Interests: React.FC<InterestsProps> = ({
   const [myActiveInterests, setMyActiveInterests] = useState(new Set(myInterests));
   const [allMyInterests, setAllMyInterests] = useState(new Set(myInterests));
 
+  React.useEffect(() => {
+    setMyActiveInterests(new Set(myInterests));
+    setAllMyInterests(new Set(myInterests));
+  }, [myInterests]);
+
   const updateMyActiveInterests = (interest: AkashaProfileInterestsLabeled, remove?: boolean) => {
     const newMyActiveInterests = new Set(myActiveInterests);
     if (remove) {
@@ -63,6 +68,7 @@ export const Interests: React.FC<InterestsProps> = ({
 
   const onSave = (interests: AkashaProfileInterestsLabeled[]) => {
     saveButton.handleClick(interests);
+    setQuery('');
   };
 
   const isFormDirty =

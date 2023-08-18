@@ -61,10 +61,11 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
     },
     [isLoggedIn],
   );
-  const { isViewer, profile: profileData } = Object.assign(
-    { isViewer: null, profile: null },
+  const { isViewer, akashaProfile: profileData } = Object.assign(
+    { isViewer: null, akashaProfile: null },
     profileDataReq.data,
   );
+
   const { validDid, isLoading, isEthAddress } = useValidDid(
     profileId,
     profileDataReq.data && !profileData,
@@ -135,7 +136,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
           {
             label: t('Report'),
             icon: 'FlagIcon',
-            onClick: handleFlag(profileData.did.id, EntityTypes.PROFILE, profileData.name),
+            onClick: handleFlag(profileData?.did.id, EntityTypes.PROFILE, profileData?.name),
             color: { light: 'errorLight', dark: 'errorDark' },
           },
         ] as MenuProps['items'])
