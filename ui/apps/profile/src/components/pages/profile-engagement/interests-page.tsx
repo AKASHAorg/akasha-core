@@ -149,7 +149,9 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
         {profileId !== loginQuery.data?.id && (
           <Stack direction="column" spacing="gap-y-2.5">
             <Text variant="h5">{t('Interests')} </Text>
-            <Text variant="subtitle2">{outsiderText} </Text>
+            <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
+              {outsiderText}
+            </Text>
 
             <Stack align="center" justify="start" spacing="gap-2" customStyle="flex-wrap w-full">
               {topics &&
