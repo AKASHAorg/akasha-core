@@ -1,5 +1,4 @@
 import { genPostData, mockSDK } from '@akashaorg/af-testing';
-import * as postHooks from '@akashaorg/ui-awf-hooks/lib/use-posts';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 
 require('@testing-library/jest-dom/extend-expect');
@@ -41,13 +40,6 @@ jest.mock('@akashaorg/typings/ui', () => ({
     ThemeChange: 'theme-change',
   },
 }));
-
-jest.spyOn(postHooks, 'usePost').mockReturnValue({
-  data: { ...genPostData() },
-  status: 'success',
-  isSuccess: true,
-  reported: true,
-});
 
 jest
   .spyOn(mediaHooks, 'getMediaUrl')
