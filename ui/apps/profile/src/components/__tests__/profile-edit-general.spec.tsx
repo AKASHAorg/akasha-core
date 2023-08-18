@@ -38,11 +38,11 @@ describe('< ProfileInfoPage />', () => {
       jest.spyOn(hooks, 'useGetProfileByDidQuery') as unknown as jest.SpyInstance<{
         data: {
           isViewer: boolean;
-          profile: Profile;
+          akashaProfile: Profile;
         };
         status: 'success' | 'error';
       }>
-    ).mockReturnValue({ data: { isViewer: true, profile }, status: 'success' });
+    ).mockReturnValue({ data: { isViewer: true, akashaProfile: profile }, status: 'success' });
 
     (
       jest.spyOn(loginHook, 'useGetLogin') as unknown as jest.SpyInstance<{
