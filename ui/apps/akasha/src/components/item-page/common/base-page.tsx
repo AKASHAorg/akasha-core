@@ -9,8 +9,6 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import { Logger } from '@akashaorg/awf-sdk';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { useInfiniteComments } from '@akashaorg/ui-awf-hooks';
-import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   RootComponentProps,
@@ -58,11 +56,8 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     return entryReq.isSuccess && entryData?.reported;
   }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
   // @TODO replace with new hooks
-  const reqComments = useInfiniteComments({ limit: 15, postID: postId }, !commentId);
-  const reqReplies = useInfiniteReplies(
-    { limit: 15, postID: postId, commentID: commentId },
-    !!commentId,
-  );
+  const reqComments = undefined;
+  const reqReplies = undefined;
   const reqCommentsOrReplies = commentId ? reqReplies : reqComments;
   const [analyticsActions] = useAnalytics();
 
@@ -75,7 +70,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
   const loggedProfileData = profileDataReq.data;

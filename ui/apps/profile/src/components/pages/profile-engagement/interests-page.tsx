@@ -59,17 +59,17 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
 
   const ownTopics = useMemo(
     () =>
-      ownInterestsReq.data?.node && hasOwn(ownInterestsReq.data?.node, 'interests')
-        ? ownInterestsReq.data.node.interests.topics
+      ownInterestsReq.data?.node && hasOwn(ownInterestsReq.data?.node, 'akashaProfileInterests')
+        ? ownInterestsReq.data.node.akashaProfileInterests.topics
         : null,
 
     [ownInterestsReq.data],
   );
 
   React.useEffect(() => {
-    if (interestsReq.data?.node && hasOwn(interestsReq.data?.node, 'interests')) {
-      interestsReq.data.node.interests?.topics
-        ? setTopics(interestsReq.data.node.interests.topics)
+    if (interestsReq.data?.node && hasOwn(interestsReq.data?.node, 'akashaProfileInterests')) {
+      interestsReq.data.node.akashaProfileInterests?.topics
+        ? setTopics(interestsReq.data.node.akashaProfileInterests.topics)
         : setTopics([]);
     }
   }, [interestsReq.data, topics]);
@@ -106,8 +106,8 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const { isViewer, profile: profileData } = Object.assign(
-    { isViewer: null, profile: null },
+  const { isViewer, akashaProfile: profileData } = Object.assign(
+    { isViewer: null, akashaProfile: null },
     profileDataReq.data,
   );
 

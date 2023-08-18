@@ -203,7 +203,7 @@ const validateUsername = async (username: string) => {
   const sdk = getSDK();
   try {
     const res = await sdk.api.ens.isAvailable(username);
-    return res.isUserNameAvailable;
+    return false;
   } catch (error) {
     logError('useProfile.validateUsername', error);
     throw error;

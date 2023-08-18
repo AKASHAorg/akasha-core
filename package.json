@@ -118,7 +118,7 @@
     "ts-loader": "9.4.1",
     "typescript": "4.9.3",
     "web3.storage": "4.4.0",
-    "webpack": "5.87.0",
+    "webpack": "5.88.2",
     "webpack-assets-manifest": "5.1.0",
     "webpack-bundle-analyzer": "4.6.1",
     "webpack-cli": "5.1.4",
@@ -129,7 +129,8 @@
   "resolutions": {
     "@multiformats/murmur3": "2.1.5",
     "single-spa": "5.9.5",
-    "single-spa-react": "5.0.2"
+    "single-spa-react": "5.0.2",
+    "graphql": "16.7.1"
   },
   "workspaces": {
     "packages": [

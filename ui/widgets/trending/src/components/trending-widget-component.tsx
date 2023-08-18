@@ -30,12 +30,13 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const [analyticsActions] = useAnalytics();
   const latestProfilesReq = useGetProfilesQuery(
     { last: 4 },
-    { select: result => result?.profileIndex?.edges.map(profile => profile.node) },
+    { select: result => result?.akashaProfileIndex?.edges.map(profile => profile.node) },
   );
   const latestTopicsReq = useGetInterestsQuery(
     { last: 4 },
     {
-      select: result => result?.interestsIndex?.edges.flatMap(interest => interest.node?.topics),
+      select: result =>
+        result?.akashaProfileInterestsIndex?.edges.flatMap(interest => interest.node?.topics),
     },
   );
   const tagSubscriptionsReq = useGetInterestsByDidQuery(

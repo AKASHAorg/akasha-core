@@ -44,7 +44,7 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
       getNextPageParam: lastPage => {
         const pageInfo =
           lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
-            ? lastPage.node.followList?.pageInfo
+            ? lastPage.node.akashaFollowList?.pageInfo
             : null;
         if (pageInfo && pageInfo.hasNextPage) {
           return { after: pageInfo.endCursor };
@@ -53,7 +53,7 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
       getPreviousPageParam: firstPage => {
         const pageInfo =
           firstPage?.node && hasOwn(firstPage?.node, 'isViewer')
-            ? firstPage.node.followList?.pageInfo
+            ? firstPage.node.akashaFollowList?.pageInfo
             : null;
         if (pageInfo && pageInfo.hasPreviousPage) {
           return { before: pageInfo.startCursor };
@@ -70,7 +70,7 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
       followingReq.data?.pages
         ? followingReq.data.pages?.flatMap(page =>
             hasOwn(page.node, 'isViewer')
-              ? page?.node?.followList?.edges?.map(edge => edge?.node) || []
+              ? page?.node?.akashaFollowList?.edges?.map(edge => edge?.node) || []
               : [],
           )
         : [],
@@ -80,7 +80,7 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
   const lastPageInfo = React.useMemo(() => {
     const lastPage = followingReq.data?.pages?.[followingReq.data?.pages?.length - 1];
     return lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
-      ? lastPage?.node.followList?.pageInfo
+      ? lastPage?.node.akashaFollowList?.pageInfo
       : null;
   }, [followingReq]);
 

@@ -85,7 +85,7 @@ const getSearchPosts = async (
   // get posts data
   const getEntriesCalls = searchResp.globalSearch?.posts
     ?.slice((page - 1) * pageSize, page * pageSize)
-    ?.map((entry: { id: string }) => sdk.api.entries.getEntry(entry.id));
+    ?.map((entry: { id: string }) => Promise.resolve());
 
   // get posts moderation status
   const getEntriesModStatus = searchResp.globalSearch?.posts?.map((entry: { id: string }) =>
@@ -147,7 +147,7 @@ const getSearchComments = async (
   // get comments data
   const getCommentsCalls = searchResp.globalSearch?.comments
     ?.slice((page - 1) * pageSize, page * pageSize)
-    ?.map((comment: { id: string }) => sdk.api.comments.getComment(comment.id));
+    ?.map((comment: { id: string }) => Promise.resolve());
 
   // get comments moderation status
   const getCommentsModStatus = searchResp.globalSearch?.comments?.map((comment: { id: string }) =>
@@ -201,7 +201,7 @@ export function useSearchComments(
 
 const getSearchTags = async (searchQuery: string) => {
   const sdk = getSDK();
-  const searchResp = await sdk.api.tags.searchTags(searchQuery);
+  const searchResp = { searchTags: [] };
 
   // get tags data
   const completeTags = searchResp.searchTags;
@@ -259,7 +259,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
 
   // get posts data
   const getEntriesCalls = searchResp.globalSearch?.posts?.map((entry: { id: string }) =>
-    sdk.api.entries.getEntry(entry.id),
+    Promise.resolve(),
   );
 
   // get posts moderation status
@@ -280,7 +280,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
 
   // get comments data
   const getCommentsCalls = searchResp.globalSearch?.comments?.map((comment: { id: string }) =>
-    sdk.api.comments.getComment(comment.id),
+    Promise.resolve(),
   );
 
   // get comments moderation status

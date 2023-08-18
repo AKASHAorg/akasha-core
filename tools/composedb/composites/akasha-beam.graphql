@@ -1,0 +1,25 @@
+type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c5y3il3anqdaunpn9y34npyc461t4oo93x63fwikxrsrfkk4c6w") {
+  id: ID!
+}
+
+
+type BlockRecord{
+  order: Int! @int(min: 0, max: 10)
+  blockID: StreamID! @documentReference(model: "AkashaContentBlock")
+ # block: ContentBlock! @relationDocument(property: "blockID")
+}
+
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c51hkop357p1t1mvh4d0gjanynwjc9cvebb43vft4nb7kp8y511") {
+  id: ID!
+}
+
+type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}]) {
+  author: DID! @documentAccount
+  content: [BlockRecord!]! @list(maxLength: 10)
+  tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32)
+  mentions: [StreamID] @list(maxLength: 10)
+  version: CommitID! @documentVersion
+  embeddedBeam: StreamID
+  active: Boolean!
+  createdAt: DateTime!
+}

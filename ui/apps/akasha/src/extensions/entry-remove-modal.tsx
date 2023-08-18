@@ -4,12 +4,6 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import {
-  useDeletePost,
-  useDeleteComment,
-  withProviders,
-  useAnalytics,
-} from '@akashaorg/ui-awf-hooks';
-import {
   RootExtensionProps,
   AnalyticsCategories,
   EntityTypes,
@@ -20,6 +14,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   const { extensionData, logger, singleSpa } = props;
@@ -28,9 +23,9 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
 
   const { t } = useTranslation('app-akasha-integration');
 
-  const postDeleteQuery = useDeletePost(extensionData.itemId);
-  const commentDeleteQuery = useDeleteComment(extensionData.itemId);
-  const [analyticsActions] = useAnalytics();
+  const postDeleteQuery = undefined;
+  const commentDeleteQuery = undefined;
+  const [analyticsActions] = [undefined];
 
   const handleModalClose = useCallback(() => {
     setShowModal(false);

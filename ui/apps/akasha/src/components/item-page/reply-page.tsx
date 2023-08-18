@@ -1,7 +1,6 @@
 import * as React from 'react';
 import BaseEntryPage from './common/base-page';
 import { useParams } from 'react-router-dom';
-import { mapEntry, useComment } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 
 type ReplyPageProps = {
@@ -12,14 +11,11 @@ const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();
 
   // @TODO replace with new hooks
-  const comment = useComment(commentId, !!commentId);
+  const comment = undefined;
 
   const entryData = React.useMemo(() => {
-    if (comment.data) {
-      return mapEntry(comment.data);
-    }
     return undefined;
-  }, [comment.data]);
+  }, []);
 
   return (
     <BaseEntryPage

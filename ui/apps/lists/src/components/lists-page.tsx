@@ -11,12 +11,7 @@ import ListAppTopbar from '@akashaorg/design-system-components/lib/components/Li
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import {
-  useGetBookmarks,
-  useDeleteBookmark,
-  usePosts,
-  checkEntryActive,
-} from '@akashaorg/ui-awf-hooks';
+import { useGetBookmarks, useDeleteBookmark, checkEntryActive } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 type ListsPageProps = Omit<
@@ -32,7 +27,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
   const loggedProfileData = profileDataReq.data;
@@ -49,7 +44,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   const lists = listsReq.data || [];
 
   const bookmarkedBeamsIds = lists.map((bm: Record<string, string>) => bm.itemId);
-  const bookmarkedBeams = usePosts({ postIds: bookmarkedBeamsIds, enabler: true });
+  const bookmarkedBeams = undefined;
   const numberOfBookmarkedInactivePosts = React.useMemo(
     () => bookmarkedBeams.filter(({ data }) => (data ? !checkEntryActive(data) : false)).length,
     // eslint-disable-next-line react-hooks/exhaustive-deps

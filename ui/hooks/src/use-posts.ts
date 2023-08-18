@@ -1,3 +1,4 @@
+/*
 import {
   useInfiniteQuery,
   useMutation,
@@ -15,29 +16,29 @@ import { SEARCH_KEY } from './use-search';
 import { TRENDING_TAGS_KEY } from './use-trending';
 import { checkEntryActive } from './utils/checkEntryActive';
 
-/**
+/!**
  * @internal
- */
+ *!/
 export const ENTRY_KEY = 'Entry';
-/**
+/!**
  * @internal
- */
+ *!/
 export const ENTRIES_KEY = 'Entries';
-/**
+/!**
  * @internal
- */
+ *!/
 export const ENTRIES_CUSTOM_KEY = 'EntriesCustomFeed';
-/**
+/!**
  * @internal
- */
+ *!/
 export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
-/**
+/!**
  * @internal
- */
+ *!/
 export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
-/**
+/!**
  * @internal
- */
+ *!/
 export const CREATE_POST_MUTATION_KEY = 'CreatePost';
 
 export type usePostParam = {
@@ -75,7 +76,7 @@ const getPosts = async (limit: number, offset?: string, filterDeleted = true) =>
   };
 };
 
-/**
+/!**
  * Hook to get posts for feed, sorted chronologically
  * @example useInfinitePosts hook
  * ```typescript
@@ -95,13 +96,13 @@ const getPosts = async (limit: number, offset?: string, filterDeleted = true) =>
     }
   }, [postsQuery, loginState?.fromCache]);
  * ```
- */
+ *!/
 export function useInfinitePosts(limit: number, offset?: string) {
   return useInfiniteQuery(
     [ENTRIES_KEY],
     async ({ pageParam = offset }) => getPosts(limit, pageParam),
     {
-      /* Return undefined to indicate there is no next page available. */
+      /!* Return undefined to indicate there is no next page available. *!/
       getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
@@ -125,7 +126,7 @@ const getCustomFeedPosts = async (limit: number, offset?: number) => {
   };
 };
 
-/**
+/!**
  * Hook to get posts for personalised user feed from followed profiles and subscribed tags,
  * sorted chronologically
  * @example useInfiniteCustomPosts hook
@@ -146,13 +147,13 @@ const getCustomFeedPosts = async (limit: number, offset?: number) => {
     }
   }, [customPostsQuery, loginState?.fromCache]);
  * ```
- */
+ *!/
 export function useInfiniteCustomPosts(enabler: boolean, limit: number, offset?: string) {
   return useInfiniteQuery(
     [ENTRIES_CUSTOM_KEY],
     async ({ pageParam = offset }) => getCustomFeedPosts(limit, pageParam),
     {
-      /* Return undefined to indicate there is no next page available. */
+      /!* Return undefined to indicate there is no next page available. *!/
       getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit) && enabler,
@@ -177,7 +178,7 @@ const getPostsByTag = async (tagName: string, limit: number, offset?: number) =>
   };
 };
 
-/**
+/!**
  * Hook to get posts that contain a specific tag
  * @example useInfinitePostsByTag hook
  * ```typescript
@@ -197,13 +198,13 @@ const getPostsByTag = async (tagName: string, limit: number, offset?: number) =>
     }
   }, [tagPostsQuery, loginState?.fromCache]);
  * ```
- */
+ *!/
 export function useInfinitePostsByTag(tagName: string, limit: number, offset?: string) {
   return useInfiniteQuery(
     [ENTRIES_BY_TAG_KEY, tagName],
     async ({ pageParam = offset }) => getPostsByTag(tagName, limit, pageParam),
     {
-      /* Return undefined to indicate there is no next page available. */
+      /!* Return undefined to indicate there is no next page available. *!/
       getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
@@ -228,7 +229,7 @@ const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) 
   };
 };
 
-/**
+/!**
  * Hook to get an author's posts
  * @example useInfinitePostsByAuthor hook
  * ```typescript
@@ -248,7 +249,7 @@ const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) 
     }
   }, [authorPostsQuery, loginState?.fromCache]);
  * ```
- */
+ *!/
 export function useInfinitePostsByAuthor(
   pubKey: string,
   limit: number,
@@ -259,7 +260,7 @@ export function useInfinitePostsByAuthor(
     [ENTRIES_BY_AUTHOR_KEY, pubKey],
     async ({ pageParam = offset }) => getPostsByAuthor(pubKey, limit, pageParam),
     {
-      /* Return undefined to indicate there is no next page available. */
+      /!* Return undefined to indicate there is no next page available. *!/
       getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: enabled,
       keepPreviousData: true,
@@ -288,7 +289,7 @@ const getPost = async (postID: string, loggedUser?: string) => {
   };
 };
 
-/**
+/!**
  * Hook to get data for a specific post
  * @example usePost hook
  * ```typescript
@@ -302,7 +303,7 @@ const getPost = async (postID: string, loggedUser?: string) => {
     return undefined;
   }, [postQuery.data]);
  * ```
- */
+ *!/
 export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
   return useQuery([ENTRY_KEY, postId], () => getPost(postId, loggedUser), {
     enabled: !!(postId && enabler),
@@ -311,7 +312,7 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
   });
 }
 
-/**
+/!**
  * Hook to get an array of post data
  * @example usePosts hook
  * ```typescript
@@ -319,7 +320,7 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
  *
  * const entryData = postQueries.map(postQuery=>postQuery.data);
  * ```
- */
+ *!/
 export function usePosts({ postIds, loggedUser, enabler = true }: usePostsParam) {
   const options = postId => ({
     enabled: !!(postId && enabler),
@@ -335,7 +336,7 @@ export function usePosts({ postIds, loggedUser, enabler = true }: usePostsParam)
   return useQueries({ queries });
 }
 
-/**
+/!**
  * Hook to delete a post
  * @example useDeletePost hook
  * ```typescript
@@ -343,7 +344,7 @@ export function usePosts({ postIds, loggedUser, enabler = true }: usePostsParam)
  *
  * deletePostQuery.mutate('some-post-id');
  * ```
- */
+ *!/
 export function useDeletePost(postID: string) {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -392,7 +393,7 @@ export function useDeletePost(postID: string) {
   });
 }
 
-/**
+/!**
  * Hook to create a new post
  * pass the publish data from the editor to the mutate function
  * @example useCreatePost hook
@@ -401,7 +402,7 @@ export function useDeletePost(postID: string) {
  *
  * publishPostQuery.mutate({ pubKey: 'author-public-key', ...});
  * ```
- */
+ *!/
 export function useCreatePost() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -448,7 +449,7 @@ const updateSearchEntry = (postIndex, slateContent) => (entry, index) => {
   };
 };
 
-/**
+/!**
  * Hook to edit a post
  * pass the edited post data to the mutate function
  * @example useEditPost hook
@@ -457,7 +458,7 @@ const updateSearchEntry = (postIndex, slateContent) => (entry, index) => {
  *
  * editPostQuery.mutate({ entryID: 'some-entry-id', ...});
  * ```
- */
+ *!/
 export const useEditPost = () => {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -514,3 +515,4 @@ export const useEditPost = () => {
     },
   );
 };
+*/
