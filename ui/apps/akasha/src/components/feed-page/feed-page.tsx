@@ -9,7 +9,6 @@ import {
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
 import {
-  CREATE_POST_MUTATION_KEY,
   useMutationsListener,
   createPendingEntry,
   useAnalytics,
@@ -69,7 +68,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [dismissed, dismissCard] = useDismissedCard(dismissedCardId);
 
   const { mutations: pendingPostStates } = useMutationsListener<IPublishData>([
-    CREATE_POST_MUTATION_KEY,
+    'CREATE_POST_MUTATION_KEY',
   ]);
 
   const postsReq = useInfiniteDummy([]);

@@ -109,12 +109,7 @@ export function useToggleTagSubscription() {
 const getTag = async (tagName: string) => {
   const sdk = getSDK();
 
-  const res = await sdk.api.tags.getTag(tagName);
-
-  if (res.data.getTag) {
-    return res.data.getTag;
-  }
-  throw new Error('Tag not found');
+  return undefined;
 };
 
 /**
@@ -135,11 +130,7 @@ export function useGetTag(tagName: string, enabler = true) {
 
 const getTags = async tagName => {
   const sdk = getSDK();
-  const res = await sdk.api.tags.searchTags(tagName);
-  if (res.hasOwnProperty('errors')) {
-    throw new Error(res['errors'][0]);
-  }
-  return res.searchTags;
+  return [];
 };
 
 /**

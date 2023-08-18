@@ -16,27 +16,93 @@ export function fetcher<TData, TVariables extends Record<string, unknown>>(query
 }
 
 export const BeamFragmentDoc = /*#__PURE__*/ `
-    fragment BeamFragment on Beam {
+    fragment BeamFragment on AkashaBeam {
   id
   reflectionsCount
-  rebeamsCount
   active
+  embeddedBeam
   author {
     id
+    isViewer
   }
   content {
-    property
-    provider
-    value
+    blockID
+    order
   }
   tags
   version
+  createdAt
+}
+    `;
+export const ContentBlockFragmentDoc = /*#__PURE__*/ `
+    fragment ContentBlockFragment on AkashaContentBlock {
+  content {
+    propertyType
+    value
+    label
+  }
+  active
+  appVersion {
+    application {
+      name
+      displayName
+      id
+    }
+    applicationID
+    id
+    version
+  }
+  appVersionID
+  createdAt
+  kind
+  author {
+    id
+    isViewer
+  }
+  version
+}
+    `;
+export const BlockStorageFragmentDoc = /*#__PURE__*/ `
+    fragment BlockStorageFragment on AkashaBlockStorage {
+  appVersionID
+  appVersion {
+    application {
+      name
+      displayName
+      id
+    }
+    applicationID
+    id
+    version
+  }
+  createdAt
+  active
+  version
+  content {
+    propertyType
+    label
+    value
+  }
+  author {
+    id
+    isViewer
+  }
+  blockID
+  block {
+    id
+    active
+    author {
+      id
+      isViewer
+    }
+  }
 }
     `;
 export const ReflectFragmentDoc = /*#__PURE__*/ `
-    fragment ReflectFragment on Reflect {
+    fragment ReflectFragment on AkashaReflect {
   author {
     id
+    isViewer
   }
   version
   active
@@ -46,20 +112,22 @@ export const ReflectFragmentDoc = /*#__PURE__*/ `
     value
   }
   isReply
-  reflectionsCount
+  reflection
   beam {
     id
     author {
       id
+      isViewer
     }
   }
 }
     `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ `
-    fragment UserProfileFragment on Profile {
+    fragment UserProfileFragment on AkashaProfile {
   id
   did {
     id
+    isViewer
   }
   name
   links {
@@ -121,25 +189,25 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ `
       }
     }
   }
-  releasessCount
+  releasesCount
   author {
     id
     isViewer
-    profile {
+    akashaProfile {
       ...UserProfileFragment
     }
   }
   contributors {
     id
     isViewer
-    profile {
+    akashaProfile {
       ...UserProfileFragment
     }
   }
 }
     `;
 export const AppReleaseFragmentDoc = /*#__PURE__*/ `
-    fragment AppReleaseFragment on AppRelease {
+    fragment AppReleaseFragment on AkashaAppRelease {
   application {
     ...AkashaAppFragment
   }
@@ -151,8 +219,15 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ `
 }
     `;
 export const GetBeamsDocument = /*#__PURE__*/ `
-    query GetBeams($after: String, $before: String, $first: Int, $last: Int) {
-  beamIndex(after: $after, before: $before, first: $first, last: $last) {
+    query GetBeams($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamFiltersInput, $sorting: AkashaBeamSortingInput) {
+  akashaBeamIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...BeamFragment
@@ -206,10 +281,17 @@ useInfiniteGetBeamsQuery.getKey = (variables?: Types.GetBeamsQueryVariables) => 
 
 useGetBeamsQuery.fetcher = (variables?: Types.GetBeamsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables, options);
 export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ `
-    query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamFiltersInput, $sorting: AkashaBeamSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
-      beamList(after: $after, before: $before, first: $first, last: $last) {
+      akashaBeamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
         edges {
           node {
             ...BeamFragment
@@ -268,7 +350,7 @@ useGetBeamsByAuthorDidQuery.fetcher = (variables: Types.GetBeamsByAuthorDidQuery
 export const GetBeamByIdDocument = /*#__PURE__*/ `
     query GetBeamById($id: ID!) {
   node(id: $id) {
-    ... on Beam {
+    ... on AkashaBeam {
       ...BeamFragment
     }
   }
@@ -312,129 +394,107 @@ useInfiniteGetBeamByIdQuery.getKey = (variables: Types.GetBeamByIdQueryVariables
 ;
 
 useGetBeamByIdQuery.fetcher = (variables: Types.GetBeamByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options);
-export const GetRebeamsFromBeamDocument = /*#__PURE__*/ `
-    query GetRebeamsFromBeam($id: ID!) {
+export const GetContentBlockByIdDocument = /*#__PURE__*/ `
+    query GetContentBlockById($id: ID!) {
   node(id: $id) {
-    ... on Beam {
-      rebeams(first: 5) {
-        edges {
-          node {
-            quotedBeam {
-              ...BeamFragment
-            }
-            beam {
-              ...BeamFragment
-            }
-          }
-        }
-      }
+    ... on AkashaContentBlock {
+      ...ContentBlockFragment
     }
   }
 }
-    ${BeamFragmentDoc}`;
-export const useGetRebeamsFromBeamQuery = <
-      TData = Types.GetRebeamsFromBeamQuery,
+    ${ContentBlockFragmentDoc}`;
+export const useGetContentBlockByIdQuery = <
+      TData = Types.GetContentBlockByIdQuery,
       TError = unknown
     >(
-      variables: Types.GetRebeamsFromBeamQueryVariables,
-      options?: UseQueryOptions<Types.GetRebeamsFromBeamQuery, TError, TData>
+      variables: Types.GetContentBlockByIdQueryVariables,
+      options?: UseQueryOptions<Types.GetContentBlockByIdQuery, TError, TData>
     ) =>
-    useQuery<Types.GetRebeamsFromBeamQuery, TError, TData>(
-      ['GetRebeamsFromBeam', variables],
-      fetcher<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, variables),
+    useQuery<Types.GetContentBlockByIdQuery, TError, TData>(
+      ['GetContentBlockById', variables],
+      fetcher<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>(GetContentBlockByIdDocument, variables),
       options
     );
-useGetRebeamsFromBeamQuery.document = GetRebeamsFromBeamDocument;
+useGetContentBlockByIdQuery.document = GetContentBlockByIdDocument;
 
 
-useGetRebeamsFromBeamQuery.getKey = (variables: Types.GetRebeamsFromBeamQueryVariables) => ['GetRebeamsFromBeam', variables];
+useGetContentBlockByIdQuery.getKey = (variables: Types.GetContentBlockByIdQueryVariables) => ['GetContentBlockById', variables];
 ;
 
-export const useInfiniteGetRebeamsFromBeamQuery = <
-      TData = Types.GetRebeamsFromBeamQuery,
+export const useInfiniteGetContentBlockByIdQuery = <
+      TData = Types.GetContentBlockByIdQuery,
       TError = unknown
     >(
-      pageParamKey: keyof Types.GetRebeamsFromBeamQueryVariables,
-      variables: Types.GetRebeamsFromBeamQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetRebeamsFromBeamQuery, TError, TData>
+      pageParamKey: keyof Types.GetContentBlockByIdQueryVariables,
+      variables: Types.GetContentBlockByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetContentBlockByIdQuery, TError, TData>
     ) =>{
     
-    return useInfiniteQuery<Types.GetRebeamsFromBeamQuery, TError, TData>(
-      ['GetRebeamsFromBeam.infinite', variables],
-      (metaData) => fetcher<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+    return useInfiniteQuery<Types.GetContentBlockByIdQuery, TError, TData>(
+      ['GetContentBlockById.infinite', variables],
+      (metaData) => fetcher<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>(GetContentBlockByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetRebeamsFromBeamQuery.getKey = (variables: Types.GetRebeamsFromBeamQueryVariables) => ['GetRebeamsFromBeam.infinite', variables];
+useInfiniteGetContentBlockByIdQuery.getKey = (variables: Types.GetContentBlockByIdQueryVariables) => ['GetContentBlockById.infinite', variables];
 ;
 
-useGetRebeamsFromBeamQuery.fetcher = (variables: Types.GetRebeamsFromBeamQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, variables, options);
-export const GetMentionsFromBeamDocument = /*#__PURE__*/ `
-    query GetMentionsFromBeam($id: ID!) {
+useGetContentBlockByIdQuery.fetcher = (variables: Types.GetContentBlockByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>(GetContentBlockByIdDocument, variables, options);
+export const GetBlockStorageByIdDocument = /*#__PURE__*/ `
+    query GetBlockStorageById($id: ID!) {
   node(id: $id) {
-    ... on Beam {
-      mentions(first: 10) {
-        edges {
-          node {
-            profile {
-              ...UserProfileFragment
-            }
-            beam {
-              ...BeamFragment
-            }
-          }
-        }
-      }
+    ... on AkashaBlockStorage {
+      ...BlockStorageFragment
     }
   }
 }
-    ${UserProfileFragmentDoc}
-${BeamFragmentDoc}`;
-export const useGetMentionsFromBeamQuery = <
-      TData = Types.GetMentionsFromBeamQuery,
+    ${BlockStorageFragmentDoc}`;
+export const useGetBlockStorageByIdQuery = <
+      TData = Types.GetBlockStorageByIdQuery,
       TError = unknown
     >(
-      variables: Types.GetMentionsFromBeamQueryVariables,
-      options?: UseQueryOptions<Types.GetMentionsFromBeamQuery, TError, TData>
+      variables: Types.GetBlockStorageByIdQueryVariables,
+      options?: UseQueryOptions<Types.GetBlockStorageByIdQuery, TError, TData>
     ) =>
-    useQuery<Types.GetMentionsFromBeamQuery, TError, TData>(
-      ['GetMentionsFromBeam', variables],
-      fetcher<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, variables),
+    useQuery<Types.GetBlockStorageByIdQuery, TError, TData>(
+      ['GetBlockStorageById', variables],
+      fetcher<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables),
       options
     );
-useGetMentionsFromBeamQuery.document = GetMentionsFromBeamDocument;
+useGetBlockStorageByIdQuery.document = GetBlockStorageByIdDocument;
 
 
-useGetMentionsFromBeamQuery.getKey = (variables: Types.GetMentionsFromBeamQueryVariables) => ['GetMentionsFromBeam', variables];
+useGetBlockStorageByIdQuery.getKey = (variables: Types.GetBlockStorageByIdQueryVariables) => ['GetBlockStorageById', variables];
 ;
 
-export const useInfiniteGetMentionsFromBeamQuery = <
-      TData = Types.GetMentionsFromBeamQuery,
+export const useInfiniteGetBlockStorageByIdQuery = <
+      TData = Types.GetBlockStorageByIdQuery,
       TError = unknown
     >(
-      pageParamKey: keyof Types.GetMentionsFromBeamQueryVariables,
-      variables: Types.GetMentionsFromBeamQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetMentionsFromBeamQuery, TError, TData>
+      pageParamKey: keyof Types.GetBlockStorageByIdQueryVariables,
+      variables: Types.GetBlockStorageByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetBlockStorageByIdQuery, TError, TData>
     ) =>{
     
-    return useInfiniteQuery<Types.GetMentionsFromBeamQuery, TError, TData>(
-      ['GetMentionsFromBeam.infinite', variables],
-      (metaData) => fetcher<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+    return useInfiniteQuery<Types.GetBlockStorageByIdQuery, TError, TData>(
+      ['GetBlockStorageById.infinite', variables],
+      (metaData) => fetcher<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetMentionsFromBeamQuery.getKey = (variables: Types.GetMentionsFromBeamQueryVariables) => ['GetMentionsFromBeam.infinite', variables];
+useInfiniteGetBlockStorageByIdQuery.getKey = (variables: Types.GetBlockStorageByIdQueryVariables) => ['GetBlockStorageById.infinite', variables];
 ;
 
-useGetMentionsFromBeamQuery.fetcher = (variables: Types.GetMentionsFromBeamQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, variables, options);
+useGetBlockStorageByIdQuery.fetcher = (variables: Types.GetBlockStorageByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables, options);
 export const CreateBeamDocument = /*#__PURE__*/ `
-    mutation CreateBeam($i: CreateBeamInput!) {
-  createBeam(input: $i) {
+    mutation CreateBeam($i: CreateAkashaBeamInput!) {
+  createAkashaBeam(input: $i) {
     document {
       ...BeamFragment
     }
+    clientMutationId
   }
 }
     ${BeamFragmentDoc}`;
@@ -451,8 +511,8 @@ useCreateBeamMutation.getKey = () => ['CreateBeam'];
 
 useCreateBeamMutation.fetcher = (variables: Types.CreateBeamMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables, options);
 export const UpdateBeamDocument = /*#__PURE__*/ `
-    mutation UpdateBeam($i: UpdateBeamInput!) {
-  updateBeam(input: $i) {
+    mutation UpdateBeam($i: UpdateAkashaBeamInput!) {
+  updateAkashaBeam(input: $i) {
     document {
       ...BeamFragment
     }
@@ -472,65 +532,54 @@ export const useUpdateBeamMutation = <
 useUpdateBeamMutation.getKey = () => ['UpdateBeam'];
 
 useUpdateBeamMutation.fetcher = (variables: Types.UpdateBeamMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables, options);
-export const CreateRebeamDocument = /*#__PURE__*/ `
-    mutation CreateRebeam($i: CreateRebeamInput!) {
-  createRebeam(input: $i) {
+export const CreateContentBlockDocument = /*#__PURE__*/ `
+    mutation CreateContentBlock($i: CreateAkashaContentBlockInput!) {
+  createAkashaContentBlock(input: $i) {
     document {
-      beam {
-        ...BeamFragment
-      }
-      quotedBeam {
-        ...BeamFragment
-      }
-      active
+      ...ContentBlockFragment
     }
     clientMutationId
   }
 }
-    ${BeamFragmentDoc}`;
-export const useCreateRebeamMutation = <
+    ${ContentBlockFragmentDoc}`;
+export const useCreateContentBlockMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.CreateRebeamMutation, TError, Types.CreateRebeamMutationVariables, TContext>) =>
-    useMutation<Types.CreateRebeamMutation, TError, Types.CreateRebeamMutationVariables, TContext>(
-      ['CreateRebeam'],
-      (variables?: Types.CreateRebeamMutationVariables) => fetcher<Types.CreateRebeamMutation, Types.CreateRebeamMutationVariables>(CreateRebeamDocument, variables)(),
+    >(options?: UseMutationOptions<Types.CreateContentBlockMutation, TError, Types.CreateContentBlockMutationVariables, TContext>) =>
+    useMutation<Types.CreateContentBlockMutation, TError, Types.CreateContentBlockMutationVariables, TContext>(
+      ['CreateContentBlock'],
+      (variables?: Types.CreateContentBlockMutationVariables) => fetcher<Types.CreateContentBlockMutation, Types.CreateContentBlockMutationVariables>(CreateContentBlockDocument, variables)(),
       options
     );
-useCreateRebeamMutation.getKey = () => ['CreateRebeam'];
+useCreateContentBlockMutation.getKey = () => ['CreateContentBlock'];
 
-useCreateRebeamMutation.fetcher = (variables: Types.CreateRebeamMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateRebeamMutation, Types.CreateRebeamMutationVariables>(CreateRebeamDocument, variables, options);
-export const CreateBeamProfileMentionDocument = /*#__PURE__*/ `
-    mutation CreateBeamProfileMention($i: CreateProfileMentionInput!) {
-  createProfileMention(input: $i) {
+useCreateContentBlockMutation.fetcher = (variables: Types.CreateContentBlockMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateContentBlockMutation, Types.CreateContentBlockMutationVariables>(CreateContentBlockDocument, variables, options);
+export const UpdateContentBlockDocument = /*#__PURE__*/ `
+    mutation UpdateContentBlock($i: UpdateAkashaContentBlockInput!) {
+  updateAkashaContentBlock(input: $i) {
     document {
-      beam {
-        ...BeamFragment
-      }
-      profile {
-        ...UserProfileFragment
-      }
+      ...ContentBlockFragment
     }
+    clientMutationId
   }
 }
-    ${BeamFragmentDoc}
-${UserProfileFragmentDoc}`;
-export const useCreateBeamProfileMentionMutation = <
+    ${ContentBlockFragmentDoc}`;
+export const useUpdateContentBlockMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.CreateBeamProfileMentionMutation, TError, Types.CreateBeamProfileMentionMutationVariables, TContext>) =>
-    useMutation<Types.CreateBeamProfileMentionMutation, TError, Types.CreateBeamProfileMentionMutationVariables, TContext>(
-      ['CreateBeamProfileMention'],
-      (variables?: Types.CreateBeamProfileMentionMutationVariables) => fetcher<Types.CreateBeamProfileMentionMutation, Types.CreateBeamProfileMentionMutationVariables>(CreateBeamProfileMentionDocument, variables)(),
+    >(options?: UseMutationOptions<Types.UpdateContentBlockMutation, TError, Types.UpdateContentBlockMutationVariables, TContext>) =>
+    useMutation<Types.UpdateContentBlockMutation, TError, Types.UpdateContentBlockMutationVariables, TContext>(
+      ['UpdateContentBlock'],
+      (variables?: Types.UpdateContentBlockMutationVariables) => fetcher<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables)(),
       options
     );
-useCreateBeamProfileMentionMutation.getKey = () => ['CreateBeamProfileMention'];
+useUpdateContentBlockMutation.getKey = () => ['UpdateContentBlock'];
 
-useCreateBeamProfileMentionMutation.fetcher = (variables: Types.CreateBeamProfileMentionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateBeamProfileMentionMutation, Types.CreateBeamProfileMentionMutationVariables>(CreateBeamProfileMentionDocument, variables, options);
+useUpdateContentBlockMutation.fetcher = (variables: Types.UpdateContentBlockMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables, options);
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
     query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
-    ... on Beam {
+    ... on AkashaBeam {
       reflections(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
@@ -590,7 +639,7 @@ export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ `
     query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
     ... on CeramicAccount {
-      reflectList(after: $after, before: $before, first: $first, last: $last) {
+      akashaReflectList(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
             ...ReflectFragment
@@ -647,24 +696,25 @@ useInfiniteGetReflectionsByAuthorDidQuery.getKey = (variables: Types.GetReflecti
 
 useGetReflectionsByAuthorDidQuery.fetcher = (variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options);
 export const GetReflectReflectionsDocument = /*#__PURE__*/ `
-    query GetReflectReflections($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
-  node(id: $id) {
-    ... on Reflect {
-      reflections(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            reflect {
-              ...ReflectFragment
-            }
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
+    query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput) {
+  akashaReflectIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: {where: {reflection: {equalTo: $id}}}
+    sorting: $sorting
+  ) {
+    edges {
+      node {
+        ...ReflectFragment
       }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
     }
   }
 }
@@ -708,8 +758,8 @@ useInfiniteGetReflectReflectionsQuery.getKey = (variables: Types.GetReflectRefle
 
 useGetReflectReflectionsQuery.fetcher = (variables: Types.GetReflectReflectionsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options);
 export const CreateReflectDocument = /*#__PURE__*/ `
-    mutation CreateReflect($i: CreateReflectInput!) {
-  createReflect(input: $i) {
+    mutation CreateReflect($i: CreateAkashaReflectInput!) {
+  createAkashaReflect(input: $i) {
     document {
       ...ReflectFragment
     }
@@ -729,9 +779,9 @@ export const useCreateReflectMutation = <
 useCreateReflectMutation.getKey = () => ['CreateReflect'];
 
 useCreateReflectMutation.fetcher = (variables: Types.CreateReflectMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables, options);
-export const UpdateReflectDocument = /*#__PURE__*/ `
-    mutation UpdateReflect($i: UpdateReflectInput!) {
-  updateReflect(input: $i) {
+export const UpdateAkashaReflectDocument = /*#__PURE__*/ `
+    mutation UpdateAkashaReflect($i: UpdateAkashaReflectInput!) {
+  updateAkashaReflect(input: $i) {
     document {
       ...ReflectFragment
     }
@@ -739,76 +789,22 @@ export const UpdateReflectDocument = /*#__PURE__*/ `
   }
 }
     ${ReflectFragmentDoc}`;
-export const useUpdateReflectMutation = <
+export const useUpdateAkashaReflectMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.UpdateReflectMutation, TError, Types.UpdateReflectMutationVariables, TContext>) =>
-    useMutation<Types.UpdateReflectMutation, TError, Types.UpdateReflectMutationVariables, TContext>(
-      ['UpdateReflect'],
-      (variables?: Types.UpdateReflectMutationVariables) => fetcher<Types.UpdateReflectMutation, Types.UpdateReflectMutationVariables>(UpdateReflectDocument, variables)(),
+    >(options?: UseMutationOptions<Types.UpdateAkashaReflectMutation, TError, Types.UpdateAkashaReflectMutationVariables, TContext>) =>
+    useMutation<Types.UpdateAkashaReflectMutation, TError, Types.UpdateAkashaReflectMutationVariables, TContext>(
+      ['UpdateAkashaReflect'],
+      (variables?: Types.UpdateAkashaReflectMutationVariables) => fetcher<Types.UpdateAkashaReflectMutation, Types.UpdateAkashaReflectMutationVariables>(UpdateAkashaReflectDocument, variables)(),
       options
     );
-useUpdateReflectMutation.getKey = () => ['UpdateReflect'];
+useUpdateAkashaReflectMutation.getKey = () => ['UpdateAkashaReflect'];
 
-useUpdateReflectMutation.fetcher = (variables: Types.UpdateReflectMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateReflectMutation, Types.UpdateReflectMutationVariables>(UpdateReflectDocument, variables, options);
-export const CreateReflectReflectionDocument = /*#__PURE__*/ `
-    mutation CreateReflectReflection($i: CreateReflectionInput!) {
-  createReflection(input: $i) {
-    document {
-      active
-      reflect {
-        ...ReflectFragment
-      }
-      reflection {
-        ...ReflectFragment
-      }
-    }
-  }
-}
-    ${ReflectFragmentDoc}`;
-export const useCreateReflectReflectionMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<Types.CreateReflectReflectionMutation, TError, Types.CreateReflectReflectionMutationVariables, TContext>) =>
-    useMutation<Types.CreateReflectReflectionMutation, TError, Types.CreateReflectReflectionMutationVariables, TContext>(
-      ['CreateReflectReflection'],
-      (variables?: Types.CreateReflectReflectionMutationVariables) => fetcher<Types.CreateReflectReflectionMutation, Types.CreateReflectReflectionMutationVariables>(CreateReflectReflectionDocument, variables)(),
-      options
-    );
-useCreateReflectReflectionMutation.getKey = () => ['CreateReflectReflection'];
-
-useCreateReflectReflectionMutation.fetcher = (variables: Types.CreateReflectReflectionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateReflectReflectionMutation, Types.CreateReflectReflectionMutationVariables>(CreateReflectReflectionDocument, variables, options);
-export const UpdateReflectReflectionDocument = /*#__PURE__*/ `
-    mutation UpdateReflectReflection($i: UpdateReflectionInput!) {
-  updateReflection(input: $i) {
-    document {
-      active
-      reflect {
-        ...ReflectFragment
-      }
-      reflection {
-        ...ReflectFragment
-      }
-    }
-  }
-}
-    ${ReflectFragmentDoc}`;
-export const useUpdateReflectReflectionMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<Types.UpdateReflectReflectionMutation, TError, Types.UpdateReflectReflectionMutationVariables, TContext>) =>
-    useMutation<Types.UpdateReflectReflectionMutation, TError, Types.UpdateReflectReflectionMutationVariables, TContext>(
-      ['UpdateReflectReflection'],
-      (variables?: Types.UpdateReflectReflectionMutationVariables) => fetcher<Types.UpdateReflectReflectionMutation, Types.UpdateReflectReflectionMutationVariables>(UpdateReflectReflectionDocument, variables)(),
-      options
-    );
-useUpdateReflectReflectionMutation.getKey = () => ['UpdateReflectReflection'];
-
-useUpdateReflectReflectionMutation.fetcher = (variables: Types.UpdateReflectReflectionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateReflectReflectionMutation, Types.UpdateReflectReflectionMutationVariables>(UpdateReflectReflectionDocument, variables, options);
+useUpdateAkashaReflectMutation.fetcher = (variables: Types.UpdateAkashaReflectMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateAkashaReflectMutation, Types.UpdateAkashaReflectMutationVariables>(UpdateAkashaReflectDocument, variables, options);
 export const GetProfileByIdDocument = /*#__PURE__*/ `
     query GetProfileByID($id: ID!) {
   node(id: $id) {
-    ... on Profile {
+    ... on AkashaProfile {
       ...UserProfileFragment
     }
   }
@@ -856,7 +852,7 @@ export const GetProfileByDidDocument = /*#__PURE__*/ `
     query GetProfileByDid($id: ID!) {
   node(id: $id) {
     ... on CeramicAccount {
-      profile {
+      akashaProfile {
         ...UserProfileFragment
       }
       isViewer
@@ -903,8 +899,15 @@ useInfiniteGetProfileByDidQuery.getKey = (variables: Types.GetProfileByDidQueryV
 
 useGetProfileByDidQuery.fetcher = (variables: Types.GetProfileByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables, options);
 export const GetProfilesDocument = /*#__PURE__*/ `
-    query GetProfiles($after: String, $before: String, $first: Int, $last: Int) {
-  profileIndex(after: $after, before: $before, first: $first, last: $last) {
+    query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput) {
+  akashaProfileIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...UserProfileFragment
@@ -959,7 +962,12 @@ useInfiniteGetProfilesQuery.getKey = (variables?: Types.GetProfilesQueryVariable
 useGetProfilesQuery.fetcher = (variables?: Types.GetProfilesQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options);
 export const GetInterestsDocument = /*#__PURE__*/ `
     query GetInterests($after: String, $before: String, $first: Int, $last: Int) {
-  interestsIndex(after: $after, before: $before, first: $first, last: $last) {
+  akashaProfileInterestsIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
     edges {
       node {
         topics {
@@ -1023,7 +1031,7 @@ export const GetInterestsByDidDocument = /*#__PURE__*/ `
     query GetInterestsByDid($id: ID!) {
   node(id: $id) {
     ... on CeramicAccount {
-      interests {
+      akashaProfileInterests {
         topics {
           value
           labelType
@@ -1079,7 +1087,7 @@ useGetInterestsByDidQuery.fetcher = (variables: Types.GetInterestsByDidQueryVari
 export const GetInterestsByIdDocument = /*#__PURE__*/ `
     query GetInterestsById($id: ID!) {
   node(id: $id) {
-    ... on Interests {
+    ... on AkashaProfileInterests {
       topics {
         value
         labelType
@@ -1134,11 +1142,18 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ `
     query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
     ... on CeramicAccount {
-      followList(after: $after, before: $before, first: $first, last: $last) {
+      akashaFollowList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: {where: {isFollowing: {equalTo: true}}}
+      ) {
         edges {
           node {
             id
             isFollowing
+            profileID
             profile {
               ...UserProfileFragment
             }
@@ -1198,12 +1213,19 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ `
     query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
     ... on CeramicAccount {
-      profile {
-        followers(after: $after, before: $before, first: $first, last: $last) {
+      akashaProfile {
+        followers(
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+          filters: {where: {isFollowing: {equalTo: true}}}
+        ) {
           edges {
             node {
               id
               isFollowing
+              profileID
               profile {
                 ...UserProfileFragment
               }
@@ -1263,7 +1285,7 @@ useGetFollowersListByDidQuery.fetcher = (variables: Types.GetFollowersListByDidQ
 export const GetMyProfileDocument = /*#__PURE__*/ `
     query GetMyProfile {
   viewer {
-    profile {
+    akashaProfile {
       ...UserProfileFragment
     }
   }
@@ -1308,8 +1330,8 @@ useInfiniteGetMyProfileQuery.getKey = (variables?: Types.GetMyProfileQueryVariab
 
 useGetMyProfileQuery.fetcher = (variables?: Types.GetMyProfileQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options);
 export const CreateProfileDocument = /*#__PURE__*/ `
-    mutation CreateProfile($i: CreateProfileInput!) {
-  createProfile(input: $i) {
+    mutation CreateProfile($i: CreateAkashaProfileInput!) {
+  createAkashaProfile(input: $i) {
     document {
       ...UserProfileFragment
     }
@@ -1330,8 +1352,8 @@ useCreateProfileMutation.getKey = () => ['CreateProfile'];
 
 useCreateProfileMutation.fetcher = (variables: Types.CreateProfileMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options);
 export const UpdateProfileDocument = /*#__PURE__*/ `
-    mutation UpdateProfile($i: UpdateProfileInput!) {
-  updateProfile(input: $i) {
+    mutation UpdateProfile($i: UpdateAkashaProfileInput!) {
+  updateAkashaProfile(input: $i) {
     document {
       ...UserProfileFragment
     }
@@ -1352,8 +1374,8 @@ useUpdateProfileMutation.getKey = () => ['UpdateProfile'];
 
 useUpdateProfileMutation.fetcher = (variables: Types.UpdateProfileMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables, options);
 export const CreateInterestsDocument = /*#__PURE__*/ `
-    mutation CreateInterests($i: CreateInterestsInput!) {
-  createInterests(input: $i) {
+    mutation CreateInterests($i: CreateAkashaProfileInterestsInput!) {
+  createAkashaProfileInterests(input: $i) {
     document {
       topics {
         value
@@ -1381,8 +1403,8 @@ useCreateInterestsMutation.getKey = () => ['CreateInterests'];
 
 useCreateInterestsMutation.fetcher = (variables: Types.CreateInterestsMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables, options);
 export const UpdateInterestsDocument = /*#__PURE__*/ `
-    mutation UpdateInterests($i: UpdateInterestsInput!) {
-  updateInterests(input: $i) {
+    mutation UpdateInterests($i: UpdateAkashaProfileInterestsInput!) {
+  updateAkashaProfileInterests(input: $i) {
     document {
       topics {
         value
@@ -1410,8 +1432,8 @@ useUpdateInterestsMutation.getKey = () => ['UpdateInterests'];
 
 useUpdateInterestsMutation.fetcher = (variables: Types.UpdateInterestsMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables, options);
 export const CreateFollowDocument = /*#__PURE__*/ `
-    mutation CreateFollow($i: CreateFollowInput!) {
-  createFollow(input: $i) {
+    mutation CreateFollow($i: CreateAkashaFollowInput!) {
+  createAkashaFollow(input: $i) {
     document {
       isFollowing
       profile {
@@ -1438,8 +1460,8 @@ useCreateFollowMutation.getKey = () => ['CreateFollow'];
 
 useCreateFollowMutation.fetcher = (variables: Types.CreateFollowMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables, options);
 export const UpdateFollowDocument = /*#__PURE__*/ `
-    mutation UpdateFollow($i: UpdateFollowInput!) {
-  updateFollow(input: $i) {
+    mutation UpdateFollow($i: UpdateAkashaFollowInput!) {
+  updateAkashaFollow(input: $i) {
     document {
       isFollowing
       profile {
@@ -1512,8 +1534,15 @@ useUpdateAppMutation.getKey = () => ['UpdateApp'];
 
 useUpdateAppMutation.fetcher = (variables: Types.UpdateAppMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables, options);
 export const GetAppsDocument = /*#__PURE__*/ `
-    query GetApps($after: String, $before: String, $first: Int, $last: Int) {
-  akashaAppIndex(after: $after, before: $before, first: $first, last: $last) {
+    query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
+  akashaAppIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...AkashaAppFragment
@@ -1616,8 +1645,8 @@ useInfiniteGetAppsByIdQuery.getKey = (variables: Types.GetAppsByIdQueryVariables
 
 useGetAppsByIdQuery.fetcher = (variables: Types.GetAppsByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options);
 export const CreateAppReleaseDocument = /*#__PURE__*/ `
-    mutation CreateAppRelease($i: CreateAppReleaseInput!) {
-  createAppRelease(input: $i) {
+    mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
+  createAkashaAppRelease(input: $i) {
     document {
       ...AppReleaseFragment
     }
@@ -1640,8 +1669,8 @@ useCreateAppReleaseMutation.getKey = () => ['CreateAppRelease'];
 
 useCreateAppReleaseMutation.fetcher = (variables: Types.CreateAppReleaseMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options);
 export const UpdateAppReleaseDocument = /*#__PURE__*/ `
-    mutation UpdateAppRelease($i: UpdateAppReleaseInput!) {
-  updateAppRelease(input: $i) {
+    mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!) {
+  updateAkashaAppRelease(input: $i) {
     document {
       ...AppReleaseFragment
     }
@@ -1664,8 +1693,15 @@ useUpdateAppReleaseMutation.getKey = () => ['UpdateAppRelease'];
 
 useUpdateAppReleaseMutation.fetcher = (variables: Types.UpdateAppReleaseMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options);
 export const GetAppsReleasesDocument = /*#__PURE__*/ `
-    query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int) {
-  appReleaseIndex(after: $after, before: $before, first: $first, last: $last) {
+    query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
+  akashaAppReleaseIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...AppReleaseFragment
@@ -1723,7 +1759,7 @@ useGetAppsReleasesQuery.fetcher = (variables?: Types.GetAppsReleasesQueryVariabl
 export const GetAppReleaseByIdDocument = /*#__PURE__*/ `
     query GetAppReleaseByID($id: ID!) {
   node(id: $id) {
-    ... on AppRelease {
+    ... on AkashaAppRelease {
       ...AppReleaseFragment
     }
   }

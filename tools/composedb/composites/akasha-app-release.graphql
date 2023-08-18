@@ -1,0 +1,11 @@
+type AkashaApp @loadModel(id: "kjzl6hvfrbw6caribi34q9q1g0i23a6i0bhj7yuaglq159hh0ij1zd1wcytr85z") {
+  id: ID!
+}
+
+type AkashaAppRelease @createModel(accountRelation: LIST, description: "AKASHA Application releases list") @createIndex(fields:[{path:"version"}, {path: "createdAt"}]){
+  applicationID: StreamID! @documentReference(model: "AkashaApp")
+  application: AkashaApp! @relationDocument(property: "applicationID")
+  version: String! @string(minLength:2, maxLength: 16)
+  source: CID!
+  createdAt: DateTime!
+}

@@ -40,7 +40,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
 
   const appReleaseInfo = 'application' in appReleaseInfoReq.data && appReleaseInfoReq.data;
 
-  const author = appReleaseInfo.application.author.profile;
+  const author = appReleaseInfo.application.author.akashaProfile;
 
   const handleAuthorEthAddressClick = (ethAddress: string) => {
     if (network) {
@@ -74,7 +74,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
   const releasesInfoReq = useGetAppsReleasesQuery(
     { last: 10 },
     {
-      select: resp => resp.appReleaseIndex.edges,
+      select: resp => resp.akashaAppReleaseIndex.edges,
     },
   );
 
@@ -83,10 +83,10 @@ const InfoPage: React.FC<RootComponentProps> = props => {
   });
 
   const developers = appReleaseInfo?.application?.contributors?.map(contributor => {
-    const avatarImg = getProfileImageVersionsWithMediaUrl(contributor.profile?.avatar);
+    const avatarImg = getProfileImageVersionsWithMediaUrl(contributor.akashaProfile?.avatar);
     return {
-      profileId: contributor.profile.did.id,
-      name: contributor.profile.name,
+      profileId: contributor.akashaProfile.did.id,
+      name: contributor.akashaProfile.name,
       avatar: avatarImg,
     };
   });

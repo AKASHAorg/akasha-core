@@ -1,6 +1,6 @@
 import Dexie from 'dexie';
-import { IntegrationSchema } from './integrations.schema';
-import { SettingsSchema } from './settings.schema';
+import type { IntegrationSchema } from './integrations.schema';
+import type { SettingsSchema } from './settings.schema';
 
 export default class DbWrapper extends Dexie {
   integrations!: Dexie.Table<IntegrationSchema, string>;

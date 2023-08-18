@@ -39,8 +39,8 @@ const IconButtonFollow: React.FC<IconButtonFollowProps> = props => {
     onMutate: () => {
       setLoading(true);
     },
-    onSuccess: ({ createFollow }) => {
-      followProfile(loginQuery.data?.id, String(profileId), createFollow.document.id);
+    onSuccess: ({ createAkashaFollow }) => {
+      followProfile(loginQuery.data?.id, String(profileId), createAkashaFollow.document.id);
     },
     onSettled: () => {
       setLoading(false);

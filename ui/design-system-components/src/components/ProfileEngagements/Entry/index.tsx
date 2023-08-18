@@ -3,7 +3,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
 import { Profile } from '@akashaorg/typings/ui';
-import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type EntryProps = {
   profileAnchorLink: string;
@@ -13,7 +13,7 @@ export type EntryProps = {
   name: string;
   followStreamId: string;
   isFollowing: boolean;
-  getMediaUrl: (image?: ProfileImageVersions) => ProfileImageVersions;
+  getMediaUrl: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
   renderFollowElement: (
     profileStreamId: string,
     followStreamId: string,
