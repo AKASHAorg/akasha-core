@@ -1,14 +1,20 @@
-/* eslint-disable */
-const path = require('path');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const webpack = require('webpack');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Dotenv = require('dotenv-webpack');
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { InjectManifest } = require('workbox-webpack-plugin');
-const { SubresourceIntegrityPlugin } = require('webpack-subresource-integrity');
-const WebpackAssetsManifest = require("webpack-assets-manifest");
+import path from 'path';
+import webpack from 'webpack';
+import Dotenv from 'dotenv-webpack';
+
+import { InjectManifest } from 'workbox-webpack-plugin';
+
+import { SubresourceIntegrityPlugin } from 'webpack-subresource-integrity';
+import WebpackAssetsManifest from 'webpack-assets-manifest';
+import { fileURLToPath } from "url";
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const isProduction = process.env.NODE_ENV === 'production';
 const config = {
@@ -43,7 +49,7 @@ const config = {
       https: false,
       dns: false,
       fs: false,
-      assert: require.resolve('assert/'),
+      assert: require.resolve('assert'),
       path: require.resolve('path-browserify/'),
       stream: require.resolve('stream-browserify/'),
       util: require.resolve('util/'),
@@ -121,4 +127,4 @@ const config = {
   ],
 };
 
-module.exports = config;
+export default config;

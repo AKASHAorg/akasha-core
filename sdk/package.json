@@ -92,7 +92,7 @@
   "scripts": {
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
-    "build": "webpack --config webpack.config.cjs",
+    "build": "webpack --config webpack.config.mjs",
     "postbuild": "copyfiles -f ./dist/sw.* ../ui/build/",
     "sc:compile": "npx hardhat compile --config hardhat.config.cjs",
     "sc:deploy:goerli": "npx hardhat run --network goerli --config hardhat.config.cjs src/contracts/scripts/update-app-registry.cjs",
