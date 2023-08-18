@@ -60,7 +60,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
   const ownTopics = useMemo(
     () =>
       ownInterestsReq.data?.node && hasOwn(ownInterestsReq.data?.node, 'akashaProfileInterests')
-        ? ownInterestsReq.data.node.akashaProfileInterests.topics
+        ? ownInterestsReq.data.node.akashaProfileInterests?.topics
         : null,
 
     [ownInterestsReq.data],
@@ -69,7 +69,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
   React.useEffect(() => {
     if (interestsReq.data?.node && hasOwn(interestsReq.data?.node, 'akashaProfileInterests')) {
       interestsReq.data.node.akashaProfileInterests?.topics
-        ? setTopics(interestsReq.data.node.akashaProfileInterests.topics)
+        ? setTopics(interestsReq.data.node.akashaProfileInterests?.topics)
         : setTopics([]);
     }
   }, [interestsReq.data, topics]);
