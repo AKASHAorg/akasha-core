@@ -18,6 +18,7 @@ export type InputProps = {
 } & JSX.IntrinsicElements['input'];
 
 export type LabelProps = {
+  id?: string;
   required?: boolean;
   disabled?: JSX.IntrinsicElements['input']['disabled'];
 };

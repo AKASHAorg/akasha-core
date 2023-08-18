@@ -2,12 +2,14 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
-import { useToggleTagSubscription, useGetLogin, useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useAnalytics } from '@akashaorg/ui-awf-hooks';
 import {
   useGetProfilesQuery,
   useGetInterestsQuery,
   useGetInterestsByDidQuery,
+  useCreateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useQueryClient } from '@tanstack/react-query';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -21,6 +23,9 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('ui-widget-trending');
   const loginQuery = useGetLogin();
+  const queryClient = useQueryClient();
+
+  const [processingTags, setProcessingTags] = React.useState([]);
 
   const [analyticsActions] = useAnalytics();
   const latestProfilesReq = useGetProfilesQuery(
@@ -43,12 +48,18 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
           interests: { topics: { value: string; labelType: string }[] };
         };
 
-        return interests?.topics.map(el => el.value);
+        return interests?.topics;
       },
     },
   );
 
-  const toggleTagSubscriptionReq = useToggleTagSubscription();
+  const createInterest = useCreateInterestsMutation({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: useGetInterestsByDidQuery.getKey({ id: loginQuery.data?.id }),
+      });
+    },
+  });
 
   const latestProfiles = latestProfilesReq.data || [];
   const latestTopics = latestTopicsReq.data || [];
@@ -75,7 +86,15 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       category: AnalyticsCategories.TRENDING_WIDGET,
       action: 'Trending Topic Subscribed',
     });
-    toggleTagSubscriptionReq.mutate(topic);
+
+    setProcessingTags(prevState => [...prevState, topic]);
+    createInterest
+      .mutateAsync({
+        i: { content: { topics: [...tagSubscriptions, { labelType: 'TOPIC', value: topic }] } },
+      })
+      .then(() => {
+        setProcessingTags(prevState => prevState.filter(value => value !== topic));
+      });
   };
 
   const handleTopicUnSubscribe = (topic: string) => {
@@ -87,7 +106,16 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       category: AnalyticsCategories.TRENDING_WIDGET,
       action: 'Trending Topic Unsubscribed',
     });
-    toggleTagSubscriptionReq.mutate(topic);
+
+    setProcessingTags(prevState => [...prevState, topic]);
+
+    createInterest
+      .mutateAsync({
+        i: { content: { topics: tagSubscriptions.filter(tag => tag.value !== topic) } },
+      })
+      .then(() => {
+        setProcessingTags(prevState => prevState.filter(value => value !== topic));
+      });
   };
 
   const handleProfileClick = (did: string) => {
@@ -148,8 +176,9 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
           unsubscribeLabel={t('Unsubscribe')}
           noTagsLabel={t('No topics found!')}
           isLoadingTags={latestTopicsReq.isFetching}
+          isProcessingTags={processingTags}
           tags={latestTopics}
-          subscribedTags={tagSubscriptions}
+          subscribedTags={tagSubscriptions?.map(el => el.value)}
           onClickTopic={handleTopicClick}
           handleSubscribeTopic={handleTopicSubscribe}
           handleUnsubscribeTopic={handleTopicUnSubscribe}
