@@ -13,10 +13,12 @@
   "license": "AGPL-3.0",
   "main": "lib/index.js",
   "directories": {
-    "lib": "lib"
+    "lib": "lib",
+    "src": "src"
   },
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "repository": {
     "type": "git",
@@ -26,23 +28,21 @@
     "build": "tsc --build tsconfig.json",
     "tsc": "tsc --build",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
-    "create": "node ./src/create-composite.mjs",
-    "merge": "node ./src/merge-composites.mjs",
-    "compile": "composedb composite:compile build/merged-composite.json lib/runtime-composite.json --ceramic-url=https://staging-ceramic.akasha.world",
-    "start:graphql": "composedb graphql:server --ceramic-url=https://staging-ceramic.akasha.world --graphiql lib/runtime-composite.json --port=5005"
+    "create:composites": "node ./src/create-composites.mjs",
+    "start:graphql": "node ./src/graphiql.mjs"
   },
   "bugs": {
-    "url": "https://github.com/AKASHAorg/akasha-framework/issues"
+    "url": "https://github.com/AKASHAorg/akasha-core/issues"
   },
   "devDependencies": {
-    "@ceramicnetwork/http-client": "^2.23.0",
-    "@composedb/cli": "^0.4.5",
-    "@composedb/devtools": "^0.4.4",
-    "@composedb/devtools-node": "^0.4.4",
+    "@ceramicnetwork/http-client": "2.28.0",
+    "@composedb/devtools-node": "0.5.0-rc.3",
+    "@composedb/types": "0.5.0-rc.3",
     "dids": "^4.0.3",
     "dotenv": "16.3.1",
     "key-did-provider-ed25519": "^3.0.1",
     "key-did-resolver": "^3.0.0",
+    "ora": "^6.3.1",
     "uint8arrays": "^4.0.4"
   }
 }

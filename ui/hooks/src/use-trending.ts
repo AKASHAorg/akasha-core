@@ -10,8 +10,8 @@ export const TRENDING_PROFILES_KEY = 'Trending_Profiles';
 
 const getTrendingTags = async () => {
   const sdk = getSDK();
-  const res = await sdk.api.tags.getTrending();
-  return res.searchTags;
+
+  return [];
 };
 
 /**

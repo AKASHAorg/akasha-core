@@ -3,7 +3,7 @@ import { apply, tw } from '@twind/core';
 import Cropper, { CropperProps } from 'react-easy-crop';
 import { Point, Area } from 'react-easy-crop/types';
 
-import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 
 import Icon from '../Icon';
 import Stack from '../Stack';
@@ -11,7 +11,7 @@ import Text from '../Text';
 import { getCroppedImage, getRadiusClasses } from '../../utils';
 
 export type ImageCropperProps = Partial<Omit<CropperProps, 'image'>> & {
-  image: string | ProfileImageVersions;
+  image: string | AkashaProfileImageVersions;
   dragToRepositionLabel: string;
   onCrop: (image: Blob) => void;
 };

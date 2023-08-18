@@ -157,15 +157,17 @@ class AWF_ENS {
     //   return createFormattedValue(true);
     // }
     // const result = await this._ENSinstance.isAvailable(name);
-    const validatedName = validateName(name);
-    const auth = await this._auth.authenticateMutationData({ userName: validatedName });
-    return this._gql.getAPI().IsUserNameAvailable(
-      { userName: validatedName },
-      {
-        Authorization: `Bearer ${auth.token}`,
-        Signature: auth.signedData.signature.toString(),
-      },
-    );
+    // const validatedName = validateName(name);
+    // const auth = await this._auth.authenticateMutationData({ userName: validatedName });
+    // return this._gql.getAPI().IsUserNameAvailable(
+    //   { userName: validatedName },
+    //   {
+    //     Authorization: `Bearer ${auth.token}`,
+    //     Signature: auth.signedData.signature.toString(),
+    //   },
+    // );
+
+    return false;
   }
 
   /**

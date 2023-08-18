@@ -4,9 +4,9 @@ import getSDK from '@akashaorg/awf-sdk';
 import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 
 import constants from './constants';
-import { ENTRY_KEY } from './use-posts';
+
 import { PROFILE_KEY } from './use-profile';
-import { COMMENT_KEY } from './use-comments';
+
 import { logError } from './utils/error-handler';
 import {
   createModeration,
@@ -146,14 +146,14 @@ export function useReport() {
     onSuccess: async (resp, variables) => {
       switch (variables.contentType) {
         case 'post':
-          queryClient.setQueryData<unknown>([ENTRY_KEY, variables.contentId], prev => ({
+          queryClient.setQueryData<unknown>(['ENTRY_KEY', variables.contentId], prev => ({
             ...prev,
             reason: variables.dataToSign.reason,
             reported: true,
           }));
           break;
         case 'reply':
-          queryClient.setQueryData<unknown>([COMMENT_KEY, variables.contentId], prev => ({
+          queryClient.setQueryData<unknown>(['COMMENT_KEY', variables.contentId], prev => ({
             ...prev,
             reason: variables.dataToSign.reason,
             reported: true,
@@ -165,7 +165,7 @@ export function useReport() {
             reason: variables.dataToSign.reason,
             reported: true,
           }));
-          queryClient.setQueriesData<PostResultFragment>([ENTRY_KEY], oldData => {
+          queryClient.setQueriesData<PostResultFragment>(['ENTRY_KEY'], oldData => {
             if (oldData?.author?.pubKey === variables.contentId) {
               return {
                 ...oldData,

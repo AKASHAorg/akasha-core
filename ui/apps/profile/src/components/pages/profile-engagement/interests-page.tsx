@@ -36,8 +36,8 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
 
   const topics = useMemo(
     () =>
-      interestsReq.data?.node && hasOwn(interestsReq.data?.node, 'interests')
-        ? interestsReq.data.node.interests.topics
+      interestsReq.data?.node && hasOwn(interestsReq.data?.node, 'akashaProfileInterests')
+        ? interestsReq.data.node.akashaProfileInterests.topics
         : [],
 
     [interestsReq.data],

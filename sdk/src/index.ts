@@ -10,7 +10,7 @@ import container /*, { importLazy }*/ from './container';
 import type Logging from './logging';
 import type Settings from './settings';
 import type Gql from './gql';
-import type GqlNew from './gql/index.new';
+
 import type DB from './db';
 import type Stash from './stash';
 import type Web3Connector from './common/web3.connector';
@@ -110,7 +110,7 @@ export function init(): AWF_SDK {
   const misc = container.get<AWF_Misc>(TYPES.Misc);
   const fetchService = async () => {
     // await importLazy();
-    const gqlNew = container.get<GqlNew>(TYPES.GqlNew);
+    const gqlNew = container.get<Gql>(TYPES.Gql);
     console.info('new gql client', gqlNew);
     return gqlNew;
   };

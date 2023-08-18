@@ -1,598 +1,920 @@
-import * as Types from '@akashaorg/typings/sdk/graphql-operation-types';
+import type * as Types from '@akashaorg/typings/sdk/graphql-operation-types-new';
 
-import { GraphQLClient } from 'graphql-request';
-import * as Dom from 'graphql-request/dist/types.dom';
+import type { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
-export const DataProviderFragmentFragmentDoc = gql`
-    fragment DataProviderFragment on DataProvider {
-  provider
-  property
-  value
-}
-    `;
-export const AuthorInfoFragmentDoc = gql`
-    fragment AuthorInfo on UserProfile {
-  pubKey
-  name
-  userName
-  avatar
-  coverImage
-  description
-  ethAddress
-  totalPosts
-  totalFollowers
-  totalFollowing
-  totalInterests
-}
-    `;
-export const PostResultFragmentDoc = gql`
-    fragment PostResult on Post {
+export const BeamFragmentDoc = /*#__PURE__*/ gql`
+    fragment BeamFragment on AkashaBeam {
+  id
+  reflectionsCount
+  active
+  embeddedBeam
+  author {
+    id
+    isViewer
+  }
   content {
-    ...DataProviderFragment
+    blockID
+    order
+  }
+  tags
+  version
+  createdAt
+}
+    `;
+export const ContentBlockFragmentDoc = /*#__PURE__*/ gql`
+    fragment ContentBlockFragment on AkashaContentBlock {
+  content {
+    propertyType
+    value
+    label
+  }
+  active
+  appVersion {
+    application {
+      name
+      displayName
+      id
+    }
+    applicationID
+    id
+    version
+  }
+  appVersionID
+  createdAt
+  kind
+  author {
+    id
+    isViewer
+  }
+  version
+}
+    `;
+export const BlockStorageFragmentDoc = /*#__PURE__*/ gql`
+    fragment BlockStorageFragment on AkashaBlockStorage {
+  appVersionID
+  appVersion {
+    application {
+      name
+      displayName
+      id
+    }
+    applicationID
+    id
+    version
+  }
+  createdAt
+  active
+  version
+  content {
+    propertyType
+    label
+    value
   }
   author {
-    ...AuthorInfo
+    id
+    isViewer
   }
-  title
-  type
-  _id
-  creationDate
-  updatedAt
-  tags
-  totalComments
-  quotedBy
-  quotedByAuthors {
-    ...AuthorInfo
-  }
-  quotes {
-    content {
-      ...DataProviderFragment
-    }
+  blockID
+  block {
+    id
+    active
     author {
-      ...AuthorInfo
+      id
+      isViewer
     }
-    title
-    type
-    _id
-    creationDate
-    updatedAt
-    tags
-    totalComments
   }
 }
-    ${DataProviderFragmentFragmentDoc}
-${AuthorInfoFragmentDoc}`;
-export const FeedResultFragmentDoc = gql`
-    fragment FeedResult on NewPostsResult {
-  results {
-    ...PostResult
+    `;
+export const ReflectFragmentDoc = /*#__PURE__*/ gql`
+    fragment ReflectFragment on AkashaReflect {
+  author {
+    id
+    isViewer
   }
-  nextIndex
-  total
-}
-    ${PostResultFragmentDoc}`;
-export const VideoPreviewFFragmentDoc = gql`
-    fragment VideoPreviewF on VideoPreview {
-  url
-  secureUrl
-  type
-  width
-  height
-}
-    `;
-export const LinkPreviewFFragmentDoc = gql`
-    fragment LinkPreviewF on LinkPreview {
-  url
-  mediaType
-  contentType
-  favicons
-  videos {
-    ...VideoPreviewF
-  }
-  title
-  siteName
-  description
-  images
-  imagePreviewHash
-  faviconPreviewHash
-}
-    ${VideoPreviewFFragmentDoc}`;
-export const TagFieldsFragmentDoc = gql`
-    fragment TagFields on Tag {
-  name
-  creationDate
-  totalPosts
-}
-    `;
-export const UserProfileFragmentDataFragmentDoc = gql`
-    fragment UserProfileFragmentData on UserProfile {
-  pubKey
-  name
-  userName
-  avatar
-  coverImage
-  description
-  ethAddress
-  totalPosts
-  totalFollowers
-  totalFollowing
-  totalInterests
-}
-    `;
-export const IntegrationInfoFragmentFragmentDoc = gql`
-    fragment IntegrationInfoFragment on IntegrationInfo {
-  id
-  name
-  author
-  integrationType
-  latestReleaseId
-  enabled
-}
-    `;
-export const IntegrationReleaseInfoFragmentFragmentDoc = gql`
-    fragment IntegrationReleaseInfoFragment on IntegrationReleaseInfo {
-  id
-  name
   version
-  integrationType
-  sources
-  integrationID
-  author
-  enabled
-  links {
-    publicRepository
-    documentation
-    detailedDescription
+  active
+  content {
+    provider
+    property
+    value
   }
-  manifestData {
-    mainFile
-    license
-    keywords
-    description
-    displayName
+  isReply
+  reflection
+  beam {
+    id
+    author {
+      id
+      isViewer
+    }
+  }
+}
+    `;
+export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
+    fragment UserProfileFragment on AkashaProfile {
+  id
+  did {
+    id
+    isViewer
+  }
+  name
+  links {
+    href
+    label
+  }
+  background {
+    alternatives {
+      src
+      width
+      height
+    }
+    default {
+      src
+      width
+      height
+    }
+  }
+  description
+  avatar {
+    default {
+      src
+      width
+      height
+    }
+    alternatives {
+      src
+      width
+      height
+    }
+  }
+  followers(last: 5) {
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
   }
   createdAt
 }
     `;
-export const GetCommentDocument = gql`
-    query GetComment($commentID: String!) {
-  getComment(commentID: $commentID) {
-    content {
-      ...DataProviderFragment
+export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaAppFragment on AkashaApp {
+  id
+  applicationType
+  description
+  licence
+  name
+  displayName
+  keywords
+  releases {
+    edges {
+      node {
+        id
+        createdAt
+        source
+        version
+      }
     }
-    author {
-      ...AuthorInfo
-    }
-    creationDate
-    updatedAt
-    replyTo
-    postId
-    totalReplies
-    _id
   }
-}
-    ${DataProviderFragmentFragmentDoc}
-${AuthorInfoFragmentDoc}`;
-export const GetCommentsDocument = gql`
-    query GetComments($offset: String, $limit: Int, $postID: String!) {
-  getComments(postID: $postID, offset: $offset, limit: $limit) {
-    total
-    nextIndex
-    results {
-      content {
-        ...DataProviderFragment
-      }
-      author {
-        ...AuthorInfo
-      }
-      creationDate
-      replyTo
-      postId
-      totalReplies
-      _id
+  releasesCount
+  author {
+    id
+    isViewer
+    akashaProfile {
+      ...UserProfileFragment
+    }
+  }
+  contributors {
+    id
+    isViewer
+    akashaProfile {
+      ...UserProfileFragment
     }
   }
 }
-    ${DataProviderFragmentFragmentDoc}
-${AuthorInfoFragmentDoc}`;
-export const GetRepliesDocument = gql`
-    query GetReplies($offset: String, $limit: Int, $postID: String!, $commentID: String!) {
-  getReplies(
-    postID: $postID
-    commentID: $commentID
-    offset: $offset
-    limit: $limit
+    `;
+export const AppReleaseFragmentDoc = /*#__PURE__*/ gql`
+    fragment AppReleaseFragment on AkashaAppRelease {
+  application {
+    ...AkashaAppFragment
+  }
+  applicationID
+  id
+  source
+  version
+  createdAt
+}
+    `;
+export const GetBeamsDocument = /*#__PURE__*/ gql`
+    query GetBeams($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamFiltersInput, $sorting: AkashaBeamSortingInput) {
+  akashaBeamIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
   ) {
-    total
-    nextIndex
-    results {
-      content {
-        ...DataProviderFragment
+    edges {
+      node {
+        ...BeamFragment
       }
-      author {
-        ...AuthorInfo
-      }
-      creationDate
-      replyTo
-      postId
-      totalReplies
-      _id
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
     }
   }
 }
-    ${DataProviderFragmentFragmentDoc}
-${AuthorInfoFragmentDoc}`;
-export const AddCommentDocument = gql`
-    mutation AddComment($content: [DataProviderInput!], $comment: CommentData) {
-  addComment(content: $content, comment: $comment)
-}
-    `;
-export const EditCommentDocument = gql`
-    mutation EditComment($content: [DataProviderInput!], $comment: CommentData, $id: String!) {
-  editComment(content: $content, comment: $comment, id: $id)
-}
-    `;
-export const RemoveCommentDocument = gql`
-    mutation RemoveComment($id: String!) {
-  removeComment(id: $id)
-}
-    `;
-export const GetEntryDocument = gql`
-    query GetEntry($id: String!, $pubKey: String) {
-  getPost(id: $id, pubKey: $pubKey) {
-    ...PostResult
-  }
-}
-    ${PostResultFragmentDoc}`;
-export const GetEntriesDocument = gql`
-    query GetEntries($offset: String, $limit: Int, $pubKey: String) {
-  posts(offset: $offset, limit: $limit, pubKey: $pubKey) {
-    results {
-      ...PostResult
+    ${BeamFragmentDoc}`;
+export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ gql`
+    query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamFiltersInput, $sorting: AkashaBeamSortingInput) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaBeamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            ...BeamFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
     }
-    nextIndex
-    total
   }
 }
-    ${PostResultFragmentDoc}`;
-export const CreateEntryDocument = gql`
-    mutation CreateEntry($content: [DataProviderInput!], $post: PostData) {
-  createPost(content: $content, post: $post)
+    ${BeamFragmentDoc}`;
+export const GetBeamByIdDocument = /*#__PURE__*/ gql`
+    query GetBeamById($id: ID!) {
+  node(id: $id) {
+    ... on AkashaBeam {
+      ...BeamFragment
+    }
+  }
 }
-    `;
-export const EditEntryDocument = gql`
-    mutation EditEntry($content: [DataProviderInput!], $post: PostData, $id: String!) {
-  editPost(content: $content, post: $post, id: $id)
+    ${BeamFragmentDoc}`;
+export const GetContentBlockByIdDocument = /*#__PURE__*/ gql`
+    query GetContentBlockById($id: ID!) {
+  node(id: $id) {
+    ... on AkashaContentBlock {
+      ...ContentBlockFragment
+    }
+  }
 }
-    `;
-export const RemoveEntryDocument = gql`
-    mutation RemoveEntry($id: String!) {
-  removePost(id: $id)
+    ${ContentBlockFragmentDoc}`;
+export const GetBlockStorageByIdDocument = /*#__PURE__*/ gql`
+    query GetBlockStorageById($id: ID!) {
+  node(id: $id) {
+    ... on AkashaBlockStorage {
+      ...BlockStorageFragment
+    }
+  }
 }
-    `;
-export const GetPostsByAuthorDocument = gql`
-    query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int, $pubKey: String) {
-  getPostsByAuthor(
-    author: $author
-    offset: $offset
-    limit: $limit
-    pubKey: $pubKey
+    ${BlockStorageFragmentDoc}`;
+export const CreateBeamDocument = /*#__PURE__*/ gql`
+    mutation CreateBeam($i: CreateAkashaBeamInput!) {
+  createAkashaBeam(input: $i) {
+    document {
+      ...BeamFragment
+    }
+    clientMutationId
+  }
+}
+    ${BeamFragmentDoc}`;
+export const UpdateBeamDocument = /*#__PURE__*/ gql`
+    mutation UpdateBeam($i: UpdateAkashaBeamInput!) {
+  updateAkashaBeam(input: $i) {
+    document {
+      ...BeamFragment
+    }
+    clientMutationId
+  }
+}
+    ${BeamFragmentDoc}`;
+export const CreateContentBlockDocument = /*#__PURE__*/ gql`
+    mutation CreateContentBlock($i: CreateAkashaContentBlockInput!) {
+  createAkashaContentBlock(input: $i) {
+    document {
+      ...ContentBlockFragment
+    }
+    clientMutationId
+  }
+}
+    ${ContentBlockFragmentDoc}`;
+export const UpdateContentBlockDocument = /*#__PURE__*/ gql`
+    mutation UpdateContentBlock($i: UpdateAkashaContentBlockInput!) {
+  updateAkashaContentBlock(input: $i) {
+    document {
+      ...ContentBlockFragment
+    }
+    clientMutationId
+  }
+}
+    ${ContentBlockFragmentDoc}`;
+export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
+    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  node(id: $id) {
+    ... on AkashaBeam {
+      reflections(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            ...ReflectFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+    ${ReflectFragmentDoc}`;
+export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ gql`
+    query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaReflectList(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            ...ReflectFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    ${ReflectFragmentDoc}`;
+export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
+    query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput) {
+  akashaReflectIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: {where: {reflection: {equalTo: $id}}}
+    sorting: $sorting
   ) {
-    ...FeedResult
-  }
-}
-    ${FeedResultFragmentDoc}`;
-export const GetPostsByTagDocument = gql`
-    query GetPostsByTag($tag: String!, $offset: Int, $limit: Int, $pubKey: String) {
-  getPostsByTag(tag: $tag, offset: $offset, limit: $limit, pubKey: $pubKey) {
-    ...FeedResult
-  }
-}
-    ${FeedResultFragmentDoc}`;
-export const GetLinkPreviewDocument = gql`
-    mutation GetLinkPreview($link: String!) {
-  getLinkPreview(link: $link) {
-    ...LinkPreviewF
-  }
-}
-    ${LinkPreviewFFragmentDoc}`;
-export const GetCustomFeedDocument = gql`
-    query GetCustomFeed($limit: Int, $offset: Int) {
-  getCustomFeed(limit: $limit, offset: $offset) {
-    ...FeedResult
-  }
-}
-    ${FeedResultFragmentDoc}`;
-export const GetTagDocument = gql`
-    query GetTag($name: String!) {
-  getTag(name: $name) {
-    ...TagFields
-  }
-}
-    ${TagFieldsFragmentDoc}`;
-export const GetTagsDocument = gql`
-    query GetTags($offset: String, $limit: Int) {
-  tags(offset: $offset, limit: $limit) {
-    results {
-      ...TagFields
+    edges {
+      node {
+        ...ReflectFragment
+      }
     }
-    nextIndex
-    total
-  }
-}
-    ${TagFieldsFragmentDoc}`;
-export const SearchTagsDocument = gql`
-    query SearchTags($name: String!) {
-  searchTags(name: $name) {
-    name
-    totalPosts
-  }
-}
-    `;
-export const CreateTagDocument = gql`
-    mutation CreateTag($name: String!) {
-  createTag(name: $name)
-}
-    `;
-export const AddProfileProviderDocument = gql`
-    mutation AddProfileProvider($data: [DataProviderInput]) {
-  addProfileProvider(data: $data)
-}
-    `;
-export const MakeDefaultProviderDocument = gql`
-    mutation MakeDefaultProvider($data: [DataProviderInput]) {
-  makeDefaultProvider(data: $data)
-}
-    `;
-export const ToggleInterestSubDocument = gql`
-    mutation ToggleInterestSub($sub: String!) {
-  toggleInterestSub(sub: $sub)
-}
-    `;
-export const RegisterUsernameDocument = gql`
-    mutation RegisterUsername($name: String!) {
-  registerUserName(name: $name)
-}
-    `;
-export const ResolveProfileDocument = gql`
-    query ResolveProfile($pubKey: String!) {
-  resolveProfile(pubKey: $pubKey) {
-    ...UserProfileFragmentData
-    providers {
-      ...DataProviderFragment
-    }
-    default {
-      ...DataProviderFragment
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
     }
   }
 }
-    ${UserProfileFragmentDataFragmentDoc}
-${DataProviderFragmentFragmentDoc}`;
-export const GetProfileDocument = gql`
-    query GetProfile($ethAddress: String!) {
-  getProfile(ethAddress: $ethAddress) {
-    ...UserProfileFragmentData
-    providers {
-      ...DataProviderFragment
+    ${ReflectFragmentDoc}`;
+export const CreateReflectDocument = /*#__PURE__*/ gql`
+    mutation CreateReflect($i: CreateAkashaReflectInput!) {
+  createAkashaReflect(input: $i) {
+    document {
+      ...ReflectFragment
     }
-    default {
-      ...DataProviderFragment
+    clientMutationId
+  }
+}
+    ${ReflectFragmentDoc}`;
+export const UpdateAkashaReflectDocument = /*#__PURE__*/ gql`
+    mutation UpdateAkashaReflect($i: UpdateAkashaReflectInput!) {
+  updateAkashaReflect(input: $i) {
+    document {
+      ...ReflectFragment
+    }
+    clientMutationId
+  }
+}
+    ${ReflectFragmentDoc}`;
+export const GetProfileByIdDocument = /*#__PURE__*/ gql`
+    query GetProfileByID($id: ID!) {
+  node(id: $id) {
+    ... on AkashaProfile {
+      ...UserProfileFragment
     }
   }
 }
-    ${UserProfileFragmentDataFragmentDoc}
-${DataProviderFragmentFragmentDoc}`;
-export const FollowDocument = gql`
-    mutation Follow($pubKey: String!) {
-  follow(pubKey: $pubKey)
-}
-    `;
-export const UnFollowDocument = gql`
-    mutation UnFollow($pubKey: String!) {
-  unFollow(pubKey: $pubKey)
-}
-    `;
-export const IsFollowingDocument = gql`
-    query IsFollowing($follower: String!, $following: String!) {
-  isFollowing(follower: $follower, following: $following)
-}
-    `;
-export const SaveMetaDataDocument = gql`
-    mutation SaveMetaData($data: DataProviderInput) {
-  saveMetaData(data: $data)
-}
-    `;
-export const SearchProfilesDocument = gql`
-    query SearchProfiles($name: String!) {
-  searchProfiles(name: $name) {
-    ...UserProfileFragmentData
+    ${UserProfileFragmentDoc}`;
+export const GetProfileByDidDocument = /*#__PURE__*/ gql`
+    query GetProfileByDid($id: ID!) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaProfile {
+        ...UserProfileFragment
+      }
+      isViewer
+    }
   }
 }
-    ${UserProfileFragmentDataFragmentDoc}`;
-export const GlobalSearchDocument = gql`
-    query GlobalSearch($keyword: String!) {
-  globalSearch(keyword: $keyword) {
-    posts {
-      id
+    ${UserProfileFragmentDoc}`;
+export const GetProfilesDocument = /*#__PURE__*/ gql`
+    query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput) {
+  akashaProfileIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
+    edges {
+      node {
+        ...UserProfileFragment
+      }
     }
-    profiles {
-      id
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
     }
-    tags {
-      id
-      name
-      totalPosts
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const GetInterestsDocument = /*#__PURE__*/ gql`
+    query GetInterests($after: String, $before: String, $first: Int, $last: Int) {
+  akashaProfileInterestsIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    edges {
+      node {
+        topics {
+          value
+          labelType
+        }
+        did {
+          id
+        }
+        id
+      }
     }
-    comments {
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
+export const GetInterestsByDidDocument = /*#__PURE__*/ gql`
+    query GetInterestsByDid($id: ID!) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaProfileInterests {
+        topics {
+          value
+          labelType
+        }
+        did {
+          id
+        }
+        id
+      }
+      isViewer
+    }
+  }
+}
+    `;
+export const GetInterestsByIdDocument = /*#__PURE__*/ gql`
+    query GetInterestsById($id: ID!) {
+  node(id: $id) {
+    ... on AkashaProfileInterests {
+      topics {
+        value
+        labelType
+      }
+      did {
+        id
+      }
       id
     }
   }
 }
     `;
-export const GetFollowersDocument = gql`
-    query GetFollowers($pubKey: String!, $limit: Int, $offset: Int) {
-  getFollowers(pubKey: $pubKey, limit: $limit, offset: $offset) {
-    results {
-      ...UserProfileFragmentData
+export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
+    query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaFollowList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: {where: {isFollowing: {equalTo: true}}}
+      ) {
+        edges {
+          node {
+            id
+            isFollowing
+            profileID
+            profile {
+              ...UserProfileFragment
+            }
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
     }
-    nextIndex
-    total
   }
 }
-    ${UserProfileFragmentDataFragmentDoc}`;
-export const GetFollowingDocument = gql`
-    query GetFollowing($pubKey: String!, $limit: Int, $offset: Int) {
-  getFollowing(pubKey: $pubKey, limit: $limit, offset: $offset) {
-    results {
-      ...UserProfileFragmentData
+    ${UserProfileFragmentDoc}`;
+export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
+    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaProfile {
+        followers(
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+          filters: {where: {isFollowing: {equalTo: true}}}
+        ) {
+          edges {
+            node {
+              id
+              isFollowing
+              profileID
+              profile {
+                ...UserProfileFragment
+              }
+            }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+      isViewer
     }
-    nextIndex
-    total
   }
 }
-    ${UserProfileFragmentDataFragmentDoc}`;
-export const GetInterestsDocument = gql`
-    query GetInterests($pubKey: String!) {
-  getInterests(pubKey: $pubKey)
+    ${UserProfileFragmentDoc}`;
+export const GetMyProfileDocument = /*#__PURE__*/ gql`
+    query GetMyProfile {
+  viewer {
+    akashaProfile {
+      ...UserProfileFragment
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const CreateProfileDocument = /*#__PURE__*/ gql`
+    mutation CreateProfile($i: CreateAkashaProfileInput!) {
+  createAkashaProfile(input: $i) {
+    document {
+      ...UserProfileFragment
+    }
+    clientMutationId
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const UpdateProfileDocument = /*#__PURE__*/ gql`
+    mutation UpdateProfile($i: UpdateAkashaProfileInput!) {
+  updateAkashaProfile(input: $i) {
+    document {
+      ...UserProfileFragment
+    }
+    clientMutationId
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const CreateInterestsDocument = /*#__PURE__*/ gql`
+    mutation CreateInterests($i: CreateAkashaProfileInterestsInput!) {
+  createAkashaProfileInterests(input: $i) {
+    document {
+      topics {
+        value
+        labelType
+      }
+      did {
+        id
+      }
+      id
+    }
+    clientMutationId
+  }
 }
     `;
-export const IsUserNameAvailableDocument = gql`
-    query IsUserNameAvailable($userName: String!) {
-  isUserNameAvailable(userName: $userName)
+export const UpdateInterestsDocument = /*#__PURE__*/ gql`
+    mutation UpdateInterests($i: UpdateAkashaProfileInterestsInput!) {
+  updateAkashaProfileInterests(input: $i) {
+    document {
+      topics {
+        value
+        labelType
+      }
+      did {
+        id
+      }
+      id
+    }
+    clientMutationId
+  }
 }
     `;
-export const GetLatestReleaseDocument = gql`
-    query GetLatestRelease($integrationIDs: [String]) {
-  getLatestRelease(integrationIDs: $integrationIDs) {
-    ...IntegrationReleaseInfoFragment
+export const CreateFollowDocument = /*#__PURE__*/ gql`
+    mutation CreateFollow($i: CreateAkashaFollowInput!) {
+  createAkashaFollow(input: $i) {
+    document {
+      isFollowing
+      profile {
+        ...UserProfileFragment
+      }
+      did {
+        id
+      }
+      id
+    }
   }
 }
-    ${IntegrationReleaseInfoFragmentFragmentDoc}`;
-export const GetIntegrationInfoDocument = gql`
-    query GetIntegrationInfo($integrationIDs: [String]) {
-  getIntegrationInfo(integrationIDs: $integrationIDs) {
-    ...IntegrationInfoFragment
+    ${UserProfileFragmentDoc}`;
+export const UpdateFollowDocument = /*#__PURE__*/ gql`
+    mutation UpdateFollow($i: UpdateAkashaFollowInput!) {
+  updateAkashaFollow(input: $i) {
+    document {
+      isFollowing
+      profile {
+        ...UserProfileFragment
+      }
+      did {
+        id
+      }
+      id
+    }
   }
 }
-    ${IntegrationInfoFragmentFragmentDoc}`;
-
-export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
-
-
-const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
-
-export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
+    ${UserProfileFragmentDoc}`;
+export const CreateAppDocument = /*#__PURE__*/ gql`
+    mutation CreateApp($i: CreateAkashaAppInput!) {
+  createAkashaApp(input: $i) {
+    document {
+      ...AkashaAppFragment
+    }
+    clientMutationId
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const UpdateAppDocument = /*#__PURE__*/ gql`
+    mutation UpdateApp($i: UpdateAkashaAppInput!) {
+  updateAkashaApp(input: $i) {
+    document {
+      ...AkashaAppFragment
+    }
+    clientMutationId
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetAppsDocument = /*#__PURE__*/ gql`
+    query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
+  akashaAppIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
+    edges {
+      node {
+        ...AkashaAppFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetAppsByIdDocument = /*#__PURE__*/ gql`
+    query GetAppsByID($id: ID!) {
+  node(id: $id) {
+    ... on AkashaApp {
+      ...AkashaAppFragment
+    }
+  }
+}
+    ${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const CreateAppReleaseDocument = /*#__PURE__*/ gql`
+    mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
+  createAkashaAppRelease(input: $i) {
+    document {
+      ...AppReleaseFragment
+    }
+    clientMutationId
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const UpdateAppReleaseDocument = /*#__PURE__*/ gql`
+    mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!) {
+  updateAkashaAppRelease(input: $i) {
+    document {
+      ...AppReleaseFragment
+    }
+    clientMutationId
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetAppsReleasesDocument = /*#__PURE__*/ gql`
+    query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
+  akashaAppReleaseIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
+    edges {
+      node {
+        ...AppReleaseFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export const GetAppReleaseByIdDocument = /*#__PURE__*/ gql`
+    query GetAppReleaseByID($id: ID!) {
+  node(id: $id) {
+    ... on AkashaAppRelease {
+      ...AppReleaseFragment
+    }
+  }
+}
+    ${AppReleaseFragmentDoc}
+${AkashaAppFragmentDoc}
+${UserProfileFragmentDoc}`;
+export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    GetComment(variables: Types.GetCommentQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetCommentQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetCommentQuery>(GetCommentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetComment', 'query');
+    GetBeams(variables?: Types.GetBeamsQueryVariables, options?: C): Promise<Types.GetBeamsQuery> {
+      return requester<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables, options) as Promise<Types.GetBeamsQuery>;
     },
-    GetComments(variables: Types.GetCommentsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetCommentsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetCommentsQuery>(GetCommentsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetComments', 'query');
+    GetBeamsByAuthorDid(variables: Types.GetBeamsByAuthorDidQueryVariables, options?: C): Promise<Types.GetBeamsByAuthorDidQuery> {
+      return requester<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, variables, options) as Promise<Types.GetBeamsByAuthorDidQuery>;
     },
-    GetReplies(variables: Types.GetRepliesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetRepliesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetRepliesQuery>(GetRepliesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetReplies', 'query');
+    GetBeamById(variables: Types.GetBeamByIdQueryVariables, options?: C): Promise<Types.GetBeamByIdQuery> {
+      return requester<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options) as Promise<Types.GetBeamByIdQuery>;
     },
-    AddComment(variables?: Types.AddCommentMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.AddCommentMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.AddCommentMutation>(AddCommentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'AddComment', 'mutation');
+    GetContentBlockById(variables: Types.GetContentBlockByIdQueryVariables, options?: C): Promise<Types.GetContentBlockByIdQuery> {
+      return requester<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>(GetContentBlockByIdDocument, variables, options) as Promise<Types.GetContentBlockByIdQuery>;
     },
-    EditComment(variables: Types.EditCommentMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.EditCommentMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.EditCommentMutation>(EditCommentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'EditComment', 'mutation');
+    GetBlockStorageById(variables: Types.GetBlockStorageByIdQueryVariables, options?: C): Promise<Types.GetBlockStorageByIdQuery> {
+      return requester<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables, options) as Promise<Types.GetBlockStorageByIdQuery>;
     },
-    RemoveComment(variables: Types.RemoveCommentMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.RemoveCommentMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.RemoveCommentMutation>(RemoveCommentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'RemoveComment', 'mutation');
+    CreateBeam(variables: Types.CreateBeamMutationVariables, options?: C): Promise<Types.CreateBeamMutation> {
+      return requester<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables, options) as Promise<Types.CreateBeamMutation>;
     },
-    GetEntry(variables: Types.GetEntryQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetEntryQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetEntryQuery>(GetEntryDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetEntry', 'query');
+    UpdateBeam(variables: Types.UpdateBeamMutationVariables, options?: C): Promise<Types.UpdateBeamMutation> {
+      return requester<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables, options) as Promise<Types.UpdateBeamMutation>;
     },
-    GetEntries(variables?: Types.GetEntriesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetEntriesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetEntriesQuery>(GetEntriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetEntries', 'query');
+    CreateContentBlock(variables: Types.CreateContentBlockMutationVariables, options?: C): Promise<Types.CreateContentBlockMutation> {
+      return requester<Types.CreateContentBlockMutation, Types.CreateContentBlockMutationVariables>(CreateContentBlockDocument, variables, options) as Promise<Types.CreateContentBlockMutation>;
     },
-    CreateEntry(variables?: Types.CreateEntryMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.CreateEntryMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.CreateEntryMutation>(CreateEntryDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateEntry', 'mutation');
+    UpdateContentBlock(variables: Types.UpdateContentBlockMutationVariables, options?: C): Promise<Types.UpdateContentBlockMutation> {
+      return requester<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables, options) as Promise<Types.UpdateContentBlockMutation>;
     },
-    EditEntry(variables: Types.EditEntryMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.EditEntryMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.EditEntryMutation>(EditEntryDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'EditEntry', 'mutation');
+    GetReflectionsFromBeam(variables: Types.GetReflectionsFromBeamQueryVariables, options?: C): Promise<Types.GetReflectionsFromBeamQuery> {
+      return requester<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables, options) as Promise<Types.GetReflectionsFromBeamQuery>;
     },
-    RemoveEntry(variables: Types.RemoveEntryMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.RemoveEntryMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.RemoveEntryMutation>(RemoveEntryDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'RemoveEntry', 'mutation');
+    GetReflectionsByAuthorDid(variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: C): Promise<Types.GetReflectionsByAuthorDidQuery> {
+      return requester<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options) as Promise<Types.GetReflectionsByAuthorDidQuery>;
     },
-    GetPostsByAuthor(variables: Types.GetPostsByAuthorQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetPostsByAuthorQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetPostsByAuthorQuery>(GetPostsByAuthorDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetPostsByAuthor', 'query');
+    GetReflectReflections(variables: Types.GetReflectReflectionsQueryVariables, options?: C): Promise<Types.GetReflectReflectionsQuery> {
+      return requester<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options) as Promise<Types.GetReflectReflectionsQuery>;
     },
-    GetPostsByTag(variables: Types.GetPostsByTagQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetPostsByTagQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetPostsByTagQuery>(GetPostsByTagDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetPostsByTag', 'query');
+    CreateReflect(variables: Types.CreateReflectMutationVariables, options?: C): Promise<Types.CreateReflectMutation> {
+      return requester<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables, options) as Promise<Types.CreateReflectMutation>;
     },
-    GetLinkPreview(variables: Types.GetLinkPreviewMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetLinkPreviewMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetLinkPreviewMutation>(GetLinkPreviewDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetLinkPreview', 'mutation');
+    UpdateAkashaReflect(variables: Types.UpdateAkashaReflectMutationVariables, options?: C): Promise<Types.UpdateAkashaReflectMutation> {
+      return requester<Types.UpdateAkashaReflectMutation, Types.UpdateAkashaReflectMutationVariables>(UpdateAkashaReflectDocument, variables, options) as Promise<Types.UpdateAkashaReflectMutation>;
     },
-    GetCustomFeed(variables?: Types.GetCustomFeedQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetCustomFeedQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetCustomFeedQuery>(GetCustomFeedDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCustomFeed', 'query');
+    GetProfileByID(variables: Types.GetProfileByIdQueryVariables, options?: C): Promise<Types.GetProfileByIdQuery> {
+      return requester<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables, options) as Promise<Types.GetProfileByIdQuery>;
     },
-    GetTag(variables: Types.GetTagQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetTagQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetTagQuery>(GetTagDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTag', 'query');
+    GetProfileByDid(variables: Types.GetProfileByDidQueryVariables, options?: C): Promise<Types.GetProfileByDidQuery> {
+      return requester<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables, options) as Promise<Types.GetProfileByDidQuery>;
     },
-    GetTags(variables?: Types.GetTagsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetTagsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetTagsQuery>(GetTagsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTags', 'query');
+    GetProfiles(variables?: Types.GetProfilesQueryVariables, options?: C): Promise<Types.GetProfilesQuery> {
+      return requester<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options) as Promise<Types.GetProfilesQuery>;
     },
-    SearchTags(variables: Types.SearchTagsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.SearchTagsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.SearchTagsQuery>(SearchTagsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'SearchTags', 'query');
+    GetInterests(variables?: Types.GetInterestsQueryVariables, options?: C): Promise<Types.GetInterestsQuery> {
+      return requester<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options) as Promise<Types.GetInterestsQuery>;
     },
-    CreateTag(variables: Types.CreateTagMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.CreateTagMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.CreateTagMutation>(CreateTagDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateTag', 'mutation');
+    GetInterestsByDid(variables: Types.GetInterestsByDidQueryVariables, options?: C): Promise<Types.GetInterestsByDidQuery> {
+      return requester<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, variables, options) as Promise<Types.GetInterestsByDidQuery>;
     },
-    AddProfileProvider(variables?: Types.AddProfileProviderMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.AddProfileProviderMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.AddProfileProviderMutation>(AddProfileProviderDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'AddProfileProvider', 'mutation');
+    GetInterestsById(variables: Types.GetInterestsByIdQueryVariables, options?: C): Promise<Types.GetInterestsByIdQuery> {
+      return requester<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, variables, options) as Promise<Types.GetInterestsByIdQuery>;
     },
-    MakeDefaultProvider(variables?: Types.MakeDefaultProviderMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.MakeDefaultProviderMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.MakeDefaultProviderMutation>(MakeDefaultProviderDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'MakeDefaultProvider', 'mutation');
+    GetFollowingListByDid(variables: Types.GetFollowingListByDidQueryVariables, options?: C): Promise<Types.GetFollowingListByDidQuery> {
+      return requester<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, variables, options) as Promise<Types.GetFollowingListByDidQuery>;
     },
-    ToggleInterestSub(variables: Types.ToggleInterestSubMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.ToggleInterestSubMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.ToggleInterestSubMutation>(ToggleInterestSubDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ToggleInterestSub', 'mutation');
+    GetFollowersListByDid(variables: Types.GetFollowersListByDidQueryVariables, options?: C): Promise<Types.GetFollowersListByDidQuery> {
+      return requester<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables, options) as Promise<Types.GetFollowersListByDidQuery>;
     },
-    RegisterUsername(variables: Types.RegisterUsernameMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.RegisterUsernameMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.RegisterUsernameMutation>(RegisterUsernameDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'RegisterUsername', 'mutation');
+    GetMyProfile(variables?: Types.GetMyProfileQueryVariables, options?: C): Promise<Types.GetMyProfileQuery> {
+      return requester<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options) as Promise<Types.GetMyProfileQuery>;
     },
-    ResolveProfile(variables: Types.ResolveProfileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.ResolveProfileQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.ResolveProfileQuery>(ResolveProfileDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ResolveProfile', 'query');
+    CreateProfile(variables: Types.CreateProfileMutationVariables, options?: C): Promise<Types.CreateProfileMutation> {
+      return requester<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options) as Promise<Types.CreateProfileMutation>;
     },
-    GetProfile(variables: Types.GetProfileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetProfileQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetProfileQuery>(GetProfileDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetProfile', 'query');
+    UpdateProfile(variables: Types.UpdateProfileMutationVariables, options?: C): Promise<Types.UpdateProfileMutation> {
+      return requester<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables, options) as Promise<Types.UpdateProfileMutation>;
     },
-    Follow(variables: Types.FollowMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.FollowMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.FollowMutation>(FollowDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Follow', 'mutation');
+    CreateInterests(variables: Types.CreateInterestsMutationVariables, options?: C): Promise<Types.CreateInterestsMutation> {
+      return requester<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables, options) as Promise<Types.CreateInterestsMutation>;
     },
-    UnFollow(variables: Types.UnFollowMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.UnFollowMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.UnFollowMutation>(UnFollowDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UnFollow', 'mutation');
+    UpdateInterests(variables: Types.UpdateInterestsMutationVariables, options?: C): Promise<Types.UpdateInterestsMutation> {
+      return requester<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables, options) as Promise<Types.UpdateInterestsMutation>;
     },
-    IsFollowing(variables: Types.IsFollowingQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.IsFollowingQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.IsFollowingQuery>(IsFollowingDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'IsFollowing', 'query');
+    CreateFollow(variables: Types.CreateFollowMutationVariables, options?: C): Promise<Types.CreateFollowMutation> {
+      return requester<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables, options) as Promise<Types.CreateFollowMutation>;
     },
-    SaveMetaData(variables?: Types.SaveMetaDataMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.SaveMetaDataMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.SaveMetaDataMutation>(SaveMetaDataDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'SaveMetaData', 'mutation');
+    UpdateFollow(variables: Types.UpdateFollowMutationVariables, options?: C): Promise<Types.UpdateFollowMutation> {
+      return requester<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options) as Promise<Types.UpdateFollowMutation>;
     },
-    SearchProfiles(variables: Types.SearchProfilesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.SearchProfilesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.SearchProfilesQuery>(SearchProfilesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'SearchProfiles', 'query');
+    CreateApp(variables: Types.CreateAppMutationVariables, options?: C): Promise<Types.CreateAppMutation> {
+      return requester<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables, options) as Promise<Types.CreateAppMutation>;
     },
-    GlobalSearch(variables: Types.GlobalSearchQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GlobalSearchQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GlobalSearchQuery>(GlobalSearchDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GlobalSearch', 'query');
+    UpdateApp(variables: Types.UpdateAppMutationVariables, options?: C): Promise<Types.UpdateAppMutation> {
+      return requester<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables, options) as Promise<Types.UpdateAppMutation>;
     },
-    GetFollowers(variables: Types.GetFollowersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetFollowersQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetFollowersQuery>(GetFollowersDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetFollowers', 'query');
+    GetApps(variables?: Types.GetAppsQueryVariables, options?: C): Promise<Types.GetAppsQuery> {
+      return requester<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options) as Promise<Types.GetAppsQuery>;
     },
-    GetFollowing(variables: Types.GetFollowingQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetFollowingQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetFollowingQuery>(GetFollowingDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetFollowing', 'query');
+    GetAppsByID(variables: Types.GetAppsByIdQueryVariables, options?: C): Promise<Types.GetAppsByIdQuery> {
+      return requester<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options) as Promise<Types.GetAppsByIdQuery>;
     },
-    GetInterests(variables: Types.GetInterestsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetInterestsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetInterestsQuery>(GetInterestsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetInterests', 'query');
+    CreateAppRelease(variables: Types.CreateAppReleaseMutationVariables, options?: C): Promise<Types.CreateAppReleaseMutation> {
+      return requester<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options) as Promise<Types.CreateAppReleaseMutation>;
     },
-    IsUserNameAvailable(variables: Types.IsUserNameAvailableQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.IsUserNameAvailableQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.IsUserNameAvailableQuery>(IsUserNameAvailableDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'IsUserNameAvailable', 'query');
+    UpdateAppRelease(variables: Types.UpdateAppReleaseMutationVariables, options?: C): Promise<Types.UpdateAppReleaseMutation> {
+      return requester<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options) as Promise<Types.UpdateAppReleaseMutation>;
     },
-    GetLatestRelease(variables?: Types.GetLatestReleaseQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetLatestReleaseQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetLatestReleaseQuery>(GetLatestReleaseDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetLatestRelease', 'query');
+    GetAppsReleases(variables?: Types.GetAppsReleasesQueryVariables, options?: C): Promise<Types.GetAppsReleasesQuery> {
+      return requester<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables, options) as Promise<Types.GetAppsReleasesQuery>;
     },
-    GetIntegrationInfo(variables?: Types.GetIntegrationInfoQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<Types.GetIntegrationInfoQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<Types.GetIntegrationInfoQuery>(GetIntegrationInfoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetIntegrationInfo', 'query');
+    GetAppReleaseByID(variables: Types.GetAppReleaseByIdQueryVariables, options?: C): Promise<Types.GetAppReleaseByIdQuery> {
+      return requester<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, variables, options) as Promise<Types.GetAppReleaseByIdQuery>;
     }
   };
 }
