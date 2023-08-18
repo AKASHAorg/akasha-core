@@ -7,13 +7,13 @@
 
 | App                                              | Staging                                                                                                                                                                                          | Production                                                       |
 |--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
-| [Akasha World](https://akasha.ethereum.world/) | [https://next.akasha-world-framework.pages.dev/](https://next.akasha-world-framework.pages.dev/)                                                                                                 | [https://akasha.ethereum.world/](https://akasha.ethereum.world/) |
+| [AKASHA World](https://akasha.ethereum.world/) | [https://next.akasha-world-framework.pages.dev/](https://next.akasha-world-framework.pages.dev/)                                                                                                 | [https://akasha.ethereum.world/](https://akasha.ethereum.world/) |
 | [Storybook](https://storybook-awf.netlify.app/)  | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)                               | NA                                                               |
 
 
 
 
-> Monorepo for Akasha Core
+> Monorepo for AKASHA Core
 
 ## Table of contents
 
@@ -36,7 +36,7 @@
 
 ## Background
 
-Akasha Core is one of the results of an [initiative](https://ethereum.world/manifesto) to accelerate the adoption of blockchain-based apps and services by transforming how they attract, engage and delight users.
+AKASHA Core is one of the results of an [initiative](https://ethereum.world/manifesto) to accelerate the adoption of blockchain-based apps and services by transforming how they attract, engage and delight users.
 
 ## Install
 
@@ -100,7 +100,7 @@ where `<package-group>` can be one of `apps`, `widgets`, `plugins`, `design-syst
 
 ### Playground test-app
 
-This [workspace](./examples) contains examples of applications that showcase the usage of Akasha Core.
+This [workspace](./examples) contains examples of applications that showcase the usage of AKASHA Core.
 
 ### Getting started with local development
 

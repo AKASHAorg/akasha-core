@@ -8,7 +8,7 @@ const App: React.FC<RootComponentProps> = props => {
   return (
     <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <Helmet>
-        <title>Search | Akasha World</title>
+        <title>Search | AKASHA World</title>
       </Helmet>
       <AppRoutes {...props} />
     </I18nextProvider>

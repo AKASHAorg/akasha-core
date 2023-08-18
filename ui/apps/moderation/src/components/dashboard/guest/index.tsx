@@ -50,7 +50,7 @@ const GuestDashboard: React.FC<GuestProps> = props => {
 
         <Text variant="subtitle2" align="center">
           {t(
-            "We are currently creating new Moderating Systems for Akasha World. If you'd like to join us click",
+            "We are currently creating new Moderating Systems for AKASHA World. If you'd like to join us click",
           )}{' '}
           <Anchor
             href="https://akasha-foundation.notion.site/The-AKASHA-Moderating-Open-Design-Challenge-15cb49cf57e740be92534958828ca210"

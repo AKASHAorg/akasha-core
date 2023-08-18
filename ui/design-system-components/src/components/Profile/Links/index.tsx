@@ -5,11 +5,11 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { getIconFromLink } from '../../../utils/get-icon-from-link';
-import { Link } from '../../types/common.types';
+import { ProfileLinkSource } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export interface LinksProps {
   title: string;
-  links: Link[];
+  links: ProfileLinkSource[];
   copyLabel?: string;
   copiedLabel?: string;
 }

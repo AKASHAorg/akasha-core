@@ -41,7 +41,7 @@ export const DevDashboard = (props: RootComponentProps) => {
   return (
     <Box customStyle="w-full">
       <Helmet>
-        <title>Dev Dashboard | Akasha World</title>
+        <title>Dev Dashboard | AKASHA World</title>
       </Helmet>
 
       <>

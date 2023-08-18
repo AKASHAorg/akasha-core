@@ -10,12 +10,16 @@ import { useCloseActions } from '../../utils';
 
 type Selected = { value: string; index?: number };
 
+type Separator = 'space' | 'comma';
+
 export type AutoCompleteProps = {
   options: string[];
   placeholder?: InputProps['placeholder'];
   disabled?: InputProps['disabled'];
   value?: string;
   customStyle?: string;
+  multiple?: string;
+  separators?: Separator[];
   onChange?: (value: string) => void;
   onSelected?: ({ value, index }: Selected) => void;
 };
@@ -26,6 +30,8 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
   disabled,
   customStyle = '',
   value,
+  multiple,
+  separators = ['space', 'comma'],
   onChange,
   onSelected,
 }) => {

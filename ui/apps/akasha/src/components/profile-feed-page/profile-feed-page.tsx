@@ -79,7 +79,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     <Box customStyle="w-full">
       <Helmet.Helmet>
         <title>
-          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | Ethereum
+          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | AKASHA
           World
         </title>
       </Helmet.Helmet>

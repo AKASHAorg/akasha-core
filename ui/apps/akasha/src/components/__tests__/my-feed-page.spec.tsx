@@ -32,7 +32,7 @@ describe('< MyFeedPage /> component', () => {
     await act(async () => {
       renderWithAllProviders(<BaseComponent loggedProfileData={genLoggedUser()} />, {});
     });
-    expect(screen.getByText(/Your customized view of Akasha World/)).toBeInTheDocument();
+    expect(screen.getByText(/Your customized view of AKASHA World/)).toBeInTheDocument();
   });
 
   it.skip('should render my feed for authenticated users', async () => {
