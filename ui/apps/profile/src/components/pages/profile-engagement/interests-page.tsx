@@ -92,6 +92,9 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
           id: profileId !== loginQuery.data?.id ? loginQuery.data?.id : profileId,
         }),
       });
+
+      setFeedbackMessage(successText);
+      setShowFeedback(true);
     },
     onSettled,
   });
@@ -112,14 +115,9 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
 
   const handleTopicClick = topic => {
     if (!ownTopics.find(interest => interest.value === topic.value)) {
-      createInterest
-        .mutateAsync({
-          i: { content: { topics: [...ownTopics, topic] } },
-        })
-        .then(() => {
-          setFeedbackMessage(successText);
-          setShowFeedback(true);
-        });
+      createInterest.mutate({
+        i: { content: { topics: [...ownTopics, topic] } },
+      });
 
       return;
     }
@@ -194,14 +192,9 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
               label: 'Save',
               loading: isProcessing,
               handleClick: interests =>
-                createInterest
-                  .mutateAsync({
-                    i: { content: { topics: interests } },
-                  })
-                  .then(() => {
-                    setFeedbackMessage(successText);
-                    setShowFeedback(true);
-                  }),
+                createInterest.mutate({
+                  i: { content: { topics: interests } },
+                }),
             }}
             customStyle="h-full"
           />
