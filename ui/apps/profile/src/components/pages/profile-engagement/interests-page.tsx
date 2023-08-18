@@ -108,6 +108,8 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
     profileDataReq.data,
   );
 
+  const successText = `${t('Successfully subscribed to interest')}!`;
+
   const handleTopicClick = topic => {
     if (!ownTopics.find(interest => interest.value === topic.value)) {
       createInterest
@@ -115,7 +117,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
           i: { content: { topics: [...ownTopics, topic] } },
         })
         .then(() => {
-          setFeedbackMessage(`${t('Successfully subscribed to interest')}!`);
+          setFeedbackMessage(successText);
           setShowFeedback(true);
         });
 
@@ -190,9 +192,14 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
               label: 'Save',
               loading: isProcessing,
               handleClick: interests =>
-                createInterest.mutate({
-                  i: { content: { topics: interests } },
-                }),
+                createInterest
+                  .mutateAsync({
+                    i: { content: { topics: interests } },
+                  })
+                  .then(() => {
+                    setFeedbackMessage(successText);
+                    setShowFeedback(true);
+                  }),
             }}
             customStyle="h-full"
           />
