@@ -15,7 +15,7 @@
 
 ## Background
 
-Akasha Integration App (Akasha World) is the foremost implementation of the Akasha World Framework. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
+AKASHA Integration App (AKASHA World) is the foremost implementation of the AKASHA Core. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
 
 ## Components
 

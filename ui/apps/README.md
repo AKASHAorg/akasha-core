@@ -4,7 +4,7 @@
 
 ## Components
 
-- [Akasha App](./akasha/README.md)
+- [AKASHA App](./akasha/README.md)
 - [Vibe](./moderation/README.md)
 - [Auth App](./auth-app/README.md)
 - [Settings App](./settings-app/README.md)

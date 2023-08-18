@@ -102,7 +102,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
             <Icon type="Cog8ToothIcon" />
           </button>
         </Box>
-        <Text>{t('Write and send private, encrypted messages 🔐 to people in Akasha World.')}</Text>
+        <Text>{t('Write and send private, encrypted messages 🔐 to people in AKASHA World.')}</Text>
         <Box customStyle="flex border(grey8 dark:grey3) rounded-lg">
           <Box customStyle="flex px-2 py-4">
             <Text variant="h2">{t('Conversations')}</Text>

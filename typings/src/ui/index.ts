@@ -17,6 +17,7 @@ export * from './ui-events';
 export * from './widgets';
 export * from './icon';
 export * from './colors';
+export * from './extensions';
 
 export enum IntegrationTypes {
   APP = 'App',

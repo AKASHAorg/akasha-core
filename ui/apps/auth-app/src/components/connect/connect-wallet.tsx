@@ -86,7 +86,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
         return t('You have rejected the change network request. Please change it manually.');
       }
       return t(
-        "To use Akasha World during the alpha period, you'll need to set the {{selectedProviderName}} wallet to {{requiredNetworkName}}",
+        "To use AKASHA World during the alpha period, you'll need to set the {{selectedProviderName}} wallet to {{requiredNetworkName}}",
         {
           selectedProviderName: getInjectedProviderDetails(injectedProviderQuery.data, t).name,
           requiredNetworkName,

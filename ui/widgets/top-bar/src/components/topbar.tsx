@@ -86,7 +86,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         <Stack align="center" justify="center" direction="column">
           <Icon type="akasha" customStyle="w-18 h-7" />
           <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
-            Akasha World
+            AKASHA World
           </Text>
         </Stack>
       </Button>

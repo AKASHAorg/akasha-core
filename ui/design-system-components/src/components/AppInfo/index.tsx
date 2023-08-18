@@ -12,8 +12,8 @@ import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import { Developer } from '../types/common.types';
 import { DuplexAppButton } from './duplex-app-button';
+import type { Developer } from '@akashaorg/typings/ui';
 
 export type AppInfoProps = {
   integrationName: string;

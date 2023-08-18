@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import AppList, { AppListProp } from '../AppList';
-import { Developer } from '../types/common.types';
+import { Developer } from '@akashaorg/typings/ui';
 
 export type DevInfoProps = {
   developerTitle: string;

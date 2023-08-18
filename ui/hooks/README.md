@@ -1,6 +1,6 @@
 # AWF Hooks
 
-This package contains all hooks required for proper functioning of the Akasha Web Framework
+This package contains all hooks required for proper functioning of the AKASHA Core
 
 ## Available Hooks
 

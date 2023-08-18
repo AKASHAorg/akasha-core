@@ -1,9 +1,9 @@
-# Akasha World Vibe App
+# AKASHA World Vibe App
 
-> Vibe for Akasha World
+> Vibe for AKASHA World
 ## Table of contents
 
-- [Akasha World Vibe App](#akasha-world-vibe-app)
+- [AKASHA World Vibe App](#akasha-world-vibe-app)
   - [Table of contents](#table-of-contents)
   - [Background](#background)
   - [Components](#components)
@@ -14,7 +14,7 @@
 
 ## Background
 
-Vibe adds moderation-related functionalities of reporting/moderating offensive/abusive contents and maintaining a log of moderated items, to the Akasha World. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
+Vibe adds moderation-related functionalities of reporting/moderating offensive/abusive contents and maintaining a log of moderated items, to the AKASHA World. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
 
 ## Components
 
@@ -34,7 +34,7 @@ The actively displayed list is controlled by the [Content Tab](src/components/da
 ### Error Pages
 > The [Prompt Authentication](src/components/error-pages/prompt-authentication.tsx) component is shown if the user trying to access the `Dashboard` is not authenticated.
 
-> The [Prompt Authorization](src/components/error-pages/prompt-authorization.tsx) component is shown if the user trying to access the `Dashboard` is authenticated but not an authorized Akasha World Moderator.
+> The [Prompt Authorization](src/components/error-pages/prompt-authorization.tsx) component is shown if the user trying to access the `Dashboard` is authenticated but not an authorized AKASHA World Moderator.
 
 > The [Render Not Found](src/components/error-pages/render-not-found.tsx) component is utilised in the `Dashboard` lists if no  matching items are found.
 

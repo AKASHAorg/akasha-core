@@ -45,7 +45,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     [TAGS]: routes[TAGS],
     [REPLY]: routes[REPLY],
   },
-  title: 'Akasha World',
+  title: 'AKASHA World',
   logo: { type: LogoTypeSource.ICON, value: 'antenna' },
   i18nNamespace: ['app-akasha-integration', 'ui-lib-feed'],
   menuItems: {

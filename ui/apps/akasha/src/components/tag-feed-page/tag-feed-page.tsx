@@ -75,7 +75,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   return (
     <Box customStyle="w-full">
       <Helmet.Helmet>
-        <title>Akasha World</title>
+        <title>AKASHA World</title>
       </Helmet.Helmet>
       {getTagQuery.status === 'loading' && <Spinner />}
       {getTagQuery.status === 'error' && (

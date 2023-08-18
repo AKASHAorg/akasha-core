@@ -2,7 +2,6 @@ import * as React from 'react';
 import PostPage from '../item-page/post-page';
 import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
-import * as commentHooks from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
 import {
   screen,
@@ -45,18 +44,6 @@ describe('< PostPage /> component', () => {
         status: string;
       }>
     ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
-
-    (
-      jest.spyOn(commentHooks, 'useInfiniteComments') as unknown as jest.SpyInstance<{
-        data: { pages: [{ results: string[] }] };
-      }>
-    ).mockReturnValue({ data: { pages: [{ results: ['oxaa'] }] } });
-
-    (
-      jest.spyOn(commentHooks, 'useInfiniteReplies') as unknown as jest.SpyInstance<{
-        data: { pages: [{ results: string[]; total?: number }] };
-      }>
-    ).mockReturnValue({ data: { pages: [{ results: ['oxrr', 'oxgg', 'oxrrt'], total: 3 }] } });
   });
 
   // @TODO fix after replacing hooks

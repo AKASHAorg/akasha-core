@@ -8,7 +8,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SocialLink } from './SocialLink';
 import { ButtonType } from '../types';
-import { Link } from '../../types/common.types';
+import { AkashaProfileLinkSource } from '@akashaorg/typings/sdk/graphql-types-new';
 
 type SocialLinkFormValue = {
   links: string[];
@@ -18,12 +18,12 @@ export type SocialLinksProp = {
   title: string;
   addNewButtonLabel: string;
   description: string;
-  socialLinks: Link[];
+  socialLinks: AkashaProfileLinkSource[];
   cancelButton: ButtonType;
   saveButton: {
     label: string;
     loading?: boolean;
-    handleClick: (formValues: { links: Link[] }) => void;
+    handleClick: (formValues: { links: AkashaProfileLinkSource[] }) => void;
   };
   customStyle?: string;
   onDelete: (index: number) => void;
