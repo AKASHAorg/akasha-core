@@ -33,7 +33,7 @@ const Pill: React.FC<PillProps> = ({
       hover={false}
       label={label}
       size={size}
-      icon={icon}
+      {...(active && { icon: icon })}
       iconDirection={iconDirection}
       customStyle={customStyle}
       active={active}
