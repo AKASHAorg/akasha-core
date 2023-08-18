@@ -6,7 +6,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import ModerationSwitchCard, { ModerationSwitchCardProps } from '.';
 
 const meta: Meta<ModerationSwitchCardProps> = {
-  title: 'Moderation/ModerationSwitchCard',
+  title: 'DSComponents/Moderation/ModerationSwitchCard',
   component: ModerationSwitchCard,
 };
 

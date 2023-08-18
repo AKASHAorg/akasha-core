@@ -7,7 +7,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo, { AppInfoProps } from '.';
 
 const meta: Meta<AppInfoProps> = {
-  title: 'AkashaVerse/AppInfo',
+  title: 'DSComponents/AkashaVerse/AppInfo',
   component: AppInfo,
 };
 

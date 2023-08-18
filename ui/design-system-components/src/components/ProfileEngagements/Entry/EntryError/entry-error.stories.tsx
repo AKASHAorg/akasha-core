@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import EntryError, { EntryErrorProps } from '.';
 
 const meta: Meta<EntryErrorProps> = {
-  title: 'Profile/EntryError',
+  title: 'DSComponents/Profile/EntryError',
   component: EntryError,
 };
 

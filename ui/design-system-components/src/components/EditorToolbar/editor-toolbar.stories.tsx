@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import EditorToolbar, { EditorToolbarProps } from '.';
 
 const meta: Meta<EditorToolbarProps> = {
-  title: 'Editor/EditorToolbar',
+  title: 'DSComponents/Editor/EditorToolbar',
   component: EditorToolbar,
 };
 

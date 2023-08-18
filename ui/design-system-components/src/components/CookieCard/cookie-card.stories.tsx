@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import CookieCard, { CookieCardProps } from '.';
 
 const meta: Meta<CookieCardProps> = {
-  title: 'Cards/CookieCard',
+  title: 'DSComponents/Cards/CookieCard',
   component: CookieCard,
 };
 

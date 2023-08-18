@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Entry, { EntryProps } from '.';
 
 const meta: Meta<EntryProps> = {
-  title: 'Profile/Entry',
+  title: 'DSComponents/Profile/Entry',
   component: Entry,
 };
 

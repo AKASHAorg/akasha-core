@@ -7,7 +7,7 @@ import Followers, { FollowersProps } from './Followers';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const meta: Meta<FollowersProps> = {
-  title: 'Profile/Followers',
+  title: 'DSComponents/Profile/Followers',
   component: Followers,
 };
 

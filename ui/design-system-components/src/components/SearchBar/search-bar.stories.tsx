@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import SearchBar, { SearchBarProps } from '.';
 
 const meta: Meta<SearchBarProps> = {
-  title: 'Search/SearchBar',
+  title: 'DSComponents/Bars/SearchBar',
   component: SearchBar,
 };
 

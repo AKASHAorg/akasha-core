@@ -8,7 +8,7 @@ import DevKeyCard, { DevKeyCardProps } from '.';
 import { sampleDevKey } from '../../utils/dummy-data';
 
 const meta: Meta<DevKeyCardProps> = {
-  title: 'Cards/DevKeyCard',
+  title: 'DSComponents/Cards/DevKeyCard',
   component: DevKeyCard,
 };
 

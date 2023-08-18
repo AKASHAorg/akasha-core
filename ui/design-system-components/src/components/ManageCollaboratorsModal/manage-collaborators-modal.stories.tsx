@@ -7,7 +7,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { trendingProfilesData } from '../../utils/dummy-data';
 
 const meta: Meta<ManageCollaboratorsModalProps> = {
-  title: 'Modals/ManageCollaboratorsModal',
+  title: 'DSComponents/Modals/ManageCollaboratorsModal',
 
   component: ManageCollaboratorsModal,
 };

@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import OnboardingSuggestionsCard, { OnboardingSuggestionsCardProps } from '.';
 
 const meta: Meta<OnboardingSuggestionsCardProps> = {
-  title: 'Cards/OnboardingSuggestionsCard',
+  title: 'DSComponents/Cards/OnboardingSuggestionsCard',
   component: OnboardingSuggestionsCard,
 };
 

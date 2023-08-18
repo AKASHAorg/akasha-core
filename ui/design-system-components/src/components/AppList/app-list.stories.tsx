@@ -7,7 +7,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import AppList, { AppListProps } from '.';
 
 const meta: Meta<AppListProps> = {
-  title: 'AkashaVerse/AppList',
+  title: 'DSComponents/AkashaVerse/AppList',
   component: AppList,
 };
 

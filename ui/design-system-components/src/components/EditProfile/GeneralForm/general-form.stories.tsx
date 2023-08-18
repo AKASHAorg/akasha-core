@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { GeneralForm, GeneralFormProps } from '.';
 
 const meta: Meta<GeneralFormProps> = {
-  title: 'Profile/Edit/GeneralForm',
+  title: 'DSComponents/Profile/Edit/GeneralForm',
   component: GeneralForm,
 };
 

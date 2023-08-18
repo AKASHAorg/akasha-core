@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import MessageContactCard, { MessageContactCardProps } from '.';
 
 const meta: Meta<MessageContactCardProps> = {
-  title: 'Cards/MessageContactCard',
+  title: 'DSComponents/Cards/MessageContactCard',
   component: MessageContactCard,
 };
 

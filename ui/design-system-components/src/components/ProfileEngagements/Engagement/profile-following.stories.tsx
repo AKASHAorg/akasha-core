@@ -7,7 +7,7 @@ import Following, { FollowingProps } from './Following';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const meta: Meta<FollowingProps> = {
-  title: 'Profile/Following',
+  title: 'DSComponents/Profile/Following',
   component: Following,
 };
 

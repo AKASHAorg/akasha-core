@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import NotificationsCard, { NotificationsCardProps } from '.';
 
 const meta: Meta<NotificationsCardProps> = {
-  title: 'NotificationsCards/NotificationsCard',
+  title: 'DSComponents/Cards/NotificationsCard',
   component: NotificationsCard,
 };
 

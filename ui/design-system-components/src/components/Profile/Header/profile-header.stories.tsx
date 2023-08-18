@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Header, { HeaderProps } from '.';
 
 const meta: Meta<HeaderProps> = {
-  title: 'Profile/ProfileHeader',
+  title: 'DSComponents/Profile/ProfileHeader',
   component: Header,
 };
 

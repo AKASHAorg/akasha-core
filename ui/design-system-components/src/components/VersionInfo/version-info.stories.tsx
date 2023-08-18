@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import VersionInfo, { VersionInfoProps } from '.';
 
 const meta: Meta<VersionInfoProps> = {
-  title: 'AkashaVerse/VersionInfo',
+  title: 'DSComponents/AkashaVerse/VersionInfo',
   component: VersionInfo,
 };
 

@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import EditorBox, { EditorBoxProps } from '.';
 
 const meta: Meta<EditorBoxProps> = {
-  title: 'Editor/EditorBox',
+  title: 'DSComponents/Editor/EditorBox',
   component: EditorBox,
 };
 

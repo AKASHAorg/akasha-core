@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Stats, { StatsProps } from '.';
 
 const meta: Meta<StatsProps> = {
-  title: 'Profile/ProfileStatsCard',
+  title: 'DSComponents/Profile/ProfileStatsCard',
   component: Stats,
 };
 

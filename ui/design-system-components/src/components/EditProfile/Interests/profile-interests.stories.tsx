@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Interests, InterestsProps } from '.';
 
 const meta: Meta<InterestsProps> = {
-  title: 'Profile/Edit/Interests',
+  title: 'DSComponents/Profile/Edit/Interests',
   component: Interests,
 };
 

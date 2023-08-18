@@ -6,7 +6,7 @@ import { profileData } from '@akashaorg/design-system-core/lib/utils';
 import ProfileSearchCard, { ProfileSearchCardProps } from '.';
 
 const meta: Meta<ProfileSearchCardProps> = {
-  title: 'ProfileSearchCards/ProfileSearchCard',
+  title: 'DSComponents/Cards/ProfileSearchCard',
   component: ProfileSearchCard,
 };
 

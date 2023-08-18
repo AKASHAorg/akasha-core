@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import ProfileEngagementLoading from './profile-engagement-loading';
 
 const meta: Meta = {
-  title: 'Profile/ProfileEngagementLoading',
+  title: 'DSComponents/Profile/ProfileEngagementLoading',
   component: ProfileEngagementLoading,
 };
 

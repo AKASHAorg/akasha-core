@@ -5,7 +5,7 @@ import { tw } from '@twind/core';
 import ModerationIntroCard, { ModerationIntroCardProps } from '.';
 
 const meta: Meta<ModerationIntroCardProps> = {
-  title: 'Moderation/ModerationIntroCard',
+  title: 'DSComponents/Moderation/ModerationIntroCard',
   component: ModerationIntroCard,
 };
 

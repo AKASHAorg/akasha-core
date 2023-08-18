@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Bio, { BioProps } from '.';
 
 const meta: Meta<BioProps> = {
-  title: 'Profile/ProfileBio',
+  title: 'DSComponents/Profile/ProfileBio',
   component: Bio,
 };
 

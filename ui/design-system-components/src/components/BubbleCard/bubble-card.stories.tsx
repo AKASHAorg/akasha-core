@@ -6,7 +6,7 @@ import BubbleCard, { BubbleCardProps } from '.';
 import { editorDefaultValue } from '../Editor/initialValue';
 
 const meta: Meta<BubbleCardProps> = {
-  title: 'Cards/BubbleCard',
+  title: 'DSComponents/Cards/BubbleCard',
   component: BubbleCard,
 };
 

@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import LoginCTACard, { LoginCTACardProps } from '.';
 
 const meta: Meta<LoginCTACardProps> = {
-  title: 'Cards/LoginCTACard',
+  title: 'DSComponents/Cards/LoginCTACard',
   component: LoginCTACard,
 };
 

@@ -5,7 +5,7 @@ import EmptyEntry, { EmptyEntryProps } from '.';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const meta: Meta<EmptyEntryProps> = {
-  title: 'Profile/EmptyEntry',
+  title: 'DSComponents/Profile/EmptyEntry',
   component: EmptyEntry,
 };
 

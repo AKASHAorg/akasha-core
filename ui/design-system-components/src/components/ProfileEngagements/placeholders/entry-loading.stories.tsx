@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import EntryLoading from './entry-loading';
 
 const meta: Meta = {
-  title: 'Profile/EntryLoading',
+  title: 'DSComponents/Profile/EntryLoading',
   component: EntryLoading,
 };
 

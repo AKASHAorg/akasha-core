@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Header, HeaderProps } from '.';
 
 const meta: Meta<HeaderProps> = {
-  title: 'Profile/Edit/Header',
+  title: 'DSComponents/Profile/Edit/Header',
   component: Header,
 };
 

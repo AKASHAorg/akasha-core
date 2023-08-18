@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import ListAppTopbar, { ListAppTopbarProps } from '.';
 
 const meta: Meta<ListAppTopbarProps> = {
-  title: 'ListApp/ListAppTopbar',
+  title: 'DSComponents/ListApp/ListAppTopbar',
   component: ListAppTopbar,
 };
 

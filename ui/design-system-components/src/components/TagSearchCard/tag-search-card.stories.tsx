@@ -6,7 +6,7 @@ import { trendingTagsData } from '@akashaorg/design-system-core/lib/utils';
 import TagSearchCard, { TagSearchCardProps } from '.';
 
 const meta: Meta<TagSearchCardProps> = {
-  title: 'Cards/TagSearchCard',
+  title: 'DSComponents/Cards/TagSearchCard',
   component: TagSearchCard,
 };
 

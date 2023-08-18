@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ModerationValueCard, { ModerationValueCardProps } from '.';
 
 const meta: Meta<ModerationValueCardProps> = {
-  title: 'Moderation/ModerationValueCard',
+  title: 'DSComponents/Moderation/ModerationValueCard',
   component: ModerationValueCard,
 };
 

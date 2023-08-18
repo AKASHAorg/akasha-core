@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import ChatAreaHeader, { ChatAreaHeaderProps } from '.';
 
 const meta: Meta<ChatAreaHeaderProps> = {
-  title: 'Chat/ChatAreaHeader',
+  title: 'DSComponents/Chat/ChatAreaHeader',
   component: ChatAreaHeader,
 };
 

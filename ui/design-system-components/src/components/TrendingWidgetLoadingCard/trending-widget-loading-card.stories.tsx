@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import TrendingWidgetLoadingCard from '.';
 
 const meta: Meta = {
-  title: 'Cards/TrendingWidgetLoadingCard',
+  title: 'DSComponents/Cards/TrendingWidgetLoadingCard',
   component: TrendingWidgetLoadingCard,
 };
 
