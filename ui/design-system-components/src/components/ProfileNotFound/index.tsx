@@ -1,9 +1,11 @@
 import React from 'react';
-import Default404Image from '../Default404Image';
+
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+import Default404Image from '../Default404Image';
 
 export type ProfileNotFoundProps = {
   titleLabel: string;

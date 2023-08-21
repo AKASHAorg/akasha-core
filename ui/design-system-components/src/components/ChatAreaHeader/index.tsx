@@ -1,13 +1,15 @@
 import * as React from 'react';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { Profile } from '@akashaorg/typings/ui';
 import { tw } from '@twind/core';
 
-export type IChatAreaHeaderProps = Pick<Profile, 'name' | 'avatar' | 'did'> & {
+import { Profile } from '@akashaorg/typings/ui';
+
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+
+export type ChatAreaHeaderProps = Pick<Profile, 'name' | 'avatar' | 'did'> & {
   onClickAvatar?: () => void;
 };
 
-const ChatAreaHeader: React.FC<IChatAreaHeaderProps> = props => {
+const ChatAreaHeader: React.FC<ChatAreaHeaderProps> = props => {
   const { name, avatar, did, onClickAvatar } = props;
 
   return (

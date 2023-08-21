@@ -1,19 +1,22 @@
 import React from 'react';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
-import IconDrop, { IconEntry } from './icon-drop';
-import { IconType } from '@akashaorg/typings/ui';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export interface IEditorToolbarProps {
+import { IconType } from '@akashaorg/typings/ui';
+
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
+
+import IconDrop, { IconEntry } from './icon-drop';
+
+export type EditorToolbarProps = {
   onBoldClick: () => void;
   onItalicClick: () => void;
   onUnderlineClick: () => void;
   onStrikeThroughClick: () => void;
-}
+};
 
-const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
+const EditorToolbar: React.FC<EditorToolbarProps> = props => {
   const { onBoldClick, onItalicClick, onUnderlineClick, onStrikeThroughClick } = props;
 
   const caseStyleRef = useCloseActions(() => {

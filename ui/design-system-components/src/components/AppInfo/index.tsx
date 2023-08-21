@@ -1,18 +1,21 @@
 import React from 'react';
+
+import { DuplexAppButton } from './duplex-app-button';
+
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Menu from '@akashaorg/design-system-core/lib/components/Menu';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import { DuplexAppButton } from './duplex-app-button';
+import Menu from '@akashaorg/design-system-core/lib/components/Menu';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+
 import type { Developer } from '@akashaorg/typings/ui';
 
 export type AppInfoProps = {

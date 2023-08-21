@@ -1,16 +1,19 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import AppList, { AppListProp } from '../AppList';
+
 import { Developer } from '@akashaorg/typings/ui';
+
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import AppList, { AppListProps } from '../AppList';
 
 export type DevInfoProps = {
   developerTitle: string;
   developers: Developer[];
-  apps: AppListProp['apps'];
+  apps: AppListProps['apps'];
   onAppSelected: (appId: string) => void;
 };
 

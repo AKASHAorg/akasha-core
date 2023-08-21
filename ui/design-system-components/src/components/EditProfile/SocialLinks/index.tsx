@@ -1,12 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import * as z from 'zod';
 import { apply, tw } from '@twind/core';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SocialLink } from './SocialLink';
+
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import { SocialLink } from './social-link';
+
 import { ButtonType } from '../types';
 import { AkashaProfileLinkSource } from '@akashaorg/typings/sdk/graphql-types-new';
 
@@ -14,7 +17,7 @@ type SocialLinkFormValue = {
   links: string[];
 };
 
-export type SocialLinksProp = {
+export type SocialLinksProps = {
   title: string;
   addNewButtonLabel: string;
   description: string;
@@ -30,7 +33,7 @@ export type SocialLinksProp = {
   onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const SocialLinks: React.FC<SocialLinksProp> = ({
+export const SocialLinks: React.FC<SocialLinksProps> = ({
   title,
   addNewButtonLabel,
   description,

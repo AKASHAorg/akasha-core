@@ -1,13 +1,15 @@
 import * as React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
-import { Profile } from '@akashaorg/typings/ui';
 import { tw } from '@twind/core';
 
-export interface IMessageContactCardProps {
+import { Profile } from '@akashaorg/typings/ui';
+
+import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
+
+export type MessageContactCardProps = {
   locale: ILocale;
   senderName: Profile['name'];
   content?: string;
@@ -22,9 +24,9 @@ export interface IMessageContactCardProps {
   onClickAvatar?: () => void;
   onClickCard?: () => void;
   onConvoPin?: () => void;
-}
+};
 
-const MessageContactCard: React.FC<IMessageContactCardProps> = props => {
+const MessageContactCard: React.FC<MessageContactCardProps> = props => {
   const {
     senderName,
     content,

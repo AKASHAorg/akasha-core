@@ -1,8 +1,9 @@
 import React from 'react';
 
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { IconType } from '@akashaorg/typings/ui';
+
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export type IconEntry = {
   type: IconType;
