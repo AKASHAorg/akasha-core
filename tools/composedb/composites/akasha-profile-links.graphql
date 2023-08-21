@@ -1,0 +1,9 @@
+type AkashaFollow @loadModel(id: "kjzl6hvfrbw6cafwnnk3q8yg6nvy0hxthnex1ylx3ow6q3e4rzbdr5zewz56s9q") {
+  id: ID!
+}
+
+
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c51hkop357p1t1mvh4d0gjanynwjc9cvebb43vft4nb7kp8y511") {
+  id: ID!
+  followers: [AkashaFollow] @relationFrom(model: "AkashaFollow", property: "profileID")
+}

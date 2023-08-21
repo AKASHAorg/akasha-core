@@ -6,14 +6,7 @@ import {
   IEntryData,
 } from '@akashaorg/typings/ui';
 import isEqual from 'lodash.isequal';
-import {
-  useCreatePost,
-  useEditPost,
-  usePost,
-  mapEntry,
-  useAnalytics,
-  useCreateComment,
-} from '@akashaorg/ui-awf-hooks';
+
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
 import { Draft, IDraftStorage } from '../utils';
@@ -31,16 +24,13 @@ type Props = {
 
 export function PostEditor({ appName, postId, userId, singleSpa, action, draftStorage }: Props) {
   const { t } = useTranslation('app-akasha-integration');
-  const [analyticsActions] = useAnalytics();
+  const [analyticsActions] = [undefined];
 
   // @TODO replace with new hooks
-  const post = usePost({
-    postId,
-    enabler: action !== 'post',
-  });
-  const editPost = useEditPost();
-  const publishPost = useCreatePost();
-  const publishComment = useCreateComment();
+  const post = undefined;
+  const editPost = undefined;
+  const publishPost = undefined;
+  const publishComment = undefined;
 
   const postDraft = new Draft<Partial<IEntryData>>({
     storage: draftStorage,
@@ -59,23 +49,12 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
   const draftRepostData = canSaveDraft ? repostDraft.get() : null;
 
   const entryData = React.useMemo(() => {
-    if (post.status === 'success') {
-      return mapEntry(post.data);
-    }
     return undefined;
-  }, [post.data, post.status]);
+  }, []);
 
   const embedEntryData = React.useMemo(() => {
-    if (entryData && action === 'repost') {
-      return entryData;
-    }
-    if (action === 'repost' || action === 'edit') {
-      if (post.data?.quotes.length) {
-        return mapEntry(post.data?.quotes[0]);
-      }
-    }
     return undefined;
-  }, [action, entryData, post.data?.quotes]);
+  }, []);
 
   const [editorState, setEditorState] = React.useState(
     action === 'edit' ? entryData?.slateContent : draftPostData,

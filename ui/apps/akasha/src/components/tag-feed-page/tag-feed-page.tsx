@@ -10,12 +10,7 @@ import {
   ModalNavigationOptions,
   Profile,
 } from '@akashaorg/typings/ui';
-import {
-  useTagSubscriptions,
-  useToggleTagSubscription,
-  useGetTag,
-  useInfinitePostsByTag,
-} from '@akashaorg/ui-awf-hooks';
+
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
@@ -32,14 +27,14 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { tagName } = useParams<{ tagName: string }>();
 
   // @TODO fix hooks
-  const getTagQuery = useGetTag(tagName);
+  const getTagQuery = undefined;
 
-  const reqPosts = useInfinitePostsByTag(tagName, 15);
+  const reqPosts = undefined;
 
-  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
-  const tagSubscriptions = tagSubscriptionsReq.data;
+  const tagSubscriptionsReq = undefined;
+  const tagSubscriptions = undefined;
 
-  const toggleTagSubscriptionReq = useToggleTagSubscription();
+  const toggleTagSubscriptionReq = undefined;
 
   const postPages = React.useMemo(() => {
     if (reqPosts.data) {
@@ -80,7 +75,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   return (
     <Box customStyle="w-full">
       <Helmet.Helmet>
-        <title>Akasha World</title>
+        <title>AKASHA World</title>
       </Helmet.Helmet>
       {getTagQuery.status === 'loading' && <Spinner />}
       {getTagQuery.status === 'error' && (

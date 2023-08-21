@@ -50,21 +50,23 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
   );
 
   const beamsTotal =
-    beams.data && 'beamList' in beams.data ? beams.data?.beamList?.edges?.length || 0 : 0;
+    beams.data && 'akashaBeamList' in beams.data
+      ? beams.data?.akashaBeamList?.edges?.length || 0
+      : 0;
 
   const interestsTotal =
-    interests.data && 'interests' in interests.data
-      ? interests.data?.interests?.topics?.length || 0
+    interests.data && 'akashaProfileInterests' in interests.data
+      ? interests.data?.akashaProfileInterests?.topics?.length || 0
       : 0;
 
   const followersTotal =
-    followers.data && 'profile' in followers.data
-      ? followers.data?.profile?.followers?.edges?.length || 0
+    followers.data && 'akashaProfile' in followers.data
+      ? followers.data?.akashaProfile?.followers?.edges?.length || 0
       : 0;
 
   const followingTotal =
-    following.data && 'followList' in following.data
-      ? following.data?.followList?.edges?.length || 0
+    following.data && 'akashaFollowList' in following.data
+      ? following.data?.akashaFollowList?.edges?.length || 0
       : 0;
 
   const handleNavigateToProfilePosts = () => {

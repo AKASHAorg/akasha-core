@@ -1,3 +1,3 @@
-# Akasha World Settings App 
+# AKASHA World Settings App 
 
-> Global settings for Akasha World
+> Global settings for AKASHA World

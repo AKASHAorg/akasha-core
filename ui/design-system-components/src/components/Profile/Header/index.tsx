@@ -9,7 +9,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import { tw } from '@twind/core';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import { Profile } from '@akashaorg/typings/ui';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 
@@ -45,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({
   const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
 
   return (
-    <div>
+    <Box>
       <Card
         elevation="1"
         radius={{ top: 20 }}
@@ -59,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
         <Stack direction="column" customStyle="pl-2" fullWidth>
           <Stack spacing="gap-x-2" customStyle="-ml-2">
-            <div className={tw(avatarContainer)}>
+            <Box customStyle={avatarContainer}>
               <Avatar
                 profileId={did.id}
                 size="xl"
@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({
                   'bg',
                 )}`}
               />
-            </div>
+            </Box>
             <Stack direction="column" spacing="gap-y-1">
               <Text variant="button-lg">{name}</Text>
               <DidField
@@ -83,10 +83,11 @@ const Header: React.FC<HeaderProps> = ({
                 copiedLabel={copiedLabel}
               />
             </Stack>
-            <div className={tw(`relative ml-auto mt-2`)}>
+            <Box customStyle="relative ml-auto mt-2">
               <Stack spacing="gap-x-2">
                 {viewerIsOwner && handleEdit ? (
                   <Button
+                    aria-label="edit"
                     icon="Cog6ToothIcon"
                     variant="primary"
                     onClick={handleEdit}
@@ -97,7 +98,6 @@ const Header: React.FC<HeaderProps> = ({
                   followElement && (
                     <>
                       <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
-
                       {followElement}
                     </>
                   )
@@ -110,13 +110,14 @@ const Header: React.FC<HeaderProps> = ({
                       variant: 'primary',
                       greyBg: true,
                       iconOnly: true,
+                      'aria-label': 'settings',
                     }}
                     items={menuItems}
                     customStyle="w-max z-99"
                   />
                 )}
               </Stack>
-            </div>
+            </Box>
           </Stack>
           <Stack direction="column" spacing="gap-y-4">
             {ensName === 'loading' ? (
@@ -145,7 +146,7 @@ const Header: React.FC<HeaderProps> = ({
           </Stack>
         </Stack>
       </Card>
-    </div>
+    </Box>
   );
 };
 export default Header;

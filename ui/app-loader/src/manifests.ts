@@ -6,8 +6,8 @@ import { getStateSlice, LoaderState } from './state';
 
 export const getLatestReleaseInfo = async (integrations: { name: string }[]) => {
   const sdk = getSDK();
-  const data = await sdk.api.icRegistry.getLatestReleaseInfo(integrations);
-  return data.getLatestRelease;
+  // const data = await sdk.api.icRegistry.getLatestReleaseInfo(integrations);
+  return Promise.resolve([]);
 };
 
 export const getIntegrationsData = async (integrationNames: string[], worldConfig: WorldConfig) => {

@@ -51,9 +51,11 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
         <Stack justify="between">
           {stats.map((stat, index) => (
             <Button
-              onClick={+stat.total > 0 ? stat.onClick : undefined}
+              onClick={
+                +stat.total > 0 || stat.label.includes('Interests') ? stat.onClick : undefined
+              }
               key={stat.label + index}
-              disabled={+stat.total === 0}
+              disabled={+stat.total === 0 && !stat.label.includes('Interests')}
               plain
             >
               <Stack direction="column" align="center" customStyle="group">

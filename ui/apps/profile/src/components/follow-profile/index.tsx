@@ -40,8 +40,8 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
     onMutate: () => {
       setLoading(true);
     },
-    onSuccess: async ({ createFollow }) => {
-      setFollowing(createFollow.document.isFollowing);
+    onSuccess: async ({ createAkashaFollow }) => {
+      setFollowing(createAkashaFollow.document.isFollowing);
       await queryClient.invalidateQueries(
         useInfiniteGetFollowersListByDidQuery.getKey({ id: loggedInProfileId }),
       );
@@ -55,8 +55,8 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
     onMutate: () => {
       setLoading(true);
     },
-    onSuccess: async ({ updateFollow }) => {
-      setFollowing(updateFollow.document.isFollowing);
+    onSuccess: async ({ updateAkashaFollow }) => {
+      setFollowing(updateAkashaFollow.document.isFollowing);
       await queryClient.invalidateQueries(
         useInfiniteGetFollowersListByDidQuery.getKey({ id: loggedInProfileId }),
       );

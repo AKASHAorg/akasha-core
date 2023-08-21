@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { useInfinitePostsByAuthor, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import { useGetProfile } from '@akashaorg/ui-awf-hooks';
 import {
   RootComponentProps,
   EntityTypes,
@@ -36,29 +36,14 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-  const reqPosts = useInfinitePostsByAuthor(
-    pubKey,
-    15,
-    !!pubKey && !erroredHooks.includes('useInfinitePostsByAuthor'),
-  );
-
-  React.useEffect(() => {
-    if (reqPosts.status === 'error' && !erroredHooks.includes('useInfinitePostsByAuthor')) {
-      setErroredHooks(['useInfinitePostsByAuthor']);
-    }
-  }, [reqPosts, erroredHooks]);
+  const reqPosts = Promise.resolve([]);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!reqPosts.isLoading && reqPosts.hasNextPage) {
-      reqPosts.fetchNextPage();
-    }
-  }, [reqPosts]);
+    return undefined;
+  }, []);
   const postPages = React.useMemo(() => {
-    if (reqPosts.data) {
-      return reqPosts.data.pages;
-    }
-    return [];
-  }, [reqPosts.data]);
+    return undefined;
+  }, []);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
@@ -79,21 +64,21 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     <Box customStyle="w-full">
       <Helmet.Helmet>
         <title>
-          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | Ethereum
+          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | AKASHA
           World
         </title>
       </Helmet.Helmet>
 
       <>
-        {reqPosts.isError && reqPosts.error && (
+        {false && (
           <ErrorLoader
             type="script-error"
             title="Cannot get posts for this profile"
-            details={(reqPosts.error as Error).message}
+            details={'placeholder error'}
           />
         )}
-        {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
-        {reqPosts.isSuccess && postPages && (
+        {true && !postPages && <div>There are no posts!</div>}
+        {true && postPages && (
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}
             itemType={EntityTypes.POST}
@@ -103,12 +88,12 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
               `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
             }
             pages={postPages}
-            requestStatus={reqPosts.status}
+            requestStatus={'success'}
             loggedProfileData={loggedProfileData}
             navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
             navigateToModal={props.navigateToModal}
             onLoginModalOpen={showLoginModal}
-            hasNextPage={reqPosts.hasNextPage}
+            hasNextPage={false}
             contentClickable={true}
             onEntryFlag={handleEntryFlag}
             onEntryRemove={handleEntryRemove}

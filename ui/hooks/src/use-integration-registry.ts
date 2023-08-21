@@ -29,7 +29,7 @@ export function useGetIntegrationInfo(integrationId: string) {
 
 const getIntegrationsInfo = async (opt: { name?: string; id?: string }[]) => {
   const sdk = getSDK();
-  return sdk.api.icRegistry.getIntegrationsInfo(opt);
+  return undefined;
 };
 
 /**
@@ -265,9 +265,8 @@ export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
 
 const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
   const sdk = getSDK();
-  // add messaging app mock to response here
-  const res = await sdk.api.icRegistry.getLatestReleaseInfo(opt);
-  return res;
+
+  return undefined;
 };
 
 /**

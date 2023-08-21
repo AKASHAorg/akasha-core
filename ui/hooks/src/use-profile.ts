@@ -144,7 +144,7 @@ export function useGetProfileByEthAddress(ethAddress: string, loggedUser?: strin
 
 const getEntryAuthorProfileData = async (entryId: string, queryClient: QueryClient) => {
   const sdk = getSDK();
-  const res = await sdk.api.entries.getEntry(entryId);
+  const res = undefined;
   const authorCache = queryClient.getQueryData<Profile>([
     PROFILE_KEY,
     res?.getPost?.author?.pubKey,
@@ -266,7 +266,7 @@ const getInterests = async (pubKey: string) => {
   const res = await sdk.api.profile.getInterests(pubKey);
 
   const getTagCalls = res.data.getInterests.map(interest => {
-    return sdk.api.tags.getTag(interest);
+    return Promise.resolve();
   });
 
   if (getTagCalls.length) {

@@ -27,7 +27,9 @@ const Connect: React.FC<RootComponentProps> = props => {
   );
 
   const profile =
-    profileDataReq.data && 'isViewer' in profileDataReq.data ? profileDataReq.data?.profile : null;
+    profileDataReq.data && 'isViewer' in profileDataReq.data
+      ? profileDataReq.data?.akashaProfile
+      : null;
 
   const { t } = useTranslation('app-auth-ewa');
   const loginMutation = useLogin();

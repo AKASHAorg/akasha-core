@@ -110,7 +110,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
               <InfoCard
                 titleLabel={t('Welcome to the Integration Centre!')}
                 bodyLabel={t(
-                  'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to Akasha World.',
+                  'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to AKASHA World.',
                 )}
                 titleVariant="h4"
                 bodyVariant="body1"

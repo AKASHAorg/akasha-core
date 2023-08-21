@@ -28,17 +28,6 @@ export const isStatusType = (type: Color): type is Status => {
   return type === 'warning' || type === 'error' || type === 'success';
 };
 
-export const EnsTxtPresets = {
-  DISCORD: 'com.discord',
-  GITHUB: 'com.github',
-  REDDIT: 'com.reddit',
-  TWITTER: 'com.twitter',
-  TELEGRAM: 'org.telegram',
-  URL: 'url',
-  AVATAR: 'avatar',
-  DESCRIPTION: 'description',
-};
-
 export const STATUS_TO_COLOR_CLASSES_MAP: Record<Status, Color> = {
   error: { light: 'errorLight', dark: 'errorDark' },
   success: 'success',

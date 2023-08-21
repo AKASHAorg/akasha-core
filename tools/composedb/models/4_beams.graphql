@@ -1,8 +1,0 @@
-type Reflection @loadModel(id: "kjzl6hvfrbw6c5wydt6460x8x0nj4j64mwtotfgjm6e15gevvg4ju85z72uisxm"){
-  id: ID!
-}
-
-type Reflect @loadModel(id: "kjzl6hvfrbw6c6bw7gfhlo2viqypg3hjg9sdik12w5nq044qi8xxop5xh768wq1"){
-  reflections: [Reflection] @relationFrom(model: "Reflection", property: "reflectID")
-  reflectionsCount: Int! @relationCountFrom(model: "Reflection", property: "reflectID")
-}

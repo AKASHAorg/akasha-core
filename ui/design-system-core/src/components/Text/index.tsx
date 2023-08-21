@@ -27,10 +27,11 @@ export type Alignment = 'start' | 'center' | 'end' | 'justify';
 export type Weight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
 
 export type TextProps = {
+  id?: string;
   customStyle?: string; // pass only the string classes without 'apply' or 'tw'
   variant?: Variant;
   color?: Color;
-  as?: Heading | 'p' | 'span';
+  as?: Heading | 'p' | 'span' | 'label';
   align?: Alignment;
   truncate?: boolean;
   breakWord?: boolean;
@@ -60,6 +61,7 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
 };
 
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
+  id,
   as,
   customStyle = '',
   variant = 'body1',
@@ -88,6 +90,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
 
     {
+      id,
       className: tw(
         apply`${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
       ),

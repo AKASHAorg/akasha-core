@@ -1,6 +1,7 @@
-fragment ReflectFragment on Reflect{
+fragment ReflectFragment on AkashaReflect{
   author {
     id
+    isViewer
   }
   version
   active
@@ -10,18 +11,19 @@ fragment ReflectFragment on Reflect{
     value
   }
   isReply
- reflectionsCount
+  reflection
   beam {
     id
     author{
       id
+      isViewer
     }
   }
 }
 
 query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
   node(id: $id){
-    ... on Beam{
+    ... on AkashaBeam{
       reflections(after: $after, before: $before, first: $first, last: $last) {
         edges{
           node{
@@ -42,7 +44,7 @@ query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: 
 query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
   node(id: $id){
     ... on CeramicAccount{
-      reflectList(after: $after, before: $before, first: $first, last: $last){
+      akashaReflectList(after: $after, before: $before, first: $first, last: $last){
         edges{
           node{
             ...ReflectFragment
@@ -60,30 +62,26 @@ query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $firs
   }
 }
 
-query GetReflectReflections($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
-  node(id: $id){
-    ...on Reflect{
-      reflections(after: $after, before: $before, first: $first, last: $last){
-        edges{
-          node{
-            reflect{
-            ...ReflectFragment
-            }
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
+# should be CeramicStreamID instead of String for $id
+#
+query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput){
+  akashaReflectIndex(after: $after, before: $before, first: $first, last: $last, filters: {where: {reflection: {equalTo: $id}}}, sorting: $sorting){
+    edges{
+      node{
+          ...ReflectFragment
       }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
     }
   }
 }
 
-mutation CreateReflect($i: CreateReflectInput!){
-  createReflect(input: $i){
+mutation CreateReflect($i: CreateAkashaReflectInput!){
+  createAkashaReflect(input: $i){
     document {
       ...ReflectFragment
     }
@@ -91,8 +89,8 @@ mutation CreateReflect($i: CreateReflectInput!){
   }
 }
 
-mutation UpdateReflect($i: UpdateReflectInput!){
-  updateReflect(input: $i){
+mutation UpdateAkashaReflect($i: UpdateAkashaReflectInput!){
+  updateAkashaReflect(input: $i){
     document {
       ...ReflectFragment
     }
@@ -100,30 +98,3 @@ mutation UpdateReflect($i: UpdateReflectInput!){
   }
 }
 
-mutation CreateReflectReflection($i: CreateReflectionInput!){
-  createReflection(input: $i){
-    document {
-      active
-      reflect {
-        ...ReflectFragment
-      }
-      reflection {
-        ...ReflectFragment
-      }
-    }
-  }
-}
-
-mutation UpdateReflectReflection($i: UpdateReflectionInput!){
-  updateReflection(input: $i){
-    document {
-      active
-      reflect {
-        ...ReflectFragment
-      }
-      reflection {
-        ...ReflectFragment
-      }
-    }
-  }
-}

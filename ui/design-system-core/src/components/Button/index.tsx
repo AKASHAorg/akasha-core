@@ -101,7 +101,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 active={active}
               />
             )}
-            <Text variant={BUTTON_SIZE_TEXT_MAP[size]} customStyle={textStyle}>
+            <Text variant={BUTTON_SIZE_TEXT_MAP[size]} as="span" customStyle={textStyle}>
               {label}
             </Text>
             {icon && iconDirection === 'right' && (

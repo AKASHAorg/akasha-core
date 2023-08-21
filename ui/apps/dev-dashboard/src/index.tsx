@@ -25,7 +25,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     defaultRoute: routes[DASHBOARD],
     ...routes,
   },
-  title: 'Dev Dashboard | Akasha World',
+  title: 'Dev Dashboard | AKASHA World',
   menuItems: {
     label: 'Dev Dashboard',
     type: MenuItemType.App,

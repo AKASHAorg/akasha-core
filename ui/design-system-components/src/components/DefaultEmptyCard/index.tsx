@@ -3,13 +3,14 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { EmptyCardSize } from '../types/common.types';
+
+type CardSize = { width?: string | number; height?: string | number };
 
 export type DefaultEmptyCardProps = {
   infoText: string;
   buttonLabel?: string;
   noBorder?: boolean;
-  customCardSize?: EmptyCardSize;
+  customCardSize?: CardSize;
   buttonClickHandler?: () => void;
 };
 

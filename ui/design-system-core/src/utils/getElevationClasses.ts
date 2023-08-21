@@ -1,4 +1,4 @@
-import { BaseElevation, Elevation } from '../components/types/common.types';
+import type { BaseElevation, Elevation } from '../components/types/common.types';
 
 export function getElevationClasses(elevation: Elevation) {
   if (typeof elevation === 'object') {

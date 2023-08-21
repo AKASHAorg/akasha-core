@@ -1,3 +1,4 @@
+/*
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { DataProviderInput } from '@akashaorg/typings/sdk';
@@ -19,17 +20,17 @@ interface InfiniteReplies extends InfiniteComments {
   commentID?: string;
 }
 
-/**
+/!**
  * @internal
- */
+ *!/
 export const COMMENT_KEY = 'Comment';
-/**
+/!**
  * @internal
- */
+ *!/
 export const COMMENTS_KEY = 'Comments';
-/**
+/!**
  * @internal
- */
+ *!/
 export const PUBLISH_PENDING_KEY = 'PendingPublish_Comments';
 
 export interface Publish_Options {
@@ -78,7 +79,7 @@ const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies)
   };
 };
 
-/**
+/!**
  * Hook to get the comments for a specific post
  * @example useInfiniteComments hook
  * ```typescript
@@ -91,13 +92,13 @@ const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies)
     return [];
   }, [commentsQuery.data]);
  * ```
- */
+ *!/
 export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabler) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
     async ({ pageParam = offset }) => getComments({ limit, postID, offset: pageParam }),
     {
-      /* Return undefined to indicate there is no next page available. */
+      /!* Return undefined to indicate there is no next page available. *!/
       getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: enabler && !!(offset || limit),
@@ -107,7 +108,7 @@ export function useInfiniteComments({ limit, postID, offset }: InfiniteComments,
   );
 }
 
-/**
+/!**
  * Hook to get the replies for a specific comment
  * @example useInfiniteReplies hook
  * ```typescript
@@ -120,13 +121,13 @@ export function useInfiniteComments({ limit, postID, offset }: InfiniteComments,
     return [];
   }, [repliesQuery.data]);
  * ```
- */
+ *!/
 export function useInfiniteReplies({ limit, postID, commentID, offset }: InfiniteReplies, enabler) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID, commentID],
     async ({ pageParam = offset }) => getReplies({ limit, postID, commentID, offset: pageParam }),
     {
-      /* Return undefined to indicate there is no next page available. */
+      /!* Return undefined to indicate there is no next page available. *!/
       getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: enabler && !!(offset || limit),
@@ -136,9 +137,9 @@ export function useInfiniteReplies({ limit, postID, commentID, offset }: Infinit
   );
 }
 
-/**
+/!**
  * Gets a comment
- */
+ *!/
 const getComment = async commentID => {
   const sdk = getSDK();
 
@@ -161,7 +162,7 @@ const getComment = async commentID => {
   };
 };
 
-/**
+/!**
  * Hook for fetching data for a specific comment
  * @example useComment hook
  * ```typescript
@@ -175,7 +176,7 @@ const getComment = async commentID => {
     }
   }, [itemType, commentQuery.data, commentQuery.isSuccess]);
  * ```
- */
+ *!/
 export function useComment(commentID: string, enabler = true) {
   const queryClient = useQueryClient();
   return useQuery([COMMENT_KEY, commentID], () => getComment(commentID), {
@@ -198,7 +199,7 @@ const deleteComment = async (commentId: string) => {
   throw new Error('Cannot delete this comment. Please try again later.');
 };
 
-/**
+/!**
  * Hook for deleting a specific comment
  * @example useDeleteComment hook
  * ```typescript
@@ -206,7 +207,7 @@ const deleteComment = async (commentId: string) => {
  *
  * deleteCommentQuery.mutate('some-comment-id');
  * ```
- */
+ *!/
 export function useDeleteComment(commentID: string) {
   const queryClient = useQueryClient();
   return useMutation((commentID: string) => deleteComment(commentID), {
@@ -256,7 +257,7 @@ export function useDeleteComment(commentID: string) {
   });
 }
 
-/**
+/!**
  * Hook for creating a new comment
  * @example useCreateComment hook
  * ```typescript
@@ -265,7 +266,7 @@ export function useDeleteComment(commentID: string) {
  *
  * createCommentQuery.mutate({ ...newCommentData , postID: 'some-post-id' });
  * ```
- */
+ *!/
 export function useCreateComment() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -309,7 +310,7 @@ export function useCreateComment() {
   );
 }
 
-/**
+/!**
  * Hook for editing a comment
  * @example useEditComment hook
  * ```typescript
@@ -318,7 +319,7 @@ export function useCreateComment() {
  *
  * editCommentQuery.mutate({ ...editedCommentData, postID: 'some-post-id' });
  * ```
- */
+ *!/
 export function useEditComment(commentID: string, hasCommentData: boolean) {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -364,3 +365,4 @@ export function useEditComment(commentID: string, hasCommentData: boolean) {
     },
   );
 }
+*/

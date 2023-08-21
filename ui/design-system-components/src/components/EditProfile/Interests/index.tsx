@@ -4,7 +4,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
-import { InterestsLabeled } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/sdk/graphql-types-new';
 import { ButtonType } from '../types';
 import { apply, tw } from '@twind/core';
 
@@ -16,14 +16,14 @@ export type InterestsProps = {
   moreInterestTitle: string;
   moreInterestDescription: string;
   moreInterestPlaceholder: string;
-  myInterests: InterestsLabeled[];
-  interests: InterestsLabeled[];
+  myInterests: AkashaProfileInterestsLabeled[];
+  interests: AkashaProfileInterestsLabeled[];
   labelType: string;
   cancelButton: ButtonType;
   saveButton: {
     label: string;
     loading?: boolean;
-    handleClick: (interests: InterestsLabeled[]) => void;
+    handleClick: (interests: AkashaProfileInterestsLabeled[]) => void;
   };
   customStyle?: string;
   onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,7 +47,12 @@ export const Interests: React.FC<InterestsProps> = ({
   const [myActiveInterests, setMyActiveInterests] = useState(new Set(myInterests));
   const [allMyInterests, setAllMyInterests] = useState(new Set(myInterests));
 
-  const updateMyActiveInterests = (interest: InterestsLabeled, remove?: boolean) => {
+  React.useEffect(() => {
+    setMyActiveInterests(new Set(myInterests));
+    setAllMyInterests(new Set(myInterests));
+  }, [myInterests]);
+
+  const updateMyActiveInterests = (interest: AkashaProfileInterestsLabeled, remove?: boolean) => {
     const newMyActiveInterests = new Set(myActiveInterests);
     if (remove) {
       newMyActiveInterests.delete(interest);
@@ -57,12 +62,13 @@ export const Interests: React.FC<InterestsProps> = ({
     setMyActiveInterests(newMyActiveInterests.add(interest));
   };
 
-  const updateAllMyInterests = (interest: InterestsLabeled) => {
+  const updateAllMyInterests = (interest: AkashaProfileInterestsLabeled) => {
     setAllMyInterests(new Set(allMyInterests).add(interest));
   };
 
-  const onSave = (interests: InterestsLabeled[]) => {
+  const onSave = (interests: AkashaProfileInterestsLabeled[]) => {
     saveButton.handleClick(interests);
+    setQuery('');
   };
 
   const isFormDirty =

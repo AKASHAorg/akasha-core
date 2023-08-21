@@ -33,8 +33,8 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
     {
       select: data => {
         if (data?.node) {
-          if ('interests' in data.node) {
-            return data.node.interests;
+          if ('akashaProfileInterests' in data.node) {
+            return data.node.akashaProfileInterests;
           }
         }
         return null;
@@ -93,7 +93,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   return (
     <Box customStyle="w-full">
       <Helmet.Helmet>
-        <title>Akasha World</title>
+        <title>AKASHA World</title>
       </Helmet.Helmet>
 
       <Box customStyle="mb-2">
@@ -103,7 +103,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           description={t(
             'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
           )}
-          secondaryDescription={t('Your customized view of Akasha World')}
+          secondaryDescription={t('Your customized view of AKASHA World')}
           image="/images/news-feed.webp"
           showMainArea={!userHasSubscriptions}
           hideMainAreaOnMobile={false}
@@ -144,7 +144,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         <MyFeedCard
           title={t('✨ Add a little magic to your feed ✨')}
           description={t(
-            'Follow topics and wonderful people you care about most to feel at home every time you visit Akasha World. ',
+            'Follow topics and wonderful people you care about most to feel at home every time you visit AKASHA World. ',
           )}
           noPostsTitle={t('No Posts Yet')}
           noPostsDescription={t(

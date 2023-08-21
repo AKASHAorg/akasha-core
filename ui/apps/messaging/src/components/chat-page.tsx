@@ -83,7 +83,7 @@ const ChatPage = (props: ChatPageProps) => {
     { id: profileId },
     {
       select: data => {
-        if (data.node && 'profile' in data.node) {
+        if (data.node && 'akashaProfile' in data.node) {
           return data.node;
         }
         return null;
@@ -93,7 +93,7 @@ const ChatPage = (props: ChatPageProps) => {
   );
 
   const contactId = React.useMemo(
-    () => profileDataReq?.data?.profile?.name || profileDataReq?.data?.profile?.did,
+    () => profileDataReq?.data?.akashaProfile?.name || profileDataReq?.data?.akashaProfile?.did,
     [profileDataReq?.data],
   );
 
@@ -171,9 +171,9 @@ const ChatPage = (props: ChatPageProps) => {
       <Box customStyle="p-2">
         <Box customStyle="flex justify-between w-full rounded-lg border(grey8 dark:grey3)">
           <ChatAreaHeader
-            name={profileDataReq.data?.profile?.name}
-            avatar={profileDataReq.data?.profile?.avatar}
-            did={profileDataReq.data?.profile?.did}
+            name={profileDataReq.data?.akashaProfile?.name}
+            avatar={profileDataReq.data?.akashaProfile?.avatar}
+            did={profileDataReq.data?.akashaProfile?.did}
             onClickAvatar={handleProfileClick}
           />
 

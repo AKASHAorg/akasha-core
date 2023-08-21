@@ -14,6 +14,7 @@ export type LatestTopicsProps = {
   tags: Interest[];
   subscribedTags?: string[];
   isLoadingTags?: boolean;
+  isProcessingTags?: string[];
   // labels
   noTagsLabel?: string;
   titleLabel: string;
@@ -36,6 +37,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     tagSubtitleLabel,
     tags,
     isLoadingTags,
+    isProcessingTags,
     noTagsLabel,
     subscribeLabel,
     subscribedLabel,
@@ -89,6 +91,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                     onClickActive={() => handleUnsubscribeTopic(tag.value)}
                     active={subscribedTags?.includes(tag.value)}
                     allowMinimization={false}
+                    loading={!!isProcessingTags?.find(processingTag => processingTag === tag.value)}
                   />
                 </Box>
               ))}
