@@ -19,6 +19,7 @@ fragment ReflectFragment on AkashaReflect{
       isViewer
     }
   }
+  nsfw
 }
 
 query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int){

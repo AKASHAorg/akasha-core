@@ -154,11 +154,13 @@ export type AkashaAppReleaseInput = {
 };
 
 export type AkashaAppReleaseObjectFilterInput = {
+  applicationID?: InputMaybe<StringValueFilterInput>;
   createdAt?: InputMaybe<StringValueFilterInput>;
   version?: InputMaybe<StringValueFilterInput>;
 };
 
 export type AkashaAppReleaseSortingInput = {
+  applicationID?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   version?: InputMaybe<SortOrder>;
 };
@@ -170,6 +172,80 @@ export type AkashaAppSortingInput = {
   name?: InputMaybe<SortOrder>;
 };
 
+export type AkashaAppsStream = Node & {
+  active: Scalars['Boolean'];
+  application?: Maybe<AkashaApp>;
+  applicationID: Scalars['CeramicStreamID'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  moderationID?: Maybe<Scalars['CeramicStreamID']>;
+  status?: Maybe<AkashaAppsStreamModerationStatus>;
+};
+
+/** A connection to a list of items. */
+export type AkashaAppsStreamConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaAppsStreamEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaAppsStreamEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaAppsStream>;
+};
+
+export type AkashaAppsStreamFiltersInput = {
+  and?: InputMaybe<Array<AkashaAppsStreamFiltersInput>>;
+  not?: InputMaybe<AkashaAppsStreamFiltersInput>;
+  or?: InputMaybe<Array<AkashaAppsStreamFiltersInput>>;
+  where?: InputMaybe<AkashaAppsStreamObjectFilterInput>;
+};
+
+export type AkashaAppsStreamInput = {
+  active: Scalars['Boolean'];
+  applicationID: Scalars['CeramicStreamID'];
+  createdAt: Scalars['DateTime'];
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaAppsStreamModerationStatus>;
+};
+
+export enum AkashaAppsStreamModerationStatus {
+  InReview = 'IN_REVIEW',
+  Nsfw = 'NSFW',
+  Ok = 'OK',
+  Other = 'OTHER',
+  Removed = 'REMOVED',
+  Suspended = 'SUSPENDED'
+}
+
+export type AkashaAppsStreamModerationStatusValueFilterInput = {
+  equalTo?: InputMaybe<AkashaAppsStreamModerationStatus>;
+  in?: InputMaybe<Array<AkashaAppsStreamModerationStatus>>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  notEqualTo?: InputMaybe<AkashaAppsStreamModerationStatus>;
+  notIn?: InputMaybe<Array<AkashaAppsStreamModerationStatus>>;
+};
+
+export type AkashaAppsStreamObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  applicationID?: InputMaybe<StringValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  moderationID?: InputMaybe<StringValueFilterInput>;
+  status?: InputMaybe<AkashaAppsStreamModerationStatusValueFilterInput>;
+};
+
+export type AkashaAppsStreamSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  applicationID?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  moderationID?: InputMaybe<SortOrder>;
+  status?: InputMaybe<SortOrder>;
+};
+
 export type AkashaBeam = Node & {
   active: Scalars['Boolean'];
   /** Account controlling the document */
@@ -179,6 +255,7 @@ export type AkashaBeam = Node & {
   embeddedBeam?: Maybe<Scalars['CeramicStreamID']>;
   id: Scalars['ID'];
   mentions?: Maybe<Array<Maybe<Scalars['CeramicStreamID']>>>;
+  nsfw?: Maybe<Scalars['Boolean']>;
   reflections: AkashaReflectConnection;
   reflectionsCount: Scalars['Int'];
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -242,17 +319,94 @@ export type AkashaBeamInput = {
   createdAt: Scalars['DateTime'];
   embeddedBeam?: InputMaybe<Scalars['CeramicStreamID']>;
   mentions?: InputMaybe<Array<InputMaybe<Scalars['CeramicStreamID']>>>;
+  nsfw?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type AkashaBeamObjectFilterInput = {
   active?: InputMaybe<BooleanValueFilterInput>;
   createdAt?: InputMaybe<StringValueFilterInput>;
+  nsfw?: InputMaybe<BooleanValueFilterInput>;
 };
 
 export type AkashaBeamSortingInput = {
   active?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
+  nsfw?: InputMaybe<SortOrder>;
+};
+
+export type AkashaBeamStream = Node & {
+  active: Scalars['Boolean'];
+  beam?: Maybe<AkashaBeam>;
+  beamID: Scalars['CeramicStreamID'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  moderationID?: Maybe<Scalars['CeramicStreamID']>;
+  status?: Maybe<AkashaBeamStreamModerationStatus>;
+};
+
+/** A connection to a list of items. */
+export type AkashaBeamStreamConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaBeamStreamEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaBeamStreamEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaBeamStream>;
+};
+
+export type AkashaBeamStreamFiltersInput = {
+  and?: InputMaybe<Array<AkashaBeamStreamFiltersInput>>;
+  not?: InputMaybe<AkashaBeamStreamFiltersInput>;
+  or?: InputMaybe<Array<AkashaBeamStreamFiltersInput>>;
+  where?: InputMaybe<AkashaBeamStreamObjectFilterInput>;
+};
+
+export type AkashaBeamStreamInput = {
+  active: Scalars['Boolean'];
+  beamID: Scalars['CeramicStreamID'];
+  createdAt: Scalars['DateTime'];
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaBeamStreamModerationStatus>;
+};
+
+export enum AkashaBeamStreamModerationStatus {
+  InReview = 'IN_REVIEW',
+  Nsfw = 'NSFW',
+  Ok = 'OK',
+  Other = 'OTHER',
+  Removed = 'REMOVED',
+  Suspended = 'SUSPENDED'
+}
+
+export type AkashaBeamStreamModerationStatusValueFilterInput = {
+  equalTo?: InputMaybe<AkashaBeamStreamModerationStatus>;
+  in?: InputMaybe<Array<AkashaBeamStreamModerationStatus>>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  notEqualTo?: InputMaybe<AkashaBeamStreamModerationStatus>;
+  notIn?: InputMaybe<Array<AkashaBeamStreamModerationStatus>>;
+};
+
+export type AkashaBeamStreamObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  beamID?: InputMaybe<StringValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  moderationID?: InputMaybe<StringValueFilterInput>;
+  status?: InputMaybe<AkashaBeamStreamModerationStatusValueFilterInput>;
+};
+
+export type AkashaBeamStreamSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  beamID?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  moderationID?: InputMaybe<SortOrder>;
+  status?: InputMaybe<SortOrder>;
 };
 
 export type AkashaBlockStorage = Node & {
@@ -353,6 +507,7 @@ export type AkashaContentBlock = Node & {
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   kind?: Maybe<AkashaContentBlockBlockDef>;
+  nsfw?: Maybe<Scalars['Boolean']>;
   /** Current version of the document */
   version: Scalars['CeramicCommitID'];
 };
@@ -400,6 +555,7 @@ export type AkashaContentBlockInput = {
   content: Array<InputMaybe<AkashaContentBlockLabeledValueInput>>;
   createdAt: Scalars['DateTime'];
   kind?: InputMaybe<AkashaContentBlockBlockDef>;
+  nsfw?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type AkashaContentBlockLabeledValue = {
@@ -418,12 +574,92 @@ export type AkashaContentBlockObjectFilterInput = {
   active?: InputMaybe<BooleanValueFilterInput>;
   createdAt?: InputMaybe<StringValueFilterInput>;
   kind?: InputMaybe<AkashaContentBlockBlockDefValueFilterInput>;
+  nsfw?: InputMaybe<BooleanValueFilterInput>;
 };
 
 export type AkashaContentBlockSortingInput = {
   active?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   kind?: InputMaybe<SortOrder>;
+  nsfw?: InputMaybe<SortOrder>;
+};
+
+export type AkashaContentBlockStream = Node & {
+  active: Scalars['Boolean'];
+  beamID: Scalars['CeramicStreamID'];
+  block?: Maybe<AkashaContentBlock>;
+  blockID: Scalars['CeramicStreamID'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  moderationID?: Maybe<Scalars['CeramicStreamID']>;
+  status?: Maybe<AkashaContentBlockStreamModerationStatus>;
+};
+
+/** A connection to a list of items. */
+export type AkashaContentBlockStreamConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaContentBlockStreamEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaContentBlockStreamEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaContentBlockStream>;
+};
+
+export type AkashaContentBlockStreamFiltersInput = {
+  and?: InputMaybe<Array<AkashaContentBlockStreamFiltersInput>>;
+  not?: InputMaybe<AkashaContentBlockStreamFiltersInput>;
+  or?: InputMaybe<Array<AkashaContentBlockStreamFiltersInput>>;
+  where?: InputMaybe<AkashaContentBlockStreamObjectFilterInput>;
+};
+
+export type AkashaContentBlockStreamInput = {
+  active: Scalars['Boolean'];
+  beamID: Scalars['CeramicStreamID'];
+  blockID: Scalars['CeramicStreamID'];
+  createdAt: Scalars['DateTime'];
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaContentBlockStreamModerationStatus>;
+};
+
+export enum AkashaContentBlockStreamModerationStatus {
+  InReview = 'IN_REVIEW',
+  Nsfw = 'NSFW',
+  Ok = 'OK',
+  Other = 'OTHER',
+  Removed = 'REMOVED',
+  Suspended = 'SUSPENDED'
+}
+
+export type AkashaContentBlockStreamModerationStatusValueFilterInput = {
+  equalTo?: InputMaybe<AkashaContentBlockStreamModerationStatus>;
+  in?: InputMaybe<Array<AkashaContentBlockStreamModerationStatus>>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  notEqualTo?: InputMaybe<AkashaContentBlockStreamModerationStatus>;
+  notIn?: InputMaybe<Array<AkashaContentBlockStreamModerationStatus>>;
+};
+
+export type AkashaContentBlockStreamObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  beamID?: InputMaybe<StringValueFilterInput>;
+  blockID?: InputMaybe<StringValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  moderationID?: InputMaybe<StringValueFilterInput>;
+  status?: InputMaybe<AkashaContentBlockStreamModerationStatusValueFilterInput>;
+};
+
+export type AkashaContentBlockStreamSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  beamID?: InputMaybe<SortOrder>;
+  blockID?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  moderationID?: InputMaybe<SortOrder>;
+  status?: InputMaybe<SortOrder>;
 };
 
 export type AkashaFollow = Node & {
@@ -465,10 +701,89 @@ export type AkashaFollowInput = {
 
 export type AkashaFollowObjectFilterInput = {
   isFollowing?: InputMaybe<BooleanValueFilterInput>;
+  profileID?: InputMaybe<StringValueFilterInput>;
 };
 
 export type AkashaFollowSortingInput = {
   isFollowing?: InputMaybe<SortOrder>;
+  profileID?: InputMaybe<SortOrder>;
+};
+
+export type AkashaInterestsStream = Node & {
+  active: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  labelType: Scalars['String'];
+  moderationID?: Maybe<Scalars['CeramicStreamID']>;
+  status?: Maybe<AkashaInterestsStreamModerationStatus>;
+  value: Scalars['String'];
+};
+
+/** A connection to a list of items. */
+export type AkashaInterestsStreamConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaInterestsStreamEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaInterestsStreamEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaInterestsStream>;
+};
+
+export type AkashaInterestsStreamFiltersInput = {
+  and?: InputMaybe<Array<AkashaInterestsStreamFiltersInput>>;
+  not?: InputMaybe<AkashaInterestsStreamFiltersInput>;
+  or?: InputMaybe<Array<AkashaInterestsStreamFiltersInput>>;
+  where?: InputMaybe<AkashaInterestsStreamObjectFilterInput>;
+};
+
+export type AkashaInterestsStreamInput = {
+  active: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
+  labelType: Scalars['String'];
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaInterestsStreamModerationStatus>;
+  value: Scalars['String'];
+};
+
+export enum AkashaInterestsStreamModerationStatus {
+  InReview = 'IN_REVIEW',
+  Nsfw = 'NSFW',
+  Ok = 'OK',
+  Other = 'OTHER',
+  Removed = 'REMOVED',
+  Suspended = 'SUSPENDED'
+}
+
+export type AkashaInterestsStreamModerationStatusValueFilterInput = {
+  equalTo?: InputMaybe<AkashaInterestsStreamModerationStatus>;
+  in?: InputMaybe<Array<AkashaInterestsStreamModerationStatus>>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  notEqualTo?: InputMaybe<AkashaInterestsStreamModerationStatus>;
+  notIn?: InputMaybe<Array<AkashaInterestsStreamModerationStatus>>;
+};
+
+export type AkashaInterestsStreamObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  labelType?: InputMaybe<StringValueFilterInput>;
+  moderationID?: InputMaybe<StringValueFilterInput>;
+  status?: InputMaybe<AkashaInterestsStreamModerationStatusValueFilterInput>;
+  value?: InputMaybe<StringValueFilterInput>;
+};
+
+export type AkashaInterestsStreamSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  labelType?: InputMaybe<SortOrder>;
+  moderationID?: InputMaybe<SortOrder>;
+  status?: InputMaybe<SortOrder>;
+  value?: InputMaybe<SortOrder>;
 };
 
 export type AkashaProfile = Node & {
@@ -482,6 +797,7 @@ export type AkashaProfile = Node & {
   id: Scalars['ID'];
   links?: Maybe<Array<Maybe<AkashaProfileLinkSource>>>;
   name: Scalars['String'];
+  nsfw?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -547,6 +863,7 @@ export type AkashaProfileInput = {
   description?: InputMaybe<Scalars['String']>;
   links?: InputMaybe<Array<InputMaybe<AkashaProfileLinkSourceInput>>>;
   name: Scalars['String'];
+  nsfw?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type AkashaProfileInterests = Node & {
@@ -599,11 +916,87 @@ export type AkashaProfileLinkSourceInput = {
 export type AkashaProfileObjectFilterInput = {
   createdAt?: InputMaybe<StringValueFilterInput>;
   name?: InputMaybe<StringValueFilterInput>;
+  nsfw?: InputMaybe<BooleanValueFilterInput>;
 };
 
 export type AkashaProfileSortingInput = {
   createdAt?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
+  nsfw?: InputMaybe<SortOrder>;
+};
+
+export type AkashaProfileStream = Node & {
+  active: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  moderationID?: Maybe<Scalars['CeramicStreamID']>;
+  profile?: Maybe<AkashaProfile>;
+  profileID: Scalars['CeramicStreamID'];
+  status?: Maybe<AkashaProfileStreamModerationStatus>;
+};
+
+/** A connection to a list of items. */
+export type AkashaProfileStreamConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaProfileStreamEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaProfileStreamEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaProfileStream>;
+};
+
+export type AkashaProfileStreamFiltersInput = {
+  and?: InputMaybe<Array<AkashaProfileStreamFiltersInput>>;
+  not?: InputMaybe<AkashaProfileStreamFiltersInput>;
+  or?: InputMaybe<Array<AkashaProfileStreamFiltersInput>>;
+  where?: InputMaybe<AkashaProfileStreamObjectFilterInput>;
+};
+
+export type AkashaProfileStreamInput = {
+  active: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  profileID: Scalars['CeramicStreamID'];
+  status?: InputMaybe<AkashaProfileStreamModerationStatus>;
+};
+
+export enum AkashaProfileStreamModerationStatus {
+  InReview = 'IN_REVIEW',
+  Nsfw = 'NSFW',
+  Ok = 'OK',
+  Other = 'OTHER',
+  Removed = 'REMOVED',
+  Suspended = 'SUSPENDED'
+}
+
+export type AkashaProfileStreamModerationStatusValueFilterInput = {
+  equalTo?: InputMaybe<AkashaProfileStreamModerationStatus>;
+  in?: InputMaybe<Array<AkashaProfileStreamModerationStatus>>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  notEqualTo?: InputMaybe<AkashaProfileStreamModerationStatus>;
+  notIn?: InputMaybe<Array<AkashaProfileStreamModerationStatus>>;
+};
+
+export type AkashaProfileStreamObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  moderationID?: InputMaybe<StringValueFilterInput>;
+  profileID?: InputMaybe<StringValueFilterInput>;
+  status?: InputMaybe<AkashaProfileStreamModerationStatusValueFilterInput>;
+};
+
+export type AkashaProfileStreamSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  moderationID?: InputMaybe<SortOrder>;
+  profileID?: InputMaybe<SortOrder>;
+  status?: InputMaybe<SortOrder>;
 };
 
 export type AkashaReflect = Node & {
@@ -617,6 +1010,7 @@ export type AkashaReflect = Node & {
   id: Scalars['ID'];
   isReply: Scalars['Boolean'];
   mentions?: Maybe<Array<Maybe<Scalars['CeramicStreamID']>>>;
+  nsfw?: Maybe<Scalars['Boolean']>;
   reflection?: Maybe<Scalars['CeramicStreamID']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Current version of the document */
@@ -653,6 +1047,7 @@ export type AkashaReflectInput = {
   createdAt: Scalars['DateTime'];
   isReply: Scalars['Boolean'];
   mentions?: InputMaybe<Array<InputMaybe<Scalars['CeramicStreamID']>>>;
+  nsfw?: InputMaybe<Scalars['Boolean']>;
   reflection?: InputMaybe<Scalars['CeramicStreamID']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
@@ -661,6 +1056,7 @@ export type AkashaReflectObjectFilterInput = {
   active?: InputMaybe<BooleanValueFilterInput>;
   createdAt?: InputMaybe<StringValueFilterInput>;
   isReply?: InputMaybe<BooleanValueFilterInput>;
+  nsfw?: InputMaybe<BooleanValueFilterInput>;
   reflection?: InputMaybe<StringValueFilterInput>;
 };
 
@@ -680,7 +1076,86 @@ export type AkashaReflectSortingInput = {
   active?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   isReply?: InputMaybe<SortOrder>;
+  nsfw?: InputMaybe<SortOrder>;
   reflection?: InputMaybe<SortOrder>;
+};
+
+export type AkashaReflectStream = Node & {
+  active: Scalars['Boolean'];
+  beamID: Scalars['CeramicStreamID'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  moderationID?: Maybe<Scalars['CeramicStreamID']>;
+  reflection?: Maybe<AkashaReflect>;
+  reflectionID: Scalars['CeramicStreamID'];
+  status?: Maybe<AkashaReflectStreamModerationStatus>;
+};
+
+/** A connection to a list of items. */
+export type AkashaReflectStreamConnection = {
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<AkashaReflectStreamEdge>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type AkashaReflectStreamEdge = {
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge */
+  node?: Maybe<AkashaReflectStream>;
+};
+
+export type AkashaReflectStreamFiltersInput = {
+  and?: InputMaybe<Array<AkashaReflectStreamFiltersInput>>;
+  not?: InputMaybe<AkashaReflectStreamFiltersInput>;
+  or?: InputMaybe<Array<AkashaReflectStreamFiltersInput>>;
+  where?: InputMaybe<AkashaReflectStreamObjectFilterInput>;
+};
+
+export type AkashaReflectStreamInput = {
+  active: Scalars['Boolean'];
+  beamID: Scalars['CeramicStreamID'];
+  createdAt: Scalars['DateTime'];
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  reflectionID: Scalars['CeramicStreamID'];
+  status?: InputMaybe<AkashaReflectStreamModerationStatus>;
+};
+
+export enum AkashaReflectStreamModerationStatus {
+  InReview = 'IN_REVIEW',
+  Nsfw = 'NSFW',
+  Ok = 'OK',
+  Other = 'OTHER',
+  Removed = 'REMOVED',
+  Suspended = 'SUSPENDED'
+}
+
+export type AkashaReflectStreamModerationStatusValueFilterInput = {
+  equalTo?: InputMaybe<AkashaReflectStreamModerationStatus>;
+  in?: InputMaybe<Array<AkashaReflectStreamModerationStatus>>;
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  notEqualTo?: InputMaybe<AkashaReflectStreamModerationStatus>;
+  notIn?: InputMaybe<Array<AkashaReflectStreamModerationStatus>>;
+};
+
+export type AkashaReflectStreamObjectFilterInput = {
+  active?: InputMaybe<BooleanValueFilterInput>;
+  beamID?: InputMaybe<StringValueFilterInput>;
+  createdAt?: InputMaybe<StringValueFilterInput>;
+  moderationID?: InputMaybe<StringValueFilterInput>;
+  reflectionID?: InputMaybe<StringValueFilterInput>;
+  status?: InputMaybe<AkashaReflectStreamModerationStatusValueFilterInput>;
+};
+
+export type AkashaReflectStreamSortingInput = {
+  active?: InputMaybe<SortOrder>;
+  beamID?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  moderationID?: InputMaybe<SortOrder>;
+  reflectionID?: InputMaybe<SortOrder>;
+  status?: InputMaybe<SortOrder>;
 };
 
 export type BooleanValueFilterInput = {
@@ -691,13 +1166,19 @@ export type BooleanValueFilterInput = {
 export type CeramicAccount = Node & {
   akashaAppList?: Maybe<AkashaAppConnection>;
   akashaAppReleaseList?: Maybe<AkashaAppReleaseConnection>;
+  akashaAppsStreamList?: Maybe<AkashaAppsStreamConnection>;
   akashaBeamList?: Maybe<AkashaBeamConnection>;
+  akashaBeamStreamList?: Maybe<AkashaBeamStreamConnection>;
   akashaBlockStorageList?: Maybe<AkashaBlockStorageConnection>;
   akashaContentBlockList?: Maybe<AkashaContentBlockConnection>;
+  akashaContentBlockStreamList?: Maybe<AkashaContentBlockStreamConnection>;
   akashaFollowList?: Maybe<AkashaFollowConnection>;
+  akashaInterestsStreamList?: Maybe<AkashaInterestsStreamConnection>;
   akashaProfile?: Maybe<AkashaProfile>;
   akashaProfileInterests?: Maybe<AkashaProfileInterests>;
+  akashaProfileStreamList?: Maybe<AkashaProfileStreamConnection>;
   akashaReflectList?: Maybe<AkashaReflectConnection>;
+  akashaReflectStreamList?: Maybe<AkashaReflectStreamConnection>;
   /** Globally unique identifier of the account (DID string) */
   id: Scalars['ID'];
   /** Whether the Ceramic instance is currently authenticated with this account or not */
@@ -725,6 +1206,16 @@ export type CeramicAccountAkashaAppReleaseListArgs = {
 };
 
 
+export type CeramicAccountAkashaAppsStreamListArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaAppsStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaAppsStreamSortingInput>;
+};
+
+
 export type CeramicAccountAkashaBeamListArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -732,6 +1223,16 @@ export type CeramicAccountAkashaBeamListArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   sorting?: InputMaybe<AkashaBeamSortingInput>;
+};
+
+
+export type CeramicAccountAkashaBeamStreamListArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaBeamStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaBeamStreamSortingInput>;
 };
 
 
@@ -755,6 +1256,16 @@ export type CeramicAccountAkashaContentBlockListArgs = {
 };
 
 
+export type CeramicAccountAkashaContentBlockStreamListArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaContentBlockStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaContentBlockStreamSortingInput>;
+};
+
+
 export type CeramicAccountAkashaFollowListArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -765,6 +1276,26 @@ export type CeramicAccountAkashaFollowListArgs = {
 };
 
 
+export type CeramicAccountAkashaInterestsStreamListArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaInterestsStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaInterestsStreamSortingInput>;
+};
+
+
+export type CeramicAccountAkashaProfileStreamListArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaProfileStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaProfileStreamSortingInput>;
+};
+
+
 export type CeramicAccountAkashaReflectListArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -772,6 +1303,16 @@ export type CeramicAccountAkashaReflectListArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   sorting?: InputMaybe<AkashaReflectSortingInput>;
+};
+
+
+export type CeramicAccountAkashaReflectStreamListArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaReflectStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaReflectStreamSortingInput>;
 };
 
 export type CreateAkashaAppInput = {
@@ -812,6 +1353,25 @@ export type CreateAkashaAppReleasePayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
+export type CreateAkashaAppsStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: AkashaAppsStreamInput;
+};
+
+export type CreateAkashaAppsStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaAppsStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type CreateAkashaAppsStreamPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
 export type CreateAkashaBeamInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
   content: AkashaBeamInput;
@@ -828,6 +1388,25 @@ export type CreateAkashaBeamPayload = {
 
 
 export type CreateAkashaBeamPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
+export type CreateAkashaBeamStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: AkashaBeamStreamInput;
+};
+
+export type CreateAkashaBeamStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaBeamStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type CreateAkashaBeamStreamPayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
@@ -869,6 +1448,25 @@ export type CreateAkashaContentBlockPayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
+export type CreateAkashaContentBlockStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: AkashaContentBlockStreamInput;
+};
+
+export type CreateAkashaContentBlockStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaContentBlockStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type CreateAkashaContentBlockStreamPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
 export type CreateAkashaFollowInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
   content: AkashaFollowInput;
@@ -885,6 +1483,25 @@ export type CreateAkashaFollowPayload = {
 
 
 export type CreateAkashaFollowPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
+export type CreateAkashaInterestsStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: AkashaInterestsStreamInput;
+};
+
+export type CreateAkashaInterestsStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaInterestsStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type CreateAkashaInterestsStreamPayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
@@ -926,6 +1543,25 @@ export type CreateAkashaProfilePayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
+export type CreateAkashaProfileStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: AkashaProfileStreamInput;
+};
+
+export type CreateAkashaProfileStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaProfileStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type CreateAkashaProfileStreamPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
 export type CreateAkashaReflectInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
   content: AkashaReflectInput;
@@ -945,25 +1581,56 @@ export type CreateAkashaReflectPayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
+export type CreateAkashaReflectStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: AkashaReflectStreamInput;
+};
+
+export type CreateAkashaReflectStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaReflectStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type CreateAkashaReflectStreamPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
 export type Mutation = {
   createAkashaApp?: Maybe<CreateAkashaAppPayload>;
   createAkashaAppRelease?: Maybe<CreateAkashaAppReleasePayload>;
+  createAkashaAppsStream?: Maybe<CreateAkashaAppsStreamPayload>;
   createAkashaBeam?: Maybe<CreateAkashaBeamPayload>;
+  createAkashaBeamStream?: Maybe<CreateAkashaBeamStreamPayload>;
   createAkashaBlockStorage?: Maybe<CreateAkashaBlockStoragePayload>;
   createAkashaContentBlock?: Maybe<CreateAkashaContentBlockPayload>;
+  createAkashaContentBlockStream?: Maybe<CreateAkashaContentBlockStreamPayload>;
   createAkashaFollow?: Maybe<CreateAkashaFollowPayload>;
+  createAkashaInterestsStream?: Maybe<CreateAkashaInterestsStreamPayload>;
   createAkashaProfile?: Maybe<CreateAkashaProfilePayload>;
   createAkashaProfileInterests?: Maybe<CreateAkashaProfileInterestsPayload>;
+  createAkashaProfileStream?: Maybe<CreateAkashaProfileStreamPayload>;
   createAkashaReflect?: Maybe<CreateAkashaReflectPayload>;
+  createAkashaReflectStream?: Maybe<CreateAkashaReflectStreamPayload>;
   updateAkashaApp?: Maybe<UpdateAkashaAppPayload>;
   updateAkashaAppRelease?: Maybe<UpdateAkashaAppReleasePayload>;
+  updateAkashaAppsStream?: Maybe<UpdateAkashaAppsStreamPayload>;
   updateAkashaBeam?: Maybe<UpdateAkashaBeamPayload>;
+  updateAkashaBeamStream?: Maybe<UpdateAkashaBeamStreamPayload>;
   updateAkashaBlockStorage?: Maybe<UpdateAkashaBlockStoragePayload>;
   updateAkashaContentBlock?: Maybe<UpdateAkashaContentBlockPayload>;
+  updateAkashaContentBlockStream?: Maybe<UpdateAkashaContentBlockStreamPayload>;
   updateAkashaFollow?: Maybe<UpdateAkashaFollowPayload>;
+  updateAkashaInterestsStream?: Maybe<UpdateAkashaInterestsStreamPayload>;
   updateAkashaProfile?: Maybe<UpdateAkashaProfilePayload>;
   updateAkashaProfileInterests?: Maybe<UpdateAkashaProfileInterestsPayload>;
+  updateAkashaProfileStream?: Maybe<UpdateAkashaProfileStreamPayload>;
   updateAkashaReflect?: Maybe<UpdateAkashaReflectPayload>;
+  updateAkashaReflectStream?: Maybe<UpdateAkashaReflectStreamPayload>;
 };
 
 
@@ -977,8 +1644,18 @@ export type MutationCreateAkashaAppReleaseArgs = {
 };
 
 
+export type MutationCreateAkashaAppsStreamArgs = {
+  input: CreateAkashaAppsStreamInput;
+};
+
+
 export type MutationCreateAkashaBeamArgs = {
   input: CreateAkashaBeamInput;
+};
+
+
+export type MutationCreateAkashaBeamStreamArgs = {
+  input: CreateAkashaBeamStreamInput;
 };
 
 
@@ -992,8 +1669,18 @@ export type MutationCreateAkashaContentBlockArgs = {
 };
 
 
+export type MutationCreateAkashaContentBlockStreamArgs = {
+  input: CreateAkashaContentBlockStreamInput;
+};
+
+
 export type MutationCreateAkashaFollowArgs = {
   input: CreateAkashaFollowInput;
+};
+
+
+export type MutationCreateAkashaInterestsStreamArgs = {
+  input: CreateAkashaInterestsStreamInput;
 };
 
 
@@ -1007,8 +1694,18 @@ export type MutationCreateAkashaProfileInterestsArgs = {
 };
 
 
+export type MutationCreateAkashaProfileStreamArgs = {
+  input: CreateAkashaProfileStreamInput;
+};
+
+
 export type MutationCreateAkashaReflectArgs = {
   input: CreateAkashaReflectInput;
+};
+
+
+export type MutationCreateAkashaReflectStreamArgs = {
+  input: CreateAkashaReflectStreamInput;
 };
 
 
@@ -1022,8 +1719,18 @@ export type MutationUpdateAkashaAppReleaseArgs = {
 };
 
 
+export type MutationUpdateAkashaAppsStreamArgs = {
+  input: UpdateAkashaAppsStreamInput;
+};
+
+
 export type MutationUpdateAkashaBeamArgs = {
   input: UpdateAkashaBeamInput;
+};
+
+
+export type MutationUpdateAkashaBeamStreamArgs = {
+  input: UpdateAkashaBeamStreamInput;
 };
 
 
@@ -1037,8 +1744,18 @@ export type MutationUpdateAkashaContentBlockArgs = {
 };
 
 
+export type MutationUpdateAkashaContentBlockStreamArgs = {
+  input: UpdateAkashaContentBlockStreamInput;
+};
+
+
 export type MutationUpdateAkashaFollowArgs = {
   input: UpdateAkashaFollowInput;
+};
+
+
+export type MutationUpdateAkashaInterestsStreamArgs = {
+  input: UpdateAkashaInterestsStreamInput;
 };
 
 
@@ -1052,8 +1769,18 @@ export type MutationUpdateAkashaProfileInterestsArgs = {
 };
 
 
+export type MutationUpdateAkashaProfileStreamArgs = {
+  input: UpdateAkashaProfileStreamInput;
+};
+
+
 export type MutationUpdateAkashaReflectArgs = {
   input: UpdateAkashaReflectInput;
+};
+
+
+export type MutationUpdateAkashaReflectStreamArgs = {
+  input: UpdateAkashaReflectStreamInput;
 };
 
 /** An object with an ID */
@@ -1092,13 +1819,30 @@ export type PartialAkashaAppReleaseInput = {
   version?: InputMaybe<Scalars['String']>;
 };
 
+export type PartialAkashaAppsStreamInput = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  applicationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaAppsStreamModerationStatus>;
+};
+
 export type PartialAkashaBeamInput = {
   active?: InputMaybe<Scalars['Boolean']>;
   content?: InputMaybe<Array<InputMaybe<AkashaBeamBlockRecordInput>>>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   embeddedBeam?: InputMaybe<Scalars['CeramicStreamID']>;
   mentions?: InputMaybe<Array<InputMaybe<Scalars['CeramicStreamID']>>>;
+  nsfw?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type PartialAkashaBeamStreamInput = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  beamID?: InputMaybe<Scalars['CeramicStreamID']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaBeamStreamModerationStatus>;
 };
 
 export type PartialAkashaBlockStorageInput = {
@@ -1116,11 +1860,30 @@ export type PartialAkashaContentBlockInput = {
   content?: InputMaybe<Array<InputMaybe<AkashaContentBlockLabeledValueInput>>>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   kind?: InputMaybe<AkashaContentBlockBlockDef>;
+  nsfw?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type PartialAkashaContentBlockStreamInput = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  beamID?: InputMaybe<Scalars['CeramicStreamID']>;
+  blockID?: InputMaybe<Scalars['CeramicStreamID']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaContentBlockStreamModerationStatus>;
 };
 
 export type PartialAkashaFollowInput = {
   isFollowing?: InputMaybe<Scalars['Boolean']>;
   profileID?: InputMaybe<Scalars['CeramicStreamID']>;
+};
+
+export type PartialAkashaInterestsStreamInput = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  labelType?: InputMaybe<Scalars['String']>;
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaInterestsStreamModerationStatus>;
+  value?: InputMaybe<Scalars['String']>;
 };
 
 export type PartialAkashaProfileInput = {
@@ -1130,10 +1893,19 @@ export type PartialAkashaProfileInput = {
   description?: InputMaybe<Scalars['String']>;
   links?: InputMaybe<Array<InputMaybe<AkashaProfileLinkSourceInput>>>;
   name?: InputMaybe<Scalars['String']>;
+  nsfw?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type PartialAkashaProfileInterestsInput = {
   topics?: InputMaybe<Array<InputMaybe<AkashaProfileInterestsLabeledInput>>>;
+};
+
+export type PartialAkashaProfileStreamInput = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  profileID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaProfileStreamModerationStatus>;
 };
 
 export type PartialAkashaReflectInput = {
@@ -1143,20 +1915,36 @@ export type PartialAkashaReflectInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   isReply?: InputMaybe<Scalars['Boolean']>;
   mentions?: InputMaybe<Array<InputMaybe<Scalars['CeramicStreamID']>>>;
+  nsfw?: InputMaybe<Scalars['Boolean']>;
   reflection?: InputMaybe<Scalars['CeramicStreamID']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type PartialAkashaReflectStreamInput = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  beamID?: InputMaybe<Scalars['CeramicStreamID']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  moderationID?: InputMaybe<Scalars['CeramicStreamID']>;
+  reflectionID?: InputMaybe<Scalars['CeramicStreamID']>;
+  status?: InputMaybe<AkashaReflectStreamModerationStatus>;
 };
 
 export type Query = {
   akashaAppIndex?: Maybe<AkashaAppConnection>;
   akashaAppReleaseIndex?: Maybe<AkashaAppReleaseConnection>;
+  akashaAppsStreamIndex?: Maybe<AkashaAppsStreamConnection>;
   akashaBeamIndex?: Maybe<AkashaBeamConnection>;
+  akashaBeamStreamIndex?: Maybe<AkashaBeamStreamConnection>;
   akashaBlockStorageIndex?: Maybe<AkashaBlockStorageConnection>;
   akashaContentBlockIndex?: Maybe<AkashaContentBlockConnection>;
+  akashaContentBlockStreamIndex?: Maybe<AkashaContentBlockStreamConnection>;
   akashaFollowIndex?: Maybe<AkashaFollowConnection>;
+  akashaInterestsStreamIndex?: Maybe<AkashaInterestsStreamConnection>;
   akashaProfileIndex?: Maybe<AkashaProfileConnection>;
   akashaProfileInterestsIndex?: Maybe<AkashaProfileInterestsConnection>;
+  akashaProfileStreamIndex?: Maybe<AkashaProfileStreamConnection>;
   akashaReflectIndex?: Maybe<AkashaReflectConnection>;
+  akashaReflectStreamIndex?: Maybe<AkashaReflectStreamConnection>;
   /** Fetches an object given its ID */
   node?: Maybe<Node>;
   /** Account currently authenticated on the Ceramic instance, if set */
@@ -1184,6 +1972,16 @@ export type QueryAkashaAppReleaseIndexArgs = {
 };
 
 
+export type QueryAkashaAppsStreamIndexArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaAppsStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaAppsStreamSortingInput>;
+};
+
+
 export type QueryAkashaBeamIndexArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -1191,6 +1989,16 @@ export type QueryAkashaBeamIndexArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   sorting?: InputMaybe<AkashaBeamSortingInput>;
+};
+
+
+export type QueryAkashaBeamStreamIndexArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaBeamStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaBeamStreamSortingInput>;
 };
 
 
@@ -1214,6 +2022,16 @@ export type QueryAkashaContentBlockIndexArgs = {
 };
 
 
+export type QueryAkashaContentBlockStreamIndexArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaContentBlockStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaContentBlockStreamSortingInput>;
+};
+
+
 export type QueryAkashaFollowIndexArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -1221,6 +2039,16 @@ export type QueryAkashaFollowIndexArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   sorting?: InputMaybe<AkashaFollowSortingInput>;
+};
+
+
+export type QueryAkashaInterestsStreamIndexArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaInterestsStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaInterestsStreamSortingInput>;
 };
 
 
@@ -1242,6 +2070,16 @@ export type QueryAkashaProfileInterestsIndexArgs = {
 };
 
 
+export type QueryAkashaProfileStreamIndexArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaProfileStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaProfileStreamSortingInput>;
+};
+
+
 export type QueryAkashaReflectIndexArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -1249,6 +2087,16 @@ export type QueryAkashaReflectIndexArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   sorting?: InputMaybe<AkashaReflectSortingInput>;
+};
+
+
+export type QueryAkashaReflectStreamIndexArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<AkashaReflectStreamFiltersInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  sorting?: InputMaybe<AkashaReflectStreamSortingInput>;
 };
 
 
@@ -1315,6 +2163,27 @@ export type UpdateAkashaAppReleasePayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
+export type UpdateAkashaAppsStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: PartialAkashaAppsStreamInput;
+  id: Scalars['ID'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaAppsStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaAppsStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaAppsStreamPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
 export type UpdateAkashaBeamInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
   content: PartialAkashaBeamInput;
@@ -1333,6 +2202,27 @@ export type UpdateAkashaBeamPayload = {
 
 
 export type UpdateAkashaBeamPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
+export type UpdateAkashaBeamStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: PartialAkashaBeamStreamInput;
+  id: Scalars['ID'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaBeamStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaBeamStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaBeamStreamPayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
@@ -1378,6 +2268,27 @@ export type UpdateAkashaContentBlockPayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
+export type UpdateAkashaContentBlockStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: PartialAkashaContentBlockStreamInput;
+  id: Scalars['ID'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaContentBlockStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaContentBlockStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaContentBlockStreamPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
 export type UpdateAkashaFollowInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
   content: PartialAkashaFollowInput;
@@ -1396,6 +2307,27 @@ export type UpdateAkashaFollowPayload = {
 
 
 export type UpdateAkashaFollowPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
+export type UpdateAkashaInterestsStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: PartialAkashaInterestsStreamInput;
+  id: Scalars['ID'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaInterestsStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaInterestsStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaInterestsStreamPayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
@@ -1441,6 +2373,27 @@ export type UpdateAkashaProfilePayloadNodeArgs = {
   id: Scalars['ID'];
 };
 
+export type UpdateAkashaProfileStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: PartialAkashaProfileStreamInput;
+  id: Scalars['ID'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaProfileStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaProfileStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaProfileStreamPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
 export type UpdateAkashaReflectInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
   content: PartialAkashaReflectInput;
@@ -1459,6 +2412,27 @@ export type UpdateAkashaReflectPayload = {
 
 
 export type UpdateAkashaReflectPayloadNodeArgs = {
+  id: Scalars['ID'];
+};
+
+export type UpdateAkashaReflectStreamInput = {
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  content: PartialAkashaReflectStreamInput;
+  id: Scalars['ID'];
+  options?: InputMaybe<UpdateOptionsInput>;
+};
+
+export type UpdateAkashaReflectStreamPayload = {
+  clientMutationId?: Maybe<Scalars['String']>;
+  document: AkashaReflectStream;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Account currently authenticated on the Ceramic instance, if set */
+  viewer?: Maybe<CeramicAccount>;
+};
+
+
+export type UpdateAkashaReflectStreamPayloadNodeArgs = {
   id: Scalars['ID'];
 };
 

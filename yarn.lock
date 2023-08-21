@@ -1651,6 +1651,26 @@
     "@composedb/server" "^0.5.0-rc.3"
     fs-extra "^11.1.1"
 
+"@composedb/devtools@0.5.0-rc.3":
+  version "0.5.0-rc.3"
+  resolved "https://registry.yarnpkg.com/@composedb/devtools/-/devtools-0.5.0-rc.3.tgz#2cbb59961a3fdbc9704bbb9cbc40393248407c0b"
+  integrity sha512-/3lIeeTMTYzlH6qPkaOABD4RFN5ZeL6jT92084BQnNY9XYbtm6JwNofz2h2r2JJF6gSYRw6nPY3lHS2VVyq22A==
+  dependencies:
+    "@ceramicnetwork/common" "^2.31.0-rc.0"
+    "@ceramicnetwork/stream-model" "^1.13.0-rc.0"
+    "@ceramicnetwork/streamid" "^2.17.0"
+    "@composedb/graphql-scalars" "^0.5.0-rc.3"
+    "@didtools/cacao" "^2.0.0"
+    "@graphql-tools/schema" "^10.0.0"
+    "@graphql-tools/utils" "^10.0.4"
+    change-case "^4.1.2"
+    json-ptr "^3.1.1"
+    lodash-es "^4.17.21"
+    multiformats "^12.0.1"
+    object-hash "^3.0.0"
+    type-fest "^4.1.0"
+    uint8arrays "^4.0.6"
+
 "@composedb/graphql-scalars@^0.5.0-rc.3":
   version "0.5.0-rc.3"
   resolved "https://registry.yarnpkg.com/@composedb/graphql-scalars/-/graphql-scalars-0.5.0-rc.3.tgz#463a0248d9b121d27bad3b2087395a96752efa7a"
@@ -16441,6 +16461,11 @@ json-parse-even-better-errors@^2.3.0, json-parse-even-better-errors@^2.3.1:
   resolved "https://registry.yarnpkg.com/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz#7c47805a94319928e05777405dc12e1f7a4ee02d"
   integrity sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==
 
+json-ptr@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/json-ptr/-/json-ptr-3.1.1.tgz#184c3d48db659fa9bbc1519f7db6f390ddffb659"
+  integrity sha512-SiSJQ805W1sDUCD1+/t1/1BIrveq2Fe9HJqENxZmMCILmrPI7WhS/pePpIOx85v6/H2z1Vy7AI08GV2TzfXocg==
+
 json-schema-traverse@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz#69f6a87d9513ab8bb8fe63bdb0979c448e684660"
@@ -16993,6 +17018,11 @@ lockfile@^1.0:
   integrity sha512-cvbTwETRfsFh4nHsL1eGWapU1XFi5Ot9E85sWAwia7Y7EgB7vfqcZhTKZ+l7hCGxSPoushMv5GKhT5PdLv03WA==
   dependencies:
     signal-exit "^3.0.2"
+
+lodash-es@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
 
 lodash.camelcase@^4.3.0:
   version "4.3.0"
@@ -18547,7 +18577,7 @@ object-hash@2.2.0:
   resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-2.2.0.tgz#5ad518581eefc443bd763472b8ff2e9c2c0d54a5"
   integrity sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw==
 
-object-hash@3.0.0:
+object-hash@3.0.0, object-hash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-3.0.0.tgz#73f97f753e7baffc0e2cc9d6e079079744ac82e9"
   integrity sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==
@@ -23022,6 +23052,11 @@ type-fest@^3.3.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-3.13.1.tgz#bb744c1f0678bea7543a2d1ec24e83e68e8c8706"
   integrity sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==
 
+type-fest@^4.1.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.2.0.tgz#e259430307710e77721ecf6f545840acad72195f"
+  integrity sha512-5zknd7Dss75pMSED270A1RQS3KloqRJA9XbXLe0eCxyw7xXFb3rd+9B0UQ/0E+LQT6lnrLviEolYORlRWamn4w==
+
 type-is@~1.6.18:
   version "1.6.18"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.18.tgz#4e552cd05df09467dcbc4ef739de89f2cf37c131"
@@ -23144,7 +23179,7 @@ uint8arrays@^3.0.0, uint8arrays@^3.1.0:
   dependencies:
     multiformats "^9.4.2"
 
-uint8arrays@^4.0.2, uint8arrays@^4.0.3, uint8arrays@^4.0.4:
+uint8arrays@^4.0.2, uint8arrays@^4.0.3, uint8arrays@^4.0.4, uint8arrays@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-4.0.6.tgz#bae68b536c2e87147045b95d73d29e503e45ecab"
   integrity sha512-4ZesjQhqOU2Ip6GPReIwN60wRxIupavL8T0Iy36BBHr2qyMrNxsPJvr7vpS4eFt8F8kSguWUPad6ZM9izs/vyw==

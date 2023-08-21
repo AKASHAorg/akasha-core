@@ -14,7 +14,7 @@ type AkashaProfile @loadModel(id: "${akashaProfileId}") {
   id: ID!
 }
 
-type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}]) {
+type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}, {path: "nsfw"}]) {
   author: DID! @documentAccount
   content: [BlockRecord!]! @list(maxLength: 10)
   tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32)
@@ -23,6 +23,7 @@ type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") 
   embeddedBeam: StreamID
   active: Boolean!
   createdAt: DateTime!
+  nsfw: Boolean
 }
 `
 }

@@ -23,6 +23,7 @@ import akashaFollow from '../composites/akasha-follow.mjs';
 import akashaProfileLinks from '../composites/akasha-profile-links.mjs';
 import akashaReflect from '../composites/akasha-reflect.mjs';
 import akashaBeamLinks from '../composites/akasha-beam-links.mjs';
+import akashaStreams from '../composites/akasha-streams.mjs';
 
 
 import dotenv from 'dotenv'
@@ -121,6 +122,13 @@ export const fillModels = async () => {
   writeFileSync(beamLinksCPath, beamLinksC);
   await createComposite(ceramic, beamLinksCPath);
   spinner.info(`AkashaBeamLinks done`);
+
+
+  const streamsC = akashaStreams(AkashaBeam.id, AkashaProfile.id, AkashaContentBlock.id, AkashaReflect.id, AkashaApp.id);
+  const streamsCPath = path.resolve(__dirname, '../composites/akasha-streams.graphql');
+  writeFileSync(streamsCPath, streamsC);
+  await createComposite(ceramic, streamsCPath);
+  spinner.info(`AkashaStreams done`);
 
 }
 
