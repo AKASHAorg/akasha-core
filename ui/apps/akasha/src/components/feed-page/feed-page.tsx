@@ -7,7 +7,6 @@ import {
   RootComponentProps,
   EntityTypes,
   AnalyticsCategories,
-  IContentClickDetails,
 } from '@akashaorg/typings/ui';
 import {
   useMutationsListener,
@@ -22,7 +21,6 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
-import { useInfiniteGetProfilesQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;

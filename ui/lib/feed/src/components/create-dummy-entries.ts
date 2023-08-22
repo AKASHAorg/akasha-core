@@ -8,7 +8,7 @@ const randomBetween = (min, max) => {
 };
 const generateBeamPages = (pageCount, itemCount) => {
   return Array.from({ length: pageCount }, (_, i) => ({
-    beamIndex: {
+    akashaBeamIndex: {
       edges: Array.from({ length: itemCount }, (_, j) => ({
         node: {
           id: `${i}_${j}_${Math.floor(Math.random() * 100)}`,

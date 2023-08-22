@@ -134,172 +134,161 @@ type MergedEntries =
 type ExtractedEntries = Extract<MergedEntries, { type: EntityTypes }>;
 
 export const mapEntry = (entry: ExtractedEntries, logger?: Logger) => {
-  const content = Object.hasOwn(entry.content, 'propertyType') ? entry.content : [];
-  const slateContent = content.find(elem => elem.propertyType === PROPERTY_SLATE_CONTENT);
-  const linkPreviewData = content.find(elem => elem.propertyType === PROPERTY_LINK_PREVIEW);
-  const imagesData = content.find(elem => elem.propertyType === PROPERTY_IMAGES);
-
-  let parsedContent;
-  let linkPreview;
-  let images;
-  let quotedByAuthors: IEntryData['author'][];
-  let quotedEntry;
-  const isRemoved = !entry.active;
-
-  if (isRemoved) {
-    parsedContent = [
-      {
-        type: 'paragraph',
-        children: [{ text: 'Deleted' }],
-      },
-    ];
-  } else {
-    try {
-      const decodedContent = decodeb64SlateContent(slateContent.value, logger, true);
-      parsedContent = decodedContent.map(node => {
-        if (node.type === 'image' && node.url?.startsWith(MEDIA_URL_PREFIX)) {
-          node.url = getMediaUrl(node.url?.replace(MEDIA_URL_PREFIX, ''))?.originLink;
-        }
-        if (node.type === 'image' && node.fallbackUrl.startsWith(MEDIA_URL_PREFIX)) {
-          node.fallbackUrl = getMediaUrl(
-            node.fallbackUrl?.replace(MEDIA_URL_PREFIX, ''),
-          )?.fallbackLink;
-        }
-        return node;
-      });
-    } catch (error) {
-      if (logger) {
-        logger.error(`Error serializing base64 to slateContent: ${error.message}`);
-      }
-      parsedContent = [
-        {
-          type: 'paragraph',
-          children: [{ text: 'Error serializing base64 to slateContent' }],
-        },
-      ];
-    }
-
-    try {
-      linkPreview = decodeb64SlateContent(linkPreviewData.value, logger);
-      const imageSources = { url: '', fallbackUrl: '' };
-      const faviconSources = { url: '', fallbackUrl: '' };
-      if (linkPreview.imagePreviewHash) {
-        const ipfsLinks = getMediaUrl(linkPreview.imagePreviewHash);
-        imageSources.url = ipfsLinks.originLink;
-        imageSources.fallbackUrl = ipfsLinks.fallbackLink;
-      } else if (!linkPreview.imagePreviewHash && linkPreview.images.length) {
-        const uploadedImageURL = new URL(linkPreview.images[0]);
-        const hash = uploadedImageURL.hostname.split('.')[0];
-        const ipfsLinks = getMediaUrl(hash);
-        imageSources.url = ipfsLinks.originLink;
-        imageSources.fallbackUrl = ipfsLinks.fallbackLink;
-      }
-      if (linkPreview.faviconPreviewHash) {
-        const ipfsLinks = getMediaUrl(linkPreview.faviconPreviewHash);
-        faviconSources.url = ipfsLinks.originLink;
-        faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
-      } else if (!linkPreview.faviconPreviewHash && linkPreview.favicons.length) {
-        const uploadedFaviconURL = new URL(linkPreview.favicons[0]);
-        const hash = uploadedFaviconURL.hostname.split('.')[0];
-        const ipfsLinks = getMediaUrl(hash);
-        faviconSources.url = ipfsLinks.originLink;
-        faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
-      }
-      linkPreview.imageSources = imageSources;
-      linkPreview.faviconSources = faviconSources;
-    } catch (error) {
-      if (logger) {
-        logger.error(`Error serializing base64 to linkPreview: ${error.message}`);
-      }
-    }
-    try {
-      const decodedImages = decodeb64SlateContent(imagesData.value, logger);
-      const sdk = getSDK();
-      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-      images = decodedImages.map(img => {
-        const imgClone = { id: img.id, size: img.size, src: { url: '', fallbackUrl: '' } };
-        if (typeof img.src === 'string' && img.src?.startsWith(ipfsGateway)) {
-          const ipfsLinks = getMediaUrl(img.src.replace(ipfsGateway, ''));
-          imgClone.src.url = ipfsLinks?.originLink;
-          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
-        } else if (typeof img.src === 'object' && img.src?.url?.startsWith(MEDIA_URL_PREFIX)) {
-          const ipfsLinks = getMediaUrl(img.src?.url?.replace(MEDIA_URL_PREFIX, ''));
-          imgClone.src.url = ipfsLinks?.originLink;
-          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
-          // handle older uploaded images where the textile gatweway was saved also
-        } else if (typeof img.src === 'string' && img.src?.startsWith(TEXTILE_GATEWAY)) {
-          const ipfsLinks = getMediaUrl(img.src.replace(TEXTILE_GATEWAY, ''));
-          imgClone.src.url = ipfsLinks?.originLink;
-          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
-          // handle older uploaded images where the ipfs origing link was saved also
-        } else if (typeof img.src === 'string') {
-          const uploadedUrl = new URL(img.src);
-          const hash = uploadedUrl.hostname.split('.')[0];
-          const ipfsLinks = getMediaUrl(hash);
-          imgClone.src.url = ipfsLinks?.originLink;
-          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
-        }
-        return imgClone;
-      });
-    } catch (error) {
-      if (logger) {
-        logger.error(`Error serializing base64 to images: ${error.message}`);
-      }
-    }
-  }
-
-  if (entry.hasOwnProperty('quotes') && entry['quotes'] && entry['quotes'][0]) {
-    quotedEntry = mapEntry(entry['quotes'][0], logger);
-  }
-
-  if (
-    entry.hasOwnProperty('quotedByAuthors') &&
-    entry['quotedByAuthors'] &&
-    entry['quotedByAuthors'].length > 0
-  ) {
-    quotedByAuthors = entry['quotedByAuthors'].map((author: PostResultFragment['author']) => {
-      const avatarWithGateway = getMediaUrl(author.avatar);
-      return {
-        ...author,
-        avatar: {
-          url: avatarWithGateway?.originLink,
-          fallbackUrl: avatarWithGateway?.fallbackLink,
-        },
-      };
-    });
-  }
-
-  let totalComments = 0;
-  if ('totalComments' in entry && !!entry.totalComments) {
-    totalComments = Number(entry.totalComments);
-  } else if ('totalReplies' in entry && !!entry.totalReplies) {
-    totalComments = Number(entry.totalReplies);
-  }
-
-  return {
-    ...entry,
-    author: {
-      ...entry.author,
-      // avatar: {
-      //   url: getMediaUrl(entry.author.avatar)?.originLink,
-      //   fallbackUrl: getMediaUrl(entry.author.avatar)?.fallbackLink,
-      // },
-      // coverImage: {
-      //   url: getMediaUrl(entry.author.coverImage)?.originLink,
-      //   fallbackUrl: getMediaUrl(entry.author.coverImage)?.fallbackLink,
-      // },
-    },
-    isRemoved,
-    slateContent: parsedContent,
-    linkPreview,
-    images,
-    quote: quotedEntry,
-    reposts: entry['quotedBy']?.length,
-    // ipfsLink: entry._id,
-    replies: totalComments,
-    quotedByAuthors: quotedByAuthors,
-    type: entry['type'],
-  };
+  // const slateContent = entry.content.find(elem => elem.propertyType === PROPERTY_SLATE_CONTENT);
+  // const linkPreviewData = entry.content.find(elem => elem.propertyType === PROPERTY_LINK_PREVIEW);
+  // const imagesData = entry.content.find(elem => elem.propertyType === PROPERTY_IMAGES);
+  // let content;
+  // let linkPreview;
+  // let images;
+  // let quotedByAuthors: IEntryData['author'][];
+  // let quotedEntry;
+  // const isRemoved = !entry.active;
+  //
+  // try {
+  //   const decodedContent = decodeb64SlateContent(slateContent.value, logger, true);
+  //   parsedContent = decodedContent.map(node => {
+  //     if (node.type === 'image' && node.url?.startsWith(MEDIA_URL_PREFIX)) {
+  //       node.url = getMediaUrl(node.url?.replace(MEDIA_URL_PREFIX, ''))?.originLink;
+  //     }
+  //     if (node.type === 'image' && node.fallbackUrl.startsWith(MEDIA_URL_PREFIX)) {
+  //       node.fallbackUrl = getMediaUrl(
+  //         node.fallbackUrl?.replace(MEDIA_URL_PREFIX, ''),
+  //       )?.fallbackLink;
+  //     }
+  //     return node;
+  //   });
+  // } catch (error) {
+  //   if (logger) {
+  //     logger.error(`Error serializing base64 to slateContent: ${error.message}`);
+  //   }
+  //   parsedContent = [
+  //     {
+  //       type: 'paragraph',
+  //       children: [{ text: 'Error serializing base64 to slateContent' }],
+  //     },
+  //   ];
+  // }
+  //
+  // try {
+  //   linkPreview = decodeb64SlateContent(linkPreviewData.value, logger);
+  //   const imageSources = { url: '', fallbackUrl: '' };
+  //   const faviconSources = { url: '', fallbackUrl: '' };
+  //   if (linkPreview.imagePreviewHash) {
+  //     const ipfsLinks = getMediaUrl(linkPreview.imagePreviewHash);
+  //     imageSources.url = ipfsLinks.originLink;
+  //     imageSources.fallbackUrl = ipfsLinks.fallbackLink;
+  //   } else if (!linkPreview.imagePreviewHash && linkPreview.images.length) {
+  //     const uploadedImageURL = new URL(linkPreview.images[0]);
+  //     const hash = uploadedImageURL.hostname.split('.')[0];
+  //     const ipfsLinks = getMediaUrl(hash);
+  //     imageSources.url = ipfsLinks.originLink;
+  //     imageSources.fallbackUrl = ipfsLinks.fallbackLink;
+  //   }
+  //   if (linkPreview.faviconPreviewHash) {
+  //     const ipfsLinks = getMediaUrl(linkPreview.faviconPreviewHash);
+  //     faviconSources.url = ipfsLinks.originLink;
+  //     faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
+  //   } else if (!linkPreview.faviconPreviewHash && linkPreview.favicons.length) {
+  //     const uploadedFaviconURL = new URL(linkPreview.favicons[0]);
+  //     const hash = uploadedFaviconURL.hostname.split('.')[0];
+  //     const ipfsLinks = getMediaUrl(hash);
+  //     faviconSources.url = ipfsLinks.originLink;
+  //     faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
+  //   }
+  //   linkPreview.imageSources = imageSources;
+  //   linkPreview.faviconSources = faviconSources;
+  // } catch (error) {
+  //   if (logger) {
+  //     logger.error(`Error serializing base64 to linkPreview: ${error.message}`);
+  //   }
+  // }
+  // try {
+  //   const decodedImages = decodeb64SlateContent(imagesData.value, logger);
+  //   const sdk = getSDK();
+  //   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+  //   images = decodedImages.map(img => {
+  //     const imgClone = { id: img.id, size: img.size, src: { url: '', fallbackUrl: '' } };
+  //     if (typeof img.src === 'string' && img.src?.startsWith(ipfsGateway)) {
+  //       const ipfsLinks = getMediaUrl(img.src.replace(ipfsGateway, ''));
+  //       imgClone.src.url = ipfsLinks?.originLink;
+  //       imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+  //     } else if (typeof img.src === 'object' && img.src?.url?.startsWith(MEDIA_URL_PREFIX)) {
+  //       const ipfsLinks = getMediaUrl(img.src?.url?.replace(MEDIA_URL_PREFIX, ''));
+  //       imgClone.src.url = ipfsLinks?.originLink;
+  //       imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+  //       // handle older uploaded images where the textile gatweway was saved also
+  //     } else if (typeof img.src === 'string' && img.src?.startsWith(TEXTILE_GATEWAY)) {
+  //       const ipfsLinks = getMediaUrl(img.src.replace(TEXTILE_GATEWAY, ''));
+  //       imgClone.src.url = ipfsLinks?.originLink;
+  //       imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+  //       // handle older uploaded images where the ipfs origing link was saved also
+  //     } else if (typeof img.src === 'string') {
+  //       const uploadedUrl = new URL(img.src);
+  //       const hash = uploadedUrl.hostname.split('.')[0];
+  //       const ipfsLinks = getMediaUrl(hash);
+  //       imgClone.src.url = ipfsLinks?.originLink;
+  //       imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+  //     }
+  //     return imgClone;
+  //   });
+  // } catch (error) {
+  //   if (logger) {
+  //     logger.error(`Error serializing base64 to images: ${error.message}`);
+  //   }
+  // }
+  //
+  // if (entry.hasOwnProperty('quotes') && entry['quotes'] && entry['quotes'][0]) {
+  //   quotedEntry = mapEntry(entry['quotes'][0], logger);
+  // }
+  //
+  // if (
+  //   entry.hasOwnProperty('quotedByAuthors') &&
+  //   entry['quotedByAuthors'] &&
+  //   entry['quotedByAuthors'].length > 0
+  // ) {
+  //   quotedByAuthors = entry['quotedByAuthors'].map((author: PostResultFragment['author']) => {
+  //     const avatarWithGateway = getMediaUrl(author.avatar);
+  //     return {
+  //       ...author,
+  //       avatar: {
+  //         url: avatarWithGateway?.originLink,
+  //         fallbackUrl: avatarWithGateway?.fallbackLink,
+  //       },
+  //     };
+  //   });
+  // }
+  //
+  // let totalComments = 0;
+  // if ('totalComments' in entry && !!entry.totalComments) {
+  //   totalComments = Number(entry.totalComments);
+  // } else if ('totalReplies' in entry && !!entry.totalReplies) {
+  //   totalComments = Number(entry.totalReplies);
+  // }
+  //
+  // return {
+  //   ...entry,
+  //   author: {
+  //     ...entry.author,
+  //     // avatar: {
+  //     //   url: getMediaUrl(entry.author.avatar)?.originLink,
+  //     //   fallbackUrl: getMediaUrl(entry.author.avatar)?.fallbackLink,
+  //     // },
+  //     // coverImage: {
+  //     //   url: getMediaUrl(entry.author.coverImage)?.originLink,
+  //     //   fallbackUrl: getMediaUrl(entry.author.coverImage)?.fallbackLink,
+  //     // },
+  //   },
+  //   isRemoved,
+  //   slateContent: parsedContent,
+  //   linkPreview,
+  //   images,
+  //   quote: quotedEntry,
+  //   reposts: entry['quotedBy']?.length,
+  //   // ipfsLink: entry._id,
+  //   replies: totalComments,
+  //   quotedByAuthors: quotedByAuthors,
+  //   type: entry['type'],
+  // };
 };
 
 /**

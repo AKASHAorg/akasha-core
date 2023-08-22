@@ -18,9 +18,9 @@ import EntryList, {
   EntryListProps,
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
-import { mapEntry } from '@akashaorg/ui-awf-hooks';
+import { AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
 
-export type ReflectFeedProps = Omit<EntryListProps<ReturnType<typeof mapEntry>>, 'itemCard'> & {
+export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
   itemType: EntityTypes.REFLECT;
   locale?: ILocale;
   onEntryFlag?: (
@@ -63,7 +63,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   } = props;
 
   return (
-    <EntryList<ReturnType<typeof mapEntry>>
+    <EntryList<AkashaReflect>
       requestStatus={requestStatus}
       isFetchingNextPage={isFetchingNextPage}
       pages={pages}

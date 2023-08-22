@@ -1,24 +1,6 @@
 import * as React from 'react';
 
-<<<<<<< HEAD
-import {
-  AnalyticsCategories,
-  EntityTypes,
-  IPublishData,
-  RootExtensionProps,
-} from '@akashaorg/typings/ui';
-import {
-  mapEntry,
-  useAnalytics,
-  useComment,
-  useCreateComment,
-  useDummyMutation,
-  useDummyQuery,
-  useEditComment,
-} from '@akashaorg/ui-awf-hooks';
-=======
 import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/ui';
->>>>>>> next
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
@@ -34,22 +16,11 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
   const [analyticsActions] = [undefined];
 
   // @TODO replace with new hooks
-<<<<<<< HEAD
-  const comment = useDummyQuery({});
-  const editComment = useDummyMutation({});
-  const publishComment = useDummyMutation({});
-
-  const entryData = React.useMemo(() => {
-    if (comment.status === 'success') {
-      return mapEntry({ ...comment.data, type: EntityTypes.REFLECT });
-    }
-=======
   const comment = undefined;
   const editComment = undefined;
   const publishComment = undefined;
 
   const entryData = React.useMemo(() => {
->>>>>>> next
     return undefined;
   }, []);
 

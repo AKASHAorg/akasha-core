@@ -6,7 +6,6 @@ import EntryList, {
 import {
   EntityTypes,
   IContentClickDetails,
-  IEntryData,
   ModalNavigationOptions,
   Profile,
   RootComponentProps,
@@ -17,9 +16,9 @@ import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
-import { mapEntry } from '@akashaorg/ui-awf-hooks';
+import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
 
-export type BeamFeedProps = Omit<EntryListProps<ReturnType<typeof mapEntry>>, 'itemCard'> & {
+export type BeamFeedProps = Omit<EntryListProps<Omit<AkashaBeam, 'reflections'>>, 'itemCard'> & {
   itemType: EntityTypes.BEAM;
   locale?: ILocale;
   onEntryFlag?: (
@@ -51,7 +50,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     i18n,
     requestStatus,
     isFetchingNextPage,
-    isFetchingPreviousPage: boolean,
+    isFetchingPreviousPage,
     pages,
     itemSpacing = 8,
     onNavigate,
@@ -62,7 +61,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
   } = props;
 
   return (
-    <EntryList<ReturnType<typeof mapEntry>>
+    <EntryList<Omit<AkashaBeam, 'reflections'>>
       requestStatus={requestStatus}
       isFetchingNextPage={isFetchingNextPage}
       pages={pages}
@@ -94,7 +93,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
             >
               <EntryCard
                 showMore={true}
-                entryData={entryData as unknown as IEntryData}
+                entryData={entryData}
                 locale={locale}
                 onRepost={onRebeam}
                 onContentClick={onNavigate}

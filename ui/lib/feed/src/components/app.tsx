@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next';
 import { EntityTypes, IContentClickDetails, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import BeamFeed, { BeamFeedProps } from './beam-feed';
 import ReflectFeed, { ReflectFeedProps } from './reflect-feed';
-import { mapEntry, useInfiniteDummy } from '@akashaorg/ui-awf-hooks';
+import { useInfiniteDummy } from '@akashaorg/ui-awf-hooks';
 import {
   GetBeamsQuery,
   GetReflectionsFromBeamQuery,
@@ -16,6 +16,7 @@ import {
 } from '../utils/use-scroll-state';
 import { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { ScrollerState } from '@akashaorg/design-system-components/lib/components/EntryList';
+import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
 
 const canFetchNextPage = (req: {
   isFetchingNextPage: boolean;
@@ -63,7 +64,7 @@ const FeedWidgetRoot: React.FC<
     }
   }, [getScrollState.data]);
 
-  const beamsReq = useInfiniteDummy<GetBeamsQuery, ReturnType<typeof mapEntry>>(
+  const beamsReq = useInfiniteDummy<GetBeamsQuery, Omit<AkashaBeam, 'reflections'>>(
     queryKey,
     createDummyBeams({ first: 5, after: initialItemId }),
     {
@@ -71,31 +72,26 @@ const FeedWidgetRoot: React.FC<
       select: data => {
         if (itemType !== EntityTypes.BEAM) return;
         return {
-          pages: data.pages.flatMap(page =>
-            page.beamIndex.edges.flatMap(edge =>
-              mapEntry({ ...edge.node, type: EntityTypes.BEAM }),
-            ),
-          ),
+          pages: data.pages.flatMap(page => page.akashaBeamIndex.edges.flatMap(edge => edge.node)),
           pageParams: data.pageParams,
         };
       },
-      keepPreviousData: true,
       getNextPageParam: (last, all) => {
         if (itemType !== EntityTypes.BEAM) return;
-        if (last.beamIndex.pageInfo.hasNextPage) {
+        if (last.akashaBeamIndex.pageInfo.hasNextPage) {
           return all.length;
         }
       },
       getPreviousPageParam: firstPage => {
         if (itemType !== EntityTypes.BEAM) return;
-        if (firstPage.beamIndex.pageInfo.hasPreviousPage) {
-          return { before: firstPage.beamIndex.pageInfo.startCursor };
+        if (firstPage.akashaBeamIndex.pageInfo.hasPreviousPage) {
+          return { before: firstPage.akashaBeamIndex.pageInfo.startCursor };
         }
       },
     },
   );
 
-  const reflectReq = useInfiniteDummy<GetReflectionsFromBeamQuery, ReturnType<typeof mapEntry>>(
+  const reflectReq = useInfiniteDummy<GetReflectionsFromBeamQuery, AkashaReflect>(
     queryKey,
     createDummyReflections(5),
     {
@@ -105,9 +101,7 @@ const FeedWidgetRoot: React.FC<
         return {
           pages: data.pages.flatMap(page => {
             if (page.node && page.node['reflections']) {
-              return page.node['reflections'].edges.flatMap(edge =>
-                mapEntry({ ...edge.node, type: EntityTypes.REFLECT }),
-              );
+              return page.node['reflections'].edges.flatMap(edge => edge.node);
             }
           }),
           pageParams: data.pageParams,

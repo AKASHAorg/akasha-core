@@ -77,15 +77,15 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
       noBorderRadius={noBorderRadius}
       pad="p-0"
     >
-      {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
-        <SocialBox
-          socialData={entryData.quotedByAuthors}
-          repostedThisLabel={repostedThisLabel}
-          andLabel={andLabel}
-          othersLabel={othersLabel}
-          onClickUser={onMentionClick}
-        />
-      )}
+      {/*{entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (*/}
+      {/*  <SocialBox*/}
+      {/*    socialData={entryData.quotedByAuthors}*/}
+      {/*    repostedThisLabel={repostedThisLabel}*/}
+      {/*    andLabel={andLabel}*/}
+      {/*    othersLabel={othersLabel}*/}
+      {/*    onClickUser={onMentionClick}*/}
+      {/*  />*/}
+      {/*)}*/}
       <EntryBox
         entryData={entryData}
         onClickAvatar={onClickAvatar}

@@ -4,11 +4,7 @@ import { useParams } from 'react-router-dom';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 
-import {
-  useInfinitePostsByAuthor,
-  useGetProfile,
-  useEntryNavigation,
-} from '@akashaorg/ui-awf-hooks';
+import { useGetProfile, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import type {
   RootComponentProps,
   Profile,
