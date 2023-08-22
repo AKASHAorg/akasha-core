@@ -9,6 +9,7 @@ export function fetcher<TData, TVariables extends Record<string, unknown>>(query
 
     const result = await sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
     if (!result.errors || !result.errors.length) {
+        // emit eventbus notif
         return result.data as TData;
     }
     throw result.errors;
@@ -36,6 +37,13 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
   version
   createdAt
   nsfw
+  reflections(last: 1) {
+    edges {
+      node {
+        id
+      }
+    }
+  }
 }
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ `
@@ -1165,6 +1173,9 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ `
             profile {
               ...UserProfileFragment
             }
+            did {
+              id
+            }
           }
         }
         pageInfo {
@@ -1237,6 +1248,11 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ `
               profileID
               profile {
                 ...UserProfileFragment
+              }
+              did {
+                akashaProfile {
+                  ...UserProfileFragment
+                }
               }
             }
           }

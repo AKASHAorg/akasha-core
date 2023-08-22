@@ -18,6 +18,13 @@ fragment BeamFragment on AkashaBeam{
   version
   createdAt
   nsfw
+  reflections(last: 1){
+    edges {
+      node {
+        id
+      }
+    }
+  }
 }
 
 fragment ContentBlockFragment on AkashaContentBlock{

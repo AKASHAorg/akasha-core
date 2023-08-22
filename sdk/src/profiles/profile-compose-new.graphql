@@ -155,6 +155,9 @@ query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: I
             profile {
              ...UserProfileFragment
             }
+            did {
+              id
+            }
           }
         }
         pageInfo {
@@ -182,6 +185,11 @@ query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: I
               profileID
               profile {
                 ...UserProfileFragment
+              }
+              did {
+                akashaProfile {
+                  ...UserProfileFragment
+                }
               }
             }
           }

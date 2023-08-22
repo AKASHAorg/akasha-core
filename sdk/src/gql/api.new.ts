@@ -23,6 +23,13 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
   version
   createdAt
   nsfw
+  reflections(last: 1) {
+    edges {
+      node {
+        id
+      }
+    }
+  }
 }
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ gql`
@@ -548,6 +555,9 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
             profile {
               ...UserProfileFragment
             }
+            did {
+              id
+            }
           }
         }
         pageInfo {
@@ -582,6 +592,11 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
               profileID
               profile {
                 ...UserProfileFragment
+              }
+              did {
+                akashaProfile {
+                  ...UserProfileFragment
+                }
               }
             }
           }

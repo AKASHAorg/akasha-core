@@ -60,6 +60,7 @@ export function fetcher<TData, TVariables extends Record<string, unknown>>(query
 
     const result = await sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
     if (!result.errors || !result.errors.length) {
+        // emit eventbus notif
         return result.data as TData;
     }
     throw result.errors;
