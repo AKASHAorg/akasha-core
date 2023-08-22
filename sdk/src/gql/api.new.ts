@@ -7,7 +7,10 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
   id
   reflectionsCount
   active
-  embeddedBeam
+  embeddedBeam {
+    label
+    embeddedID
+  }
   author {
     id
     isViewer
@@ -96,8 +99,8 @@ export const ReflectFragmentDoc = /*#__PURE__*/ gql`
   version
   active
   content {
-    provider
-    property
+    label
+    propertyType
     value
   }
   isReply

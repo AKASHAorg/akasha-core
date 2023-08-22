@@ -1,4 +1,4 @@
-type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c81zkhwf9gwvg4w7hlhzmggfbmyjapze5lzc8c7pcnm8igdg0hf") {
+type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c58vvx12mfk81er1aq06atqjan89i6qcb56ntqvjovyn2uryzuf") {
   id: ID!
 }
 
@@ -7,6 +7,11 @@ type BlockRecord{
   order: Int! @int(min: 0, max: 10)
   blockID: StreamID! @documentReference(model: "AkashaContentBlock")
  # block: ContentBlock! @relationDocument(property: "blockID")
+}
+
+type EmbeddedType{
+  label: String! @string(minLength:3, maxLength: 32)
+  embeddedID: StreamID!
 }
 
 type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c9l8sxje9238fz8hx6u6whu9njmww96wn04c6uj0lillf9jygno") {
@@ -19,7 +24,7 @@ type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") 
   tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32)
   mentions: [StreamID] @list(maxLength: 10)
   version: CommitID! @documentVersion
-  embeddedBeam: StreamID
+  embeddedBeam: EmbeddedType
   active: Boolean!
   createdAt: DateTime!
   nsfw: Boolean

@@ -1,9 +1,9 @@
 export default function compose (akashaBeamId) {
     return `
 type ProviderValue{
-  provider: String! @string(minLength: 6, maxLength: 100)
-  property: String! @string(minLength: 2, maxLength: 40)
-  value: String! @string(minLength: 3, maxLength: 2000)
+  propertyType: String! @string(minLength: 2, maxLength: 100)
+  label: String! @string(minLength: 6, maxLength: 100)
+  value: String! @string(minLength: 3, maxLength: 3000)
 }
 
 type AkashaBeam @loadModel(id: "${akashaBeamId}") {

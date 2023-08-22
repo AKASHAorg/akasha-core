@@ -7,7 +7,7 @@ export default function compose(akashaAppReleaseId){
 type LabeledValue{
   propertyType: String! @string(minLength: 2, maxLength: 100)
   label: String! @string(minLength: 6, maxLength: 100)
-  value: String! @string(minLength: 3, maxLength: 2000)
+  value: String! @string(minLength: 3, maxLength: 6000)
 }
 
 enum BlockDef{
@@ -17,7 +17,7 @@ enum BlockDef{
 }
 
 # model builder
-type AkashaContentBlock @createModel(accountRelation: LIST, description: "AKASHA Basic Content Block") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "kind"}, {path: "nsfw"}]) {
+type AkashaContentBlock @createModel(accountRelation: LIST, description: "AKASHA Basic Content Block") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "kind"}, {path: "nsfw"}, {path: "appVersionID"}]) {
   content: [LabeledValue!]! @list(maxLength: 20)
   appVersionID: StreamID! @documentReference(model: "AkashaAppRelease")
   appVersion: AkashaAppRelease! @relationDocument(property: "appVersionID")

@@ -117,7 +117,7 @@ type AkashaBeam implements Node {
   author: CeramicAccount!
   content: [AkashaBeamBlockRecord!]!
   createdAt: DateTime!
-  embeddedBeam: CeramicStreamID
+  embeddedBeam: AkashaBeamEmbeddedType
   id: ID!
   mentions: [CeramicStreamID]
   nsfw: Boolean
@@ -164,6 +164,11 @@ type AkashaBeamEdge {
   cursor: String!
   "The item at the end of the edge"
   node: AkashaBeam
+}
+
+type AkashaBeamEmbeddedType {
+  embeddedID: CeramicStreamID!
+  label: String!
 }
 
 type AkashaBeamStream implements Node {
@@ -493,8 +498,8 @@ type AkashaReflectEdge {
 }
 
 type AkashaReflectProviderValue {
-  property: String!
-  provider: String!
+  label: String!
+  propertyType: String!
   value: String!
 }
 
@@ -1491,6 +1496,11 @@ input AkashaBeamBlockRecordInput {
   order: Int!
 }
 
+input AkashaBeamEmbeddedTypeInput {
+  embeddedID: CeramicStreamID!
+  label: String!
+}
+
 input AkashaBeamFiltersInput {
   and: [AkashaBeamFiltersInput!]
   not: AkashaBeamFiltersInput
@@ -1502,7 +1512,7 @@ input AkashaBeamInput {
   active: Boolean!
   content: [AkashaBeamBlockRecordInput]!
   createdAt: DateTime!
-  embeddedBeam: CeramicStreamID
+  embeddedBeam: AkashaBeamEmbeddedTypeInput
   mentions: [CeramicStreamID]
   nsfw: Boolean
   tags: [String]
@@ -1633,6 +1643,7 @@ input AkashaContentBlockLabeledValueInput {
 
 input AkashaContentBlockObjectFilterInput {
   active: BooleanValueFilterInput
+  appVersionID: StringValueFilterInput
   createdAt: StringValueFilterInput
   kind: AkashaContentBlockBlockDefValueFilterInput
   nsfw: BooleanValueFilterInput
@@ -1640,6 +1651,7 @@ input AkashaContentBlockObjectFilterInput {
 
 input AkashaContentBlockSortingInput {
   active: SortOrder
+  appVersionID: SortOrder
   createdAt: SortOrder
   kind: SortOrder
   nsfw: SortOrder
@@ -1872,8 +1884,8 @@ input AkashaReflectObjectFilterInput {
 }
 
 input AkashaReflectProviderValueInput {
-  property: String!
-  provider: String!
+  label: String!
+  propertyType: String!
   value: String!
 }
 
@@ -2037,7 +2049,7 @@ input PartialAkashaBeamInput {
   active: Boolean
   content: [AkashaBeamBlockRecordInput]
   createdAt: DateTime
-  embeddedBeam: CeramicStreamID
+  embeddedBeam: AkashaBeamEmbeddedTypeInput
   mentions: [CeramicStreamID]
   nsfw: Boolean
   tags: [String]

@@ -2,7 +2,10 @@ fragment BeamFragment on AkashaBeam{
   id
   reflectionsCount
   active
-  embeddedBeam
+  embeddedBeam{
+    label
+    embeddedID
+  }
   author{
     id
     isViewer
