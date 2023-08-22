@@ -30,7 +30,7 @@ type AkashaProfileInterests @createModel(accountRelation: SINGLE, description: "
   did: DID! @documentAccount
 }
 
-type AkashaProfile @createModel(accountRelation: SINGLE, description: "AKASHA profile") @createIndex(fields:[{path:"name"}, {path: "createdAt"}]) {
+type AkashaProfile @createModel(accountRelation: SINGLE, description: "AKASHA profile") @createIndex(fields:[{path:"name"}, {path: "createdAt"}, {path: "nsfw"}]) {
   name: String! @string(minLength: 3, maxLength: 50)
   avatar: ImageVersions
   description: String @string(maxLength: 200)
@@ -38,6 +38,7 @@ type AkashaProfile @createModel(accountRelation: SINGLE, description: "AKASHA pr
   links: [LinkSource] @list(maxLength: 20)
   did: DID! @documentAccount
   createdAt: DateTime!
+  nsfw: Boolean
 }
 
 
