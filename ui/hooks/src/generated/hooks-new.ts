@@ -1166,6 +1166,9 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ `
             profile {
               ...UserProfileFragment
             }
+            did {
+              id
+            }
           }
         }
         pageInfo {

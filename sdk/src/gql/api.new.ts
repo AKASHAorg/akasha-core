@@ -548,6 +548,9 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
             profile {
               ...UserProfileFragment
             }
+            did {
+              id
+            }
           }
         }
         pageInfo {
