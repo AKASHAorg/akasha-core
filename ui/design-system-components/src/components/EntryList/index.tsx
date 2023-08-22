@@ -5,44 +5,55 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { useWindowVirtualizer, VirtualItem } from '@tanstack/react-virtual';
-import { IEntryData } from '@akashaorg/typings/ui';
+import { useWindowVirtualizer, VirtualItem, Virtualizer } from '@tanstack/react-virtual';
 
-export type CardListProps = {
+export type CardListProps<T> = {
   items: VirtualItem[];
-  allEntries: IEntryData[];
+  allEntries: T[];
   itemSpacing?: number;
   measureElementRef: (node: Element) => void;
   isFetchingNextPage?: boolean;
 };
 
-export type EntryListProps = {
-  pages: Record<string, any>[];
-  children?: (props: CardListProps) => React.ReactElement[];
-  onLoadMore: () => void;
+export type ScrollerState = {
+  startItemId: string;
+  startItemOffset: number;
+  measurementsCache: VirtualItem[];
+  scrollDirection: Virtualizer<Window, HTMLElement>['scrollDirection'];
+  itemsCount: number;
+  lastItemId?: string;
+  firstItemId?: string;
+};
+
+export type EntryListProps<T> = {
+  pages: T[];
+  children?: (props: CardListProps<T>) => React.ReactElement[];
   itemSpacing?: number;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';
   hasNextPage?: boolean;
   languageDirection?: 'ltr' | 'rtl';
   isFetchingNextPage?: boolean;
-  onScrollStateChange?: (scrollerState: any) => void;
+  isFetchingPreviousPage?: boolean;
+  onScrollStateChange?: (scrollerState: ScrollerState) => void;
   onScrollStateReset?: () => void;
-  initialScrollState?: any;
+  initialScrollState?: ScrollerState;
+  getItemKey?: (index: number, entries: T[]) => string;
 };
 
-const EntryList: React.FC<EntryListProps> = props => {
+function EntryList<T>(props: EntryListProps<T>) {
   const {
     pages,
     itemSpacing = 0,
-    onLoadMore,
     languageDirection = 'ltr',
     hasNextPage,
     isFetchingNextPage,
+    isFetchingPreviousPage,
     requestStatus,
     children,
     onScrollStateChange,
     initialScrollState,
     onScrollStateReset,
+    getItemKey,
   } = props;
   const [hideScrollTop, setHideScrollTop] = React.useState(true);
   const rootElementRef = React.useRef<HTMLDivElement>();
@@ -67,6 +78,7 @@ const EntryList: React.FC<EntryListProps> = props => {
     initialOffset: initialScrollState?.startItemOffset || 0,
     initialMeasurementsCache: initialScrollState?.measurementsCache,
     scrollingDelay: 250,
+    getItemKey: index => getItemKey(index, allEntries),
     onChange: vInstance => {
       // only save the state when isScrolling
       if (!vInstance.isScrolling) {
@@ -76,7 +88,7 @@ const EntryList: React.FC<EntryListProps> = props => {
       if (!vItems.length || !allEntries.length) {
         return;
       }
-      const startItemId = allEntries[vItems[0].index].id;
+      const startItemId = allEntries[vItems[0].index]['id'];
       const { startIndex } = vInstance.range;
       const [offset] = vInstance.getOffsetForIndex(startIndex, 'center');
       if (onScrollStateChange) {
@@ -84,26 +96,15 @@ const EntryList: React.FC<EntryListProps> = props => {
           startItemId,
           startItemOffset: offset,
           measurementsCache: vInstance.measurementsCache,
+          scrollDirection: vInstance.scrollDirection,
+          itemsCount: allEntries.length,
+          lastItemId: allEntries[allEntries.length - 1]['id'],
+          firstItemId: allEntries[0]['id'],
         });
       }
     },
-    // scrollToFn: (offset, params, instance) => {
-    //   console.log('scroll to', params, offset);
-    // },
   });
   const items = virtualizer.getVirtualItems();
-  /**
-   * Handle load more
-   */
-  React.useEffect(() => {
-    const [lastItem] = [...items].reverse();
-    if (!lastItem) {
-      return;
-    }
-    if (lastItem.index >= allEntries.length - 1 && hasNextPage && !isFetchingNextPage) {
-      onLoadMore();
-    }
-  }, [hasNextPage, items, onLoadMore, isFetchingNextPage, allEntries.length]);
   /**
    * Handle scroll to top button visibility
    */
@@ -149,6 +150,11 @@ const EntryList: React.FC<EntryListProps> = props => {
             transform: `translateY(${items[0].start - virtualizer.options.scrollMargin}px)`,
           }}
         >
+          {requestStatus === 'loading' && isFetchingPreviousPage && (
+            <Box customStyle="p-8 w-full">
+              <Spinner />
+            </Box>
+          )}
           {children({
             items,
             allEntries,
@@ -156,7 +162,7 @@ const EntryList: React.FC<EntryListProps> = props => {
             isFetchingNextPage,
             itemSpacing,
           })}
-          {requestStatus === 'loading' && !isFetchingNextPage && (
+          {isFetchingNextPage && (
             <Box customStyle="p-8 w-full">
               <Spinner />
             </Box>
@@ -168,6 +174,6 @@ const EntryList: React.FC<EntryListProps> = props => {
       </Box>
     </Box>
   );
-};
+}
 
-export default React.memo(EntryList);
+export default EntryList;

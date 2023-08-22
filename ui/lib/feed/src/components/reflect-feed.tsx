@@ -3,6 +3,7 @@ import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
   EntityTypes,
   IContentClickDetails,
+  IEntryData,
   ModalNavigationOptions,
   NavigateToParams,
   Profile,
@@ -15,11 +16,12 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import EntryList, {
   EntryListProps,
+  ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
+import { mapEntry } from '@akashaorg/ui-awf-hooks';
 
-export type ReflectFeedProps = Omit<EntryListProps, 'itemCard'> & {
+export type ReflectFeedProps = Omit<EntryListProps<ReturnType<typeof mapEntry>>, 'itemCard'> & {
   itemType: EntityTypes.REFLECT;
-  pages: Record<string, any>[];
   locale?: ILocale;
   onEntryFlag?: (
     entryId: string,
@@ -39,8 +41,8 @@ export type ReflectFeedProps = Omit<EntryListProps, 'itemCard'> & {
   loggedProfileData?: Profile;
   i18n: i18n;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  onScrollStateChange: (scrollState: any) => void;
-  initialScrollState: any;
+  onScrollStateChange: (scrollState: ScrollerState) => void;
+  initialScrollState: ScrollerState;
   onScrollStateReset: () => void;
 };
 
@@ -48,7 +50,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
     onNavigate,
     locale,
-    onLoadMore,
     requestStatus,
     isFetchingNextPage,
     pages,
@@ -58,11 +59,11 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     initialScrollState,
     onScrollStateReset,
     onScrollStateChange,
+    getItemKey,
   } = props;
 
   return (
-    <EntryList
-      onLoadMore={onLoadMore}
+    <EntryList<ReturnType<typeof mapEntry>>
       requestStatus={requestStatus}
       isFetchingNextPage={isFetchingNextPage}
       pages={pages}
@@ -72,6 +73,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       initialScrollState={initialScrollState}
       onScrollStateReset={onScrollStateReset}
       onScrollStateChange={onScrollStateChange}
+      getItemKey={getItemKey}
     >
       {cardProps => {
         const { items, allEntries, measureElementRef } = cardProps;
@@ -95,7 +97,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
             >
               <EntryCard
                 showMore={true}
-                entryData={entryData}
+                entryData={entryData as unknown as IEntryData}
                 locale={locale}
                 onContentClick={onNavigate}
               />

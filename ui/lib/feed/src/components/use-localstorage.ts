@@ -1,11 +1,13 @@
 import * as React from 'react';
+import getSdk from '@akashaorg/awf-sdk';
 
 const isClient = () => {
   return typeof window !== 'undefined' && window.document && window.document.documentElement;
 };
 
-export const useLocalstorage = (storageKey: string) => {
-  const getItem = () => {
+export const useScrollState = (storageKey: string) => {
+  const sdk = getSdk();
+  const getScrollState = async () => {
     if (!storageKey) {
       console.error('storageKey parameter is missing');
       return null;
@@ -16,6 +18,7 @@ export const useLocalstorage = (storageKey: string) => {
     }
 
     try {
+      // const state = await sdk.services.
       const val = window.localStorage.getItem(storageKey);
       if (val && val !== 'undefined') {
         return JSON.parse(val);
@@ -28,7 +31,7 @@ export const useLocalstorage = (storageKey: string) => {
     }
   };
 
-  const [val, setVal] = React.useState(getItem());
+  const [val, setVal] = React.useState(getScrollState());
 
   const storeValue = newValue => {
     let valueToStore = newValue;

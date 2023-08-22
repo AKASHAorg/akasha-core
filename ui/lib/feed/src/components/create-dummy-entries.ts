@@ -27,11 +27,19 @@ const generateBeamPages = (pageCount, itemCount) => {
             {
               provider: 'akasha-beams',
               property: PROPERTY_SLATE_CONTENT,
-              value: serializeSlateToBase64(
-                slateContent
+              value: serializeSlateToBase64([
+                {
+                  type: 'paragraph',
+                  children: [
+                    {
+                      text: `Page: ${i}; item: ${j}`,
+                    },
+                  ],
+                },
+                ...slateContent
                   .slice(0, randomBetween(1, slateContent.length))
                   .sort(() => Math.random() - 0.5),
-              ),
+              ]),
             },
           ],
         },
@@ -44,12 +52,11 @@ const generateBeamPages = (pageCount, itemCount) => {
   }));
 };
 let beamPages = [];
-export const createDummyBeams = (count: number) => {
+export const createDummyBeams = ({ first, after }: { first: number; after?: string }) => {
   if (!beamPages.length) {
-    beamPages = generateBeamPages(10, count);
+    beamPages = generateBeamPages(10, first);
   }
   return ({ pageParam = 0 }) => {
-    console.log('requesting page', pageParam, 'pages', beamPages);
     return beamPages[pageParam];
   };
 };
@@ -79,11 +86,19 @@ export const createDummyReflections =
                 {
                   provider: 'akasha-reflections',
                   property: PROPERTY_SLATE_CONTENT,
-                  value: serializeSlateToBase64(
-                    slateContent
+                  value: serializeSlateToBase64([
+                    {
+                      type: 'paragraph',
+                      children: [
+                        {
+                          text: `Page: ${pageParam}; item: ${i}`,
+                        },
+                      ],
+                    },
+                    ...slateContent
                       .slice(0, randomBetween(1, slateContent.length))
                       .sort(() => Math.random() - 0.5),
-                  ),
+                  ]),
                 },
               ],
               beam: { id: 'some-beam-id', author: { id: 'some-author-id' } },

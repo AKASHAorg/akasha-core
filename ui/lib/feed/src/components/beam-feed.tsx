@@ -1,10 +1,12 @@
 import * as React from 'react';
 import EntryList, {
   EntryListProps,
+  ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
 import {
   EntityTypes,
   IContentClickDetails,
+  IEntryData,
   ModalNavigationOptions,
   Profile,
   RootComponentProps,
@@ -15,8 +17,9 @@ import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
+import { mapEntry } from '@akashaorg/ui-awf-hooks';
 
-export type BeamFeedProps = Omit<EntryListProps, 'itemCard'> & {
+export type BeamFeedProps = Omit<EntryListProps<ReturnType<typeof mapEntry>>, 'itemCard'> & {
   itemType: EntityTypes.BEAM;
   locale?: ILocale;
   onEntryFlag?: (
@@ -37,46 +40,45 @@ export type BeamFeedProps = Omit<EntryListProps, 'itemCard'> & {
   i18n: i18n;
   onRebeam?: (withComment: boolean, beamId: string) => void;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  onScrollStateChange: (scrollState: any) => void;
-  initialScrollState: any;
+  onScrollStateChange: (scrollState: ScrollerState) => void;
+  initialScrollState: ScrollerState;
   onScrollStateReset: () => void;
 };
 
 const BeamFeed: React.FC<BeamFeedProps> = props => {
   const {
     locale = 'en',
-    onLoadMore,
     i18n,
     requestStatus,
     isFetchingNextPage,
+    isFetchingPreviousPage: boolean,
     pages,
     itemSpacing = 8,
-    hasNextPage,
     onNavigate,
     onRebeam,
     onScrollStateChange,
     initialScrollState,
+    getItemKey,
   } = props;
 
   return (
-    <EntryList
-      onLoadMore={onLoadMore}
+    <EntryList<ReturnType<typeof mapEntry>>
       requestStatus={requestStatus}
       isFetchingNextPage={isFetchingNextPage}
       pages={pages}
       itemSpacing={itemSpacing}
-      hasNextPage={hasNextPage}
       languageDirection={i18n?.dir() || 'ltr'}
       onScrollStateChange={onScrollStateChange}
       initialScrollState={initialScrollState}
+      getItemKey={getItemKey}
     >
       {cardProps => {
         const { items, allEntries, measureElementRef } = cardProps;
         return items.map(item => {
           const { index, key } = item;
           const entryData = allEntries[index];
-          const isLoader = index > allEntries.length - 1;
-          if (isLoader || isFetchingNextPage) {
+          const isNextLoader = index > allEntries.length - 1;
+          if (isNextLoader) {
             return (
               <Box key={key} customStyle="p-8 w-full">
                 <Spinner />
@@ -92,7 +94,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
             >
               <EntryCard
                 showMore={true}
-                entryData={entryData}
+                entryData={entryData as unknown as IEntryData}
                 locale={locale}
                 onRepost={onRebeam}
                 onContentClick={onNavigate}
