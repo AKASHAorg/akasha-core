@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { apply, tw } from '@twind/core';
+
+import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/sdk/graphql-types-new';
+
+import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
-import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/sdk/graphql-types-new';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
 import { ButtonType } from '../types';
-import { apply, tw } from '@twind/core';
 
 const MAX_INTERESTS = 10;
 

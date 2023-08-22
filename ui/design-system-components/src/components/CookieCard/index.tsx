@@ -1,9 +1,10 @@
 import React from 'react';
+
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 
 export type CookieCardProps = {
   titleLabel: string;

@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import Entry from '../Entry';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EmptyEntry from '../Entry/EmptyEntry';
+import { tw } from '@twind/core';
+import { useIntersection } from 'react-use';
+
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import { tw } from '@twind/core';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+
+import Entry from '../Entry';
+import EmptyEntry from '../Entry/EmptyEntry';
 import { Engagement, EngagementProps } from '../types';
-import { useIntersection } from 'react-use';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 
 export type FollowersProps = {
   followers: Engagement;

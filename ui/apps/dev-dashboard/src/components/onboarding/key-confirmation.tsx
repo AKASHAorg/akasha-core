@@ -3,8 +3,7 @@ import React from 'react';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import {
-  DevKeyCard,
+import DevKeyCard, {
   DevKeyCardProps,
 } from '@akashaorg/design-system-components/lib/components/DevKeyCard';
 import {

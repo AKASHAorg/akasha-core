@@ -1,18 +1,17 @@
 import React from 'react';
-
-import Collaborator from './collaborator';
-
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
-import SearchBar, { ISearchBar } from '../SearchBar';
-import { Profile } from '@akashaorg/typings/ui';
 import { tw } from '@twind/core';
 
-export interface IManageCollaboratorsModalProps
-  extends Omit<ISearchBar, 'searchInputSize' | 'iconSize'> {
+import { Profile } from '@akashaorg/typings/ui';
+
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import Collaborator from './collaborator';
+import SearchBar, { SearchBarProps } from '../SearchBar';
+
+export type ManageCollaboratorsModalProps = Omit<SearchBarProps, 'searchInputSize' | 'iconSize'> & {
   assetName?: string;
   publicImgPath?: string;
   titleLabel: string;
@@ -24,9 +23,9 @@ export interface IManageCollaboratorsModalProps
   removeButtonLabel: string;
   closeModal: () => void;
   onClickCollaborator: (profileId: string, action: 'add' | 'remove') => () => void;
-}
+};
 
-const ManageCollaboratorsModal: React.FC<IManageCollaboratorsModalProps> = props => {
+const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props => {
   const {
     assetName = 'no-collaborators',
     publicImgPath = '/images',

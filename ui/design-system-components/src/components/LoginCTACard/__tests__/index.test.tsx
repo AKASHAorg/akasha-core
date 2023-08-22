@@ -2,8 +2,9 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import LoginCTAWidgetCard from '..';
 import { customRender } from '@akashaorg/design-system-core/src/test-utils';
+
+import LoginCTAWidgetCard from '..';
 
 describe('<LoginCTAWidgetCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});

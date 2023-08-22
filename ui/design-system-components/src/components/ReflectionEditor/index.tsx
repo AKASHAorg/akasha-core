@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { apply, tw } from '@twind/core';
 import EditorPlaceholder from '../EditorPlaceholder';
-import EditorBox, { IEditorBox } from '../Editor';
+import EditorBox, { EditorBoxProps } from '../Editor';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 import { IPublishData } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
-export type ReflectionEditorProps = IEditorBox & {
+export type ReflectionEditorProps = EditorBoxProps & {
   openEditor?: boolean;
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;

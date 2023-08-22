@@ -1,4 +1,7 @@
 import React, { ReactElement } from 'react';
+
+import { Profile } from '@akashaorg/typings/ui';
+
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
@@ -10,8 +13,8 @@ import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyTo
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import { Profile } from '@akashaorg/typings/ui';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
+
+import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 
 export type HeaderProps = {
   did: Profile['did'];

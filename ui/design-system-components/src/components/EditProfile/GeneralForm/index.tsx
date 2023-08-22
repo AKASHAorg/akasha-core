@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
+import * as z from 'zod';
+import { useMedia } from 'react-use';
+import { tw, apply } from '@twind/core';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import { tw, apply } from '@twind/core';
+
 import { Header, HeaderProps } from './Header';
-import { useForm, Controller } from 'react-hook-form';
-import { useMedia } from 'react-use';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types';
-import * as z from 'zod';
 
 export type GeneralFormValues = {
   userName?: string;

@@ -2,7 +2,10 @@ fragment BeamFragment on AkashaBeam{
   id
   reflectionsCount
   active
-  embeddedBeam
+  embeddedBeam{
+    label
+    embeddedID
+  }
   author{
     id
     isViewer
@@ -14,6 +17,7 @@ fragment BeamFragment on AkashaBeam{
   tags
   version
   createdAt
+  nsfw
 }
 
 fragment ContentBlockFragment on AkashaContentBlock{
@@ -41,6 +45,7 @@ fragment ContentBlockFragment on AkashaContentBlock{
     isViewer
   }
   version
+  nsfw
 }
 
 fragment BlockStorageFragment on AkashaBlockStorage {

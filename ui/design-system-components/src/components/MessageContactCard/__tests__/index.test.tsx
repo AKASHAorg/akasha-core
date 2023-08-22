@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { act, cleanup, fireEvent } from '@testing-library/react';
 
-import MessageContactCard from '..';
 import { customRender } from '@akashaorg/design-system-core/src/test-utils';
+
+import MessageContactCard from '..';
 
 describe('<MessageContactCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});

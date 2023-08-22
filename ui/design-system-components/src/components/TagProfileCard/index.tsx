@@ -1,6 +1,8 @@
 import React from 'react';
 import { tw } from '@twind/core';
+
 import { ITag } from '@akashaorg/typings/ui';
+
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';

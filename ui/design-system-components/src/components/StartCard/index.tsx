@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { tw } from '@twind/core';
+
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { tw } from '@twind/core';
 
-export interface StartProps {
+export type StartCardProps = {
   title?: string;
   subtitle?: string;
   heading: string;
@@ -18,9 +19,9 @@ export interface StartProps {
   noBorderRadius?: boolean;
   onClickCTA?: () => void;
   CTALabel?: string;
-}
+};
 
-const StartCard: React.FC<StartProps> = ({
+const StartCard: React.FC<StartCardProps> = ({
   title,
   subtitle,
   heading,
@@ -34,7 +35,7 @@ const StartCard: React.FC<StartProps> = ({
   noBorderRadius,
   onClickCTA,
   CTALabel,
-}: StartProps) => {
+}: StartCardProps) => {
   return (
     <Card noBorderRadius={noBorderRadius} customStyle="gap-1">
       <div className={tw(`flex justify-center w-full`)}>
@@ -43,7 +44,7 @@ const StartCard: React.FC<StartProps> = ({
       </div>
       {showMainArea && (
         <div className={tw(`w-full px-4 ${hideMainAreaOnMobile && 'hidden'}`)}>
-          {!!image && <img className={tw(`max-w-1/2 mx-auto py-3 pr-2`)} src={image} />}
+          {!!image && <img alt={image} className={tw(`max-w-1/2 mx-auto py-3 pr-2`)} src={image} />}
           {!!icon && icon}
           <Text variant="h6" align="center">
             {heading}

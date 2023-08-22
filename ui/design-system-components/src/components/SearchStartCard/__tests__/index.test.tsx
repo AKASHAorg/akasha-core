@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
 import { customRender } from '@akashaorg/design-system-core/src/test-utils';
+
 import SearchStartCard from '../';
 
 describe('<SearchStartCard /> Component', () => {

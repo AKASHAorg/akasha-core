@@ -1,4 +1,4 @@
-type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c5y3il3anqdaunpn9y34npyc461t4oo93x63fwikxrsrfkk4c6w") {
+type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c58vvx12mfk81er1aq06atqjan89i6qcb56ntqvjovyn2uryzuf") {
   id: ID!
 }
 
@@ -9,17 +9,23 @@ type BlockRecord{
  # block: ContentBlock! @relationDocument(property: "blockID")
 }
 
-type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c51hkop357p1t1mvh4d0gjanynwjc9cvebb43vft4nb7kp8y511") {
+type EmbeddedType{
+  label: String! @string(minLength:3, maxLength: 32)
+  embeddedID: StreamID!
+}
+
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c9l8sxje9238fz8hx6u6whu9njmww96wn04c6uj0lillf9jygno") {
   id: ID!
 }
 
-type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}]) {
+type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}, {path: "nsfw"}]) {
   author: DID! @documentAccount
   content: [BlockRecord!]! @list(maxLength: 10)
   tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32)
   mentions: [StreamID] @list(maxLength: 10)
   version: CommitID! @documentVersion
-  embeddedBeam: StreamID
+  embeddedBeam: EmbeddedType
   active: Boolean!
   createdAt: DateTime!
+  nsfw: Boolean
 }

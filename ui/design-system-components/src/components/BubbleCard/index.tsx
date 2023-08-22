@@ -1,34 +1,33 @@
 import * as React from 'react';
-import { Descendant } from 'slate';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
-import { formatRelativeTime, ILocale } from '../../utils/time';
-import ReadOnlyEditor from '../ReadOnlyEditor';
 import dayjs from 'dayjs';
 import { tw } from '@twind/core';
+import { Descendant } from 'slate';
 
-export interface IBubbleCardProps {
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import ReadOnlyEditor from '../ReadOnlyEditor';
+
+import { formatRelativeTime, ILocale } from '../../utils/time';
+
+export type BubbleCardProps = {
   locale: ILocale;
   senderName?: string;
   youLabel: string;
   content?: Descendant[];
-  isRead?: boolean;
   isFromLoggedUser?: boolean;
   chatTimestamp?: string;
   handleMentionClick?: (pubKey: string) => void;
   handleTagClick?: (name: string) => void;
   handleLinkClick?: (url: string) => void;
-}
+};
 
-const BubbleCard: React.FC<IBubbleCardProps> = props => {
+const BubbleCard: React.FC<BubbleCardProps> = props => {
   const {
     locale,
     senderName,
     youLabel,
     content,
-    isRead,
     isFromLoggedUser,
     chatTimestamp,
     handleMentionClick,
@@ -38,7 +37,6 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
 
   const time = dayjs(+chatTimestamp / 1000000).format('HH:mm');
   const relativeTime = formatRelativeTime(+chatTimestamp / 1000000, locale);
-  const iconType = isRead ? 'checkDouble' : 'checkSimple';
 
   return (
     <div>

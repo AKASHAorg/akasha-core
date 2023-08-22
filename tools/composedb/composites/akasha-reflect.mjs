@@ -1,16 +1,16 @@
 export default function compose (akashaBeamId) {
     return `
 type ProviderValue{
-  provider: String! @string(minLength: 6, maxLength: 100)
-  property: String! @string(minLength: 2, maxLength: 40)
-  value: String! @string(minLength: 3, maxLength: 2000)
+  propertyType: String! @string(minLength: 2, maxLength: 100)
+  label: String! @string(minLength: 6, maxLength: 100)
+  value: String! @string(minLength: 3, maxLength: 3000)
 }
 
 type AkashaBeam @loadModel(id: "${akashaBeamId}") {
   id: ID!
 }
 
-type AkashaReflect @createModel(accountRelation: LIST, description: "A Reflection on a Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}, {path: "reflection"}, {path: "isReply"}]) {
+type AkashaReflect @createModel(accountRelation: LIST, description: "A Reflection on a Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}, {path: "reflection"}, {path: "isReply"}, {path: "nsfw"}]) {
     beamID: StreamID! @documentReference(model: "AkashaBeam")
     beam: AkashaBeam! @relationDocument(property: "beamID")
     author: DID! @documentAccount
@@ -22,5 +22,6 @@ type AkashaReflect @createModel(accountRelation: LIST, description: "A Reflectio
     isReply: Boolean!
     active: Boolean!
     createdAt: DateTime!
+    nsfw: Boolean
 }`
 }

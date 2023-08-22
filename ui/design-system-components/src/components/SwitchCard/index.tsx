@@ -4,15 +4,11 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export type ISwitchCard = {
+export type SwitchCardProps = {
   loggedUser: string | null;
-  hasIcon?: boolean;
   activeButton: string;
   buttonValues: { value: string; label: string }[];
-  onIconClick?: () => void;
   onTabClick: (value: string) => () => void;
-  style?: string;
-  className?: string;
 };
 
 export interface IStickyBoxProps {
@@ -29,17 +25,8 @@ const StickyBox: React.FC<IStickyBoxProps> = props => {
   );
 };
 
-const SwitchCard: React.FC<ISwitchCard> = props => {
-  const {
-    loggedUser,
-    activeButton,
-    // hasIcon = false,
-    buttonValues,
-    onIconClick,
-    onTabClick,
-    style,
-    className,
-  } = props;
+const SwitchCard: React.FC<SwitchCardProps> = props => {
+  const { loggedUser, activeButton, buttonValues, onTabClick } = props;
 
   const baseStyle = 'group p-2';
 

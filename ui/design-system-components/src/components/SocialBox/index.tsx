@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
+import { Menu } from '@headlessui/react';
+
+import { Profile } from '@akashaorg/typings/ui';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { Menu } from '@headlessui/react';
+
 import { truncateMiddle } from '../../utils/string-utils';
-import { Profile } from '@akashaorg/typings/ui';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export interface ISocialBox {
   socialData: Profile[];
@@ -40,8 +44,8 @@ const SocialBox: React.FC<ISocialBox> = props => {
           }}
         />
       )}
-      <a
-        className={tw(`flex no-underline`)}
+      <Button
+        plain={true}
         onClick={() => {
           if (onClickUser) {
             onClickUser(socialData[0].id);
@@ -51,7 +55,7 @@ const SocialBox: React.FC<ISocialBox> = props => {
         {socialData[0].name ||
           // socialData[0].userName ||
           truncateMiddle(socialData[0]?.id, 3, 3)}
-      </a>
+      </Button>
 
       {socialData.length > 1 ? (
         <div className={tw(`flex flex-row gap-1`)}>
@@ -59,9 +63,7 @@ const SocialBox: React.FC<ISocialBox> = props => {
 
           <Menu>
             <Menu.Button>
-              <a className={tw(`flex no-underline`)}>{`${
-                socialData?.length - 1
-              } ${othersLabel}`}</a>
+              <Text variant="subtitle1">{`${socialData?.length - 1} ${othersLabel}`}</Text>
             </Menu.Button>
             <Menu.Items>
               <div

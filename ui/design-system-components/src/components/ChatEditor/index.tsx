@@ -1,9 +1,10 @@
 import * as React from 'react';
-import EditorBox, { IEditorBox } from '../Editor';
-import { editorDefaultValue } from '../Editor/initialValue';
 import { tw } from '@twind/core';
 
-const ChatEditor: React.FC<Omit<IEditorBox, 'setEditorState'>> = props => {
+import EditorBox, { EditorBoxProps } from '../Editor';
+import { editorDefaultValue } from '../Editor/initialValue';
+
+const ChatEditor: React.FC<Omit<EditorBoxProps, 'setEditorState'>> = props => {
   const {
     profileId,
     avatar,
