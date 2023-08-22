@@ -45,13 +45,13 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     [TAGS]: routes[TAGS],
     [REFLECT]: routes[REFLECT],
   },
-  title: 'Akasha World',
-  logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
+  title: 'AKASHA World',
+  logo: { type: LogoTypeSource.ICON, value: 'antenna' },
   i18nNamespace: ['app-akasha-integration', 'ui-lib-feed'],
   menuItems: {
-    label: 'Social',
+    label: 'Antenna',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'akasha' },
+    logo: { type: LogoTypeSource.ICON, value: 'antenna' },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [
       {

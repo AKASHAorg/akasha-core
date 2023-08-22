@@ -1,14 +1,18 @@
 import React from 'react';
+
 import { EntityTypes } from '@akashaorg/typings/ui';
-import { formatRelativeTime } from '../../utils/time';
+
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import BasicInfoCard from '@akashaorg/design-system-core/lib/components/BasicInfoCard';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import ProfileAvatarNotificationApp from './ProfileAvatarNotificationApp';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
-export interface INotificationsCard {
+import BasicInfoCard from './basic-info-card';
+import ProfileAvatarNotificationApp from './profile-avatar-notification-app';
+
+import { formatRelativeTime } from '../../utils/time';
+
+export type NotificationsCardProps = {
   // data
   notifications: Record<string, unknown>[];
   isFetching?: boolean;
@@ -29,9 +33,9 @@ export interface INotificationsCard {
   handleEntryClick: (itemId: string, itemType: EntityTypes) => void;
   handleProfileClick: (pubKey: string) => void;
   loggedIn?: boolean;
-}
+};
 
-const NotificationsCard: React.FC<INotificationsCard> = props => {
+const NotificationsCard: React.FC<NotificationsCardProps> = props => {
   const {
     notifications,
     isFetching,
@@ -202,6 +206,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     </BasicCardBox>
   );
 };
+
 NotificationsCard.defaultProps = {
   mentionedPostLabel: 'mentioned you in a post',
   mentionedCommentLabel: 'mentioned you in a comment',

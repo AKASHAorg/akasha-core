@@ -194,22 +194,25 @@ class AWF_IC_REGISTRY {
       return ethersUtils.id(el.name || '');
     });
   }
-  @validate(z.array(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial()))
-  async getIntegrationsInfo(opt: { name?: string; id?: string }[]) {
-    const normalizedIDs = this._normalizeIDs(opt);
-    return this._gql.getAPI().GetIntegrationInfo({ integrationIDs: normalizedIDs });
-  }
-  @validate(z.array(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial()))
-  getLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
-    const normalizedIDs = this._normalizeIDs(opt);
-    return this._gql.getAPI().GetLatestRelease({ integrationIDs: normalizedIDs });
-  }
-
-  public getContracts() {
-    return {
-      IntegrationRegistryInstance: this._IntegrationRegistryInstance,
-    };
-  }
+  // @validate(z.array(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial()))
+  // async getIntegrationsInfo(opt: { name?: string; id?: string }[]) {
+  //   const normalizedIDs = this._normalizeIDs(opt);
+  //   // return this._gql.getAPI().GetIntegrationInfo({ integrationIDs: normalizedIDs });
+  //   return Promise.resolve({});
+  // }
+  // }
+  // @validate(z.array(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial()))
+  // async getLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
+  //   const normalizedIDs = this._normalizeIDs(opt);
+  //   // return this._gql.getAPI().GetLatestRelease({ integrationIDs: normalizedIDs })normalizedIDs;
+  //   return Promise.resolve();
+  // }
+  //
+  // public getContracts() {
+  //   return {
+  //     IntegrationRegistryInstance: this._IntegrationRegistryInstance,
+  //   };
+  // }
 }
 
 export default AWF_IC_REGISTRY;

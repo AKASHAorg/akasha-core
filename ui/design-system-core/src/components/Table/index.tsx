@@ -7,7 +7,7 @@ import Icon from '../Icon';
 
 type TDataValues = string[];
 
-export interface ITableProps {
+export type TableProps = {
   tableTitle?: string;
   theadValues?: string[];
   rows: TDataValues[];
@@ -15,9 +15,9 @@ export interface ITableProps {
   clickableRows?: boolean;
   customTdStyle?: string;
   onRowClick?: (contentId: string) => void;
-}
+};
 
-const Table: React.FC<ITableProps> = props => {
+const Table: React.FC<TableProps> = props => {
   const {
     tableTitle,
     theadValues,

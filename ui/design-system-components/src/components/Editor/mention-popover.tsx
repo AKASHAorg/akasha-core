@@ -40,7 +40,6 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
           >
             <ProfileAvatarButton
               label={value.name}
-              info={value.name}
               avatarImage={value.avatar}
               profileId={value.did.id}
             />

@@ -17,8 +17,8 @@ const SearchAppFilter: React.FC<SearchAppFilterProps> = ({
   resetLabel = 'Reset',
 }) => {
   return (
-    <div className={tw('flex justify-between items-center')}>
-      <div className={tw('w-2/6 mt-6')}>
+    <div className={tw('flex justify-between items-center my-6')}>
+      <div className={tw('w-2/6')}>
         <DropDown
           menuItems={dropdownMenuItems}
           selected={selected}

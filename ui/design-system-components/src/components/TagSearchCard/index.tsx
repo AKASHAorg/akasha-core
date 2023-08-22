@@ -1,18 +1,19 @@
 import React from 'react';
+
 import { ITag } from '@akashaorg/typings/ui';
+
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 
-export type ITagSearchCard = {
+export type TagSearchCardProps = {
   // data
   tag: ITag | null;
   subscribedTags: string[];
   loggedEthAddress?: string | null;
   // labels
-  mentionsLabel?: string;
   subscribeLabel?: string;
   unsubscribeLabel?: string;
   subscribedLabel?: string;
@@ -24,14 +25,13 @@ export type ITagSearchCard = {
   handleUnsubscribeTag: (tagName: string) => void;
 };
 
-const TagSearchCard: React.FC<ITagSearchCard> = props => {
+const TagSearchCard: React.FC<TagSearchCardProps> = props => {
   const {
     tag,
     subscribedTags,
     subscribeLabel,
     subscribedLabel,
     unsubscribeLabel,
-    mentionsLabel,
     tagAnchorLink,
     onClickTag,
     handleSubscribeTag,
@@ -74,7 +74,8 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
         <Box>
           <DuplexButton
             inactiveLabel={subscribeLabel}
-            activeLabel={unsubscribeLabel}
+            activeLabel={subscribedLabel}
+            activeHoverLabel={unsubscribeLabel}
             onClickInactive={() => handleSubscribeTag(tag.name)}
             onClickActive={() => handleUnsubscribeTag(tag.name)}
             active={subscribedTags?.includes(tag.name)}
@@ -86,7 +87,7 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
   );
 };
 TagSearchCard.defaultProps = {
-  mentionsLabel: 'beams',
+  // mentionsLabel: 'beams',
   subscribeLabel: 'Subscribe',
   subscribedLabel: 'Subscribed',
   unsubscribeLabel: 'Unsubscribe',

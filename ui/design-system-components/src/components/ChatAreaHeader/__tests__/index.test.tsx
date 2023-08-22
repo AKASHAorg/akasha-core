@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import ChatAreaHeader from '..';
-
 import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
+
+import ChatAreaHeader from '..';
 
 describe('<ChatAreaHeader /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const name = 'Estelle Collier';
-  const username = 'estellecollier';
 
   const handleClickAvatar = jest.fn();
 

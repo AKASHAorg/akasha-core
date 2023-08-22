@@ -1,13 +1,12 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { Logger } from '@akashaorg/awf-sdk';
-import { Comment, UserProfile } from '@akashaorg/typings/sdk/graphql-types';
-import { EntityTypes, IEntryData, IPublishData, ModerationStatus } from '@akashaorg/typings/ui';
+import { Comment } from '@akashaorg/typings/sdk/graphql-types';
+import { EntityTypes, IEntryData, IPublishData } from '@akashaorg/typings/ui';
 
 import { getMediaUrl } from './media-utils';
 import { Profile } from '@akashaorg/typings/ui';
-import { Reflect, Beam } from '@akashaorg/typings/sdk/graphql-types-new';
-import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import {
+import type { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import type {
   GetBeamsQuery,
   GetReflectionsFromBeamQuery,
 } from '@akashaorg/typings/sdk/graphql-operation-types-new';
@@ -125,38 +124,39 @@ export const serializeSlateToBase64 = (slateContent: unknown) => {
 //   rebeamsCount: number;
 //   tags?: Array<string | null> | null;
 // };
-type ReflectionsFromBeam = Extract<GetReflectionsFromBeamQuery['node'], { reflections }>;
+type ReflectionsFromBeam = Extract<GetReflectionsFromBeamQuery['node'], { reflection }>;
 type MergedEntries =
   | Omit<
       ReflectionsFromBeam['reflections']['edges'][0]['node'] & { type: EntityTypes.REFLECT },
       'id'
     >
-  | (GetBeamsQuery['beamIndex']['edges'][0]['node'] & { type: EntityTypes.BEAM });
+  | (GetBeamsQuery['akashaBeamIndex']['edges'][0]['node'] & { type: EntityTypes.BEAM });
 type ExtractedEntries = Extract<MergedEntries, { type: EntityTypes }>;
 
 export const mapEntry = (entry: ExtractedEntries, logger?: Logger) => {
-  const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
-  const linkPreviewData = entry.content.find(elem => elem.property === PROPERTY_LINK_PREVIEW);
-  const imagesData = entry.content.find(elem => elem.property === PROPERTY_IMAGES);
-  let content;
+  const content = Object.hasOwn(entry.content, 'propertyType') ? entry.content : [];
+  const slateContent = content.find(elem => elem.propertyType === PROPERTY_SLATE_CONTENT);
+  const linkPreviewData = content.find(elem => elem.propertyType === PROPERTY_LINK_PREVIEW);
+  const imagesData = content.find(elem => elem.propertyType === PROPERTY_IMAGES);
+
+  let parsedContent;
   let linkPreview;
   let images;
   let quotedByAuthors: IEntryData['author'][];
   let quotedEntry;
-  const isRemoved = entry.content.length === 1 && entry.content[0].property === 'removed';
+  const isRemoved = !entry.active;
 
   if (isRemoved) {
-    content = entry.content;
-    /* [
+    parsedContent = [
       {
         type: 'paragraph',
         children: [{ text: 'Deleted' }],
       },
-    ]; */
+    ];
   } else {
     try {
       const decodedContent = decodeb64SlateContent(slateContent.value, logger, true);
-      content = decodedContent.map(node => {
+      parsedContent = decodedContent.map(node => {
         if (node.type === 'image' && node.url?.startsWith(MEDIA_URL_PREFIX)) {
           node.url = getMediaUrl(node.url?.replace(MEDIA_URL_PREFIX, ''))?.originLink;
         }
@@ -171,7 +171,7 @@ export const mapEntry = (entry: ExtractedEntries, logger?: Logger) => {
       if (logger) {
         logger.error(`Error serializing base64 to slateContent: ${error.message}`);
       }
-      content = [
+      parsedContent = [
         {
           type: 'paragraph',
           children: [{ text: 'Error serializing base64 to slateContent' }],
@@ -290,7 +290,7 @@ export const mapEntry = (entry: ExtractedEntries, logger?: Logger) => {
       // },
     },
     isRemoved,
-    slateContent: content,
+    slateContent: parsedContent,
     linkPreview,
     images,
     quote: quotedEntry,

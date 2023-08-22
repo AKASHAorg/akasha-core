@@ -1,8 +1,9 @@
 
-fragment UserProfileFragment on Profile{
+fragment UserProfileFragment on AkashaProfile{
   id
   did{
     id
+    isViewer
   }
   name
   links{
@@ -45,11 +46,12 @@ fragment UserProfileFragment on Profile{
   }
 
   createdAt
+  nsfw
 }
 # id of the profile document
 query GetProfileByID($id: ID!) {
   node(id: $id) {
-    ...on Profile {
+    ...on AkashaProfile {
       ...UserProfileFragment
     }
   }
@@ -58,7 +60,7 @@ query GetProfileByID($id: ID!) {
 query GetProfileByDid($id: ID!) {
   node(id: $id) {
     ...on CeramicAccount {
-      profile {
+      akashaProfile {
         ...UserProfileFragment
       }
       isViewer
@@ -66,8 +68,8 @@ query GetProfileByDid($id: ID!) {
   }
 }
 
-query GetProfiles($after: String, $before: String, $first: Int, $last: Int){
-  profileIndex(after: $after, before: $before, first: $first, last: $last ){
+query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput ){
+  akashaProfileIndex(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting: $sorting ){
     edges {
       node {
         ...UserProfileFragment
@@ -84,7 +86,7 @@ query GetProfiles($after: String, $before: String, $first: Int, $last: Int){
 
 # saved interests for all documents, might be useful at some point
 query GetInterests($after: String, $before: String, $first: Int, $last: Int){
-  interestsIndex(after: $after, before: $before, first: $first, last: $last ){
+  akashaProfileInterestsIndex(after: $after, before: $before, first: $first, last: $last ){
     edges {
       node {
         topics {
@@ -110,7 +112,7 @@ query GetInterests($after: String, $before: String, $first: Int, $last: Int){
 query GetInterestsByDid($id: ID!){
   node(id: $id){
     ... on CeramicAccount{
-      interests {
+      akashaProfileInterests {
         topics {
           value
           labelType
@@ -128,7 +130,7 @@ query GetInterestsByDid($id: ID!){
 # get interests from a specific Interests document id
 query GetInterestsById($id: ID!){
   node(id: $id){
-    ... on Interests{
+    ... on AkashaProfileInterests{
       topics {
         value
         labelType
@@ -141,14 +143,15 @@ query GetInterestsById($id: ID!){
   }
 }
 # get following
-query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput){
   node(id: $id){
     ... on CeramicAccount{
-      followList(after: $after, before: $before, first: $first, last: $last){
+      akashaFollowList(after: $after, before: $before, first: $first, last: $last, filters: {where: {isFollowing: {equalTo: true}}}, sorting: $sorting){
         edges {
           node {
             id
             isFollowing
+            profileID
             profile {
              ...UserProfileFragment
             }
@@ -167,15 +170,16 @@ query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: I
 }
 
 # get followers
-query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput){
   node(id: $id){
     ... on CeramicAccount{
-      profile {
-        followers(after: $after, before: $before, first: $first, last: $last){
+      akashaProfile {
+        followers(after: $after, before: $before, first: $first, last: $last, filters: {where: {isFollowing: {equalTo: true}}}, sorting: $sorting){
           edges {
             node {
               id
               isFollowing
+              profileID
               profile {
                 ...UserProfileFragment
               }
@@ -197,15 +201,43 @@ query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: I
 
 query GetMyProfile{
   viewer {
-    profile {
+    akashaProfile {
       ...UserProfileFragment
     }
   }
 }
 
+query GetFollowDocument($follower: ID!, $following: String!){
+  node(id: $follower){
+    ... on CeramicAccount{
+      akashaProfile {
+        followers(last: 1, filters: {where: {profileID: {equalTo: $following}}}){
+          edges {
+            node {
+              id
+              isFollowing
+              profileID
+              profile {
+                ...UserProfileFragment
+              }
+            }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+      isViewer
+    }
+  }
+}
+
 # create new Profile document attached to did
-mutation CreateProfile($i: CreateProfileInput!){
-  createProfile(input: $i){
+mutation CreateProfile($i: CreateAkashaProfileInput!){
+  createAkashaProfile(input: $i){
     document {
       ...UserProfileFragment
     }
@@ -214,8 +246,8 @@ mutation CreateProfile($i: CreateProfileInput!){
 }
 
 # update an existing Profile document
-mutation UpdateProfile($i: UpdateProfileInput!){
-  updateProfile(input: $i){
+mutation UpdateProfile($i: UpdateAkashaProfileInput!){
+  updateAkashaProfile(input: $i){
     document {
       ...UserProfileFragment
     }
@@ -224,8 +256,8 @@ mutation UpdateProfile($i: UpdateProfileInput!){
 }
 
 # create an Interests document for the authenticated Did account
-mutation CreateInterests($i: CreateInterestsInput!){
-  createInterests(input: $i){
+mutation CreateInterests($i: CreateAkashaProfileInterestsInput!){
+  createAkashaProfileInterests(input: $i){
     document {
       topics {
         value
@@ -241,8 +273,8 @@ mutation CreateInterests($i: CreateInterestsInput!){
 }
 
 # update an existing Interests document for the authenticated Did account
-mutation UpdateInterests($i: UpdateInterestsInput!){
-  updateInterests(input: $i){
+mutation UpdateInterests($i: UpdateAkashaProfileInterestsInput!){
+  updateAkashaProfileInterests(input: $i){
     document {
       topics {
         value
@@ -257,8 +289,8 @@ mutation UpdateInterests($i: UpdateInterestsInput!){
   }
 }
 
-mutation CreateFollow($i: CreateFollowInput!){
-  createFollow(input: $i){
+mutation CreateFollow($i: CreateAkashaFollowInput!){
+  createAkashaFollow(input: $i){
     document {
       isFollowing
       profile {
@@ -272,8 +304,8 @@ mutation CreateFollow($i: CreateFollowInput!){
   }
 }
 
-mutation UpdateFollow($i: UpdateFollowInput!){
-  updateFollow(input: $i){
+mutation UpdateFollow($i: UpdateAkashaFollowInput!){
+  updateAkashaFollow(input: $i){
     document {
       isFollowing
       profile {

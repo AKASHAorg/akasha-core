@@ -7,21 +7,26 @@ import {
   useGetInterestsByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
-import { EngagementType, NavigateToParams } from '@akashaorg/typings/ui';
+import { EngagementType, NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 type ProfileStatsPresentationProps = {
   profileId: string;
   navigateTo: (args: NavigateToParams) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
   profileId,
   navigateTo,
+  showLoginModal,
 }) => {
   const { t } = useTranslation('app-profile');
 
   const loginQuery = useGetLogin();
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data?.id;
+  }, [loginQuery.data]);
 
   /*@TODO: replace the following hook calls when stats are supported via indexing */
   const beams = useGetBeamsByAuthorDidQuery(
@@ -45,36 +50,29 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
   );
 
   const beamsTotal =
-    beams.data && 'beamList' in beams.data ? beams.data?.beamList?.edges?.length || 0 : 0;
+    beams.data && 'akashaBeamList' in beams.data
+      ? beams.data?.akashaBeamList?.edges?.length || 0
+      : 0;
 
   const interestsTotal =
-    interests.data && 'interests' in interests.data
-      ? interests.data?.interests?.topics?.length || 0
+    interests.data && 'akashaProfileInterests' in interests.data
+      ? interests.data?.akashaProfileInterests?.topics?.length || 0
       : 0;
 
   const followersTotal =
-    followers.data && 'profile' in followers.data
-      ? followers.data?.profile?.followers?.edges?.length || 0
+    followers.data && 'akashaProfile' in followers.data
+      ? followers.data?.akashaProfile?.followers?.edges?.length || 0
       : 0;
 
   const followingTotal =
-    following.data && 'followList' in following.data
-      ? following.data?.followList?.edges?.length || 0
+    following.data && 'akashaFollowList' in following.data
+      ? following.data?.akashaFollowList?.edges?.length || 0
       : 0;
 
-  const checkAuth = (cb: () => void) => () => {
-    if (!loginQuery.data?.id && navigateTo) {
-      /*TODO: convert to login modal once it's fixed */
-      navigateTo({
-        appName: '@akashaorg/app-auth-ewa',
-        getNavigationUrl: navRoutes => navRoutes.CONNECT,
-      });
-      return;
-    }
-    return cb();
-  };
-
   const handleNavigateToProfilePosts = () => {
+    if (!isLoggedIn) {
+      return showLoginModal();
+    }
     navigateTo({
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: routes => `${routes.ProfileFeed}/${profileId}`,
@@ -82,6 +80,9 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
   };
 
   const onStatClick = (stat: EngagementType) => () => {
+    if (!isLoggedIn) {
+      return showLoginModal();
+    }
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}/${stat}`,
@@ -93,21 +94,22 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
       posts={{
         label: t('Beams'),
         total: beamsTotal,
-        onClick: checkAuth(handleNavigateToProfilePosts),
+        onClick: handleNavigateToProfilePosts,
       }}
       interests={{
         label: t('Interests'),
         total: interestsTotal,
+        onClick: onStatClick('interests'),
       }}
       followers={{
         label: t('Followers'),
         total: followersTotal,
-        onClick: checkAuth(onStatClick('followers')),
+        onClick: onStatClick('followers'),
       }}
       following={{
         label: t('Following'),
         total: followingTotal,
-        onClick: checkAuth(onStatClick('following')),
+        onClick: onStatClick('following'),
       }}
     />
   );

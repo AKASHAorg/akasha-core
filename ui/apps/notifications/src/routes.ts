@@ -5,9 +5,9 @@ export const SHOW_NOTIFICATIONS_PAGE = 'ShowNotificationsPage';
 export const SETTINGS_PAGE = 'SettingsPage';
 
 export default {
-  [CUSTOMIZE_NOTIFICATION_WELCOME_PAGE]: `/customize-notifications/welcome`,
+  [SHOW_NOTIFICATIONS_PAGE]: `/notifications`,
   [CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]: `/customize-notifications/notification-options`,
   [CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]: `/customize-notifications/confirmation`,
-  [SHOW_NOTIFICATIONS_PAGE]: '/',
+  [CUSTOMIZE_NOTIFICATION_WELCOME_PAGE]: `/`,
   [SETTINGS_PAGE]: '/settings',
 };

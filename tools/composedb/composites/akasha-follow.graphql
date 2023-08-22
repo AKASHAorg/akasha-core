@@ -1,0 +1,11 @@
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c9l8sxje9238fz8hx6u6whu9njmww96wn04c6uj0lillf9jygno"){
+    id: ID!
+  }
+
+
+  type AkashaFollow @createModel(accountRelation: LIST, description: "Following list") @createIndex(fields:[{path:"isFollowing"}, {path:"profileID"}]) {
+    isFollowing: Boolean!
+    profileID: StreamID! @documentReference(model: "AkashaProfile")
+    profile: AkashaProfile! @relationDocument(property: "profileID")
+    did: DID! @documentAccount
+  }

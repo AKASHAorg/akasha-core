@@ -4,7 +4,7 @@ import Avatar from '../Avatar';
 import Button from '../Button';
 import Accordion from '../Accordion';
 
-export interface ISidebarProps {
+export type SidebarProps = {
   guestTitle: string;
   guestSubtitle: string;
   ctaText: string;
@@ -13,9 +13,9 @@ export interface ISidebarProps {
   loggedUser: Record<string, string>;
   listItems: Record<string, any>[];
   footerIcons: Record<string, any>[];
-}
+};
 
-const Sidebar: React.FC<ISidebarProps> = props => {
+const Sidebar: React.FC<SidebarProps> = props => {
   const {
     guestTitle,
     guestSubtitle,

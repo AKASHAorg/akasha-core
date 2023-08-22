@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useClickAway } from 'react-use';
+import { tw } from '@twind/core';
+
 import Icon from '../Icon';
+import Text from '../Text';
+
 import MonthSelector from './MonthSelector';
 import DateSelector from './DateSelector';
-import { tw } from '@twind/core';
-import Text from '../Text';
 
 const DatePicker: React.FC = () => {
   const [month, setMonth] = useState(new Date().getMonth());

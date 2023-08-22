@@ -2,7 +2,7 @@ import * as React from 'react';
 import BaseEntryPage from './common/base-page';
 import { useParams } from 'react-router-dom';
 import { RootComponentProps, ModalNavigationOptions, EntityTypes } from '@akashaorg/typings/ui';
-import { usePost, mapEntry, useDummyQuery } from '@akashaorg/ui-awf-hooks';
+import { useDummyQuery } from '@akashaorg/ui-awf-hooks';
 
 type PostPageProps = {
   userId?: string;

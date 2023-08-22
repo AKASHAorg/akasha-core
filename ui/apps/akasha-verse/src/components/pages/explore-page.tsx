@@ -10,20 +10,28 @@ import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import { INFO } from '../../routes';
 
 export interface IExplorePage extends RootComponentProps {
-  installableApps: IntegrationReleaseInfoFragmentFragment[];
-  installedAppsInfo?: IntegrationReleaseInfo[];
+  installableApps: GetAppsQuery['akashaAppIndex']['edges'];
+  installedAppsInfo?: GetAppsByIdQuery['node'][];
   isFetching?: boolean;
   reqError?: Error;
   isUserLoggedIn?: boolean;
 }
 
 const ExplorePage: React.FC<IExplorePage> = props => {
-  const { installableApps, isFetching, reqError, installedAppsInfo, isUserLoggedIn } = props;
+  const {
+    installableApps,
+    isFetching,
+    reqError,
+    installedAppsInfo,
+    isUserLoggedIn,
+    plugins,
+    navigateToModal,
+  } = props;
   const sdk = getSDK();
   const { t } = useTranslation('app-akasha-verse');
 
@@ -51,14 +59,14 @@ const ExplorePage: React.FC<IExplorePage> = props => {
   const uninstallAppReq = useUninstallApp();
 
   const handleAppClick = (app: IntegrationReleaseInfo) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });
   };
 
   const handleAppInstall = (integrationName: string) => {
-    props.navigateToModal({
+    navigateToModal({
       name: 'install-modal',
       integrationName: integrationName,
     });
@@ -102,7 +110,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
               <InfoCard
                 titleLabel={t('Welcome to the Integration Centre!')}
                 bodyLabel={t(
-                  'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to Akasha World.',
+                  'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to AKASHA World.',
                 )}
                 titleVariant="h4"
                 bodyVariant="body1"

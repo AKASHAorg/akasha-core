@@ -1,11 +1,13 @@
 import React, { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import SearchBar from '../SearchBar';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import SearchBar from '../SearchBar';
 
 export type SearchStartProps = {
   inputPlaceholderLabel: string;

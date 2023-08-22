@@ -10,6 +10,7 @@ describe('< WelcomePage /> component', () => {
       description="Get the latest updates about what’s going on with your world. You can personalize your notifications and get only what you want to see!"
       leftButtonLabel="Skip"
       rightButtonLabel="Customize your notifications"
+      isLoggedIn={true}
       {...genAppProps()}
     />
   );

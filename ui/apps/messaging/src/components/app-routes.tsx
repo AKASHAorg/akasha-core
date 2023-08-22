@@ -13,7 +13,7 @@ import { db } from '../db/messages-db';
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
   const loggedProfileData = profileDataReq.data;
@@ -59,7 +59,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
     <Router basename={props.baseRouteName}>
       <Helmet>
-        <title>Message App | Akasha World</title>
+        <title>Message App | AKASHA World</title>
       </Helmet>
       <Routes>
         <Route

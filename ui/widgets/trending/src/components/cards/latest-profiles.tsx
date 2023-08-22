@@ -78,7 +78,6 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                   <ProfileAvatarButton
                     profileId={profile.did.id}
                     label={profile.name}
-                    info={profile.did.id}
                     size="md"
                     avatarImage={getProfileImageVersionsWithMediaUrl(profile.avatar)}
                     onClick={() => onClickProfile(profile.did.id)}

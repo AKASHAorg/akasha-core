@@ -2,7 +2,8 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
 import { customRender } from '@akashaorg/design-system-core/src/test-utils';
-import StartCard from '../index';
+
+import StartCard from '../';
 
 describe('<StartCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});

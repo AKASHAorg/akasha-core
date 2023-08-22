@@ -7,10 +7,8 @@ import EntryCardHidden from '@akashaorg/design-system-components/lib/components/
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import { Logger } from '@akashaorg/awf-sdk';
-import { useAnalytics, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { useInfiniteComments } from '@akashaorg/ui-awf-hooks';
-import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
+import { useAnalytics, useDummyQuery, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   RootComponentProps,
@@ -59,11 +57,8 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     return entryReq.isSuccess && entryData?.reported;
   }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
   // @TODO replace with new hooks
-  const reqComments = useInfiniteComments({ limit: 15, postID: postId }, !commentId);
-  const reqReplies = useInfiniteReplies(
-    { limit: 15, postID: postId, commentID: commentId },
-    !!commentId,
-  );
+  const reqComments = useDummyQuery([]);
+  const reqReplies = useDummyQuery([]);
   const reqCommentsOrReplies = commentId ? reqReplies : reqComments;
   const [analyticsActions] = useAnalytics();
 
@@ -76,7 +71,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
   const loggedProfileData = profileDataReq.data;

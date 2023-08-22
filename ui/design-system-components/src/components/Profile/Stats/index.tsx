@@ -1,10 +1,12 @@
 import React from 'react';
+
+import { IconType } from '@akashaorg/typings/ui';
+
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
-import { IconType } from '@akashaorg/typings/ui';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 
 type Stat = {
   label: string;
@@ -51,9 +53,11 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
         <Stack justify="between">
           {stats.map((stat, index) => (
             <Button
-              onClick={+stat.total > 0 ? stat.onClick : undefined}
+              onClick={
+                +stat.total > 0 || stat.label.includes('Interests') ? stat.onClick : undefined
+              }
               key={stat.label + index}
-              disabled={+stat.total === 0}
+              disabled={+stat.total === 0 && !stat.label.includes('Interests')}
               plain
             >
               <Stack direction="column" align="center" customStyle="group">

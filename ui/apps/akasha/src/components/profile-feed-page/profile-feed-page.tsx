@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+
 import {
   useInfinitePostsByAuthor,
   useGetProfile,
@@ -42,24 +42,15 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-  const reqPosts = useInfinitePostsByAuthor(
-    pubKey,
-    15,
-    !!pubKey && !erroredHooks.includes('useInfinitePostsByAuthor'),
-  );
+  const reqPosts = Promise.resolve([]);
 
-  React.useEffect(() => {
-    if (reqPosts.status === 'error' && !erroredHooks.includes('useInfinitePostsByAuthor')) {
-      setErroredHooks(['useInfinitePostsByAuthor']);
-    }
-  }, [reqPosts, erroredHooks]);
+  const handleLoadMore = React.useCallback(() => {
+    return undefined;
+  }, []);
 
   const postPages = React.useMemo(() => {
-    if (reqPosts.data) {
-      return reqPosts.data.pages;
-    }
-    return [];
-  }, [reqPosts.data]);
+    return undefined;
+  }, []);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
@@ -91,20 +82,20 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     <Box customStyle="w-full">
       <Helmet.Helmet>
         <title>
-          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | Ethereum
+          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | AKASHA
           World
         </title>
       </Helmet.Helmet>
 
       <>
-        {reqPosts.isError && reqPosts.error && (
+        {false && (
           <ErrorLoader
             type="script-error"
             title="Cannot get posts for this profile"
-            details={(reqPosts.error as Error).message}
+            details={'placeholder error'}
           />
         )}
-        {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
+        {true && !postPages && <div>There are no posts!</div>}
         <FeedWidget
           queryKey="akasha-profile-beams-query-key"
           modalSlotId={layoutConfig.modalSlotId}

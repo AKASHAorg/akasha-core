@@ -1,11 +1,15 @@
 import React, { LegacyRef, PropsWithChildren, forwardRef } from 'react';
-import Stack from '../Stack';
 import { apply } from '@twind/core';
+
+import Stack from '../Stack';
+
 import { Color, Elevation, Padding, Radius } from '../types/common.types';
-import { getElevationClasses } from '../../utils/getElevationClasses';
-import { getRadiusClasses } from '../../utils/getRadiusClasses';
-import { getPaddingClasses } from '../../utils/getPaddingClasses';
-import { getColorClasses } from '../../utils/getColorClasses';
+import {
+  getColorClasses,
+  getElevationClasses,
+  getPaddingClasses,
+  getRadiusClasses,
+} from '../../utils';
 
 export type CardProps = {
   elevation?: Elevation;

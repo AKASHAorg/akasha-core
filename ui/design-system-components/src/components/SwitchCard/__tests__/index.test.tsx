@@ -2,13 +2,13 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import SwitchCard from '..';
 import { customRender } from '@akashaorg/design-system-core/src/test-utils';
+
+import SwitchCard from '..';
 
 describe('<SwitchCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const handleIconClick = jest.fn();
   const handleTabClick = jest.fn();
 
   beforeEach(() => {
@@ -20,7 +20,6 @@ describe('<SwitchCard /> Component', () => {
             { value: 'Delisted', label: 'Delisted' },
           ]}
           activeButton={'Kept'}
-          onIconClick={() => handleIconClick}
           onTabClick={() => handleTabClick}
           loggedUser="0x000"
         />,

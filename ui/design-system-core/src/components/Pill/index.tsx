@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../Button';
 import { ButtonProps } from '../Button/types';
 
-export interface IPillProps {
+export type PillProps = {
   label: ButtonProps['label'];
   size?: ButtonProps['size'];
   icon?: ButtonProps['icon'];
@@ -10,9 +10,9 @@ export interface IPillProps {
   customStyle?: ButtonProps['customStyle'];
   active?: boolean;
   onPillClick?: (active?: boolean) => void;
-}
+};
 
-const Pill: React.FC<IPillProps> = ({
+const Pill: React.FC<PillProps> = ({
   label,
   size,
   icon,
@@ -23,7 +23,7 @@ const Pill: React.FC<IPillProps> = ({
 }) => {
   const handlePillClick = () => {
     if (onPillClick) {
-      onPillClick();
+      onPillClick(!active);
     }
   };
 
@@ -33,7 +33,7 @@ const Pill: React.FC<IPillProps> = ({
       hover={false}
       label={label}
       size={size}
-      icon={icon}
+      icon={active ? icon : null}
       iconDirection={iconDirection}
       customStyle={customStyle}
       active={active}

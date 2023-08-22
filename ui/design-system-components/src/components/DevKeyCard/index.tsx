@@ -34,7 +34,7 @@ export type DevKeyCardProps = {
   onDeleteButtonClick?: () => void;
 };
 
-export const DevKeyCard: React.FC<DevKeyCardProps> = props => {
+const DevKeyCard: React.FC<DevKeyCardProps> = props => {
   const {
     item,
     nonameLabel,
@@ -134,3 +134,5 @@ export const DevKeyCard: React.FC<DevKeyCardProps> = props => {
     </Box>
   );
 };
+
+export default DevKeyCard;

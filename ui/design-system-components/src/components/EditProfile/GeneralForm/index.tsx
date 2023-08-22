@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
+import * as z from 'zod';
+import { useMedia } from 'react-use';
+import { tw, apply } from '@twind/core';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import { tw, apply } from '@twind/core';
+
 import { Header, HeaderProps } from './Header';
-import { useForm, Controller } from 'react-hook-form';
-import { useMedia } from 'react-use';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '../types';
-import * as z from 'zod';
 
 export type GeneralFormValues = {
   userName?: string;
@@ -85,6 +87,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           render={({ field: { name, value, onChange, ref } }) => (
             <>
               <TextField
+                id={'name'}
                 type="text"
                 name={name}
                 label={nameField.label}
@@ -104,6 +107,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
             name="userName"
             render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
               <TextField
+                id={'user-name'}
                 type="text"
                 name={name}
                 label={userNameField.label}
@@ -126,6 +130,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
               name="ens"
               render={({ field: { name, value, onChange, ref } }) => (
                 <TextField
+                  id={'ens'}
                   type="text"
                   name={name}
                   label={ensField.label}
@@ -147,6 +152,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
               name="ens"
               render={({ field: { name, value, onChange, ref } }) => (
                 <TextField
+                  id={'ens'}
                   type="text"
                   name={name}
                   label={ensField?.label}
@@ -169,6 +175,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           name="bio"
           render={({ field: { name, value, onChange, ref } }) => (
             <TextField
+              id={'bio'}
               name={name}
               label={bioField.label}
               value={value}

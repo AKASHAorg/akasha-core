@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Accordion, { IAccordionProps } from '@akashaorg/design-system-core/lib/components/Accordion';
+import Accordion, { AccordionProps } from '@akashaorg/design-system-core/lib/components/Accordion';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -20,7 +20,7 @@ export type ReportItemProps = PageHeaderProps &
     step: number;
     introLabel: string;
     subTextLabel: string;
-    accordionNodes: IAccordionProps[];
+    accordionNodes: AccordionProps[];
     reasonPlaceholderLabel: string;
   };
 

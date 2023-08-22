@@ -1,4 +1,5 @@
 import React from 'react';
+
 import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';

@@ -21,11 +21,11 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       ),
     });
   },
-  title: 'List | Akasha World',
+  title: 'List | AKASHA World',
   menuItems: {
     label: 'List',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
+    logo: { type: LogoTypeSource.ICON, value: 'SparklesIcon' },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [],
   },

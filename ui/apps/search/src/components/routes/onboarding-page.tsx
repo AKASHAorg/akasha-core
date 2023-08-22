@@ -23,9 +23,9 @@ interface OnboardingPageProps extends RootComponentProps {
 }
 
 const OnboardingPage: React.FC<OnboardingPageProps> = props => {
-  const { showLoginModal, loggedProfileData } = props;
+  const { loggedProfileData, plugins, showLoginModal } = props;
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-search');
 
@@ -114,7 +114,6 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
           handleButtonClick={handleShowMyFeed}
         />
         <OnboardingSuggestionsCard
-          loggedProfileId={loggedProfileData?.did?.id}
           topicsLabel={t('Topics to follow')}
           peopleLabel={t('People to follow')}
           followLabel={t('Follow')}

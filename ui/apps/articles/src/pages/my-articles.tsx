@@ -25,7 +25,7 @@ const MyArticles: React.FC<RootComponentProps> = props => {
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
   const loggedProfileData = profileDataReq.data;
@@ -125,7 +125,7 @@ const MyArticles: React.FC<RootComponentProps> = props => {
         onClickTab={handleClickTab}
       />
       <BasicCardBox customStyle="flex flex-row p-4 items-center justify-between border(secondaryLight dark:secondaryDark">
-        <Text variant="h6">{t(' ✨😸Share your articles with Akasha World 😸✨')}</Text>
+        <Text variant="h6">{t(' ✨😸Share your articles with AKASHA World 😸✨')}</Text>
         <Button variant="primary" label={t('Start writing')} onClick={handleClickWriteArticle} />
       </BasicCardBox>
       {activeTabIndex === 0 &&

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import NotificationsCard from '../';
 import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
+
+import NotificationsCard from '../';
 
 describe('<NotificationsCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});

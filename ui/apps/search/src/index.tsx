@@ -19,7 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     label: 'Search',
     area: [MenuItemAreaType.SearchArea, MenuItemAreaType.AppArea],
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'search' },
+    logo: { type: LogoTypeSource.ICON, value: 'MagnifyingGlassIcon' },
     subRoutes: [],
   },
   routes: {

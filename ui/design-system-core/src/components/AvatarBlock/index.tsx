@@ -1,13 +1,15 @@
 import React from 'react';
-import Stack from '../Stack';
-import Avatar from '../Avatar';
-import Text from '../Text';
-import { Profile } from '@akashaorg/typings/sdk/graphql-types-new';
 
-type AvatarBlockProps = {
-  profileId: Profile['did']['id'];
-  avatar: Profile['avatar'];
-  name: Profile['name'];
+import { AkashaProfile } from '@akashaorg/typings/sdk/graphql-types-new';
+
+import Avatar from '../Avatar';
+import Stack from '../Stack';
+import Text from '../Text';
+
+export type AvatarBlockProps = {
+  profileId: AkashaProfile['did']['id'];
+  avatar: AkashaProfile['avatar'];
+  name: AkashaProfile['name'];
   userName: string;
   onClick?: () => void;
 };

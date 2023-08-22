@@ -12,7 +12,7 @@ note left of DIContainer: dependency injection container
 
 node "akasha-core" {
 () Settings
-() "Akasha Module" as AkashaModule
+() "AKASHA Module" as AkashaModule
 [Core] as AkashaCore
 [Settings Service] as SettingsService
 [Stash Service] as StashService

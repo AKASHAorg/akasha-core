@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+<<<<<<< HEAD
 import {
   AnalyticsCategories,
   EntityTypes,
@@ -15,6 +16,9 @@ import {
   useDummyQuery,
   useEditComment,
 } from '@akashaorg/ui-awf-hooks';
+=======
+import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/ui';
+>>>>>>> next
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
@@ -27,9 +31,10 @@ type Props = {
 
 export function ReplyEditor({ commentId, singleSpa, action }: Props) {
   const { t } = useTranslation('app-akasha-integration');
-  const [analyticsActions] = useAnalytics();
+  const [analyticsActions] = [undefined];
 
   // @TODO replace with new hooks
+<<<<<<< HEAD
   const comment = useDummyQuery({});
   const editComment = useDummyMutation({});
   const publishComment = useDummyMutation({});
@@ -38,8 +43,15 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
     if (comment.status === 'success') {
       return mapEntry({ ...comment.data, type: EntityTypes.REFLECT });
     }
+=======
+  const comment = undefined;
+  const editComment = undefined;
+  const publishComment = undefined;
+
+  const entryData = React.useMemo(() => {
+>>>>>>> next
     return undefined;
-  }, [comment.data, comment.status]);
+  }, []);
 
   const [editorState, setEditorState] = React.useState(
     action === 'edit' ? entryData?.slateContent : null,

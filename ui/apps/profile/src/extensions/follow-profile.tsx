@@ -4,11 +4,15 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import singleSpaReact from 'single-spa-react';
 import FollowProfile from '../components/follow-profile';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 
 const App = (props: RootExtensionProps) => {
   const { loggedInProfileId, profileStreamId, isLoggedIn, isFollowing, followStreamId } =
     props.extensionData;
+
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    props.navigateToModal({ name: 'login', redirectTo });
+  };
   return (
     <FollowProfile
       loggedInProfileId={String(loggedInProfileId)}
@@ -16,7 +20,7 @@ const App = (props: RootExtensionProps) => {
       isLoggedIn={!!isLoggedIn}
       isFollowing={!!isFollowing}
       followStreamId={String(followStreamId)}
-      navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+      showLoginModal={showLoginModal}
     />
   );
 };

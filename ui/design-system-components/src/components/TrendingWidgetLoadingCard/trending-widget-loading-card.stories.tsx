@@ -1,18 +1,21 @@
 import React from 'react';
-import TrendingWidgetLoadingCard from '.';
 import { tw } from '@twind/core';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export default {
-  title: 'Cards/TrendingWidgetLoadingCard',
+import TrendingWidgetLoadingCard from '.';
+
+const meta: Meta = {
+  title: 'DSComponents/Cards/TrendingWidgetLoadingCard',
   component: TrendingWidgetLoadingCard,
 };
 
-const Template = args => (
-  <div className={tw('w-[25%]')}>
-    <TrendingWidgetLoadingCard {...args} />
-  </div>
-);
+export default meta;
+type Story = StoryObj;
 
-export const BaseTrendingWidgetLoadingCard = Template.bind({});
-
-BaseTrendingWidgetLoadingCard.args = {};
+export const BaseCard: Story = {
+  render: () => (
+    <div className={tw('w-[25%]')}>
+      <TrendingWidgetLoadingCard />
+    </div>
+  ),
+};

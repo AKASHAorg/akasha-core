@@ -16,7 +16,7 @@ export type OverviewCTA = {
   iconType: IconType;
 };
 
-export interface IModerationIntroCardProps {
+export type ModerationIntroCardProps = {
   assetName?: string;
   titleLabel: string;
   introLabel: string;
@@ -25,9 +25,9 @@ export interface IModerationIntroCardProps {
   codeOfConductLabel: string;
   overviewCTAArr: OverviewCTA[];
   onCodeOfConductClick?: () => void;
-}
+};
 
-const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
+const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
   const {
     assetName = 'moderation',
     titleLabel,

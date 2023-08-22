@@ -46,19 +46,7 @@ import {
   PROFILE_KEY,
   UPDATE_PROFILE_STATUS,
 } from './use-profile';
-import {
-  useInfinitePosts,
-  useInfiniteCustomPosts,
-  useInfinitePostsByTag,
-  useInfinitePostsByAuthor,
-  usePost,
-  usePosts,
-  useCreatePost,
-  useDeletePost,
-  useEditPost,
-  ENTRY_KEY,
-  CREATE_POST_MUTATION_KEY,
-} from './use-posts';
+
 import {
   useCheckNewNotifications,
   useFetchNotifications,
@@ -76,15 +64,7 @@ import { useMentionSearch } from './use-mentions';
 export * from './use-login.new';
 import { useLegalDoc } from './use-legal';
 import { useIsFollowingMultiple, useIsContactMultiple, useFollow, useUnfollow } from './use-follow';
-import {
-  useComment,
-  useInfiniteComments,
-  useCreateComment,
-  useDeleteComment,
-  useEditComment,
-  COMMENT_KEY,
-  COMMENTS_KEY,
-} from './use-comments';
+
 import { useGetBookmarks, useSaveBookmark, useDeleteBookmark } from './use-bookmarks';
 import {
   useSearch,
@@ -195,17 +175,7 @@ export {
   PROFILE_KEY,
   UPDATE_PROFILE_STATUS,
   // use-posts
-  useInfinitePosts,
-  useInfiniteCustomPosts,
-  useInfinitePostsByTag,
-  useInfinitePostsByAuthor,
-  usePost,
-  usePosts,
-  useCreatePost,
-  useDeletePost,
-  useEditPost,
-  ENTRY_KEY,
-  CREATE_POST_MUTATION_KEY,
+
   // use-notifications
   useCheckNewNotifications,
   useFetchNotifications,
@@ -228,13 +198,7 @@ export {
   useFollow,
   useUnfollow,
   // use-comments
-  useComment,
-  useInfiniteComments,
-  useCreateComment,
-  useDeleteComment,
-  useEditComment,
-  COMMENT_KEY,
-  COMMENTS_KEY,
+
   // use-bookmarks
   useGetBookmarks,
   useSaveBookmark,

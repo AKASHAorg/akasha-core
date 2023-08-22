@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-import { NavigateToParams } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateFollowMutation,
@@ -15,7 +15,7 @@ export type FollowProfileProps = {
   isLoggedIn: boolean;
   isFollowing: boolean;
   followStreamId: string | null;
-  navigateTo: (args: NavigateToParams) => void | null;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const FollowProfile: React.FC<FollowProfileProps> = props => {
@@ -25,7 +25,7 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
     isLoggedIn,
     isFollowing,
     followStreamId,
-    navigateTo,
+    showLoginModal,
   } = props;
 
   const queryClient = useQueryClient();
@@ -40,8 +40,8 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
     onMutate: () => {
       setLoading(true);
     },
-    onSuccess: async ({ createFollow }) => {
-      setFollowing(createFollow.document.isFollowing);
+    onSuccess: async ({ createAkashaFollow }) => {
+      setFollowing(createAkashaFollow.document.isFollowing);
       await queryClient.invalidateQueries(
         useInfiniteGetFollowersListByDidQuery.getKey({ id: loggedInProfileId }),
       );
@@ -55,8 +55,8 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
     onMutate: () => {
       setLoading(true);
     },
-    onSuccess: async ({ updateFollow }) => {
-      setFollowing(updateFollow.document.isFollowing);
+    onSuccess: async ({ updateAkashaFollow }) => {
+      setFollowing(updateAkashaFollow.document.isFollowing);
       await queryClient.invalidateQueries(
         useInfiniteGetFollowersListByDidQuery.getKey({ id: loggedInProfileId }),
       );
@@ -66,19 +66,10 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
     },
   });
 
-  const checkAuth = () => {
-    if (!isLoggedIn && navigateTo) {
-      navigateTo({
-        appName: '@akashaorg/app-auth-ewa',
-        getNavigationUrl: navRoutes => navRoutes.CONNECT,
-      });
-      return false;
-    }
-    return true;
-  };
-
   const handleFollow = (profileStreamId: string, followStreamId?: string) => {
-    if (!checkAuth()) return;
+    if (!isLoggedIn) {
+      return showLoginModal();
+    }
     if (!followStreamId) {
       createFollowMutation.mutate({
         i: { content: { isFollowing: true, profileID: profileStreamId } },
@@ -97,7 +88,9 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
   };
 
   const handleUnfollow = (profileStreamId: string, followStreamId?: string) => {
-    if (!checkAuth()) return;
+    if (!isLoggedIn) {
+      return showLoginModal();
+    }
     updateFollowMutation.mutate({
       i: {
         id: followStreamId,

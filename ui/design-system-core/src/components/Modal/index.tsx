@@ -1,13 +1,14 @@
 import React, { Fragment, PropsWithChildren } from 'react';
-import Stack from '../Stack';
-import Text, { TextProps } from '../Text';
-import Card from '../Card';
-import Icon from '../Icon';
-import Button from '../Button';
-import Divider from '../Divider';
 import { tw } from '@twind/core';
 import { Dialog, Transition } from '@headlessui/react';
+
+import Button from '../Button';
 import { ButtonProps } from '../Button/types';
+import Card from '../Card';
+import Divider from '../Divider';
+import Icon from '../Icon';
+import Stack from '../Stack';
+import Text, { TextProps } from '../Text';
 
 export type ActionsAlign = 'center' | 'end';
 

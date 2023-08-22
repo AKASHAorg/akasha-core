@@ -10,7 +10,6 @@ import {
   IContentClickDetails,
 } from '@akashaorg/typings/ui';
 import {
-  CREATE_POST_MUTATION_KEY,
   useMutationsListener,
   useAnalytics,
   useDismissedCard,
@@ -67,7 +66,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [dismissed, dismissCard] = useDismissedCard(dismissedCardId);
 
   const { mutations: pendingPostStates } = useMutationsListener<IPublishData>([
-    CREATE_POST_MUTATION_KEY,
+    'CREATE_POST_MUTATION_KEY',
   ]);
 
   const handleEntryFlag = React.useCallback(
@@ -110,7 +109,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   return (
     <Box customStyle={'w-full'}>
       <Helmet.Helmet>
-        <title>Akasha World</title>
+        <title>AKASHA World</title>
       </Helmet.Helmet>
       {loggedProfileData?.did?.id ? (
         <>
@@ -138,7 +137,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               subtitle={t('We are in private alpha at this time. ')}
               beforeLinkLabel={t("If you'd like to participate, just ")}
               afterLinkLabel={t(
-                " and we'll send you a ticket for the next shuttle going to Akasha World.",
+                " and we'll send you a ticket for the next shuttle going to AKASHA World.",
               )}
               disclaimerLabel={t(
                 "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",

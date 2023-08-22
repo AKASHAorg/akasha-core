@@ -1,8 +1,8 @@
-import { PartialProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import { PartialAkashaProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
 import { ProfileImageType } from '@akashaorg/typings/ui';
 
 interface IDeleteImage {
-  profileData?: PartialProfileInput;
+  profileData?: PartialAkashaProfileInput;
   type: ProfileImageType;
 }
 
@@ -35,7 +35,7 @@ export function deleteImageAndGetProfileContent({ profileData, type }: IDeleteIm
       }
     : undefined;
 
-  const profileContent: PartialProfileInput = {
+  const profileContent: PartialAkashaProfileInput = {
     name,
     description,
     links: linksObj,

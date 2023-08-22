@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { tw, apply } from '@twind/core';
+
 import Icon from '../Icon';
+import Button from '../Button';
 
 export type ScrollTopButtonProps = {
   onClick: () => void;
@@ -9,20 +10,21 @@ export type ScrollTopButtonProps = {
 
 const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
   ({ onClick, hide }, ref) => {
-    const styledDiv = apply`
-    flex items-center justify-center
-    w-[48px] h-[48px]
-    rounded-3xl
-    bg-[#DCE3FF]
-    cursor-pointer
-    hover:(bg-[#4666E6] [&>*]:stroke-[#fff])
-    `;
+    const styledDiv =
+      'flex items-center justify-center w-[48px] h-[48px] rounded-3xl bg-[#DCE3FF] cursor-pointer hover:(bg-[#4666E6] [&>*]:stroke-[#fff])';
 
     return (
       !hide && (
-        <div title="scroll-to-top" ref={ref} onClick={() => onClick()} className={tw(styledDiv)}>
-          <Icon type="ArrowUpIcon" hover={true} accentColor={true} />
-        </div>
+        <Button
+          title="scroll-to-top"
+          plain={true}
+          onClick={() => onClick()}
+          customStyle={styledDiv}
+        >
+          <div ref={ref}>
+            <Icon type="ArrowUpIcon" hover={true} accentColor={true} />
+          </div>
+        </Button>
       )
     );
   },

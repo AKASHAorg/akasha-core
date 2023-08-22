@@ -1,26 +1,22 @@
 import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import OnboardingStartCard, { OnboardingStartCardProps } from './index';
+import OnboardingStartCard, { OnboardingStartCardProps } from '.';
 
-export default {
-  title: 'Cards/OnboardingStartCard',
+const meta: Meta<OnboardingStartCardProps> = {
+  title: 'DSComponents/Cards/OnboardingStartCard',
   component: OnboardingStartCard,
-  argTypes: {
-    searchKeyword: { control: 'text' },
-    inputPlaceholderLabel: { control: 'text' },
-    title: { control: 'text' },
-    description: { control: 'text' },
-    image: { control: 'text' },
-  },
 };
 
-const Template = (args: OnboardingStartCardProps) => {
-  return <OnboardingStartCard {...args} />;
-};
+export default meta;
+type Story = StoryObj<OnboardingStartCardProps>;
 
-export const BaseOnboardingStartCard = Template.bind({});
-
-BaseOnboardingStartCard.args = {
-  inputPlaceholderLabel: 'Search',
-  titleLabel: 'Search',
+export const BaseOnboardingStartCard: Story = {
+  render: () => (
+    <OnboardingStartCard
+      inputPlaceholderLabel="Search"
+      titleLabel="Search"
+      handleSearch={() => ({})}
+    />
+  ),
 };

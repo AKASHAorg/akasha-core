@@ -1,6 +1,6 @@
 # NX Executors
 
-This package contains all custom executors built for the NX monorepo build system used by Akasha.
+This package contains all custom executors built for the NX monorepo build system used by AKASHA.
 
 ## General
 

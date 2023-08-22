@@ -27,7 +27,9 @@ const Connect: React.FC<RootComponentProps> = props => {
   );
 
   const profile =
-    profileDataReq.data && 'isViewer' in profileDataReq.data ? profileDataReq.data?.profile : null;
+    profileDataReq.data && 'isViewer' in profileDataReq.data
+      ? profileDataReq.data?.akashaProfile
+      : null;
 
   const { t } = useTranslation('app-auth-ewa');
   const loginMutation = useLogin();
@@ -40,6 +42,7 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     const searchParam = new URLSearchParams(location.search);
+
     // if user is logged in, do not show the connect page
     if (loginQuery.data?.id && profileDataReq.status !== 'loading') {
       if (!profile) {
@@ -49,6 +52,7 @@ const Connect: React.FC<RootComponentProps> = props => {
         });
         return;
       }
+
       routingPlugin.current?.handleRedirect({
         search: searchParam,
         fallback: {
@@ -66,7 +70,8 @@ const Connect: React.FC<RootComponentProps> = props => {
     }
     routingPlugin.current?.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: appRoutes => `${appRoutes[CONNECT]}${appRoutes[provider]}`,
+      getNavigationUrl: appRoutes =>
+        `${appRoutes[CONNECT]}${appRoutes[provider]}${location.search ? `${location.search}` : ''}`,
     });
   };
 

@@ -6,9 +6,9 @@ import { customRender } from '../../../test-utils';
 describe('<ErrorCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const titleLabel = 'This page is for our marvelous Akasha World moderators';
+  const titleLabel = 'This page is for our marvelous AKASHA World moderators';
   const subtitleLabel =
-    'To view this page, you must be an Akasha World Moderator and log in with your wallet to continue.';
+    'To view this page, you must be an AKASHA World Moderator and log in with your wallet to continue.';
   const buttonLabel = 'Connect a wallet';
 
   const buttonHandler = jest.fn(() => {

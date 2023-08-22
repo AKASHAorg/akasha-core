@@ -1,9 +1,11 @@
 import React, { PropsWithChildren } from 'react';
-import Stack from '../Stack';
 import { tw } from '@twind/core';
-import { getColorClasses } from '../../utils/getColorClasses';
-import { arcCommands, calculateEndAngle } from '../../utils/graphics';
-import { MeterProps } from './types';
+
+import Stack from '../Stack';
+
+import { MeterProps } from '.';
+
+import { getColorClasses, calculateEndAngle, arcCommands } from '../../utils';
 
 const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
   size,

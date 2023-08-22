@@ -1,8 +1,12 @@
-import { CeramicAccount, FollowConnection, Profile as ProfileData } from '../sdk/graphql-types-new';
+import {
+  CeramicAccount,
+  AkashaFollowConnection,
+  AkashaProfile as ProfileData,
+} from '../sdk/graphql-types-new';
 
 export type Profile = Omit<ProfileData, 'followers' | 'did'> & {
   did: Partial<CeramicAccount>;
-  followers?: FollowConnection;
+  followers?: AkashaFollowConnection;
 };
 
 export enum UsernameTypes {
@@ -46,6 +50,6 @@ export enum StepStatus {
   GETTING_KEYS = 'gettingKeys',
 }
 
-export type EngagementType = 'followers' | 'following';
+export type EngagementType = 'followers' | 'following' | 'interests';
 
 export type ProfileImageType = 'avatar' | 'cover-image';

@@ -21,9 +21,7 @@ import {
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
-  useSearchPosts,
   useSearchProfiles,
-  useSearchComments,
   useSearchTags,
   useEntryNavigation,
   useAnalytics,
@@ -74,12 +72,12 @@ const onNavBack = () => {
 
 const SearchPage: React.FC<SearchPageProps> = props => {
   const {
-    singleSpa,
-    loggedProfileData,
-    showLoginModal,
     plugins,
+    loggedProfileData,
     logger,
+    singleSpa,
     uiEvents,
+    showLoginModal,
     navigateToModal,
   } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
@@ -203,30 +201,32 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   );
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
-  const searchBeamsReq = useSearchPosts(
-    decodeURIComponent(searchKeyword),
-    searchState[ButtonValues.CONTENT].page,
-    loggedProfileData?.did?.id,
-  );
+  // const searchBeamsReq = useSearchPosts(
+  //   decodeURIComponent(searchKeyword),
+  //   searchState[ButtonValues.CONTENT].page,
+  //   loggedProfileData?.did?.id,
+  // );
+
   const searchBeamsState = getSearchStateForTab(ButtonValues.CONTENT);
 
-  const searchCommentsReq = useSearchComments(
-    decodeURIComponent(searchKeyword),
-    searchState[ButtonValues.CONTENT].page,
-    loggedProfileData?.did?.id,
-  );
+  // const searchCommentsReq = useSearchComments(
+  //   decodeURIComponent(searchKeyword),
+  //   searchState[ButtonValues.CONTENT].page,
+  //   loggedProfileData?.did?.id,
+  // );
+
   // const searchReflectionsState = searchState[ButtonValues.CONTENT].results;
 
   const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TAGS);
 
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   if (searchBeamsReq.isFetched) {
   //     updateSearchState(ButtonValues.CONTENT, searchBeamsReq.data);
   //   }
   // }, [searchBeamsReq.data, searchBeamsReq.isFetched]);
 
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   if (searchCommentsReq.isFetched) {
   //     updateSearchState(ButtonValues.CONTENT, searchCommentsReq.data);
   //   }
@@ -342,11 +342,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
   };
 
-  const emptySearchState =
-    searchProfilesState?.length === 0 &&
-    searchBeamsState?.length === 0 &&
-    // searchReflectionsState?.length === 0 &&
-    searchTagsState?.length === 0;
+  // const emptySearchState =
+  //   searchProfilesState?.length === 0 &&
+  //   searchBeamsState?.length === 0 &&
+  //   // searchReflectionsState?.length === 0 &&
+  //   searchTagsState?.length === 0;
 
   React.useEffect(() => {
     if (activeButton !== ButtonValues.CONTENT) {
@@ -377,26 +377,30 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     setActiveButton(value);
   };
 
-  const searchCount =
-    searchProfilesState?.length ||
-    0 + searchBeamsState?.length ||
-    // 0 + searchReflectionsState?.length ||
-    0 + searchTagsState?.length ||
-    0;
+  // const onNavBack = () => {
+  //   history.back();
+  // };
 
-  const allQueriesFinished = React.useMemo(() => {
-    return (
-      !searchProfilesReq.isFetching &&
-      !searchBeamsReq.isFetching &&
-      !searchCommentsReq.isFetching &&
-      !searchTagsReq.isFetching
-    );
-  }, [
-    searchCommentsReq.isFetching,
-    searchBeamsReq.isFetching,
-    searchProfilesReq.isFetching,
-    searchTagsReq.isFetching,
-  ]);
+  // const searchCount =
+  //   searchProfilesState?.length ||
+  //   0 + searchBeamsState?.length ||
+  //   // 0 + searchReflectionsState?.length ||
+  //   0 + searchTagsState?.length ||
+  //   0;
+
+  // const allQueriesFinished = React.useMemo(() => {
+  //   return (
+  //     !searchProfilesReq.isFetching &&
+  //     !searchBeamsReq.isFetching &&
+  //     !searchCommentsReq.isFetching &&
+  //     !searchTagsReq.isFetching
+  //   );
+  // }, [
+  //   searchCommentsReq.isFetching,
+  //   searchBeamsReq.isFetching,
+  //   searchProfilesReq.isFetching,
+  //   searchTagsReq.isFetching,
+  // ]);
 
   const isFetchingSearch = React.useMemo(() => {
     // if (activeButton === ButtonValues.ALL) {
@@ -429,10 +433,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         <SwitchCard
           activeButton={activeButton}
           onTabClick={onTabClick}
-          onIconClick={onNavBack}
           buttonValues={buttonValues}
           loggedUser={loggedProfileData?.did?.id}
-          style="-mb-px" // overlaps border with parent's bottom border
         />
       </SearchStartCard>
       {activeButton === ButtonValues.CONTENT && (
@@ -443,7 +445,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           resetLabel={t('Reset')}
         />
       )}
-      {searchKeyword === '' && <DefaultEmptyCard infoText=" ✨ Start searching for something ✨" />}
+      {searchKeyword === '' && (
+        <DefaultEmptyCard noBorder={true} infoText=" ✨ Start searching for something ✨" />
+      )}
 
       {
         /* allQueriesFinished */ !isFetchingSearch &&

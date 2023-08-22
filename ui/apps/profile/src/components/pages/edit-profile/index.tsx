@@ -14,6 +14,7 @@ import {
 import { SocialLinks } from '@akashaorg/design-system-components/lib/components/EditProfile/SocialLinks';
 import { Interests } from '@akashaorg/design-system-components/lib/components/EditProfile/Interests';
 import {
+  useCreateInterestsMutation,
   useCreateProfileMutation,
   useGetInterestsByDidQuery,
   useGetProfileByDidQuery,
@@ -24,7 +25,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useSaveImage } from './use-save-image';
-import { PartialProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import { PartialAkashaProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
 import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-content';
 
 type EditProfilePageProps = {
@@ -33,7 +34,6 @@ type EditProfilePageProps = {
 
 const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
   const { plugins, handleFeedback } = props;
-
   const { t } = useTranslation('app-profile');
   const { profileId } = useParams<{ profileId: string }>();
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -47,14 +47,9 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     },
   );
   const status = profileDataReq.status;
-  const { profile: profileData } = Object.assign(
-    { isViewer: null, profile: null },
-    profileDataReq.data,
-  );
-
+  const { profile: profileData } = Object.assign({ profile: null }, profileDataReq.data);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
-
   // dirty state for tabs
   const [isGeneralFormDirty, setGeneralFormDirty] = useState(false);
   const [isSocialLinksDirty, setSocialLinksDirty] = useState(false);
@@ -63,46 +58,55 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
-    useState<PartialProfileInput | null>(null);
+    useState<PartialAkashaProfileInput | null>(null);
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
   const queryClient = useQueryClient();
+
+  const onMutate = () => {
+    setIsProcessing(true);
+  };
+
+  const onSettled = (gotoProfileInfoPage = true) => {
+    handleFeedback();
+    setIsProcessing(false);
+    if (gotoProfileInfoPage) navigateToProfileInfoPage();
+  };
+
   const createProfileMutation = useCreateProfileMutation({
-    onMutate: () => {
-      setIsProcessing(true);
-    },
+    onMutate,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
       });
     },
-    onSettled: () => {
-      handleFeedback();
-      setIsProcessing(false);
-      navigateToProfileInfoPage();
-    },
+    onSettled: () => onSettled(),
   });
   const updateProfileMutation = useUpdateProfileMutation({
-    onMutate: () => {
-      setIsProcessing(true);
-    },
+    onMutate,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
       });
     },
-    onSettled: () => {
-      handleFeedback();
-      setIsProcessing(false);
-      navigateToProfileInfoPage();
-    },
+    onSettled: () => onSettled(),
   });
+  const createInterest = useCreateInterestsMutation({
+    onMutate,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: useGetInterestsByDidQuery.getKey({ id: profileId }),
+      });
+    },
+    onSettled: () => onSettled(false),
+  });
+
   const myInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node, enabled: !!profileData?.id },
   );
   const myInterests =
     myInterestsQueryReq.data && 'isViewer' in myInterestsQueryReq.data
-      ? myInterestsQueryReq.data.interests
+      ? myInterestsQueryReq.data.akashaProfileInterests
       : null;
   const loginQuery = useGetLogin();
   const background = useMemo(
@@ -167,7 +171,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
 
   const createProfile = async (
     formValues: GeneralFormValues,
-    profileImages: Pick<PartialProfileInput, 'avatar' | 'background'>,
+    profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
   ) => {
     createProfileMutation.mutate({
       i: {
@@ -183,7 +187,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
 
   const updateGeneralForm = async (
     formValues: GeneralFormValues,
-    profileImages: Pick<PartialProfileInput, 'avatar' | 'background'>,
+    profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
   ) => {
     updateProfileMutation.mutate({
       i: {
@@ -198,8 +202,8 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   };
 
   const getProfileImageVersions = (
-    avatarImage: PartialProfileInput['avatar'],
-    coverImage: PartialProfileInput['background'],
+    avatarImage: PartialAkashaProfileInput['avatar'],
+    coverImage: PartialAkashaProfileInput['background'],
   ) => {
     const avatarImageObj = avatarImage ? { avatar: avatarImage } : {};
     const coverImageObj = coverImage ? { background: coverImage } : {};
@@ -366,8 +370,9 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                   'You can find more interests and add them to your list of interests!',
                 )}
                 moreInterestPlaceholder={t('Search for interests')}
-                myInterests={myInterests ? myInterests.topics.map(topic => topic.value) : []}
+                myInterests={myInterests?.topics || []}
                 interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
+                labelType="TOPIC"
                 cancelButton={{
                   label: t('Cancel'),
                   disabled: isProcessing,
@@ -378,9 +383,10 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
                 saveButton={{
                   label: 'Save',
                   loading: isProcessing,
-                  handleClick: () => {
-                    //@TODO
-                  },
+                  handleClick: interests =>
+                    createInterest.mutate({
+                      i: { content: { topics: interests } },
+                    }),
                 }}
                 onFormDirty={setInterestsListDirty}
                 customStyle="h-full"

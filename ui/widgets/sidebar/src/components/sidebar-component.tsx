@@ -129,8 +129,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   }, [routing]);
 
   useEffect(() => {
-    if (myProfileQuery.data?.profile?.did?.id) {
-      setProfileName(myProfileQuery.data?.profile?.name);
+    if (myProfileQuery.data?.akashaProfile?.did?.id) {
+      setProfileName(myProfileQuery.data?.akashaProfile?.name);
     } else if (loginQuery.data?.id) {
       setProfileName('');
     } else {
@@ -140,8 +140,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   }, [
     isLoading,
     loginQuery.data?.id,
-    myProfileQuery.data?.profile?.did?.id,
-    myProfileQuery.data?.profile?.name,
+    myProfileQuery.data?.akashaProfile?.did?.id,
+    myProfileQuery.data?.akashaProfile?.name,
   ]);
 
   // sort according to worldConfig index
@@ -266,7 +266,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         <Box customStyle="w-fit h-fit mr-2">
           <Avatar
             profileId={loginQuery.data?.id}
-            avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.profile?.avatar)}
+            avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.akashaProfile?.avatar)}
             isClickable={!!loginQuery.data?.id}
             onClick={() => handleAvatarClick(loginQuery.data?.id)}
           />
@@ -305,7 +305,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         )}
 
         <Box customStyle="w-fit h-fit ml-6 self-start">
-          {isLoading && <Button size="sm" loading />}
+          {isLoading && <Button size="sm" loading onClick={handleLogoutClick} />}
           {!isLoading && (
             <>
               {loginQuery.data?.id && (
