@@ -6,6 +6,7 @@ import Logging from '../logging/index';
 import pino from 'pino';
 import CeramicService from '../common/ceramic';
 import type { DocumentNode } from 'graphql';
+import EventBus from '../common/event-bus';
 
 /** @internal  */
 @injectable()
@@ -17,15 +18,18 @@ class Gql {
   // #_clientWithCache: Sdk;
   private _log: pino.Logger;
   private _gqlStash: IQuickLRU;
+  private _globalChannel: EventBus;
 
   // create Apollo link object and initialize the stash
   public constructor(
     @inject(TYPES.Stash) stash: Stash,
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Ceramic) ceramic: CeramicService,
+    @inject(TYPES.EventBus) globalChannel: EventBus,
   ) {
     this._stash = stash;
     this._log = log.create('AWF_GQL');
+    this._globalChannel = globalChannel;
     // create the cache stash for the gql client
     this._gqlStash = this._stash.create({
       maxSize: 1280,

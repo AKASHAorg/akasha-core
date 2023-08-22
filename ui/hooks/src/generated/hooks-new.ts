@@ -39,9 +39,13 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
   nsfw
   reflections(last: 1) {
     edges {
-      node {
-        id
-      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
     }
   }
 }
