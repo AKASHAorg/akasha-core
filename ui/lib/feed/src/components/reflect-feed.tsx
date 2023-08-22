@@ -18,10 +18,11 @@ import EntryList, {
   EntryListProps,
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
-import { AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
   itemType: EntityTypes.REFLECT;
+  beamId?: string;
   locale?: ILocale;
   onEntryFlag?: (
     entryId: string,
@@ -95,12 +96,12 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
               ref={measureElementRef}
               style={{ paddingBottom: itemSpacing }}
             >
-              <EntryCard
-                showMore={true}
-                entryData={entryData as unknown as IEntryData}
-                locale={locale}
-                onContentClick={onNavigate}
-              />
+              {/*<EntryCard*/}
+              {/*  showMore={true}*/}
+              {/*  entryData={entryData}*/}
+              {/*  locale={locale}*/}
+              {/*  onContentClick={onNavigate}*/}
+              {/*/>*/}
             </div>
           );
         });

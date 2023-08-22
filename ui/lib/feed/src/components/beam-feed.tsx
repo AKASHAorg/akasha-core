@@ -18,7 +18,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
 
-export type BeamFeedProps = Omit<EntryListProps<Omit<AkashaBeam, 'reflections'>>, 'itemCard'> & {
+export type BeamFeedProps = Omit<EntryListProps<AkashaBeam>, 'itemCard'> & {
   itemType: EntityTypes.BEAM;
   locale?: ILocale;
   onEntryFlag?: (
@@ -61,7 +61,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
   } = props;
 
   return (
-    <EntryList<Omit<AkashaBeam, 'reflections'>>
+    <EntryList<AkashaBeam>
       requestStatus={requestStatus}
       isFetchingNextPage={isFetchingNextPage}
       pages={pages}

@@ -17,6 +17,10 @@ import {
 import { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { ScrollerState } from '@akashaorg/design-system-components/lib/components/EntryList';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
+import {
+  useInfiniteGetBeamsQuery,
+  useInfiniteGetReflectionsFromBeamQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const canFetchNextPage = (req: {
   isFetchingNextPage: boolean;
@@ -64,9 +68,12 @@ const FeedWidgetRoot: React.FC<
     }
   }, [getScrollState.data]);
 
-  const beamsReq = useInfiniteDummy<GetBeamsQuery, Omit<AkashaBeam, 'reflections'>>(
-    queryKey,
-    createDummyBeams({ first: 5, after: initialItemId }),
+  const beamsReq = useInfiniteGetBeamsQuery(
+    'last',
+    {
+      first: 5,
+      after: initialItemId,
+    },
     {
       enabled: itemType === EntityTypes.BEAM && getScrollState.isFetched,
       select: data => {
@@ -91,9 +98,9 @@ const FeedWidgetRoot: React.FC<
     },
   );
 
-  const reflectReq = useInfiniteDummy<GetReflectionsFromBeamQuery, AkashaReflect>(
-    queryKey,
-    createDummyReflections(5),
+  const reflectReq = useInfiniteGetReflectionsFromBeamQuery(
+    'last',
+    { id: '0', last: 5 },
     {
       enabled: itemType === EntityTypes.REFLECT && getScrollState.isFetched,
       select: data => {
@@ -159,20 +166,20 @@ const FeedWidgetRoot: React.FC<
           getItemKey={(idx, items) => items[idx]['id']}
         />
       )}
-      {itemType === EntityTypes.REFLECT && (
-        <ReflectFeed
-          {...props}
-          requestStatus={reflectReq.status}
-          pages={reflectReq.data?.pages}
-          isFetchingNextPage={reflectReq.isFetchingNextPage}
-          isFetchingPreviousPage={reflectReq.isFetchingPreviousPage}
-          hasNextPage={reflectReq.hasNextPage}
-          onScrollStateChange={handleScrollStateChange}
-          initialScrollState={getScrollState.data}
-          onScrollStateReset={handleRemoveScrollState}
-          getItemKey={(idx, items) => items[idx]['id']}
-        />
-      )}
+      {/*{itemType === EntityTypes.REFLECT && (*/}
+      {/*  <ReflectFeed*/}
+      {/*    {...props}*/}
+      {/*    requestStatus={reflectReq.status}*/}
+      {/*    pages={reflectReq.data?.pages}*/}
+      {/*    isFetchingNextPage={reflectReq.isFetchingNextPage}*/}
+      {/*    isFetchingPreviousPage={reflectReq.isFetchingPreviousPage}*/}
+      {/*    hasNextPage={reflectReq.hasNextPage}*/}
+      {/*    onScrollStateChange={handleScrollStateChange}*/}
+      {/*    initialScrollState={getScrollState.data}*/}
+      {/*    onScrollStateReset={handleRemoveScrollState}*/}
+      {/*    getItemKey={(idx, items) => items[idx]['id']}*/}
+      {/*  />*/}
+      {/*)}*/}
     </I18nextProvider>
   );
 };
