@@ -583,6 +583,11 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
               profile {
                 ...UserProfileFragment
               }
+              did {
+                akashaProfile {
+                  ...UserProfileFragment
+                }
+              }
             }
           }
           pageInfo {

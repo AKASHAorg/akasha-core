@@ -183,6 +183,11 @@ query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: I
               profile {
                 ...UserProfileFragment
               }
+              did {
+                akashaProfile {
+                  ...UserProfileFragment
+                }
+              }
             }
           }
           pageInfo {
