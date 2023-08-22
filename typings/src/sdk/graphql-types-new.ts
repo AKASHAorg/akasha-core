@@ -252,7 +252,7 @@ export type AkashaBeam = Node & {
   author: CeramicAccount;
   content: Array<AkashaBeamBlockRecord>;
   createdAt: Scalars['DateTime'];
-  embeddedBeam?: Maybe<Scalars['CeramicStreamID']>;
+  embeddedBeam?: Maybe<AkashaBeamEmbeddedType>;
   id: Scalars['ID'];
   mentions?: Maybe<Array<Maybe<Scalars['CeramicStreamID']>>>;
   nsfw?: Maybe<Scalars['Boolean']>;
@@ -306,6 +306,16 @@ export type AkashaBeamEdge = {
   node?: Maybe<AkashaBeam>;
 };
 
+export type AkashaBeamEmbeddedType = {
+  embeddedID: Scalars['CeramicStreamID'];
+  label: Scalars['String'];
+};
+
+export type AkashaBeamEmbeddedTypeInput = {
+  embeddedID: Scalars['CeramicStreamID'];
+  label: Scalars['String'];
+};
+
 export type AkashaBeamFiltersInput = {
   and?: InputMaybe<Array<AkashaBeamFiltersInput>>;
   not?: InputMaybe<AkashaBeamFiltersInput>;
@@ -317,7 +327,7 @@ export type AkashaBeamInput = {
   active: Scalars['Boolean'];
   content: Array<InputMaybe<AkashaBeamBlockRecordInput>>;
   createdAt: Scalars['DateTime'];
-  embeddedBeam?: InputMaybe<Scalars['CeramicStreamID']>;
+  embeddedBeam?: InputMaybe<AkashaBeamEmbeddedTypeInput>;
   mentions?: InputMaybe<Array<InputMaybe<Scalars['CeramicStreamID']>>>;
   nsfw?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -572,6 +582,7 @@ export type AkashaContentBlockLabeledValueInput = {
 
 export type AkashaContentBlockObjectFilterInput = {
   active?: InputMaybe<BooleanValueFilterInput>;
+  appVersionID?: InputMaybe<StringValueFilterInput>;
   createdAt?: InputMaybe<StringValueFilterInput>;
   kind?: InputMaybe<AkashaContentBlockBlockDefValueFilterInput>;
   nsfw?: InputMaybe<BooleanValueFilterInput>;
@@ -579,6 +590,7 @@ export type AkashaContentBlockObjectFilterInput = {
 
 export type AkashaContentBlockSortingInput = {
   active?: InputMaybe<SortOrder>;
+  appVersionID?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   kind?: InputMaybe<SortOrder>;
   nsfw?: InputMaybe<SortOrder>;
@@ -1061,14 +1073,14 @@ export type AkashaReflectObjectFilterInput = {
 };
 
 export type AkashaReflectProviderValue = {
-  property: Scalars['String'];
-  provider: Scalars['String'];
+  label: Scalars['String'];
+  propertyType: Scalars['String'];
   value: Scalars['String'];
 };
 
 export type AkashaReflectProviderValueInput = {
-  property: Scalars['String'];
-  provider: Scalars['String'];
+  label: Scalars['String'];
+  propertyType: Scalars['String'];
   value: Scalars['String'];
 };
 
@@ -1831,7 +1843,7 @@ export type PartialAkashaBeamInput = {
   active?: InputMaybe<Scalars['Boolean']>;
   content?: InputMaybe<Array<InputMaybe<AkashaBeamBlockRecordInput>>>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  embeddedBeam?: InputMaybe<Scalars['CeramicStreamID']>;
+  embeddedBeam?: InputMaybe<AkashaBeamEmbeddedTypeInput>;
   mentions?: InputMaybe<Array<InputMaybe<Scalars['CeramicStreamID']>>>;
   nsfw?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;

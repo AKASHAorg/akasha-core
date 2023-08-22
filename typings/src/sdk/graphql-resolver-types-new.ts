@@ -106,6 +106,8 @@ export type ResolversTypes = {
   AkashaBeamBlockRecordInput: Types.AkashaBeamBlockRecordInput;
   AkashaBeamConnection: ResolverTypeWrapper<Types.AkashaBeamConnection>;
   AkashaBeamEdge: ResolverTypeWrapper<Types.AkashaBeamEdge>;
+  AkashaBeamEmbeddedType: ResolverTypeWrapper<Types.AkashaBeamEmbeddedType>;
+  AkashaBeamEmbeddedTypeInput: Types.AkashaBeamEmbeddedTypeInput;
   AkashaBeamFiltersInput: Types.AkashaBeamFiltersInput;
   AkashaBeamInput: Types.AkashaBeamInput;
   AkashaBeamObjectFilterInput: Types.AkashaBeamObjectFilterInput;
@@ -338,6 +340,8 @@ export type ResolversParentTypes = {
   AkashaBeamBlockRecordInput: Types.AkashaBeamBlockRecordInput;
   AkashaBeamConnection: Types.AkashaBeamConnection;
   AkashaBeamEdge: Types.AkashaBeamEdge;
+  AkashaBeamEmbeddedType: Types.AkashaBeamEmbeddedType;
+  AkashaBeamEmbeddedTypeInput: Types.AkashaBeamEmbeddedTypeInput;
   AkashaBeamFiltersInput: Types.AkashaBeamFiltersInput;
   AkashaBeamInput: Types.AkashaBeamInput;
   AkashaBeamObjectFilterInput: Types.AkashaBeamObjectFilterInput;
@@ -606,7 +610,7 @@ export type AkashaBeamResolvers<ContextType = any, ParentType extends ResolversP
   author?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
   content?: Resolver<Array<ResolversTypes['AkashaBeamBlockRecord']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  embeddedBeam?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
+  embeddedBeam?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamEmbeddedType']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   mentions?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicStreamID']>>>, ParentType, ContextType>;
   nsfw?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -632,6 +636,12 @@ export type AkashaBeamConnectionResolvers<ContextType = any, ParentType extends 
 export type AkashaBeamEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeamEdge'] = ResolversParentTypes['AkashaBeamEdge']> = {
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   node?: Resolver<Types.Maybe<ResolversTypes['AkashaBeam']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaBeamEmbeddedTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeamEmbeddedType'] = ResolversParentTypes['AkashaBeamEmbeddedType']> = {
+  embeddedID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -916,8 +926,8 @@ export type AkashaReflectEdgeResolvers<ContextType = any, ParentType extends Res
 };
 
 export type AkashaReflectProviderValueResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaReflectProviderValue'] = ResolversParentTypes['AkashaReflectProviderValue']> = {
-  property?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  provider?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  propertyType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1311,6 +1321,7 @@ export type Resolvers<ContextType = any> = {
   AkashaBeamBlockRecord?: AkashaBeamBlockRecordResolvers<ContextType>;
   AkashaBeamConnection?: AkashaBeamConnectionResolvers<ContextType>;
   AkashaBeamEdge?: AkashaBeamEdgeResolvers<ContextType>;
+  AkashaBeamEmbeddedType?: AkashaBeamEmbeddedTypeResolvers<ContextType>;
   AkashaBeamStream?: AkashaBeamStreamResolvers<ContextType>;
   AkashaBeamStreamConnection?: AkashaBeamStreamConnectionResolvers<ContextType>;
   AkashaBeamStreamEdge?: AkashaBeamStreamEdgeResolvers<ContextType>;

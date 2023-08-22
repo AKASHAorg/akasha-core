@@ -10,6 +10,11 @@ type BlockRecord{
  # block: ContentBlock! @relationDocument(property: "blockID")
 }
 
+type EmbeddedType{
+  label: String! @string(minLength:3, maxLength: 32)
+  embeddedID: StreamID!
+}
+
 type AkashaProfile @loadModel(id: "${akashaProfileId}") {
   id: ID!
 }
@@ -20,7 +25,7 @@ type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") 
   tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32)
   mentions: [StreamID] @list(maxLength: 10)
   version: CommitID! @documentVersion
-  embeddedBeam: StreamID
+  embeddedBeam: EmbeddedType
   active: Boolean!
   createdAt: DateTime!
   nsfw: Boolean

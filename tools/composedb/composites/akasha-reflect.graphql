@@ -1,11 +1,11 @@
 
 type ProviderValue{
-  provider: String! @string(minLength: 6, maxLength: 100)
-  property: String! @string(minLength: 2, maxLength: 40)
-  value: String! @string(minLength: 3, maxLength: 2000)
+  propertyType: String! @string(minLength: 2, maxLength: 100)
+  label: String! @string(minLength: 6, maxLength: 100)
+  value: String! @string(minLength: 3, maxLength: 3000)
 }
 
-type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c8wwniweysnm1vsse05a60c1rho0dugyauf8uqq469xitdxy3ia") {
+type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c7emv46av2u74x3qgu9i3oywn1w7sg8u6momkyg9atp1k5g0z74") {
   id: ID!
 }
 

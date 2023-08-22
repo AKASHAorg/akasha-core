@@ -20,7 +20,10 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
   id
   reflectionsCount
   active
-  embeddedBeam
+  embeddedBeam {
+    label
+    embeddedID
+  }
   author {
     id
     isViewer
@@ -109,8 +112,8 @@ export const ReflectFragmentDoc = /*#__PURE__*/ `
   version
   active
   content {
-    provider
-    property
+    label
+    propertyType
     value
   }
   isReply

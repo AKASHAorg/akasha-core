@@ -6,8 +6,8 @@ fragment ReflectFragment on AkashaReflect{
   version
   active
   content {
-    provider
-    property
+    label
+    propertyType
     value
   }
   isReply

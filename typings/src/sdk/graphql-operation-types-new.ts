@@ -1,6 +1,6 @@
 import type * as Types from './graphql-types-new';
 
-export type BeamFragmentFragment = { id: string, reflectionsCount: number, active: boolean, embeddedBeam?: any | null, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> };
+export type BeamFragmentFragment = { id: string, reflectionsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, embeddedBeam?: { label: string, embeddedID: any } | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> };
 
 export type ContentBlockFragmentFragment = { active: boolean, appVersionID: any, createdAt: any, kind?: Types.AkashaContentBlockBlockDef | null, version: any, nsfw?: boolean | null, content: Array<{ propertyType: string, value: string, label: string }>, appVersion?: { applicationID: any, id: string, version: string, application?: { name: string, displayName: string, id: string } | null } | null, author: { id: string, isViewer: boolean } };
 
@@ -16,7 +16,7 @@ export type GetBeamsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetBeamsQuery = { akashaBeamIndex?: { edges?: Array<{ node?: { id: string, reflectionsCount: number, active: boolean, embeddedBeam?: any | null, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
+export type GetBeamsQuery = { akashaBeamIndex?: { edges?: Array<{ node?: { id: string, reflectionsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, embeddedBeam?: { label: string, embeddedID: any } | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
 
 export type GetBeamsByAuthorDidQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -29,14 +29,14 @@ export type GetBeamsByAuthorDidQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetBeamsByAuthorDidQuery = { node?: { isViewer: boolean, akashaBeamList?: { edges?: Array<{ node?: { id: string, reflectionsCount: number, active: boolean, embeddedBeam?: any | null, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
+export type GetBeamsByAuthorDidQuery = { node?: { isViewer: boolean, akashaBeamList?: { edges?: Array<{ node?: { id: string, reflectionsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, embeddedBeam?: { label: string, embeddedID: any } | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
 
 export type GetBeamByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;
 
 
-export type GetBeamByIdQuery = { node?: { id: string, reflectionsCount: number, active: boolean, embeddedBeam?: any | null, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } | {} | null };
+export type GetBeamByIdQuery = { node?: { id: string, reflectionsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, embeddedBeam?: { label: string, embeddedID: any } | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } | {} | null };
 
 export type GetContentBlockByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -57,14 +57,14 @@ export type CreateBeamMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateBeamMutation = { createAkashaBeam?: { clientMutationId?: string | null, document: { id: string, reflectionsCount: number, active: boolean, embeddedBeam?: any | null, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } } | null };
+export type CreateBeamMutation = { createAkashaBeam?: { clientMutationId?: string | null, document: { id: string, reflectionsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, embeddedBeam?: { label: string, embeddedID: any } | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } } | null };
 
 export type UpdateBeamMutationVariables = Types.Exact<{
   i: Types.UpdateAkashaBeamInput;
 }>;
 
 
-export type UpdateBeamMutation = { updateAkashaBeam?: { clientMutationId?: string | null, document: { id: string, reflectionsCount: number, active: boolean, embeddedBeam?: any | null, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } } | null };
+export type UpdateBeamMutation = { updateAkashaBeam?: { clientMutationId?: string | null, document: { id: string, reflectionsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, embeddedBeam?: { label: string, embeddedID: any } | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }> } } | null };
 
 export type CreateContentBlockMutationVariables = Types.Exact<{
   i: Types.CreateAkashaContentBlockInput;
@@ -80,7 +80,7 @@ export type UpdateContentBlockMutationVariables = Types.Exact<{
 
 export type UpdateContentBlockMutation = { updateAkashaContentBlock?: { clientMutationId?: string | null, document: { active: boolean, appVersionID: any, createdAt: any, kind?: Types.AkashaContentBlockBlockDef | null, version: any, nsfw?: boolean | null, content: Array<{ propertyType: string, value: string, label: string }>, appVersion?: { applicationID: any, id: string, version: string, application?: { name: string, displayName: string, id: string } | null } | null, author: { id: string, isViewer: boolean } } } | null };
 
-export type ReflectFragmentFragment = { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ provider: string, property: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null };
+export type ReflectFragmentFragment = { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null };
 
 export type GetReflectionsFromBeamQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -91,7 +91,7 @@ export type GetReflectionsFromBeamQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetReflectionsFromBeamQuery = { node?: { reflections: { edges?: Array<{ node?: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ provider: string, property: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | {} | null };
+export type GetReflectionsFromBeamQuery = { node?: { reflections: { edges?: Array<{ node?: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | {} | null };
 
 export type GetReflectionsByAuthorDidQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
@@ -102,7 +102,7 @@ export type GetReflectionsByAuthorDidQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetReflectionsByAuthorDidQuery = { node?: { isViewer: boolean, akashaReflectList?: { edges?: Array<{ node?: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ provider: string, property: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
+export type GetReflectionsByAuthorDidQuery = { node?: { isViewer: boolean, akashaReflectList?: { edges?: Array<{ node?: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
 
 export type GetReflectReflectionsQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
@@ -114,21 +114,21 @@ export type GetReflectReflectionsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetReflectReflectionsQuery = { akashaReflectIndex?: { edges?: Array<{ node?: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ provider: string, property: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
+export type GetReflectReflectionsQuery = { akashaReflectIndex?: { edges?: Array<{ node?: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
 
 export type CreateReflectMutationVariables = Types.Exact<{
   i: Types.CreateAkashaReflectInput;
 }>;
 
 
-export type CreateReflectMutation = { createAkashaReflect?: { clientMutationId?: string | null, document: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ provider: string, property: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } } | null };
+export type CreateReflectMutation = { createAkashaReflect?: { clientMutationId?: string | null, document: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } } | null };
 
 export type UpdateAkashaReflectMutationVariables = Types.Exact<{
   i: Types.UpdateAkashaReflectInput;
 }>;
 
 
-export type UpdateAkashaReflectMutation = { updateAkashaReflect?: { clientMutationId?: string | null, document: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ provider: string, property: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } } | null };
+export type UpdateAkashaReflectMutation = { updateAkashaReflect?: { clientMutationId?: string | null, document: { version: any, active: boolean, isReply: boolean, reflection?: any | null, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } } | null };
 
 export type UserProfileFragmentFragment = { id: string, name: string, description?: string | null, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
 
