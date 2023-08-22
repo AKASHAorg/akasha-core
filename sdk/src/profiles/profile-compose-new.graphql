@@ -46,6 +46,7 @@ fragment UserProfileFragment on AkashaProfile{
   }
 
   createdAt
+  nsfw
 }
 # id of the profile document
 query GetProfileByID($id: ID!) {
@@ -142,10 +143,10 @@ query GetInterestsById($id: ID!){
   }
 }
 # get following
-query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput){
   node(id: $id){
     ... on CeramicAccount{
-      akashaFollowList(after: $after, before: $before, first: $first, last: $last, filters: {where: {isFollowing: {equalTo: true}}}){
+      akashaFollowList(after: $after, before: $before, first: $first, last: $last, filters: {where: {isFollowing: {equalTo: true}}}, sorting: $sorting){
         edges {
           node {
             id
@@ -169,11 +170,11 @@ query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: I
 }
 
 # get followers
-query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput){
   node(id: $id){
     ... on CeramicAccount{
       akashaProfile {
-        followers(after: $after, before: $before, first: $first, last: $last, filters: {where: {isFollowing: {equalTo: true}}}){
+        followers(after: $after, before: $before, first: $first, last: $last, filters: {where: {isFollowing: {equalTo: true}}}, sorting: $sorting){
           edges {
             node {
               id
@@ -202,6 +203,34 @@ query GetMyProfile{
   viewer {
     akashaProfile {
       ...UserProfileFragment
+    }
+  }
+}
+
+query GetFollowDocument($follower: ID!, $following: String!){
+  node(id: $follower){
+    ... on CeramicAccount{
+      akashaProfile {
+        followers(last: 1, filters: {where: {profileID: {equalTo: $following}}}){
+          edges {
+            node {
+              id
+              isFollowing
+              profileID
+              profile {
+                ...UserProfileFragment
+              }
+            }
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+      isViewer
     }
   }
 }

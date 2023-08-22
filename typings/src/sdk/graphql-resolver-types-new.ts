@@ -92,6 +92,15 @@ export type ResolversTypes = {
   AkashaAppReleaseObjectFilterInput: Types.AkashaAppReleaseObjectFilterInput;
   AkashaAppReleaseSortingInput: Types.AkashaAppReleaseSortingInput;
   AkashaAppSortingInput: Types.AkashaAppSortingInput;
+  AkashaAppsStream: ResolverTypeWrapper<Types.AkashaAppsStream>;
+  AkashaAppsStreamConnection: ResolverTypeWrapper<Types.AkashaAppsStreamConnection>;
+  AkashaAppsStreamEdge: ResolverTypeWrapper<Types.AkashaAppsStreamEdge>;
+  AkashaAppsStreamFiltersInput: Types.AkashaAppsStreamFiltersInput;
+  AkashaAppsStreamInput: Types.AkashaAppsStreamInput;
+  AkashaAppsStreamModerationStatus: Types.AkashaAppsStreamModerationStatus;
+  AkashaAppsStreamModerationStatusValueFilterInput: Types.AkashaAppsStreamModerationStatusValueFilterInput;
+  AkashaAppsStreamObjectFilterInput: Types.AkashaAppsStreamObjectFilterInput;
+  AkashaAppsStreamSortingInput: Types.AkashaAppsStreamSortingInput;
   AkashaBeam: ResolverTypeWrapper<Types.AkashaBeam>;
   AkashaBeamBlockRecord: ResolverTypeWrapper<Types.AkashaBeamBlockRecord>;
   AkashaBeamBlockRecordInput: Types.AkashaBeamBlockRecordInput;
@@ -101,6 +110,15 @@ export type ResolversTypes = {
   AkashaBeamInput: Types.AkashaBeamInput;
   AkashaBeamObjectFilterInput: Types.AkashaBeamObjectFilterInput;
   AkashaBeamSortingInput: Types.AkashaBeamSortingInput;
+  AkashaBeamStream: ResolverTypeWrapper<Types.AkashaBeamStream>;
+  AkashaBeamStreamConnection: ResolverTypeWrapper<Types.AkashaBeamStreamConnection>;
+  AkashaBeamStreamEdge: ResolverTypeWrapper<Types.AkashaBeamStreamEdge>;
+  AkashaBeamStreamFiltersInput: Types.AkashaBeamStreamFiltersInput;
+  AkashaBeamStreamInput: Types.AkashaBeamStreamInput;
+  AkashaBeamStreamModerationStatus: Types.AkashaBeamStreamModerationStatus;
+  AkashaBeamStreamModerationStatusValueFilterInput: Types.AkashaBeamStreamModerationStatusValueFilterInput;
+  AkashaBeamStreamObjectFilterInput: Types.AkashaBeamStreamObjectFilterInput;
+  AkashaBeamStreamSortingInput: Types.AkashaBeamStreamSortingInput;
   AkashaBlockStorage: ResolverTypeWrapper<Types.AkashaBlockStorage>;
   AkashaBlockStorageBlockStorageDef: Types.AkashaBlockStorageBlockStorageDef;
   AkashaBlockStorageBlockStorageDefValueFilterInput: Types.AkashaBlockStorageBlockStorageDefValueFilterInput;
@@ -123,6 +141,15 @@ export type ResolversTypes = {
   AkashaContentBlockLabeledValueInput: Types.AkashaContentBlockLabeledValueInput;
   AkashaContentBlockObjectFilterInput: Types.AkashaContentBlockObjectFilterInput;
   AkashaContentBlockSortingInput: Types.AkashaContentBlockSortingInput;
+  AkashaContentBlockStream: ResolverTypeWrapper<Types.AkashaContentBlockStream>;
+  AkashaContentBlockStreamConnection: ResolverTypeWrapper<Types.AkashaContentBlockStreamConnection>;
+  AkashaContentBlockStreamEdge: ResolverTypeWrapper<Types.AkashaContentBlockStreamEdge>;
+  AkashaContentBlockStreamFiltersInput: Types.AkashaContentBlockStreamFiltersInput;
+  AkashaContentBlockStreamInput: Types.AkashaContentBlockStreamInput;
+  AkashaContentBlockStreamModerationStatus: Types.AkashaContentBlockStreamModerationStatus;
+  AkashaContentBlockStreamModerationStatusValueFilterInput: Types.AkashaContentBlockStreamModerationStatusValueFilterInput;
+  AkashaContentBlockStreamObjectFilterInput: Types.AkashaContentBlockStreamObjectFilterInput;
+  AkashaContentBlockStreamSortingInput: Types.AkashaContentBlockStreamSortingInput;
   AkashaFollow: ResolverTypeWrapper<Types.AkashaFollow>;
   AkashaFollowConnection: ResolverTypeWrapper<Types.AkashaFollowConnection>;
   AkashaFollowEdge: ResolverTypeWrapper<Types.AkashaFollowEdge>;
@@ -130,6 +157,15 @@ export type ResolversTypes = {
   AkashaFollowInput: Types.AkashaFollowInput;
   AkashaFollowObjectFilterInput: Types.AkashaFollowObjectFilterInput;
   AkashaFollowSortingInput: Types.AkashaFollowSortingInput;
+  AkashaInterestsStream: ResolverTypeWrapper<Types.AkashaInterestsStream>;
+  AkashaInterestsStreamConnection: ResolverTypeWrapper<Types.AkashaInterestsStreamConnection>;
+  AkashaInterestsStreamEdge: ResolverTypeWrapper<Types.AkashaInterestsStreamEdge>;
+  AkashaInterestsStreamFiltersInput: Types.AkashaInterestsStreamFiltersInput;
+  AkashaInterestsStreamInput: Types.AkashaInterestsStreamInput;
+  AkashaInterestsStreamModerationStatus: Types.AkashaInterestsStreamModerationStatus;
+  AkashaInterestsStreamModerationStatusValueFilterInput: Types.AkashaInterestsStreamModerationStatusValueFilterInput;
+  AkashaInterestsStreamObjectFilterInput: Types.AkashaInterestsStreamObjectFilterInput;
+  AkashaInterestsStreamSortingInput: Types.AkashaInterestsStreamSortingInput;
   AkashaProfile: ResolverTypeWrapper<Types.AkashaProfile>;
   AkashaProfileConnection: ResolverTypeWrapper<Types.AkashaProfileConnection>;
   AkashaProfileEdge: ResolverTypeWrapper<Types.AkashaProfileEdge>;
@@ -149,6 +185,15 @@ export type ResolversTypes = {
   AkashaProfileLinkSourceInput: Types.AkashaProfileLinkSourceInput;
   AkashaProfileObjectFilterInput: Types.AkashaProfileObjectFilterInput;
   AkashaProfileSortingInput: Types.AkashaProfileSortingInput;
+  AkashaProfileStream: ResolverTypeWrapper<Types.AkashaProfileStream>;
+  AkashaProfileStreamConnection: ResolverTypeWrapper<Types.AkashaProfileStreamConnection>;
+  AkashaProfileStreamEdge: ResolverTypeWrapper<Types.AkashaProfileStreamEdge>;
+  AkashaProfileStreamFiltersInput: Types.AkashaProfileStreamFiltersInput;
+  AkashaProfileStreamInput: Types.AkashaProfileStreamInput;
+  AkashaProfileStreamModerationStatus: Types.AkashaProfileStreamModerationStatus;
+  AkashaProfileStreamModerationStatusValueFilterInput: Types.AkashaProfileStreamModerationStatusValueFilterInput;
+  AkashaProfileStreamObjectFilterInput: Types.AkashaProfileStreamObjectFilterInput;
+  AkashaProfileStreamSortingInput: Types.AkashaProfileStreamSortingInput;
   AkashaReflect: ResolverTypeWrapper<Types.AkashaReflect>;
   AkashaReflectConnection: ResolverTypeWrapper<Types.AkashaReflectConnection>;
   AkashaReflectEdge: ResolverTypeWrapper<Types.AkashaReflectEdge>;
@@ -158,6 +203,15 @@ export type ResolversTypes = {
   AkashaReflectProviderValue: ResolverTypeWrapper<Types.AkashaReflectProviderValue>;
   AkashaReflectProviderValueInput: Types.AkashaReflectProviderValueInput;
   AkashaReflectSortingInput: Types.AkashaReflectSortingInput;
+  AkashaReflectStream: ResolverTypeWrapper<Types.AkashaReflectStream>;
+  AkashaReflectStreamConnection: ResolverTypeWrapper<Types.AkashaReflectStreamConnection>;
+  AkashaReflectStreamEdge: ResolverTypeWrapper<Types.AkashaReflectStreamEdge>;
+  AkashaReflectStreamFiltersInput: Types.AkashaReflectStreamFiltersInput;
+  AkashaReflectStreamInput: Types.AkashaReflectStreamInput;
+  AkashaReflectStreamModerationStatus: Types.AkashaReflectStreamModerationStatus;
+  AkashaReflectStreamModerationStatusValueFilterInput: Types.AkashaReflectStreamModerationStatusValueFilterInput;
+  AkashaReflectStreamObjectFilterInput: Types.AkashaReflectStreamObjectFilterInput;
+  AkashaReflectStreamSortingInput: Types.AkashaReflectStreamSortingInput;
   BooleanValueFilterInput: Types.BooleanValueFilterInput;
   CeramicAccount: ResolverTypeWrapper<Types.CeramicAccount>;
   CeramicCommitID: ResolverTypeWrapper<Types.Scalars['CeramicCommitID']>;
@@ -166,35 +220,53 @@ export type ResolversTypes = {
   CreateAkashaAppPayload: ResolverTypeWrapper<Types.CreateAkashaAppPayload>;
   CreateAkashaAppReleaseInput: Types.CreateAkashaAppReleaseInput;
   CreateAkashaAppReleasePayload: ResolverTypeWrapper<Types.CreateAkashaAppReleasePayload>;
+  CreateAkashaAppsStreamInput: Types.CreateAkashaAppsStreamInput;
+  CreateAkashaAppsStreamPayload: ResolverTypeWrapper<Types.CreateAkashaAppsStreamPayload>;
   CreateAkashaBeamInput: Types.CreateAkashaBeamInput;
   CreateAkashaBeamPayload: ResolverTypeWrapper<Types.CreateAkashaBeamPayload>;
+  CreateAkashaBeamStreamInput: Types.CreateAkashaBeamStreamInput;
+  CreateAkashaBeamStreamPayload: ResolverTypeWrapper<Types.CreateAkashaBeamStreamPayload>;
   CreateAkashaBlockStorageInput: Types.CreateAkashaBlockStorageInput;
   CreateAkashaBlockStoragePayload: ResolverTypeWrapper<Types.CreateAkashaBlockStoragePayload>;
   CreateAkashaContentBlockInput: Types.CreateAkashaContentBlockInput;
   CreateAkashaContentBlockPayload: ResolverTypeWrapper<Types.CreateAkashaContentBlockPayload>;
+  CreateAkashaContentBlockStreamInput: Types.CreateAkashaContentBlockStreamInput;
+  CreateAkashaContentBlockStreamPayload: ResolverTypeWrapper<Types.CreateAkashaContentBlockStreamPayload>;
   CreateAkashaFollowInput: Types.CreateAkashaFollowInput;
   CreateAkashaFollowPayload: ResolverTypeWrapper<Types.CreateAkashaFollowPayload>;
+  CreateAkashaInterestsStreamInput: Types.CreateAkashaInterestsStreamInput;
+  CreateAkashaInterestsStreamPayload: ResolverTypeWrapper<Types.CreateAkashaInterestsStreamPayload>;
   CreateAkashaProfileInput: Types.CreateAkashaProfileInput;
   CreateAkashaProfileInterestsInput: Types.CreateAkashaProfileInterestsInput;
   CreateAkashaProfileInterestsPayload: ResolverTypeWrapper<Types.CreateAkashaProfileInterestsPayload>;
   CreateAkashaProfilePayload: ResolverTypeWrapper<Types.CreateAkashaProfilePayload>;
+  CreateAkashaProfileStreamInput: Types.CreateAkashaProfileStreamInput;
+  CreateAkashaProfileStreamPayload: ResolverTypeWrapper<Types.CreateAkashaProfileStreamPayload>;
   CreateAkashaReflectInput: Types.CreateAkashaReflectInput;
   CreateAkashaReflectPayload: ResolverTypeWrapper<Types.CreateAkashaReflectPayload>;
+  CreateAkashaReflectStreamInput: Types.CreateAkashaReflectStreamInput;
+  CreateAkashaReflectStreamPayload: ResolverTypeWrapper<Types.CreateAkashaReflectStreamPayload>;
   DID: ResolverTypeWrapper<Types.Scalars['DID']>;
   DateTime: ResolverTypeWrapper<Types.Scalars['DateTime']>;
   InterPlanetaryCID: ResolverTypeWrapper<Types.Scalars['InterPlanetaryCID']>;
   Mutation: ResolverTypeWrapper<{}>;
-  Node: ResolversTypes['AkashaApp'] | ResolversTypes['AkashaAppRelease'] | ResolversTypes['AkashaBeam'] | ResolversTypes['AkashaBlockStorage'] | ResolversTypes['AkashaContentBlock'] | ResolversTypes['AkashaFollow'] | ResolversTypes['AkashaProfile'] | ResolversTypes['AkashaProfileInterests'] | ResolversTypes['AkashaReflect'] | ResolversTypes['CeramicAccount'];
+  Node: ResolversTypes['AkashaApp'] | ResolversTypes['AkashaAppRelease'] | ResolversTypes['AkashaAppsStream'] | ResolversTypes['AkashaBeam'] | ResolversTypes['AkashaBeamStream'] | ResolversTypes['AkashaBlockStorage'] | ResolversTypes['AkashaContentBlock'] | ResolversTypes['AkashaContentBlockStream'] | ResolversTypes['AkashaFollow'] | ResolversTypes['AkashaInterestsStream'] | ResolversTypes['AkashaProfile'] | ResolversTypes['AkashaProfileInterests'] | ResolversTypes['AkashaProfileStream'] | ResolversTypes['AkashaReflect'] | ResolversTypes['AkashaReflectStream'] | ResolversTypes['CeramicAccount'];
   PageInfo: ResolverTypeWrapper<Types.PageInfo>;
   PartialAkashaAppInput: Types.PartialAkashaAppInput;
   PartialAkashaAppReleaseInput: Types.PartialAkashaAppReleaseInput;
+  PartialAkashaAppsStreamInput: Types.PartialAkashaAppsStreamInput;
   PartialAkashaBeamInput: Types.PartialAkashaBeamInput;
+  PartialAkashaBeamStreamInput: Types.PartialAkashaBeamStreamInput;
   PartialAkashaBlockStorageInput: Types.PartialAkashaBlockStorageInput;
   PartialAkashaContentBlockInput: Types.PartialAkashaContentBlockInput;
+  PartialAkashaContentBlockStreamInput: Types.PartialAkashaContentBlockStreamInput;
   PartialAkashaFollowInput: Types.PartialAkashaFollowInput;
+  PartialAkashaInterestsStreamInput: Types.PartialAkashaInterestsStreamInput;
   PartialAkashaProfileInput: Types.PartialAkashaProfileInput;
   PartialAkashaProfileInterestsInput: Types.PartialAkashaProfileInterestsInput;
+  PartialAkashaProfileStreamInput: Types.PartialAkashaProfileStreamInput;
   PartialAkashaReflectInput: Types.PartialAkashaReflectInput;
+  PartialAkashaReflectStreamInput: Types.PartialAkashaReflectStreamInput;
   Query: ResolverTypeWrapper<{}>;
   SortOrder: Types.SortOrder;
   StringValueFilterInput: Types.StringValueFilterInput;
@@ -203,20 +275,32 @@ export type ResolversTypes = {
   UpdateAkashaAppPayload: ResolverTypeWrapper<Types.UpdateAkashaAppPayload>;
   UpdateAkashaAppReleaseInput: Types.UpdateAkashaAppReleaseInput;
   UpdateAkashaAppReleasePayload: ResolverTypeWrapper<Types.UpdateAkashaAppReleasePayload>;
+  UpdateAkashaAppsStreamInput: Types.UpdateAkashaAppsStreamInput;
+  UpdateAkashaAppsStreamPayload: ResolverTypeWrapper<Types.UpdateAkashaAppsStreamPayload>;
   UpdateAkashaBeamInput: Types.UpdateAkashaBeamInput;
   UpdateAkashaBeamPayload: ResolverTypeWrapper<Types.UpdateAkashaBeamPayload>;
+  UpdateAkashaBeamStreamInput: Types.UpdateAkashaBeamStreamInput;
+  UpdateAkashaBeamStreamPayload: ResolverTypeWrapper<Types.UpdateAkashaBeamStreamPayload>;
   UpdateAkashaBlockStorageInput: Types.UpdateAkashaBlockStorageInput;
   UpdateAkashaBlockStoragePayload: ResolverTypeWrapper<Types.UpdateAkashaBlockStoragePayload>;
   UpdateAkashaContentBlockInput: Types.UpdateAkashaContentBlockInput;
   UpdateAkashaContentBlockPayload: ResolverTypeWrapper<Types.UpdateAkashaContentBlockPayload>;
+  UpdateAkashaContentBlockStreamInput: Types.UpdateAkashaContentBlockStreamInput;
+  UpdateAkashaContentBlockStreamPayload: ResolverTypeWrapper<Types.UpdateAkashaContentBlockStreamPayload>;
   UpdateAkashaFollowInput: Types.UpdateAkashaFollowInput;
   UpdateAkashaFollowPayload: ResolverTypeWrapper<Types.UpdateAkashaFollowPayload>;
+  UpdateAkashaInterestsStreamInput: Types.UpdateAkashaInterestsStreamInput;
+  UpdateAkashaInterestsStreamPayload: ResolverTypeWrapper<Types.UpdateAkashaInterestsStreamPayload>;
   UpdateAkashaProfileInput: Types.UpdateAkashaProfileInput;
   UpdateAkashaProfileInterestsInput: Types.UpdateAkashaProfileInterestsInput;
   UpdateAkashaProfileInterestsPayload: ResolverTypeWrapper<Types.UpdateAkashaProfileInterestsPayload>;
   UpdateAkashaProfilePayload: ResolverTypeWrapper<Types.UpdateAkashaProfilePayload>;
+  UpdateAkashaProfileStreamInput: Types.UpdateAkashaProfileStreamInput;
+  UpdateAkashaProfileStreamPayload: ResolverTypeWrapper<Types.UpdateAkashaProfileStreamPayload>;
   UpdateAkashaReflectInput: Types.UpdateAkashaReflectInput;
   UpdateAkashaReflectPayload: ResolverTypeWrapper<Types.UpdateAkashaReflectPayload>;
+  UpdateAkashaReflectStreamInput: Types.UpdateAkashaReflectStreamInput;
+  UpdateAkashaReflectStreamPayload: ResolverTypeWrapper<Types.UpdateAkashaReflectStreamPayload>;
   UpdateOptionsInput: Types.UpdateOptionsInput;
 };
 
@@ -241,6 +325,14 @@ export type ResolversParentTypes = {
   AkashaAppReleaseObjectFilterInput: Types.AkashaAppReleaseObjectFilterInput;
   AkashaAppReleaseSortingInput: Types.AkashaAppReleaseSortingInput;
   AkashaAppSortingInput: Types.AkashaAppSortingInput;
+  AkashaAppsStream: Types.AkashaAppsStream;
+  AkashaAppsStreamConnection: Types.AkashaAppsStreamConnection;
+  AkashaAppsStreamEdge: Types.AkashaAppsStreamEdge;
+  AkashaAppsStreamFiltersInput: Types.AkashaAppsStreamFiltersInput;
+  AkashaAppsStreamInput: Types.AkashaAppsStreamInput;
+  AkashaAppsStreamModerationStatusValueFilterInput: Types.AkashaAppsStreamModerationStatusValueFilterInput;
+  AkashaAppsStreamObjectFilterInput: Types.AkashaAppsStreamObjectFilterInput;
+  AkashaAppsStreamSortingInput: Types.AkashaAppsStreamSortingInput;
   AkashaBeam: Types.AkashaBeam;
   AkashaBeamBlockRecord: Types.AkashaBeamBlockRecord;
   AkashaBeamBlockRecordInput: Types.AkashaBeamBlockRecordInput;
@@ -250,6 +342,14 @@ export type ResolversParentTypes = {
   AkashaBeamInput: Types.AkashaBeamInput;
   AkashaBeamObjectFilterInput: Types.AkashaBeamObjectFilterInput;
   AkashaBeamSortingInput: Types.AkashaBeamSortingInput;
+  AkashaBeamStream: Types.AkashaBeamStream;
+  AkashaBeamStreamConnection: Types.AkashaBeamStreamConnection;
+  AkashaBeamStreamEdge: Types.AkashaBeamStreamEdge;
+  AkashaBeamStreamFiltersInput: Types.AkashaBeamStreamFiltersInput;
+  AkashaBeamStreamInput: Types.AkashaBeamStreamInput;
+  AkashaBeamStreamModerationStatusValueFilterInput: Types.AkashaBeamStreamModerationStatusValueFilterInput;
+  AkashaBeamStreamObjectFilterInput: Types.AkashaBeamStreamObjectFilterInput;
+  AkashaBeamStreamSortingInput: Types.AkashaBeamStreamSortingInput;
   AkashaBlockStorage: Types.AkashaBlockStorage;
   AkashaBlockStorageBlockStorageDefValueFilterInput: Types.AkashaBlockStorageBlockStorageDefValueFilterInput;
   AkashaBlockStorageConnection: Types.AkashaBlockStorageConnection;
@@ -270,6 +370,14 @@ export type ResolversParentTypes = {
   AkashaContentBlockLabeledValueInput: Types.AkashaContentBlockLabeledValueInput;
   AkashaContentBlockObjectFilterInput: Types.AkashaContentBlockObjectFilterInput;
   AkashaContentBlockSortingInput: Types.AkashaContentBlockSortingInput;
+  AkashaContentBlockStream: Types.AkashaContentBlockStream;
+  AkashaContentBlockStreamConnection: Types.AkashaContentBlockStreamConnection;
+  AkashaContentBlockStreamEdge: Types.AkashaContentBlockStreamEdge;
+  AkashaContentBlockStreamFiltersInput: Types.AkashaContentBlockStreamFiltersInput;
+  AkashaContentBlockStreamInput: Types.AkashaContentBlockStreamInput;
+  AkashaContentBlockStreamModerationStatusValueFilterInput: Types.AkashaContentBlockStreamModerationStatusValueFilterInput;
+  AkashaContentBlockStreamObjectFilterInput: Types.AkashaContentBlockStreamObjectFilterInput;
+  AkashaContentBlockStreamSortingInput: Types.AkashaContentBlockStreamSortingInput;
   AkashaFollow: Types.AkashaFollow;
   AkashaFollowConnection: Types.AkashaFollowConnection;
   AkashaFollowEdge: Types.AkashaFollowEdge;
@@ -277,6 +385,14 @@ export type ResolversParentTypes = {
   AkashaFollowInput: Types.AkashaFollowInput;
   AkashaFollowObjectFilterInput: Types.AkashaFollowObjectFilterInput;
   AkashaFollowSortingInput: Types.AkashaFollowSortingInput;
+  AkashaInterestsStream: Types.AkashaInterestsStream;
+  AkashaInterestsStreamConnection: Types.AkashaInterestsStreamConnection;
+  AkashaInterestsStreamEdge: Types.AkashaInterestsStreamEdge;
+  AkashaInterestsStreamFiltersInput: Types.AkashaInterestsStreamFiltersInput;
+  AkashaInterestsStreamInput: Types.AkashaInterestsStreamInput;
+  AkashaInterestsStreamModerationStatusValueFilterInput: Types.AkashaInterestsStreamModerationStatusValueFilterInput;
+  AkashaInterestsStreamObjectFilterInput: Types.AkashaInterestsStreamObjectFilterInput;
+  AkashaInterestsStreamSortingInput: Types.AkashaInterestsStreamSortingInput;
   AkashaProfile: Types.AkashaProfile;
   AkashaProfileConnection: Types.AkashaProfileConnection;
   AkashaProfileEdge: Types.AkashaProfileEdge;
@@ -296,6 +412,14 @@ export type ResolversParentTypes = {
   AkashaProfileLinkSourceInput: Types.AkashaProfileLinkSourceInput;
   AkashaProfileObjectFilterInput: Types.AkashaProfileObjectFilterInput;
   AkashaProfileSortingInput: Types.AkashaProfileSortingInput;
+  AkashaProfileStream: Types.AkashaProfileStream;
+  AkashaProfileStreamConnection: Types.AkashaProfileStreamConnection;
+  AkashaProfileStreamEdge: Types.AkashaProfileStreamEdge;
+  AkashaProfileStreamFiltersInput: Types.AkashaProfileStreamFiltersInput;
+  AkashaProfileStreamInput: Types.AkashaProfileStreamInput;
+  AkashaProfileStreamModerationStatusValueFilterInput: Types.AkashaProfileStreamModerationStatusValueFilterInput;
+  AkashaProfileStreamObjectFilterInput: Types.AkashaProfileStreamObjectFilterInput;
+  AkashaProfileStreamSortingInput: Types.AkashaProfileStreamSortingInput;
   AkashaReflect: Types.AkashaReflect;
   AkashaReflectConnection: Types.AkashaReflectConnection;
   AkashaReflectEdge: Types.AkashaReflectEdge;
@@ -305,6 +429,14 @@ export type ResolversParentTypes = {
   AkashaReflectProviderValue: Types.AkashaReflectProviderValue;
   AkashaReflectProviderValueInput: Types.AkashaReflectProviderValueInput;
   AkashaReflectSortingInput: Types.AkashaReflectSortingInput;
+  AkashaReflectStream: Types.AkashaReflectStream;
+  AkashaReflectStreamConnection: Types.AkashaReflectStreamConnection;
+  AkashaReflectStreamEdge: Types.AkashaReflectStreamEdge;
+  AkashaReflectStreamFiltersInput: Types.AkashaReflectStreamFiltersInput;
+  AkashaReflectStreamInput: Types.AkashaReflectStreamInput;
+  AkashaReflectStreamModerationStatusValueFilterInput: Types.AkashaReflectStreamModerationStatusValueFilterInput;
+  AkashaReflectStreamObjectFilterInput: Types.AkashaReflectStreamObjectFilterInput;
+  AkashaReflectStreamSortingInput: Types.AkashaReflectStreamSortingInput;
   BooleanValueFilterInput: Types.BooleanValueFilterInput;
   CeramicAccount: Types.CeramicAccount;
   CeramicCommitID: Types.Scalars['CeramicCommitID'];
@@ -313,35 +445,53 @@ export type ResolversParentTypes = {
   CreateAkashaAppPayload: Types.CreateAkashaAppPayload;
   CreateAkashaAppReleaseInput: Types.CreateAkashaAppReleaseInput;
   CreateAkashaAppReleasePayload: Types.CreateAkashaAppReleasePayload;
+  CreateAkashaAppsStreamInput: Types.CreateAkashaAppsStreamInput;
+  CreateAkashaAppsStreamPayload: Types.CreateAkashaAppsStreamPayload;
   CreateAkashaBeamInput: Types.CreateAkashaBeamInput;
   CreateAkashaBeamPayload: Types.CreateAkashaBeamPayload;
+  CreateAkashaBeamStreamInput: Types.CreateAkashaBeamStreamInput;
+  CreateAkashaBeamStreamPayload: Types.CreateAkashaBeamStreamPayload;
   CreateAkashaBlockStorageInput: Types.CreateAkashaBlockStorageInput;
   CreateAkashaBlockStoragePayload: Types.CreateAkashaBlockStoragePayload;
   CreateAkashaContentBlockInput: Types.CreateAkashaContentBlockInput;
   CreateAkashaContentBlockPayload: Types.CreateAkashaContentBlockPayload;
+  CreateAkashaContentBlockStreamInput: Types.CreateAkashaContentBlockStreamInput;
+  CreateAkashaContentBlockStreamPayload: Types.CreateAkashaContentBlockStreamPayload;
   CreateAkashaFollowInput: Types.CreateAkashaFollowInput;
   CreateAkashaFollowPayload: Types.CreateAkashaFollowPayload;
+  CreateAkashaInterestsStreamInput: Types.CreateAkashaInterestsStreamInput;
+  CreateAkashaInterestsStreamPayload: Types.CreateAkashaInterestsStreamPayload;
   CreateAkashaProfileInput: Types.CreateAkashaProfileInput;
   CreateAkashaProfileInterestsInput: Types.CreateAkashaProfileInterestsInput;
   CreateAkashaProfileInterestsPayload: Types.CreateAkashaProfileInterestsPayload;
   CreateAkashaProfilePayload: Types.CreateAkashaProfilePayload;
+  CreateAkashaProfileStreamInput: Types.CreateAkashaProfileStreamInput;
+  CreateAkashaProfileStreamPayload: Types.CreateAkashaProfileStreamPayload;
   CreateAkashaReflectInput: Types.CreateAkashaReflectInput;
   CreateAkashaReflectPayload: Types.CreateAkashaReflectPayload;
+  CreateAkashaReflectStreamInput: Types.CreateAkashaReflectStreamInput;
+  CreateAkashaReflectStreamPayload: Types.CreateAkashaReflectStreamPayload;
   DID: Types.Scalars['DID'];
   DateTime: Types.Scalars['DateTime'];
   InterPlanetaryCID: Types.Scalars['InterPlanetaryCID'];
   Mutation: {};
-  Node: ResolversParentTypes['AkashaApp'] | ResolversParentTypes['AkashaAppRelease'] | ResolversParentTypes['AkashaBeam'] | ResolversParentTypes['AkashaBlockStorage'] | ResolversParentTypes['AkashaContentBlock'] | ResolversParentTypes['AkashaFollow'] | ResolversParentTypes['AkashaProfile'] | ResolversParentTypes['AkashaProfileInterests'] | ResolversParentTypes['AkashaReflect'] | ResolversParentTypes['CeramicAccount'];
+  Node: ResolversParentTypes['AkashaApp'] | ResolversParentTypes['AkashaAppRelease'] | ResolversParentTypes['AkashaAppsStream'] | ResolversParentTypes['AkashaBeam'] | ResolversParentTypes['AkashaBeamStream'] | ResolversParentTypes['AkashaBlockStorage'] | ResolversParentTypes['AkashaContentBlock'] | ResolversParentTypes['AkashaContentBlockStream'] | ResolversParentTypes['AkashaFollow'] | ResolversParentTypes['AkashaInterestsStream'] | ResolversParentTypes['AkashaProfile'] | ResolversParentTypes['AkashaProfileInterests'] | ResolversParentTypes['AkashaProfileStream'] | ResolversParentTypes['AkashaReflect'] | ResolversParentTypes['AkashaReflectStream'] | ResolversParentTypes['CeramicAccount'];
   PageInfo: Types.PageInfo;
   PartialAkashaAppInput: Types.PartialAkashaAppInput;
   PartialAkashaAppReleaseInput: Types.PartialAkashaAppReleaseInput;
+  PartialAkashaAppsStreamInput: Types.PartialAkashaAppsStreamInput;
   PartialAkashaBeamInput: Types.PartialAkashaBeamInput;
+  PartialAkashaBeamStreamInput: Types.PartialAkashaBeamStreamInput;
   PartialAkashaBlockStorageInput: Types.PartialAkashaBlockStorageInput;
   PartialAkashaContentBlockInput: Types.PartialAkashaContentBlockInput;
+  PartialAkashaContentBlockStreamInput: Types.PartialAkashaContentBlockStreamInput;
   PartialAkashaFollowInput: Types.PartialAkashaFollowInput;
+  PartialAkashaInterestsStreamInput: Types.PartialAkashaInterestsStreamInput;
   PartialAkashaProfileInput: Types.PartialAkashaProfileInput;
   PartialAkashaProfileInterestsInput: Types.PartialAkashaProfileInterestsInput;
+  PartialAkashaProfileStreamInput: Types.PartialAkashaProfileStreamInput;
   PartialAkashaReflectInput: Types.PartialAkashaReflectInput;
+  PartialAkashaReflectStreamInput: Types.PartialAkashaReflectStreamInput;
   Query: {};
   StringValueFilterInput: Types.StringValueFilterInput;
   URI: Types.Scalars['URI'];
@@ -349,20 +499,32 @@ export type ResolversParentTypes = {
   UpdateAkashaAppPayload: Types.UpdateAkashaAppPayload;
   UpdateAkashaAppReleaseInput: Types.UpdateAkashaAppReleaseInput;
   UpdateAkashaAppReleasePayload: Types.UpdateAkashaAppReleasePayload;
+  UpdateAkashaAppsStreamInput: Types.UpdateAkashaAppsStreamInput;
+  UpdateAkashaAppsStreamPayload: Types.UpdateAkashaAppsStreamPayload;
   UpdateAkashaBeamInput: Types.UpdateAkashaBeamInput;
   UpdateAkashaBeamPayload: Types.UpdateAkashaBeamPayload;
+  UpdateAkashaBeamStreamInput: Types.UpdateAkashaBeamStreamInput;
+  UpdateAkashaBeamStreamPayload: Types.UpdateAkashaBeamStreamPayload;
   UpdateAkashaBlockStorageInput: Types.UpdateAkashaBlockStorageInput;
   UpdateAkashaBlockStoragePayload: Types.UpdateAkashaBlockStoragePayload;
   UpdateAkashaContentBlockInput: Types.UpdateAkashaContentBlockInput;
   UpdateAkashaContentBlockPayload: Types.UpdateAkashaContentBlockPayload;
+  UpdateAkashaContentBlockStreamInput: Types.UpdateAkashaContentBlockStreamInput;
+  UpdateAkashaContentBlockStreamPayload: Types.UpdateAkashaContentBlockStreamPayload;
   UpdateAkashaFollowInput: Types.UpdateAkashaFollowInput;
   UpdateAkashaFollowPayload: Types.UpdateAkashaFollowPayload;
+  UpdateAkashaInterestsStreamInput: Types.UpdateAkashaInterestsStreamInput;
+  UpdateAkashaInterestsStreamPayload: Types.UpdateAkashaInterestsStreamPayload;
   UpdateAkashaProfileInput: Types.UpdateAkashaProfileInput;
   UpdateAkashaProfileInterestsInput: Types.UpdateAkashaProfileInterestsInput;
   UpdateAkashaProfileInterestsPayload: Types.UpdateAkashaProfileInterestsPayload;
   UpdateAkashaProfilePayload: Types.UpdateAkashaProfilePayload;
+  UpdateAkashaProfileStreamInput: Types.UpdateAkashaProfileStreamInput;
+  UpdateAkashaProfileStreamPayload: Types.UpdateAkashaProfileStreamPayload;
   UpdateAkashaReflectInput: Types.UpdateAkashaReflectInput;
   UpdateAkashaReflectPayload: Types.UpdateAkashaReflectPayload;
+  UpdateAkashaReflectStreamInput: Types.UpdateAkashaReflectStreamInput;
+  UpdateAkashaReflectStreamPayload: Types.UpdateAkashaReflectStreamPayload;
   UpdateOptionsInput: Types.UpdateOptionsInput;
 };
 
@@ -416,6 +578,29 @@ export type AkashaAppReleaseEdgeResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AkashaAppsStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaAppsStream'] = ResolversParentTypes['AkashaAppsStream']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  application?: Resolver<Types.Maybe<ResolversTypes['AkashaApp']>, ParentType, ContextType>;
+  applicationID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  moderationID?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
+  status?: Resolver<Types.Maybe<ResolversTypes['AkashaAppsStreamModerationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaAppsStreamConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaAppsStreamConnection'] = ResolversParentTypes['AkashaAppsStreamConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaAppsStreamEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaAppsStreamEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaAppsStreamEdge'] = ResolversParentTypes['AkashaAppsStreamEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaAppsStream']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type AkashaBeamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeam'] = ResolversParentTypes['AkashaBeam']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   author?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
@@ -424,6 +609,7 @@ export type AkashaBeamResolvers<ContextType = any, ParentType extends ResolversP
   embeddedBeam?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   mentions?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicStreamID']>>>, ParentType, ContextType>;
+  nsfw?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   reflections?: Resolver<ResolversTypes['AkashaReflectConnection'], ParentType, ContextType, Partial<Types.AkashaBeamReflectionsArgs>>;
   reflectionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.AkashaBeamReflectionsCountArgs>>;
   tags?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
@@ -446,6 +632,29 @@ export type AkashaBeamConnectionResolvers<ContextType = any, ParentType extends 
 export type AkashaBeamEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeamEdge'] = ResolversParentTypes['AkashaBeamEdge']> = {
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   node?: Resolver<Types.Maybe<ResolversTypes['AkashaBeam']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaBeamStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeamStream'] = ResolversParentTypes['AkashaBeamStream']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  beam?: Resolver<Types.Maybe<ResolversTypes['AkashaBeam']>, ParentType, ContextType>;
+  beamID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  moderationID?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
+  status?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamStreamModerationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaBeamStreamConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeamStreamConnection'] = ResolversParentTypes['AkashaBeamStreamConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaBeamStreamEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaBeamStreamEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaBeamStreamEdge'] = ResolversParentTypes['AkashaBeamStreamEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamStream']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -492,6 +701,7 @@ export type AkashaContentBlockResolvers<ContextType = any, ParentType extends Re
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   kind?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockBlockDef']>, ParentType, ContextType>;
+  nsfw?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   version?: Resolver<ResolversTypes['CeramicCommitID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -512,6 +722,30 @@ export type AkashaContentBlockLabeledValueResolvers<ContextType = any, ParentTyp
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   propertyType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaContentBlockStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaContentBlockStream'] = ResolversParentTypes['AkashaContentBlockStream']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  beamID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  block?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlock']>, ParentType, ContextType>;
+  blockID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  moderationID?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
+  status?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockStreamModerationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaContentBlockStreamConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaContentBlockStreamConnection'] = ResolversParentTypes['AkashaContentBlockStreamConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaContentBlockStreamEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaContentBlockStreamEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaContentBlockStreamEdge'] = ResolversParentTypes['AkashaContentBlockStreamEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockStream']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -536,6 +770,29 @@ export type AkashaFollowEdgeResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AkashaInterestsStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaInterestsStream'] = ResolversParentTypes['AkashaInterestsStream']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  labelType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  moderationID?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
+  status?: Resolver<Types.Maybe<ResolversTypes['AkashaInterestsStreamModerationStatus']>, ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaInterestsStreamConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaInterestsStreamConnection'] = ResolversParentTypes['AkashaInterestsStreamConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaInterestsStreamEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaInterestsStreamEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaInterestsStreamEdge'] = ResolversParentTypes['AkashaInterestsStreamEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaInterestsStream']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type AkashaProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaProfile'] = ResolversParentTypes['AkashaProfile']> = {
   avatar?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileImageVersions']>, ParentType, ContextType>;
   background?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileImageVersions']>, ParentType, ContextType>;
@@ -546,6 +803,7 @@ export type AkashaProfileResolvers<ContextType = any, ParentType extends Resolve
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   links?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaProfileLinkSource']>>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  nsfw?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -605,6 +863,29 @@ export type AkashaProfileLinkSourceResolvers<ContextType = any, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AkashaProfileStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaProfileStream'] = ResolversParentTypes['AkashaProfileStream']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  moderationID?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
+  profile?: Resolver<Types.Maybe<ResolversTypes['AkashaProfile']>, ParentType, ContextType>;
+  profileID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  status?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileStreamModerationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaProfileStreamConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaProfileStreamConnection'] = ResolversParentTypes['AkashaProfileStreamConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaProfileStreamEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaProfileStreamEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaProfileStreamEdge'] = ResolversParentTypes['AkashaProfileStreamEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileStream']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type AkashaReflectResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaReflect'] = ResolversParentTypes['AkashaReflect']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   author?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
@@ -615,6 +896,7 @@ export type AkashaReflectResolvers<ContextType = any, ParentType extends Resolve
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isReply?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   mentions?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicStreamID']>>>, ParentType, ContextType>;
+  nsfw?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   reflection?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
   tags?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   version?: Resolver<ResolversTypes['CeramicCommitID'], ParentType, ContextType>;
@@ -640,16 +922,46 @@ export type AkashaReflectProviderValueResolvers<ContextType = any, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AkashaReflectStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaReflectStream'] = ResolversParentTypes['AkashaReflectStream']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  beamID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  moderationID?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
+  reflection?: Resolver<Types.Maybe<ResolversTypes['AkashaReflect']>, ParentType, ContextType>;
+  reflectionID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
+  status?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStreamModerationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaReflectStreamConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaReflectStreamConnection'] = ResolversParentTypes['AkashaReflectStreamConnection']> = {
+  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaReflectStreamEdge']>>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AkashaReflectStreamEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaReflectStreamEdge'] = ResolversParentTypes['AkashaReflectStreamEdge']> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStream']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CeramicAccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['CeramicAccount'] = ResolversParentTypes['CeramicAccount']> = {
   akashaAppList?: Resolver<Types.Maybe<ResolversTypes['AkashaAppConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppListArgs>>;
   akashaAppReleaseList?: Resolver<Types.Maybe<ResolversTypes['AkashaAppReleaseConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppReleaseListArgs>>;
+  akashaAppsStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaAppsStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppsStreamListArgs>>;
   akashaBeamList?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaBeamListArgs>>;
+  akashaBeamStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaBeamStreamListArgs>>;
   akashaBlockStorageList?: Resolver<Types.Maybe<ResolversTypes['AkashaBlockStorageConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaBlockStorageListArgs>>;
   akashaContentBlockList?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaContentBlockListArgs>>;
+  akashaContentBlockStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaContentBlockStreamListArgs>>;
   akashaFollowList?: Resolver<Types.Maybe<ResolversTypes['AkashaFollowConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaFollowListArgs>>;
+  akashaInterestsStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaInterestsStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaInterestsStreamListArgs>>;
   akashaProfile?: Resolver<Types.Maybe<ResolversTypes['AkashaProfile']>, ParentType, ContextType>;
   akashaProfileInterests?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileInterests']>, ParentType, ContextType>;
+  akashaProfileStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaProfileStreamListArgs>>;
   akashaReflectList?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaReflectListArgs>>;
+  akashaReflectStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaReflectStreamListArgs>>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isViewer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -679,10 +991,26 @@ export type CreateAkashaAppReleasePayloadResolvers<ContextType = any, ParentType
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CreateAkashaAppsStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAkashaAppsStreamPayload'] = ResolversParentTypes['CreateAkashaAppsStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaAppsStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAkashaAppsStreamPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CreateAkashaBeamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAkashaBeamPayload'] = ResolversParentTypes['CreateAkashaBeamPayload']> = {
   clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   document?: Resolver<ResolversTypes['AkashaBeam'], ParentType, ContextType>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAkashaBeamPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateAkashaBeamStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAkashaBeamStreamPayload'] = ResolversParentTypes['CreateAkashaBeamStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaBeamStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAkashaBeamStreamPayloadNodeArgs, 'id'>>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -703,10 +1031,26 @@ export type CreateAkashaContentBlockPayloadResolvers<ContextType = any, ParentTy
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CreateAkashaContentBlockStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAkashaContentBlockStreamPayload'] = ResolversParentTypes['CreateAkashaContentBlockStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaContentBlockStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAkashaContentBlockStreamPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CreateAkashaFollowPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAkashaFollowPayload'] = ResolversParentTypes['CreateAkashaFollowPayload']> = {
   clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   document?: Resolver<ResolversTypes['AkashaFollow'], ParentType, ContextType>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAkashaFollowPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateAkashaInterestsStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAkashaInterestsStreamPayload'] = ResolversParentTypes['CreateAkashaInterestsStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaInterestsStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAkashaInterestsStreamPayloadNodeArgs, 'id'>>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -727,10 +1071,26 @@ export type CreateAkashaProfilePayloadResolvers<ContextType = any, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CreateAkashaProfileStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAkashaProfileStreamPayload'] = ResolversParentTypes['CreateAkashaProfileStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaProfileStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAkashaProfileStreamPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CreateAkashaReflectPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAkashaReflectPayload'] = ResolversParentTypes['CreateAkashaReflectPayload']> = {
   clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   document?: Resolver<ResolversTypes['AkashaReflect'], ParentType, ContextType>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAkashaReflectPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateAkashaReflectStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAkashaReflectStreamPayload'] = ResolversParentTypes['CreateAkashaReflectStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaReflectStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAkashaReflectStreamPayloadNodeArgs, 'id'>>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -750,26 +1110,38 @@ export interface InterPlanetaryCidScalarConfig extends GraphQLScalarTypeConfig<R
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createAkashaApp?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaAppPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaAppArgs, 'input'>>;
   createAkashaAppRelease?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaAppReleasePayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaAppReleaseArgs, 'input'>>;
+  createAkashaAppsStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaAppsStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaAppsStreamArgs, 'input'>>;
   createAkashaBeam?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaBeamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaBeamArgs, 'input'>>;
+  createAkashaBeamStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaBeamStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaBeamStreamArgs, 'input'>>;
   createAkashaBlockStorage?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaBlockStoragePayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaBlockStorageArgs, 'input'>>;
   createAkashaContentBlock?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaContentBlockPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaContentBlockArgs, 'input'>>;
+  createAkashaContentBlockStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaContentBlockStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaContentBlockStreamArgs, 'input'>>;
   createAkashaFollow?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaFollowPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaFollowArgs, 'input'>>;
+  createAkashaInterestsStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaInterestsStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaInterestsStreamArgs, 'input'>>;
   createAkashaProfile?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaProfilePayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaProfileArgs, 'input'>>;
   createAkashaProfileInterests?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaProfileInterestsPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaProfileInterestsArgs, 'input'>>;
+  createAkashaProfileStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaProfileStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaProfileStreamArgs, 'input'>>;
   createAkashaReflect?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaReflectPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaReflectArgs, 'input'>>;
+  createAkashaReflectStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaReflectStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaReflectStreamArgs, 'input'>>;
   updateAkashaApp?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppArgs, 'input'>>;
   updateAkashaAppRelease?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppReleasePayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppReleaseArgs, 'input'>>;
+  updateAkashaAppsStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppsStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppsStreamArgs, 'input'>>;
   updateAkashaBeam?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaBeamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaBeamArgs, 'input'>>;
+  updateAkashaBeamStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaBeamStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaBeamStreamArgs, 'input'>>;
   updateAkashaBlockStorage?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaBlockStoragePayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaBlockStorageArgs, 'input'>>;
   updateAkashaContentBlock?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaContentBlockPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaContentBlockArgs, 'input'>>;
+  updateAkashaContentBlockStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaContentBlockStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaContentBlockStreamArgs, 'input'>>;
   updateAkashaFollow?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaFollowPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaFollowArgs, 'input'>>;
+  updateAkashaInterestsStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaInterestsStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaInterestsStreamArgs, 'input'>>;
   updateAkashaProfile?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaProfilePayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaProfileArgs, 'input'>>;
   updateAkashaProfileInterests?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaProfileInterestsPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaProfileInterestsArgs, 'input'>>;
+  updateAkashaProfileStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaProfileStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaProfileStreamArgs, 'input'>>;
   updateAkashaReflect?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaReflectPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaReflectArgs, 'input'>>;
+  updateAkashaReflectStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaReflectStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaReflectStreamArgs, 'input'>>;
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'AkashaApp' | 'AkashaAppRelease' | 'AkashaBeam' | 'AkashaBlockStorage' | 'AkashaContentBlock' | 'AkashaFollow' | 'AkashaProfile' | 'AkashaProfileInterests' | 'AkashaReflect' | 'CeramicAccount', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'AkashaApp' | 'AkashaAppRelease' | 'AkashaAppsStream' | 'AkashaBeam' | 'AkashaBeamStream' | 'AkashaBlockStorage' | 'AkashaContentBlock' | 'AkashaContentBlockStream' | 'AkashaFollow' | 'AkashaInterestsStream' | 'AkashaProfile' | 'AkashaProfileInterests' | 'AkashaProfileStream' | 'AkashaReflect' | 'AkashaReflectStream' | 'CeramicAccount', ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
@@ -784,13 +1156,19 @@ export type PageInfoResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   akashaAppIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaAppConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaAppIndexArgs>>;
   akashaAppReleaseIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaAppReleaseConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaAppReleaseIndexArgs>>;
+  akashaAppsStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaAppsStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaAppsStreamIndexArgs>>;
   akashaBeamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaBeamIndexArgs>>;
+  akashaBeamStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaBeamStreamIndexArgs>>;
   akashaBlockStorageIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaBlockStorageConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaBlockStorageIndexArgs>>;
   akashaContentBlockIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaContentBlockIndexArgs>>;
+  akashaContentBlockStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaContentBlockStreamIndexArgs>>;
   akashaFollowIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaFollowConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaFollowIndexArgs>>;
+  akashaInterestsStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaInterestsStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaInterestsStreamIndexArgs>>;
   akashaProfileIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaProfileIndexArgs>>;
   akashaProfileInterestsIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileInterestsConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaProfileInterestsIndexArgs>>;
+  akashaProfileStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaProfileStreamIndexArgs>>;
   akashaReflectIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaReflectIndexArgs>>;
+  akashaReflectStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaReflectStreamIndexArgs>>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.QueryNodeArgs, 'id'>>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
 };
@@ -815,10 +1193,26 @@ export type UpdateAkashaAppReleasePayloadResolvers<ContextType = any, ParentType
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UpdateAkashaAppsStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaAppsStreamPayload'] = ResolversParentTypes['UpdateAkashaAppsStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaAppsStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaAppsStreamPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UpdateAkashaBeamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaBeamPayload'] = ResolversParentTypes['UpdateAkashaBeamPayload']> = {
   clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   document?: Resolver<ResolversTypes['AkashaBeam'], ParentType, ContextType>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaBeamPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpdateAkashaBeamStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaBeamStreamPayload'] = ResolversParentTypes['UpdateAkashaBeamStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaBeamStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaBeamStreamPayloadNodeArgs, 'id'>>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -839,10 +1233,26 @@ export type UpdateAkashaContentBlockPayloadResolvers<ContextType = any, ParentTy
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UpdateAkashaContentBlockStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaContentBlockStreamPayload'] = ResolversParentTypes['UpdateAkashaContentBlockStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaContentBlockStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaContentBlockStreamPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UpdateAkashaFollowPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaFollowPayload'] = ResolversParentTypes['UpdateAkashaFollowPayload']> = {
   clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   document?: Resolver<ResolversTypes['AkashaFollow'], ParentType, ContextType>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaFollowPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpdateAkashaInterestsStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaInterestsStreamPayload'] = ResolversParentTypes['UpdateAkashaInterestsStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaInterestsStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaInterestsStreamPayloadNodeArgs, 'id'>>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -863,10 +1273,26 @@ export type UpdateAkashaProfilePayloadResolvers<ContextType = any, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UpdateAkashaProfileStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaProfileStreamPayload'] = ResolversParentTypes['UpdateAkashaProfileStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaProfileStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaProfileStreamPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UpdateAkashaReflectPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaReflectPayload'] = ResolversParentTypes['UpdateAkashaReflectPayload']> = {
   clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   document?: Resolver<ResolversTypes['AkashaReflect'], ParentType, ContextType>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaReflectPayloadNodeArgs, 'id'>>;
+  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpdateAkashaReflectStreamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAkashaReflectStreamPayload'] = ResolversParentTypes['UpdateAkashaReflectStreamPayload']> = {
+  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  document?: Resolver<ResolversTypes['AkashaReflectStream'], ParentType, ContextType>;
+  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAkashaReflectStreamPayloadNodeArgs, 'id'>>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -878,10 +1304,16 @@ export type Resolvers<ContextType = any> = {
   AkashaAppRelease?: AkashaAppReleaseResolvers<ContextType>;
   AkashaAppReleaseConnection?: AkashaAppReleaseConnectionResolvers<ContextType>;
   AkashaAppReleaseEdge?: AkashaAppReleaseEdgeResolvers<ContextType>;
+  AkashaAppsStream?: AkashaAppsStreamResolvers<ContextType>;
+  AkashaAppsStreamConnection?: AkashaAppsStreamConnectionResolvers<ContextType>;
+  AkashaAppsStreamEdge?: AkashaAppsStreamEdgeResolvers<ContextType>;
   AkashaBeam?: AkashaBeamResolvers<ContextType>;
   AkashaBeamBlockRecord?: AkashaBeamBlockRecordResolvers<ContextType>;
   AkashaBeamConnection?: AkashaBeamConnectionResolvers<ContextType>;
   AkashaBeamEdge?: AkashaBeamEdgeResolvers<ContextType>;
+  AkashaBeamStream?: AkashaBeamStreamResolvers<ContextType>;
+  AkashaBeamStreamConnection?: AkashaBeamStreamConnectionResolvers<ContextType>;
+  AkashaBeamStreamEdge?: AkashaBeamStreamEdgeResolvers<ContextType>;
   AkashaBlockStorage?: AkashaBlockStorageResolvers<ContextType>;
   AkashaBlockStorageConnection?: AkashaBlockStorageConnectionResolvers<ContextType>;
   AkashaBlockStorageEdge?: AkashaBlockStorageEdgeResolvers<ContextType>;
@@ -890,9 +1322,15 @@ export type Resolvers<ContextType = any> = {
   AkashaContentBlockConnection?: AkashaContentBlockConnectionResolvers<ContextType>;
   AkashaContentBlockEdge?: AkashaContentBlockEdgeResolvers<ContextType>;
   AkashaContentBlockLabeledValue?: AkashaContentBlockLabeledValueResolvers<ContextType>;
+  AkashaContentBlockStream?: AkashaContentBlockStreamResolvers<ContextType>;
+  AkashaContentBlockStreamConnection?: AkashaContentBlockStreamConnectionResolvers<ContextType>;
+  AkashaContentBlockStreamEdge?: AkashaContentBlockStreamEdgeResolvers<ContextType>;
   AkashaFollow?: AkashaFollowResolvers<ContextType>;
   AkashaFollowConnection?: AkashaFollowConnectionResolvers<ContextType>;
   AkashaFollowEdge?: AkashaFollowEdgeResolvers<ContextType>;
+  AkashaInterestsStream?: AkashaInterestsStreamResolvers<ContextType>;
+  AkashaInterestsStreamConnection?: AkashaInterestsStreamConnectionResolvers<ContextType>;
+  AkashaInterestsStreamEdge?: AkashaInterestsStreamEdgeResolvers<ContextType>;
   AkashaProfile?: AkashaProfileResolvers<ContextType>;
   AkashaProfileConnection?: AkashaProfileConnectionResolvers<ContextType>;
   AkashaProfileEdge?: AkashaProfileEdgeResolvers<ContextType>;
@@ -903,22 +1341,34 @@ export type Resolvers<ContextType = any> = {
   AkashaProfileInterestsEdge?: AkashaProfileInterestsEdgeResolvers<ContextType>;
   AkashaProfileInterestsLabeled?: AkashaProfileInterestsLabeledResolvers<ContextType>;
   AkashaProfileLinkSource?: AkashaProfileLinkSourceResolvers<ContextType>;
+  AkashaProfileStream?: AkashaProfileStreamResolvers<ContextType>;
+  AkashaProfileStreamConnection?: AkashaProfileStreamConnectionResolvers<ContextType>;
+  AkashaProfileStreamEdge?: AkashaProfileStreamEdgeResolvers<ContextType>;
   AkashaReflect?: AkashaReflectResolvers<ContextType>;
   AkashaReflectConnection?: AkashaReflectConnectionResolvers<ContextType>;
   AkashaReflectEdge?: AkashaReflectEdgeResolvers<ContextType>;
   AkashaReflectProviderValue?: AkashaReflectProviderValueResolvers<ContextType>;
+  AkashaReflectStream?: AkashaReflectStreamResolvers<ContextType>;
+  AkashaReflectStreamConnection?: AkashaReflectStreamConnectionResolvers<ContextType>;
+  AkashaReflectStreamEdge?: AkashaReflectStreamEdgeResolvers<ContextType>;
   CeramicAccount?: CeramicAccountResolvers<ContextType>;
   CeramicCommitID?: GraphQLScalarType;
   CeramicStreamID?: GraphQLScalarType;
   CreateAkashaAppPayload?: CreateAkashaAppPayloadResolvers<ContextType>;
   CreateAkashaAppReleasePayload?: CreateAkashaAppReleasePayloadResolvers<ContextType>;
+  CreateAkashaAppsStreamPayload?: CreateAkashaAppsStreamPayloadResolvers<ContextType>;
   CreateAkashaBeamPayload?: CreateAkashaBeamPayloadResolvers<ContextType>;
+  CreateAkashaBeamStreamPayload?: CreateAkashaBeamStreamPayloadResolvers<ContextType>;
   CreateAkashaBlockStoragePayload?: CreateAkashaBlockStoragePayloadResolvers<ContextType>;
   CreateAkashaContentBlockPayload?: CreateAkashaContentBlockPayloadResolvers<ContextType>;
+  CreateAkashaContentBlockStreamPayload?: CreateAkashaContentBlockStreamPayloadResolvers<ContextType>;
   CreateAkashaFollowPayload?: CreateAkashaFollowPayloadResolvers<ContextType>;
+  CreateAkashaInterestsStreamPayload?: CreateAkashaInterestsStreamPayloadResolvers<ContextType>;
   CreateAkashaProfileInterestsPayload?: CreateAkashaProfileInterestsPayloadResolvers<ContextType>;
   CreateAkashaProfilePayload?: CreateAkashaProfilePayloadResolvers<ContextType>;
+  CreateAkashaProfileStreamPayload?: CreateAkashaProfileStreamPayloadResolvers<ContextType>;
   CreateAkashaReflectPayload?: CreateAkashaReflectPayloadResolvers<ContextType>;
+  CreateAkashaReflectStreamPayload?: CreateAkashaReflectStreamPayloadResolvers<ContextType>;
   DID?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;
   InterPlanetaryCID?: GraphQLScalarType;
@@ -929,12 +1379,18 @@ export type Resolvers<ContextType = any> = {
   URI?: GraphQLScalarType;
   UpdateAkashaAppPayload?: UpdateAkashaAppPayloadResolvers<ContextType>;
   UpdateAkashaAppReleasePayload?: UpdateAkashaAppReleasePayloadResolvers<ContextType>;
+  UpdateAkashaAppsStreamPayload?: UpdateAkashaAppsStreamPayloadResolvers<ContextType>;
   UpdateAkashaBeamPayload?: UpdateAkashaBeamPayloadResolvers<ContextType>;
+  UpdateAkashaBeamStreamPayload?: UpdateAkashaBeamStreamPayloadResolvers<ContextType>;
   UpdateAkashaBlockStoragePayload?: UpdateAkashaBlockStoragePayloadResolvers<ContextType>;
   UpdateAkashaContentBlockPayload?: UpdateAkashaContentBlockPayloadResolvers<ContextType>;
+  UpdateAkashaContentBlockStreamPayload?: UpdateAkashaContentBlockStreamPayloadResolvers<ContextType>;
   UpdateAkashaFollowPayload?: UpdateAkashaFollowPayloadResolvers<ContextType>;
+  UpdateAkashaInterestsStreamPayload?: UpdateAkashaInterestsStreamPayloadResolvers<ContextType>;
   UpdateAkashaProfileInterestsPayload?: UpdateAkashaProfileInterestsPayloadResolvers<ContextType>;
   UpdateAkashaProfilePayload?: UpdateAkashaProfilePayloadResolvers<ContextType>;
+  UpdateAkashaProfileStreamPayload?: UpdateAkashaProfileStreamPayloadResolvers<ContextType>;
   UpdateAkashaReflectPayload?: UpdateAkashaReflectPayloadResolvers<ContextType>;
+  UpdateAkashaReflectStreamPayload?: UpdateAkashaReflectStreamPayloadResolvers<ContextType>;
 };
 

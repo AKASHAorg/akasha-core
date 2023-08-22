@@ -14,6 +14,7 @@ fragment BeamFragment on AkashaBeam{
   tags
   version
   createdAt
+  nsfw
 }
 
 fragment ContentBlockFragment on AkashaContentBlock{
@@ -41,6 +42,7 @@ fragment ContentBlockFragment on AkashaContentBlock{
     isViewer
   }
   version
+  nsfw
 }
 
 fragment BlockStorageFragment on AkashaBlockStorage {
