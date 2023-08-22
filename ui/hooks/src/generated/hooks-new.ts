@@ -37,6 +37,13 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
   version
   createdAt
   nsfw
+  reflections(last: 1) {
+    edges {
+      node {
+        id
+      }
+    }
+  }
 }
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ `
