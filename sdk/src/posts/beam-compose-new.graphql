@@ -18,6 +18,17 @@ fragment BeamFragment on AkashaBeam{
   version
   createdAt
   nsfw
+  reflections(last: 1){
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
 }
 
 fragment ContentBlockFragment on AkashaContentBlock{
