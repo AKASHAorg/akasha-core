@@ -251,6 +251,7 @@ export const GetBeamsDocument = /*#__PURE__*/ `
       node {
         ...BeamFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -315,6 +316,7 @@ export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ `
           node {
             ...BeamFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -604,6 +606,7 @@ export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -663,6 +666,7 @@ export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ `
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -728,6 +732,7 @@ export const GetReflectReflectionsDocument = /*#__PURE__*/ `
       node {
         ...ReflectFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -931,6 +936,7 @@ export const GetProfilesDocument = /*#__PURE__*/ `
       node {
         ...UserProfileFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -998,6 +1004,7 @@ export const GetInterestsDocument = /*#__PURE__*/ `
         }
         id
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -1181,6 +1188,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ `
               id
             }
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -1259,6 +1267,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ `
                 }
               }
             }
+            cursor
           }
           pageInfo {
             startCursor
@@ -1373,6 +1382,7 @@ export const GetFollowDocumentDocument = /*#__PURE__*/ `
                 ...UserProfileFragment
               }
             }
+            cursor
           }
           pageInfo {
             startCursor
