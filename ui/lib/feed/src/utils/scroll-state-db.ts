@@ -1,4 +1,4 @@
-import Dexie from 'dexie';
+import { Dexie } from 'dexie';
 import { ScrollerState } from '@akashaorg/design-system-components/lib/components/EntryList';
 
 export interface ScrollStateSchema {
