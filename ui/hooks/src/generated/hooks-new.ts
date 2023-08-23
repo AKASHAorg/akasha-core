@@ -37,6 +37,17 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
   version
   createdAt
   nsfw
+  reflections(last: 1) {
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
 }
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ `

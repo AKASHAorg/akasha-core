@@ -23,6 +23,17 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
   version
   createdAt
   nsfw
+  reflections(last: 1) {
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
 }
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ gql`
