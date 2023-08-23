@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetModerators } from '@akashaorg/ui-awf-hooks';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import ModerationSwitchCard from '@akashaorg/design-system-components/lib/components/ModerationSwitchCard';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Tab from '@akashaorg/design-system-core/lib/components/Tab';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ModeratorDetailMiniCard from '../components/moderator/mini-card';
 
@@ -15,23 +15,18 @@ import { BasePageProps } from './dashboard';
 export const Moderators: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
-  const [activeTab, setActiveTab] = useState<string>('All');
+  const [activeTab, setActiveTab] = useState<number>(0);
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const getModeratorsQuery = useGetModerators();
+  const getModeratorsQuery = { data: null, isFetching: false };
 
   const allModerators = getModeratorsQuery.data;
 
   const tabs = ['All', 'Active', 'Resigned', 'Revoked'];
 
-  const modTabs = tabs.map(tab => ({
-    title: t('{{tab}}', { tab }),
-    value: tab,
-  }));
-
   const filteredModeratorList = allModerators?.filter(moderator =>
-    activeTab === 'All' ? moderator : moderator.status === activeTab.toLowerCase(),
+    tabs[activeTab] === 'All' ? moderator : moderator.status === tabs[activeTab].toLowerCase(),
   );
 
   const handleViewModerator = (profileId: string) => {
@@ -43,33 +38,41 @@ export const Moderators: React.FC<BasePageProps> = props => {
 
   return (
     <BasicCardBox pad="p-0">
-      <ModerationSwitchCard tabs={modTabs} activeTab={activeTab} onTabClick={setActiveTab} />
-
-      {getModeratorsQuery.isFetching && (
-        <Box customStyle="flex items-center justify-center p-4">
-          <Spinner size="lg" />
-        </Box>
-      )}
-
-      {!getModeratorsQuery.isFetching && filteredModeratorList && filteredModeratorList.length > 0 && (
-        <Box customStyle="flex-1">
-          <Box customStyle="w-full h-full overflow-y-scroll">
-            {filteredModeratorList?.map((moderator, idx) => {
-              const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
-
-              return (
-                <ModeratorDetailMiniCard
-                  key={moderator.did.id}
-                  moderator={moderator}
-                  hasBorderBottom={idx < filteredModeratorList.length - 1}
-                  tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
-                  onCardClick={handleViewModerator}
-                />
-              );
-            })}
+      <Tab value={activeTab} onChange={setActiveTab} labels={tabs} labelTextVariant="body1">
+        {getModeratorsQuery.isFetching && (
+          <Box customStyle="flex items-center justify-center p-4">
+            <Spinner size="lg" />
           </Box>
-        </Box>
-      )}
+        )}
+
+        {!getModeratorsQuery.isFetching && !filteredModeratorList && (
+          <Text align="center" customStyle="pb-4">
+            {t('No moderators found...yet')}
+          </Text>
+        )}
+
+        {!getModeratorsQuery.isFetching &&
+          filteredModeratorList &&
+          filteredModeratorList.length > 0 && (
+            <Box customStyle="flex-1">
+              <Box customStyle="w-full h-full overflow-y-scroll">
+                {filteredModeratorList?.map((moderator, idx) => {
+                  const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
+
+                  return (
+                    <ModeratorDetailMiniCard
+                      key={moderator.did.id}
+                      moderator={moderator}
+                      hasBorderBottom={idx < filteredModeratorList.length - 1}
+                      tenureInfoLabel={t('{{tenureInfoLabel}}', { tenureInfoLabel })}
+                      onCardClick={handleViewModerator}
+                    />
+                  );
+                })}
+              </Box>
+            </Box>
+          )}
+      </Tab>
     </BasicCardBox>
   );
 };
