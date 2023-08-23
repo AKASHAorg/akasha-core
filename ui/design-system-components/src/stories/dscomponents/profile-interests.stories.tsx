@@ -71,7 +71,9 @@ export const BaseInterests: Story = {
       cancelButton={{ label: 'Cancel', handleClick: () => ({}) }}
       saveButton={{
         label: 'Save',
-        handleClick: () => ({}),
+        handleClick: interests => {
+          console.log(interests);
+        },
       }}
     />
   ),

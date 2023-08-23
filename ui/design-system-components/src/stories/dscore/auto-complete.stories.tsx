@@ -19,9 +19,16 @@ const Component = () => {
   return (
     <AutoComplete
       value={query}
-      onChange={setQuery}
+      onChange={value => {
+        if (typeof value === 'string') {
+          setQuery(value);
+          return;
+        }
+      }}
       options={['AKASHA', 'AKIRA', 'Travel', 'Cooking', 'Ethereum', 'Finance']}
       customStyle="w-fit"
+      separators={['Comma', 'Space', 'Enter']}
+      multiple
     />
   );
 };

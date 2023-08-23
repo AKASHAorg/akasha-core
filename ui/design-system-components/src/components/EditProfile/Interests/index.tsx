@@ -49,6 +49,7 @@ export const Interests: React.FC<InterestsProps> = ({
   const [query, setQuery] = useState('');
   const [myActiveInterests, setMyActiveInterests] = useState(new Set(myInterests));
   const [allMyInterests, setAllMyInterests] = useState(new Set(myInterests));
+  const [tags, setTags] = useState(new Set<string>());
 
   React.useEffect(() => {
     setMyActiveInterests(new Set(myInterests));
@@ -71,29 +72,37 @@ export const Interests: React.FC<InterestsProps> = ({
 
   const onSave = (interests: AkashaProfileInterestsLabeled[]) => {
     saveButton.handleClick(interests);
+    setTags(new Set());
     setQuery('');
   };
 
   const isFormDirty =
     allMyInterests.size !== myInterests.length ||
     myActiveInterests.size !== myInterests.length ||
+    tags.size > 0 ||
     !!query;
 
   useEffect(() => {
     if (onFormDirty) onFormDirty(isFormDirty);
   }, [isFormDirty, onFormDirty]);
 
+  const findInterest = useCallback(
+    (value: string) => {
+      return [...allMyInterests].find(
+        interest => interest.value.toLowerCase() === value.toLocaleLowerCase(),
+      );
+    },
+    [allMyInterests],
+  );
   const getNewInterest = useCallback(() => {
     if (query) {
-      const foundInterest = [...allMyInterests].find(
-        interest => interest.value.toLowerCase() === query.toLocaleLowerCase(),
-      );
+      const foundInterest = findInterest(query);
       if (!foundInterest) {
         return { value: query, labelType };
       }
     }
     return null;
-  }, [query, labelType, allMyInterests]);
+  }, [query, labelType, findInterest]);
 
   return (
     <form className={tw(apply`h-full ${customStyle}`)}>
@@ -131,14 +140,23 @@ export const Interests: React.FC<InterestsProps> = ({
             value={query}
             options={interests.map(interest => interest.value)}
             placeholder={moreInterestPlaceholder}
+            tags={tags}
+            separators={['Comma', 'Space', 'Enter']}
             customStyle="grow mt-2"
             onSelected={({ index }) => {
               updateMyActiveInterests(interests[index]);
               updateAllMyInterests(interests[index]);
               setQuery('');
             }}
-            onChange={setQuery}
-            disabled={allMyInterests.size >= MAX_INTERESTS}
+            onChange={value => {
+              if (typeof value === 'string') {
+                setQuery(value);
+                return;
+              }
+              setTags(new Set(value));
+            }}
+            disabled={allMyInterests.size + tags.size >= MAX_INTERESTS}
+            multiple
           />
         </Stack>
         <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
@@ -155,7 +173,14 @@ export const Interests: React.FC<InterestsProps> = ({
             onClick={event => {
               event.preventDefault();
               const newInterest = getNewInterest();
-              onSave(newInterest ? [...myActiveInterests, newInterest] : [...myActiveInterests]);
+              const newTags = [...tags]
+                .filter(tag => !findInterest(tag))
+                .map(tag => ({ value: tag, labelType }));
+              onSave(
+                newInterest
+                  ? [...myActiveInterests, ...newTags, newInterest]
+                  : [...myActiveInterests, ...newTags],
+              );
             }}
             disabled={!isFormDirty}
             type="submit"

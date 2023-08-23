@@ -4,9 +4,11 @@ import { tw } from '@twind/core';
 import Stack from '../Stack';
 import List, { ListItem } from '../List';
 import TextField from '../TextField';
+import Tag from './Tag';
 import { InputProps } from '../TextField/types';
-
 import { useCloseActions } from '../../utils';
+import { Separator } from './types';
+import { isSeparator } from './isSeparator';
 
 type Selected = { value: string; index?: number };
 
@@ -16,19 +18,26 @@ export type AutoCompleteProps = {
   disabled?: InputProps['disabled'];
   value?: string;
   customStyle?: string;
-  onChange?: (value: string) => void;
+  multiple?: boolean;
+  separators?: Separator[];
+  tags?: Set<string>;
+  onChange?: (value: string | string[]) => void;
   onSelected?: ({ value, index }: Selected) => void;
 };
 
-const AutoComplete: React.FC<AutoCompleteProps> = ({
-  options,
-  placeholder,
-  disabled,
-  customStyle = '',
-  value,
-  onChange,
-  onSelected,
-}) => {
+const AutoComplete: React.FC<AutoCompleteProps> = props => {
+  const {
+    options,
+    placeholder,
+    disabled,
+    customStyle = '',
+    value,
+    multiple,
+    separators = ['Enter'],
+    tags,
+    onChange,
+    onSelected,
+  } = props;
   const [filters, setFilters] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -54,6 +63,19 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
     [filters],
   );
 
+  const updateTag = (tag: string, remove?: boolean) => {
+    const newTags = new Set(tags);
+
+    if (remove) {
+      newTags.delete(tag);
+      if (onChange) onChange([...newTags]);
+      return;
+    }
+
+    newTags.add(tag);
+    if (onChange) onChange([...newTags]);
+  };
+
   return (
     <Stack
       direction="column"
@@ -62,6 +84,19 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
       customStyle={customStyle}
       ref={autoCompleteRef}
     >
+      {tags.size > 0 && (
+        <Stack align="end" customStyle="flex-wrap space-x-2 space-y-2">
+          {[...tags].map(tag => (
+            <Tag
+              key={tag}
+              tag={tag}
+              onRemove={() => {
+                updateTag(tag, true);
+              }}
+            />
+          ))}
+        </Stack>
+      )}
       <TextField
         type="text"
         placeholder={placeholder}
@@ -73,6 +108,19 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
         }}
         onFocus={() => {
           setShowSuggestions(true);
+        }}
+        onKeyDown={event => {
+          if (multiple) {
+            if (isSeparator(event.code, separators)) {
+              if (value) {
+                if (onChange) onChange('');
+                updateTag(value);
+                setShowSuggestions(false);
+              }
+              event.preventDefault();
+              event.nativeEvent.stopImmediatePropagation();
+            }
+          }
         }}
         customStyle="rounded-3xl"
         radius={100}
