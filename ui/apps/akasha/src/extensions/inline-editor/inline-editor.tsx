@@ -15,14 +15,14 @@ export const InlineEditor = (
   const draftStorage = props.draftStorage || localStorage;
 
   /*ReplyEditor handles reply to a comment and editing a comment*/
-  if (itemType === EntityTypes.REPLY && itemId && (action === 'reply' || action === 'edit')) {
+  if (itemType === EntityTypes.REFLECT && itemId && (action === 'reply' || action === 'edit')) {
     return <ReplyEditor commentId={itemId} singleSpa={props.singleSpa} action={action} />;
   }
 
   /*PostEditor handles reply to a post, repost, and editing a post*/
   if (
     action === 'post' ||
-    (itemType === EntityTypes.POST &&
+    (itemType === EntityTypes.BEAM &&
       itemId &&
       (action === 'repost' || action === 'edit' || action === 'reply'))
   ) {

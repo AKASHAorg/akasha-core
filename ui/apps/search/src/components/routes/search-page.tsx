@@ -66,6 +66,10 @@ const initSearchState = {
   [ButtonValues.TAGS]: { page: 1, results: [], done: false, isLoading: false },
 };
 
+const onNavBack = () => {
+  history.back();
+};
+
 const SearchPage: React.FC<SearchPageProps> = props => {
   const {
     plugins,
@@ -550,7 +554,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 <EntryCardRenderer
                   key={itemData.itemId}
                   itemData={itemData}
-                  itemType={EntityTypes.POST}
+                  itemType={EntityTypes.BEAM}
                   logger={logger}
                   singleSpa={singleSpa}
                   onContentClick={handleEntryNavigation}

@@ -61,8 +61,7 @@ const BasicCardBox: React.FC<PropsWithChildren<BasicCardBoxProps>> = props => {
       apply`flex flex-col shadow-${elevation} w-full ${pad} ${margin} bg(white dark:grey2) ${
         noBorderRadius ? 'rounded-none' : round
       } ${generatedBorder} ${customStyle}`,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [generatedBorder],
+    [customStyle, elevation, generatedBorder, margin, noBorderRadius, pad, round],
   );
 
   return (

@@ -3,7 +3,8 @@ import * as React from 'react';
 import { IEntryData, IPublishData, Profile } from '@akashaorg/typings/ui';
 import { createPendingEntry, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import routes, { POST } from '../../routes';
+import routes, { BEAM } from '../../routes';
+
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
 export interface IReplyErrorState {
@@ -44,11 +45,12 @@ export function ReplyError({ postId, loggedProfileData, onChange }: Props) {
     <>
       {entryData && (
         <EntryBox
-          entryData={createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
+          // @TODO fix createPendingEntry method
+          entryData={null} //createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
           locale={'en'}
           showMore={true}
           profileAnchorLink={'/profile'}
-          repliesAnchorLink={routes[POST]}
+          repliesAnchorLink={routes[BEAM]}
           contentClickable={false}
           hidePublishTime={true}
           disableActions={true}

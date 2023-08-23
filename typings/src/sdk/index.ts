@@ -40,6 +40,7 @@ const ServiceTypes = {
   Misc: Symbol.for('awf-Misc'),
   Lit: Symbol.for('awf-LIT'),
   Ceramic: Symbol.for('awf-Ceramic'),
+  ScrollState: Symbol.for('awf-scroll-state'),
 };
 
 export type IMessageBody = {
