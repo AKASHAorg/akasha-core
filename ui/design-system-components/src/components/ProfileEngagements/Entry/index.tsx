@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { Profile } from '@akashaorg/typings/ui';
 import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 
@@ -46,11 +46,10 @@ const Entry: React.FC<EntryProps> = props => {
             onProfileClick(profileId);
           }}
         >
-          <AvatarBlock
+          <ProfileAvatarButton
             profileId={profileId}
-            avatar={getMediaUrl(avatar)}
-            name={name}
-            userName={'' /*@TODO: revisit this part when username is implemented on the API side */}
+            avatarImage={getMediaUrl(avatar)}
+            label={name}
           />
         </Anchor>
         {renderFollowElement && renderFollowElement(profileStreamId, followStreamId, isFollowing)}
