@@ -198,7 +198,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ `
   name
   displayName
   keywords
-  releases {
+  releases(last: 5) {
     edges {
       node {
         id
@@ -206,6 +206,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ `
         source
         version
       }
+      cursor
     }
   }
   releasesCount
@@ -1653,6 +1654,7 @@ export const GetAppsDocument = /*#__PURE__*/ `
       node {
         ...AkashaAppFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -1812,6 +1814,7 @@ export const GetAppsReleasesDocument = /*#__PURE__*/ `
       node {
         ...AppReleaseFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
