@@ -74,6 +74,7 @@ query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $fil
       node {
         ...UserProfileFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -98,6 +99,7 @@ query GetInterests($after: String, $before: String, $first: Int, $last: Int){
         }
         id
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -159,6 +161,7 @@ query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: I
               id
             }
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -192,6 +195,7 @@ query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: I
                 }
               }
             }
+            cursor
           }
           pageInfo {
             startCursor
@@ -229,6 +233,7 @@ query GetFollowDocument($follower: ID!, $following: String!){
                 ...UserProfileFragment
               }
             }
+            cursor
           }
           pageInfo {
             startCursor

@@ -30,6 +30,7 @@ query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: 
           node{
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -50,6 +51,7 @@ query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $firs
           node{
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -71,6 +73,7 @@ query GetReflectReflections($id: String!, $after: String, $before: String, $firs
       node{
           ...ReflectFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
