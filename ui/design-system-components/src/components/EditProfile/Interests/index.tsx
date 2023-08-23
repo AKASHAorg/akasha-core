@@ -11,8 +11,6 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { ButtonType } from '../types';
 
-const MAX_INTERESTS = 10;
-
 export type InterestsProps = {
   title: string;
   description: string;
@@ -28,6 +26,7 @@ export type InterestsProps = {
     loading?: boolean;
     handleClick: (interests: AkashaProfileInterestsLabeled[]) => void;
   };
+  maxInterests: number;
   customStyle?: string;
   onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -43,6 +42,7 @@ export const Interests: React.FC<InterestsProps> = ({
   labelType,
   cancelButton,
   saveButton,
+  maxInterests,
   customStyle = '',
   onFormDirty,
 }) => {
@@ -119,7 +119,7 @@ export const Interests: React.FC<InterestsProps> = ({
               <Pill
                 key={interest.value}
                 label={interest.value}
-                icon="CheckIcon"
+                icon={myActiveInterests.has(interest) ? 'CheckIcon' : 'XMarkIcon'}
                 iconDirection="right"
                 active={myActiveInterests.has(interest)}
                 onPillClick={active => {
@@ -157,7 +157,7 @@ export const Interests: React.FC<InterestsProps> = ({
               }
               setTags(new Set(value));
             }}
-            disabled={allMyInterests.size + tagsSize >= MAX_INTERESTS}
+            disabled={allMyInterests.size + tagsSize >= maxInterests}
             multiple
           />
         </Stack>
@@ -175,9 +175,11 @@ export const Interests: React.FC<InterestsProps> = ({
             onClick={event => {
               event.preventDefault();
               const newInterest = getNewInterest();
-              const newTags = [...tags]
-                .filter(tag => !findInterest(tag))
-                .map(tag => ({ value: tag, labelType }));
+              const newTags = tags
+                ? [...tags]
+                    .filter(tag => !findInterest(tag))
+                    .map(tag => ({ value: tag, labelType }))
+                : [];
               onSave(
                 newInterest
                   ? [...myActiveInterests, ...newTags, newInterest]

@@ -171,7 +171,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
           <Interests
             title={t('Your interests')}
             description={t(
-              'Your interests will help refine your social feed and throughout AKASHA World.  You can have a maximum of 10 topics',
+              'Your interests will help refine your social feed and throughout AKASHA World.  You can have a maximum of 30 topics',
             )}
             moreInterestTitle={t('Find more interests')}
             moreInterestDescription={t(
@@ -180,6 +180,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
             moreInterestPlaceholder={t('Search for interests')}
             myInterests={topics}
             interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
+            maxInterests={30}
             labelType="TOPIC"
             cancelButton={{
               label: t('Cancel'),

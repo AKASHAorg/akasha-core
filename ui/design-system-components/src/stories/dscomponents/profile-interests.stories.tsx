@@ -67,6 +67,7 @@ export const BaseInterests: Story = {
           labelType: 'TOPIC',
         },
       ]}
+      maxInterests={10}
       labelType="TOPIC"
       cancelButton={{ label: 'Cancel', handleClick: () => ({}) }}
       saveButton={{
