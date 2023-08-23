@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IPublishData, Profile } from '@akashaorg/typings/ui';
 import { createPendingEntry, useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import routes, { REPLY } from '../../../routes';
+import routes, { REFLECT } from '../../../routes';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
@@ -34,12 +34,13 @@ export function PendingReply({ postId, loggedProfileData, commentIds }: PendingR
               key={pendingReplyState.mutationId}
             >
               <EntryBox
-                entryData={createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
+                // @TODO: Fix createPendingEntry method
+                entryData={null} //createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
                 flagAsLabel={t('Report Comment')}
                 locale={'en'}
                 showMore={true}
                 profileAnchorLink={'/profile'}
-                repliesAnchorLink={routes[REPLY]}
+                repliesAnchorLink={routes[REFLECT]}
                 contentClickable={false}
                 hidePublishTime={true}
                 disableActions={true}

@@ -26,14 +26,14 @@ const Extension: React.FC<ExtensionProps> = props => {
   const handleExtensionUnmount = (name: string) => {
     uiEvents.next({
       event: EventTypes.ExtensionPointUnmount,
-      data: { name },
+      data: { name, ...data },
     });
   };
 
   return (
     <ExtensionSlot
       name={name}
-      customStyle={`${customStyle} ${fullHeight && 'h-full'}`}
+      customStyle={`${customStyle} ${fullHeight ? 'h-full' : ''}`}
       onMount={handleExtensionMount}
       onUnmount={handleExtensionUnmount}
       style={style}
@@ -42,4 +42,7 @@ const Extension: React.FC<ExtensionProps> = props => {
   );
 };
 
+Extension.defaultProps = {
+  customStyle: '',
+};
 export default Extension;
