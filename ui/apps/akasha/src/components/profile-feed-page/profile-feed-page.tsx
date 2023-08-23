@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 
 import { useGetProfile, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import type {
