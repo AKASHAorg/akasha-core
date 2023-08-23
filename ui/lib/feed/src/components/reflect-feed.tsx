@@ -96,12 +96,12 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
               ref={measureElementRef}
               style={{ paddingBottom: itemSpacing }}
             >
-              {/*<EntryCard*/}
-              {/*  showMore={true}*/}
-              {/*  entryData={entryData}*/}
-              {/*  locale={locale}*/}
-              {/*  onContentClick={onNavigate}*/}
-              {/*/>*/}
+              <EntryCard
+                showMore={true}
+                entryData={entryData}
+                locale={locale}
+                onContentClick={onNavigate}
+              />
             </div>
           );
         });

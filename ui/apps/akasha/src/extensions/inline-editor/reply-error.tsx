@@ -45,7 +45,8 @@ export function ReplyError({ postId, loggedProfileData, onChange }: Props) {
     <>
       {entryData && (
         <EntryBox
-          entryData={createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
+          // @TODO fix createPendingEntry method
+          entryData={null} //createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
           locale={'en'}
           showMore={true}
           profileAnchorLink={'/profile'}

@@ -10,22 +10,18 @@ import { Logger } from '@akashaorg/awf-sdk';
 import { useAnalytics, useDummyQuery, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import {
-  RootComponentProps,
-  EntityTypes,
-  ModalNavigationOptions,
-  IEntryData,
-} from '@akashaorg/typings/ui';
+import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 
 import { OriginalItem } from './original-item';
 import { PendingReply } from './pending-reply';
+import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
 
 type BaseEntryProps = {
   postId: string;
   commentId?: string;
   itemType: EntityTypes;
   entryReq: UseQueryResult;
-  entryData?: IEntryData;
+  entryData?: AkashaBeam;
   logger: Logger;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   feedQueryKey: string;
@@ -54,8 +50,8 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     if (showAnyway) {
       return false;
     }
-    return entryReq.isSuccess && entryData?.reported;
-  }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
+    return entryReq.isSuccess && entryData?.nsfw;
+  }, [entryData?.nsfw, showAnyway, entryReq.isSuccess]);
   // @TODO replace with new hooks
   const reqComments = useDummyQuery([]);
   const reqReplies = useDummyQuery([]);
@@ -107,15 +103,15 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
           devDetails={entryReq.error as string}
         />
       )}
-      {entryData?.moderated && entryData?.delisted && (
+      {entryData?.nsfw && entryData?.nsfw && (
         <EntryCardHidden
           moderatedContentLabel={t('This content has been moderated')}
           isDelisted={true}
         />
       )}
-      {!entryData?.moderated && isReported && (
+      {!entryData?.nsfw && isReported && (
         <EntryCardHidden
-          reason={entryData?.reason}
+          reason={t('This beam was marked as NSFW')}
           headerTextLabel={t('You reported this post for the following reason')}
           footerTextLabel={t('It is awaiting moderation.')}
           ctaLabel={t('See it anyway')}

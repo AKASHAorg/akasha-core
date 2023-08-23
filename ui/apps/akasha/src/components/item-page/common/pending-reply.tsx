@@ -34,7 +34,8 @@ export function PendingReply({ postId, loggedProfileData, commentIds }: PendingR
               key={pendingReplyState.mutationId}
             >
               <EntryBox
-                entryData={createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
+                // @TODO: Fix createPendingEntry method
+                entryData={null} //createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
                 flagAsLabel={t('Report Comment')}
                 locale={'en'}
                 showMore={true}

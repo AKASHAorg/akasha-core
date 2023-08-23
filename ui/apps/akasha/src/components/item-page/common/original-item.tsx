@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useAnalytics, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import {
   EntityTypes,
-  IEntryData,
   RootComponentProps,
   ModalNavigationOptions,
   AnalyticsCategories,
@@ -16,6 +15,7 @@ import Extension from '@akashaorg/design-system-components/lib/components/Extens
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
+import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
 
 type Props = {
   itemId: string;
@@ -25,7 +25,7 @@ type Props = {
   uiEvents: RootComponentProps['uiEvents'];
   plugins: RootComponentProps['plugins'];
   layoutConfig: RootComponentProps['layoutConfig'];
-  entryData?: IEntryData;
+  entryData?: AkashaBeam;
   navigateToModal: RootComponentProps['navigateToModal'];
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
@@ -57,18 +57,15 @@ export function OriginalItem({
     if (showAnyway) {
       return false;
     }
-    return entryReq.isSuccess && entryData?.reported;
-  }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
+    return entryReq.isSuccess && entryData?.nsfw;
+  }, [entryData?.nsfw, showAnyway, entryReq.isSuccess]);
 
   const showEntry = React.useMemo(
-    () => !entryData?.delisted && (!isReported || (isReported && entryData?.moderated)),
-    [entryData?.delisted, entryData?.moderated, isReported],
+    () => !entryData?.active && (!isReported || (isReported && entryData?.nsfw)),
+    [entryData?.active, entryData?.nsfw, isReported],
   );
 
-  const showEditButton = React.useMemo(
-    () => entryData?.author?.did.isViewer,
-    [entryData?.author?.did],
-  );
+  const showEditButton = React.useMemo(() => entryData?.author?.isViewer, [entryData?.author]);
 
   if (!showEntry) return null;
 
@@ -76,7 +73,7 @@ export function OriginalItem({
     if (action === 'edit') {
       return (
         <Extension
-          name={`inline-editor_postedit_${entryData?.entryId}`}
+          name={`inline-editor_postedit_${entryData?.id}`}
           uiEvents={uiEvents}
           data={{ itemId, itemType, action: 'edit' }}
         />
@@ -150,16 +147,16 @@ export function OriginalItem({
     <Box customStyle={`rounded-t-lg`}>
       <Box customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
         <EntryBox
-          isRemoved={entryData?.isRemoved}
+          isRemoved={!entryData?.active}
           entryData={entryData}
-          onClickAvatar={handleAvatarClick(entryData?.author?.did?.id)}
+          onClickAvatar={handleAvatarClick(entryData?.author?.id)}
           flagAsLabel={t('Report Post')}
           locale={locale}
           showMore={true}
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[BEAM]}
           onRepost={handleRepost}
-          onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.BEAM)}
+          onEntryFlag={handleEntryFlag(entryData?.id, EntityTypes.BEAM)}
           onContentClick={handleEntryNavigate}
           navigateTo={navigateTo}
           contentClickable={true}
@@ -174,12 +171,12 @@ export function OriginalItem({
           removeEntryLabel={t('Delete Post')}
           removedByMeLabel={t('You deleted this post')}
           removedByAuthorLabel={t('This post was deleted by its author')}
-          disableReposting={entryData?.isRemoved || itemType === EntityTypes.REFLECT}
+          disableReposting={!entryData?.active || itemType === EntityTypes.REFLECT}
           hideRepost={itemType === EntityTypes.REFLECT}
           headerMenuExt={
             showEditButton && (
               <Extension
-                name={`entry-card-edit-button_${entryData?.entryId}`}
+                name={`entry-card-edit-button_${entryData?.id}`}
                 style={{ width: '100%' }}
                 uiEvents={uiEvents}
                 data={{ itemId, itemType }}
@@ -188,7 +185,7 @@ export function OriginalItem({
           }
           actionsRightExt={
             <Extension
-              name={`entry-card-actions-right_${entryData?.entryId}`}
+              name={`entry-card-actions-right_${entryData?.id}`}
               uiEvents={uiEvents}
               data={{
                 itemId,
@@ -207,9 +204,9 @@ export function OriginalItem({
             placeholderLabel={t('Share your thoughts')}
           />
         )}
-        {showReplyEditor && loggedProfileData?.did?.id && !entryData?.isRemoved && (
+        {showReplyEditor && loggedProfileData?.did?.id && entryData?.active && (
           <Extension
-            name={`inline-editor_reply_${entryData?.entryId}`}
+            name={`inline-editor_reply_${entryData?.id}`}
             uiEvents={uiEvents}
             data={{
               itemId,

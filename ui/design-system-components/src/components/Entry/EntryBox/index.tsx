@@ -25,11 +25,11 @@ import LinkPreview from '../../LinkPreview';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 
 import { formatDate, formatRelativeTime, ILocale } from '../../../utils/time';
-import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
 
-export interface IEntryBoxProps {
+export type EntryBoxProps = {
   // data
-  entryData: AkashaBeam;
+  entryData: Omit<AkashaBeam, 'reflectionsCount' | 'reflections'> | AkashaReflect;
   locale: ILocale;
   // labels
   flagAsLabel?: string;
@@ -77,9 +77,9 @@ export interface IEntryBoxProps {
   error?: string;
   onRetry?: () => void;
   children?: React.ReactNode;
-}
+};
 
-const EntryBox: React.FC<IEntryBoxProps> = props => {
+const EntryBox: React.FC<EntryBoxProps> = props => {
   const {
     entryData,
     flagAsLabel,
@@ -147,7 +147,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     if (typeof onRepliesClick === 'function') onRepliesClick();
   };
 
-  const handleContentClick = (data?: Omit<AkashaBeam, 'reflections'>) => {
+  const handleContentClick = (data?: {
+    embeddedBeam?: AkashaBeam['embeddedBeam'];
+    author: AkashaBeam['author'];
+    id: AkashaBeam['id'];
+  }) => {
     if (typeof onContentClick === 'function' && !disableActions && contentClickable && data) {
       const replyTo = data.embeddedBeam ? { itemId: data.embeddedBeam.embeddedID } : null;
       const itemType = replyTo ? EntityTypes.REFLECT : EntityTypes.BEAM;

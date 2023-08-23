@@ -6,10 +6,11 @@ import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { SyntheticEvent } from 'react';
 import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import type { EntryBoxProps } from './index';
 
-export interface CardActionProps {
+export type CardActionProps = {
   // data
-  entryData: AkashaBeam;
+  entryData: EntryBoxProps['entryData'];
   // anchor link
   repliesAnchorLink?: string;
   // handlers
@@ -20,7 +21,7 @@ export interface CardActionProps {
   hideRepost?: boolean;
   isModerated?: boolean;
   actionsRightExt?: React.ReactNode;
-}
+};
 
 const CardActions: React.FC<CardActionProps> = props => {
   const {

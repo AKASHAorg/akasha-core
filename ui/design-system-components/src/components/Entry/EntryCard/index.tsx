@@ -1,10 +1,10 @@
 import * as React from 'react';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import SocialBox from '../../SocialBox';
-import EntryBox, { IEntryBoxProps } from '../EntryBox';
+import EntryBox, { EntryBoxProps } from '../EntryBox';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
-export interface IEntryCardProps extends IEntryBoxProps {
+export type EntryCardProps = EntryBoxProps & {
   // labels
   repostedThisLabel?: string;
   andLabel?: string;
@@ -20,9 +20,9 @@ export interface IEntryCardProps extends IEntryBoxProps {
   accentBorderTop?: boolean;
   navigateTo?: (args: NavigateToParams) => void;
   hideRepost?: boolean;
-}
+};
 
-const EntryCard: React.FC<IEntryCardProps> = props => {
+const EntryCard: React.FC<EntryCardProps> = props => {
   const {
     entryData,
     repostedThisLabel,
