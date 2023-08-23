@@ -19,6 +19,9 @@ export interface LinkPreviewExt extends LinkPreview {
 }
 
 export interface IEntryData {
+  // id is missing when the entry is in pending state
+  id?: string;
+  // the following props are deprecated!
   CID?: string;
   linkPreview?: LinkPreviewExt;
   images?: IMetadata['images'];

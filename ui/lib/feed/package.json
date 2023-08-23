@@ -51,7 +51,8 @@
   "peerDependencies": {
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "rxjs": "7.3.0"
+    "rxjs": "7.3.0",
+    "dexie": "3.2.3"
   },
   "files": [
     "lib"

@@ -137,15 +137,24 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
-  if (post.error) return <>Error loading {action === 'repost' && 'embedded'} post</>;
+  // if (post.error) return <>Error loading {action === 'repost' && 'embedded'} post</>;
+  //
+  // if (post.status === 'loading') return <EntryCardLoading />;
 
-  if (post.status === 'loading') return <EntryCardLoading />;
+  const postLabelAction = React.useMemo(() => {
+    switch (action) {
+      case 'edit':
+        return t('Save Changes');
+      case 'reply':
+        return t('Reply');
+      default:
+        return t('Publish');
+    }
+  }, [action]);
 
   return (
     <Base
-      postLabel={
-        action === 'edit' ? t('Save Changes') : action === 'reply' ? t('Reply') : t('Publish')
-      }
+      postLabel={postLabelAction}
       placeholderLabel={
         action === 'reply' ? `${t('Reply to')} ${entryAuthorName || ''}` : t('Share your thoughts')
       }

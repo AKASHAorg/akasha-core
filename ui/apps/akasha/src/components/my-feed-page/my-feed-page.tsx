@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { Profile } from '@akashaorg/typings/ui';
 import {
-  useGetFollowingListByDidQuery,
   useGetInterestsByDidQuery,
   useInfiniteGetBeamsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -12,6 +11,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
 import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
+import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 
 export interface MyFeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -19,9 +19,9 @@ export interface MyFeedPageProps {
 }
 
 const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
-  const { logger, loggedProfileData } = props;
+  const { loggedProfileData, layoutConfig, plugins, uiEvents } = props;
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const isLoggedUser = React.useMemo(() => !!loggedProfileData?.did.id, [loggedProfileData]);
 
@@ -41,22 +41,8 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       },
     },
   );
-  const followingReq = useGetFollowingListByDidQuery({ id: loggedProfileData?.did.id });
   const navigateToModal = React.useRef(props.navigateToModal);
   const showLoginModal = React.useRef(props.showLoginModal);
-
-  const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage) {
-      postsReq.fetchNextPage();
-    }
-  }, [postsReq]);
-
-  const postPages = React.useMemo(() => {
-    if (postsReq.data) {
-      return postsReq.data.pages;
-    }
-    return [];
-  }, [postsReq.data]);
 
   const userHasSubscriptions = React.useMemo(() => {
     return loggedProfileData?.followers?.edges?.length > 0 || tagSubsReq.data?.topics?.length > 0;
@@ -75,7 +61,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   const handleEntryRemove = React.useCallback((itemId: string) => {
     navigateToModal.current({
       name: 'entry-remove-confirmation',
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
       itemId,
     });
   }, []);
@@ -114,30 +100,20 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       </Box>
 
       <FeedWidget
-        modalSlotId={props.layoutConfig.modalSlotId}
-        logger={logger}
-        itemType={EntityTypes.POST}
-        pages={postPages}
-        onLoadMore={handleLoadMore}
-        getShareUrl={(itemId: string) =>
-          `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-        }
-        navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-        navigateToModal={props.navigateToModal}
-        onLoginModalOpen={props.showLoginModal}
-        requestStatus={postsReq.status}
-        hasNextPage={postsReq.hasNextPage}
+        queryKey="akasha-my-feed-query"
+        modalSlotId={layoutConfig.modalSlotId}
+        itemType={EntityTypes.BEAM}
+        navigateToModal={navigateToModal.current}
+        onLoginModalOpen={showLoginModal.current}
         loggedProfileData={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
-        removeEntryLabel={t('Delete Post')}
-        removedByMeLabel={t('You deleted this post')}
-        removedByAuthorLabel={t('This post was deleted by its author')}
-        uiEvents={props.uiEvents}
+        uiEvents={uiEvents}
         itemSpacing={8}
-        i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
         accentBorderTop={true}
+        onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
       />
 
       {userHasSubscriptions && !postsReq.isFetching && (

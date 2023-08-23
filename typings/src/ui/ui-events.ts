@@ -35,20 +35,20 @@ export enum EventTypes {
 }
 
 export const enum EntityTypes {
-  POST = 0,
+  BEAM = 0,
   PROFILE = 1,
-  REPLY = 2,
+  REFLECT = 2,
   TAG = 3,
   ARTICLE = 4,
 }
 
 /**
-  To be used as per example `EntityTypesMap[EntityTypes.POST]` to get the name of the entity type
+ To be used as per example `EntityTypesMap[EntityTypes.POST]` to get the name of the entity type
  */
 export const EntityTypesMap = {
-  [EntityTypes.POST]: 'post',
+  [EntityTypes.BEAM]: 'beam',
   [EntityTypes.PROFILE]: 'profile',
-  [EntityTypes.REPLY]: 'reply',
+  [EntityTypes.REFLECT]: 'reply',
   [EntityTypes.TAG]: 'tag',
   [EntityTypes.ARTICLE]: 'article',
 } as const;

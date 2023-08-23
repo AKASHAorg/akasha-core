@@ -1,23 +1,27 @@
 import * as React from 'react';
-import { IEntryData } from '@akashaorg/typings/ui';
 import { tw } from '@twind/core';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { SyntheticEvent } from 'react';
+import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import type { EntryBoxProps } from './index';
 
-export interface CardActionProps {
+export type CardActionProps = {
   // data
-  entryData: IEntryData;
+  entryData: EntryBoxProps['entryData'];
   // anchor link
   repliesAnchorLink?: string;
   // handlers
   onRepost: () => void;
-  handleRepliesClick: () => void;
+  handleRepliesClick: (ev: SyntheticEvent) => void;
   disableActions?: boolean;
   disableReposting?: boolean;
   hideRepost?: boolean;
   isModerated?: boolean;
   actionsRightExt?: React.ReactNode;
-}
+};
 
 const CardActions: React.FC<CardActionProps> = props => {
   const {
@@ -34,8 +38,8 @@ const CardActions: React.FC<CardActionProps> = props => {
     actionsRightExt,
   } = props;
 
-  const repostsBtnText = `${entryData.reposts || ''}`;
-  const repliesBtnText = `${entryData.replies || 0}`;
+  // const repostsBtnText = `${entryData.reposts || ''}`;
+  // const repliesBtnText = `${entryData.replies || 0}`;
 
   if (isModerated) {
     return (
@@ -44,7 +48,7 @@ const CardActions: React.FC<CardActionProps> = props => {
       >
         <button onClick={handleRepliesClick} className={tw(`flex flex-row items-center space-x-2`)}>
           <Icon type="ChatBubbleLeftRightIcon" accentColor={true} />
-          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repliesBtnText}</Text>
+          {/*<Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repliesBtnText}</Text>*/}
         </button>
         <button
           onClick={onRepost}
@@ -52,22 +56,22 @@ const CardActions: React.FC<CardActionProps> = props => {
           disabled={disableReposting}
         >
           <Icon type="ArrowPathIcon" accentColor={true} />
-          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repostsBtnText}</Text>
+          {/*<Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repostsBtnText}</Text>*/}
         </button>
       </div>
     );
   }
 
   return (
-    <div className={tw(`p-4 flex flex-row items-center justify-end space-x-4`)}>
+    <Stack direction="row" align="center" justify="end" spacing="gap-x-4" customStyle="p-4">
       <>{actionsRightExt}</>
-      <a
+      <Anchor
+        href={`${repliesAnchorLink}/${entryData.id}`}
+        customStyle="no-underline"
         onClick={e => {
           e.preventDefault();
           return false;
         }}
-        href={`${repliesAnchorLink}/${entryData.entryId}`}
-        className={tw(`no-underline`)}
       >
         <button
           onClick={handleRepliesClick}
@@ -75,9 +79,9 @@ const CardActions: React.FC<CardActionProps> = props => {
           disabled={disableActions}
         >
           <Icon type="ChatBubbleLeftRightIcon" accentColor={true} />
-          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repliesBtnText}</Text>
+          {/*<Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repliesBtnText}</Text>*/}
         </button>
-      </a>
+      </Anchor>
 
       {!hideRepost && (
         <button
@@ -86,10 +90,10 @@ const CardActions: React.FC<CardActionProps> = props => {
           disabled={disableReposting || disableActions}
         >
           <Icon type="ArrowPathIcon" accentColor={true} />
-          <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repostsBtnText}</Text>
+          {/*<Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{repostsBtnText}</Text>*/}
         </button>
       )}
-    </div>
+    </Stack>
   );
 };
 

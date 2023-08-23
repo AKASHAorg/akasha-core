@@ -13,10 +13,8 @@ export type BoxProps = {
 const Box: React.FC<PropsWithChildren<BoxProps>> = React.forwardRef((props, ref) => {
   const { customStyle = '', style = {}, testId, children, ...rest } = props;
 
-  const className = apply`${customStyle}`;
-
   return (
-    <div className={tw(className)} data-testid={testId} {...rest} style={style} ref={ref}>
+    <div className={tw(customStyle)} data-testid={testId} {...rest} style={style} ref={ref}>
       {children}
     </div>
   );

@@ -10,18 +10,15 @@ import {
 } from '@akashaorg/typings/ui';
 import {
   useMutationsListener,
-  createPendingEntry,
   useAnalytics,
   useDismissedCard,
-  useInfiniteDummy,
+  useEntryNavigation,
 } from '@akashaorg/ui-awf-hooks';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import routes, { POST } from '../../routes';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { Profile } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
-import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
 
@@ -60,7 +57,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       signal: controller.signal,
     });
     return () => controller.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dismissedCardId = '@akashaorg/app-akasha-integration_private-alpha-notification';
@@ -70,21 +66,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { mutations: pendingPostStates } = useMutationsListener<IPublishData>([
     'CREATE_POST_MUTATION_KEY',
   ]);
-
-  const postsReq = useInfiniteDummy([]);
-
-  const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage) {
-      postsReq.fetchNextPage();
-    }
-  }, [postsReq]);
-
-  const postPages = React.useMemo(() => {
-    if (postsReq.data) {
-      return postsReq.data.pages;
-    }
-    return [];
-  }, [postsReq.data]);
 
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
@@ -99,7 +80,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryRemove = React.useCallback((itemId: string) => {
     navigateToModal({
       name: 'entry-remove-confirmation',
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
       itemId,
     });
   }, []);
@@ -110,6 +91,17 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       action: 'Request',
       name: 'Feed',
     });
+  };
+
+  const handleRebeam = (withComment: boolean, beamId: string) => {
+    if (!loggedProfileData?.did.id) {
+      navigateToModal({ name: 'login' });
+    } else {
+      plugins['@akashaorg/app-routing'].navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: () => `/feed?repost=${beamId}`,
+      });
+    }
   };
 
   return (
@@ -124,7 +116,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               <Extension
                 name={`inline-editor_repost_${postId}`}
                 uiEvents={uiEvents}
-                data={{ itemId: postId, itemType: EntityTypes.POST, action: 'repost' }}
+                data={{ itemId: postId, itemType: EntityTypes.BEAM, action: 'repost' }}
               />
             ) : (
               <Extension
@@ -166,54 +158,21 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             />
           ),
       )}
-      {pendingPostStates?.map(
-        pendingPostState =>
-          (pendingPostState.state.status === 'loading' ||
-            /*The following line ensures that even if the post is published pending post UI should be shown till the new entry appears on the feed */
-            (pendingPostState.state.status === 'success' &&
-              !postPages?.includes(pendingPostState.state.data.toString() as any))) && (
-            <EntryCard
-              key={pendingPostState.mutationId}
-              style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
-              entryData={createPendingEntry(loggedProfileData, pendingPostState.state.variables)}
-              flagAsLabel={t('Report Post')}
-              locale={locale || 'en'}
-              showMore={true}
-              profileAnchorLink={'/profile'}
-              repliesAnchorLink={routes[POST]}
-              contentClickable={false}
-              hidePublishTime={true}
-              disableActions={true}
-            />
-          ),
-      )}
       <FeedWidget
+        queryKey="akashaorg-antenna-page-query"
         modalSlotId={layoutConfig.modalSlotId}
-        logger={logger}
-        itemType={EntityTypes.POST}
-        // @TODO replace with real data source
-        pages={[]}
-        onLoadMore={handleLoadMore}
-        getShareUrl={(itemId: string) =>
-          `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-        }
+        itemType={EntityTypes.BEAM}
         loggedProfileData={loggedProfileData}
-        navigateTo={plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={navigateToModal}
         onLoginModalOpen={showLoginModal}
-        // @TODO replace with real data source
-        requestStatus={null}
-        // @TODO replace with real data source
-        hasNextPage={false}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
-        removeEntryLabel={t('Delete Post')}
-        removedByMeLabel={t('You deleted this post')}
-        removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={uiEvents}
         itemSpacing={8}
         i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+        onRebeam={handleRebeam}
+        onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
       />
     </Box>
   );

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import BaseEntryPage from './common/base-page';
 import { useParams } from 'react-router-dom';
+import { useDummyQuery } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 
 type ReplyPageProps = {
@@ -11,7 +12,7 @@ const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();
 
   // @TODO replace with new hooks
-  const comment = undefined;
+  const comment = useDummyQuery(null);
 
   const entryData = React.useMemo(() => {
     return undefined;
@@ -20,12 +21,11 @@ const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
   return (
     <BaseEntryPage
       {...props}
-      postId={!!entryData && 'postId' in entryData && entryData?.postId}
+      postId={!!entryData && 'postId' in entryData && (entryData?.postId as string)}
       commentId={commentId}
-      itemType={EntityTypes.REPLY}
-      // @TODO add data after new hooks
-      entryData={null}
+      itemType={EntityTypes.REFLECT}
       entryReq={comment}
+      feedQueryKey="akasha-reflect-page-query"
     />
   );
 };
