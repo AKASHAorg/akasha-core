@@ -84,7 +84,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
       customStyle={customStyle}
       ref={autoCompleteRef}
     >
-      {tags.size > 0 && (
+      {tags?.size > 0 && (
         <Stack align="end" customStyle="flex-wrap space-x-2 space-y-2">
           {[...tags].map(tag => (
             <Tag

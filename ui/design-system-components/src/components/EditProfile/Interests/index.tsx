@@ -72,14 +72,16 @@ export const Interests: React.FC<InterestsProps> = ({
 
   const onSave = (interests: AkashaProfileInterestsLabeled[]) => {
     saveButton.handleClick(interests);
-    setTags(new Set());
+    setTags(null);
     setQuery('');
   };
+
+  const tagsSize = tags?.size || 0;
 
   const isFormDirty =
     allMyInterests.size !== myInterests.length ||
     myActiveInterests.size !== myInterests.length ||
-    tags.size > 0 ||
+    tagsSize > 0 ||
     !!query;
 
   useEffect(() => {
@@ -155,7 +157,7 @@ export const Interests: React.FC<InterestsProps> = ({
               }
               setTags(new Set(value));
             }}
-            disabled={allMyInterests.size + tags.size >= MAX_INTERESTS}
+            disabled={allMyInterests.size + tagsSize >= MAX_INTERESTS}
             multiple
           />
         </Stack>
