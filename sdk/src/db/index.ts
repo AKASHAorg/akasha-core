@@ -4,7 +4,6 @@ import appSchema from './integrations.schema';
 import { validate } from '../common/validator';
 import { z } from 'zod';
 import DbWrapper from './db.wrapper';
-import integrationsSchema from './integrations.schema';
 
 export const availableCollections = Object.freeze({
   Settings: settingsSchema.name,

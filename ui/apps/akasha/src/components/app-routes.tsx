@@ -10,7 +10,7 @@ import PostPage from './item-page/post-page';
 import InvitePage from './item-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
 
-import routes, { FEED, MY_FEED, PROFILE_FEED, POST, REPLY, TAGS, INVITE } from '../routes';
+import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, INVITE } from '../routes';
 import ReplyPage from './item-page/reply-page';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -52,7 +52,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
           <Route
-            path={`${routes[POST]}/:postId`}
+            path={`${routes[BEAM]}/:postId`}
             element={<PostPage {...props} showLoginModal={showLoginModal} />}
           />
           <Route
@@ -76,7 +76,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
           <Route
-            path={`${routes[REPLY]}/:commentId`}
+            path={`${routes[REFLECT]}/:commentId`}
             element={<ReplyPage {...props} showLoginModal={showLoginModal} />}
           />
           <Route path={`${routes[INVITE]}/:inviteCode`} element={<InvitePage {...props} />} />

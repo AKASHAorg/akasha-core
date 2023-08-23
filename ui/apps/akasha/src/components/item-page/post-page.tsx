@@ -2,6 +2,7 @@ import * as React from 'react';
 import BaseEntryPage from './common/base-page';
 import { useParams } from 'react-router-dom';
 import { RootComponentProps, ModalNavigationOptions, EntityTypes } from '@akashaorg/typings/ui';
+import { useDummyQuery } from '@akashaorg/ui-awf-hooks';
 
 type PostPageProps = {
   userId?: string;
@@ -11,20 +12,18 @@ type PostPageProps = {
 const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
   const { userId } = props;
 
-  const { postId } = useParams<{ postId: string }>();
+  const { postId } = useParams<{
+    postId: string;
+  }>();
   // @TODO replace with new hooks
-  const postReq = undefined;
-  const entryData = React.useMemo(() => {
-    return undefined;
-  }, []);
+  const postReq = useDummyQuery({});
 
   return (
     <BaseEntryPage
       {...props}
+      feedQueryKey="akasha-beam-page-query"
       postId={postId}
-      itemType={EntityTypes.POST}
-      // @TODO replace with real data after hooks
-      entryData={null}
+      itemType={EntityTypes.BEAM}
       entryReq={postReq}
     />
   );

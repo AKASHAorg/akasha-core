@@ -10,8 +10,8 @@ export enum ButtonValues {
 
 export const ModerationEntityTypesMap = {
   [EntityTypes.PROFILE]: 'account',
-  [EntityTypes.POST]: 'post',
-  [EntityTypes.REPLY]: 'reply',
+  [EntityTypes.BEAM]: 'beam',
+  [EntityTypes.REFLECT]: 'reply',
 
   // @TODO: add support for tag type, when tag moderation is implemented
   [EntityTypes.ARTICLE]: 'article',

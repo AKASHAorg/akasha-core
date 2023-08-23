@@ -19,11 +19,11 @@ export const useEntryNavigation = (
       if (typeof navigateFn !== 'function' || (currentPostId && currentPostId === id)) {
         return;
       }
-
+      console.log('navigating to :', itemType, id);
       navigateFn({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes =>
-          `${itemType === EntityTypes.REPLY ? navRoutes.Reply : navRoutes.Post}/${id}`,
+          `${itemType === EntityTypes.REFLECT ? navRoutes.Reflect : navRoutes.Beam}/${id}`,
       });
     },
     [navigateFn, currentPostId],

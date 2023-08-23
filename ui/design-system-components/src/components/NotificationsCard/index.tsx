@@ -76,7 +76,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID, EntityTypes.POST);
+            handleEntryClick(postID, EntityTypes.BEAM);
           }
         };
         break;
@@ -85,9 +85,9 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (replyID) {
-            handleEntryClick(replyID, EntityTypes.REPLY);
+            handleEntryClick(replyID, EntityTypes.REFLECT);
           } else if (postID) {
-            handleEntryClick(postID, EntityTypes.POST);
+            handleEntryClick(postID, EntityTypes.BEAM);
           }
         };
         break;
@@ -96,7 +96,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID, EntityTypes.POST);
+            handleEntryClick(postID, EntityTypes.BEAM);
           }
         };
         break;
@@ -105,7 +105,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (replyID) {
-            handleEntryClick(replyID, EntityTypes.REPLY);
+            handleEntryClick(replyID, EntityTypes.REFLECT);
           }
         };
         break;
@@ -114,7 +114,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID, EntityTypes.POST);
+            handleEntryClick(postID, EntityTypes.BEAM);
           }
         };
         break;
@@ -130,7 +130,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (moderatedID) {
-            handleEntryClick(moderatedID, EntityTypes.POST);
+            handleEntryClick(moderatedID, EntityTypes.BEAM);
           }
         };
         break;
@@ -139,7 +139,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (moderatedID) {
-            handleEntryClick(moderatedID, EntityTypes.REPLY);
+            handleEntryClick(moderatedID, EntityTypes.REFLECT);
           }
         };
         break;

@@ -74,13 +74,13 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
       action: 'Reply Placeholder Clicked',
     });
   };
-
-  const entryAuthorName =
-    entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
+  // @TODO: fix author name
+  const entryAuthorName = undefined;
+  // entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
   if (comment.error) return <>Error loading comment</>;
 
-  if (comment.status === 'loading') return <EntryCardLoading />;
+  if (comment.isLoading) return <EntryCardLoading />;
 
   return (
     <Base

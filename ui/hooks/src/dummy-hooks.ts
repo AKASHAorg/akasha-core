@@ -1,11 +1,27 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  UseInfiniteQueryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
-export function useInfiniteDummy(initialData: any[]) {
-  const qc = useQueryClient();
-  return useInfiniteQuery([initialData], () => Promise.resolve(), {
-    onSuccess: () => {
-      qc.setQueryData([initialData], initialData);
+type DataGeneratorFn<TData = unknown> = ({ pageParam = 0 }) => TData;
+
+export function useInfiniteDummy<
+  TQueryReturnData,
+  TQueryStateData = TQueryReturnData,
+  TErr = Error,
+>(
+  queryKey: string,
+  dataGeneratorFn: DataGeneratorFn<TQueryReturnData>,
+  options?: UseInfiniteQueryOptions<TQueryReturnData, TErr, TQueryStateData>,
+) {
+  return useInfiniteQuery([`infinite_dummy_${queryKey}`], dataGeneratorFn, {
+    getNextPageParam: (lastPage, pages) => {
+      return pages.length;
     },
+    ...options,
   });
 }
 

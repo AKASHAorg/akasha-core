@@ -23,6 +23,17 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
   version
   createdAt
   nsfw
+  reflections(last: 1) {
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
 }
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ gql`
@@ -173,7 +184,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
   name
   displayName
   keywords
-  releases {
+  releases(last: 5) {
     edges {
       node {
         id
@@ -181,6 +192,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
         source
         version
       }
+      cursor
     }
   }
   releasesCount
@@ -226,6 +238,7 @@ export const GetBeamsDocument = /*#__PURE__*/ gql`
       node {
         ...BeamFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -252,6 +265,7 @@ export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ gql`
           node {
             ...BeamFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -341,6 +355,7 @@ export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -362,6 +377,7 @@ export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ gql`
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -389,6 +405,7 @@ export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
       node {
         ...ReflectFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -454,6 +471,7 @@ export const GetProfilesDocument = /*#__PURE__*/ gql`
       node {
         ...UserProfileFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -483,6 +501,7 @@ export const GetInterestsDocument = /*#__PURE__*/ gql`
         }
         id
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -552,6 +571,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
               id
             }
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -592,6 +612,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
                 }
               }
             }
+            cursor
           }
           pageInfo {
             startCursor
@@ -630,6 +651,7 @@ export const GetFollowDocumentDocument = /*#__PURE__*/ gql`
                 ...UserProfileFragment
               }
             }
+            cursor
           }
           pageInfo {
             startCursor
@@ -766,6 +788,7 @@ export const GetAppsDocument = /*#__PURE__*/ gql`
       node {
         ...AkashaAppFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -825,6 +848,7 @@ export const GetAppsReleasesDocument = /*#__PURE__*/ gql`
       node {
         ...AppReleaseFragment
       }
+      cursor
     }
     pageInfo {
       startCursor

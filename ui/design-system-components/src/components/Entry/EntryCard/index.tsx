@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import SocialBox from '../../SocialBox';
-import EntryBox, { IEntryBoxProps } from '../EntryBox';
+import EntryBox, { EntryBoxProps } from '../EntryBox';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
-export interface IEntryCardProps extends IEntryBoxProps {
+export type EntryCardProps = EntryBoxProps & {
   // labels
   repostedThisLabel?: string;
   andLabel?: string;
@@ -20,9 +20,9 @@ export interface IEntryCardProps extends IEntryBoxProps {
   accentBorderTop?: boolean;
   navigateTo?: (args: NavigateToParams) => void;
   hideRepost?: boolean;
-}
+};
 
-const EntryCard: React.FC<IEntryCardProps> = props => {
+const EntryCard: React.FC<EntryCardProps> = props => {
   const {
     entryData,
     repostedThisLabel,
@@ -72,7 +72,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
 
   return (
     <Card ref={ref} border={border} noBorderRadius={noBorderRadius} padding="p-0">
-      {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
+      {/* {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
         <SocialBox
           socialData={entryData.quotedByAuthors}
           repostedThisLabel={repostedThisLabel}
@@ -80,7 +80,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
           othersLabel={othersLabel}
           onClickUser={onMentionClick}
         />
-      )}
+      )} */}
       <EntryBox
         entryData={entryData}
         onClickAvatar={onClickAvatar}

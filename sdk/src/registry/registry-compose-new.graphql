@@ -6,7 +6,7 @@ fragment AkashaAppFragment on AkashaApp{
   name
   displayName
   keywords
-  releases{
+  releases(last: 5){
     edges {
       node {
         id
@@ -14,6 +14,7 @@ fragment AkashaAppFragment on AkashaApp{
         source
         version
       }
+      cursor
     }
   }
   releasesCount
@@ -68,6 +69,7 @@ query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters
       node {
         ...AkashaAppFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -111,6 +113,7 @@ query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, 
       node {
         ...AppReleaseFragment
       }
+      cursor
     }
     pageInfo {
       startCursor

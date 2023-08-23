@@ -3,18 +3,20 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import {
   RootComponentProps,
   EntityTypes,
   ModalNavigationOptions,
   Profile,
+  IContentClickDetails,
 } from '@akashaorg/typings/ui';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
+import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 
 interface ITagFeedPage {
   loggedProfileData?: Profile;
@@ -22,7 +24,15 @@ interface ITagFeedPage {
 }
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
-  const { showLoginModal, loggedProfileData } = props;
+  const {
+    uiEvents,
+    layoutConfig,
+    plugins,
+    logger,
+    navigateToModal,
+    showLoginModal,
+    loggedProfileData,
+  } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { tagName } = useParams<{ tagName: string }>();
 
@@ -60,7 +70,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
     });
   };
 
@@ -70,6 +80,17 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       return;
     }
     toggleTagSubscriptionReq.mutate(tagName);
+  };
+
+  const handleRebeam = (withComment: boolean, beamId: string) => {
+    if (!loggedProfileData?.did.id) {
+      navigateToModal({ name: 'login' });
+    } else {
+      plugins['@akashaorg/app-routing'].navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: () => `/feed?repost=${beamId}`,
+      });
+    }
   };
 
   return (
@@ -86,43 +107,32 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         />
       )}
       {getTagQuery.status === 'success' && (
-        <>
-          <Box customStyle="mb-2">
-            <TagProfileCard
-              tag={getTagQuery.data}
-              subscribedTags={tagSubscriptions}
-              handleSubscribeTag={handleTagSubscribe}
-              handleUnsubscribeTag={handleTagSubscribe}
-            />
-          </Box>
-
-          <FeedWidget
-            modalSlotId={props.layoutConfig.modalSlotId}
-            itemType={EntityTypes.POST}
-            logger={props.logger}
-            onLoadMore={handleLoadMore}
-            pages={postPages}
-            getShareUrl={(itemId: string) =>
-              `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-            }
-            requestStatus={reqPosts.status}
-            loggedProfileData={loggedProfileData}
-            navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-            navigateToModal={props.navigateToModal}
-            onLoginModalOpen={showLoginModal}
-            hasNextPage={reqPosts.hasNextPage}
-            contentClickable={true}
-            onEntryRemove={handleEntryRemove}
-            onEntryFlag={handleEntryFlag}
-            removeEntryLabel={t('Delete Post')}
-            removedByMeLabel={t('You deleted this post')}
-            removedByAuthorLabel={t('This post was deleted by its author')}
-            uiEvents={props.uiEvents}
-            itemSpacing={8}
-            i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+        <Box customStyle="mb-2">
+          <TagProfileCard
+            tag={getTagQuery.data}
+            subscribedTags={tagSubscriptions}
+            handleSubscribeTag={handleTagSubscribe}
+            handleUnsubscribeTag={handleTagSubscribe}
           />
-        </>
+        </Box>
       )}
+      <FeedWidget
+        queryKey="akasha-tag-feed-query"
+        modalSlotId={layoutConfig.modalSlotId}
+        // @TODO add a new entry for tags
+        itemType={EntityTypes.BEAM}
+        loggedProfileData={loggedProfileData}
+        navigateToModal={navigateToModal}
+        onLoginModalOpen={showLoginModal}
+        contentClickable={true}
+        onEntryRemove={handleEntryRemove}
+        onEntryFlag={handleEntryFlag}
+        uiEvents={uiEvents}
+        itemSpacing={8}
+        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+        onRebeam={handleRebeam}
+        onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
+      />
     </Box>
   );
 };

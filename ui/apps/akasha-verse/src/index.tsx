@@ -17,9 +17,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   i18nNamespace: ['app-akasha-verse'],
   loadingFn: () => import('./components'),
-  title: 'App center',
+  title: 'AKASHA Core Extensions',
   menuItems: {
-    label: 'AKASHAVerse',
+    label: 'Extensions',
     area: [MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'akasha' },
     subRoutes: [],

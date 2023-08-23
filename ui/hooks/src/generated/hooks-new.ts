@@ -37,6 +37,17 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
   version
   createdAt
   nsfw
+  reflections(last: 1) {
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
 }
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ `
@@ -187,7 +198,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ `
   name
   displayName
   keywords
-  releases {
+  releases(last: 5) {
     edges {
       node {
         id
@@ -195,6 +206,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ `
         source
         version
       }
+      cursor
     }
   }
   releasesCount
@@ -240,6 +252,7 @@ export const GetBeamsDocument = /*#__PURE__*/ `
       node {
         ...BeamFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -304,6 +317,7 @@ export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ `
           node {
             ...BeamFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -593,6 +607,7 @@ export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -652,6 +667,7 @@ export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ `
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -717,6 +733,7 @@ export const GetReflectReflectionsDocument = /*#__PURE__*/ `
       node {
         ...ReflectFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -920,6 +937,7 @@ export const GetProfilesDocument = /*#__PURE__*/ `
       node {
         ...UserProfileFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -987,6 +1005,7 @@ export const GetInterestsDocument = /*#__PURE__*/ `
         }
         id
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -1170,6 +1189,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ `
               id
             }
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -1248,6 +1268,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ `
                 }
               }
             }
+            cursor
           }
           pageInfo {
             startCursor
@@ -1362,6 +1383,7 @@ export const GetFollowDocumentDocument = /*#__PURE__*/ `
                 ...UserProfileFragment
               }
             }
+            cursor
           }
           pageInfo {
             startCursor
@@ -1632,6 +1654,7 @@ export const GetAppsDocument = /*#__PURE__*/ `
       node {
         ...AkashaAppFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -1791,6 +1814,7 @@ export const GetAppsReleasesDocument = /*#__PURE__*/ `
       node {
         ...AppReleaseFragment
       }
+      cursor
     }
     pageInfo {
       startCursor

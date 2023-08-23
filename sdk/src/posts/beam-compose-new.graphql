@@ -18,6 +18,17 @@ fragment BeamFragment on AkashaBeam{
   version
   createdAt
   nsfw
+  reflections(last: 1){
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
 }
 
 fragment ContentBlockFragment on AkashaContentBlock{
@@ -91,6 +102,7 @@ query GetBeams($after: String, $before: String, $first: Int, $last: Int, $filter
      node {
        ...BeamFragment
      }
+      cursor
     }
     pageInfo {
       startCursor
@@ -109,6 +121,7 @@ query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int
           node {
             ...BeamFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
