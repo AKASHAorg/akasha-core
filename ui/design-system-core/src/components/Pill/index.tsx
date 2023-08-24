@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '../Button';
 import { ButtonProps } from '../Button/types';
 
@@ -6,6 +6,7 @@ export type PillProps = {
   label: ButtonProps['label'];
   size?: ButtonProps['size'];
   icon?: ButtonProps['icon'];
+  hover?: { icon: ButtonProps['icon']; active: boolean };
   iconDirection?: ButtonProps['iconDirection'];
   customStyle?: ButtonProps['customStyle'];
   active?: boolean;
@@ -16,11 +17,14 @@ const Pill: React.FC<PillProps> = ({
   label,
   size,
   icon,
+  hover,
   iconDirection,
   customStyle = '',
   active,
   onPillClick,
 }) => {
+  const [showHover, setShowHover] = useState(false);
+
   const handlePillClick = () => {
     if (onPillClick) {
       onPillClick(!active);
@@ -33,10 +37,12 @@ const Pill: React.FC<PillProps> = ({
       hover={false}
       label={label}
       size={size}
-      icon={icon}
+      icon={showHover && hover ? hover.icon : icon}
       iconDirection={iconDirection}
       customStyle={customStyle}
-      active={active}
+      active={showHover && hover ? hover.active : active}
+      onMouseEnter={() => setShowHover(true)}
+      onMouseLeave={() => setShowHover(false)}
       onClick={handlePillClick}
     />
   );

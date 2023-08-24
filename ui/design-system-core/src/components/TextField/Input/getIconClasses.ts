@@ -1,6 +1,6 @@
 import { Color, STATUS_TO_COLOR_CLASSES_MAP, Status } from '../../types/common.types';
 
-export function getIconClasses(disabled: boolean, status: Status): Color {
+export function getIconClasses(status: Status, disabled?: boolean): Color {
   if (disabled) {
     return { light: 'grey2', dark: 'grey7' };
   }

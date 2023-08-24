@@ -23,7 +23,6 @@ export type LabelProps = {
 };
 
 export type CaptionProps = {
-  disabled?: JSX.IntrinsicElements['input']['disabled'];
   status?: Status;
 };
 

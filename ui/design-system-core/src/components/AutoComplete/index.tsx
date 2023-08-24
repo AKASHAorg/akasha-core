@@ -5,7 +5,7 @@ import Stack from '../Stack';
 import List, { ListItem } from '../List';
 import TextField from '../TextField';
 import Tag from './Tag';
-import { InputProps } from '../TextField/types';
+import { InputProps, TextFieldProps } from '../TextField/types';
 import { useCloseActions } from '../../utils';
 import { Separator } from './types';
 import { isSeparator } from './isSeparator';
@@ -23,7 +23,7 @@ export type AutoCompleteProps = {
   tags?: Set<string>;
   onChange?: (value: string | string[]) => void;
   onSelected?: ({ value, index }: Selected) => void;
-};
+} & Pick<TextFieldProps, 'label' | 'caption' | 'status'>;
 
 const AutoComplete: React.FC<AutoCompleteProps> = props => {
   const {
@@ -35,6 +35,9 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
     multiple,
     separators = ['Enter'],
     tags,
+    label,
+    caption,
+    status,
     onChange,
     onSelected,
   } = props;
@@ -89,6 +92,9 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
         placeholder={placeholder}
         iconRight="MagnifyingGlassIcon"
         value={value}
+        label={label}
+        caption={caption}
+        status={status}
         onChange={event => {
           setShowSuggestions(true);
           if (onChange) onChange(event.target.value);

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { apply, tw } from '@twind/core';
 
 import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/sdk/graphql-types-new';
@@ -13,6 +13,7 @@ import { ButtonType } from '../types';
 
 export type InterestsProps = {
   title: string;
+  subTitle: string;
   description: string;
   moreInterestTitle: string;
   moreInterestDescription: string;
@@ -20,6 +21,7 @@ export type InterestsProps = {
   myInterests: AkashaProfileInterestsLabeled[];
   interests: AkashaProfileInterestsLabeled[];
   labelType: string;
+  maxInterestsErrorMessage: string;
   cancelButton: ButtonType;
   saveButton: {
     label: string;
@@ -33,6 +35,7 @@ export type InterestsProps = {
 
 export const Interests: React.FC<InterestsProps> = ({
   title,
+  subTitle,
   description,
   moreInterestTitle,
   moreInterestDescription,
@@ -40,6 +43,7 @@ export const Interests: React.FC<InterestsProps> = ({
   myInterests,
   interests,
   labelType,
+  maxInterestsErrorMessage,
   cancelButton,
   saveButton,
   maxInterests,
@@ -106,11 +110,18 @@ export const Interests: React.FC<InterestsProps> = ({
     return null;
   }, [query, labelType, findInterest]);
 
+  const maximumInterestsSelected = myActiveInterests.size + tagsSize >= maxInterests;
+
   return (
     <form className={tw(apply`h-full ${customStyle}`)}>
       <Stack direction="column" justify="between" spacing="gap-y-11" customStyle="h-full">
         <Stack direction="column">
-          <Text variant="h6">{title}</Text>
+          <Stack align="center" spacing="gap-x-1">
+            <Text variant="h6">{title}</Text>
+            <Text variant="footnotes2" color="grey7">
+              {subTitle}
+            </Text>
+          </Stack>
           <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
             {description}
           </Text>
@@ -119,9 +130,12 @@ export const Interests: React.FC<InterestsProps> = ({
               <Pill
                 key={interest.value}
                 label={interest.value}
-                icon={myActiveInterests.has(interest) ? 'CheckIcon' : 'XMarkIcon'}
+                icon={myActiveInterests.has(interest) ? 'CheckIcon' : null}
                 iconDirection="right"
                 active={myActiveInterests.has(interest)}
+                hover={
+                  myActiveInterests.has(interest) ? { icon: 'XMarkIcon', active: false } : null
+                }
                 onPillClick={active => {
                   if (active) {
                     updateMyActiveInterests(interest);
@@ -145,6 +159,8 @@ export const Interests: React.FC<InterestsProps> = ({
             tags={tags}
             separators={['Comma', 'Space', 'Enter']}
             customStyle="grow mt-2"
+            caption={maximumInterestsSelected ? maxInterestsErrorMessage : null}
+            status={maximumInterestsSelected ? 'error' : null}
             onSelected={({ index }) => {
               updateMyActiveInterests(interests[index]);
               updateAllMyInterests(interests[index]);
@@ -157,7 +173,7 @@ export const Interests: React.FC<InterestsProps> = ({
               }
               setTags(new Set(value));
             }}
-            disabled={allMyInterests.size + tagsSize >= maxInterests}
+            disabled={maximumInterestsSelected}
             multiple
           />
         </Stack>

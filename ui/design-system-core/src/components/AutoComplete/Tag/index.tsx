@@ -10,16 +10,17 @@ type TagProps = {
   onRemove: () => void;
 };
 
+//@TODO: Combine this component with pill component and use the latter for tags
 const Tag: React.FC<TagProps> = props => {
   const { tag, onRemove } = props;
   return (
-    <Card key={tag} radius={10} padding={4} accentBorder>
+    <Card key={tag} radius={24} padding={4} accentBorder>
       <Stack align="center" spacing="gap-x-1">
         <Text variant="body2" weight="light" truncate>
           {tag}
         </Text>
         <Button onClick={onRemove} plain>
-          <Icon type="XCircleIcon" size="sm" accentColor />
+          <Icon type="XMarkIcon" size="sm" accentColor />
         </Button>
       </Stack>
     </Card>
