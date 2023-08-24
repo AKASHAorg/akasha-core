@@ -153,9 +153,11 @@ const Layout: React.FC<RootComponentProps> = props => {
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = `
-      fixed xl:sticky h-full ${needSidebarToggling ? 'hidden' : ''} ${
-    showSidebar ? 'min-w([100vw] xl:max) z-[99]' : ''
-  }`;
+      fixed xl:sticky h-full ${
+        showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
+          ? 'min-w([100vw] xl:max) bg(black/30 dark:white/30) z-[99]'
+          : ''
+      }`;
 
   const sidebarSlotStyle = `
       sticky top-0 h-screen transition-all duration-300 transform ${

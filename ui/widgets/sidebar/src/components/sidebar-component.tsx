@@ -63,9 +63,11 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
+
     const resize = () => {
       setIsMobile(mql.matches);
     };
+
     window.addEventListener('resize', resize);
     return () => {
       window.removeEventListener('resize', resize);
