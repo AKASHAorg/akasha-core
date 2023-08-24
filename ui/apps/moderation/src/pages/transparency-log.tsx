@@ -2,19 +2,17 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonValues, IModerationLogItem } from '@akashaorg/typings/ui';
-import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
+import { IModerationLogItem } from '@akashaorg/typings/ui';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-// import { NoItemsFound } from '../components/error-cards';
-
 import { BasePageProps } from './dashboard';
-// import getReasonPrefix from '../utils/getReasonPrefix';
 import PaginatedTable from '../components/transparency-log/paginated-table';
+
+import { generateModerationHistory } from '../utils';
 
 export type PaginatedItem = IModerationLogItem[];
 
@@ -29,8 +27,6 @@ export const contentTypeMap = {
 export const TransparencyLog: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
-  const [, setActiveButton] = useState<string>(ButtonValues.ALL);
-  const [selected, setSelected] = useState<IModerationLogItem | null>(null);
   const [pages, setPages] = useState<PaginatedItem[]>([]);
 
   // list filters
@@ -43,15 +39,13 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
   const decisionPlaceholderLabel = t('Decision');
   const categoryPlaceholderLabel = t('Category');
 
-  const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
+  const logItemsQuery = { data: null };
 
   useEffect(() => {
     if (logItemsQuery.data) {
       const results = logItemsQuery.data.pages[0].results;
 
       setPages([...pages, results]);
-
-      // logItemsQuery.fetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logItemsQuery.data]);
@@ -71,45 +65,6 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
       setCurPage(curPage + 1);
     }
   };
-
-  const onTabClick = (value: string) => () => {
-    setActiveButton(value);
-  };
-
-  const handleClickArrowLeft = () => {
-    setSelected(null);
-  };
-
-  const handleClickAvatar = (profileId: string) => () => {
-    if (profileId)
-      navigateTo?.({
-        appName: '@akashaorg/app-profile',
-        getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
-      });
-  };
-
-  const handleCardClick = (el: IModerationLogItem) => () => {
-    selected?.contentID === el.contentID ? setSelected(null) : setSelected(el);
-  };
-
-  const buttonValues = [
-    {
-      value: ButtonValues.ALL,
-      label: t('{{ buttonValueAll }}', { buttonValueAll: ButtonValues.ALL }),
-    },
-    {
-      value: ButtonValues.KEPT,
-      label: t('{{ buttonValueKept }}', { buttonValueKept: ButtonValues.KEPT }),
-    },
-    {
-      value: ButtonValues.DELISTED,
-      label: t('{{ buttonValueDelisted }}', { buttonValueDelisted: ButtonValues.DELISTED }),
-    },
-    {
-      value: ButtonValues.STATS,
-      label: t('{{ buttonValueStats }}', { buttonValueStats: ButtonValues.STATS }),
-    },
-  ];
 
   const resetFilters = () => {
     setfilterByDecision({
@@ -132,13 +87,14 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
     });
   };
 
-  const trimmedRows =
-    pages[curPage - 1]?.map(el => [
-      dayjs(el.moderatedDate).format('DD MMM YYYY'),
-      t('{{type}}', { type: contentTypeMap[el.contentType] }),
-      el.delisted ? t('Delisted') : t('Kept'),
-      el.contentID,
-    ]) ?? [];
+  const moderationEntries = generateModerationHistory();
+
+  const trimmedRows = moderationEntries.map(el => [
+    dayjs(el.moderatedDate).format('DD MMM YYYY'),
+    t('{{type}}', { type: contentTypeMap[el.contentType] }),
+    el.delisted ? t('Delisted') : t('Kept'),
+    el.contentID,
+  ]);
 
   return (
     <>

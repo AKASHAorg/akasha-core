@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Profile } from '@akashaorg/typings/ui';
+
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

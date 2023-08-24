@@ -3,7 +3,6 @@ import React from 'react';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import { PageHeaderProps, PageHeader } from '../../../common';

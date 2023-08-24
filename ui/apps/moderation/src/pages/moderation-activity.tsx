@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
-
-import { PaginatedItem, DEFAULT_LIMIT, contentTypeMap } from './transparency-log';
+import { PaginatedItem, contentTypeMap } from './transparency-log';
+import { BasePageProps } from './dashboard';
 
 import ModerationActivity from '../components/dashboard/tabs/activity/moderation';
 
-import { BasePageProps } from './dashboard';
+import { generateModerationHistory } from '../utils';
 
 export const ModerationActivityPage: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
@@ -17,7 +16,7 @@ export const ModerationActivityPage: React.FC<BasePageProps> = props => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
+  const logItemsQuery = { data: null };
 
   useEffect(() => {
     if (logItemsQuery.data) {
@@ -35,13 +34,14 @@ export const ModerationActivityPage: React.FC<BasePageProps> = props => {
     });
   };
 
-  const moderationRows =
-    pages[0]?.map(el => [
-      dayjs(el.moderatedDate).format('DD MMM YYYY'),
-      t('{{type}}', { type: contentTypeMap[el.contentType] }),
-      el.delisted ? t('Delisted') : t('Kept'),
-      el.contentID,
-    ]) ?? [];
+  const moderationEntries = generateModerationHistory();
+
+  const moderationRows = moderationEntries.map(el => [
+    dayjs(el.moderatedDate).format('DD MMM YYYY'),
+    t('{{type}}', { type: contentTypeMap[el.contentType] }),
+    el.delisted ? t('Delisted') : t('Kept'),
+    el.contentID,
+  ]);
 
   return (
     <ModerationActivity
