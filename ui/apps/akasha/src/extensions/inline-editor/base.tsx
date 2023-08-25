@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  uploadMediaToTextile,
-  getLinkPreview,
-  useTagSearch,
-  useMentionSearch,
-} from '@akashaorg/ui-awf-hooks';
+import { uploadMediaToTextile, getLinkPreview, useTagSearch } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
 import { IEntryData, RootExtensionProps } from '@akashaorg/typings/ui';
@@ -34,7 +29,7 @@ export function Base(
 
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
-  const mentionSearch = useMentionSearch(mentionQuery);
+  const mentionSearch = null;
   const tagSearch = useTagSearch(tagQuery);
 
   const disablePublishing = React.useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
@@ -77,7 +72,7 @@ export function Base(
           getMentions={handleMentionQueryChange}
           getTags={handleTagQueryChange}
           tags={tagSearch.data}
-          mentions={mentionSearch.data}
+          mentions={mentionSearch?.data}
           uploadRequest={uploadMediaToTextile}
           background={props.entryData ? 'bg(grey9 dark:grey3)' : 'bg(white grey2'}
         />

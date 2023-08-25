@@ -2,14 +2,7 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/ui';
-import {
-  useDeleteBookmark,
-  useGetBookmarks,
-  useGetLogin,
-  useSaveBookmark,
-  withProviders,
-  useAnalytics,
-} from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, withProviders, useAnalytics } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -17,9 +10,9 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 const EntryCardSaveButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
   const loggedUserReq = useGetLogin();
-  const bookmarkReq = useGetBookmarks(loggedUserReq.data?.id, loggedUserReq.isSuccess);
-  const bookmarkCreate = useSaveBookmark();
-  const bookmarkDelete = useDeleteBookmark();
+  const bookmarkReq = null;
+  const bookmarkCreate = null;
+  const bookmarkDelete = null;
   const [analyticsActions] = useAnalytics();
 
   const isBookmarked = React.useMemo(() => {

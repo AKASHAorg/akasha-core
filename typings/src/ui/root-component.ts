@@ -20,14 +20,6 @@ export interface RootComponentProps {
   name?: string;
   singleSpa: typeof singleSpa;
   baseRouteName: string;
-  /*
-   * @deprecated
-   */
-  installIntegration?: (name: string) => void;
-  /*
-   * @deprecated
-   */
-  uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: ModalNavigationOptions) => void;
   getAppRoutes?: (appId: string) => IAppConfig['routes'];
   worldConfig: WorldConfig;

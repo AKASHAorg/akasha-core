@@ -3,9 +3,6 @@ import { useTranslation } from 'react-i18next';
 import {
   useTrendingProfiles,
   useTrendingTags,
-  useIsFollowingMultiple,
-  useFollow,
-  useUnfollow,
   useTagSubscriptions,
   useToggleTagSubscription,
 } from '@akashaorg/ui-awf-hooks';
@@ -38,13 +35,10 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
 
   const followPubKeyArr = trendingProfiles.map((profile: { pubKey: string }) => profile.pubKey);
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(
-    loggedProfileData?.did?.id,
-    followPubKeyArr,
-  );
+  const isFollowingMultipleReq = null;
   const followedProfiles = isFollowingMultipleReq.data;
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
+  const followReq = null;
+  const unfollowReq = null;
 
   const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
   const tagSubscriptions = tagSubscriptionsReq.data;

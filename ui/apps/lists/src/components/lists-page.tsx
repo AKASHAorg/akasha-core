@@ -11,12 +11,7 @@ import ListAppTopbar from '@akashaorg/design-system-components/lib/components/Li
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import {
-  useGetBookmarks,
-  useDeleteBookmark,
-  checkEntryActive,
-  useEntryNavigation,
-} from '@akashaorg/ui-awf-hooks';
+import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 type ListsPageProps = Omit<
@@ -28,7 +23,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   const { uiEvents, plugins, navigateToModal, layoutConfig } = props;
   const { t } = useTranslation('app-lists');
   const [showModal, setShowModal] = React.useState(false);
-  const bookmarkDelete = useDeleteBookmark();
+  const bookmarkDelete = null;
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
@@ -41,17 +36,17 @@ const ListsPage: React.FC<ListsPageProps> = props => {
     return loggedProfileData?.did?.id;
   }, [loggedProfileData?.did?.id]);
 
-  const listsReq = useGetBookmarks(isLoggedIn);
+  const listsReq = null;
   /**
    * Currently react query's initialData isn't working properly so listsReq.data will return undefined even if we supply initialData.
-   * This will be fixed in v4 of react query(https://github.com/DamianOsipiuk/vue-query/issues/124).
-   * In the mean time, the following check will ensure undefined data is handled.  */
+   * This will be fixed in v4 of React query(https://github.com/DamianOsipiuk/vue-query/issues/124).
+   * In the meantime, the following check will ensure undefined data is handled.  */
   const lists = listsReq.data || [];
 
   const bookmarkedBeamsIds = lists.map((bm: Record<string, string>) => bm.itemId);
   const bookmarkedBeams = undefined;
   const numberOfBookmarkedInactivePosts = React.useMemo(
-    () => bookmarkedBeams.filter(({ data }) => (data ? !checkEntryActive(data) : false)).length,
+    () => bookmarkedBeams.filter(({ data }) => (data ? data.active : false)).length,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [bookmarkedBeamsIds],
   );

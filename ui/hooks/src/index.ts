@@ -1,51 +1,19 @@
 import 'systemjs-webpack-interop/auto-public-path';
-
+// these hooks should remain
 export * from './dummy-hooks';
+export * from './use-root-props';
+export * from './use-global-login';
+export * from './use-analytics';
+export * as constants from './constants';
+export * from './utils/provider-hoc';
+export * from './utils/generic-utils';
+export * from './utils/entry-utils';
+export * from './utils/media-utils';
 
-import constants from './constants';
-import { logError } from './utils/error-handler';
-import { validateType } from './utils/generic-utils';
-import { createPendingEntry, mapEntry } from './utils/entry-utils';
-import { checkEntryActive } from './utils/checkEntryActive';
-import {
-  getMediaUrl,
-  saveMediaFile,
-  getProfileImageVersionsWithMediaUrl,
-  uploadMediaToTextile,
-  getLinkPreview,
-} from './utils/media-utils';
-import useGlobalLogin from './use-global-login';
-import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-analytics';
-import withProviders from './utils/provider-hoc';
+// to be removed or filtered
 import useReasons from './use-reasons';
 import { hasOwn } from './utils/has-own';
 import { useQueryListener, useMutationListener, useMutationsListener } from './use-query-listener';
-import {
-  useUpdateUsernameProvider,
-  useUsernameValidation,
-  useEnsByAddress,
-  useEnsRegistration,
-} from './use-username';
-import { useTrendingProfiles, useTrendingTags } from './use-trending';
-import {
-  useTagSubscriptions,
-  useIsSubscribedToTag,
-  useGetTag,
-  useTagSearch,
-  useToggleTagSubscription,
-} from './use-tag';
-import {
-  useGetProfile,
-  useGetProfileByEthAddress,
-  useFollowers,
-  useFollowing,
-  useGetEntryAuthor,
-  useInterests,
-  useProfileUpdate,
-  FormProfileData,
-  PROFILE_KEY,
-  UPDATE_PROFILE_STATUS,
-} from './use-profile';
 
 import {
   useCheckNewNotifications,
@@ -59,33 +27,10 @@ import {
   switchToRequiredNetwork,
   useNetworkChangeListener,
 } from './use-network-state';
-import { useMentionSearch } from './use-mentions';
 
 export * from './use-login.new';
 import { useLegalDoc } from './use-legal';
-import { useIsFollowingMultiple, useIsContactMultiple, useFollow, useUnfollow } from './use-follow';
-
-import { useGetBookmarks, useSaveBookmark, useDeleteBookmark } from './use-bookmarks';
-import {
-  useSearch,
-  useSearchComments,
-  useSearchPosts,
-  useSearchProfiles,
-  useSearchTags,
-} from './use-search';
 import { useEntryNavigation } from './use-navigation';
-import {
-  useCheckModerator,
-  useGetCount,
-  useGetModerators,
-  useGetFlags,
-  useInfiniteDelisted,
-  useInfiniteKept,
-  useInfiniteLog,
-  useInfinitePending,
-  useModeration,
-  useReport,
-} from './use-moderation';
 import { disconnectProvider, useInjectedProvider } from './use-injected-provider';
 import { useIsValidToken } from './use-invite-token-validation';
 import {
@@ -106,9 +51,7 @@ import {
   useInstallApp,
   useUninstallApp,
 } from './use-app-settings';
-import { useAppDescription } from './use-app-description';
 import { usePlaformHealthCheck } from './use-health-check';
-import { useEnsTexts } from './use-ens';
 import {
   useValidateMessage,
   useAddDevKeyFromMessage,
@@ -122,60 +65,12 @@ import useModerationCategory from './use-moderation-categories';
 import { useValidDid } from './use-valid-did';
 
 export {
-  constants,
-  useGlobalLogin,
-  // use-analytics
-  useAnalytics,
-  CookieConsentTypes,
-  COOKIE_CONSENT_NAME,
-  withProviders,
   hasOwn,
   useReasons,
-  // generic-utils
-  validateType,
-  // error-utils
-  logError,
-  // entry-utils
-  createPendingEntry,
-  mapEntry,
-  checkEntryActive,
-  // media-utils
-  getLinkPreview,
-  getMediaUrl,
-  saveMediaFile,
-  getProfileImageVersionsWithMediaUrl,
-  uploadMediaToTextile,
   // use-query-listener
   useQueryListener,
   useMutationListener,
   useMutationsListener,
-  // use-username
-  useUpdateUsernameProvider,
-  useUsernameValidation,
-  useEnsByAddress,
-  useEnsRegistration,
-  // use-trending
-  useTrendingProfiles,
-  useTrendingTags,
-  // use-tags
-  useTagSubscriptions,
-  useIsSubscribedToTag,
-  useGetTag,
-  useTagSearch,
-  useToggleTagSubscription,
-  // use-profile
-  useGetProfile,
-  useGetProfileByEthAddress,
-  useFollowers,
-  useFollowing,
-  useGetEntryAuthor,
-  useInterests,
-  useProfileUpdate,
-  FormProfileData,
-  PROFILE_KEY,
-  UPDATE_PROFILE_STATUS,
-  // use-posts
-
   // use-notifications
   useCheckNewNotifications,
   useFetchNotifications,
@@ -186,40 +81,10 @@ export {
   useNetworkChangeListener,
   useRequiredNetwork,
   switchToRequiredNetwork,
-  // use-mentions
-  useMentionSearch,
   // use-navigation
   useEntryNavigation,
   // use-legal
   useLegalDoc,
-  // use-follow
-  useIsFollowingMultiple,
-  useIsContactMultiple,
-  useFollow,
-  useUnfollow,
-  // use-comments
-
-  // use-bookmarks
-  useGetBookmarks,
-  useSaveBookmark,
-  useDeleteBookmark,
-  // use-search
-  useSearch,
-  useSearchTags,
-  useSearchComments,
-  useSearchPosts,
-  useSearchProfiles,
-  // use-moderation
-  useCheckModerator,
-  useGetCount,
-  useGetModerators,
-  useGetFlags,
-  useInfiniteDelisted,
-  useInfiniteKept,
-  useInfiniteLog,
-  useInfinitePending,
-  useModeration,
-  useReport,
   // use-injected-provider
   useInjectedProvider,
   disconnectProvider,
@@ -241,9 +106,7 @@ export {
   useGetAppConfig,
   useInstallApp,
   useUninstallApp,
-  useAppDescription,
   usePlaformHealthCheck,
-  useEnsTexts,
   useValidateMessage,
   useAddDevKeyFromMessage,
   useGetDevKeys,

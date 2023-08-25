@@ -1,6 +1,5 @@
 import * as React from 'react';
 import MyFeedPage from '../my-feed-page/my-feed-page';
-import * as hooks from '@akashaorg/ui-awf-hooks/lib/use-posts';
 
 import {
   screen,

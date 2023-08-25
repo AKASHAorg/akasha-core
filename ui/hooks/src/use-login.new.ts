@@ -3,7 +3,7 @@ import getSDK from '@akashaorg/awf-sdk';
 
 import { CurrentUser, EthProviders } from '@akashaorg/typings/sdk';
 
-import { useGlobalLogin } from '.';
+import { useGlobalLogin } from './use-global-login';
 import { logError } from './utils/error-handler';
 
 export const LOGIN_STATE_KEY = 'LOGIN_STATE';
@@ -93,9 +93,9 @@ export function useLogin(onError?: (err: Error) => void) {
  *
  * // sample logout handler
  * const handleLogout = async () => {
-    await logoutMutation.mutateAsync();
-    // add other logic after logout
-  };
+ await logoutMutation.mutateAsync();
+ // add other logic after logout
+ };
  * ```
  */
 export function useLogout() {
