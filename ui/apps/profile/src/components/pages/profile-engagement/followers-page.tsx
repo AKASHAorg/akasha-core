@@ -4,6 +4,7 @@ import Followers from '@akashaorg/design-system-components/lib/components/Profil
 import EngagementTab from './engagement-tab';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
+import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useParams } from 'react-router-dom';
 import {
@@ -11,10 +12,9 @@ import {
   useInfiniteGetFollowersListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
-import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 
 const FollowersPage: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
+  const { plugins, navigateToModal } = props;
   const { profileId } = useParams<{ profileId: string }>();
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -23,7 +23,7 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    props.navigateToModal({ name: 'login', redirectTo });
+    navigateToModal({ name: 'login', redirectTo });
   };
 
   const profileDataReq = useGetProfileByDidQuery(

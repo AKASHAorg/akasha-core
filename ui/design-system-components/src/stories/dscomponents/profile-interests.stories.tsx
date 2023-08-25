@@ -15,10 +15,11 @@ export const BaseInterests: Story = {
   render: () => (
     <Interests
       title="Your interests"
-      description="Your interests will help refine your social feed and throughout AKASHA World.  You can have a maximum of 10 topics"
-      moreInterestTitle="Find more interests"
-      moreInterestDescription="You can find more interests and add them to your list of interests!"
-      moreInterestPlaceholder="Search for interests"
+      subTitle="(10 topics max.)"
+      description="Your interests will help refine your social feed and throughout AKASHA World."
+      moreInterestTitle="Add more interests"
+      moreInterestDescription="Separate your interests by comma or space"
+      moreInterestPlaceholder="Interests"
       myInterests={[
         {
           value: 'AKASHA',
@@ -67,11 +68,15 @@ export const BaseInterests: Story = {
           labelType: 'TOPIC',
         },
       ]}
+      maxInterests={10}
       labelType="TOPIC"
+      maxInterestsErrorMessage="Max interests reached. Remove some interests to add more."
       cancelButton={{ label: 'Cancel', handleClick: () => ({}) }}
       saveButton={{
         label: 'Save',
-        handleClick: () => ({}),
+        handleClick: interests => {
+          console.log(interests);
+        },
       }}
     />
   ),
