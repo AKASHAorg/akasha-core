@@ -38,7 +38,7 @@ import ProfileSearchCard from '@akashaorg/design-system-components/lib/component
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import SearchStartCard from '@akashaorg/design-system-components/lib/components/SearchStartCard';
 import SearchAppFilter from '@akashaorg/design-system-components/lib/components/SearchAppFilter';
-import SeventyFivePercentSpinner from '@akashaorg/design-system-core/lib/components/SeventyFivePercentSpinner';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import SwitchCard from '@akashaorg/design-system-components/lib/components/SwitchCard';
 import TagSearchCard from '@akashaorg/design-system-components/lib/components/TagSearchCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -599,10 +599,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       </Box>
       {isFetchingSearch && (
         <Box customStyle="p-8 flex flex-col items-center justify-center m-auto space-y-8">
-          <SeventyFivePercentSpinner
+          <Spinner
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             size="xxl"
             loadingLabel="Loading..."
+            partialSpinner={true}
           />
           <Text variant="footnotes2">{t('Searching...')}</Text>
         </Box>
