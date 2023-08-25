@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
-import { useFollowers, useFollowing } from '@akashaorg/ui-awf-hooks';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -31,13 +30,13 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   };
 
   // @TODO: replace with new hooks
-  const followersQuery = useFollowers(loggedUserId, 500);
+  const followersQuery = null;
   const followers = React.useMemo(
     () => followersQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followersQuery.data?.pages],
   );
 
-  const followingQuery = useFollowing(loggedUserId, 500);
+  const followingQuery = null;
   const following = React.useMemo(
     () => followingQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followingQuery.data?.pages],
