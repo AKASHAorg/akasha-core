@@ -3,7 +3,7 @@ import React from 'react';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -40,7 +40,7 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
   };
 
   return (
-    <BasicCardBox pad="p-0">
+    <Card padding={0}>
       <Box customStyle="p-4">
         <Text variant="h5" align="center" weight="bold">
           {titleLabel}
@@ -83,7 +83,7 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
           </Box>
         </Box>
       ))}
-    </BasicCardBox>
+    </Card>
   );
 };
 

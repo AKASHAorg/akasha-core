@@ -16,7 +16,7 @@ import getSDK from '@akashaorg/awf-sdk';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
@@ -259,10 +259,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   });
 
   return (
-    <BasicCardBox
+    <Card
       customStyle="w-[19.5rem] max-w-[19.5rem] max-h(screen xl:[calc(100vh-20px)]) h(full xl:fit)"
-      round="rounded-r-2xl xl:rounded-2xl"
-      pad="p-0"
+      radius="rounded-r-2xl xl:rounded-2xl"
+      padding="p-0"
     >
       <Box customStyle="flex flex-row justify-items-stretch p-4 border-b-1 border(grey9 dark:grey3)">
         <Box customStyle="w-fit h-fit mr-2">
@@ -370,7 +370,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
           </Box>
         </Box>
       )}
-    </BasicCardBox>
+    </Card>
   );
 };
 export default SidebarComponent;

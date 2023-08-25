@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
@@ -18,7 +18,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
   const { labelTextVariant = 'h5', label, cancelButtonLabel, confirmButtonLabel, children } = props;
 
   return (
-    <BasicCardBox pad="p-0">
+    <Card padding={0}>
       <Box customStyle="px-4 py-6">
         <Text variant={labelTextVariant} align="center">
           {label}
@@ -35,6 +35,6 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
           <PageButtons {...props} />
         </Box>
       )}
-    </BasicCardBox>
+    </Card>
   );
 };

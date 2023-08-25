@@ -2,7 +2,7 @@ import React from 'react';
 
 import { EntityTypes } from '@akashaorg/typings/ui';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -166,12 +166,12 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
     const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
     return (
       <div key={index}>
-        <BasicCardBox
+        <Card
           elevation="none"
-          pad="py-3 pl-4"
+          padding="py-3 pl-4"
           onClick={clickHandler}
           customStyle="flex-row"
-          round="none"
+          radius="none"
         >
           <ProfileAvatarNotificationApp
             profileId={profileData.did?.id}
@@ -182,14 +182,14 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
             onClick={clickHandler}
             active={!notif.read}
           />
-        </BasicCardBox>
+        </Card>
         <Divider />
       </div>
     );
   };
 
   return (
-    <BasicCardBox pad="p-0" elevation="none">
+    <Card padding={0} elevation="none">
       {loggedIn && !isFetching && notifications.length === 0 && (
         <BasicInfoCard titleLabel={emptyTitle} />
       )}
@@ -203,7 +203,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
           )}
         </div>
       )}
-    </BasicCardBox>
+    </Card>
   );
 };
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
@@ -34,7 +34,7 @@ const GuestDashboard: React.FC<GuestProps> = props => {
   };
 
   return (
-    <BasicCardBox pad="p-4">
+    <Card padding={16}>
       <Box customStyle="grid gap-4 grid-cols-1">
         <Text variant="h5" align="center">
           {t('Moderating')}
@@ -75,7 +75,7 @@ const GuestDashboard: React.FC<GuestProps> = props => {
           {t('to learn more about our moderation criteria')}
         </Text>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

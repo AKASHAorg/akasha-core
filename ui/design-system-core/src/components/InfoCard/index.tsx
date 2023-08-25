@@ -40,6 +40,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
         />
       ) : (
         <Card
+          elevation="none"
           radius={20}
           background={{ light: 'grey8', dark: 'grey5' }}
           customStyle="h-32 w-32 sm:h-52 sm:w-52"

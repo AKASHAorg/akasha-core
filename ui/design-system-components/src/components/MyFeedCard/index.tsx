@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { tw } from '@twind/core';
@@ -18,7 +18,7 @@ const MyFeedCard: React.FC<MyFeedCardProps> = props => {
   const { title, description, noPostsTitle, noPostsDescription, CTALabel, onClickCTA, hasPosts } =
     props;
   return (
-    <BasicCardBox>
+    <Card>
       <div className={tw(`flex items-center py-6 px-4`)}>
         {!hasPosts && (
           <>
@@ -52,7 +52,7 @@ const MyFeedCard: React.FC<MyFeedCardProps> = props => {
           <Icon type="ChevronRightIcon" accentColor={true} />
         </button>
       </div>
-    </BasicCardBox>
+    </Card>
   );
 };
 

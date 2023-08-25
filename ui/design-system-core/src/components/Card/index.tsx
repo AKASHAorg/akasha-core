@@ -1,66 +1,97 @@
-import React, { LegacyRef, PropsWithChildren, forwardRef } from 'react';
-import { apply } from '@twind/core';
-
-import Stack from '../Stack';
-
-import { Color, Elevation, Padding, Radius } from '../types/common.types';
+import React, { PropsWithChildren, forwardRef, LegacyRef } from 'react';
+import { apply, tw } from '@twind/core';
 import {
   getColorClasses,
   getElevationClasses,
   getPaddingClasses,
   getRadiusClasses,
 } from '../../utils';
+import { Color, Elevation, Padding, Radius } from '../types/common.types';
 
 export type CardProps = {
   elevation?: Elevation;
   background?: Color;
-  radius?: Radius;
-  padding?: Padding;
-  direction?: 'row' | 'column';
+  dashedBorder?: boolean;
   accentBorder?: boolean;
+  padding?: Padding;
+  margin?: string;
+  radius?: Radius;
+  border?: boolean;
+  noBorderRadius?: boolean;
   customStyle?: string;
-  testId?: string;
+  onClick?: () => void;
+  tabIndex?: number;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   ref?: LegacyRef<HTMLDivElement>;
+  testId?: string;
 };
-
-const baseStyles = 'block';
 
 const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => {
   const {
-    elevation = 'none',
-    background = { light: 'white', dark: 'grey2' },
-    // default radius as in the design system specs
-    radius = 'rounded-2xl',
-    padding,
-    direction,
-    accentBorder,
-    customStyle = '',
-    testId,
     children,
+    elevation = '1',
+    background = { light: 'white', dark: 'grey2' },
+    dashedBorder,
+    accentBorder,
+    padding = 'p-6',
+    margin = 'm-0',
+    radius = 'rounded-2xl',
+    border,
+    noBorderRadius,
+    customStyle = '',
+    tabIndex = 0,
+    testId,
+    onKeyDown = () => {
+      void 0;
+    },
+    onClick,
   } = props;
+
+  const generatedBorder = React.useMemo(() => {
+    if (dashedBorder) {
+      return 'border(2 dashed grey5)';
+    }
+
+    if (border) {
+      return 'border(1 solid grey9 dark:grey3)';
+    }
+    if (accentBorder) {
+      return 'border(1 solid secondaryLight dark:secondaryDark)';
+    }
+
+    /**
+     * Define other border-changing props here
+     */
+
+    return 'border-none';
+  }, [dashedBorder, border, accentBorder]);
 
   const elevationStyle = getElevationClasses(elevation);
   const radiusStyle = getRadiusClasses(radius);
   const paddingStyle = getPaddingClasses(padding);
   const backgroundStyle = getColorClasses(background, 'bg');
-  const accentBorderStyle = accentBorder
-    ? `border ${getColorClasses({ light: 'secondaryLight', dark: 'secondaryDark' }, 'border')}`
-    : '';
 
-  const instanceStyles = apply`
-    ${baseStyles}
-    ${backgroundStyle}
-    ${elevationStyle}
-    ${radiusStyle}
-    ${paddingStyle}
-    ${accentBorderStyle}
-    ${customStyle}
-  `;
+  const className = React.useMemo(
+    () =>
+      apply`flex flex-col ${elevationStyle} w-full ${paddingStyle} ${margin} ${backgroundStyle} ${
+        noBorderRadius ? 'rounded-none' : radiusStyle
+      } ${generatedBorder} ${customStyle}`,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [generatedBorder],
+  );
 
   return (
-    <Stack direction={direction} customStyle={instanceStyles} testId={testId} ref={ref}>
+    <div
+      className={tw(className)}
+      role={onClick ? 'button' : 'presentation'}
+      tabIndex={tabIndex}
+      ref={ref}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      data-testid={testId}
+    >
       {children}
-    </Stack>
+    </div>
   );
 });
 

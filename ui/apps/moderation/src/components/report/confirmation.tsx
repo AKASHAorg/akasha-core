@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -33,7 +33,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
   } = props;
 
   return (
-    <BasicCardBox pad="p-4">
+    <Card padding={16}>
       <Box customStyle="flex flex-col space-y-4 items-center">
         <Button plain={true} customStyle="self-end" onClick={onIconClick}>
           <Icon type="XMarkIcon" />
@@ -76,6 +76,6 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
           </a>
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };

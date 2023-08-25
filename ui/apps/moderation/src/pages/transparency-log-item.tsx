@@ -1,7 +1,7 @@
 import React from 'react';
 // import { useParams } from 'react-router-dom';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -13,7 +13,7 @@ export const TransparencyLogItem: React.FC = () => {
   const value = 'Kept';
 
   return (
-    <BasicCardBox pad="p-0 space-y-3">
+    <Card padding={0} customStyle="space-y-3">
       <Box
         customStyle={`p-4 space-y-2 rounded-t-2xl bg-(${
           value === 'Kept' ? 'success/10 dark:success/30' : 'errorLight/10 dark:errorDark/40'
@@ -48,6 +48,6 @@ export const TransparencyLogItem: React.FC = () => {
           A post has been reported for
         </Text>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };

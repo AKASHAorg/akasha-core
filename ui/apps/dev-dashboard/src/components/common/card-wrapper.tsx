@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -17,7 +17,7 @@ export const CardWrapper: React.FC<React.PropsWithChildren<ICardWrapperProps>> =
   const { titleLabel, children } = props;
 
   return (
-    <BasicCardBox pad="p-0">
+    <Card padding={0}>
       <Box customStyle="p-4">
         <Text variant="h5" align="center">
           {titleLabel}
@@ -31,6 +31,6 @@ export const CardWrapper: React.FC<React.PropsWithChildren<ICardWrapperProps>> =
       <Box customStyle="flex p-4 space-x-6 items-center justify-end">
         <PageButtons {...props} />
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };

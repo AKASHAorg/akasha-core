@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -29,7 +29,7 @@ const ArticleOnboardingIntro: React.FC<IArticleOnboardingIntroProps> = props => 
   } = props;
 
   return (
-    <BasicCardBox customStyle="mb-4">
+    <Card customStyle="mb-4">
       <Box customStyle="flex items-start w-full p-4">
         <Box customStyle="flex flex-row w-full justify-between mb-1">
           <Text variant="h2">{titleLabel}</Text>
@@ -52,7 +52,7 @@ const ArticleOnboardingIntro: React.FC<IArticleOnboardingIntroProps> = props => 
           <Button size="lg" variant="primary" label={buttonLabel} onClick={onStart} />
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Profile } from '@akashaorg/typings/ui';
@@ -17,17 +17,20 @@ export interface IEditorPlaceholder {
 const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
   const { avatar, profileId, placeholderLabel, replyLabel, onClick } = props;
   return (
-    <BasicCardBox border={true} pad="none">
-      <div className={tw(`flex justify-between px-4 py-2 `)} onClick={onClick}>
-        <div className={tw(`flex flex-row items-center gap-4`)}>
-          <Avatar avatar={avatar} profileId={profileId} size="sm" />
-          <Text variant="subtitle2" truncate={true}>
-            {placeholderLabel}
-          </Text>
+    <Card border={true} padding={0}>
+      <button onClick={onClick}>
+        <div className={tw(`flex justify-between px-4 py-2 `)}>
+          <div className={tw(`flex flex-row items-center gap-4`)}>
+            <Avatar avatar={avatar} profileId={profileId} size="sm" />
+            <Text variant="subtitle2" truncate={true}>
+              {placeholderLabel}
+            </Text>
+          </div>
+
+          <Button variant="primary" disabled={true} label={replyLabel} size="sm" />
         </div>
-        <Button variant="primary" disabled={true} label={replyLabel} size="sm" />
-      </div>
-    </BasicCardBox>
+      </button>
+    </Card>
   );
 };
 

@@ -64,7 +64,7 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
     >
       <Text align="center">{`${t('Are you sure you wish to delete')} "${keyName}"?`}</Text>
 
-      {/* <BasicCardBox pad="p-4">
+      {/* <Card padding={16}>
         <Box customStyle="w-[36rem] space-y-3">
           <Box customStyle="flex justify-center relative">
             <Text variant="h5" align="center" weight="bold">
@@ -83,7 +83,7 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
             <Button size="sm" variant="primary" label={t('Delete')} onClick={handleDelete} />
           </Box>
         </Box>
-      </BasicCardBox> */}
+      </Card> */}
     </Modal>
   );
 };

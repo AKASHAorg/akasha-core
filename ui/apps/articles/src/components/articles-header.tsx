@@ -1,5 +1,5 @@
 import React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -16,7 +16,7 @@ export interface IArticleHeaderProps {
 const ArticleHeader: React.FC<IArticleHeaderProps> = props => {
   const { titleLabel, subtitleLabel, writeArticleLabel, onIconClick, onClickWriteArticle } = props;
   return (
-    <BasicCardBox customStyle="p-4 gap-4">
+    <Card customStyle="p-4 gap-4">
       <Box customStyle="flex-flex-row justify-between">
         <Text variant="h2">{titleLabel}</Text>
         <button onClick={onIconClick}>
@@ -27,7 +27,7 @@ const ArticleHeader: React.FC<IArticleHeaderProps> = props => {
         <Text variant="h6">{subtitleLabel}</Text>
         <Button size="lg" label={writeArticleLabel} onClick={onClickWriteArticle} />
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

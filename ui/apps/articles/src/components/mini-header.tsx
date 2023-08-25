@@ -1,5 +1,5 @@
 import React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -13,14 +13,14 @@ const MiniHeader: React.FC<IMiniHeaderProps> = props => {
   const { titleLabel, onClickIcon } = props;
 
   return (
-    <BasicCardBox pad="p-2">
+    <Card padding={8}>
       <Box customStyle="flex flex-row w-full">
         <button onClick={onClickIcon}>
           <Icon type="ChevronLeftIcon" />
         </button>
         <Text variant="h2">{titleLabel}</Text>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

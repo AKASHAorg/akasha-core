@@ -48,10 +48,10 @@ const ListsPage: React.FC<ListsPageProps> = props => {
    * In the mean time, the following check will ensure undefined data is handled.  */
   const lists = listsReq.data || [];
 
-  const bookmarkedBeamsIds = lists.map((bm: Record<string, string>) => bm.itemId);
+  const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);
   const bookmarkedBeams = undefined;
   const numberOfBookmarkedInactivePosts = React.useMemo(
-    () => bookmarkedBeams.filter(({ data }) => (data ? !checkEntryActive(data) : false)).length,
+    () => bookmarkedBeams?.filter(({ data }) => (data ? !checkEntryActive(data) : false)).length,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [bookmarkedBeamsIds],
   );
@@ -110,7 +110,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   };
 
   return (
-    <Card direction="row" elevation={'1'} radius={16} padding={16}>
+    <Card customStyle="flex flex-row" elevation={'1'} radius={16} padding={'p-4'}>
       <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
       {listsReq.status === 'error' && (
         <ErrorLoader

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -17,7 +17,7 @@ const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
   const { titleLabel, subtitleLabel, onCloseButtonClick } = props;
 
   return (
-    <BasicCardBox pad="p-5">
+    <Card padding={20}>
       <Box customStyle="self-end">
         <Button plain={true} onClick={onCloseButtonClick}>
           <Icon type="XMarkIcon" />
@@ -32,7 +32,7 @@ const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
           {subtitleLabel}
         </Text>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

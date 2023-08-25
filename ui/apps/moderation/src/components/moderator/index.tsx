@@ -4,7 +4,7 @@ import { Moderator } from '@akashaorg/typings/ui';
 
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -45,7 +45,7 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
   }`;
 
   return (
-    <BasicCardBox pad="p-4 space-y-4">
+    <Card padding={16} customStyle="space-y-4">
       <Box customStyle={boxStyle}>
         <Box customStyle="flex space-x-2 items-center w([50%] md:[30%])">
           <Avatar avatar={moderator.avatar} />
@@ -124,7 +124,7 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
           onClick={onClickDismissModerator}
         />
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 
