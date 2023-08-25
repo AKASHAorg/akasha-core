@@ -80,7 +80,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   // @TODO replace with new hooks
   const tagSubscriptionsReq = null;
-  const tagSubscriptionsState = tagSubscriptionsReq.data;
+  const tagSubscriptionsState = tagSubscriptionsReq?.data;
 
   const toggleTagSubscriptionReq = null;
 
