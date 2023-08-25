@@ -182,7 +182,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                   />
                 </Box>
               ) : (
-                <Box customStyle="pt-0 xl:pt-4 h-screen" ref={wrapperRef}>
+                <Box customStyle="pt-0 xl:pt-4 h-screen">
                   <Extension
                     fullHeight
                     name={props.layoutConfig.sidebarSlotId}
