@@ -4,7 +4,6 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type ResignConfirmationProps = {

@@ -41,22 +41,29 @@ const CookieCard: React.FC<CookieCardProps> = props => {
     <Card elevation="1" radius={20} padding={'p-4'}>
       <Stack direction="column" spacing="gap-y-1">
         <Text variant="h6">{titleLabel}</Text>
+
         <Text variant="body2">{paragraphOneLabel}</Text>
+
         <Text variant="body2">
-          <Text variant="button-md" customStyle="inline">
-            {paragraphTwo.ctaLabel}
-          </Text>
+          {paragraphTwo.ctaLabel}
+
           <Anchor href={paragraphTwo.analyticsURL}>{paragraphTwo.analyticsLabel}</Anchor>
+
           {paragraphTwo.middleParagraphLabeL}
+
           <Anchor onClick={paragraphTwo.onSettingsClick}>{paragraphTwo.settingsLabel}</Anchor>
+
           {paragraphTwo.lastParagraphLabel}
         </Text>
+
         <Text variant="body2">
           {paragraphThree.ctaLabel}{' '}
           <Anchor href={paragraphThree.url}>{paragraphThree.urlLabel}</Anchor>
         </Text>
+
         <Stack spacing="gap-x-4" customStyle="ml-auto mt-auto">
           <Button variant="text" label={onlyEssentialLabel} onClick={onClickOnlyEssential} />
+
           <Button
             variant="primary"
             label={acceptAllLabel}

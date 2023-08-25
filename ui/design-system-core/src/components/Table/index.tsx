@@ -34,6 +34,30 @@ const Table: React.FC<TableProps> = props => {
     }
   };
 
+  const generateTdValue = (idx: number, value: string) => {
+    if (hasIcons && idx === 2) {
+      return (
+        <div className={tw('flex space-x-1.5 items-center')}>
+          <div
+            className={tw(
+              `w-2 h-2 rounded-full ${
+                ['Kept', 'Accepted'].includes(value)
+                  ? 'bg-success'
+                  : 'bg(errorLight dark:errorDark)'
+              }`,
+            )}
+          />
+          <Text variant="body2">{value}</Text>
+        </div>
+      );
+    }
+
+    if (hasIcons && idx === 3) {
+      return <Icon type="ChevronRightIcon" accentColor={true} />;
+    }
+    return <Text variant="body2">{value}</Text>;
+  };
+
   const baseTdStyle = apply(`py-4 px-5 ${customTdStyle}`);
 
   return (
@@ -74,22 +98,7 @@ const Table: React.FC<TableProps> = props => {
                   key={value + idx}
                   className={`${baseTdStyle} ${hasIcons && idx === 3 ? 'flex justify-end' : ''}`}
                 >
-                  {hasIcons && idx === 2 ? (
-                    <div className={tw('flex space-x-1.5 items-center')}>
-                      <div
-                        className={tw(
-                          `w-2 h-2 rounded-full ${
-                            value === 'Kept' ? 'bg-success' : 'bg(errorLight dark:errorDark)'
-                          }`,
-                        )}
-                      />
-                      <Text variant="body2">{value}</Text>
-                    </div>
-                  ) : hasIcons && idx === 3 ? (
-                    <Icon type="ChevronRightIcon" accentColor={true} />
-                  ) : (
-                    <Text variant="body2">{value}</Text>
-                  )}
+                  {generateTdValue(idx, value)}
                 </td>
               ))}
             </tr>

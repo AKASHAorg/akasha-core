@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -17,33 +17,35 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 const Layout: React.FC<RootComponentProps> = props => {
-  const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
-  const [needSidebarToggling, setNeedSidebarToggling] = React.useState(
+  const [activeModal, setActiveModal] = useState<UIEventData['data'] | null>(null);
+  const [needSidebarToggling, setNeedSidebarToggling] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
-
   // sidebar is open by default on larger screens >=1440px
-  const [showSidebar, setShowSidebar] = React.useState(
+  const [showSidebar, setShowSidebar] = useState(
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
+
     const resize = () => {
       setShowSidebar(!mql.matches);
     };
+
     window.addEventListener('resize', resize);
+
     return () => {
       window.removeEventListener('resize', resize);
     };
   }, []);
 
   // widgets are autohidden starting on screens <=768px
-  const [showWidgets, setshowWidgets] = React.useState(
+  const [showWidgets, setshowWidgets] = useState(
     window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const handleResize = () => {
       setshowWidgets(window.matchMedia(startWidgetsTogglingBreakpoint).matches);
       setNeedSidebarToggling(window.matchMedia(startMobileSidebarHidingBreakpoint).matches);
@@ -56,7 +58,7 @@ const Layout: React.FC<RootComponentProps> = props => {
 
   const maintenanceReq = usePlaformHealthCheck();
 
-  const isPlatformHealthy = React.useMemo(() => {
+  const isPlatformHealthy = useMemo(() => {
     if (maintenanceReq.status === 'success') {
       return maintenanceReq.data.success;
     }
@@ -64,12 +66,13 @@ const Layout: React.FC<RootComponentProps> = props => {
     return true;
   }, [maintenanceReq.status, maintenanceReq.data]);
 
-  const uiEvents = React.useRef(props.uiEvents);
+  const uiEvents = useRef(props.uiEvents);
   const { t } = useTranslation();
 
   const handleSidebarShow = () => {
     setShowSidebar(true);
   };
+
   const handleSidebarHide = () => {
     setShowSidebar(false);
   };
@@ -81,7 +84,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     setshowWidgets(false);
   };
 
-  const handleModal = React.useCallback(
+  const handleModal = useCallback(
     (data: UIEventData['data']) => {
       setActiveModal(active => {
         if ((!active || !active.name) && data.name) {
@@ -99,7 +102,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     [activeModal],
   );
 
-  const wrapperRef = React.useRef(null);
+  const wrapperRef = useRef(null);
 
   useClickAway(wrapperRef, () => {
     uiEvents.current.next({
@@ -107,7 +110,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     });
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const eventsSub = uiEvents.current.subscribe({
       next: (eventInfo: UIEventData) => {
         switch (eventInfo.event) {
@@ -150,10 +153,11 @@ const Layout: React.FC<RootComponentProps> = props => {
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = `
-      fixed xl:sticky h-full
-      ${showSidebar ? 'min-w-[100vw] xl:min-w-max z-[99] bg(black/30 dark:white/30)' : ''}
-      ${needSidebarToggling ? 'hidden' : ''}
-      `;
+      fixed xl:sticky h-full ${
+        showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
+          ? 'min-w([100vw] xl:max) bg(black/30 dark:white/30) z-[99]'
+          : ''
+      }`;
 
   const sidebarSlotStyle = `
       sticky top-0 h-screen transition-all duration-300 transform ${
@@ -166,6 +170,7 @@ const Layout: React.FC<RootComponentProps> = props => {
       <Box customStyle="h-full m-auto lg:w-[95%] xl:w-full min-h-screen">
         <Box customStyle={layoutStyle}>
           <ScrollRestorer />
+
           <Box customStyle={mobileLayoverStyle}>
             <Box customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
@@ -187,6 +192,7 @@ const Layout: React.FC<RootComponentProps> = props => {
               )}
             </Box>
           </Box>
+
           <Box customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
             <Box customStyle="sticky top-0 z-10">
               <Box customStyle="pt-4 bg(white dark:black) rounded-b-2xl">
@@ -221,16 +227,19 @@ const Layout: React.FC<RootComponentProps> = props => {
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </Box>
           </Box>
+
           <Box customStyle="sticky top-0 h-screen">
             <Box customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
               <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
               <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
             </Box>
+
             <Box customStyle="fixed bottom-0 mr-4 mb-4">
               <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
             </Box>
           </Box>
         </Box>
+
         {activeModal && (
           <Extension
             name={activeModal.name}
@@ -238,6 +247,7 @@ const Layout: React.FC<RootComponentProps> = props => {
             customStyle="relative z-999"
           />
         )}
+
         <Extension
           name={props.layoutConfig.modalSlotId}
           uiEvents={props.uiEvents}

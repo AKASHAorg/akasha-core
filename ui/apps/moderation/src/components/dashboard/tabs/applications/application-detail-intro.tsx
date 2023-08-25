@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { ModeratorApplicantData } from '@akashaorg/typings/ui';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';

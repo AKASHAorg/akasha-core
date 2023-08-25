@@ -4,9 +4,11 @@ import { tw } from '@twind/core';
 import Stack from '../Stack';
 import List, { ListItem } from '../List';
 import TextField from '../TextField';
-import { InputProps } from '../TextField/types';
-
+import Tag from './Tag';
+import { InputProps, TextFieldProps } from '../TextField/types';
 import { useCloseActions } from '../../utils';
+import { Separator } from './types';
+import { isSeparator } from './isSeparator';
 
 type Selected = { value: string; index?: number };
 
@@ -16,19 +18,29 @@ export type AutoCompleteProps = {
   disabled?: InputProps['disabled'];
   value?: string;
   customStyle?: string;
-  onChange?: (value: string) => void;
+  multiple?: boolean;
+  separators?: Separator[];
+  tags?: Set<string>;
+  onChange?: (value: string | string[]) => void;
   onSelected?: ({ value, index }: Selected) => void;
-};
+} & Pick<TextFieldProps, 'label' | 'caption' | 'status'>;
 
-const AutoComplete: React.FC<AutoCompleteProps> = ({
-  options,
-  placeholder,
-  disabled,
-  customStyle = '',
-  value,
-  onChange,
-  onSelected,
-}) => {
+const AutoComplete: React.FC<AutoCompleteProps> = props => {
+  const {
+    options,
+    placeholder,
+    disabled,
+    customStyle = '',
+    value,
+    multiple,
+    separators = ['Enter'],
+    tags,
+    label,
+    caption,
+    status,
+    onChange,
+    onSelected,
+  } = props;
   const [filters, setFilters] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -54,6 +66,19 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
     [filters],
   );
 
+  const updateTag = (tag: string, remove?: boolean) => {
+    const newTags = new Set(tags);
+
+    if (remove) {
+      newTags.delete(tag);
+      if (onChange) onChange([...newTags]);
+      return;
+    }
+
+    newTags.add(tag);
+    if (onChange) onChange([...newTags]);
+  };
+
   return (
     <Stack
       direction="column"
@@ -67,12 +92,28 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
         placeholder={placeholder}
         iconRight="MagnifyingGlassIcon"
         value={value}
+        label={label}
+        caption={caption}
+        status={status}
         onChange={event => {
           setShowSuggestions(true);
           if (onChange) onChange(event.target.value);
         }}
         onFocus={() => {
           setShowSuggestions(true);
+        }}
+        onKeyDown={event => {
+          if (multiple) {
+            if (isSeparator(event.code, separators)) {
+              if (value) {
+                if (onChange) onChange('');
+                updateTag(value);
+                setShowSuggestions(false);
+              }
+              event.preventDefault();
+              event.nativeEvent.stopImmediatePropagation();
+            }
+          }
         }}
         customStyle="rounded-3xl"
         radius={100}
@@ -91,6 +132,19 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
             customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar"
           />
         </div>
+      )}
+      {tags?.size > 0 && (
+        <Stack align="end" customStyle="flex-wrap space-x-2 space-y-2">
+          {[...tags].map(tag => (
+            <Tag
+              key={tag}
+              tag={tag}
+              onRemove={() => {
+                updateTag(tag, true);
+              }}
+            />
+          ))}
+        </Stack>
       )}
     </Stack>
   );

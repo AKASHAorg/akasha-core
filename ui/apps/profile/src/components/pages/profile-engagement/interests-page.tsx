@@ -170,17 +170,20 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
         {profileId === loginQuery.data?.id && (
           <Interests
             title={t('Your interests')}
+            subTitle={t('(30 topics max.)')}
             description={t(
-              'Your interests will help refine your social feed and throughout AKASHA World.  You can have a maximum of 10 topics',
+              'Your interests will help refine your social feed and throughout AKASHA World.',
             )}
-            moreInterestTitle={t('Find more interests')}
-            moreInterestDescription={t(
-              'You can find more interests and add them to your list of interests!',
-            )}
-            moreInterestPlaceholder={t('Search for interests')}
+            moreInterestTitle={t('Add more interests')}
+            moreInterestDescription={t('Separate your interests by comma or space!')}
+            moreInterestPlaceholder={t('Interests')}
             myInterests={topics}
             interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
+            maxInterests={30}
             labelType="TOPIC"
+            maxInterestsErrorMessage={t(
+              'Max interests reached. Remove some interests to add more.',
+            )}
             cancelButton={{
               label: t('Cancel'),
               disabled: isProcessing,

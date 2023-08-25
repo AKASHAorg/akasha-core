@@ -2,6 +2,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 
 import { IconType } from '@akashaorg/typings/ui';
+
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
