@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { uiEventsMock } from '@akashaorg/af-testing';
-import { useAnalytics, AnalyticsProvider } from '../use-analytics';
+import { AnalyticsProvider, useAnalytics } from '../use-analytics';
+import { AnalyticsCategories } from '@akashaorg/typings/ui';
 
 describe('useAnalytics', () => {
   const wrapper = ({ children }) => (
@@ -23,6 +24,6 @@ describe('useAnalytics', () => {
         done();
       },
     });
-    trackEvent({ test: true });
+    trackEvent({ category: AnalyticsCategories.EXPLORE });
   });
 });
