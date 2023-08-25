@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { uiEventsMock } from '@akashaorg/af-testing';
-import useAnalytics, { AnalyticsProvider } from '../use-analytics';
+import { useAnalytics, AnalyticsProvider } from '../use-analytics';
 
 describe('useAnalytics', () => {
   const wrapper = ({ children }) => (

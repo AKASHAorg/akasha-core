@@ -32,8 +32,8 @@ import {
   useMarkAsRead,
 } from './use-notifications';
 
-// to be removed or filtered
-import useReasons from './use-reasons';
+// hooks to be removed or filtered
+// import useReasons from './use-reasons';
 import {
   useGetIntegrationInfo,
   useGetAllIntegrationReleaseIds,
@@ -63,7 +63,6 @@ import {
 import useModerationCategory from './use-moderation-categories';
 
 export {
-  useReasons,
   // use-notifications
   useCheckNewNotifications,
   useFetchNotifications,
@@ -90,6 +89,5 @@ export {
   useDeleteDevKey,
   useSignMessage,
   useVerifySignature,
-  // use-dismissed-card
   useModerationCategory,
 };

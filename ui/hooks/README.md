@@ -13,43 +13,6 @@ This package contains all hooks required for proper functioning of the AKASHA Co
 - rejectConsent
 - trackEvent
 
-### [useENSRegistration](./src/use-ens-registration.ts)
-
-> handles registration and resolution of ENS (Ethereum Name Service) names. Available actions include;
-
-- getENSByAddress
-- register
-- updateUserName
-- validateName
-- claim
-- resetRegistrationStatus
-
-### [useBookmarks](./src/use-entry-bookmark.ts)
-
-> handles bookmark related functionalities in the [bookmarks plugin](../plugins/bookmarks/README.md). Available actions
-> include;
-
-- getBookmarks
-- bookmarkPost
-- bookmarkComment
-- removeBookmark
-
-### [useEntryPublisher](./src/use-entry-publisher.ts)
-
-> handles creation and publishing of entries in the virtual list. Available actions include;
-
-- addEntry
-- removeEntry
-
-### [useFeedReducer](./src/use-feed-reducer.ts)
-
-> handles loading and data fetching for feed items. Available actions include;
-
-- setFeedItems
-- setFeedItemData
-- loadFeedStart
-- hasMoreItems
-
 ### [useGlobalLogin](./src/use-global-login.ts)
 
 > handles actions triggered right after user logs in or out of the app.
@@ -59,13 +22,6 @@ This package contains all hooks required for proper functioning of the AKASHA Co
 > handles retrieval of legal docs from IPFS service. Available actions include;
 
 - getLegalDoc
-
-### [useMentions](./src/use-mentions.ts)
-
-> handles mentions and tags functionalities. Available actions include;
-
-- getMentions
-- getTags
 
 ### [useModalState](./src/use-modal-state.ts)
 
@@ -90,54 +46,4 @@ This package contains all hooks required for proper functioning of the AKASHA Co
 - getMessages
 - markMessageAsRead
 - hasNewNotifications
-
-### [useProfile](./src/use-profile.ts)
-
-> handles profile related functionalities in the [profile plugin](../plugins/profile/README.md). Available actions
-> include;
-
-- getProfileData
-- getEntryAuthor
-- resetProfileData
-- optimisticUpdate
-- updateProfile
-- resetUpdateStatus
-- validateUsername
-- getUsernameTypes
-- updateUsernameProvider
-
-### [useSearch](./src/use-search.ts)
-
-> handles search related functionalities in the [search plugin](../plugins/search/README.md). Available actions include;
-
-- search
-- updateSearchState
-
-### [useTagSubscribe](./src/use-tag-subscribe.ts)
-
-> handles tag subscription functionalities. Available actions include;
-
-- isSubscribedToTag
-- toggleTagSubscription
-- getTagSubscriptions
-
-### [useTrendingData](./src/use-trending-data.ts)
-
-> handles fetching of trending data (tags and profiles). Available actions include;
-
-- setTrendingTags
-- setTrendingProfiles
-
-## [useModeration](./src/use-moderation.ts)
-
-- handles moderation related actions. Available actions include;
-- createModerationMutation
-- checkStatus
-- checkModerator
-- getCount
-- getFlags
-- getLog
-- getPending
-- getKept
-- getDelisted
 
