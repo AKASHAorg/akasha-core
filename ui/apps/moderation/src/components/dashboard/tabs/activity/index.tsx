@@ -41,7 +41,7 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
             <Text
               variant="button-sm"
               weight="bold"
-              color={{ light: 'secondaryDark', dark: 'secondaryDark' }}
+              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             >
               {viewAllLabel}
             </Text>
@@ -59,7 +59,7 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
 
       <Divider />
 
-      <Box customStyle="px-4">
+      <Box customStyle="p-4">
         <Box customStyle="flex justify-between">
           <Text variant="button-md" weight="bold">
             {moderationTitleLabel}
@@ -69,7 +69,7 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
             <Text
               variant="button-sm"
               weight="bold"
-              color={{ light: 'secondaryDark', dark: 'secondaryDark' }}
+              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             >
               {viewAllLabel}
             </Text>

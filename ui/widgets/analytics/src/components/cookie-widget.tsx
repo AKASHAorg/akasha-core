@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import CookieCard from '@akashaorg/design-system-components/lib/components/CookieCard';
 import { I18nextProvider, Translation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
@@ -17,11 +17,12 @@ export enum CookieConsentTypes {
   ALL = 'ALL',
 }
 const CookieWidget: React.FC<RootComponentProps> = props => {
-  const [cookieType, setCookieType] = React.useState(null);
-  const eventSub = React.useRef(null);
-  const analyticsConfig = React.useRef(props.worldConfig.analytics);
-  const uiEvents = React.useRef(props.uiEvents);
-  React.useLayoutEffect(() => {
+  const [cookieType, setCookieType] = useState(null);
+  const eventSub = useRef(null);
+  const analyticsConfig = useRef(props.worldConfig.analytics);
+  const uiEvents = useRef(props.uiEvents);
+
+  useLayoutEffect(() => {
     const consentType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
     if (consentType) {
       setCookieType(consentType);
@@ -29,7 +30,8 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
       setCookieType(null);
     }
   }, []);
-  React.useEffect(() => {
+
+  useEffect(() => {
     if (cookieType && cookieType === CookieConsentTypes.ESSENTIAL) {
       return;
     }
@@ -55,6 +57,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
     );
     setCookieType(all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL);
   };
+
   return (
     <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       {cookieType === null && (

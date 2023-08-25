@@ -48,11 +48,7 @@ const TextField: React.FC<TextFieldProps> = props => {
           {...rest}
         />
       )}
-      {caption && (
-        <Caption status={status} disabled={disabled}>
-          {caption}
-        </Caption>
-      )}
+      {caption && <Caption status={status}>{caption}</Caption>}
     </Stack>
   );
 };

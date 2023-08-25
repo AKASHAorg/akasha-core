@@ -14,7 +14,7 @@ module.exports = {
     '<rootDir>/dist',
   ],
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.[jt]sx?|mjs$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: ['<rootDir>/sdk/'],
   coverageReporters: ['text-summary'],

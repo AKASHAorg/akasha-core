@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { ModeratorApplicantData } from '@akashaorg/typings/ui';
+
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 

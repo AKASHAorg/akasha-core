@@ -63,9 +63,11 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
+
     const resize = () => {
       setIsMobile(mql.matches);
     };
+
     window.addEventListener('resize', resize);
     return () => {
       window.removeEventListener('resize', resize);
@@ -258,7 +260,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <BasicCardBox
-      customStyle="w-[19.5rem] max-w-[19.5rem] max-h-screen min-[1440px]:max-h-[calc(100vh-20px)]"
+      customStyle="w-[19.5rem] max-w-[19.5rem] max-h(screen xl:[calc(100vh-20px)]) h(full xl:fit)"
       round="rounded-r-2xl xl:rounded-2xl"
       pad="p-0"
     >
