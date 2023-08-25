@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Profile } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
-import { useRootComponentProps, useTagSearch } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
@@ -72,7 +72,7 @@ const ChatPage = (props: ChatPageProps) => {
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionQueryReq = null;
-  const tagQueryReq = useTagSearch(tagQuery);
+  const tagQueryReq = null;
   const handleMentionQueryChange = (query: string) => {
     setMentionQuery(query);
   };

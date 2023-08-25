@@ -1,7 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { useTagSearch } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { getCroppedImage } from '@akashaorg/design-system-core/lib/utils/get-cropped-image';
 
@@ -36,7 +34,7 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
     license: '',
   });
 
-  const tagSearch = useTagSearch(formValues.newTag);
+  const tagSearch = null;
 
   const coverImageInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 

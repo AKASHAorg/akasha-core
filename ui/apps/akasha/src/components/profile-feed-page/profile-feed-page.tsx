@@ -1,19 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 
-import { useGetProfile, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
-import type {
-  RootComponentProps,
-  Profile,
-  ModalNavigationOptions,
-  IContentClickDetails,
-} from '@akashaorg/typings/ui';
+import { hasOwn, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import type { RootComponentProps, Profile, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 export type ProfilePageProps = RootComponentProps & {
   loggedProfileData: Profile;
@@ -23,30 +18,24 @@ export type ProfilePageProps = RootComponentProps & {
 const ProfileFeedPage = (props: ProfilePageProps) => {
   const { uiEvents, plugins, navigateToModal, layoutConfig, loggedProfileData, showLoginModal } =
     props;
-  const [erroredHooks, setErroredHooks] = React.useState([]);
 
   const { t } = useTranslation('app-profile');
-  const { pubKey } = useParams<{ pubKey: string }>();
+  const { did } = useParams<{ did: string }>();
 
-  const profileDataQuery = useGetProfile(pubKey, loggedProfileData?.did?.id);
+  const profileDataQuery = useGetProfileByDidQuery(
+    { id: did },
+    {
+      select: data => (hasOwn(data.node, 'akashaProfile') ? data.node.akashaProfile : null),
+    },
+  );
   const profileState = profileDataQuery.data;
 
   const profileUserName = React.useMemo(() => {
     if (profileState && profileState.name) {
       return profileState.name;
     }
-    return pubKey;
-  }, [profileState, pubKey]);
-
-  const reqPosts = Promise.resolve([]);
-
-  const handleLoadMore = React.useCallback(() => {
-    return undefined;
-  }, []);
-
-  const postPages = React.useMemo(() => {
-    return undefined;
-  }, []);
+    return did;
+  }, [profileState, did]);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
@@ -84,14 +73,6 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
       </Helmet.Helmet>
 
       <>
-        {false && (
-          <ErrorLoader
-            type="script-error"
-            title="Cannot get posts for this profile"
-            details={'placeholder error'}
-          />
-        )}
-        {true && !postPages && <div>There are no posts!</div>}
         <FeedWidget
           queryKey="akasha-profile-beams-query-key"
           modalSlotId={layoutConfig.modalSlotId}

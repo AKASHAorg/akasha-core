@@ -15,14 +15,7 @@ import {
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { SETTINGS } from '../../routes';
 
-import {
-  useTagSubscriptions,
-  useToggleTagSubscription,
-  useSearchProfiles,
-  useSearchTags,
-  useEntryNavigation,
-  useAnalytics,
-} from '@akashaorg/ui-awf-hooks';
+import { useEntryNavigation, useAnalytics } from '@akashaorg/ui-awf-hooks';
 
 import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
 
@@ -86,10 +79,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   // @TODO replace with new hooks
-  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
+  const tagSubscriptionsReq = null;
   const tagSubscriptionsState = tagSubscriptionsReq.data;
 
-  const toggleTagSubscriptionReq = useToggleTagSubscription();
+  const toggleTagSubscriptionReq = null;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const handleEntryNavigation = useEntryNavigation(navigateTo);
@@ -187,15 +180,15 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       ...initSearchState,
       [activeButton]: { ...initSearchState[activeButton], isLoading: true },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword]);
 
   // @TODO replace with new hooks
-  const searchProfilesReq = useSearchProfiles(
-    decodeURIComponent(searchKeyword),
-    searchState[ButtonValues.PEOPLE].page,
-    loggedProfileData?.did?.id,
-  );
+  const searchProfilesReq = null;
+  // const searchProfilesReq = useSearchProfiles(
+  //   decodeURIComponent(searchKeyword),
+  //   searchState[ButtonValues.PEOPLE].page,
+  //   loggedProfileData?.did?.id,
+  // );
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
   // const searchBeamsReq = useSearchPosts(
@@ -213,8 +206,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   // );
 
   // const searchReflectionsState = searchState[ButtonValues.CONTENT].results;
-
-  const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
+  const searchTagsReq = null;
+  // const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TAGS);
 
   // useEffect(() => {
