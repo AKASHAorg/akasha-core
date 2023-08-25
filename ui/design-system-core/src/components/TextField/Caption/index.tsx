@@ -7,16 +7,14 @@ import { CaptionProps } from '../types';
 import { IconType } from '@akashaorg/typings/ui';
 import { getIconClasses } from '../Input/getIconClasses';
 
-const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, disabled, children }) => {
-  const iconStyle = getIconClasses(disabled, status);
+const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, children }) => {
+  const iconStyle = getIconClasses(status);
   const textColor: Color = status
     ? status
     : {
         light: 'grey4',
         dark: 'grey6',
       };
-
-  if (disabled) return null;
 
   return (
     <Stack align="center" spacing="gap-1.5">

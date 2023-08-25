@@ -13,7 +13,7 @@ export const Input: React.FC<InputProps> = forwardRef(
   ({ id, radius, status, iconLeft, iconRight, readOnly, disabled, ...rest }, ref) => {
     const containerStyle = getContainerClasses(disabled, status, readOnly);
     const inputStyle = getInputClasses(disabled, status, readOnly);
-    const iconColor = getIconClasses(disabled, status);
+    const iconColor = getIconClasses(status, disabled);
     const radiusStyle = getRadiusClasses(radius);
 
     return (
