@@ -13,7 +13,7 @@ const MiniHeader: React.FC<IMiniHeaderProps> = props => {
   const { titleLabel, onClickIcon } = props;
 
   return (
-    <Card padding="p-2">
+    <Card padding={8}>
       <Box customStyle="flex flex-row w-full">
         <button onClick={onClickIcon}>
           <Icon type="ChevronLeftIcon" />

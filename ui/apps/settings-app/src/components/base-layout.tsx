@@ -11,7 +11,7 @@ export interface IBaseLayout {
 const BaseLayout: React.FC<PropsWithChildren<IBaseLayout>> = props => {
   const { title, children } = props;
   return (
-    <Card padding="p-0">
+    <Card padding={0}>
       <Box customStyle="p-4 border(b-1 solid grey8 dark:grey5)">
         <Text variant="h5" align="center">
           {title}

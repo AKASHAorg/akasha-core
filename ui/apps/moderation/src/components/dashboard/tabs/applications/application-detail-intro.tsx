@@ -32,7 +32,7 @@ const ApplicationDetailIntro: React.FC<ApplicationDetailIntroProps> = props => {
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
   return (
-    <Card padding="p-0">
+    <Card padding={0}>
       <Box customStyle="flex justify-between items-center p-4">
         <Box customStyle="flex space-x-2 items-center">
           <Avatar size="lg" avatar={selectedApplicant.avatar} />

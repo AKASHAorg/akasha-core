@@ -25,7 +25,7 @@ const ModeratorDashboard: React.FC<ModeratorDashboardProps> = props => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <Card padding="p-0 pt-4">
+    <Card padding={16}>
       <Tab value={activeTab} onChange={setActiveTab} labels={tabLabels} labelTextVariant="body1">
         {/* General tab */}
         <GeneralTab {...props} />

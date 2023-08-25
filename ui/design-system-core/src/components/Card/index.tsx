@@ -1,14 +1,19 @@
 import React, { PropsWithChildren, forwardRef, LegacyRef } from 'react';
 import { apply, tw } from '@twind/core';
-import { getColorClasses, getElevationClasses, getRadiusClasses } from '../../utils';
-import { Color, Elevation, Radius } from '../types/common.types';
+import {
+  getColorClasses,
+  getElevationClasses,
+  getPaddingClasses,
+  getRadiusClasses,
+} from '../../utils';
+import { Color, Elevation, Padding, Radius } from '../types/common.types';
 
 export type CardProps = {
   elevation?: Elevation;
   background?: Color;
   dashedBorder?: boolean;
   accentBorder?: boolean;
-  padding?: string;
+  padding?: Padding;
   margin?: string;
   radius?: Radius;
   border?: boolean;
@@ -63,11 +68,12 @@ const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => 
 
   const elevationStyle = getElevationClasses(elevation);
   const radiusStyle = getRadiusClasses(radius);
+  const paddingStyle = getPaddingClasses(padding);
   const backgroundStyle = getColorClasses(background, 'bg');
 
   const className = React.useMemo(
     () =>
-      apply`flex flex-col ${elevationStyle} w-full ${padding} ${margin} ${backgroundStyle} ${
+      apply`flex flex-col ${elevationStyle} w-full ${paddingStyle} ${margin} ${backgroundStyle} ${
         noBorderRadius ? 'rounded-none' : radiusStyle
       } ${generatedBorder} ${customStyle}`,
     // eslint-disable-next-line react-hooks/exhaustive-deps

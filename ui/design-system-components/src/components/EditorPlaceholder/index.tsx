@@ -17,7 +17,7 @@ export interface IEditorPlaceholder {
 const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
   const { avatar, profileId, placeholderLabel, replyLabel, onClick } = props;
   return (
-    <Card border={true} padding="none">
+    <Card border={true} padding={0}>
       <button onClick={onClick}>
         <div className={tw(`flex justify-between px-4 py-2 `)}>
           <div className={tw(`flex flex-row items-center gap-4`)}>

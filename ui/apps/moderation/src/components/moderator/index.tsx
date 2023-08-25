@@ -45,7 +45,7 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
   }`;
 
   return (
-    <Card padding="p-4 space-y-4">
+    <Card padding={16} customStyle="space-y-4">
       <Box customStyle={boxStyle}>
         <Box customStyle="flex space-x-2 items-center w([50%] md:[30%])">
           <Avatar avatar={moderator.avatar} />

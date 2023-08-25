@@ -34,7 +34,7 @@ const DismissModerator: React.FC<DismissModeratorProps> = props => {
   } = props;
 
   return (
-    <Card padding="p-4 space-y-3">
+    <Card padding={16} customStyle="space-y-3">
       <Text variant="h6">{titleLabel}</Text>
 
       <TextField placeholder={placeholderLabel} type="multiline" />

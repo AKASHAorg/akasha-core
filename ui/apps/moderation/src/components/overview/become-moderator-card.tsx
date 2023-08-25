@@ -15,7 +15,7 @@ const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
   const { titleLabel, subtitleLabel, buttonLabel, onClickApply } = props;
 
   return (
-    <Card padding="p-4">
+    <Card padding={16}>
       <Box customStyle="flex flex-col items-center space-y-6">
         <Text variant="h6" weight="bold">
           {titleLabel}

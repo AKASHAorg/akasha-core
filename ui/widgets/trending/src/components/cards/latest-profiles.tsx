@@ -48,7 +48,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
   const BaseItemStyles = 'flex justify-between items-center space-y-2';
 
   return (
-    <Card padding="p-4">
+    <Card padding={16}>
       <Box customStyle="mb-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}

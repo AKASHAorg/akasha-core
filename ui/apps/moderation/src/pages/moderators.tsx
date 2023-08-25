@@ -37,7 +37,7 @@ export const Moderators: React.FC<BasePageProps> = props => {
   };
 
   return (
-    <Card padding="p-0">
+    <Card padding={0}>
       <Tab value={activeTab} onChange={setActiveTab} labels={tabs} labelTextVariant="body1">
         {getModeratorsQuery.isFetching && (
           <Box customStyle="flex items-center justify-center p-4">

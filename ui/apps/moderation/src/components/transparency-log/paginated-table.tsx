@@ -9,7 +9,7 @@ import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/
 const PaginatedTable: React.FC<TableProps & PaginationProps> = props => {
   return (
     <>
-      <Card padding="p-0">
+      <Card padding={0}>
         <Table {...props} />
       </Card>
 

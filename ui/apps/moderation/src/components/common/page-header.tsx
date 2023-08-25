@@ -18,7 +18,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
   const { labelTextVariant = 'h5', label, cancelButtonLabel, confirmButtonLabel, children } = props;
 
   return (
-    <Card padding="p-0">
+    <Card padding={0}>
       <Box customStyle="px-4 py-6">
         <Text variant={labelTextVariant} align="center">
           {label}

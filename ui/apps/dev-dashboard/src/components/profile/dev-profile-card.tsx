@@ -40,7 +40,7 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
   };
 
   return (
-    <Card padding="p-0">
+    <Card padding={0}>
       <Box customStyle="p-4">
         <Text variant="h5" align="center" weight="bold">
           {titleLabel}

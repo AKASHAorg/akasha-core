@@ -25,7 +25,7 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
   const { titleLabel, subtitleLabel, ctaLabel, ctaUrl, values, onValueClick } = props;
 
   return (
-    <Card padding="p-4">
+    <Card padding={16}>
       <div className={tw('grid gap-4 grid-cols-1 md:px-10')}>
         <Text variant="h5" align="center">
           {titleLabel}

@@ -40,7 +40,7 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
   } = props;
 
   return (
-    <Card padding="p-4">
+    <Card padding={16}>
       <Box customStyle="grid gap-4 grid-cols-1">
         <Text variant="h5" align="center">
           {titleLabel}

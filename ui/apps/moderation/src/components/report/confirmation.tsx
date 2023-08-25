@@ -33,7 +33,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
   } = props;
 
   return (
-    <Card padding="p-4">
+    <Card padding={16}>
       <Box customStyle="flex flex-col space-y-4 items-center">
         <Button plain={true} customStyle="self-end" onClick={onIconClick}>
           <Icon type="XMarkIcon" />

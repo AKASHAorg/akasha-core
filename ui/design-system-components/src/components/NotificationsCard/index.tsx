@@ -189,7 +189,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
   };
 
   return (
-    <Card padding="p-0" elevation="none">
+    <Card padding={0} elevation="none">
       {loggedIn && !isFetching && notifications.length === 0 && (
         <BasicInfoCard titleLabel={emptyTitle} />
       )}

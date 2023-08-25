@@ -22,7 +22,7 @@ export const SteppedActionWrapper: React.FC<
   const { stepLabels, activeIndex, titleLabel, footerCTALabel, footerCTAUrl, children } = props;
 
   return (
-    <Card padding="p-4">
+    <Card padding={16}>
       <Box customStyle="flex flex-col space-y-4">
         <Box customStyle="self-center">
           <StepIndicator stepLabels={stepLabels} activeIndex={activeIndex} />

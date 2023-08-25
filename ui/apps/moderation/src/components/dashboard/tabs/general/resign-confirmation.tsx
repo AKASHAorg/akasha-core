@@ -17,7 +17,7 @@ const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
   const { titleLabel, subtitleLabel, onCloseButtonClick } = props;
 
   return (
-    <Card padding="p-5">
+    <Card padding={20}>
       <Box customStyle="self-end">
         <Button plain={true} onClick={onCloseButtonClick}>
           <Icon type="XMarkIcon" />

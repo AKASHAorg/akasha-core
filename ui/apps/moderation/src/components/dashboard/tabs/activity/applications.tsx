@@ -14,7 +14,7 @@ const ApplicationsActivity: React.FC<ApplicationsActivityProps> = props => {
   const { label } = props;
 
   return (
-    <Card padding="pt-0 px-0 pb-2">
+    <Card customStyle="pt-0 px-0 pb-2">
       <Box customStyle="px-4 py-6">
         <Text variant="h5" align="center">
           {label}
