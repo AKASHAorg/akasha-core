@@ -2,8 +2,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 
-// @TODO - fix typings
-
 export const APP_SETTINGS_KEY = 'App_Settings';
 
 const getAppConfig = async (appName: string) => {
@@ -22,7 +20,7 @@ const getAppConfig = async (appName: string) => {
  * ```
  */
 export function useGetAppConfig(appName: string, enabler?: boolean) {
-  return useQuery([APP_SETTINGS_KEY, appName], (): Promise<any> => getAppConfig(appName), {
+  return useQuery([APP_SETTINGS_KEY, appName], () => getAppConfig(appName), {
     enabled: !!enabler,
     keepPreviousData: true,
     onError: (err: Error) => logError('useAppSettings.getAppConfig', err),
@@ -45,7 +43,7 @@ const getAllInstalledApps = async () => {
  * ```
  */
 export function useGetAllInstalledApps(enabler?: boolean) {
-  return useQuery([APP_SETTINGS_KEY], (): Promise<any> => getAllInstalledApps(), {
+  return useQuery([APP_SETTINGS_KEY], () => getAllInstalledApps(), {
     enabled: !!enabler,
     keepPreviousData: true,
     onError: (err: Error) => logError('useAppSettings.getAllInstalledApps', err),

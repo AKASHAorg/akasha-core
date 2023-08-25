@@ -18,9 +18,6 @@ import routes, { SETTINGS } from '../../routes';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
-  useIsFollowingMultiple,
-  useFollow,
-  useUnfollow,
   useSearchProfiles,
   useSearchTags,
   useEntryNavigation,
@@ -243,13 +240,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   }, [searchTagsReq.data, searchTagsReq.isFetched]);
 
   const followPubKeyArr = searchProfilesState?.map(profile => profile.pubKey);
-  const isFollowingMultipleReq = useIsFollowingMultiple(
-    loggedProfileData?.did?.id,
-    followPubKeyArr,
-  );
+  const isFollowingMultipleReq = null;
   const followedProfiles = isFollowingMultipleReq.data;
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
+  const followReq = null;
+  const unfollowReq = null;
 
   const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
     if (!loggedProfileData?.did?.id) {

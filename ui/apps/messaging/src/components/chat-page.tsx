@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
-import { useMentionSearch, useTagSearch } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useTagSearch } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
@@ -17,7 +17,7 @@ import ChatAreaHeader from '@akashaorg/design-system-components/lib/components/C
 import ChatEditor from '@akashaorg/design-system-components/lib/components/ChatEditor';
 import BubbleCard from '@akashaorg/design-system-components/lib/components/BubbleCard';
 
-export interface ChatPageProps extends RootComponentProps {
+export interface ChatPageProps {
   loggedProfileData: Profile;
   fetchingMessages?: boolean;
 }
@@ -26,8 +26,9 @@ const ChatPage = (props: ChatPageProps) => {
   const { loggedProfileData, fetchingMessages } = props;
 
   const { t } = useTranslation('app-messaging');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const { profileId } = useParams<{ profileId: string }>();
 
@@ -70,7 +71,7 @@ const ChatPage = (props: ChatPageProps) => {
 
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
-  const mentionQueryReq = useMentionSearch(mentionQuery);
+  const mentionQueryReq = null;
   const tagQueryReq = useTagSearch(tagQuery);
   const handleMentionQueryChange = (query: string) => {
     setMentionQuery(query);

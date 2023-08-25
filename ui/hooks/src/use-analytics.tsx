@@ -19,7 +19,13 @@ export enum CookieConsentTypes {
 
 const AnalyticsContext = React.createContext(null);
 
-export const AnalyticsProvider: React.FC<RootComponentProps> = ({ uiEvents, children }) => {
+const AnalyticsProvider = ({
+  uiEvents,
+  children,
+}: {
+  uiEvents: RootComponentProps['uiEvents'];
+  children?: React.ReactNode;
+}) => {
   return <AnalyticsContext.Provider value={uiEvents}>{children}</AnalyticsContext.Provider>;
 };
 
@@ -35,9 +41,9 @@ export interface UseAnalyticsActions {
  * const [analyticsActions] = useAnalytics();
  *
  * analyticsActions.trackEvent({
-      category: 'some-category',
-      action: 'some-action',
-    });
+ category: 'some-category',
+ action: 'some-action',
+ });
  * ```
  */
 const useAnalytics = (): [UseAnalyticsActions] => {
@@ -59,4 +65,4 @@ const useAnalytics = (): [UseAnalyticsActions] => {
   return [actions];
 };
 
-export default useAnalytics;
+export { useAnalytics, AnalyticsProvider };
