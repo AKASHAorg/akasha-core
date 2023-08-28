@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
@@ -37,7 +37,7 @@ export const Moderators: React.FC<BasePageProps> = props => {
   };
 
   return (
-    <BasicCardBox pad="p-0">
+    <Card padding={0}>
       <Tab value={activeTab} onChange={setActiveTab} labels={tabs} labelTextVariant="body1">
         {getModeratorsQuery.isFetching && (
           <Box customStyle="flex items-center justify-center p-4">
@@ -73,6 +73,6 @@ export const Moderators: React.FC<BasePageProps> = props => {
             </Box>
           )}
       </Tab>
-    </BasicCardBox>
+    </Card>
   );
 };

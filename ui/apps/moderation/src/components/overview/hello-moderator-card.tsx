@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -25,7 +25,7 @@ const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox pad="p-4">
+    <Card padding={16}>
       <Box customStyle="flex flex-col items-center space-y-6">
         <Text variant="h6" weight="bold">
           {titleLabel}
@@ -59,7 +59,7 @@ const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
           </a>
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

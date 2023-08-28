@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -28,7 +28,7 @@ const BMIntro: React.FC<BMIntroProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox pad="p-4">
+    <Card padding={16}>
       <Box customStyle="flex flex-col space-y-4">
         <Text variant="h5" align="center">
           {titleLabel}
@@ -47,7 +47,7 @@ const BMIntro: React.FC<BMIntroProps> = props => {
           <PageButtons {...props} />
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

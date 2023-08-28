@@ -14,7 +14,12 @@ export type ConnectErrorCardProps = {
 
 const ConnectErrorCard: React.FC<ConnectErrorCardProps> = ({ title, message, action }) => {
   return (
-    <Card elevation="none" background={{ light: 'grey9', dark: 'grey5' }} radius={20} padding={16}>
+    <Card
+      elevation="none"
+      background={{ light: 'grey9', dark: 'grey5' }}
+      radius={20}
+      padding={'p-4'}
+    >
       <Stack direction="column" spacing="gap-y-2">
         <Stack justify="between">
           <Stack align="center" spacing="gap-x-2">

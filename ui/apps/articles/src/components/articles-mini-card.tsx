@@ -3,7 +3,7 @@ import React from 'react';
 import { IArticleData } from '@akashaorg/typings/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -61,7 +61,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
   const isCollaborator = articleData.collaborators?.find(el => el.did?.id === loggedProfileId);
 
   return (
-    <BasicCardBox customStyle="p-4 gap-4">
+    <Card customStyle="p-4 gap-4">
       <Box customStyle="flex flex-row justify-between">
         <Box customStyle="flex flex-row gap-0.5 items-center">
           <Avatar
@@ -156,7 +156,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
           <Text variant="subtitle2">{collaboratingLabel}</Text>
         </Box>
       )}
-    </BasicCardBox>
+    </Card>
   );
 };
 

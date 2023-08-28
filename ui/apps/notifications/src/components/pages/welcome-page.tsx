@@ -1,7 +1,6 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -102,11 +101,17 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
   }
 
   return (
-    <Card direction="row" elevation={'1'} radius={16} padding={8} testId="notifications">
+    <Card
+      customStyle="flex flex-row"
+      elevation={'1'}
+      radius={16}
+      padding={'p-2'}
+      testId="notifications"
+    >
       <div className={tw('flex(& col) justify-center align-center mb-32')}>
-        <BasicCardBox
+        <Card
           customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
-          round="rounded-xl"
+          radius="rounded-xl"
         />
         <Text variant={finalStep ? 'h5' : 'h6'} align="center">
           {isLoggedIn ? header : t('Uh-oh! You are not connected!')}

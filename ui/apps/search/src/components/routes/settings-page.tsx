@@ -98,11 +98,10 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
   return (
     <>
       <Card
-        direction="row"
         elevation={'1'}
         radius={16}
-        padding={{ x: 8, y: 8 }}
-        customStyle="h-full md:h-min space-y-4"
+        padding={'p-2'}
+        customStyle="h-full md:h-min space-y-4 flex flex-row"
       >
         <Text variant="h5" align="center">
           {t('Search Settings')}

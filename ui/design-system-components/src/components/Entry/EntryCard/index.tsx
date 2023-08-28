@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import SocialBox from '../../SocialBox';
 import EntryBox, { EntryBoxProps } from '../EntryBox';
 import { NavigateToParams } from '@akashaorg/typings/ui';
@@ -12,7 +12,7 @@ export type EntryCardProps = EntryBoxProps & {
   // external css
   className?: string;
   style?: React.CSSProperties;
-  rootNodeRef?: React.Ref<HTMLDivElement>;
+  ref?: React.Ref<HTMLDivElement>;
   contentClickable?: boolean;
   border?: boolean;
   noBorderRadius?: boolean;
@@ -30,7 +30,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     othersLabel,
     onClickAvatar,
     locale,
-    rootNodeRef,
+    ref,
     showMore,
     profileAnchorLink,
     repliesAnchorLink,
@@ -71,21 +71,16 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox
-      rootNodeRef={rootNodeRef}
-      border={border}
-      noBorderRadius={noBorderRadius}
-      pad="p-0"
-    >
-      {/*{entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (*/}
-      {/*  <SocialBox*/}
-      {/*    socialData={entryData.quotedByAuthors}*/}
-      {/*    repostedThisLabel={repostedThisLabel}*/}
-      {/*    andLabel={andLabel}*/}
-      {/*    othersLabel={othersLabel}*/}
-      {/*    onClickUser={onMentionClick}*/}
-      {/*  />*/}
-      {/*)}*/}
+    <Card ref={ref} border={border} noBorderRadius={noBorderRadius} padding="p-0">
+      {/* {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
+        <SocialBox
+          socialData={entryData.quotedByAuthors}
+          repostedThisLabel={repostedThisLabel}
+          andLabel={andLabel}
+          othersLabel={othersLabel}
+          onClickUser={onMentionClick}
+        />
+      )} */}
       <EntryBox
         entryData={entryData}
         onClickAvatar={onClickAvatar}
@@ -124,7 +119,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         error={error}
         onRetry={onRetry}
       />
-    </BasicCardBox>
+    </Card>
   );
 };
 

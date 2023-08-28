@@ -1,5 +1,5 @@
 import React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -33,7 +33,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox customStyle="mb-2">
+    <Card customStyle="mb-2">
       <Box customStyle="flex items-start w-full p-4">
         <Box customStyle="flex flex-row w-full mb-4">
           <button onClick={onClickIcon}>
@@ -72,7 +72,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
           />
         </Box>
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

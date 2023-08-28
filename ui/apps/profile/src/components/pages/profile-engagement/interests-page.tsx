@@ -143,7 +143,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
         avatar={avatar}
         name={profileData?.name}
       />
-      <Card elevation="1" radius={20} padding={16}>
+      <Card elevation="1" radius={20} padding={'p-4'}>
         {profileId !== loginQuery.data?.id && (
           <Stack direction="column" spacing="gap-y-2.5">
             <Text variant="h5">{t('Interests')} </Text>

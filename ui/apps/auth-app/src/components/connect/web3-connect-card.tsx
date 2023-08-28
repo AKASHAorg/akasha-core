@@ -35,7 +35,7 @@ const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
       <Card
         elevation="none"
         radius={8}
-        padding={8}
+        padding={'p-2'}
         accentBorder={true}
         customStyle="select-none w-full"
       >

@@ -6,11 +6,8 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import ModalContainer from '@akashaorg/design-system-core/lib/components/ModalContainer';
+import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 
 import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
@@ -18,9 +15,11 @@ import { withProviders } from '@akashaorg/ui-awf-hooks';
 const LoginModal = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');
   const location = useLocation();
+  const [showModal, setShowModal] = React.useState(true);
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
+    setShowModal(false);
   };
 
   const handleConnectClick = () => {
@@ -33,31 +32,26 @@ const LoginModal = (props: RootExtensionProps) => {
         }).toString()}`;
       },
     });
+    setShowModal(false);
   };
 
   return (
-    <ModalContainer onModalClose={handleModalClose}>
-      <BasicCardBox customStyle="py-4 px-6 md:px-24 relative">
-        <Box customStyle={`absolute top-4 right-4`}>
-          <button onClick={handleModalClose}>
-            <Icon type="XMarkIcon" color={{ light: 'grey7', dark: 'grey4' }} />
-          </button>
-        </Box>
-
-        <Box customStyle="flex flex-col items-center" data-testid="modal-card-login">
-          <Box customStyle="flex flex-col items-center w-full gap-y-2">
-            <Text variant="h6">{t('AKASHA World')}</Text>
-            <Text variant="body1" align="center">
-              {t('To continue you need an AKASHA World account')}
-            </Text>
-          </Box>
-          <Box customStyle="flex flex-row items-center justify-center gap-x-2 w-full pt-4">
-            <Button onClick={handleModalClose} label={t('Cancel')} />
-            <Button onClick={handleConnectClick} label={t('Connect')} variant="primary" />
-          </Box>
-        </Box>
-      </BasicCardBox>
-    </ModalContainer>
+    <Modal
+      show={showModal}
+      title={{ label: t('AKASHA World'), variant: 'h6' }}
+      actions={[
+        { label: t('Cancel'), variant: 'secondary', onClick: handleModalClose },
+        { label: t('Connect'), variant: 'primary', onClick: handleConnectClick },
+      ]}
+      onClose={handleModalClose}
+      customStyle="py-4 px-6 md:px-24"
+    >
+      <Box customStyle="flex flex-col items-center w-full gap-y-2">
+        <Text variant="body1" align="center">
+          {t('To continue you need an AKASHA World account')}
+        </Text>
+      </Box>
+    </Modal>
   );
 };
 

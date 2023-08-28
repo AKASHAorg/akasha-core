@@ -4,7 +4,7 @@ import { tw } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -40,7 +40,7 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox pad="p-4">
+    <Card padding={16}>
       <Box customStyle="grid gap-4 grid-cols-1">
         <Text variant="h5" align="center">
           {titleLabel}
@@ -102,7 +102,7 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
           </Box>
         )}
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 

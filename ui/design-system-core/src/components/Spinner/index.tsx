@@ -1,12 +1,14 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { tw, apply } from '@twind/core';
 
 import { Color } from '../types/common.types';
+import { getColorClasses } from '../../utils';
 
 export type SpinnerProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   color?: Color;
   loadingLabel?: string;
+  partialSpinner?: boolean;
 };
 
 const spinnerSizesMap = {
@@ -18,7 +20,28 @@ const spinnerSizesMap = {
 };
 
 const Spinner: React.FC<SpinnerProps> = props => {
-  const { size = 'md', color = 'current', loadingLabel = 'Loading...' } = props;
+  const { size = 'md', color, loadingLabel = 'Loading...', partialSpinner } = props;
+  const partialSpinnerColor = typeof color === 'string' ? color : 'black';
+
+  if (partialSpinner) {
+    return (
+      <div
+        role="status"
+        className={tw(
+          apply(
+            `inline-block ${
+              spinnerSizesMap[size]
+            } animate-spin rounded-full border-4 border-solid ${getColorClasses(
+              partialSpinnerColor,
+              'border',
+            )} border-r-transparent dark:border-r-white align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`,
+          ),
+        )}
+      >
+        <span className={tw('sr-only')}>{loadingLabel}</span>
+      </div>
+    );
+  }
 
   return (
     <div role="status">

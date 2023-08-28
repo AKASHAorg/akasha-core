@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 export interface IPlaceholderProps {
@@ -10,9 +10,9 @@ export interface IPlaceholderProps {
 }
 
 const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {
-  const { height = 200, animated = false } = props;
+  const { height = 200, animated = false, children } = props;
   return (
-    <BasicCardBox pad={'p-4'} customStyle={`min-h-[${height}]`}>
+    <Card padding={'p-4'} customStyle={`min-h-[${height}]`}>
       <div className={tw(`flex flex-row`)}>
         <div className={tw(`flex flex-row items-center`)}>
           <TextLine title="avatar" width="40" height="40" round={'rounded-full'} />
@@ -29,9 +29,9 @@ const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {
         <TextLine title="entry-publish-date" width="w-6/12" animated={animated} />
         <TextLine title="entry-publish-date" width="w-10/12" animated={animated} />
         <TextLine title="entry-publish-date" width="w-8/12" animated={animated} />
-        {props.children}
+        {children}
       </div>
-    </BasicCardBox>
+    </Card>
   );
 };
 

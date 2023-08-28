@@ -3,7 +3,7 @@ import { tw } from '@twind/core';
 import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
 
-import BasicCardBox from '../BasicCardBox';
+import Card from '../Card';
 
 export type MarkdownCardProps = {
   mdText: string | null;
@@ -22,9 +22,9 @@ const MarkdownCard: React.FC<MarkdownCardProps> = props => {
       )}
 
       {hasWrapper && (
-        <BasicCardBox pad="p-4" customStyle="bg(dark:white)">
+        <Card padding={16}>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{mdText}</ReactMarkdown>
-        </BasicCardBox>
+        </Card>
       )}
     </div>
   );

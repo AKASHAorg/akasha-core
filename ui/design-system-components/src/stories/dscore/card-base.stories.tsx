@@ -11,10 +11,30 @@ const meta: Meta<CardProps> = {
 export default meta;
 type Story = StoryObj<CardProps>;
 
+const CardContents = (
+  <>
+    <div>Card content</div>
+    <div>Card content</div>
+    <div>Card content</div>
+  </>
+);
+
 export const BaseCard: Story = {
+  render: () => <Card customStyle="w-[25%]">{CardContents}</Card>,
+};
+
+export const CardWithElevation: Story = {
   render: () => (
-    <Card radius={8} customStyle="w-[25%]">
-      <div>Card content</div>
+    <Card elevation="2" customStyle="w-[25%]">
+      {CardContents}
+    </Card>
+  ),
+};
+
+export const CardWithDashedBorder: Story = {
+  render: () => (
+    <Card dashedBorder={true} customStyle="w-[25%]">
+      {CardContents}
     </Card>
   ),
 };

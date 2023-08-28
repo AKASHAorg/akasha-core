@@ -4,7 +4,7 @@ import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { getTextileUsage } from '../api/message';
 import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -14,6 +14,18 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 export interface SettingsPageProps extends RootComponentProps {
   loggedProfileData: Profile;
 }
+
+const convertFromBytes = val => {
+  if (val) {
+    const k = val > 0 ? Math.floor(Math.log2(val) / 10) : 0;
+    const rank = (k > 0 ? 'KMGT'[k - 1] : '') + 'b';
+    const count = (val / Math.pow(1024, k)).toFixed(2);
+    return `${count} ${rank}`;
+  }
+  if (val == 0) {
+    return `${val} Kb`;
+  }
+};
 
 const InboxPage = (props: SettingsPageProps) => {
   const { t } = useTranslation('app-messaging');
@@ -40,18 +52,6 @@ const InboxPage = (props: SettingsPageProps) => {
   const storageUsed = storageData?.total;
   const storageTotal = storageData?.free;
 
-  const convertFromBytes = val => {
-    if (val) {
-      const k = val > 0 ? Math.floor(Math.log2(val) / 10) : 0;
-      const rank = (k > 0 ? 'KMGT'[k - 1] : '') + 'b';
-      const count = (val / Math.pow(1024, k)).toFixed(2);
-      return `${count} ${rank}`;
-    }
-    if (val == 0) {
-      return `${val} Kb`;
-    }
-  };
-
   const handleUninstall = () => {
     uninstallAppReq.mutate('@akashaorg/app-messaging');
     navigateTo?.({
@@ -61,7 +61,7 @@ const InboxPage = (props: SettingsPageProps) => {
   };
 
   return (
-    <BasicCardBox customStyle="max-h-[92vh]">
+    <Card customStyle="max-h-[92vh]">
       <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
         <button onClick={onChevronLeftClick}>
           <Icon type="ChevronLeftIcon" />
@@ -92,7 +92,7 @@ const InboxPage = (props: SettingsPageProps) => {
       <Box customStyle="flex flex-row justify-end p-4">
         <Button label={t('Uninstall')} onClick={handleUninstall} icon="XMarkIcon" />
       </Box>
-    </BasicCardBox>
+    </Card>
   );
 };
 
