@@ -24,34 +24,11 @@ export { usePlaformHealthCheck } from './use-health-check';
 export { useDismissedCard } from './use-dismissed-card';
 export { useValidDid } from './use-valid-did';
 export { disconnectProvider, useInjectedProvider } from './use-injected-provider';
+export { useModerationCategory } from './use-moderation-categories';
+
 // the following hooks needs refactor/reimplementation
-import {
+export {
   useCheckNewNotifications,
   useFetchNotifications,
   useMarkAsRead,
 } from './use-notifications';
-
-// hooks to be removed or filtered
-import {
-  useValidateMessage,
-  useAddDevKeyFromMessage,
-  useGetDevKeys,
-  useDeleteDevKey,
-  useSignMessage,
-  useVerifySignature,
-} from './use-dev-profile';
-import useModerationCategory from './use-moderation-categories';
-
-export {
-  // use-notifications
-  useCheckNewNotifications,
-  useFetchNotifications,
-  useMarkAsRead,
-  useValidateMessage,
-  useAddDevKeyFromMessage,
-  useGetDevKeys,
-  useDeleteDevKey,
-  useSignMessage,
-  useVerifySignature,
-  useModerationCategory,
-};

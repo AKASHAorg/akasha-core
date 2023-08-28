@@ -51,5 +51,3 @@ export const useModerationCategory = (
 
   return { categories, handleCategoryClick };
 };
-
-export default useModerationCategory;
