@@ -33,24 +33,6 @@ import {
 
 // hooks to be removed or filtered
 import {
-  useGetIntegrationInfo,
-  useGetAllIntegrationReleaseIds,
-  useGetAllIntegrationsIds,
-  useGetIntegrationId,
-  useGetIntegrationReleaseId,
-  useGetIntegrationReleaseInfo,
-  useGetIntegrationsReleaseInfo,
-  useGetIntegrationsCount,
-  useGetIntegrationsInfo,
-  useGetLatestReleaseInfo,
-} from './use-integration-registry';
-import {
-  useGetAllInstalledApps,
-  useGetAppConfig,
-  useInstallApp,
-  useUninstallApp,
-} from './use-app-settings';
-import {
   useValidateMessage,
   useAddDevKeyFromMessage,
   useGetDevKeys,
@@ -65,22 +47,6 @@ export {
   useCheckNewNotifications,
   useFetchNotifications,
   useMarkAsRead,
-  // use-integration-registry
-  useGetIntegrationInfo,
-  useGetAllIntegrationReleaseIds,
-  useGetAllIntegrationsIds,
-  useGetIntegrationId,
-  useGetIntegrationReleaseId,
-  useGetIntegrationReleaseInfo,
-  useGetIntegrationsReleaseInfo,
-  useGetIntegrationsCount,
-  useGetIntegrationsInfo,
-  useGetLatestReleaseInfo,
-  // use-app-settings
-  useGetAllInstalledApps,
-  useGetAppConfig,
-  useInstallApp,
-  useUninstallApp,
   useValidateMessage,
   useAddDevKeyFromMessage,
   useGetDevKeys,

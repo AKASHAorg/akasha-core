@@ -8,7 +8,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import { EventTypes, UIEventData, RootExtensionProps } from '@akashaorg/typings/ui';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useInstallApp, withProviders } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   const { extensionData, uiEvents, singleSpa } = props;
@@ -58,7 +58,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
 
   //   const [analyticsActions] = useAnalytics();
 
-  const installApp = useInstallApp();
+  const installApp = null;
 
   React.useEffect(() => {
     installApp.mutate(

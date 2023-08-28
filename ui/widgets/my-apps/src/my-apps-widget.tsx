@@ -4,13 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
-import {
-  useGetAllInstalledApps,
-  useGetAllIntegrationsIds,
-  useGetLatestReleaseInfo,
-  withProviders,
-  useGetLogin,
-} from '@akashaorg/ui-awf-hooks';
+import { withProviders, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { hiddenIntegrations } from './hidden-integrations';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -39,7 +33,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
 
-  const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
+  const availableIntegrationsReq = null;
 
   const filteredIntegrations = React.useMemo(() => {
     return availableIntegrationsReq?.data?.filter(
@@ -75,9 +69,9 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       })
       .filter(Boolean);
   }, [filteredIntegrations, filteredDefaultIntegrations]);
-  const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
-  const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
+  const installedAppsReq = null;
+  const integrationsInfoReq = null;
 
   const { filteredDefaultApps, filteredInstalledApps } = React.useMemo(() => {
     if (integrationsInfoReq.data?.getLatestRelease) {
