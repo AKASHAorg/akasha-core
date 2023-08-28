@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useValidateMessage, useAddDevKeyFromMessage, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import { GenerateMessage, KeyConfirmation } from '../components/onboarding';
 
@@ -21,8 +21,16 @@ export const AddDevKey: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const validateMutation = useValidateMessage();
-  const addKeyMutation = useAddDevKeyFromMessage();
+  const validateMutation = { isSuccess: false, data: null, isError: false, error: null };
+
+  // @TODO: needs update
+  const addKeyMutation = {
+    isSuccess: false,
+    data: null,
+    isError: false,
+    error: null,
+    mutate: _args => _args,
+  };
 
   useEffect(() => {
     // add key after validating
