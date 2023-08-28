@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetDevKeys } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -22,7 +21,7 @@ export const DevKeysCard: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const getKeysQuery = useGetDevKeys(true);
+  const getKeysQuery = { isFetching: false };
 
   const devKeys = sampleDevKeys;
 

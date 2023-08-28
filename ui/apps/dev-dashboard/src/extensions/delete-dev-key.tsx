@@ -5,7 +5,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 
 import { RootExtensionProps } from '@akashaorg/typings/ui';
-import { withProviders, useDeleteDevKey } from '@akashaorg/ui-awf-hooks';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
@@ -23,19 +23,19 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const pubKey = React.useMemo(() => {
-    if (extensionData.hasOwnProperty('pubKey') && typeof extensionData.pubKey === 'string') {
-      return extensionData.pubKey;
-    }
-  }, [extensionData]);
-
   const keyName = React.useMemo(() => {
     if (extensionData.hasOwnProperty('keyName') && typeof extensionData.keyName === 'string') {
       return extensionData.keyName;
     }
   }, [extensionData]);
 
-  const deleteKeyMutation = useDeleteDevKey();
+  const deleteKeyMutation = {
+    isSuccess: false,
+    data: null,
+    isError: false,
+    error: null,
+    mutate: () => null,
+  };
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -43,7 +43,7 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
   };
 
   const handleDelete = () => {
-    deleteKeyMutation.mutate(pubKey);
+    deleteKeyMutation.mutate();
 
     setShowModal(false);
     navigateTo?.({

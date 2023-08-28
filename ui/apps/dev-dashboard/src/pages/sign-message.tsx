@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useSignMessage } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -22,7 +21,13 @@ export const SignMessage: React.FC<RootComponentProps> = props => {
 
   const [message] = React.useState<string>('');
 
-  const signMessageMutation = useSignMessage();
+  const signMessageMutation = {
+    isSuccess: false,
+    data: null,
+    isError: false,
+    error: null,
+    mutate: _args => _args,
+  };
 
   const handleSignMessage = () => {
     signMessageMutation.mutate({ message });
