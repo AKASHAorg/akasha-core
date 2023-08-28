@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin, useValidateMessage, useAddDevKeyFromMessage } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import { ONBOARDING_STATUS } from './intro-card';
 
@@ -41,8 +41,16 @@ export const DevDashOnboardingSteps: React.FC<
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const validateMutation = useValidateMessage();
-  const addKeyMutation = useAddDevKeyFromMessage();
+  const validateMutation = { isSuccess: false, data: null, isError: false, error: null };
+
+  // @TODO: needs update
+  const addKeyMutation = {
+    isSuccess: false,
+    data: null,
+    isError: false,
+    error: null,
+    mutate: _args => _args,
+  };
 
   const pathnameArr = [
     ONBOARDING_STEP_ONE,

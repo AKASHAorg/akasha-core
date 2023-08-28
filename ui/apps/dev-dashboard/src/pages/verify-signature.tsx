@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin, useVerifySignature } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -19,7 +19,14 @@ export const VerifySignature: React.FC<RootComponentProps> = props => {
   const [message] = React.useState<string>('');
   const [signature] = React.useState<string>('');
 
-  const verifySignatureMutation = useVerifySignature();
+  // @TODO: needs update
+  const verifySignatureMutation = {
+    isSuccess: false,
+    data: null,
+    isError: false,
+    error: null,
+    mutate: _args => _args,
+  };
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
