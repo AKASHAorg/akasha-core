@@ -229,12 +229,12 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   }, [searchProfilesReq, searchProfilesReq?.isFetched]);
 
   React.useEffect(() => {
-    if (searchTagsReq.isFetched) updateSearchState(ButtonValues.TAGS, searchTagsReq.data);
-  }, [searchTagsReq.data, searchTagsReq.isFetched]);
+    if (searchTagsReq?.isFetched) updateSearchState(ButtonValues.TAGS, searchTagsReq.data);
+  }, [searchTagsReq, searchTagsReq?.isFetched]);
 
   const followPubKeyArr = searchProfilesState?.map(profile => profile.pubKey);
   const isFollowingMultipleReq = null;
-  const followedProfiles = isFollowingMultipleReq.data;
+  const followedProfiles = isFollowingMultipleReq?.data;
   const followReq = null;
   const unfollowReq = null;
 
