@@ -226,7 +226,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (searchProfilesReq.isFetched) {
       updateSearchState(ButtonValues.PEOPLE, searchProfilesReq.data);
     }
-  }, [searchProfilesReq.data, searchProfilesReq.isFetched]);
+  }, [searchProfilesReq, searchProfilesReq.isFetched]);
 
   React.useEffect(() => {
     if (searchTagsReq.isFetched) updateSearchState(ButtonValues.TAGS, searchTagsReq.data);
