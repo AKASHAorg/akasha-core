@@ -19,6 +19,7 @@ export const VerifySignature: React.FC<RootComponentProps> = props => {
   const [message] = React.useState<string>('');
   const [signature] = React.useState<string>('');
 
+  // @TODO: needs update
   const verifySignatureMutation = {
     isSuccess: false,
     data: null,

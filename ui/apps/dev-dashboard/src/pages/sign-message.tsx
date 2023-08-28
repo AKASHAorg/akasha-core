@@ -21,6 +21,7 @@ export const SignMessage: React.FC<RootComponentProps> = props => {
 
   const [message] = React.useState<string>('');
 
+  // @TODO: needs update
   const signMessageMutation = {
     isSuccess: false,
     data: null,

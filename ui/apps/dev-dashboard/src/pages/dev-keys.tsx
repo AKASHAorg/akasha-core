@@ -21,6 +21,7 @@ export const DevKeysCard: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-dev-dashboard');
 
+  // @TODO: needs update
   const getKeysQuery = { isFetching: false };
 
   const devKeys = sampleDevKeys;
