@@ -1,8 +1,10 @@
 import * as React from 'react';
+// @ts-ignore
 import FeedPage from '../feed-page/feed-page';
 import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import userEvent from '@testing-library/user-event';
 
+// @ts-ignore
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import { Draft } from '../../extensions/inline-editor/utils/draft';
 import {
@@ -15,7 +17,6 @@ import {
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
 import { when } from 'jest-when';
-import * as hooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 import { EntityTypes } from '@akashaorg/typings/ui';
 
 const partialArgs = (...argsToMatch) =>
@@ -27,7 +28,7 @@ const MockedInlineEditor = ({ action }) => (
     extensionData={{
       name: 'name',
       itemId: '01gf',
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
       action,
     }}
   />
@@ -52,11 +53,11 @@ describe('< FeedPage /> component', () => {
         />,
       );
 
-    (
-      jest.spyOn(hooks, 'useGetProfile') as unknown as jest.SpyInstance<{
-        status: string;
-      }>
-    ).mockReturnValue({ status: 'success' });
+    // (
+    //   jest.spyOn(hooks, 'useGetProfile') as unknown as jest.SpyInstance<{
+    //     status: string;
+    //   }>
+    // ).mockReturnValue({ status: 'success' });
   });
   // @TODO fix after new hooks
   it.skip('should render feed page for anonymous users', async () => {
