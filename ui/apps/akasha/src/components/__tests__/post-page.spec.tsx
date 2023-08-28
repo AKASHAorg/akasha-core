@@ -1,16 +1,11 @@
 import * as React from 'react';
+// @ts-ignore
 import PostPage from '../item-page/post-page';
 import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 
-import {
-  screen,
-  renderWithAllProviders,
-  act,
-  genAppProps,
-  genLoggedInState,
-} from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
+// @ts-ignore
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import { when } from 'jest-when';
 import { EntityTypes } from '@akashaorg/typings/ui';
@@ -24,7 +19,7 @@ const MockedInlineEditor = ({ action }) => (
     extensionData={{
       name: 'name',
       itemId: '01gf',
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
       action,
     }}
   />
@@ -38,12 +33,12 @@ describe('< PostPage /> component', () => {
   );
 
   beforeAll(() => {
-    (
-      jest.spyOn(profileHooks, 'useGetProfile') as unknown as jest.SpyInstance<{
-        data: Record<string, unknown>;
-        status: string;
-      }>
-    ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
+    // (
+    //   jest.spyOn(profileHooks, 'useGetProfile') as unknown as jest.SpyInstance<{
+    //     data: Record<string, unknown>;
+    //     status: string;
+    //   }>
+    // ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
   });
 
   // @TODO fix after replacing hooks

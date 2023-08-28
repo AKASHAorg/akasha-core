@@ -73,11 +73,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
         <Route
           path={`${routes[CHAT]}/:pubKey`}
           element={
-            <ChatPage
-              {...props}
-              loggedProfileData={loggedProfileData}
-              fetchingMessages={fetchingMessages}
-            />
+            <ChatPage loggedProfileData={loggedProfileData} fetchingMessages={fetchingMessages} />
           }
         ></Route>
         <Route path="/" element={<Navigate to={routes[MESSAGING]} replace />} />

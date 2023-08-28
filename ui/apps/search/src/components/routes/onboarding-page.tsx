@@ -1,16 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  useTrendingProfiles,
-  useTrendingTags,
-  useIsFollowingMultiple,
-  useFollow,
-  useUnfollow,
-  useTagSubscriptions,
-  useToggleTagSubscription,
-} from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
-
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
@@ -30,25 +20,22 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   const { t } = useTranslation('app-search');
 
   // @TODO: replace with new hooks
-  const trendingTagsReq = useTrendingTags();
+  const trendingTagsReq = null;
   const trendingTags = trendingTagsReq.data?.slice(0, 15) || [];
 
-  const trendingProfilesReq = useTrendingProfiles();
+  const trendingProfilesReq = null;
   const trendingProfiles = trendingProfilesReq.data?.slice(0, 7) || [];
 
   const followPubKeyArr = trendingProfiles.map((profile: { pubKey: string }) => profile.pubKey);
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(
-    loggedProfileData?.did?.id,
-    followPubKeyArr,
-  );
+  const isFollowingMultipleReq = null;
   const followedProfiles = isFollowingMultipleReq.data;
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
+  const followReq = null;
+  const unfollowReq = null;
 
-  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
+  const tagSubscriptionsReq = null;
   const tagSubscriptions = tagSubscriptionsReq.data;
-  const toggleTagSubscriptionReq = useToggleTagSubscription();
+  const toggleTagSubscriptionReq = null;
 
   const isLoggedIn = React.useMemo(() => {
     return loggedProfileData?.did?.id;

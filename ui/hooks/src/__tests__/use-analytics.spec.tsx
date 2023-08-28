@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { uiEventsMock } from '@akashaorg/af-testing';
-import useAnalytics, { AnalyticsProvider } from '../use-analytics';
+// @ts-ignore
+import { AnalyticsProvider, useAnalytics } from '../use-analytics';
+import { AnalyticsCategories, AnalyticsEventTypes, TrackEventData } from '@akashaorg/typings/ui';
 
 describe('useAnalytics', () => {
   const wrapper = ({ children }) => (
@@ -17,12 +19,13 @@ describe('useAnalytics', () => {
     const { result } = renderHook(() => useAnalytics(), { wrapper });
     const { trackEvent } = result.current[0];
     uiEventsMock.subscribe({
-      next: (data: { eventType: number; test: boolean }) => {
-        expect(data.eventType).toBe(1);
-        expect(data.test).toBeTruthy();
+      next: (ev: TrackEventData) => {
+        expect(ev.eventType).toBeDefined();
+        expect(ev.eventType).toEqual(AnalyticsEventTypes.TRACK_EVENT);
+        expect(ev.category).toEqual(AnalyticsCategories.EXPLORE);
         done();
       },
     });
-    trackEvent({ test: true });
+    trackEvent({ category: AnalyticsCategories.EXPLORE });
   });
 });

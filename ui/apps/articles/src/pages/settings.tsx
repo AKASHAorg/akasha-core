@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import ArticlesSettings from '../components/article-settings';
-import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import routes, { HOME } from '../routes';
 import { topics } from '../components/dummy-data';
 
@@ -16,7 +15,7 @@ const ArticleSettingsPage: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-articles');
 
-  const uninstallAppReq = useUninstallApp();
+  const uninstallAppReq = null;
 
   const handleClickCloseSettings = () => {
     navigateTo({

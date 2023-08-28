@@ -3,18 +3,13 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import {
-  useAnalytics,
-  withProviders,
-  useIsContactMultiple,
-  validateType,
-} from '@akashaorg/ui-awf-hooks';
+import { useAnalytics, withProviders, validateType } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const MessageButton = (props: RootExtensionProps) => {
-  const { extensionData } = props;
+  const { extensionData, plugins } = props;
 
   const { t } = useTranslation('app-messaging');
 
@@ -34,8 +29,8 @@ const MessageButton = (props: RootExtensionProps) => {
     contactsToCheck.push(profileId);
   }
 
-  const isContactReq = useIsContactMultiple(loggedProfileData.did.id, contactsToCheck);
-  const contactList = isContactReq.data;
+  const isContactReq = null;
+  const contactList = isContactReq?.data;
 
   const isContact = React.useMemo(() => {
     return contactList.includes(profileId as string);
@@ -47,7 +42,7 @@ const MessageButton = (props: RootExtensionProps) => {
       action: 'message-button-click',
     });
 
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
       getNavigationUrl: routes => `${routes.chat}/${profileId}`,
     });

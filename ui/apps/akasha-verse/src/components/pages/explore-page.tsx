@@ -8,7 +8,6 @@ import AppList from '@akashaorg/design-system-components/lib/components/AppList'
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
-import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
@@ -56,7 +55,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const uninstallAppReq = useUninstallApp();
+  const uninstallAppReq = null;
 
   const handleAppClick = (app: IntegrationReleaseInfo) => {
     plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({

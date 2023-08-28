@@ -4,6 +4,7 @@ import { mockSDK } from '@akashaorg/af-testing';
 import { useInjectedProvider } from '../use-injected-provider';
 // @ts-ignore
 import { useRequiredNetwork } from '../use-network-state';
+// @ts-ignore
 import { createWrapper } from './utils';
 
 jest.mock('@akashaorg/awf-sdk', () => {

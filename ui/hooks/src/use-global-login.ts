@@ -28,7 +28,7 @@ export interface UseGlobalLoginProps {
  * })
  * ```
  */
-const useGlobalLogin = (props: UseGlobalLoginProps): void => {
+export const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   const { onError, onLogin, onLogout } = props;
   const onErrorHandler = React.useRef(onError);
   const onLoginHandler = React.useRef(onLogin);
@@ -67,5 +67,3 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
     return () => sub.unsubscribe();
   }, []);
 };
-
-export default useGlobalLogin;

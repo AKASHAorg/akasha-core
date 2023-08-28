@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { getTextileUsage } from '../api/message';
-import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -32,7 +31,7 @@ const InboxPage = (props: SettingsPageProps) => {
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const uninstallAppReq = useUninstallApp();
+  const uninstallAppReq = null;
 
   const onChevronLeftClick = () => {
     navigateTo?.({
