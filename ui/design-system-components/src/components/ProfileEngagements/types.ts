@@ -1,14 +1,7 @@
-import { AkashaFollow, AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
-import { Profile } from '@akashaorg/typings/ui';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
 import { ReactElement } from 'react';
 
 export const LOADING_LIST_SIZE = 10;
-
-export type Engagement = {
-  id: AkashaFollow['id'];
-  isFollowing: AkashaFollow['isFollowing'];
-  profile?: Profile;
-}[];
 
 export type EngagementProps = {
   profileAnchorLink: string;

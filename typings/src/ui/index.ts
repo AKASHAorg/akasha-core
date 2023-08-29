@@ -18,6 +18,7 @@ export * from './widgets';
 export * from './icon';
 export * from './colors';
 export * from './extensions';
+export * from './engagements';
 
 export enum IntegrationTypes {
   APP = 'App',
