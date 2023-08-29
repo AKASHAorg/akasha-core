@@ -38,7 +38,14 @@ const followingData = {
 const variants: FollowingProps[] = [
   {
     ...commonProps,
-    following: [{ id: '1', profile: followingData, did: { id: 'aa' }, isFollowing: true }],
+    following: [
+      {
+        id: '1',
+        profile: followingData,
+        did: { id: 'did:pkh:eip155:5:0x405616bf38175c5a73edd5b506d0ce820074acae' },
+        isFollowing: true,
+      },
+    ],
   },
   {
     ...commonProps,
