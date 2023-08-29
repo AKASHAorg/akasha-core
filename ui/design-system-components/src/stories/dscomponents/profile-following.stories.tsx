@@ -1,8 +1,5 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
-import { Profile } from '@akashaorg/typings/ui';
-
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import Following, {
@@ -30,17 +27,18 @@ const commonProps = {
   onProfileClick: () => ({}),
 };
 
-const followingData: Profile = {
+const followingData = {
   id: 'some id',
   createdAt: Date.now(),
   name: 'Latte Lover',
-  did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377' },
+  did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377', isViewer: true },
+  followers: null,
 };
 
 const variants: FollowingProps[] = [
   {
     ...commonProps,
-    following: [{ id: '1', profile: followingData, isFollowing: true }],
+    following: [{ id: '1', profile: followingData, did: { id: 'aa' }, isFollowing: true }],
   },
   {
     ...commonProps,

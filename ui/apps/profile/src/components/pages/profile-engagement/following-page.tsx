@@ -91,8 +91,8 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const { isViewer, profile: profileData } = Object.assign(
-    { isViewer: null, profile: null },
+  const { isViewer, akashaProfile: profileData } = Object.assign(
+    { isViewer: null, akashaProfile: null },
     profileDataReq.data,
   );
   const onProfileClick = (profileId: string) => {

@@ -1,13 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-
-import { Profile } from '@akashaorg/typings/ui';
-
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-
 import Followers, {
   FollowersProps,
 } from '../../components/ProfileEngagements/Engagement/Followers';
+import { AkashaProfile } from '@akashaorg/typings/sdk/graphql-types-new';
 
 const meta: Meta<FollowersProps> = {
   title: 'DSComponents/Profile/Followers',
@@ -29,17 +26,18 @@ const commonProps = {
   onProfileClick: () => ({}),
 };
 
-const followerData: Profile = {
+const followerData: AkashaProfile = {
   id: 'some id',
   createdAt: Date.now(),
   name: 'Coffee Lover',
-  did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377' },
+  did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377', isViewer: false },
+  followers: null,
 };
 
 const variants: FollowersProps[] = [
   {
     ...commonProps,
-    followers: [{ id: '1', isFollowing: false, profile: followerData }],
+    followers: [{ id: '1', isFollowing: false, did: { akashaProfile: followerData } }],
   },
   {
     ...commonProps,
@@ -47,7 +45,7 @@ const variants: FollowersProps[] = [
   },
   {
     ...commonProps,
-    followers: [{ id: '1', isFollowing: false, profile: followerData }],
+    followers: [{ id: '1', isFollowing: false, did: { akashaProfile: followerData } }],
     viewerIsOwner: false,
   },
 ];
