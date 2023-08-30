@@ -10,6 +10,7 @@ export type PillProps = {
   iconDirection?: ButtonProps['iconDirection'];
   customStyle?: ButtonProps['customStyle'];
   active?: boolean;
+  loading?: boolean;
   onPillClick?: (active?: boolean) => void;
 };
 
@@ -21,6 +22,7 @@ const Pill: React.FC<PillProps> = ({
   iconDirection,
   customStyle = '',
   active,
+  loading,
   onPillClick,
 }) => {
   const [showHover, setShowHover] = useState(false);
@@ -39,8 +41,9 @@ const Pill: React.FC<PillProps> = ({
       size={size}
       icon={showHover && hover ? hover.icon : icon}
       iconDirection={iconDirection}
-      customStyle={customStyle}
       active={showHover && hover ? hover.active : active}
+      loading={loading}
+      customStyle={customStyle}
       onMouseEnter={() => setShowHover(true)}
       onMouseLeave={() => setShowHover(false)}
       onClick={handlePillClick}
