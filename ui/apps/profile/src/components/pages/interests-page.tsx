@@ -1,22 +1,26 @@
 import React, { useMemo, useState } from 'react';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
-
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import EditInterests from '@akashaorg/design-system-components/lib/components/EditInterests';
 import { ProfileHeader } from '@akashaorg/design-system-components/lib/components/Profile';
-import { Interests } from '@akashaorg/design-system-components/lib/components/EditProfile/Interests';
+import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   useGetProfileByDidQuery,
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  useShowFeedback,
+  getProfileImageVersionsWithMediaUrl,
+  hasOwn,
+  useGetLogin,
+} from '@akashaorg/ui-awf-hooks';
 
 const InterestsPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
@@ -24,57 +28,10 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-profile');
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
-  const loginQuery = useGetLogin();
-
-  const [showFeedback, setShowFeedback] = React.useState(false);
-  const [feedbackMessage, setFeedbackMessage] = React.useState('');
-
-  if (showFeedback) {
-    setTimeout(() => {
-      setShowFeedback(false);
-      setFeedbackMessage('');
-    }, 6000);
-  }
-
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [topics, setTopics] = useState([]);
-
-  const profileDataReq = useGetProfileByDidQuery(
-    {
-      id: profileId,
-    },
-    {
-      select: response => response.node,
-      enabled: !!loginQuery.data?.id,
-    },
-  );
-
-  const interestsReq = useGetInterestsByDidQuery({ id: profileId });
-  // only fetch when the logged in user is not the owner of the profile interest page he is visiting
-  const ownInterestsReq = useGetInterestsByDidQuery(
-    { id: loginQuery.data?.id },
-    { enabled: loginQuery.data?.id !== profileId },
-  );
-
-  const ownTopics = useMemo(
-    () =>
-      ownInterestsReq.data?.node && hasOwn(ownInterestsReq.data?.node, 'akashaProfileInterests')
-        ? ownInterestsReq.data.node.akashaProfileInterests?.topics
-        : null,
-
-    [ownInterestsReq.data],
-  );
-
-  React.useEffect(() => {
-    if (interestsReq.data?.node && hasOwn(interestsReq.data?.node, 'akashaProfileInterests')) {
-      interestsReq.data.node.akashaProfileInterests?.topics
-        ? setTopics(interestsReq.data.node.akashaProfileInterests?.topics)
-        : setTopics([]);
-    }
-  }, [interestsReq.data, topics]);
-
   const queryClient = useQueryClient();
+
+  const [showFeedback, setShowFeedback] = useShowFeedback(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const onMutate = () => {
     setIsProcessing(true);
@@ -84,6 +41,51 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
     setIsProcessing(false);
   };
 
+  const loginQuery = useGetLogin();
+  const profileDataReq = useGetProfileByDidQuery(
+    {
+      id: profileId,
+    },
+    {
+      select: response => response.node,
+      enabled: !!loginQuery.data?.id,
+    },
+  );
+  const { akashaProfile: profileData } = Object.assign(
+    { akashaProfile: null },
+    profileDataReq.data,
+  );
+  const ownInterestsQueryReq = useGetInterestsByDidQuery(
+    { id: profileId },
+    { select: response => response.node },
+  );
+  // only fetch when the logged in user is not the owner of the profile interest page he is visiting
+  const loggedUserInterestsReq = useGetInterestsByDidQuery(
+    { id: loginQuery.data?.id },
+    { select: response => response.node, enabled: loginQuery.data?.id !== profileId },
+  );
+  const loggedInUserInterests = useMemo(
+    () =>
+      loggedUserInterestsReq.data && hasOwn(loggedUserInterestsReq.data, 'isViewer')
+        ? loggedUserInterestsReq.data.akashaProfileInterests?.topics || []
+        : [],
+    [loggedUserInterestsReq.data],
+  );
+  const ownInterests = useMemo(
+    () =>
+      ownInterestsQueryReq.data && hasOwn(ownInterestsQueryReq.data, 'isViewer')
+        ? ownInterestsQueryReq.data.akashaProfileInterests?.topics || []
+        : [],
+    [ownInterestsQueryReq.data],
+  );
+  const background = useMemo(
+    () => getProfileImageVersionsWithMediaUrl(profileData?.background),
+    [profileData?.background],
+  );
+  const avatar = useMemo(
+    () => getProfileImageVersionsWithMediaUrl(profileData?.avatar),
+    [profileData?.avatar],
+  );
   const createInterest = useCreateInterestsMutation({
     onMutate,
     onSuccess: async () => {
@@ -92,8 +94,6 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
           id: profileId !== loginQuery.data?.id ? loginQuery.data?.id : profileId,
         }),
       });
-
-      setFeedbackMessage(successText);
       setShowFeedback(true);
     },
     onSettled,
@@ -106,33 +106,19 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const { isViewer, akashaProfile: profileData } = Object.assign(
-    { isViewer: null, akashaProfile: null },
-    profileDataReq.data,
-  );
-
-  const successText = `${t('Successfully subscribed to interest')}!`;
-
   const handleTopicClick = topic => {
-    if (!ownTopics.find(interest => interest.value === topic.value)) {
+    //subscribe only if logged in user hasn't subscribed before otherwise navigate to the topic page
+    if (!loggedInUserInterests.find(interest => interest.value === topic.value)) {
       createInterest.mutate({
-        i: { content: { topics: [...ownTopics, topic] } },
+        i: { content: { topics: [...loggedInUserInterests, topic] } },
       });
-
       return;
     }
-
     navigateTo?.({
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${topic}`,
     });
   };
-
-  const background = getProfileImageVersionsWithMediaUrl(profileData?.background);
-  const avatar = getProfileImageVersionsWithMediaUrl(profileData?.avatar);
-  const outsiderText = t(
-    "Spot something interesting?  You can subscribe to any  of your fellow member interests and they'll shape the beams in your antenna! ",
-  );
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
@@ -148,27 +134,29 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
           <Stack direction="column" spacing="gap-y-2.5">
             <Text variant="h5">{t('Interests')} </Text>
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
-              {outsiderText}
+              {t(
+                "Spot something interesting?  You can subscribe to any  of your fellow member interests and they'll shape the beams in your antenna! ",
+              )}
             </Text>
 
             <Stack align="center" justify="start" spacing="gap-2" customStyle="flex-wrap w-full">
-              {topics &&
-                topics.map((topic, idx) => (
-                  <Pill
-                    key={`${idx}-${topic.value}`}
-                    label={topic.value}
-                    icon="CheckIcon"
-                    iconDirection="right"
-                    size="sm"
-                    onPillClick={() => handleTopicClick(topic)}
-                    active={!!ownTopics.find(interest => interest.value === topic.value)}
-                  />
-                ))}
+              {ownInterests.map((topic, idx) => (
+                <Pill
+                  key={`${idx}-${topic.value}`}
+                  label={topic.value}
+                  icon="CheckIcon"
+                  iconDirection="right"
+                  size="sm"
+                  loading={isProcessing}
+                  onPillClick={() => handleTopicClick(topic)}
+                  active={!!loggedInUserInterests.find(interest => interest.value === topic.value)}
+                />
+              ))}
             </Stack>
           </Stack>
         )}
         {profileId === loginQuery.data?.id && (
-          <Interests
+          <EditInterests
             title={t('Your interests')}
             subTitle={t('(30 topics max.)')}
             description={t(
@@ -177,7 +165,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
             moreInterestTitle={t('Add more interests')}
             moreInterestDescription={t('Separate your interests by comma or space!')}
             moreInterestPlaceholder={t('Interests')}
-            myInterests={topics}
+            myInterests={ownInterests}
             interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
             maxInterests={30}
             labelType="TOPIC"
@@ -188,7 +176,10 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
               label: t('Cancel'),
               disabled: isProcessing,
               handleClick: () => {
-                //do something
+                navigateTo({
+                  appName: '@akashaorg/app-profile',
+                  getNavigationUrl: () => `/${profileId}`,
+                });
               },
             }}
             saveButton={{
@@ -205,7 +196,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
       </Card>
       {showFeedback && (
         <Snackbar
-          title={feedbackMessage}
+          title={t('Successfully subscribed to interest')}
           type="success"
           iconType="CheckCircleIcon"
           handleDismiss={() => {
