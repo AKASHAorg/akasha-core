@@ -146,9 +146,9 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
       case 'edit':
         return t('Save Changes');
       case 'reply':
-        return t('Reply');
+        return t('Reflect');
       default:
-        return t('Publish');
+        return t('Beam it');
     }
   }, [action]);
 
@@ -173,13 +173,13 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
       handleSaveImagesDraft={handleSaveImagesDraft}
       handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
       setEditorState={(value: IEntryData['slateContent']) => {
-        if (canSaveDraft) {
-          if (isEqual(value, editorDefaultValue)) {
-            postDraft.clear();
-            return;
-          }
-          postDraft.save({ ...postDraft.get(), slateContent: value });
-        }
+        // if (canSaveDraft) {
+        //   if (isEqual(value, editorDefaultValue)) {
+        //     postDraft.clear();
+        //     return;
+        //   }
+        //   postDraft.save({ ...postDraft.get(), slateContent: value });
+        // }
         setEditorState(value);
       }}
       onClear={() => {
@@ -188,8 +188,6 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
         setEmbededEntry(null);
         setEditorState(editorDefaultValue);
       }}
-      noBorderRound={action === 'edit'}
-      borderBottomOnly={action === 'edit'}
     />
   );
 }

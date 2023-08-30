@@ -25,7 +25,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
-    return <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />;
+    return <ErrorLoader type="script-error" title="Error in inline editor" details={err.message} />;
   },
 });
 
