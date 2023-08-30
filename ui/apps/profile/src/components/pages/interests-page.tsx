@@ -32,6 +32,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
 
   const [showFeedback, setShowFeedback] = useShowFeedback(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [activeInterests, setActiveInterests] = useState([]);
 
   const onMutate = () => {
     setIsProcessing(true);
@@ -58,18 +59,6 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
   const ownInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node },
-  );
-  // only fetch when the logged in user is not the owner of the profile interest page he is visiting
-  const loggedUserInterestsReq = useGetInterestsByDidQuery(
-    { id: loginQuery.data?.id },
-    { select: response => response.node, enabled: loginQuery.data?.id !== profileId },
-  );
-  const loggedInUserInterests = useMemo(
-    () =>
-      loggedUserInterestsReq.data && hasOwn(loggedUserInterestsReq.data, 'isViewer')
-        ? loggedUserInterestsReq.data.akashaProfileInterests?.topics || []
-        : [],
-    [loggedUserInterestsReq.data],
   );
   const ownInterests = useMemo(
     () =>
@@ -106,12 +95,14 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const handleTopicClick = topic => {
+  const handleInterestClick = topic => {
     //subscribe only if logged in user hasn't subscribed before otherwise navigate to the topic page
-    if (!loggedInUserInterests.find(interest => interest.value === topic.value)) {
+    if (!activeInterests.find(interest => interest.value === topic.value)) {
+      const newActiveInterests = [...activeInterests, topic];
       createInterest.mutate({
-        i: { content: { topics: [...loggedInUserInterests, topic] } },
+        i: { content: { topics: newActiveInterests } },
       });
+      setActiveInterests(newActiveInterests);
       return;
     }
     navigateTo?.({
@@ -140,16 +131,21 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
             </Text>
 
             <Stack align="center" justify="start" spacing="gap-2" customStyle="flex-wrap w-full">
-              {ownInterests.map((topic, idx) => (
+              {ownInterests.map((interest, idx) => (
                 <Pill
-                  key={`${idx}-${topic.value}`}
-                  label={topic.value}
+                  key={`${idx}-${interest.value}`}
+                  label={interest.value}
                   icon="CheckIcon"
                   iconDirection="right"
                   size="sm"
-                  loading={isProcessing}
-                  onPillClick={() => handleTopicClick(topic)}
-                  active={!!loggedInUserInterests.find(interest => interest.value === topic.value)}
+                  loading={
+                    activeInterests.length > 0 &&
+                    activeInterests[activeInterests.length - 1] === interest
+                      ? isProcessing
+                      : false
+                  }
+                  onPillClick={() => handleInterestClick(interest)}
+                  active={!!activeInterests.find(activeInterest => activeInterest === interest)}
                 />
               ))}
             </Stack>
