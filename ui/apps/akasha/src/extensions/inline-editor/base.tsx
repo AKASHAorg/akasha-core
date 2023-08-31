@@ -63,7 +63,7 @@ export function Base(
           setEditorState={props.setEditorState}
           onCancelClick={() => props.singleSpa.navigateToUrl(location.pathname)}
           cancelButtonLabel={t('Cancel')}
-          avatar={profileDataReq.data?.avatar}
+          avatar={profileDataReq?.data?.avatar}
           profileId={loggedProfileData?.did?.id}
           emojiPlaceholderLabel={t('Search')}
           disablePublishLabel={t('Authenticating')}
@@ -71,10 +71,10 @@ export function Base(
           getLinkPreview={getLinkPreview}
           getMentions={handleMentionQueryChange}
           getTags={handleTagQueryChange}
-          tags={tagSearch.data}
+          tags={tagSearch?.data}
           mentions={mentionSearch?.data}
           uploadRequest={uploadMediaToTextile}
-          background={props.entryData ? 'bg(grey9 dark:grey3)' : 'bg(white grey2'}
+          background={props.entryData && { light: 'grey9', dark: 'grey3' }}
         />
       )}
       {props.isReply && (

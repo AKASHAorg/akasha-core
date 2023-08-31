@@ -84,7 +84,7 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
 
   return (
     <Base
-      postLabel={action === 'edit' ? t('Save Changes') : t('Reply')}
+      postLabel={action === 'edit' ? t('Save Changes') : t('Reflect')}
       placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
       onPublish={handlePublish}
       onPlaceholderClick={handlePlaceholderClick}
@@ -96,8 +96,6 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
       openEditor={true}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
-      noBorderRound={action === 'edit'}
-      borderBottomOnly={action === 'edit'}
     />
   );
 }
