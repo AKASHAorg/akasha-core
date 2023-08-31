@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -12,7 +11,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import routes, { ONBOARDING_STEP_ONE } from '../routes';
 
-export type DevDashOnboardingIntroProps = RootComponentProps & {
+export type DevDashOnboardingIntroProps = {
   publicImgPath?: string;
   assetName?: string;
   assetExtension?: string;
@@ -25,11 +24,11 @@ export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = pro
     assetName = 'dev-dashboard-intro',
     assetExtension = 'webp',
     publicImgPath = '/images',
-    baseRouteName,
-    plugins,
   } = props;
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const { t } = useTranslation('app-dev-dashboard');
 

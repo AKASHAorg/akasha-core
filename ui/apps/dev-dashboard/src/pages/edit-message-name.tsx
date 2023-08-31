@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -9,12 +9,12 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import menuRoute, { DEV_KEYS } from '../routes';
 import { CardWrapper, DevMessageForm } from '../components/common';
 
-export const EditMessageName: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
-
+export const EditMessageName = () => {
   const { t } = useTranslation('app-profile');
+
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const handleCancel = () => {
     navigateTo?.({

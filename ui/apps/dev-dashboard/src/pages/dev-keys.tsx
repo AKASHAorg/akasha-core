@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -14,10 +14,10 @@ import { CardWrapper } from '../components/common';
 import menuRoute, { ADD_DEV_KEY, DEV_KEYS } from '../routes';
 import { sampleDevKeys } from '../utils/dummy-data';
 
-export const DevKeysCard: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
+export const DevKeysCard = () => {
+  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const { t } = useTranslation('app-dev-dashboard');
 
@@ -41,7 +41,7 @@ export const DevKeysCard: React.FC<RootComponentProps> = props => {
   };
 
   const handleDeleteClick = (id: string, keyName: string) => () => {
-    props.navigateToModal({ name: 'delete-dev-key', id, keyName });
+    navigateToModal({ name: 'delete-dev-key', id, keyName });
   };
 
   return (

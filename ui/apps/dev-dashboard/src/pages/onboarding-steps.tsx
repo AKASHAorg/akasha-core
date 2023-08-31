@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { ONBOARDING_STATUS } from './intro-card';
 
@@ -26,12 +25,10 @@ type DevDashOnboardingStepsProps = {
   activeIndex?: number;
 };
 
-export const DevDashOnboardingSteps: React.FC<
-  RootComponentProps & DevDashOnboardingStepsProps
-> = props => {
-  const { baseRouteName, plugins } = props;
+export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = props => {
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const [activeIndex, setActiveIndex] = useState<number>(props.activeIndex || 0);
   const [messageName] = useState<string>('');

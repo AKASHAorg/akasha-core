@@ -1,13 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
-
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { CardWrapper } from '../components/common';
 
-export const PublishedApps: React.FC<RootComponentProps> = () => {
+export const PublishedApps = () => {
   const { t } = useTranslation('app-dev-dashboard');
 
   return (

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
@@ -18,10 +18,10 @@ import menuRoute, {
 } from '../routes';
 import { sampleDevKeys } from '../utils/dummy-data';
 
-export const DevDashboard = (props: RootComponentProps) => {
-  const { plugins } = props;
+export const DevDashboard = () => {
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const { t } = useTranslation('app-dev-dashboard');
 
