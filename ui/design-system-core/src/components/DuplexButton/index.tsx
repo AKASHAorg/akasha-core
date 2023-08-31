@@ -34,6 +34,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
     activeHoverIcon,
     allowMinimization,
     loading,
+    ...rest
   } = props;
 
   const [hovered, setHovered] = useState(false);
@@ -59,7 +60,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
   }, [active]);
 
   if (loading) {
-    return <Button loading={true} />;
+    return <Button loading={true} {...rest} />;
   }
 
   const getLabel = () => {
@@ -75,7 +76,6 @@ const DuplexButton = (props: DuplexButtonProps) => {
   if (iconOnly && allowMinimization) {
     return (
       <Button
-        data-testid="duplex-button"
         onClick={active ? onClickActive : onClickInactive}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -89,7 +89,6 @@ const DuplexButton = (props: DuplexButtonProps) => {
 
   return (
     <Button
-      data-testid="duplex-button"
       label={getLabel()}
       onClick={active ? onClickActive : onClickInactive}
       onMouseEnter={() => setHovered(true)}
@@ -98,6 +97,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
       variant={active ? 'secondary' : 'primary'}
       size={size}
       customStyle={customStyle}
+      {...rest}
     />
   );
 };

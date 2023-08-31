@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import DuplexButton, {
@@ -14,7 +14,7 @@ export default meta;
 type Story = StoryObj<DuplexButtonProps>;
 
 const Component = () => {
-  const [active, setActive] = React.useState(false);
+  const [active, setActive] = useState(true);
 
   const handleClick = () => {
     setActive(!active);

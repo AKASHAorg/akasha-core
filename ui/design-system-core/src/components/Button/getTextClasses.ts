@@ -6,10 +6,18 @@ interface ITextClasses {
   loading: ButtonProps['loading'];
   disabled: ButtonProps['disabled'];
   hover: ButtonProps['hover'];
+  hoverColor: ButtonProps['hoverColor'];
   active: ButtonProps['active'];
 }
 
-export function getTextClasses({ variant, loading, disabled, hover, active }: ITextClasses) {
+export function getTextClasses({
+  variant,
+  loading,
+  disabled,
+  hover,
+  hoverColor,
+  active,
+}: ITextClasses) {
   if (variant === 'text') {
     const textColorStyle = getColorClasses(
       {
@@ -43,7 +51,10 @@ export function getTextClasses({ variant, loading, disabled, hover, active }: IT
       },
       'text',
     );
-    const hoverStyle = !loading && !disabled ? 'dark:group-hover:text-white' : '';
+    const hoverTextColor = hoverColor?.text
+      ? getColorClasses(hoverColor.text, 'group-hover:text')
+      : 'dark:group-hover:text-white';
+    const hoverStyle = !loading && !disabled ? hoverTextColor : '';
     return `${textColorStyle} ${hoverStyle}`;
   }
 

@@ -45,7 +45,7 @@ const EmptyEntry: React.FC<EmptyEntryProps> = ({
     };
   }
 
-  return <InfoCard {...props} />;
+  return <InfoCard {...props} publicImgPath="/images" assetName="longbeam-notfound.webp" />;
 };
 
 export default EmptyEntry;
