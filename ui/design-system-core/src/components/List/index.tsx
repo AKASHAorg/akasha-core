@@ -50,7 +50,7 @@ const List: React.FC<ListProps> = forwardRef(
     };
 
     return (
-      <Card radius={8} customStyle={`w-fit ${customStyle}`} ref={ref}>
+      <Card radius={8} padding={0} customStyle={`w-fit ${customStyle}`} ref={ref}>
         <Stack direction="column">
           {items.map((item, index) => (
             <Button
