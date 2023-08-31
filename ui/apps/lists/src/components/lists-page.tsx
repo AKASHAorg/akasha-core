@@ -46,7 +46,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);
   const bookmarkedBeams = undefined;
   const numberOfBookmarkedInactivePosts = React.useMemo(
-    () => bookmarkedBeams.filter(({ data }) => (data ? data.active : false)).length,
+    () => bookmarkedBeams?.filter(({ data }) => (data ? data.active : false)).length,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [bookmarkedBeamsIds],
   );

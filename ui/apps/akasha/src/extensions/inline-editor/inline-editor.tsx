@@ -9,9 +9,9 @@ export const InlineEditor = (
   props: Partial<RootExtensionProps> & { draftStorage?: IDraftStorage },
 ) => {
   const loginQuery = useGetLogin();
-  const action = props.extensionData.action;
-  const itemId = props.extensionData.itemId;
-  const itemType = props.extensionData.itemType;
+  const action = props.extensionData?.action;
+  const itemId = props.extensionData?.itemId;
+  const itemType = props.extensionData?.itemType;
   const draftStorage = props.draftStorage || localStorage;
 
   /*ReplyEditor handles reply to a comment and editing a comment*/

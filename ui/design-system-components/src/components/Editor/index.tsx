@@ -9,7 +9,7 @@ import {
   Descendant,
 } from 'slate';
 import isUrl from 'is-url';
-import { tw, tx } from '@twind/core';
+import { tw } from '@twind/core';
 import { withHistory } from 'slate-history';
 import { Popover } from '@headlessui/react';
 import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
@@ -19,7 +19,7 @@ import { IEntryData, IMetadata, IPublishData, Profile } from '@akashaorg/typings
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Meter from '@akashaorg/design-system-core/lib/components/Meter';
+import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
 import { CustomEditor } from './helpers';
 import { TagPopover } from './tag-popover';
@@ -87,6 +87,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
     avatar,
     showAvatar = true,
     showDraft = false,
+    onClear,
     profileId,
     postLabel,
     placeholderLabel,
@@ -114,7 +115,6 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
     cancelButtonLabel,
     onCancelClick,
     showCancelButton,
-    onClear,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -560,11 +560,15 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
 
   return (
     <div
-      className={tx(`flex justify-between w-full bg(grey9 dark:grey1) h-[45vh] md:max-h-[38rem]`)}
+      className={tw(
+        `flex flex-col justify-between w-full bg(white dark:grey2) h-[45vh] md:max-h-[38rem]`,
+      )}
     >
       <div
-        className={tx(
-          `flex flex-row px-4 items-start overflow-auto ${minHeight && `min-h-[${minHeight}]`}`,
+        className={tw(
+          `flex flex-row items-start h-full w-full p-2 overflow-auto ${
+            minHeight && `min-h-[${minHeight}]`
+          }`,
         )}
       >
         {showAvatar && (
@@ -572,8 +576,8 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
             <Avatar avatar={avatar} profileId={profileId} />
           </div>
         )}
-        <div className={tw(`w-full px-2 flex flex-row justify-between`)}>
-          <div className={tw(`w-full flex`)}>
+        <div className={tw(`w-full p-2 flex flex-col overflow-auto`)}>
+          <div className={tw(`w-full flex flex-col`)}>
             <Slate
               editor={editor}
               value={editorState || editorDefaultValue}
@@ -641,12 +645,12 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
           </div>
         </div>
       </div>
-      <div className={tw(`w-full px-4 pt-2 pb-4 justify-between flex flex-row`)}>
+      <div className={tw(`flex flex-row w-full p-2 justify-between`)}>
         <div className={tw(`flex flex-row gap-2 items-center`)}>
-          <div className={tw('md:hidden')}>
+          <div className={tw('sm:hidden')}>
             <Popover className="relative">
               <Popover.Button>
-                <Icon type="FaceSmileIcon" />
+                <Icon type="FaceSmileIcon" accentColor={true} />
               </Popover.Button>
               <Popover.Panel className="absolute z-10">
                 <Popover.Button>
@@ -657,13 +661,17 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
           </div>
           {uploadRequest && (
             <button className={tw(`flex items-center`)} onClick={handleMediaClick}>
-              <Icon type="PhotoIcon" disabled={uploading || imageUploadDisabled} />
+              <Icon
+                accentColor={true}
+                type="PhotoIcon"
+                disabled={uploading || imageUploadDisabled}
+              />
             </button>
           )}
         </div>
 
         <div className={tw(`flex flex-row gap-2 items-center`)}>
-          {showDraft && (
+          {/* {showDraft && (
             <div className={tw(`flex flex-row gap-2 items-center`)}>
               {!publishDisabled && (
                 <p className={tw(`text(secondaryLight dark:secondaryDark)`)}>Draft</p>
@@ -679,10 +687,8 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
                 Clear
               </button>
             </div>
-          )}
-          {withMeter && (
-            <Meter type="circle" value={letterCount} max={MAX_LENGTH} size={24} thickness={3} />
-          )}
+          )} */}
+          {withMeter && <EditorMeter value={letterCount} max={MAX_LENGTH} />}
           {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
           <Button
             variant={'primary'}

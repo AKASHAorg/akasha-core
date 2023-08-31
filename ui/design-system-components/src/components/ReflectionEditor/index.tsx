@@ -6,12 +6,14 @@ import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 import { IPublishData } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Colors } from '@akashaorg/typings/ui';
 
 export type ReflectionEditorProps = EditorBoxProps & {
   openEditor?: boolean;
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
-  background?: string;
+  background?: { light: Colors; dark: Colors };
 };
 
 const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
@@ -43,9 +45,8 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     setEditorState,
     showDraft,
     uploadedImages,
-    borderBottomOnly,
-    noBorderRound,
     onClear,
+    background,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(openEditor);
@@ -84,11 +85,8 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     setShowEditor(!showEditor);
   };
 
-  const bordePositionClass = borderBottomOnly ? 'border-b' : 'border';
-  const borderRoundClass = noBorderRound ? '' : 'rounded-lg';
-
   return (
-    <Box ref={wrapperRef}>
+    <Box ref={wrapperRef} customStyle="grid">
       {!showEditor && (
         <EditorPlaceholder
           onClick={handleToggleEditor}
@@ -98,7 +96,12 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
         />
       )}
       {showEditor && (
-        <Box customStyle={`p-0.5 ${bordePositionClass} ${borderRoundClass}  ${props.background}`}>
+        <Card
+          padding={0}
+          accentBorder={true}
+          background={!!background && background}
+          customStyle="overflow-hidden"
+        >
           <EditorBox
             ref={editorRef}
             avatar={avatar}
@@ -129,7 +132,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             showDraft={showDraft}
             onClear={onClear}
           />
-        </Box>
+        </Card>
       )}
     </Box>
   );
