@@ -22,7 +22,7 @@ const MarkdownCard: React.FC<MarkdownCardProps> = props => {
       )}
 
       {hasWrapper && (
-        <Card padding={16}>
+        <Card padding={16} customStyle="text(dark: dark:white)">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{mdText}</ReactMarkdown>
         </Card>
       )}
