@@ -14,7 +14,7 @@ export default meta;
 type Story = StoryObj<DuplexButtonProps>;
 
 const Component = () => {
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
 
   const handleClick = () => {
     setActive(!active);

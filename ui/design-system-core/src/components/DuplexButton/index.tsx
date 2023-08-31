@@ -7,7 +7,7 @@ import Button from '../Button';
 import Icon from '../Icon/';
 import { ButtonProps } from '../Button/types';
 
-export type DuplexButtonProps = ButtonProps & {
+export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
   onClickInactive?: EventHandler<SyntheticEvent>;
   onClickActive?: EventHandler<SyntheticEvent>;
   inactiveLabel?: string;
