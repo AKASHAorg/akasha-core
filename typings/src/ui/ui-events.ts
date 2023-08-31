@@ -73,5 +73,5 @@ export type UIEventData =
     }
   | {
       event: EventTypes.RegisterEditorBlock;
-      data?: EditorBlockInterface[];
+      data?: (EditorBlockInterface & { appName: string })[];
     };

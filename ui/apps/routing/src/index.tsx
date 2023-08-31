@@ -12,7 +12,6 @@ import {
 import getSDK from '@akashaorg/awf-sdk';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { RouteRepository } from './types';
-import { filterEvent } from '@akashaorg/ui-app-loader/lib/events';
 
 export class RoutingPlugin {
   static readonly routeRepository: RouteRepository = {
@@ -43,7 +42,7 @@ export class RoutingPlugin {
         }
       },
     });
-    uiEvents.pipe(filterEvent(EventTypes.RegisterIntegration)).subscribe({
+    uiEvents.subscribe({
       next: (eventData: {
         event: Omit<EventTypes, EventTypes.RegisterEditorBlock>;
         data?: EventDataTypes;
@@ -52,31 +51,32 @@ export class RoutingPlugin {
         if (RoutingPlugin.routeRepository.all[eventData.data.name]) {
           return;
         }
-
-        if (Array.isArray(eventData.data.menuItems)) {
-          eventData.data.menuItems.forEach(item => {
+        if (eventData.event && eventData.event === EventTypes.RegisterIntegration) {
+          if (Array.isArray(eventData.data.menuItems)) {
+            eventData.data.menuItems.forEach(item => {
+              const appMenuItemData = {
+                ...item,
+                navRoutes: eventData.data.navRoutes,
+                name: eventData.data.name,
+              };
+              RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
+              item?.area?.forEach((area: MenuItemAreaType) =>
+                RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
+              );
+              RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
+            });
+          } else {
             const appMenuItemData = {
-              ...item,
+              ...eventData.data.menuItems,
               navRoutes: eventData.data.navRoutes,
               name: eventData.data.name,
             };
             RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
-            item?.area?.forEach((area: MenuItemAreaType) =>
+            eventData.data.menuItems?.area?.forEach((area: MenuItemAreaType) =>
               RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
             );
             RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
-          });
-        } else {
-          const appMenuItemData = {
-            ...eventData.data.menuItems,
-            navRoutes: eventData.data.navRoutes,
-            name: eventData.data.name,
-          };
-          RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
-          eventData.data.menuItems?.area?.forEach((area: MenuItemAreaType) =>
-            RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
-          );
-          RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
+          }
         }
       },
     });

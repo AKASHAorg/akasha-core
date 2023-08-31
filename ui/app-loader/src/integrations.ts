@@ -170,12 +170,12 @@ export const processSystemModules = (
                     navRoutes: appConf?.routes,
                   },
                 });
-                console.log(appConf, '<<< app conf');
-                if (appConf?.editorBlocks)
+                if (appConf?.editorBlocks) {
                   uiEvents.next({
                     event: EventTypes.RegisterEditorBlock,
-                    data: appConf.editorBlocks,
+                    data: appConf.editorBlocks.map(eb => ({ ...eb, appName: moduleName })),
                   });
+                }
               }
               return {
                 ...appConf,
