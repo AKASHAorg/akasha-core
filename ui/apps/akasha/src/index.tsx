@@ -10,7 +10,7 @@ import {
   RootComponentProps,
 } from '@akashaorg/typings/ui';
 import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/ui/editor-blocks';
-import { filterEvent } from '@akashaorg/ui-app-loader/lib/events';
+import { filter } from 'rxjs';
 
 /**
  * Initialization of the integration is optional.
@@ -95,8 +95,13 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
 
 class EditorBlocksPlugin {
   static readonly editorBlocks: EditorBlockInterface[] = [];
-
   static observe = (uiEvents: RootComponentProps['uiEvents']) => {
+    const filterEvent = (eventType: EventTypes) => {
+      return filter(
+        (eventData: { event: string }) =>
+          eventData && eventData.hasOwnProperty('event') && eventData.event === eventType,
+      );
+    };
     uiEvents.pipe(filterEvent(EventTypes.RegisterEditorBlock)).subscribe({
       next: (evData: { event: EventTypes.RegisterEditorBlock; data: EditorBlockInterface[] }) => {
         if (!evData.data) {
