@@ -78,7 +78,7 @@ describe('<NotificationsCard /> Component', () => {
     const { getByRole } = componentWrapper;
 
     const avatar = getByRole('img');
-    expect(avatar).toHaveAttribute('src', expect.stringMatching(/placeholder/));
+    expect(avatar).toHaveAttribute('src', expect.stringMatching(/avatar-/));
   });
 
   it('has correct label based on type (POST_MENTION)', () => {
