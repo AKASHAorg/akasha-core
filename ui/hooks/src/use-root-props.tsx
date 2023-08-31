@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { RootComponentProps, RootExtensionProps } from '@akashaorg/typings/ui';
 import { hasOwn } from './utils/has-own';
-import type { TranslationPlugin } from '@akashaorg/app-translation';
 
 const RootComponentPropsContext = React.createContext(null);
 const DEFAULT_ROUTING_PLUGIN = '@akashaorg/app-routing';
@@ -33,7 +32,7 @@ const useRootComponentProps = () => {
   );
 
   const getTranslationPlugin = React.useCallback(
-    (ns = DEFAULT_TRANSLATION_PLUGIN): { i18n: typeof TranslationPlugin.i18n } => {
+    (ns = DEFAULT_TRANSLATION_PLUGIN): { i18n: RootComponentProps['i18next'] } => {
       if (hasOwn(ctx.plugins, ns)) {
         return ctx.plugins[ns].translation;
       }
