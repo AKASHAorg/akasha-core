@@ -1,15 +1,15 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { GeneralForm, GeneralFormProps } from '../../components/EditProfile/GeneralForm';
+import EditProfile, { EditProfileProps } from '../../components/EditProfile';
 
-const meta: Meta<GeneralFormProps> = {
-  title: 'DSComponents/Profile/Edit/GeneralForm',
-  component: GeneralForm,
+const meta: Meta<EditProfileProps> = {
+  title: 'DSComponents/Profile/Edit/EditProfile',
+  component: EditProfile,
 };
 
 export default meta;
-type Story = StoryObj<GeneralFormProps>;
+type Story = StoryObj<EditProfileProps>;
 
 const avatar = { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } };
 
@@ -23,9 +23,9 @@ const coverImage = {
 
 const profileId = 'did:key:003410490050000320006570034567114572000';
 
-export const BaseGeneralForm: Story = {
+export const BaseEditProfile: Story = {
   render: () => (
-    <GeneralForm
+    <EditProfile
       header={{
         title: 'Avatar & Cover Image',
         coverImage: coverImage,
@@ -71,8 +71,15 @@ export const BaseGeneralForm: Story = {
       }}
       saveButton={{
         label: 'Save',
-        handleClick: () => ({}),
+        handleClick: formValues => {
+          console.log(formValues);
+        },
       }}
+      linkLabel="External URLs"
+      addNewLinkButtonLabel="Add new"
+      description="You can add your personal websites or social links to be shared on your profile"
+      socialLinks={[]}
+      onDeleteLink={() => ({})}
     />
   ),
 };

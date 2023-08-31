@@ -7,7 +7,7 @@ import {
   useGetInterestsByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
-import { EngagementType, NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 type ProfileStatsPresentationProps = {
@@ -79,7 +79,7 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
     });
   };
 
-  const onStatClick = (stat: EngagementType) => () => {
+  const onStatClick = (stat: 'followers' | 'following' | 'interests') => () => {
     if (!isLoggedIn) {
       return showLoginModal();
     }

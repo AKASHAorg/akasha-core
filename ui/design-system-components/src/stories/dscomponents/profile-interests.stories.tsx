@@ -1,19 +1,19 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { InterestsProps, Interests } from '../../components/EditProfile/Interests';
+import EditInterests, { EditInterestsProps } from '../../components/EditInterests';
 
-const meta: Meta<InterestsProps> = {
+const meta: Meta<EditInterestsProps> = {
   title: 'DSComponents/Profile/Edit/Interests',
-  component: Interests,
+  component: EditInterests,
 };
 
 export default meta;
-type Story = StoryObj<InterestsProps>;
+type Story = StoryObj<EditInterestsProps>;
 
 export const BaseInterests: Story = {
   render: () => (
-    <Interests
+    <EditInterests
       title="Your interests"
       subTitle="(10 topics max.)"
       description="Your interests will help refine your social feed and throughout AKASHA World."

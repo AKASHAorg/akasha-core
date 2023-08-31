@@ -83,7 +83,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
     <Stack
       direction="column"
       justify="center"
-      spacing="gap-y-1"
+      spacing="gap-y-2"
       customStyle={customStyle}
       ref={autoCompleteRef}
     >
@@ -134,7 +134,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
         </div>
       )}
       {tags?.size > 0 && (
-        <Stack align="end" customStyle="flex-wrap space-x-2 space-y-2">
+        <Stack align="center" customStyle="flex-wrap gap-x-2 gap-y-2">
           {[...tags].map(tag => (
             <Tag
               key={tag}
