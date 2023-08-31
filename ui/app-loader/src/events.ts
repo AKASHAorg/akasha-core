@@ -131,7 +131,7 @@ export const getUiEvents = () => {
      * property of the event.
      *    Load the extension points that match as single-spa parcel (mountRootParcel).
      * Note that the extensions are not conditioned by their parent integration status (mounted or not).
-     *  However if the parent integration is disabled in the user prefs, they should not load.
+     *  However, if the parent integration is disabled in the user prefs, they should not load.
      * @internal
      */
     uiEvents

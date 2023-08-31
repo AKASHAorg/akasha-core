@@ -1,9 +1,10 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { setupI18next } from './i18n';
+import { i18n } from 'i18next';
 
 export class TranslationPlugin {
   static defaultPath = '/locales/{{lng}}/{{ns}}.json';
-  static i18n;
+  static i18n: i18n;
 
   static async initTranslation() {
     if (TranslationPlugin.i18n) {

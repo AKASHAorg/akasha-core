@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps, RootExtensionProps } from '@akashaorg/typings/ui';
 import { hasOwn } from './utils/has-own';
+import type { TranslationPlugin } from '@akashaorg/app-translation';
 
 const RootComponentPropsContext = React.createContext(null);
 const DEFAULT_ROUTING_PLUGIN = '@akashaorg/app-routing';
 const DEFAULT_TRANSLATION_PLUGIN = '@akashaorg/app-translation';
+const DEFAULT_EDITOR_BLOCKS_PLUGIN = '@akashaorg/app-akasha-integration';
 
 const RootComponentPropsProvider = ({
   children,
@@ -18,8 +20,7 @@ const RootComponentPropsProvider = ({
 };
 
 const useRootComponentProps = () => {
-  const ctx = React.useContext<RootComponentProps>(RootComponentPropsContext);
-
+  const ctx = React.useContext<RootComponentProps | RootExtensionProps>(RootComponentPropsContext);
   const getRoutingPlugin = React.useCallback(
     (ns = DEFAULT_ROUTING_PLUGIN) => {
       if (hasOwn(ctx.plugins, ns)) {
@@ -32,19 +33,26 @@ const useRootComponentProps = () => {
   );
 
   const getTranslationPlugin = React.useCallback(
-    (ns = DEFAULT_TRANSLATION_PLUGIN) => {
+    (ns = DEFAULT_TRANSLATION_PLUGIN): { i18n: typeof TranslationPlugin.i18n } => {
       if (hasOwn(ctx.plugins, ns)) {
         return ctx.plugins[ns].translation;
       }
       console.warn('Translation plugin not available yet!');
-      return {};
+      return { i18n: null };
     },
     [ctx.plugins],
   );
 
+  const getEditorBlocksPlugin = React.useCallback(() => {
+    if (hasOwn(ctx.plugins, DEFAULT_EDITOR_BLOCKS_PLUGIN)) {
+      return ctx.plugins[DEFAULT_EDITOR_BLOCKS_PLUGIN].editorBlocks;
+    }
+  }, [ctx.plugins]);
+
   return {
     getRoutingPlugin,
     getTranslationPlugin,
+    getEditorBlocksPlugin,
     ...ctx,
   };
 };

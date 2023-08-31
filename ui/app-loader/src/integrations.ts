@@ -170,6 +170,12 @@ export const processSystemModules = (
                     navRoutes: appConf?.routes,
                   },
                 });
+                console.log(appConf, '<<< app conf');
+                if (appConf?.editorBlocks)
+                  uiEvents.next({
+                    event: EventTypes.RegisterEditorBlock,
+                    data: appConf.editorBlocks,
+                  });
               }
               return {
                 ...appConf,
@@ -283,7 +289,7 @@ export const handleExtPointMountOfApps = (
           };
         }
 
-        const unique: [string, EventDataTypes][] = Array.from(mountedExtPoints).filter(([name]) => {
+        const unique = Array.from(mountedExtPoints).filter(([name]) => {
           const _prevIntegrationsCount = prevIntegrations.get(name)?.length || 0;
           const _nextIntegrationsCount = integrationsByMountPoint.get(name)?.length || 0;
 

@@ -2,6 +2,7 @@ import { ActivityFn, ExtendsFn, IntegrationRegistrationOptions } from './app-loa
 import { IMenuItem } from './menu-items';
 import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
+import { EditorBlockInterface } from './editor-blocks';
 
 export type Extensions = { [key: string]: string } & {
   /**
@@ -74,6 +75,10 @@ export interface IAppConfig {
     [key: string]: string;
   };
   loadingFn: () => Promise<singleSpa.LifeCycles<RootComponentProps>>;
+  /**
+   * @TODO: add docs
+   */
+  editorBlocks?: EditorBlockInterface[];
   /**
    * A simple mapping of the extensions exposed by this widget.
    * This is the main mechanism that can be used to

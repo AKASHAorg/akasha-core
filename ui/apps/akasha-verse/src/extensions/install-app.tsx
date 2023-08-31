@@ -5,10 +5,11 @@ import singleSpaReact from 'single-spa-react';
 import getSDK from '@akashaorg/awf-sdk';
 import InstallApp from '@akashaorg/design-system-components/lib/components/InstallApp';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { EventTypes, UIEventData, RootExtensionProps } from '@akashaorg/typings/ui';
+import { EventDataTypes, EventTypes, RootExtensionProps, UIEventData } from '@akashaorg/typings/ui';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { filterEvent } from '@akashaorg/ui-app-loader/lib/events';
 
 const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   const { extensionData, uiEvents, singleSpa } = props;
@@ -39,12 +40,9 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
         }
       },
     });
-    const sub = uiEvents.subscribe({
-      next: (eventData: UIEventData) => {
-        if (
-          eventData.event === EventTypes.RegisterIntegration &&
-          eventData.data.name === integrationName
-        ) {
+    const sub = uiEvents.pipe(filterEvent(EventTypes.RegisterIntegration)).subscribe({
+      next: (eventData: { event: EventTypes; data?: EventDataTypes }) => {
+        if (eventData.data.name === integrationName) {
           setModalState(3);
         }
       },

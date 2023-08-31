@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
+import { EventDataTypes, EventTypes, RootComponentProps, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
 import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
-
 import {
   startMobileSidebarHidingBreakpoint,
   startWidgetsTogglingBreakpoint,
@@ -15,9 +14,10 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { filterEvent } from '@akashaorg/ui-app-loader/lib/events';
 
 const Layout: React.FC<RootComponentProps> = props => {
-  const [activeModal, setActiveModal] = useState<UIEventData['data'] | null>(null);
+  const [activeModal, setActiveModal] = useState<EventDataTypes | null>(null);
   const [needSidebarToggling, setNeedSidebarToggling] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
@@ -85,7 +85,7 @@ const Layout: React.FC<RootComponentProps> = props => {
   };
 
   const handleModal = useCallback(
-    (data: UIEventData['data']) => {
+    (data: EventDataTypes) => {
       setActiveModal(active => {
         if ((!active || !active.name) && data.name) {
           return data;
@@ -111,29 +111,37 @@ const Layout: React.FC<RootComponentProps> = props => {
   });
 
   useEffect(() => {
-    const eventsSub = uiEvents.current.subscribe({
-      next: (eventInfo: UIEventData) => {
-        switch (eventInfo.event) {
-          case EventTypes.ModalRequest:
-            handleModal(eventInfo.data);
-            break;
-          case EventTypes.ShowSidebar:
-            handleSidebarShow();
-            break;
-          case EventTypes.HideSidebar:
-            handleSidebarHide();
-            break;
-          case EventTypes.ShowWidgets:
-            handleWidgetsShow();
-            break;
-          case EventTypes.HideWidgets:
-            handleWidgetsHide();
-            break;
-          default:
-            break;
-        }
-      },
-    });
+    const eventsSub = uiEvents.current
+      .pipe(
+        filterEvent(EventTypes.ModalRequest),
+        filterEvent(EventTypes.ShowSidebar),
+        filterEvent(EventTypes.HideSidebar),
+        filterEvent(EventTypes.ShowSidebar),
+        filterEvent(EventTypes.HideWidgets),
+      )
+      .subscribe({
+        next: (eventInfo: UIEventData) => {
+          switch (eventInfo.event) {
+            case EventTypes.ModalRequest:
+              handleModal(eventInfo.data as EventDataTypes);
+              break;
+            case EventTypes.ShowSidebar:
+              handleSidebarShow();
+              break;
+            case EventTypes.HideSidebar:
+              handleSidebarHide();
+              break;
+            case EventTypes.ShowWidgets:
+              handleWidgetsShow();
+              break;
+            case EventTypes.HideWidgets:
+              handleWidgetsHide();
+              break;
+            default:
+              break;
+          }
+        },
+      });
     uiEvents.current.next({
       event: EventTypes.LayoutReady,
     });

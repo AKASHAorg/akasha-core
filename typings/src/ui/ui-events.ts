@@ -1,9 +1,11 @@
 import { IMenuItem } from './menu-items';
+import { EditorBlockInterface } from './editor-blocks';
 
 export enum EventTypes {
   Instantiated = 'instantiated',
   InstallIntegration = 'install-integration',
   RegisterIntegration = 'register-integration',
+  RegisterEditorBlock = 'register-editor-block',
   UninstallIntegration = 'uninstall-integration',
   ExtensionPointMount = 'extension-point-mount',
   ExtensionPointMountRequest = 'extension-point-mount-request',
@@ -64,7 +66,12 @@ export type EventDataTypes = {
   [key: string]: unknown;
 };
 
-export interface UIEventData {
-  event: EventTypes;
-  data?: EventDataTypes;
-}
+export type UIEventData =
+  | {
+      event: Omit<EventTypes, EventTypes.RegisterEditorBlock>;
+      data?: EventDataTypes;
+    }
+  | {
+      event: EventTypes.RegisterEditorBlock;
+      data?: EditorBlockInterface[];
+    };
