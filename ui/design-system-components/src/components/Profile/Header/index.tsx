@@ -13,8 +13,7 @@ import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyTo
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 
 export type HeaderProps = {
   did: Profile['did'];
@@ -28,6 +27,7 @@ export type HeaderProps = {
   copyLabel?: string;
   copiedLabel?: string;
   followElement?: ReactElement;
+  publicImagePath: string;
   handleEdit?: () => void;
 };
 
@@ -43,9 +43,12 @@ const Header: React.FC<HeaderProps> = ({
   copyLabel,
   copiedLabel,
   followElement,
+  publicImagePath,
   handleEdit,
 }) => {
   const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
+  const seed = getImageFromSeed(did.id, 3);
+  const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
 
   return (
     <Box>
@@ -53,11 +56,9 @@ const Header: React.FC<HeaderProps> = ({
         elevation="1"
         radius={{ top: 20 }}
         background={{ light: 'grey7', dark: 'grey5' }}
-        customStyle={`h-32 ${
-          background?.default
-            ? `bg-center bg-no-repeat	bg-cover bg-[url(${background?.default.src})]`
-            : ''
-        }`}
+        customStyle={`h-32 ${`bg-center bg-no-repeat	bg-cover bg-[url(${
+          background?.default.src || coverImageFallback
+        })]`}`}
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
         <Stack direction="column" customStyle="pl-2" fullWidth>
