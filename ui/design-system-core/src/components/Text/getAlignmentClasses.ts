@@ -1,6 +1,6 @@
-import { Alignment } from './index';
+import { TextAlignment } from './index';
 
-export function getAlignmentClasses(align: Alignment) {
+export function getAlignmentClasses(align: TextAlignment) {
   switch (align) {
     case 'start':
       return 'text-start';

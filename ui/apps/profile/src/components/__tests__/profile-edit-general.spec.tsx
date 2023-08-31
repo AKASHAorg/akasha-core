@@ -55,7 +55,7 @@ describe('< ProfileInfoPage />', () => {
     });
   });
 
-  it('should render general tab of edit page', async () => {
+  it('should render edit page', async () => {
     expect(screen.getByRole('heading', { name: 'Avatar & Cover Image' })).toBeInTheDocument();
   });
 
@@ -64,7 +64,7 @@ describe('< ProfileInfoPage />', () => {
   });
 
   it('should have an enabled save button when name changes', async () => {
-    const nameInput = screen.getByLabelText('Name');
+    const nameInput = screen.getByLabelText(/Name/i);
 
     userEvent.clear(nameInput);
     await userEvent.type(nameInput, 'Orion');
@@ -72,7 +72,7 @@ describe('< ProfileInfoPage />', () => {
   });
 
   it('should show error when name contains illegal characters', async () => {
-    const nameInput = screen.getByLabelText('Name');
+    const nameInput = screen.getByLabelText(/Name/i);
 
     userEvent.clear(nameInput);
     await userEvent.type(nameInput, '&**$$');
@@ -84,28 +84,12 @@ describe('< ProfileInfoPage />', () => {
   });
 
   it('should show error when name is less than 3 characters long', async () => {
-    const nameInput = screen.getByLabelText('Name');
+    const nameInput = screen.getByLabelText(/Name/i);
 
     userEvent.clear(nameInput);
     await userEvent.type(nameInput, 'O');
     await waitFor(() =>
       expect(screen.getByText('Must be at least 3 characters')).toBeInTheDocument(),
-    );
-  });
-
-  it('should show warning model when user tries to leave unsaved changes', async () => {
-    const nameInput = screen.getByLabelText('Name');
-
-    userEvent.clear(nameInput);
-    await userEvent.type(nameInput, 'Orion');
-
-    await userEvent.click(screen.getByText('External URLs'));
-    await waitFor(() =>
-      expect(
-        screen.getByText(
-          `It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!`,
-        ),
-      ).toBeInTheDocument(),
     );
   });
 });

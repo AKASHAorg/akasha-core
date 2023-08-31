@@ -32,3 +32,5 @@ export {
   useFetchNotifications,
   useMarkAsRead,
 } from './use-notifications';
+
+export { useShowFeedback } from './use-show-feedback';

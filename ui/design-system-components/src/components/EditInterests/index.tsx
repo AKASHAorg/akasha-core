@@ -1,17 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { apply, tw } from '@twind/core';
-
-import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/sdk/graphql-types-new';
-
+import React, { useCallback, useEffect, useState } from 'react';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { apply, tw } from '@twind/core';
+import { ButtonType } from '../types/common.types';
+import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/sdk/graphql-types-new';
 
-import { ButtonType } from '../types';
-
-export type InterestsProps = {
+export type EditInterestsProps = {
   title: string;
   subTitle: string;
   description: string;
@@ -33,7 +30,7 @@ export type InterestsProps = {
   onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const Interests: React.FC<InterestsProps> = ({
+const EditInterests: React.FC<EditInterestsProps> = ({
   title,
   subTitle,
   description,
@@ -126,9 +123,9 @@ export const Interests: React.FC<InterestsProps> = ({
             {description}
           </Text>
           <Stack spacing="gap-2" customStyle="flex-wrap mt-2">
-            {[...allMyInterests].map(interest => (
+            {[...allMyInterests].map((interest, index) => (
               <Pill
-                key={interest.value}
+                key={`${index}-${interest.value}`}
                 label={interest.value}
                 icon={myActiveInterests.has(interest) ? 'CheckIcon' : null}
                 iconDirection="right"
@@ -210,3 +207,5 @@ export const Interests: React.FC<InterestsProps> = ({
     </form>
   );
 };
+
+export default EditInterests;

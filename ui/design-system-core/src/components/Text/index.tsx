@@ -22,9 +22,9 @@ export type ButtonText = 'button-lg' | 'button-md' | 'button-sm';
 
 export type Variant = Heading | BodyText | ButtonText;
 
-export type Alignment = 'start' | 'center' | 'end' | 'justify';
+export type TextAlignment = 'start' | 'center' | 'end' | 'justify';
 
-export type Weight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
+export type FontWeight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
 
 export type TextProps = {
   id?: string;
@@ -32,11 +32,11 @@ export type TextProps = {
   variant?: Variant;
   color?: Color;
   as?: Heading | 'p' | 'span' | 'label';
-  align?: Alignment;
+  align?: TextAlignment;
   truncate?: boolean;
   breakWord?: boolean;
   lineClamp?: number;
-  weight?: Weight;
+  weight?: FontWeight;
   ref?: React.Ref<HTMLElement>;
   selectable?: boolean;
 };
