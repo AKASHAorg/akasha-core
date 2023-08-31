@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import { RootComponentProps } from '@akashaorg/typings/ui';
 
-const InvitePage: React.FC<RootComponentProps> = props => {
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
+const InvitePage = () => {
   const { inviteCode } = useParams<{ inviteCode: string }>();
+  const { getRoutingPlugin } = useRootComponentProps();
+
   if (inviteCode) {
     localStorage.setItem('@signUpToken', inviteCode);
   }
-  props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({ getNavigationUrl: () => '/' });
+  getRoutingPlugin().navigateTo?.({ getNavigationUrl: () => '/' });
   return <div />;
 };
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BaseEntryPage from './common/base-page';
 import { useParams } from 'react-router-dom';
-import { RootComponentProps, ModalNavigationOptions, EntityTypes } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions, EntityTypes } from '@akashaorg/typings/ui';
 import { useDummyQuery } from '@akashaorg/ui-awf-hooks';
 
 type PostPageProps = {
@@ -9,8 +9,8 @@ type PostPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
-  const { userId } = props;
+const PostPage: React.FC<PostPageProps> = props => {
+  const { showLoginModal } = props;
 
   const { postId } = useParams<{
     postId: string;
@@ -20,7 +20,7 @@ const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
 
   return (
     <BaseEntryPage
-      {...props}
+      showLoginModal={showLoginModal}
       feedQueryKey="akasha-beam-page-query"
       postId={postId}
       itemType={EntityTypes.BEAM}

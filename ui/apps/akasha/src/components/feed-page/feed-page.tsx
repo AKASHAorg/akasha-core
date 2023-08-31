@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import {
   ModalNavigationOptions,
   IPublishData,
-  RootComponentProps,
   EntityTypes,
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
@@ -13,6 +11,7 @@ import {
   useAnalytics,
   useDismissedCard,
   useEntryNavigation,
+  useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
@@ -27,20 +26,13 @@ export interface FeedPageProps {
   loggedProfileData?: Profile;
 }
 
-const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const {
-    logger,
-    loggedProfileData,
-    plugins,
-    uiEvents,
-    layoutConfig,
-    showLoginModal,
-    navigateToModal,
-  } = props;
+const FeedPage: React.FC<FeedPageProps> = props => {
+  const { loggedProfileData, showLoginModal } = props;
+
+  const { uiEvents, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
 
   const { t } = useTranslation('app-akasha-integration');
-  const locale = (plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
-    'en') as ILocale;
 
   const [analyticsActions] = useAnalytics();
 
@@ -74,6 +66,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       }
       navigateToModal({ name: 'report-modal', itemId, itemType });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [loggedProfileData?.did?.id],
   );
 
@@ -83,6 +76,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       itemType: EntityTypes.BEAM,
       itemId,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleWriteToUsLabelClick = () => {
@@ -97,7 +91,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     if (!loggedProfileData?.did.id) {
       navigateToModal({ name: 'login' });
     } else {
-      plugins['@akashaorg/app-routing'].navigateTo?.({
+      getRoutingPlugin().navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: () => `/feed?repost=${beamId}`,
       });
@@ -170,9 +164,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         onEntryRemove={handleEntryRemove}
         uiEvents={uiEvents}
         itemSpacing={8}
-        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+        i18n={getTranslationPlugin().i18n}
         onRebeam={handleRebeam}
-        onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
+        onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
       />
     </Box>
   );

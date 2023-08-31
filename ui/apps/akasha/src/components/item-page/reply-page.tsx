@@ -2,13 +2,13 @@ import * as React from 'react';
 import BaseEntryPage from './common/base-page';
 import { useParams } from 'react-router-dom';
 import { useDummyQuery } from '@akashaorg/ui-awf-hooks';
-import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 
 type ReplyPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
+const ReplyPage: React.FC<ReplyPageProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();
 
   // @TODO replace with new hooks
