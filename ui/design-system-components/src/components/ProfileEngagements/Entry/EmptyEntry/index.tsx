@@ -17,7 +17,13 @@ const EmptyEntry: React.FC<EmptyEntryProps> = ({
   viewerIsOwner = true,
 }) => {
   if (!viewerIsOwner && type === 'following')
-    return <InfoCard titleLabel={`@${userName} is not following anyone yet!`} />;
+    return (
+      <InfoCard
+        titleLabel={`@${userName} is not following anyone yet!`}
+        publicImgPath="/images"
+        assetName="longbeam-notfound.webp"
+      />
+    );
 
   let props = {
     titleLabel: titleLabel ? titleLabel : 'Looks like there are no followers!',
