@@ -33,9 +33,9 @@ const InfoCard: React.FC<InfoCardProps> = ({
     >
       {assetName ? (
         <img
-          className={tw('object-contain h-56')}
+          className={tw('object-contain h-[11.25rem]')}
           aria-label={assetName}
-          src={`${publicImgPath}/${assetName}.webp`}
+          src={`${publicImgPath}/${assetName}`}
           alt={assetName}
         />
       ) : (

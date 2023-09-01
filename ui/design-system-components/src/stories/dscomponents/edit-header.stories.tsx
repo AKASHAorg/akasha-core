@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Header, HeaderProps } from '../../components/EditProfile/GeneralForm/Header';
+import { Header, HeaderProps } from '../../components/EditProfile/General/Header';
 
 const meta: Meta<HeaderProps> = {
   title: 'DSComponents/Profile/Edit/Header',
@@ -15,7 +15,7 @@ const profileId = 'did:key:003410490050000320006570034567114572000';
 
 const avatar = {
   default: {
-    src: 'https://next.akasha-world-framework.pages.dev/images/avatar-placeholder-1.webp',
+    src: 'https://next.akasha-world-framework.pages.dev/images/avatar-1-min.webp',
     height: 360,
     width: 360,
   },
@@ -47,6 +47,7 @@ export const BaseHeader: Story = {
         avatar: 'Are you sure you want to delete your avatar? ',
         coverImage: 'Are you sure you want to delete your cover?',
       }}
+      publicImagePath="/images"
       onAvatarChange={() => ({})}
       onCoverImageChange={() => ({})}
       onImageDelete={() => ({})}

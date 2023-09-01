@@ -7,7 +7,7 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-export type MasterEngagementsPageProps = {
+export type EngagementTabProps = {
   isLoggedIn: boolean;
   navigateTo: (args: NavigateToParams) => void;
 };
@@ -22,7 +22,7 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
   [routes[FOLLOWING]]: 1,
 };
 
-const MasterPage: React.FC<PropsWithChildren<MasterEngagementsPageProps>> = props => {
+const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => {
   const { isLoggedIn, children, navigateTo } = props;
   const { t } = useTranslation('app-profile');
   const { profileId } = useParams<{ profileId: string }>();
@@ -56,4 +56,4 @@ const MasterPage: React.FC<PropsWithChildren<MasterEngagementsPageProps>> = prop
   );
 };
 
-export default MasterPage;
+export default EngagementTab;

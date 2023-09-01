@@ -10,7 +10,7 @@ import { ButtonType } from '../../types/common.types';
 
 type InputType = { label: string; initialValue: string };
 
-export type GeneralFormProps = {
+export type GeneralProps = {
   header: Omit<HeaderProps, 'onAvatarChange' | 'onCoverImageChange'>;
   name: InputType;
   userName?: InputType;
@@ -23,7 +23,7 @@ export type GeneralFormProps = {
   onCoverImageChange: (coverImage: File) => void;
 };
 
-export const GeneralForm: React.FC<GeneralFormProps> = ({
+export const General: React.FC<GeneralProps> = ({
   header,
   name: nameField,
   userName: userNameField,

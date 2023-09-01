@@ -29,6 +29,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     customStyle = '',
     active,
     hover = true,
+    hoverColor,
     ...rest
   } = props;
 
@@ -53,15 +54,24 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         customStyle={customStyle}
         active={active}
         hover={hover}
+        hoverColor={hoverColor}
         ref={ref}
         {...rest}
       />
     );
   }
 
-  const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled, active, hover });
+  const containerStyle = getContainerClasses({
+    variant,
+    loading,
+    greyBg,
+    disabled,
+    active,
+    hover,
+    hoverColor,
+  });
 
-  const textStyle = getTextClasses({ variant, loading, disabled, hover, active });
+  const textStyle = getTextClasses({ variant, loading, disabled, hover, hoverColor, active });
 
   const breakPointStyle = breakPointSize
     ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
