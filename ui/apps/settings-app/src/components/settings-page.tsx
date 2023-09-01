@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -9,23 +8,27 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import PageLayout from './base-layout';
 import { ISettingsItem, settingsItems, SettingsOption } from '../utils/settings-items';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export interface BaseOption {
   titleLabel: string;
 }
 
-const SettingsPage: React.FC<BaseOption & RootComponentProps> = props => {
+const SettingsPage: React.FC<BaseOption> = props => {
+  const { titleLabel } = props;
+
   const { t } = useTranslation('app-settings-ewa');
+  const { getRoutingPlugin } = useRootComponentProps();
 
   const handleSettingsOptionClick = (option: SettingsOption) => () => {
-    return props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    return getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-settings-ewa',
       getNavigationUrl: navRoutes => navRoutes[option],
     });
   };
 
   return (
-    <PageLayout title={t('Settings')}>
+    <PageLayout title={titleLabel}>
       <Box customStyle="px-4">
         {settingsItems.map((item: ISettingsItem, idx: number) => {
           const baseStyle = `flex py-4 justify-between items-center ${
