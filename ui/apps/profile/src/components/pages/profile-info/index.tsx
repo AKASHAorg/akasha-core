@@ -3,10 +3,10 @@ import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ProfileStatsPresentation from '../profile-stats-presentation';
+import ProfileStatsPresentation from '../../profile-stats-presentation';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
-import routes, { EDIT } from '../../routes';
-import IconButtonFollow from '../icon-button-follow/icon-button-follow';
+import routes, { EDIT } from '../../../routes';
+import IconButtonFollow from '../../icon-button-follow/icon-button-follow';
 import {
   ProfileHeader,
   ProfileBio,
@@ -157,6 +157,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
           menuItems={menuItems}
           copyLabel={t('Copy to clipboard')}
           copiedLabel={t('Copied')}
+          publicImagePath="/images"
           followElement={
             <IconButtonFollow
               profileId={profileId}

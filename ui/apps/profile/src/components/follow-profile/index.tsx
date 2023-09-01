@@ -112,7 +112,11 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
       active={!!following}
       size="sm"
       loading={loading}
-      allowMinimization
+      hoverColor={{
+        background: { light: 'errorLight/20', dark: 'errorDark/20' },
+        border: { light: 'errorLight', dark: 'errorDark' },
+        text: { light: 'errorLight', dark: 'errorDark' },
+      }}
     />
   );
 };

@@ -22,6 +22,7 @@ const commonProps = {
   avatar: { default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 } },
   name: 'Coffee Lover',
   flagLabel: 'Report',
+  publicImagePath: '/images',
 };
 
 const variants = [

@@ -46,6 +46,7 @@ export const BaseEditProfile: Story = {
           avatar: 'Are you sure you want to delete your avatar?',
           coverImage: 'Are you sure you want to delete your cover?',
         },
+        publicImagePath: '/images',
         dragToRepositionLabel: 'Drag to reposition',
         isSavingImage: false,
         onImageSave: () => ({}),
@@ -79,7 +80,6 @@ export const BaseEditProfile: Story = {
       addNewLinkButtonLabel="Add new"
       description="You can add your personal websites or social links to be shared on your profile"
       socialLinks={[]}
-      onDeleteLink={() => ({})}
     />
   ),
 };

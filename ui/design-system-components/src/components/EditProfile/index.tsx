@@ -6,7 +6,7 @@ import { SocialLinks, SocialLinksProps } from './SocialLinks';
 import { apply, tw } from '@twind/core';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { GeneralForm, GeneralFormProps } from './GeneralForm';
+import { General, GeneralProps } from './General';
 import { EditProfileFormValues } from './types';
 import { ButtonType } from '../types/common.types';
 
@@ -18,8 +18,8 @@ export type EditProfileProps = {
     loading?: boolean;
     handleClick: (formValues: EditProfileFormValues) => void;
   };
-} & Omit<GeneralFormProps, 'control' | 'onAvatarChange' | 'onCoverImageChange'> &
-  Omit<SocialLinksProps, 'control'>;
+} & Omit<GeneralProps, 'control' | 'onAvatarChange' | 'onCoverImageChange'> &
+  Omit<SocialLinksProps, 'control' | 'onDeleteLink'>;
 
 const EditProfile: React.FC<EditProfileProps> = ({
   defaultValues = {
@@ -54,7 +54,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
   return (
     <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
       <Stack direction="column" spacing="gap-y-4">
-        <GeneralForm
+        <General
           {...rest}
           control={control}
           onAvatarChange={avatar => {
@@ -69,7 +69,6 @@ const EditProfile: React.FC<EditProfileProps> = ({
           control={control}
           onDeleteLink={index => {
             unregister(`links.${index}`);
-            rest.onDeleteLink(index);
           }}
         />
         <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">

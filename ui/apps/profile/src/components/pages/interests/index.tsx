@@ -119,6 +119,7 @@ const InterestsPage: React.FC<RootComponentProps> = props => {
         background={background}
         avatar={avatar}
         name={profileData?.name}
+        publicImagePath="/images"
       />
       <Card elevation="1" radius={20} padding={'p-4'}>
         {profileId !== loginQuery.data?.id && (
