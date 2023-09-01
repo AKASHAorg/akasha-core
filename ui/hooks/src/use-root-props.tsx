@@ -10,7 +10,7 @@ const DEFAULT_EDITOR_BLOCKS_PLUGIN = '@akashaorg/app-akasha-integration';
 const RootComponentPropsProvider = ({
   children,
   ...props
-}: RootComponentProps & { children: React.ReactNode }) => {
+}: RootComponentProps | RootExtensionProps) => {
   return (
     <RootComponentPropsContext.Provider value={props}>
       {children}
@@ -18,8 +18,8 @@ const RootComponentPropsProvider = ({
   );
 };
 
-const useRootComponentProps = () => {
-  const ctx = React.useContext<RootComponentProps | RootExtensionProps>(RootComponentPropsContext);
+const useRootComponentProps = <T extends RootComponentProps>() => {
+  const ctx = React.useContext<T>(RootComponentPropsContext);
   const getRoutingPlugin = React.useCallback(
     (ns = DEFAULT_ROUTING_PLUGIN) => {
       if (hasOwn(ctx.plugins, ns)) {

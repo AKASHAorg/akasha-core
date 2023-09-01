@@ -1,5 +1,13 @@
 import { IMenuItem } from './menu-items';
-import { EditorBlockInterface } from './editor-blocks';
+import {
+  BlockAction,
+  BlockActionType,
+  BlockName,
+  EditorBlock,
+  EditorBlockInterface,
+} from './editor-blocks';
+import { AnalyticsEventData } from './analytics';
+import { AppName } from './apps';
 
 export enum EventTypes {
   Instantiated = 'instantiated',
@@ -66,12 +74,32 @@ export type EventDataTypes = {
   [key: string]: unknown;
 };
 
+export type BlockCommandRequest = {
+  event: `${AppName}_${BlockName}/${BlockAction}`;
+  data: EditorBlock;
+};
+
+export type BlockCommandResponse = {
+  event: `${AppName}_${BlockName}/${BlockAction}_${BlockActionType}`;
+  data: {
+    block: EditorBlock;
+    // @TODO: this response must contain published content block id ??
+    response: { error?: string; blockID?: string };
+  };
+};
+
+export type EditorBlockRegisterEvent = {
+  event: EventTypes.RegisterEditorBlock;
+  data?: (EditorBlockInterface & { appName: string })[];
+};
+
+// @TODO: merge UIEventData with AnalyticsEventData!!
+// @TODO: split EventTypes with their respective EventDataTypes as the example below
 export type UIEventData =
   | {
       event: Omit<EventTypes, EventTypes.RegisterEditorBlock>;
       data?: EventDataTypes;
     }
-  | {
-      event: EventTypes.RegisterEditorBlock;
-      data?: (EditorBlockInterface & { appName: string })[];
-    };
+  | EditorBlockRegisterEvent
+  | BlockCommandRequest
+  | BlockCommandResponse;

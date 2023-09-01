@@ -52,7 +52,7 @@ export interface LoaderState {
       register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
       initialize?: (opts: Partial<IntegrationRegistrationOptions>) => Promise<void> | void;
       getPlugin?: (
-        opts: IntegrationRegistrationOptions & {
+        opts: Omit<IntegrationRegistrationOptions, 'layoutConfig'> & {
           encodeAppName: (name: string) => string;
           decodeAppName: (name: string) => string;
         },

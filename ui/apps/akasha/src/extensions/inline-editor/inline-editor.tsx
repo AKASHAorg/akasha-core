@@ -1,22 +1,26 @@
 import * as React from 'react';
 import { EntityTypes, RootExtensionProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { filterEvents, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ReplyEditor } from './reply-editor';
 import { PostEditor } from './post-editor';
 import { IDraftStorage } from './utils';
+import { uiEvents } from '@akashaorg/ui-app-loader/lib/events';
 
 export const InlineEditor = (
   props: Partial<RootExtensionProps> & { draftStorage?: IDraftStorage },
 ) => {
+  const { extensionData, worldConfig, singleSpa } = props;
   const loginQuery = useGetLogin();
-  const action = props.extensionData?.action;
-  const itemId = props.extensionData?.itemId;
-  const itemType = props.extensionData?.itemType;
+  const { action, itemId, itemType, block } = extensionData;
   const draftStorage = props.draftStorage || localStorage;
+
+  React.useEffect(() => {
+    console.log(extensionData, '<< extension data in editor block');
+  }, [extensionData]);
 
   /*ReplyEditor handles reply to a comment and editing a comment*/
   if (itemType === EntityTypes.REFLECT && itemId && (action === 'reply' || action === 'edit')) {
-    return <ReplyEditor commentId={itemId} singleSpa={props.singleSpa} action={action} />;
+    return <ReplyEditor commentId={itemId} singleSpa={singleSpa} action={action} />;
   }
 
   /*PostEditor handles reply to a post, repost, and editing a post*/
@@ -28,10 +32,10 @@ export const InlineEditor = (
   ) {
     return (
       <PostEditor
-        appName={props?.worldConfig?.homepageApp || 'inline-editor'}
+        appName={worldConfig?.homepageApp || 'inline-editor'}
         postId={itemId}
         userId={loginQuery?.data?.id}
-        singleSpa={props.singleSpa}
+        singleSpa={singleSpa}
         action={action}
         draftStorage={draftStorage}
       />

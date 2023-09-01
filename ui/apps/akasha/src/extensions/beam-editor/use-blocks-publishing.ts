@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { RootComponentProps, UIEventData } from '@akashaorg/typings/ui';
-import { EditorBlockInterface } from '@akashaorg/typings/ui/editor-blocks';
+import { BlockCommandResponse, RootComponentProps } from '@akashaorg/typings/ui';
+import { BlockActionType, EditorBlock } from '@akashaorg/typings/ui/editor-blocks';
+import { filterEvents } from '@akashaorg/ui-awf-hooks';
 
 /**
  * Steps when publishBeam is called:
@@ -17,33 +18,101 @@ const DEFAULT_TEXT_BLOCK = 'slate-block';
 
 export type UseBlocksPublishingProps = {
   uiEvents: RootComponentProps['uiEvents'];
-  availableBlocks: EditorBlockInterface[];
+  availableBlocks: Omit<EditorBlock, 'idx'>[];
+  onBeamPublish: (publishedBlocks: BlockCommandResponse['data'][]) => void;
 };
 
 export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
-  const { uiEvents, availableBlocks } = props;
+  const { uiEvents, availableBlocks, onBeamPublish } = props;
   const [isPublishing, setIsPublishing] = React.useState(false);
-  const [blocksInUse, setBlocksInUse] = React.useState<EditorBlockInterface[]>([]);
+  const [blocksInUse, setBlocksInUse] = React.useState<EditorBlock[]>([]);
 
-  const [publishedBlocks, setPublishedBlocks] = React.useState();
+  const [publishedBlocks, setPublishedBlocks] = React.useState<BlockCommandResponse['data'][]>([]);
   const defaultTextBlock = availableBlocks.find(block => block.name === DEFAULT_TEXT_BLOCK);
 
   React.useEffect(() => {
     if (blocksInUse.length === 0) {
       // always add the default block
-      setBlocksInUse([defaultTextBlock]);
+      setBlocksInUse([{ ...defaultTextBlock, idx: 0 }]);
     }
-  }, [blocksInUse]);
+  }, [blocksInUse, defaultTextBlock]);
 
-  const publishBeam = React.useCallback(() => {
-    console.log('fire an event to create contentBlocks for', blocksInUse);
-  }, [blocksInUse]);
+  // subscribe to contentBlock creation event
+  // add the response along with the block data to the publishedBlocks state
+  React.useEffect(() => {
+    const blockEvents = blocksInUse.map(
+      block => `${block.appName}_${block.eventMap.publish}_${BlockActionType.SUCCESS}`,
+    );
+
+    const sub = uiEvents.pipe(filterEvents(blockEvents)).subscribe({
+      next: (event: BlockCommandResponse) => {
+        const blockData = event.data.block;
+        if (
+          publishedBlocks.some(
+            published =>
+              published.block.name === blockData.name && published.block.idx === blockData.idx,
+          )
+        ) {
+          return;
+        }
+        setPublishedBlocks(prev => [...prev, event.data]);
+      },
+    });
+    return () => {
+      sub.unsubscribe();
+    };
+  }, [blocksInUse, publishedBlocks, uiEvents]);
+
+  // check if all used blocks are published
+  // and then trigger beam publishing;
+  React.useEffect(() => {
+    // this check is mandatory because array.some returns true if the array is empty :O
+    if (!publishedBlocks.length) {
+      return;
+    }
+    const isAllPublishedWithSuccess = blocksInUse.every(bl =>
+      publishedBlocks.some(
+        pBlock =>
+          pBlock.block.name === bl.name && pBlock.block.idx === bl.idx && !pBlock.response.error,
+      ),
+    );
+    // @TODO: handle errors!
+    if (isAllPublishedWithSuccess) {
+      console.log('publishing beam with blocks:', publishedBlocks);
+      onBeamPublish(publishedBlocks);
+    }
+  }, [blocksInUse, onBeamPublish, publishedBlocks]);
+
+  const createContentBlocks = React.useCallback(() => {
+    for (const block of blocksInUse) {
+      uiEvents.next({
+        event: `${block.appName}_${block.eventMap.publish}`,
+        data: block,
+      });
+    }
+  }, [blocksInUse, uiEvents]);
+
+  // convenience method to add a new block into the beam editor
+  // if index (idx) param is omitted, it will be added as the last block in the list
+  const addBlockToList = (block: UseBlocksPublishingProps['availableBlocks'][0], idx?: number) => {
+    if (idx) {
+      setBlocksInUse(prev => [
+        ...prev.slice(0, idx),
+        { ...block, idx: idx },
+        ...prev.slice(idx).map(bl => ({
+          ...bl,
+          idx: bl.idx + 1,
+        })),
+      ]);
+    }
+    setBlocksInUse(prev => [...prev, { ...block, idx: prev.length }]);
+  };
 
   return {
     isPublishing,
     setIsPublishing,
-    publishBeam,
+    createContentBlocks,
     blocksInUse,
-    setBlocksInUse,
+    addBlockToList,
   };
 };

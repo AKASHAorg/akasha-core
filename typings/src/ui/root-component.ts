@@ -12,7 +12,7 @@ import type { ILogger } from '../sdk/log';
 export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement: HTMLElement;
-  uiEvents: Subject<UIEventData | AnalyticsEventData>;
+  uiEvents: Subject<Extract<UIEventData, { event: UIEventData['event'] }> | AnalyticsEventData>;
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
   layoutConfig: IAppConfig['extensions'];

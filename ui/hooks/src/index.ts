@@ -8,6 +8,7 @@ export * from './utils/provider-hoc';
 export * from './utils/generic-utils';
 export * from './utils/entry-utils';
 export * from './utils/media-utils';
+export * from './utils/event-utils';
 export * from './use-login.new';
 export { hasOwn } from './utils/has-own';
 export { useQueryListener, useMutationListener, useMutationsListener } from './use-query-listener';
@@ -25,6 +26,7 @@ export { useDismissedCard } from './use-dismissed-card';
 export { useValidDid } from './use-valid-did';
 export { disconnectProvider, useInjectedProvider } from './use-injected-provider';
 export { useModerationCategory } from './use-moderation-categories';
+export * from './use-editor-blocks';
 
 // the following hooks needs refactor/reimplementation
 export {

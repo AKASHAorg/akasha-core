@@ -3,7 +3,11 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { EventDataTypes, EventTypes, RootComponentProps, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
-import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
+import {
+  filterEvents,
+  usePlaformHealthCheck,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import {
   startMobileSidebarHidingBreakpoint,
   startWidgetsTogglingBreakpoint,
@@ -14,7 +18,6 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { filterEvent } from '@akashaorg/ui-app-loader/lib/events';
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = useState<EventDataTypes | null>(null);
@@ -113,11 +116,13 @@ const Layout: React.FC<RootComponentProps> = props => {
   useEffect(() => {
     const eventsSub = uiEvents.current
       .pipe(
-        filterEvent(EventTypes.ModalRequest),
-        filterEvent(EventTypes.ShowSidebar),
-        filterEvent(EventTypes.HideSidebar),
-        filterEvent(EventTypes.ShowSidebar),
-        filterEvent(EventTypes.HideWidgets),
+        filterEvents([
+          EventTypes.ModalRequest,
+          EventTypes.ShowSidebar,
+          EventTypes.HideSidebar,
+          EventTypes.ShowSidebar,
+          EventTypes.HideWidgets,
+        ]),
       )
       .subscribe({
         next: (eventInfo: UIEventData) => {
@@ -266,12 +271,16 @@ const Layout: React.FC<RootComponentProps> = props => {
   );
 };
 
-const LayoutWidget: React.FC<RootComponentProps> = props => (
-  <Router>
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
-      <Layout {...props} />
-    </I18nextProvider>
-  </Router>
-);
+const LayoutWidget: React.FC<RootComponentProps> = props => {
+  const { getTranslationPlugin } = useRootComponentProps();
+  const { i18n } = getTranslationPlugin();
+  return (
+    <Router>
+      <I18nextProvider i18n={i18n}>
+        <Layout {...props} />
+      </I18nextProvider>
+    </Router>
+  );
+};
 
 export default React.memo(LayoutWidget);

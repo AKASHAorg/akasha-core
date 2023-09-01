@@ -42,6 +42,8 @@ export type Extensions = { [key: string]: string } & {
   focusedPluginSlotId?: string;
 };
 
+export type AppName = string;
+
 export interface IAppConfig {
   /**
    * Optional property.

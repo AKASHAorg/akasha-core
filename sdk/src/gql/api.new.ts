@@ -38,6 +38,7 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ gql`
     fragment ContentBlockFragment on AkashaContentBlock {
+  id
   content {
     propertyType
     value

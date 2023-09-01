@@ -80,13 +80,14 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       eventMap: {
         publish: `slate-block/${BlockAction.PUBLISH}`,
         update: `slate-block/${BlockAction.UPDATE}`,
+        validate: `slate-block/${BlockAction.VALIDATE}`,
       },
     },
   ],
   extends: (matcher, loader) => {
     matcher({
       'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
-      'slate-block_*': loader(() => import('./extensions/inline-editor')),
+      'slate-block_*': loader(() => import('./extensions/slate-block')),
       'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
       'beam-editor_*': loader(() => import('./extensions/beam-editor')),
     });

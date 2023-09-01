@@ -52,6 +52,7 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ `
     fragment ContentBlockFragment on AkashaContentBlock {
+  id
   content {
     propertyType
     value

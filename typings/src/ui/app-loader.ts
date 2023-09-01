@@ -27,7 +27,7 @@ export interface IntegrationRegistrationOptions {
 
 export interface ExtensionMatcherFn<G = ReplaySubject<GlobalEventBusData>> {
   (
-    uiEvents: Subject<UIEventData>,
+    uiEvents: RootComponentProps['uiEvents'],
     globalChannel: G,
     extProps: Omit<
       RootExtensionProps,

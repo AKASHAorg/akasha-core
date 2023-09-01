@@ -47,11 +47,11 @@ export class RoutingPlugin {
         event: Omit<EventTypes, EventTypes.RegisterEditorBlock>;
         data?: EventDataTypes;
       }) => {
-        // allow only one entry per app
-        if (RoutingPlugin.routeRepository.all[eventData.data.name]) {
-          return;
-        }
         if (eventData.event && eventData.event === EventTypes.RegisterIntegration) {
+          // allow only one entry per app
+          if (RoutingPlugin.routeRepository.all[eventData.data.name]) {
+            return;
+          }
           if (Array.isArray(eventData.data.menuItems)) {
             eventData.data.menuItems.forEach(item => {
               const appMenuItemData = {
