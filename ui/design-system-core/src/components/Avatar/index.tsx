@@ -8,7 +8,7 @@ import AvatarImage from './avatar-image';
 import {
   generateActiveOverlayClass,
   generateAvatarContainerStyle,
-  getAvatarFromSeed,
+  getImageFromSeed,
 } from '../../utils';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
@@ -53,8 +53,8 @@ const Avatar: React.FC<AvatarProps> = props => {
   let avatarImageFallback: string;
 
   if (!avatarImageFallback) {
-    const seed = getAvatarFromSeed(profileId);
-    avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
+    const seed = getImageFromSeed(profileId, 7);
+    avatarImageFallback = `${publicImgPath}/avatar-${seed}-min.webp`;
   }
 
   const containerStyle = generateAvatarContainerStyle({

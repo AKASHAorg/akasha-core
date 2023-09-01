@@ -8,6 +8,7 @@ interface IContainerClasses {
   disabled: ButtonProps['disabled'];
   active: ButtonProps['active'];
   hover: ButtonProps['hover'];
+  hoverColor: ButtonProps['hoverColor'];
 }
 
 export function getContainerClasses({
@@ -17,13 +18,14 @@ export function getContainerClasses({
   disabled,
   active,
   hover,
+  hoverColor,
 }: IContainerClasses) {
   if (variant === 'primary') {
     return getPrimaryClasses({ greyBg, loading, disabled, active, hover });
   }
 
   if (variant === 'secondary') {
-    return getSecondaryClasses({ loading, disabled, active, hover });
+    return getSecondaryClasses({ loading, disabled, active, hover, hoverColor });
   }
 
   return '';
@@ -57,9 +59,10 @@ interface ISecondaryClasses {
   disabled: ButtonProps['disabled'];
   active: ButtonProps['active'];
   hover: ButtonProps['hover'];
+  hoverColor: ButtonProps['hoverColor'];
 }
 
-function getSecondaryClasses({ loading, disabled, active, hover }: ISecondaryClasses) {
+function getSecondaryClasses({ loading, disabled, active, hover, hoverColor }: ISecondaryClasses) {
   const backgroundStyle = 'bg-transparent';
   const borderStyle = getColorClasses(
     {
@@ -68,16 +71,23 @@ function getSecondaryClasses({ loading, disabled, active, hover }: ISecondaryCla
     },
     'border',
   );
-  const hoverStyle =
-    !loading && !disabled && hover
-      ? `${getColorClasses(
-          {
-            light: 'secondaryLight/30',
-            dark: 'secondaryDark',
-          },
-          'hover:bg',
-        )}`
-      : '';
+  const hoverBorderColor = hoverColor?.border
+    ? getColorClasses(
+        hoverColor.border,
+
+        'hover:border',
+      )
+    : '';
+  const hoverBgColor = getColorClasses(
+    hoverColor?.background
+      ? hoverColor.background
+      : {
+          light: 'secondaryLight/30',
+          dark: 'secondaryDark',
+        },
+    'hover:bg',
+  );
+  const hoverStyle = !loading && !disabled && hover ? `${hoverBgColor} ${hoverBorderColor}` : '';
   const activeStyle =
     !loading && !disabled && active
       ? `${getColorClasses(

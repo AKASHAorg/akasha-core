@@ -18,6 +18,7 @@ type IconOnlyButtonProps = {
   customStyle: ButtonProps['customStyle'];
   active: ButtonProps['active'];
   hover: ButtonProps['hover'];
+  hoverColor: ButtonProps['hoverColor'];
   ref?: ButtonProps['ref'];
 };
 
@@ -35,6 +36,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         customStyle,
         active,
         hover,
+        hoverColor,
         ...rest
       },
       ref,
@@ -46,6 +48,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         disabled,
         active,
         hover,
+        hoverColor,
       });
       const breakPointStyle = breakPointSize
         ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
