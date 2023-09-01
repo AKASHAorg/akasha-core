@@ -1,43 +1,38 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, {
-  CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE,
-  SHOW_NOTIFICATIONS_PAGE,
-  CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
-} from '../../routes';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
+import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 
 type WelcomePageProps = {
   header: string;
   description: string;
   leftButtonLabel?: string;
-  // leftButtonClickHandler?: () => void;
   rightButtonLabel: string;
-  // rightButtonClickHandler?: () => void;
   finalStep?: boolean;
   isLoggedIn: boolean;
 };
 
-const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
+const WelcomePage: React.FC<WelcomePageProps> = props => {
   const {
-    baseRouteName,
-    plugins,
     leftButtonLabel,
-    // leftButtonClickHandler,
     rightButtonLabel,
-    // rightButtonClickHandler,
     header,
     description,
     finalStep = false,
     isLoggedIn,
   } = props;
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
   const { t } = useTranslation('app-notifications');
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   // check if user has gone through onboarding steps before
   let savedPreferences;

@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { tw } from '@twind/core';
+import { useTranslation } from 'react-i18next';
+
+import { EventTypes } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -9,14 +14,13 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
+
 import routes, {
   CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
 } from '../../routes';
-import { RootComponentProps, EventTypes } from '@akashaorg/typings/ui';
-import { useTranslation } from 'react-i18next';
 
-interface ICustomizeNotificationPageProps extends RootComponentProps {
+interface ICustomizeNotificationPageProps {
   initial?: boolean;
 }
 
@@ -32,14 +36,13 @@ const Title = ({ title }: { title: string }): JSX.Element => {
 
 const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   initial = true,
-  ...props
 }) => {
   const { t } = useTranslation('app-notifications');
-  const { plugins } = props;
+  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
 
-  const [selected, setSelected] = React.useState(true);
+  const [selected, setSelected] = useState(true);
 
-  const socialAppCheckboxes = React.useMemo(
+  const socialAppCheckboxes = useMemo(
     () => [
       {
         label: t('New Followers'),
@@ -75,7 +78,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     [t],
   );
 
-  const articleAppCheckboxes = React.useMemo(
+  const articleAppCheckboxes = useMemo(
     () => [
       {
         label: t('Replies to my Article'),
@@ -95,7 +98,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     ],
     [t],
   );
-  const moderationAppCheckboxes = React.useMemo(
+  const moderationAppCheckboxes = useMemo(
     () => [
       {
         label: t('My content gets delisted/kept'),
@@ -105,7 +108,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     ],
     [t],
   );
-  const integrationCenterCheckboxes = React.useMemo(
+  const integrationCenterCheckboxes = useMemo(
     () => [
       {
         label: t('New versions of installed integrations'),
@@ -116,7 +119,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     [t],
   );
 
-  const [allStates, setAllStates] = React.useState({
+  const [allStates, setAllStates] = useState({
     socialapp: socialAppCheckboxes.map(e => e.selected),
     articleApp: articleAppCheckboxes.map(e => e.selected),
     moderationApp: moderationAppCheckboxes.map(e => e.selected),
@@ -124,10 +127,10 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   });
 
   // for displaying feedback messages
-  const [message, setMessage] = React.useState('');
-  const [messageType, setMessageType] = React.useState('success');
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('success');
 
-  const [showFeedback, setShowFeedback] = React.useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   if (showFeedback) {
     setTimeout(() => {
@@ -136,28 +139,28 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     }, 6000);
   }
 
-  const [snoozed, setSnoozed] = React.useState(false);
+  const [snoozed, setSnoozed] = useState(false);
 
   // check if snooze notification option has already been set
-  React.useEffect(() => {
+  useEffect(() => {
     if (window.localStorage) {
       setSnoozed(JSON.parse(localStorage.getItem('notifications-snoozed')));
     }
   }, []);
 
   //for the button, disabled when no change made, enabled when there's an change
-  // const [updateButtonDisabled, setUpdateButtonDisabled] = React.useState(true);
-  const [isChanged, setIsChanged] = React.useState(false);
+  // const [updateButtonDisabled, setUpdateButtonDisabled] = useState(true);
+  const [isChanged, setIsChanged] = useState(false);
 
   const snoozeChangeHandler = () => {
     setSnoozed(!snoozed);
     setIsChanged(true);
   };
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   // added for emitting snooze notification event
-  const uiEvents = React.useRef(props.uiEvents);
+  const _uiEvents = useRef(uiEvents);
 
   const changeHandler = (pos: number, section: string): void => {
     const stateArray = (() => {
@@ -206,14 +209,14 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
   };
 
   // detects if user changes any of the setting options and then enable the Update button
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   // setUpdateButtonDisabled(!updateButtonDisabled);
   //   setIsChanged(!isChanged);
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [isChanged]);
 
   // auto-selects all when I want to receive all notification is checked
-  React.useEffect(() => {
+  useEffect(() => {
     if (selected == true) {
       setAllStates({
         ...allStates,
@@ -258,7 +261,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
           localStorage.setItem('notifications-snoozed', JSON.stringify(true));
 
           // emit snooze notification event so the topbar's notification icon can be updated
-          uiEvents.current.next({
+          _uiEvents.current.next({
             event: EventTypes.SnoozeNotifications,
           });
           setMessage('You have snoozed your notifications successfully');
@@ -268,7 +271,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
           localStorage.removeItem('notifications-snoozed');
 
           // emit unsnooze notification event so the topbar's notification icon can be updated
-          uiEvents.current.next({
+          _uiEvents.current.next({
             event: EventTypes.UnsnoozeNotifications,
           });
           setMessage('You have unsnoozed your notifications successfully');
