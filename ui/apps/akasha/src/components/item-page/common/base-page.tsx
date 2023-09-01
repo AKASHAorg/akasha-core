@@ -35,14 +35,8 @@ const BaseEntryPage: React.FC<BaseEntryProps> = props => {
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
   const { t } = useTranslation('app-akasha-integration');
 
-  const {
-    uiEvents,
-    children,
-    layoutConfig,
-    navigateToModal,
-    getRoutingPlugin,
-    getTranslationPlugin,
-  } = useRootComponentProps();
+  const { children, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
 
   const isReported = useMemo(() => {
     if (showAnyway) {
@@ -141,7 +135,6 @@ const BaseEntryPage: React.FC<BaseEntryProps> = props => {
         onLoginModalOpen={showLoginModal}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleCommentRemove}
-        uiEvents={uiEvents}
         itemSpacing={8}
         i18n={getTranslationPlugin().i18n}
         trackEvent={analyticsActions.trackEvent}

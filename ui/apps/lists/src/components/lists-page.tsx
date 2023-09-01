@@ -18,7 +18,7 @@ const ListsPage = () => {
   const [showModal, setShowModal] = React.useState(false);
 
   const { t } = useTranslation('app-lists');
-  const { uiEvents, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
     useRootComponentProps();
 
   const bookmarkDelete = null;
@@ -107,7 +107,6 @@ const ListsPage = () => {
           contentClickable={true}
           onEntryFlag={handleEntryFlag}
           onEntryRemove={handleEntryRemove}
-          uiEvents={uiEvents}
           itemSpacing={8}
           onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
           i18n={getTranslationPlugin().i18n}

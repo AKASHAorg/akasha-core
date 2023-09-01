@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import CookieCard from '@akashaorg/design-system-components/lib/components/CookieCard';
 import { I18nextProvider, Translation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
 import {
   enableTracking,
   installPageTacking,
@@ -9,6 +9,7 @@ import {
   registerEventBusSubscriber,
   uninstallPageTacking,
 } from '../analytics';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export const COOKIE_CONSENT_NAME = 'ewa-cookie-consent';
 
@@ -16,11 +17,13 @@ export enum CookieConsentTypes {
   ESSENTIAL = 'ESSENTIAL',
   ALL = 'ALL',
 }
-const CookieWidget: React.FC<RootComponentProps> = props => {
+const CookieWidget = () => {
   const [cookieType, setCookieType] = useState(null);
+
+  const { uiEvents, worldConfig, getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const eventSub = useRef(null);
-  const analyticsConfig = useRef(props.worldConfig.analytics);
-  const uiEvents = useRef(props.uiEvents);
+  const analyticsConfig = useRef(worldConfig.analytics);
+  const _uiEvents = useRef(uiEvents);
 
   useLayoutEffect(() => {
     const consentType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
@@ -40,7 +43,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
         installTrackingScript(analyticsConfig.current);
         enableTracking();
         installPageTacking();
-        eventSub.current = registerEventBusSubscriber(uiEvents.current);
+        eventSub.current = registerEventBusSubscriber(_uiEvents.current);
       }
     }
     return () => {
@@ -59,7 +62,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
       {cookieType === null && (
         <div>
           <Translation ns="ui-widget-analytics">
@@ -78,7 +81,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
                   ),
                   settingsLabel: t('settings '),
                   onSettingsClick: () =>
-                    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+                    getRoutingPlugin().navigateTo?.({
                       appName: '@akashaorg/app-settings-ewa',
                       getNavigationUrl: navRoutes => navRoutes.Home,
                     }),

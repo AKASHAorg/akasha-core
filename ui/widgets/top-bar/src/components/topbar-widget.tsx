@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router } from 'react-router-dom';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import TopbarComponent from './topbar-component';
 
-const TopbarWidget = (props: RootComponentProps) => {
+const TopbarWidget = () => {
+  const { getTranslationPlugin } = useRootComponentProps();
+
   return (
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <Router>
-        <TopbarComponent {...props} />
+        <TopbarComponent />
       </Router>
     </I18nextProvider>
   );

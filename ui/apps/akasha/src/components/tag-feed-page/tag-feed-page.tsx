@@ -21,7 +21,7 @@ const TagFeedPage: React.FC<ITagFeedPage> = props => {
   const { showLoginModal, loggedProfileData } = props;
 
   const { t } = useTranslation('app-akasha-integration');
-  const { uiEvents, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
     useRootComponentProps();
 
   // const { tagName } = useParams<{ tagName: string }>();
@@ -117,7 +117,6 @@ const TagFeedPage: React.FC<ITagFeedPage> = props => {
         contentClickable={true}
         onEntryRemove={handleEntryRemove}
         onEntryFlag={handleEntryFlag}
-        uiEvents={uiEvents}
         itemSpacing={8}
         i18n={getTranslationPlugin().i18n}
         onRebeam={handleRebeam}

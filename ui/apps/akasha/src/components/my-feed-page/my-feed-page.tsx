@@ -21,7 +21,7 @@ export interface MyFeedPageProps {
 const MyFeedPage: React.FC<MyFeedPageProps> = props => {
   const { loggedProfileData } = props;
 
-  const { uiEvents, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
     useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
@@ -114,7 +114,6 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
-        uiEvents={uiEvents}
         itemSpacing={8}
         i18n={getTranslationPlugin().i18n}
         accentBorderTop={true}

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
+import { EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
-import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
+import { usePlaformHealthCheck, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import {
   startMobileSidebarHidingBreakpoint,
@@ -16,7 +16,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 
-const Layout: React.FC<RootComponentProps> = props => {
+const Layout = () => {
   const [activeModal, setActiveModal] = useState<UIEventData['data'] | null>(null);
   const [needSidebarToggling, setNeedSidebarToggling] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
@@ -25,6 +25,8 @@ const Layout: React.FC<RootComponentProps> = props => {
   const [showSidebar, setShowSidebar] = useState(
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
+
+  const { uiEvents, layoutConfig } = useRootComponentProps();
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
@@ -66,7 +68,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     return true;
   }, [maintenanceReq.status, maintenanceReq.data]);
 
-  const uiEvents = useRef(props.uiEvents);
+  const _uiEvents = useRef(uiEvents);
   const { t } = useTranslation();
 
   const handleSidebarShow = () => {
@@ -105,13 +107,13 @@ const Layout: React.FC<RootComponentProps> = props => {
   const wrapperRef = useRef(null);
 
   useClickAway(wrapperRef, () => {
-    uiEvents.current.next({
+    _uiEvents.current.next({
       event: EventTypes.HideSidebar,
     });
   });
 
   useEffect(() => {
-    const eventsSub = uiEvents.current.subscribe({
+    const eventsSub = _uiEvents.current.subscribe({
       next: (eventInfo: UIEventData) => {
         switch (eventInfo.event) {
           case EventTypes.ModalRequest:
@@ -134,7 +136,7 @@ const Layout: React.FC<RootComponentProps> = props => {
         }
       },
     });
-    uiEvents.current.next({
+    _uiEvents.current.next({
       event: EventTypes.LayoutReady,
     });
     return () => {
@@ -175,19 +177,11 @@ const Layout: React.FC<RootComponentProps> = props => {
             <Box customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
                 <Box customStyle="pt-0 xl:pt-4 h-screen" ref={wrapperRef}>
-                  <Extension
-                    fullHeight
-                    name={props.layoutConfig.sidebarSlotId}
-                    uiEvents={props.uiEvents}
-                  />
+                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
                 </Box>
               ) : (
                 <Box customStyle="pt-0 xl:pt-4 h-screen">
-                  <Extension
-                    fullHeight
-                    name={props.layoutConfig.sidebarSlotId}
-                    uiEvents={props.uiEvents}
-                  />
+                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
                 </Box>
               )}
             </Box>
@@ -196,7 +190,7 @@ const Layout: React.FC<RootComponentProps> = props => {
           <Box customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
             <Box customStyle="sticky top-0 z-10">
               <Box customStyle="pt-4 bg(white dark:black) rounded-b-2xl">
-                <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
+                <Extension name={layoutConfig.topbarSlotId} uiEvents={uiEvents} />
               </Box>
             </Box>
             <Box customStyle="pt-4">
@@ -224,33 +218,29 @@ const Layout: React.FC<RootComponentProps> = props => {
                   </Box>
                 </Card>
               )}
-              <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
+              <Extension name={layoutConfig.pluginSlotId} uiEvents={uiEvents} />
             </Box>
           </Box>
 
           <Box customStyle="sticky top-0 h-screen">
             <Box customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
-              <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
-              <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
+              <Extension name={layoutConfig.widgetSlotId} uiEvents={uiEvents} />
+              <Extension name={layoutConfig.rootWidgetSlotId} uiEvents={uiEvents} />
             </Box>
 
             <Box customStyle="fixed bottom-0 mr-4 mb-4">
-              <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
+              <Extension name={layoutConfig.cookieWidgetSlotId} uiEvents={uiEvents} />
             </Box>
           </Box>
         </Box>
 
         {activeModal && (
-          <Extension
-            name={activeModal.name}
-            uiEvents={props.uiEvents}
-            customStyle="relative z-999"
-          />
+          <Extension name={activeModal.name} uiEvents={uiEvents} customStyle="relative z-999" />
         )}
 
         <Extension
-          name={props.layoutConfig.modalSlotId}
-          uiEvents={props.uiEvents}
+          name={layoutConfig.modalSlotId}
+          uiEvents={uiEvents}
           customStyle="relative z-999"
         />
       </Box>
@@ -258,12 +248,16 @@ const Layout: React.FC<RootComponentProps> = props => {
   );
 };
 
-const LayoutWidget: React.FC<RootComponentProps> = props => (
-  <Router>
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
-      <Layout {...props} />
-    </I18nextProvider>
-  </Router>
-);
+const LayoutWidget = () => {
+  const { getTranslationPlugin } = useRootComponentProps();
+
+  return (
+    <Router>
+      <I18nextProvider i18n={getTranslationPlugin().i18n}>
+        <Layout />
+      </I18nextProvider>
+    </Router>
+  );
+};
 
 export default React.memo(LayoutWidget);

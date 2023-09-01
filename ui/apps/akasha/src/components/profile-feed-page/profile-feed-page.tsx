@@ -20,7 +20,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
 
   const { t } = useTranslation('app-profile');
   const { did } = useParams<{ did: string }>();
-  const { uiEvents, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
     useRootComponentProps();
 
   const profileDataQuery = useGetProfileByDidQuery(
@@ -84,7 +84,6 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
           contentClickable={true}
           onEntryFlag={handleEntryFlag}
           onEntryRemove={handleEntryRemove}
-          uiEvents={uiEvents}
           itemSpacing={8}
           i18n={getTranslationPlugin().i18n}
           onRebeam={handleRebeam}

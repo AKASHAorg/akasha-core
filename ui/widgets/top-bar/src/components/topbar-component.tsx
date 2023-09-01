@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
-import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { EventTypes, UIEventData } from '@akashaorg/typings/ui';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Topbar from './topbar';
 import {
   startWidgetsTogglingBreakpoint,
   startMobileSidebarHidingBreakpoint,
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 
-const TopbarComponent: React.FC<RootComponentProps> = props => {
-  const { uiEvents, layoutConfig, worldConfig, plugins } = props;
+const TopbarComponent = props => {
+  const { uiEvents, layoutConfig, worldConfig, plugins } = useRootComponentProps();
 
   const location = useLocation();
   const historyCount = React.useRef(0);

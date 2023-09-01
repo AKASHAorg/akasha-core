@@ -162,7 +162,6 @@ const FeedPage: React.FC<FeedPageProps> = props => {
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
-        uiEvents={uiEvents}
         itemSpacing={8}
         i18n={getTranslationPlugin().i18n}
         onRebeam={handleRebeam}
