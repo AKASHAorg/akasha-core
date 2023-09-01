@@ -4,19 +4,16 @@ import {
   EntityTypes,
   ModalNavigationOptions,
   NavigateToParams,
-  RootComponentProps,
   Profile,
   IContentClickDetails,
 } from '@akashaorg/typings/ui';
-import { Logger } from '@akashaorg/awf-sdk';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export interface IEntryCardRendererProps {
-  logger: Logger;
-  singleSpa: RootComponentProps['singleSpa'];
   itemData?: AkashaBeam;
   itemType?: EntityTypes;
   locale?: ILocale;
@@ -32,8 +29,6 @@ export interface IEntryCardRendererProps {
   moderatedContentLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: AkashaBeam, isQuote: boolean) => () => void;
-  uiEvents: RootComponentProps['uiEvents'];
-  navigateToModal: RootComponentProps['navigateToModal'];
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -46,21 +41,15 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     contentClickable,
     onRebeam,
     navigateTo,
-    uiEvents,
     onMentionClick,
     onTagClick,
-    navigateToModal,
     onContentClick,
   } = props;
 
   const { id } = itemData || {};
+
   const { t } = useTranslation('app-search');
-
-  // const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
-
-  // const handleFlipCard = () => {
-  //   setShowAnyway(true);
-  // };
+  const { uiEvents, navigateToModal } = useRootComponentProps();
 
   const handleClickAvatar = () => {
     navigateTo?.({

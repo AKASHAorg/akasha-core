@@ -1,23 +1,28 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
+
+import { ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
 import OnboardingStartCard from '@akashaorg/design-system-components/lib/components/OnboardingStartCard';
 
-interface OnboardingPageProps extends RootComponentProps {
+interface OnboardingPageProps {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
 const OnboardingPage: React.FC<OnboardingPageProps> = props => {
-  const { loggedProfileData, plugins, showLoginModal } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { loggedProfileData, showLoginModal } = props;
 
   const { t } = useTranslation('app-search');
+
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   // @TODO: replace with new hooks
   const trendingTagsReq = null;
@@ -25,8 +30,6 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
 
   const trendingProfilesReq = null;
   const trendingProfiles = trendingProfilesReq.data?.slice(0, 7) || [];
-
-  const followPubKeyArr = trendingProfiles.map((profile: { pubKey: string }) => profile.pubKey);
 
   const isFollowingMultipleReq = null;
   const followedProfiles = isFollowingMultipleReq.data;
