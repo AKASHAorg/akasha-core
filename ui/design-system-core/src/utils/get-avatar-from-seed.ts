@@ -4,7 +4,7 @@
  * @param seed - string or null
  * @returns placeholder image number
  */
-export const getAvatarFromSeed = (seed: string | null) => {
+export const getImageFromSeed = (seed: string | null, numberOfPlaceholders: number) => {
   let str = seed;
 
   if (seed && seed.startsWith('0x')) {
@@ -21,14 +21,14 @@ export const getAvatarFromSeed = (seed: string | null) => {
 
     /**
      * if user is a visitor his address is 0x0000... so sum is 0
-     * you can give him a specific placeholder (for now placeholder_7)
+     * you can give him a specific placeholder
      */
     if (avatarOption === 0) {
-      return 7;
+      return numberOfPlaceholders;
     }
 
-    return (avatarOption % 6) + 1;
+    return (avatarOption % (numberOfPlaceholders - 1)) + 1;
   }
   // load the first placeholder, just to not throw and error
-  return 7;
+  return numberOfPlaceholders;
 };

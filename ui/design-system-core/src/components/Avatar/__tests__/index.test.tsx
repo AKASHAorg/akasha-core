@@ -34,6 +34,6 @@ describe('<Avatar /> Component', () => {
     const img = getByRole('img');
 
     expect(img).toBeDefined();
-    expect(img).toHaveAttribute('src', expect.stringMatching(/avatar-placeholder/));
+    expect(img).toHaveAttribute('src', expect.stringMatching(/avatar-/));
   });
 });

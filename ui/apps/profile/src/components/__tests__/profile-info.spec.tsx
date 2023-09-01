@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileInfoPage from '../pages/profile-info-page';
+import ProfileInfoPage from '../pages/profile-info';
 import userEvent from '@testing-library/user-event';
 import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 

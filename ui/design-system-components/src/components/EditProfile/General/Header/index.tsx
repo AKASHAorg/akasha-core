@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { CropperProps } from 'react-easy-crop';
-
-import { ProfileImageType, Profile } from '@akashaorg/typings/ui';
-
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -10,13 +6,14 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
+import { CropperProps } from 'react-easy-crop';
+import { ProfileImageType, Profile } from '@akashaorg/typings/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
-
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
-
 import { EditImageModal } from './EditImageModal';
 import { DeleteImageModal } from './DeleteImageModal';
+import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 
 export type HeaderProps = {
   coverImage: Profile['background'];
@@ -31,6 +28,7 @@ export type HeaderProps = {
   confirmationLabel: { avatar: string; coverImage: string };
   dragToRepositionLabel: string;
   isSavingImage: boolean;
+  publicImagePath: string;
   onAvatarChange: (avatar?: File) => void;
   onCoverImageChange: (coverImage?: File) => void;
   onImageSave: (type: ProfileImageType, image?: File) => void;
@@ -50,6 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
   confirmationLabel,
   dragToRepositionLabel,
   isSavingImage,
+  publicImagePath,
   onAvatarChange,
   onCoverImageChange,
   onImageSave,
@@ -65,6 +64,9 @@ export const Header: React.FC<HeaderProps> = ({
   const [coverImageUrl, setCoverImageUrl] = useState(coverImage);
   const [avatarFile, setAvatarFile] = useState(null);
   const [coverImageFile, setCoverImageFile] = useState(null);
+
+  const seed = getImageFromSeed(profileId, 3);
+  const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
 
   useEffect(() => {
     if (!isSavingImage) {
@@ -184,7 +186,9 @@ export const Header: React.FC<HeaderProps> = ({
         <Card
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
-          customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${coverImageUrl?.default?.src})]`}
+          customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
+            coverImageUrl?.default?.src || coverImageFallback
+          })]`}
           ref={editCoverRef}
         >
           <Stack direction="column" spacing="gap-y-1" customStyle="relative mt-auto ml-auto">

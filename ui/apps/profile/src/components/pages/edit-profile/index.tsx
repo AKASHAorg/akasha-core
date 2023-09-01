@@ -207,6 +207,7 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               coverImage: t('Are you sure you want to delete your cover?'),
             },
             isSavingImage: isSavingImage,
+            publicImagePath: '/images',
             onImageSave: async (type, image) => saveImage(type, image),
             onImageDelete: type =>
               setProfileContentOnImageDelete(
@@ -268,7 +269,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
               updateGeneralForm(formValues, getProfileImageVersions(avatarImage, coverImage));
             },
           }}
-          onDeleteLink={() => ({})}
         />
       </Card>
       <Modal

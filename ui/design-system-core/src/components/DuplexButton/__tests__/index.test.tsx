@@ -18,7 +18,6 @@ describe('<DuplexButton /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         <DuplexButton
-          label={label}
           onClick={() => mockClickHandler()}
           active={true}
           activeLabel={activeLabel}
@@ -37,7 +36,6 @@ describe('<DuplexButton /> Component', () => {
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
   });
-
   it('has correct label when hovered', () => {
     const { getByText } = componentWrapper;
 

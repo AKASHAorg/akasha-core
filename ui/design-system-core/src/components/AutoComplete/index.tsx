@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { tw } from '@twind/core';
-
 import Stack from '../Stack';
 import List, { ListItem } from '../List';
 import TextField from '../TextField';
 import Tag from './Tag';
+import Box from '../Box';
 import { InputProps, TextFieldProps } from '../TextField/types';
 import { useCloseActions } from '../../utils';
 import { Separator } from './types';
@@ -62,7 +61,6 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
         label: filter,
         variant: 'subtitle2',
       })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [filters],
   );
 
@@ -120,7 +118,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
         disabled={disabled}
       />
       {showSuggestions && suggestions.length > 0 && (
-        <div className={tw('relative')}>
+        <Box customStyle={'relative'}>
           <List
             items={suggestions}
             showDivider={false}
@@ -131,7 +129,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
             }}
             customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar"
           />
-        </div>
+        </Box>
       )}
       {tags?.size > 0 && (
         <Stack align="center" customStyle="flex-wrap gap-x-2 gap-y-2">
