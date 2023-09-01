@@ -9,20 +9,18 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-type ListsPageProps = Omit<
-  RootComponentProps,
-  'layout' | 'events' | 'domElement' | 'name' | 'unmountSelf' | 'activeWhen' | 'rootNodeId'
->;
-
-const ListsPage: React.FC<ListsPageProps> = props => {
-  const { uiEvents, plugins, navigateToModal, layoutConfig } = props;
-  const { t } = useTranslation('app-lists');
+const ListsPage = () => {
   const [showModal, setShowModal] = React.useState(false);
+
+  const { t } = useTranslation('app-lists');
+  const { uiEvents, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
+
   const bookmarkDelete = null;
 
   const profileDataReq = useGetMyProfileQuery(null, {
@@ -44,56 +42,24 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   const lists = listsReq.data || [];
 
   const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);
-  const bookmarkedBeams = undefined;
-  const numberOfBookmarkedInactivePosts = React.useMemo(
-    () => bookmarkedBeams?.filter(({ data }) => (data ? data.active : false)).length,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [bookmarkedBeamsIds],
-  );
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    props.navigateToModal({ name: 'login', redirectTo });
+    navigateToModal({ name: 'login', redirectTo });
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', itemId, itemType });
+    navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleEntryRemove = (itemId: string) => {
-    props.navigateToModal({
+    navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
       itemType: EntityTypes.BEAM,
     });
-  };
-
-  const description = t('Lists help you save your favorite posts for quick access at any time.');
-
-  const getInactivePostsText = (numberOfBookmarkedInactivePosts: number) => {
-    const linkingVerb = numberOfBookmarkedInactivePosts > 1 ? t('are') : t('is');
-    const result = numberOfBookmarkedInactivePosts
-      ? t('{{ deletedCount }} of which {{ linkingVerb }} deleted', {
-          deletedCount: numberOfBookmarkedInactivePosts,
-          linkingVerb,
-        })
-      : '';
-    return result ? ` (${result})` : '';
-  };
-
-  const getSubtitleText = () => {
-    if (isLoggedIn && lists?.length) {
-      return t('You have {{ bookmarkCount }} lists.{{ inactivePostsText }}', {
-        bookmarkCount: lists.length,
-        inactivePostsText: getInactivePostsText(numberOfBookmarkedInactivePosts),
-      });
-    }
-    if (isLoggedIn && !lists?.length) {
-      return description;
-    }
-    return t('Check out the posts saved in your lists');
   };
 
   const handleIconMenuClick = () => {
@@ -143,8 +109,8 @@ const ListsPage: React.FC<ListsPageProps> = props => {
           onEntryRemove={handleEntryRemove}
           uiEvents={uiEvents}
           itemSpacing={8}
-          onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
-          i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+          onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
+          i18n={getTranslationPlugin().i18n}
         />
       </Box>
       <Modal
