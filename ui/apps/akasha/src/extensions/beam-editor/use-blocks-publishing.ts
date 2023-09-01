@@ -19,7 +19,7 @@ const DEFAULT_TEXT_BLOCK = 'slate-block';
 export type UseBlocksPublishingProps = {
   uiEvents: RootComponentProps['uiEvents'];
   availableBlocks: Omit<EditorBlock, 'idx'>[];
-  onBeamPublish: (publishedBlocks: BlockCommandResponse['data'][]) => void;
+  onBeamPublish: (publishedBlocks: BlockCommandResponse['data'][]) => Promise<void>;
 };
 
 export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
@@ -77,11 +77,17 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
       ),
     );
     // @TODO: handle errors!
-    if (isAllPublishedWithSuccess) {
-      console.log('publishing beam with blocks:', publishedBlocks);
-      onBeamPublish(publishedBlocks);
+    if (isAllPublishedWithSuccess && !isPublishing) {
+      setIsPublishing(true);
+      onBeamPublish(publishedBlocks)
+        .then(() => {
+          setIsPublishing(false);
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
-  }, [blocksInUse, onBeamPublish, publishedBlocks]);
+  }, [blocksInUse, isPublishing, onBeamPublish, publishedBlocks]);
 
   const createContentBlocks = React.useCallback(() => {
     for (const block of blocksInUse) {
