@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -12,7 +12,8 @@ import EditorToolbar from '@akashaorg/design-system-components/lib/components/Ed
 
 import ArticleEditorCard from '../components/article-editor-card';
 
-const ArticleEditor: React.FC<RootComponentProps> = props => {
+const ArticleEditor = () => {
+  const { navigateToModal } = useRootComponentProps();
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
 
@@ -21,15 +22,7 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
   };
 
   const handleManageCollaborators = () => {
-    props.navigateToModal({ name: 'manage-collaborators' });
-  };
-
-  const handleSaveDraft = () => {
-    /** do something */
-  };
-
-  const handlePublish = () => {
-    /** do something */
+    navigateToModal({ name: 'manage-collaborators' });
   };
 
   return (
@@ -62,8 +55,8 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
         publishLabel={t('Publish')}
         canPublish={true}
         onManageCollaborators={handleManageCollaborators}
-        onSaveDraft={handleSaveDraft}
-        onPublish={handlePublish}
+        onSaveDraft={() => null}
+        onPublish={() => null}
       />
     </Card>
   );

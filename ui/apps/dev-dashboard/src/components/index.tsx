@@ -7,7 +7,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
-import App from './app';
+import App from './App';
 
 const reactLifecycles = singleSpaReact({
   React,

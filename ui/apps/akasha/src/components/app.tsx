@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import AppRoutes from './app-routes';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import AppRoutes from './app-routes';
 
 const SocialApp = () => {
   const { getTranslationPlugin } = useRootComponentProps();

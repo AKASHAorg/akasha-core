@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
@@ -12,14 +12,13 @@ import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboard
 import routes, { ONBOARDING_STEP_ONE, SETTINGS, WRITE_ARTICLE } from '../routes';
 import { articles } from '../components/dummy-data';
 
-const Dashboard: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
+const Dashboard = () => {
   const { t } = useTranslation('app-articles');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const isOnboarded = React.useMemo(() => {
+  const navigateTo = getRoutingPlugin().navigateTo;
+
+  const isOnboarded = useMemo(() => {
     return window.localStorage.getItem(ONBOARDING_STATUS);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -57,18 +56,6 @@ const Dashboard: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
     });
-  };
-
-  const handleMentionsClick = () => {
-    /** do something */
-  };
-
-  const handleRepliesClick = () => {
-    /** do something */
-  };
-
-  const handleSaveClick = () => {
-    /** do something */
   };
 
   if (!isOnboarded) {
@@ -109,9 +96,9 @@ const Dashboard: React.FC<RootComponentProps> = props => {
             savedLabel={t('Saved')}
             onClickArticle={handleClickArticle}
             onTagClick={handleTagClick}
-            onMentionsClick={handleMentionsClick}
-            onRepliesClick={handleRepliesClick}
-            onSaveClick={handleSaveClick}
+            onMentionsClick={() => null}
+            onRepliesClick={() => null}
+            onSaveClick={() => null}
           />
         ))}
     </Box>

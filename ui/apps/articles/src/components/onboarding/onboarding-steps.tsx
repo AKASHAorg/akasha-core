@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import StepOne from './step-one';
 import StepTwo from './step-two';
@@ -20,18 +20,17 @@ interface IOnboardingStepsProps {
   activeIndex?: number;
 }
 
-const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsProps> = props => {
-  const { plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
+const ArticlesOnboardingSteps: React.FC<IOnboardingStepsProps> = props => {
   const [selectedTopics, setSelectedTopics] = React.useState<string[]>([]);
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
 
   const { t } = useTranslation('app-articles');
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const pathnameArr = [ONBOARDING_STEP_ONE, ONBOARDING_STEP_TWO, ONBOARDING_STEP_THREE].map(
-    el => `${props.baseRouteName}${menuRoute[el]}`,
+    el => `${baseRouteName}${menuRoute[el]}`,
   );
 
   React.useEffect(() => {
