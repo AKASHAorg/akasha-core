@@ -6,13 +6,17 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import EditProfile from '@akashaorg/design-system-components/lib/components/EditProfile';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
 import {
   useCreateProfileMutation,
   useGetProfileByDidQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  useGetLogin,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -25,12 +29,13 @@ type EditProfilePageProps = {
   handleFeedback: () => void;
 };
 
-const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
-  const { plugins, handleFeedback } = props;
-  const { t } = useTranslation('app-profile');
+const EditProfilePage: React.FC<EditProfilePageProps> = props => {
+  const { handleFeedback } = props;
   const { profileId } = useParams<{ profileId: string }>();
+  const { t } = useTranslation('app-profile');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
   const queryClient = useQueryClient();
 
   const [activeTab, setActiveTab] = useState(0);

@@ -6,7 +6,7 @@ import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import EditInterests from '@akashaorg/design-system-components/lib/components/EditInterests';
 import { ProfileHeader } from '@akashaorg/design-system-components/lib/components/Profile';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
@@ -20,14 +20,16 @@ import {
   getProfileImageVersionsWithMediaUrl,
   hasOwn,
   useGetLogin,
+  useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 
-const InterestsPage: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
+const InterestsPage = () => {
   const { profileId } = useParams<{ profileId: string }>();
   const { t } = useTranslation('app-profile');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
+
   const queryClient = useQueryClient();
 
   const [showFeedback, setShowFeedback] = useShowFeedback(false);

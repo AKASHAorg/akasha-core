@@ -15,10 +15,11 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import {
   getProfileImageVersionsWithMediaUrl,
   useGetLogin,
+  useRootComponentProps,
   useValidDid,
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -28,14 +29,17 @@ export interface ProfilePageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
-const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props => {
-  const { plugins, navigateToModal, showLoginModal } = props;
+const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
+  const { showLoginModal } = props;
 
   const { t } = useTranslation('app-profile');
+  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
+
   const { profileId } = useParams<{ profileId: string }>();
   const [showFeedback, setShowFeedback] = React.useState(false);
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const loginQuery = useGetLogin();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const isLoggedIn = React.useMemo(() => {
     return !!loginQuery.data?.id;
@@ -59,6 +63,7 @@ const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props =
       }
       navigateToModal({ name: 'report-modal', itemId, itemType, user });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isLoggedIn],
   );
   const { isViewer, akashaProfile: profileData } = Object.assign(
