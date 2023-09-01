@@ -21,7 +21,7 @@ export const getImageFromSeed = (seed: string | null, numberOfPlaceholders: numb
 
     /**
      * if user is a visitor his address is 0x0000... so sum is 0
-     * you can give him a specific placeholde
+     * you can give him a specific placeholder
      */
     if (avatarOption === 0) {
       return numberOfPlaceholders;
