@@ -2,8 +2,14 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 import { EthProviders } from '@akashaorg/typings/sdk';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin, useInjectedProvider, useLogin, useLogout } from '@akashaorg/ui-awf-hooks';
+
+import {
+  useGetLogin,
+  useInjectedProvider,
+  useLogin,
+  useLogout,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import ConnectWallet from './connect-wallet';
 import ChooseProvider from './choose-provider';
@@ -11,7 +17,7 @@ import { getInjectedProviderDetails } from '../../utils/getInjectedProvider';
 import routes, { CONNECT } from '../../routes';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 
-const Connect: React.FC<RootComponentProps> = props => {
+const Connect = () => {
   const loginQuery = useGetLogin();
   const logoutQuery = useLogout();
   const injectedProviderQuery = useInjectedProvider();
@@ -32,9 +38,11 @@ const Connect: React.FC<RootComponentProps> = props => {
       : null;
 
   const { t } = useTranslation('app-auth-ewa');
+  const { worldConfig, getRoutingPlugin } = useRootComponentProps();
+
   const loginMutation = useLogin();
 
-  const routingPlugin = React.useRef(props.plugins['@akashaorg/app-routing']?.routing);
+  const routingPlugin = React.useRef(getRoutingPlugin());
 
   const injectedProvider = React.useMemo(() => {
     return getInjectedProviderDetails(injectedProviderQuery.data, t);
@@ -56,11 +64,11 @@ const Connect: React.FC<RootComponentProps> = props => {
       routingPlugin.current?.handleRedirect({
         search: searchParam,
         fallback: {
-          appName: props.worldConfig.homepageApp,
+          appName: worldConfig.homepageApp,
         },
       });
     }
-  }, [loginQuery, profile, profileDataReq, props.worldConfig.homepageApp]);
+  }, [loginQuery, profile, profileDataReq, worldConfig.homepageApp]);
 
   const handleProviderSelect = (provider: EthProviders) => {
     //this is required because of the backend
@@ -96,7 +104,6 @@ const Connect: React.FC<RootComponentProps> = props => {
             <ChooseProvider
               injectedProvider={injectedProvider}
               onProviderSelect={handleProviderSelect}
-              plugins={props.plugins}
             />
           }
         />
@@ -107,7 +114,7 @@ const Connect: React.FC<RootComponentProps> = props => {
               selectedProvider={EthProviders.Web3Injected}
               onSignIn={handleSignIn}
               onDisconnect={handleDisconnect}
-              worldName={props.worldConfig.title}
+              worldName={worldConfig.title}
               signInError={loginMutation.error}
             />
           }
@@ -119,7 +126,7 @@ const Connect: React.FC<RootComponentProps> = props => {
               selectedProvider={EthProviders.WalletConnect}
               onSignIn={handleSignIn}
               onDisconnect={handleDisconnect}
-              worldName={props.worldConfig.title}
+              worldName={worldConfig.title}
               signInError={loginMutation.error}
             />
           }

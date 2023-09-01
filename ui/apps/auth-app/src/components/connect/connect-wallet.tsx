@@ -65,6 +65,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     return () => {
       changedNetworkUnsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changedNetwork, requiredNetworkQuery.data]);
 
   const requiredNetworkName = React.useMemo(() => {
@@ -94,16 +95,19 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
       );
     }
     return null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectWalletCall, requiredNetworkName, selectedProvider]);
 
   React.useEffect(() => {
     connectWalletCall.mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
     if (connectWalletCall.isSuccess && connectWalletCall.data.length == 42 && !isSignInRetry) {
       signInCall.current(selectedProvider);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connectWalletCall.isSuccess, isSignInRetry]);
 
   const handleChangeNetwork = () => {
