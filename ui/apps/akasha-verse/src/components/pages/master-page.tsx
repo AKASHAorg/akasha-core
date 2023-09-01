@@ -6,14 +6,12 @@ import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCar
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import routes, { APPS, EXPLORE, MY_APPS, MY_WIDGETS } from '../../routes';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams, RootComponentProps } from '@akashaorg/typings/ui';
 
 import { useLocation } from 'react-router';
-import { useDismissedCard } from '@akashaorg/ui-awf-hooks';
+import { useDismissedCard, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-export interface MasterPageProps extends RootComponentProps {
+export interface MasterPageProps {
   isLoggedIn: boolean;
-  navigateTo: (args: NavigateToParams) => void;
 }
 
 const TAB_INDEX_TO_ROUTE_MAP = {
@@ -31,15 +29,19 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
 };
 
 const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => {
-  const { isLoggedIn, navigateTo, navigateToModal, children } = props;
+  const { isLoggedIn, children } = props;
 
   const { t } = useTranslation('app-akasha-verse');
+  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
+
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(
     isLoggedIn ? ROUTE_TO_TAB_INDEX_MAP[location.pathname] || 0 : 0,
   );
 
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/app-akasha-verse_welcome-message');
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
