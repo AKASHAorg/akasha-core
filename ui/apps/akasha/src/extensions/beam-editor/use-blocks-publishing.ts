@@ -29,6 +29,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
 
   const [publishedBlocks, setPublishedBlocks] = React.useState<BlockCommandResponse['data'][]>([]);
   const defaultTextBlock = availableBlocks.find(block => block.name === DEFAULT_TEXT_BLOCK);
+  const publishBeam = React.useRef(onBeamPublish);
 
   React.useEffect(() => {
     if (blocksInUse.length === 0) {
@@ -77,19 +78,17 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
       ),
     );
     // @TODO: handle errors!
-    if (isAllPublishedWithSuccess && !isPublishing) {
-      setIsPublishing(true);
-      onBeamPublish(publishedBlocks)
-        .then(() => {
-          setIsPublishing(false);
-        })
-        .catch(err => {
-          console.error(err);
-        });
+    if (isAllPublishedWithSuccess) {
+      publishBeam.current(publishedBlocks).finally(() => {
+        // @TODO: check for errors before reseting publishedBlocks
+        setPublishedBlocks([]);
+        setIsPublishing(false);
+      });
     }
-  }, [blocksInUse, isPublishing, onBeamPublish, publishedBlocks]);
+  }, [blocksInUse, publishedBlocks]);
 
   const createContentBlocks = React.useCallback(() => {
+    setIsPublishing(true);
     for (const block of blocksInUse) {
       uiEvents.next({
         event: `${block.appName}_${block.eventMap.publish}`,

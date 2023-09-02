@@ -60,7 +60,6 @@ export const SlateEditorBlock = () => {
             },
           },
         });
-        console.log(resp, '<<< content block response');
         return { blockID: resp.createAkashaContentBlock.document.id };
       } catch (err) {
         console.error(err);

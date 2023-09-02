@@ -2,6 +2,7 @@ import * as React from 'react';
 import { BlockCommandResponse, RootExtensionProps } from '@akashaorg/typings/ui';
 import { filterEvents } from './utils/event-utils';
 import { BlockAction, BlockActionType, EditorBlock } from '@akashaorg/typings/ui/editor-blocks';
+import { useRootComponentProps } from './use-root-props';
 
 export type UseEditorBlocksProps = {
   uiEvents: RootExtensionProps['uiEvents'];
@@ -10,9 +11,11 @@ export type UseEditorBlocksProps = {
   blockState: unknown;
 };
 export const useEditorBlocks = (props: UseEditorBlocksProps) => {
+  const { logger } = useRootComponentProps();
   const { blockData, uiEvents, onBlockCreate, blockState } = props;
   const { appName, eventMap } = blockData;
   const uiEventsRef = React.useRef(uiEvents);
+  const logging = React.useRef(logger);
 
   React.useEffect(() => {
     const publishEvent: `${string}_${string}/${BlockAction.PUBLISH}` = `${appName}_${eventMap.publish}`;
@@ -32,7 +35,7 @@ export const useEditorBlocks = (props: UseEditorBlocksProps) => {
               });
             })
             .catch(err => {
-              console.error('error creating block:', err.message);
+              logging.current.error(`error creating content block: ${err.message}`);
               uiEventsRef.current.next({
                 event: `${appName}_${eventMap.publish}_${BlockActionType.SUCCESS}`,
                 data: {

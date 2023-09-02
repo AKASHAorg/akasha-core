@@ -1,22 +1,17 @@
 import * as React from 'react';
 import { EntityTypes, RootExtensionProps } from '@akashaorg/typings/ui';
-import { filterEvents, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ReplyEditor } from './reply-editor';
 import { PostEditor } from './post-editor';
 import { IDraftStorage } from './utils';
-import { uiEvents } from '@akashaorg/ui-app-loader/lib/events';
 
 export const InlineEditor = (
   props: Partial<RootExtensionProps> & { draftStorage?: IDraftStorage },
 ) => {
   const { extensionData, worldConfig, singleSpa } = props;
   const loginQuery = useGetLogin();
-  const { action, itemId, itemType, block } = extensionData;
+  const { action, itemId, itemType } = extensionData;
   const draftStorage = props.draftStorage || localStorage;
-
-  React.useEffect(() => {
-    console.log(extensionData, '<< extension data in editor block');
-  }, [extensionData]);
 
   /*ReplyEditor handles reply to a comment and editing a comment*/
   if (itemType === EntityTypes.REFLECT && itemId && (action === 'reply' || action === 'edit')) {
