@@ -22,24 +22,24 @@ const useRootComponentProps = () => {
 
   const getRoutingPlugin = React.useCallback(
     (ns = DEFAULT_ROUTING_PLUGIN) => {
-      if (hasOwn(ctx.plugins, ns)) {
-        return ctx.plugins[ns].routing;
+      if (hasOwn(ctx?.plugins, ns)) {
+        return ctx?.plugins[ns].routing;
       }
       console.warn('Routing plugin not available yet');
       return {};
     },
-    [ctx.plugins],
+    [ctx?.plugins],
   );
 
   const getTranslationPlugin = React.useCallback(
     (ns = DEFAULT_TRANSLATION_PLUGIN) => {
-      if (hasOwn(ctx.plugins, ns)) {
-        return ctx.plugins[ns].translation;
+      if (hasOwn(ctx?.plugins, ns)) {
+        return ctx?.plugins[ns].translation;
       }
       console.warn('Translation plugin not available yet!');
       return {};
     },
-    [ctx.plugins],
+    [ctx?.plugins],
   );
 
   return {

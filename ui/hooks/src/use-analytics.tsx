@@ -1,11 +1,9 @@
 import * as React from 'react';
-import {
-  AnalyticsEventData,
-  AnalyticsEventTypes,
-  TrackEventData,
-  RootComponentProps,
-} from '@akashaorg/typings/ui';
 import { BehaviorSubject } from 'rxjs';
+
+import { AnalyticsEventData, AnalyticsEventTypes, TrackEventData } from '@akashaorg/typings/ui';
+
+import { useRootComponentProps } from './use-root-props';
 
 /**
  * @internal
@@ -19,13 +17,9 @@ export enum CookieConsentTypes {
 
 const AnalyticsContext = React.createContext(null);
 
-const AnalyticsProvider = ({
-  uiEvents,
-  children,
-}: {
-  uiEvents: RootComponentProps['uiEvents'];
-  children?: React.ReactNode;
-}) => {
+const AnalyticsProvider = ({ children }: { children?: React.ReactNode }) => {
+  const { uiEvents } = useRootComponentProps();
+
   return <AnalyticsContext.Provider value={uiEvents}>{children}</AnalyticsContext.Provider>;
 };
 
