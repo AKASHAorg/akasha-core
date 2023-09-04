@@ -1,10 +1,9 @@
-import { IAppConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
+import { IAppConfig, INTEGRATION_TYPES, UseRootComponentReturn } from '@akashaorg/typings/ui';
 import { genLifecycles } from '../mocks/single-spa';
 import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
 import { Subject } from 'rxjs';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export const genAppConfig = (
   overrides?: Partial<IAppConfig & { name: string }>,
@@ -36,7 +35,7 @@ const log: any = {
     /*  */
   },
 };
-export const genAppProps = (): ReturnType<typeof useRootComponentProps> => ({
+export const genAppProps = (): UseRootComponentReturn => ({
   logger: log,
   navigateToModal: () => ({}),
   uiEvents: uiEventsMock,
