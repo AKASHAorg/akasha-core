@@ -1,18 +1,18 @@
-import singleSpa from 'single-spa';
-import { IAppConfig } from './apps';
-import { Subject } from 'rxjs';
-import { UIEventData } from './ui-events';
-import { AnalyticsEventData } from './analytics';
-import { ModalNavigationOptions } from './navigation';
-import i18n from 'i18next';
-import { IPluginsMap } from './plugins';
-import { WorldConfig, QueryStringType } from './app-loader';
-import { ILogger } from '../sdk/log';
+import type singleSpa from 'single-spa';
+import type { IAppConfig } from './apps';
+import type { Subject } from 'rxjs';
+import type { EventDataTypes, UIEventData } from './ui-events';
+import type { AnalyticsEventData } from './analytics';
+import type { ModalNavigationOptions } from './navigation';
+import type i18n from 'i18next';
+import type { IPluginsMap } from './plugins';
+import type { WorldConfig, QueryStringType } from './app-loader';
+import type { ILogger } from '../sdk/log';
 
 export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement: HTMLElement;
-  uiEvents: Subject<UIEventData | AnalyticsEventData>;
+  uiEvents: Subject<Extract<UIEventData, { event: UIEventData['event'] }> | AnalyticsEventData>;
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
   layoutConfig: IAppConfig['extensions'];
@@ -30,5 +30,5 @@ export interface RootComponentProps {
 }
 
 export interface RootExtensionProps extends RootComponentProps {
-  extensionData: UIEventData['data'];
+  extensionData: EventDataTypes;
 }

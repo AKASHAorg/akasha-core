@@ -25,6 +25,12 @@ export type ScrollerState = {
   firstItemId?: string;
 };
 
+export type ScrollerOnChangeState<T> = ScrollerState & {
+  allEntries: T[];
+  firstItemIdx: number;
+  lastItemIdx: number;
+};
+
 export type EntryListProps<T> = {
   pages: T[];
   children?: (props: CardListProps<T>) => React.ReactElement[];
@@ -34,7 +40,7 @@ export type EntryListProps<T> = {
   languageDirection?: 'ltr' | 'rtl';
   isFetchingNextPage?: boolean;
   isFetchingPreviousPage?: boolean;
-  onScrollStateChange?: (scrollerState: ScrollerState) => void;
+  onScrollStateChange?: (scrollerState: ScrollerOnChangeState<T>) => void;
   onScrollStateReset?: () => void;
   initialScrollState?: ScrollerState;
   getItemKey?: (index: number, entries: T[]) => string;
@@ -89,10 +95,11 @@ function EntryList<T>(props: EntryListProps<T>) {
         return;
       }
       const startItemId = allEntries[vItems[0].index]['id'];
-      const { startIndex } = vInstance.range;
+      const { startIndex, endIndex } = vInstance.range;
       const [offset] = vInstance.getOffsetForIndex(startIndex, 'center');
       if (onScrollStateChange) {
         onScrollStateChange({
+          allEntries,
           startItemId,
           startItemOffset: offset,
           measurementsCache: vInstance.measurementsCache,
@@ -100,6 +107,8 @@ function EntryList<T>(props: EntryListProps<T>) {
           itemsCount: allEntries.length,
           lastItemId: allEntries[allEntries.length - 1]['id'],
           firstItemId: allEntries[0]['id'],
+          firstItemIdx: startIndex,
+          lastItemIdx: endIndex,
         });
       }
     },

@@ -1,12 +1,16 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { FEED, MY_FEED, BEAM, PROFILE_FEED, REFLECT, TAGS } from './routes';
+import routes, { BEAM, FEED, MY_FEED, PROFILE_FEED, REFLECT, TAGS } from './routes';
 import {
+  EventTypes,
   IAppConfig,
   IntegrationRegistrationOptions,
+  LogoTypeSource,
   MenuItemAreaType,
   MenuItemType,
-  LogoTypeSource,
+  RootComponentProps,
 } from '@akashaorg/typings/ui';
+import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/ui/editor-blocks';
+import { filter } from 'rxjs';
 
 /**
  * Initialization of the integration is optional.
@@ -68,11 +72,67 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     ],
   },
+  editorBlocks: [
+    {
+      name: 'slate-block',
+      icon: 'Bars3BottomLeftIcon',
+      displayName: 'Slate text block',
+      eventMap: {
+        publish: `slate-block/${BlockAction.PUBLISH}`,
+        update: `slate-block/${BlockAction.UPDATE}`,
+        validate: `slate-block/${BlockAction.VALIDATE}`,
+      },
+    },
+  ],
   extends: (matcher, loader) => {
     matcher({
       'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
-      'inline-editor_*': loader(() => import('./extensions/inline-editor')),
+      'slate-block_*': loader(() => import('./extensions/slate-block')),
       'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
+      'beam-editor_*': loader(() => import('./extensions/beam-editor')),
     });
   },
 });
+
+class EditorBlocksPlugin {
+  static readonly editorBlocks: EditorBlockInterface[] = [];
+  static observe = (uiEvents: RootComponentProps['uiEvents']) => {
+    const filterEvent = (eventType: EventTypes) => {
+      return filter(
+        (eventData: { event: string }) =>
+          eventData && eventData.hasOwnProperty('event') && eventData.event === eventType,
+      );
+    };
+    uiEvents.pipe(filterEvent(EventTypes.RegisterEditorBlock)).subscribe({
+      next: (evData: { event: EventTypes.RegisterEditorBlock; data: EditorBlockInterface[] }) => {
+        if (!evData.data) {
+          console.log('event =>', evData);
+          return;
+        }
+        for (const block of evData.data) {
+          if (EditorBlocksPlugin.editorBlocks.some(b => b.name === block.name)) {
+            return;
+          }
+          EditorBlocksPlugin.editorBlocks.push(block);
+        }
+      },
+    });
+  };
+  static getAllBlocks = () => {
+    return EditorBlocksPlugin.editorBlocks;
+  };
+}
+
+export const getPlugin = async (
+  props: RootComponentProps & {
+    encodeAppName: (name: string) => string;
+    decodeAppName: (name: string) => string;
+  },
+) => {
+  EditorBlocksPlugin.observe(props.uiEvents);
+  return {
+    editorBlocks: {
+      getAll: EditorBlocksPlugin.getAllBlocks,
+    },
+  };
+};

@@ -4,10 +4,10 @@ import * as singleSpa from 'single-spa';
 import {
   EventTypes,
   MenuItemAreaType,
-  UIEventData,
   NavigateToParams,
   RootComponentProps,
   IntegrationRegistrationOptions,
+  EventDataTypes,
 } from '@akashaorg/typings/ui';
 import getSDK from '@akashaorg/awf-sdk';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
@@ -43,13 +43,15 @@ export class RoutingPlugin {
       },
     });
     uiEvents.subscribe({
-      next: (eventData: UIEventData) => {
-        if (eventData.event === EventTypes.RegisterIntegration) {
+      next: (eventData: {
+        event: Omit<EventTypes, EventTypes.RegisterEditorBlock>;
+        data?: EventDataTypes;
+      }) => {
+        if (eventData.event && eventData.event === EventTypes.RegisterIntegration) {
           // allow only one entry per app
           if (RoutingPlugin.routeRepository.all[eventData.data.name]) {
             return;
           }
-
           if (Array.isArray(eventData.data.menuItems)) {
             eventData.data.menuItems.forEach(item => {
               const appMenuItemData = {

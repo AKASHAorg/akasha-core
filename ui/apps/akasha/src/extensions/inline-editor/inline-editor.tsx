@@ -8,15 +8,14 @@ import { IDraftStorage } from './utils';
 export const InlineEditor = (
   props: Partial<RootExtensionProps> & { draftStorage?: IDraftStorage },
 ) => {
+  const { extensionData, worldConfig, singleSpa } = props;
   const loginQuery = useGetLogin();
-  const action = props.extensionData?.action;
-  const itemId = props.extensionData?.itemId;
-  const itemType = props.extensionData?.itemType;
+  const { action, itemId, itemType } = extensionData;
   const draftStorage = props.draftStorage || localStorage;
 
   /*ReplyEditor handles reply to a comment and editing a comment*/
   if (itemType === EntityTypes.REFLECT && itemId && (action === 'reply' || action === 'edit')) {
-    return <ReplyEditor commentId={itemId} singleSpa={props.singleSpa} action={action} />;
+    return <ReplyEditor commentId={itemId} singleSpa={singleSpa} action={action} />;
   }
 
   /*PostEditor handles reply to a post, repost, and editing a post*/
@@ -28,10 +27,10 @@ export const InlineEditor = (
   ) {
     return (
       <PostEditor
-        appName={props?.worldConfig?.homepageApp || 'inline-editor'}
+        appName={worldConfig?.homepageApp || 'inline-editor'}
         postId={itemId}
         userId={loginQuery?.data?.id}
-        singleSpa={props.singleSpa}
+        singleSpa={singleSpa}
         action={action}
         draftStorage={draftStorage}
       />

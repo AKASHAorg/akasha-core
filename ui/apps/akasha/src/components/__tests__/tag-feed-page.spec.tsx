@@ -1,4 +1,5 @@
 import * as React from 'react';
+// @ts-ignore
 import TagFeedPage from '../tag-feed-page/tag-feed-page';
 
 import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
