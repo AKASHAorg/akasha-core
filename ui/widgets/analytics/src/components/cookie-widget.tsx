@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import CookieCard from '@akashaorg/design-system-components/lib/components/CookieCard';
-import { I18nextProvider, Translation } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import {
   enableTracking,
@@ -20,6 +20,7 @@ export enum CookieConsentTypes {
 const CookieWidget = () => {
   const [cookieType, setCookieType] = useState(null);
 
+  const { t } = useTranslation('ui-widget-analytics');
   const { uiEvents, worldConfig, getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const eventSub = useRef(null);
   const analyticsConfig = useRef(worldConfig.analytics);
@@ -65,40 +66,36 @@ const CookieWidget = () => {
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
       {cookieType === null && (
         <div>
-          <Translation ns="ui-widget-analytics">
-            {t => (
-              <CookieCard
-                titleLabel={t('The Choice is Yours 🤘🏼')}
-                paragraphOneLabel={t(
-                  `We use cookies. Some are necessary to operate effectively the platform, others are to help us improve AKASHA World.`,
-                )}
-                paragraphTwo={{
-                  ctaLabel: t(`By opting-in you allow us to collect data via `),
-                  analyticsLabel: t('Matomo'),
-                  analyticsURL: 'https://matomo.org',
-                  middleParagraphLabeL: t(
-                    `, an open source analytics platform that will help us improve AKASHA World. As we respect your privacy, rest assured that we don't store personal identifiable information (PII). In addition, if you change your mind, you can always opt-out by accessing the `,
-                  ),
-                  settingsLabel: t('settings '),
-                  onSettingsClick: () =>
-                    getRoutingPlugin().navigateTo?.({
-                      appName: '@akashaorg/app-settings-ewa',
-                      getNavigationUrl: navRoutes => navRoutes.Home,
-                    }),
-                  lastParagraphLabel: t(' menu.'),
-                }}
-                paragraphThree={{
-                  ctaLabel: t('For more info, see our '),
-                  urlLabel: t('Privacy Policy'),
-                  url: `${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/privacy-policy`,
-                }}
-                onlyEssentialLabel={t('Only essential')}
-                acceptAllLabel={t('Accept all')}
-                onClickOnlyEssential={() => handleAcceptCookie()}
-                onClickAcceptAll={() => handleAcceptCookie(true)}
-              />
+          <CookieCard
+            titleLabel={t('The Choice is Yours 🤘🏼')}
+            paragraphOneLabel={t(
+              `We use cookies. Some are necessary to operate effectively the platform, others are to help us improve AKASHA World.`,
             )}
-          </Translation>
+            paragraphTwo={{
+              ctaLabel: t(`By opting-in you allow us to collect data via `),
+              analyticsLabel: t('Matomo'),
+              analyticsURL: 'https://matomo.org',
+              middleParagraphLabeL: t(
+                `, an open source analytics platform that will help us improve AKASHA World. As we respect your privacy, rest assured that we don't store personal identifiable information (PII). In addition, if you change your mind, you can always opt-out by accessing the `,
+              ),
+              settingsLabel: t('settings '),
+              onSettingsClick: () =>
+                getRoutingPlugin().navigateTo?.({
+                  appName: '@akashaorg/app-settings-ewa',
+                  getNavigationUrl: navRoutes => navRoutes.Home,
+                }),
+              lastParagraphLabel: t(' menu.'),
+            }}
+            paragraphThree={{
+              ctaLabel: t('For more info, see our '),
+              urlLabel: t('Privacy Policy'),
+              url: `${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/privacy-policy`,
+            }}
+            onlyEssentialLabel={t('Only essential')}
+            acceptAllLabel={t('Accept all')}
+            onClickOnlyEssential={() => handleAcceptCookie()}
+            onClickAcceptAll={() => handleAcceptCookie(true)}
+          />
         </div>
       )}
     </I18nextProvider>
