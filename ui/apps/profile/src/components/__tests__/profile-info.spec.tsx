@@ -3,14 +3,7 @@ import ProfileInfoPage from '../pages/profile-info';
 import userEvent from '@testing-library/user-event';
 import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-import {
-  renderWithAllProviders,
-  act,
-  screen,
-  genAppProps,
-  genUser,
-  waitFor,
-} from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, screen, genUser, waitFor } from '@akashaorg/af-testing';
 import { Profile } from '@akashaorg/typings/ui';
 import { MemoryRouter as Router } from 'react-router-dom';
 
@@ -19,17 +12,7 @@ const navigateTo = jest.fn();
 describe('< ProfileInfoPage />', () => {
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
-      <ProfileInfoPage
-        {...genAppProps()}
-        plugins={{
-          '@akashaorg/app-routing': {
-            routing: {
-              navigateTo,
-            },
-          },
-        }}
-        showLoginModal={jest.fn()}
-      />
+      <ProfileInfoPage showLoginModal={jest.fn()} />
     </Router>
   );
   const profile = genUser('pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff');

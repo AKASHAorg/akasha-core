@@ -1,19 +1,10 @@
 import * as React from 'react';
-// @ts-ignore
 import FeedPage from '../feed-page/feed-page';
 import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import userEvent from '@testing-library/user-event';
 
-// @ts-ignore
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
-import { Draft } from '../../extensions/inline-editor/utils/draft';
-import {
-  screen,
-  renderWithAllProviders,
-  genAppProps,
-  genLoggedInState,
-  localStorageMock,
-} from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, localStorageMock } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
 import { when } from 'jest-when';
@@ -24,7 +15,6 @@ const partialArgs = (...argsToMatch) =>
 
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
-    {...genAppProps()}
     extensionData={{
       name: 'name',
       itemId: '01gf',
@@ -34,11 +24,10 @@ const MockedInlineEditor = ({ action }) => (
   />
 );
 
-const appProps = genAppProps();
 describe('< FeedPage /> component', () => {
   const BaseComponent = () => (
-    <AnalyticsProvider {...genAppProps()}>
-      <FeedPage {...appProps} showLoginModal={jest.fn()} />
+    <AnalyticsProvider>
+      <FeedPage showLoginModal={jest.fn()} />
     </AnalyticsProvider>
   );
 
@@ -47,7 +36,6 @@ describe('< FeedPage /> component', () => {
       .spyOn(Extension, 'default')
       .mockReturnValue(
         <InlineEditor
-          {...genAppProps()}
           draftStorage={localStorageMock}
           extensionData={{ name: 'post', action: 'post' }}
         />,
@@ -120,7 +108,7 @@ describe('< FeedPage /> component', () => {
     history.pushState(null, '', location.origin);
   });
   it.skip('should show saved draft post', async () => {
-    const loginState = genLoggedInState(true);
+    // const loginState = genLoggedInState(true);
 
     // localStorageMock.setItem(
     //   Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState.pubKey, 'post'),

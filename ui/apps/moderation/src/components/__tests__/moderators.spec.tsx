@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { renderWithAllProviders, act, genAppProps, cleanup } from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, cleanup } from '@akashaorg/af-testing';
 
 import { Moderators } from '../../pages';
 
 describe('<Moderators /> component', () => {
-  const Base = <Moderators {...genAppProps()} />;
+  const Base = <Moderators navigateTo={jest.fn()} />;
 
   let componentWrapper = renderWithAllProviders(<></>, {});
 

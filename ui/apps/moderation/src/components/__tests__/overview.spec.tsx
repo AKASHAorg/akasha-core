@@ -1,11 +1,17 @@
 import * as React from 'react';
 
-import { renderWithAllProviders, act, genAppProps, cleanup } from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, cleanup } from '@akashaorg/af-testing';
 
-import { Overview } from '../../pages';
+import { ApplicationStatusType, Overview } from '../../pages';
 
 describe('<Overview /> component', () => {
-  const Base = <Overview {...genAppProps()} />;
+  const Base = (
+    <Overview
+      navigateTo={jest.fn()}
+      isAuthorised={true}
+      applicationStatus={ApplicationStatusType.approved}
+    />
+  );
 
   const assetName = 'moderation';
 
