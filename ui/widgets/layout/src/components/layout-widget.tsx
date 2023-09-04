@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { EventDataTypes, EventTypes, RootComponentProps, UIEventData } from '@akashaorg/typings/ui';
+import { EventDataTypes, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
 import {
@@ -19,7 +19,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 
-const Layout: React.FC<RootComponentProps> = props => {
+const Layout = () => {
   const [activeModal, setActiveModal] = useState<EventDataTypes | null>(null);
   const [needSidebarToggling, setNeedSidebarToggling] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
@@ -116,7 +116,7 @@ const Layout: React.FC<RootComponentProps> = props => {
   });
 
   useEffect(() => {
-    const eventsSub = uiEvents.current
+    const eventsSub = _uiEvents.current
       .pipe(
         filterEvents([
           EventTypes.ModalRequest,
@@ -149,7 +149,7 @@ const Layout: React.FC<RootComponentProps> = props => {
           }
         },
       });
-    uiEvents.current.next({
+    _uiEvents.current.next({
       event: EventTypes.LayoutReady,
     });
     return () => {
@@ -261,13 +261,13 @@ const Layout: React.FC<RootComponentProps> = props => {
   );
 };
 
-const LayoutWidget: React.FC<RootComponentProps> = props => {
+const LayoutWidget = () => {
   const { getTranslationPlugin } = useRootComponentProps();
-  const { i18n } = getTranslationPlugin();
+
   return (
     <Router>
-      <I18nextProvider i18n={i18n}>
-        <Layout {...props} />
+      <I18nextProvider i18n={getTranslationPlugin().i18n}>
+        <Layout />
       </I18nextProvider>
     </Router>
   );

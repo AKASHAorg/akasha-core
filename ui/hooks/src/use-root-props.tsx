@@ -33,8 +33,8 @@ const useRootComponentProps = <T extends RootComponentProps>() => {
 
   const getTranslationPlugin = React.useCallback(
     (ns = DEFAULT_TRANSLATION_PLUGIN): { i18n: RootComponentProps['i18next'] } => {
-      if (hasOwn(ctx.plugins, ns)) {
-        return ctx.plugins[ns].translation;
+      if (hasOwn(ctx?.plugins, ns)) {
+        return ctx?.plugins[ns].translation;
       }
       console.warn('Translation plugin not available yet!');
       return { i18n: null };
@@ -43,10 +43,10 @@ const useRootComponentProps = <T extends RootComponentProps>() => {
   );
 
   const getEditorBlocksPlugin = React.useCallback(() => {
-    if (hasOwn(ctx.plugins, DEFAULT_EDITOR_BLOCKS_PLUGIN)) {
-      return ctx.plugins[DEFAULT_EDITOR_BLOCKS_PLUGIN].editorBlocks;
+    if (hasOwn(ctx?.plugins, DEFAULT_EDITOR_BLOCKS_PLUGIN)) {
+      return ctx?.plugins[DEFAULT_EDITOR_BLOCKS_PLUGIN].editorBlocks;
     }
-  }, [ctx.plugins]);
+  }, [ctx?.plugins]);
 
   return {
     getRoutingPlugin,
