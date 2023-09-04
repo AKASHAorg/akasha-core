@@ -248,6 +248,36 @@ query GetFollowDocument($follower: ID!, $following: String!){
   }
 }
 
+
+query GetFollowDocuments($follower: ID!, $following: [String!]){
+  node(id: $follower){
+    ... on CeramicAccount{
+      akashaProfile {
+        followers(last: 25, filters: {where: {profileID: {in: $following}}}){
+          edges {
+            node {
+              id
+              isFollowing
+              profileID
+              profile {
+                ...UserProfileFragment
+              }
+            }
+            cursor
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+      isViewer
+    }
+  }
+}
+
 # create new Profile document attached to did
 mutation CreateProfile($i: CreateAkashaProfileInput!){
   createAkashaProfile(input: $i){

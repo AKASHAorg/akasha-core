@@ -666,6 +666,36 @@ export const GetFollowDocumentDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
+export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
+    query GetFollowDocuments($follower: ID!, $following: [String!]) {
+  node(id: $follower) {
+    ... on CeramicAccount {
+      akashaProfile {
+        followers(last: 25, filters: {where: {profileID: {in: $following}}}) {
+          edges {
+            node {
+              id
+              isFollowing
+              profileID
+              profile {
+                ...UserProfileFragment
+              }
+            }
+            cursor
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
 export const CreateProfileDocument = /*#__PURE__*/ gql`
     mutation CreateProfile($i: CreateAkashaProfileInput!) {
   createAkashaProfile(input: $i) {
@@ -946,6 +976,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetFollowDocument(variables: Types.GetFollowDocumentQueryVariables, options?: C): Promise<Types.GetFollowDocumentQuery> {
       return requester<Types.GetFollowDocumentQuery, Types.GetFollowDocumentQueryVariables>(GetFollowDocumentDocument, variables, options) as Promise<Types.GetFollowDocumentQuery>;
+    },
+    GetFollowDocuments(variables: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
+      return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
     },
     CreateProfile(variables: Types.CreateProfileMutationVariables, options?: C): Promise<Types.CreateProfileMutation> {
       return requester<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options) as Promise<Types.CreateProfileMutation>;
