@@ -101,13 +101,7 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
   }
 
   return (
-    <Card
-      customStyle="flex flex-row"
-      elevation={'1'}
-      radius={16}
-      padding={'p-2'}
-      testId="notifications"
-    >
+    <Card elevation={'1'} radius={16} padding={'p-2'} testId="notifications">
       <div className={tw('flex(& col) justify-center align-center mb-32')}>
         <Card
           customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"

@@ -224,7 +224,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   return (
     <>
-      <Card elevation={'1'} radius={16} padding={'py-2'} customStyle="pb-16 flex flex-row">
+      <Card elevation={'1'} radius={16} padding={'py-2'} customStyle="pb-16">
         <div className={tw('py-4 relative w-full')}>
           <Text variant="h5" align="center">
             <>{t('Notifications')}</>
