@@ -61,6 +61,7 @@ fragment ContentBlockFragment on AkashaContentBlock{
 }
 
 fragment BlockStorageFragment on AkashaBlockStorage {
+  id
   appVersionID
   appVersion {
     application {

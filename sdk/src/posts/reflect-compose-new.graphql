@@ -1,4 +1,5 @@
 fragment ReflectFragment on AkashaReflect{
+  id
   author {
     id
     isViewer
