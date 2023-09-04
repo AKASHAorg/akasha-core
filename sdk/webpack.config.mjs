@@ -99,7 +99,7 @@ const config = {
     new InjectManifest({
       swSrc: './src/sw.js',
       swDest: 'sw.js',
-      exclude: [/.*?/],
+      exclude: [/\.map$/, /^manifest.*\.js$/, /\.d.ts$/, /\.ts$/ ],
     }),
     new SubresourceIntegrityPlugin({
       enabled: false, // disable until fixed isProduction,
