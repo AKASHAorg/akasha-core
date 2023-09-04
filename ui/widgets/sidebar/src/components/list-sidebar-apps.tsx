@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { IMenuItem } from '@akashaorg/typings/ui';
 
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import MenuItemLabel from './menu-item-label';
@@ -54,13 +53,11 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
       ))}
 
       {otherApps.map((app, idx) => (
-        <Box
-          key={app.label + idx}
-          customStyle="py-2 px-6 bg(hover:grey8 dark:hover:grey5) cursor-pointer"
-          onClick={onClickMenuItem(app)}
-        >
-          <MenuItemLabel menuItem={app} />
-        </Box>
+        <button key={app.label + idx} onClick={onClickMenuItem(app)}>
+          <Stack customStyle="py-2 px-6 bg(hover:grey8 dark:hover:grey5) cursor-pointer">
+            <MenuItemLabel menuItem={app} />
+          </Stack>
+        </button>
       ))}
     </Stack>
   );

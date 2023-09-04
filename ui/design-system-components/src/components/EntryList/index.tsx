@@ -1,11 +1,12 @@
 // react component used to list entries
 
 import * as React from 'react';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import { useWindowVirtualizer, VirtualItem, Virtualizer } from '@tanstack/react-virtual';
+import { tw } from '@twind/core';
 
 export type CardListProps<T> = {
   items: VirtualItem[];
@@ -137,23 +138,23 @@ function EntryList<T>(props: EntryListProps<T>) {
   }
 
   return (
-    <Box ref={rootElementRef}>
-      <Box
-        customStyle="relative"
+    <Stack ref={rootElementRef}>
+      <div
+        className={tw('relative')}
         style={{
           height: virtualizer.getTotalSize(),
         }}
       >
-        <Box
-          customStyle={`absolute w-full top-0 left-0`}
+        <div
+          className={tw(`absolute w-full top-0 left-0`)}
           style={{
             transform: `translateY(${items[0].start - virtualizer.options.scrollMargin}px)`,
           }}
         >
           {requestStatus === 'loading' && isFetchingPreviousPage && (
-            <Box customStyle="p-8 w-full">
+            <Stack fullWidth={true} customStyle="p-8">
               <Spinner />
-            </Box>
+            </Stack>
           )}
           {children({
             items,
@@ -163,16 +164,16 @@ function EntryList<T>(props: EntryListProps<T>) {
             itemSpacing,
           })}
           {isFetchingNextPage && (
-            <Box customStyle="p-8 w-full">
+            <Stack fullWidth={true} customStyle="p-8">
               <Spinner />
-            </Box>
+            </Stack>
           )}
-        </Box>
+        </div>
         <ScrollTopWrapper placement={scrollTopButtonPlacement}>
           <ScrollTopButton hide={hideScrollTop} onClick={handleScrollToTop} />
         </ScrollTopWrapper>
-      </Box>
-    </Box>
+      </div>
+    </Stack>
   );
 }
 

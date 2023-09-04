@@ -64,7 +64,7 @@ const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
   ];
 
   return (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack spacing="gap-y-4">
       <Text variant="h6">{t('Newest Widgets')}</Text>
       <AppList
         apps={dummyNewestWidgets}

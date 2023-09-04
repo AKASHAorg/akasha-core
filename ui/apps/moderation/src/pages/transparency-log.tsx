@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IModerationLogItem } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -98,8 +98,8 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
 
   return (
     <>
-      <Box customStyle="flex justify-between items-center mb-3">
-        <Box customStyle="flex items-center space-x-3">
+      <Stack align="center" justify="between" customStyle="mb-3">
+        <Stack align="center" spacing="gap-x-3">
           <Dropdown
             name="filterByDecision"
             placeholderLabel={decisionPlaceholderLabel}
@@ -123,14 +123,14 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
             ]}
             setSelected={setfilterByCategory}
           />
-        </Box>
+        </Stack>
 
         <Button plain={true} onClick={resetFilters}>
           <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {`${t('Reset')}`}
           </Text>
         </Button>
-      </Box>
+      </Stack>
 
       <PaginatedTable
         theadValues={[t('Date'), t('Category'), t('Decision'), '']}

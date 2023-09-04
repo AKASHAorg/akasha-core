@@ -11,7 +11,7 @@ import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMete
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import ImageCropper, {
@@ -82,9 +82,12 @@ export interface IArticleCardSettingsProps extends ImageCropperProps {
 const SectionWrapper: React.FC<{ topBorderOnly?: boolean; children: React.ReactNode }> = props => {
   const { topBorderOnly, children } = props;
   return (
-    <Box customStyle={`flex p-4 gap-1 border(${topBorderOnly ? 't' : 'y'} grey8 dark:grey3)`}>
+    <Stack
+      spacing="gap-1"
+      customStyle={`p-4 border(${topBorderOnly ? 't' : 'y'} grey8 dark:grey3)`}
+    >
       {children}
-    </Box>
+    </Stack>
   );
 };
 
@@ -92,13 +95,14 @@ const InputWrapper: React.FC<{ children: React.ReactNode; accentBorder?: boolean
   const { children, accentBorder } = props;
 
   return (
-    <Box
-      customStyle={`flex my-1 w-full p-1 rounded-sm border(${
+    <Stack
+      fullWidth={true}
+      customStyle={`my-1s p-1 rounded-sm border(${
         accentBorder ? 'secondaryLight dark: secondaryDark' : 'grey8 dark:grey3'
       })`}
     >
       {children}
-    </Box>
+    </Stack>
   );
 };
 
@@ -153,18 +157,18 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
 
   return (
     <Card>
-      <Box customStyle="flex flex-row p-4 w-full">
+      <Stack direction="row" fullWidth={true} customStyle="p-4">
         <button onClick={handleClickIcon}>
           <Icon type="ChevronLeftIcon" />
         </button>
         <Text variant="h2">{titleLabel}</Text>
-      </Box>
+      </Stack>
       <SectionWrapper>
-        <Box customStyle="flex flex-row items-center gap-1">
+        <Stack direction="row" spacing="gap-1" align="center">
           <Text variant="h2">{addCoverImageLabel}</Text>
           <Text variant="subtitle1">{`(${optionalLabel})`}</Text>
-        </Box>
-        <Box customStyle="flex flex-row items-center justify-between">
+        </Stack>
+        <Stack direction="row" align="center" justify="between">
           <Text variant="subtitle1">{coverImageSubtitleLabel}</Text>
           <Button size="lg" label={uploadLabel} customStyle="ml-6" onClick={onUploadClick} />
           <input
@@ -174,38 +178,42 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
             accept="image/*"
             ref={coverImageInputRef}
           />
-        </Box>
+        </Stack>
         {!showCropper && (
-          <Box customStyle="flex w-full h-[8.55rem] rounded-sm justify-center items-center mx-1 relative bg(secondaryLight/20 dark:secondaryDark/20)">
+          <Stack
+            fullWidth={true}
+            align="center"
+            justify="between"
+            customStyle="h-[8.55rem] rounded-sm mx-1 relative bg(secondaryLight/20 dark:secondaryDark/20)"
+          >
             {!formValues.coverImage && <Text variant="subtitle2">{coverImagePlaceholder}</Text>}
 
             {formValues.coverImage && (
               <>
-                <Box
-                  customStyle="flex p-0.5 rounded-sm border(secondaryLight dark:secondaryDark) absolute top-2 right-2"
-                  onClick={onClickEditImage}
-                >
-                  <Icon type="integrationAppCTA" accentColor={true} />
-                </Box>
+                <button onClick={onClickEditImage}>
+                  <Stack customStyle="p-0.5 rounded-sm border(secondaryLight dark:secondaryDark) absolute top-2 right-2">
+                    <Icon type="integrationAppCTA" accentColor={true} />
+                  </Stack>
+                </button>
                 <Image
                   customStyle="w-full object-cover rounded-sm"
                   src={formValues.coverImage?.src.url}
                 />
               </>
             )}
-          </Box>
+          </Stack>
         )}
         {showCropper && (
-          <Box customStyle="flex my-1">
+          <Stack customStyle="my-1">
             <ImageCropper {...props} />
-          </Box>
+          </Stack>
         )}
       </SectionWrapper>
       <SectionWrapper>
-        <Box customStyle="flex flex-row items-center gap-1">
+        <Stack direction="row" align="center" spacing="gap-1">
           <Text variant="h2">{addDescriptiveTextLabel}</Text>
           <Text variant="subtitle1">{`(${optionalLabel})`}</Text>
-        </Box>
+        </Stack>
         <Text variant="subtitle1">{descriptiveTextSubtitleLabel}</Text>
         <InputWrapper>
           <textarea
@@ -216,18 +224,18 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
             onChange={ev => onDescriptiveTextChange(ev.target.value)}
             placeholder={descriptiveTextPlaceholder}
           />
-          <Box customStyle="flex w-fit self-end mt-1">
+          <Stack customStyle="w-fit self-end mt-1">
             <EditorMeter value={charCount} max={MAX_CHARS} />
-          </Box>
+          </Stack>
         </InputWrapper>
       </SectionWrapper>
       <SectionWrapper>
         <Text variant="h2">{tagsLabel}</Text>
         <Text variant="subtitle1">{tagsSubtitleLabel}</Text>
         <InputWrapper accentBorder={formValues.tags.length > 0}>
-          <Box customStyle="flex flex-row items-center flex-wrap" ref={tagBoxRef}>
+          <Stack direction="row" align="center" customStyle=" flex-wrap" ref={tagBoxRef}>
             <InputTags values={formValues.tags} onClickTag={onClickTag} />
-            <Box customStyle="flex m-1 min-w-[150px]">
+            <Stack customStyle="m-1 min-w-[150px]">
               {/* TODO: search input with suggestions dropdown */}
               {/* <StyledTextInput
                 type="search"
@@ -240,8 +248,8 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
                 value={formValues.newTag}
                 onSuggestionSelect={(event: { suggestion: string }) => onAddTag(event.suggestion)}
               /> */}
-            </Box>
-          </Box>
+            </Stack>
+          </Stack>
         </InputWrapper>
       </SectionWrapper>
       <SectionWrapper topBorderOnly>
@@ -255,23 +263,30 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
           onChange={({ option }) => onSelectLicense(option)}
         /> */}
         {selectedLicense && (
-          <Box customStyle="flex flex-row items-center mt-2 px-1">
+          <Stack direction="row" align="center" customStyle="mt-2 px-1">
             <Icon type={selectedLicense.icon} size="lg" accentColor={true} />
-            <Box customStyle="flex gap-1">
+            <Stack spacing="gap-1">
               {selectedLicense.description.map((el, idx) => (
-                <Box key={idx} customStyle="flex flex-row gap-2">
+                <Stack key={idx} direction="row" spacing="gap-2">
                   {el.icon && <Icon type={el.icon} size="sm" accentColor={true} />}
                   <Text variant="subtitle2">{el.text}</Text>
-                </Box>
+                </Stack>
               ))}
-            </Box>
-          </Box>
+            </Stack>
+          </Stack>
         )}
       </SectionWrapper>
-      <Box customStyle="flex flex-row w-full justify-end items-center p-4 gap-2">
+      <Stack
+        direction="row"
+        align="center"
+        justify="end"
+        fullWidth={true}
+        spacing="gap-2"
+        customStyle="p-4"
+      >
         <Button size="lg" label={saveDraftLabel} onClick={onClickSaveDraft} />
         <Button size="lg" variant="primary" label={confirmLabel} onClick={onClickConfirm} />
-      </Box>
+      </Stack>
     </Card>
   );
 };

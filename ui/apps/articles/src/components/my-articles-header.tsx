@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IMyArticlesHeaderProps {
@@ -16,14 +16,14 @@ const MyArticlesHeader: React.FC<IMyArticlesHeaderProps> = props => {
   const tabWidth = 100 / tabs.length;
   return (
     <Card customStyle="border-b-0 rounded-b-none">
-      <Box customStyle="p-4 gap-4">
+      <Stack customStyle="p-4 gap-4">
         <Text variant="h2">{titleLabel}</Text>
         <Text variant="h6">{subtitleLabel}</Text>
-      </Box>
-      <Box customStyle="flex flex-row">
+      </Stack>
+      <Stack direction="row">
         {tabs.map((tab, idx) => (
           <button onClick={onClickTab(idx)}>
-            <Box
+            <Stack
               key={idx}
               customStyle={`w-[${tabWidth}%}] p-4 border(b ${
                 activeTabIndex === idx ? 'secondaryLight dark:secondaryDark' : 'grey8 dark:grey3'
@@ -46,10 +46,10 @@ const MyArticlesHeader: React.FC<IMyArticlesHeaderProps> = props => {
               >
                 {tab}
               </Text>
-            </Box>
+            </Stack>
           </button>
         ))}
-      </Box>
+      </Stack>
     </Card>
   );
 };

@@ -5,7 +5,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 import { RootExtensionProps } from '@akashaorg/typings/ui';
@@ -124,7 +124,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   };
 
   return (
-    <Box customStyle="pb-2 max-h-[30rem]">
+    <Stack customStyle="pb-2 max-h-[30rem]">
       <ProfileMiniCard
         handleClick={handleProfileClick}
         handleFollow={handleFollow}
@@ -140,7 +140,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         postsLabel={t('Posts')}
         footerExt={<Extension name={`profile-mini-card-footer-extension`} uiEvents={uiEvents} />}
       />
-    </Box>
+    </Stack>
   );
 };
 

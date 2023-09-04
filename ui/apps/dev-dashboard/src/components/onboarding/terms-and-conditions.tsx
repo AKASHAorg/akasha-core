@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
   SteppedActionWrapperProps,
@@ -24,7 +24,7 @@ export const TermsAndConditions: React.FC<TermsAndConditionsProps> = props => {
 
   return (
     <SteppedActionWrapper {...props}>
-      <Box>
+      <Stack>
         {introLabel && (
           <Text customStyle="mb-2" weight="bold">
             {introLabel}
@@ -33,12 +33,12 @@ export const TermsAndConditions: React.FC<TermsAndConditionsProps> = props => {
 
         {subtitleLabel && <Text customStyle="mb-2">{subtitleLabel}</Text>}
 
-        <Box customStyle="space-y-4">
+        <Stack spacing="gap-y-4">
           {paragraphs.map((paragraph: string, idx: number) => (
             <ListItem key={idx} listElementText="•" item={paragraph} />
           ))}
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </SteppedActionWrapper>
   );
 };

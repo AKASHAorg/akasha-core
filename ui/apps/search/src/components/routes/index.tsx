@@ -6,7 +6,7 @@ import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
 import SettingsPage from './settings-page';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetMyProfileQuery(null, {
@@ -21,7 +21,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Router basename={props.baseRouteName}>
-      <Box testId="search-box">
+      <Stack testId="search-box">
         <Routes>
           <Route path="/" element={<Navigate to={routes[RESULTS]} replace />} />
           <Route path={routes[RESULTS]}>
@@ -67,7 +67,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
         </Routes>
-      </Box>
+      </Stack>
     </Router>
   );
 };

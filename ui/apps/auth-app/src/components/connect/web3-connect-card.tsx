@@ -48,7 +48,7 @@ const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
             backgroundSize={boxSize}
             background={boxBgColor}
           />
-          <Stack direction="column">
+          <Stack>
             <Text variant="h6">{titleLabel}</Text>
             {subtitleLabel && (
               <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>

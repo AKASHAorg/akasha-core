@@ -3,7 +3,7 @@ import React from 'react';
 import { EntityTypes } from '@akashaorg/typings/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
@@ -197,9 +197,9 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         <div>
           {notifications?.map((notif: any, index: number) => renderNotificationCard(notif, index))}
           {isFetching && (
-            <Box customStyle="py-4">
+            <Stack customStyle="py-4">
               <Spinner />
-            </Box>
+            </Stack>
           )}
         </div>
       )}

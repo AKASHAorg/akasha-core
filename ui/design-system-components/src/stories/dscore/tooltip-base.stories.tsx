@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip, { TooltipProps } from '@akashaorg/design-system-core/lib/components/Tooltip';
@@ -39,7 +38,7 @@ const ControlledTooltipComponent = () => {
   const [showToolTip, setShowTooltip] = useState(false);
 
   return (
-    <Box customStyle={'flex justify-center items-center h-screen'}>
+    <Stack align="center" justify="center" customStyle={'h-screen'}>
       <Tooltip
         content="I am a tooltip"
         placement="bottom"
@@ -49,7 +48,7 @@ const ControlledTooltipComponent = () => {
       >
         {childrenNode}
       </Tooltip>
-    </Box>
+    </Stack>
   );
 };
 

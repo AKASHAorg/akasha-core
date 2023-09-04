@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import MessageContactCard from '@akashaorg/design-system-components/lib/components/MessageContactCard';
@@ -94,24 +94,24 @@ const InboxPage: React.FC<InboxPageProps> = props => {
 
   return (
     <Card customStyle="max-h-[92vh]">
-      <Box customStyle="flex p-4 gap-2">
-        <Box customStyle="flex flex-row justify-between">
+      <Stack spacing="gap-2" customStyle="p-4 ">
+        <Stack customStyle="flex-row justify-between">
           <Text variant="h1">{t('Messaging App')}</Text>
           <button onClick={handleSettingsClick}>
             <Icon type="Cog8ToothIcon" />
           </button>
-        </Box>
+        </Stack>
         <Text>{t('Write and send private, encrypted messages 🔐 to people in AKASHA World.')}</Text>
-        <Box customStyle="flex border(grey8 dark:grey3) rounded-lg">
-          <Box customStyle="flex px-2 py-4">
+        <Stack customStyle="border(grey8 dark:grey3) rounded-lg">
+          <Stack customStyle="px-2 py-4">
             <Text variant="h2">{t('Conversations')}</Text>
-          </Box>
-          <Box customStyle="rounded-b-lg overflow-auto">
+          </Stack>
+          <Stack customStyle="rounded-b-lg overflow-auto">
             {!!pinnedContacts.length && (
-              <Box customStyle="flex shrink-0">
-                <Box customStyle="p-4 flex shrink-0">
+              <Stack customStyle="shrink-0">
+                <Stack customStyle="p-4 shrink-0">
                   <Text variant="body1">{t('PINNED')}</Text>
-                </Box>
+                </Stack>
 
                 {pinnedContacts.map((contact, idx) => (
                   <MessageContactCard
@@ -134,14 +134,14 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                     onConvoPin={() => handlePinConversation(contact.pubKey)}
                   />
                 ))}
-              </Box>
+              </Stack>
             )}
 
-            <Box customStyle="flex shrink-0">
+            <Stack customStyle="shrink-0">
               {!!pinnedContacts.length && (
-                <Box customStyle="flex p-4">
+                <Stack customStyle="flex p-4">
                   <Text variant="body1">{t('ALL CONVERSATIONS')}</Text>
-                </Box>
+                </Stack>
               )}
 
               {unpinnedContacts?.map((contact, idx) => (
@@ -166,10 +166,10 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                   onConvoPin={() => handlePinConversation(contact.pubKey)}
                 />
               ))}
-            </Box>
-          </Box>
-        </Box>
-      </Box>
+            </Stack>
+          </Stack>
+        </Stack>
+      </Stack>
     </Card>
   );
 };

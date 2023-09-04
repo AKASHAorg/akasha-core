@@ -21,9 +21,9 @@ const ProfileNotFound: React.FC<ProfileNotFoundProps> = ({
   const publicImgPath = '/images';
 
   return (
-    <Stack direction="column" spacing="gap-y-4" fullWidth>
+    <Stack spacing="gap-y-4" fullWidth>
       <Card customStyle={'flex flex-row'} elevation={'1'} radius={16} padding={'p-2'}>
-        <Stack direction="column" customStyle="mb-32">
+        <Stack customStyle="mb-32">
           <Default404Image url={`${publicImgPath}/new404.webp`} />
           <Text variant={'h6'} align="center">
             {titleLabel}

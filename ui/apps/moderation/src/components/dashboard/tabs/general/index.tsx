@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 import { IconType } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -60,16 +60,16 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
   } = props;
 
   return (
-    <Box customStyle="p-4 space-y-4">
-      <Box customStyle="flex items-center justify-between">
+    <Stack spacing="gap-y-4" customStyle="p-4">
+      <Stack align="center" justify="between">
         <Text weight="bold">{moderatorSinceLabel}</Text>
         <Text color="grey4">{dayjs(moderatorSince).format('DD-MMM-YYYY')}</Text>
-      </Box>
+      </Stack>
 
       <Divider />
 
-      <Box customStyle="flex flex-col">
-        <Box customStyle="flex items-center justify-between">
+      <Stack>
+        <Stack align="center" justify="between">
           <Text weight="bold">{moderationCategoriesLabel}</Text>
 
           <Button plain={true} onClick={onButtonClick(EDIT_CATEGORIES)}>
@@ -77,22 +77,22 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
               {changeLabel}
             </Text>
           </Button>
-        </Box>
+        </Stack>
         {moderationCategories.length > 0 ? (
-          <Box customStyle="flex flex-wrap">
+          <Stack customStyle="flex-wrap">
             {moderationCategories.map((category, idx) => (
               <Pill key={category + idx} label={category} active={true} customStyle="mt-3 mr-3" />
             ))}
-          </Box>
+          </Stack>
         ) : (
           <Text>{noCategoriesLabel}</Text>
         )}
-      </Box>
+      </Stack>
 
       <Divider />
 
-      <Box customStyle="flex flex-col space-y-3">
-        <Box customStyle="flex items-center justify-between ">
+      <Stack spacing="gap-y-3">
+        <Stack align="center" justify="between">
           <Text weight="bold">{contactInfoLabel}</Text>
 
           <Button plain={true} onClick={onButtonClick(EDIT_CONTACT_INFO)}>
@@ -100,27 +100,27 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
               {changeLabel}
             </Text>
           </Button>
-        </Box>
+        </Stack>
 
         <Text>{contactInfoIntroLabel}</Text>
 
-        <Box customStyle="space-y-2">
+        <Stack spacing="gap-y-2">
           {contactInfo.map(({ type, value }) => (
-            <Box key={type + value} customStyle="flex items-center space-x-2">
+            <Stack key={type + value} align="center" spacing="gap-x-2">
               <Button icon={type} variant="primary" greyBg={true} iconOnly={true} size="sm" />
 
               <Text>{value}</Text>
-            </Box>
+            </Stack>
           ))}
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
 
       <Divider />
 
       {isAdmin && (
         <>
-          <Box customStyle="flex flex-col space-y-3">
-            <Box customStyle="flex items-center justify-between">
+          <Stack spacing="gap-y-3">
+            <Stack align="center" justify="between">
               <Text weight="bold">{maxApplicantsLabel}</Text>
 
               <Button plain={true} onClick={onButtonClick(EDIT_MAX_APPLICANTS)}>
@@ -128,24 +128,24 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
                   {changeLabel}
                 </Text>
               </Button>
-            </Box>
+            </Stack>
 
             <Text>{maxApplicantsIntroLabel}</Text>
 
-            <Box customStyle="flex space-x-3">
+            <Stack spacing="gap-x-3">
               <Text
                 weight="bold"
                 color={{ light: 'black', dark: 'grey6' }}
               >{`${currentNumberLabel}:`}</Text>
               <Text>{maxApplicants}</Text>
-            </Box>
-          </Box>
+            </Stack>
+          </Stack>
 
           <Divider />
         </>
       )}
 
-      <Box customStyle="flex flex-col space-y-3">
+      <Stack spacing="gap-y-3">
         <Text weight="bold">{moderationDutiesLabel}</Text>
         <Text>{moderationDutiesDescLabel}</Text>
 
@@ -155,7 +155,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
           customStyle="self-end mt-3"
           onClick={onButtonClick(RESIGN_ROLE)}
         />
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };

@@ -4,7 +4,7 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -41,7 +41,7 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
 
   return (
     <Card padding={0}>
-      <Box customStyle="p-4">
+      <Stack customStyle="p-4">
         <Text variant="h5" align="center" weight="bold">
           {titleLabel}
         </Text>
@@ -53,20 +53,20 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
           </Anchor>{' '}
           {subtitleCompletion}
         </Text>
-      </Box>
+      </Stack>
 
       {cardMenuItems.map((item, idx) => (
-        <Box key={idx}>
+        <Stack key={idx}>
           <Divider />
 
-          <Box customStyle="p-4">
+          <Stack customStyle="p-4">
             <Button plain={true} onClick={handleClickMenuItem(item.route)} customStyle="w-full">
-              <Box customStyle="flex justify-between items-center">
+              <Stack align="center" justify="between">
                 <Text variant="h6" weight="bold">
                   {item.label}
                 </Text>
 
-                <Box customStyle="flex items-center space-x-1">
+                <Stack align="center" spacing="gap-x-1">
                   {item.value && (
                     <Text variant="subtitle1" color={{ light: 'grey4', dark: 'grey6' }}>
                       {typeof item.value === 'number' ? item.value : item.value.length}
@@ -77,11 +77,11 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
                     type="ChevronRightIcon"
                     color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                   />
-                </Box>
-              </Box>
+                </Stack>
+              </Stack>
             </Button>
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
       ))}
     </Card>
   );

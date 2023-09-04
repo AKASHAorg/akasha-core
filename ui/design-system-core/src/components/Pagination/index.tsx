@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '../Box';
+import Stack from '../Stack';
 import Button from '../Button';
 import Text from '../Text';
 
@@ -50,7 +50,7 @@ const Pagination: React.FC<PaginationProps> = props => {
   const disabledButtonTextColor = 'grey7';
 
   return (
-    <Box customStyle={`flex items-center space-x-2 ${customStyle}`}>
+    <Stack align="center" spacing="gap-x-2" customStyle={customStyle}>
       {showButtons && (
         <Button
           plain={true}
@@ -146,7 +146,7 @@ const Pagination: React.FC<PaginationProps> = props => {
           </Text>
         </Button>
       )}
-    </Box>
+    </Stack>
   );
 };
 

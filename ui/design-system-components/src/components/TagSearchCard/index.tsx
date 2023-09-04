@@ -3,7 +3,7 @@ import React from 'react';
 import { ITag } from '@akashaorg/typings/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
@@ -38,12 +38,8 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
     handleUnsubscribeTag,
   } = props;
 
-  const BaseItemStyles = `
-    flex justify-between items-center py-2
-    `;
-
   return (
-    <Box customStyle={BaseItemStyles}>
+    <Stack align="center" justify="between" customStyle={'py-2'}>
       <Anchor
         onClick={e => {
           e.preventDefault();
@@ -51,27 +47,29 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
         }}
         href={`${tagAnchorLink}/${tag?.name}`}
       >
-        <Box customStyle={BaseItemStyles} onClick={onClickTag}>
-          {tag && (
-            <SubtitleTextIcon
-              onClick={onClickTag}
-              label={tag.name}
-              subtitle={`${tag.totalPosts} Beams`}
-              iconType="HashtagIcon"
-              backgroundColor={true}
-            />
-          )}
+        <button onClick={onClickTag}>
+          <Stack align="center" justify="between" customStyle={'py-2'}>
+            {tag && (
+              <SubtitleTextIcon
+                onClick={onClickTag}
+                label={tag.name}
+                subtitle={`${tag.totalPosts} Beams`}
+                iconType="HashtagIcon"
+                backgroundColor={true}
+              />
+            )}
 
-          {!tag && (
-            <Box customStyle={BaseItemStyles}>
-              <TextLine title="tagName" animated={false} width="140px" />
-              <TextLine title="tagName" animated={false} width="80px" />
-            </Box>
-          )}
-        </Box>
+            {!tag && (
+              <Stack align="center" justify="between" customStyle={'py-2'}>
+                <TextLine title="tagName" animated={false} width="140px" />
+                <TextLine title="tagName" animated={false} width="80px" />
+              </Stack>
+            )}
+          </Stack>
+        </button>
       </Anchor>
       {tag && (
-        <Box>
+        <Stack>
           <DuplexButton
             inactiveLabel={subscribeLabel}
             activeLabel={subscribedLabel}
@@ -81,9 +79,9 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
             active={subscribedTags?.includes(tag.name)}
             allowMinimization={false}
           />
-        </Box>
+        </Stack>
       )}
-    </Box>
+    </Stack>
   );
 };
 TagSearchCard.defaultProps = {

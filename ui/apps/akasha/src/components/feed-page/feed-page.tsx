@@ -17,7 +17,7 @@ import {
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { Profile } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
@@ -105,13 +105,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   return (
-    <Box customStyle={'w-full'}>
+    <Stack fullWidth={true}>
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
       {loggedProfileData?.did?.id ? (
         <>
-          <Box customStyle="mb-1">
+          <Stack customStyle="mb-1">
             {postId ? (
               <Extension
                 name={`inline-editor_repost_${postId}`}
@@ -125,11 +125,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                 data={{ action: 'post' }}
               />
             )}
-          </Box>
+          </Stack>
         </>
       ) : (
         !dismissed && (
-          <Box customStyle="mb-2">
+          <Stack customStyle="mb-2">
             <LoginCTACard
               title={`${t('Welcome, fellow Ethereans!')} 💫`}
               subtitle={t('We are in private alpha at this time. ')}
@@ -146,7 +146,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               onCloseIconClick={dismissCard}
               key={dismissedCardId}
             />
-          </Box>
+          </Stack>
         )
       )}
       {pendingPostStates?.map(
@@ -174,7 +174,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         onRebeam={handleRebeam}
         onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
       />
-    </Box>
+    </Stack>
   );
 };
 

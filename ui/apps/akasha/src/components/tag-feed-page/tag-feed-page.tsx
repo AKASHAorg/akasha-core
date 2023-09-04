@@ -12,7 +12,7 @@ import {
   IContentClickDetails,
 } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
@@ -94,7 +94,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
@@ -107,14 +107,14 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         />
       )}
       {getTagQuery.status === 'success' && (
-        <Box customStyle="mb-2">
+        <Stack customStyle="mb-2">
           <TagProfileCard
             tag={getTagQuery.data}
             subscribedTags={tagSubscriptions}
             handleSubscribeTag={handleTagSubscribe}
             handleUnsubscribeTag={handleTagSubscribe}
           />
-        </Box>
+        </Stack>
       )}
       <FeedWidget
         queryKey="akasha-tag-feed-query"
@@ -133,7 +133,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         onRebeam={handleRebeam}
         onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
       />
-    </Box>
+    </Stack>
   );
 };
 

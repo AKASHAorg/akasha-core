@@ -5,7 +5,7 @@ import { IconType } from '@akashaorg/typings/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -41,12 +41,12 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
 
   return (
     <Card padding={16}>
-      <Box customStyle="grid gap-4 grid-cols-1">
+      <Stack customStyle="grid gap-4 grid-cols-1">
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
 
-        <Box customStyle="w-40 h-40 my-2 mx-auto">
+        <Stack customStyle="w-40 h-40 my-2 mx-auto">
           <img
             className={tw('object-contain')}
             aria-label={assetName}
@@ -54,7 +54,7 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
             alt={assetName}
             data-testid={`${assetName}-image`}
           />
-        </Box>
+        </Stack>
 
         {introLabel && (
           <Text weight="bold" align="center">
@@ -69,7 +69,7 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
         )}
 
         {codeOfConductLabel && (
-          <Box customStyle="flex justify-center">
+          <Stack justify="center">
             <Button plain={true} onClick={onCodeOfConductClick}>
               <Text
                 variant="subtitle2"
@@ -81,13 +81,13 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
                 {codeOfConductLabel}
               </Text>
             </Button>
-          </Box>
+          </Stack>
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
-          <Box customStyle="flex md:px-20 justify-between">
+          <Stack justify="between" customStyle="md:px-20">
             {overviewCTAArr.map(({ url, label, iconType }) => (
-              <Box key={label + iconType} customStyle="grid gap-1 grid-cols-1 w-[30%]">
+              <Stack key={label + iconType} customStyle="grid gap-1 grid-cols-1 w-[30%]">
                 <Icon size="sm" accentColor={true} type={iconType} customStyle="mx-auto my-0" />
 
                 <Anchor
@@ -97,11 +97,11 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
                 >
                   {label}
                 </Anchor>
-              </Box>
+              </Stack>
             ))}
-          </Box>
+          </Stack>
         )}
-      </Box>
+      </Stack>
     </Card>
   );
 };

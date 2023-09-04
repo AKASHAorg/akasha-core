@@ -21,7 +21,7 @@ import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
 
 import EntryCardRenderer from './entry-renderer';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '@akashaorg/design-system-components/lib/components/ProfileSearchCard';
@@ -405,7 +405,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   return (
-    <Box customStyle="flex(& col)">
+    <Stack>
       <SearchStartCard
         searchKeyword={searchKeyword}
         handleSearch={handleSearch}
@@ -440,7 +440,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         /* allQueriesFinished */ !isFetchingSearch &&
           searchKeyword &&
           /* isAllTabActive ? emptySearchState : */ !searchState[activeButton]?.results?.length && (
-            <Box customStyle="mt-8">
+            <Stack customStyle="mt-8">
               <InfoCard
                 titleLabel=""
                 bodyLabel={
@@ -454,11 +454,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 bodyVariant="body1"
                 customWidthStyle="w-[90%] md:w-[50%] m-auto"
               />
-            </Box>
+            </Stack>
           )
       }
 
-      <Box customStyle="mt-4">
+      <Stack customStyle="mt-4">
         {activeButton === ButtonValues.PEOPLE &&
           searchState[ButtonValues.PEOPLE].done &&
           !!searchProfilesState.length && (
@@ -473,7 +473,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 />
               }
               {searchProfilesState?.map((profileData: Profile, index: number) => (
-                <Box key={index} customStyle="pb-4">
+                <Stack key={index} customStyle="pb-4">
                   <ProfileSearchCard
                     handleFollow={() => handleFollowProfile(profileData.did.id)}
                     handleUnfollow={() => handleUnfollowProfile(profileData.did.id)}
@@ -488,7 +488,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     profileAnchorLink={'/profile'}
                     onClickProfile={() => handleProfileClick(profileData.did.id)}
                   />
-                </Box>
+                </Stack>
               ))}
             </>
           )}
@@ -507,7 +507,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               }
               <Card customStyle="pb-0">
                 {searchTagsState?.map((tag: ITag, index: number) => (
-                  <Box key={index}>
+                  <Stack key={index}>
                     <TagSearchCard
                       tag={tag}
                       subscribedTags={tagSubscriptionsState}
@@ -519,7 +519,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                       handleUnsubscribeTag={handleTagSubscribe(false)}
                     />
                     {index < searchTagsState?.length - 1 && <Divider />}
-                  </Box>
+                  </Stack>
                 ))}
               </Card>
             </>
@@ -583,9 +583,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               navigateToModal={props.navigateToModal}
             />
           ))} */}
-      </Box>
+      </Stack>
       {isFetchingSearch && (
-        <Box customStyle="p-8 flex flex-col items-center justify-center m-auto space-y-8">
+        <Stack align="center" justify="center" spacing="gap-y-8" customStyle="p-8 m-auto">
           <Spinner
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             size="xxl"
@@ -593,11 +593,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             partialSpinner={true}
           />
           <Text variant="footnotes2">{t('Searching...')}</Text>
-        </Box>
+        </Stack>
       )}
       {/* triggers intersection observer */}
-      <Box customStyle="p-2" ref={loadmoreRef} />
-    </Box>
+      <Stack customStyle="p-2" ref={loadmoreRef} />
+    </Stack>
   );
 };
 

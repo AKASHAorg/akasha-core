@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
@@ -302,7 +302,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
         {!initial && (
           <>
             <Divider customStyle="my-2" />
-            <Box customStyle="flex justify-between">
+            <Stack justify="between">
               <Text variant="footnotes2">
                 <>{t('Snooze Notifications')}</>
               </Text>
@@ -312,7 +312,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
                 checked={snoozed}
                 onChange={snoozeChangeHandler}
               />
-            </Box>
+            </Stack>
             <Divider customStyle="my-2" />
           </>
         )}

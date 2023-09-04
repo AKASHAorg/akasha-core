@@ -6,7 +6,7 @@ import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { hasOwn, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import type { RootComponentProps, Profile, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { EntityTypes } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
@@ -64,7 +64,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
   };
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet.Helmet>
         <title>
           {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | AKASHA
@@ -90,7 +90,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
           onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
         />
       </>
-    </Box>
+    </Stack>
   );
 };
 

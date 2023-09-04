@@ -3,7 +3,7 @@ import type { IEntryData, NavigateToParams, IContentClickDetails } from '@akasha
 import { EntityTypes } from '@akashaorg/typings/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -226,8 +226,8 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
 
   return (
     <>
-      <Box customStyle={`${error && 'bg-(errorLight/10 dark:errorDark/40)'}`} style={style}>
-        <Box customStyle="flex flex-row justify-between p-4 shrink-0">
+      <Stack customStyle={`${error && 'bg-(errorLight/10 dark:errorDark/40)'}`}>
+        <Stack customStyle="flex flex-row justify-between p-4 shrink-0">
           <Anchor
             customStyle="flex min-w-0 no-underline"
             href={`${profileAnchorLink}/${entryData.author.id}`}
@@ -244,7 +244,7 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
             />
           </Anchor>
 
-          <Box customStyle="flex flex-row gap-2 items-center shrink-0">
+          <Stack direction="row" spacing="gap-2" align="center" customStyle="shrink-0">
             {entryData.createdAt && !hidePublishTime && (
               <Tooltip placement={'top'} content={formatDate(entryData.createdAt, locale)}>
                 <Text customStyle="flex shrink-0 text(grey4 dark:grey7)">
@@ -287,8 +287,8 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
                 headerMenuExt={headerMenuExt}
               />
             )}
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
 
         {isRemoved && (
           <EntryCardRemoved
@@ -298,34 +298,35 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
           />
         )}
         {!isRemoved && (
-          <Box
-            customStyle={`px-4 max-h-[50rem] ${
-              scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'
-            } ${contentClickable ? 'cursor-pointer' : 'cursor-default'}`}
-            onClick={() => handleContentClick(entryData)}
-            data-testid="entry-content"
-          >
-            {children}
-            {/*<ReadOnlyEditor*/}
-            {/*  content={entryData.slateContent}*/}
-            {/*  handleMentionClick={onMentionClick}*/}
-            {/*  handleTagClick={onTagClick}*/}
-            {/*  handleLinkClick={handleLinkClick}*/}
-            {/*/>*/}
-          </Box>
+          <button onClick={() => handleContentClick(entryData)}>
+            <Stack
+              customStyle={`px-4 max-h-[50rem] ${
+                scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'
+              } ${contentClickable ? 'cursor-pointer' : 'cursor-default'}`}
+              data-testid="entry-content"
+            >
+              {children}
+              {/*<ReadOnlyEditor*/}
+              {/*  content={entryData.slateContent}*/}
+              {/*  handleMentionClick={onMentionClick}*/}
+              {/*  handleTagClick={onTagClick}*/}
+              {/*  handleLinkClick={handleLinkClick}*/}
+              {/*/>*/}
+            </Stack>
+          </button>
         )}
         {/*{showLinkPreview && (*/}
-        {/*  <Box customStyle="flex p-4">*/}
+        {/*  <Stack customStyle="p-4">*/}
         {/*    <LinkPreview*/}
         {/*      linkPreviewData={entryData.linkPreview}*/}
         {/*      handleLinkClick={handleLinkClick}*/}
         {/*    />*/}
-        {/*  </Box>*/}
+        {/*  </Stack>*/}
         {/*)}*/}
         {/*{entryData.images && (*/}
-        {/*  <Box customStyle="flex p-4">*/}
+        {/*  <Stack customStyle="p-4">*/}
         {/*    <EntryImageGallery images={entryData.images} handleClickImage={handleClickImage} />*/}
-        {/*  </Box>*/}
+        {/*  </Stack>*/}
         {/*)}*/}
         {/*{imageOverlayOpen && (*/}
         {/*  <MultipleImageOverlay*/}
@@ -335,9 +336,9 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
         {/*  />*/}
         {/*)}*/}
         {/*{showQuote && (*/}
-        {/*  <Box customStyle="flex p-4" onClick={() => handleContentClick(entryData.quote)}>*/}
+        {/*  <Stack customStyle="p-4" onClick={() => handleContentClick(entryData.quote)}>*/}
         {/*    <EmbedBox embedEntryData={entryData.quote} />*/}
-        {/*  </Box>*/}
+        {/*  </Stack>*/}
         {/*)}*/}
         {/*{showRemovedQuote && (*/}
         {/*  <EntryCardRemoved*/}
@@ -347,7 +348,7 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
         {/*  />*/}
         {/*)}*/}
         {/*{showReportedQuote && (*/}
-        {/*  <Box customStyle="flex p-4" onClick={() => null}>*/}
+        {/*  <Stack customStyle="p-4" onClick={() => null}>*/}
         {/*    <EntryCardHidden*/}
         {/*      reason={entryData.reason}*/}
         {/*      headerTextLabel={headerTextLabel}*/}
@@ -355,12 +356,12 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
         {/*      ctaLabel={ctaLabel}*/}
         {/*      handleFlipCard={handleFlipCard}*/}
         {/*    />*/}
-        {/*  </Box>*/}
+        {/*  </Stack>*/}
         {/*)}*/}
         {/*{showDelistedQuote && (*/}
-        {/*  <Box customStyle="flex p-4" onClick={() => null}>*/}
+        {/*  <Stack customStyle="p-4" onClick={() => null}>*/}
         {/*    <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />*/}
-        {/*  </Box>*/}
+        {/*  </Stack>*/}
         {/*)}*/}
         {!hideActionButtons && (
           <CardActions
@@ -379,7 +380,7 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
           />
         )}
         {error && <EntryCardError error={error} onRetry={onRetry} />}
-      </Box>
+      </Stack>
     </>
   );
 };

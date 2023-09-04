@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -18,20 +18,20 @@ const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
 
   return (
     <Card padding={20}>
-      <Box customStyle="self-end">
+      <Stack customStyle="self-end">
         <Button plain={true} onClick={onCloseButtonClick}>
           <Icon type="XMarkIcon" />
         </Button>
-      </Box>
-      <Box customStyle="flex flex-col items-center space-y-6">
+      </Stack>
+      <Stack align="center" spacing="gap-y-6">
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
-        <Box customStyle="w-36 h-36 rounded-xl bg(grey7 dark:grey5)" />
+        <Stack customStyle="w-36 h-36 rounded-xl bg(grey7 dark:grey5)" />
         <Text variant="footnotes2" align="center">
           {subtitleLabel}
         </Text>
-      </Box>
+      </Stack>
     </Card>
   );
 };

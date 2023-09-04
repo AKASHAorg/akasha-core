@@ -3,7 +3,7 @@ import { IPublishData, Profile } from '@akashaorg/typings/ui';
 import { createPendingEntry, useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { REFLECT } from '../../../routes';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
 type PendingReplyProps = {
@@ -28,7 +28,7 @@ export function PendingReply({ postId, loggedProfileData, commentIds }: PendingR
             (pendingReplyState.state.status === 'success' &&
               !commentIds.includes(pendingReplyState.state.data.toString()))) &&
           pendingReplyState.state.variables.postID === postId && (
-            <Box
+            <Stack
               customStyle={`px-4 border border(grey8 dark:grey3) bg-secondaryLight/30`}
               data-testid="pending-entry"
               key={pendingReplyState.mutationId}
@@ -46,7 +46,7 @@ export function PendingReply({ postId, loggedProfileData, commentIds }: PendingR
                 disableActions={true}
                 hideActionButtons={true}
               />
-            </Box>
+            </Stack>
           ),
       )}
     </>

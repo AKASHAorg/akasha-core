@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import FollowProfile from '../../follow-profile';
 import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
 import EngagementTab from './engagement-tab';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
@@ -112,9 +112,9 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
     <EngagementTab isLoggedIn={!!loginQuery.data?.id} navigateTo={navigateTo}>
       {followersReq.status === 'loading' && <ProfileEngagementLoading />}
       {followersReq.status === 'error' && (
-        <Box customStyle="mt-8">
+        <Stack customStyle="mt-8">
           <EntryError onError={onError} />
-        </Box>
+        </Stack>
       )}
       {followersReq.status === 'success' && (
         <Followers

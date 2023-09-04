@@ -3,7 +3,7 @@ import React from 'react';
 import { Profile } from '@akashaorg/typings/ui';
 
 import Avatar, { AvatarSize } from '../Avatar';
-import Box from '../Box';
+import Stack from '../Stack';
 import Button from '../Button';
 import DidField from '../DidField';
 import Text from '../Text';
@@ -56,7 +56,7 @@ const ProfileAvatarButton = React.forwardRef(
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        <Box role="img" aria-label="avatar-box" customStyle="shrink-0">
+        <Stack aria-label="avatar-box" customStyle="shrink-0">
           <Avatar
             size={size}
             avatar={avatarImage}
@@ -64,15 +64,15 @@ const ProfileAvatarButton = React.forwardRef(
             customStyle="cursor-pointer"
             onClick={handleClickAvatar}
           />
-        </Box>
-        <Box role="listitem" aria-label="info-box" customStyle="justify-center align-top space-y-1">
-          <Box ref={ref}>
+        </Stack>
+        <Stack aria-label="info-box" customStyle="justify-center align-top space-y-1">
+          <Stack ref={ref}>
             <Text variant="button-sm" weight="bold" truncate={true} customStyle={textTruncateStyle}>
               {label || profileId}
             </Text>
-          </Box>
+          </Stack>
           <DidField did={profileId} isValid={true} copiable={false} />
-        </Box>
+        </Stack>
       </Button>
     );
   },

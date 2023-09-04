@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Entry from '../Entry';
@@ -54,9 +53,10 @@ const Followers: React.FC<FollowersProps> = ({
   )}`;
 
   return (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack spacing="gap-y-4">
       {followers.map((engagement, index, engagements) => (
-        <Box
+        <Stack
+          direction="row"
           key={`${engagement?.id}-${index}`}
           customStyle={index + 1 !== engagements.length ? borderBottomStyle : ''}
         >
@@ -74,11 +74,11 @@ const Followers: React.FC<FollowersProps> = ({
             }
             onProfileClick={onProfileClick}
           />
-        </Box>
+        </Stack>
       ))}
-      <Box customStyle="mx-auto" ref={loadMoreRef}>
+      <Stack customStyle="mx-auto" ref={loadMoreRef}>
         {loadMore && <Spinner />}
-      </Box>
+      </Stack>
     </Stack>
   );
 };

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import menuRoute, { DEV_KEYS } from '../routes';
@@ -38,7 +38,7 @@ export const EditMessageName: React.FC<RootComponentProps> = props => {
       onCancelButtonClick={handleCancel}
       onConfirmButtonClick={handleSave}
     >
-      <Box customStyle="p-4 space-y-4">
+      <Stack spacing="gap-y-4" customStyle="p-4">
         <Text variant="body2">
           {t(
             'You can only edit the name of your message, but you cannot edit the generated message.  If you wish, you can delete it and generate a new one.',
@@ -55,7 +55,7 @@ export const EditMessageName: React.FC<RootComponentProps> = props => {
             extraInfo: t('Messages cannot be edited, but you can delete them and add a new one.'),
           }}
         />
-      </Box>
+      </Stack>
     </CardWrapper>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -16,7 +16,7 @@ const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
 
   return (
     <Card padding={16}>
-      <Box customStyle="flex flex-col items-center space-y-6">
+      <Stack align="center" spacing="gap-y-6">
         <Text variant="h6" weight="bold">
           {titleLabel}
         </Text>
@@ -26,7 +26,7 @@ const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
         </Text>
 
         <Button size="md" variant="primary" label={buttonLabel} onClick={onClickApply} />
-      </Box>
+      </Stack>
     </Card>
   );
 };

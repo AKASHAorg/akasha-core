@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -44,15 +44,15 @@ const BMContactInfo: React.FC<BMContactInfoProps> = props => {
         {subtitleLabel}{' '}
       </Text>
 
-      <Box>
+      <Stack>
         <TextField label={discordLabel} placeholder={discordPlaceholderLabel} type="text" />
-      </Box>
+      </Stack>
 
-      <Box>
+      <Stack>
         <TextField label={emailLabel} placeholder={emailPlaceholderLabel} type="text" />
-      </Box>
+      </Stack>
 
-      <Box customStyle="flex justify-end">
+      <Stack justify="end">
         <Button plain={true} onClick={onFillFromProfileClick}>
           <Text
             as="span"
@@ -64,7 +64,7 @@ const BMContactInfo: React.FC<BMContactInfoProps> = props => {
             {fillFromProfileLabel}
           </Text>
         </Button>
-      </Box>
+      </Stack>
 
       {checks.map((check, idx) => (
         <Checkbox

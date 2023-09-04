@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
@@ -33,21 +33,21 @@ const AppsOption: React.FC<IAppsOption> = props => {
 
   return (
     <PageLayout title={titleLabel}>
-      <Box customStyle="px-4">
+      <Stack customStyle="px-4">
         {/* automatic updates */}
-        <Box customStyle="py-4 border(b-1 solid grey8)">
-          <Box customStyle="flex justify-between items-center mb-2">
+        <Stack customStyle="py-4 border(b-1 solid grey8)">
+          <Stack justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{autoUpdatesLabel}</Text>
 
             <Toggle checked={checkedAutoUpdates} onChange={onAutoUpdatesChange} disabled={true} />
-          </Box>
+          </Stack>
 
           <Text>{autoUpdatesInfo}</Text>
-        </Box>
+        </Stack>
 
         {/* data and analytics */}
-        <Box customStyle="py-4 border(b-1 solid grey8)">
-          <Box customStyle="flex justify-between items-center mb-2">
+        <Stack customStyle="py-4 border(b-1 solid grey8)">
+          <Stack justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{dataAnalyticsLabel}</Text>
 
             <Toggle
@@ -55,11 +55,11 @@ const AppsOption: React.FC<IAppsOption> = props => {
               onChange={onDataAnalyticsChange}
               disabled={true}
             />
-          </Box>
+          </Stack>
 
           <Text>{dataAnalyticsinfo}</Text>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </PageLayout>
   );
 };

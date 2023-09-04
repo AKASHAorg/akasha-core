@@ -13,7 +13,7 @@ import TagFeedPage from './tag-feed-page/tag-feed-page';
 import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, INVITE } from '../routes';
 import ReplyPage from './item-page/reply-page';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetMyProfileQuery(null, {
@@ -29,7 +29,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Router basename={props.baseRouteName}>
-      <Box customStyle="flex">
+      <Stack>
         <Routes>
           <Route
             path={routes[FEED]}
@@ -82,7 +82,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route path={`${routes[INVITE]}/:inviteCode`} element={<InvitePage {...props} />} />
           <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
         </Routes>
-      </Box>
+      </Stack>
     </Router>
   );
 };

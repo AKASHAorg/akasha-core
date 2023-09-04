@@ -49,8 +49,8 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
 
   return (
     <Card elevation="1" radius={20} padding={'p-4'}>
-      <Stack direction="column" spacing="gap-4" fullWidth>
-        <Stack justify="between">
+      <Stack spacing="gap-4" fullWidth>
+        <Stack direction="row" justify="between">
           {stats.map((stat, index) => (
             <Button
               onClick={
@@ -60,7 +60,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
               disabled={+stat.total === 0 && !stat.label.includes('Interests')}
               plain
             >
-              <Stack direction="column" align="center" customStyle="group">
+              <Stack direction="row" align="center" customStyle="group">
                 <AppIcon
                   placeholderIconType={stat.icon}
                   size="sm"

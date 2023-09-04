@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type ListItemProps = {
@@ -12,10 +12,10 @@ export const ListItem: React.FC<ListItemProps> = props => {
   const { listElementText, item } = props;
 
   return (
-    <Box customStyle="flex space-x-1">
+    <Stack spacing="gap-x-1">
       <Text>{listElementText}</Text>
 
       <Text>{item}</Text>
-    </Box>
+    </Stack>
   );
 };
