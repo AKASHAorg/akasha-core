@@ -20,18 +20,10 @@ import {
 
 const FollowersPage = () => {
   const { profileId } = useParams<{ profileId: string }>();
-
-  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
-
-  const navigateTo = getRoutingPlugin().navigateTo;
-
   const [loadMore, setLoadingMore] = useState(false);
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
   const loginQuery = useGetLogin();
-
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
-  };
-
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -83,9 +75,6 @@ const FollowersPage = () => {
         : [],
     [followersReq.data],
   );
-  const isViewer =
-    profileDataReq.data && 'isViewer' in profileDataReq.data ? profileDataReq.data.isViewer : null;
-
   const lastPageInfo = React.useMemo(() => {
     const lastPage = followersReq.data?.pages?.[followersReq.data?.pages?.length - 1];
     return lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
@@ -99,6 +88,15 @@ const FollowersPage = () => {
       getNavigationUrl: () => `/${profileId}`,
     });
   }
+
+  const { isViewer } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { isViewer: null };
+
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    navigateToModal({ name: 'login', redirectTo });
+  };
 
   const onProfileClick = (profileId: string) => {
     navigateTo?.({

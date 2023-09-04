@@ -5,36 +5,23 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import EditInterests from '@akashaorg/design-system-components/lib/components/EditInterests';
-import { ProfileHeader } from '@akashaorg/design-system-components/lib/components/Profile';
-
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  useGetProfileByDidQuery,
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import {
-  useShowFeedback,
-  getProfileImageVersionsWithMediaUrl,
-  hasOwn,
-  useGetLogin,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
+import { useShowFeedback, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 const InterestsPage = () => {
   const { profileId } = useParams<{ profileId: string }>();
   const { t } = useTranslation('app-profile');
-  const { getRoutingPlugin } = useRootComponentProps();
-
-  const navigateTo = getRoutingPlugin().navigateTo;
-
-  const queryClient = useQueryClient();
-
   const [showFeedback, setShowFeedback] = useShowFeedback(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const onMutate = () => {
     setIsProcessing(true);
@@ -44,20 +31,8 @@ const InterestsPage = () => {
     setIsProcessing(false);
   };
 
+  const queryClient = useQueryClient();
   const loginQuery = useGetLogin();
-  const profileDataReq = useGetProfileByDidQuery(
-    {
-      id: profileId,
-    },
-    {
-      select: response => response.node,
-      enabled: !!loginQuery.data?.id,
-    },
-  );
-  const { akashaProfile: profileData } = Object.assign(
-    { akashaProfile: null },
-    profileDataReq.data,
-  );
   const ownInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node },
@@ -68,14 +43,6 @@ const InterestsPage = () => {
         ? ownInterestsQueryReq.data.akashaProfileInterests?.topics || []
         : [],
     [ownInterestsQueryReq.data],
-  );
-  const background = useMemo(
-    () => getProfileImageVersionsWithMediaUrl(profileData?.background),
-    [profileData?.background],
-  );
-  const avatar = useMemo(
-    () => getProfileImageVersionsWithMediaUrl(profileData?.avatar),
-    [profileData?.avatar],
   );
   const createInterest = useCreateInterestsMutation({
     onMutate,
@@ -115,14 +82,6 @@ const InterestsPage = () => {
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
-      <ProfileHeader
-        did={profileData?.did}
-        validAddress={true}
-        background={background}
-        avatar={avatar}
-        name={profileData?.name}
-        publicImagePath="/images"
-      />
       <Card elevation="1" radius={20} padding={'p-4'}>
         {profileId !== loginQuery.data?.id && (
           <Stack direction="column" spacing="gap-y-2.5">
