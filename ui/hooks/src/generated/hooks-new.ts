@@ -52,6 +52,7 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ `
     fragment ContentBlockFragment on AkashaContentBlock {
+  id
   content {
     propertyType
     value
@@ -81,6 +82,7 @@ export const ContentBlockFragmentDoc = /*#__PURE__*/ `
     `;
 export const BlockStorageFragmentDoc = /*#__PURE__*/ `
     fragment BlockStorageFragment on AkashaBlockStorage {
+  id
   appVersionID
   appVersion {
     application {
@@ -117,6 +119,7 @@ export const BlockStorageFragmentDoc = /*#__PURE__*/ `
     `;
 export const ReflectFragmentDoc = /*#__PURE__*/ `
     fragment ReflectFragment on AkashaReflect {
+  id
   author {
     id
     isViewer

@@ -32,6 +32,7 @@ fragment BeamFragment on AkashaBeam{
 }
 
 fragment ContentBlockFragment on AkashaContentBlock{
+  id
   content {
     propertyType
     value
@@ -60,6 +61,7 @@ fragment ContentBlockFragment on AkashaContentBlock{
 }
 
 fragment BlockStorageFragment on AkashaBlockStorage {
+  id
   appVersionID
   appVersion {
     application {
