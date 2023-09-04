@@ -12,7 +12,7 @@ import {
   useGetProfileByDidQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getProfileImageVersionsWithMediaUrl, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -29,17 +29,13 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   const { plugins, handleFeedback } = props;
   const { t } = useTranslation('app-profile');
   const { profileId } = useParams<{ profileId: string }>();
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-  const queryClient = useQueryClient();
-
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialAkashaProfileInput | null>(null);
-  const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const onMutate = () => {
     setIsProcessing(true);
@@ -50,6 +46,8 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
     navigateToProfileInfoPage();
   };
 
+  const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
+  const queryClient = useQueryClient();
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfileByDidQuery(
     {
@@ -60,10 +58,12 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
       enabled: !!profileId,
     },
   );
-  const { akashaProfile: profileData } = Object.assign(
-    { akashaProfile: null },
-    profileDataReq.data,
-  );
+
+  const { akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { akashaProfile: null };
+
   const background = useMemo(
     () => getProfileImageVersionsWithMediaUrl(profileData?.background),
     [profileData?.background],
@@ -112,10 +112,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
         details={t('We cannot show this profile right now')}
       />
     );
-
-  const modalMessage = t(
-    "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
-  );
 
   const navigateToProfileInfoPage = () => {
     navigateTo({
@@ -297,7 +293,11 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
           },
         ]}
       >
-        <Text variant="body1">{modalMessage}</Text>
+        <Text variant="body1">
+          {t(
+            "It looks like you haven't saved your changes, if you leave this page all the changes you made will be gone!",
+          )}
+        </Text>
       </Modal>
     </Stack>
   );
