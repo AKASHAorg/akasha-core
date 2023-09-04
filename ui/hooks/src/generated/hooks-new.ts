@@ -52,6 +52,7 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ `
     fragment ContentBlockFragment on AkashaContentBlock {
+  id
   content {
     propertyType
     value
@@ -81,6 +82,7 @@ export const ContentBlockFragmentDoc = /*#__PURE__*/ `
     `;
 export const BlockStorageFragmentDoc = /*#__PURE__*/ `
     fragment BlockStorageFragment on AkashaBlockStorage {
+  id
   appVersionID
   appVersion {
     application {
@@ -117,6 +119,7 @@ export const BlockStorageFragmentDoc = /*#__PURE__*/ `
     `;
 export const ReflectFragmentDoc = /*#__PURE__*/ `
     fragment ReflectFragment on AkashaReflect {
+  id
   author {
     id
     isViewer
@@ -1436,6 +1439,74 @@ useInfiniteGetFollowDocumentQuery.getKey = (variables: Types.GetFollowDocumentQu
 ;
 
 useGetFollowDocumentQuery.fetcher = (variables: Types.GetFollowDocumentQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetFollowDocumentQuery, Types.GetFollowDocumentQueryVariables>(GetFollowDocumentDocument, variables, options);
+export const GetFollowDocumentsDocument = /*#__PURE__*/ `
+    query GetFollowDocuments($follower: ID!, $following: [String!]) {
+  node(id: $follower) {
+    ... on CeramicAccount {
+      akashaProfile {
+        followers(last: 25, filters: {where: {profileID: {in: $following}}}) {
+          edges {
+            node {
+              id
+              isFollowing
+              profileID
+              profile {
+                ...UserProfileFragment
+              }
+            }
+            cursor
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const useGetFollowDocumentsQuery = <
+      TData = Types.GetFollowDocumentsQuery,
+      TError = unknown
+    >(
+      variables: Types.GetFollowDocumentsQueryVariables,
+      options?: UseQueryOptions<Types.GetFollowDocumentsQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetFollowDocumentsQuery, TError, TData>(
+      ['GetFollowDocuments', variables],
+      fetcher<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables),
+      options
+    );
+useGetFollowDocumentsQuery.document = GetFollowDocumentsDocument;
+
+
+useGetFollowDocumentsQuery.getKey = (variables: Types.GetFollowDocumentsQueryVariables) => ['GetFollowDocuments', variables];
+;
+
+export const useInfiniteGetFollowDocumentsQuery = <
+      TData = Types.GetFollowDocumentsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetFollowDocumentsQueryVariables,
+      variables: Types.GetFollowDocumentsQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetFollowDocumentsQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetFollowDocumentsQuery, TError, TData>(
+      ['GetFollowDocuments.infinite', variables],
+      (metaData) => fetcher<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetFollowDocumentsQuery.getKey = (variables: Types.GetFollowDocumentsQueryVariables) => ['GetFollowDocuments.infinite', variables];
+;
+
+useGetFollowDocumentsQuery.fetcher = (variables: Types.GetFollowDocumentsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options);
 export const CreateProfileDocument = /*#__PURE__*/ `
     mutation CreateProfile($i: CreateAkashaProfileInput!) {
   createAkashaProfile(input: $i) {
