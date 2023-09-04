@@ -6,6 +6,8 @@ import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { useBlocksPublishing } from './use-blocks-publishing';
 import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { AkashaBeamInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 export const BeamEditor: React.FC = () => {
   const { getEditorBlocksPlugin, uiEvents, logger } = useRootComponentProps();
@@ -56,7 +58,7 @@ export const BeamEditor: React.FC = () => {
   };
 
   return (
-    <div>
+    <Card>
       {blocksInUse.map((block, idx) => (
         <div key={`${block.name}-${idx}`}>
           <Extension
@@ -65,7 +67,7 @@ export const BeamEditor: React.FC = () => {
             uiEvents={uiEvents}
           />
           <Dropdown
-            placeholderLabel={'Add block'}
+            placeholderLabel={'Add Block'}
             menuItems={availableBlocks.map(eb => ({
               id: eb.name,
               iconName: eb.icon,
@@ -75,9 +77,9 @@ export const BeamEditor: React.FC = () => {
           />
         </div>
       ))}
-      <div>
+      <Stack justify={'end'}>
         <Button disabled={isPublishing} label={'Publish'} onClick={handleBeamPublish} />
-      </div>
-    </div>
+      </Stack>
+    </Card>
   );
 };
