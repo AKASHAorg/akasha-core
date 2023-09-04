@@ -46,7 +46,7 @@ export const genAppProps = (): UseRootComponentReturn => ({
     routeObserver: new Subject(),
     navigateTo: jest.fn(),
     handleRedirect: jest.fn(),
-    getURlForApp: jest.fn(),
+    getUrlForApp: jest.fn(),
   }),
   getTranslationPlugin: () => ({ i18n: {} }),
   parseQueryString: () => ({}),
