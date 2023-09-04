@@ -30,7 +30,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
       return resp.viewer?.akashaProfile;
     },
   });
-  const loggedProfileData = profileDataReq.data;
+  const loggedProfileData = profileDataReq?.data;
 
   const isLoggedIn = React.useMemo(() => {
     return loggedProfileData?.did?.id;
@@ -41,7 +41,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
    * Currently react query's initialData isn't working properly so listsReq.data will return undefined even if we supply initialData.
    * This will be fixed in v4 of React query(https://github.com/DamianOsipiuk/vue-query/issues/124).
    * In the meantime, the following check will ensure undefined data is handled.  */
-  const lists = listsReq.data || [];
+  const lists = listsReq?.data || [];
 
   const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);
   const bookmarkedBeams = undefined;
@@ -105,13 +105,13 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   };
 
   return (
-    <Card customStyle="flex flex-row" elevation={'1'} radius={16} padding={'p-4'}>
+    <Card elevation={'1'} radius={16} padding={'p-4'}>
       <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
-      {listsReq.status === 'error' && (
+      {listsReq?.status === 'error' && (
         <ErrorLoader
           type="script-error"
           title={t('There was an error loading the lists')}
-          details={listsReq.error as string}
+          details={listsReq?.error as string}
         />
       )}
 
@@ -125,7 +125,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
             showMainArea={!isLoggedIn}
           /> */}
 
-        {!listsReq.isFetched && isLoggedIn && <Spinner />}
+        {!listsReq?.isFetched && isLoggedIn && <Spinner />}
         {(!isLoggedIn || (listsReq.isFetched && (!lists || !lists.length))) && (
           <DefaultEmptyCard infoText={t('You don’t have any saved content in your List')} />
         )}
