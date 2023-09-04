@@ -1,4 +1,9 @@
-import { UIEventData, ExtensionLoaderFn, RootExtensionProps } from '@akashaorg/typings/ui';
+import {
+  ExtensionLoaderFn,
+  RootExtensionProps,
+  EventDataTypes,
+  EventTypes,
+} from '@akashaorg/typings/ui';
 import * as singleSpa from 'single-spa';
 
 export const extensionLoader: ExtensionLoaderFn = loadingFn => {
@@ -6,24 +11,24 @@ export const extensionLoader: ExtensionLoaderFn = loadingFn => {
   const unmountingParcels = new Set<string>();
   return {
     load(props: RootExtensionProps, parentName: string) {
-      const { domElement } = props;
+      const { domElement, extensionData, logger } = props;
       const parcelProps = {
         ...props,
         // @TODO: refactor this. App-loader should not alter extension data!
         extensionData: {
-          ...props.extensionData,
+          ...extensionData,
           itemType:
             // Make sure that itemType coming from extensionData is the correct type `EntityTypes`
             // as it will be stringified when passed to the extension by navigateToModal
-            props.extensionData.itemType === undefined ? undefined : +props.extensionData.itemType,
+            extensionData.itemType === undefined ? undefined : +extensionData.itemType,
         },
       };
       if (!domElement) {
-        props.logger.warn(`Not loading extension ${props.name}. domNode not found.`);
+        logger.warn(`Not loading extension ${props.name}. domNode not found.`);
         return;
       }
 
-      const rootNodeId = `${props.extensionData.name}_${parentName}`;
+      const rootNodeId = `${extensionData.name}_${parentName}`;
       const rootNode = document.createElement('div');
 
       if (!domElement.childElementCount || !domElement.children.namedItem(rootNodeId)) {
@@ -31,13 +36,13 @@ export const extensionLoader: ExtensionLoaderFn = loadingFn => {
         domElement.appendChild(rootNode);
       }
 
-      if (unmountingParcels.has(props.extensionData.name)) {
+      if (unmountingParcels.has(extensionData.name)) {
         // Parcel was marked for unmounting, unmount it now to avoid
         // weird behaviour
-        parcels[props.extensionData.name].unmount();
-        parcels[props.extensionData.name].unmountPromise.then(() => {
-          parcels[props.extensionData.name].mount();
-          unmountingParcels.delete(props.extensionData.name);
+        parcels[extensionData.name].unmount();
+        parcels[extensionData.name].unmountPromise.then(() => {
+          parcels[extensionData.name].mount();
+          unmountingParcels.delete(extensionData.name);
           return;
         });
       }
@@ -46,12 +51,12 @@ export const extensionLoader: ExtensionLoaderFn = loadingFn => {
         domElement: rootNode,
       });
       parcel.mountPromise.then(() => {
-        parcels[props.extensionData.name] = parcel;
+        parcels[extensionData.name] = parcel;
       });
     },
     // the unload does not work properly
     // TODO: refactor the unloading logic
-    async unload(event: UIEventData, _parentName: string) {
+    async unload(event: { event: EventTypes; data: EventDataTypes }, _parentName: string) {
       const { name } = event.data;
       if (parcels[name] && parcels[name].getStatus() === singleSpa.MOUNTED) {
         unmountingParcels.add(name);
