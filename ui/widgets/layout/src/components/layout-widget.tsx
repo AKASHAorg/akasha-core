@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { EventTypes, UIEventData } from '@akashaorg/typings/ui';
+import { EventDataTypes, EventTypes, RootComponentProps, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
-import { usePlaformHealthCheck, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
+import {
+  filterEvents,
+  usePlaformHealthCheck,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import {
   startMobileSidebarHidingBreakpoint,
   startWidgetsTogglingBreakpoint,
@@ -16,8 +19,8 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 
-const Layout = () => {
-  const [activeModal, setActiveModal] = useState<UIEventData['data'] | null>(null);
+const Layout: React.FC<RootComponentProps> = props => {
+  const [activeModal, setActiveModal] = useState<EventDataTypes | null>(null);
   const [needSidebarToggling, setNeedSidebarToggling] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
@@ -87,7 +90,7 @@ const Layout = () => {
   };
 
   const handleModal = useCallback(
-    (data: UIEventData['data']) => {
+    (data: EventDataTypes) => {
       setActiveModal(active => {
         if ((!active || !active.name) && data.name) {
           return data;
@@ -113,30 +116,40 @@ const Layout = () => {
   });
 
   useEffect(() => {
-    const eventsSub = _uiEvents.current.subscribe({
-      next: (eventInfo: UIEventData) => {
-        switch (eventInfo.event) {
-          case EventTypes.ModalRequest:
-            handleModal(eventInfo.data);
-            break;
-          case EventTypes.ShowSidebar:
-            handleSidebarShow();
-            break;
-          case EventTypes.HideSidebar:
-            handleSidebarHide();
-            break;
-          case EventTypes.ShowWidgets:
-            handleWidgetsShow();
-            break;
-          case EventTypes.HideWidgets:
-            handleWidgetsHide();
-            break;
-          default:
-            break;
-        }
-      },
-    });
-    _uiEvents.current.next({
+    const eventsSub = uiEvents.current
+      .pipe(
+        filterEvents([
+          EventTypes.ModalRequest,
+          EventTypes.ShowSidebar,
+          EventTypes.HideSidebar,
+          EventTypes.ShowSidebar,
+          EventTypes.HideWidgets,
+        ]),
+      )
+      .subscribe({
+        next: (eventInfo: UIEventData) => {
+          switch (eventInfo.event) {
+            case EventTypes.ModalRequest:
+              handleModal(eventInfo.data as EventDataTypes);
+              break;
+            case EventTypes.ShowSidebar:
+              handleSidebarShow();
+              break;
+            case EventTypes.HideSidebar:
+              handleSidebarHide();
+              break;
+            case EventTypes.ShowWidgets:
+              handleWidgetsShow();
+              break;
+            case EventTypes.HideWidgets:
+              handleWidgetsHide();
+              break;
+            default:
+              break;
+          }
+        },
+      });
+    uiEvents.current.next({
       event: EventTypes.LayoutReady,
     });
     return () => {
@@ -248,13 +261,13 @@ const Layout = () => {
   );
 };
 
-const LayoutWidget = () => {
+const LayoutWidget: React.FC<RootComponentProps> = props => {
   const { getTranslationPlugin } = useRootComponentProps();
-
+  const { i18n } = getTranslationPlugin();
   return (
     <Router>
-      <I18nextProvider i18n={getTranslationPlugin().i18n}>
-        <Layout />
+      <I18nextProvider i18n={i18n}>
+        <Layout {...props} />
       </I18nextProvider>
     </Router>
   );

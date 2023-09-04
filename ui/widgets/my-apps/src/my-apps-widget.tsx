@@ -75,7 +75,7 @@ const ICWidget = () => {
   const integrationsInfoReq = null;
 
   const { filteredDefaultApps, filteredInstalledApps } = React.useMemo(() => {
-    if (integrationsInfoReq.data?.getLatestRelease) {
+    if (integrationsInfoReq?.data?.getLatestRelease) {
       return integrationsInfoReq.data?.getLatestRelease.reduce(
         (acc, app) => {
           // select default apps from list of apps
@@ -88,7 +88,7 @@ const ICWidget = () => {
             });
           } else {
             // select user installed apps from list of installed apps
-            if (installedAppsReq.data?.some(installedApp => installedApp.name === app.name)) {
+            if (installedAppsReq?.data?.some(installedApp => installedApp.name === app.name)) {
               acc.filteredInstalledApps.push({
                 name: app.manifestData.displayName,
                 appId: app.name,
@@ -102,7 +102,7 @@ const ICWidget = () => {
       );
     }
     return { filteredDefaultApps: [], filteredInstalledApps: [] };
-  }, [defaultApps, installedAppsReq.data, integrationsInfoReq.data?.getLatestRelease]);
+  }, [defaultApps, installedAppsReq?.data, integrationsInfoReq?.data?.getLatestRelease]);
 
   const handleAppClick = (appName: string) => () => {
     if (!isLoggedIn) {

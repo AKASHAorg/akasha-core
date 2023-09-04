@@ -79,6 +79,7 @@ export type EditorBoxProps = {
   onPlaceholderClick?: () => void;
   showDraft?: boolean;
   onClear?: () => void;
+  showPostButton?: boolean;
 };
 
 /* eslint-disable complexity */
@@ -115,6 +116,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
     cancelButtonLabel,
     onCancelClick,
     showCancelButton,
+    showPostButton = true,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -690,13 +692,15 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
           )} */}
           {withMeter && <EditorMeter value={letterCount} max={MAX_LENGTH} />}
           {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
-          <Button
-            variant={'primary'}
-            icon={disablePublish ? 'ArrowPathIcon' : null}
-            label={disablePublish ? disablePublishLabel : postLabel}
-            onClick={handlePublish}
-            disabled={publishDisabled}
-          />
+          {showPostButton && (
+            <Button
+              variant={'primary'}
+              icon={disablePublish ? 'ArrowPathIcon' : null}
+              label={disablePublish ? disablePublishLabel : postLabel}
+              onClick={handlePublish}
+              disabled={publishDisabled}
+            />
+          )}
         </div>
       </div>
     </div>
