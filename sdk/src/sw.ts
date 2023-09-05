@@ -20,13 +20,13 @@ precacheAndRoute(self.__WB_MANIFEST);
 staticResourceCache({cacheName: 'static-v1.0'});
 imageCache({ maxEntries: 300 });
 offlineFallback({ pageFallback: '/img/offline-page.png', imageFallback: '/img/offline-img.png' });
-// setCacheNameDetails({
-//   prefix: 'akasha',
-//   suffix: 'v0.1.0',
-//   // precache: 'install-time',
-//   // runtime: 'run-time',
-//   googleAnalytics: 'ga',
-// });
+setCacheNameDetails({
+  prefix: 'akasha',
+  suffix: 'v0.1.0',
+  // precache: 'install-time',
+  // runtime: 'run-time',
+  googleAnalytics: 'ga',
+});
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 //self.skipWaiting();
