@@ -14,10 +14,10 @@ import routes, { THEME, APPS, HOME, PRIVACY } from '../routes';
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const currentTheme = window.localStorage.getItem('Theme') as theme | null;
+  const currentTheme = (window.localStorage.getItem('Theme') as theme) ?? 'Light-Theme';
   const cookieType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
 
-  const [theme, setTheme] = React.useState<theme | null>(currentTheme);
+  const [theme, setTheme] = React.useState<theme>(currentTheme);
   const [checkedTracking, setCheckedTracking] = React.useState<boolean>(
     cookieType === CookieConsentTypes.ALL,
   );
