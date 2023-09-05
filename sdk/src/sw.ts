@@ -6,9 +6,6 @@ import {
   staticResourceCache,
   offlineFallback,
 } from 'workbox-recipes';
-import init from './sw-functions';
-
-// init();
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 
