@@ -27,6 +27,12 @@ offlineFallback({ pageFallback: '/img/offline-page.png', imageFallback: '/img/of
 //   // runtime: 'run-time',
 //   googleAnalytics: 'ga',
 // });
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+//self.skipWaiting();
+clientsClaim();
+
+
 (function init() {
   const ENC_KEY = 'ENC_KEY';
   const IV_SEPARATOR = '|';
@@ -110,7 +116,3 @@ offlineFallback({ pageFallback: '/img/offline-page.png', imageFallback: '/img/of
     }
   });
 })()
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-//self.skipWaiting();
-clientsClaim();
