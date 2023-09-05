@@ -16,15 +16,10 @@ import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akash
 const FollowingPage: React.FC<RootComponentProps> = props => {
   const { plugins, navigateToModal } = props;
   const { profileId } = useParams<{ profileId: string }>();
-
+  const [loadMore, setLoadingMore] = useState(false);
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const [loadMore, setLoadingMore] = useState(false);
   const loginQuery = useGetLogin();
-
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
-  };
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -76,7 +71,6 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
         : [],
     [followingReq.data],
   );
-
   const lastPageInfo = React.useMemo(() => {
     const lastPage = followingReq.data?.pages?.[followingReq.data?.pages?.length - 1];
     return lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
@@ -91,10 +85,15 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const { isViewer, akashaProfile: profileData } = Object.assign(
-    { isViewer: null, akashaProfile: null },
-    profileDataReq.data,
-  );
+  const { isViewer, akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { isViewer: null, akashaProfile: null };
+
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    navigateToModal({ name: 'login', redirectTo });
+  };
+
   const onProfileClick = (profileId: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',

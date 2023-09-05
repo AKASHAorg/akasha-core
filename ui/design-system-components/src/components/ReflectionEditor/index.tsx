@@ -58,7 +58,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
       !openEditor &&
       showEditor &&
       isEqual(editorState, editorDefaultValue) &&
-      !editorRef.current?.getPopoversState() &&
       !editorRef.current?.getUploadingState() &&
       !editorRef.current?.getImagesState()
     ) {

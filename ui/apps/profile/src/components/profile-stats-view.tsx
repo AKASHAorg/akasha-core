@@ -10,13 +10,13 @@ import { useTranslation } from 'react-i18next';
 import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
-type ProfileStatsPresentationProps = {
+type ProfileStatsViewProps = {
   profileId: string;
   navigateTo: (args: NavigateToParams) => void;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
+const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
   profileId,
   navigateTo,
   showLoginModal,
@@ -115,4 +115,4 @@ const ProfileStatsPresentation: React.FC<ProfileStatsPresentationProps> = ({
   );
 };
 
-export default ProfileStatsPresentation;
+export default ProfileStatsView;

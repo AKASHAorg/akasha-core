@@ -120,7 +120,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               />
             ) : (
               <Extension
-                name="inline-editor_feed_page"
+                name="beam-editor_feed_page"
                 uiEvents={uiEvents}
                 data={{ action: 'post' }}
               />
