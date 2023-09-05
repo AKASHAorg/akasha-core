@@ -7,6 +7,7 @@ import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import FollowingPage from './pages/profile-engagement/following-page';
 import FollowersPage from './pages/profile-engagement/followers-page';
 import InterestsPage from './pages/interests/index';
+import withProfileHeader from './profile-header-hoc';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
@@ -14,8 +15,8 @@ import { useShowFeedback } from '@akashaorg/ui-awf-hooks';
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-profile');
-
   const [showFeedback, setShowFeedback] = useShowFeedback(false);
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const handleFeedback = () => {
     setShowFeedback(true);
@@ -25,6 +26,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
 
+  const commonHeaderViewProps = {
+    handleFeedback,
+    navigateTo,
+    navigateToModal: props.navigateToModal,
+    showLoginModal,
+  };
+
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="mb-8">
       <Router basename={props.baseRouteName}>
@@ -32,19 +40,21 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route path="/">
             <Route
               path={':profileId'}
-              element={<ProfileInfoPage showLoginModal={showLoginModal} {...props} />}
+              element={withProfileHeader(
+                <ProfileInfoPage showLoginModal={showLoginModal} {...props} />,
+              )(commonHeaderViewProps)}
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWERS]}`}
-              element={<FollowersPage {...props} />}
+              element={withProfileHeader(<FollowersPage {...props} />)(commonHeaderViewProps)}
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWING]}`}
-              element={<FollowingPage {...props} />}
+              element={withProfileHeader(<FollowingPage {...props} />)(commonHeaderViewProps)}
             />
             <Route
               path={`:profileId${menuRoute[INTERESTS]}`}
-              element={<InterestsPage {...props} />}
+              element={withProfileHeader(<InterestsPage {...props} />)(commonHeaderViewProps)}
             />
             <Route
               path={`:profileId${menuRoute[EDIT]}`}
@@ -67,4 +77,5 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     </Stack>
   );
 };
+
 export default AppRoutes;

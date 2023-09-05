@@ -37,18 +37,13 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   }, [loggedProfileData?.did?.id]);
 
   const listsReq = null;
-  /**
-   * Currently react query's initialData isn't working properly so listsReq.data will return undefined even if we supply initialData.
-   * This will be fixed in v4 of React query(https://github.com/DamianOsipiuk/vue-query/issues/124).
-   * In the meantime, the following check will ensure undefined data is handled.  */
   const lists = listsReq?.data || [];
 
   const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);
   const bookmarkedBeams = undefined;
   const numberOfBookmarkedInactivePosts = React.useMemo(
     () => bookmarkedBeams?.filter(({ data }) => (data ? data.active : false)).length,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [bookmarkedBeamsIds],
+    [bookmarkedBeams],
   );
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -126,7 +121,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
           /> */}
 
         {!listsReq?.isFetched && isLoggedIn && <Spinner />}
-        {(!isLoggedIn || (listsReq.isFetched && (!lists || !lists.length))) && (
+        {(!isLoggedIn || (listsReq?.isFetched && (!lists || !lists.length))) && (
           <DefaultEmptyCard infoText={t('You don’t have any saved content in your List')} />
         )}
 

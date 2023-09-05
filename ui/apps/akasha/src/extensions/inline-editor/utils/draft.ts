@@ -34,8 +34,8 @@ export class Draft<T> implements IDraft<T> {
     this.action = action;
   }
 
-  static getDraftKey(appName: string, pubKey: string, action: string) {
-    return `${appName}-${pubKey}-draft-${action}`;
+  static getDraftKey(appName: string, userId: string, action: string) {
+    return `${appName}-${userId}-draft-${action}`;
   }
 
   save(content: T) {

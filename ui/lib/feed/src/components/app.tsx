@@ -9,7 +9,7 @@ import {
   useSaveScrollState,
 } from '../utils/use-scroll-state';
 import { ScrollStateDBWrapper } from '../utils/scroll-state-db';
-import type { ScrollerState } from '@akashaorg/design-system-components/lib/components/EntryList';
+import type { ScrollerOnChangeState } from '@akashaorg/design-system-components/lib/components/EntryList';
 
 import {
   useInfiniteGetBeamsQuery,
@@ -137,61 +137,75 @@ const FeedWidgetRoot: React.FC<
     removeScrollState.mutate();
   }, [removeScrollState]);
 
-  const onFetchError = err => {
-    // @TODO: handle this error. Through state maybe?
-    console.error(err, beamsReq, reflectReq);
-  };
-
-  const tryFetchNextPage = (lastItemId: string) => {
-    if (itemType === EntityTypes.BEAM && canFetchNextPage(beamsReq)) {
-      beamsReq
-        .fetchNextPage({ pageParam: { first: scrollerOptions.overscan, after: lastItemId } })
-        .catch(onFetchError);
-    }
-    if (itemType === EntityTypes.REFLECT && canFetchNextPage(reflectReq)) {
-      reflectReq
-        .fetchNextPage({ pageParam: { first: scrollerOptions.overscan, after: lastItemId } })
-        .catch(onFetchError);
-    }
-  };
-
-  const tryFetchPreviousPage = firstItemId => {
-    if (itemType === EntityTypes.BEAM && canFetchPreviousPage(beamsReq)) {
-      beamsReq
-        .fetchPreviousPage({ pageParam: { last: scrollerOptions.overscan, before: firstItemId } })
-        .catch(onFetchError);
-    }
-
-    if (itemType === EntityTypes.REFLECT && canFetchPreviousPage(reflectReq)) {
-      reflectReq
-        .fetchPreviousPage({ pageParam: { last: scrollerOptions.overscan, before: firstItemId } })
-        .catch(onFetchError);
-    }
-  };
   const handleScrollStateChange = React.useCallback(
-    (
-      scrollState: ScrollerState & {
-        lastItemIdx: number;
-        firstItemIdx: number;
-        allEntries: unknown[];
-      },
-    ) => {
-      const { scrollDirection, lastItemIdx, firstItemIdx, lastItemId, allEntries } = scrollState;
-      saveScrollState.mutate(scrollState);
+    (scrollState: ScrollerOnChangeState<unknown>) => {
+      const onFetchError = (err: Error) => {
+        // @TODO: handle this error. Through state maybe?
+        console.error(err, beamsReq, reflectReq);
+      };
+      const tryFetchNextPage = (lastItemId: string) => {
+        if (itemType === EntityTypes.BEAM && canFetchNextPage(beamsReq)) {
+          beamsReq
+            .fetchNextPage({ pageParam: { first: scrollerOptions.overscan, after: lastItemId } })
+            .catch(onFetchError);
+        }
+        if (itemType === EntityTypes.REFLECT && canFetchNextPage(reflectReq)) {
+          reflectReq
+            .fetchNextPage({ pageParam: { first: scrollerOptions.overscan, after: lastItemId } })
+            .catch(onFetchError);
+        }
+      };
+      const tryFetchPreviousPage = (firstItemId: string) => {
+        if (itemType === EntityTypes.BEAM && canFetchPreviousPage(beamsReq)) {
+          beamsReq
+            .fetchPreviousPage({
+              pageParam: { last: scrollerOptions.overscan, before: firstItemId },
+            })
+            .catch(onFetchError);
+        }
+
+        if (itemType === EntityTypes.REFLECT && canFetchPreviousPage(reflectReq)) {
+          reflectReq
+            .fetchPreviousPage({
+              pageParam: { last: scrollerOptions.overscan, before: firstItemId },
+            })
+            .catch(onFetchError);
+        }
+      };
+
+      const {
+        measurementsCache,
+        scrollDirection,
+        firstItemId,
+        lastItemIdx,
+        firstItemIdx,
+        lastItemId,
+        allEntries,
+        itemsCount,
+        startItemOffset,
+      } = scrollState;
+
+      saveScrollState.mutate({
+        scrollDirection,
+        startItemId: firstItemId,
+        lastItemId,
+        measurementsCache,
+        startItemOffset,
+        itemsCount,
+      });
       if (scrollDirection === 'forward') {
         if (lastItemIdx >= allEntries.length - 1) {
           tryFetchNextPage(lastItemId);
-          // onLoadMore(lastItemId);
         }
       }
       if (scrollDirection === 'backward') {
         if (firstItemIdx < scrollerOptions.overscan) {
-          tryFetchPreviousPage(firstItemIdx);
+          tryFetchPreviousPage(firstItemId);
         }
         return;
       }
     },
-    [saveScrollState],
+    [beamsReq, itemType, reflectReq, saveScrollState, scrollerOptions.overscan],
   );
 
   return (

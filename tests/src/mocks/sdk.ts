@@ -120,6 +120,9 @@ const mockSDK: any = (overrides?: any) => {
           getSettings: () => null,
           catDocument: () => null,
         },
+        misc: {
+          resolveDID: jest.fn(),
+        },
         ...(overrides?.common || {}),
       },
       db: {

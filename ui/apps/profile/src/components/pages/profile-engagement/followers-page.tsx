@@ -16,16 +16,10 @@ import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akash
 const FollowersPage: React.FC<RootComponentProps> = props => {
   const { plugins, navigateToModal } = props;
   const { profileId } = useParams<{ profileId: string }>();
-
+  const [loadMore, setLoadingMore] = useState(false);
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const [loadMore, setLoadingMore] = useState(false);
   const loginQuery = useGetLogin();
-
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
-  };
-
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -77,9 +71,6 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
         : [],
     [followersReq.data],
   );
-  const isViewer =
-    profileDataReq.data && 'isViewer' in profileDataReq.data ? profileDataReq.data.isViewer : null;
-
   const lastPageInfo = React.useMemo(() => {
     const lastPage = followersReq.data?.pages?.[followersReq.data?.pages?.length - 1];
     return lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
@@ -93,6 +84,15 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
       getNavigationUrl: () => `/${profileId}`,
     });
   }
+
+  const { isViewer } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { isViewer: null };
+
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    navigateToModal({ name: 'login', redirectTo });
+  };
 
   const onProfileClick = (profileId: string) => {
     navigateTo?.({

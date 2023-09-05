@@ -1,6 +1,6 @@
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { IntegrationInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { EventTypes, UIEventData, ExtensionMatcherFn } from '@akashaorg/typings/ui';
+import { EventTypes, ExtensionMatcherFn, EventDataTypes } from '@akashaorg/typings/ui';
 import { filter, from, map, mergeMap, ReplaySubject } from 'rxjs';
 import { filterEvent } from './events';
 import { stringToRegExp } from './utils';
@@ -10,7 +10,7 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
     uiEvents
       .pipe(
         filterEvent(EventTypes.ExtensionPointMount),
-        mergeMap((event: UIEventData) =>
+        mergeMap((event: { event: EventTypes; data?: EventDataTypes }) =>
           from(Object.entries(extConfig))
             .pipe(filter(([mountPoint]) => stringToRegExp(mountPoint).test(event.data.name)))
             .pipe(
@@ -46,7 +46,7 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
     uiEvents
       .pipe(
         filterEvent(EventTypes.ExtensionPointUnmount),
-        mergeMap((event: UIEventData) =>
+        mergeMap((event: { event: EventTypes; data?: EventDataTypes }) =>
           from(Object.entries(extConfig)).pipe(
             filter(([mountPoint]) => stringToRegExp(mountPoint).test(event.data.name)),
             map(([mountPoint, loader]) => ({
@@ -86,7 +86,7 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
             map(([mountPoint, loader]) => ({
               mountPoint,
               loader,
-              event: { event, data } as unknown as UIEventData,
+              event: { event, data } as unknown as { event: EventTypes; data: EventDataTypes },
             })),
           ),
         ),

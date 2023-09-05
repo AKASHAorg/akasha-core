@@ -12,6 +12,10 @@ import { Base } from '../base';
 import { Draft, IDraftStorage } from '../utils';
 import { editorDefaultValue } from '@akashaorg/design-system-components/lib/components/Editor/initialValue';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import {
+  useCreateBeamMutation,
+  useCreateContentBlockMutation,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 type Props = {
   appName: string;
@@ -29,7 +33,8 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
   // @TODO replace with new hooks
   const post = undefined;
   const editPost = undefined;
-  const publishPost = undefined;
+  const editorBlockCreator = useCreateContentBlockMutation();
+  const publishPost = useCreateBeamMutation();
   const publishComment = undefined;
 
   const postDraft = new Draft<Partial<IEntryData>>({
@@ -84,52 +89,53 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
 
   const handlePublish = React.useCallback(
     (data: IPublishData) => {
-      switch (action) {
-        case 'edit':
-          editPost.mutate(
-            { entryID: postId, ...data },
-            {
-              onSuccess: () => {
-                analyticsActions.trackEvent({
-                  category: AnalyticsCategories.POST,
-                  action: 'Post Edited',
-                });
-              },
-            },
-          );
-          singleSpa.navigateToUrl(location.pathname);
-          break;
-        case 'post':
-        case 'repost':
-          publishPost.mutate(
-            { ...data, userId },
-            {
-              onSuccess: () => {
-                analyticsActions.trackEvent({
-                  category: AnalyticsCategories.POST,
-                  action: `${action === 'repost' ? 'Repost' : 'New Post'} Published`,
-                });
-              },
-            },
-          );
-          break;
-        case 'reply':
-          publishComment.mutate(
-            {
-              ...data,
-              postID: postId,
-            },
-            {
-              onSuccess: () => {
-                analyticsActions.trackEvent({
-                  category: AnalyticsCategories.REPLY,
-                  action: 'Reply Published',
-                });
-              },
-            },
-          );
-          singleSpa.navigateToUrl(location.pathname);
-      }
+      console.log('publish post:', data);
+      // switch (action) {
+      //   case 'edit':
+      //     editPost.mutate(
+      //       { entryID: postId, ...data },
+      //       {
+      //         onSuccess: () => {
+      //           analyticsActions.trackEvent({
+      //             category: AnalyticsCategories.POST,
+      //             action: 'Post Edited',
+      //           });
+      //         },
+      //       },
+      //     );
+      //     singleSpa.navigateToUrl(location.pathname);
+      //     break;
+      //   case 'post':
+      //   case 'repost':
+      //     publishPost.mutate(
+      //       { ...data, userId },
+      //       {
+      //         onSuccess: () => {
+      //           analyticsActions.trackEvent({
+      //             category: AnalyticsCategories.POST,
+      //             action: `${action === 'repost' ? 'Repost' : 'New Post'} Published`,
+      //           });
+      //         },
+      //       },
+      //     );
+      //     break;
+      //   case 'reply':
+      //     publishComment.mutate(
+      //       {
+      //         ...data,
+      //         postID: postId,
+      //       },
+      //       {
+      //         onSuccess: () => {
+      //           analyticsActions.trackEvent({
+      //             category: AnalyticsCategories.REPLY,
+      //             action: 'Reply Published',
+      //           });
+      //         },
+      //       },
+      //     );
+      //     singleSpa.navigateToUrl(location.pathname);
+      // }
     },
     [action, postId, userId, singleSpa, editPost, publishPost, publishComment, analyticsActions],
   );
