@@ -21,10 +21,10 @@ staticResourceCache();
 imageCache({ maxEntries: 300 });
 offlineFallback({ pageFallback: '/img/offline-page.png', imageFallback: '/img/offline-img.png' });
 setCacheNameDetails({
-  prefix: 'ewa',
-  suffix: 'v0.1.2',
-  precache: 'install-time',
-  runtime: 'run-time',
+  prefix: 'akasha',
+  suffix: 'v0.1.0',
+  // precache: 'install-time',
+  // runtime: 'run-time',
   googleAnalytics: 'ga',
 });
 
