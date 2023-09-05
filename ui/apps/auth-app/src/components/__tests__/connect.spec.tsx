@@ -1,14 +1,14 @@
 import * as React from 'react';
 import Connect from '../connect';
 
-import { act, screen, renderWithAllProviders } from '@akashaorg/af-testing';
+import { act, screen, renderWithAllProviders, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { MemoryRouter as Router } from 'react-router-dom';
 
 describe('< SignIn /> component', () => {
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-auth-ewa/provider']}>
-      <AnalyticsProvider>
+      <AnalyticsProvider {...genAppProps()}>
         <Connect />;
       </AnalyticsProvider>
     </Router>

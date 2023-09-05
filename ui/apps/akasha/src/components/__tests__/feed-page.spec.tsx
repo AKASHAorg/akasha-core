@@ -4,7 +4,12 @@ import * as Extension from '@akashaorg/design-system-components/lib/components/E
 import userEvent from '@testing-library/user-event';
 
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
-import { screen, renderWithAllProviders, localStorageMock } from '@akashaorg/af-testing';
+import {
+  screen,
+  renderWithAllProviders,
+  localStorageMock,
+  genAppProps,
+} from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
 import { when } from 'jest-when';
@@ -26,7 +31,7 @@ const MockedInlineEditor = ({ action }) => (
 
 describe('< FeedPage /> component', () => {
   const BaseComponent = () => (
-    <AnalyticsProvider>
+    <AnalyticsProvider {...genAppProps()}>
       <FeedPage showLoginModal={jest.fn()} />
     </AnalyticsProvider>
   );

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import TrendingWidgetComponent from '../trending-widget-component';
 
-import { RenderResult, renderWithAllProviders, act } from '@akashaorg/af-testing';
+import { RenderResult, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 
 describe('<TrendingWidgetComponent /> component', () => {
   let renderResult: RenderResult;
 
   const BaseComponent = (
-    <AnalyticsProvider>
+    <AnalyticsProvider {...genAppProps()}>
       <TrendingWidgetComponent />
     </AnalyticsProvider>
   );

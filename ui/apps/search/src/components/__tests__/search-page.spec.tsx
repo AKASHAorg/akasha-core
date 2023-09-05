@@ -1,6 +1,6 @@
 import React from 'react';
 import SearchPage from '../routes/search-page';
-import { screen, renderWithAllProviders, act } from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 
 const mockLocationValue = {
@@ -26,7 +26,7 @@ jest.mock('react-router', () => ({
 
 describe('<SearchPage />', () => {
   const BaseComponent = (
-    <AnalyticsProvider>
+    <AnalyticsProvider {...genAppProps()}>
       <SearchPage
         loggedProfileData={{
           id: 'some id',

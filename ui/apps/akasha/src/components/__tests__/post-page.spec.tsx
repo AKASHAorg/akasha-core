@@ -2,7 +2,7 @@ import * as React from 'react';
 import PostPage from '../item-page/post-page';
 import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 
-import { renderWithAllProviders, act } from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import { when } from 'jest-when';
@@ -24,7 +24,7 @@ const MockedInlineEditor = ({ action }) => (
 
 describe('< PostPage /> component', () => {
   const BaseComponent = (
-    <AnalyticsProvider>
+    <AnalyticsProvider {...genAppProps()}>
       <PostPage showLoginModal={jest.fn()} />
     </AnalyticsProvider>
   );
