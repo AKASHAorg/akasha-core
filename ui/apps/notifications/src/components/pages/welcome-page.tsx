@@ -4,11 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, {
-  CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE,
-  SHOW_NOTIFICATIONS_PAGE,
-  CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
-} from '../../routes';
+import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 type WelcomePageProps = {

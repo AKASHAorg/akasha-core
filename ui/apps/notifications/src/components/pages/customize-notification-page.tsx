@@ -302,7 +302,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps & RootC
     <>
       <Card elevation={'1'} radius={16} padding={'p-2'} customStyle="h-full md:h-min space-y-4">
         <Text variant="h5" align="center">
-          {initial ? ' Customize Your Notifications' : 'Notifications Settings'}
+          {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
         {!initial && (
           <>
