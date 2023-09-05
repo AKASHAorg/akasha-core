@@ -14,17 +14,17 @@ import { get as idbGet, set as idbSet } from 'idb-keyval';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 
-//precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST);
 
 // pageCache({ networkTimeoutSeconds: 6 });
 staticResourceCache();
 imageCache({ maxEntries: 300 });
 offlineFallback({ pageFallback: '/img/offline-page.png', imageFallback: '/img/offline-img.png' });
 setCacheNameDetails({
-  prefix: 'ewa',
-  suffix: 'v0.1.2',
-  precache: 'install-time',
-  runtime: 'run-time',
+  prefix: 'akasha',
+  suffix: 'v0.1.0',
+  // precache: 'install-time',
+  // runtime: 'run-time',
   googleAnalytics: 'ga',
 });
 
@@ -111,5 +111,5 @@ self.addEventListener('message', async event => {
 });
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-self.skipWaiting();
+//self.skipWaiting();
 clientsClaim();
