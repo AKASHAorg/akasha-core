@@ -19,9 +19,12 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 const FollowersPage = () => {
-  const { profileId } = useParams<{ profileId: string }>();
   const [loadMore, setLoadingMore] = useState(false);
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { profileId } = useParams<{ profileId: string }>();
+
+  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfileByDidQuery(

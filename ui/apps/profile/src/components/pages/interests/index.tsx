@@ -5,7 +5,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import EditInterests from '@akashaorg/design-system-components/lib/components/EditInterests';
-import { RootComponentProps } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
@@ -13,15 +12,23 @@ import {
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { useShowFeedback, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  useShowFeedback,
+  hasOwn,
+  useGetLogin,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 
 const InterestsPage = () => {
-  const { profileId } = useParams<{ profileId: string }>();
-  const { t } = useTranslation('app-profile');
-  const [showFeedback, setShowFeedback] = useShowFeedback(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
+  const [showFeedback, setShowFeedback] = useShowFeedback(false);
+  const { profileId } = useParams<{ profileId: string }>();
+  const { t } = useTranslation('app-profile');
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const onMutate = () => {
     setIsProcessing(true);

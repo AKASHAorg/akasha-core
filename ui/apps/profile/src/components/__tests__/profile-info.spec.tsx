@@ -14,19 +14,7 @@ describe('< ProfileInfoPage />', () => {
 
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
-      {withProfileHeader(
-        <ProfileInfoPage
-          {...genAppProps()}
-          plugins={{
-            '@akashaorg/app-routing': {
-              routing: {
-                navigateTo,
-              },
-            },
-          }}
-          showLoginModal={jest.fn()}
-        />,
-      )({
+      {withProfileHeader(<ProfileInfoPage showLoginModal={jest.fn()} />)({
         handleFeedback: jest.fn(),
         navigateTo,
         navigateToModal: jest.fn(),

@@ -12,7 +12,12 @@ import {
   useGetProfileByDidQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  hasOwn,
+  useGetLogin,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -27,14 +32,20 @@ type EditProfilePageProps = {
 
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { handleFeedback } = props;
-  const { profileId } = useParams<{ profileId: string }>();
+
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialAkashaProfileInput | null>(null);
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
+  const { profileId } = useParams<{ profileId: string }>();
+  const { t } = useTranslation('app-profile');
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
+  const queryClient = useQueryClient();
 
   const onMutate = () => {
     setIsProcessing(true);
@@ -46,7 +57,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   };
 
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
-  const queryClient = useQueryClient();
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfileByDidQuery(
     {
