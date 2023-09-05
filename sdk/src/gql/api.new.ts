@@ -669,36 +669,6 @@ export const GetFollowDocumentDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
-export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
-    query GetFollowDocuments($follower: ID!, $following: [String!]) {
-  node(id: $follower) {
-    ... on CeramicAccount {
-      akashaProfile {
-        followers(last: 25, filters: {where: {profileID: {in: $following}}}) {
-          edges {
-            node {
-              id
-              isFollowing
-              profileID
-              profile {
-                ...UserProfileFragment
-              }
-            }
-            cursor
-          }
-          pageInfo {
-            startCursor
-            endCursor
-            hasNextPage
-            hasPreviousPage
-          }
-        }
-      }
-      isViewer
-    }
-  }
-}
-    ${UserProfileFragmentDoc}`;
 export const CreateProfileDocument = /*#__PURE__*/ gql`
     mutation CreateProfile($i: CreateAkashaProfileInput!) {
   createAkashaProfile(input: $i) {
@@ -781,6 +751,36 @@ export const UpdateFollowDocument = /*#__PURE__*/ gql`
         id
       }
       id
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const GetIsFollowingListDocument = /*#__PURE__*/ gql`
+    query GetIsFollowingList($follower: ID!, $following: [String!]) {
+  node(id: $follower) {
+    ... on CeramicAccount {
+      akashaProfile {
+        followers(last: 25, filters: {where: {profileID: {in: $following}}}) {
+          edges {
+            node {
+              id
+              isFollowing
+              profileID
+              profile {
+                ...UserProfileFragment
+              }
+            }
+            cursor
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+      isViewer
     }
   }
 }
@@ -980,9 +980,6 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetFollowDocument(variables: Types.GetFollowDocumentQueryVariables, options?: C): Promise<Types.GetFollowDocumentQuery> {
       return requester<Types.GetFollowDocumentQuery, Types.GetFollowDocumentQueryVariables>(GetFollowDocumentDocument, variables, options) as Promise<Types.GetFollowDocumentQuery>;
     },
-    GetFollowDocuments(variables: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
-      return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
-    },
     CreateProfile(variables: Types.CreateProfileMutationVariables, options?: C): Promise<Types.CreateProfileMutation> {
       return requester<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options) as Promise<Types.CreateProfileMutation>;
     },
@@ -1000,6 +997,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     UpdateFollow(variables: Types.UpdateFollowMutationVariables, options?: C): Promise<Types.UpdateFollowMutation> {
       return requester<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options) as Promise<Types.UpdateFollowMutation>;
+    },
+    GetIsFollowingList(variables: Types.GetIsFollowingListQueryVariables, options?: C): Promise<Types.GetIsFollowingListQuery> {
+      return requester<Types.GetIsFollowingListQuery, Types.GetIsFollowingListQueryVariables>(GetIsFollowingListDocument, variables, options) as Promise<Types.GetIsFollowingListQuery>;
     },
     CreateApp(variables: Types.CreateAppMutationVariables, options?: C): Promise<Types.CreateAppMutation> {
       return requester<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables, options) as Promise<Types.CreateAppMutation>;
