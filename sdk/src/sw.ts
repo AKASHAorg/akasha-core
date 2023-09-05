@@ -17,7 +17,7 @@ import { get as idbGet, set as idbSet } from 'idb-keyval';
 precacheAndRoute(self.__WB_MANIFEST);
 
 // pageCache({ networkTimeoutSeconds: 6 });
-// /*staticResourceCache();
+staticResourceCache({cacheName: 'static'});
 // imageCache({ maxEntries: 300 });
 // offlineFallback({ pageFallback: '/img/offline-page.png', imageFallback: '/img/offline-img.png' });
 // setCacheNameDetails({
