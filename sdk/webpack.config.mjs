@@ -127,7 +127,7 @@ const config = [
         ],
     },
     {
-        entry: path.join(__dirname, 'src', 'worker.js'),
+        entry: path.join(__dirname, 'src', 'worker.mjs'),
         output: {
             path: path.join(__dirname, '../ui', 'build'),
             filename: 'worker.js'
