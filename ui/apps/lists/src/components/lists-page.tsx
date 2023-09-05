@@ -125,7 +125,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
           <DefaultEmptyCard infoText={t('You don’t have any saved content in your List')} />
         )}
 
-        <FeedWidget
+        {/* <FeedWidget
           queryKey="akasha-lists-page-query"
           modalSlotId={layoutConfig.modalSlotId}
           // @TODO: create an entry for lists
@@ -140,7 +140,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
           itemSpacing={8}
           onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
           i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
-        />
+        /> */}
       </Box>
       <Modal
         title={{ label: t('Remove Content') }}
