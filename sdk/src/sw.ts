@@ -14,7 +14,7 @@ import { get as idbGet, set as idbSet } from 'idb-keyval';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 
-//precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST);
 
 // pageCache({ networkTimeoutSeconds: 6 });
 staticResourceCache();
@@ -111,5 +111,5 @@ self.addEventListener('message', async event => {
 });
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-self.skipWaiting();
+//self.skipWaiting();
 clientsClaim();
