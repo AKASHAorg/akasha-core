@@ -211,21 +211,17 @@ export type GetMyProfileQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 export type GetMyProfileQuery = { viewer?: { akashaProfile?: { id: string, name: string, description?: string | null, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } } | null } | null };
 
-export type GetFollowDocumentQueryVariables = Types.Exact<{
-  follower: Types.Scalars['ID'];
-  following: Types.Scalars['String'];
-}>;
-
-
-export type GetFollowDocumentQuery = { node?: { isViewer: boolean, akashaProfile?: { followers: { edges?: Array<{ cursor: string, node?: { id: string, isFollowing: boolean, profileID: any, profile?: { id: string, name: string, description?: string | null, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | null } | {} | null };
-
 export type GetFollowDocumentsQueryVariables = Types.Exact<{
-  follower: Types.Scalars['ID'];
+  after?: Types.InputMaybe<Types.Scalars['String']>;
+  before?: Types.InputMaybe<Types.Scalars['String']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  last?: Types.InputMaybe<Types.Scalars['Int']>;
+  sorting?: Types.InputMaybe<Types.AkashaFollowSortingInput>;
   following?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>;
 }>;
 
 
-export type GetFollowDocumentsQuery = { node?: { isViewer: boolean, akashaProfile?: { followers: { edges?: Array<{ cursor: string, node?: { id: string, isFollowing: boolean, profileID: any, profile?: { id: string, name: string, description?: string | null, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | null } | {} | null };
+export type GetFollowDocumentsQuery = { viewer?: { isViewer: boolean, akashaFollowList?: { edges?: Array<{ cursor: string, node?: { id: string, isFollowing: boolean, profileID: any, profile?: { id: string, name: string, description?: string | null, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | null };
 
 export type CreateProfileMutationVariables = Types.Exact<{
   i: Types.CreateAkashaProfileInput;
