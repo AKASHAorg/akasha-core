@@ -2,6 +2,7 @@ import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -29,28 +30,28 @@ const Dropdown: React.FC<IDropdownProps> = ({
   label,
   placeholderLabel,
   menuItems,
-  // selected,
-  // setSelected,
+  selected,
+  setSelected,
   divider = false,
   optgroup = false,
 }) => {
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
-  const [selected, setSelected] = React.useState<null | DropdownMenuItemGroupType>(null);
+  // const [selected, setSelected] = React.useState<null | DropdownMenuItemGroupType>(null);
 
   React.useEffect(() => {
     if (placeholderLabel) {
       setSelected({
         id: '',
         iconName: null,
-        title: placeholderLabel ?? (optgroup ? menuItems[0].children[0].title : menuItems[0].title),
+        title: placeholderLabel,
       });
     } else {
-      optgroup ? setSelected(menuItems[0].children[0]) : setSelected(menuItems[0]);
+      menuItems[0]?.children ? setSelected(menuItems[0].children[0]) : setSelected(menuItems[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
+  const optionsWrapperStyle = apply`absolute z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
 
   const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey3)`;
 
@@ -64,7 +65,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
   };
 
   return (
-    <Stack fullWidth={true} customStyle="relative">
+    <Stack fullWidth customStyle="relative">
       {label && <Text variant="label">{label}</Text>}
 
       <button
@@ -83,7 +84,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
 
       {/* <!-- Dropdown menu --> */}
       {dropOpen && (
-        <Stack customStyle={optionsWrapperStyle}>
+        <Stack fullWidth customStyle={optionsWrapperStyle}>
           <ul aria-labelledby="dropdownDefaultButton">
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
@@ -91,7 +92,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                 if (menuItem.type === 'optgroup') {
                   return (
                     <>
-                      <Stack align="center" customStyle={` pt-3 pl-3`} key={menuItem.id}>
+                      <Stack align="center" customStyle={`pt-3 pl-3`} key={idx}>
                         <Text
                           variant="body2"
                           customStyle="cursor-not-allowed"
@@ -103,18 +104,19 @@ const Dropdown: React.FC<IDropdownProps> = ({
                       {menuItem?.children &&
                         menuItem.children.map((item, idx) => {
                           return (
-                            <button key={item.id} onClick={handleChange(item)}>
-                              <li
-                                className={tw(
-                                  `${optionStyle}
+                            <li
+                              key={idx}
+                              className={tw(
+                                `${optionStyle}
                                 // $ {
                                 //   idx < menuItem.children.length - 1
                                 //     ? 'border-b(1 grey8 dark:grey3)'
                                 //     : ''
                                 // }
                                 cursor-pointer`,
-                                )}
-                              >
+                              )}
+                            >
+                              <Button onClick={handleChange(item)} plain>
                                 <Stack
                                   align="center"
                                   spacing="gap-x-2"
@@ -143,8 +145,8 @@ const Dropdown: React.FC<IDropdownProps> = ({
                                     {item.title}
                                   </Text>
                                 </Stack>
-                              </li>
-                            </button>
+                              </Button>
+                            </li>
                           );
                         })}
                       {divider && <Divider customStyle="border-t-0" />}
@@ -152,18 +154,19 @@ const Dropdown: React.FC<IDropdownProps> = ({
                   );
                 } else {
                   return (
-                    <button key={menuItem.id} onClick={handleChange(menuItem)}>
-                      <li
-                        className={tw(
-                          `${optionStyle}
+                    <li
+                      key={idx}
+                      className={tw(
+                        `${optionStyle}
                         ${idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey5)' : ''}
                         cursor-pointer`,
-                        )}
-                      >
+                      )}
+                    >
+                      <Button onClick={handleChange(menuItem)} plain>
                         <Stack
-                          customStyle={`flex items-center space-x-2 ${
-                            isSelected ? 'text-secondaryLight' : 'text-black'
-                          }`}
+                          align="center"
+                          spacing="gap-x-2"
+                          customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                         >
                           {menuItem?.iconName && (
                             <Icon
@@ -186,20 +189,21 @@ const Dropdown: React.FC<IDropdownProps> = ({
                             {menuItem.title}
                           </Text>
                         </Stack>
-                      </li>
-                    </button>
+                      </Button>
+                    </li>
                   );
                 }
               } else {
                 return (
-                  <button key={menuItem.id} onClick={handleChange(menuItem)}>
-                    <li
-                      className={tw(
-                        `${optionStyle} ${
-                          idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
-                        } cursor-pointer`,
-                      )}
-                    >
+                  <li
+                    key={menuItem.id}
+                    className={tw(
+                      `${optionStyle} ${
+                        idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
+                      } cursor-pointer`,
+                    )}
+                  >
+                    <Button onClick={handleChange(menuItem)} plain>
                       <Stack
                         align="center"
                         spacing="gap-x-2"
@@ -234,8 +238,8 @@ const Dropdown: React.FC<IDropdownProps> = ({
                           />
                         </span>
                       )}
-                    </li>
-                  </button>
+                    </Button>
+                  </li>
                 );
               }
             })}

@@ -3,17 +3,15 @@ import { useTranslation } from 'react-i18next';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, {
-  CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE,
-  SHOW_NOTIFICATIONS_PAGE,
-  CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
-} from '../../routes';
+import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 type WelcomePageProps = {
   header: string;
   description: string;
+  image?: string;
   leftButtonLabel?: string;
   // leftButtonClickHandler?: () => void;
   rightButtonLabel: string;
@@ -32,6 +30,7 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
     // rightButtonClickHandler,
     header,
     description,
+    image,
     finalStep = false,
     isLoggedIn,
   } = props;
@@ -93,7 +92,7 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
     goToNotificationsPage();
   };
 
-  if (isLoggedIn && savedPreferences) {
+  if (!finalStep && isLoggedIn && savedPreferences) {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[SHOW_NOTIFICATIONS_PAGE],
@@ -103,10 +102,15 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
   return (
     <Card elevation={'1'} radius={16} padding={'p-2'} testId="notifications">
       <Stack justify="center" align="center" customStyle="mb-32">
-        <Card
-          customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
-          radius="rounded-xl"
-        />
+        {image && isLoggedIn ? (
+          <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
+        ) : (
+          <Card
+            customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
+            radius="rounded-xl"
+          />
+        )}
+
         <Text variant={finalStep ? 'h5' : 'h6'} align="center">
           {isLoggedIn ? header : t('Uh-oh! You are not connected!')}
         </Text>

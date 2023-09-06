@@ -191,7 +191,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
   return (
     <Card padding={0} elevation="none">
       {loggedIn && !isFetching && notifications.length === 0 && (
-        <BasicInfoCard titleLabel={emptyTitle} />
+        <BasicInfoCard titleLabel={emptyTitle} image={'/images/longbeam-notfound.webp'} />
       )}
       {loggedIn && notifications.length !== 0 && (
         <div>
