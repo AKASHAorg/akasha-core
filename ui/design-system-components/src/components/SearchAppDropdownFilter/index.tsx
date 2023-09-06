@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -51,7 +51,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
+  const optionsWrapperStyle = apply`absolute z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
 
   const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey3)`;
 
@@ -65,7 +65,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
   };
 
   return (
-    <Box customStyle="relative w-full">
+    <Stack fullWidth customStyle="relative">
       {label && <Text variant="label">{label}</Text>}
 
       <button
@@ -84,7 +84,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
 
       {/* <!-- Dropdown menu --> */}
       {dropOpen && (
-        <Box customStyle={optionsWrapperStyle}>
+        <Stack fullWidth customStyle={optionsWrapperStyle}>
           <ul aria-labelledby="dropdownDefaultButton">
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
@@ -92,7 +92,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                 if (menuItem.type === 'optgroup') {
                   return (
                     <>
-                      <Box customStyle={`flex items-center pt-3 pl-3`} key={menuItem.id}>
+                      <Stack align="center" customStyle={`pt-3 pl-3`} key={idx}>
                         <Text
                           variant="body2"
                           customStyle="cursor-not-allowed"
@@ -100,12 +100,12 @@ const Dropdown: React.FC<IDropdownProps> = ({
                         >
                           {menuItem.title}
                         </Text>
-                      </Box>
+                      </Stack>
                       {menuItem?.children &&
                         menuItem.children.map((item, idx) => {
                           return (
                             <li
-                              key={item.id}
+                              key={idx}
                               className={tw(
                                 `${optionStyle}
                                 // $ {
@@ -117,8 +117,10 @@ const Dropdown: React.FC<IDropdownProps> = ({
                               )}
                             >
                               <Button onClick={handleChange(item)} plain>
-                                <Box
-                                  customStyle={`flex items-center space-x-2 ${
+                                <Stack
+                                  align="center"
+                                  spacing="gap-x-2"
+                                  customStyle={`${
                                     selected.id === item.id ? 'text-secondaryLight' : 'text-black'
                                   }`}
                                 >
@@ -142,7 +144,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                                   >
                                     {item.title}
                                   </Text>
-                                </Box>
+                                </Stack>
                               </Button>
                             </li>
                           );
@@ -153,7 +155,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                 } else {
                   return (
                     <li
-                      key={menuItem.id}
+                      key={idx}
                       className={tw(
                         `${optionStyle}
                         ${idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey5)' : ''}
@@ -161,10 +163,10 @@ const Dropdown: React.FC<IDropdownProps> = ({
                       )}
                     >
                       <Button onClick={handleChange(menuItem)} plain>
-                        <Box
-                          customStyle={`flex items-center space-x-2 ${
-                            isSelected ? 'text-secondaryLight' : 'text-black'
-                          }`}
+                        <Stack
+                          align="center"
+                          spacing="gap-x-2"
+                          customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                         >
                           {menuItem?.iconName && (
                             <Icon
@@ -186,7 +188,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                           >
                             {menuItem.title}
                           </Text>
-                        </Box>
+                        </Stack>
                       </Button>
                     </li>
                   );
@@ -202,10 +204,10 @@ const Dropdown: React.FC<IDropdownProps> = ({
                     )}
                   >
                     <Button onClick={handleChange(menuItem)} plain>
-                      <Box
-                        customStyle={`flex items-center space-x-2 ${
-                          isSelected ? 'text-secondaryLight' : 'text-black'
-                        }`}
+                      <Stack
+                        align="center"
+                        spacing="gap-x-2"
+                        customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                       >
                         {menuItem?.iconName && (
                           <Icon
@@ -227,7 +229,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                         >
                           {menuItem.title}
                         </Text>
-                      </Box>
+                      </Stack>
                       {isSelected && (
                         <span className={tw('ml-4')}>
                           <Icon
@@ -242,9 +244,9 @@ const Dropdown: React.FC<IDropdownProps> = ({
               }
             })}
           </ul>
-        </Box>
+        </Stack>
       )}
-    </Box>
+    </Stack>
   );
 };
 

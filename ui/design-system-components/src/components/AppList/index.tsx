@@ -6,7 +6,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { getRadiusClasses, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 type App = {
   id?: string;
@@ -30,10 +29,10 @@ const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
     <Stack direction="column" spacing="gap-y-4">
       {apps?.map((app, index, array) => (
         <Stack key={app.name} direction="column" spacing="gap-y-4">
-          <Stack justify="between" align="center">
+          <Stack direction="row" justify="between" align="center">
             <Button onClick={() => onAppSelected(app.id)} plain>
-              <Stack spacing="gap-x-2">
-                <Box customStyle={iconStyle} />
+              <Stack direction="row" spacing="gap-x-2">
+                <Stack customStyle={iconStyle} />
 
                 <Stack direction="column" customStyle="h-[3.75rem]">
                   <Text variant="button-sm">{app.name}</Text>
@@ -50,7 +49,7 @@ const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
               </Stack>
             </Button>
 
-            <Box customStyle="ml-auto">{app.action}</Box>
+            <Stack customStyle="ml-auto">{app.action}</Stack>
           </Stack>
           {index < array.length - 1 && <Divider />}
         </Stack>

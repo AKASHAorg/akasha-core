@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import {
   Dashboard,
@@ -78,7 +78,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const navigateTo = getRoutingPlugin().navigateTo;
 
   return (
-    <Box>
+    <Stack>
       <Router basename={baseRouteName}>
         <Routes>
           <Route
@@ -209,7 +209,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
       </Router>
-    </Box>
+    </Stack>
   );
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { apps } from '../dummy-data';
@@ -30,36 +30,36 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
 
   return (
     <Card customStyle="mb-4">
-      <Box customStyle="flex items-start w-full p-4">
-        <Box customStyle="flex flex-row w-full mb-4">
+      <Stack align="start" fullWidth={true} customStyle="p-4">
+        <Stack direction="row" fullWidth={true} customStyle="mb-4">
           <button onClick={onClickIcon}>
             <Icon type="ChevronLeftIcon" />{' '}
           </button>
           <Text variant="h2">{titleLabel}</Text>
-        </Box>
+        </Stack>
         <Text variant="h6" customStyle="mb-1">
           {textLine1Label}
         </Text>
-        <Box customStyle="flex my-4 gap-4">
+        <Stack spacing="gap-4" customStyle="my-4">
           {apps.map((app, idx) => (
-            <Box customStyle="flex flex-row items-center gap-1" key={idx}>
-              <Box customStyle="flex rounded-sm p-2 bg(grey8 dark:grey3)">
+            <Stack direction="row" align="center" spacing="gap-1" key={idx}>
+              <Stack customStyle="flex rounded-sm p-2 bg(grey8 dark:grey3)">
                 <Icon size="lg" type="CircleStackIcon" />
-              </Box>
-              <Box customStyle="flex gap-0.5">
+              </Stack>
+              <Stack spacing="gap-0.5">
                 <Text variant="h2">{app.title}</Text>
                 <Text variant="subtitle1">
                   @{app.author} · {app.type}
                 </Text>
-              </Box>
-            </Box>
+              </Stack>
+            </Stack>
           ))}
-        </Box>
-        <Box customStyle="flex flex-row w-full justify-end items-center gap-2">
+        </Stack>
+        <Stack direction="row" fullWidth={true} align="center" justify="end" spacing="gap-2">
           <Button size="lg" label={skipLabel} onClick={onClickSkip} />
           <Button size="lg" variant="primary" label={nextLabel} onClick={onClickNext} />
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </Card>
   );
 };

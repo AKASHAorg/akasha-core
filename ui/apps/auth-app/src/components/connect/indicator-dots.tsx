@@ -1,5 +1,5 @@
 import React from 'react';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export interface IndicatorDotsProps {
@@ -20,15 +20,18 @@ const IndicatorDots: React.FC<IndicatorDotsProps> = props => {
   const dotColor = React.useMemo(() => getDotColor(hasErrors), [hasErrors]);
 
   return (
-    <Box customStyle="flex flex-row items-center justify-center mx-4">
-      <Box customStyle={`rounded-full w-4 h-4 ${dotColor} opacity-50`} />
-      <Box
-        customStyle={`flex flex-row rounded-full w-5 h-5 ${dotColor} mx-2 justify-center items-center`}
+    <Stack direction="row" align="center" justify="center" customStyle="mx-4">
+      <Stack customStyle={`rounded-full w-4 h-4 ${dotColor} opacity-50`} />
+      <Stack
+        direction="row"
+        align="center"
+        justify="center"
+        customStyle={`rounded-full w-5 h-5 ${dotColor} mx-2`}
       >
         {hasErrors && <Icon type="ExclamationTriangleIcon" color="white" size="xs" />}
-      </Box>
-      <Box customStyle={`rounded-full w-4 h-4 ${dotColor} opacity-50`} />
-    </Box>
+      </Stack>
+      <Stack customStyle={`rounded-full w-4 h-4 ${dotColor} opacity-50`} />
+    </Stack>
   );
 };
 

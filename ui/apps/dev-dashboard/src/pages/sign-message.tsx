@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import { CardWrapper } from '../components/common';
@@ -50,15 +50,15 @@ export const SignMessage: React.FC<unknown> = () => {
       onCancelButtonClick={handleButtonClick}
       onConfirmButtonClick={isSuccess ? handleButtonClick : handleSignMessage}
     >
-      <Box customStyle="pt-4 px-4">
+      <Stack padding="pt-4 px-4">
         {!signMessageMutation.isSuccess && (
-          <Box>
+          <Stack>
             <TextField
               label={t('Message')}
               placeholder={t('Place the message to be signed here')}
               type="multiline"
             />
-          </Box>
+          </Stack>
         )}
 
         {signMessageMutation.isSuccess && (
@@ -71,7 +71,7 @@ export const SignMessage: React.FC<unknown> = () => {
             paragraph2Content={sampleSignature}
           />
         )}
-      </Box>
+      </Stack>
     </CardWrapper>
   );
 };

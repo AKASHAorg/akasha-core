@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import MiniHeader from '../components/mini-header';
 import ArticleCard from '../components/article-card';
@@ -32,7 +32,7 @@ const ArticlePage: React.FC<unknown> = () => {
   };
 
   return (
-    <Box customStyle="gap-2">
+    <Stack spacing="gap-2">
       <MiniHeader titleLabel={t('Articles')} onClickIcon={handleClickIcon} />
       <ArticleCard
         articleData={sampleArticleData}
@@ -50,7 +50,7 @@ const ArticlePage: React.FC<unknown> = () => {
         onRepliesClick={() => null}
         onSaveClick={() => null}
       />
-    </Box>
+    </Stack>
   );
 };
 export default ArticlePage;

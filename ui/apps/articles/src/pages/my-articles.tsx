@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -77,7 +77,7 @@ const MyArticles: React.FC<unknown> = () => {
   }
 
   return (
-    <Box customStyle="gap-2">
+    <Stack spacing="gap-2">
       <MyArticlesHeader
         titleLabel={t('My Articles')}
         subtitleLabel={t('You can check all the articles that you published as well as the drafts')}
@@ -138,7 +138,7 @@ const MyArticles: React.FC<unknown> = () => {
               onClickArticle={handleClickArticle}
             />
           ))}
-    </Box>
+    </Stack>
   );
 };
 

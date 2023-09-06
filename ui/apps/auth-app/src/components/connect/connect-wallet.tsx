@@ -1,11 +1,10 @@
 import React from 'react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import IndicatorDots from './indicator-dots';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
 import { useTranslation } from 'react-i18next';
 import {
@@ -145,16 +144,16 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   };
 
   return (
-    <Stack direction="column" spacing="gap-y-4">
-      <Box>
+    <Stack spacing="gap-y-4">
+      <Stack>
         <Text variant="body1" align="center" weight="bold">
           {t('Connect to {{worldName}}', { worldName })}
         </Text>
         <Text variant="body1" align="center" weight="bold">
           {t('using your wallet')}
         </Text>
-      </Box>
-      <Stack align="center" justify="center">
+      </Stack>
+      <Stack direction="row" align="center" justify="center">
         <AppIcon
           placeholderIconType={
             selectedProvider === EthProviders.Web3Injected ? 'metamask' : 'walletconnect'
@@ -200,14 +199,14 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
       {errors.map((errObj, idx) => (
         <ConnectErrorCard key={idx} title={errObj.title} message={errObj.subtitle} />
       ))}
-      <Box>
+      <Stack>
         {!!connectWalletCall.data?.length && (
-          <Box>
+          <Stack>
             <Text variant="subtitle2" weight="bold">
               {t('Your Address')}
             </Text>
             <Text variant="subtitle2">{connectWalletCall.data}</Text>
-          </Box>
+          </Stack>
         )}
         <Stack align="center" justify="center">
           <Button
@@ -215,11 +214,9 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
             size="lg"
             onClick={handleDisconnect}
             label={t('Disconnect or change way to connect')}
-          >
-            {t('Disconnect or change way to connect')}
-          </Button>
+          />
         </Stack>
-      </Box>
+      </Stack>
     </Stack>
   );
 };

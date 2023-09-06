@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Profile } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 
@@ -38,12 +38,8 @@ const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
     onClickProfile,
   } = props;
 
-  const BaseItemStyles = `
-  flex justify-between items-center py-2
-  `;
-
   return (
-    <Box customStyle={BaseItemStyles}>
+    <Stack align="center" justify="between" customStyle={'py-2'}>
       <a
         onClick={e => {
           e.preventDefault();
@@ -73,7 +69,7 @@ const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
           />
         </div>
       )}
-    </Box>
+    </Stack>
   );
 };
 

@@ -84,7 +84,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
 
   return (
     <>
-      <Stack direction="column" testId="akasha-verse">
+      <Stack testId="akasha-verse">
         {!isFetching && reqError && (
           <ErrorLoader
             type="script-error"
@@ -107,7 +107,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
               />
             )}
             {!isUserLoggedIn && (
-              <Stack direction="column" spacing="gap-y-4">
+              <Stack spacing="gap-y-4">
                 <Text variant="h6">{t('Latest Apps')}</Text>
                 <AppList
                   apps={dummyApps}
@@ -128,7 +128,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
             {/*@TODO: Remove the lines below once the page is connected with relevant hooks */}
             {/* {installableApps?.length !== 0 &&
               installableApps?.map((app, index) => (
-                <Box key={index} direction="row" justify="between" align="center" gap="xsmall">
+                <Stack key={index} direction="row" justify="between" align="center" gap="xsmall">
                   <SubtitleTextIcon
                     label={app.manifestData?.displayName}
                     subtitle={app.name}
@@ -150,7 +150,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                     onClickActive={() => handleAppUninstall(app.name)}
                     onClickInactive={() => handleAppInstall(app.name)}
                   />
-                </Box>
+                </Stack>
               ))} */}
           </>
         )}

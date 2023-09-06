@@ -2,7 +2,7 @@ import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { topics } from '../dummy-data';
@@ -34,21 +34,23 @@ const StepThree: React.FC<IStepThreeProps> = props => {
 
   return (
     <Card customStyle="mb-2">
-      <Box customStyle="flex items-start w-full p-4">
-        <Box customStyle="flex flex-row w-full mb-4">
+      <Stack fullWidth={true} align="start" customStyle="p-4">
+        <Stack direction="row" fullWidth={true} customStyle="mb-4">
           <button onClick={onClickIcon}>
             <Icon type="ChevronLeftIcon" />
           </button>
           <Text variant="h2">{titleLabel}</Text>
-        </Box>
+        </Stack>
         <Text variant="h6" customStyle="mb-1">
           {textLine1Label}
         </Text>
-        <Box customStyle="flex flex-row flex-wrap gap-1 px-6 py-4">
+        <Stack direction="row" spacing="gap-1" customStyle="flex-wrap px-6 py-4">
           {topics.map((topic, idx) => (
             <button key={idx} onClick={onClickTopic(topic)}>
-              <Box
-                customStyle={`flex flex-row rounded-lg gap-0.5 px-1 py-0.5 border(${
+              <Stack
+                direction="row"
+                spacing="gap-0.5"
+                customStyle={`rounded-lg px-1 py-0.5 border(${
                   selectedTopics.includes(topic)
                     ? 'secondaryLight dark:secondaryDark'
                     : 'grey8 dark:grey3'
@@ -58,11 +60,11 @@ const StepThree: React.FC<IStepThreeProps> = props => {
                   {topic}
                 </Text>
                 {selectedTopics.includes(topic) && <Icon type="XMarkIcon" />}
-              </Box>
+              </Stack>
             </button>
           ))}
-        </Box>
-        <Box customStyle="flex flex-row w-full justify-end items-center gap-2">
+        </Stack>
+        <Stack direction="row" fullWidth={true} align="center" justify="end" spacing="gap-2">
           <Button size="lg" label={readArticleLabel} onClick={onClickReadArticle} />
           <Button
             size="lg"
@@ -70,8 +72,8 @@ const StepThree: React.FC<IStepThreeProps> = props => {
             label={writeFirstArticleLabel}
             onClick={onClickWriteArticle}
           />
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </Card>
   );
 };

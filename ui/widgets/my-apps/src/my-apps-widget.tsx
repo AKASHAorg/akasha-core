@@ -5,7 +5,6 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 import { withProviders, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -127,22 +126,22 @@ const ICWidget: React.FC<unknown> = () => {
   };
 
   return (
-    <Box customStyle="pb-4">
+    <Stack padding="pb-4">
       <Card elevation="1">
-        <Box customStyle="pl-4 pt-4 pb-6">
+        <Stack padding="pl-4 pt-4 pb-6">
           <Text weight="bold" variant="body1">
             {t('My Apps')}
           </Text>
-        </Box>
-        <Box>
+        </Stack>
+        <Stack>
           <TabList
             labels={[t('World Apps'), t('Installed')]}
             selected={activeTabIndex}
             onChange={onTabChange}
             tabListDivider
           />
-        </Box>
-        <Box customStyle="pt-4 pb-4">
+        </Stack>
+        <Stack padding="pt-4 pb-4">
           {activeTabIndex === 0 && filteredDefaultApps.length === 0 && <NoAppsMessage />}
           {activeTabIndex === 1 && filteredInstalledApps.length === 0 && <NoAppsMessage />}
 
@@ -164,9 +163,9 @@ const ICWidget: React.FC<unknown> = () => {
               />
             </Stack>
           )}
-        </Box>
+        </Stack>
       </Card>
-    </Box>
+    </Stack>
   );
 };
 

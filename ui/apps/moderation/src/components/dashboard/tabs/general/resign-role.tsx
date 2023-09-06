@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
@@ -25,20 +25,20 @@ const ResignRole: React.FC<ResignRoleProps> = props => {
 
   return (
     <PageHeader {...props}>
-      <Box customStyle="space-y-4">
+      <Stack spacing="gap-y-4">
         <Text>{textLine1Label}</Text>
 
-        <Box customStyle="space-y-2">
-          <Box customStyle="flex space-x-2">
+        <Stack spacing="gap-y-2">
+          <Stack spacing="gap-x-2">
             <Text weight="bold">{reasonTitleLabel}</Text>
             <Text customStyle="text-[0.875rem] leading-[1.375rem] font-light">{`(${optionalLabel})`}</Text>
-          </Box>
+          </Stack>
 
           <TextField placeholder={reasonPlaceholderLabel} type="multiline" />
-        </Box>
+        </Stack>
 
         <Text>{textLine2Label}</Text>
-      </Box>
+      </Stack>
     </PageHeader>
   );
 };

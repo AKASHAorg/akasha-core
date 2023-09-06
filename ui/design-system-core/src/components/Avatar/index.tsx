@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Profile } from '@akashaorg/typings/ui';
 
-import Box from '../Box';
+import Stack from '../Stack';
 
 import AvatarImage from './avatar-image';
 import {
@@ -30,7 +30,7 @@ export type AvatarProps = {
   active?: boolean;
   isClickable?: boolean;
   customStyle?: string;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 const Avatar: React.FC<AvatarProps> = props => {
@@ -69,21 +69,23 @@ const Avatar: React.FC<AvatarProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Box customStyle={containerStyle} onClick={onClick}>
-      {/* updating this logic, so that avatarImage loads with fallbackUrl even when avatar is null */}
-      {(avatar || avatarImageFallback) && (
-        <React.Suspense fallback={<></>}>
-          <AvatarImage
-            url={avatar?.default?.src}
-            alt={alt}
-            fallbackUrl={avatarImageFallback}
-            faded={faded}
-          />
-        </React.Suspense>
-      )}
+    <button onClick={onClick}>
+      <Stack customStyle={containerStyle}>
+        {/* updating this logic, so that avatarImage loads with fallbackUrl even when avatar is null */}
+        {(avatar || avatarImageFallback) && (
+          <React.Suspense fallback={<></>}>
+            <AvatarImage
+              url={avatar?.default?.src}
+              alt={alt}
+              fallbackUrl={avatarImageFallback}
+              faded={faded}
+            />
+          </React.Suspense>
+        )}
 
-      {active && <Box customStyle={activeOverlayClass} />}
-    </Box>
+        {active && <Stack customStyle={activeOverlayClass} />}
+      </Stack>
+    </button>
   );
 };
 

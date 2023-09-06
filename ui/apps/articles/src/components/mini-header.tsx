@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
@@ -14,12 +14,12 @@ const MiniHeader: React.FC<IMiniHeaderProps> = props => {
 
   return (
     <Card padding={8}>
-      <Box customStyle="flex flex-row w-full">
+      <Stack direction="row" fullWidth={true}>
         <button onClick={onClickIcon}>
           <Icon type="ChevronLeftIcon" />
         </button>
         <Text variant="h2">{titleLabel}</Text>
-      </Box>
+      </Stack>
     </Card>
   );
 };

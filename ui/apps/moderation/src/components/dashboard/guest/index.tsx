@@ -5,7 +5,7 @@ import { NavigateToParams } from '@akashaorg/typings/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -35,14 +35,14 @@ const GuestDashboard: React.FC<GuestProps> = props => {
 
   return (
     <Card padding={16}>
-      <Box customStyle="grid gap-4 grid-cols-1">
+      <Stack spacing="gap-4" customStyle="grid grid-cols-1">
         <Text variant="h5" align="center">
           {t('Moderating')}
         </Text>
 
-        <Box customStyle="w-40 h-40 my-2 mx-auto">
+        <Stack customStyle="w-40 h-40 my-2 mx-auto">
           <Image src={`${publicImgPath}/${assetName}.${assetExtension}`} />
-        </Box>
+        </Stack>
 
         <Text weight="bold" align="center">
           {t('Are you interested in Moderating?')}
@@ -74,7 +74,7 @@ const GuestDashboard: React.FC<GuestProps> = props => {
           </Button>{' '}
           {t('to learn more about our moderation criteria')}
         </Text>
-      </Box>
+      </Stack>
     </Card>
   );
 };

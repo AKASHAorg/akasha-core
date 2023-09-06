@@ -5,7 +5,7 @@ import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 
@@ -46,11 +46,11 @@ const LoginModal = (props: RootExtensionProps) => {
       onClose={handleModalClose}
       customStyle="py-4 px-6 md:px-24"
     >
-      <Box customStyle="flex flex-col items-center w-full gap-y-2">
+      <Stack align="center" fullWidth={true} spacing="gap-y-2">
         <Text variant="body1" align="center">
           {t('To continue you need an AKASHA World account')}
         </Text>
-      </Box>
+      </Stack>
     </Modal>
   );
 };

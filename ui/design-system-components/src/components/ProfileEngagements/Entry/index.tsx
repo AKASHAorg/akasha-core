@@ -37,7 +37,7 @@ const Entry: React.FC<EntryProps> = props => {
   } = props;
 
   return (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack spacing="gap-y-4">
       <Stack align="center" justify="between">
         <Anchor
           href={`${profileAnchorLink}/${profileId}`}

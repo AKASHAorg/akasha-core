@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ModerationCategory } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 
 export type CategoryPillsProps = {
@@ -23,7 +23,7 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
   } = props;
 
   return (
-    <Box customStyle="flex flex-wrap">
+    <Stack customStyle="flex-wrap">
       {allCategoriesLabel && (
         <Pill
           label={allCategoriesLabel}
@@ -44,6 +44,6 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
           onPillClick={onPillClick({ label, value })}
         />
       ))}
-    </Box>
+    </Stack>
   );
 };

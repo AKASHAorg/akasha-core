@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import ModeratorDetailCard from '../components/moderator';
 import PaginatedTable from '../components/transparency-log/paginated-table';
@@ -82,7 +82,7 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
     ]) ?? [];
 
   return (
-    <Box customStyle="space-y-4">
+    <Stack spacing="gap-y-4">
       <ModeratorDetailCard
         moderator={moderator}
         viewProfileLabel={t('View Profile')}
@@ -111,6 +111,6 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
         onClickPrev={handleClickPrev}
         onClickNext={handleClickNext}
       />
-    </Box>
+    </Stack>
   );
 };

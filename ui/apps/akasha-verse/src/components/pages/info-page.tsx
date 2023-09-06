@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -84,7 +84,7 @@ const InfoPage: React.FC<unknown> = () => {
   });
 
   return (
-    <Box>
+    <Stack>
       {appReleaseInfoReq.error && (
         <ErrorLoader
           type="script-error"
@@ -130,7 +130,7 @@ const InfoPage: React.FC<unknown> = () => {
           }
         />
       )}
-    </Box>
+    </Stack>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -24,20 +24,20 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = props => {
 
   return (
     <PageHeader {...props}>
-      <Box customStyle="flex flex-col space-y-4">
-        <Box customStyle="w-40 h-40 my-2 mx-auto">
+      <Stack spacing="gap-y-4">
+        <Stack customStyle="w-40 h-40 my-2 mx-auto">
           <Image
             src={`${publicImgPath}/${assetName}.${assetExtension}`}
             dataTestId={`${assetName}-image`}
           />
-        </Box>
+        </Stack>
 
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
 
         <SubtitleRenderer {...props} />
-      </Box>
+      </Stack>
     </PageHeader>
   );
 };

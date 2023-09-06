@@ -2,7 +2,7 @@ import React from 'react';
 
 import { IMenuItem } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type MenuSubItemsProps = {
@@ -21,38 +21,45 @@ const MenuSubItems: React.FC<MenuSubItemsProps> = props => {
   }, [menuItem.subRoutes]);
 
   return (
-    <Box customStyle="cursor-pointer">
+    <Stack customStyle="cursor-pointer">
       {subRoutes.map((subRoute, idx) => {
         const isActive =
           subRoute?.route === activeOption?.route || location.pathname.includes(subRoute?.route);
 
         return (
-          <Box key={subRoute.label + idx} customStyle={'hover:bg-grey8 dark:hover:bg-grey5'}>
-            <Box
-              key={subRoute.label + idx}
-              customStyle={`ml-8 border(l-4 ${
-                isActive ? 'secondaryLight dark:secondaryDark' : 'grey9 dark:grey3'
-              })`}
+          <Stack
+            key={subRoute.label + idx}
+            direction="row"
+            customStyle={'hover:bg-grey8 dark:hover:bg-grey5'}
+          >
+            <button
               onClick={e => {
                 e.preventDefault();
                 onOptionClick(menuItem, subRoute);
               }}
             >
-              <Text
-                color={
-                  isActive
-                    ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                    : { light: 'black', dark: 'white' }
-                }
-                customStyle="py-4 px-8"
+              <Stack
+                key={subRoute.label + idx}
+                customStyle={`ml-8 border(l-4 ${
+                  isActive ? 'secondaryLight dark:secondaryDark' : 'grey9 dark:grey3'
+                })`}
               >
-                {subRoute.label}
-              </Text>
-            </Box>
-          </Box>
+                <Text
+                  color={
+                    isActive
+                      ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                      : { light: 'black', dark: 'white' }
+                  }
+                  customStyle="py-4 px-8"
+                >
+                  {subRoute.label}
+                </Text>
+              </Stack>
+            </button>
+          </Stack>
         );
       })}
-    </Box>
+    </Stack>
   );
 };
 

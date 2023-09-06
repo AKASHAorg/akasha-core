@@ -46,7 +46,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
       customStyle={`${borderStyle} ${customStyle}`}
     >
       <Stack direction="column" spacing="gap-y-2">
-        <Stack justify="between">
+        <Stack direction="row" justify="between">
           <Stack align="center" justify="center" spacing="gap-x-1" fullWidth>
             {titleIconType && <Icon type={titleIconType} size="sm" />}
             <Text variant={titleVariant} align="center">

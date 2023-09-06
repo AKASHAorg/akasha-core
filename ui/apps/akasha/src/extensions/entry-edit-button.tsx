@@ -36,7 +36,7 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
 
   return (
     <Button plain={true} onClick={handleClick}>
-      <Stack align="center" spacing="gap-x-3" customStyle="py-2 px-4">
+      <Stack direction="row" align="center" spacing="gap-x-3" customStyle="py-2 px-4">
         <Icon type="PencilIcon" size="sm" />
 
         <Text variant="body1">{t('Edit {{ itemTypeLabel }}', { itemTypeLabel })}</Text>

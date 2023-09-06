@@ -7,7 +7,7 @@ import {
   useGetInterestsByDidQuery,
   useInfiniteGetBeamsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
 import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
@@ -82,12 +82,12 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
   };
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
 
-      <Box customStyle="mb-2">
+      <Stack customStyle="mb-2">
         <StartCard
           title={t('My Feed')}
           heading={t('Add some magic to your feed 🪄')}
@@ -102,7 +102,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
           CTALabel={t('Customize My Feed')}
           onClickCTA={handleCTAClick}
         />
-      </Box>
+      </Stack>
 
       <FeedWidget
         queryKey="akasha-my-feed-query"
@@ -135,7 +135,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
           hasPosts={postsReq.hasNextPage && postsReq.data?.pages?.length > 0}
         />
       )}
-    </Box>
+    </Stack>
   );
 };
 

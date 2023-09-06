@@ -49,7 +49,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
   };
 
   return (
-    <Stack testId="providers-list" direction="column" spacing="gap-y-4">
+    <Stack testId="providers-list" spacing="gap-y-4">
       <Text variant="h5" align="center">
         {`✨ ${t('Welcome to AKASHA World')} ✨`}
       </Text>
@@ -63,7 +63,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
         {t('Choose a way to connect')}
       </Text>
 
-      <Stack direction="column" spacing="gap-y-4">
+      <Stack spacing="gap-y-4">
         <Text variant="h6">{t('Web3 Wallets')}</Text>
 
         <Accordion
@@ -74,7 +74,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
             </Text>
           }
           contentNode={
-            <Stack direction="column" spacing="gap-y-4">
+            <Stack spacing="gap-y-4">
               <Text variant="button-sm" weight="normal" customStyle="p-2">
                 {t(
                   'A web3 wallet is simply a digital wallet that can be used to store digital assets. These digital assets include Non-fungible tokens (NFTs).',
@@ -90,7 +90,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                 {t('Get your own wallet')}
               </Text>
 
-              <Stack align="center" justify="center" spacing="gap-x-2">
+              <Stack direction="row" align="center" justify="center" spacing="gap-x-2">
                 <AppIcon
                   placeholderIconType="metamask"
                   background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
@@ -104,7 +104,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                   href="https://metamask.io"
                   target="_blank"
                 >
-                  <Stack align="center" spacing="gap-x-2">
+                  <Stack direction="row" align="center" spacing="gap-x-2">
                     <Text
                       variant="button-sm"
                       weight="bold"
@@ -121,7 +121,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
           }
         />
 
-        <Stack direction="column" spacing="gap-y-2">
+        <Stack spacing="gap-y-2">
           {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
             <Web3ConnectCard
               leftIconType={injectedProvider.iconType}

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -50,7 +50,7 @@ export const DevKeysCard: React.FC<unknown> = () => {
       confirmButtonLabel={t('New Dev Key')}
       onConfirmButtonClick={handleAddDevKey}
     >
-      <Box customStyle={`${!getKeysQuery.isFetching && !!devKeys.length ? 'p-0' : 'p-4'}`}>
+      <Stack customStyle={`${!getKeysQuery.isFetching && !!devKeys.length ? 'p-0' : 'p-4'}`}>
         {getKeysQuery.isFetching && <Spinner />}
 
         {!getKeysQuery.isFetching && (
@@ -81,7 +81,7 @@ export const DevKeysCard: React.FC<unknown> = () => {
               ))}
           </>
         )}
-      </Box>
+      </Stack>
     </CardWrapper>
   );
 };

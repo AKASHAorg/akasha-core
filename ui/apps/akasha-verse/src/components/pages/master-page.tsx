@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import TabList from '@akashaorg/design-system-core/lib/components/TabList';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
-import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import MessageCard from '@akashaorg/design-system-core/lib/components/MessageCard';
 import routes, { APPS, EXPLORE, MY_APPS, MY_WIDGETS } from '../../routes';
 import { useTranslation } from 'react-i18next';
 
@@ -68,7 +67,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
   }, [isLoggedIn, location.pathname, navigateTo]);
 
   return (
-    <Stack direction="column" spacing="gap-y-2">
+    <Stack spacing="gap-y-2">
       {!dismissed && (
         <MessageCard
           title={t('Welcome to AKASHAVerse')}
@@ -96,7 +95,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
           labels={[t('Explore'), t('My Apps'), t('Apps'), t('Widgets')]}
           tabListDivider
         />
-        <Box customStyle="p-4">{children}</Box>
+        <Stack padding={'p-4'}>{children}</Stack>
       </Card>
     </Stack>
   );

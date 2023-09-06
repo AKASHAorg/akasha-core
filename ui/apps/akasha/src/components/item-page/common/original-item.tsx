@@ -11,7 +11,7 @@ import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { BEAM } from '../../../routes';
 import { UseQueryResult } from '@tanstack/react-query';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
@@ -132,8 +132,8 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
   const replyActive = !action && loggedProfileData?.did?.id;
 
   return (
-    <Box customStyle={`rounded-t-lg`}>
-      <Box customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
+    <Stack customStyle={`rounded-t-lg`}>
+      <Stack customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
         <EntryBox
           isRemoved={!entryData?.active}
           entryData={entryData}
@@ -182,8 +182,8 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
             />
           }
         />
-      </Box>
-      <Box customStyle="m-4">
+      </Stack>
+      <Stack customStyle="m-4">
         {!loggedProfileData?.did?.id && (
           <EditorPlaceholder
             onClick={handlePlaceholderClick}
@@ -203,7 +203,7 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
             }}
           />
         )}
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -19,7 +18,7 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="px-6 py-4 bg(grey9 dark:grey3)">
-      <Stack justify="between" align="start">
+      <Stack direction="row" justify="between" align="start">
         <Text
           variant="footnotes2"
           color={{ light: 'grey4', dark: 'grey7' }}
@@ -33,9 +32,9 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
         </Button>
       </Stack>
 
-      <Box customStyle="w-fit h-fit self-end">
+      <Stack customStyle="w-fit h-fit self-end">
         <Button onClick={onClickCTAButton} label={t('Check them out')} variant="secondary" />
-      </Box>
+      </Stack>
     </Stack>
   );
 };
