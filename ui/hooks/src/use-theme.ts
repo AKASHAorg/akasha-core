@@ -50,7 +50,7 @@ export const useTheme = () => {
        * check user's preference.
        * To automatically switch theme when user's preference changes,
        * simply add an event listener like so:
-       * 
+       *
        * colorScheme.addEventListener('change', ({ matches }) => {
             if (matches) {
               // do something
