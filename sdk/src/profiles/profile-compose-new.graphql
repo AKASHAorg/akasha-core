@@ -67,6 +67,19 @@ query GetProfileByDid($id: ID!) {
   }
 }
 
+# id is the did string of the account
+query GetProfileStatsByDid($id: ID!) {
+  node(id: $id) {
+    ...on CeramicAccount {
+      akashaProfile {
+        ...UserProfileFragment
+        followersCount(filters: {where: {isFollowing: {equalTo: true}}}, account: $id)
+      }
+      isViewer
+    }
+  }
+}
+
 query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput ){
   akashaProfileIndex(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting: $sorting ){
     edges {
