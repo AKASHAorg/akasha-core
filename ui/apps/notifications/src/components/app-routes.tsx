@@ -34,6 +34,7 @@ const AppRoutes = (props: RootComponentProps) => {
               description={t(
                 'Get the latest updates about what’s going on with your world. You can personalize your notifications and get only what you want to see!',
               )}
+              image={isLoggedIn ? '/images/notificationapp-welcome-min.webp' : null}
               leftButtonLabel={t('Skip')}
               rightButtonLabel={t('Customize your notifications')}
               isLoggedIn={isLoggedIn}
@@ -53,6 +54,7 @@ const AppRoutes = (props: RootComponentProps) => {
               description={t(
                 'You will receive notifications based on your choices now! You can always change that or even pause it from the notifications settings!',
               )}
+              image={'/images/notificationapp-success-min.webp'}
               finalStep={true}
               rightButtonLabel={t('Go to my notifications')}
               isLoggedIn={isLoggedIn}
