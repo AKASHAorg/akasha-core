@@ -7,7 +7,10 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
   id
   reflectionsCount
   active
-  embeddedBeam
+  embeddedBeam {
+    label
+    embeddedID
+  }
   author {
     id
     isViewer
@@ -19,10 +22,23 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
   tags
   version
   createdAt
+  nsfw
+  reflections(last: 1) {
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
 }
     `;
 export const ContentBlockFragmentDoc = /*#__PURE__*/ gql`
     fragment ContentBlockFragment on AkashaContentBlock {
+  id
   content {
     propertyType
     value
@@ -47,10 +63,12 @@ export const ContentBlockFragmentDoc = /*#__PURE__*/ gql`
     isViewer
   }
   version
+  nsfw
 }
     `;
 export const BlockStorageFragmentDoc = /*#__PURE__*/ gql`
     fragment BlockStorageFragment on AkashaBlockStorage {
+  id
   appVersionID
   appVersion {
     application {
@@ -87,6 +105,7 @@ export const BlockStorageFragmentDoc = /*#__PURE__*/ gql`
     `;
 export const ReflectFragmentDoc = /*#__PURE__*/ gql`
     fragment ReflectFragment on AkashaReflect {
+  id
   author {
     id
     isViewer
@@ -94,8 +113,8 @@ export const ReflectFragmentDoc = /*#__PURE__*/ gql`
   version
   active
   content {
-    provider
-    property
+    label
+    propertyType
     value
   }
   isReply
@@ -107,6 +126,7 @@ export const ReflectFragmentDoc = /*#__PURE__*/ gql`
       isViewer
     }
   }
+  nsfw
 }
     `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
@@ -155,6 +175,7 @@ export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
     }
   }
   createdAt
+  nsfw
 }
     `;
 export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
@@ -166,7 +187,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
   name
   displayName
   keywords
-  releases {
+  releases(last: 5) {
     edges {
       node {
         id
@@ -174,6 +195,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ gql`
         source
         version
       }
+      cursor
     }
   }
   releasesCount
@@ -219,6 +241,7 @@ export const GetBeamsDocument = /*#__PURE__*/ gql`
       node {
         ...BeamFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -245,6 +268,7 @@ export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ gql`
           node {
             ...BeamFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -334,6 +358,7 @@ export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -355,6 +380,7 @@ export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ gql`
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -382,6 +408,7 @@ export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
       node {
         ...ReflectFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -447,6 +474,7 @@ export const GetProfilesDocument = /*#__PURE__*/ gql`
       node {
         ...UserProfileFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -476,6 +504,7 @@ export const GetInterestsDocument = /*#__PURE__*/ gql`
         }
         id
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -522,7 +551,7 @@ export const GetInterestsByIdDocument = /*#__PURE__*/ gql`
 }
     `;
 export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
-    query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
       akashaFollowList(
@@ -531,6 +560,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
         first: $first
         last: $last
         filters: {where: {isFollowing: {equalTo: true}}}
+        sorting: $sorting
       ) {
         edges {
           node {
@@ -540,7 +570,11 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
             profile {
               ...UserProfileFragment
             }
+            did {
+              id
+            }
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -555,7 +589,7 @@ export const GetFollowingListByDidDocument = /*#__PURE__*/ gql`
 }
     ${UserProfileFragmentDoc}`;
 export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
-    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
       akashaProfile {
@@ -565,6 +599,7 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
           first: $first
           last: $last
           filters: {where: {isFollowing: {equalTo: true}}}
+          sorting: $sorting
         ) {
           edges {
             node {
@@ -574,7 +609,13 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
               profile {
                 ...UserProfileFragment
               }
+              did {
+                akashaProfile {
+                  ...UserProfileFragment
+                }
+              }
             }
+            cursor
           }
           pageInfo {
             startCursor
@@ -594,6 +635,66 @@ export const GetMyProfileDocument = /*#__PURE__*/ gql`
   viewer {
     akashaProfile {
       ...UserProfileFragment
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const GetFollowDocumentDocument = /*#__PURE__*/ gql`
+    query GetFollowDocument($follower: ID!, $following: String!) {
+  node(id: $follower) {
+    ... on CeramicAccount {
+      akashaProfile {
+        followers(last: 1, filters: {where: {profileID: {equalTo: $following}}}) {
+          edges {
+            node {
+              id
+              isFollowing
+              profileID
+              profile {
+                ...UserProfileFragment
+              }
+            }
+            cursor
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
+    query GetFollowDocuments($follower: ID!, $following: [String!]) {
+  node(id: $follower) {
+    ... on CeramicAccount {
+      akashaProfile {
+        followers(last: 25, filters: {where: {profileID: {in: $following}}}) {
+          edges {
+            node {
+              id
+              isFollowing
+              profileID
+              profile {
+                ...UserProfileFragment
+              }
+            }
+            cursor
+          }
+          pageInfo {
+            startCursor
+            endCursor
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }
+      isViewer
     }
   }
 }
@@ -720,6 +821,7 @@ export const GetAppsDocument = /*#__PURE__*/ gql`
       node {
         ...AkashaAppFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -779,6 +881,7 @@ export const GetAppsReleasesDocument = /*#__PURE__*/ gql`
       node {
         ...AppReleaseFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -873,6 +976,12 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetMyProfile(variables?: Types.GetMyProfileQueryVariables, options?: C): Promise<Types.GetMyProfileQuery> {
       return requester<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options) as Promise<Types.GetMyProfileQuery>;
+    },
+    GetFollowDocument(variables: Types.GetFollowDocumentQueryVariables, options?: C): Promise<Types.GetFollowDocumentQuery> {
+      return requester<Types.GetFollowDocumentQuery, Types.GetFollowDocumentQueryVariables>(GetFollowDocumentDocument, variables, options) as Promise<Types.GetFollowDocumentQuery>;
+    },
+    GetFollowDocuments(variables: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
+      return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
     },
     CreateProfile(variables: Types.CreateProfileMutationVariables, options?: C): Promise<Types.CreateProfileMutation> {
       return requester<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options) as Promise<Types.CreateProfileMutation>;
