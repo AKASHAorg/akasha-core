@@ -1371,74 +1371,77 @@ useInfiniteGetMyProfileQuery.getKey = (variables?: Types.GetMyProfileQueryVariab
 ;
 
 useGetMyProfileQuery.fetcher = (variables?: Types.GetMyProfileQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options);
-export const GetFollowDocumentDocument = /*#__PURE__*/ `
-    query GetFollowDocument($follower: ID!, $following: String!) {
-  node(id: $follower) {
-    ... on CeramicAccount {
-      akashaProfile {
-        followers(last: 1, filters: {where: {profileID: {equalTo: $following}}}) {
-          edges {
-            node {
-              id
-              isFollowing
-              profileID
-              profile {
-                ...UserProfileFragment
-              }
-            }
-            cursor
-          }
-          pageInfo {
-            startCursor
-            endCursor
-            hasNextPage
-            hasPreviousPage
+export const GetFollowDocumentsDocument = /*#__PURE__*/ `
+    query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
+  viewer {
+    akashaFollowList(
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      filters: {where: {profileID: {in: $following}}}
+      sorting: $sorting
+    ) {
+      edges {
+        node {
+          id
+          isFollowing
+          profileID
+          profile {
+            ...UserProfileFragment
           }
         }
+        cursor
       }
-      isViewer
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
     }
+    isViewer
   }
 }
     ${UserProfileFragmentDoc}`;
-export const useGetFollowDocumentQuery = <
-      TData = Types.GetFollowDocumentQuery,
+export const useGetFollowDocumentsQuery = <
+      TData = Types.GetFollowDocumentsQuery,
       TError = unknown
     >(
-      variables: Types.GetFollowDocumentQueryVariables,
-      options?: UseQueryOptions<Types.GetFollowDocumentQuery, TError, TData>
+      variables?: Types.GetFollowDocumentsQueryVariables,
+      options?: UseQueryOptions<Types.GetFollowDocumentsQuery, TError, TData>
     ) =>
-    useQuery<Types.GetFollowDocumentQuery, TError, TData>(
-      ['GetFollowDocument', variables],
-      fetcher<Types.GetFollowDocumentQuery, Types.GetFollowDocumentQueryVariables>(GetFollowDocumentDocument, variables),
+    useQuery<Types.GetFollowDocumentsQuery, TError, TData>(
+      variables === undefined ? ['GetFollowDocuments'] : ['GetFollowDocuments', variables],
+      fetcher<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables),
       options
     );
-useGetFollowDocumentQuery.document = GetFollowDocumentDocument;
+useGetFollowDocumentsQuery.document = GetFollowDocumentsDocument;
 
 
-useGetFollowDocumentQuery.getKey = (variables: Types.GetFollowDocumentQueryVariables) => ['GetFollowDocument', variables];
+useGetFollowDocumentsQuery.getKey = (variables?: Types.GetFollowDocumentsQueryVariables) => variables === undefined ? ['GetFollowDocuments'] : ['GetFollowDocuments', variables];
 ;
 
-export const useInfiniteGetFollowDocumentQuery = <
-      TData = Types.GetFollowDocumentQuery,
+export const useInfiniteGetFollowDocumentsQuery = <
+      TData = Types.GetFollowDocumentsQuery,
       TError = unknown
     >(
-      pageParamKey: keyof Types.GetFollowDocumentQueryVariables,
-      variables: Types.GetFollowDocumentQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetFollowDocumentQuery, TError, TData>
+      pageParamKey: keyof Types.GetFollowDocumentsQueryVariables,
+      variables?: Types.GetFollowDocumentsQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetFollowDocumentsQuery, TError, TData>
     ) =>{
     
-    return useInfiniteQuery<Types.GetFollowDocumentQuery, TError, TData>(
-      ['GetFollowDocument.infinite', variables],
-      (metaData) => fetcher<Types.GetFollowDocumentQuery, Types.GetFollowDocumentQueryVariables>(GetFollowDocumentDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+    return useInfiniteQuery<Types.GetFollowDocumentsQuery, TError, TData>(
+      variables === undefined ? ['GetFollowDocuments.infinite'] : ['GetFollowDocuments.infinite', variables],
+      (metaData) => fetcher<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetFollowDocumentQuery.getKey = (variables: Types.GetFollowDocumentQueryVariables) => ['GetFollowDocument.infinite', variables];
+useInfiniteGetFollowDocumentsQuery.getKey = (variables?: Types.GetFollowDocumentsQueryVariables) => variables === undefined ? ['GetFollowDocuments.infinite'] : ['GetFollowDocuments.infinite', variables];
 ;
 
-useGetFollowDocumentQuery.fetcher = (variables: Types.GetFollowDocumentQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetFollowDocumentQuery, Types.GetFollowDocumentQueryVariables>(GetFollowDocumentDocument, variables, options);
+useGetFollowDocumentsQuery.fetcher = (variables?: Types.GetFollowDocumentsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options);
 export const CreateProfileDocument = /*#__PURE__*/ `
     mutation CreateProfile($i: CreateAkashaProfileInput!) {
   createAkashaProfile(input: $i) {
@@ -1597,74 +1600,6 @@ export const useUpdateFollowMutation = <
 useUpdateFollowMutation.getKey = () => ['UpdateFollow'];
 
 useUpdateFollowMutation.fetcher = (variables: Types.UpdateFollowMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options);
-export const GetIsFollowingListDocument = /*#__PURE__*/ `
-    query GetIsFollowingList($follower: ID!, $following: [String!]) {
-  node(id: $follower) {
-    ... on CeramicAccount {
-      akashaProfile {
-        followers(last: 25, filters: {where: {profileID: {in: $following}}}) {
-          edges {
-            node {
-              id
-              isFollowing
-              profileID
-              profile {
-                ...UserProfileFragment
-              }
-            }
-            cursor
-          }
-          pageInfo {
-            startCursor
-            endCursor
-            hasNextPage
-            hasPreviousPage
-          }
-        }
-      }
-      isViewer
-    }
-  }
-}
-    ${UserProfileFragmentDoc}`;
-export const useGetIsFollowingListQuery = <
-      TData = Types.GetIsFollowingListQuery,
-      TError = unknown
-    >(
-      variables: Types.GetIsFollowingListQueryVariables,
-      options?: UseQueryOptions<Types.GetIsFollowingListQuery, TError, TData>
-    ) =>
-    useQuery<Types.GetIsFollowingListQuery, TError, TData>(
-      ['GetIsFollowingList', variables],
-      fetcher<Types.GetIsFollowingListQuery, Types.GetIsFollowingListQueryVariables>(GetIsFollowingListDocument, variables),
-      options
-    );
-useGetIsFollowingListQuery.document = GetIsFollowingListDocument;
-
-
-useGetIsFollowingListQuery.getKey = (variables: Types.GetIsFollowingListQueryVariables) => ['GetIsFollowingList', variables];
-;
-
-export const useInfiniteGetIsFollowingListQuery = <
-      TData = Types.GetIsFollowingListQuery,
-      TError = unknown
-    >(
-      pageParamKey: keyof Types.GetIsFollowingListQueryVariables,
-      variables: Types.GetIsFollowingListQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetIsFollowingListQuery, TError, TData>
-    ) =>{
-    
-    return useInfiniteQuery<Types.GetIsFollowingListQuery, TError, TData>(
-      ['GetIsFollowingList.infinite', variables],
-      (metaData) => fetcher<Types.GetIsFollowingListQuery, Types.GetIsFollowingListQueryVariables>(GetIsFollowingListDocument, {...variables, ...(metaData.pageParam ?? {})})(),
-      options
-    )};
-
-
-useInfiniteGetIsFollowingListQuery.getKey = (variables: Types.GetIsFollowingListQueryVariables) => ['GetIsFollowingList.infinite', variables];
-;
-
-useGetIsFollowingListQuery.fetcher = (variables: Types.GetIsFollowingListQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetIsFollowingListQuery, Types.GetIsFollowingListQueryVariables>(GetIsFollowingListDocument, variables, options);
 export const CreateAppDocument = /*#__PURE__*/ `
     mutation CreateApp($i: CreateAkashaAppInput!) {
   createAkashaApp(input: $i) {
