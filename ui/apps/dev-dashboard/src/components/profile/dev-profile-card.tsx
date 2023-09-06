@@ -41,7 +41,7 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
 
   return (
     <Card padding={0}>
-      <Stack customStyle="p-4">
+      <Stack padding="p-4">
         <Text variant="h5" align="center" weight="bold">
           {titleLabel}
         </Text>
@@ -59,7 +59,7 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
         <Stack key={idx}>
           <Divider />
 
-          <Stack customStyle="p-4">
+          <Stack padding="p-4">
             <Button plain={true} onClick={handleClickMenuItem(item.route)} customStyle="w-full">
               <Stack align="center" justify="between">
                 <Text variant="h6" weight="bold">

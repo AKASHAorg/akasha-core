@@ -18,7 +18,7 @@ export const CardWrapper: React.FC<React.PropsWithChildren<ICardWrapperProps>> =
 
   return (
     <Card padding={0}>
-      <Stack customStyle="p-4">
+      <Stack padding="p-4">
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
@@ -28,7 +28,7 @@ export const CardWrapper: React.FC<React.PropsWithChildren<ICardWrapperProps>> =
 
       <>{children}</>
 
-      <Stack spacing="gap-x-6" align="center" justify="end" customStyle="p-4">
+      <Stack spacing="gap-x-6" align="center" justify="end" padding="p-4">
         <PageButtons {...props} />
       </Stack>
     </Card>

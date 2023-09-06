@@ -355,7 +355,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       )}
 
       {socialLinks.length > 0 && (
-        <Stack customStyle="px-8 py-4 border-t-1 border(grey9 dark:grey3)">
+        <Stack padding="px-8 py-4" customStyle="border-t-1 border(grey9 dark:grey3)">
           <Text variant="footnotes2">{t('Get in touch')}</Text>
 
           <Stack direction="row" customStyle="w-fit h-fit mt-6">

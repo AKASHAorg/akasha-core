@@ -19,7 +19,7 @@ const ThemeOption: React.FC<IThemeOption> = props => {
 
   return (
     <PageLayout title={titleLabel}>
-      <Stack customStyle="p-4">
+      <Stack padding="p-4">
         <Stack direction="row" justify="between" align="center" customStyle="mb-2">
           <Text weight="bold">{themeIntroLabel}</Text>
 

@@ -124,7 +124,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   };
 
   return (
-    <Stack customStyle="pb-2 max-h-[30rem]">
+    <Stack padding="pb-2" customStyle="max-h-[30rem]">
       <ProfileMiniCard
         handleClick={handleProfileClick}
         handleFollow={handleFollow}

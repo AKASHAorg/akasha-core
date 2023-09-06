@@ -33,9 +33,9 @@ const AppsOption: React.FC<IAppsOption> = props => {
 
   return (
     <PageLayout title={titleLabel}>
-      <Stack customStyle="px-4">
+      <Stack padding="px-4">
         {/* automatic updates */}
-        <Stack customStyle="py-4 border(b-1 solid grey8)">
+        <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
           <Stack justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{autoUpdatesLabel}</Text>
 
@@ -46,7 +46,7 @@ const AppsOption: React.FC<IAppsOption> = props => {
         </Stack>
 
         {/* data and analytics */}
-        <Stack customStyle="py-4 border(b-1 solid grey8)">
+        <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
           <Stack justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{dataAnalyticsLabel}</Text>
 

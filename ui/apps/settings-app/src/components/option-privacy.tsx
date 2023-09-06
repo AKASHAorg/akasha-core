@@ -59,9 +59,9 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
 
   return (
     <PageLayout title={titleLabel}>
-      <Stack customStyle="px-4">
+      <Stack padding="px-4">
         {/* essential cookies */}
-        <Stack customStyle="py-4 border(b-1 solid grey8)">
+        <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
           <Stack direction="row" justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{essentialCookiesLabel}</Text>
 
@@ -91,7 +91,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
         </Stack>
 
         {/* tracking analytics */}
-        <Stack customStyle="py-4">
+        <Stack padding="py-4">
           <Stack direction="row" justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{trackingAnalyticsLabel}</Text>
 

@@ -125,9 +125,9 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Stack customStyle="pb-4">
+    <Stack padding="pb-4">
       <Card elevation="1">
-        <Stack customStyle="pl-4 pt-4 pb-6">
+        <Stack padding="pl-4 pt-4 pb-6">
           <Text weight="bold" variant="body1">
             {t('My Apps')}
           </Text>
@@ -140,7 +140,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
             tabListDivider
           />
         </Stack>
-        <Stack customStyle="pt-4 pb-4">
+        <Stack padding="pt-4 pb-4">
           {activeTabIndex === 0 && filteredDefaultApps.length === 0 && <NoAppsMessage />}
           {activeTabIndex === 1 && filteredInstalledApps.length === 0 && <NoAppsMessage />}
 

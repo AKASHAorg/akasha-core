@@ -38,7 +38,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
 
   return (
     <Card customStyle="mb-2">
-      <Stack customStyle="p-4">
+      <Stack padding="p-4">
         <Stack direction="row" justify="between">
           <Stack spacing="gap-1">
             <Stack direction="row" spacing="gap-0.5" align="center">
@@ -65,7 +65,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           </Stack>
         </Stack>
       </Stack>
-      <Stack customStyle="px-4 pb-4 border(b grey8 dark:grey3 gap-2)">
+      <Stack padding="px-4 pb-4" customStyle="border(b grey8 dark:grey3 gap-2)">
         <Text variant="h2">{articleData.title}</Text>
         <Stack fullWidth={true} customStyle="h-[12.625rem] rounded-sm">
           <Image customStyle="object-contain rounded-sm" src={articleData.image} />

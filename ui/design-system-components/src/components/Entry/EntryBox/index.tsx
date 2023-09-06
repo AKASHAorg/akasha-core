@@ -316,7 +316,7 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
           </button>
         )}
         {/*{showLinkPreview && (*/}
-        {/*  <Stack customStyle="p-4">*/}
+        {/*  <Stack padding="p-4">*/}
         {/*    <LinkPreview*/}
         {/*      linkPreviewData={entryData.linkPreview}*/}
         {/*      handleLinkClick={handleLinkClick}*/}
@@ -324,7 +324,7 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
         {/*  </Stack>*/}
         {/*)}*/}
         {/*{entryData.images && (*/}
-        {/*  <Stack customStyle="p-4">*/}
+        {/*  <Stack padding="p-4">*/}
         {/*    <EntryImageGallery images={entryData.images} handleClickImage={handleClickImage} />*/}
         {/*  </Stack>*/}
         {/*)}*/}
@@ -336,7 +336,7 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
         {/*  />*/}
         {/*)}*/}
         {/*{showQuote && (*/}
-        {/*  <Stack customStyle="p-4" onClick={() => handleContentClick(entryData.quote)}>*/}
+        {/*  <Stack padding="p-4" onClick={() => handleContentClick(entryData.quote)}>*/}
         {/*    <EmbedBox embedEntryData={entryData.quote} />*/}
         {/*  </Stack>*/}
         {/*)}*/}
@@ -348,7 +348,7 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
         {/*  />*/}
         {/*)}*/}
         {/*{showReportedQuote && (*/}
-        {/*  <Stack customStyle="p-4" onClick={() => null}>*/}
+        {/*  <Stack padding="p-4" onClick={() => null}>*/}
         {/*    <EntryCardHidden*/}
         {/*      reason={entryData.reason}*/}
         {/*      headerTextLabel={headerTextLabel}*/}
@@ -359,7 +359,7 @@ const EntryBox: React.FC<EntryBoxProps> = props => {
         {/*  </Stack>*/}
         {/*)}*/}
         {/*{showDelistedQuote && (*/}
-        {/*  <Stack customStyle="p-4" onClick={() => null}>*/}
+        {/*  <Stack padding="p-4" onClick={() => null}>*/}
         {/*    <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />*/}
         {/*  </Stack>*/}
         {/*)}*/}

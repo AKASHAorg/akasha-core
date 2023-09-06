@@ -73,7 +73,7 @@ export const VerifySignature: React.FC<RootComponentProps> = props => {
       onCancelButtonClick={handleButtonClick}
       onConfirmButtonClick={isSuccess ? handleButtonClick : handleVerifySignature}
     >
-      <Stack customStyle="pt-4 px-4">
+      <Stack padding="pt-4 px-4">
         {!verifySignatureMutation.isSuccess && (
           <Stack spacing="gap-y-4">
             <TextField label={t('DID')} placeholder={t('Paste your DID here')} type="text" />

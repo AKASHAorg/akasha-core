@@ -19,7 +19,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
 
   return (
     <Card padding={0}>
-      <Stack customStyle="px-4 py-6">
+      <Stack padding="px-4 py-6">
         <Text variant={labelTextVariant} align="center">
           {label}
         </Text>
@@ -27,7 +27,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
 
       <Divider />
 
-      <Stack customStyle="p-4">{children}</Stack>
+      <Stack padding="p-4">{children}</Stack>
 
       {/* show buttons only when the labels are specified */}
       {(cancelButtonLabel || confirmButtonLabel) && (

@@ -43,7 +43,7 @@ export const TransparencyLogItem: React.FC = () => {
         </Stack>
       </Stack>
 
-      <Stack customStyle="p-4">
+      <Stack padding="p-4">
         <Text variant="body1" color={{ light: 'grey5', dark: 'grey7' }}>
           A post has been reported for
         </Text>

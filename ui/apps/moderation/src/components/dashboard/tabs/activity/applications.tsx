@@ -15,7 +15,7 @@ const ApplicationsActivity: React.FC<ApplicationsActivityProps> = props => {
 
   return (
     <Card customStyle="pt-0 px-0 pb-2">
-      <Stack customStyle="px-4 py-6">
+      <Stack padding="px-4 py-6">
         <Text variant="h5" align="center">
           {label}
         </Text>

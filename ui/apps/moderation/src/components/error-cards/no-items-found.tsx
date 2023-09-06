@@ -11,7 +11,7 @@ export type NoItemsFoundProps = {
 
 const NoItemsFound: React.FC<NoItemsFoundProps> = ({ titleLabel, subtitleLabel }) => {
   return (
-    <Stack customStyle="pt-6 px-2 pb-2">
+    <Stack padding="pt-6 px-2 pb-2">
       <Icon type="vibe" size="lg" accentColor={true} />
 
       <Text align="center" weight="bold">

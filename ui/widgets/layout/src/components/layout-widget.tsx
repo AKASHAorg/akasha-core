@@ -187,7 +187,7 @@ const Layout: React.FC<RootComponentProps> = props => {
           <Stack customStyle={mobileLayoverStyle}>
             <Stack customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
-                <Stack customStyle="pt-0 xl:pt-4 h-screen" ref={wrapperRef}>
+                <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
                   <Extension
                     fullHeight
                     name={props.layoutConfig.sidebarSlotId}
@@ -195,7 +195,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                   />
                 </Stack>
               ) : (
-                <Stack customStyle="pt-0 xl:pt-4 h-screen">
+                <Stack padding="pt-0 xl:pt-4" customStyle="h-screen">
                   <Extension
                     fullHeight
                     name={props.layoutConfig.sidebarSlotId}
@@ -208,11 +208,11 @@ const Layout: React.FC<RootComponentProps> = props => {
 
           <Stack customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
             <Stack customStyle="sticky top-0 z-10">
-              <Stack customStyle="pt-4 bg(white dark:black) rounded-b-2xl">
+              <Stack padding="pt-4" customStyle="bg(white dark:black) rounded-b-2xl">
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
               </Stack>
             </Stack>
-            <Stack customStyle="pt-4">
+            <Stack padding="pt-4">
               {!isPlatformHealthy && (
                 <Card
                   margin="mb-4"

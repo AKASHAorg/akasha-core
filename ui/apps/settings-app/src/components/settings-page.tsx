@@ -26,7 +26,7 @@ const SettingsPage: React.FC<BaseOption & RootComponentProps> = props => {
 
   return (
     <PageLayout title={t('Settings')}>
-      <Stack customStyle="px-4">
+      <Stack padding="px-4">
         {settingsItems.map((item: ISettingsItem, idx: number) => {
           const baseStyle = `flex py-4 justify-between items-center ${
             idx !== settingsItems.length - 1 ? 'border(b-1 solid grey8 dark:grey5)' : 'border-none'

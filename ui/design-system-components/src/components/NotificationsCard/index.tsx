@@ -197,7 +197,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         <div>
           {notifications?.map((notif: any, index: number) => renderNotificationCard(notif, index))}
           {isFetching && (
-            <Stack customStyle="py-4">
+            <Stack padding="py-4">
               <Spinner />
             </Stack>
           )}

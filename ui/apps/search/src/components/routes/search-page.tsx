@@ -606,7 +606,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         </Stack>
       )}
       {/* triggers intersection observer */}
-      <Stack customStyle="p-2" ref={loadmoreRef} />
+      <Stack padding="p-2" ref={loadmoreRef} />
     </Stack>
   );
 };

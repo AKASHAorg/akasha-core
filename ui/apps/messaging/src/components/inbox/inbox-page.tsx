@@ -103,13 +103,13 @@ const InboxPage: React.FC<InboxPageProps> = props => {
         </Stack>
         <Text>{t('Write and send private, encrypted messages 🔐 to people in AKASHA World.')}</Text>
         <Stack customStyle="border(grey8 dark:grey3) rounded-lg">
-          <Stack customStyle="px-2 py-4">
+          <Stack padding="px-2 py-4">
             <Text variant="h2">{t('Conversations')}</Text>
           </Stack>
           <Stack customStyle="rounded-b-lg overflow-auto">
             {!!pinnedContacts.length && (
               <Stack customStyle="shrink-0">
-                <Stack customStyle="p-4 shrink-0">
+                <Stack padding="p-4 shrink-0">
                   <Text variant="body1">{t('PINNED')}</Text>
                 </Stack>
 

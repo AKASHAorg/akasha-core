@@ -191,7 +191,10 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
             {formValues.coverImage && (
               <>
                 <button onClick={onClickEditImage}>
-                  <Stack customStyle="p-0.5 rounded-sm border(secondaryLight dark:secondaryDark) absolute top-2 right-2">
+                  <Stack
+                    padding={'p-0.5'}
+                    customStyle="rounded-sm border(secondaryLight dark:secondaryDark) absolute top-2 right-2"
+                  >
                     <Icon type="integrationAppCTA" accentColor={true} />
                   </Stack>
                 </button>

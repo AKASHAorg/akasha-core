@@ -16,7 +16,7 @@ const MyArticlesHeader: React.FC<IMyArticlesHeaderProps> = props => {
   const tabWidth = 100 / tabs.length;
   return (
     <Card customStyle="border-b-0 rounded-b-none">
-      <Stack customStyle="p-4 gap-4">
+      <Stack padding="p-4" spacing="gap-4">
         <Text variant="h2">{titleLabel}</Text>
         <Text variant="h6">{subtitleLabel}</Text>
       </Stack>

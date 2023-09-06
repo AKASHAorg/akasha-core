@@ -93,7 +93,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
           labels={[t('Explore'), t('My Apps'), t('Apps'), t('Widgets')]}
           tabListDivider
         />
-        <Stack customStyle="p-4">{children}</Stack>
+        <Stack padding={'p-4'}>{children}</Stack>
       </Card>
     </Stack>
   );

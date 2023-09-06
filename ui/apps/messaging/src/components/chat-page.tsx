@@ -169,7 +169,7 @@ const ChatPage = (props: ChatPageProps) => {
           {t('Message')}
         </Text>
       </Stack>
-      <Stack customStyle="p-2">
+      <Stack padding="p-2">
         <Stack fullWidth={true} justify="between" customStyle="rounded-lg border(grey8 dark:grey3)">
           <ChatAreaHeader
             name={profileDataReq.data?.akashaProfile?.name}

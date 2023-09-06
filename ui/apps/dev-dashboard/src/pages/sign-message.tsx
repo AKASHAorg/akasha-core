@@ -51,7 +51,7 @@ export const SignMessage: React.FC<RootComponentProps> = props => {
       onCancelButtonClick={handleButtonClick}
       onConfirmButtonClick={isSuccess ? handleButtonClick : handleSignMessage}
     >
-      <Stack customStyle="pt-4 px-4">
+      <Stack padding="pt-4 px-4">
         {!signMessageMutation.isSuccess && (
           <Stack>
             <TextField

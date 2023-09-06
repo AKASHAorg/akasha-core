@@ -54,7 +54,7 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
 
       {otherApps.map((app, idx) => (
         <button key={app.label + idx} onClick={onClickMenuItem(app)}>
-          <Stack customStyle="py-2 px-6 bg(hover:grey8 dark:hover:grey5) cursor-pointer">
+          <Stack padding="py-2 px-6" customStyle="bg(hover:grey8 dark:hover:grey5)">
             <MenuItemLabel menuItem={app} />
           </Stack>
         </button>
