@@ -102,7 +102,7 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
   return (
     <Card elevation={'1'} radius={16} padding={'p-2'} testId="notifications">
       <div className={tw('flex(& col) justify-center align-center mb-32')}>
-        {image ? (
+        {image && isLoggedIn ? (
           <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
         ) : (
           <Card
