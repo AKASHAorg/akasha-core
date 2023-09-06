@@ -1,12 +1,12 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import {
   COOKIE_CONSENT_NAME,
   CookieConsentTypes,
   useRootComponentProps,
+  useTheme,
 } from '@akashaorg/ui-awf-hooks';
-import { EventTypes } from '@akashaorg/typings/ui';
 
 import AppsOption from './option-apps';
 import SettingsPage from './settings-page';
@@ -18,18 +18,18 @@ import routes, { THEME, APPS, HOME, PRIVACY } from '../routes';
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
 const AppRoutes = () => {
-  const currentTheme = window.localStorage.getItem('Theme') as theme | null;
   const cookieType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
 
-  const [theme, setTheme] = React.useState<theme | null>(currentTheme);
-  const [checkedTracking, setCheckedTracking] = React.useState<boolean>(
+  const [checkedTracking, setCheckedTracking] = useState<boolean>(
     cookieType === CookieConsentTypes.ALL,
   );
-  const [checkedAutoUpdates, setCheckedAutoUpdates] = React.useState<boolean>(false);
-  const [checkedDataAnalytics, setCheckedDataAnalytics] = React.useState<boolean>(false);
+  const [checkedAutoUpdates, setCheckedAutoUpdates] = useState<boolean>(false);
+  const [checkedDataAnalytics, setCheckedDataAnalytics] = useState<boolean>(false);
+
+  const { theme, propagateTheme } = useTheme();
 
   const { t } = useTranslation('app-settings-ewa');
-  const { baseRouteName, uiEvents, getRoutingPlugin } = useRootComponentProps();
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
 
   const routing = getRoutingPlugin();
 
@@ -72,31 +72,7 @@ const AppRoutes = () => {
   const handleThemeSelect = () => {
     const selectedTheme = theme === 'Dark-Theme' ? 'Light-Theme' : 'Dark-Theme';
 
-    setTheme(selectedTheme);
-
-    window.localStorage.setItem('Theme', selectedTheme);
-
-    /*
-     * Custom event used in main html file
-     * to update the theme in the <body> tag
-     */
-    const ev = new CustomEvent(EventTypes.ThemeChange, {
-      detail: {
-        theme: selectedTheme,
-      },
-    });
-
-    window.dispatchEvent(ev);
-
-    /*
-     * Propagate the change to all apps and widgets
-     */
-    uiEvents.next({
-      event: EventTypes.ThemeChange,
-      data: {
-        name: selectedTheme,
-      },
-    });
+    propagateTheme(selectedTheme, true);
   };
 
   return (

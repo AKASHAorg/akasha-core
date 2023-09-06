@@ -7,6 +7,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import PageLayout from './base-layout';
+
 import { ISettingsItem, settingsItems, SettingsOption } from '../utils/settings-items';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 

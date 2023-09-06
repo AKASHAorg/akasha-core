@@ -7,6 +7,7 @@ import {
   filterEvents,
   usePlaformHealthCheck,
   useRootComponentProps,
+  useTheme,
 } from '@akashaorg/ui-awf-hooks';
 import {
   startMobileSidebarHidingBreakpoint,
@@ -30,6 +31,8 @@ const Layout = () => {
   );
 
   const { uiEvents, layoutConfig } = useRootComponentProps();
+  // initialise fallback theme, if none is set
+  useTheme();
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
