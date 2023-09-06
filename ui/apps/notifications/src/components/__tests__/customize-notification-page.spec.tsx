@@ -4,7 +4,7 @@ import CustomizeNotificationPage from '../pages/customize-notification-page';
 import { screen, renderWithAllProviders, act } from '@akashaorg/af-testing';
 
 describe('< CustomizeNotificationPage /> component', () => {
-  const BaseComponent = <CustomizeNotificationPage />;
+  const BaseComponent = <CustomizeNotificationPage isLoggedIn={true} />;
   beforeEach(async () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});

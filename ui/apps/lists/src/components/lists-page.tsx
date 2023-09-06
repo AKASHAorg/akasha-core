@@ -10,16 +10,14 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const ListsPage = () => {
   const [showModal, setShowModal] = React.useState(false);
 
   const { t } = useTranslation('app-lists');
-  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
+  const { navigateToModal } = useRootComponentProps();
 
   const bookmarkDelete = null;
 
@@ -28,7 +26,7 @@ const ListsPage = () => {
       return resp.viewer?.akashaProfile;
     },
   });
-  const loggedProfileData = profileDataReq.data;
+  const loggedProfileData = profileDataReq?.data;
 
   const isLoggedIn = React.useMemo(() => {
     return loggedProfileData?.did?.id;
@@ -72,7 +70,7 @@ const ListsPage = () => {
   };
 
   return (
-    <Card customStyle="flex flex-row" elevation={'1'} radius={16} padding={'p-4'}>
+    <Card elevation={'1'} radius={16} padding={'p-4'}>
       <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
       {listsReq?.status === 'error' && (
         <ErrorLoader
@@ -94,24 +92,12 @@ const ListsPage = () => {
 
         {!listsReq?.isFetched && isLoggedIn && <Spinner />}
         {(!isLoggedIn || (listsReq?.isFetched && (!lists || !lists.length))) && (
-          <DefaultEmptyCard infoText={t('You don’t have any saved content in your List')} />
+          <DefaultEmptyCard
+            infoText={t('You don’t have any saved content in your List')}
+            noBorder
+            image="/images/listsapp-empty-min.webp"
+          />
         )}
-
-        <FeedWidget
-          queryKey="akasha-lists-page-query"
-          modalSlotId={layoutConfig.modalSlotId}
-          // @TODO: create an entry for lists
-          itemType={EntityTypes.BEAM}
-          loggedProfileData={loggedProfileData}
-          navigateToModal={navigateToModal}
-          onLoginModalOpen={showLoginModal}
-          contentClickable={true}
-          onEntryFlag={handleEntryFlag}
-          onEntryRemove={handleEntryRemove}
-          itemSpacing={8}
-          onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
-          i18n={getTranslationPlugin().i18n}
-        />
       </Box>
       <Modal
         title={{ label: t('Remove Content') }}

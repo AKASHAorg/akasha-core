@@ -37,6 +37,7 @@ const AppRoutes = () => {
               description={t(
                 'Get the latest updates about what’s going on with your world. You can personalize your notifications and get only what you want to see!',
               )}
+              image="/images/notificationapp-welcome-min.webp"
               leftButtonLabel={t('Skip')}
               rightButtonLabel={t('Customize your notifications')}
               isLoggedIn={isLoggedIn}
@@ -45,7 +46,7 @@ const AppRoutes = () => {
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]}
-          element={<CustomizeNotificationPage initial={true} />}
+          element={<CustomizeNotificationPage initial={true} isLoggedIn={isLoggedIn} />}
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]}
@@ -55,6 +56,7 @@ const AppRoutes = () => {
               description={t(
                 'You will receive notifications based on your choices now! You can always change that or even pause it from the notifications settings!',
               )}
+              image={'/images/notificationapp-success-min.webp'}
               finalStep={true}
               rightButtonLabel={t('Go to my notifications')}
               isLoggedIn={isLoggedIn}
@@ -64,7 +66,7 @@ const AppRoutes = () => {
         <Route path={routes[SHOW_NOTIFICATIONS_PAGE]} element={<NotificationsPage />} />
         <Route
           path={routes[SETTINGS_PAGE]}
-          element={<CustomizeNotificationPage initial={false} />}
+          element={<CustomizeNotificationPage initial={false} isLoggedIn={isLoggedIn} />}
         />
       </Routes>
     </Router>

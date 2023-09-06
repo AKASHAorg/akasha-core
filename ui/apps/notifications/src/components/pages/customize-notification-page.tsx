@@ -16,13 +16,15 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import routes, {
+  CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
   CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
 } from '../../routes';
 
-interface ICustomizeNotificationPageProps {
+type CustomizeNotificationPageProps = {
   initial?: boolean;
-}
+  isLoggedIn: boolean;
+};
 
 const Title = ({ title }: { title: string }): JSX.Element => {
   return (
@@ -34,8 +36,9 @@ const Title = ({ title }: { title: string }): JSX.Element => {
   );
 };
 
-const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
+const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   initial = true,
+  isLoggedIn,
 }) => {
   const { t } = useTranslation('app-notifications');
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
@@ -291,16 +294,18 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     setShowFeedback(true);
   };
 
+  if (!isLoggedIn) {
+    return navigateTo?.({
+      appName: '@akashaorg/app-notifications',
+      getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
+    });
+  }
+
   return (
     <>
-      <Card
-        elevation={'1'}
-        radius={16}
-        padding={'p-2'}
-        customStyle="h-full md:h-min space-y-4 flex flex-row"
-      >
+      <Card elevation={'1'} radius={16} padding={'p-2'} customStyle="h-full md:h-min space-y-4">
         <Text variant="h5" align="center">
-          {initial ? ' Customize Your Notifications' : 'Notifications Settings'}
+          {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
         {!initial && (
           <>
