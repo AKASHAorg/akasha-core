@@ -4,20 +4,20 @@ import EntryList, {
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
 import {
+  AnalyticsEventData,
   EntityTypes,
   IContentClickDetails,
   ModalNavigationOptions,
   Profile,
-  TrackEventData,
 } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
-import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeamEdge } from '@akashaorg/typings/sdk/graphql-types-new';
 
-export type BeamFeedProps = Omit<EntryListProps<AkashaBeam>, 'itemCard'> & {
+export type BeamFeedProps = Omit<EntryListProps<AkashaBeamEdge>, 'itemCard'> & {
   itemType: EntityTypes.BEAM;
   locale?: ILocale;
   onEntryFlag?: (
@@ -30,7 +30,7 @@ export type BeamFeedProps = Omit<EntryListProps<AkashaBeam>, 'itemCard'> & {
   className?: string;
   modalSlotId: string;
   accentBorderTop?: boolean;
-  trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
+  trackEvent?: (data: AnalyticsEventData['data']) => void;
   totalEntryCount?: number;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: Profile;
@@ -58,7 +58,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
   } = props;
 
   return (
-    <EntryList<AkashaBeam>
+    <EntryList<AkashaBeamEdge>
       requestStatus={requestStatus}
       isFetchingNextPage={isFetchingNextPage}
       pages={pages}
@@ -76,21 +76,21 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
           const isNextLoader = index > allEntries.length - 1;
           if (isNextLoader) {
             return (
-              <Stack fullWidth={true} key={key} customStyle="p-8">
+              <Stack fullWidth={true} key={`${index}_${key}`} customStyle="p-8">
                 <Spinner />
               </Stack>
             );
           }
           return (
             <div
-              key={key}
+              key={`${index}_${key}`}
               data-index={index}
               ref={measureElementRef}
               style={{ paddingBottom: itemSpacing }}
             >
               <EntryCard
                 showMore={true}
-                entryData={entryData}
+                entryData={entryData.node}
                 locale={locale}
                 onRepost={onRebeam}
                 onContentClick={onNavigate}

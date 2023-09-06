@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
+  AnalyticsEventData,
   EntityTypes,
   IContentClickDetails,
   ModalNavigationOptions,
   NavigateToParams,
   Profile,
-  TrackEventData,
 } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -32,7 +32,7 @@ export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> &
   className?: string;
   modalSlotId: string;
   accentBorderTop?: boolean;
-  trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
+  trackEvent?: (data: AnalyticsEventData['data']) => void;
   totalEntryCount?: number;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (props: ModalNavigationOptions) => void;

@@ -43,10 +43,7 @@ export class RoutingPlugin {
       },
     });
     uiEvents.subscribe({
-      next: (eventData: {
-        event: Omit<EventTypes, EventTypes.RegisterEditorBlock>;
-        data?: EventDataTypes;
-      }) => {
+      next: (eventData: { event: EventTypes; data?: EventDataTypes }) => {
         if (eventData.event && eventData.event === EventTypes.RegisterIntegration) {
           // allow only one entry per app
           if (RoutingPlugin.routeRepository.all[eventData.data.name]) {

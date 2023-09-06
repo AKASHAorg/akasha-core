@@ -17,13 +17,13 @@ export type CardListProps<T> = {
 };
 
 export type ScrollerState = {
-  startItemId: string;
+  startItemCursor: string;
   startItemOffset: number;
   measurementsCache: VirtualItem[];
   scrollDirection: Virtualizer<Window, HTMLElement>['scrollDirection'];
   itemsCount: number;
-  lastItemId?: string;
-  firstItemId?: string;
+  lastItemCursor?: string;
+  firstItemCursor?: string;
 };
 
 export type ScrollerOnChangeState<T> = ScrollerState & {
@@ -64,9 +64,6 @@ function EntryList<T>(props: EntryListProps<T>) {
   } = props;
   const [hideScrollTop, setHideScrollTop] = React.useState(true);
   const rootElementRef = React.useRef<HTMLDivElement>();
-
-  const rootElementOffset = React.useRef(0);
-
   const allEntries = React.useMemo(() => {
     if (pages) {
       return pages.flatMap(page => page);
@@ -74,46 +71,64 @@ function EntryList<T>(props: EntryListProps<T>) {
     return [];
   }, [pages]);
 
-  React.useLayoutEffect(() => {
-    rootElementOffset.current = rootElementRef.current?.offsetTop || 0;
-  }, []);
+  const itemCount = hasNextPage ? allEntries.length + 1 : allEntries.length;
+
+  const virtualizerRef = React.useRef<Virtualizer<Window, Element>>(null);
 
   const virtualizer = useWindowVirtualizer({
-    count: hasNextPage ? allEntries.length + 1 : allEntries.length,
+    count: itemCount,
     estimateSize: () => 100,
-    scrollMargin: rootElementOffset.current,
+    scrollMargin: rootElementRef.current?.offsetTop || 0,
     initialOffset: initialScrollState?.startItemOffset || 0,
     initialMeasurementsCache: initialScrollState?.measurementsCache,
     scrollingDelay: 250,
     getItemKey: index => getItemKey(index, allEntries),
     onChange: vInstance => {
-      // only save the state when isScrolling
-      if (!vInstance.isScrolling) {
-        return;
-      }
       const vItems = vInstance.getVirtualItems();
       if (!vItems.length || !allEntries.length) {
         return;
       }
-      const startItemId = allEntries[vItems[0].index]['id'];
+
+      const startItemCursor = allEntries[vItems[0].index]['cursor'];
       const { startIndex, endIndex } = vInstance.range;
       const [offset] = vInstance.getOffsetForIndex(startIndex, 'center');
       if (onScrollStateChange) {
         onScrollStateChange({
           allEntries,
-          startItemId,
+          startItemCursor,
           startItemOffset: offset,
           measurementsCache: vInstance.measurementsCache,
           scrollDirection: vInstance.scrollDirection,
           itemsCount: allEntries.length,
-          lastItemId: allEntries[allEntries.length - 1]['id'],
-          firstItemId: allEntries[0]['id'],
+          lastItemCursor: allEntries[allEntries.length - 1]['cursor'],
+          firstItemCursor: allEntries[0]['cursor'],
           firstItemIdx: startIndex,
           lastItemIdx: endIndex,
         });
       }
     },
   });
+
+  React.useLayoutEffect(() => {
+    virtualizerRef.current = virtualizer;
+  });
+
+  React.useLayoutEffect(() => {
+    if (!virtualizerRef.current) {
+      return;
+    }
+    const scrollDirection = virtualizerRef.current.scrollDirection;
+    const hasChanged = itemCount !== virtualizerRef.current.options.count;
+    if (!hasChanged) return;
+    const range = virtualizerRef.current.calculateRange();
+    if (scrollDirection === 'forward') {
+      virtualizerRef.current.scrollToIndex(range.endIndex, { align: 'end' });
+    }
+    if (scrollDirection === 'backward') {
+      virtualizerRef.current.scrollToIndex(range.startIndex, { align: 'start' });
+    }
+  });
+
   const items = virtualizer.getVirtualItems();
   /**
    * Handle scroll to top button visibility
