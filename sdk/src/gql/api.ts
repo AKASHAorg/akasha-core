@@ -639,63 +639,36 @@ export const GetMyProfileDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
-export const GetFollowDocumentDocument = /*#__PURE__*/ gql`
-    query GetFollowDocument($follower: ID!, $following: String!) {
-  node(id: $follower) {
-    ... on CeramicAccount {
-      akashaProfile {
-        followers(last: 1, filters: {where: {profileID: {equalTo: $following}}}) {
-          edges {
-            node {
-              id
-              isFollowing
-              profileID
-              profile {
-                ...UserProfileFragment
-              }
-            }
-            cursor
-          }
-          pageInfo {
-            startCursor
-            endCursor
-            hasNextPage
-            hasPreviousPage
-          }
-        }
-      }
-      isViewer
-    }
-  }
-}
-    ${UserProfileFragmentDoc}`;
 export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
-    query GetFollowDocuments($follower: ID!, $following: [String!]) {
-  node(id: $follower) {
-    ... on CeramicAccount {
-      akashaProfile {
-        followers(last: 25, filters: {where: {profileID: {in: $following}}}) {
-          edges {
-            node {
-              id
-              isFollowing
-              profileID
-              profile {
-                ...UserProfileFragment
-              }
-            }
-            cursor
-          }
-          pageInfo {
-            startCursor
-            endCursor
-            hasNextPage
-            hasPreviousPage
+    query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
+  viewer {
+    akashaFollowList(
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      filters: {where: {profileID: {in: $following}}}
+      sorting: $sorting
+    ) {
+      edges {
+        node {
+          id
+          isFollowing
+          profileID
+          profile {
+            ...UserProfileFragment
           }
         }
+        cursor
       }
-      isViewer
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
     }
+    isViewer
   }
 }
     ${UserProfileFragmentDoc}`;
@@ -977,10 +950,7 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetMyProfile(variables?: Types.GetMyProfileQueryVariables, options?: C): Promise<Types.GetMyProfileQuery> {
       return requester<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options) as Promise<Types.GetMyProfileQuery>;
     },
-    GetFollowDocument(variables: Types.GetFollowDocumentQueryVariables, options?: C): Promise<Types.GetFollowDocumentQuery> {
-      return requester<Types.GetFollowDocumentQuery, Types.GetFollowDocumentQueryVariables>(GetFollowDocumentDocument, variables, options) as Promise<Types.GetFollowDocumentQuery>;
-    },
-    GetFollowDocuments(variables: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
+    GetFollowDocuments(variables?: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
       return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
     },
     CreateProfile(variables: Types.CreateProfileMutationVariables, options?: C): Promise<Types.CreateProfileMutation> {
