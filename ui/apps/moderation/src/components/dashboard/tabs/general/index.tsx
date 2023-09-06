@@ -61,7 +61,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
 
   return (
     <Stack spacing="gap-y-4" customStyle="p-4">
-      <Stack align="center" justify="between">
+      <Stack direction="row" align="center" justify="between">
         <Text weight="bold">{moderatorSinceLabel}</Text>
         <Text color="grey4">{dayjs(moderatorSince).format('DD-MMM-YYYY')}</Text>
       </Stack>
@@ -69,7 +69,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
       <Divider />
 
       <Stack>
-        <Stack align="center" justify="between">
+        <Stack direction="row" align="center" justify="between">
           <Text weight="bold">{moderationCategoriesLabel}</Text>
 
           <Button plain={true} onClick={onButtonClick(EDIT_CATEGORIES)}>
@@ -79,7 +79,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
           </Button>
         </Stack>
         {moderationCategories.length > 0 ? (
-          <Stack customStyle="flex-wrap">
+          <Stack direction="row" customStyle="flex-wrap">
             {moderationCategories.map((category, idx) => (
               <Pill key={category + idx} label={category} active={true} customStyle="mt-3 mr-3" />
             ))}
@@ -92,7 +92,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
       <Divider />
 
       <Stack spacing="gap-y-3">
-        <Stack align="center" justify="between">
+        <Stack direction="row" align="center" justify="between">
           <Text weight="bold">{contactInfoLabel}</Text>
 
           <Button plain={true} onClick={onButtonClick(EDIT_CONTACT_INFO)}>
@@ -106,7 +106,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
 
         <Stack spacing="gap-y-2">
           {contactInfo.map(({ type, value }) => (
-            <Stack key={type + value} align="center" spacing="gap-x-2">
+            <Stack direction="row" key={type + value} align="center" spacing="gap-x-2">
               <Button icon={type} variant="primary" greyBg={true} iconOnly={true} size="sm" />
 
               <Text>{value}</Text>
@@ -120,7 +120,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
       {isAdmin && (
         <>
           <Stack spacing="gap-y-3">
-            <Stack align="center" justify="between">
+            <Stack direction="row" align="center" justify="between">
               <Text weight="bold">{maxApplicantsLabel}</Text>
 
               <Button plain={true} onClick={onButtonClick(EDIT_MAX_APPLICANTS)}>
@@ -132,7 +132,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
 
             <Text>{maxApplicantsIntroLabel}</Text>
 
-            <Stack spacing="gap-x-3">
+            <Stack direction="row" spacing="gap-x-3">
               <Text
                 weight="bold"
                 color={{ light: 'black', dark: 'grey6' }}

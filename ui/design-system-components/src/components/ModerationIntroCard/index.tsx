@@ -85,7 +85,7 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
-          <Stack justify="between" customStyle="md:px-20">
+          <Stack direction="row" justify="between" customStyle="md:px-20">
             {overviewCTAArr.map(({ url, label, iconType }) => (
               <Stack key={label + iconType} customStyle="grid gap-1 grid-cols-1 w-[30%]">
                 <Icon size="sm" accentColor={true} type={iconType} customStyle="mx-auto my-0" />

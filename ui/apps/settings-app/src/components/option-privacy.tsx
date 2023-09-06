@@ -62,7 +62,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
       <Stack customStyle="px-4">
         {/* essential cookies */}
         <Stack customStyle="py-4 border(b-1 solid grey8)">
-          <Stack justify="between" align="center" customStyle="mb-2">
+          <Stack direction="row" justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{essentialCookiesLabel}</Text>
 
             {/* always checked and cannot be toggled */}
@@ -92,7 +92,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
 
         {/* tracking analytics */}
         <Stack customStyle="py-4">
-          <Stack justify="between" align="center" customStyle="mb-2">
+          <Stack direction="row" justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{trackingAnalyticsLabel}</Text>
 
             <Toggle

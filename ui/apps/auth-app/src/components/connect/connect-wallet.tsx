@@ -153,7 +153,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           {t('using your wallet')}
         </Text>
       </Stack>
-      <Stack align="center" justify="center">
+      <Stack direction="row" align="center" justify="center">
         <AppIcon
           placeholderIconType={
             selectedProvider === EthProviders.Web3Injected ? 'metamask' : 'walletconnect'
@@ -214,9 +214,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
             size="lg"
             onClick={handleDisconnect}
             label={t('Disconnect or change way to connect')}
-          >
-            {t('Disconnect or change way to connect')}
-          </Button>
+          />
         </Stack>
       </Stack>
     </Stack>

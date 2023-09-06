@@ -1,5 +1,4 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import routes, { RESULTS } from '../../routes';
 import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
@@ -121,7 +120,7 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
             )}
           </>
         </Text>
-        <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2 pt-32')}>
+        <Stack fullWidth justify="end" spacing="gap-x-4" customStyle="pr-2 pb-2 pt-32">
           <Button
             variant="text"
             label={t('Cancel')}
@@ -134,16 +133,16 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
             onClick={confirmHandler}
             disabled={updateButtonDisabled}
           />
-        </div>
+        </Stack>
       </Card>
       {showFeedback && (
-        <div className={tw('-mt-12 md:mt-4 z-50 w-full')}>
+        <Stack fullWidth customStyle="-mt-12 md:mt-4 z-50">
           <Snackbar
             title={t('{{notificationMessage}}', { notificationMessage: message })}
             type={messageType as SnackBarType}
             handleDismiss={() => setShowFeedback(false)}
           />
-        </div>
+        </Stack>
       )}
     </>
   );

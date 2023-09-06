@@ -99,7 +99,7 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
   return (
     <>
       <Stack align="center" justify="between" customStyle="mb-3">
-        <Stack align="center" spacing="gap-x-3">
+        <Stack direction="row" align="center" spacing="gap-x-3">
           <Dropdown
             name="filterByDecision"
             placeholderLabel={decisionPlaceholderLabel}

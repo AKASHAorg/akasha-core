@@ -39,7 +39,7 @@ const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
         accentBorder={true}
         customStyle="select-none w-full"
       >
-        <Stack align="center" spacing="gap-x-2">
+        <Stack direction="row" align="center" spacing="gap-x-2">
           <AppIcon
             iconColor={iconColor}
             placeholderIconType={leftIconType}

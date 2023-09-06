@@ -89,7 +89,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                 {t('Get your own wallet')}
               </Text>
 
-              <Stack align="center" justify="center" spacing="gap-x-2">
+              <Stack direction="row" align="center" justify="center" spacing="gap-x-2">
                 <AppIcon
                   placeholderIconType="metamask"
                   background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
@@ -103,7 +103,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                   href="https://metamask.io"
                   target="_blank"
                 >
-                  <Stack align="center" spacing="gap-x-2">
+                  <Stack direction="row" align="center" spacing="gap-x-2">
                     <Text
                       variant="button-sm"
                       weight="bold"

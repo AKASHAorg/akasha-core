@@ -56,7 +56,7 @@ const ProfileAvatarButton = React.forwardRef(
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        <Stack aria-label="avatar-box" customStyle="shrink-0">
+        <Stack customStyle="shrink-0" data-testid="avatar-box" aria-label="avatar-box">
           <Avatar
             size={size}
             avatar={avatarImage}
@@ -65,7 +65,13 @@ const ProfileAvatarButton = React.forwardRef(
             onClick={handleClickAvatar}
           />
         </Stack>
-        <Stack aria-label="info-box" customStyle="justify-center align-top space-y-1">
+        <Stack
+          justify="center"
+          spacing="gap-y-1"
+          customStyle="align-top"
+          data-testid="info-box"
+          aria-label="info-box"
+        >
           <Stack ref={ref}>
             <Text variant="button-sm" weight="bold" truncate={true} customStyle={textTruncateStyle}>
               {label || profileId}

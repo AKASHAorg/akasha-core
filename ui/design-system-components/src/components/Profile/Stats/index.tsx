@@ -60,7 +60,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
               disabled={+stat.total === 0 && !stat.label.includes('Interests')}
               plain
             >
-              <Stack direction="row" align="center" customStyle="group">
+              <Stack align="center" customStyle="group">
                 <AppIcon
                   placeholderIconType={stat.icon}
                   size="sm"

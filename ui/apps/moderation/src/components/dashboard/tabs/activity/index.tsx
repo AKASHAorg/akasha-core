@@ -32,7 +32,7 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
   return (
     <Stack spacing="gap-y-4">
       <Stack customStyle="px-4">
-        <Stack justify="between">
+        <Stack direction="row" justify="between">
           <Text variant="button-md" weight="bold">
             {applicationsTitleLabel}
           </Text>
@@ -60,7 +60,7 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
       <Divider />
 
       <Stack customStyle="p-4">
-        <Stack justify="between">
+        <Stack direction="row" justify="between">
           <Text variant="button-md" weight="bold">
             {moderationTitleLabel}
           </Text>

@@ -29,9 +29,9 @@ const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
     <Stack direction="column" spacing="gap-y-4">
       {apps?.map((app, index, array) => (
         <Stack key={app.name} direction="column" spacing="gap-y-4">
-          <Stack justify="between" align="center">
+          <Stack direction="row" justify="between" align="center">
             <Button onClick={() => onAppSelected(app.id)} plain>
-              <Stack spacing="gap-x-2">
+              <Stack direction="row" spacing="gap-x-2">
                 <Stack customStyle={iconStyle} />
 
                 <Stack direction="column" customStyle="h-[3.75rem]">

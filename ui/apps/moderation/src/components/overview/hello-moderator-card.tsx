@@ -35,10 +35,10 @@ const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
           {subtitleLabel}
         </Text>
 
-        <Stack spacing="gap-x-6" justify="center">
+        <Stack direction="row" spacing="gap-x-6" justify="center">
           <a href={moderatorGuideUrl} target="_blank" rel="noreferrer noopener">
             <Button plain={true}>
-              <Stack align="center" spacing="gap-x-2">
+              <Stack direction="row" align="center" spacing="gap-x-2">
                 <Icon size="sm" accentColor={true} type="shield" customStyle="mx-auto my-0" />
                 <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                   {moderatorGuideLabel}
@@ -49,7 +49,7 @@ const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
 
           <a href={moderationFAQUrl} target="_blank" rel="noreferrer noopener">
             <Button plain={true}>
-              <Stack align="center" spacing="gap-x-2">
+              <Stack direction="row" align="center" spacing="gap-x-2">
                 <Icon size="sm" accentColor={true} type="faq" customStyle="mx-auto my-0" />
                 <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                   {moderationFAQLabel}

@@ -19,12 +19,12 @@ export const TransparencyLogItem: React.FC = () => {
           value === 'Kept' ? 'success/10 dark:success/30' : 'errorLight/10 dark:errorDark/40'
         })`}
       >
-        <Stack align="center" justify="between">
+        <Stack direction="row" align="center" justify="between">
           <Text variant="h5">Social App</Text>
 
           <Text variant="body1">Case # S-21920</Text>
         </Stack>
-        <Stack align="center" justify="between">
+        <Stack direction="row" align="center" justify="between">
           <Text variant="body1">Post</Text>
 
           <Stack align="center" spacing="gap-x-1.5">
@@ -36,7 +36,7 @@ export const TransparencyLogItem: React.FC = () => {
             <Text variant="body2">{value}</Text>
           </Stack>
         </Stack>
-        <Stack align="center" justify="between">
+        <Stack direction="row" align="center" justify="between">
           <Text variant="body1">Reported 16-03-2022</Text>
 
           <Text variant="body1">Resolved 20-03-2022</Text>
