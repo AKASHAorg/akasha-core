@@ -18,7 +18,7 @@ const config = {
       plugins: ['typescript-operations'],
       config: { federation: true, skipTypename: true, useTypeImports: true },
     },
-    './src/gql/api.new.ts': {
+    './src/gql/api.ts': {
       preset: 'import-types-preset',
       presetConfig: {
         typesPath: '@akashaorg/typings/sdk/graphql-operation-types-new',
