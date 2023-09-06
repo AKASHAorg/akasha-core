@@ -404,6 +404,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
 
+  const handleResetClick = () => {
+    setSelected(dropdownMenuItems[0]);
+  };
+
   return (
     <Box customStyle="flex(& col)">
       <SearchStartCard
@@ -430,10 +434,15 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           selected={selected}
           setSelected={setSelected}
           resetLabel={t('Reset')}
+          resetHandler={handleResetClick}
         />
       )}
       {searchKeyword === '' && (
-        <DefaultEmptyCard noBorder={true} infoText=" ✨ Start searching for something ✨" />
+        <DefaultEmptyCard
+          noBorder={true}
+          infoText=" ✨ Start searching for something ✨"
+          image="/images/search-1.webp"
+        />
       )}
 
       {
@@ -453,6 +462,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 }
                 bodyVariant="body1"
                 customWidthStyle="w-[90%] md:w-[50%] m-auto"
+                assetName="SearchApp_NotFound-min.webp"
               />
             </Box>
           )
