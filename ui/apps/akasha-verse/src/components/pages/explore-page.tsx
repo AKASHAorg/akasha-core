@@ -10,15 +10,15 @@ import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 
-export interface IExplorePage {
+export type ExplorePageProps = {
   installableApps: GetAppsQuery['akashaAppIndex']['edges'];
   installedAppsInfo?: GetAppsByIdQuery['node'][];
   isFetching?: boolean;
   reqError?: Error;
   isUserLoggedIn?: boolean;
-}
+};
 
-const ExplorePage: React.FC<IExplorePage> = props => {
+const ExplorePage: React.FC<ExplorePageProps> = props => {
   const { isFetching, reqError, isUserLoggedIn } = props;
 
   const [, setUninstallingApps] = useState([]);

@@ -10,9 +10,9 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import { useDismissedCard, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-export interface MasterPageProps {
+export type MasterPageProps = {
   isLoggedIn: boolean;
-}
+};
 
 const TAB_INDEX_TO_ROUTE_MAP = {
   0: [routes[EXPLORE]],

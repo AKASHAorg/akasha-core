@@ -12,13 +12,13 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { INFO } from '../../routes';
 
-export interface IMyAppsPage {
+export type MyAppsPageProps = {
   availableApps?: GetAppsQuery['akashaAppIndex']['edges'];
   installedAppsInfo?: GetAppsByIdQuery['node'][];
   defaultIntegrations?: string[];
-}
+};
 
-const MyAppsPage: React.FC<IMyAppsPage> = props => {
+const MyAppsPage: React.FC<MyAppsPageProps> = props => {
   const { availableApps } = props;
 
   const { t } = useTranslation('app-akasha-verse');

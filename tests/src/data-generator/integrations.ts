@@ -1,4 +1,4 @@
-import { IAppConfig, INTEGRATION_TYPES, UseRootComponentReturn } from '@akashaorg/typings/ui';
+import { IAppConfig, INTEGRATION_TYPES, RootComponentProps } from '@akashaorg/typings/ui';
 import { genLifecycles } from '../mocks/single-spa';
 import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
@@ -35,7 +35,10 @@ const log: any = {
     /*  */
   },
 };
-export const genAppProps = (): UseRootComponentReturn => ({
+export const genAppProps = (): RootComponentProps & {
+  getRoutingPlugin: (ns?: string) => any;
+  getTranslationPlugin: (ns?: string) => any;
+} => ({
   logger: log,
   navigateToModal: () => ({}),
   uiEvents: uiEventsMock,

@@ -32,9 +32,3 @@ export interface RootComponentProps {
 export interface RootExtensionProps extends RootComponentProps {
   extensionData: EventDataTypes;
 }
-
-// @Todo: fix type
-export interface UseRootComponentReturn extends RootComponentProps {
-  getRoutingPlugin: (ns?: string) => any;
-  getTranslationPlugin: (ns?: string) => any;
-}
