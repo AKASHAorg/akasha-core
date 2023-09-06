@@ -4,7 +4,7 @@ import CustomizeNotificationPage from '../pages/customize-notification-page';
 import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 
 describe('< CustomizeNotificationPage /> component', () => {
-  const BaseComponent = <CustomizeNotificationPage {...genAppProps()} />;
+  const BaseComponent = <CustomizeNotificationPage isLoggedIn={true} {...genAppProps()} />;
   beforeEach(async () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});

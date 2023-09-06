@@ -2,10 +2,10 @@ let theme;
 
 window.addEventListener('theme-change', ev => {
   if (ev.detail.theme === 'Dark-Theme') {
-    return document.body.classList.add('dark');
+    return document.body.classList.add('dark', 'bg-black');
   } else {
-    if (document.body.classList.contains('dark')) {
-      return document.body.classList.remove('dark');
+    if (document.body.classList.contains('dark', 'bg-black')) {
+      return document.body.classList.remove('dark', 'bg-black');
     }
   }
 });
@@ -19,15 +19,15 @@ if (window.localStorage) {
     }
     darkMode.addEventListener('change', ev => {
       if (ev.matches) {
-        document.body.classList.add('dark');
+        document.body.classList.add('dark', 'bg-black');
       } else {
-        document.body.classList.remove('dark');
+        document.body.classList.remove('dark', 'bg-black');
       }
     });
   }
 }
 if (theme) {
   window.addEventListener('load', () => {
-    document.body.classList.add(theme);
+    document.body.classList.add(theme, 'bg-black');
   });
 }
