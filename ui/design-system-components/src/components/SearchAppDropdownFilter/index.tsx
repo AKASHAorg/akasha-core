@@ -2,6 +2,7 @@ import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -29,23 +30,23 @@ const Dropdown: React.FC<IDropdownProps> = ({
   label,
   placeholderLabel,
   menuItems,
-  // selected,
-  // setSelected,
+  selected,
+  setSelected,
   divider = false,
   optgroup = false,
 }) => {
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
-  const [selected, setSelected] = React.useState<null | DropdownMenuItemGroupType>(null);
+  // const [selected, setSelected] = React.useState<null | DropdownMenuItemGroupType>(null);
 
   React.useEffect(() => {
     if (placeholderLabel) {
       setSelected({
         id: '',
         iconName: null,
-        title: placeholderLabel ?? (optgroup ? menuItems[0].children[0].title : menuItems[0].title),
+        title: placeholderLabel,
       });
     } else {
-      optgroup ? setSelected(menuItems[0].children[0]) : setSelected(menuItems[0]);
+      menuItems[0]?.children ? setSelected(menuItems[0].children[0]) : setSelected(menuItems[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -114,34 +115,35 @@ const Dropdown: React.FC<IDropdownProps> = ({
                                 // }
                                 cursor-pointer`,
                               )}
-                              onClick={handleChange(item)}
                             >
-                              <Box
-                                customStyle={`flex items-center space-x-2 ${
-                                  selected.id === item.id ? 'text-secondaryLight' : 'text-black'
-                                }`}
-                              >
-                                {item?.iconName && (
-                                  <Icon
-                                    type={item.iconName}
+                              <Button onClick={handleChange(item)} plain>
+                                <Box
+                                  customStyle={`flex items-center space-x-2 ${
+                                    selected.id === item.id ? 'text-secondaryLight' : 'text-black'
+                                  }`}
+                                >
+                                  {item?.iconName && (
+                                    <Icon
+                                      type={item.iconName}
+                                      color={
+                                        selected.id === item.id
+                                          ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                                          : { light: 'black', dark: 'white' }
+                                      }
+                                    />
+                                  )}
+                                  <Text
+                                    variant="body1"
                                     color={
                                       selected.id === item.id
                                         ? { light: 'secondaryLight', dark: 'secondaryDark' }
                                         : { light: 'black', dark: 'white' }
                                     }
-                                  />
-                                )}
-                                <Text
-                                  variant="body1"
-                                  color={
-                                    selected.id === item.id
-                                      ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                                      : { light: 'black', dark: 'white' }
-                                  }
-                                >
-                                  {item.title}
-                                </Text>
-                              </Box>
+                                  >
+                                    {item.title}
+                                  </Text>
+                                </Box>
+                              </Button>
                             </li>
                           );
                         })}
@@ -157,8 +159,49 @@ const Dropdown: React.FC<IDropdownProps> = ({
                         ${idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey5)' : ''}
                         cursor-pointer`,
                       )}
-                      onClick={handleChange(menuItem)}
                     >
+                      <Button onClick={handleChange(menuItem)} plain>
+                        <Box
+                          customStyle={`flex items-center space-x-2 ${
+                            isSelected ? 'text-secondaryLight' : 'text-black'
+                          }`}
+                        >
+                          {menuItem?.iconName && (
+                            <Icon
+                              type={menuItem.iconName}
+                              color={
+                                isSelected
+                                  ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                                  : { light: 'black', dark: 'white' }
+                              }
+                            />
+                          )}
+                          <Text
+                            variant="body1"
+                            color={
+                              isSelected
+                                ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                                : { light: 'black', dark: 'white' }
+                            }
+                          >
+                            {menuItem.title}
+                          </Text>
+                        </Box>
+                      </Button>
+                    </li>
+                  );
+                }
+              } else {
+                return (
+                  <li
+                    key={menuItem.id}
+                    className={tw(
+                      `${optionStyle} ${
+                        idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
+                      } cursor-pointer`,
+                    )}
+                  >
+                    <Button onClick={handleChange(menuItem)} plain>
                       <Box
                         customStyle={`flex items-center space-x-2 ${
                           isSelected ? 'text-secondaryLight' : 'text-black'
@@ -185,54 +228,15 @@ const Dropdown: React.FC<IDropdownProps> = ({
                           {menuItem.title}
                         </Text>
                       </Box>
-                    </li>
-                  );
-                }
-              } else {
-                return (
-                  <li
-                    key={menuItem.id}
-                    className={tw(
-                      `${optionStyle} ${
-                        idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
-                      } cursor-pointer`,
-                    )}
-                    onClick={handleChange(menuItem)}
-                  >
-                    <Box
-                      customStyle={`flex items-center space-x-2 ${
-                        isSelected ? 'text-secondaryLight' : 'text-black'
-                      }`}
-                    >
-                      {menuItem?.iconName && (
-                        <Icon
-                          type={menuItem.iconName}
-                          color={
-                            isSelected
-                              ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                              : { light: 'black', dark: 'white' }
-                          }
-                        />
+                      {isSelected && (
+                        <span className={tw('ml-4')}>
+                          <Icon
+                            type="CheckIcon"
+                            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          />
+                        </span>
                       )}
-                      <Text
-                        variant="body1"
-                        color={
-                          isSelected
-                            ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                            : { light: 'black', dark: 'white' }
-                        }
-                      >
-                        {menuItem.title}
-                      </Text>
-                    </Box>
-                    {isSelected && (
-                      <span className={tw('ml-4')}>
-                        <Icon
-                          type="CheckIcon"
-                          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                        />
-                      </span>
-                    )}
+                    </Button>
                   </li>
                 );
               }

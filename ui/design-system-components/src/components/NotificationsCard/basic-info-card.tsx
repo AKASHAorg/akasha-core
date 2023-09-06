@@ -2,28 +2,34 @@ import React from 'react';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type BasicInfoCardProps = {
   titleLabel: string;
   subtitleLabel?: string;
+  image?: string;
   customStyle?: string;
 };
 
 const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   titleLabel,
   subtitleLabel,
+  image,
   customStyle = '',
 }) => {
   return (
-    <Card padding={'p-2'} customStyle={`border-none ${customStyle}`}>
+    <Card padding={'p-2'} customStyle={customStyle} elevation="none" border={false}>
       <Stack direction="column" align="center" justify="center" customStyle="mb-32">
-        <Card
-          customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
-          radius="rounded-xl"
-        />
-
+        {image ? (
+          <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
+        ) : (
+          <Card
+            customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
+            radius="rounded-xl"
+          />
+        )}
         <Box customStyle="w-[50%] m-auto">
           {titleLabel && (
             <Text variant="h6" align="center">

@@ -44,11 +44,11 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     {
       enabled: !!loginQuery.data?.id,
       select: resp => {
-        const { interests } = resp.node as {
-          interests: { topics: { value: string; labelType: string }[] };
+        const { akashaProfileInterests } = resp.node as {
+          akashaProfileInterests: { topics: { value: string; labelType: string }[] };
         };
 
-        return interests?.topics;
+        return akashaProfileInterests?.topics;
       },
     },
   );
