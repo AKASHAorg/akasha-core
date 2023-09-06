@@ -12,7 +12,7 @@ import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboard
 import routes, { ONBOARDING_STEP_ONE, SETTINGS, WRITE_ARTICLE } from '../routes';
 import { articles } from '../components/dummy-data';
 
-const Dashboard = () => {
+const Dashboard: React.FC<unknown> = () => {
   const { t } = useTranslation('app-articles');
   const { getRoutingPlugin } = useRootComponentProps();
 

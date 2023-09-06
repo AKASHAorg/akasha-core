@@ -7,7 +7,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 
 import AppRoutes from './app-routes';
 
-const Application = () => {
+const Application: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (

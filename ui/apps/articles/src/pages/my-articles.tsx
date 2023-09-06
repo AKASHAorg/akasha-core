@@ -15,7 +15,7 @@ import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboard
 import routes, { ONBOARDING_STEP_ONE, WRITE_ARTICLE } from '../routes';
 import { articles } from '../components/dummy-data';
 
-const MyArticles = () => {
+const MyArticles: React.FC<unknown> = () => {
   const { getRoutingPlugin } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;

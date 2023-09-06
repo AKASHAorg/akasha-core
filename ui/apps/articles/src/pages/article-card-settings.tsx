@@ -13,7 +13,7 @@ import ArticleCardSettings, {
 
 import { licences } from '../utils/licenses';
 
-const ArticleCardSettingsPage = () => {
+const ArticleCardSettingsPage: React.FC<unknown> = () => {
   // state values to handle image cropping
   const [, setCoverImageCrop] = React.useState<unknown>({
     x: 0,

@@ -17,7 +17,7 @@ import { getInjectedProviderDetails } from '../../utils/getInjectedProvider';
 import routes, { CONNECT } from '../../routes';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 
-const Connect = () => {
+const Connect: React.FC<unknown> = () => {
   const loginQuery = useGetLogin();
   const logoutQuery = useLogout();
   const injectedProviderQuery = useInjectedProvider();

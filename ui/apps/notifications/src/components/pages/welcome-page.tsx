@@ -11,7 +11,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 
-type WelcomePageProps = {
+export type WelcomePageProps = {
   header: string;
   description: string;
   image?: string;

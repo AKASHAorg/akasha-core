@@ -9,7 +9,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import menuRoute, { DEV_KEYS } from '../routes';
 import { CardWrapper, DevMessageForm } from '../components/common';
 
-export const EditMessageName = () => {
+export const EditMessageName: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
 
   const { getRoutingPlugin } = useRootComponentProps();

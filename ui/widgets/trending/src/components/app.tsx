@@ -6,7 +6,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import TrendingWidgetComponent from './trending-widget-component';
 
-const TrendingWidgetRoot = () => {
+const TrendingWidgetRoot: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (

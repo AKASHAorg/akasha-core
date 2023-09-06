@@ -67,7 +67,7 @@ describe('< ProfileInfoPage />', () => {
     expect(screen.getByText('0xc47a...fc02ff')).toBeInTheDocument();
   });
 
-  // @todo: fix test
+  // @TODO: fix test
   it.skip('should go to edit page when edit icon is clicked', async () => {
     userEvent.click(screen.getByRole('button', { name: 'edit' }));
     await waitFor(() => expect(navigateTo).toHaveBeenCalled());

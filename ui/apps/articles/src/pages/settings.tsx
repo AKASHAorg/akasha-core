@@ -7,8 +7,8 @@ import ArticlesSettings from '../components/article-settings';
 import routes, { HOME } from '../routes';
 import { topics } from '../components/dummy-data';
 
-const ArticleSettingsPage = () => {
-  // replace with real data
+const ArticleSettingsPage: React.FC<unknown> = () => {
+  // @TODO replace with real data
   const [selectedTopics, setSelectedTopics] = React.useState<string[]>(topics.slice(0, 15));
 
   const { t } = useTranslation('app-articles');

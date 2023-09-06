@@ -9,11 +9,11 @@ import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
 import OnboardingStartCard from '@akashaorg/design-system-components/lib/components/OnboardingStartCard';
 
-interface OnboardingPageProps {
+export type OnboardingPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
 const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   const { loggedProfileData, showLoginModal } = props;

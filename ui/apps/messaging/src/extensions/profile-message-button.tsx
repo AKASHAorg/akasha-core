@@ -8,7 +8,7 @@ import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hook
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
-const MessageIconButton = (props: RootExtensionProps) => {
+const MessageIconButton: React.FC<RootExtensionProps> = props => {
   const { extensionData, plugins } = props;
 
   const [analyticsActions] = useAnalytics();

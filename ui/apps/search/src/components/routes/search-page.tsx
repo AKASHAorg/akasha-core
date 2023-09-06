@@ -41,11 +41,11 @@ export enum ButtonValues {
   TAGS = 'Tags',
 }
 
-interface SearchPageProps {
+export type SearchPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
 type DataResponse = SearchTagsResult | IEntryData;
 

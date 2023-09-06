@@ -19,7 +19,7 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 
-const InterestsPage = () => {
+const InterestsPage: React.FC<unknown> = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
 

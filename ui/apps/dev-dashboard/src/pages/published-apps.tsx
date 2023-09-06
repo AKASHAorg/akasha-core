@@ -5,7 +5,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { CardWrapper } from '../components/common';
 
-export const PublishedApps = () => {
+export const PublishedApps: React.FC<unknown> = () => {
   const { t } = useTranslation('app-dev-dashboard');
 
   return (

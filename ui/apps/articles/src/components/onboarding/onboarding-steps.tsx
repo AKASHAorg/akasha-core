@@ -16,11 +16,11 @@ import menuRoute, {
   WRITE_ARTICLE,
 } from '../../routes';
 
-interface IOnboardingStepsProps {
+export type OnboardingStepsProps = {
   activeIndex?: number;
-}
+};
 
-const ArticlesOnboardingSteps: React.FC<IOnboardingStepsProps> = props => {
+const ArticlesOnboardingSteps: React.FC<OnboardingStepsProps> = props => {
   const [selectedTopics, setSelectedTopics] = React.useState<string[]>([]);
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
 

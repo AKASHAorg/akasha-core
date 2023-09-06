@@ -15,13 +15,13 @@ import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import routes, { RESULTS } from '../../routes';
 
-interface ISettingsPageProps {
+export type SettingsPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const SettingsPage: React.FC<ISettingsPageProps> = () => {
+const SettingsPage: React.FC<SettingsPageProps> = () => {
   const { t } = useTranslation('app-search');
   const { getRoutingPlugin } = useRootComponentProps();
 

@@ -13,7 +13,7 @@ import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-const ListsPage = () => {
+const ListsPage: React.FC<unknown> = () => {
   const [showModal, setShowModal] = React.useState(false);
 
   const { t } = useTranslation('app-lists');

@@ -12,12 +12,12 @@ import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
 import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-interface ITagFeedPage {
+export type TagFeedPageProps = {
   loggedProfileData?: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const TagFeedPage: React.FC<ITagFeedPage> = props => {
+const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   const { showLoginModal, loggedProfileData } = props;
 
   const { t } = useTranslation('app-akasha-integration');

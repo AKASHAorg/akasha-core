@@ -14,9 +14,9 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import { getTextileUsage } from '../api/message';
 import { MESSAGING } from '../routes';
 
-export interface SettingsPageProps {
+export type SettingsPageProps = {
   loggedProfileData: Profile;
-}
+};
 
 const convertFromBytes = val => {
   if (val) {

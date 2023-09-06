@@ -13,7 +13,7 @@ import Extension from '@akashaorg/design-system-components/lib/components/Extens
 import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-export interface IEntryCardRendererProps {
+export type EntryCardRendererProps = {
   itemData?: AkashaBeam;
   itemType?: EntityTypes;
   locale?: ILocale;
@@ -29,9 +29,9 @@ export interface IEntryCardRendererProps {
   moderatedContentLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: AkashaBeam, isQuote: boolean) => () => void;
-}
+};
 
-const EntryCardRenderer = (props: IEntryCardRendererProps) => {
+const EntryCardRenderer = (props: EntryCardRendererProps) => {
   const {
     loggedProfileData,
     locale,

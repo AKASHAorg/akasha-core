@@ -5,7 +5,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 import AppRoutes from './app-routes';
 
-const Application = () => {
+const Application: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (

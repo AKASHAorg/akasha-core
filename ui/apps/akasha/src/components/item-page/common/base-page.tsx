@@ -20,7 +20,7 @@ import { OriginalItem } from './original-item';
 import { PendingReply } from './pending-reply';
 import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
 
-type BaseEntryProps = {
+export type BaseEntryProps = {
   postId: string;
   commentId?: string;
   itemType: EntityTypes;

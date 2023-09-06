@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -12,9 +12,9 @@ import { CardWrapper } from '../components/common';
 import menuRoute, { DASHBOARD } from '../routes';
 import { sampleMessage } from '../utils/dummy-data';
 
-export const VerifySignature = () => {
-  const [message] = React.useState<string>('');
-  const [signature] = React.useState<string>('');
+export const VerifySignature: React.FC<unknown> = () => {
+  const [message] = useState<string>('');
+  const [signature] = useState<string>('');
 
   // @TODO: needs update
   const verifySignatureMutation = {

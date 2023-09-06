@@ -17,7 +17,7 @@ export enum CookieConsentTypes {
   ESSENTIAL = 'ESSENTIAL',
   ALL = 'ALL',
 }
-const CookieWidget = () => {
+const CookieWidget: React.FC<unknown> = () => {
   const [cookieType, setCookieType] = useState(null);
 
   const { t } = useTranslation('ui-widget-analytics');

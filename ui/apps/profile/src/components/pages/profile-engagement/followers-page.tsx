@@ -18,7 +18,7 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 
-const FollowersPage = () => {
+const FollowersPage: React.FC<unknown> = () => {
   const [loadMore, setLoadingMore] = useState(false);
   const { profileId } = useParams<{ profileId: string }>();
 

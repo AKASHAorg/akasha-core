@@ -16,7 +16,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 
 import { LatestProfiles, LatestTopics } from './cards';
 
-const TrendingWidgetComponent = () => {
+const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { plugins, navigateToModal } = useRootComponentProps();
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;

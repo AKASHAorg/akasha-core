@@ -29,7 +29,7 @@ import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-cor
 import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
 
-const SidebarComponent = () => {
+const SidebarComponent: React.FC<unknown> = () => {
   const {
     uiEvents,
     plugins,

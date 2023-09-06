@@ -11,9 +11,9 @@ import PageLayout from './base-layout';
 import { ISettingsItem, settingsItems, SettingsOption } from '../utils/settings-items';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-export interface BaseOption {
+export type BaseOption = {
   titleLabel: string;
-}
+};
 
 const SettingsPage: React.FC<BaseOption> = props => {
   const { titleLabel } = props;

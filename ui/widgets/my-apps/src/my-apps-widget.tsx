@@ -16,7 +16,7 @@ import AppsList from './apps-list';
 
 import NoAppsMessage from './no-apps-message';
 
-const ICWidget = () => {
+const ICWidget: React.FC<unknown> = () => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const { t } = useTranslation('app-akasha-verse');

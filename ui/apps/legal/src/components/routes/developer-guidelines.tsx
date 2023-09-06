@@ -5,7 +5,7 @@ import { useLegalDoc } from '@akashaorg/ui-awf-hooks';
 
 import PageRenderer from './page-renderer';
 
-const DeveloperGuidelinesPage = () => {
+const DeveloperGuidelinesPage: React.FC<unknown> = () => {
   const legalDocReq = useLegalDoc(LEGAL_DOCS.APP_GUIDE);
 
   const legalDoc = legalDocReq.data;

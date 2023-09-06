@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-const InvitePage = () => {
+const InvitePage: React.FC<unknown> = () => {
   const { inviteCode } = useParams<{ inviteCode: string }>();
   const { getRoutingPlugin } = useRootComponentProps();
 

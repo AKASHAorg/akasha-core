@@ -12,7 +12,7 @@ import EditorToolbar from '@akashaorg/design-system-components/lib/components/Ed
 
 import ArticleEditorCard from '../components/article-editor-card';
 
-const ArticleEditor = () => {
+const ArticleEditor: React.FC<unknown> = () => {
   const { navigateToModal } = useRootComponentProps();
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');

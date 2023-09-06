@@ -26,6 +26,7 @@ const AppRoutes: React.FC<unknown> = () => {
 
   const { baseRouteName } = useRootComponentProps();
 
+  // @TODO: update this
   const fetchMessagesCallback = useCallback(async () => {
     setFetchingMessages(true);
     // get all messages from textile inbox, currently filterring by user pubkey is not supported

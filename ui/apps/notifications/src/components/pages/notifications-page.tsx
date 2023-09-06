@@ -15,12 +15,12 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
 
-interface Notification {
+export type Notification = {
   id: string;
   [key: string]: unknown;
-}
+};
 
-const NotificationsPage = () => {
+const NotificationsPage: React.FC<unknown> = () => {
   const [searchParams] = useSearchParams();
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');

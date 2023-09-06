@@ -10,9 +10,9 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import MessageContactCard from '@akashaorg/design-system-components/lib/components/MessageContactCard';
 
-export interface InboxPageProps {
+export type InboxPageProps = {
   loggedProfileData: Profile;
-}
+};
 
 const InboxPage: React.FC<InboxPageProps> = () => {
   const { t } = useTranslation('app-messaging');

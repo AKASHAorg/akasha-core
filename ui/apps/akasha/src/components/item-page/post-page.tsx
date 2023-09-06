@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { ModalNavigationOptions, EntityTypes } from '@akashaorg/typings/ui';
 import { useDummyQuery } from '@akashaorg/ui-awf-hooks';
 
-type PostPageProps = {
+export type PostPageProps = {
   userId?: string;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };

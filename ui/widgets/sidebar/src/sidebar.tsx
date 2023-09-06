@@ -9,7 +9,7 @@ import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import SidebarComponent from './components/sidebar-component';
 
-const Widget = () => {
+const Widget: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (

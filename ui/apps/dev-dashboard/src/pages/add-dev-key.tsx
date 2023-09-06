@@ -7,7 +7,7 @@ import { GenerateMessage, KeyConfirmation } from '../components/onboarding';
 
 import menuRoute, { DEV_KEYS } from '../routes';
 
-export const AddDevKey = () => {
+export const AddDevKey: React.FC<unknown> = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');

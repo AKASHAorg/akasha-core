@@ -17,9 +17,9 @@ import { ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { hasOwn, useGetLogin, useRootComponentProps, useValidDid } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-export interface ProfilePageProps {
+export type ProfilePageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
 const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   const { showLoginModal } = props;

@@ -13,10 +13,10 @@ import StartCard from '@akashaorg/design-system-components/lib/components/StartC
 import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
 import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-export interface MyFeedPageProps {
+export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: Profile;
-}
+};
 
 const MyFeedPage: React.FC<MyFeedPageProps> = props => {
   const { loggedProfileData } = props;

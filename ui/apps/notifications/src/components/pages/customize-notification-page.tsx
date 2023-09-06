@@ -21,7 +21,7 @@ import routes, {
   SHOW_NOTIFICATIONS_PAGE,
 } from '../../routes';
 
-type CustomizeNotificationPageProps = {
+export type CustomizeNotificationPageProps = {
   initial?: boolean;
   isLoggedIn: boolean;
 };

@@ -21,10 +21,10 @@ import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
 
-export interface FeedPageProps {
+export type FeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: Profile;
-}
+};
 
 const FeedPage: React.FC<FeedPageProps> = props => {
   const { loggedProfileData, showLoginModal } = props;

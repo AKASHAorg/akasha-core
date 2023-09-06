@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -18,14 +18,14 @@ import menuRoute, {
 } from '../routes';
 import { sampleDevKeys } from '../utils/dummy-data';
 
-export const DevDashboard = () => {
+export const DevDashboard: React.FC<unknown> = () => {
   const { getRoutingPlugin } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const isOnboarded = React.useMemo(() => {
+  const isOnboarded = useMemo(() => {
     return Boolean(window.localStorage.getItem(ONBOARDING_STATUS));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

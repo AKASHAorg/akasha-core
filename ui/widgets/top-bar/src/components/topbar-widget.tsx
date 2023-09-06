@@ -6,7 +6,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import TopbarComponent from './topbar-component';
 
-const TopbarWidget = () => {
+const TopbarWidget: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (

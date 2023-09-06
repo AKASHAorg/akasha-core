@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useGetLogin, getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
 import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-const InfoPage = () => {
+const InfoPage: React.FC<unknown> = () => {
   const { appId } = useParams<{ appId: string }>();
 
   // const { getRoutingPlugin } = useRootComponentProps();

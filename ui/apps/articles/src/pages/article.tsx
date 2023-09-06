@@ -11,7 +11,7 @@ import ArticleCard from '../components/article-card';
 
 import { articles } from '../components/dummy-data';
 
-const ArticlePage = () => {
+const ArticlePage: React.FC<unknown> = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
   const { getRoutingPlugin } = useRootComponentProps();

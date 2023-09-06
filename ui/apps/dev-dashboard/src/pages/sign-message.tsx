@@ -12,7 +12,7 @@ import { SummaryCard } from '../components/profile/summary-card';
 import menuRoute, { DASHBOARD } from '../routes';
 import { sampleSignature } from '../utils/dummy-data';
 
-export const SignMessage = () => {
+export const SignMessage: React.FC<unknown> = () => {
   const [message] = useState<string>('');
 
   const { t } = useTranslation('app-dev-dashboard');

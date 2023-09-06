@@ -14,7 +14,7 @@ import { CardWrapper } from '../components/common';
 import menuRoute, { ADD_DEV_KEY, DEV_KEYS } from '../routes';
 import { sampleDevKeys } from '../utils/dummy-data';
 
-export const DevKeysCard = () => {
+export const DevKeysCard: React.FC<unknown> = () => {
   const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
