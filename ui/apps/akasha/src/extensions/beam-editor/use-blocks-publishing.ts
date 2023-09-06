@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BlockCommandResponse, RootComponentProps } from '@akashaorg/typings/ui';
+import { BlockAction, BlockCommandResponse, RootComponentProps } from '@akashaorg/typings/ui';
 import { BlockActionType, EditorBlock } from '@akashaorg/typings/ui/editor-blocks';
 import { filterEvents } from '@akashaorg/ui-awf-hooks';
 
@@ -41,9 +41,10 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   // subscribe to contentBlock creation event
   // add the response along with the block data to the publishedBlocks state
   React.useEffect(() => {
-    const blockEvents = blocksInUse.map(
-      block => `${block.appName}_${block.eventMap.publish}_${BlockActionType.SUCCESS}`,
-    );
+    const blockEvents =
+      blocksInUse.map<`${string}_${string}/${BlockAction.PUBLISH}_${BlockActionType.SUCCESS}`>(
+        block => `${block.appName}_${block.eventMap.publish}_${BlockActionType.SUCCESS}`,
+      );
 
     const sub = uiEvents.pipe(filterEvents(blockEvents)).subscribe({
       next: (event: BlockCommandResponse) => {

@@ -11,12 +11,15 @@ export interface ScrollStateSchema {
     size: number;
     start: number;
   }[];
-  startItemId: string;
+  // first item in the loaded list
+  startItemCursor: string;
   startItemOffset: number;
   scrollDirection: ScrollerState['scrollDirection'];
   itemsCount: number;
-  firstItemId?: string;
-  lastItemId?: string;
+  // the first item in the virtual list's visible range
+  firstItemCursor?: string;
+  // last item in the virtual list's visible range
+  lastItemCursor?: string;
 }
 
 export class ScrollStateDBWrapper extends Dexie {

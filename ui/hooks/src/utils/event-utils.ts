@@ -6,7 +6,7 @@ export function filterEvent(eventType: UIEventData['event']): MonoTypeOperatorFu
   Extract<
     UIEventData,
     {
-      event: UIEventData['event'];
+      event: typeof eventType;
     }
   >
 > {

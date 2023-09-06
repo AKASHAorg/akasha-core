@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
+  AnalyticsEventData,
   EntityTypes,
   IContentClickDetails,
-  IEntryData,
   ModalNavigationOptions,
   NavigateToParams,
   Profile,
   RootComponentProps,
-  TrackEventData,
 } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -18,7 +17,7 @@ import EntryList, {
   EntryListProps,
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
-import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
   itemType: EntityTypes.REFLECT;
@@ -35,7 +34,7 @@ export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> &
   className?: string;
   modalSlotId: string;
   accentBorderTop?: boolean;
-  trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
+  trackEvent?: (data: AnalyticsEventData['data']) => void;
   totalEntryCount?: number;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (props: ModalNavigationOptions) => void;

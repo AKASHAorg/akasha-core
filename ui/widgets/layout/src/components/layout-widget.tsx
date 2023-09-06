@@ -1,4 +1,12 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  StrictMode,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { EventDataTypes, EventTypes, RootComponentProps, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -275,11 +283,13 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
   const { getTranslationPlugin } = useRootComponentProps();
   const { i18n } = getTranslationPlugin();
   return (
-    <Router>
-      <I18nextProvider i18n={i18n}>
-        <Layout {...props} />
-      </I18nextProvider>
-    </Router>
+    <StrictMode>
+      <Router>
+        <I18nextProvider i18n={i18n}>
+          <Layout {...props} />
+        </I18nextProvider>
+      </Router>
+    </StrictMode>
   );
 };
 

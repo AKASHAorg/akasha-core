@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { EntityTypes, IContentClickDetails, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import BeamFeed, { BeamFeedProps } from './beam-feed';
@@ -20,13 +20,25 @@ const canFetchNextPage = (req: {
   isFetchingNextPage: boolean;
   hasNextPage?: boolean;
   isError: boolean;
-}) => !req.isFetchingNextPage && req.hasNextPage && !req.isError;
+}) => {
+  return !req.isFetchingNextPage && req.hasNextPage && !req.isError;
+};
 
 const canFetchPreviousPage = (req: {
   isFetchingPreviousPage: boolean;
   hasPreviousPage?: boolean;
   isError: boolean;
 }) => !req.isFetchingPreviousPage && req.hasPreviousPage && !req.isError;
+
+/**
+ * Scroll restoration:
+ * start from the first item that was visible in the viewport (firstItemCursor)
+ *  - if first time visitor - start from most recent item
+ * fetch {overscan} number of items that were published {before} the first item in the list
+ *  - first item in the list (startItemCursor) is different from the (firstItemCursor)
+ *  - if there are items in the response, show the "New items" pill
+ *    - on click - reset the list including the new items
+ */
 
 export type FeedWidgetCommonProps = {
   queryKey: string;
@@ -67,7 +79,7 @@ const FeedWidgetRoot: React.FC<
   // backward pagination: last, before? - least recent -> most recent
   const initialItemId = React.useMemo(() => {
     if (getScrollState.data) {
-      return getScrollState.data.firstItemId;
+      return getScrollState.data.startItemCursor;
     }
   }, [getScrollState.data]);
 
@@ -75,21 +87,20 @@ const FeedWidgetRoot: React.FC<
     'first',
     {
       first: scrollerOptions.overscan,
-      after: initialItemId,
     },
     {
       enabled: itemType === EntityTypes.BEAM && getScrollState.isFetched,
       select: data => {
         if (itemType !== EntityTypes.BEAM) return;
         return {
-          pages: data.pages.flatMap(page => page.akashaBeamIndex.edges.flatMap(edge => edge.node)),
+          pages: data.pages.flatMap(page => page.akashaBeamIndex.edges),
           pageParams: data.pageParams,
         };
       },
       getNextPageParam: (last, all) => {
         if (itemType !== EntityTypes.BEAM) return;
         if (last.akashaBeamIndex.pageInfo.hasNextPage) {
-          return all.length;
+          return { after: last.akashaBeamIndex.pageInfo.endCursor };
         }
       },
       getPreviousPageParam: firstPage => {
@@ -143,102 +154,89 @@ const FeedWidgetRoot: React.FC<
         // @TODO: handle this error. Through state maybe?
         console.error(err, beamsReq, reflectReq);
       };
-      const tryFetchNextPage = (lastItemId: string) => {
+      const tryFetchNextPage = () => {
         if (itemType === EntityTypes.BEAM && canFetchNextPage(beamsReq)) {
-          beamsReq
-            .fetchNextPage({ pageParam: { first: scrollerOptions.overscan, after: lastItemId } })
-            .catch(onFetchError);
+          beamsReq.fetchNextPage().catch(onFetchError);
         }
         if (itemType === EntityTypes.REFLECT && canFetchNextPage(reflectReq)) {
-          reflectReq
-            .fetchNextPage({ pageParam: { first: scrollerOptions.overscan, after: lastItemId } })
-            .catch(onFetchError);
+          reflectReq.fetchNextPage().catch(onFetchError);
         }
       };
-      const tryFetchPreviousPage = (firstItemId: string) => {
+      const tryFetchPreviousPage = () => {
         if (itemType === EntityTypes.BEAM && canFetchPreviousPage(beamsReq)) {
-          beamsReq
-            .fetchPreviousPage({
-              pageParam: { last: scrollerOptions.overscan, before: firstItemId },
-            })
-            .catch(onFetchError);
+          beamsReq.fetchPreviousPage().catch(onFetchError);
         }
 
         if (itemType === EntityTypes.REFLECT && canFetchPreviousPage(reflectReq)) {
-          reflectReq
-            .fetchPreviousPage({
-              pageParam: { last: scrollerOptions.overscan, before: firstItemId },
-            })
-            .catch(onFetchError);
+          reflectReq.fetchPreviousPage().catch(onFetchError);
         }
       };
 
       const {
         measurementsCache,
         scrollDirection,
-        firstItemId,
+        firstItemCursor,
         lastItemIdx,
         firstItemIdx,
-        lastItemId,
+        lastItemCursor,
         allEntries,
         itemsCount,
         startItemOffset,
+        startItemCursor,
       } = scrollState;
 
       saveScrollState.mutate({
         scrollDirection,
-        startItemId: firstItemId,
-        lastItemId,
+        startItemCursor,
+        lastItemCursor,
+        firstItemCursor,
         measurementsCache,
         startItemOffset,
         itemsCount,
       });
-      if (scrollDirection === 'forward') {
-        if (lastItemIdx >= allEntries.length - 1) {
-          tryFetchNextPage(lastItemId);
-        }
+      if (lastItemIdx >= allEntries.length - 1) {
+        tryFetchNextPage();
       }
-      if (scrollDirection === 'backward') {
-        if (firstItemIdx < scrollerOptions.overscan) {
-          tryFetchPreviousPage(firstItemId);
-        }
-        return;
+      if (firstItemIdx < scrollerOptions.overscan) {
+        tryFetchPreviousPage();
       }
     },
     [beamsReq, itemType, reflectReq, saveScrollState, scrollerOptions.overscan],
   );
 
   return (
-    <I18nextProvider i18n={i18n}>
-      {itemType === EntityTypes.BEAM && (
-        <BeamFeed
-          {...props}
-          requestStatus={beamsReq.status}
-          pages={beamsReq.data?.pages}
-          isFetchingNextPage={beamsReq.isFetchingNextPage}
-          isFetchingPreviousPage={beamsReq.isFetchingPreviousPage}
-          hasNextPage={beamsReq.hasNextPage}
-          onScrollStateChange={handleScrollStateChange}
-          initialScrollState={getScrollState.data}
-          onScrollStateReset={handleRemoveScrollState}
-          getItemKey={(idx, items) => items[idx]['id']}
-        />
-      )}
-      {itemType === EntityTypes.REFLECT && (
-        <ReflectFeed
-          {...props}
-          requestStatus={reflectReq.status}
-          pages={reflectReq.data?.pages}
-          isFetchingNextPage={reflectReq.isFetchingNextPage}
-          isFetchingPreviousPage={reflectReq.isFetchingPreviousPage}
-          hasNextPage={reflectReq.hasNextPage}
-          onScrollStateChange={handleScrollStateChange}
-          initialScrollState={getScrollState.data}
-          onScrollStateReset={handleRemoveScrollState}
-          getItemKey={(idx, items) => items[idx]['id']}
-        />
-      )}
-    </I18nextProvider>
+    <StrictMode>
+      <I18nextProvider i18n={i18n}>
+        {itemType === EntityTypes.BEAM && (
+          <BeamFeed
+            {...props}
+            requestStatus={beamsReq.status}
+            pages={beamsReq.data?.pages}
+            isFetchingNextPage={beamsReq.isFetchingNextPage}
+            isFetchingPreviousPage={beamsReq.isFetchingPreviousPage}
+            hasNextPage={beamsReq.hasNextPage}
+            onScrollStateChange={handleScrollStateChange}
+            initialScrollState={getScrollState.data}
+            onScrollStateReset={handleRemoveScrollState}
+            getItemKey={(idx, items) => items[idx]['id']}
+          />
+        )}
+        {itemType === EntityTypes.REFLECT && (
+          <ReflectFeed
+            {...props}
+            requestStatus={reflectReq.status}
+            pages={reflectReq.data?.pages}
+            isFetchingNextPage={reflectReq.isFetchingNextPage}
+            isFetchingPreviousPage={reflectReq.isFetchingPreviousPage}
+            hasNextPage={reflectReq.hasNextPage}
+            onScrollStateChange={handleScrollStateChange}
+            initialScrollState={getScrollState.data}
+            onScrollStateReset={handleRemoveScrollState}
+            getItemKey={(idx, items) => items[idx]['id']}
+          />
+        )}
+      </I18nextProvider>
+    </StrictMode>
   );
 };
 
