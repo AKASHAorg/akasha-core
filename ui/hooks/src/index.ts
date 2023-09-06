@@ -36,3 +36,4 @@ export {
 } from './use-notifications';
 
 export { useShowFeedback } from './use-show-feedback';
+export { useTheme } from './use-theme';
