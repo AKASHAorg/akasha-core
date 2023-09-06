@@ -67,7 +67,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const handleThemeSelect = () => {
     const selectedTheme = theme === 'Dark-Theme' ? 'Light-Theme' : 'Dark-Theme';
 
-    propagateTheme(selectedTheme);
+    propagateTheme(selectedTheme, true);
   };
 
   return (
