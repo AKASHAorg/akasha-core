@@ -15,6 +15,7 @@ import {
   filterEvents,
   usePlaformHealthCheck,
   useRootComponentProps,
+  useTheme,
 } from '@akashaorg/ui-awf-hooks';
 import {
   startMobileSidebarHidingBreakpoint,
@@ -36,6 +37,9 @@ const Layout: React.FC<RootComponentProps> = props => {
   const [showSidebar, setShowSidebar] = useState(
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
+
+  // initialise fallback theme, if none is set
+  useTheme();
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);

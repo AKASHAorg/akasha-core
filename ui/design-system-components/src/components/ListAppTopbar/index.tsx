@@ -57,8 +57,8 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
           {showMenu && <List items={dropDownActions} customStyle="absolute right-0 top-7 w-max" />}
         </Stack>
       </Stack>
-      <div className={tw('flex justify-between items-center')}>
-        <div className={tw('w-full md:w-2/6 mt-6')}>
+      <div className={tw('flex justify-between items-center my-2')}>
+        <div className={tw('w-full md:w-2/6')}>
           <DropDown
             name="filterByCategory"
             selected={filterByCategory}
