@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -182,7 +181,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <Stack direction="column" spacing="gap-y-2">
       <Text variant="h6">{title}</Text>
-      <Box customStyle="relative mb-8">
+      <Stack customStyle="relative mb-8">
         <Card
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
@@ -232,7 +231,7 @@ export const Header: React.FC<HeaderProps> = ({
               'bg',
             )}`}
           />
-          <Box customStyle="absolute">
+          <Stack customStyle="absolute">
             <Button
               icon="PencilSquareIcon"
               size="xs"
@@ -245,9 +244,9 @@ export const Header: React.FC<HeaderProps> = ({
               iconOnly
             />
             {showAvatarActions && <List items={dropDownActions} customStyle="absolute top-7" />}
-          </Box>
+          </Stack>
         </Stack>
-      </Box>
+      </Stack>
       <EditImageModal
         show={showEditImage}
         title={ProfileImageType === 'avatar' ? imageTitle.avatar : imageTitle.coverImage}

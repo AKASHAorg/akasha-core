@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
 import DevProfileCard from '../components/profile/dev-profile-card';
@@ -39,7 +39,7 @@ export const DevDashboard = (props: RootComponentProps) => {
   }
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet>
         <title>Dev Dashboard | AKASHA World</title>
       </Helmet>
@@ -70,6 +70,6 @@ export const DevDashboard = (props: RootComponentProps) => {
           navigateTo={navigateTo}
         />
       </>
-    </Box>
+    </Stack>
   );
 };

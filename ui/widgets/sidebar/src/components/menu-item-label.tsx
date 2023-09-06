@@ -3,7 +3,6 @@ import React from 'react';
 import { IMenuItem } from '@akashaorg/typings/ui';
 
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -18,8 +17,12 @@ const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
   const isActive = location.pathname.includes(menuItem.name);
 
   return (
-    <Stack align="center">
-      <Box customStyle="w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3">
+    <Stack direction="row" align="center">
+      <Stack
+        align="center"
+        justify="center"
+        customStyle="w-10 h-10 rounded-full bg-grey9 dark:bg-grey3"
+      >
         {menuItem.logo.type === 'icon' && (
           <AppIcon
             size="md"
@@ -28,7 +31,7 @@ const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
             placeholderIconType={menuItem.logo.value}
           />
         )}
-      </Box>
+      </Stack>
 
       <Text
         variant="button-md"

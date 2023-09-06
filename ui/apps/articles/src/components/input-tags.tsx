@@ -1,5 +1,5 @@
 import React from 'react';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
@@ -14,15 +14,15 @@ const InputTags: React.FC<IInputTagsProps> = props => {
     <>
       {values.map((tag, idx) => (
         <button onClick={onClickTag(tag)}>
-          <Box
+          <Stack
             key={`${tag}${idx}`}
-            customStyle={
-              'flex flex-row rounded-lg gap-0.5 m-0.5 px-1 py-0.5 border(grey8 dark:grey3)'
-            }
+            direction="row"
+            spacing="gap-0.5"
+            customStyle={'rounded-lg m-0.5 px-1 py-0.5 border(grey8 dark:grey3)'}
           >
             <Text variant="body1">{tag}</Text>
             <Icon type="XMarkIcon" />
-          </Box>
+          </Stack>
         </button>
       ))}
     </>

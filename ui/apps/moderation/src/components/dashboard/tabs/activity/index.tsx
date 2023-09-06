@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -30,9 +30,9 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
   } = props;
 
   return (
-    <Box customStyle="space-y-4">
-      <Box customStyle="px-4">
-        <Box customStyle="flex justify-between">
+    <Stack spacing="gap-y-4">
+      <Stack padding="px-4">
+        <Stack direction="row" justify="between">
           <Text variant="button-md" weight="bold">
             {applicationsTitleLabel}
           </Text>
@@ -46,7 +46,7 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
               {viewAllLabel}
             </Text>
           </Button>
-        </Box>
+        </Stack>
 
         <Table
           rows={applicationsRows.slice(0, 4)}
@@ -55,12 +55,12 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
           customTdStyle="px-0"
           onRowClick={onApplicationsRowClick}
         />
-      </Box>
+      </Stack>
 
       <Divider />
 
-      <Box customStyle="p-4">
-        <Box customStyle="flex justify-between">
+      <Stack padding="p-4">
+        <Stack direction="row" justify="between">
           <Text variant="button-md" weight="bold">
             {moderationTitleLabel}
           </Text>
@@ -74,7 +74,7 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
               {viewAllLabel}
             </Text>
           </Button>
-        </Box>
+        </Stack>
 
         <Table
           rows={moderationRows.slice(0, 4)}
@@ -83,7 +83,7 @@ export const ActivityTab: React.FC<ActivityTabProps> = props => {
           customTdStyle="px-0"
           onRowClick={onModerationRowClick}
         />
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };

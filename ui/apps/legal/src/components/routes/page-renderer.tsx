@@ -32,7 +32,7 @@ const PageRenderer: React.FC<PageRendererProps> = props => {
   }
 
   return (
-    <Stack direction="column" align="center">
+    <Stack align="center">
       {!doc && <Spinner />}
 
       {doc && <MarkdownCard mdText={doc} />}

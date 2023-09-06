@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -59,15 +59,15 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
 
   return (
     <PageLayout title={titleLabel}>
-      <Box customStyle="px-4">
+      <Stack padding="px-4">
         {/* essential cookies */}
-        <Box customStyle="py-4 border(b-1 solid grey8)">
-          <Box customStyle="flex justify-between items-center mb-2">
+        <Stack padding="py-4" customStyle="border(b-1 solid grey8 dark:grey5)">
+          <Stack direction="row" justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{essentialCookiesLabel}</Text>
 
             {/* always checked and cannot be toggled */}
             <Toggle checked={true} disabled={true} />
-          </Box>
+          </Stack>
 
           <Text>
             {essentialCookiesInfo1}
@@ -88,11 +88,11 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
             {essentialCookiesInfo3}
             {essentialCookiesInfo4}
           </Text>
-        </Box>
+        </Stack>
 
         {/* tracking analytics */}
-        <Box customStyle="py-4">
-          <Box customStyle="flex justify-between items-center mb-2">
+        <Stack padding="py-4">
+          <Stack direction="row" justify="between" align="center" customStyle="mb-2">
             <Text weight="bold">{trackingAnalyticsLabel}</Text>
 
             <Toggle
@@ -100,7 +100,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
               onChange={onTrackingOptionChange}
               disabled={!cookieType}
             />
-          </Box>
+          </Stack>
 
           <Text>
             {trackingAnalyticsInfo1}
@@ -125,8 +125,8 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
             </Anchor>
             {trackingAnalyticsInfo4}
           </Text>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </PageLayout>
   );
 };

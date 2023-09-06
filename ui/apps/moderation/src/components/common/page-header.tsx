@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 import {
@@ -19,21 +19,21 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
 
   return (
     <Card padding={0}>
-      <Box customStyle="px-4 py-6">
+      <Stack padding="px-4 py-6">
         <Text variant={labelTextVariant} align="center">
           {label}
         </Text>
-      </Box>
+      </Stack>
 
       <Divider />
 
-      <Box customStyle="p-4">{children}</Box>
+      <Stack padding="p-4">{children}</Stack>
 
       {/* show buttons only when the labels are specified */}
       {(cancelButtonLabel || confirmButtonLabel) && (
-        <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
+        <Stack align="center" justify="end" spacing="gap-x-6" customStyle="p-4 my-2">
           <PageButtons {...props} />
-        </Box>
+        </Stack>
       )}
     </Card>
   );

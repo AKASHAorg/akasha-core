@@ -11,7 +11,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useQueryClient } from '@tanstack/react-query';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 import { LatestProfiles, LatestTopics } from './cards';
@@ -154,7 +154,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Box customStyle="space-y-4">
+    <Stack spacing="gap-y-4">
       {(latestTopicsReq.isError || latestProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
@@ -201,7 +201,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
           handleUnfollowProfile={handleUnfollowProfile}
         />
       )}
-    </Box>
+    </Stack>
   );
 };
 

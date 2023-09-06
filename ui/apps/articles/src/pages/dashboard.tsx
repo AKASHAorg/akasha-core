@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import ArticleHeader from '../components/articles-header';
 import ArticlesMiniCard from '../components/articles-mini-card';
@@ -86,7 +86,7 @@ const Dashboard: React.FC<RootComponentProps> = props => {
   }
 
   return (
-    <Box customStyle="gap-2">
+    <Stack spacing="gap-2">
       <ArticleHeader
         titleLabel={t('Articles')}
         subtitleLabel={t('Browse articles or write a new one 📝')}
@@ -114,7 +114,7 @@ const Dashboard: React.FC<RootComponentProps> = props => {
             onSaveClick={handleSaveClick}
           />
         ))}
-    </Box>
+    </Stack>
   );
 };
 

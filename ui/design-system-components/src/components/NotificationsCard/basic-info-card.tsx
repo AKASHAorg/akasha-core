@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -30,7 +29,7 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
             radius="rounded-xl"
           />
         )}
-        <Box customStyle="w-[50%] m-auto">
+        <Stack customStyle="w-[50%] m-auto">
           {titleLabel && (
             <Text variant="h6" align="center">
               {titleLabel}
@@ -42,7 +41,7 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
               {subtitleLabel}
             </Text>
           )}
-        </Box>
+        </Stack>
       </Stack>
     </Card>
   );

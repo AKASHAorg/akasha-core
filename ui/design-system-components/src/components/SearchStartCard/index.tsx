@@ -35,7 +35,7 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
   return (
     <>
       <Card radius="rounded-lg" padding="px-4 py-0">
-        <Stack justify="between" customStyle="my-3">
+        <Stack direction="row" justify="between" customStyle="my-3">
           <Text variant="h5" align="center">
             <>{t('Search')}</>
           </Text>

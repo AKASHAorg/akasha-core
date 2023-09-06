@@ -15,7 +15,7 @@ import {
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import { useClickAway } from 'react-use';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -183,52 +183,52 @@ const Layout: React.FC<RootComponentProps> = props => {
       `;
 
   return (
-    <Box customStyle="bg(white dark:black) min-h-screen">
-      <Box customStyle="h-full m-auto lg:w-[95%] xl:w-full min-h-screen">
-        <Box customStyle={layoutStyle}>
+    <Stack customStyle="bg(white dark:black) min-h-screen">
+      <Stack customStyle="h-full m-auto lg:w-[95%] xl:w-full min-h-screen">
+        <Stack customStyle={layoutStyle}>
           <ScrollRestorer />
 
-          <Box customStyle={mobileLayoverStyle}>
-            <Box customStyle={sidebarSlotStyle}>
+          <Stack customStyle={mobileLayoverStyle}>
+            <Stack customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
-                <Box customStyle="pt-0 xl:pt-4 h-screen" ref={wrapperRef}>
+                <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
                   <Extension
                     fullHeight
                     name={props.layoutConfig.sidebarSlotId}
                     uiEvents={props.uiEvents}
                   />
-                </Box>
+                </Stack>
               ) : (
-                <Box customStyle="pt-0 xl:pt-4 h-screen">
+                <Stack padding="pt-0 xl:pt-4" customStyle="h-screen">
                   <Extension
                     fullHeight
                     name={props.layoutConfig.sidebarSlotId}
                     uiEvents={props.uiEvents}
                   />
-                </Box>
+                </Stack>
               )}
-            </Box>
-          </Box>
+            </Stack>
+          </Stack>
 
-          <Box customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
-            <Box customStyle="sticky top-0 z-10">
-              <Box customStyle="pt-4 bg(white dark:black) rounded-b-2xl">
+          <Stack customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
+            <Stack customStyle="sticky top-0 z-10">
+              <Stack padding="pt-4" customStyle="bg(white dark:black) rounded-b-2xl">
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
-              </Box>
-            </Box>
-            <Box customStyle="pt-4">
+              </Stack>
+            </Stack>
+            <Stack padding="pt-4">
               {!isPlatformHealthy && (
                 <Card
                   margin="mb-4"
                   customStyle="bg(warningLight dark:warningDark) border(errorLight dark:errorDark)"
                 >
-                  <Box customStyle="flex flex-row">
+                  <Stack direction="row">
                     <Icon
                       color={{ light: 'grey3', dark: 'grey3' }}
                       type="ExclamationTriangleIcon"
                       customStyle="mr-4"
                     />
-                    <Box>
+                    <Stack>
                       <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
                         {`${t(
                           'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
@@ -237,25 +237,25 @@ const Layout: React.FC<RootComponentProps> = props => {
                       <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>{`${t(
                         'Thank you for your patience',
                       )} 😸`}</Text>
-                    </Box>
-                  </Box>
+                    </Stack>
+                  </Stack>
                 </Card>
               )}
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
-            </Box>
-          </Box>
+            </Stack>
+          </Stack>
 
-          <Box customStyle="sticky top-0 h-screen">
-            <Box customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
+          <Stack customStyle="sticky top-0 h-screen">
+            <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
               <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
               <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
-            </Box>
+            </Stack>
 
-            <Box customStyle="fixed bottom-0 mr-4 mb-4">
+            <Stack customStyle="fixed bottom-0 mr-4 mb-4">
               <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
-            </Box>
-          </Box>
-        </Box>
+            </Stack>
+          </Stack>
+        </Stack>
 
         {activeModal && (
           <Extension
@@ -270,8 +270,8 @@ const Layout: React.FC<RootComponentProps> = props => {
           uiEvents={props.uiEvents}
           customStyle="relative z-999"
         />
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };
 

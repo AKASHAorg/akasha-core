@@ -4,7 +4,7 @@ import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { getTextileUsage } from '../api/message';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -61,7 +61,7 @@ const InboxPage = (props: SettingsPageProps) => {
 
   return (
     <Card customStyle="max-h-[92vh]">
-      <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
+      <Stack direction="row" align="center" customStyle="p-4 border(b grey8 dark:grey3)">
         <button onClick={onChevronLeftClick}>
           <Icon type="ChevronLeftIcon" />
         </button>
@@ -69,11 +69,11 @@ const InboxPage = (props: SettingsPageProps) => {
         <Text variant="h5" customStyle="mx-auto">
           {t('Message App Settings')}
         </Text>
-      </Box>
-      <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
+      </Stack>
+      <Stack direction="row" align="center" customStyle="p-4 border(b grey8 dark:grey3)">
         <Text variant="h6">{t('Storage and data')}</Text>
-      </Box>
-      <Box customStyle="flex flex-row py-4 px-8 justify-between border(b grey8 dark:grey3)">
+      </Stack>
+      <Stack direction="row" justify="between" customStyle="py-4 px-8 border(b grey8 dark:grey3)">
         <Text variant="h6">{t('Message storage')}</Text>
         {!storageTotal && <TextLine title="textileStorage" animated={false} width="80px" />}
         {storageTotal && (
@@ -81,16 +81,16 @@ const InboxPage = (props: SettingsPageProps) => {
             storageTotal,
           )} used`}</Text>
         )}
-      </Box>
-      <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
+      </Stack>
+      <Stack direction="row" align="center" customStyle="p-4 border(b grey8 dark:grey3)">
         <Text weight={'bold'}>{t('Ethereum Public Key')}</Text>
-      </Box>
-      <Box customStyle="flex flex-row py-4 px-8 justify-between border(b grey8 dark:grey3)">
+      </Stack>
+      <Stack direction="row" justify="between" customStyle="py-4 px-8 border(b grey8 dark:grey3)">
         <Text>{props.loggedProfileData?.did?.id}</Text>
-      </Box>
-      <Box customStyle="flex flex-row justify-end p-4">
+      </Stack>
+      <Stack direction="row" justify="end" customStyle="p-4">
         <Button label={t('Uninstall')} onClick={handleUninstall} icon="XMarkIcon" />
-      </Box>
+      </Stack>
     </Card>
   );
 };

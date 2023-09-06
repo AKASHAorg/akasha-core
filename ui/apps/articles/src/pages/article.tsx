@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import MiniHeader from '../components/mini-header';
 import ArticleCard from '../components/article-card';
@@ -97,7 +97,7 @@ const ArticlePage: React.FC<RootComponentProps> = props => {
   ];
 
   return (
-    <Box customStyle="gap-2">
+    <Stack spacing="gap-2">
       <MiniHeader titleLabel={t('Articles')} onClickIcon={handleClickIcon} />
       <ArticleCard
         articleData={sampleArticleData}
@@ -115,7 +115,7 @@ const ArticlePage: React.FC<RootComponentProps> = props => {
         onRepliesClick={handleRepliesClick}
         onSaveClick={handleSaveClick}
       />
-    </Box>
+    </Stack>
   );
 };
 export default ArticlePage;

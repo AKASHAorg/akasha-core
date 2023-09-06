@@ -9,7 +9,7 @@ import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ChatList from '@akashaorg/design-system-components/lib/components/ChatList';
@@ -160,7 +160,7 @@ const ChatPage = (props: ChatPageProps) => {
 
   return (
     <Card customStyle="max-h-[92vh]">
-      <Box customStyle="flx flex-row p-4 items-center">
+      <Stack direction="row" align="center" customStyle="p-4">
         <button onClick={onChevronLeftClick}>
           <Icon type="ChevronLeftIcon" />
         </button>
@@ -168,9 +168,9 @@ const ChatPage = (props: ChatPageProps) => {
         <Text variant="h5" customStyle="mx-auto">
           {t('Message')}
         </Text>
-      </Box>
-      <Box customStyle="p-2">
-        <Box customStyle="flex justify-between w-full rounded-lg border(grey8 dark:grey3)">
+      </Stack>
+      <Stack padding="p-2">
+        <Stack fullWidth={true} justify="between" customStyle="rounded-lg border(grey8 dark:grey3)">
           <ChatAreaHeader
             name={profileDataReq.data?.akashaProfile?.name}
             avatar={profileDataReq.data?.akashaProfile?.avatar}
@@ -214,8 +214,8 @@ const ChatPage = (props: ChatPageProps) => {
             tags={tagQueryReq.data}
             mentions={mentionQueryReq.data}
           />
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </Card>
   );
 };

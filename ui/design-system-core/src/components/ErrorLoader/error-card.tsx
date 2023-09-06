@@ -4,7 +4,7 @@ import { tw } from '@twind/core';
 import { ErrorLoaderProps } from '.';
 import Text from '../Text';
 import Card from '../Card';
-import Box from '../Box';
+import Stack from '../Stack';
 
 interface ErrorRendererProps {
   customStyle?: string; // use valid twind classes;
@@ -35,9 +35,9 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
 
   return (
     <Card elevation="1" customStyle={tw(`items-center ${customStyle}`)}>
-      <Box>
+      <Stack>
         <img alt={''} className={tw('max-w-[50%] h-auto my-0 mx-auto py-8 px-0')} src={imageSrc} />
-      </Box>
+      </Stack>
       <Text variant="h5" align="center" customStyle="px-4">
         {title}
       </Text>
@@ -62,7 +62,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
           {message}
         </Text>
       )}
-      <Box customStyle={tw('pt-6 pb-4')}>{children}</Box>
+      <Stack customStyle={'pt-6 pb-4'}>{children}</Stack>
     </Card>
   );
 };

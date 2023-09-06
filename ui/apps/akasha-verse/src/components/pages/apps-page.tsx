@@ -25,7 +25,7 @@ const AppsPage: React.FC<RootComponentProps> = () => {
     },
   ];
   return (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack spacing="gap-y-4">
       <Text variant="h6">{t('Newest Apps')}</Text>
       <AppList
         apps={dummyNewestApps}

@@ -28,7 +28,7 @@ const DidField: React.FC<DidFieldProps> = ({
   const networkType = iconForDid(did);
   const truncatedDid = truncateDid(did, networkType);
   const didDisplayBlock = (
-    <Stack spacing="gap-x-1.5" align="center">
+    <Stack direction="row" spacing="gap-x-1.5" align="center">
       {networkType && <Icon type={isValid ? networkType : 'noEth'} />}
       <Text variant="footnotes1" color={textColor}>
         {truncatedDid}

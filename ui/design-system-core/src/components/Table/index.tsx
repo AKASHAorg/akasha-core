@@ -1,7 +1,7 @@
 import React from 'react';
 import { apply, tw } from '@twind/core';
 
-import Box from '../Box';
+import Stack from '../Stack';
 import Text from '../Text';
 import Icon from '../Icon';
 
@@ -63,11 +63,11 @@ const Table: React.FC<TableProps> = props => {
   return (
     <>
       {tableTitle && (
-        <Box customStyle="w-full py-4 px-5">
+        <Stack fullWidth={true} customStyle="py-4 px-5">
           <Text weight="bold" align="center">
             {tableTitle}
           </Text>
-        </Box>
+        </Stack>
       )}
 
       <table className={tw('table-auto w-full')}>

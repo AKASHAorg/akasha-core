@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
@@ -107,7 +107,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
         />
       )}
 
-      <Box data-testid="lists" customStyle="space-x-8 space-y-8">
+      <Stack data-testid="lists" spacing="gap-8">
         {/* <StartCard
             title={t('Lists')}
             subtitle={getSubtitleText()}
@@ -125,7 +125,7 @@ const ListsPage: React.FC<ListsPageProps> = props => {
             image="/images/listsapp-empty-min.webp"
           />
         )}
-      </Box>
+      </Stack>
       <Modal
         title={{ label: t('Remove Content') }}
         show={showModal}
