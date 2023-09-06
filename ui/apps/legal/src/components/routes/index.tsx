@@ -11,7 +11,7 @@ import DeveloperGuidelines from './developer-guidelines';
 
 import route, { TOS, TOU, PP, COC, DG } from '../../routes';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName } = useRootComponentProps();
 
   return (

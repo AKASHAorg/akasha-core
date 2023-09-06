@@ -11,7 +11,7 @@ import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hiddenIntegrations } from '../hidden-integrations';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { worldConfig, baseRouteName } = useRootComponentProps();
 
   const loginQuery = useGetLogin();

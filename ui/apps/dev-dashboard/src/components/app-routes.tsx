@@ -32,7 +32,7 @@ import routes, {
   EDIT_MESSAGE_NAME,
 } from '../routes';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName } = useRootComponentProps();
 
   return (

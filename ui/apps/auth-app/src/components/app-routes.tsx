@@ -7,7 +7,7 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import routes, { CONNECT } from '../routes';
 import Connect from './connect';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName } = useRootComponentProps();
 
   return (

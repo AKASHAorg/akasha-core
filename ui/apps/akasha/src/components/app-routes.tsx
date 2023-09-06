@@ -16,7 +16,7 @@ import ReplyPage from './item-page/reply-page';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal } = useRootComponentProps();
 
   const profileDataReq = useGetMyProfileQuery(null, {

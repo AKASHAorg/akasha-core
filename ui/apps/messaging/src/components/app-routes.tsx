@@ -12,7 +12,7 @@ import SettingsPage from './settings-page';
 
 import routes, { CHAT, MESSAGING, SETTINGS } from '../routes';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
       return resp.viewer?.akashaProfile;

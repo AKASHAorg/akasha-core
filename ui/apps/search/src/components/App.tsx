@@ -7,7 +7,7 @@ import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
 import AppRoutes from './routes';
 
-const App = () => {
+const App: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (

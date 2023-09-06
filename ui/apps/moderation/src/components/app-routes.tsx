@@ -54,7 +54,7 @@ import routes, {
   MODERATION_ACTIVITY,
 } from '../routes';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
 
   const profileDataReq = useGetMyProfileQuery(null, {

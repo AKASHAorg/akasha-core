@@ -17,7 +17,7 @@ import ProfileInfoPage from './pages/profile-info';
 
 import menuRoute, { EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
   const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
 

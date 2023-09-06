@@ -12,7 +12,7 @@ import SettingsPage from './settings-page';
 
 import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal } = useRootComponentProps();
 
   const profileDataReq = useGetMyProfileQuery(null, {

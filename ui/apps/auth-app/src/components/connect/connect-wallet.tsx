@@ -65,7 +65,6 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     return () => {
       changedNetworkUnsubscribe();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changedNetwork, requiredNetworkQuery.data]);
 
   const requiredNetworkName = React.useMemo(() => {

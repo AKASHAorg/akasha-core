@@ -16,7 +16,7 @@ import routes, {
   SETTINGS_PAGE,
 } from '../routes';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-notifications');
   const { baseRouteName } = useRootComponentProps();
 

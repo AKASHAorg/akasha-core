@@ -5,7 +5,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import AppRoutes from './app-routes';
 
-const App = () => {
+const App: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (

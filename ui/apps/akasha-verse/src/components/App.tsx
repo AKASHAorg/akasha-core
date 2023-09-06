@@ -1,13 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { I18nextProvider } from 'react-i18next';
-
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-
 import AppRoutes from './app-routes';
 
-const App = () => {
+const App: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (

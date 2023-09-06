@@ -24,7 +24,7 @@ import routes, {
   WRITE_ARTICLE,
 } from '../routes';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName } = useRootComponentProps();
 
   return (

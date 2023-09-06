@@ -6,7 +6,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ListsPage from './lists-page';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName } = useRootComponentProps();
 
   return (

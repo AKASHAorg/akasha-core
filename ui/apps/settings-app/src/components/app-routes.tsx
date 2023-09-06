@@ -17,7 +17,7 @@ import routes, { THEME, APPS, HOME, PRIVACY } from '../routes';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
-const AppRoutes = () => {
+const AppRoutes: React.FC<unknown> = () => {
   const cookieType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
 
   const [checkedTracking, setCheckedTracking] = useState<boolean>(
