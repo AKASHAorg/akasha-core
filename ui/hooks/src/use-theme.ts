@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { EventTypes } from '@akashaorg/typings/ui';
 import { useRootComponentProps } from './use-root-props';
 
@@ -12,54 +12,49 @@ export const useTheme = () => {
 
   const [theme, setTheme] = useState<theme>(currentTheme);
 
-  const propagateTheme = (_theme: theme, setToLocal?: boolean) => {
-    setTheme(_theme);
-
-    if (setToLocal) {
-      window.localStorage.setItem('Theme', _theme);
-    }
-
-    /*
-     * Custom event used in main html file to update the theme in the <body> tag
-     */
-    const ev = new CustomEvent(EventTypes.ThemeChange, {
-      detail: {
-        theme: _theme,
-      },
-    });
-
-    window.dispatchEvent(ev);
-
-    /*
-     * Propagate the change to all apps and widgets
-     */
-    uiEvents.next({
-      event: EventTypes.ThemeChange,
-      data: {
-        name: _theme,
-      },
-    });
-  };
+  const propagateTheme = useCallback(
+    (_theme: theme, setToLocal?: boolean) => {
+      setTheme(_theme);
+      if (setToLocal) {
+        window.localStorage.setItem('Theme', _theme);
+      }
+      /*
+       * Custom event used in main html file to update the theme in the <body> tag
+       */
+      const ev = new CustomEvent(EventTypes.ThemeChange, {
+        detail: {
+          theme: _theme,
+        },
+      });
+      window.dispatchEvent(ev);
+      /*
+       * Propagate the change to all apps and widgets
+       */
+      uiEvents.next({
+        event: EventTypes.ThemeChange,
+        data: {
+          name: _theme,
+        },
+      });
+    },
+    [uiEvents],
+  );
 
   useEffect(() => {
     /**
      * if no theme is set on local storage, default to user's preference (auto)
      */
+    const userPrefTheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (!currentTheme) {
+      propagateTheme(userPrefTheme.matches ? 'Dark-Theme' : 'Light-Theme');
+    }
     const setThemeFromUserPref = ({ matches }) => {
       if (!currentTheme) {
         propagateTheme(matches ? 'Dark-Theme' : 'Light-Theme');
       }
     };
-
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', setThemeFromUserPref);
-
-    return window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .removeEventListener('change', setThemeFromUserPref);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    userPrefTheme.addEventListener('change', setThemeFromUserPref);
+  }, [currentTheme, theme, propagateTheme]);
 
   return { theme, propagateTheme };
 };
