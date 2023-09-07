@@ -16,7 +16,7 @@ const ProfileHeaderLoading: React.FC = () => {
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
         <Stack padding="pl-2" fullWidth>
-          <Stack spacing="gap-x-2" customStyle="-ml-2">
+          <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
             <Stack customStyle="relative w-20 h-[3.5rem] shrink-0">
               <CircularPlaceholder customStyle="absolute -top-6" />
             </Stack>

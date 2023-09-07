@@ -21,7 +21,7 @@ const EntryLoading: React.FC = () => {
       justify="between"
       customStyle={`px-4 pb-4 ${borderBottomStyle}`}
     >
-      <Stack spacing="gap-1">
+      <Stack direction="row" spacing="gap-1">
         <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
         <Stack direction="column" justify="center" spacing="gap-y-1">
           <TextLine width="w-24" height="h-4" animated />
