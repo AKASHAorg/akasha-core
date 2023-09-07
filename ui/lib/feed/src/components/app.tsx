@@ -9,12 +9,16 @@ import {
   useSaveScrollState,
 } from '../utils/use-scroll-state';
 import { ScrollStateDBWrapper } from '../utils/scroll-state-db';
-import type { ScrollerOnChangeState } from '@akashaorg/design-system-components/lib/components/EntryList';
+import type {
+  ScrollerOnChangeState,
+  ScrollerState,
+} from '@akashaorg/design-system-components/lib/components/EntryList';
 
 import {
   useInfiniteGetBeamsQuery,
   useInfiniteGetReflectionsFromBeamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { SortOrder } from '@akashaorg/typings/sdk/graphql-types-new';
 
 const canFetchNextPage = (req: {
   isFetchingNextPage: boolean;
@@ -74,22 +78,39 @@ const FeedWidgetRoot: React.FC<
   const getScrollState = useGetScrollState(scrollStateQK, db);
   const saveScrollState = useSaveScrollState(scrollStateQK, db);
   const removeScrollState = useRemoveScrollState(scrollStateQK, db);
+  const [initialScrollState, setInitialScrollState] = React.useState<
+    ScrollerState & { isFetched: boolean }
+  >({
+    isFetched: false,
+    measurementsCache: [],
+    startItemCursor: undefined,
+    startItemOffset: 0,
+    itemsCount: 0,
+    visibleCursorRange: {
+      startCursor: undefined,
+      endCursor: undefined,
+    },
+  });
+
+  React.useLayoutEffect(() => {
+    if (getScrollState.isFetched && !initialScrollState.isFetched) {
+      setInitialScrollState(prev => ({ ...prev, ...getScrollState.data, isFetched: true }));
+    }
+  }, [getScrollState.data, getScrollState.isFetched, initialScrollState.isFetched]);
 
   // forward pagination: first, after? - most recent -> least recent
   // backward pagination: last, before? - least recent -> most recent
-  const initialItemId = React.useMemo(() => {
-    if (getScrollState.data) {
-      return getScrollState.data.startItemCursor;
-    }
-  }, [getScrollState.data]);
-
   const beamsReq = useInfiniteGetBeamsQuery(
-    'first',
+    'sorting',
     {
       first: scrollerOptions.overscan,
+      after: initialScrollState.visibleCursorRange.startCursor ?? undefined,
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
     },
     {
-      enabled: itemType === EntityTypes.BEAM && getScrollState.isFetched,
+      enabled: itemType === EntityTypes.BEAM && initialScrollState.isFetched,
       select: data => {
         if (itemType !== EntityTypes.BEAM) return;
         return {
@@ -97,7 +118,7 @@ const FeedWidgetRoot: React.FC<
           pageParams: data.pageParams,
         };
       },
-      getNextPageParam: (last, all) => {
+      getNextPageParam: last => {
         if (itemType !== EntityTypes.BEAM) return;
         if (last.akashaBeamIndex.pageInfo.hasNextPage) {
           return { after: last.akashaBeamIndex.pageInfo.endCursor };
@@ -149,7 +170,18 @@ const FeedWidgetRoot: React.FC<
   }, [removeScrollState]);
 
   const handleScrollStateChange = React.useCallback(
-    (scrollState: ScrollerOnChangeState<unknown>) => {
+    (scrollerOnChangeState: ScrollerOnChangeState<unknown>) => {
+      const {
+        measurementsCache,
+        scrollDirection,
+        allEntries,
+        itemsCount,
+        startItemOffset,
+        startItemCursor,
+        visibleCursorRange,
+        visibleIndexRange,
+      } = scrollerOnChangeState;
+
       const onFetchError = (err: Error) => {
         // @TODO: handle this error. Through state maybe?
         console.error(err, beamsReq, reflectReq);
@@ -172,33 +204,20 @@ const FeedWidgetRoot: React.FC<
         }
       };
 
-      const {
-        measurementsCache,
-        scrollDirection,
-        firstItemCursor,
-        lastItemIdx,
-        firstItemIdx,
-        lastItemCursor,
-        allEntries,
-        itemsCount,
-        startItemOffset,
-        startItemCursor,
-      } = scrollState;
-
       saveScrollState.mutate({
-        scrollDirection,
         startItemCursor,
-        lastItemCursor,
-        firstItemCursor,
-        measurementsCache,
         startItemOffset,
+        measurementsCache,
         itemsCount,
+        visibleCursorRange,
       });
-      if (lastItemIdx >= allEntries.length - 1) {
+      if (visibleIndexRange.end >= allEntries.length - 1) {
         tryFetchNextPage();
       }
-      if (firstItemIdx < scrollerOptions.overscan) {
-        tryFetchPreviousPage();
+      if (visibleIndexRange.start < scrollerOptions.overscan) {
+        if (scrollDirection === 'backward') {
+          tryFetchPreviousPage();
+        }
       }
     },
     [beamsReq, itemType, reflectReq, saveScrollState, scrollerOptions.overscan],
@@ -218,7 +237,7 @@ const FeedWidgetRoot: React.FC<
             onScrollStateChange={handleScrollStateChange}
             initialScrollState={getScrollState.data}
             onScrollStateReset={handleRemoveScrollState}
-            getItemKey={(idx, items) => items[idx]['id']}
+            getItemKey={(idx, items) => items[idx].node.id}
           />
         )}
         {itemType === EntityTypes.REFLECT && (
