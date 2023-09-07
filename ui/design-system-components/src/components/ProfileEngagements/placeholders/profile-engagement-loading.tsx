@@ -8,7 +8,7 @@ import { LOADING_LIST_SIZE } from '../types';
 
 const ProfileEngagementLoading: React.FC = () => {
   return (
-    <Stack direction="row" spacing="gap-y-4">
+    <Stack direction="column" spacing="gap-y-4">
       {Array.from({ length: LOADING_LIST_SIZE }).map((_, index) => (
         <EntryLoading key={`${index}`} />
       ))}

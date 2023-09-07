@@ -23,7 +23,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
         <Text variant="label">{title}</Text>
         {links.map((link, index) => (
           <CopyToClipboard key={`${link.href}${index}`} value={link.href}>
-            <Stack align="center" spacing="gap-x-2">
+            <Stack direction="row" align="center" spacing="gap-x-2">
               <AppIcon placeholderIconType={getIconFromLink(link.href)} size="xs" accentColor />
               <Text
                 variant="body2"

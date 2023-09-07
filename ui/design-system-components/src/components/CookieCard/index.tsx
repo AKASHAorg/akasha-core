@@ -61,7 +61,7 @@ const CookieCard: React.FC<CookieCardProps> = props => {
           <Anchor href={paragraphThree.url}>{paragraphThree.urlLabel}</Anchor>
         </Text>
 
-        <Stack spacing="gap-x-4" customStyle="ml-auto mt-auto">
+        <Stack direction="row" spacing="gap-x-4" customStyle="ml-auto mt-auto">
           <Button variant="text" label={onlyEssentialLabel} onClick={onClickOnlyEssential} />
 
           <Button
