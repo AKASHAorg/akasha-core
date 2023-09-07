@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import singleSpaReact from 'single-spa-react';
-import FollowProfile from '../components/follow-profile';
+import FollowProfileButton from '../components/follow-profile-button';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 
@@ -14,7 +14,7 @@ const App = (props: RootExtensionProps) => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
   return (
-    <FollowProfile
+    <FollowProfileButton
       loggedInProfileId={String(loggedInProfileId)}
       profileStreamId={String(profileStreamId)}
       isLoggedIn={!!isLoggedIn}

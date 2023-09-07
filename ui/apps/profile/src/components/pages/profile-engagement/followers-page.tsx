@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import FollowProfile from '../../follow-profile';
+import FollowProfileButton from '../../follow-profile-button';
 import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
 import EngagementTab from './engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -129,7 +129,7 @@ const FollowersPage: React.FC<RootComponentProps> = props => {
             }
           }}
           renderFollowElement={(profileStreamId, followStreamId, isFollowing) => (
-            <FollowProfile
+            <FollowProfileButton
               loggedInProfileId={loginQuery.data?.id}
               profileStreamId={profileStreamId}
               isLoggedIn={!!loginQuery.data?.id}

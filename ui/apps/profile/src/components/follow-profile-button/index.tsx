@@ -1,30 +1,34 @@
 import React, { useState } from 'react';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import { ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateFollowMutation,
   useInfiniteGetFollowersListByDidQuery,
+  useGetFollowDocumentsQuery,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useQueryClient } from '@tanstack/react-query';
 
-export type FollowProfileProps = {
+export type FollowProfileButtonProps = {
   loggedInProfileId: string;
   profileStreamId: string;
   isLoggedIn: boolean;
   isFollowing: boolean;
   followStreamId: string | null;
+  iconOnly?: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-const FollowProfile: React.FC<FollowProfileProps> = props => {
+const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   const {
     loggedInProfileId,
     profileStreamId,
     isLoggedIn,
     isFollowing,
     followStreamId,
+    iconOnly,
     showLoginModal,
   } = props;
 
@@ -44,6 +48,9 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
       setFollowing(createAkashaFollow.document.isFollowing);
       await queryClient.invalidateQueries(
         useInfiniteGetFollowersListByDidQuery.getKey({ id: loggedInProfileId }),
+      );
+      await queryClient.invalidateQueries(
+        useGetFollowDocumentsQuery.getKey({ following: [profileStreamId], last: 1 }),
       );
     },
     onSettled: () => {
@@ -102,7 +109,20 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
     });
   };
 
-  return (
+  return iconOnly ? (
+    <Button
+      onClick={
+        isFollowing
+          ? () => handleUnfollow(profileStreamId, followStreamId)
+          : () => handleFollow(profileStreamId, followStreamId)
+      }
+      icon={isFollowing ? 'UsersIcon' : 'UserPlusIcon'}
+      variant={isFollowing ? 'secondary' : 'primary'}
+      loading={loading}
+      greyBg={isFollowing}
+      iconOnly={true}
+    />
+  ) : (
     <DuplexButton
       inactiveLabel={t('Follow')}
       activeLabel={t('Following')}
@@ -121,4 +141,4 @@ const FollowProfile: React.FC<FollowProfileProps> = props => {
   );
 };
 
-export default FollowProfile;
+export default FollowProfileButton;
