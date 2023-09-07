@@ -15,6 +15,7 @@ import {
 } from '@akashaorg/af-testing';
 import { Profile } from '@akashaorg/typings/ui';
 import { MemoryRouter as Router } from 'react-router-dom';
+import { AkashaFollow } from '@akashaorg/typings/sdk/graphql-types-new';
 
 const navigateTo = jest.fn();
 
@@ -57,9 +58,22 @@ describe('< ProfileInfoPage />', () => {
           isViewer: boolean;
           akashaProfile: Profile;
         };
-        status: 'success' | 'error';
+        status: 'success' | 'error' | 'loading';
       }>
     ).mockReturnValue({ data: { isViewer: true, akashaProfile: profile }, status: 'success' });
+
+    (
+      jest.spyOn(hooks, 'useGetFollowDocumentsQuery') as unknown as jest.SpyInstance<{
+        data: {
+          isViewer: boolean;
+          akashaFollowList: { edges: AkashaFollow[] };
+        };
+        status: 'success' | 'error' | 'loading';
+      }>
+    ).mockReturnValue({
+      data: { isViewer: true, akashaFollowList: { edges: [] } },
+      status: 'success',
+    });
   });
   it('should render profile info page', async () => {
     expect(screen.getByTestId('avatar-image')).toBeInTheDocument();
