@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { RootComponentProps, EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/ui';
+import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/ui';
 import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/sdk/events';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
@@ -11,6 +11,7 @@ import {
   useLogout,
   LOGIN_STATE_KEY,
   useDismissedCard,
+  useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
 
@@ -27,12 +28,12 @@ import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-cor
 import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
 
-const SidebarComponent: React.FC<RootComponentProps> = props => {
+const SidebarComponent: React.FC<unknown> = () => {
   const {
     uiEvents,
     plugins,
     worldConfig: { defaultApps, socialLinks },
-  } = props;
+  } = useRootComponentProps();
 
   const [isMobile, setIsMobile] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,

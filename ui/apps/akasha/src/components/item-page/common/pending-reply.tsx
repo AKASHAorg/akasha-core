@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { IPublishData, Profile } from '@akashaorg/typings/ui';
-import { createPendingEntry, useMutationsListener } from '@akashaorg/ui-awf-hooks';
+import { useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { REFLECT } from '../../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
-type PendingReplyProps = {
+export type PendingReplyProps = {
   postId: string;
   loggedProfileData: Profile;
   commentIds: string[];
 };
 
-export function PendingReply({ postId, loggedProfileData, commentIds }: PendingReplyProps) {
+export function PendingReply({ postId, commentIds }: PendingReplyProps) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutations: pendingReplyStates } = useMutationsListener<IPublishData & { postID: string }>(
     ['PUBLISH_PENDING_KEY'],

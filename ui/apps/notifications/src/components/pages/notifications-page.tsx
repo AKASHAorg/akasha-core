@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
-import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useMarkAsRead, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
@@ -12,16 +12,15 @@ import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/compon
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
+import { EntityTypes } from '@akashaorg/typings/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
 
-interface Notification {
+export type Notification = {
   id: string;
+  [key: string]: unknown;
+};
 
-  [key: string]: any;
-}
-
-const NotificationsPage: React.FC<RootComponentProps> = props => {
+const NotificationsPage: React.FC<unknown> = () => {
   const [searchParams] = useSearchParams();
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
@@ -34,7 +33,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     savedPreferences = JSON.parse(localStorage.getItem('notification-preference'));
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     /* @TODO:  uncomment this part when backend data becomes available */
     // redirect to sign in page if not logged in
     // if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
@@ -47,7 +46,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   }, []);
 
   //find if any message is passed in the url params and display it
-  React.useEffect(() => {
+  useEffect(() => {
     if (searchParams.get('message')) {
       setMessage(searchParams.get('message'));
       setMessageType(searchParams.get('type'));
@@ -56,7 +55,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     }
   }, [searchParams]);
 
-  const [showFeedback, setShowFeedback] = React.useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   if (showFeedback) {
     setTimeout(() => {
@@ -65,17 +64,16 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     }, 6000);
   }
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
   const { t } = useTranslation('app-notifications');
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const loginQuery = useGetLogin();
 
-  const isLoggedIn = React.useMemo(() => {
+  const isLoggedIn = useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
-
-  const notifReq = useFetchNotifications(!loginQuery.isSuccess && loginQuery.data?.id);
 
   // mock data used for displaying something. Change when there's real data
   const allNotifications: Notification[] = [

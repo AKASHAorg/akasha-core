@@ -1,7 +1,7 @@
 import * as React from 'react';
 import WelcomePage from '../pages/welcome-page';
 
-import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, act } from '@akashaorg/af-testing';
 
 describe('< WelcomePage /> component', () => {
   const BaseComponent = (
@@ -11,7 +11,6 @@ describe('< WelcomePage /> component', () => {
       leftButtonLabel="Skip"
       rightButtonLabel="Customize your notifications"
       isLoggedIn={true}
-      {...genAppProps()}
     />
   );
   beforeEach(async () => {

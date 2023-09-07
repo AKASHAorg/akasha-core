@@ -1,7 +1,7 @@
 import * as React from 'react';
 import TopbarComponent from '../topbar-component';
 
-import { RenderResult, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
+import { RenderResult, renderWithAllProviders, act } from '@akashaorg/af-testing';
 
 const mockLocationValue = {
   pathname: '/profile',
@@ -20,7 +20,7 @@ jest.mock('react-router', () =>
 
 describe('<TopbarComponent />', () => {
   let renderResult: RenderResult;
-  const BaseComponent = <TopbarComponent {...genAppProps()} />;
+  const BaseComponent = <TopbarComponent />;
   beforeEach(async () => {
     await act(async () => {
       renderResult = await renderWithAllProviders(BaseComponent, {});

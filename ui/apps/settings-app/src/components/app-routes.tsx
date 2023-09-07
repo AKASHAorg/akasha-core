@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { COOKIE_CONSENT_NAME, CookieConsentTypes, useTheme } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import {
+  COOKIE_CONSENT_NAME,
+  CookieConsentTypes,
+  useRootComponentProps,
+  useTheme,
+} from '@akashaorg/ui-awf-hooks';
 
 import AppsOption from './option-apps';
 import SettingsPage from './settings-page';
@@ -13,7 +17,7 @@ import routes, { THEME, APPS, HOME, PRIVACY } from '../routes';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
-const AppRoutes: React.FC<RootComponentProps> = props => {
+const AppRoutes: React.FC<unknown> = () => {
   const cookieType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
 
   const [checkedTracking, setCheckedTracking] = useState<boolean>(
@@ -25,8 +29,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const { theme, propagateTheme } = useTheme();
 
   const { t } = useTranslation('app-settings-ewa');
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
 
-  const routing = props.plugins['@akashaorg/app-routing']?.routing;
+  const routing = getRoutingPlugin();
 
   const handlePrivacyPolicyClick = () => {
     routing.navigateTo({
@@ -71,12 +76,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Router basename={props.baseRouteName}>
+    <Router basename={baseRouteName}>
       <Routes>
-        <Route
-          path={routes[HOME]}
-          element={<SettingsPage titleLabel={t('Settings')} {...props} />}
-        />
+        <Route path={routes[HOME]} element={<SettingsPage titleLabel={t('Settings')} />} />
         <Route
           path={routes[PRIVACY]}
           element={

@@ -4,9 +4,8 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
 
-const AppsPage: React.FC<RootComponentProps> = () => {
+const AppsPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-akasha-verse');
 
   /*@TODO: replace with the relevant hook once it's ready */

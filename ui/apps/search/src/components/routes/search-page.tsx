@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { tw } from '@twind/core';
 import {
-  RootComponentProps,
   IEntryData,
   ITag,
   EntityTypes,
@@ -15,7 +14,7 @@ import {
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { SETTINGS } from '../../routes';
 
-import { useEntryNavigation, useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { useEntryNavigation, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
 
@@ -42,11 +41,11 @@ export enum ButtonValues {
   TAGS = 'Tags',
 }
 
-interface SearchPageProps extends RootComponentProps {
+export type SearchPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
 type DataResponse = SearchTagsResult | IEntryData;
 
@@ -56,26 +55,15 @@ const initSearchState = {
   [ButtonValues.TAGS]: { page: 1, results: [], done: false, isLoading: false },
 };
 
-const onNavBack = () => {
-  history.back();
-};
-
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const {
-    plugins,
-    loggedProfileData,
-    logger,
-    singleSpa,
-    uiEvents,
-    showLoginModal,
-    navigateToModal,
-  } = props;
+  const { loggedProfileData, showLoginModal } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
 
   const [analyticsActions] = useAnalytics();
   const { t, i18n } = useTranslation('app-search');
+  const { getRoutingPlugin } = useRootComponentProps();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   // @TODO replace with new hooks
@@ -84,7 +72,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = null;
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
+
   const handleEntryNavigation = useEntryNavigation(navigateTo);
 
   // const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.CONTENT, [activeButton]);
@@ -180,6 +169,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       ...initSearchState,
       [activeButton]: { ...initSearchState[activeButton], isLoading: true },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword]);
 
   // @TODO replace with new hooks
@@ -232,7 +222,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (searchTagsReq?.isFetched) updateSearchState(ButtonValues.TAGS, searchTagsReq.data);
   }, [searchTagsReq, searchTagsReq?.isFetched]);
 
-  const followPubKeyArr = searchProfilesState?.map(profile => profile.pubKey);
   const isFollowingMultipleReq = null;
   const followedProfiles = isFollowingMultipleReq?.data;
   const followReq = null;
@@ -272,7 +261,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     const trimmedValue = inputValue.trim();
     if (!trimmedValue) return;
     const encodedSearchKey = encodeURIComponent(trimmedValue);
-    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-search',
       getNavigationUrl: routes => `${routes.Results}/${encodedSearchKey}`,
     });
@@ -552,8 +541,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   key={itemData.itemId}
                   itemData={itemData}
                   itemType={EntityTypes.BEAM}
-                  logger={logger}
-                  singleSpa={singleSpa}
                   onContentClick={handleEntryNavigation}
                   navigateTo={navigateTo}
                   onRebeam={handleRebeam}
@@ -564,8 +551,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   locale={locale}
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}
-                  uiEvents={uiEvents}
-                  navigateToModal={navigateToModal}
                 />
               ))}
             </>

@@ -4,21 +4,15 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import {
-  useGetLogin,
-  useCurrentNetwork,
-  getProfileImageVersionsWithMediaUrl,
-} from '@akashaorg/ui-awf-hooks';
-import {
-  useGetAppReleaseByIdQuery,
-  useGetAppsReleasesQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetLogin, getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
+import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-const InfoPage: React.FC<RootComponentProps> = props => {
+const InfoPage: React.FC<unknown> = () => {
   const { appId } = useParams<{ appId: string }>();
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  // const { getRoutingPlugin } = useRootComponentProps();
+
+  // const navigateTo = getRoutingPlugin().navigateTo;
 
   const { t } = useTranslation('app-akasha-verse');
 
@@ -28,7 +22,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
     return !!loginQueryReq.data?.id;
   }, [loginQueryReq.data]);
 
-  const network = useCurrentNetwork(isLoggedIn).data;
+  // const network = useCurrentNetwork(isLoggedIn).data;
 
   const appReleaseInfoReq = useGetAppReleaseByIdQuery(
     { id: appId },
@@ -40,26 +34,26 @@ const InfoPage: React.FC<RootComponentProps> = props => {
 
   const appReleaseInfo = 'application' in appReleaseInfoReq.data && appReleaseInfoReq.data;
 
-  const author = appReleaseInfo.application.author.akashaProfile;
+  // const author = appReleaseInfo.application.author.akashaProfile;
 
-  const handleAuthorEthAddressClick = (ethAddress: string) => {
-    if (network) {
-      window.open(
-        `https://${network}.etherscan.io/address/${ethAddress}`,
-        '_blank',
-        'noreferrer noopener',
-      );
-    } else {
-      window.open(`https://etherscan.io/address/${ethAddress}`, '_blank', 'noreferrer noopener');
-    }
-  };
+  // const handleAuthorEthAddressClick = (ethAddress: string) => {
+  //   if (network) {
+  //     window.open(
+  //       `https://${network}.etherscan.io/address/${ethAddress}`,
+  //       '_blank',
+  //       'noreferrer noopener',
+  //     );
+  //   } else {
+  //     window.open(`https://etherscan.io/address/${ethAddress}`, '_blank', 'noreferrer noopener');
+  //   }
+  // };
 
-  const handleAuthorClick = (author: { pubKey: string }) => {
-    navigateTo?.({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `${routes.rootRoute}/${author.pubKey}`,
-    });
-  };
+  // const handleAuthorClick = (author: { pubKey: string }) => {
+  //   navigateTo?.({
+  //     appName: '@akashaorg/app-profile',
+  //     getNavigationUrl: routes => `${routes.rootRoute}/${author.pubKey}`,
+  //   });
+  // };
 
   // @TODO update with new hooks when available
   // const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
@@ -71,16 +65,14 @@ const InfoPage: React.FC<RootComponentProps> = props => {
   //   }
   // }, [installedAppsReq.data, appId]);
 
-  const releasesInfoReq = useGetAppsReleasesQuery(
-    { last: 10 },
-    {
-      select: resp => resp.akashaAppReleaseIndex.edges,
-    },
-  );
+  // const releasesInfoReq = useGetAppsReleasesQuery(
+  //   { last: 10 },
+  //   {
+  //     select: resp => resp.akashaAppReleaseIndex.edges,
+  //   },
+  // );
 
-  const releases = releasesInfoReq.data.map(release => {
-    return release.node;
-  });
+  // const releases = releasesInfoReq.data.map(release => release.node);
 
   const developers = appReleaseInfo?.application?.contributors?.map(contributor => {
     const avatarImg = getProfileImageVersionsWithMediaUrl(contributor.akashaProfile?.avatar);

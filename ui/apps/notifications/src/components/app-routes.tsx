@@ -1,8 +1,9 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import CustomizeNotificationPage from './pages/customize-notification-page';
 import NotificationsPage from './pages/notifications-page';
 import WelcomePage from './pages/welcome-page';
@@ -15,8 +16,10 @@ import routes, {
   SETTINGS_PAGE,
 } from '../routes';
 
-const AppRoutes = (props: RootComponentProps) => {
+const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-notifications');
+  const { baseRouteName } = useRootComponentProps();
+
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
@@ -24,7 +27,7 @@ const AppRoutes = (props: RootComponentProps) => {
   }, [loginQuery.data]);
 
   return (
-    <Router basename={props.baseRouteName}>
+    <Router basename={baseRouteName}>
       <Routes>
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE]}
@@ -38,13 +41,12 @@ const AppRoutes = (props: RootComponentProps) => {
               leftButtonLabel={t('Skip')}
               rightButtonLabel={t('Customize your notifications')}
               isLoggedIn={isLoggedIn}
-              {...props}
             />
           }
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]}
-          element={<CustomizeNotificationPage {...props} initial={true} isLoggedIn={isLoggedIn} />}
+          element={<CustomizeNotificationPage initial={true} isLoggedIn={isLoggedIn} />}
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]}
@@ -58,14 +60,13 @@ const AppRoutes = (props: RootComponentProps) => {
               finalStep={true}
               rightButtonLabel={t('Go to my notifications')}
               isLoggedIn={isLoggedIn}
-              {...props}
             />
           }
         />
-        <Route path={routes[SHOW_NOTIFICATIONS_PAGE]} element={<NotificationsPage {...props} />} />
+        <Route path={routes[SHOW_NOTIFICATIONS_PAGE]} element={<NotificationsPage />} />
         <Route
           path={routes[SETTINGS_PAGE]}
-          element={<CustomizeNotificationPage {...props} initial={false} isLoggedIn={isLoggedIn} />}
+          element={<CustomizeNotificationPage initial={false} isLoggedIn={isLoggedIn} />}
         />
       </Routes>
     </Router>

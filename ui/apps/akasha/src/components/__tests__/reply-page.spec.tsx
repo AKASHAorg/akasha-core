@@ -1,11 +1,9 @@
 import * as React from 'react';
-// @ts-ignore
 import ReplyPage from '../item-page/reply-page';
 import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 
-import { renderWithAllProviders, act, genAppProps, genLoggedInState } from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
-// @ts-ignore
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import { when } from 'jest-when';
 import { EntityTypes } from '@akashaorg/typings/ui';
@@ -15,7 +13,6 @@ const partialArgs = (...argsToMatch) =>
 
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
-    {...genAppProps()}
     extensionData={{
       name: 'name',
       itemId: '01gf',
@@ -28,7 +25,7 @@ const MockedInlineEditor = ({ action }) => (
 describe('< ReplyPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <ReplyPage {...genAppProps()} showLoginModal={jest.fn()} />
+      <ReplyPage showLoginModal={jest.fn()} />
     </AnalyticsProvider>
   );
 

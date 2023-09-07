@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { mockSDK } from '@akashaorg/af-testing';
+import { mockSDK, genAppProps } from '@akashaorg/af-testing';
+import * as useRootComponentProps from '@akashaorg/ui-awf-hooks/lib/use-root-props';
 
 require('@testing-library/jest-dom/extend-expect');
 
@@ -28,3 +29,5 @@ jest.mock('@twind/core', () => {
     tx: () => {},
   };
 });
+
+jest.spyOn(useRootComponentProps, 'useRootComponentProps').mockReturnValue(genAppProps());

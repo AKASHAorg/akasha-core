@@ -2,10 +2,10 @@ import * as React from 'react';
 // @ts-ignore
 import TagFeedPage from '../tag-feed-page/tag-feed-page';
 
-import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, act } from '@akashaorg/af-testing';
 
 describe('< TagFeedPage /> component', () => {
-  const BaseComponent = <TagFeedPage {...genAppProps()} showLoginModal={jest.fn()} />;
+  const BaseComponent = <TagFeedPage showLoginModal={jest.fn()} />;
 
   beforeAll(() => {
     // (

@@ -5,19 +5,26 @@ import EngagementTab from './engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
-import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useParams } from 'react-router-dom';
 import {
   useGetProfileByDidQuery,
   useInfiniteGetFollowingListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  hasOwn,
+  useGetLogin,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 
-const FollowingPage: React.FC<RootComponentProps> = props => {
-  const { plugins, navigateToModal } = props;
-  const { profileId } = useParams<{ profileId: string }>();
+const FollowingPage: React.FC<unknown> = () => {
   const [loadMore, setLoadingMore] = useState(false);
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { profileId } = useParams<{ profileId: string }>();
+
+  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfileByDidQuery(

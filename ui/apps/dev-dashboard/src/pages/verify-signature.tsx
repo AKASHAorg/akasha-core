@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -13,11 +12,9 @@ import { CardWrapper } from '../components/common';
 import menuRoute, { DASHBOARD } from '../routes';
 import { sampleMessage } from '../utils/dummy-data';
 
-export const VerifySignature: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
-
-  const [message] = React.useState<string>('');
-  const [signature] = React.useState<string>('');
+export const VerifySignature: React.FC<unknown> = () => {
+  const [message] = useState<string>('');
+  const [signature] = useState<string>('');
 
   // @TODO: needs update
   const verifySignatureMutation = {
@@ -28,13 +25,13 @@ export const VerifySignature: React.FC<RootComponentProps> = props => {
     mutate: _args => _args,
   };
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
-
   const { t } = useTranslation('app-dev-dashboard');
+  const { getRoutingPlugin } = useRootComponentProps();
 
   const loginQuery = useGetLogin();
 
   const did = loginQuery.data?.id;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   // const handleFieldChange = (ev, field: string) => {
   //   switch (field) {

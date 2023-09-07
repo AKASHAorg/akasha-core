@@ -5,7 +5,7 @@ import { useLegalDoc } from '@akashaorg/ui-awf-hooks';
 
 import PageRenderer from './page-renderer';
 
-const PrivacyPolicyPage = () => {
+const PrivacyPolicyPage: React.FC<unknown> = () => {
   const legalDocReq = useLegalDoc(LEGAL_DOCS.PRIVACY_POLICY);
 
   const legalDoc = legalDocReq.data;

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { act, screen, renderWithAllProviders, genAppProps } from '@akashaorg/af-testing';
+import { act, screen, renderWithAllProviders } from '@akashaorg/af-testing';
 import ListsPage from '../lists-page';
 
 describe('<ListsPage /> component', () => {
-  const Base = <ListsPage {...genAppProps()} />;
+  const Base = <ListsPage />;
 
   beforeEach(async () => {
     await act(async () => {

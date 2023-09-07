@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { useAnalytics, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import { useAnalytics, useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   EntityTypes,
-  RootComponentProps,
   ModalNavigationOptions,
   AnalyticsCategories,
   Profile,
@@ -17,36 +16,25 @@ import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/E
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
 
-type Props = {
+export type OriginalItemProps = {
   itemId: string;
   itemType: EntityTypes;
   entryReq: UseQueryResult;
   loggedProfileData?: Profile;
-  uiEvents: RootComponentProps['uiEvents'];
-  plugins: RootComponentProps['plugins'];
-  layoutConfig: RootComponentProps['layoutConfig'];
   entryData?: AkashaBeam;
-  navigateToModal: RootComponentProps['navigateToModal'];
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-export function OriginalItem({
-  itemId,
-  itemType,
-  entryReq,
-  loggedProfileData,
-  uiEvents,
-  plugins,
-  entryData,
-  navigateToModal,
-  showLoginModal,
-}: Props) {
+export const OriginalItem: React.FC<OriginalItemProps> = props => {
+  const { itemId, itemType, entryReq, loggedProfileData, entryData, showLoginModal } = props;
+
   const { t } = useTranslation('app-akasha-integration');
+  const { uiEvents, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
 
   const action = new URLSearchParams(location.search).get('action');
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-  const locale = (plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
-    'en') as ILocale;
+  const navigateTo = getRoutingPlugin().navigateTo;
+  const locale = (getTranslationPlugin().i18n?.languages?.[0] || 'en') as ILocale;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const [analyticsActions] = useAnalytics();
   const handleEntryNavigate = useEntryNavigation(navigateTo, itemId);
@@ -218,4 +206,4 @@ export function OriginalItem({
       </Stack>
     </Stack>
   );
-}
+};
