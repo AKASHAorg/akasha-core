@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
@@ -34,7 +34,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
 
   return (
     <Card padding={16}>
-      <Box customStyle="flex flex-col space-y-4 items-center">
+      <Stack spacing="gap-y-4" align="center">
         <Button plain={true} customStyle="self-end" onClick={onIconClick}>
           <Icon type="XMarkIcon" />
         </Button>
@@ -43,25 +43,25 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
           {titleLabel} 🙌🏽
         </Text>
 
-        <Box customStyle="w-40 h-40 my-2 mx-auto">
+        <Stack customStyle="w-40 h-40 my-2 mx-auto">
           <Image
             src={`${publicImgPath}/${assetName}.${assetExtension}`}
             dataTestId={`${assetName}-image`}
           />
-        </Box>
+        </Stack>
 
         <Text align="center" color={{ light: 'grey5', dark: 'grey6' }}>
           {subtitleLabel}
         </Text>
 
-        <Box customStyle="flex flex-col items-center justify-self-end space-y-2">
+        <Stack align="center" justifySelf="end" spacing="gap-y-2">
           <Text variant="footnotes2" align="center">
             {footnoteLabel}.
           </Text>
 
           <a href={ctaUrl} target="_blank" rel="noreferrer noopener">
             <Button plain={true}>
-              <Box customStyle="flex items-center space-x-2">
+              <Stack align="center" spacing="gap-x-2">
                 <Icon size="sm" accentColor={true} type="discord" customStyle="mx-auto my-0" />
 
                 <Text
@@ -71,11 +71,11 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
                 >
                   {ctaLabel}
                 </Text>
-              </Box>
+              </Stack>
             </Button>
           </a>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </Card>
   );
 };

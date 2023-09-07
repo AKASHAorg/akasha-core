@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import {
   SteppedActionWrapperProps,
@@ -22,12 +22,12 @@ const BMConfirmation: React.FC<BMConfirmationProps> = props => {
 
   return (
     <SteppedActionWrapper {...props}>
-      <Box customStyle="w-40 h-40 my-2 mx-auto">
+      <Stack customStyle="w-40 h-40 my-2 mx-auto">
         <Image
           src={`${publicImgPath}/${assetName}.${assetExtension}`}
           dataTestId={`${assetName}-image`}
         />
-      </Box>
+      </Stack>
 
       <SubtitleRenderer {...props} />
     </SteppedActionWrapper>

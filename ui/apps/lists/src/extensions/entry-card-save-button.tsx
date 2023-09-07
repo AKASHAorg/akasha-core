@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { useGetLogin, withProviders, useAnalytics } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const EntryCardSaveButton = (props: RootExtensionProps) => {
@@ -45,7 +45,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
   };
 
   return (
-    <Box customStyle={'flex items-center'}>
+    <Stack align="center">
       <button onClick={handleEntryBookmark}>
         <Icon
           type="BookmarkIcon"
@@ -53,7 +53,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
           customStyle={isBookmarked && `[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark`}
         />
       </button>
-    </Box>
+    </Stack>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '../Box';
+import Stack from '../Stack';
 import Button from '../Button';
 import Text from '../Text';
 
@@ -13,14 +13,16 @@ export type PageBubbleProps = {
 const PageBubble: React.FC<PageBubbleProps> = props => {
   const { isActive, page, onClickPage } = props;
 
-  const basePageWrapperStyle = 'flex items-center justify-center w-8 h-8 rounded-full';
+  const basePageWrapperStyle = 'w-8 h-8 rounded-full';
 
   const activePageWrapperBg = 'bg-(secondaryLight dark:secondaryDark)';
 
   const regularPageWrapperBg = 'bg-(grey8 dark:grey3)';
   return (
     <Button plain={true} onClick={onClickPage(page)}>
-      <Box
+      <Stack
+        align="center"
+        justify="center"
         customStyle={`${basePageWrapperStyle} ${
           isActive ? activePageWrapperBg : regularPageWrapperBg
         }`}
@@ -35,7 +37,7 @@ const PageBubble: React.FC<PageBubbleProps> = props => {
         >
           {page}
         </Text>
-      </Box>
+      </Stack>
     </Button>
   );
 };

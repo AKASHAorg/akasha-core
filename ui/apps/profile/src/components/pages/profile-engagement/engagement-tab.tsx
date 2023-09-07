@@ -2,7 +2,7 @@ import React, { useState, PropsWithChildren } from 'react';
 import TabList from '@akashaorg/design-system-core/lib/components/TabList';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { FOLLOWERS, FOLLOWING } from '../../../routes';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -51,7 +51,7 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
           onTabChange(selectedIndex);
         }}
       />
-      <Box customStyle="mt-4">{children}</Box>
+      <Stack customStyle="mt-4">{children}</Stack>
     </Card>
   );
 };

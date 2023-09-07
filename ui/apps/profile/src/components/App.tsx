@@ -1,16 +1,16 @@
 import React from 'react';
 import AppRoutes from './app-routes';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { I18nextProvider } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 const App = (props: RootComponentProps) => {
   return (
-    <Box>
+    <Stack>
       <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
         <AppRoutes {...props} />
       </I18nextProvider>
-    </Box>
+    </Stack>
   );
 };
 

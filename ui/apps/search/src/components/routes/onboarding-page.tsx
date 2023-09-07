@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
 import OnboardingStartCard from '@akashaorg/design-system-components/lib/components/OnboardingStartCard';
@@ -87,11 +87,11 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   };
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet>
         <title>{t('Onboarding')}</title>
       </Helmet>
-      <Box customStyle="gap-4">
+      <Stack spacing="gap-4">
         <OnboardingStartCard
           inputPlaceholderLabel={t('Search')}
           titleLabel={t('Search')}
@@ -115,8 +115,8 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
           onClickFollow={handleFollow}
           onClickUnfollow={handleUnfollow}
         />
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };
 

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -29,28 +30,28 @@ const Dropdown: React.FC<IDropdownProps> = ({
   label,
   placeholderLabel,
   menuItems,
-  // selected,
-  // setSelected,
+  selected,
+  setSelected,
   divider = false,
   optgroup = false,
 }) => {
   const [dropOpen, setDropOpen] = React.useState<boolean>(false);
-  const [selected, setSelected] = React.useState<null | DropdownMenuItemGroupType>(null);
+  // const [selected, setSelected] = React.useState<null | DropdownMenuItemGroupType>(null);
 
   React.useEffect(() => {
     if (placeholderLabel) {
       setSelected({
         id: '',
         iconName: null,
-        title: placeholderLabel ?? (optgroup ? menuItems[0].children[0].title : menuItems[0].title),
+        title: placeholderLabel,
       });
     } else {
-      optgroup ? setSelected(menuItems[0].children[0]) : setSelected(menuItems[0]);
+      menuItems[0]?.children ? setSelected(menuItems[0].children[0]) : setSelected(menuItems[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
+  const optionsWrapperStyle = apply`absolute z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
 
   const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey3)`;
 
@@ -64,7 +65,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
   };
 
   return (
-    <Box customStyle="relative w-full">
+    <Stack fullWidth customStyle="relative">
       {label && <Text variant="label">{label}</Text>}
 
       <button
@@ -83,7 +84,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
 
       {/* <!-- Dropdown menu --> */}
       {dropOpen && (
-        <Box customStyle={optionsWrapperStyle}>
+        <Stack fullWidth customStyle={optionsWrapperStyle}>
           <ul aria-labelledby="dropdownDefaultButton">
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
@@ -91,7 +92,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                 if (menuItem.type === 'optgroup') {
                   return (
                     <>
-                      <Box customStyle={`flex items-center pt-3 pl-3`} key={menuItem.id}>
+                      <Stack align="center" customStyle={`pt-3 pl-3`} key={idx}>
                         <Text
                           variant="body2"
                           customStyle="cursor-not-allowed"
@@ -99,12 +100,12 @@ const Dropdown: React.FC<IDropdownProps> = ({
                         >
                           {menuItem.title}
                         </Text>
-                      </Box>
+                      </Stack>
                       {menuItem?.children &&
                         menuItem.children.map((item, idx) => {
                           return (
                             <li
-                              key={item.id}
+                              key={idx}
                               className={tw(
                                 `${optionStyle}
                                 // $ {
@@ -114,34 +115,37 @@ const Dropdown: React.FC<IDropdownProps> = ({
                                 // }
                                 cursor-pointer`,
                               )}
-                              onClick={handleChange(item)}
                             >
-                              <Box
-                                customStyle={`flex items-center space-x-2 ${
-                                  selected.id === item.id ? 'text-secondaryLight' : 'text-black'
-                                }`}
-                              >
-                                {item?.iconName && (
-                                  <Icon
-                                    type={item.iconName}
+                              <Button onClick={handleChange(item)} plain>
+                                <Stack
+                                  align="center"
+                                  spacing="gap-x-2"
+                                  customStyle={`${
+                                    selected.id === item.id ? 'text-secondaryLight' : 'text-black'
+                                  }`}
+                                >
+                                  {item?.iconName && (
+                                    <Icon
+                                      type={item.iconName}
+                                      color={
+                                        selected.id === item.id
+                                          ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                                          : { light: 'black', dark: 'white' }
+                                      }
+                                    />
+                                  )}
+                                  <Text
+                                    variant="body1"
                                     color={
                                       selected.id === item.id
                                         ? { light: 'secondaryLight', dark: 'secondaryDark' }
                                         : { light: 'black', dark: 'white' }
                                     }
-                                  />
-                                )}
-                                <Text
-                                  variant="body1"
-                                  color={
-                                    selected.id === item.id
-                                      ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                                      : { light: 'black', dark: 'white' }
-                                  }
-                                >
-                                  {item.title}
-                                </Text>
-                              </Box>
+                                  >
+                                    {item.title}
+                                  </Text>
+                                </Stack>
+                              </Button>
                             </li>
                           );
                         })}
@@ -151,18 +155,59 @@ const Dropdown: React.FC<IDropdownProps> = ({
                 } else {
                   return (
                     <li
-                      key={menuItem.id}
+                      key={idx}
                       className={tw(
                         `${optionStyle}
                         ${idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey5)' : ''}
                         cursor-pointer`,
                       )}
-                      onClick={handleChange(menuItem)}
                     >
-                      <Box
-                        customStyle={`flex items-center space-x-2 ${
-                          isSelected ? 'text-secondaryLight' : 'text-black'
-                        }`}
+                      <Button onClick={handleChange(menuItem)} plain>
+                        <Stack
+                          align="center"
+                          spacing="gap-x-2"
+                          customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
+                        >
+                          {menuItem?.iconName && (
+                            <Icon
+                              type={menuItem.iconName}
+                              color={
+                                isSelected
+                                  ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                                  : { light: 'black', dark: 'white' }
+                              }
+                            />
+                          )}
+                          <Text
+                            variant="body1"
+                            color={
+                              isSelected
+                                ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                                : { light: 'black', dark: 'white' }
+                            }
+                          >
+                            {menuItem.title}
+                          </Text>
+                        </Stack>
+                      </Button>
+                    </li>
+                  );
+                }
+              } else {
+                return (
+                  <li
+                    key={menuItem.id}
+                    className={tw(
+                      `${optionStyle} ${
+                        idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
+                      } cursor-pointer`,
+                    )}
+                  >
+                    <Button onClick={handleChange(menuItem)} plain>
+                      <Stack
+                        align="center"
+                        spacing="gap-x-2"
+                        customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                       >
                         {menuItem?.iconName && (
                           <Icon
@@ -184,63 +229,24 @@ const Dropdown: React.FC<IDropdownProps> = ({
                         >
                           {menuItem.title}
                         </Text>
-                      </Box>
-                    </li>
-                  );
-                }
-              } else {
-                return (
-                  <li
-                    key={menuItem.id}
-                    className={tw(
-                      `${optionStyle} ${
-                        idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
-                      } cursor-pointer`,
-                    )}
-                    onClick={handleChange(menuItem)}
-                  >
-                    <Box
-                      customStyle={`flex items-center space-x-2 ${
-                        isSelected ? 'text-secondaryLight' : 'text-black'
-                      }`}
-                    >
-                      {menuItem?.iconName && (
-                        <Icon
-                          type={menuItem.iconName}
-                          color={
-                            isSelected
-                              ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                              : { light: 'black', dark: 'white' }
-                          }
-                        />
+                      </Stack>
+                      {isSelected && (
+                        <span className={tw('ml-4')}>
+                          <Icon
+                            type="CheckIcon"
+                            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                          />
+                        </span>
                       )}
-                      <Text
-                        variant="body1"
-                        color={
-                          isSelected
-                            ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                            : { light: 'black', dark: 'white' }
-                        }
-                      >
-                        {menuItem.title}
-                      </Text>
-                    </Box>
-                    {isSelected && (
-                      <span className={tw('ml-4')}>
-                        <Icon
-                          type="CheckIcon"
-                          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                        />
-                      </span>
-                    )}
+                    </Button>
                   </li>
                 );
               }
             })}
           </ul>
-        </Box>
+        </Stack>
       )}
-    </Box>
+    </Stack>
   );
 };
 

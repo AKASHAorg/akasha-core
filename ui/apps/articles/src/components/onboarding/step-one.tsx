@@ -3,7 +3,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IStepOneProps {
@@ -37,26 +37,26 @@ const StepOne: React.FC<IStepOneProps> = props => {
 
   return (
     <Card customStyle="mb-4">
-      <Box customStyle="flex items-start w-full p-4">
-        <Box customStyle="flex flex-row w-full mb-4">
+      <Stack fullWidth={true} align="start" customStyle="p-4">
+        <Stack direction="row" fullWidth={true} customStyle="mb-4">
           <button onClick={onClickIcon}>
             <Icon type="ChevronLeftIcon" />{' '}
           </button>
           <Text variant="h2">{titleLabel}</Text>
-        </Box>
-        <Box customStyle="flex w-full gap-1">
+        </Stack>
+        <Stack fullWidth={true} spacing="gap-1">
           <Text variant="h6">{textLine1Label}</Text>
           <Text variant="h6">{textLine2Label}</Text>
-          <Box customStyle="w-48">
+          <Stack customStyle="w-48">
             <Image customStyle="object-contain" src={`${publicImgPath}/${assetName}.webp`} />
-          </Box>
+          </Stack>
           <Text variant="h6">{textLine3Label}</Text>
-        </Box>
-        <Box customStyle="flex flex-row w-full justify-end items-center gap-2">
+        </Stack>
+        <Stack direction="row" fullWidth={true} align="center" justify="end" spacing="gap-2">
           <Button size="lg" label={skipLabel} onClick={onClickSkip} />
           <Button size="lg" variant="primary" label={nextLabel} onClick={onClickNext} />
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </Card>
   );
 };

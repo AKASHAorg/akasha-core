@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
@@ -10,15 +10,17 @@ import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/compon
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import routes, {
+  CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
   CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
 } from '../../routes';
 import { RootComponentProps, EventTypes } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 
-interface ICustomizeNotificationPageProps extends RootComponentProps {
+type CustomizeNotificationPageProps = {
   initial?: boolean;
-}
+  isLoggedIn: boolean;
+};
 
 const Title = ({ title }: { title: string }): JSX.Element => {
   return (
@@ -30,8 +32,9 @@ const Title = ({ title }: { title: string }): JSX.Element => {
   );
 };
 
-const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
+const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps & RootComponentProps> = ({
   initial = true,
+  isLoggedIn,
   ...props
 }) => {
   const { t } = useTranslation('app-notifications');
@@ -288,21 +291,23 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
     setShowFeedback(true);
   };
 
+  if (!isLoggedIn) {
+    return navigateTo?.({
+      appName: '@akashaorg/app-notifications',
+      getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
+    });
+  }
+
   return (
     <>
-      <Card
-        elevation={'1'}
-        radius={16}
-        padding={'p-2'}
-        customStyle="h-full md:h-min space-y-4 flex flex-row"
-      >
+      <Card elevation={'1'} radius={16} padding={'p-2'} customStyle="h-full md:h-min space-y-4">
         <Text variant="h5" align="center">
-          {initial ? ' Customize Your Notifications' : 'Notifications Settings'}
+          {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
         {!initial && (
           <>
             <Divider customStyle="my-2" />
-            <Box customStyle="flex justify-between">
+            <Stack justify="between">
               <Text variant="footnotes2">
                 <>{t('Snooze Notifications')}</>
               </Text>
@@ -312,7 +317,7 @@ const CustomizeNotificationPage: React.FC<ICustomizeNotificationPageProps> = ({
                 checked={snoozed}
                 onChange={snoozeChangeHandler}
               />
-            </Box>
+            </Stack>
             <Divider customStyle="my-2" />
           </>
         )}

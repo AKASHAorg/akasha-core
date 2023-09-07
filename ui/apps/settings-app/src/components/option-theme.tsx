@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
@@ -19,8 +19,8 @@ const ThemeOption: React.FC<IThemeOption> = props => {
 
   return (
     <PageLayout title={titleLabel}>
-      <Box customStyle="p-4">
-        <Box customStyle="flex justify-between items-center mb-2">
+      <Stack padding="p-4">
+        <Stack direction="row" justify="between" align="center" customStyle="mb-2">
           <Text weight="bold">{themeIntroLabel}</Text>
 
           <Toggle
@@ -29,10 +29,10 @@ const ThemeOption: React.FC<IThemeOption> = props => {
             iconUnchecked="MoonIcon"
             onChange={onThemeSelect}
           />
-        </Box>
+        </Stack>
 
         <Text>{themeSubtitleLabel}</Text>
-      </Box>
+      </Stack>
     </PageLayout>
   );
 };

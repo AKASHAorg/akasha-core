@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import AppInfo, { AppInfoProps } from '../../components/AppInfo';
@@ -24,7 +23,7 @@ export const AppInfoVariants: Story = {
   render: () => (
     <Stack direction="column" spacing="gap-y-4" customStyle="w-[50%]">
       {variants.map((variant, idx) => (
-        <Box key={idx}>
+        <Stack key={idx}>
           <AppInfo
             status={variant}
             integrationName="Integration Name"
@@ -51,7 +50,7 @@ export const AppInfoVariants: Story = {
             onUninstall={() => ({})}
             onSelectDeveloper={() => ({})}
           />
-        </Box>
+        </Stack>
       ))}
     </Stack>
   ),

@@ -11,7 +11,7 @@ import {
   TrackEventData,
 } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import EntryList, {
@@ -84,9 +84,9 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           const isLoader = index > allEntries.length - 1;
           if (isLoader || isFetchingNextPage) {
             return (
-              <Box key={key} customStyle="p-8 w-full">
+              <Stack key={key} customStyle="p-8 w-full">
                 <Spinner />
-              </Box>
+              </Stack>
             );
           }
           return (

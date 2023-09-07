@@ -3,7 +3,7 @@ import React from 'react';
 import { ModeratorApplicantData } from '@akashaorg/typings/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -20,11 +20,11 @@ const Applicant: React.FC<ApplicantProps> = props => {
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
   return (
-    <Box customStyle="flex justify-between p-4">
-      <Box customStyle="flex space-x-2 items-start">
+    <Stack justify="between" customStyle="p-4">
+      <Stack spacing="gap-x-2" align="start">
         <Avatar avatar={applicant.avatar} />
 
-        <Box>
+        <Stack>
           <Tooltip content={applicant.name} placement="right">
             <Text variant="body2" weight="bold" truncate={true} customStyle={textStyle}>
               {applicant.name}
@@ -42,13 +42,13 @@ const Applicant: React.FC<ApplicantProps> = props => {
               @{applicant.did.id}
             </Text>
           </Tooltip>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
 
       <Button plain={true} onClick={() => onClickApplicant(applicant.did.id)}>
         <Icon type="ChevronRightIcon" accentColor={true} />
       </Button>
-    </Box>
+    </Stack>
   );
 };
 

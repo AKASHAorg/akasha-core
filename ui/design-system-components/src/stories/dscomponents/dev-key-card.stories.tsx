@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import DevKeyCard, { DevKeyCardProps } from '../../components/DevKeyCard';
 
@@ -17,7 +17,7 @@ type Story = StoryObj<DevKeyCardProps>;
 
 export const BaseDevKeyCard: Story = {
   render: () => (
-    <Box customStyle="w-[40%] p-0 items-center">
+    <Stack customStyle="w-[40%] p-0 items-center">
       <DevKeyCard
         item={sampleDevKey}
         unusedLabel="Unused"
@@ -26,6 +26,6 @@ export const BaseDevKeyCard: Story = {
         devPubKeyLabel="Dev Public Key 🔑"
         dateAddedLabel="Date added 🗓"
       />
-    </Box>
+    </Stack>
   ),
 };

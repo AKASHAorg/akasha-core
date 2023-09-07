@@ -3,7 +3,7 @@ import React from 'react';
 import { EntityTypes } from '@akashaorg/typings/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
@@ -191,15 +191,15 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
   return (
     <Card padding={0} elevation="none">
       {loggedIn && !isFetching && notifications.length === 0 && (
-        <BasicInfoCard titleLabel={emptyTitle} />
+        <BasicInfoCard titleLabel={emptyTitle} image={'/images/longbeam-notfound.webp'} />
       )}
       {loggedIn && notifications.length !== 0 && (
         <div>
           {notifications?.map((notif: any, index: number) => renderNotificationCard(notif, index))}
           {isFetching && (
-            <Box customStyle="py-4">
+            <Stack padding="py-4">
               <Spinner />
-            </Box>
+            </Stack>
           )}
         </div>
       )}

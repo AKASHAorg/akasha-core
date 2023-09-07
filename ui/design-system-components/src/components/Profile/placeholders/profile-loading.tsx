@@ -9,7 +9,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const ProfileLoading: React.FC = () => {
   return (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack spacing="gap-y-4">
       <div>
         <Card
           elevation="1"
@@ -18,12 +18,12 @@ const ProfileLoading: React.FC = () => {
           customStyle="h-32"
         ></Card>
         <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
-          <Stack direction="column" customStyle="pl-2" fullWidth>
+          <Stack padding="pl-2" fullWidth>
             <Stack spacing="gap-x-2" customStyle="-ml-2">
               <div className={tw('relative w-20 h-[3.5rem] shrink-0')}>
                 <CircularPlaceholder customStyle="absolute -top-6" />
               </div>
-              <Stack direction="column" spacing="gap-y-1.5" customStyle="mt-1">
+              <Stack spacing="gap-y-1.5" customStyle="mt-1">
                 <TextLine width="w-36" animated />
                 <TextLine width="w-28" animated />
               </Stack>
@@ -34,13 +34,13 @@ const ProfileLoading: React.FC = () => {
                 animated
               />
             </Stack>
-            <Stack direction="column" spacing="gap-y-4">
-              <Stack direction="column" spacing="gap-y-1.5">
+            <Stack spacing="gap-y-4">
+              <Stack spacing="gap-y-1.5">
                 <TextLine width="w-40" animated />
                 <TextLine animated />
               </Stack>
               <Divider />
-              <Stack direction="column" spacing="gap-y-1.5">
+              <Stack spacing="gap-y-1.5">
                 <TextLine width="w-24" animated />
                 <TextLine width="w-72" animated />
               </Stack>
@@ -49,9 +49,9 @@ const ProfileLoading: React.FC = () => {
         </Card>
       </div>
       <Card elevation="1" radius={20} padding={'p-4'}>
-        <Stack direction="column" spacing="gap-2">
+        <Stack spacing="gap-2">
           <TextLine width="w-24" animated />
-          <Stack direction="column" spacing="gap-1">
+          <Stack spacing="gap-1">
             <TextLine width="w-full" animated />
             <TextLine width="w-full" animated />
             <TextLine width="w-full" animated />
@@ -59,33 +59,33 @@ const ProfileLoading: React.FC = () => {
         </Stack>
       </Card>
       <Card elevation="1" radius={20} padding={'p-4'}>
-        <Stack direction="column" spacing="gap-4" fullWidth>
+        <Stack spacing="gap-4" fullWidth>
           <TextLine width="w-20" animated />
           <Stack justify="between">
-            <Stack direction="column" spacing="gap-2">
+            <Stack spacing="gap-2">
               <CircularPlaceholder height="h-12" width="w-12" customStyle="shrink-0" animated />
-              <Stack direction="column" spacing="gap-1">
+              <Stack spacing="gap-1">
                 <TextLine width="w-11" animated />
                 <TextLine width="w-11" animated />
               </Stack>
             </Stack>
-            <Stack direction="column" spacing="gap-2">
+            <Stack spacing="gap-2">
               <CircularPlaceholder height="h-12" width="w-12" customStyle="shrink-0" />
-              <Stack direction="column" spacing="gap-1">
+              <Stack spacing="gap-1">
                 <TextLine width="w-11" animated />
                 <TextLine width="w-11" animated />
               </Stack>
             </Stack>
-            <Stack direction="column" spacing="gap-2">
+            <Stack spacing="gap-2">
               <CircularPlaceholder height="h-12" width="w-12" customStyle="shrink-0" animated />
-              <Stack direction="column" spacing="gap-1">
+              <Stack spacing="gap-1">
                 <TextLine width="w-11" animated />
                 <TextLine width="w-11" animated />
               </Stack>
             </Stack>
-            <Stack direction="column" spacing="gap-2" customStyle="w-fit">
+            <Stack spacing="gap-2" customStyle="w-fit">
               <CircularPlaceholder height="h-12" width="w-12" customStyle="shrink-0" animated />
-              <Stack direction="column" spacing="gap-1">
+              <Stack spacing="gap-1">
                 <TextLine width="w-11" animated />
                 <TextLine width="w-11" animated />
               </Stack>
@@ -94,7 +94,7 @@ const ProfileLoading: React.FC = () => {
         </Stack>
       </Card>
       <Card elevation="1" radius={20} padding={'p-4'}>
-        <Stack direction="column" spacing="gap-2">
+        <Stack spacing="gap-2">
           <TextLine width="w-24" animated />
           <TextLine width="w-full" animated />
         </Stack>
