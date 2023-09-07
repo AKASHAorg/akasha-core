@@ -1,4 +1,4 @@
 import { Subject } from 'rxjs';
-import { UIEventData, AnalyticsEventData } from '@akashaorg/typings/ui';
+import { UIEventData } from '@akashaorg/typings/ui';
 
-export const uiEventsMock = new Subject<UIEventData | AnalyticsEventData>();
+export const uiEventsMock = new Subject<UIEventData>();
