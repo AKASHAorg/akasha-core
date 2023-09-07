@@ -25,6 +25,9 @@ import { throwError } from '../common/error-handling';
 import Gql from '../gql';
 import { GetProfilesQueryVariables } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import type { AkashaProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import CeramicService from '../common/ceramic';
+import { definition } from '@akashaorg/composedb-models/lib/runtime-definition';
+import { hasOwn } from '../helpers/types';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
@@ -37,26 +40,29 @@ class AWF_Profile {
   private _globalChannel: EventBus;
   private _ipfs: IpfsConnector;
   public readonly TagSubscriptions = '@TagSubscriptions';
+  readonly _ceramic: CeramicService;
 
-  constructor(
+  constructor (
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Auth) auth: AWF_Auth,
     @inject(TYPES.EventBus) globalChannel: EventBus,
     @inject(TYPES.IPFS) ipfs: IpfsConnector,
+    @inject(TYPES.Ceramic) ceramic: CeramicService,
   ) {
     this._log = log.create('AWF_Profile');
     this._auth = auth;
     this._globalChannel = globalChannel;
     this._ipfs = ipfs;
     this._gql = gql;
+    this._ceramic = ceramic;
   }
 
   /**
    * Create a new profile
    * @param profileData - {@link ProfileInput} - profileData.name is mandatory
    */
-  async createProfile(profileData: AkashaProfileInput) {
+  async createProfile (profileData: AkashaProfileInput) {
     try {
       const result = await this._gql.getAPI().CreateProfile({
         i: {
@@ -86,7 +92,7 @@ class AWF_Profile {
    * @param profileData - ProfileInput - fields of the profile to update
    * @see {@link GetProfileByDidQuery} for the profileData.id
    */
-  async updateProfile(id: string, profileData: AkashaProfileInput) {
+  async updateProfile (id: string, profileData: AkashaProfileInput) {
     try {
       const result = await this._gql.getAPI().UpdateProfile({
         i: {
@@ -115,7 +121,7 @@ class AWF_Profile {
    * @param opt.last- number - number of X last profiles to return
    * @param opt.first - number - number of X first profiles to return
    */
-  async getProfiles(opt?: GetProfilesQueryVariables) {
+  async getProfiles (opt?: GetProfilesQueryVariables) {
     const options = opt || {};
     if (!opt) {
       options['last'] = 5;
@@ -138,7 +144,7 @@ class AWF_Profile {
   /**
    * Get the current user profile
    */
-  async getMyProfile() {
+  async getMyProfile () {
     try {
       const result = await this._gql.getAPI().GetMyProfile();
       return createFormattedValue(result.viewer?.akashaProfile);
@@ -155,7 +161,7 @@ class AWF_Profile {
    * Get a profile by the profile id.
    * @param did - string - profile did
    */
-  async getProfileByDid(did: string) {
+  async getProfileByDid (did: string) {
     try {
       const resp = await this._gql.getAPI().GetProfileByDid({ id: did });
       if (resp.node && 'profile' in resp.node) {
@@ -170,7 +176,7 @@ class AWF_Profile {
     }
   }
 
-  async getFollowersByDid(did: string) {
+  async getFollowersByDid (did: string) {
     try {
       const resp = await this._gql.getAPI().GetFollowersListByDid({ id: did });
       if (resp.node && 'akashaProfile' in resp.node) {
@@ -185,7 +191,7 @@ class AWF_Profile {
     }
   }
 
-  async getFollowingByDid(did: string) {
+  async getFollowingByDid (did: string) {
     try {
       const resp = await this._gql.getAPI().GetFollowingListByDid({ id: did });
       if (resp.node && 'akashaFollowList' in resp.node) {
@@ -200,14 +206,15 @@ class AWF_Profile {
     }
   }
 
-  async createFollow() {}
+  async createFollow () {
+  }
 
   /**
    * Mutation request to add a profile provider to the profile object
    * @param opt - DataProviderInput
    */
   @validate(z.array(DataProviderInputSchema))
-  async addProfileProvider(opt: DataProviderInput[]) {
+  async addProfileProvider (opt: DataProviderInput[]) {
     return createFormattedValue({
       addProfileProvider: {},
     });
@@ -219,7 +226,7 @@ class AWF_Profile {
    * @param opt - DataProviderInput
    */
   @validate(z.array(DataProviderInputSchema))
-  async makeDefaultProvider(opt: DataProviderInput[]): Promise<any> {
+  async makeDefaultProvider (opt: DataProviderInput[]): Promise<any> {
     return throwError('Deprecated', ['sdk', 'profile', 'makeDefaultProvider']);
   }
 
@@ -228,7 +235,7 @@ class AWF_Profile {
    * @param userName - Username
    */
   @validate(UsernameSchema)
-  async registerUserName(userName: Username): Promise<any> {
+  async registerUserName (userName: Username): Promise<any> {
     return throwError('Deprecated', ['sdk', 'profile', 'registerUserName']);
   }
 
@@ -242,8 +249,47 @@ class AWF_Profile {
       pubKey: PubKeySchema.optional(),
     }),
   )
-  async getProfile(opt: { ethAddress?: EthAddress; pubKey?: PubKey }): Promise<any> {
+  async getProfile (opt: { ethAddress?: EthAddress; pubKey?: PubKey }): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profile', 'getProfile']);
+  }
+
+  /**
+   *
+   * @param id - DID string of the profile
+   */
+  @validate(z.string().min(3))
+  async getProfileStats (id: string) {
+    const stats = {
+      totalFollowing: 0,
+      totalFollowers: 0,
+      totalBeams: 0,
+      totalTopics: 0,
+    }
+    const profile = await this._gql.getAPI().GetProfileByDid({ id: id });
+    if (profile.node && hasOwn(profile.node, 'akashaProfile') && profile.node.akashaProfile) {
+      stats.totalFollowing = await this._ceramic.getComposeClient().context.queryCount({
+        model: definition.models.AkashaFollow.id,
+        account: id,
+        queryFilters: { where: { isFollowing: { equalTo: true } } },
+      });
+
+      stats.totalFollowers = await this._ceramic.getComposeClient().context.queryCount({
+        model: definition.models.AkashaFollow.id,
+        queryFilters: { and: [{ where: { isFollowing: { equalTo: true } } }, { where: { profileID: { equalTo: profile.node.akashaProfile.id } } }] },
+      });
+
+      stats.totalBeams = await this._ceramic.getComposeClient().context.queryCount({
+        model: definition.models.AkashaBeam.id,
+        account: id,
+        queryFilters: { where: { active: { equalTo: true } } },
+      });
+    }
+    // getting all the interests
+    const interests = await this._gql.getAPI().GetInterestsByDid({id: id});
+    if(interests.node && hasOwn(interests.node, 'akashaProfileInterests') && interests.node.akashaProfileInterests){
+      stats.totalTopics = interests.node.akashaProfileInterests.topics.length;
+    }
+    return createFormattedValue(stats);
   }
 
   /**
@@ -251,7 +297,7 @@ class AWF_Profile {
    * @param pubKey - public key
    */
   @validate(PubKeySchema)
-  async follow(pubKey: PubKey): Promise<any> {
+  async follow (pubKey: PubKey): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profile', 'follow']);
   }
 
@@ -260,7 +306,7 @@ class AWF_Profile {
    * @param pubKey - public key
    */
   @validate(PubKeySchema)
-  async unFollow(pubKey: PubKey): Promise<any> {
+  async unFollow (pubKey: PubKey): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profile', 'unFollow']);
   }
 
@@ -269,7 +315,7 @@ class AWF_Profile {
    * @param opt - object - follower and following public keys
    */
   @validate(z.object({ follower: PubKeySchema, following: PubKeySchema }))
-  async isFollowing(opt: { follower: PubKey; following: PubKey }): Promise<any> {
+  async isFollowing (opt: { follower: PubKey; following: PubKey }): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profile', 'isFollowing']);
   }
 
@@ -277,7 +323,7 @@ class AWF_Profile {
    *
    * @param data - media file data
    */
-  async saveMediaFile(data: {
+  async saveMediaFile (data: {
     content: Buffer | ArrayBuffer | string | any;
     isUrl?: boolean;
     name?: string;
@@ -332,14 +378,14 @@ class AWF_Profile {
    * @param name - name to search for
    */
   @validate(z.string().min(3))
-  async searchProfiles(name: string): Promise<any> {
+  async searchProfiles (name: string): Promise<any> {
     return throwError('Deprecated', ['sdk', 'profile', 'searchProfiles']);
   }
 
   /**
    *
    */
-  async getTrending(): Promise<any> {
+  async getTrending (): Promise<any> {
     return throwError('Deprecated', ['sdk', 'profile', 'getTrending']);
   }
 
@@ -348,14 +394,14 @@ class AWF_Profile {
    * @param tagName - tag name
    */
   @validate(TagNameSchema)
-  async toggleTagSubscription(tagName: TagName): Promise<any> {
+  async toggleTagSubscription (tagName: TagName): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profile', 'toggleTagSubscription']);
   }
 
   /**
    *
    */
-  async getTagSubscriptions(): Promise<any> {
+  async getTagSubscriptions (): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profile', 'getTagSubscriptions']);
   }
 
@@ -364,7 +410,7 @@ class AWF_Profile {
    * @param tagName - tag name
    */
   @validate(TagNameSchema)
-  async isSubscribedToTag(tagName: TagName): Promise<any> {
+  async isSubscribedToTag (tagName: TagName): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profile', 'isSubscribedToTag']);
   }
 
@@ -373,7 +419,7 @@ class AWF_Profile {
    * @param keyword - keyword to search for
    */
   @validate(z.string().min(3))
-  async globalSearch(keyword: string): Promise<any> {
+  async globalSearch (keyword: string): Promise<any> {
     return throwError('Deprecated', ['sdk', 'profile', 'globalSearch']);
   }
 
@@ -384,7 +430,7 @@ class AWF_Profile {
    * @param offset - offset to start from
    */
   @validate(z.string(), z.number(), z.number().optional())
-  async getFollowers(pubKey: string, limit: number, offset?: number): Promise<any> {
+  async getFollowers (pubKey: string, limit: number, offset?: number): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profiles', 'getFollowers']);
   }
 
@@ -395,7 +441,7 @@ class AWF_Profile {
    * @param offset - offset to start from
    */
   @validate(z.string(), z.number(), z.number().optional())
-  async getFollowing(pubKey: string, limit: number, offset?: number): Promise<any> {
+  async getFollowing (pubKey: string, limit: number, offset?: number): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profiles', 'getFollowing']);
   }
 
@@ -404,7 +450,7 @@ class AWF_Profile {
    * @param pubKey - public key of the user
    */
   @validate(z.string())
-  async getInterests(pubKey: string): Promise<any> {
+  async getInterests (pubKey: string): Promise<any> {
     return throwError('Not implemented', ['sdk', 'profiles', 'getInterests']);
   }
 }

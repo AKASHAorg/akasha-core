@@ -806,6 +806,7 @@ export type AkashaProfile = Node & {
   /** Account controlling the document */
   did: CeramicAccount;
   followers: AkashaFollowConnection;
+  followersCount: Scalars['Int'];
   id: Scalars['ID'];
   links?: Maybe<Array<Maybe<AkashaProfileLinkSource>>>;
   name: Scalars['String'];
@@ -821,6 +822,12 @@ export type AkashaProfileFollowersArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   sorting?: InputMaybe<AkashaFollowSortingInput>;
+};
+
+
+export type AkashaProfileFollowersCountArgs = {
+  account?: InputMaybe<Scalars['ID']>;
+  filters?: InputMaybe<AkashaFollowFiltersInput>;
 };
 
 /** A connection to a list of items. */
