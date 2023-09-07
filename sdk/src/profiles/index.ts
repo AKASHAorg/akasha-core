@@ -253,6 +253,11 @@ class AWF_Profile {
     return throwError('Not implemented', ['sdk', 'profile', 'getProfile']);
   }
 
+  /**
+   *
+   * @param id - DID string of the profile
+   */
+  @validate(z.string().min(3))
   async getProfileStats (id: string) {
     const stats = {
       totalFollowing: 0,
