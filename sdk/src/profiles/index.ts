@@ -254,21 +254,37 @@ class AWF_Profile {
   }
 
   async getProfileStats (id: string) {
+    const stats = {
+      totalFollowing: 0,
+      totalFollowers: 0,
+      totalBeams: 0,
+      totalTopics: 0,
+    }
     const profile = await this._gql.getAPI().GetProfileByDid({ id: id });
     if (profile.node && hasOwn(profile.node, 'akashaProfile') && profile.node.akashaProfile) {
-      const following = await this._ceramic.getComposeClient().context.queryCount({
+      stats.totalFollowing = await this._ceramic.getComposeClient().context.queryCount({
         model: definition.models.AkashaFollow.id,
         account: id,
         queryFilters: { where: { isFollowing: { equalTo: true } } },
       });
 
-      const followers = await this._ceramic.getComposeClient().context.queryCount({
+      stats.totalFollowers = await this._ceramic.getComposeClient().context.queryCount({
         model: definition.models.AkashaFollow.id,
         queryFilters: { and: [{ where: { isFollowing: { equalTo: true } } }, { where: { profileID: { equalTo: profile.node.akashaProfile.id } } }] },
       });
-      return createFormattedValue({ following, followers });
-    }
 
+      stats.totalBeams = await this._ceramic.getComposeClient().context.queryCount({
+        model: definition.models.AkashaBeam.id,
+        account: id,
+        queryFilters: { where: { active: { equalTo: true } } },
+      });
+    }
+    // getting all the interests
+    const interests = await this._gql.getAPI().GetInterestsByDid({id: id});
+    if(interests.node && hasOwn(interests.node, 'akashaProfileInterests') && interests.node.akashaProfileInterests){
+      stats.totalTopics = interests.node.akashaProfileInterests.topics.length;
+    }
+    return createFormattedValue(stats);
   }
 
   /**
