@@ -1,4 +1,5 @@
-import { AkashaFollowConnection, AkashaProfile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaFollowConnection } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfile } from '@akashaorg/typings/ui';
 
 const userAvatar = (width = 360, height = 360) => {
   return {
@@ -21,6 +22,7 @@ const createUser = n => {
     avatar: userAvatar(),
     createdAt: '2021-03-01T00:00:00.000Z',
     followers: {} as AkashaFollowConnection,
+    followersCount: 0
   };
 };
 const userData: AkashaProfile[] = Array.from({ length: 4 }, (v, k) => createUser(k));
@@ -65,6 +67,7 @@ const profileData: AkashaProfile = {
   followers: {} as AkashaFollowConnection,
   createdAt: '2023-01-01T00:00:00.000Z',
   id: '31231',
+  followersCount: 12
 };
 
 const randomMentions = n => {

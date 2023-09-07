@@ -30,6 +30,7 @@ export const trendingProfilesData: Profile[] = Array.from({ length: 4 }, (k, v) 
     description: descriptionList[3],
     background: { default: { src: 'https://placebeard.it/540/320', height: 540, width: 320 } },
     createdAt: '2020-01-01',
+    followersCount: 0,
   };
 });
 export const sampleDevKey = {
