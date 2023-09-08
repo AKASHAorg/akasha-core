@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({
               />
             </Stack>
             <Stack customStyle="relative ml-auto mt-2">
-              <Stack direction="row" spacing="gap-x-2">
+              <Stack direction="row" align="center" spacing="gap-x-2">
                 {viewerIsOwner && handleEdit ? (
                   <Button
                     aria-label="edit"

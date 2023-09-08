@@ -71,7 +71,8 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   if (profileDataReq.status === 'loading' || followDocuments.status === 'loading')
     return <ProfileHeaderLoading />;
 
-  if (profileDataReq.status === 'error' || profileNotFound) return null;
+  if (profileDataReq.status === 'error' || followDocuments.status === 'error' || profileNotFound)
+    return null;
 
   const handleCopy = () => {
     const profileUrl = new URL(location.pathname, location.origin).href;
@@ -120,10 +121,9 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       publicImagePath="/images"
       followElement={
         <FollowProfileButton
-          loggedInProfileId={loginQuery.data?.id}
-          profileStreamId={profileData?.id}
+          profileId={profileData?.id}
           isLoggedIn={!!loginQuery.data?.id}
-          followStreamId={followDocument?.node?.id}
+          followId={followDocument?.node?.id}
           isFollowing={followDocument?.node?.isFollowing}
           showLoginModal={showLoginModal}
           iconOnly={true}

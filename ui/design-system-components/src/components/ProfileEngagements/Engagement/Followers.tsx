@@ -62,11 +62,11 @@ const Followers: React.FC<FollowersProps> = ({
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            profileId={engagement?.did?.akashaProfile?.did?.id}
-            profileStreamId={engagement?.did?.akashaProfile?.id}
+            ceramicAccountId={engagement?.did?.akashaProfile?.did?.id}
+            profileId={engagement?.did?.akashaProfile?.id}
             avatar={engagement?.did?.akashaProfile?.avatar}
             name={engagement?.did?.akashaProfile?.name}
-            followStreamId={engagement.id}
+            followId={engagement.id}
             isFollowing={engagement.isFollowing}
             getMediaUrl={getMediaUrl}
             renderFollowElement={

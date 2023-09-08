@@ -64,11 +64,11 @@ const Following: React.FC<FollowingProps> = ({
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            profileId={engagement?.profile?.did.id}
-            profileStreamId={engagement?.profile?.id}
+            ceramicAccountId={engagement?.profile?.did.id}
+            profileId={engagement?.profile?.id}
             avatar={engagement?.profile?.avatar}
             name={engagement?.profile?.name}
-            followStreamId={engagement.id}
+            followId={engagement.id}
             isFollowing={engagement.isFollowing}
             getMediaUrl={getMediaUrl}
             renderFollowElement={viewerIsOwner ? renderFollowElement : null}

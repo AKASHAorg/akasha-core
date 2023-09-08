@@ -26,17 +26,6 @@ const ProfileHeaderLoading: React.FC = () => {
             </Stack>
             <CircularPlaceholder height="h-8" width="w-8" customStyle="ml-auto shrink-0" animated />
           </Stack>
-          <Stack spacing="gap-y-4">
-            <Stack spacing="gap-y-1.5">
-              <TextLine width="w-40" animated />
-              <TextLine animated />
-            </Stack>
-            <Divider />
-            <Stack spacing="gap-y-1.5">
-              <TextLine width="w-24" animated />
-              <TextLine width="w-72" animated />
-            </Stack>
-          </Stack>
         </Stack>
       </Card>
     </div>

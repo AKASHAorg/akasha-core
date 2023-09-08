@@ -7,16 +7,16 @@ import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types
 
 export type EntryProps = {
   profileAnchorLink: string;
+  ceramicAccountId: string;
   profileId: string;
-  profileStreamId: string;
   avatar: Profile['avatar'];
   name: string;
-  followStreamId: string;
+  followId: string;
   isFollowing: boolean;
   getMediaUrl: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
   renderFollowElement: (
-    profileStreamId: string,
-    followStreamId: string,
+    profileId: string,
+    followId: string,
     isFollowing: boolean,
   ) => ReactElement | null;
   onProfileClick: (profileId: string) => void;
@@ -25,11 +25,11 @@ export type EntryProps = {
 const Entry: React.FC<EntryProps> = props => {
   const {
     profileAnchorLink,
+    ceramicAccountId,
     profileId,
-    profileStreamId,
     avatar,
     name,
-    followStreamId,
+    followId,
     isFollowing,
     getMediaUrl,
     renderFollowElement,
@@ -37,17 +37,17 @@ const Entry: React.FC<EntryProps> = props => {
   } = props;
 
   return (
-    <Stack direction="row" align="center" justify="between" customStyle="pb-2" fullWidth>
+    <Stack direction="row" align="center" justify="between" customStyle="pb-4" fullWidth>
       <Anchor
-        href={`${profileAnchorLink}/${profileId}`}
+        href={`${profileAnchorLink}/${ceramicAccountId}`}
         onClick={event => {
           event.preventDefault();
-          onProfileClick(profileId);
+          onProfileClick(ceramicAccountId);
         }}
       >
         <ProfileAvatarButton profileId={profileId} avatarImage={getMediaUrl(avatar)} label={name} />
       </Anchor>
-      {renderFollowElement && renderFollowElement(profileStreamId, followStreamId, isFollowing)}
+      {renderFollowElement && renderFollowElement(profileId, followId, isFollowing)}
     </Stack>
   );
 };

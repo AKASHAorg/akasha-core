@@ -22,8 +22,8 @@ export const BaseEntry: Story = {
       profileId={profileId}
       avatar={avatar}
       name="Coffee Lover"
-      profileStreamId="id"
-      followStreamId="id"
+      ceramicAccountId="id"
+      followId="id"
       isFollowing={false}
       getMediaUrl={() => ({
         default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },

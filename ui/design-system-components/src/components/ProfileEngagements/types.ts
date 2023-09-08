@@ -9,8 +9,8 @@ export type EngagementProps = {
   onLoadMore: () => void;
   getMediaUrl: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
   renderFollowElement: (
-    profileStreamId: string,
-    followStreamId: string,
+    profileId: string,
+    followId: string,
     isFollowing: boolean,
   ) => ReactElement | null;
   onProfileClick: (profileId: string) => void;

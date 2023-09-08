@@ -136,12 +136,11 @@ const FollowingPage: React.FC<unknown> = () => {
               followingReq.fetchNextPage();
             }
           }}
-          renderFollowElement={(profileStreamId, followStreamId, isFollowing) => (
+          renderFollowElement={(profileId, followId, isFollowing) => (
             <FollowProfileButton
-              loggedInProfileId={loginQuery.data?.id}
-              profileStreamId={profileStreamId}
+              profileId={profileId}
               isLoggedIn={!!loginQuery.data?.id}
-              followStreamId={followStreamId}
+              followId={followId}
               isFollowing={isFollowing}
               showLoginModal={showLoginModal}
             />
