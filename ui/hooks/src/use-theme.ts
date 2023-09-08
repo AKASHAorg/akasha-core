@@ -54,6 +54,8 @@ export const useTheme = () => {
       }
     };
     userPrefTheme.addEventListener('change', setThemeFromUserPref);
+
+    return () => userPrefTheme.removeEventListener('change', () => ({}));
   }, [currentTheme, theme, propagateTheme]);
 
   return { theme, propagateTheme };
