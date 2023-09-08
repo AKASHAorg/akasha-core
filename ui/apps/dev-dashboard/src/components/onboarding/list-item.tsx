@@ -12,9 +12,8 @@ export const ListItem: React.FC<ListItemProps> = props => {
   const { listElementText, item } = props;
 
   return (
-    <Stack spacing="gap-x-1">
+    <Stack direction="row" spacing="gap-x-1">
       <Text>{listElementText}</Text>
-
       <Text>{item}</Text>
     </Stack>
   );

@@ -35,7 +35,7 @@ export const DownloadCLITool: React.FC<DownloadCLIToolProps> = props => {
         )}
 
         {ctaListItem && (
-          <Stack spacing="gap-x-2" customStyle="mt-3">
+          <Stack direction="row" spacing="gap-x-2" customStyle="mt-3">
             <Text>•</Text>
 
             <Text>

@@ -17,7 +17,7 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, children }
       };
 
   return (
-    <Stack align="center" spacing="gap-1.5">
+    <Stack direction="row" align="center" spacing="gap-1.5">
       {status && <Icon type={STATUS_TO_ICON_MAP[status]} color={iconStyle} />}
       <Text color={textColor} variant="footnotes2" weight="normal">
         {children}

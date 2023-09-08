@@ -42,7 +42,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle={customStyle}>
       <Stack spacing="gap-y-1" direction="column">
-        <Stack spacing="gap-x-2" justify="between" align="center">
+        <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
           <Text variant="h6">{linkLabel}</Text>
           <Button
             variant="text"

@@ -1,12 +1,18 @@
 import React, { ReactNode } from 'react';
-import IconButtonFollow from './icon-button-follow/icon-button-follow';
 import routes, { EDIT } from '../routes';
-import { ProfileHeader } from '@akashaorg/design-system-components/lib/components/Profile';
+import FollowProfileButton from './follow-profile-button';
+import {
+  ProfileHeader,
+  ProfileHeaderLoading,
+} from '@akashaorg/design-system-components/lib/components/Profile';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import { EntityTypes, ModalNavigationOptions, NavigateToParams } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import {
+  useGetProfileByDidQuery,
+  useGetFollowDocumentsQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hasOwn, useGetLogin, useValidDid } from '@akashaorg/ui-awf-hooks';
 
 type ProfileHeaderViewProps = {
@@ -31,7 +37,13 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       enabled: !!profileId,
     },
   );
-  const { validDid, isEthAddress } = useValidDid(profileId, !!profileDataReq.data);
+
+  const { isViewer, akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { isViewer: null, akashaProfile: null };
+
+  const { validDid, isEthAddress } = useValidDid(profileId, !!profileData);
   const isLoggedIn = React.useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
@@ -44,16 +56,26 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
     },
     [isLoggedIn, navigateToModal, showLoginModal],
   );
-  const { isViewer, akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
-      ? profileDataReq.data
-      : { isViewer: null, akashaProfile: null };
+  const followDocuments = useGetFollowDocumentsQuery(
+    {
+      following: [profileData?.id],
+      last: 1,
+    },
+    { select: response => response.viewer },
+  );
 
-  if (profileDataReq.status !== 'success' || (!profileData && !validDid)) return null;
+  const followDocument = followDocuments.data?.akashaFollowList?.edges[0];
+
+  const profileNotFound = !profileData && !validDid;
+
+  if (profileDataReq.status === 'loading' || followDocuments.status === 'loading')
+    return <ProfileHeaderLoading />;
+
+  if (profileDataReq.status === 'error' || followDocuments.status === 'error' || profileNotFound)
+    return null;
 
   const handleCopy = () => {
     const profileUrl = new URL(location.pathname, location.origin).href;
-
     navigator.clipboard.writeText(profileUrl).then(() => {
       handleFeedback();
     });
@@ -98,10 +120,13 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       copiedLabel={t('Copied')}
       publicImagePath="/images"
       followElement={
-        <IconButtonFollow
-          profileId={profileId}
-          profileStreamId={profileData?.id}
+        <FollowProfileButton
+          profileId={profileData?.id}
+          isLoggedIn={!!loginQuery.data?.id}
+          followId={followDocument?.node?.id}
+          isFollowing={followDocument?.node?.isFollowing}
           showLoginModal={showLoginModal}
+          iconOnly={true}
         />
       }
       handleEdit={handleEdit}

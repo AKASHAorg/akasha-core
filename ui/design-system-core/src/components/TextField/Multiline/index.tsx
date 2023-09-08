@@ -18,7 +18,11 @@ export const Multiline: React.FC<MultlineProps> = forwardRef(
     const radiusStyle = getRadiusClasses(radius);
 
     return (
-      <Stack customStyle={`${containerStyle} ${radiusStyle} py-2.5`} spacing="gap-x-2">
+      <Stack
+        direction="row"
+        customStyle={`${containerStyle} ${radiusStyle} py-2.5`}
+        spacing="gap-x-2"
+      >
         <textarea
           {...rest}
           aria-labelledby={id}

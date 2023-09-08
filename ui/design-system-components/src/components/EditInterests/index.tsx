@@ -113,7 +113,7 @@ const EditInterests: React.FC<EditInterestsProps> = ({
     <form className={tw(apply`h-full ${customStyle}`)}>
       <Stack direction="column" justify="between" spacing="gap-y-11" customStyle="h-full">
         <Stack direction="column">
-          <Stack align="center" spacing="gap-x-1">
+          <Stack direction="row" align="center" spacing="gap-x-1">
             <Text variant="h6">{title}</Text>
             <Text variant="footnotes2" color="grey7">
               {subTitle}
@@ -122,7 +122,7 @@ const EditInterests: React.FC<EditInterestsProps> = ({
           <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
             {description}
           </Text>
-          <Stack spacing="gap-2" customStyle="flex-wrap mt-2">
+          <Stack direction="row" spacing="gap-2" customStyle="flex-wrap mt-2">
             {[...allMyInterests].map((interest, index) => (
               <Pill
                 key={`${index}-${interest.value}`}
@@ -174,7 +174,7 @@ const EditInterests: React.FC<EditInterestsProps> = ({
             multiple
           />
         </Stack>
-        <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
+        <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
             variant="text"
             label={cancelButton.label}

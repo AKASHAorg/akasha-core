@@ -117,7 +117,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
         disabled={disabled}
       />
       {showSuggestions && suggestions.length > 0 && (
-        <Stack customStyle={'relative'}>
+        <Stack direction="row" customStyle={'relative'}>
           <List
             items={suggestions}
             showDivider={false}
@@ -131,7 +131,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
         </Stack>
       )}
       {tags?.size > 0 && (
-        <Stack align="center" spacing="gap-2" customStyle="flex-wrap">
+        <Stack direction="row" align="center" spacing="gap-2" customStyle="flex-wrap">
           {[...tags].map(tag => (
             <Tag
               key={tag}

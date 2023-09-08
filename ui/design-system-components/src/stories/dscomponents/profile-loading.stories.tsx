@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { ProfileLoading } from '../../components/Profile';
+import { ProfileLoading, ProfileHeaderLoading } from '../../components/Profile';
 
 const meta: Meta = {
   title: 'DSComponents/Profile/ProfileLoading',
@@ -13,4 +13,8 @@ type Story = StoryObj;
 
 export const BaseProfileLoading: Story = {
   render: () => <ProfileLoading />,
+};
+
+export const BaseProfileHeaderLoading: Story = {
+  render: () => <ProfileHeaderLoading />,
 };

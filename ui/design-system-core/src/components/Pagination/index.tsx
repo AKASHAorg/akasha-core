@@ -50,7 +50,7 @@ const Pagination: React.FC<PaginationProps> = props => {
   const disabledButtonTextColor = 'grey7';
 
   return (
-    <Stack align="center" spacing="gap-x-2" customStyle={customStyle}>
+    <Stack direction="row" align="center" spacing="gap-x-2" customStyle={customStyle}>
       {showButtons && (
         <Button
           plain={true}
