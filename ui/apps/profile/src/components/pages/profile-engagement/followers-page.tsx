@@ -83,7 +83,7 @@ const FollowersPage: React.FC<unknown> = () => {
   const followDocumentsReq = useGetFollowDocumentsQuery(
     {
       following: followProfileIds,
-      last: 10,
+      last: followProfileIds.length,
     },
     { select: response => response.viewer?.akashaFollowList },
   );

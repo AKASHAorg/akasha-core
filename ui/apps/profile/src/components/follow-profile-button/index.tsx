@@ -48,7 +48,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     },
   });
 
-  //reset following state whenever isFollowing prop changes
+  //reset `following` whenever isFollowing prop changes
   useEffect(() => {
     setFollowing(isFollowing);
   }, [isFollowing]);
