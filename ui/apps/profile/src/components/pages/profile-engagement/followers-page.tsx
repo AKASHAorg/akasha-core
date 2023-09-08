@@ -8,7 +8,7 @@ import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/co
 import { ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useParams } from 'react-router-dom';
 import {
-  useGetProfileByDidQuery,
+  useGetFollowDocumentsQuery,
   useInfiniteGetFollowersListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
@@ -17,6 +17,7 @@ import {
   useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
+import { getFollowList } from './getFollowList';
 
 const FollowersPage: React.FC<unknown> = () => {
   const [loadMore, setLoadingMore] = useState(false);
@@ -27,15 +28,6 @@ const FollowersPage: React.FC<unknown> = () => {
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const loginQuery = useGetLogin();
-  const profileDataReq = useGetProfileByDidQuery(
-    {
-      id: profileId,
-    },
-    {
-      select: response => response.node,
-      enabled: !!loginQuery.data?.id,
-    },
-  );
   const followersReq = useInfiniteGetFollowersListByDidQuery(
     'first',
     {
@@ -84,6 +76,17 @@ const FollowersPage: React.FC<unknown> = () => {
       ? lastPage?.node.akashaProfile?.followers?.pageInfo
       : null;
   }, [followersReq]);
+  const followProfileIds = useMemo(
+    () => followers.map(follower => follower.did?.akashaProfile?.id),
+    [followers],
+  );
+  const followDocumentsReq = useGetFollowDocumentsQuery(
+    {
+      following: followProfileIds,
+      last: 10,
+    },
+    { select: response => response.viewer?.akashaFollowList },
+  );
 
   if (!loginQuery.data?.id) {
     return navigateTo({
@@ -92,10 +95,7 @@ const FollowersPage: React.FC<unknown> = () => {
     });
   }
 
-  const { isViewer } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
-      ? profileDataReq.data
-      : { isViewer: null };
+  const followList = getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node));
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({ name: 'login', redirectTo });
@@ -125,9 +125,10 @@ const FollowersPage: React.FC<unknown> = () => {
       )}
       {followersReq.status === 'success' && (
         <Followers
+          loggedInAccountId={loginQuery.data?.id}
           followers={followers}
+          followList={followList}
           profileAnchorLink={'/@akashaorg/app-profile'}
-          viewerIsOwner={isViewer}
           loadMore={loadMore}
           onLoadMore={() => {
             if (lastPageInfo && lastPageInfo.hasNextPage) {

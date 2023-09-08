@@ -11,12 +11,12 @@ import { EngagementProps } from '../types';
 
 export type FollowersProps = {
   followers: AkashaFollowers;
-  viewerIsOwner: boolean;
 } & EngagementProps;
 
 const Followers: React.FC<FollowersProps> = ({
+  followList,
+  loggedInAccountId,
   followers,
-  viewerIsOwner,
   profileAnchorLink,
   loadMore,
   onLoadMore,
@@ -62,15 +62,17 @@ const Followers: React.FC<FollowersProps> = ({
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            ceramicAccountId={engagement?.did?.akashaProfile?.did?.id}
+            accountId={engagement?.did?.akashaProfile?.did?.id}
             profileId={engagement?.did?.akashaProfile?.id}
             avatar={engagement?.did?.akashaProfile?.avatar}
             name={engagement?.did?.akashaProfile?.name}
-            followId={engagement.id}
-            isFollowing={engagement.isFollowing}
+            followId={followList.get(engagement?.did?.akashaProfile?.id)?.id}
+            isFollowing={followList.get(engagement?.did?.akashaProfile?.id)?.isFollowing}
             getMediaUrl={getMediaUrl}
             renderFollowElement={
-              null /*@TODO: isFollowing check is giving wrong result, revisit when the check works as expected  */
+              loggedInAccountId !== engagement?.did?.akashaProfile?.did?.id
+                ? renderFollowElement
+                : null
             }
             onProfileClick={onProfileClick}
           />

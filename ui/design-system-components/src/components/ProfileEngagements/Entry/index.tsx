@@ -7,7 +7,7 @@ import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types
 
 export type EntryProps = {
   profileAnchorLink: string;
-  ceramicAccountId: string;
+  accountId: string;
   profileId: string;
   avatar: Profile['avatar'];
   name: string;
@@ -25,7 +25,7 @@ export type EntryProps = {
 const Entry: React.FC<EntryProps> = props => {
   const {
     profileAnchorLink,
-    ceramicAccountId,
+    accountId,
     profileId,
     avatar,
     name,
@@ -39,10 +39,10 @@ const Entry: React.FC<EntryProps> = props => {
   return (
     <Stack direction="row" align="center" justify="between" customStyle="pb-4" fullWidth>
       <Anchor
-        href={`${profileAnchorLink}/${ceramicAccountId}`}
+        href={`${profileAnchorLink}/${accountId}`}
         onClick={event => {
           event.preventDefault();
-          onProfileClick(ceramicAccountId);
+          onProfileClick(accountId);
         }}
       >
         <ProfileAvatarButton profileId={profileId} avatarImage={getMediaUrl(avatar)} label={name} />

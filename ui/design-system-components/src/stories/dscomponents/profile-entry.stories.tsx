@@ -22,7 +22,7 @@ export const BaseEntry: Story = {
       profileId={profileId}
       avatar={avatar}
       name="Coffee Lover"
-      ceramicAccountId="id"
+      accountId="id"
       followId="id"
       isFollowing={false}
       getMediaUrl={() => ({
