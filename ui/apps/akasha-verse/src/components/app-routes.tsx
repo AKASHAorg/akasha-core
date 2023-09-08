@@ -7,21 +7,18 @@ import AppsPage from './pages/apps-page';
 import MasterPage from './pages/master-page';
 import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO, APPS } from '../routes';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hiddenIntegrations } from '../hidden-integrations';
 
-const AppRoutes: React.FC<RootComponentProps> = props => {
-  const { worldConfig, plugins, baseRouteName } = props;
+const AppRoutes: React.FC<unknown> = () => {
+  const { worldConfig, baseRouteName } = useRootComponentProps();
 
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const defaultIntegrations = [].concat(
     worldConfig.defaultApps,
@@ -62,7 +59,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Router basename={baseRouteName}>
-      <MasterPage isLoggedIn={isLoggedIn} navigateTo={navigateTo} {...props}>
+      <MasterPage isLoggedIn={isLoggedIn}>
         <Routes>
           <Route
             path={routes[EXPLORE]}
@@ -73,7 +70,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 isFetching={appsReq.isFetching}
                 reqError={appsReq.error as Error}
                 isUserLoggedIn={isLoggedIn}
-                {...props}
               />
             }
           />
@@ -84,23 +80,15 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 availableApps={availableApps}
                 defaultIntegrations={defaultIntegrations}
                 installedAppsInfo={[]}
-                isFetching={appsReq.isFetching}
-                {...props}
               />
             }
           />
-          <Route path={routes[APPS]} element={<AppsPage {...props} />} />
+          <Route path={routes[APPS]} element={<AppsPage />} />
           <Route
             path={routes[MY_WIDGETS]}
-            element={
-              <MyWidgetsPage
-                availableApps={availableApps}
-                isFetching={appsReq.isFetching}
-                {...props}
-              />
-            }
+            element={<MyWidgetsPage availableApps={availableApps} />}
           />
-          <Route path={`${routes[INFO]}/:appId`} element={<InfoPage {...props} />} />
+          <Route path={`${routes[INFO]}/:appId`} element={<InfoPage />} />
           <Route path="/" element={<Navigate to={routes[EXPLORE]} replace />} />
         </Routes>
       </MasterPage>

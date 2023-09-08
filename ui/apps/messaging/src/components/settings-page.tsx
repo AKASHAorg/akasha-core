@@ -1,18 +1,20 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
-import { MESSAGING } from '../routes';
-import { getTextileUsage } from '../api/message';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Profile } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
-export interface SettingsPageProps extends RootComponentProps {
+import { getTextileUsage } from '../api/message';
+import { MESSAGING } from '../routes';
+
+export type SettingsPageProps = {
   loggedProfileData: Profile;
-}
+};
 
 const convertFromBytes = val => {
   if (val) {
@@ -28,8 +30,9 @@ const convertFromBytes = val => {
 
 const InboxPage = (props: SettingsPageProps) => {
   const { t } = useTranslation('app-messaging');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const uninstallAppReq = null;
 

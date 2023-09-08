@@ -1,32 +1,28 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { useTranslation } from 'react-i18next';
+
+import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
+import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/sdk/graphql-operation-types-new';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
 import { INFO } from '../../routes';
 
-export interface IMyAppsPage extends RootComponentProps {
+export type MyAppsPageProps = {
   availableApps?: GetAppsQuery['akashaAppIndex']['edges'];
   installedAppsInfo?: GetAppsByIdQuery['node'][];
   defaultIntegrations?: string[];
-  isFetching?: boolean;
-}
+};
 
-const MyAppsPage: React.FC<IMyAppsPage> = props => {
-  const {
-    worldConfig,
-    availableApps,
-    installedAppsInfo,
-    defaultIntegrations,
-    isFetching,
-    plugins,
-  } = props;
+const MyAppsPage: React.FC<MyAppsPageProps> = props => {
+  const { availableApps } = props;
 
   const { t } = useTranslation('app-akasha-verse');
+  const { worldConfig, getRoutingPlugin } = useRootComponentProps();
 
   const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
 
@@ -60,20 +56,23 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
       ),
     };
   });
-  // select user installed apps from list of installed apps
-  const filteredInstalledApps = availableApps
-    ?.filter(app => {
-      if (!installedAppsInfo?.length) {
-        return null;
-      }
-      if (!defaultIntegrations?.some(defaultApp => defaultApp === app.node?.name)) {
-        return app;
-      }
-    })
-    .filter(Boolean);
+
+  /**
+   * TODO: select user installed apps from list of installed apps
+   */
+  // const filteredInstalledApps = availableApps
+  //   ?.filter(app => {
+  //     if (!installedAppsInfo?.length) {
+  //       return null;
+  //     }
+  //     if (!defaultIntegrations?.some(defaultApp => defaultApp === app.node?.name)) {
+  //       return app;
+  //     }
+  //   })
+  //   .filter(Boolean);
 
   const handleAppClick = appId => {
-    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-akasha-verse',
       getNavigationUrl: routes => `${routes[INFO]}/${appId}`,
     });

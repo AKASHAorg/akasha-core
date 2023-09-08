@@ -8,8 +8,9 @@ import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Web3ConnectCard from './web3-connect-card';
 import { useTranslation } from 'react-i18next';
-import { IconType, RootComponentProps } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/ui';
 import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type ChooseProviderProps = {
   injectedProvider: {
@@ -19,14 +20,14 @@ export type ChooseProviderProps = {
     subtitleLabel?: string;
   };
   onProviderSelect: (provider: EthProviders) => void;
-  plugins: RootComponentProps['plugins'];
 };
 
 const ChooseProvider: React.FC<ChooseProviderProps> = props => {
-  const { injectedProvider, plugins, onProviderSelect } = props;
+  const { injectedProvider, onProviderSelect } = props;
   const { t } = useTranslation('app-auth-ewa');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const routingPlugin = React.useRef(plugins['@akashaorg/app-routing']?.routing);
+  const routingPlugin = React.useRef(getRoutingPlugin());
 
   const termsUrl = routingPlugin.current?.getUrlForApp({
     appName: '@akashaorg/app-legal',

@@ -22,31 +22,31 @@ const useRootComponentProps = <T extends RootComponentProps>() => {
   const ctx = React.useContext<T>(RootComponentPropsContext);
   const getRoutingPlugin = React.useCallback(
     (ns = DEFAULT_ROUTING_PLUGIN) => {
-      if (hasOwn(ctx.plugins, ns)) {
-        return ctx.plugins[ns].routing;
+      if (hasOwn(ctx?.plugins, ns)) {
+        return ctx?.plugins[ns].routing;
       }
       console.warn('Routing plugin not available yet');
       return {};
     },
-    [ctx.plugins],
+    [ctx?.plugins],
   );
 
   const getTranslationPlugin = React.useCallback(
     (ns = DEFAULT_TRANSLATION_PLUGIN): { i18n: RootComponentProps['i18next'] } => {
-      if (hasOwn(ctx.plugins, ns)) {
-        return ctx.plugins[ns].translation;
+      if (hasOwn(ctx?.plugins, ns)) {
+        return ctx?.plugins[ns].translation;
       }
       console.warn('Translation plugin not available yet!');
       return { i18n: null };
     },
-    [ctx.plugins],
+    [ctx?.plugins],
   );
 
   const getEditorBlocksPlugin = React.useCallback(() => {
-    if (hasOwn(ctx.plugins, DEFAULT_EDITOR_BLOCKS_PLUGIN)) {
-      return ctx.plugins[DEFAULT_EDITOR_BLOCKS_PLUGIN].editorBlocks;
+    if (hasOwn(ctx?.plugins, DEFAULT_EDITOR_BLOCKS_PLUGIN)) {
+      return ctx?.plugins[DEFAULT_EDITOR_BLOCKS_PLUGIN].editorBlocks;
     }
-  }, [ctx.plugins]);
+  }, [ctx?.plugins]);
 
   return {
     getRoutingPlugin,

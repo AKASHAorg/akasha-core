@@ -1,73 +1,63 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+
 import { useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import {
-  RootComponentProps,
-  EntityTypes,
-  ModalNavigationOptions,
-  Profile,
-  IContentClickDetails,
-} from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
-import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-interface ITagFeedPage {
+export type TagFeedPageProps = {
   loggedProfileData?: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
-  const {
-    uiEvents,
-    layoutConfig,
-    plugins,
-    logger,
-    navigateToModal,
-    showLoginModal,
-    loggedProfileData,
-  } = props;
+const TagFeedPage: React.FC<TagFeedPageProps> = props => {
+  const { showLoginModal, loggedProfileData } = props;
+
   const { t } = useTranslation('app-akasha-integration');
-  const { tagName } = useParams<{ tagName: string }>();
+  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
+
+  // const { tagName } = useParams<{ tagName: string }>();
 
   // @TODO fix hooks
   const getTagQuery = undefined;
 
-  const reqPosts = undefined;
+  // const reqPosts = undefined;
 
-  const tagSubscriptionsReq = undefined;
+  // const tagSubscriptionsReq = undefined;
   const tagSubscriptions = undefined;
 
   const toggleTagSubscriptionReq = undefined;
 
-  const postPages = React.useMemo(() => {
-    if (reqPosts.data) {
-      return reqPosts.data.pages;
-    }
-    return [];
-  }, [reqPosts.data]);
+  // const postPages = React.useMemo(() => {
+  //   if (reqPosts.data) {
+  //     return reqPosts.data.pages;
+  //   }
+  //   return [];
+  // }, [reqPosts.data]);
 
-  const handleLoadMore = React.useCallback(() => {
-    if (!reqPosts.isLoading && reqPosts.hasNextPage) {
-      reqPosts.fetchNextPage();
-    }
-  }, [reqPosts]);
+  // const handleLoadMore = React.useCallback(() => {
+  //   if (!reqPosts.isLoading && reqPosts.hasNextPage) {
+  //     reqPosts.fetchNextPage();
+  //   }
+  // }, [reqPosts]);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', itemId, itemType });
+    navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleEntryRemove = (itemId: string) => {
-    props.navigateToModal({
+    navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
       itemType: EntityTypes.BEAM,
@@ -86,7 +76,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     if (!loggedProfileData?.did.id) {
       navigateToModal({ name: 'login' });
     } else {
-      plugins['@akashaorg/app-routing'].navigateTo?.({
+      getRoutingPlugin().navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: () => `/feed?repost=${beamId}`,
       });
@@ -127,11 +117,10 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         contentClickable={true}
         onEntryRemove={handleEntryRemove}
         onEntryFlag={handleEntryFlag}
-        uiEvents={uiEvents}
         itemSpacing={8}
-        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+        i18n={getTranslationPlugin().i18n}
         onRebeam={handleRebeam}
-        onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
+        onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
       />
     </Stack>
   );

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -12,14 +12,13 @@ import { SummaryCard } from '../components/profile/summary-card';
 import menuRoute, { DASHBOARD } from '../routes';
 import { sampleSignature } from '../utils/dummy-data';
 
-export const SignMessage: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+export const SignMessage: React.FC<unknown> = () => {
+  const [message] = useState<string>('');
 
   const { t } = useTranslation('app-dev-dashboard');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const [message] = React.useState<string>('');
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   // @TODO: needs update
   const signMessageMutation = {

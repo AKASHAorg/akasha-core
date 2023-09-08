@@ -8,7 +8,6 @@ import {
   IContentClickDetails,
   ModalNavigationOptions,
   Profile,
-  RootComponentProps,
   TrackEventData,
 } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
@@ -28,7 +27,6 @@ export type BeamFeedProps = Omit<EntryListProps<AkashaBeam>, 'itemCard'> & {
   ) => () => void;
   contentClickable?: boolean;
   onEntryRemove?: (entryId: string) => void;
-  uiEvents: RootComponentProps['uiEvents'];
   className?: string;
   modalSlotId: string;
   accentBorderTop?: boolean;
@@ -50,7 +48,6 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     i18n,
     requestStatus,
     isFetchingNextPage,
-    isFetchingPreviousPage,
     pages,
     itemSpacing = 8,
     onNavigate,

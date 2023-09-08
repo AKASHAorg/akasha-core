@@ -1,16 +1,10 @@
 import * as React from 'react';
 import ExplorePage from '../pages/explore-page';
 
-import {
-  screen,
-  renderWithAllProviders,
-  act,
-  genAppProps,
-  genReleaseInfo,
-} from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, act, genReleaseInfo } from '@akashaorg/af-testing';
 
 describe('< ExplorePage /> component', () => {
-  const BaseComponent = <ExplorePage {...genAppProps()} installableApps={[genReleaseInfo()]} />;
+  const BaseComponent = <ExplorePage installableApps={[genReleaseInfo()]} />;
 
   beforeEach(async () => {
     await act(async () => {

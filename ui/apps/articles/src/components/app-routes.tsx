@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import ArticlesOnboardingSteps from './onboarding/onboarding-steps';
 import Dashboard from '../pages/dashboard';
 import ArticlePage from '../pages/article';
@@ -22,16 +24,18 @@ import routes, {
   WRITE_ARTICLE,
 } from '../routes';
 
-const AppRoutes: React.FC<RootComponentProps> = props => {
-  return (
-    <Router basename={props.baseRouteName}>
-      <Routes>
-        <Route path={routes[HOME]} element={<Dashboard {...props} />} />
+const AppRoutes: React.FC<unknown> = () => {
+  const { baseRouteName } = useRootComponentProps();
 
-        <Route path={routes[MY_ARTICLES]} element={<MyArticles {...props} />} />
+  return (
+    <Router basename={baseRouteName}>
+      <Routes>
+        <Route path={routes[HOME]} element={<Dashboard />} />
+
+        <Route path={routes[MY_ARTICLES]} element={<MyArticles />} />
 
         {[routes[WRITE_ARTICLE], routes[EDIT_ARTICLE]].map((path, idx) => (
-          <Route key={path + idx} path={path} element={<ArticleEditor {...props} />} />
+          <Route key={path + idx} path={path} element={<ArticleEditor />} />
         ))}
 
         {[
@@ -42,14 +46,14 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route
             key={path + idx}
             path={path}
-            element={<ArticlesOnboardingSteps {...props} activeIndex={idx} />}
+            element={<ArticlesOnboardingSteps activeIndex={idx} />}
           />
         ))}
-        <Route path={routes[SETTINGS]} element={<ArticleSettingsPage {...props} />} />
+        <Route path={routes[SETTINGS]} element={<ArticleSettingsPage />} />
 
-        <Route path={routes[ARTICLE]} element={<ArticlePage {...props} />} />
+        <Route path={routes[ARTICLE]} element={<ArticlePage />} />
 
-        <Route path={routes[ARTICLE_SETTINGS]} element={<ArticleCardSettingsPage {...props} />} />
+        <Route path={routes[ARTICLE_SETTINGS]} element={<ArticleCardSettingsPage />} />
 
         <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
       </Routes>

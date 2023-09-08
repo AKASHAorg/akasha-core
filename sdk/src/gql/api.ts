@@ -460,6 +460,19 @@ export const GetProfileByDidDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
+export const GetProfileStatsByDidDocument = /*#__PURE__*/ gql`
+    query GetProfileStatsByDid($id: ID!) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaProfile {
+        ...UserProfileFragment
+        followersCount(filters: {where: {isFollowing: {equalTo: true}}}, account: $id)
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
 export const GetProfilesDocument = /*#__PURE__*/ gql`
     query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput) {
   akashaProfileIndex(
@@ -928,6 +941,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetProfileByDid(variables: Types.GetProfileByDidQueryVariables, options?: C): Promise<Types.GetProfileByDidQuery> {
       return requester<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables, options) as Promise<Types.GetProfileByDidQuery>;
+    },
+    GetProfileStatsByDid(variables: Types.GetProfileStatsByDidQueryVariables, options?: C): Promise<Types.GetProfileStatsByDidQuery> {
+      return requester<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, variables, options) as Promise<Types.GetProfileStatsByDidQuery>;
     },
     GetProfiles(variables?: Types.GetProfilesQueryVariables, options?: C): Promise<Types.GetProfilesQuery> {
       return requester<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options) as Promise<Types.GetProfilesQuery>;

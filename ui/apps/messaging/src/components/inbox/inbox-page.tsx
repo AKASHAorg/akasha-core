@@ -1,26 +1,24 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Profile } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import MessageContactCard from '@akashaorg/design-system-components/lib/components/MessageContactCard';
 
-export interface InboxPageProps extends RootComponentProps {
+export type InboxPageProps = {
   loggedProfileData: Profile;
-}
+};
 
-const InboxPage: React.FC<InboxPageProps> = props => {
-  const { loggedProfileData, plugins } = props;
-
+const InboxPage: React.FC<InboxPageProps> = () => {
   const { t } = useTranslation('app-messaging');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const [pinnedConvos, setPinnedConvos] = React.useState([]);
-
-  const loggedUserId = React.useMemo(() => loggedProfileData?.did?.id, [loggedProfileData]);
 
   const handleSettingsClick = () => {
     navigateTo?.({
@@ -79,7 +77,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   };
 
   const handleCardClick = (pubKey: string) => {
-    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-messaging',
       getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
     });

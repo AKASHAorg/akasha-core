@@ -16,15 +16,15 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { getInjectedProviderDetails } from '../../utils/getInjectedProvider';
 
-export interface IConnectWalletProps {
+export type ConnectWalletProps = {
   selectedProvider: EthProviders;
   onSignIn: (provider: EthProviders) => void;
   onDisconnect: (provider: EthProviders) => void;
   worldName: string;
   signInError?: Error;
-}
+};
 
-const ConnectWallet: React.FC<IConnectWalletProps> = props => {
+const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   const { selectedProvider, onSignIn, onDisconnect, worldName, signInError } = props;
   const [errors, setErrors] = React.useState<{ title: string; subtitle: string }[]>([]);
   const [isSignInRetry, setIsSignInRetry] = React.useState(false);

@@ -3,11 +3,9 @@ import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
   EntityTypes,
   IContentClickDetails,
-  IEntryData,
   ModalNavigationOptions,
   NavigateToParams,
   Profile,
-  RootComponentProps,
   TrackEventData,
 } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
@@ -18,7 +16,7 @@ import EntryList, {
   EntryListProps,
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
-import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
   itemType: EntityTypes.REFLECT;
@@ -31,7 +29,6 @@ export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> &
   ) => () => void;
   navigateTo: (args: NavigateToParams) => void;
   onEntryRemove?: (entryId: string) => void;
-  uiEvents: RootComponentProps['uiEvents'];
   className?: string;
   modalSlotId: string;
   accentBorderTop?: boolean;

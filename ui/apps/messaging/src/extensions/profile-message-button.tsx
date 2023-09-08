@@ -1,6 +1,5 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
-import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { I18nextProvider } from 'react-i18next';
@@ -9,9 +8,9 @@ import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hook
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
-const MessageIconButton = (props: RootExtensionProps) => {
+const MessageIconButton: React.FC<RootExtensionProps> = props => {
   const { extensionData, plugins } = props;
-  const { t } = useTranslation('app-messaging');
+
   const [analyticsActions] = useAnalytics();
   const { profileId } = extensionData;
 

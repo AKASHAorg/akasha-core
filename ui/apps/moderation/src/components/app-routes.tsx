@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -54,7 +54,9 @@ import routes, {
   MODERATION_ACTIVITY,
 } from '../routes';
 
-const AppRoutes: React.FC<RootComponentProps> = props => {
+const AppRoutes: React.FC<unknown> = () => {
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
       return resp.viewer?.akashaProfile;
@@ -73,17 +75,17 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const isAdmin = false;
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   return (
     <Stack>
-      <Router basename={props.baseRouteName}>
+      <Router basename={baseRouteName}>
         <Routes>
           <Route
             path={routes[HOME]}
             element={
               <Overview
-                {...props}
+                user={loggedProfileData?.did.id}
                 isAuthorised={isAuthorised}
                 applicationStatus={applicationStatus}
                 navigateTo={navigateTo}

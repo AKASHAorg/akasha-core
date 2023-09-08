@@ -5,7 +5,7 @@ import { LEGAL_DOCS } from '@akashaorg/typings/ui';
 
 import PageRenderer from './page-renderer';
 
-const TermsOfUsePage = () => {
+const TermsOfUsePage: React.FC<unknown> = () => {
   const legalDocReq = useLegalDoc(LEGAL_DOCS.TERMS_OF_USE);
 
   const legalDoc = legalDocReq.data;

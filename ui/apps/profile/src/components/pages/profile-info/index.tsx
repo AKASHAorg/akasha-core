@@ -13,22 +13,26 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import { hasOwn, useGetLogin, useValidDid } from '@akashaorg/ui-awf-hooks';
+import { ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { hasOwn, useGetLogin, useRootComponentProps, useValidDid } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-export interface ProfilePageProps {
+export type ProfilePageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const ProfileInfoPage: React.FC<RootComponentProps & ProfilePageProps> = props => {
-  const { plugins, showLoginModal } = props;
+const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
+  const { showLoginModal } = props;
+
   const { t } = useTranslation('app-profile');
+  const { getRoutingPlugin } = useRootComponentProps();
+
   const { profileId } = useParams<{ profileId: string }>();
   const [showFeedback, setShowFeedback] = React.useState(false);
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
   const loginQuery = useGetLogin();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
+
   const isLoggedIn = React.useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);

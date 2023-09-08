@@ -1,7 +1,7 @@
 import faker from 'faker';
-import { Profile } from '@akashaorg/typings/ui';
+import { AkashaProfile } from '@akashaorg/typings/ui';
 
-const genUser = (ethAddress?: string): Profile => {
+const genUser = (ethAddress?: string): AkashaProfile => {
   const avatarUrl = faker.image.avatar();
   const coverImageUrl = faker.image.imageUrl();
   return {
@@ -16,10 +16,11 @@ const genUser = (ethAddress?: string): Profile => {
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
     did: { id: `did:${ethAddress}` },
     createdAt: faker.date.past().toISOString(),
+    followersCount: 0,
   };
 };
 
-export const genLoggedInState = (loggedIn = false): Profile => {
+export const genLoggedInState = (loggedIn = false): AkashaProfile => {
   if (!loggedIn) return null;
   return {
     id: '124',
@@ -41,6 +42,7 @@ export const genLoggedInState = (loggedIn = false): Profile => {
     },
     description: 'profile description',
     createdAt: faker.date.past().toISOString(),
+    followersCount: 2,
   };
 };
 

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { uiEventsMock } from '@akashaorg/af-testing';
-// @ts-ignore
 import { AnalyticsProvider, useAnalytics } from '../use-analytics';
 import { AnalyticsCategories, AnalyticsEventTypes, TrackEventData } from '@akashaorg/typings/ui';
 

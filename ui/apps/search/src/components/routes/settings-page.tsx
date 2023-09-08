@@ -1,7 +1,9 @@
 import React from 'react';
-import routes, { RESULTS } from '../../routes';
-import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
+
+import { ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -10,15 +12,17 @@ import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/compon
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
-interface ISettingsPageProps extends RootComponentProps {
+import routes, { RESULTS } from '../../routes';
+
+export type SettingsPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const SettingsPage: React.FC<ISettingsPageProps> = props => {
+const SettingsPage: React.FC<SettingsPageProps> = () => {
   const { t } = useTranslation('app-search');
-  const { plugins } = props;
+  const { getRoutingPlugin } = useRootComponentProps();
 
   // for displaying feedback messages
   const [message, setMessage] = React.useState('');
@@ -48,7 +52,7 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
     setShowNsfwContent(!showNsfwContent);
   };
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const goToSearchPage = () => {
     return navigateTo?.({
