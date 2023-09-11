@@ -16,6 +16,7 @@ export const register: (props: IntegrationRegistrationOptions) => IWidgetConfig 
       modalSlotId: 'modal-slot',
       focusedPluginSlotId: 'focused-plugin-slot',
       cookieWidgetSlotId: 'cookie-widget-slot',
+      snackbarNotifSlotId: 'snackbar-notif-slot',
     },
   };
 };

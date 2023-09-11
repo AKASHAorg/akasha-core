@@ -239,6 +239,9 @@ const Layout: React.FC<RootComponentProps> = props => {
               )}
               <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
             </Box>
+            <Box customStyle="fixed bottom-0 mr-4 mb-4">
+              <Extension name={props.layoutConfig.snackbarNotifSlotId} uiEvents={props.uiEvents} />
+            </Box>
           </Box>
 
           <Box customStyle="sticky top-0 h-screen">
