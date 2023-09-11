@@ -1,10 +1,10 @@
 import * as React from 'react';
 import SettingsPage from '../settings-page';
 
-import { act, screen, renderWithAllProviders, genAppProps } from '@akashaorg/af-testing';
+import { act, screen, renderWithAllProviders } from '@akashaorg/af-testing';
 
 describe('< SettingsPage /> component', () => {
-  const BaseComponent = <SettingsPage {...genAppProps()} />;
+  const BaseComponent = <SettingsPage titleLabel="Settings Page" />;
   beforeEach(async () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});

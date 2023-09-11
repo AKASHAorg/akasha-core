@@ -3,7 +3,7 @@ import React from 'react';
 import { Profile } from '@akashaorg/typings/ui';
 import { getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -45,22 +45,20 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
 
   const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none';
 
-  const BaseItemStyles = 'flex justify-between items-center space-y-2';
-
   return (
     <Card padding={16}>
-      <Box customStyle="mb-4">
+      <Stack customStyle="mb-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}
         </Text>
-      </Box>
+      </Stack>
 
-      <Box customStyle={BaseTabPanelStyles}>
+      <Stack customStyle={BaseTabPanelStyles}>
         <ul>
           {profiles.length === 0 && !isLoadingProfiles && (
-            <Box customStyle="flex justify-center items-center py-2">
+            <Stack justify="center" align="center" customStyle="py-2">
               <Text>{noProfilesLabel}</Text>
-            </Box>
+            </Stack>
           )}
 
           {profiles.length === 0 &&
@@ -71,10 +69,16 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
               </React.Fragment>
             ))}
 
-          <Box customStyle="space-y-4">
+          <Stack spacing="gap-y-4">
             {profiles.length !== 0 &&
               profiles.map((profile, index) => (
-                <Box key={index} customStyle={BaseItemStyles}>
+                <Stack
+                  key={index}
+                  direction="row"
+                  align="center"
+                  justify="between"
+                  spacing="gap-y-2"
+                >
                   <ProfileAvatarButton
                     profileId={profile.did.id}
                     label={profile.name}
@@ -93,11 +97,11 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                       allowMinimization={false}
                     />
                   )}
-                </Box>
+                </Stack>
               ))}
-          </Box>
+          </Stack>
         </ul>
-      </Box>
+      </Stack>
     </Card>
   );
 };

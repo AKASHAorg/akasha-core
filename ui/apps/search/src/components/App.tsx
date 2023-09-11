@@ -1,16 +1,21 @@
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import AppRoutes from './routes';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
-const App: React.FC<RootComponentProps> = props => {
+import AppRoutes from './routes';
+
+const App: React.FC<unknown> = () => {
+  const { getTranslationPlugin } = useRootComponentProps();
+
   return (
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <Helmet>
         <title>Search | AKASHA World</title>
       </Helmet>
-      <AppRoutes {...props} />
+      <AppRoutes />
     </I18nextProvider>
   );
 };

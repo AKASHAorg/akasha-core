@@ -5,7 +5,7 @@ import { Moderator } from '@akashaorg/typings/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -34,8 +34,6 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
 
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
-  const boxStyle = 'flex justify-between';
-
   const moderatorStatusIndicator = `${
     moderator.status === 'active'
       ? 'bg-success'
@@ -46,10 +44,10 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
 
   return (
     <Card padding={16} customStyle="space-y-4">
-      <Box customStyle={boxStyle}>
-        <Box customStyle="flex space-x-2 items-center w([50%] md:[30%])">
+      <Stack justify="between">
+        <Stack customStyle="flex space-x-2 items-center w([50%] md:[30%])">
           <Avatar avatar={moderator.avatar} />
-          <Box>
+          <Stack>
             <Tooltip content={moderator.name} placement="right">
               <Text
                 variant="button-lg"
@@ -68,16 +66,16 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
                 color={{ light: 'grey4', dark: 'grey7' }}
               >{`${moderator.name}`}</Text>
             </Tooltip>
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
 
-        <Box>
-          <Box customStyle="flex space-x-1.5 items-center">
-            <Box customStyle={`w-1.5 h-1.5 rounded-full ${moderatorStatusIndicator}`} />
+        <Stack>
+          <Stack align="center" spacing="gap-x-1.5">
+            <Stack customStyle={`w-1.5 h-1.5 rounded-full ${moderatorStatusIndicator}`} />
             <Text variant="button-md" weight="normal" customStyle="capitalize">
               {moderator.status}
             </Text>
-          </Box>
+          </Stack>
 
           <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
             {tenureInfoLabel}:
@@ -88,16 +86,16 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
               ? formatDate(new Date(moderator.createdAt).toISOString())
               : formatDate(moderator.moderatorEndDate)}
           </Text>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
 
       <Divider />
 
-      <Box customStyle={boxStyle}>
+      <Stack justify="between">
         <Button label={viewProfileLabel} />
 
         {moderator.social && (
-          <Box customStyle="flex space-x-2">
+          <Stack spacing="gap-x-2">
             {moderator.social?.discord && (
               <AppIcon placeholderIconType="discord" accentColor={true} />
             )}
@@ -105,13 +103,13 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
             {moderator.social?.email && (
               <AppIcon placeholderIconType="EnvelopeIcon" accentColor={true} />
             )}
-          </Box>
+          </Stack>
         )}
-      </Box>
+      </Stack>
 
       <Divider />
 
-      <Box customStyle="flex flex-col">
+      <Stack>
         <Text variant="button-md" weight="bold">
           {dismissModeratorLabel}
         </Text>
@@ -123,7 +121,7 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
           customStyle="self-end"
           onClick={onClickDismissModerator}
         />
-      </Box>
+      </Stack>
     </Card>
   );
 };

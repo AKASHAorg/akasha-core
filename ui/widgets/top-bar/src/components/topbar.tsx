@@ -3,7 +3,6 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 
@@ -66,7 +65,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-8)';
   return (
     <Card customStyle={customStyle}>
-      <Box customStyle="flex space-x-2">
+      <Stack direction="row" spacing="gap-x-2">
         <Button
           iconOnly={true}
           icon={sidebarVisible ? 'ArrowLeftOnRectangleIcon' : 'ArrowRightOnRectangleIcon'}
@@ -81,7 +80,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           icon="ChevronLeftIcon"
           onClick={onBackClick}
         />
-      </Box>
+      </Stack>
       <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
         <Stack align="center" justify="center" direction="column">
           <Icon type="akasha" customStyle="w-18 h-7" />
@@ -90,7 +89,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           </Text>
         </Stack>
       </Button>
-      <Box customStyle="flex space-x-2">
+      <Stack direction="row" spacing="gap-x-2">
         {displayWidgetTogglingButton ? (
           isLoggedIn ? (
             <>
@@ -115,7 +114,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
             variant="primary"
           />
         )}
-      </Box>
+      </Stack>
     </Card>
   );
 };

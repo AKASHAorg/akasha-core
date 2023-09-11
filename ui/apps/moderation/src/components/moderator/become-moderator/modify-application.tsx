@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
@@ -20,8 +20,8 @@ const ModifyApplication: React.FC<ModifyApplicationProps> = props => {
 
   return (
     <PageHeader {...props}>
-      <Box customStyle="space-y-6">
-        <Box customStyle="space-y-4">
+      <Stack spacing="gap-y-6">
+        <Stack spacing="gap-y-4">
           <Text variant="h6">{reasonTitleLabel}</Text>
 
           <TextField
@@ -29,14 +29,14 @@ const ModifyApplication: React.FC<ModifyApplicationProps> = props => {
             placeholder={reasonPlaceholderLabel}
             type="multiline"
           />
-        </Box>
+        </Stack>
 
-        <Box customStyle="space-y-4">
+        <Stack spacing="gap-y-4">
           <Text variant="h6">{changeCategoryTitleLabel}</Text>
 
           <CategoryPills {...props} />
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </PageHeader>
   );
 };

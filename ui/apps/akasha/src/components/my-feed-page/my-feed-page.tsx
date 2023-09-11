@@ -1,27 +1,30 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { Profile } from '@akashaorg/typings/ui';
 import {
   useGetInterestsByDidQuery,
   useInfiniteGetBeamsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
 import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
-import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-export interface MyFeedPageProps {
+export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: Profile;
-}
+};
 
-const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
-  const { loggedProfileData, layoutConfig, plugins, uiEvents } = props;
+const MyFeedPage: React.FC<MyFeedPageProps> = props => {
+  const { loggedProfileData } = props;
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const isLoggedUser = React.useMemo(() => !!loggedProfileData?.did.id, [loggedProfileData]);
 
@@ -41,7 +44,9 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       },
     },
   );
-  const navigateToModal = React.useRef(props.navigateToModal);
+
+  const _navigateToModal = React.useRef(navigateToModal);
+
   const showLoginModal = React.useRef(props.showLoginModal);
 
   const userHasSubscriptions = React.useMemo(() => {
@@ -53,13 +58,13 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       if (!isLoggedUser) {
         return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
-      navigateToModal.current({ name: 'report-modal', itemId, itemType });
+      _navigateToModal.current({ name: 'report-modal', itemId, itemType });
     },
     [isLoggedUser],
   );
 
   const handleEntryRemove = React.useCallback((itemId: string) => {
-    navigateToModal.current({
+    _navigateToModal.current({
       name: 'entry-remove-confirmation',
       itemType: EntityTypes.BEAM,
       itemId,
@@ -77,12 +82,12 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   };
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
 
-      <Box customStyle="mb-2">
+      <Stack customStyle="mb-2">
         <StartCard
           title={t('My Feed')}
           heading={t('Add some magic to your feed 🪄')}
@@ -97,23 +102,22 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           CTALabel={t('Customize My Feed')}
           onClickCTA={handleCTAClick}
         />
-      </Box>
+      </Stack>
 
       <FeedWidget
         queryKey="akasha-my-feed-query"
         modalSlotId={layoutConfig.modalSlotId}
         itemType={EntityTypes.BEAM}
-        navigateToModal={navigateToModal.current}
+        navigateToModal={_navigateToModal.current}
         onLoginModalOpen={showLoginModal.current}
         loggedProfileData={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
-        uiEvents={uiEvents}
         itemSpacing={8}
-        i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+        i18n={getTranslationPlugin().i18n}
         accentBorderTop={true}
-        onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
+        onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
       />
 
       {userHasSubscriptions && !postsReq.isFetching && (
@@ -131,7 +135,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           hasPosts={postsReq.hasNextPage && postsReq.data?.pages?.length > 0}
         />
       )}
-    </Box>
+    </Stack>
   );
 };
 

@@ -1,23 +1,28 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+
+import { ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 import OnboardingSuggestionsCard from '@akashaorg/design-system-components/lib/components/OnboardingSuggestionsCard';
 import OnboardingStartCard from '@akashaorg/design-system-components/lib/components/OnboardingStartCard';
 
-interface OnboardingPageProps extends RootComponentProps {
+export type OnboardingPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
 const OnboardingPage: React.FC<OnboardingPageProps> = props => {
-  const { loggedProfileData, plugins, showLoginModal } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { loggedProfileData, showLoginModal } = props;
 
   const { t } = useTranslation('app-search');
+
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   // @TODO: replace with new hooks
   const trendingTagsReq = null;
@@ -25,8 +30,6 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
 
   const trendingProfilesReq = null;
   const trendingProfiles = trendingProfilesReq.data?.slice(0, 7) || [];
-
-  const followPubKeyArr = trendingProfiles.map((profile: { pubKey: string }) => profile.pubKey);
 
   const isFollowingMultipleReq = null;
   const followedProfiles = isFollowingMultipleReq.data;
@@ -87,11 +90,11 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   };
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet>
         <title>{t('Onboarding')}</title>
       </Helmet>
-      <Box customStyle="gap-4">
+      <Stack spacing="gap-4">
         <OnboardingStartCard
           inputPlaceholderLabel={t('Search')}
           titleLabel={t('Search')}
@@ -115,8 +118,8 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
           onClickFollow={handleFollow}
           onClickUnfollow={handleUnfollow}
         />
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };
 

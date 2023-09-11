@@ -22,7 +22,7 @@ const ConnectErrorCard: React.FC<ConnectErrorCardProps> = ({ title, message, act
     >
       <Stack direction="column" spacing="gap-y-2">
         <Stack justify="between">
-          <Stack align="center" spacing="gap-x-2">
+          <Stack direction="row" align="center" spacing="gap-x-2">
             <Icon
               type="ExclamationTriangleIcon"
               color={{ light: 'errorLight', dark: 'errorDark' }}

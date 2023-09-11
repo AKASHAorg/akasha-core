@@ -5,7 +5,7 @@ import { editorDefaultValue } from '../Editor/initialValue';
 import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 import { IPublishData } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Colors } from '@akashaorg/typings/ui';
 
@@ -85,7 +85,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
   };
 
   return (
-    <Box ref={wrapperRef} customStyle="grid">
+    <Stack ref={wrapperRef} customStyle="grid">
       {!showEditor && (
         <EditorPlaceholder
           onClick={handleToggleEditor}
@@ -133,7 +133,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
           />
         </Card>
       )}
-    </Box>
+    </Stack>
   );
 };
 

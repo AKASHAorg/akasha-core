@@ -1,19 +1,21 @@
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import AppRoutes from './app-routes';
 
-const App: React.FC<RootComponentProps> = props => {
+const App: React.FC<unknown> = () => {
+  const { getTranslationPlugin } = useRootComponentProps();
+
   return (
-    <Box>
-      <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
-        <AppRoutes {...props} />
+    <Stack>
+      <I18nextProvider i18n={getTranslationPlugin().i18n}>
+        <AppRoutes />
       </I18nextProvider>
-    </Box>
+    </Stack>
   );
 };
 

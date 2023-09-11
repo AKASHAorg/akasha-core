@@ -3,7 +3,6 @@ import React, { ReactElement } from 'react';
 import { Profile } from '@akashaorg/typings/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
@@ -12,7 +11,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 
 export type HeaderProps = {
@@ -51,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({
   const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
 
   return (
-    <Box>
+    <Stack>
       <Card
         elevation="1"
         radius={{ top: 20 }}
@@ -62,8 +61,8 @@ const Header: React.FC<HeaderProps> = ({
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
         <Stack direction="column" customStyle="pl-2" fullWidth>
-          <Stack spacing="gap-x-2" customStyle="-ml-2">
-            <Box customStyle={avatarContainer}>
+          <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
+            <Stack customStyle={avatarContainer}>
               <Avatar
                 profileId={did.id}
                 size="xl"
@@ -76,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({
                   'bg',
                 )}`}
               />
-            </Box>
+            </Stack>
             <Stack direction="column" spacing="gap-y-1">
               <Text variant="button-lg">{name}</Text>
               <DidField
@@ -87,8 +86,8 @@ const Header: React.FC<HeaderProps> = ({
                 copiedLabel={copiedLabel}
               />
             </Stack>
-            <Box customStyle="relative ml-auto mt-2">
-              <Stack spacing="gap-x-2">
+            <Stack customStyle="relative ml-auto mt-2">
+              <Stack direction="row" align="center" spacing="gap-x-2">
                 {viewerIsOwner && handleEdit ? (
                   <Button
                     aria-label="edit"
@@ -121,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({
                   />
                 )}
               </Stack>
-            </Box>
+            </Stack>
           </Stack>
           <Stack direction="column" spacing="gap-y-4">
             {ensName === 'loading' ? (
@@ -150,7 +149,7 @@ const Header: React.FC<HeaderProps> = ({
           </Stack>
         </Stack>
       </Card>
-    </Box>
+    </Stack>
   );
 };
 export default Header;

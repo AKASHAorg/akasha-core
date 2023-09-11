@@ -1,10 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -16,19 +15,12 @@ import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboard
 import routes, { ONBOARDING_STEP_ONE, WRITE_ARTICLE } from '../routes';
 import { articles } from '../components/dummy-data';
 
-const MyArticles: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
+const MyArticles: React.FC<unknown> = () => {
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
-
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-  });
-  const loggedProfileData = profileDataReq.data;
 
   const { t } = useTranslation('app-articles');
 
@@ -42,25 +34,6 @@ const MyArticles: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
     });
-  };
-
-  const handleDropItemClick = (id: string, action?: 'edit' | 'settings') => () => {
-    if (action) {
-      navigateTo({
-        appName: '@akashaorg/app-articles',
-        getNavigationUrl: () => `/article/${id}/${action}`,
-      });
-    }
-  };
-
-  const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData?.did?.id) {
-      return props.navigateToModal({
-        name: 'login',
-        redirectTo: { name: 'report-modal', itemId, itemType },
-      });
-    }
-    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleClickWriteArticle = () => {
@@ -78,23 +51,11 @@ const MyArticles: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleMentionsClick = () => {
-    /** do something */
-  };
-
   const handleTagClick = (name: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
     });
-  };
-
-  const handleRepliesClick = () => {
-    /** do something */
-  };
-
-  const handleSaveClick = () => {
-    /** do something */
   };
 
   const handleClickTab = (idx: number) => () => {
@@ -116,7 +77,7 @@ const MyArticles: React.FC<RootComponentProps> = props => {
   }
 
   return (
-    <Box customStyle="gap-2">
+    <Stack spacing="gap-2">
       <MyArticlesHeader
         titleLabel={t('My Articles')}
         subtitleLabel={t('You can check all the articles that you published as well as the drafts')}
@@ -144,9 +105,9 @@ const MyArticles: React.FC<RootComponentProps> = props => {
               savedLabel={t('Saved')}
               onClickArticle={handleClickArticle}
               onTagClick={handleTagClick}
-              onMentionsClick={handleMentionsClick}
-              onRepliesClick={handleRepliesClick}
-              onSaveClick={handleSaveClick}
+              onMentionsClick={() => null}
+              onRepliesClick={() => null}
+              onSaveClick={() => null}
             />
           ))}
       {activeTabIndex === 1 &&
@@ -177,7 +138,7 @@ const MyArticles: React.FC<RootComponentProps> = props => {
               onClickArticle={handleClickArticle}
             />
           ))}
-    </Box>
+    </Stack>
   );
 };
 

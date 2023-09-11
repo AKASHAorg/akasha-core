@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import ArticleHeader from '../components/articles-header';
 import ArticlesMiniCard from '../components/articles-mini-card';
@@ -12,14 +12,13 @@ import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboard
 import routes, { ONBOARDING_STEP_ONE, SETTINGS, WRITE_ARTICLE } from '../routes';
 import { articles } from '../components/dummy-data';
 
-const Dashboard: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
+const Dashboard: React.FC<unknown> = () => {
   const { t } = useTranslation('app-articles');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const isOnboarded = React.useMemo(() => {
+  const navigateTo = getRoutingPlugin().navigateTo;
+
+  const isOnboarded = useMemo(() => {
     return window.localStorage.getItem(ONBOARDING_STATUS);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -59,18 +58,6 @@ const Dashboard: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleMentionsClick = () => {
-    /** do something */
-  };
-
-  const handleRepliesClick = () => {
-    /** do something */
-  };
-
-  const handleSaveClick = () => {
-    /** do something */
-  };
-
   if (!isOnboarded) {
     return (
       <ArticleOnboardingIntro
@@ -86,7 +73,7 @@ const Dashboard: React.FC<RootComponentProps> = props => {
   }
 
   return (
-    <Box customStyle="gap-2">
+    <Stack spacing="gap-2">
       <ArticleHeader
         titleLabel={t('Articles')}
         subtitleLabel={t('Browse articles or write a new one 📝')}
@@ -109,12 +96,12 @@ const Dashboard: React.FC<RootComponentProps> = props => {
             savedLabel={t('Saved')}
             onClickArticle={handleClickArticle}
             onTagClick={handleTagClick}
-            onMentionsClick={handleMentionsClick}
-            onRepliesClick={handleRepliesClick}
-            onSaveClick={handleSaveClick}
+            onMentionsClick={() => null}
+            onRepliesClick={() => null}
+            onSaveClick={() => null}
           />
         ))}
-    </Box>
+    </Stack>
   );
 };
 

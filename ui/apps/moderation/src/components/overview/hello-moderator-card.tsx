@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -26,7 +26,7 @@ const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
 
   return (
     <Card padding={16}>
-      <Box customStyle="flex flex-col items-center space-y-6">
+      <Stack align="center" spacing="gap-y-6">
         <Text variant="h6" weight="bold">
           {titleLabel}
         </Text>
@@ -35,30 +35,30 @@ const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
           {subtitleLabel}
         </Text>
 
-        <Box customStyle="flex space-x-6 justify-center">
+        <Stack direction="row" spacing="gap-x-6" justify="center">
           <a href={moderatorGuideUrl} target="_blank" rel="noreferrer noopener">
             <Button plain={true}>
-              <Box customStyle="flex items-center space-x-2">
+              <Stack direction="row" align="center" spacing="gap-x-2">
                 <Icon size="sm" accentColor={true} type="shield" customStyle="mx-auto my-0" />
                 <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                   {moderatorGuideLabel}
                 </Text>
-              </Box>
+              </Stack>
             </Button>
           </a>
 
           <a href={moderationFAQUrl} target="_blank" rel="noreferrer noopener">
             <Button plain={true}>
-              <Box customStyle="flex items-center space-x-2">
+              <Stack direction="row" align="center" spacing="gap-x-2">
                 <Icon size="sm" accentColor={true} type="faq" customStyle="mx-auto my-0" />
                 <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                   {moderationFAQLabel}
                 </Text>
-              </Box>
+              </Stack>
             </Button>
           </a>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </Card>
   );
 };

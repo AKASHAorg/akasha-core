@@ -1,12 +1,6 @@
 import React from 'react';
 import SearchPage from '../routes/search-page';
-import {
-  screen,
-  renderWithAllProviders,
-  genLoggedInState,
-  genAppProps,
-  act,
-} from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 
 const mockLocationValue = {
@@ -31,10 +25,17 @@ jest.mock('react-router', () => ({
 }));
 
 describe('<SearchPage />', () => {
-  const appProps = genAppProps();
   const BaseComponent = (
-    <AnalyticsProvider {...appProps}>
-      <SearchPage {...appProps} loginState={genLoggedInState()} showLoginModal={jest.fn()} />
+    <AnalyticsProvider {...genAppProps()}>
+      <SearchPage
+        loggedProfileData={{
+          id: 'some id',
+          createdAt: Date.now(),
+          name: 'some name',
+          did: { id: 'did:pkh' },
+        }}
+        showLoginModal={jest.fn()}
+      />
     </AnalyticsProvider>
   );
   beforeEach(async () => {

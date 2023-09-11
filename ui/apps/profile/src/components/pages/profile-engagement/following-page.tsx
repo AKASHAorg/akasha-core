@@ -1,23 +1,32 @@
 import React, { useMemo, useState } from 'react';
-import FollowProfile from '../../follow-profile';
+import FollowProfileButton from '../../follow-profile-button';
 import Following from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Following';
 import EngagementTab from './engagement-tab';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
-import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useParams } from 'react-router-dom';
 import {
+  useGetFollowDocumentsQuery,
   useGetProfileByDidQuery,
   useInfiniteGetFollowingListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  hasOwn,
+  useGetLogin,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
+import { getFollowList } from './getFollowList';
 
-const FollowingPage: React.FC<RootComponentProps> = props => {
-  const { plugins, navigateToModal } = props;
-  const { profileId } = useParams<{ profileId: string }>();
+const FollowingPage: React.FC<unknown> = () => {
   const [loadMore, setLoadingMore] = useState(false);
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { profileId } = useParams<{ profileId: string }>();
+
+  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfileByDidQuery(
@@ -29,6 +38,12 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
       enabled: !!loginQuery.data?.id,
     },
   );
+
+  const { isViewer, akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { isViewer: null, akashaProfile: null };
+
   const followingReq = useInfiniteGetFollowingListByDidQuery(
     'first',
     {
@@ -77,6 +92,14 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
       ? lastPage?.node.akashaFollowList?.pageInfo
       : null;
   }, [followingReq]);
+  const followProfileIds = useMemo(() => following.map(follow => follow.profile?.id), [following]);
+  const followDocumentsReq = useGetFollowDocumentsQuery(
+    {
+      following: followProfileIds,
+      last: followProfileIds.length,
+    },
+    { select: response => response.viewer?.akashaFollowList, enabled: !isViewer },
+  );
 
   if (!loginQuery.data?.id) {
     return navigateTo({
@@ -85,10 +108,9 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
     });
   }
 
-  const { isViewer, akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
-      ? profileDataReq.data
-      : { isViewer: null, akashaProfile: null };
+  const followList = getFollowList(
+    isViewer ? following : followDocumentsReq.data?.edges.map(edge => edge?.node),
+  );
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({ name: 'login', redirectTo });
@@ -112,12 +134,14 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
     <EngagementTab isLoggedIn={!!loginQuery.data?.id} navigateTo={navigateTo}>
       {followingReq.status === 'loading' && <ProfileEngagementLoading />}
       {followingReq.status === 'error' && (
-        <Box customStyle="mt-8">
+        <Stack customStyle="mt-8">
           <EntryError onError={onError} />
-        </Box>
+        </Stack>
       )}
       {followingReq.status === 'success' && (
         <Following
+          loggedInAccountId={loginQuery.data?.id}
+          followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
           ownerUserName={profileData.name}
@@ -129,12 +153,11 @@ const FollowingPage: React.FC<RootComponentProps> = props => {
               followingReq.fetchNextPage();
             }
           }}
-          renderFollowElement={(profileStreamId, followStreamId, isFollowing) => (
-            <FollowProfile
-              loggedInProfileId={loginQuery.data?.id}
-              profileStreamId={profileStreamId}
+          renderFollowElement={(profileId, followId, isFollowing) => (
+            <FollowProfileButton
+              profileId={profileId}
               isLoggedIn={!!loginQuery.data?.id}
-              followStreamId={followStreamId}
+              followId={followId}
               isFollowing={isFollowing}
               showLoginModal={showLoginModal}
             />

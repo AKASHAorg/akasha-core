@@ -7,16 +7,16 @@ import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types
 
 export type EntryProps = {
   profileAnchorLink: string;
+  accountId: string;
   profileId: string;
-  profileStreamId: string;
   avatar: Profile['avatar'];
   name: string;
-  followStreamId: string;
+  followId: string;
   isFollowing: boolean;
   getMediaUrl: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
   renderFollowElement: (
-    profileStreamId: string,
-    followStreamId: string,
+    profileId: string,
+    followId: string,
     isFollowing: boolean,
   ) => ReactElement | null;
   onProfileClick: (profileId: string) => void;
@@ -25,11 +25,11 @@ export type EntryProps = {
 const Entry: React.FC<EntryProps> = props => {
   const {
     profileAnchorLink,
+    accountId,
     profileId,
-    profileStreamId,
     avatar,
     name,
-    followStreamId,
+    followId,
     isFollowing,
     getMediaUrl,
     renderFollowElement,
@@ -37,23 +37,17 @@ const Entry: React.FC<EntryProps> = props => {
   } = props;
 
   return (
-    <Stack direction="column" spacing="gap-y-4">
-      <Stack align="center" justify="between">
-        <Anchor
-          href={`${profileAnchorLink}/${profileId}`}
-          onClick={event => {
-            event.preventDefault();
-            onProfileClick(profileId);
-          }}
-        >
-          <ProfileAvatarButton
-            profileId={profileId}
-            avatarImage={getMediaUrl(avatar)}
-            label={name}
-          />
-        </Anchor>
-        {renderFollowElement && renderFollowElement(profileStreamId, followStreamId, isFollowing)}
-      </Stack>
+    <Stack direction="row" align="center" justify="between" customStyle="pb-4" fullWidth>
+      <Anchor
+        href={`${profileAnchorLink}/${accountId}`}
+        onClick={event => {
+          event.preventDefault();
+          onProfileClick(accountId);
+        }}
+      >
+        <ProfileAvatarButton profileId={profileId} avatarImage={getMediaUrl(avatar)} label={name} />
+      </Anchor>
+      {renderFollowElement && renderFollowElement(profileId, followId, isFollowing)}
     </Stack>
   );
 };

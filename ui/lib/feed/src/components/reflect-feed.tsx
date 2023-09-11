@@ -3,22 +3,20 @@ import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
   EntityTypes,
   IContentClickDetails,
-  IEntryData,
   ModalNavigationOptions,
   NavigateToParams,
   Profile,
-  RootComponentProps,
   TrackEventData,
 } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import EntryList, {
   EntryListProps,
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
-import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
 
 export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
   itemType: EntityTypes.REFLECT;
@@ -31,7 +29,6 @@ export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> &
   ) => () => void;
   navigateTo: (args: NavigateToParams) => void;
   onEntryRemove?: (entryId: string) => void;
-  uiEvents: RootComponentProps['uiEvents'];
   className?: string;
   modalSlotId: string;
   accentBorderTop?: boolean;
@@ -84,9 +81,9 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           const isLoader = index > allEntries.length - 1;
           if (isLoader || isFetchingNextPage) {
             return (
-              <Box key={key} customStyle="p-8 w-full">
+              <Stack key={key} customStyle="p-8 w-full">
                 <Spinner />
-              </Box>
+              </Stack>
             );
           }
           return (

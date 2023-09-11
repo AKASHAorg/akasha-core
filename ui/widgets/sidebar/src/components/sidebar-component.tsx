@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { RootComponentProps, EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/ui';
+import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/ui';
 import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/sdk/events';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
@@ -11,13 +11,13 @@ import {
   useLogout,
   LOGIN_STATE_KEY,
   useDismissedCard,
+  useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -28,12 +28,12 @@ import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-cor
 import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
 
-const SidebarComponent: React.FC<RootComponentProps> = props => {
+const SidebarComponent: React.FC<unknown> = () => {
   const {
     uiEvents,
     plugins,
     worldConfig: { defaultApps, socialLinks },
-  } = props;
+  } = useRootComponentProps();
 
   const [isMobile, setIsMobile] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
@@ -266,15 +266,19 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       radius="rounded-r-2xl xl:rounded-2xl"
       padding="p-0"
     >
-      <Box customStyle="flex flex-row justify-items-stretch p-4 border-b-1 border(grey9 dark:grey3)">
-        <Box customStyle="w-fit h-fit mr-2">
+      <Stack
+        direction="row"
+        justifyItems="stretch"
+        customStyle="p-4 border-b-1 border(grey9 dark:grey3)"
+      >
+        <Stack customStyle="w-fit h-fit mr-2">
           <Avatar
             profileId={loginQuery.data?.id}
             avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.akashaProfile?.avatar)}
             isClickable={!!loginQuery.data?.id}
             onClick={() => handleAvatarClick(loginQuery.data?.id)}
           />
-        </Box>
+        </Stack>
 
         {isLoading ? (
           <Stack direction="column" spacing="gap-y-1" customStyle="w-fit flex-grow ">
@@ -283,7 +287,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
             <TextLine title="tagName" animated={true} width="w-[100px]" />
           </Stack>
         ) : (
-          <Box customStyle="w-fit flex flex-grow flex-col justify-center">
+          <Stack customStyle="w-fit flex flex-grow flex-col justify-center">
             {profileName && <Text variant="button-md">{profileName}</Text>}
             {loginQuery.data?.id && (
               <DidField
@@ -305,10 +309,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
                 {t('Connect to see member only features.')}
               </Text>
             )}
-          </Box>
+          </Stack>
         )}
 
-        <Box customStyle="w-fit h-fit ml-6 self-start">
+        <Stack customStyle="w-fit h-fit ml-6 self-start">
           {isLoading && <Button size="sm" loading onClick={handleLogoutClick} />}
           {!isLoading && (
             <>
@@ -320,8 +324,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
               )}
             </>
           )}
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
 
       {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
@@ -354,10 +358,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       )}
 
       {socialLinks.length > 0 && (
-        <Box customStyle="flex flex-col px-8 py-4 border-t-1 border(grey9 dark:grey3)">
+        <Stack padding="px-8 py-4" customStyle="border-t-1 border(grey9 dark:grey3)">
           <Text variant="footnotes2">{t('Get in touch')}</Text>
 
-          <Box customStyle="flex w-fit h-fit mt-6">
+          <Stack direction="row" customStyle="w-fit h-fit mt-6">
             {socialLinks.map((socialLink, idx) => (
               <Anchor
                 key={socialLink.icon + idx}
@@ -369,8 +373,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
                 <Button icon={socialLink.icon} variant="primary" greyBg={true} iconOnly={true} />
               </Anchor>
             ))}
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
       )}
     </Card>
   );

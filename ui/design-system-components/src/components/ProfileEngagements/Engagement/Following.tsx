@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Entry from '../Entry';
@@ -17,6 +16,8 @@ export type FollowingProps = {
 } & EngagementProps;
 
 const Following: React.FC<FollowingProps> = ({
+  loggedInAccountId,
+  followList,
   following,
   profileAnchorLink,
   ownerUserName,
@@ -56,29 +57,32 @@ const Following: React.FC<FollowingProps> = ({
   )}`;
 
   return (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack spacing="gap-y-4">
       {following.map((engagement, index, engagements) => (
-        <Box
+        <Stack
+          direction="row"
           key={`${engagement?.profile.id}-${index}`}
           customStyle={index + 1 !== engagements.length ? borderBottomStyle : ''}
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            profileId={engagement?.profile?.did.id}
-            profileStreamId={engagement?.profile?.id}
+            accountId={engagement?.profile?.did.id}
+            profileId={engagement?.profile?.id}
             avatar={engagement?.profile?.avatar}
             name={engagement?.profile?.name}
-            followStreamId={engagement.id}
-            isFollowing={engagement.isFollowing}
+            followId={followList.get(engagement?.profile?.id)?.id}
+            isFollowing={followList.get(engagement?.profile?.id)?.isFollowing}
             getMediaUrl={getMediaUrl}
-            renderFollowElement={viewerIsOwner ? renderFollowElement : null}
+            renderFollowElement={
+              loggedInAccountId !== engagement?.profile?.did.id ? renderFollowElement : null
+            }
             onProfileClick={onProfileClick}
           />
-        </Box>
+        </Stack>
       ))}
-      <Box customStyle="mx-auto" ref={loadMoreRef}>
+      <Stack customStyle="mx-auto" ref={loadMoreRef}>
         {loadMore && <Spinner />}
-      </Box>
+      </Stack>
     </Stack>
   );
 };

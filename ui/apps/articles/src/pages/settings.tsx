@@ -1,19 +1,20 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import ArticlesSettings from '../components/article-settings';
 import routes, { HOME } from '../routes';
 import { topics } from '../components/dummy-data';
 
-const ArticleSettingsPage: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
-  // replace with real data
+const ArticleSettingsPage: React.FC<unknown> = () => {
+  // @TODO replace with real data
   const [selectedTopics, setSelectedTopics] = React.useState<string[]>(topics.slice(0, 15));
 
   const { t } = useTranslation('app-articles');
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const uninstallAppReq = null;
 
@@ -22,10 +23,6 @@ const ArticleSettingsPage: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[HOME],
     });
-  };
-
-  const handleSearch = () => {
-    /** do something */
   };
 
   const handleClickTopic = (topic: string) => () => {
@@ -52,7 +49,7 @@ const ArticleSettingsPage: React.FC<RootComponentProps> = props => {
       subscribedTopics={selectedTopics}
       uninstallLabel={t('Uninstall')}
       onClickCloseSettings={handleClickCloseSettings}
-      onSearch={handleSearch}
+      onSearch={() => null}
       onClickTopic={handleClickTopic}
       onClickUninstall={handleUninstall}
     />

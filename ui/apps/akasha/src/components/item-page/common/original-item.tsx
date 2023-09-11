@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { useAnalytics, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import { useAnalytics, useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   EntityTypes,
-  RootComponentProps,
   ModalNavigationOptions,
   AnalyticsCategories,
   Profile,
@@ -12,41 +11,30 @@ import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { BEAM } from '../../../routes';
 import { UseQueryResult } from '@tanstack/react-query';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
 
-type Props = {
+export type OriginalItemProps = {
   itemId: string;
   itemType: EntityTypes;
   entryReq: UseQueryResult;
   loggedProfileData?: Profile;
-  uiEvents: RootComponentProps['uiEvents'];
-  plugins: RootComponentProps['plugins'];
-  layoutConfig: RootComponentProps['layoutConfig'];
   entryData?: AkashaBeam;
-  navigateToModal: RootComponentProps['navigateToModal'];
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-export function OriginalItem({
-  itemId,
-  itemType,
-  entryReq,
-  loggedProfileData,
-  uiEvents,
-  plugins,
-  entryData,
-  navigateToModal,
-  showLoginModal,
-}: Props) {
+export const OriginalItem: React.FC<OriginalItemProps> = props => {
+  const { itemId, itemType, entryReq, loggedProfileData, entryData, showLoginModal } = props;
+
   const { t } = useTranslation('app-akasha-integration');
+  const { uiEvents, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
 
   const action = new URLSearchParams(location.search).get('action');
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-  const locale = (plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
-    'en') as ILocale;
+  const navigateTo = getRoutingPlugin().navigateTo;
+  const locale = (getTranslationPlugin().i18n?.languages?.[0] || 'en') as ILocale;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const [analyticsActions] = useAnalytics();
   const handleEntryNavigate = useEntryNavigation(navigateTo, itemId);
@@ -144,8 +132,8 @@ export function OriginalItem({
   const replyActive = !action && loggedProfileData?.did?.id;
 
   return (
-    <Box customStyle={`rounded-t-lg`}>
-      <Box customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
+    <Stack customStyle={`rounded-t-lg`}>
+      <Stack customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
         <EntryBox
           isRemoved={!entryData?.active}
           entryData={entryData}
@@ -194,8 +182,8 @@ export function OriginalItem({
             />
           }
         />
-      </Box>
-      <Box customStyle="m-4">
+      </Stack>
+      <Stack customStyle="m-4">
         {!loggedProfileData?.did?.id && (
           <EditorPlaceholder
             onClick={handlePlaceholderClick}
@@ -215,7 +203,7 @@ export function OriginalItem({
             }}
           />
         )}
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
-}
+};

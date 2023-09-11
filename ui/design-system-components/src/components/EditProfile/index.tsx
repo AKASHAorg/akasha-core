@@ -71,7 +71,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             unregister(`links.${index}`);
           }}
         />
-        <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
+        <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
             variant="text"
             label={cancelButton.label}

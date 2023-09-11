@@ -3,7 +3,7 @@ import { apply, tw, tx } from '@twind/core';
 
 import { IconType } from '@akashaorg/typings/ui';
 
-import Box from '../Box';
+import Stack from '../Stack';
 import Icon from '../Icon';
 import Text from '../Text';
 
@@ -54,7 +54,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   return (
-    <Box customStyle="relative min-w-[8rem]">
+    <Stack customStyle="relative min-w-[8rem]">
       {label && <Text variant="label">{label}</Text>}
 
       <button
@@ -74,7 +74,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
       {/* <!-- Dropdown menu --> */}
       {dropOpen && (
-        <Box customStyle={optionsWrapperStyle}>
+        <Stack customStyle={optionsWrapperStyle}>
           <ul aria-labelledby="dropdownDefaultButton">
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
@@ -88,10 +88,10 @@ const Dropdown: React.FC<DropdownProps> = ({
                   )}
                   onClick={handleChange(menuItem)}
                 >
-                  <Box
-                    customStyle={`flex items-center space-x-2 ${
-                      isSelected ? 'text-secondaryLight' : 'text-black'
-                    }`}
+                  <Stack
+                    align="center"
+                    spacing="gap-x-2"
+                    customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                   >
                     {menuItem?.iconName && (
                       <Icon
@@ -113,7 +113,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                     >
                       {menuItem.title}
                     </Text>
-                  </Box>
+                  </Stack>
                   {isSelected && (
                     <span className={tw('ml-4')}>
                       <Icon
@@ -126,9 +126,9 @@ const Dropdown: React.FC<DropdownProps> = ({
               );
             })}
           </ul>
-        </Box>
+        </Stack>
       )}
-    </Box>
+    </Stack>
   );
 };
 

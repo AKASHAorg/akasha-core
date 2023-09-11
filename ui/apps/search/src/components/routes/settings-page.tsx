@@ -1,9 +1,10 @@
 import React from 'react';
-import { tw } from '@twind/core';
-import routes, { RESULTS } from '../../routes';
-import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+
+import { ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -11,15 +12,17 @@ import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/compon
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
-interface ISettingsPageProps extends RootComponentProps {
+import routes, { RESULTS } from '../../routes';
+
+export type SettingsPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const SettingsPage: React.FC<ISettingsPageProps> = props => {
+const SettingsPage: React.FC<SettingsPageProps> = () => {
   const { t } = useTranslation('app-search');
-  const { plugins } = props;
+  const { getRoutingPlugin } = useRootComponentProps();
 
   // for displaying feedback messages
   const [message, setMessage] = React.useState('');
@@ -49,7 +52,7 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
     setShowNsfwContent(!showNsfwContent);
   };
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const goToSearchPage = () => {
     return navigateTo?.({
@@ -108,12 +111,12 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
         </Text>
 
         <Divider customStyle="my-2" />
-        <Box customStyle="flex justify-between">
+        <Stack justify="between">
           <Text variant="h6">
             <>{t('Show NSFW Content')}</>
           </Text>
           <Toggle checked={showNsfwContent} onChange={showNSFWChangeHandler} size="large" />
-        </Box>
+        </Stack>
         <Text variant="footnotes2" color={{ light: 'grey7', dark: 'grey6' }}>
           <>
             {t(
@@ -121,7 +124,7 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
             )}
           </>
         </Text>
-        <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2 pt-32')}>
+        <Stack fullWidth justify="end" spacing="gap-x-4" customStyle="pr-2 pb-2 pt-32">
           <Button
             variant="text"
             label={t('Cancel')}
@@ -134,16 +137,16 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
             onClick={confirmHandler}
             disabled={updateButtonDisabled}
           />
-        </div>
+        </Stack>
       </Card>
       {showFeedback && (
-        <div className={tw('-mt-12 md:mt-4 z-50 w-full')}>
+        <Stack fullWidth customStyle="-mt-12 md:mt-4 z-50">
           <Snackbar
             title={t('{{notificationMessage}}', { notificationMessage: message })}
             type={messageType as SnackBarType}
             handleDismiss={() => setShowFeedback(false)}
           />
-        </div>
+        </Stack>
       )}
     </>
   );

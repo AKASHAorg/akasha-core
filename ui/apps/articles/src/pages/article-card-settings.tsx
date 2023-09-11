@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import { getCroppedImage } from '@akashaorg/design-system-core/lib/utils/get-cropped-image';
 
 import ArticleCardSettings, {
@@ -11,9 +13,9 @@ import ArticleCardSettings, {
 
 import { licences } from '../utils/licenses';
 
-const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
+const ArticleCardSettingsPage: React.FC<unknown> = () => {
   // state values to handle image cropping
-  const [coverImageCrop, setCoverImageCrop] = React.useState<any>({
+  const [, setCoverImageCrop] = React.useState<unknown>({
     x: 0,
     y: 0,
   });
@@ -39,6 +41,7 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
   const coverImageInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const { t } = useTranslation('app-articles');
+  const { logger } = useRootComponentProps();
 
   // extract and translate licenses
   const licensesArr = licences.map(license =>
@@ -159,7 +162,7 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
 
       resetCropperFields();
     } catch (e) {
-      props.logger.error(e);
+      logger.error(e);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coverImageCroppedAreaPixels, coverImageRotation]);
@@ -279,15 +282,16 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
   /**
    * Saves a draft of the form values.
    */
-  const handleSaveDraft = () => {
-    /** do something */
-  };
+  // const handleSaveDraft = () => {
+  //   /** do something */
+  // };
+
   /**
    * Updates settings for the specified article id.
    */
-  const handleConfirm = () => {
-    /** do something */
-  };
+  // const handleConfirm = () => {
+  //   /** do something */
+  // };
 
   return (
     <ArticleCardSettings
@@ -345,8 +349,8 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
       onTargetKeyDown={handleTargetKeyDown}
       onClickTag={handleTagClick}
       onSelectLicense={handleSelectLicense}
-      onClickSaveDraft={handleSaveDraft}
-      onClickConfirm={handleConfirm}
+      onClickSaveDraft={() => null}
+      onClickConfirm={() => null}
     />
   );
 };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -40,9 +40,9 @@ export const Moderators: React.FC<BasePageProps> = props => {
     <Card padding={0}>
       <Tab value={activeTab} onChange={setActiveTab} labels={tabs} labelTextVariant="body1">
         {getModeratorsQuery.isFetching && (
-          <Box customStyle="flex items-center justify-center p-4">
+          <Stack align="center" justify="center" customStyle="p-4">
             <Spinner size="lg" />
-          </Box>
+          </Stack>
         )}
 
         {!getModeratorsQuery.isFetching && !filteredModeratorList && (
@@ -54,8 +54,8 @@ export const Moderators: React.FC<BasePageProps> = props => {
         {!getModeratorsQuery.isFetching &&
           filteredModeratorList &&
           filteredModeratorList.length > 0 && (
-            <Box customStyle="flex-1">
-              <Box customStyle="w-full h-full overflow-y-scroll">
+            <Stack>
+              <Stack fullWidth={true} customStyle="h-full overflow-y-scroll">
                 {filteredModeratorList?.map((moderator, idx) => {
                   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
 
@@ -69,8 +69,8 @@ export const Moderators: React.FC<BasePageProps> = props => {
                     />
                   );
                 })}
-              </Box>
-            </Box>
+              </Stack>
+            </Stack>
           )}
       </Tab>
     </Card>

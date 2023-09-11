@@ -3,7 +3,6 @@ import Stack from '../Stack';
 import List, { ListItem } from '../List';
 import TextField from '../TextField';
 import Tag from './Tag';
-import Box from '../Box';
 import { InputProps, TextFieldProps } from '../TextField/types';
 import { useCloseActions } from '../../utils';
 import { Separator } from './types';
@@ -118,7 +117,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
         disabled={disabled}
       />
       {showSuggestions && suggestions.length > 0 && (
-        <Box customStyle={'relative'}>
+        <Stack direction="row" customStyle={'relative'}>
           <List
             items={suggestions}
             showDivider={false}
@@ -129,10 +128,10 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
             }}
             customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar"
           />
-        </Box>
+        </Stack>
       )}
       {tags?.size > 0 && (
-        <Stack align="center" customStyle="flex-wrap gap-x-2 gap-y-2">
+        <Stack direction="row" align="center" spacing="gap-2" customStyle="flex-wrap">
           {[...tags].map(tag => (
             <Tag
               key={tag}

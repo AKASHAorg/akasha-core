@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import ApplicationDetailIntro from '../components/dashboard/tabs/applications/application-detail-intro';
 import ApplicationDetail from '../components/dashboard/tabs/applications/application-detail';
@@ -31,7 +31,7 @@ export const ApplicationDetailPage: React.FC = () => {
   };
 
   return (
-    <Box customStyle="space-y-4">
+    <Stack spacing="gap-y-4">
       <ApplicationDetailIntro
         selectedApplicant={selectedApplicant}
         viewProfileLabel={t('View Profile')}
@@ -63,6 +63,6 @@ export const ApplicationDetailPage: React.FC = () => {
         onCancelButtonClick={handleCancelButtonClick}
         onConfirmButtonClick={handleConfirmButtonClick}
       />
-    </Box>
+    </Stack>
   );
 };

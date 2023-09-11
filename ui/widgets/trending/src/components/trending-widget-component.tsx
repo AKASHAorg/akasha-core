@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
-import { useGetLogin, useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/typings/ui';
+import { useGetLogin, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   useGetProfilesQuery,
   useGetInterestsQuery,
@@ -11,13 +11,13 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useQueryClient } from '@tanstack/react-query';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 import { LatestProfiles, LatestTopics } from './cards';
 
-const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
-  const { plugins, navigateToModal } = props;
+const TrendingWidgetComponent: React.FC<unknown> = () => {
+  const { plugins, navigateToModal } = useRootComponentProps();
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
@@ -125,7 +125,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleFollowProfile = (did: string) => {
+  const handleFollowProfile = () => {
     if (!loginQuery.data?.id) {
       showLoginModal();
       return;
@@ -139,7 +139,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     // followReq.mutate(did);
   };
 
-  const handleUnfollowProfile = (did: string) => {
+  const handleUnfollowProfile = () => {
     if (!loginQuery.data?.id) {
       showLoginModal();
       return;
@@ -154,7 +154,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Box customStyle="space-y-4">
+    <Stack spacing="gap-y-4">
       {(latestTopicsReq.isError || latestProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
@@ -201,7 +201,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
           handleUnfollowProfile={handleUnfollowProfile}
         />
       )}
-    </Box>
+    </Stack>
   );
 };
 

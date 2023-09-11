@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Entry from '../Entry';
@@ -12,12 +11,12 @@ import { EngagementProps } from '../types';
 
 export type FollowersProps = {
   followers: AkashaFollowers;
-  viewerIsOwner: boolean;
 } & EngagementProps;
 
 const Followers: React.FC<FollowersProps> = ({
+  followList,
+  loggedInAccountId,
   followers,
-  viewerIsOwner,
   profileAnchorLink,
   loadMore,
   onLoadMore,
@@ -54,31 +53,34 @@ const Followers: React.FC<FollowersProps> = ({
   )}`;
 
   return (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack spacing="gap-y-4">
       {followers.map((engagement, index, engagements) => (
-        <Box
+        <Stack
+          direction="row"
           key={`${engagement?.id}-${index}`}
           customStyle={index + 1 !== engagements.length ? borderBottomStyle : ''}
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            profileId={engagement?.did?.akashaProfile?.did?.id}
-            profileStreamId={engagement?.did?.akashaProfile?.id}
+            accountId={engagement?.did?.akashaProfile?.did?.id}
+            profileId={engagement?.did?.akashaProfile?.id}
             avatar={engagement?.did?.akashaProfile?.avatar}
             name={engagement?.did?.akashaProfile?.name}
-            followStreamId={engagement.id}
-            isFollowing={engagement.isFollowing}
+            followId={followList.get(engagement?.did?.akashaProfile?.id)?.id}
+            isFollowing={followList.get(engagement?.did?.akashaProfile?.id)?.isFollowing}
             getMediaUrl={getMediaUrl}
             renderFollowElement={
-              null /*@TODO: isFollowing check is giving wrong result, revisit when the check works as expected  */
+              loggedInAccountId !== engagement?.did?.akashaProfile?.did?.id
+                ? renderFollowElement
+                : null
             }
             onProfileClick={onProfileClick}
           />
-        </Box>
+        </Stack>
       ))}
-      <Box customStyle="mx-auto" ref={loadMoreRef}>
+      <Stack customStyle="mx-auto" ref={loadMoreRef}>
         {loadMore && <Spinner />}
-      </Box>
+      </Stack>
     </Stack>
   );
 };

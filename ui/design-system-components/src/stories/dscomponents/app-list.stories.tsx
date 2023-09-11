@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import AppList, { AppListProps } from '../../components/AppList';
 
@@ -16,7 +16,7 @@ type Story = StoryObj<AppListProps>;
 
 export const BaseAppList: Story = {
   render: () => (
-    <Box customStyle="w-[50%]">
+    <Stack customStyle="w-[50%]">
       <AppList
         apps={[
           {
@@ -34,6 +34,6 @@ export const BaseAppList: Story = {
         ]}
         onAppSelected={() => ({})}
       />
-    </Box>
+    </Stack>
   ),
 };

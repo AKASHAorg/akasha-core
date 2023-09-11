@@ -6,13 +6,18 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import EditProfile from '@akashaorg/design-system-components/lib/components/EditProfile';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
 import {
   useCreateProfileMutation,
   useGetProfileByDidQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { getProfileImageVersionsWithMediaUrl, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  getProfileImageVersionsWithMediaUrl,
+  hasOwn,
+  useGetLogin,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -25,17 +30,22 @@ type EditProfilePageProps = {
   handleFeedback: () => void;
 };
 
-const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = props => {
-  const { plugins, handleFeedback } = props;
-  const { t } = useTranslation('app-profile');
-  const { profileId } = useParams<{ profileId: string }>();
+const EditProfilePage: React.FC<EditProfilePageProps> = props => {
+  const { handleFeedback } = props;
+
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialAkashaProfileInput | null>(null);
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
+  const { profileId } = useParams<{ profileId: string }>();
+  const { t } = useTranslation('app-profile');
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
+  const queryClient = useQueryClient();
 
   const onMutate = () => {
     setIsProcessing(true);
@@ -47,7 +57,6 @@ const EditProfilePage: React.FC<RootComponentProps & EditProfilePageProps> = pro
   };
 
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
-  const queryClient = useQueryClient();
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfileByDidQuery(
     {

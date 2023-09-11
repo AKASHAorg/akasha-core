@@ -1,16 +1,21 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import route, { TOS, TOU, PP, COC, DG } from '../../routes';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import TermsOfService from './terms-of-service';
 import TermsOfUse from './terms-of-use';
 import CodeOfConduct from './code-of-conduct';
 import PrivacyPolicy from './privacy-policy';
 import DeveloperGuidelines from './developer-guidelines';
 
-const AppRoutes: React.FC<RootComponentProps> = props => {
+import route, { TOS, TOU, PP, COC, DG } from '../../routes';
+
+const AppRoutes: React.FC<unknown> = () => {
+  const { baseRouteName } = useRootComponentProps();
+
   return (
-    <Router basename={props.baseRouteName}>
+    <Router basename={baseRouteName}>
       <Routes>
         <Route path={route[TOS]} element={<TermsOfService />} />
         <Route path={route[TOU]} element={<TermsOfUse />} />

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import CookieWidget from '../cookie-widget';
 
-import { genAppProps, RenderResult, renderWithAllProviders } from '@akashaorg/af-testing';
+import { RenderResult, renderWithAllProviders } from '@akashaorg/af-testing';
 
 describe('< CookieWidget />', () => {
   let renderResult: RenderResult;
-  const BaseComponent = <CookieWidget {...genAppProps()} />;
+  const BaseComponent = <CookieWidget />;
   beforeEach(() => {
     renderResult = renderWithAllProviders(BaseComponent, {});
   });

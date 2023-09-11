@@ -86,7 +86,12 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
                     customStyle="px-4"
                   >
                     {children}
-                    <Stack spacing="gap-x-4" justify={actionsAlign} customStyle="mt-auto">
+                    <Stack
+                      direction="row"
+                      spacing="gap-x-4"
+                      justify={actionsAlign}
+                      customStyle="mt-auto"
+                    >
                       {actions.map((action, index) => (
                         <Button key={index} size="md" {...action} />
                       ))}

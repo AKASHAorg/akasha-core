@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
-import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { EventTypes, UIEventData } from '@akashaorg/typings/ui';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Topbar from './topbar';
 import {
   startWidgetsTogglingBreakpoint,
   startMobileSidebarHidingBreakpoint,
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 
-const TopbarComponent: React.FC<RootComponentProps> = props => {
-  const { uiEvents, layoutConfig, worldConfig, plugins } = props;
+const TopbarComponent: React.FC<unknown> = () => {
+  const { uiEvents, layoutConfig, worldConfig, plugins, encodeAppName, getRoutingPlugin } =
+    useRootComponentProps();
 
   const location = useLocation();
   const historyCount = React.useRef(0);
@@ -138,7 +139,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       return;
     }
 
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
+    getRoutingPlugin().navigateTo({
       appName: worldConfig.homepageApp,
       getNavigationUrl: appRoutes => {
         if (appRoutes.hasOwnProperty('defaultRoute')) {
@@ -146,7 +147,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
           // it means that we want to scroll to the top of the page
           if (
             location.pathname ===
-            `/${props.encodeAppName(worldConfig.homepageApp)}${appRoutes.defaultRoute}`
+            `/${encodeAppName(worldConfig.homepageApp)}${appRoutes.defaultRoute}`
           ) {
             scrollTo(0, 0);
           }

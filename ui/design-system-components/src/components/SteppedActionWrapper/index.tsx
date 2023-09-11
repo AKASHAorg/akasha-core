@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import StepIndicator from '@akashaorg/design-system-core/lib/components/Stepper';
 
@@ -23,10 +23,10 @@ export const SteppedActionWrapper: React.FC<
 
   return (
     <Card padding={16}>
-      <Box customStyle="flex flex-col space-y-4">
-        <Box customStyle="self-center">
+      <Stack spacing="gap-y-4">
+        <Stack customStyle="self-center">
           <StepIndicator stepLabels={stepLabels} activeIndex={activeIndex} />
-        </Box>
+        </Stack>
 
         <Text variant="h5" align="center">
           {titleLabel}
@@ -34,16 +34,16 @@ export const SteppedActionWrapper: React.FC<
 
         {children}
 
-        <Box customStyle="flex items-center justify-between">
+        <Stack align="center" justify="between">
           <Anchor href={footerCTAUrl} customStyle="text-sm text-center font-bold">
             {footerCTALabel}
           </Anchor>
 
-          <Box customStyle="flex space-x-6 items-center">
+          <Stack align="center" spacing="gap-x-6">
             <PageButtons {...props} />
-          </Box>
-        </Box>
-      </Box>
+          </Stack>
+        </Stack>
+      </Stack>
     </Card>
   );
 };

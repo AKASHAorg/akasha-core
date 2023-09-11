@@ -4,7 +4,7 @@ import { IntegrationTypes } from '@akashaorg/typings/ui';
 
 import { AvatarProps } from '../Avatar';
 import AvatarImage from '../Avatar/avatar-image';
-import Box from '../Box';
+import Stack from '../Stack';
 
 import { generateActiveOverlayClass, generateAvatarContainerStyle } from '../../utils';
 
@@ -61,18 +61,20 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Box customStyle={className} onClick={onClick}>
-      <React.Suspense fallback={<></>}>
-        <AvatarImage
-          url={avatar?.default?.src}
-          alt={alt}
-          fallbackUrl={avatarImageFallback}
-          faded={faded}
-        />
-      </React.Suspense>
+    <button onClick={onClick}>
+      <Stack customStyle={className}>
+        <React.Suspense fallback={<></>}>
+          <AvatarImage
+            url={avatar?.default?.src}
+            alt={alt}
+            fallbackUrl={avatarImageFallback}
+            faded={faded}
+          />
+        </React.Suspense>
 
-      {active && <div className={activeOverlayClass}></div>}
-    </Box>
+        {active && <div className={activeOverlayClass}></div>}
+      </Stack>
+    </button>
   );
 };
 

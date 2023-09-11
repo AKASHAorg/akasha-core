@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ModerationIntroCard from '@akashaorg/design-system-components/lib/components/ModerationIntroCard';
 import ModerationValuesCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard';
 
@@ -51,7 +51,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
   };
 
   return (
-    <Box customStyle="space-y-4">
+    <Stack spacing="gap-y-4">
       {isAuthorised && (
         <HelloModeratorCard
           titleLabel={t('Hello Moderator!')}
@@ -118,6 +118,6 @@ export const Overview: React.FC<OverviewPageProps> = props => {
         }))}
         onValueClick={handleValueClick}
       />
-    </Box>
+    </Stack>
   );
 };

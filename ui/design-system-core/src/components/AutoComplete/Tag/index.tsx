@@ -15,7 +15,7 @@ const Tag: React.FC<TagProps> = props => {
   const { tag, onRemove } = props;
   return (
     <Card key={tag} radius={24} padding={'px-2 py-1'} customStyle="w-fit" accentBorder>
-      <Stack align="center" spacing="gap-x-1">
+      <Stack direction="row" align="center" spacing="gap-x-1">
         <Text variant="body2" weight="light" truncate>
           {tag}
         </Text>

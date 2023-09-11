@@ -3,24 +3,25 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 
-import { hasOwn, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
-import type { RootComponentProps, Profile, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { hasOwn, useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import type { Profile, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { EntityTypes } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-export type ProfilePageProps = RootComponentProps & {
+export type ProfilePageProps = {
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const ProfileFeedPage = (props: ProfilePageProps) => {
-  const { uiEvents, plugins, navigateToModal, layoutConfig, loggedProfileData, showLoginModal } =
-    props;
+  const { loggedProfileData, showLoginModal } = props;
 
   const { t } = useTranslation('app-profile');
   const { did } = useParams<{ did: string }>();
+  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
 
   const profileDataQuery = useGetProfileByDidQuery(
     { id: did },
@@ -41,11 +42,11 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', itemId, itemType });
+    navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleEntryRemove = (itemId: string) => {
-    props.navigateToModal({
+    navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
       itemType: EntityTypes.BEAM,
@@ -56,7 +57,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     if (!loggedProfileData?.did.id) {
       navigateToModal({ name: 'login' });
     } else {
-      plugins['@akashaorg/app-routing'].navigateTo?.({
+      getRoutingPlugin().navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: () => `/feed?repost=${beamId}`,
       });
@@ -64,7 +65,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
   };
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet.Helmet>
         <title>
           {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | AKASHA
@@ -83,14 +84,13 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
           contentClickable={true}
           onEntryFlag={handleEntryFlag}
           onEntryRemove={handleEntryRemove}
-          uiEvents={uiEvents}
           itemSpacing={8}
-          i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
+          i18n={getTranslationPlugin().i18n}
           onRebeam={handleRebeam}
-          onNavigate={useEntryNavigation(plugins['@akashaorg/app-routing']?.routing?.navigateTo)}
+          onNavigate={useEntryNavigation(getRoutingPlugin()?.routing?.navigateTo)}
         />
       </>
-    </Box>
+    </Stack>
   );
 };
 

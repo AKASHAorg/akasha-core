@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { tw } from '@twind/core';
 import {
-  RootComponentProps,
   IEntryData,
   ITag,
   EntityTypes,
@@ -15,13 +14,13 @@ import {
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { SETTINGS } from '../../routes';
 
-import { useEntryNavigation, useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { useEntryNavigation, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
 
 import EntryCardRenderer from './entry-renderer';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '@akashaorg/design-system-components/lib/components/ProfileSearchCard';
@@ -42,11 +41,11 @@ export enum ButtonValues {
   TAGS = 'Tags',
 }
 
-interface SearchPageProps extends RootComponentProps {
+export type SearchPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
 type DataResponse = SearchTagsResult | IEntryData;
 
@@ -56,26 +55,15 @@ const initSearchState = {
   [ButtonValues.TAGS]: { page: 1, results: [], done: false, isLoading: false },
 };
 
-const onNavBack = () => {
-  history.back();
-};
-
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const {
-    plugins,
-    loggedProfileData,
-    logger,
-    singleSpa,
-    uiEvents,
-    showLoginModal,
-    navigateToModal,
-  } = props;
+  const { loggedProfileData, showLoginModal } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
 
   const [analyticsActions] = useAnalytics();
   const { t, i18n } = useTranslation('app-search');
+  const { getRoutingPlugin } = useRootComponentProps();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   // @TODO replace with new hooks
@@ -84,7 +72,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = null;
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
+
   const handleEntryNavigation = useEntryNavigation(navigateTo);
 
   // const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.CONTENT, [activeButton]);
@@ -180,6 +169,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       ...initSearchState,
       [activeButton]: { ...initSearchState[activeButton], isLoading: true },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword]);
 
   // @TODO replace with new hooks
@@ -232,7 +222,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (searchTagsReq?.isFetched) updateSearchState(ButtonValues.TAGS, searchTagsReq.data);
   }, [searchTagsReq, searchTagsReq?.isFetched]);
 
-  const followPubKeyArr = searchProfilesState?.map(profile => profile.pubKey);
   const isFollowingMultipleReq = null;
   const followedProfiles = isFollowingMultipleReq?.data;
   const followReq = null;
@@ -272,7 +261,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     const trimmedValue = inputValue.trim();
     if (!trimmedValue) return;
     const encodedSearchKey = encodeURIComponent(trimmedValue);
-    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-search',
       getNavigationUrl: routes => `${routes.Results}/${encodedSearchKey}`,
     });
@@ -409,7 +398,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   return (
-    <Box customStyle="flex(& col)">
+    <Stack>
       <SearchStartCard
         searchKeyword={searchKeyword}
         handleSearch={handleSearch}
@@ -449,7 +438,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         /* allQueriesFinished */ !isFetchingSearch &&
           searchKeyword &&
           /* isAllTabActive ? emptySearchState : */ !searchState[activeButton]?.results?.length && (
-            <Box customStyle="mt-8">
+            <Stack customStyle="mt-8">
               <InfoCard
                 titleLabel=""
                 bodyLabel={
@@ -464,11 +453,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 customWidthStyle="w-[90%] md:w-[50%] m-auto"
                 assetName="SearchApp_NotFound-min.webp"
               />
-            </Box>
+            </Stack>
           )
       }
 
-      <Box customStyle="mt-4">
+      <Stack customStyle="mt-4">
         {activeButton === ButtonValues.PEOPLE &&
           searchState[ButtonValues.PEOPLE].done &&
           !!searchProfilesState.length && (
@@ -483,7 +472,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 />
               }
               {searchProfilesState?.map((profileData: Profile, index: number) => (
-                <Box key={index} customStyle="pb-4">
+                <Stack key={index} customStyle="pb-4">
                   <ProfileSearchCard
                     handleFollow={() => handleFollowProfile(profileData.did.id)}
                     handleUnfollow={() => handleUnfollowProfile(profileData.did.id)}
@@ -498,7 +487,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     profileAnchorLink={'/profile'}
                     onClickProfile={() => handleProfileClick(profileData.did.id)}
                   />
-                </Box>
+                </Stack>
               ))}
             </>
           )}
@@ -517,7 +506,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               }
               <Card customStyle="pb-0">
                 {searchTagsState?.map((tag: ITag, index: number) => (
-                  <Box key={index}>
+                  <Stack key={index}>
                     <TagSearchCard
                       tag={tag}
                       subscribedTags={tagSubscriptionsState}
@@ -529,7 +518,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                       handleUnsubscribeTag={handleTagSubscribe(false)}
                     />
                     {index < searchTagsState?.length - 1 && <Divider />}
-                  </Box>
+                  </Stack>
                 ))}
               </Card>
             </>
@@ -552,8 +541,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   key={itemData.itemId}
                   itemData={itemData}
                   itemType={EntityTypes.BEAM}
-                  logger={logger}
-                  singleSpa={singleSpa}
                   onContentClick={handleEntryNavigation}
                   navigateTo={navigateTo}
                   onRebeam={handleRebeam}
@@ -564,8 +551,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   locale={locale}
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}
-                  uiEvents={uiEvents}
-                  navigateToModal={navigateToModal}
                 />
               ))}
             </>
@@ -593,9 +578,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               navigateToModal={props.navigateToModal}
             />
           ))} */}
-      </Box>
+      </Stack>
       {isFetchingSearch && (
-        <Box customStyle="p-8 flex flex-col items-center justify-center m-auto space-y-8">
+        <Stack align="center" justify="center" spacing="gap-y-8" customStyle="p-8 m-auto">
           <Spinner
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             size="xxl"
@@ -603,11 +588,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             partialSpinner={true}
           />
           <Text variant="footnotes2">{t('Searching...')}</Text>
-        </Box>
+        </Stack>
       )}
       {/* triggers intersection observer */}
-      <Box customStyle="p-2" ref={loadmoreRef} />
-    </Box>
+      <Stack padding="p-2" ref={loadmoreRef} />
+    </Stack>
   );
 };
 

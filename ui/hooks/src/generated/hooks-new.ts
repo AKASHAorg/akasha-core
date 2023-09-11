@@ -926,6 +926,57 @@ useInfiniteGetProfileByDidQuery.getKey = (variables: Types.GetProfileByDidQueryV
 ;
 
 useGetProfileByDidQuery.fetcher = (variables: Types.GetProfileByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables, options);
+export const GetProfileStatsByDidDocument = /*#__PURE__*/ `
+    query GetProfileStatsByDid($id: ID!) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaProfile {
+        ...UserProfileFragment
+        followersCount(filters: {where: {isFollowing: {equalTo: true}}}, account: $id)
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const useGetProfileStatsByDidQuery = <
+      TData = Types.GetProfileStatsByDidQuery,
+      TError = unknown
+    >(
+      variables: Types.GetProfileStatsByDidQueryVariables,
+      options?: UseQueryOptions<Types.GetProfileStatsByDidQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetProfileStatsByDidQuery, TError, TData>(
+      ['GetProfileStatsByDid', variables],
+      fetcher<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, variables),
+      options
+    );
+useGetProfileStatsByDidQuery.document = GetProfileStatsByDidDocument;
+
+
+useGetProfileStatsByDidQuery.getKey = (variables: Types.GetProfileStatsByDidQueryVariables) => ['GetProfileStatsByDid', variables];
+;
+
+export const useInfiniteGetProfileStatsByDidQuery = <
+      TData = Types.GetProfileStatsByDidQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetProfileStatsByDidQueryVariables,
+      variables: Types.GetProfileStatsByDidQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetProfileStatsByDidQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetProfileStatsByDidQuery, TError, TData>(
+      ['GetProfileStatsByDid.infinite', variables],
+      (metaData) => fetcher<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetProfileStatsByDidQuery.getKey = (variables: Types.GetProfileStatsByDidQueryVariables) => ['GetProfileStatsByDid.infinite', variables];
+;
+
+useGetProfileStatsByDidQuery.fetcher = (variables: Types.GetProfileStatsByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, variables, options);
 export const GetProfilesDocument = /*#__PURE__*/ `
     query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput) {
   akashaProfileIndex(

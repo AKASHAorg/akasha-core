@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { GenerateMessage, KeyConfirmation } from '../components/onboarding';
 
 import menuRoute, { DEV_KEYS } from '../routes';
 
-export const AddDevKey: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
-
+export const AddDevKey: React.FC<unknown> = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');
@@ -20,6 +15,10 @@ export const AddDevKey: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const { t } = useTranslation('app-dev-dashboard');
+
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const validateMutation = { isSuccess: false, data: null, isError: false, error: null };
 

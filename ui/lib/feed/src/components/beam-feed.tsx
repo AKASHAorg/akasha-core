@@ -8,12 +8,11 @@ import {
   IContentClickDetails,
   ModalNavigationOptions,
   Profile,
-  RootComponentProps,
   TrackEventData,
 } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
@@ -28,7 +27,6 @@ export type BeamFeedProps = Omit<EntryListProps<AkashaBeam>, 'itemCard'> & {
   ) => () => void;
   contentClickable?: boolean;
   onEntryRemove?: (entryId: string) => void;
-  uiEvents: RootComponentProps['uiEvents'];
   className?: string;
   modalSlotId: string;
   accentBorderTop?: boolean;
@@ -50,7 +48,6 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     i18n,
     requestStatus,
     isFetchingNextPage,
-    isFetchingPreviousPage,
     pages,
     itemSpacing = 8,
     onNavigate,
@@ -79,9 +76,9 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
           const isNextLoader = index > allEntries.length - 1;
           if (isNextLoader) {
             return (
-              <Box key={key} customStyle="p-8 w-full">
+              <Stack fullWidth={true} key={key} customStyle="p-8">
                 <Spinner />
-              </Box>
+              </Stack>
             );
           }
           return (

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -62,7 +62,7 @@ const DismissModerator: React.FC<DismissModeratorProps> = props => {
         </Button>
       </Text>
 
-      <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
+      <Stack align="center" justify="end" spacing="gap-x-6" customStyle="p-4 my-2">
         <Button plain={true} onClick={onCancelButtonClick}>
           <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {cancelButtonLabel}
@@ -75,7 +75,7 @@ const DismissModerator: React.FC<DismissModeratorProps> = props => {
           label={confirmButtonLabel}
           onClick={onConfirmButtonClick}
         />
-      </Box>
+      </Stack>
     </Card>
   );
 };

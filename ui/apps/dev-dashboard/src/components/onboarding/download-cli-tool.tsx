@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
@@ -25,7 +25,7 @@ export const DownloadCLITool: React.FC<DownloadCLIToolProps> = props => {
 
   return (
     <SteppedActionWrapper {...props}>
-      <Box>
+      <Stack>
         {introLabel && <Text weight="bold">{introLabel}</Text>}
 
         {subtitleLabel && (
@@ -35,7 +35,7 @@ export const DownloadCLITool: React.FC<DownloadCLIToolProps> = props => {
         )}
 
         {ctaListItem && (
-          <Box customStyle="flex space-x-2 mt-3">
+          <Stack direction="row" spacing="gap-x-2" customStyle="mt-3">
             <Text>•</Text>
 
             <Text>
@@ -47,26 +47,26 @@ export const DownloadCLITool: React.FC<DownloadCLIToolProps> = props => {
               </Button>{' '}
               {listCompletion}
             </Text>
-          </Box>
+          </Stack>
         )}
 
-        <Box customStyle="space-y-4">
+        <Stack spacing="gap-y-4">
           {paragraphs.map((paragraph: string, idx: number) => (
             <React.Fragment key={idx}>
               <ListItem listElementText="•" item={paragraph} />
               {/* re-enable this, if we need to show the console image */}
 
-              {/* <Box customStyle="h-[3rem] my-2">
+              {/* <Stack customStyle="h-[3rem] my-2">
                 <Image
                   assetName={assetName}
                   assetExtension={assetExtension}
                   publicImgPath={publicImgPath}
                 />
-              </Box> */}
+              </Stack> */}
             </React.Fragment>
           ))}
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </SteppedActionWrapper>
   );
 };

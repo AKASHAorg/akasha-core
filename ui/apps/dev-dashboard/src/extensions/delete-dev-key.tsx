@@ -66,24 +66,24 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
       <Text align="center">{`${t('Are you sure you wish to delete')} "${keyName}"?`}</Text>
 
       {/* <Card padding={16}>
-        <Box customStyle="w-[36rem] space-y-3">
-          <Box customStyle="flex justify-center relative">
+        <Stack spacing="gap-y-3" customStyle="w-[36rem]">
+          <Stack justify="center" customStyle="relative">
             <Text variant="h5" align="center" weight="bold">
               {t('Deleting a Dev Key')}
             </Text>
             <Button plain={true} customStyle="absolute right-0" onClick={handleModalClose}>
               <Icon type="XMarkIcon" color="gray" />
             </Button>
-          </Box>
+          </Stack>
 
           <Text align="center">{t(`Are you sure you wish to delete "${keyName}"`)}?</Text>
 
-          <Box customStyle="flex space-x-4 items-center justify-center">
+          <Stack align="center" justify="center" spacing="gap-x-4">
             <Button size="sm" variant="secondary" label={t('Cancel')} onClick={handleModalClose} />
 
             <Button size="sm" variant="primary" label={t('Delete')} onClick={handleDelete} />
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
       </Card> */}
     </Modal>
   );

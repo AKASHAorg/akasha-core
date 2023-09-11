@@ -81,7 +81,7 @@ export const General: React.FC<GeneralProps> = ({
         />
       )}
       {isLargeScreen && ensField && (
-        <Stack align="end" justify="between" spacing="gap-x-6" fullWidth>
+        <Stack direction="row" align="end" justify="between" spacing="gap-x-6" fullWidth>
           <Controller
             control={control}
             name="ens"

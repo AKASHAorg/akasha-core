@@ -68,7 +68,7 @@ const Toggle: React.FC<ToggleProps> = ({
         checked={checked}
         disabled={disabled}
         onChange={handleChange}
-        className={tw('sr-only peer relative')}
+        className={tw('sr-only peer relative invisible')} // adding 'invisible' to remove the small blue dot on Firefox
       />
       <div className={tw(knobStyle)} />
 

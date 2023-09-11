@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import { CardWrapper } from '../components/common';
@@ -12,14 +12,13 @@ import { SummaryCard } from '../components/profile/summary-card';
 import menuRoute, { DASHBOARD } from '../routes';
 import { sampleSignature } from '../utils/dummy-data';
 
-export const SignMessage: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+export const SignMessage: React.FC<unknown> = () => {
+  const [message] = useState<string>('');
 
   const { t } = useTranslation('app-dev-dashboard');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const [message] = React.useState<string>('');
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   // @TODO: needs update
   const signMessageMutation = {
@@ -51,15 +50,15 @@ export const SignMessage: React.FC<RootComponentProps> = props => {
       onCancelButtonClick={handleButtonClick}
       onConfirmButtonClick={isSuccess ? handleButtonClick : handleSignMessage}
     >
-      <Box customStyle="pt-4 px-4">
+      <Stack padding="pt-4 px-4">
         {!signMessageMutation.isSuccess && (
-          <Box>
+          <Stack>
             <TextField
               label={t('Message')}
               placeholder={t('Place the message to be signed here')}
               type="multiline"
             />
-          </Box>
+          </Stack>
         )}
 
         {signMessageMutation.isSuccess && (
@@ -72,7 +71,7 @@ export const SignMessage: React.FC<RootComponentProps> = props => {
             paragraph2Content={sampleSignature}
           />
         )}
-      </Box>
+      </Stack>
     </CardWrapper>
   );
 };

@@ -6,7 +6,6 @@ import {
   screen,
   renderWithAllProviders,
   act,
-  genAppProps,
   genPendingPost,
   genUser,
 } from '@akashaorg/af-testing';
@@ -14,7 +13,7 @@ import { PendingReply } from '../item-page/common/pending-reply';
 
 describe('< PendingReply /> component', () => {
   const BaseComponent = (
-    <PendingReply postId="oxfg" {...genAppProps()} loggedProfileData={genUser()} commentIds={[]} />
+    <PendingReply postId="oxfg" loggedProfileData={genUser()} commentIds={[]} />
   );
 
   beforeAll(() => {

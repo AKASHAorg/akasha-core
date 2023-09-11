@@ -1,33 +1,30 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
-import { RootComponentProps } from '@akashaorg/typings/ui';
 
-type WelcomePageProps = {
+import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
+
+export type WelcomePageProps = {
   header: string;
   description: string;
   image?: string;
   leftButtonLabel?: string;
-  // leftButtonClickHandler?: () => void;
   rightButtonLabel: string;
-  // rightButtonClickHandler?: () => void;
   finalStep?: boolean;
   isLoggedIn: boolean;
 };
 
-const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
+const WelcomePage: React.FC<WelcomePageProps> = props => {
   const {
-    baseRouteName,
-    plugins,
     leftButtonLabel,
-    // leftButtonClickHandler,
     rightButtonLabel,
-    // rightButtonClickHandler,
     header,
     description,
     image,
@@ -35,8 +32,10 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
     isLoggedIn,
   } = props;
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
   const { t } = useTranslation('app-notifications');
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   // check if user has gone through onboarding steps before
   let savedPreferences;
@@ -101,7 +100,7 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
 
   return (
     <Card elevation={'1'} radius={16} padding={'p-2'} testId="notifications">
-      <div className={tw('flex(& col) justify-center align-center mb-32')}>
+      <Stack justify="center" align="center" customStyle="mb-32">
         {image && isLoggedIn ? (
           <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
         ) : (
@@ -117,8 +116,8 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
         <Text variant="footnotes2" align="center" color={{ light: 'black', dark: 'grey6' }}>
           {isLoggedIn ? description : t('To check your notifications you must be connected ⚡️')}
         </Text>
-      </div>
-      <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2')}>
+      </Stack>
+      <Stack direction="row" fullWidth justify="end" spacing="gap-x-4" customStyle="pr-2 pb-2">
         {isLoggedIn && leftButtonLabel && (
           <Button
             variant="text"
@@ -132,7 +131,7 @@ const WelcomePage: React.FC<RootComponentProps & WelcomePageProps> = props => {
           label={isLoggedIn ? rightButtonLabel : t('Connect')}
           onClick={isLoggedIn ? confirmCustomization : connect}
         />
-      </div>
+      </Stack>
     </Card>
   );
 };

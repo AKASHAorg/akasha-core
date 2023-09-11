@@ -3,7 +3,7 @@ import React from 'react';
 import { Interest } from '@akashaorg/typings/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -49,18 +49,18 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
   return (
     <Card padding={16}>
-      <Box customStyle="mb-4">
+      <Stack customStyle="mb-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}
         </Text>
-      </Box>
+      </Stack>
 
-      <Box>
+      <Stack>
         <ul>
           {tags.length === 0 && !isLoadingTags && (
-            <Box customStyle="flex justify-center items-center">
+            <Stack align="center" justify="center">
               <Text>{noTagsLabel}</Text>
-            </Box>
+            </Stack>
           )}
 
           {tags.length === 0 &&
@@ -71,10 +71,16 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               </React.Fragment>
             ))}
 
-          <Box customStyle="space-y-4">
+          <Stack spacing="gap-y-4">
             {tags.length !== 0 &&
               tags.slice(0, 4).map((tag, index) => (
-                <Box key={index} customStyle={baseItemStyles}>
+                <Stack
+                  key={index}
+                  direction="row"
+                  align="center"
+                  justify="between"
+                  spacing="gap-y-2"
+                >
                   <SubtitleTextIcon
                     label={tag.value}
                     subtitle={`${tag.totalPosts || 0} ${tagSubtitleLabel}`}
@@ -93,11 +99,11 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                     allowMinimization={false}
                     loading={!!isProcessingTags?.find(processingTag => processingTag === tag.value)}
                   />
-                </Box>
+                </Stack>
               ))}
-          </Box>
+          </Stack>
         </ul>
-      </Box>
+      </Stack>
     </Card>
   );
 };

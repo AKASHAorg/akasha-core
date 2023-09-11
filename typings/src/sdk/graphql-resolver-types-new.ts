@@ -810,6 +810,7 @@ export type AkashaProfileResolvers<ContextType = any, ParentType extends Resolve
   description?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   did?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
   followers?: Resolver<ResolversTypes['AkashaFollowConnection'], ParentType, ContextType, Partial<Types.AkashaProfileFollowersArgs>>;
+  followersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.AkashaProfileFollowersCountArgs>>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   links?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AkashaProfileLinkSource']>>>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

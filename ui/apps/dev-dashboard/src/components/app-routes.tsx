@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
@@ -32,8 +32,8 @@ import routes, {
   EDIT_MESSAGE_NAME,
 } from '../routes';
 
-const AppRoutes = (props: RootComponentProps) => {
-  const { baseRouteName } = props;
+const AppRoutes: React.FC<unknown> = () => {
+  const { baseRouteName } = useRootComponentProps();
 
   return (
     <Router basename={baseRouteName}>
@@ -44,9 +44,9 @@ const AppRoutes = (props: RootComponentProps) => {
       <Routes>
         <Route path="/" element={<Navigate to={routes[DASHBOARD]} replace />} />
 
-        <Route path={routes[DASHBOARD]} element={<DevDashboard {...props} />} />
+        <Route path={routes[DASHBOARD]} element={<DevDashboard />} />
 
-        <Route path={routes[ONBOARDING]} element={<DevDashOnboardingIntro {...props} />} />
+        <Route path={routes[ONBOARDING]} element={<DevDashOnboardingIntro />} />
 
         {[
           routes[ONBOARDING_STEP_ONE],
@@ -54,24 +54,20 @@ const AppRoutes = (props: RootComponentProps) => {
           routes[ONBOARDING_STEP_THREE],
           routes[ONBOARDING_STEP_FOUR],
         ].map((path, idx) => (
-          <Route
-            key={path}
-            path={path}
-            element={<DevDashOnboardingSteps {...props} activeIndex={idx} />}
-          />
+          <Route key={path} path={path} element={<DevDashOnboardingSteps activeIndex={idx} />} />
         ))}
 
-        <Route path={routes[DEV_KEYS]} element={<DevKeysCard {...props} />} />
+        <Route path={routes[DEV_KEYS]} element={<DevKeysCard />} />
 
-        <Route path={routes[ADD_DEV_KEY]} element={<AddDevKey {...props} />} />
+        <Route path={routes[ADD_DEV_KEY]} element={<AddDevKey />} />
 
-        <Route path={routes[EDIT_MESSAGE_NAME]} element={<EditMessageName {...props} />} />
+        <Route path={routes[EDIT_MESSAGE_NAME]} element={<EditMessageName />} />
 
-        <Route path={routes[PUBLISHED_APPS]} element={<PublishedApps {...props} />} />
+        <Route path={routes[PUBLISHED_APPS]} element={<PublishedApps />} />
 
-        <Route path={routes[SIGN_MESSAGE]} element={<SignMessage {...props} />} />
+        <Route path={routes[SIGN_MESSAGE]} element={<SignMessage />} />
 
-        <Route path={routes[VERIFY_SIGNATURE]} element={<VerifySignature {...props} />} />
+        <Route path={routes[VERIFY_SIGNATURE]} element={<VerifySignature />} />
       </Routes>
     </Router>
   );

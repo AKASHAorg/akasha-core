@@ -12,7 +12,7 @@ export type SocialLinkProps = {
 
 export const SocialLink: React.FC<SocialLinkProps> = ({ onDelete, ...textProps }) => {
   return (
-    <Stack spacing="gap-x-2" align="baseline">
+    <Stack direction="row" spacing="gap-x-2" align="baseline">
       <TextField type="text" customStyle="grow" {...textProps} />
       <div className="relative w-5 h-5">
         <Button onClick={onDelete} plain customStyle="absolute top-1 right-0">

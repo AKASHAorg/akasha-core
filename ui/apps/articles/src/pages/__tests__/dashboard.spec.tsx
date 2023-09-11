@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Dashboard from '../dashboard';
 
-import { renderWithAllProviders, screen, act, genAppProps } from '@akashaorg/af-testing';
+import { renderWithAllProviders, screen, act } from '@akashaorg/af-testing';
 
 describe('< Dashboard />', () => {
-  const BaseComponent = <Dashboard {...genAppProps()} />;
+  const BaseComponent = <Dashboard />;
   beforeEach(async () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
