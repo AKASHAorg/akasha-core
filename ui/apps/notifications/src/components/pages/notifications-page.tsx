@@ -27,6 +27,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   const [messageType, setMessageType] = useState('');
   const [showMenu, setShowMenu] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const { plugins } = props;
 
   // check if user has gone through onboarding steps before
   let savedPreferences;
@@ -65,7 +66,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     }, 6000);
   }
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-notifications');
 

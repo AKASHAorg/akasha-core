@@ -6,7 +6,6 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 import routes, {
@@ -126,19 +125,6 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps & RootC
     integrationCenter: integrationCenterCheckboxes.map(e => e.selected),
   });
 
-  // for displaying feedback messages
-  const [message, setMessage] = React.useState('');
-  const [messageType, setMessageType] = React.useState('success');
-
-  const [showFeedback, setShowFeedback] = React.useState(false);
-
-  if (showFeedback) {
-    setTimeout(() => {
-      setShowFeedback(false);
-      setMessage('');
-    }, 6000);
-  }
-
   const [snoozed, setSnoozed] = React.useState(false);
 
   // check if snooze notification option has already been set
@@ -236,7 +222,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps & RootC
       getNavigationUrl: () =>
         initial
           ? routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]
-          : `${routes[SHOW_NOTIFICATIONS_PAGE]}/?message=${message}&type=success`,
+          : `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
     });
   };
 
@@ -255,7 +241,13 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps & RootC
     try {
       if (window.localStorage) {
         localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
-        setMessage('Notification settings updated successfully');
+        uiEvents.current.next({
+          event: EventTypes.ShowNotification,
+          data: {
+            name: 'success',
+            message: 'Notification settings updated successfully',
+          },
+        });
 
         if (snoozed && !localStorage.getItem('notifications-snoozed')) {
           localStorage.setItem('notifications-snoozed', JSON.stringify(true));
@@ -264,7 +256,13 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps & RootC
           uiEvents.current.next({
             event: EventTypes.SnoozeNotifications,
           });
-          setMessage('You have snoozed your notifications successfully');
+          uiEvents.current.next({
+            event: EventTypes.ShowNotification,
+            data: {
+              name: 'success',
+              message: 'You have snoozed your notifications successfully',
+            },
+          });
         }
 
         if (!snoozed && localStorage.getItem('notifications-snoozed')) {
@@ -274,7 +272,14 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps & RootC
           uiEvents.current.next({
             event: EventTypes.UnsnoozeNotifications,
           });
-          setMessage('You have unsnoozed your notifications successfully');
+
+          uiEvents.current.next({
+            event: EventTypes.ShowNotification,
+            data: {
+              name: 'success',
+              message: 'You have unsnoozed your notifications successfully',
+            },
+          });
         }
       }
 
@@ -285,10 +290,14 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps & RootC
       // navigate to final step
       initial && goToNextStep();
     } catch (error) {
-      setMessage('Something went wrong. Retry');
-      setMessageType('error');
+      uiEvents.current.next({
+        event: EventTypes.ShowNotification,
+        data: {
+          name: 'error',
+          message: 'Something went wrong. Retry',
+        },
+      });
     }
-    setShowFeedback(true);
   };
 
   if (!isLoggedIn) {
@@ -405,15 +414,6 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps & RootC
           )}
         </div>
       </Card>
-      {showFeedback && (
-        <div className={tw('-mt-12 md:mt-4 z-50 w-full')}>
-          <Snackbar
-            title={message}
-            type={messageType as SnackBarType}
-            handleDismiss={() => setShowFeedback(false)}
-          />
-        </div>
-      )}
     </>
   );
 };
