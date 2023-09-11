@@ -60,7 +60,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
           size="lg"
           solid={true}
         />
-        <Stack direction="column">
+        <Stack direction="row">
           <Text variant="button-md" color={textColor}>
             {title}
           </Text>
