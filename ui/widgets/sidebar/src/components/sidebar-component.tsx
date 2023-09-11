@@ -77,13 +77,15 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
-        if (
-          eventData.event === AUTH_EVENTS.WAIT_FOR_AUTH ||
-          eventData.event === AUTH_EVENTS.CONNECT_ADDRESS
-        ) {
-          setIsLoading(true);
+        if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS) {
+          if (!isLoading) setIsLoading(true);
           return;
         }
+        if (eventData.event === AUTH_EVENTS.READY) {
+          setIsLoading(false);
+          return;
+        }
+
         if (eventData.event === WEB3_EVENTS.DISCONNECTED) {
           setIsLoading(true);
           setTimeout(() => {
