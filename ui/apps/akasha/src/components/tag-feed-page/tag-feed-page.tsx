@@ -108,17 +108,14 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       )}
       <FeedWidget
         queryKey="akasha-tag-feed-query"
-        modalSlotId={layoutConfig.modalSlotId}
         // @TODO add a new entry for tags
         itemType={EntityTypes.BEAM}
         loggedProfileData={loggedProfileData}
-        navigateToModal={navigateToModal}
         onLoginModalOpen={showLoginModal}
         contentClickable={true}
         onEntryRemove={handleEntryRemove}
         onEntryFlag={handleEntryFlag}
         itemSpacing={8}
-        i18n={getTranslationPlugin().i18n}
         onRebeam={handleRebeam}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
       />

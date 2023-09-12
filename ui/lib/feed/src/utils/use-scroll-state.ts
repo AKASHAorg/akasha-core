@@ -13,14 +13,29 @@ const getScrollState = async (key: string, database: ScrollStateDBWrapper) => {
 
 const saveScrollState = async (
   key: string,
-  data: Omit<ScrollerState, 'id'>,
+  data: Partial<Omit<ScrollerState, 'id'>>,
   database: ScrollStateDBWrapper,
 ) => {
   const collection = database.scrollState;
   const doc = await collection.where('id').equals(key).first();
-  const updated = Object.assign(doc ?? { id: key }, data);
-  await collection.put(updated, key);
-  return updated;
+
+  const mergedState: ScrollerState & { id: string } = {
+    id: doc?.id || key,
+    startItemCursor: undefined,
+    measurementsCache: [],
+    itemsCount: 0,
+    totalHeight: 0,
+    totalWidth: 0,
+    visibleCursorRange: {
+      startCursor: undefined,
+      endCursor: undefined,
+    },
+    ...doc,
+    ...data,
+  };
+
+  await collection.put(mergedState, key);
+  return mergedState;
 };
 
 const removeScrollState = async (key: string, database: ScrollStateDBWrapper) => {
@@ -28,19 +43,14 @@ const removeScrollState = async (key: string, database: ScrollStateDBWrapper) =>
 };
 
 export const useGetScrollState = (key: string, database: ScrollStateDBWrapper) => {
-  return useQuery([key], () => getScrollState(key, database), {
-    // we don't want this to be updated
-    // because it will mess up the list as the queryKey hash will change
-    staleTime: Infinity,
-    cacheTime: Infinity,
-  });
+  return useQuery([key], () => getScrollState(key, database));
 };
 
 export const useSaveScrollState = (key: string, database: ScrollStateDBWrapper) => {
   const queryClient = useQueryClient();
   return useMutation(
     [key],
-    (data: Omit<ScrollerState, 'id'>) => saveScrollState(key, data, database),
+    (data: Partial<Omit<ScrollerState, 'id'>>) => saveScrollState(key, data, database),
     {
       onMutate: async () => {
         await queryClient.invalidateQueries([key]);

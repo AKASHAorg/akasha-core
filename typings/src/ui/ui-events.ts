@@ -70,7 +70,6 @@ export type EventDataTypes = {
   [key: string]: unknown;
 };
 
-// @TODO: merge UIEventData with AnalyticsEventData!!
 // @TODO: split EventTypes with their respective EventDataTypes as the example below
 export type UIEventData =
   | {

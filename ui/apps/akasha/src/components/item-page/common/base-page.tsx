@@ -35,8 +35,7 @@ const BaseEntryPage: React.FC<BaseEntryProps> = props => {
   const [showAnyway, setShowAnyway] = useState<boolean>(false);
   const { t } = useTranslation('app-akasha-integration');
 
-  const { children, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
+  const { children, navigateToModal, getRoutingPlugin } = useRootComponentProps();
 
   const isReported = useMemo(() => {
     if (showAnyway) {
@@ -63,8 +62,6 @@ const BaseEntryPage: React.FC<BaseEntryProps> = props => {
     },
   });
   const loggedProfileData = profileDataReq.data;
-
-  const navigateTo = getRoutingPlugin().navigateTo;
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
@@ -127,16 +124,12 @@ const BaseEntryPage: React.FC<BaseEntryProps> = props => {
       />
       <FeedWidget
         queryKey={feedQueryKey}
-        modalSlotId={layoutConfig.modalSlotId}
         itemType={EntityTypes.REFLECT}
         loggedProfileData={loggedProfileData}
-        navigateTo={navigateTo}
-        navigateToModal={navigateToModal}
         onLoginModalOpen={showLoginModal}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleCommentRemove}
         itemSpacing={8}
-        i18n={getTranslationPlugin().i18n}
         trackEvent={analyticsActions.trackEvent}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
       />

@@ -17,9 +17,10 @@ import EntryList, {
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
 import { AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
+import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
+import type { FeedWidgetCommonProps } from './app';
 
 export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
-  itemType: EntityTypes.REFLECT;
   beamId?: string;
   locale?: ILocale;
   onEntryFlag?: (
@@ -42,6 +43,8 @@ export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> &
   onScrollStateChange: (scrollState: ScrollerState) => void;
   initialScrollState: ScrollerState;
   onScrollStateReset: () => void;
+  db: ScrollStateDBWrapper;
+  scrollerOptions: FeedWidgetCommonProps['scrollerOptions'];
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
@@ -57,7 +60,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     initialScrollState,
     onScrollStateReset,
     onScrollStateChange,
-    getItemKey,
+    scrollerOptions,
   } = props;
 
   return (
@@ -71,7 +74,17 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       initialScrollState={initialScrollState}
       onScrollStateReset={onScrollStateReset}
       onScrollStateChange={onScrollStateChange}
-      getItemKey={getItemKey}
+      getItemKey={(idx, items) => items[idx]['id']}
+      scrollerOptions={scrollerOptions}
+      onFetchNextPage={(lastCursor: string) => {
+        //@TODO:
+      }}
+      onFetchPreviousPage={firstCursor => {
+        //@TODO:
+      }}
+      onScrollStateSave={() => {
+        //@TODO:
+      }}
     >
       {cardProps => {
         const { items, allEntries, measureElementRef } = cardProps;
