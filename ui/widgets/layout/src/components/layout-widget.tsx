@@ -165,7 +165,7 @@ const Layout: React.FC<unknown> = () => {
   const layoutStyle = `
       grid md:(grid-flow-col) min-h-screen
       lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
-      ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '}
+      ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'}
       xl:max-w-7xl xl:mx-auto gap-x-4
       `;
 
@@ -185,7 +185,7 @@ const Layout: React.FC<unknown> = () => {
 
   return (
     <Stack customStyle="bg(white dark:black) min-h-screen">
-      <Stack customStyle="h-full m-auto lg:w-[95%] xl:w-full min-h-screen">
+      <Stack customStyle="h-full m-auto w-[95%] xl:w-full min-h-screen">
         <Stack customStyle={layoutStyle}>
           <ScrollRestorer />
 
