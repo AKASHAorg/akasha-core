@@ -7,7 +7,9 @@
   "directories": {
     "lib": "lib"
   },
-  "files": ["sdk/*", "ui/*"],
+  "files": [
+    "lib"
+  ],
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
