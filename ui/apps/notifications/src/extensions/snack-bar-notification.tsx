@@ -14,7 +14,7 @@ const SnackBarNotification = (props: RootExtensionProps) => {
   if (message) {
     setTimeout(() => {
       setMessage('');
-    }, 6000);
+    }, 4000);
   }
 
   useEffect(() => {
