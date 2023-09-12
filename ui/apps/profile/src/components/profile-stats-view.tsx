@@ -36,11 +36,12 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
   const sdk = getSDK();
 
   useEffect(() => {
-    const getStats = () => {
-      sdk.api.profile
-        .getProfileStats(profileId)
-        .then(({ data }) => setStats(data))
-        .catch(error => logger.error(`Error getting profile stats ${error}`));
+    const getStats = async () => {
+      const res = await sdk.api.profile.getProfileStats(profileId);
+
+      if (res.data) {
+        setStats(res.data);
+      }
     };
 
     getStats();

@@ -6,6 +6,7 @@ import { IconType } from '@akashaorg/typings/ui';
 import Stack from '../Stack';
 import Icon from '../Icon';
 import Text from '../Text';
+import Anchor from '../Anchor';
 
 export type DropdownMenuItemType = { id: string; iconName?: IconType; title: string };
 
@@ -79,8 +80,9 @@ const Dropdown: React.FC<DropdownProps> = ({
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
               return (
-                <li
+                <Anchor
                   key={menuItem.id}
+                  tabIndex={-7}
                   className={tw(
                     `${optionStyle} ${
                       idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
@@ -122,7 +124,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                       />
                     </span>
                   )}
-                </li>
+                </Anchor>
               );
             })}
           </ul>
