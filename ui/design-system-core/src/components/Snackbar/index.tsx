@@ -52,7 +52,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
       radius={8}
       customStyle={`${instanceStyle} ${customStyle}`}
     >
-      <Stack spacing="gap-x-3" fullWidth>
+      <Stack spacing="gap-x-3" fullWidth direction="row">
         <Icon
           type={iconType}
           color={{ light: colorLight, dark: colorDark }}
