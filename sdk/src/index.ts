@@ -5,7 +5,7 @@
  */
 import 'reflect-metadata';
 import 'systemjs-webpack-interop/auto-public-path';
-import * as typings from '@akashaorg/typings/sdk';
+import * as typings from '@akashaorg/typings/lib/sdk';
 import container /*, { importLazy }*/ from './container';
 import type Logging from './logging';
 import type Settings from './settings';

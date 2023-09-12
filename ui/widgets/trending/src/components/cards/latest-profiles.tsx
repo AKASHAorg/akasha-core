@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 import { getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

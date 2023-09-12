@@ -4,7 +4,7 @@ import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import { BeamEditor } from './beam-editor';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { i18n } from 'i18next';
 

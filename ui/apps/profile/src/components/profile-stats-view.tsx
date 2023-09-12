@@ -7,7 +7,7 @@ import {
   useGetInterestsByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 type ProfileStatsViewProps = {

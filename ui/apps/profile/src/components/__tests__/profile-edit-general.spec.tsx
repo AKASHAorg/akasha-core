@@ -7,7 +7,7 @@ import * as loginHook from '@akashaorg/ui-awf-hooks/lib/use-login.new';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithAllProviders, act, screen, genUser, waitFor } from '@akashaorg/af-testing';
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 import { MemoryRouter as Router } from 'react-router-dom';
 
 describe('< ProfileInfoPage />', () => {

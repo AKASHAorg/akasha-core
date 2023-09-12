@@ -1,7 +1,7 @@
 import { BehaviorSubject, filter, NextObserver, Subscription } from 'rxjs';
 import getSdk from '@akashaorg/awf-sdk';
-import { AUTH_EVENTS, GlobalEventBusData } from '@akashaorg/typings/sdk';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { AUTH_EVENTS, GlobalEventBusData } from '@akashaorg/typings/lib/sdk';
+import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 
 type Listener = (data: unknown) => void;
 

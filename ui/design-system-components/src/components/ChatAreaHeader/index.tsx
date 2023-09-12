@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 

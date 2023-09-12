@@ -2,7 +2,7 @@ import * as React from 'react';
 import { uploadMediaToTextile, getLinkPreview } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
-import { IEntryData, RootExtensionProps } from '@akashaorg/typings/ui';
+import { IEntryData, RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { IReplyErrorState, ReplyError } from './reply-error';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 import ReflectionEditor, {

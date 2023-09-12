@@ -1,5 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
-import type { WorldConfig } from '@akashaorg/typings/ui';
+import type { WorldConfig } from '@akashaorg/typings/lib/ui';
 import { hidePageSplash, showPageSplash } from './splash-screen';
 import { merge, of } from 'rxjs';
 import * as singleSpa from 'single-spa';

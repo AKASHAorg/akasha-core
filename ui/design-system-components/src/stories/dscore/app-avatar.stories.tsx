@@ -2,7 +2,7 @@ import React from 'react';
 import { tw } from '@twind/core';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { IntegrationTypes } from '@akashaorg/typings/ui';
+import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
 
 import AppAvatar, { AppAvatarProps } from '@akashaorg/design-system-core/lib/components/AppAvatar';
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/ui';
+import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { useGetLogin, withProviders, useAnalytics } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

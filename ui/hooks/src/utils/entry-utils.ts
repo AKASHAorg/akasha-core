@@ -1,15 +1,15 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { Logger } from '@akashaorg/awf-sdk';
-import { Comment } from '@akashaorg/typings/sdk/graphql-types';
-import { EntityTypes, IEntryData, IPublishData } from '@akashaorg/typings/ui';
+import { Comment } from '@akashaorg/typings/lib/sdk/graphql-types';
+import { EntityTypes, IEntryData, IPublishData } from '@akashaorg/typings/lib/ui';
 
 import { getMediaUrl } from './media-utils';
-import { Profile } from '@akashaorg/typings/ui';
-import type { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { Profile } from '@akashaorg/typings/lib/ui';
+import type { PostResultFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import type {
   GetBeamsQuery,
   GetReflectionsFromBeamQuery,
-} from '@akashaorg/typings/sdk/graphql-operation-types-new';
+} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';

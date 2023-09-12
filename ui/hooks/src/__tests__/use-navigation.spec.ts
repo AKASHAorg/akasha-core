@@ -5,7 +5,7 @@ import { mockSDK } from '@akashaorg/af-testing';
 
 const navigateTo = jest.fn();
 jest.mock('@akashaorg/awf-sdk', () => () => mockSDK());
-jest.mock('@akashaorg/typings/ui', () => ({
+jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     POST: 0,
   },

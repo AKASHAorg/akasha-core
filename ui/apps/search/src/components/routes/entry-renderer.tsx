@@ -6,11 +6,11 @@ import {
   NavigateToParams,
   Profile,
   IContentClickDetails,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type EntryCardRendererProps = {

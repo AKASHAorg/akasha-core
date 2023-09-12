@@ -3,7 +3,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { SocialLink } from './social-link';
-import { AkashaProfileLinkSource } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Controller, Control } from 'react-hook-form';
 import { EditProfileFormValues } from '../types';
 

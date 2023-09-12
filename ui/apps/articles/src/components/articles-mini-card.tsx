@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IArticleData } from '@akashaorg/typings/ui';
+import { IArticleData } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';

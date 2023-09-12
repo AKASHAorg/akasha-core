@@ -4,10 +4,10 @@ import EditorBox, { EditorBoxProps } from '../Editor';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
-import { IPublishData } from '@akashaorg/typings/ui';
+import { IPublishData } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { Colors } from '@akashaorg/typings/ui';
+import { Colors } from '@akashaorg/typings/lib/ui';
 
 export type ReflectionEditorProps = EditorBoxProps & {
   openEditor?: boolean;

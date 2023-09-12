@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AnalyticsCategories } from '@akashaorg/typings/ui';
+import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { useGetLogin, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   useGetProfilesQuery,

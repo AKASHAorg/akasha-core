@@ -1,6 +1,6 @@
 import React, { LegacyRef, forwardRef } from 'react';
 
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Button from '../Button';
 import Card from '../Card';

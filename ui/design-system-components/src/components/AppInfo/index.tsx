@@ -16,7 +16,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
-import type { Developer } from '@akashaorg/typings/ui';
+import type { Developer } from '@akashaorg/typings/lib/ui';
 
 export type AppInfoProps = {
   integrationName: string;

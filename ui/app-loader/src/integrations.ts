@@ -4,9 +4,9 @@ import type {
   IAppConfig,
   WorldConfig,
   EventDataTypes,
-} from '@akashaorg/typings/ui';
-import { EventTypes } from '@akashaorg/typings/ui';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+} from '@akashaorg/typings/lib/ui';
+import { EventTypes } from '@akashaorg/typings/lib/ui';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import {
   Observable,
   mergeMap,

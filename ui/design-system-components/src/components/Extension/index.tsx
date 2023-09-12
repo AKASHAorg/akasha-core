@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ExtensionSlot from './extension-slot';
-import { EventTypes, RootComponentProps, EventDataTypes } from '@akashaorg/typings/ui';
+import { EventTypes, RootComponentProps, EventDataTypes } from '@akashaorg/typings/lib/ui';
 
 type ExtensionProps = {
   name: string;

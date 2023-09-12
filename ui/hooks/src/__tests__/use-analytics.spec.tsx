@@ -2,7 +2,7 @@ import * as React from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { uiEventsMock } from '@akashaorg/af-testing';
 import { AnalyticsProvider, useAnalytics } from '../use-analytics';
-import { AnalyticsCategories, AnalyticsEventTypes, TrackEventData } from '@akashaorg/typings/ui';
+import { AnalyticsCategories, AnalyticsEventTypes, TrackEventData } from '@akashaorg/typings/lib/ui';
 
 describe('useAnalytics', () => {
   const wrapper = ({ children }) => (

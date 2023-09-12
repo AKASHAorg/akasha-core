@@ -5,7 +5,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import IndicatorDots from './indicator-dots';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
+import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
 import { useTranslation } from 'react-i18next';
 import {
   switchToRequiredNetwork,

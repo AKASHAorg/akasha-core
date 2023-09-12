@@ -1,4 +1,4 @@
-import { IPluginsMap } from '@akashaorg/typings/ui';
+import { IPluginsMap } from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
 
 export const loadI18nNamespaces = async (plugins: IPluginsMap, namespaces: string | string[]) => {

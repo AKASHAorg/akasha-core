@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { LEGAL_DOCS } from '@akashaorg/typings/ui';
+import { LEGAL_DOCS } from '@akashaorg/typings/lib/ui';
 import { useLegalDoc } from '@akashaorg/ui-awf-hooks';
 
 import PageRenderer from './page-renderer';

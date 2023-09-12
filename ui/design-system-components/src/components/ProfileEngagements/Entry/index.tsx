@@ -2,8 +2,8 @@ import React, { ReactElement } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { Profile } from '@akashaorg/typings/ui';
-import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/lib/ui';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type EntryProps = {
   profileAnchorLink: string;

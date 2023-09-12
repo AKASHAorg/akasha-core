@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 
 import { hasOwn, useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import type { Profile, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import { EntityTypes } from '@akashaorg/typings/ui';
+import type { Profile, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';

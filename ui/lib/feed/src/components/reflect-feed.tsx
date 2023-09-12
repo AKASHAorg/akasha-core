@@ -7,7 +7,7 @@ import {
   NavigateToParams,
   Profile,
   TrackEventData,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -16,7 +16,7 @@ import EntryList, {
   EntryListProps,
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
-import { AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
   itemType: EntityTypes.REFLECT;

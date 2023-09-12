@@ -8,8 +8,8 @@ import {
   MenuItemAreaType,
   MenuItemType,
   RootComponentProps,
-} from '@akashaorg/typings/ui';
-import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/ui/editor-blocks';
+} from '@akashaorg/typings/lib/ui';
+import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/lib/ui/editor-blocks';
 import { filter } from 'rxjs';
 
 /**

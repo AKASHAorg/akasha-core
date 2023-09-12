@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { IMenuItem } from '@akashaorg/typings/ui';
+import { IMenuItem } from '@akashaorg/typings/lib/ui';
 
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { apply, tw } from '@twind/core';
 import { ButtonType } from '../types/common.types';
-import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type EditInterestsProps = {
   title: string;

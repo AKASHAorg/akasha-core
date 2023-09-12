@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Portal } from './helpers';
 import { tw, tx } from '@twind/core';
-import { ITag } from '@akashaorg/typings/ui';
+import { ITag } from '@akashaorg/typings/lib/ui';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface ITagPopover {
