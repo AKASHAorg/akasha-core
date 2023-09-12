@@ -1,11 +1,13 @@
-import React from 'react';
-import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
-import { useGetProfileStatsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams, ModalNavigationOptions, AkashaProfile } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
-type ProfileStatsViewProps = {
+import getSDK from '@akashaorg/awf-sdk';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/ui';
+
+import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
+
+export type ProfileStatsViewProps = {
   profileId: string;
   navigateTo: (args: NavigateToParams) => void;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -16,24 +18,33 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
   navigateTo,
   showLoginModal,
 }) => {
+  const [stats, setStats] = useState({
+    totalFollowing: 0,
+    totalFollowers: 0,
+    totalBeams: 0,
+    totalTopics: 0,
+  });
+
   const { t } = useTranslation('app-profile');
+  const { logger } = useRootComponentProps();
 
   const loginQuery = useGetLogin();
-  const isLoggedIn = React.useMemo(() => {
+  const isLoggedIn = useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
 
-  const statsQuery = useGetProfileStatsByDidQuery(
-    { id: profileId },
-    { select: response => response.node },
-  ) as { data: { akashaProfile: AkashaProfile } };
+  const sdk = getSDK();
 
-  const stats = {
-    beamsTotal: 10,
-    interestsTotal: 10,
-    followersTotal: statsQuery.data?.akashaProfile?.followersCount,
-    followingTotal: 10,
-  };
+  useEffect(() => {
+    const getStats = () => {
+      sdk.api.profile
+        .getProfileStats(profileId)
+        .then(({ data }) => setStats(data))
+        .catch(error => logger.error(`Error getting profile stats ${error}`));
+    };
+
+    getStats();
+  }, [profileId, sdk.api.profile, logger]);
 
   const handleNavigateToProfilePosts = () => {
     if (!isLoggedIn) {
@@ -59,22 +70,22 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
     <ProfileStats
       posts={{
         label: t('Beams'),
-        total: stats.beamsTotal,
+        total: stats.totalBeams,
         onClick: handleNavigateToProfilePosts,
       }}
       interests={{
         label: t('Interests'),
-        total: stats.interestsTotal,
+        total: stats.totalTopics,
         onClick: onStatClick('interests'),
       }}
       followers={{
         label: t('Followers'),
-        total: stats.followersTotal,
+        total: stats.totalFollowers,
         onClick: onStatClick('followers'),
       }}
       following={{
         label: t('Following'),
-        total: stats.followingTotal,
+        total: stats.totalFollowing,
         onClick: onStatClick('following'),
       }}
     />
