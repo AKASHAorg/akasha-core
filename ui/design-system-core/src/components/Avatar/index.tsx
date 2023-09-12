@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Profile } from '@akashaorg/typings/ui';
 
+import Anchor from '../Anchor';
 import Stack from '../Stack';
 
 import AvatarImage from './avatar-image';
@@ -30,7 +31,7 @@ export type AvatarProps = {
   active?: boolean;
   isClickable?: boolean;
   customStyle?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 const Avatar: React.FC<AvatarProps> = props => {
@@ -69,7 +70,7 @@ const Avatar: React.FC<AvatarProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <button onClick={onClick}>
+    <Anchor onClick={onClick} tabIndex={-6}>
       <Stack customStyle={containerStyle}>
         {/* updating this logic, so that avatarImage loads with fallbackUrl even when avatar is null */}
         {(avatar || avatarImageFallback) && (
@@ -85,7 +86,7 @@ const Avatar: React.FC<AvatarProps> = props => {
 
         {active && <Stack customStyle={activeOverlayClass} />}
       </Stack>
-    </button>
+    </Anchor>
   );
 };
 
