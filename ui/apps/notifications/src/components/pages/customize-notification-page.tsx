@@ -312,14 +312,19 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   return (
     <>
-      <Card elevation={'1'} radius={16} padding={'p-2'} customStyle="h-full md:h-min space-y-4">
+      <Card
+        elevation={'1'}
+        radius={16}
+        padding={'py-2,px-4'}
+        customStyle="h-full md:h-min space-y-4"
+      >
         <Text variant="h5" align="center">
           {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
         {!initial && (
           <>
             <Divider customStyle="my-2" />
-            <Stack justify="between">
+            <Stack justify="between" direction="row">
               <Text variant="footnotes2">
                 <>{t('Snooze Notifications')}</>
               </Text>
