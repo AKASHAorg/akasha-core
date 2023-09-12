@@ -1,13 +1,8 @@
 import React from 'react';
 import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
-import {
-  useGetBeamsByAuthorDidQuery,
-  useGetFollowersListByDidQuery,
-  useGetFollowingListByDidQuery,
-  useGetInterestsByDidQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetProfileStatsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { NavigateToParams, ModalNavigationOptions, AkashaProfile } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 type ProfileStatsViewProps = {
@@ -28,46 +23,17 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
 
-  /*@TODO: replace the following hook calls when stats are supported via indexing */
-  const beams = useGetBeamsByAuthorDidQuery(
+  const statsQuery = useGetProfileStatsByDidQuery(
     { id: profileId },
     { select: response => response.node },
-  );
+  ) as { data: { akashaProfile: AkashaProfile } };
 
-  const interests = useGetInterestsByDidQuery(
-    { id: profileId },
-    { select: response => response.node },
-  );
-
-  const followers = useGetFollowersListByDidQuery(
-    { id: profileId, last: 100 },
-    { select: response => response.node },
-  );
-
-  const following = useGetFollowingListByDidQuery(
-    { id: profileId, last: 100 },
-    { select: response => response.node },
-  );
-
-  const beamsTotal =
-    beams.data && 'akashaBeamList' in beams.data
-      ? beams.data?.akashaBeamList?.edges?.length || 0
-      : 0;
-
-  const interestsTotal =
-    interests.data && 'akashaProfileInterests' in interests.data
-      ? interests.data?.akashaProfileInterests?.topics?.length || 0
-      : 0;
-
-  const followersTotal =
-    followers.data && 'akashaProfile' in followers.data
-      ? followers.data?.akashaProfile?.followers?.edges?.length || 0
-      : 0;
-
-  const followingTotal =
-    following.data && 'akashaFollowList' in following.data
-      ? following.data?.akashaFollowList?.edges?.length || 0
-      : 0;
+  const stats = {
+    beamsTotal: 10,
+    interestsTotal: 10,
+    followersTotal: statsQuery.data?.akashaProfile?.followersCount,
+    followingTotal: 10,
+  };
 
   const handleNavigateToProfilePosts = () => {
     if (!isLoggedIn) {
@@ -93,22 +59,22 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
     <ProfileStats
       posts={{
         label: t('Beams'),
-        total: beamsTotal,
+        total: stats.beamsTotal,
         onClick: handleNavigateToProfilePosts,
       }}
       interests={{
         label: t('Interests'),
-        total: interestsTotal,
+        total: stats.interestsTotal,
         onClick: onStatClick('interests'),
       }}
       followers={{
         label: t('Followers'),
-        total: followersTotal,
+        total: stats.followersTotal,
         onClick: onStatClick('followers'),
       }}
       following={{
         label: t('Following'),
-        total: followingTotal,
+        total: stats.followingTotal,
         onClick: onStatClick('following'),
       }}
     />
