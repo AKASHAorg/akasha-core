@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import getSDK from '@akashaorg/awf-sdk';
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useProfileStats } from '@akashaorg/ui-awf-hooks';
 import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/ui';
 
 import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -18,34 +17,18 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
   navigateTo,
   showLoginModal,
 }) => {
-  const [stats, setStats] = useState({
-    totalFollowing: 0,
-    totalFollowers: 0,
-    totalBeams: 0,
-    totalTopics: 0,
-  });
-
   const { t } = useTranslation('app-profile');
-  const { logger } = useRootComponentProps();
 
   const loginQuery = useGetLogin();
   const isLoggedIn = useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
 
-  const sdk = getSDK();
+  const profileStatsQuery = useProfileStats(profileId);
 
-  useEffect(() => {
-    const getStats = async () => {
-      const res = await sdk.api.profile.getProfileStats(profileId);
-
-      if (res.data) {
-        setStats(res.data);
-      }
-    };
-
-    getStats();
-  }, [profileId, sdk.api.profile, logger]);
+  const {
+    data: { totalBeams, totalFollowers, totalFollowing, totalTopics },
+  } = profileStatsQuery.data;
 
   const handleNavigateToProfilePosts = () => {
     if (!isLoggedIn) {
@@ -71,22 +54,22 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
     <ProfileStats
       posts={{
         label: t('Beams'),
-        total: stats.totalBeams,
+        total: totalBeams,
         onClick: handleNavigateToProfilePosts,
       }}
       interests={{
         label: t('Interests'),
-        total: stats.totalTopics,
+        total: totalTopics,
         onClick: onStatClick('interests'),
       }}
       followers={{
         label: t('Followers'),
-        total: stats.totalFollowers,
+        total: totalFollowers,
         onClick: onStatClick('followers'),
       }}
       following={{
         label: t('Following'),
-        total: stats.totalFollowing,
+        total: totalFollowing,
         onClick: onStatClick('following'),
       }}
     />
