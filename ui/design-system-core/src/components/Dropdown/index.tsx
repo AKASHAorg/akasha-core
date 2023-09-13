@@ -6,6 +6,7 @@ import { IconType } from '@akashaorg/typings/ui';
 import Stack from '../Stack';
 import Icon from '../Icon';
 import Text from '../Text';
+import Anchor from '../Anchor';
 
 export type DropdownMenuItemType = { id: string; iconName?: IconType; title: string };
 
@@ -40,7 +41,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey5) border(1 grey8 dark:grey3)`;
+  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 mt-12 py-0 rounded-lg overflow-auto bg-(white dark:grey5) border(1 grey8 dark:grey3)`;
 
   const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey5)`;
 
@@ -79,8 +80,9 @@ const Dropdown: React.FC<DropdownProps> = ({
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
               return (
-                <li
+                <Anchor
                   key={menuItem.id}
+                  tabIndex={-7}
                   className={tw(
                     `${optionStyle} ${
                       idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
@@ -122,7 +124,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                       />
                     </span>
                   )}
-                </li>
+                </Anchor>
               );
             })}
           </ul>

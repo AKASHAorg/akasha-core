@@ -97,8 +97,8 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
   ]);
 
   return (
-    <>
-      <Stack align="center" justify="between" customStyle="mb-3">
+    <Stack spacing="gap-y-4">
+      <Stack direction="row" align="center" justify="between">
         <Stack direction="row" align="center" spacing="gap-x-3">
           <Dropdown
             name="filterByDecision"
@@ -149,6 +149,6 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
         onClickPrev={handleClickPrev}
         onClickNext={handleClickNext}
       />
-    </>
+    </Stack>
   );
 };
