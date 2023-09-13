@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { EventTypes } from '@akashaorg/typings/ui';
+import { EventTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from './use-root-props';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';

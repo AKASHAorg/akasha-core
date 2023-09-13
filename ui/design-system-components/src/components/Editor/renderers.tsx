@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import { tw, apply } from '@twind/core';
-import { ImageElement } from '@akashaorg/typings/ui';
+import { ImageElement } from '@akashaorg/typings/lib/ui';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const closeDivClass = apply(

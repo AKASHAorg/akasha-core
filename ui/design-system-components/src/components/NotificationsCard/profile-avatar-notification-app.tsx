@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw, apply } from '@twind/core';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar, { AvatarSize } from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

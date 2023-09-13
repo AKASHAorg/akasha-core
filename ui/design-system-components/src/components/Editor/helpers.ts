@@ -7,8 +7,8 @@ import {
   LinkElement,
   MentionElement,
   TagElement,
-} from '@akashaorg/typings/ui';
-import { Profile } from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 const CustomEditor = {
   isBlockActive(editor: Editor, format: string) {

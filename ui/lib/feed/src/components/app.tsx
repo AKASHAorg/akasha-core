@@ -1,6 +1,6 @@
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { EntityTypes, IContentClickDetails, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { EntityTypes, IContentClickDetails, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import BeamFeed, { BeamFeedProps } from './beam-feed';
 import ReflectFeed, { ReflectFeedProps } from './reflect-feed';
 import {

@@ -1,6 +1,6 @@
-import { CeramicAccount } from '@akashaorg/typings/sdk/graphql-types-new';
-import { IArticleData } from '@akashaorg/typings/ui';
-import { Profile } from '@akashaorg/typings/ui';
+import { CeramicAccount } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { IArticleData } from '@akashaorg/typings/lib/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 export const apps = Array(4).fill({
   title: 'Image Editor',

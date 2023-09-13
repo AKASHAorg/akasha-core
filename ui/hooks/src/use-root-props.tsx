@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RootComponentProps, RootExtensionProps } from '@akashaorg/typings/ui';
+import { RootComponentProps, RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { hasOwn } from './utils/has-own';
 
 const RootComponentPropsContext = React.createContext(null);

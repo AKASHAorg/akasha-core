@@ -8,7 +8,7 @@ import {
   AnalyticsCategories,
   EntityTypes,
   EntityTypesMap,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';

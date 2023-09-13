@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ModerationCategory } from '@akashaorg/typings/ui';
+import { ModerationCategory } from '@akashaorg/typings/lib/ui';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';

@@ -1,6 +1,6 @@
 import { mergeMap } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
-import { IAppConfig } from '@akashaorg/typings/ui';
+import { IAppConfig } from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 import { getModalFromParams, checkActivityFn, stringToRegExp } from '../src/utils';
 

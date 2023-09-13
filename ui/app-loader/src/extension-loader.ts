@@ -3,7 +3,7 @@ import {
   RootExtensionProps,
   EventDataTypes,
   EventTypes,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 
 export const extensionLoader: ExtensionLoaderFn = loadingFn => {

@@ -9,13 +9,13 @@ import {
   ModalNavigationOptions,
   Profile,
   TrackEventData,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
-import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type BeamFeedProps = Omit<EntryListProps<AkashaBeam>, 'itemCard'> & {
   itemType: EntityTypes.BEAM;

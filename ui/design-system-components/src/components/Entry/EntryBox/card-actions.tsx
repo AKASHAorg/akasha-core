@@ -5,7 +5,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { SyntheticEvent } from 'react';
-import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import type { EntryBoxProps } from './index';
 
 export type CardActionProps = {

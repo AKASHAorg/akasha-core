@@ -1,4 +1,4 @@
-import type * as Types from '@akashaorg/typings/sdk/graphql-operation-types-new';
+import type * as Types from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 import type { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';

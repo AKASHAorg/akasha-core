@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Interest } from '@akashaorg/typings/ui';
+import { Interest } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

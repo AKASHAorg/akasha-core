@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/ui';
+import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';

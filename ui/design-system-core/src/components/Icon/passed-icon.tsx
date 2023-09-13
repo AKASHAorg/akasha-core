@@ -3,7 +3,7 @@ import { apply, tw } from '@twind/core';
 import * as HeroIconsOutline from '@heroicons/react/24/outline';
 import * as HeroIconsSolid from '@heroicons/react/24/solid';
 
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import * as CustomIcons from './akasha-icons';
 

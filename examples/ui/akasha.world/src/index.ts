@@ -1,7 +1,7 @@
 import '@akashaorg/design-system-core/src/twind/main.css';
 import '@akashaorg/design-system-core/src/twind/globals.css';
 
-import { WorldConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
+import { WorldConfig, INTEGRATION_TYPES } from '@akashaorg/typings/lib/ui';
 import { missingRequiredFields } from './registry-overrides';
 
 console.time('AppLoader:firstMount');

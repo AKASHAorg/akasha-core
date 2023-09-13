@@ -1,6 +1,6 @@
 import * as React from 'react';
-import type { IEntryData, NavigateToParams, IContentClickDetails } from '@akashaorg/typings/ui';
-import { EntityTypes } from '@akashaorg/typings/ui';
+import type { IEntryData, NavigateToParams, IContentClickDetails } from '@akashaorg/typings/lib/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -25,7 +25,7 @@ import LinkPreview from '../../LinkPreview';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 
 import { formatDate, formatRelativeTime, ILocale } from '../../../utils/time';
-import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type EntryBoxProps = {
   // data

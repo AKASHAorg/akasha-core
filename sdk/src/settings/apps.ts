@@ -5,7 +5,7 @@ import {
   IntegrationName,
   IntegrationNameSchema,
   TYPES,
-} from '@akashaorg/typings/sdk';
+} from '@akashaorg/typings/lib/sdk';
 import DB from '../db';
 import { createFormattedValue } from '../helpers/observable';
 import Logging from '../logging/index';

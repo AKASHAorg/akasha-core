@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Stack from '../Stack';
 import Icon from '../Icon';

@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaorg/typings/sdk';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
 import DB from '../db/index';
 import Web3Connector from './web3.connector';
 import EventBus from './event-bus';

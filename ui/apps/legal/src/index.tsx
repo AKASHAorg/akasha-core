@@ -6,7 +6,7 @@ import {
   MenuItemType,
   IntegrationRegistrationOptions,
   LogoTypeSource,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   mountsIn: opts.layoutConfig?.pluginSlotId,

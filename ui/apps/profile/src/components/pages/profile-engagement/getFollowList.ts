@@ -1,4 +1,4 @@
-import { AkashaFollowDocument, FollowList } from '@akashaorg/typings/ui';
+import { AkashaFollowDocument, FollowList } from '@akashaorg/typings/lib/ui';
 
 export function getFollowList(followDocuments: AkashaFollowDocument[]) {
   const followList: FollowList = new Map();

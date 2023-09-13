@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
 
-import { IChatMessage } from '@akashaorg/typings/ui';
+import { IChatMessage } from '@akashaorg/typings/lib/ui';
 
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

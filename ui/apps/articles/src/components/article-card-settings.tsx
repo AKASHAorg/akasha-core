@@ -5,7 +5,7 @@ import InputTags from './input-tags';
 
 import { License } from '../utils/licenses';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 import Card from '@akashaorg/design-system-core/lib/components/Card';

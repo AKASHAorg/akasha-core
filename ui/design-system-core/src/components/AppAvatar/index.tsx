@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IntegrationTypes } from '@akashaorg/typings/ui';
+import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
 
 import Anchor from '../Anchor';
 import { AvatarProps } from '../Avatar';

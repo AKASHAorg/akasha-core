@@ -1,4 +1,4 @@
-import { Colors } from '@akashaorg/typings/ui';
+import { Colors } from '@akashaorg/typings/lib/ui';
 import { SnackBarType } from './index';
 
 export function getColorLight(type: SnackBarType): Colors {

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 import {
   useGetInterestsByDidQuery,
   useInfiniteGetBeamsQuery,

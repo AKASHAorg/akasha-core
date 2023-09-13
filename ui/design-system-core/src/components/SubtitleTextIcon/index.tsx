@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Stack from '../Stack';
 import Button from '../Button';

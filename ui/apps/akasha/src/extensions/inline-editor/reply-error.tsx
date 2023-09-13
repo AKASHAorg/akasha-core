@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { IEntryData, IPublishData, Profile } from '@akashaorg/typings/ui';
+import { IEntryData, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
 import { createPendingEntry, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { BEAM } from '../../routes';
