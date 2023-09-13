@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 
-export const PROFILE_STATS_QUERY_KEY = 'Profile_Stats';
+const PROFILE_STATS_QUERY_KEY = 'Profile_Stats';
 
 const getStats = async (profileId: string) => {
   const sdk = getSDK();
@@ -35,3 +35,5 @@ export function useProfileStats(profileId: string) {
     onError: (err: Error) => logError('useProfileStats.getStats', err),
   });
 }
+
+useProfileStats.getKey = (profileId: string) => [`${PROFILE_STATS_QUERY_KEY}_${profileId}`];
