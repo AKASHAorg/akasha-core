@@ -2,13 +2,18 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import singleSpaReact from 'single-spa-react';
-import { withProviders, filterEvents, hasOwn } from '@akashaorg/ui-awf-hooks';
-import { RootExtensionProps, UIEventData, EventTypes } from '@akashaorg/typings/ui';
+import {
+  withProviders,
+  filterEvents,
+  hasOwn,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { RootExtensionProps, UIEventData, EventTypes } from '@akashaorg/typings/lib/ui';
 
-const SnackBarNotification = (props: RootExtensionProps) => {
-  const { uiEvents } = props;
+const SnackBarNotification = (_: RootExtensionProps) => {
+  const { uiEvents } = useRootComponentProps();
   const [message, setMessage] = useState('');
 
   if (message) {
