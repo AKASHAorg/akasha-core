@@ -18,6 +18,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -272,12 +273,18 @@ const SidebarComponent: React.FC<unknown> = () => {
         customStyle="p-4 border-b-1 border(grey9 dark:grey3)"
       >
         <Stack customStyle="w-fit h-fit mr-2">
-          <Avatar
-            profileId={loginQuery.data?.id}
-            avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.akashaProfile?.avatar)}
-            isClickable={!!loginQuery.data?.id}
-            onClick={() => handleAvatarClick(loginQuery.data?.id)}
-          />
+          {isLoading ? (
+            <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
+          ) : (
+            <Avatar
+              profileId={loginQuery.data?.id}
+              avatar={getProfileImageVersionsWithMediaUrl(
+                myProfileQuery.data?.akashaProfile?.avatar,
+              )}
+              isClickable={!!loginQuery.data?.id}
+              onClick={() => handleAvatarClick(loginQuery.data?.id)}
+            />
+          )}
         </Stack>
 
         {isLoading ? (
