@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
 
 import { EventTypes } from '@akashaorg/typings/ui';
@@ -27,11 +26,11 @@ export type CustomizeNotificationPageProps = {
 
 const Title = ({ title }: { title: string }): JSX.Element => {
   return (
-    <div className={tw('flex flex-row items-center')}>
+    <Stack direction="row" justifyItems="center">
       <Text variant="h6" align="center">
         {title}
       </Text>
-    </div>
+    </Stack>
   );
 };
 
@@ -40,7 +39,27 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   isLoggedIn,
 }) => {
   const { t } = useTranslation('app-notifications');
-  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
+  const { uiEvents, getRoutingPlugin, plugins, worldConfig } = useRootComponentProps();
+
+  const routing = plugins['@akashaorg/app-routing']?.routing;
+
+  // console.log('defaultApps ', routing);
+  useEffect(() => {
+    let sub;
+    console.log('worldConfig ', worldConfig);
+    if (routing) {
+      sub = routing.routeObserver.subscribe({
+        next: routeData => {
+          console.log('route data', routeData);
+        },
+      });
+    }
+    return () => {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    };
+  }, [routing, worldConfig]);
 
   const [selected, setSelected] = useState(true);
 
@@ -180,7 +199,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       <div>
         {checkboxArray.map(({ label, value }, index) => {
           return (
-            <div className={tw('')} key={index}>
+            <div key={index}>
               <Checkbox
                 label={label}
                 value={value}
@@ -315,15 +334,15 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       <Card
         elevation={'1'}
         radius={16}
-        padding={'py-2,px-4'}
+        padding={'py-2,px-0'}
         customStyle="h-full md:h-min space-y-4"
       >
         <Text variant="h5" align="center">
           {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
+        <Divider customStyle="my-2" />
         {!initial && (
           <>
-            <Divider customStyle="my-2" />
             <Stack justify="between" direction="row">
               <Text variant="footnotes2">
                 <>{t('Snooze Notifications')}</>
@@ -364,17 +383,19 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           customStyle="ml-2"
         />
         <Divider customStyle="my-2" />
-        <div className={tw('min-h-[80%]')}>
+        <Stack direction="column" customStyle="min-h-[80%]">
           <Accordion
             titleNode={<Title title={t('Social App')} />}
             contentNode={<Content checkboxArray={socialAppCheckboxes} section={'socialapp'} />}
             open={initial}
+            customStyle="mx-4"
           />
           <Divider customStyle="my-2" />
           <Accordion
             titleNode={<Title title={t('Article App')} />}
             contentNode={<Content checkboxArray={articleAppCheckboxes} section={'articleApp'} />}
             open={initial}
+            customStyle="mx-4"
           />
           <Divider customStyle="my-2" />
           <Accordion
@@ -383,6 +404,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
               <Content checkboxArray={moderationAppCheckboxes} section={'moderationApp'} />
             }
             open={initial}
+            customStyle="mx-4"
           />
           <Divider customStyle="my-2" />
           <Accordion
@@ -391,9 +413,10 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
               <Content checkboxArray={integrationCenterCheckboxes} section={'integrationCenter'} />
             }
             open={initial}
+            customStyle="px-4"
           />
-        </div>
-        <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2')}>
+        </Stack>
+        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2">
           {initial ? (
             <>
               <Button
@@ -420,7 +443,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
               />
             </>
           )}
-        </div>
+        </Stack>
       </Card>
     </>
   );
