@@ -93,6 +93,7 @@ const mockSDK: any = (overrides?: any) => {
         getFollowers: () => Promise.resolve(),
         getFollowing: () => Promise.resolve(),
         getInterests: () => Promise.resolve(),
+        getProfileStats: () => Promise.resolve(),
         ...(overrides?.profile || {}),
       },
       tags: {
