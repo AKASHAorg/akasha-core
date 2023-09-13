@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigateToParams, EntityTypes, IContentClickDetails } from '@akashaorg/typings/ui';
+import { NavigateToParams, EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 
 /**
  * Hook to navigation to entry's page

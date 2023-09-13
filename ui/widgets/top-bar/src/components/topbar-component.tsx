@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
-import { EventTypes, UIEventData } from '@akashaorg/typings/ui';
+import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
 import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Topbar from './topbar';
 import {

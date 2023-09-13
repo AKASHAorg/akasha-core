@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaorg/typings/sdk';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
 import Stash, { IQuickLRU } from '../stash';
 import { getSdk, Requester, Sdk } from './api';
 import Logging from '../logging/index';

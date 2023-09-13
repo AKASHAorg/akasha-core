@@ -7,7 +7,7 @@ import {
   PROVIDER_ERROR_CODES,
   TYPES,
   WEB3_EVENTS,
-} from '@akashaorg/typings/sdk';
+} from '@akashaorg/typings/lib/sdk';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { EthereumProvider } from '@walletconnect/ethereum-provider';
 import Logging from '../logging';

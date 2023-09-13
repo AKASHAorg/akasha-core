@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EntityTypes } from '@akashaorg/typings/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { IWidgetConfig } from '@akashaorg/typings/ui';
+import { IWidgetConfig } from '@akashaorg/typings/lib/ui';
 
 /**
  * All widgets must export an object like this:

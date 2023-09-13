@@ -6,10 +6,10 @@ import {
   MenuItemAreaType,
   MenuItemType,
   LogoTypeSource,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import getSDK, { Logger } from '@akashaorg/awf-sdk';
 import { filter, mergeMap } from 'rxjs';
-import { AUTH_EVENTS } from '@akashaorg/typings/sdk';
+import { AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
 
 export const initialize = (options: IntegrationRegistrationOptions & { logger: Logger }) => {
   const notification: any = options.plugins['@akashaorg/app-notifications'].notification;

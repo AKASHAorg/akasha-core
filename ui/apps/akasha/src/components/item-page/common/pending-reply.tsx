@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IPublishData, Profile } from '@akashaorg/typings/ui';
+import { IPublishData, Profile } from '@akashaorg/typings/lib/ui';
 import { useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { REFLECT } from '../../../routes';

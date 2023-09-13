@@ -1,5 +1,5 @@
 import faker from 'faker';
-import { AkashaProfile } from '@akashaorg/typings/ui';
+import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 
 const genUser = (ethAddress?: string): AkashaProfile => {
   const avatarUrl = faker.image.avatar();

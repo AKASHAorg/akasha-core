@@ -1,5 +1,5 @@
 import { Container } from 'inversify';
-import { TYPES } from '@akashaorg/typings/sdk';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
 import Logging from './logging';
 import Gql from './gql';
 import Settings from './settings';

@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/ui';
-import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/sdk/events';
+import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
+import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   getProfileImageVersionsWithMediaUrl,

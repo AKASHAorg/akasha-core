@@ -4,7 +4,7 @@ import {
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   LogoTypeSource,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 import routes, { EDIT, FOLLOWERS, FOLLOWING } from './routes';
 /**

@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { TYPES, TAG_EVENTS, TagNameSchema, TagName } from '@akashaorg/typings/sdk';
+import { TYPES, TAG_EVENTS, TagNameSchema, TagName } from '@akashaorg/typings/lib/sdk';
 import Web3Connector from '../common/web3.connector';
 import Logging from '../logging';
 import Gql from '../gql';

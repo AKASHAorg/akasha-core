@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
+import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 
 import { PaginatedItem, contentTypeMap } from './transparency-log';
 import ModeratorDashboard from '../components/dashboard';

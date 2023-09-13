@@ -1,4 +1,4 @@
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 export const getIconFromLink = (href: string): IconType => {
   const host = new URL(href).host;

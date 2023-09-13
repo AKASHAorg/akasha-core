@@ -10,8 +10,8 @@ import {
   IntegrationNameSchema,
   IntegrationName,
   ReleaseInfo,
-} from '@akashaorg/typings/sdk';
-import { ManifestInfo } from '@akashaorg/typings/sdk/graphql-types';
+} from '@akashaorg/typings/lib/sdk';
+import { ManifestInfo } from '@akashaorg/typings/lib/sdk/graphql-types';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';

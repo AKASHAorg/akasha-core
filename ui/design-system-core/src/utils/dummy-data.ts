@@ -1,5 +1,5 @@
-import { AkashaFollowConnection } from '@akashaorg/typings/sdk/graphql-types-new';
-import { AkashaProfile } from '@akashaorg/typings/ui';
+import { AkashaFollowConnection } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 
 const userAvatar = (width = 360, height = 360) => {
   return {

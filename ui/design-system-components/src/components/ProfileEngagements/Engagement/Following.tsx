@@ -6,7 +6,7 @@ import EmptyEntry from '../Entry/EmptyEntry';
 import { tw } from '@twind/core';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
-import { AkashaFollowing } from '@akashaorg/typings/ui';
+import { AkashaFollowing } from '@akashaorg/typings/lib/ui';
 import { EngagementProps } from '../types';
 
 export type FollowingProps = {

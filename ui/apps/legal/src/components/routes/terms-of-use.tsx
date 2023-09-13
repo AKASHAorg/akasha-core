@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useLegalDoc } from '@akashaorg/ui-awf-hooks';
-import { LEGAL_DOCS } from '@akashaorg/typings/ui';
+import { LEGAL_DOCS } from '@akashaorg/typings/lib/ui';
 
 import PageRenderer from './page-renderer';
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { BlockCommandResponse, RootExtensionProps } from '@akashaorg/typings/ui';
+import { BlockCommandResponse, RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { filterEvents } from './utils/event-utils';
-import { BlockAction, BlockActionType, EditorBlock } from '@akashaorg/typings/ui/editor-blocks';
+import { BlockAction, BlockActionType, EditorBlock } from '@akashaorg/typings/lib/ui/editor-blocks';
 import { useRootComponentProps } from './use-root-props';
 
 export type UseEditorBlocksProps = {

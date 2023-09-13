@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { withProviders, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';

@@ -1,5 +1,5 @@
 import getSDK, { Logger } from '@akashaorg/awf-sdk';
-import type { WorldConfig } from '@akashaorg/typings/ui';
+import type { WorldConfig } from '@akashaorg/typings/lib/ui';
 import { Observable, mergeMap, tap, catchError, switchMap, filter, withLatestFrom } from 'rxjs';
 import { pipelineEvents } from './events';
 import { getStateSlice, LoaderState } from './state';

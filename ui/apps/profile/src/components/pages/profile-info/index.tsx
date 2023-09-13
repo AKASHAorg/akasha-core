@@ -13,7 +13,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { hasOwn, useGetLogin, useRootComponentProps, useValidDid } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 

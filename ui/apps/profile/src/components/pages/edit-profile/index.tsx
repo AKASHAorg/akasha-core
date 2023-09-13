@@ -22,7 +22,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useSaveImage } from './use-save-image';
-import { PartialAkashaProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-content';
 import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/components/EditProfile/types';
 

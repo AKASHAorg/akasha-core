@@ -2,7 +2,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import { mockSDK, genWorldConfig } from '@akashaorg/af-testing';
 import { map, mergeMap, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
-import { ILoaderConfig } from '@akashaorg/typings/ui';
+import { ILoaderConfig } from '@akashaorg/typings/lib/ui';
 import { getStateSlice, initState, LoaderState } from '../src/state';
 import { getDefaultIntegrationManifests, getUserIntegrationManifests } from '../src/manifests';
 import { pipelineEvents } from '../src/events';

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { IMessage } from '@akashaorg/typings/sdk';
+import { IMessage } from '@akashaorg/typings/lib/sdk';
 
 import { logError } from './utils/error-handler';
 import { buildProfileMediaLinks } from './utils/media-utils';

@@ -1,9 +1,9 @@
-import { IAppConfig, ModalNavigationOptions, QueryStringType } from '@akashaorg/typings/ui';
+import { IAppConfig, ModalNavigationOptions, QueryStringType } from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
 import { of } from 'rxjs';
 import { Logger } from '@akashaorg/awf-sdk';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 
 export const encodeName = (appName: string) => {
   return appName;

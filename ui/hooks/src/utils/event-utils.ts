@@ -1,6 +1,6 @@
 import { filter, MonoTypeOperatorFunction } from 'rxjs';
 import { hasOwn } from './has-own';
-import { UIEventData } from '@akashaorg/typings/ui';
+import { UIEventData } from '@akashaorg/typings/lib/ui';
 
 export function filterEvent(eventType: UIEventData['event']): MonoTypeOperatorFunction<
   Extract<

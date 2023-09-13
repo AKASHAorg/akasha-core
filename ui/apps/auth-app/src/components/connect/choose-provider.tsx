@@ -8,8 +8,8 @@ import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Web3ConnectCard from './web3-connect-card';
 import { useTranslation } from 'react-i18next';
-import { IconType } from '@akashaorg/typings/ui';
-import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
+import { IconType } from '@akashaorg/typings/lib/ui';
+import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/lib/sdk';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type ChooseProviderProps = {

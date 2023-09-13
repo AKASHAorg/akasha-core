@@ -1,4 +1,4 @@
-import { ReleaseInfo } from '@akashaorg/typings/sdk';
+import { ReleaseInfo } from '@akashaorg/typings/lib/sdk';
 
 export interface IntegrationSchema {
   name: string;

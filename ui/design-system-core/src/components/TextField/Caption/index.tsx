@@ -4,7 +4,7 @@ import Text from '../../Text';
 import Stack from '../../Stack';
 import { Color, Status } from '../../types/common.types';
 import { CaptionProps } from '../types';
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import { getIconClasses } from '../Input/getIconClasses';
 
 const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, children }) => {

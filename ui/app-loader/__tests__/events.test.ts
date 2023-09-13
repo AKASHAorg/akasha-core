@@ -1,5 +1,5 @@
-import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/sdk';
-import { EventTypes } from '@akashaorg/typings/ui';
+import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { EventTypes } from '@akashaorg/typings/lib/ui';
 import { map, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { getGlobalChannelEvents, getUiEvents, spaEvents$, uiEvents } from '../src/events';

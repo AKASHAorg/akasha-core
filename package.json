@@ -132,8 +132,6 @@
   },
   "workspaces": {
     "packages": [
-      "sdk/typings",
-      "ui/typings",
       "typings",
       "sdk",
       "ui/hooks",

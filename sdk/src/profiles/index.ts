@@ -10,21 +10,21 @@ import {
   UsernameSchema,
   EthAddress,
   EthAddressSchema,
-} from '@akashaorg/typings/sdk';
+} from '@akashaorg/typings/lib/sdk';
 import AWF_Auth from '../auth';
 import Logging from '../logging';
 import { resizeImage } from '../helpers/img';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
-import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
+import { DataProviderInput } from '@akashaorg/typings/lib/sdk/graphql-types';
 import { createFormattedValue } from '../helpers/observable';
 import IpfsConnector from '../common/ipfs.connector';
 import { z } from 'zod';
 import { validate } from '../common/validator';
 import { throwError } from '../common/error-handling';
 import Gql from '../gql';
-import { GetProfilesQueryVariables } from '@akashaorg/typings/sdk/graphql-operation-types-new';
-import type { AkashaProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import { GetProfilesQueryVariables } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import type { AkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import CeramicService from '../common/ceramic';
 import { definition } from '@akashaorg/composedb-models/lib/runtime-definition';
 import { hasOwn } from '../helpers/types';
