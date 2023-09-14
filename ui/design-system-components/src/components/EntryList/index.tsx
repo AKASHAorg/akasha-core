@@ -5,18 +5,9 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import {
-  defaultRangeExtractor,
-  useWindowVirtualizer,
-  VirtualItem,
-  Virtualizer,
-} from '@tanstack/react-virtual';
+import { defaultRangeExtractor, useWindowVirtualizer, VirtualItem } from '@tanstack/react-virtual';
 import { useScrollTop } from './use-scroll-top';
-
-/**
- * Notes (remove after implementation)
- * list is settled when:
- */
+import { mergeWithCache } from '../../utils/virtual-list-utils';
 
 export type CardListProps<T> = {
   items: VirtualItem[];
@@ -30,11 +21,6 @@ export type ScrollerState = {
   startItemCursor: string;
   measurementsCache: VirtualItem[];
   itemsCount: number;
-  rangeStartOffset?: number;
-  totalHeight?: number;
-  totalWidth?: number;
-  paddingTop: number;
-  paddingBottom: number;
   visibleCursorRange: {
     startCursor: string;
     endCursor: string;
@@ -43,19 +29,6 @@ export type ScrollerState = {
 
 export type ScrollerOnChangeState<T> = ScrollerState & {
   allEntries: T[];
-  scrollDirection: Virtualizer<Window, Element>['scrollDirection'];
-  visibleIndexRange: {
-    start: number;
-    end: number;
-  };
-};
-
-const usePrevState = (val: unknown) => {
-  const ref = React.useRef<unknown>();
-  React.useEffect(() => {
-    ref.current = val;
-  }, [val]);
-  return ref.current;
 };
 
 export type EntryListProps<T> = {
@@ -72,7 +45,7 @@ export type EntryListProps<T> = {
   onScrollStateChange?: (scrollerState: ScrollerOnChangeState<T>) => void;
   onScrollStateReset?: () => void;
   initialScrollState?: ScrollerState & { isFetched: boolean };
-  getItemKey?: (index: number, entries: T[]) => string;
+  getItemKey?: (index: number, entries: (T | VirtualItem)[]) => string;
   newItemsCount?: number;
   scrollerOptions?: { overscan: number };
   onFetchNextPage: (lastCursor: string) => void;
@@ -101,82 +74,49 @@ function EntryList<T>(props: EntryListProps<T>) {
   } = props;
 
   const rootElementRef = React.useRef<HTMLDivElement>();
+  const isScrollRestored = React.useRef(false);
   // @TODO: maybe pass the topbar slotId here?
   const topbarHeight = document.getElementById('topbar-slot')?.offsetParent?.clientHeight || 0;
 
-  const itemCount = React.useMemo(() => {
-    if (hasNextPage) {
-      return pages.length + 1;
-    }
-    return pages.length;
-  }, [hasNextPage, pages.length]);
-
-  const prevItemCount = usePrevState(itemCount);
-
+  // keep the first scroll state as ref
   const initialScrollStateRef = React.useRef<ScrollerState & { isFetched: boolean }>();
-
-  React.useLayoutEffect(() => {
-    if (initialScrollState.isFetched && !initialScrollStateRef.current) {
+  React.useEffect(() => {
+    if (!initialScrollStateRef.current && initialScrollState.isFetched) {
       initialScrollStateRef.current = initialScrollState;
     }
   }, [initialScrollState]);
-  const virtualizerRef = React.useRef<Virtualizer<Window, Element>>();
 
-  const handleVlistChange = React.useCallback(
-    (vInstance: Virtualizer<Window, Element>) => {
-      console.log(vInstance.options.count, pages.length, itemCount, prevItemCount, '<<<counts');
-    },
-    [itemCount, pages.length],
-  );
-
-  const visibleRange = React.useRef();
+  // merge pages and measurementsCache
+  const pageItems: (T & { index: number; key: string })[] = React.useMemo(() => {
+    if (initialScrollStateRef.current && pages.length) {
+      return mergeWithCache(initialScrollStateRef.current.measurementsCache, pages);
+    }
+    return [];
+  }, [pages]);
 
   const virtualizer = useWindowVirtualizer({
-    count: itemCount,
-    paddingStart: initialScrollStateRef.current?.paddingTop || 0,
-    paddingEnd: initialScrollStateRef.current?.paddingBottom || 0,
+    count: pageItems.length,
     scrollPaddingEnd: 100,
     estimateSize: () => 240,
     scrollMargin: rootElementRef.current?.offsetTop || 0,
     initialMeasurementsCache: initialScrollStateRef.current?.measurementsCache || [],
     scrollingDelay: 250,
     overscan: scrollerOptions.overscan,
-    getItemKey: index => getItemKey(index, pages),
-    onChange: handleVlistChange,
-    // rangeExtractor: React.useCallback(
-    //   range => {
-    //     if (initialScrollState.isFetched) {
-    //       const cache = initialScrollState.measurementsCache.map(mc => mc.index);
-    //       const current = defaultRangeExtractor(range);
-    //       const nextRange = new Set([...cache, ...current]);
-    //       return [...nextRange].sort((a, b) => a - b);
-    //     }
-    //     return defaultRangeExtractor(range);
-    //   },
-    //   [initialScrollState],
-    // ),
+    getItemKey: index => getItemKey(index, pageItems),
+    rangeExtractor: React.useCallback(
+      range => {
+        if (!initialScrollState.isFetched) {
+          return [];
+        }
+        return defaultRangeExtractor(range);
+      },
+      [initialScrollState],
+    ),
   });
-
-  const isInitialized = React.useMemo(() => {
-    if (initialScrollState.isFetched) {
-      initialScrollStateRef.current = initialScrollState;
-      return true;
-    }
-    return false;
-  }, [initialScrollState]);
 
   const items = virtualizer.getVirtualItems();
 
   const [paddingTop, paddingBottom] = React.useMemo(() => {
-    const range = virtualizer.calculateRange();
-    if (isInitialized && range.startIndex === 0) {
-      if (initialScrollStateRef.current.measurementsCache.length > 0) {
-        return [
-          initialScrollStateRef.current.paddingTop,
-          Math.max(0, virtualizer.getTotalSize() - items[items.length - 1]?.end),
-        ];
-      }
-    }
     if (items.length) {
       return [
         Math.max(0, items[0].start - virtualizer.options.scrollMargin),
@@ -184,46 +124,72 @@ function EntryList<T>(props: EntryListProps<T>) {
       ];
     }
     return [0, 0];
-  }, [isInitialized, items, virtualizer]);
+  }, [items, virtualizer]);
 
-  // save scroll state hook
-  React.useLayoutEffect(() => {
-    if (isInitialized && virtualizer.isScrolling) {
-      const { startIndex, endIndex } = virtualizer.calculateRange();
-
-      const state: ScrollerOnChangeState<T> = {
-        allEntries: pages,
-        startItemCursor: pages[0]['cursor'],
-        measurementsCache: virtualizer.measurementsCache,
-        itemsCount: itemCount,
-        scrollDirection: virtualizer.scrollDirection,
-        paddingTop,
-        paddingBottom,
-        visibleCursorRange: {
-          startCursor: pages[startIndex]['cursor'],
-          endCursor: pages[endIndex]['cursor'],
-        },
-        visibleIndexRange: {
-          start: startIndex,
-          end: endIndex,
-        },
-      };
-      onScrollStateSave(state);
+  const [firstPopulatedItem, lastPopulatedItem] = React.useMemo(() => {
+    if (pages.length) {
+      const firstItem = pageItems.find(it => it.key === pages[0]['cursor']);
+      const lastItem = pageItems.find(it => it.key === pages[pages.length - 1]['cursor']);
+      return [firstItem, lastItem];
     }
-  }, [isInitialized, onScrollStateSave, paddingBottom, paddingTop, pages, virtualizer]);
+    return [];
+  }, [pageItems, pages]);
 
   React.useEffect(() => {
-    if (isInitialized && pages.length && initialScrollStateRef.current?.measurementsCache.length) {
-      const firstItem = rootElementRef.current.querySelector('[data-index="0"]');
-      const range = virtualizer.calculateRange();
-      if (firstItem && range.startIndex === 0 && initialScrollStateRef.current.paddingTop) {
-        const rect = firstItem.getClientRects().item(0);
-        if (rect.top > topbarHeight) {
-          virtualizer.scrollBy(rect.top - topbarHeight);
+    if (items[0] && items[0].index < firstPopulatedItem.index && !isScrollRestored.current) {
+      virtualizer.scrollToIndex(firstPopulatedItem.index, { align: 'start' });
+      const firstDomEl = rootElementRef.current.querySelector(
+        `[data-index="${firstPopulatedItem.index}"]`,
+      );
+      if (firstDomEl) {
+        const rect = firstDomEl.getClientRects().item(0);
+        if (rect.top <= topbarHeight) {
+          isScrollRestored.current = true;
         }
       }
     }
-  }, [isInitialized, pages.length, topbarHeight, virtualizer]);
+  }, [firstPopulatedItem, items, topbarHeight, virtualizer]);
+
+  // save scroll state hook
+  const prevRange = React.useRef<{ startIndex: number; endIndex: number }>(
+    virtualizer.calculateRange(),
+  );
+  React.useLayoutEffect(() => {
+    if (virtualizer.isScrolling) {
+      const { startIndex, endIndex } = virtualizer.calculateRange();
+
+      if (
+        startIndex < firstPopulatedItem.index &&
+        prevRange.current.startIndex === startIndex &&
+        prevRange.current.endIndex === endIndex
+      ) {
+        return;
+      }
+
+      const state: ScrollerOnChangeState<T> = {
+        allEntries: pages,
+        startItemCursor: pageItems[0]['key'],
+        measurementsCache: virtualizer.measurementsCache,
+        itemsCount: pageItems.length,
+        visibleCursorRange: {
+          startCursor: pages[startIndex]?.['cursor'] || firstPopulatedItem.key,
+          endCursor: pages[endIndex]?.['cursor'] || lastPopulatedItem.key,
+        },
+      };
+      onScrollStateSave(state);
+      prevRange.current = { startIndex, endIndex };
+    }
+  }, [
+    pageItems.length,
+    onScrollStateSave,
+    paddingBottom,
+    paddingTop,
+    pages,
+    virtualizer,
+    firstPopulatedItem,
+    pageItems,
+    lastPopulatedItem,
+  ]);
 
   const { isHidden, scrollTopButtonPlacement } = useScrollTop({
     rootElementRef,
@@ -232,58 +198,45 @@ function EntryList<T>(props: EntryListProps<T>) {
     languageDirection,
   });
 
-  React.useEffect(() => {
-    const range = virtualizer.calculateRange();
-    if (pages.length && range.endIndex >= pages.length - 3) {
-      onFetchNextPage(pages.reverse()[0]['cursor']);
+  // next page loading logic
+  React.useLayoutEffect(() => {
+    const lastItem = items[items.length - 1];
+    if (!lastItem) {
+      return;
     }
+    if (lastItem.index >= lastPopulatedItem.index) {
+      onFetchNextPage(lastPopulatedItem.key as string);
+    }
+  }, [items, lastPopulatedItem, onFetchNextPage]);
+
+  // prev page loading logic
+  React.useLayoutEffect(() => {
     if (
-      isInitialized &&
-      range.startIndex === 0 &&
-      paddingTop > 0 &&
-      pages.length &&
-      virtualizer.scrollDirection === 'backward'
+      items.length &&
+      !isFetchingNextPage &&
+      virtualizer.scrollDirection === 'backward' &&
+      isScrollRestored.current &&
+      items[0].index + 1 < firstPopulatedItem.index
     ) {
-      onFetchPreviousPage(pages[0]['cursor'], true);
+      return onFetchPreviousPage(firstPopulatedItem.key, true);
     }
   }, [
-    isInitialized,
-    onFetchNextPage,
+    firstPopulatedItem,
+    items,
     onFetchPreviousPage,
     paddingTop,
-    pages,
-    virtualizer,
-    virtualizer.isScrolling,
+    pageItems,
+    scrollerOptions.overscan,
+    virtualizer.scrollDirection,
   ]);
 
-  if (virtualizerRef.current && virtualizerRef.current.options.count !== pages.length) {
-    const itemDelta = pages.length - virtualizerRef.current.options.count;
-    console.log('items added to the list', itemDelta);
-    if (!virtualizer.scrollDirection || virtualizer.scrollDirection === 'forward') {
-      console.log('items were appended!');
-      console.log('==========');
-    } else {
-      console.log('items were prepended!');
-      console.log('==========');
-    }
-  }
-
-  React.useEffect(() => {
-    console.log(pages, '>>> pages');
-    console.log(items, '>>> items');
-  }, [pages, items]);
-
-  React.useLayoutEffect(() => {
-    virtualizerRef.current = virtualizer;
-  }, [virtualizer]);
-
-  const handleScrollToTop = () => {
+  const handleScrollToTop = React.useCallback(() => {
     const [offset] = virtualizer.getOffsetForIndex(0, 'start');
     virtualizer.scrollToOffset(offset - topbarHeight - itemSpacing, { align: 'start' });
     if (onScrollStateReset) {
       onScrollStateReset();
     }
-  };
+  }, [itemSpacing, onScrollStateReset, topbarHeight, virtualizer]);
 
   return (
     <div
@@ -299,23 +252,20 @@ function EntryList<T>(props: EntryListProps<T>) {
           <span>{newItemsCount} New Items</span>
         </div>
       )}
-      {requestStatus === 'loading' && isFetchingPreviousPage && (
-        <Stack fullWidth={true} customStyle="p-8">
-          <Spinner />
-        </Stack>
-      )}
+      {requestStatus === 'loading' &&
+        isFetchingPreviousPage &&
+        firstPopulatedItem.index === items[0].index && (
+          <Stack fullWidth={true} customStyle="p-8">
+            <Spinner />
+          </Stack>
+        )}
       {children({
         items,
-        allEntries: pages,
+        allEntries: pageItems,
         measureElementRef: virtualizer.measureElement,
         isFetchingNextPage,
         itemSpacing,
       })}
-      {isFetchingNextPage && (
-        <Stack fullWidth={true} customStyle="p-8">
-          <Spinner />
-        </Stack>
-      )}
       <ScrollTopWrapper placement={scrollTopButtonPlacement}>
         <ScrollTopButton hide={isHidden} onClick={handleScrollToTop} />
       </ScrollTopWrapper>

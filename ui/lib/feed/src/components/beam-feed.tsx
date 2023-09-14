@@ -18,6 +18,8 @@ import { AkashaBeamEdge } from '@akashaorg/typings/sdk/graphql-types-new';
 import { useInfiniteBeams } from '../utils/use-infinite-beams';
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';
+import { hasOwn } from '@akashaorg/ui-awf-hooks';
+import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
 export type BeamFeedProps = Omit<
   EntryListProps<AkashaBeamEdge>,
@@ -90,7 +92,10 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
         onScrollStateSave={beamsReq.onScrollStateSave}
         initialScrollState={beamsReq.initialScrollState}
         onScrollStateReset={beamsReq.onScrollStateRemove}
-        getItemKey={(idx, items) => items[idx].cursor}
+        getItemKey={(idx, items) => {
+          if (!items || !items.length) return null;
+          return hasOwn(items[idx], 'key') ? items[idx]['key'] : items[idx]['cursor'];
+        }}
         scrollerOptions={scrollerOptions}
         onFetchNextPage={beamsReq.tryFetchNextPage}
         onFetchPreviousPage={beamsReq.tryFetchPreviousPage}
@@ -117,16 +122,24 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
                 data-index={index}
                 ref={measureElementRef}
                 style={{ paddingBottom: itemSpacing }}
+                data-cursor={entryData?.cursor || ''}
               >
-                <EntryCard
-                  showMore={true}
-                  entryData={entryData.node}
-                  locale={locale}
-                  onRepost={onRebeam}
-                  onContentClick={onNavigate}
-                  repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
-                  profileAnchorLink="/@akashaorg/app-profile"
-                />
+                {!entryData.node && (
+                  <div>
+                    <EntryLoadingPlaceholder />
+                  </div>
+                )}
+                {entryData.node && (
+                  <EntryCard
+                    showMore={true}
+                    entryData={entryData.node}
+                    locale={locale}
+                    onRepost={onRebeam}
+                    onContentClick={onNavigate}
+                    repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
+                    profileAnchorLink="/@akashaorg/app-profile"
+                  />
+                )}
               </div>
             );
           });

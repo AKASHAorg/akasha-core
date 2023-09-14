@@ -24,8 +24,6 @@ const saveScrollState = async (
     startItemCursor: undefined,
     measurementsCache: [],
     itemsCount: 0,
-    totalHeight: 0,
-    totalWidth: 0,
     visibleCursorRange: {
       startCursor: undefined,
       endCursor: undefined,

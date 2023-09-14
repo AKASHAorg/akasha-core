@@ -12,7 +12,7 @@ export type TextLineProps = {
   customStyle?: string;
 };
 
-const baseStyle = `bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
+const baseStyle = `bg-gradient-to-r light:from-grey6 light:via-grey8 light:to-white dark:from-grey dark:to-grey3`;
 
 const TextLine: React.FC<TextLineProps> = props => {
   const {

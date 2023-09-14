@@ -44,12 +44,7 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
     isFetched: false,
     measurementsCache: [],
     startItemCursor: undefined,
-    paddingTop: 0,
-    paddingBottom: 0,
     itemsCount: 0,
-    totalWidth: 0,
-    totalHeight: 0,
-    rangeStartOffset: 0,
     visibleCursorRange: {
       startCursor: undefined,
       endCursor: undefined,
@@ -100,13 +95,11 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
       },
       getNextPageParam: last => {
         if (last.akashaBeamIndex.pageInfo.hasNextPage) {
-          return { after: last.akashaBeamIndex.pageInfo.endCursor };
+          return last.akashaBeamIndex.pageInfo.endCursor;
         }
       },
       getPreviousPageParam: firstPage => {
-        if (firstPage.akashaBeamIndex.pageInfo.hasPreviousPage) {
-          return { before: firstPage.akashaBeamIndex.pageInfo.startCursor };
-        }
+        return firstPage.akashaBeamIndex.pageInfo.startCursor;
       },
     },
   );
@@ -130,23 +123,13 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
   }, [removeScrollState]);
 
   const handleScrollStateSave = (scrollerOnChangeState: ScrollerOnChangeState<unknown>) => {
-    const { allEntries, scrollDirection, visibleIndexRange, ...scrollState } =
-      scrollerOnChangeState;
+    const { allEntries, ...scrollState } = scrollerOnChangeState;
 
-    if (scrollDirection && !saveScrollState.isLoading) {
+    if (!saveScrollState.isLoading) {
       saveScrollState.mutate({
         ...scrollState,
       });
     }
-
-    // if (visibleIndexRange.end >= allEntries.length - 1) {
-    //   tryFetchNextPage();
-    // }
-    // if (visibleIndexRange.start < options.scrollerOptions.overscan) {
-    //   if (scrollDirection === 'backward') {
-    //     tryFetchPreviousPage();
-    //   }
-    // }
   };
 
   const newItemsCount = React.useMemo(() => {
@@ -161,36 +144,47 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
     console.error(err, beamsReq);
   };
 
-  const tryFetchNextPage = (lastCursor: string) => {
-    if (canFetchNextPage(beamsReq)) {
-      beamsReq
-        .fetchNextPage({
-          pageParam: {
-            first: options.scrollerOptions.overscan,
-            sorting: {
-              createdAt: SortOrder.Desc,
+  const tryFetchNextPage = React.useCallback(
+    (lastCursor: string) => {
+      if (canFetchNextPage(beamsReq)) {
+        beamsReq
+          .fetchNextPage({
+            pageParam: {
+              first: options.scrollerOptions.overscan,
+              last: null,
+              sorting: {
+                createdAt: SortOrder.Desc,
+              },
+              before: null,
+              after: lastCursor,
             },
-            after: beamsReq.data.pages.reverse()[0].cursor,
-          },
-        })
-        .catch(onFetchError);
-    }
-  };
-  const tryFetchPreviousPage = (firstCursor: string, force = false) => {
-    if (canFetchPreviousPage(beamsReq, force)) {
-      beamsReq
-        .fetchPreviousPage({
-          pageParam: {
-            first: options.scrollerOptions.overscan,
-            sorting: {
-              createdAt: SortOrder.Desc,
+          })
+          .catch(onFetchError);
+      }
+    },
+    [beamsReq, onFetchError, options.scrollerOptions.overscan],
+  );
+
+  const tryFetchPreviousPage = React.useCallback(
+    (firstCursor: string, force = false) => {
+      if (canFetchPreviousPage(beamsReq, force)) {
+        beamsReq
+          .fetchPreviousPage({
+            pageParam: {
+              first: null,
+              last: options.scrollerOptions.overscan,
+              sorting: {
+                createdAt: SortOrder.Desc,
+              },
+              after: null,
+              before: firstCursor,
             },
-            before: firstCursor,
-          },
-        })
-        .catch(onFetchError);
-    }
-  };
+          })
+          .catch(onFetchError);
+      }
+    },
+    [beamsReq, onFetchError, options.scrollerOptions.overscan],
+  );
 
   return {
     pages: beamsReq.data?.pages || [],
