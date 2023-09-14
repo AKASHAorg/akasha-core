@@ -4,7 +4,7 @@ import { genLoggedInState, genPostData, genCommentData } from '@akashaorg/af-tes
 import * as loginHooks from '@akashaorg/ui-awf-hooks/lib/use-login.new';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 
-jest.mock('@akashaorg/typings/lib/ui', () => ({
+jest.mock('@akashaorg/typings/ui', () => ({
   EntityTypes: {
     POST: 0,
     PROFILE: 1,

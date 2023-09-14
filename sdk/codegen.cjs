@@ -55,7 +55,7 @@ const config = {
               `
 import getSDK from '@akashaorg/awf-sdk';
 const sdk = getSDK();
-export function fetcher<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
+export function fetcher<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: Record<string, unknown>) {
   return async (): Promise<TData> => {
 
     const result = await sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
