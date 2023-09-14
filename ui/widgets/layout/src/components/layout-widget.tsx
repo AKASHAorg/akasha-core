@@ -236,6 +236,9 @@ const Layout: React.FC<unknown> = () => {
                 </Card>
               )}
               <Extension name={layoutConfig.pluginSlotId} uiEvents={uiEvents} />
+              <Stack customStyle="fixed bottom-0 mr-4 mb-4">
+                <Extension name={layoutConfig.snackbarNotifSlotId} uiEvents={uiEvents} />
+              </Stack>
             </Stack>
           </Stack>
 

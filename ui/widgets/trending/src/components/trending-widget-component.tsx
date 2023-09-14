@@ -5,7 +5,7 @@ import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { useGetLogin, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import {
   useGetProfilesQuery,
-  useGetInterestsQuery,
+  useGetInterestsStreamQuery,
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -32,11 +32,11 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     { last: 4 },
     { select: result => result?.akashaProfileIndex?.edges.map(profile => profile.node) },
   );
-  const latestTopicsReq = useGetInterestsQuery(
+  const latestTopicsReq = useGetInterestsStreamQuery(
     { last: 4 },
     {
       select: result =>
-        result?.akashaProfileInterestsIndex?.edges.flatMap(interest => interest.node?.topics),
+        result?.akashaInterestsStreamIndex?.edges.flatMap(interest => interest.node),
     },
   );
   const tagSubscriptionsReq = useGetInterestsByDidQuery(
