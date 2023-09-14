@@ -5,7 +5,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { Profile, RootExtensionProps } from '@akashaorg/typings/ui';
+import { Profile, RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { trendingProfilesData } from '@akashaorg/design-system-components/lib/utils/dummy-data';
 

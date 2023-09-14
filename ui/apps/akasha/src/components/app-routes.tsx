@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import { ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import FeedPage from './feed-page/feed-page';

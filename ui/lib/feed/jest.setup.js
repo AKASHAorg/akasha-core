@@ -12,7 +12,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK({});
 });
 
-jest.mock('@akashaorg/typings/ui', () => ({
+jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     POST: 0,
     PROFILE: 1,

@@ -1,5 +1,5 @@
 import Dexie, { Table } from 'dexie';
-import { IChatMessage } from '@akashaorg/typings/ui';
+import { IChatMessage } from '@akashaorg/typings/lib/ui';
 
 export interface Message extends IChatMessage {
   loggedUserId: string;

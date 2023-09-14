@@ -1,7 +1,7 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
+import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useAnalytics, withProviders, validateType } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';

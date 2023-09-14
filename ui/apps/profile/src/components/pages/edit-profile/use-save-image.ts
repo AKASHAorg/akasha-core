@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { saveAndGetImageObj } from './save-and-get-image-obj';
-import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
-import { ProfileImageType } from '@akashaorg/typings/ui';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ProfileImageType } from '@akashaorg/typings/lib/ui';
 
 export function useSaveImage() {
   const [loading, setLoading] = useState(false);

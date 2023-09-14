@@ -4,7 +4,7 @@ import {
   IPublishData,
   AnalyticsCategories,
   IEntryData,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import isEqual from 'lodash.isequal';
 
 import { useTranslation } from 'react-i18next';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ITag } from '@akashaorg/typings/ui';
+import { ITag } from '@akashaorg/typings/lib/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

@@ -1,4 +1,4 @@
-import { CustomElement } from '@akashaorg/typings/ui';
+import { CustomElement } from '@akashaorg/typings/lib/ui';
 import { Editor, Node, Path, Range, Transforms } from 'slate';
 
 const withImages = (editor: Editor) => {

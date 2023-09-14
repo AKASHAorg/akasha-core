@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { IModerationLogItem } from '@akashaorg/typings/ui';
+import { IModerationLogItem } from '@akashaorg/typings/lib/ui';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -97,8 +97,8 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
   ]);
 
   return (
-    <>
-      <Stack align="center" justify="between" customStyle="mb-3">
+    <Stack spacing="gap-y-4">
+      <Stack direction="row" align="center" justify="between">
         <Stack direction="row" align="center" spacing="gap-x-3">
           <Dropdown
             name="filterByDecision"
@@ -149,6 +149,6 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
         onClickPrev={handleClickPrev}
         onClickNext={handleClickNext}
       />
-    </>
+    </Stack>
   );
 };

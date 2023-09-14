@@ -2,7 +2,7 @@ import * as React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import SocialBox from '../../SocialBox';
 import EntryBox, { EntryBoxProps } from '../EntryBox';
-import { NavigateToParams } from '@akashaorg/typings/ui';
+import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 
 export type EntryCardProps = EntryBoxProps & {
   // labels

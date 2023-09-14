@@ -1,6 +1,6 @@
-import { APP_EVENTS } from '@akashaorg/typings/sdk';
-import { IntegrationInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { EventTypes, ExtensionMatcherFn, EventDataTypes } from '@akashaorg/typings/ui';
+import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { IntegrationInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
+import { EventTypes, ExtensionMatcherFn, EventDataTypes } from '@akashaorg/typings/lib/ui';
 import { filter, from, map, mergeMap, ReplaySubject } from 'rxjs';
 import { filterEvent } from './events';
 import { stringToRegExp } from './utils';

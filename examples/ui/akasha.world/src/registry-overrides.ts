@@ -1,4 +1,4 @@
-import { INTEGRATION_TYPES } from '@akashaorg/typings/ui';
+import { INTEGRATION_TYPES } from '@akashaorg/typings/lib/ui';
 
 export const missingRequiredFields = {
   version: '0.0.1',

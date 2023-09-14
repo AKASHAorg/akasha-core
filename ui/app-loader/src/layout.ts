@@ -1,4 +1,4 @@
-import type { WorldConfig, RootComponentProps } from '@akashaorg/typings/ui';
+import type { WorldConfig, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { Observable, mergeMap, from, filter, tap, catchError, map, withLatestFrom } from 'rxjs';
 import { uiEvents, pipelineEvents } from './events';
 import { LoaderState, getStateSlice } from './state';

@@ -1,5 +1,5 @@
-import { APP_EVENTS } from '@akashaorg/typings/sdk';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import {
   ModalNavigationOptions,
   WorldConfig,
@@ -9,7 +9,7 @@ import {
   PluginConf,
   IntegrationRegistrationOptions,
   EventDataTypes,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import {
   Observable,
   distinctUntilChanged,

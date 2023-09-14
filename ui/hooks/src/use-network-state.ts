@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { filter } from 'rxjs';
-import { GlobalEventBusData, WEB3_EVENTS } from '@akashaorg/typings/sdk';
+import { GlobalEventBusData, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
 import React from 'react';
 
 export const NETWORK_STATE_KEY = 'Network_State';

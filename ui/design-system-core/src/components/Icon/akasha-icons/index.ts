@@ -1,4 +1,4 @@
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import akasha from './akasha';
 import alignCenter from './align-center';

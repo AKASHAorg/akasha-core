@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { EventDataTypes, EventTypes, UIEventData } from '@akashaorg/typings/ui';
+import { EventDataTypes, EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
 import {
@@ -204,10 +204,11 @@ const Layout: React.FC<unknown> = () => {
           </Stack>
 
           <Stack customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
-            <Stack customStyle="sticky top-0 z-10">
-              <Stack padding="pt-4" customStyle="bg(white dark:black) rounded-b-2xl">
-                <Extension name={layoutConfig.topbarSlotId} uiEvents={uiEvents} />
-              </Stack>
+            <Stack
+              padding="pt-4"
+              customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
+            >
+              <Extension name={layoutConfig.topbarSlotId} uiEvents={uiEvents} />
             </Stack>
             <Stack padding="pt-4">
               {!isPlatformHealthy && (

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
 
-import { EventTypes } from '@akashaorg/typings/ui';
+import { EventTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';

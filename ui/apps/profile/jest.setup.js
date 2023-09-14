@@ -11,7 +11,7 @@ jest
 
 jest.spyOn(reactUse, 'useMedia').mockReturnValue(true);
 
-jest.mock('@akashaorg/typings/ui', () => ({
+jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     PROFILE: 1,
   },

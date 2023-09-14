@@ -1,4 +1,4 @@
-import { IMenuItem, MenuItemAreaType } from '@akashaorg/typings/ui';
+import { IMenuItem, MenuItemAreaType } from '@akashaorg/typings/lib/ui';
 
 type RouteMenuItem = IMenuItem & { navRoutes: Record<string, string> };
 

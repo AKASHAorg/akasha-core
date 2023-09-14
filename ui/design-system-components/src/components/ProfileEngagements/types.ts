@@ -1,5 +1,5 @@
-import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
-import { FollowList } from '@akashaorg/typings/ui';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { FollowList } from '@akashaorg/typings/lib/ui';
 import { ReactElement } from 'react';
 
 export const LOADING_LIST_SIZE = 10;

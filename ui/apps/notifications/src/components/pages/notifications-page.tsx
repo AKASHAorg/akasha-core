@@ -12,7 +12,7 @@ import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/compon
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { EntityTypes } from '@akashaorg/typings/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
 
 export type Notification = {

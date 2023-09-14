@@ -4,7 +4,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import singleSpaReact from 'single-spa-react';
 import FollowProfileButton from '../components/follow-profile-button';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
-import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 const App = (props: RootExtensionProps) => {
   const { profileID, isLoggedIn, isFollowing, followId } = props.extensionData;

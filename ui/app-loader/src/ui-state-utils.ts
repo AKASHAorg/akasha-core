@@ -1,6 +1,6 @@
 import { Logger } from '@akashaorg/awf-sdk';
-import type { WorldConfig } from '@akashaorg/typings/ui';
-import { EventTypes, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
+import type { WorldConfig } from '@akashaorg/typings/lib/ui';
+import { EventTypes, INTEGRATION_TYPES } from '@akashaorg/typings/lib/ui';
 import { combineLatest, filter, Observable, tap, withLatestFrom } from 'rxjs';
 import { getStateSlice, LoaderState } from './state';
 import * as singleSpa from 'single-spa';

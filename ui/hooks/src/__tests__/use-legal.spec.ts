@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
 import { useLegalDoc } from '../use-legal';
-import { LEGAL_DOCS } from '@akashaorg/typings/ui';
+import { LEGAL_DOCS } from '@akashaorg/typings/lib/ui';
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () =>

@@ -7,7 +7,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { getIconFromLink } from '../../../utils/get-icon-from-link';
-import { AkashaProfileLinkSource } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type LinksProps = {
   title: string;

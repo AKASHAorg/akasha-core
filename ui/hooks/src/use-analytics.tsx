@@ -4,7 +4,7 @@ import {
   AnalyticsEventTypes,
   TrackEventData,
   RootComponentProps,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import { BehaviorSubject } from 'rxjs';
 
 /**

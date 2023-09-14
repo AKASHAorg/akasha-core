@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BaseEntryPage from './common/base-page';
 import { useParams } from 'react-router-dom';
-import { ModalNavigationOptions, EntityTypes } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions, EntityTypes } from '@akashaorg/typings/lib/ui';
 import { useDummyQuery } from '@akashaorg/ui-awf-hooks';
 
 export type PostPageProps = {

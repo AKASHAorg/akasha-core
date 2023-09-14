@@ -5,7 +5,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { useBlocksPublishing } from './use-blocks-publishing';
 import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { AkashaBeamInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 

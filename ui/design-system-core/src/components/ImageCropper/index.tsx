@@ -3,7 +3,7 @@ import { apply, tw } from '@twind/core';
 import Cropper, { CropperProps } from 'react-easy-crop';
 import { Point, Area } from 'react-easy-crop/types';
 
-import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 import Icon from '../Icon';
 import Stack from '../Stack';

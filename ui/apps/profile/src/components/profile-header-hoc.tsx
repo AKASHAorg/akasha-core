@@ -6,7 +6,7 @@ import {
   ProfileHeaderLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import { EntityTypes, ModalNavigationOptions, NavigateToParams } from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions, NavigateToParams } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { tw } from '@twind/core';
 import { Menu } from '@headlessui/react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

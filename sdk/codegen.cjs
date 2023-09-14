@@ -21,7 +21,7 @@ const config = {
     './src/gql/api.ts': {
       preset: 'import-types-preset',
       presetConfig: {
-        typesPath: '@akashaorg/typings/sdk/graphql-operation-types-new',
+        typesPath: '@akashaorg/typings/lib/sdk/graphql-operation-types-new',
       },
       plugins: ['@graphql-codegen/typescript-generic-sdk'],
       config: {
@@ -44,7 +44,7 @@ const config = {
     '../ui/hooks/src/generated/hooks-new.ts':{
       preset: 'import-types-preset',
       presetConfig: {
-        typesPath: '@akashaorg/typings/sdk/graphql-operation-types-new',
+        typesPath: '@akashaorg/typings/lib/sdk/graphql-operation-types-new',
         // baseTypesPath: '~@akashaorg/typings/sdk/graphql-operation-types-new',
         // importAllFragmentsFrom: '~@akashaorg/awf-sdk/src/gql/api.new' // does not work with import-preset
       },

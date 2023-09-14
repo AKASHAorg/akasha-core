@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EntityTypes, RootExtensionProps } from '@akashaorg/typings/ui';
+import { EntityTypes, RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ReplyEditor } from './reply-editor';
 import { PostEditor } from './post-editor';

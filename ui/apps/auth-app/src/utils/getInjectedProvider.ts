@@ -1,5 +1,5 @@
-import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
-import { IconType } from '@akashaorg/typings/ui';
+import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/lib/sdk';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import { TFunction } from 'i18next';
 
 const availableIcons = [

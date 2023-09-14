@@ -9,14 +9,14 @@ import {
   ModalNavigationOptions,
   AnalyticsCategories,
   Profile,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { SETTINGS } from '../../routes';
 
 import { useEntryNavigation, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
+import { SearchTagsResult } from '@akashaorg/typings/lib/sdk/graphql-types';
 
 import EntryCardRenderer from './entry-renderer';
 import Card from '@akashaorg/design-system-core/lib/components/Card';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import { ITag, Profile } from '@akashaorg/typings/ui';
+import { ITag, Profile } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';

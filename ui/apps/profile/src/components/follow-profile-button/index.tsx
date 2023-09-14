@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-import { ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateFollowMutation,

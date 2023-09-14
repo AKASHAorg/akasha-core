@@ -8,7 +8,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateFollowMutation,

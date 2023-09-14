@@ -3,7 +3,7 @@ import { tw } from '@twind/core';
 import { Menu } from '@headlessui/react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 export interface IMenuItem {
   label?: string;

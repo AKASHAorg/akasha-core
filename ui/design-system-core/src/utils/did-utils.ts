@@ -1,4 +1,4 @@
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import { truncateMiddle } from './string-utils';
 
 export const truncateDid = (didKey: string, type = 'eth') => {

@@ -1,4 +1,4 @@
-import { Colors } from '@akashaorg/typings/ui';
+import { Colors } from '@akashaorg/typings/lib/ui';
 
 export type Status = 'warning' | 'error' | 'success';
 

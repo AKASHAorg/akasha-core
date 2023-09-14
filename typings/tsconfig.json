@@ -1,11 +1,11 @@
 {
   "extends": "../tsconfig.json",
-  "include": [
-    "./src/ui/*.ts",
-    "./src/sdk/*.ts"
-  ],
   "compilerOptions": {
+    "outDir": "./lib",
     "rootDir": "./src",
-    "outDir": "./",
-  }
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["./src"],
+  "exclude": ["node_modules", "**/*.spec.*"]
 }
