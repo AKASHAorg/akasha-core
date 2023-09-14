@@ -18,6 +18,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -77,13 +78,15 @@ const SidebarComponent: React.FC<unknown> = () => {
   useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
-        if (
-          eventData.event === AUTH_EVENTS.WAIT_FOR_AUTH ||
-          eventData.event === AUTH_EVENTS.CONNECT_ADDRESS
-        ) {
-          setIsLoading(true);
+        if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS) {
+          if (!isLoading) setIsLoading(true);
           return;
         }
+        if (eventData.event === AUTH_EVENTS.READY) {
+          setIsLoading(false);
+          return;
+        }
+
         if (eventData.event === WEB3_EVENTS.DISCONNECTED) {
           setIsLoading(true);
           setTimeout(() => {
@@ -270,12 +273,18 @@ const SidebarComponent: React.FC<unknown> = () => {
         customStyle="p-4 border-b-1 border(grey9 dark:grey3)"
       >
         <Stack customStyle="w-fit h-fit mr-2">
-          <Avatar
-            profileId={loginQuery.data?.id}
-            avatar={getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.akashaProfile?.avatar)}
-            isClickable={!!loginQuery.data?.id}
-            onClick={() => handleAvatarClick(loginQuery.data?.id)}
-          />
+          {isLoading ? (
+            <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
+          ) : (
+            <Avatar
+              profileId={loginQuery.data?.id}
+              avatar={getProfileImageVersionsWithMediaUrl(
+                myProfileQuery.data?.akashaProfile?.avatar,
+              )}
+              isClickable={!!loginQuery.data?.id}
+              onClick={() => handleAvatarClick(loginQuery.data?.id)}
+            />
+          )}
         </Stack>
 
         {isLoading ? (

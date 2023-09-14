@@ -46,11 +46,11 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
 
   return (
     <React.Fragment>
-      <Stack justify="between" customStyle="my-3">
+      <Stack justify="between" customStyle="my-3" direction="row">
         <Text variant="h5" align="center">
           <>{t('Your List')}</>
         </Text>
-        <Stack customStyle="relative">
+        <Stack customStyle="relative w-min">
           <Button plain={true} onClick={() => setShowMenu(!showMenu)}>
             <Icon type="EllipsisHorizontalIcon" accentColor={true} />
           </Button>
