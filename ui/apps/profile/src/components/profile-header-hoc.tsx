@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import routes, { EDIT } from '../routes';
 import FollowProfileButton from './follow-profile-button';
 import {
@@ -44,7 +44,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       : { isViewer: null, akashaProfile: null };
 
   const { validDid, isEthAddress } = useValidDid(profileId, !!profileData);
-  const isLoggedIn = React.useMemo(() => {
+  const isLoggedIn = useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
   const handleFlag = React.useCallback(
@@ -121,7 +121,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       publicImagePath="/images"
       followElement={
         <FollowProfileButton
-          profileId={profileData?.id}
+          profileID={profileData?.id}
           isLoggedIn={!!loginQuery.data?.id}
           followId={followDocument?.node?.id}
           isFollowing={followDocument?.node?.isFollowing}

@@ -139,6 +139,10 @@ export const getUiEvents = () => {
       .pipe(map(eventData => ({ ...eventData }))),
 
     uiEvents
+      .pipe(filterEvent(EventTypes.ExtensionPointUpdate))
+      .pipe(map(eventData => ({ ...eventData }))),
+
+    uiEvents
       .pipe(filterEvent(EventTypes.ExtensionPointUnmount))
       .pipe(map(eventData => ({ ...eventData }))),
 

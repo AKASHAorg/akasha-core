@@ -30,11 +30,19 @@ describe('[AppLoader]: events', () => {
           event: EventTypes.ExtensionPointUnmount,
           data: { name: 'TestExtension2' },
         },
+        c: {
+          event: EventTypes.ExtensionPointUpdate,
+          data: { name: 'TestExtension2', prop: 'new-prop' },
+        },
       };
       const expectedMarble = 'ab';
       const expectedValues = {
         a: { data: { name: 'TestExtension1' }, event: EventTypes.ExtensionPointMount },
         b: { data: { name: 'TestExtension2' }, event: EventTypes.ExtensionPointUnmount },
+        c: {
+          event: EventTypes.ExtensionPointUpdate,
+          data: { name: 'TestExtension2', prop: 'new-prop' },
+        },
       };
 
       const uiEventsInput$ = cold(eventsMarble, uiEventValues).pipe(

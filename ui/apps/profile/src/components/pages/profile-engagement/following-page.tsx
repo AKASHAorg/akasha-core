@@ -15,10 +15,10 @@ import {
 import {
   getProfileImageVersionsWithMediaUrl,
   hasOwn,
+  getFollowList,
   useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { getFollowList } from './getFollowList';
 
 const FollowingPage: React.FC<unknown> = () => {
   const [loadMore, setLoadingMore] = useState(false);
@@ -86,7 +86,7 @@ const FollowingPage: React.FC<unknown> = () => {
         : [],
     [followingReq.data],
   );
-  const lastPageInfo = React.useMemo(() => {
+  const lastPageInfo = useMemo(() => {
     const lastPage = followingReq.data?.pages?.[followingReq.data?.pages?.length - 1];
     return lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
       ? lastPage?.node.akashaFollowList?.pageInfo
@@ -155,7 +155,7 @@ const FollowingPage: React.FC<unknown> = () => {
           }}
           renderFollowElement={(profileId, followId, isFollowing) => (
             <FollowProfileButton
-              profileId={profileId}
+              profileID={profileId}
               isLoggedIn={!!loginQuery.data?.id}
               followId={followId}
               isFollowing={isFollowing}

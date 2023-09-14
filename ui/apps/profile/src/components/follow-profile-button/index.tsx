@@ -9,7 +9,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 export type FollowProfileButtonProps = {
-  profileId: string;
+  profileID: string;
   isLoggedIn: boolean;
   isFollowing: boolean;
   followId: string | null;
@@ -18,7 +18,7 @@ export type FollowProfileButtonProps = {
 };
 
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
-  const { profileId, isLoggedIn, isFollowing, followId, iconOnly, showLoginModal } = props;
+  const { profileID, isLoggedIn, isFollowing, followId, iconOnly, showLoginModal } = props;
 
   const { t } = useTranslation('app-profile');
   const [following, setFollowing] = useState(isFollowing);
@@ -56,15 +56,15 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   //reset loading flag whenever profile id changes
   useEffect(() => {
     setLoading(false);
-  }, [profileId]);
+  }, [profileID]);
 
-  const handleFollow = (profileId: string, followId?: string) => {
+  const handleFollow = (profileID: string, followId?: string) => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
     if (!followId) {
       createFollowMutation.mutate({
-        i: { content: { isFollowing: true, profileID: profileId } },
+        i: { content: { isFollowing: true, profileID: profileID } },
       });
     } else {
       updateFollowMutation.mutate({
@@ -72,14 +72,14 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
           id: followId,
           content: {
             isFollowing: true,
-            profileID: profileId,
+            profileID: profileID,
           },
         },
       });
     }
   };
 
-  const handleUnfollow = (profileId: string, followId?: string) => {
+  const handleUnfollow = (profileID: string, followId?: string) => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
@@ -88,7 +88,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
         id: followId,
         content: {
           isFollowing: false,
-          profileID: profileId,
+          profileID: profileID,
         },
       },
     });
@@ -98,8 +98,8 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     <Button
       onClick={
         following
-          ? () => handleUnfollow(profileId, followId)
-          : () => handleFollow(profileId, followId)
+          ? () => handleUnfollow(profileID, followId)
+          : () => handleFollow(profileID, followId)
       }
       icon={following ? 'UsersIcon' : 'UserPlusIcon'}
       variant={following ? 'secondary' : 'primary'}
@@ -112,8 +112,8 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       inactiveLabel={t('Follow')}
       activeLabel={t('Following')}
       activeHoverLabel={t('Unfollow')}
-      onClickInactive={() => handleFollow(profileId, followId)}
-      onClickActive={() => handleUnfollow(profileId, followId)}
+      onClickInactive={() => handleFollow(profileID, followId)}
+      onClickActive={() => handleUnfollow(profileID, followId)}
       active={following}
       size="sm"
       loading={loading}

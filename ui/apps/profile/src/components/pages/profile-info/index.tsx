@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
@@ -28,12 +28,12 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
 
   const { profileId } = useParams<{ profileId: string }>();
-  const [showFeedback, setShowFeedback] = React.useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   const loginQuery = useGetLogin();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const isLoggedIn = React.useMemo(() => {
+  const isLoggedIn = useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
   const profileDataReq = useGetProfileByDidQuery(

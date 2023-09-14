@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AnalyticsCategories } from '@akashaorg/typings/ui';
-import { useGetLogin, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  useGetLogin,
+  useAnalytics,
+  useRootComponentProps,
+  getFollowList,
+} from '@akashaorg/ui-awf-hooks';
 import {
   useGetProfilesQuery,
   useGetInterestsQuery,
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
+  useGetFollowDocumentsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -17,7 +23,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import { LatestProfiles, LatestTopics } from './cards';
 
 const TrendingWidgetComponent: React.FC<unknown> = () => {
-  const { plugins, navigateToModal } = useRootComponentProps();
+  const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
@@ -25,7 +31,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const loginQuery = useGetLogin();
   const queryClient = useQueryClient();
 
-  const [processingTags, setProcessingTags] = React.useState([]);
+  const [processingTags, setProcessingTags] = useState([]);
 
   const [analyticsActions] = useAnalytics();
   const latestProfilesReq = useGetProfilesQuery(
@@ -52,7 +58,21 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       },
     },
   );
-
+  const latestProfiles = useMemo(() => latestProfilesReq.data || [], [latestProfilesReq.data]);
+  const isLoggedIn = useMemo(() => {
+    return !!loginQuery.data?.id;
+  }, [loginQuery.data]);
+  const followProfileIds = useMemo(
+    () => latestProfiles.map(follower => follower.id),
+    [latestProfiles],
+  );
+  const followDocumentsReq = useGetFollowDocumentsQuery(
+    {
+      following: followProfileIds,
+      last: followProfileIds.length,
+    },
+    { select: response => response.viewer?.akashaFollowList, enabled: isLoggedIn },
+  );
   const createInterest = useCreateInterestsMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -61,10 +81,11 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     },
   });
 
-  const latestProfiles = latestProfilesReq.data || [];
   const latestTopics = latestTopicsReq.data || [];
-
   const tagSubscriptions = tagSubscriptionsReq.data;
+  const followList = isLoggedIn
+    ? getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node))
+    : null;
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
@@ -125,34 +146,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     });
   };
 
-  const handleFollowProfile = () => {
-    if (!loginQuery.data?.id) {
-      showLoginModal();
-      return;
-    }
-
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending People Followed',
-    });
-
-    // followReq.mutate(did);
-  };
-
-  const handleUnfollowProfile = () => {
-    if (!loginQuery.data?.id) {
-      showLoginModal();
-      return;
-    }
-
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending People Unfollowed',
-    });
-
-    // unfollowReq.mutate(did);
-  };
-
   return (
     <Stack spacing="gap-y-4">
       {(latestTopicsReq.isError || latestProfilesReq.isError) && (
@@ -188,17 +181,14 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       {!latestProfilesReq.isError && (
         <LatestProfiles
           titleLabel={t('Start Following')}
-          followLabel={t('Follow')}
-          unfollowLabel={t('Unfollow')}
-          followersLabel={t('Followers')}
           noProfilesLabel={t('No profiles found!')}
-          isLoadingProfiles={latestProfilesReq.isFetching}
+          isLoadingProfiles={latestProfilesReq.isFetching || followDocumentsReq.isFetching}
           profiles={latestProfiles}
+          followList={followList}
+          isLoggedIn={isLoggedIn}
           loggedUserDid={loginQuery?.data?.id}
-          followedProfiles={['followedProfiles']}
+          uiEvents={uiEvents}
           onClickProfile={handleProfileClick}
-          handleFollowProfile={handleFollowProfile}
-          handleUnfollowProfile={handleUnfollowProfile}
         />
       )}
     </Stack>

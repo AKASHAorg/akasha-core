@@ -46,7 +46,8 @@ describe('[AppLoader]: extension-matcher.ts', () => {
     const mockExtLoaders = spies.map(spy =>
       jest.fn().mockImplementation(() => ({
         load: spy,
-        unload: jest.fn(),
+        unmount: jest.fn(),
+        update: jest.fn(),
       })),
     );
 

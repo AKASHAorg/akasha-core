@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
 import {
   useGetBeamsByAuthorDidQuery,
@@ -24,7 +24,7 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
   const { t } = useTranslation('app-profile');
 
   const loginQuery = useGetLogin();
-  const isLoggedIn = React.useMemo(() => {
+  const isLoggedIn = useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
 

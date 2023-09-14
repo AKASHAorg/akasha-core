@@ -7,17 +7,18 @@ import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 
 const App = (props: RootExtensionProps) => {
-  const { profileId, isLoggedIn, isFollowing, followId } = props.extensionData;
+  const { profileID, isLoggedIn, isFollowing, followId } = props.extensionData;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
+
   return (
     <FollowProfileButton
-      profileId={String(profileId)}
-      isLoggedIn={!!isLoggedIn}
+      profileID={profileID}
+      isLoggedIn={isLoggedIn}
       isFollowing={!!isFollowing}
-      followId={String(followId)}
+      followId={followId}
       showLoginModal={showLoginModal}
     />
   );
@@ -44,5 +45,7 @@ const reactLifecycles = singleSpaReact({
 export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
+
+export const update = reactLifecycles.update;
 
 export const unmount = reactLifecycles.unmount;

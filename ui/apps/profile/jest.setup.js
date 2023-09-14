@@ -29,6 +29,7 @@ jest.mock('@akashaorg/typings/ui', () => ({
     ExtensionPointMount: 'extension-point-mount',
     ExtensionPointMountRequest: 'extension-point-mount-request',
     ExtensionPointUnmount: 'extension-point-unmount',
+    ExtensionPointUpdate: 'extension-point-update',
     ExtensionPointUnmountRequest: 'extension-point-unmount-request',
     ModalRequest: 'modal-mount-request',
     ModalMount: 'modal-mount',
