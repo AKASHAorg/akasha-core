@@ -39,27 +39,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   isLoggedIn,
 }) => {
   const { t } = useTranslation('app-notifications');
-  const { uiEvents, getRoutingPlugin, plugins, worldConfig } = useRootComponentProps();
-
-  const routing = plugins['@akashaorg/app-routing']?.routing;
-
-  // console.log('defaultApps ', routing);
-  useEffect(() => {
-    let sub;
-    console.log('worldConfig ', worldConfig);
-    if (routing) {
-      sub = routing.routeObserver.subscribe({
-        next: routeData => {
-          console.log('route data', routeData);
-        },
-      });
-    }
-    return () => {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    };
-  }, [routing, worldConfig]);
+  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
 
   const [selected, setSelected] = useState(true);
 
@@ -71,54 +51,34 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         selected: true,
       },
       {
-        label: t('Replies to my post'),
-        value: 'Replies to my post',
+        label: t('Reflects on my Beam'),
+        value: 'Reflects on my Beam',
         selected: true,
       },
       {
-        label: t('Mentions me in a post / reply'),
-        value: 'Mentions me in a post / reply',
+        label: t('Mentions me in a Beam / Reflect'),
+        value: 'Mentions me in a Beam / Reflect',
         selected: true,
       },
       {
-        label: t('Someone sharing my post'),
-        value: 'Someone sharing my post',
+        label: t('Someone sharing my Beam'),
+        value: 'Someone sharing my Beam',
         selected: true,
       },
       {
-        label: t('When someone I am following posts new content'),
-        value: 'When someone I am following posts new content',
+        label: t('When someone I am following Beams new content'),
+        value: 'When someone I am following Beams new content',
         selected: true,
       },
       {
-        label: t('When there’s new content in topics I’m Subscribed to'),
-        value: 'When there’s new content in topics I’m Subscribed to',
+        label: t('When there’s new content in topics I’m subscribed to'),
+        value: 'When there’s new content in topics I’m subscribed to',
         selected: true,
       },
     ],
     [t],
   );
 
-  const articleAppCheckboxes = useMemo(
-    () => [
-      {
-        label: t('Replies to my Article'),
-        value: 'Replies to my Article',
-        selected: true,
-      },
-      {
-        label: t('Quotes me in an Article.'),
-        value: 'Quotes me in an Article',
-        selected: true,
-      },
-      {
-        label: t('Someone shares my Article'),
-        value: 'Someone shares my Article',
-        selected: true,
-      },
-    ],
-    [t],
-  );
   const moderationAppCheckboxes = useMemo(
     () => [
       {
@@ -142,7 +102,6 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   const [allStates, setAllStates] = useState({
     socialapp: socialAppCheckboxes.map(e => e.selected),
-    articleApp: articleAppCheckboxes.map(e => e.selected),
     moderationApp: moderationAppCheckboxes.map(e => e.selected),
     integrationCenter: integrationCenterCheckboxes.map(e => e.selected),
   });
@@ -175,8 +134,6 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       switch (section) {
         case 'socialapp':
           return allStates.socialapp;
-        case 'articleApp':
-          return allStates.articleApp;
         case 'moderationApp':
           return allStates.moderationApp;
         case 'integrationCenter':
@@ -229,7 +186,6 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       setAllStates({
         ...allStates,
         socialapp: Array(socialAppCheckboxes.length).fill(true),
-        articleApp: Array(articleAppCheckboxes.length).fill(true),
         moderationApp: Array(moderationAppCheckboxes.length).fill(true),
         integrationCenter: Array(integrationCenterCheckboxes.length).fill(true),
       });
@@ -341,82 +297,83 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
         <Divider customStyle="my-2" />
-        {!initial && (
-          <>
-            <Stack justify="between" direction="row">
-              <Text variant="footnotes2">
-                <>{t('Snooze Notifications')}</>
-              </Text>
-              <Toggle
-                iconChecked="BellSnoozeIcon"
-                iconUnchecked="BellAlertIcon"
-                checked={snoozed}
-                onChange={snoozeChangeHandler}
-              />
-            </Stack>
-            <Divider customStyle="my-2" />
-          </>
-        )}
-        {initial ? (
-          <Text variant="footnotes2" color={{ dark: 'grey6', light: 'grey4' }}>
+        <Stack direction="column" customStyle="mx-4">
+          {!initial && (
             <>
-              {t(
-                'Choose the notifications that you would like to receive from other applications. Remember, you can change this anytime from the notifications settings.',
-              )}
+              <Stack justify="between" direction="row">
+                <Text variant="footnotes2">
+                  <>{t('Snooze Notifications')}</>
+                </Text>
+                <Toggle
+                  iconChecked="BellSnoozeIcon"
+                  iconUnchecked="BellAlertIcon"
+                  checked={snoozed}
+                  onChange={snoozeChangeHandler}
+                />
+              </Stack>
             </>
-          </Text>
-        ) : (
-          <Text variant="h6">
-            <>{t('Receiving Notifications')}</>
-          </Text>
-        )}
-        <Checkbox
-          id="receive-all-notifications-checkbox"
-          label={t('I want to receive all types of notifications')}
-          value="I want to receive all types of notifications"
-          name="check-all"
-          isSelected={selected}
-          handleChange={() => {
-            setSelected(!selected);
-            !initial && setIsChanged(true);
-          }}
-          customStyle="ml-2"
-        />
+          )}
+        </Stack>
+        <Divider customStyle="my-2" />
+        <Stack direction="column" customStyle="mx-4">
+          {initial ? (
+            <Text variant="footnotes2" weight="normal" color={{ dark: 'grey6', light: 'grey4' }}>
+              <>
+                {t(
+                  'Choose the notifications that you would like to receive from other applications. Remember, you can change this anytime from the notifications settings.',
+                )}
+              </>
+            </Text>
+          ) : (
+            <Text variant="h6">
+              <>{t('Receiving Notifications')}</>
+            </Text>
+          )}
+          <Checkbox
+            id="receive-all-notifications-checkbox"
+            label={t('I want to receive all types of notifications')}
+            value="I want to receive all types of notifications"
+            name="check-all"
+            isSelected={selected}
+            handleChange={() => {
+              setSelected(!selected);
+              !initial && setIsChanged(true);
+            }}
+            customStyle="ml-2 my-4"
+          />
+        </Stack>
         <Divider customStyle="my-2" />
         <Stack direction="column" customStyle="min-h-[80%]">
           <Accordion
-            titleNode={<Title title={t('Social App')} />}
+            titleNode={<Title title={t('Antenna')} />}
             contentNode={<Content checkboxArray={socialAppCheckboxes} section={'socialapp'} />}
             open={initial}
             customStyle="mx-4"
+            contentStyle="mx-6"
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={<Title title={t('Article App')} />}
-            contentNode={<Content checkboxArray={articleAppCheckboxes} section={'articleApp'} />}
-            open={initial}
-            customStyle="mx-4"
-          />
-          <Divider customStyle="my-2" />
-          <Accordion
-            titleNode={<Title title={t('Vibe App')} />}
+            titleNode={<Title title={t('Vibes')} />}
             contentNode={
               <Content checkboxArray={moderationAppCheckboxes} section={'moderationApp'} />
             }
             open={initial}
             customStyle="mx-4"
+            contentStyle="mx-6"
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={<Title title={t('AKASHAVerse')} />}
+            titleNode={<Title title={t('Extensions')} />}
             contentNode={
               <Content checkboxArray={integrationCenterCheckboxes} section={'integrationCenter'} />
             }
             open={initial}
-            customStyle="px-4"
+            customStyle="mx-4"
+            contentStyle="mx-6"
           />
+          <Divider customStyle="my-2" />
         </Stack>
-        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2">
+        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-16">
           {initial ? (
             <>
               <Button
