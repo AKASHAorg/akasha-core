@@ -76,7 +76,7 @@ function EntryList<T>(props: EntryListProps<T>) {
 
   const rootElementRef = React.useRef<HTMLDivElement>();
   const isScrollRestored = React.useRef(false);
-  const [resetList, setResetList] = React.useReducer();
+  const [listReset, resetList] = React.useReducer(() => ({}), {});
 
   // @TODO: maybe pass the topbar slotId here?
   const topbarHeight = document.getElementById('topbar-slot')?.offsetParent?.clientHeight || 0;
@@ -94,7 +94,7 @@ function EntryList<T>(props: EntryListProps<T>) {
     if (initialScrollState.isFetched) {
       cachedScrollState.current = initialScrollState;
     }
-  }, [initialScrollState]);
+  }, [initialScrollState, listReset]);
 
   const measurementsCache = React.useMemo(() => {
     if (initialScrollState.isFetched) {
@@ -109,7 +109,7 @@ function EntryList<T>(props: EntryListProps<T>) {
       return mergeWithCache(measurementsCache, pages);
     }
     return measurementsCache;
-  }, [measurementsCache, pages]);
+  }, [measurementsCache, pages, listReset]);
 
   const virtualizer = useWindowVirtualizer({
     count: pageItems.length,
@@ -262,6 +262,7 @@ function EntryList<T>(props: EntryListProps<T>) {
       }
       cachedScrollState.current = null;
       initialScrollStateRef.current = null;
+      resetList();
     },
     [itemSpacing, onScrollStateReset, topbarHeight, virtualizer],
   );
