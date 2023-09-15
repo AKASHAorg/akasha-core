@@ -45,7 +45,8 @@ export type ExtensionLoaderFn = (
   loadingFunction: () => Promise<ParcelConfigObject<Omit<RootExtensionProps, 'baseRouteName'>>>,
 ) => {
   load: (props: Omit<RootExtensionProps, 'baseRouteName'>, parentAppName: string) => void;
-  unload: (event: { data?: EventDataTypes }, parentAppName: string) => Promise<void>;
+  unmount: (event: { data?: EventDataTypes }, parentAppName: string) => Promise<void>;
+  update: (props: Omit<RootExtensionProps, 'baseRouteName'>, parentAppName: string) => void;
 };
 
 export type ExtendsFn = (
