@@ -293,11 +293,11 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         padding={'py-2,px-0'}
         customStyle="h-full md:h-min space-y-4"
       >
-        <Text variant="h5" align="center">
+        <Text variant="h5" align="center" customStyle="pb-2">
           {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
-        <Divider customStyle="my-2" />
-        <Stack direction="column" customStyle="mx-4">
+        <Divider customStyle="!mt-0" />
+        <Stack direction="column" customStyle="mx-4 !my-0 py-2">
           {!initial && (
             <>
               <Stack justify="between" direction="row">
@@ -314,7 +314,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
             </>
           )}
         </Stack>
-        <Divider customStyle="my-2" />
+        <Divider customStyle="!mt-0" />
         <Stack direction="column" customStyle="mx-4">
           {initial ? (
             <Text variant="footnotes2" weight="normal" color={{ dark: 'grey6', light: 'grey4' }}>
@@ -342,8 +342,8 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
             customStyle="ml-2 my-4"
           />
         </Stack>
-        <Divider customStyle="my-2" />
-        <Stack direction="column" customStyle="min-h-[80%]">
+        <Divider customStyle="!mt-0" />
+        <Stack direction="column" customStyle="min-h-[80%] !mt-0 gap-y-2 pt-2">
           <Accordion
             titleNode={<Title title={t('Antenna')} />}
             contentNode={<Content checkboxArray={socialAppCheckboxes} section={'socialapp'} />}
@@ -351,7 +351,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
             customStyle="mx-4"
             contentStyle="mx-6"
           />
-          <Divider customStyle="my-2" />
+          <Divider customStyle="!mt-0" />
           <Accordion
             titleNode={<Title title={t('Vibes')} />}
             contentNode={
@@ -361,7 +361,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
             customStyle="mx-4"
             contentStyle="mx-6"
           />
-          <Divider customStyle="my-2" />
+          <Divider customStyle="!mt-0" />
           <Accordion
             titleNode={<Title title={t('Extensions')} />}
             contentNode={
@@ -371,7 +371,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
             customStyle="mx-4"
             contentStyle="mx-6"
           />
-          <Divider customStyle="my-2" />
+          <Divider customStyle="!mt-0" />
         </Stack>
         <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-16">
           {initial ? (

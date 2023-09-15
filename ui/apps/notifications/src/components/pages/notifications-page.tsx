@@ -1,18 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { tw } from '@twind/core';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
 import { useGetLogin, useMarkAsRead, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import NotificationsCard from '@akashaorg/design-system-components/lib/components/NotificationsCard';
-import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, EventTypes } from '@akashaorg/typings/lib/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
 
 export type Notification = {
@@ -21,9 +18,6 @@ export type Notification = {
 };
 
 const NotificationsPage: React.FC<unknown> = () => {
-  const [searchParams] = useSearchParams();
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState('');
   const [showMenu, setShowMenu] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
 
@@ -45,27 +39,8 @@ const NotificationsPage: React.FC<unknown> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //find if any message is passed in the url params and display it
-  useEffect(() => {
-    if (searchParams.get('message')) {
-      setMessage(searchParams.get('message'));
-      setMessageType(searchParams.get('type'));
-
-      setShowFeedback(true);
-    }
-  }, [searchParams]);
-
-  const [showFeedback, setShowFeedback] = useState(false);
-
-  if (showFeedback) {
-    setTimeout(() => {
-      setShowFeedback(false);
-      setMessage('');
-    }, 6000);
-  }
-
   const { t } = useTranslation('app-notifications');
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
@@ -74,6 +49,8 @@ const NotificationsPage: React.FC<unknown> = () => {
   const isLoggedIn = useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
+
+  const _uiEvents = useRef(uiEvents);
 
   // mock data used for displaying something. Change when there's real data
   const allNotifications: Notification[] = [
@@ -187,9 +164,13 @@ const NotificationsPage: React.FC<unknown> = () => {
     });
     setShowMenu(!showMenu);
 
-    setMessage('Marked all as read successfully.');
-    setMessageType('success');
-    setShowFeedback(true);
+    _uiEvents.current.next({
+      event: EventTypes.ShowNotification,
+      data: {
+        name: 'success',
+        message: 'Marked all as read successfully.',
+      },
+    });
   };
 
   const redirectToSettingsPage = () => {
@@ -223,7 +204,7 @@ const NotificationsPage: React.FC<unknown> = () => {
   return (
     <>
       <Card elevation={'1'} radius={16} padding={'py-2'} customStyle="pb-16">
-        <div className={tw('py-4 relative w-full')}>
+        <Stack customStyle="py-4 relative w-full" direction="column">
           <Text variant="h5" align="center">
             <>{t('Notifications')}</>
           </Text>
@@ -235,7 +216,7 @@ const NotificationsPage: React.FC<unknown> = () => {
               <List items={dropDownActions} customStyle="absolute right-0 top-7 w-max" />
             )}
           </Stack>
-        </div>
+        </Stack>
         <Tab value={activeTab} onChange={setActiveTab} labels={labels}>
           <NotificationsCard
             notifications={unreadNotifications || []}
@@ -283,15 +264,6 @@ const NotificationsPage: React.FC<unknown> = () => {
           </div>
         </Tab>
       </Card>
-      {showFeedback && (
-        <div className={tw('-mt-12 md:mt-4 z-50 w-full')}>
-          <Snackbar
-            title={message}
-            type={messageType as SnackBarType}
-            handleDismiss={() => setShowFeedback(false)}
-          />
-        </div>
-      )}
     </>
   );
 };

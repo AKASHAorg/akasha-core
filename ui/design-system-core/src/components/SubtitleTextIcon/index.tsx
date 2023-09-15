@@ -34,7 +34,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
     onClick,
   } = props;
 
-  const baseStyles = `flex items-center justify-center bg(white dark:grey2) space-x-2`;
+  const baseStyles = `flex items-center justify-center bg(white dark:grey2) gap-x-2`;
 
   const InstanceWrapperStyle = `${baseStyles} ${maxWidth} ${customStyle}`;
 
@@ -59,7 +59,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
         </Stack>
       )}
 
-      <Stack customStyle="max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])">
+      <Stack customStyle="max-w(xl:[7rem] lg:[6rem] md:[6rem] xs:[2rem])">
         <Text variant="button-sm" weight="bold" truncate={true}>
           {label}
         </Text>
