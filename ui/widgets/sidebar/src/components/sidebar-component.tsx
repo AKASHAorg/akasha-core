@@ -7,25 +7,22 @@ import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   getProfileImageVersionsWithMediaUrl,
-  useGetLogin,
   useLogout,
   LOGIN_STATE_KEY,
   useDismissedCard,
   useRootComponentProps,
+  useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
+import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import getSDK from '@akashaorg/awf-sdk';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
-import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
-
 import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
 
@@ -36,6 +33,8 @@ const SidebarComponent: React.FC<unknown> = () => {
     worldConfig: { defaultApps, socialLinks },
   } = useRootComponentProps();
 
+  const { t } = useTranslation('ui-widget-sidebar');
+
   const [isMobile, setIsMobile] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
@@ -43,24 +42,30 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [profileName, setProfileName] = useState('Guest');
 
-  const { t } = useTranslation('ui-widget-sidebar');
-
-  const loginQuery = useGetLogin();
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
   const logoutQuery = useLogout();
   const queryClient = useQueryClient();
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
   const myProfileQuery = useGetMyProfileQuery(null, {
-    enabled: !!loginQuery.data?.id,
-    select: data => data.viewer,
-    onSuccess: data => {
-      if (data) setIsLoading(false);
-    },
+    enabled: isLoggedIn,
+    select: response => response.viewer,
   });
 
-  const sdk = getSDK();
   const routing = plugins['@akashaorg/app-routing']?.routing;
+
+  const profileName = useMemo(
+    () => (!isLoggedIn || isLoading ? t('Guest') : myProfileQuery.data?.akashaProfile?.name || ''),
+    [myProfileQuery.data, isLoggedIn, isLoading, t],
+  );
+
+  //empty profile name implies the connection process is still in progress
+  const inProgress = isLoading || !profileName;
+
+  const headerBackground = inProgress ? 'bg(secondaryLight/30 dark:grey5)' : '';
+
+  //this padding style will adjust the header's vertical space to maintain the same height through different states
+  const headerPadding = profileName && isLoggedIn && !inProgress ? 'pb-[2.125rem]' : '';
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
@@ -76,10 +81,11 @@ const SidebarComponent: React.FC<unknown> = () => {
   }, []);
 
   useEffect(() => {
+    const sdk = getSDK();
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
         if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS) {
-          if (!isLoading) setIsLoading(true);
+          setIsLoading(true);
           return;
         }
         if (eventData.event === AUTH_EVENTS.READY) {
@@ -91,7 +97,7 @@ const SidebarComponent: React.FC<unknown> = () => {
           setIsLoading(true);
           setTimeout(() => {
             setIsLoading(false);
-          }, 2000);
+          }, 1000);
           return;
         }
       },
@@ -100,7 +106,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     return () => {
       subSDK.unsubscribe();
     };
-  }, [sdk.api.globalChannel]);
+  }, []);
 
   useEffect(() => {
     const invalidateQuery = async () => {
@@ -109,13 +115,11 @@ const SidebarComponent: React.FC<unknown> = () => {
       });
     };
 
-    if (!loginQuery.data?.id) {
+    if (!isLoggedIn) {
       invalidateQuery();
       myProfileQuery.refetch();
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loginQuery.data?.id]);
+  }, [isLoggedIn, myProfileQuery, queryClient]);
 
   useEffect(() => {
     let sub;
@@ -132,22 +136,6 @@ const SidebarComponent: React.FC<unknown> = () => {
       }
     };
   }, [routing]);
-
-  useEffect(() => {
-    if (myProfileQuery.data?.akashaProfile?.did?.id) {
-      setProfileName(myProfileQuery.data?.akashaProfile?.name);
-    } else if (loginQuery.data?.id) {
-      setProfileName('');
-    } else {
-      setProfileName(t('Guest'));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isLoading,
-    loginQuery.data?.id,
-    myProfileQuery.data?.akashaProfile?.did?.id,
-    myProfileQuery.data?.akashaProfile?.name,
-  ]);
 
   // sort according to worldConfig index
   const worldApps = useMemo(() => {
@@ -270,70 +258,58 @@ const SidebarComponent: React.FC<unknown> = () => {
       <Stack
         direction="row"
         justifyItems="stretch"
-        customStyle="p-4 border-b-1 border(grey9 dark:grey3)"
+        customStyle={`p-4 border-b-1 border(grey9 dark:grey3) rounded-t-2xl ${headerPadding} ${headerBackground}`}
       >
         <Stack customStyle="w-fit h-fit mr-2">
-          {isLoading ? (
-            <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
-          ) : (
-            <Avatar
-              profileId={loginQuery.data?.id}
-              avatar={getProfileImageVersionsWithMediaUrl(
-                myProfileQuery.data?.akashaProfile?.avatar,
-              )}
-              isClickable={!!loginQuery.data?.id}
-              onClick={() => handleAvatarClick(loginQuery.data?.id)}
+          <Avatar
+            profileId={!isLoggedIn || inProgress ? null : loggedInProfileId}
+            avatar={
+              !isLoggedIn || inProgress
+                ? null
+                : getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.akashaProfile?.avatar)
+            }
+            isClickable={isLoggedIn}
+            onClick={() => handleAvatarClick(loggedInProfileId)}
+          />
+        </Stack>
+        <Stack justify="center" customStyle={'w-fit flex-grow'}>
+          <Text variant="button-md">{inProgress ? t('Guest') : profileName}</Text>
+          {isLoggedIn && !inProgress && (
+            <DidField
+              did={loggedInProfileId}
+              textColor="grey7"
+              copyLabel={t('Copy to clipboard')}
+              copiedLabel={t('Copied')}
             />
           )}
+          {(!isLoggedIn || inProgress) && (
+            <Text
+              variant="footnotes2"
+              color="grey7"
+              customStyle="whitespace-normal"
+              truncate
+              breakWord
+            >
+              {t('Connect to see')}
+              <br />
+              {t('member only features.')}
+            </Text>
+          )}
         </Stack>
-
-        {isLoading ? (
-          <Stack direction="column" spacing="gap-y-1" customStyle="w-fit flex-grow ">
-            <TextLine title="tagName" animated={true} width="w-[40px]" />
-
-            <TextLine title="tagName" animated={true} width="w-[100px]" />
-          </Stack>
-        ) : (
-          <Stack customStyle="w-fit flex flex-grow flex-col justify-center">
-            {profileName && <Text variant="button-md">{profileName}</Text>}
-            {loginQuery.data?.id && (
-              <DidField
-                did={loginQuery.data?.id}
-                textColor="grey7"
-                copyLabel={t('Copy to clipboard')}
-                copiedLabel={t('Copied')}
-              />
-            )}
-
-            {!loginQuery.data?.id && (
-              <Text
-                variant="footnotes2"
-                color="grey7"
-                customStyle="whitespace-normal"
-                truncate
-                breakWord
-              >
-                {t('Connect to see member only features.')}
-              </Text>
-            )}
-          </Stack>
-        )}
-
-        <Stack customStyle="w-fit h-fit ml-6 self-start">
-          {isLoading && <Button size="sm" loading onClick={handleLogoutClick} />}
-          {!isLoading && (
+        <Stack customStyle="w-fit h-fit self-start">
+          {inProgress && <Button variant="primary" size="sm" loading onClick={handleLogoutClick} />}
+          {!inProgress && (
             <>
-              {loginQuery.data?.id && (
+              {isLoggedIn && (
                 <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
               )}
-              {!loginQuery.data?.id && loginQuery.isStale && (
+              {!isLoggedIn && (
                 <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
               )}
             </>
           )}
         </Stack>
       </Stack>
-
       {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
@@ -347,7 +323,6 @@ const SidebarComponent: React.FC<unknown> = () => {
             onClickMenuItem={handleAppIconClick}
           />
         )}
-
         {/* container for user-installed apps */}
         {userInstalledApps?.length > 0 && (
           <ListSidebarApps
@@ -359,15 +334,12 @@ const SidebarComponent: React.FC<unknown> = () => {
           />
         )}
       </Stack>
-
       {!dismissed && (
         <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
       )}
-
       {socialLinks.length > 0 && (
         <Stack padding="px-8 py-4" customStyle="border-t-1 border(grey9 dark:grey3)">
           <Text variant="footnotes2">{t('Get in touch')}</Text>
-
           <Stack direction="row" customStyle="w-fit h-fit mt-6">
             {socialLinks.map((socialLink, idx) => (
               <Anchor

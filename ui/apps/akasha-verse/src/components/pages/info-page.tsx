@@ -4,7 +4,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useGetLogin, getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
+import { getProfileImageVersionsWithMediaUrl, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const InfoPage: React.FC<unknown> = () => {
@@ -16,11 +16,7 @@ const InfoPage: React.FC<unknown> = () => {
 
   const { t } = useTranslation('app-akasha-verse');
 
-  const loginQueryReq = useGetLogin();
-
-  const isLoggedIn = React.useMemo(() => {
-    return !!loginQueryReq.data?.id;
-  }, [loginQueryReq.data]);
+  const { isLoggedIn } = useLoggedIn();
 
   // const network = useCurrentNetwork(isLoggedIn).data;
 

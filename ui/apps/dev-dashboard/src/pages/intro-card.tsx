@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -32,11 +32,11 @@ export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = pro
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const loginQuery = useGetLogin();
+  const { isLoggedIn } = useLoggedIn();
 
   const handleOnboardingCTAClick = () => {
     // if logged in, navigate to step 1
-    if (loginQuery.data?.id) {
+    if (isLoggedIn) {
       return navigateTo?.({
         appName: '@akashaorg/app-dev-dashboard',
         getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],

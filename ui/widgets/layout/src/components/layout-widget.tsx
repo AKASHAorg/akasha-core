@@ -13,6 +13,7 @@ import {
   startMobileSidebarHidingBreakpoint,
   startWidgetsTogglingBreakpoint,
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
+import { useScrollbarWidth } from 'react-use/lib/useScrollbarWidth';
 import { useClickAway } from 'react-use';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -29,6 +30,8 @@ const Layout: React.FC<unknown> = () => {
   const [showSidebar, setShowSidebar] = useState(
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
+
+  const scrollBarWidth = useScrollbarWidth();
 
   const { uiEvents, layoutConfig } = useRootComponentProps();
   // initialise fallback theme, if none is set
@@ -183,8 +186,11 @@ const Layout: React.FC<unknown> = () => {
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
 
+  //style to prevent horizontal shift when vertical scrollbar appears
+  const widthStyle = `w-[calc(100vw-${scrollBarWidth}px)]`;
+
   return (
-    <Stack customStyle="bg(white dark:black) min-h-screen">
+    <Stack customStyle={`bg(white dark:black) min-h-screen ${widthStyle}`}>
       <Stack customStyle="h-full m-auto w-[95%] xl:w-full min-h-screen">
         <Stack customStyle={layoutStyle}>
           <ScrollRestorer />

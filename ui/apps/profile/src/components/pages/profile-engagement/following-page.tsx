@@ -16,8 +16,8 @@ import {
   getProfileImageVersionsWithMediaUrl,
   hasOwn,
   getFollowList,
-  useGetLogin,
   useRootComponentProps,
+  useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
 
 const FollowingPage: React.FC<unknown> = () => {
@@ -28,14 +28,14 @@ const FollowingPage: React.FC<unknown> = () => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const loginQuery = useGetLogin();
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
     },
     {
       select: response => response.node,
-      enabled: !!loginQuery.data?.id,
+      enabled: isLoggedIn,
     },
   );
 
@@ -72,7 +72,7 @@ const FollowingPage: React.FC<unknown> = () => {
       onSettled: () => {
         setLoadingMore(false);
       },
-      enabled: !!loginQuery.data?.id,
+      enabled: isLoggedIn,
     },
   );
   const following = useMemo(
@@ -98,10 +98,10 @@ const FollowingPage: React.FC<unknown> = () => {
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    { select: response => response.viewer?.akashaFollowList },
+    { select: response => response.viewer?.akashaFollowList, enabled: isLoggedIn },
   );
 
-  if (!loginQuery.data?.id) {
+  if (!isLoggedIn) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
@@ -129,7 +129,7 @@ const FollowingPage: React.FC<unknown> = () => {
   };
 
   return (
-    <EngagementTab isLoggedIn={!!loginQuery.data?.id} navigateTo={navigateTo}>
+    <EngagementTab navigateTo={navigateTo}>
       {followingReq.status === 'loading' && <ProfileEngagementLoading />}
       {followingReq.status === 'error' && (
         <Stack customStyle="mt-8">
@@ -138,7 +138,7 @@ const FollowingPage: React.FC<unknown> = () => {
       )}
       {followingReq.status === 'success' && (
         <Following
-          loggedInAccountId={loginQuery.data?.id}
+          loggedInProfileId={loggedInProfileId}
           followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
@@ -154,7 +154,7 @@ const FollowingPage: React.FC<unknown> = () => {
           renderFollowElement={(profileId, followId, isFollowing) => (
             <FollowProfileButton
               profileID={profileId}
-              isLoggedIn={!!loginQuery.data?.id}
+              isLoggedIn={isLoggedIn}
               followId={followId}
               isFollowing={isFollowing}
               showLoginModal={showLoginModal}

@@ -10,7 +10,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const ListsPage: React.FC<unknown> = () => {
@@ -28,9 +28,7 @@ const ListsPage: React.FC<unknown> = () => {
   });
   const loggedProfileData = profileDataReq?.data;
 
-  const isLoggedIn = React.useMemo(() => {
-    return loggedProfileData?.did?.id;
-  }, [loggedProfileData?.did?.id]);
+  const { isLoggedIn } = useLoggedIn();
 
   const listsReq = null;
   const lists = listsReq?.data || [];

@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import {
-  useGetLogin,
   useAnalytics,
   useRootComponentProps,
   getFollowList,
+  useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useGetProfilesQuery,
@@ -28,7 +28,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('ui-widget-trending');
-  const loginQuery = useGetLogin();
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
   const queryClient = useQueryClient();
 
   const [processingTags, setProcessingTags] = useState([]);
@@ -46,9 +46,9 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     },
   );
   const tagSubscriptionsReq = useGetInterestsByDidQuery(
-    { id: loginQuery.data?.id },
+    { id: loggedInProfileId },
     {
-      enabled: !!loginQuery.data?.id,
+      enabled: isLoggedIn,
       select: resp => {
         const { akashaProfileInterests } = resp.node as {
           akashaProfileInterests: { topics: { value: string; labelType: string }[] };
@@ -59,9 +59,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     },
   );
   const latestProfiles = useMemo(() => latestProfilesReq.data || [], [latestProfilesReq.data]);
-  const isLoggedIn = useMemo(() => {
-    return !!loginQuery.data?.id;
-  }, [loginQuery.data]);
   const followProfileIds = useMemo(
     () => latestProfiles.map(follower => follower.id),
     [latestProfiles],
@@ -76,7 +73,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const createInterest = useCreateInterestsMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: useGetInterestsByDidQuery.getKey({ id: loginQuery.data?.id }),
+        queryKey: useGetInterestsByDidQuery.getKey({ id: loggedInProfileId }),
       });
     },
   });
@@ -99,7 +96,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   };
 
   const handleTopicSubscribe = (topic: string) => {
-    if (!loginQuery.data?.ethAddress) {
+    if (!isLoggedIn) {
       showLoginModal();
       return;
     }
@@ -119,7 +116,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   };
 
   const handleTopicUnSubscribe = (topic: string) => {
-    if (!loginQuery.data?.ethAddress) {
+    if (!isLoggedIn) {
       showLoginModal();
       return;
     }
@@ -186,7 +183,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           profiles={latestProfiles}
           followList={followList}
           isLoggedIn={isLoggedIn}
-          loggedUserDid={loginQuery?.data?.id}
+          loggedInProfileId={loggedInProfileId}
           uiEvents={uiEvents}
           onClickProfile={handleProfileClick}
         />

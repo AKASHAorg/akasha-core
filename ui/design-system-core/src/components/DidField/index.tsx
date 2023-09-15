@@ -16,6 +16,7 @@ export type DidFieldProps = {
   copyLabel?: string;
   copiedLabel?: string;
   copiable?: boolean;
+  customStyle?: string;
 };
 const DidField: React.FC<DidFieldProps> = ({
   did,
@@ -24,11 +25,12 @@ const DidField: React.FC<DidFieldProps> = ({
   copiable = true,
   copyLabel,
   copiedLabel,
+  customStyle = '',
 }) => {
   const networkType = iconForDid(did);
   const truncatedDid = truncateDid(did, networkType);
   const didDisplayBlock = (
-    <Stack direction="row" spacing="gap-x-1.5" align="center">
+    <Stack direction="row" spacing="gap-x-1.5" align="center" customStyle={customStyle}>
       {networkType && <Icon type={isValid ? networkType : 'noEth'} />}
       <Text variant="footnotes1" color={textColor}>
         {truncatedDid}
