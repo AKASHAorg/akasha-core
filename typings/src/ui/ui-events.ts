@@ -66,6 +66,7 @@ export const EntityTypesMap = {
 
 export type EventDataTypes = {
   name: string;
+  profileId?: string;
   //profile stream id
   profileID?: string;
   isLoggedIn?: boolean;

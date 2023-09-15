@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FollowList, Profile, RootComponentProps } from '@akashaorg/typings/ui';
+import { FollowList, Profile, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -66,9 +66,9 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
 
           <Stack spacing="gap-y-4">
             {profiles.length !== 0 &&
-              profiles.map((profile, index) => (
+              profiles.map(profile => (
                 <Stack
-                  key={index}
+                  key={profile.id}
                   direction="row"
                   align="center"
                   justify="between"
@@ -87,6 +87,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                       name={`follow_${profile.id}`}
                       uiEvents={uiEvents}
                       data={{
+                        profileId: loggedUserDid,
                         profileID: profile.id,
                         isFollowing: followList?.get(profile.id)?.isFollowing,
                         isLoggedIn,

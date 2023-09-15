@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AnalyticsCategories } from '@akashaorg/typings/ui';
+import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import {
   useGetLogin,
   useAnalytics,
@@ -182,7 +182,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
         <LatestProfiles
           titleLabel={t('Start Following')}
           noProfilesLabel={t('No profiles found!')}
-          isLoadingProfiles={latestProfilesReq.isFetching || followDocumentsReq.isFetching}
+          isLoadingProfiles={latestProfilesReq.isFetching}
           profiles={latestProfiles}
           followList={followList}
           isLoggedIn={isLoggedIn}

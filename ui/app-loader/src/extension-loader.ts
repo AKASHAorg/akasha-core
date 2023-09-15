@@ -14,7 +14,14 @@ export const extensionLoader: ExtensionLoaderFn = loadingFn => {
       if (!parcels.get(extensionData.name)) {
         const parcelProps = {
           ...props,
-          extensionData,
+          // @TODO: refactor this. App-loader should not alter extension data!
+          extensionData: {
+            ...extensionData,
+            itemType:
+              // Make sure that itemType coming from extensionData is the correct type `EntityTypes`
+              // as it will be stringified when passed to the extension by navigateToModal
+              extensionData.itemType === undefined ? undefined : +extensionData.itemType,
+          },
         };
         if (!domElement) {
           logger.warn(`Not loading extension ${props.name}. domNode not found.`);
@@ -44,7 +51,7 @@ export const extensionLoader: ExtensionLoaderFn = loadingFn => {
       const parcelStatus = await parcels.get(name).getStatus();
       if (parcelStatus === singleSpa.MOUNTED) {
         parcels.get(name).unmount();
-        parcels.get(name).unmountPromise.then(async () => {
+        parcels.get(name).unmountPromise.then(() => {
           parcels.delete(name);
         });
       }

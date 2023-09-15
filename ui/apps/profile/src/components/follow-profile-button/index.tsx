@@ -5,31 +5,48 @@ import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateFollowMutation,
+  useGetFollowDocumentsQuery,
   useUpdateFollowMutation,
+  useInfiniteGetFollowersListByDidQuery,
+  useInfiniteGetFollowingListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useQueryClient } from '@tanstack/react-query';
 
 export type FollowProfileButtonProps = {
   profileID: string;
   isLoggedIn: boolean;
   isFollowing: boolean;
   followId: string | null;
+  profileId?: string;
   iconOnly?: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
-  const { profileID, isLoggedIn, isFollowing, followId, iconOnly, showLoginModal } = props;
+  const { profileID, profileId, isLoggedIn, isFollowing, followId, iconOnly, showLoginModal } =
+    props;
 
   const { t } = useTranslation('app-profile');
   const [following, setFollowing] = useState(isFollowing);
   const [loading, setLoading] = useState(false);
 
+  const queryClient = useQueryClient();
+
   const createFollowMutation = useCreateFollowMutation({
     onMutate: () => {
       setLoading(true);
     },
-    onSuccess: ({ createAkashaFollow }) => {
+    onSuccess: async ({ createAkashaFollow }) => {
       setFollowing(createAkashaFollow.document.isFollowing);
+      await queryClient.invalidateQueries(useGetFollowDocumentsQuery.getKey());
+      if (profileId) {
+        await queryClient.invalidateQueries(
+          useInfiniteGetFollowersListByDidQuery.getKey({ id: profileId }),
+        );
+        await queryClient.invalidateQueries(
+          useInfiniteGetFollowingListByDidQuery.getKey({ id: profileId }),
+        );
+      }
     },
     onSettled: () => {
       setLoading(false);
@@ -40,8 +57,17 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     onMutate: () => {
       setLoading(true);
     },
-    onSuccess: ({ updateAkashaFollow }) => {
+    onSuccess: async ({ updateAkashaFollow }) => {
       setFollowing(updateAkashaFollow.document.isFollowing);
+      await queryClient.invalidateQueries(useGetFollowDocumentsQuery.getKey());
+      if (profileId) {
+        await queryClient.invalidateQueries(
+          useInfiniteGetFollowersListByDidQuery.getKey({ id: profileId }),
+        );
+        await queryClient.invalidateQueries(
+          useInfiniteGetFollowingListByDidQuery.getKey({ id: profileId }),
+        );
+      }
     },
     onSettled: () => {
       setLoading(false);
@@ -52,6 +78,11 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   useEffect(() => {
     setFollowing(isFollowing);
   }, [isFollowing]);
+
+  //reset `following` whenever user is logged out
+  useEffect(() => {
+    if (!isLoggedIn) setFollowing(false);
+  }, [isLoggedIn]);
 
   //reset loading flag whenever profile id changes
   useEffect(() => {

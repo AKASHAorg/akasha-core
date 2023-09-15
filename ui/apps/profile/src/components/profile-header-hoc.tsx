@@ -10,8 +10,8 @@ import { EntityTypes, ModalNavigationOptions, NavigateToParams } from '@akashaor
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import {
-  useGetProfileByDidQuery,
   useGetFollowDocumentsQuery,
+  useGetProfileByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hasOwn, useGetLogin, useValidDid } from '@akashaorg/ui-awf-hooks';
 
@@ -137,7 +137,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
 export const withProfileHeader = <T extends ProfileHeaderViewProps>(
   wrappedComponent: ReactNode,
 ) => {
-  const ComponentWithProfileHeader = (props: T) => {
+  return (props: T) => {
     return (
       <>
         <ProfileHeaderView {...props} />
@@ -145,8 +145,6 @@ export const withProfileHeader = <T extends ProfileHeaderViewProps>(
       </>
     );
   };
-
-  return ComponentWithProfileHeader;
 };
 
 export default withProfileHeader;

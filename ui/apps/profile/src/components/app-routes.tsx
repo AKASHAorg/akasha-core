@@ -7,7 +7,6 @@ import { useShowFeedback, useRootComponentProps } from '@akashaorg/ui-awf-hooks'
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
-
 import withProfileHeader from './profile-header-hoc';
 import InterestsPage from './pages/interests';
 import EditProfilePage from './pages/edit-profile';

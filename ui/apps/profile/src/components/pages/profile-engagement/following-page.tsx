@@ -98,7 +98,7 @@ const FollowingPage: React.FC<unknown> = () => {
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    { select: response => response.viewer?.akashaFollowList, enabled: !isViewer },
+    { select: response => response.viewer?.akashaFollowList },
   );
 
   if (!loginQuery.data?.id) {
@@ -108,9 +108,7 @@ const FollowingPage: React.FC<unknown> = () => {
     });
   }
 
-  const followList = getFollowList(
-    isViewer ? following : followDocumentsReq.data?.edges.map(edge => edge?.node),
-  );
+  const followList = getFollowList(followDocumentsReq.data?.edges.map(edge => edge?.node));
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({ name: 'login', redirectTo });
