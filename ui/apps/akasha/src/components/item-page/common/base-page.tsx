@@ -14,11 +14,11 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 import { OriginalItem } from './original-item';
 import { PendingReply } from './pending-reply';
-import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type BaseEntryProps = {
   postId: string;

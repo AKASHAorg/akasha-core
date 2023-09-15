@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
-import { EthProviders } from '@akashaorg/typings/sdk';
+import { EthProviders } from '@akashaorg/typings/lib/sdk';
 
 import {
   useGetLogin,

@@ -175,6 +175,18 @@ export type GetInterestsQueryVariables = Types.Exact<{
 
 export type GetInterestsQuery = { akashaProfileInterestsIndex?: { edges?: Array<{ cursor: string, node?: { id: string, topics: Array<{ value: string, labelType: string }>, did: { id: string } } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
 
+export type GetInterestsStreamQueryVariables = Types.Exact<{
+  after?: Types.InputMaybe<Types.Scalars['String']>;
+  before?: Types.InputMaybe<Types.Scalars['String']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  last?: Types.InputMaybe<Types.Scalars['Int']>;
+  sorting?: Types.InputMaybe<Types.AkashaInterestsStreamSortingInput>;
+  filters?: Types.InputMaybe<Types.AkashaInterestsStreamFiltersInput>;
+}>;
+
+
+export type GetInterestsStreamQuery = { akashaInterestsStreamIndex?: { edges?: Array<{ cursor: string, node?: { labelType: string, value: string, active: boolean, createdAt: any, id: string } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
+
 export type GetInterestsByDidQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
 }>;

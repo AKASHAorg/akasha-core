@@ -1,4 +1,4 @@
-import type * as Types from '@akashaorg/typings/sdk/graphql-operation-types-new';
+import type * as Types from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 import { useQuery, useInfiniteQuery, useMutation, type UseQueryOptions, type UseInfiniteQueryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
@@ -1108,6 +1108,73 @@ useInfiniteGetInterestsQuery.getKey = (variables?: Types.GetInterestsQueryVariab
 ;
 
 useGetInterestsQuery.fetcher = (variables?: Types.GetInterestsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options);
+export const GetInterestsStreamDocument = /*#__PURE__*/ `
+    query GetInterestsStream($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput) {
+  akashaInterestsStreamIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    sorting: $sorting
+    filters: $filters
+  ) {
+    edges {
+      node {
+        labelType
+        value
+        active
+        createdAt
+        id
+      }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
+export const useGetInterestsStreamQuery = <
+      TData = Types.GetInterestsStreamQuery,
+      TError = unknown
+    >(
+      variables?: Types.GetInterestsStreamQueryVariables,
+      options?: UseQueryOptions<Types.GetInterestsStreamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetInterestsStreamQuery, TError, TData>(
+      variables === undefined ? ['GetInterestsStream'] : ['GetInterestsStream', variables],
+      fetcher<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, variables),
+      options
+    );
+useGetInterestsStreamQuery.document = GetInterestsStreamDocument;
+
+
+useGetInterestsStreamQuery.getKey = (variables?: Types.GetInterestsStreamQueryVariables) => variables === undefined ? ['GetInterestsStream'] : ['GetInterestsStream', variables];
+;
+
+export const useInfiniteGetInterestsStreamQuery = <
+      TData = Types.GetInterestsStreamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetInterestsStreamQueryVariables,
+      variables?: Types.GetInterestsStreamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetInterestsStreamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetInterestsStreamQuery, TError, TData>(
+      variables === undefined ? ['GetInterestsStream.infinite'] : ['GetInterestsStream.infinite', variables],
+      (metaData) => fetcher<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetInterestsStreamQuery.getKey = (variables?: Types.GetInterestsStreamQueryVariables) => variables === undefined ? ['GetInterestsStream.infinite'] : ['GetInterestsStream.infinite', variables];
+;
+
+useGetInterestsStreamQuery.fetcher = (variables?: Types.GetInterestsStreamQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, variables, options);
 export const GetInterestsByDidDocument = /*#__PURE__*/ `
     query GetInterestsByDid($id: ID!) {
   node(id: $id) {

@@ -1,6 +1,6 @@
 import React, { LegacyRef, forwardRef } from 'react';
 
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Button from '../Button';
 import Card from '../Card';
@@ -59,7 +59,7 @@ const List: React.FC<ListProps> = forwardRef(
               onClick={handleItemClick(item, index)}
               plain
             >
-              <Stack align="center" spacing="gap-x-3" customStyle="py-2 px-4">
+              <Stack direction="row" align="center" spacing="gap-x-3" customStyle="py-2 px-4">
                 {item.icon && <Icon type={item.icon} color={item.color} size="sm" />}
                 <Text variant="body1" {...item}>
                   {item.label}

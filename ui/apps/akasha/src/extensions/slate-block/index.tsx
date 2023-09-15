@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider } from 'react-i18next';
 import { SlateEditorBlock } from './slate-editor-block';
 import singleSpaReact from 'single-spa-react';

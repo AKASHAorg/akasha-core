@@ -1,4 +1,4 @@
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import { Status, Radius } from '../types/common.types';
 

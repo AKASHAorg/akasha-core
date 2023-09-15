@@ -3,12 +3,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { uiEventsMock } from '@akashaorg/af-testing';
 // @ts-ignore-next-line
 import { AnalyticsProvider, useAnalytics } from '../use-analytics';
-import {
-  AnalyticsCategories,
-  AnalyticsEventData,
-  AnalyticsEventTypes,
-} from '@akashaorg/typings/ui';
-// @ts-ignore-next-line
+import { AnalyticsCategories, AnalyticsEventTypes, TrackEventData } from '@akashaorg/typings/lib/ui';
 import { filterEvent } from '../utils/event-utils';
 
 describe('useAnalytics', () => {

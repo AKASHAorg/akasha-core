@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
@@ -13,7 +13,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { hasOwn, useGetLogin, useRootComponentProps, useValidDid } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
@@ -28,12 +28,12 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
 
   const { profileId } = useParams<{ profileId: string }>();
-  const [showFeedback, setShowFeedback] = React.useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   const loginQuery = useGetLogin();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const isLoggedIn = React.useMemo(() => {
+  const isLoggedIn = useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
   const profileDataReq = useGetProfileByDidQuery(

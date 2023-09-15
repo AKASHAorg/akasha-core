@@ -6,7 +6,7 @@ import {
   MenuItemAreaType,
   MenuItemType,
   LogoTypeSource,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 /**
  * All the plugins must export an object like this:

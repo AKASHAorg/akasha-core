@@ -14,7 +14,7 @@ import { withHistory } from 'slate-history';
 import { Popover } from '@headlessui/react';
 import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
-import { IEntryData, IMetadata, IPublishData, Profile } from '@akashaorg/typings/ui';
+import { IEntryData, IMetadata, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';

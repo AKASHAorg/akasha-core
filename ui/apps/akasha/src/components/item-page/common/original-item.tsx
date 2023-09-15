@@ -5,7 +5,7 @@ import {
   ModalNavigationOptions,
   AnalyticsCategories,
   Profile,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { BEAM } from '../../../routes';
@@ -14,7 +14,7 @@ import Extension from '@akashaorg/design-system-components/lib/components/Extens
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
-import { AkashaBeam } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type OriginalItemProps = {
   itemId: string;

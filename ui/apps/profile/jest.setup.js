@@ -11,7 +11,7 @@ jest
 
 jest.spyOn(reactUse, 'useMedia').mockReturnValue(true);
 
-jest.mock('@akashaorg/typings/ui', () => ({
+jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     PROFILE: 1,
   },
@@ -29,6 +29,7 @@ jest.mock('@akashaorg/typings/ui', () => ({
     ExtensionPointMount: 'extension-point-mount',
     ExtensionPointMountRequest: 'extension-point-mount-request',
     ExtensionPointUnmount: 'extension-point-unmount',
+    ExtensionPointUpdate: 'extension-point-update',
     ExtensionPointUnmountRequest: 'extension-point-unmount-request',
     ModalRequest: 'modal-mount-request',
     ModalMount: 'modal-mount',

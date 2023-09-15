@@ -11,8 +11,8 @@ import {
   PostToPublish,
   EntryID,
   PubKey,
-} from '@akashaorg/typings/sdk';
-import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
+} from '@akashaorg/typings/lib/sdk';
+import { DataProviderInput } from '@akashaorg/typings/lib/sdk/graphql-types';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Logging from '../logging';

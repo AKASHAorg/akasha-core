@@ -2,24 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import singleSpaReact from 'single-spa-react';
-import FollowProfile from '../components/follow-profile';
+import FollowProfileButton from '../components/follow-profile-button';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
-import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 const App = (props: RootExtensionProps) => {
-  const { loggedInProfileId, profileStreamId, isLoggedIn, isFollowing, followStreamId } =
-    props.extensionData;
+  const { profileID, isLoggedIn, isFollowing, followId } = props.extensionData;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
+
   return (
-    <FollowProfile
-      loggedInProfileId={String(loggedInProfileId)}
-      profileStreamId={String(profileStreamId)}
-      isLoggedIn={!!isLoggedIn}
+    <FollowProfileButton
+      profileID={profileID}
+      isLoggedIn={isLoggedIn}
       isFollowing={!!isFollowing}
-      followStreamId={String(followStreamId)}
+      followId={followId}
       showLoginModal={showLoginModal}
     />
   );
@@ -46,5 +45,7 @@ const reactLifecycles = singleSpaReact({
 export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
+
+export const update = reactLifecycles.update;
 
 export const unmount = reactLifecycles.unmount;

@@ -80,6 +80,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
   return (
     <button ref={ref} className={tw(customStyle)} type="button" {...rest} disabled={disabled}>
       <Stack
+        direction="row"
         align="center"
         justify="center"
         spacing="gap-x-1"

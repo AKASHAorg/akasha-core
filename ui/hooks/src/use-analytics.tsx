@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { AnalyticsEventData, AnalyticsEventTypes, RootComponentProps } from '@akashaorg/typings/ui';
+import {
+  AnalyticsEventData,
+  AnalyticsEventTypes,
+  TrackEventData,
+  RootComponentProps,
+} from '@akashaorg/typings/lib/ui';
 import { BehaviorSubject } from 'rxjs';
 
 /**

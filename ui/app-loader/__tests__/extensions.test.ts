@@ -2,7 +2,7 @@ import { from, mergeMap, of, ReplaySubject } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { genAppConfig, genWorldConfig, mockSDK } from '@akashaorg/af-testing';
 import { extensionMatcher } from '../src/extension-matcher';
-import { EventTypes, UIEventData, RootExtensionProps } from '@akashaorg/typings/ui';
+import { EventTypes, UIEventData, RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 
 jest.mock('@akashaorg/awf-sdk', () => {
@@ -46,7 +46,8 @@ describe('[AppLoader]: extension-matcher.ts', () => {
     const mockExtLoaders = spies.map(spy =>
       jest.fn().mockImplementation(() => ({
         load: spy,
-        unload: jest.fn(),
+        unmount: jest.fn(),
+        update: jest.fn(),
       })),
     );
 

@@ -1,5 +1,10 @@
 import type { SingleSpaCustomEventDetail } from 'single-spa';
-import { AnalyticsEventData, AnalyticsEventTypes, RootComponentProps } from '@akashaorg/typings/ui';
+import {
+  AnalyticsEventData,
+  AnalyticsEventTypes,
+  TrackEventData,
+  RootComponentProps,
+} from '@akashaorg/typings/lib/ui';
 import { filterEvents } from '@akashaorg/ui-awf-hooks';
 
 export interface CustomSingleSpaEvent extends Event {

@@ -1,4 +1,4 @@
-import { UIEventData, EventTypes } from '@akashaorg/typings/ui';
+import { UIEventData, EventTypes } from '@akashaorg/typings/lib/ui';
 import {
   Subject,
   merge,
@@ -16,7 +16,7 @@ import {
 import { hidePageSplash } from './splash-screen';
 import { LoaderState } from './state';
 import { getModalFromParams } from './utils';
-import { AUTH_EVENTS, APP_EVENTS } from '@akashaorg/typings/sdk';
+import { AUTH_EVENTS, APP_EVENTS } from '@akashaorg/typings/lib/sdk';
 import * as singleSpa from 'single-spa';
 
 export const pipelineEvents = new Subject<Partial<LoaderState>>();
@@ -136,6 +136,10 @@ export const getUiEvents = () => {
      */
     uiEvents
       .pipe(filterEvent(EventTypes.ExtensionPointMount))
+      .pipe(map(eventData => ({ ...eventData }))),
+
+    uiEvents
+      .pipe(filterEvent(EventTypes.ExtensionPointUpdate))
       .pipe(map(eventData => ({ ...eventData }))),
 
     uiEvents

@@ -1,19 +1,21 @@
 import React, { useMemo, useState } from 'react';
-import FollowProfile from '../../follow-profile';
+import FollowProfileButton from '../../follow-profile-button';
 import Following from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Following';
 import EngagementTab from './engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
-import { ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useParams } from 'react-router-dom';
 import {
+  useGetFollowDocumentsQuery,
   useGetProfileByDidQuery,
   useInfiniteGetFollowingListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   getProfileImageVersionsWithMediaUrl,
   hasOwn,
+  getFollowList,
   useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
@@ -36,6 +38,12 @@ const FollowingPage: React.FC<unknown> = () => {
       enabled: !!loginQuery.data?.id,
     },
   );
+
+  const { isViewer, akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { isViewer: null, akashaProfile: null };
+
   const followingReq = useInfiniteGetFollowingListByDidQuery(
     'first',
     {
@@ -78,12 +86,20 @@ const FollowingPage: React.FC<unknown> = () => {
         : [],
     [followingReq.data],
   );
-  const lastPageInfo = React.useMemo(() => {
+  const lastPageInfo = useMemo(() => {
     const lastPage = followingReq.data?.pages?.[followingReq.data?.pages?.length - 1];
     return lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
       ? lastPage?.node.akashaFollowList?.pageInfo
       : null;
   }, [followingReq]);
+  const followProfileIds = useMemo(() => following.map(follow => follow.profile?.id), [following]);
+  const followDocumentsReq = useGetFollowDocumentsQuery(
+    {
+      following: followProfileIds,
+      last: followProfileIds.length,
+    },
+    { select: response => response.viewer?.akashaFollowList },
+  );
 
   if (!loginQuery.data?.id) {
     return navigateTo({
@@ -92,10 +108,7 @@ const FollowingPage: React.FC<unknown> = () => {
     });
   }
 
-  const { isViewer, akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
-      ? profileDataReq.data
-      : { isViewer: null, akashaProfile: null };
+  const followList = getFollowList(followDocumentsReq.data?.edges.map(edge => edge?.node));
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({ name: 'login', redirectTo });
@@ -125,6 +138,8 @@ const FollowingPage: React.FC<unknown> = () => {
       )}
       {followingReq.status === 'success' && (
         <Following
+          loggedInAccountId={loginQuery.data?.id}
+          followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
           ownerUserName={profileData.name}
@@ -136,12 +151,11 @@ const FollowingPage: React.FC<unknown> = () => {
               followingReq.fetchNextPage();
             }
           }}
-          renderFollowElement={(profileStreamId, followStreamId, isFollowing) => (
-            <FollowProfile
-              loggedInProfileId={loginQuery.data?.id}
-              profileStreamId={profileStreamId}
+          renderFollowElement={(profileId, followId, isFollowing) => (
+            <FollowProfileButton
+              profileID={profileId}
               isLoggedIn={!!loginQuery.data?.id}
-              followStreamId={followStreamId}
+              followId={followId}
               isFollowing={isFollowing}
               showLoginModal={showLoginModal}
             />

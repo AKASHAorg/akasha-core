@@ -6,7 +6,7 @@ import EmptyEntry from '../Entry/EmptyEntry';
 import { tw } from '@twind/core';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
-import { AkashaFollowing } from '@akashaorg/typings/ui';
+import { AkashaFollowing } from '@akashaorg/typings/lib/ui';
 import { EngagementProps } from '../types';
 
 export type FollowingProps = {
@@ -16,6 +16,8 @@ export type FollowingProps = {
 } & EngagementProps;
 
 const Following: React.FC<FollowingProps> = ({
+  loggedInAccountId,
+  followList,
   following,
   profileAnchorLink,
   ownerUserName,
@@ -59,19 +61,20 @@ const Following: React.FC<FollowingProps> = ({
       {following.map((engagement, index, engagements) => (
         <Stack
           direction="row"
-          key={`${engagement?.profile.id}-${index}`}
+          key={`${engagement?.id}-${index}`}
           customStyle={index + 1 !== engagements.length ? borderBottomStyle : ''}
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            profileId={engagement?.profile?.did.id}
-            profileStreamId={engagement?.profile?.id}
+            profileIds={{ id: engagement?.profile?.id, did: engagement?.profile?.did.id }}
             avatar={engagement?.profile?.avatar}
             name={engagement?.profile?.name}
-            followStreamId={engagement.id}
-            isFollowing={engagement.isFollowing}
+            followId={followList.get(engagement?.profile?.id)?.id}
+            isFollowing={followList.get(engagement?.profile?.id)?.isFollowing}
             getMediaUrl={getMediaUrl}
-            renderFollowElement={viewerIsOwner ? renderFollowElement : null}
+            renderFollowElement={
+              loggedInAccountId !== engagement?.profile?.did.id ? renderFollowElement : null
+            }
             onProfileClick={onProfileClick}
           />
         </Stack>

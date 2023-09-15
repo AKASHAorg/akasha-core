@@ -9,7 +9,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 
-import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 const LoginModal = (props: RootExtensionProps) => {

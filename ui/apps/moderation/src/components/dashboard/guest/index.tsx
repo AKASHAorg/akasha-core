@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
+import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';

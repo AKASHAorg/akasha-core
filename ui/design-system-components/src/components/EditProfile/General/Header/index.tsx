@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import { CropperProps } from 'react-easy-crop';
-import { ProfileImageType, Profile } from '@akashaorg/typings/ui';
+import { ProfileImageType, Profile } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';

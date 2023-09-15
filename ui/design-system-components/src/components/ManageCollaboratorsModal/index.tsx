@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';

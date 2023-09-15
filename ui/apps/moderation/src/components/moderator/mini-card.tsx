@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Moderator } from '@akashaorg/typings/ui';
+import { Moderator } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

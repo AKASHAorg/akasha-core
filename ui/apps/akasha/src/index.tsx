@@ -9,9 +9,9 @@ import {
   MenuItemAreaType,
   MenuItemType,
   RootComponentProps,
-} from '@akashaorg/typings/ui';
-import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/ui/editor-blocks';
-import { filterEvent } from '@akashaorg/ui-awf-hooks';
+} from '@akashaorg/typings/lib/ui';
+import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/lib/ui/editor-blocks';
+import { filter } from 'rxjs';
 
 /**
  * Initialization of the integration is optional.

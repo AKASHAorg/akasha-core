@@ -5,7 +5,7 @@ import {
   IPublishData,
   EntityTypes,
   AnalyticsCategories,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import {
   useMutationsListener,
   useAnalytics,
@@ -15,7 +15,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';

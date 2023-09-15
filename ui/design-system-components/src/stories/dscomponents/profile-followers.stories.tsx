@@ -4,7 +4,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Followers, {
   FollowersProps,
 } from '../../components/ProfileEngagements/Engagement/Followers';
-import { AkashaProfile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfile } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const meta: Meta<FollowersProps> = {
   title: 'DSComponents/Profile/Followers',
@@ -15,6 +15,8 @@ export default meta;
 type Story = StoryObj<FollowersProps>;
 
 const commonProps = {
+  loggedInAccountId: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
+  followList: new Map(),
   viewerIsOwner: false,
   profileAnchorLink: '#',
   loadMore: false,

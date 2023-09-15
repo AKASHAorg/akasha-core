@@ -9,14 +9,14 @@ import {
   ModalNavigationOptions,
   AnalyticsCategories,
   Profile,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { SETTINGS } from '../../routes';
 
 import { useEntryNavigation, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
+import { SearchTagsResult } from '@akashaorg/typings/lib/sdk/graphql-types';
 
 import EntryCardRenderer from './entry-renderer';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -95,7 +95,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     },
     {
       id: '21',
-      title: 'Akashaverse',
+      title: 'Extensions',
       type: 'optgroup',
       children: [
         { id: '4', title: 'Apps' },
@@ -444,8 +444,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 bodyLabel={
                   <>
                     {t('Oops! Looks like there’re no results for the word ')}{' '}
-                    <span className={tw('font-bold')}>{searchKeyword}</span> {t('in ')}{' '}
-                    <span className={tw('font-bold')}>{activeButton}</span>.{' '}
+                    <Text weight="bold">{searchKeyword}</Text> {t('in ')}{' '}
+                    <Text weight="bold">{activeButton}</Text>.{' '}
                     {t(' Try searching for something else or try a different Category!')}
                   </>
                 }

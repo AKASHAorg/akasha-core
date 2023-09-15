@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typings/ui';
+import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typings/lib/ui';
 
 export const register: (props: IntegrationRegistrationOptions) => IWidgetConfig = props => {
   return {
@@ -16,6 +16,7 @@ export const register: (props: IntegrationRegistrationOptions) => IWidgetConfig 
       modalSlotId: 'modal-slot',
       focusedPluginSlotId: 'focused-plugin-slot',
       cookieWidgetSlotId: 'cookie-widget-slot',
+      snackbarNotifSlotId: 'snackbar-notif-slot',
     },
   };
 };

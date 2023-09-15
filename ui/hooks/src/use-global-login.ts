@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
 import getSDK from '@akashaorg/awf-sdk';
-import { AUTH_EVENTS, CurrentUser } from '@akashaorg/typings/sdk';
+import { AUTH_EVENTS, CurrentUser } from '@akashaorg/typings/lib/sdk';
 
 export type OnLoginSuccessHandler = (data: CurrentUser) => void;
 export type OnLogoutSuccessHandler = () => void;

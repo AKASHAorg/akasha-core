@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';

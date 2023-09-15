@@ -19,11 +19,13 @@ export const BaseEntry: Story = {
   render: () => (
     <Entry
       profileAnchorLink=""
-      profileId={profileId}
       avatar={avatar}
       name="Coffee Lover"
-      profileStreamId="id"
-      followStreamId="id"
+      profileIds={{
+        id: 'id',
+        did: profileId,
+      }}
+      followId="id"
       isFollowing={false}
       getMediaUrl={() => ({
         default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },

@@ -17,7 +17,12 @@ export const Input: React.FC<InputProps> = forwardRef(
     const radiusStyle = getRadiusClasses(radius);
 
     return (
-      <Stack align="center" spacing="gap-x-2" customStyle={`${containerStyle} ${radiusStyle}`}>
+      <Stack
+        direction="row"
+        align="center"
+        spacing="gap-x-2"
+        customStyle={`${containerStyle} ${radiusStyle}`}
+      >
         {iconLeft && <Icon type={iconLeft} color={iconColor} disabled={disabled} />}
         <input
           ref={ref}

@@ -16,7 +16,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
-import type { Developer } from '@akashaorg/typings/ui';
+import type { Developer } from '@akashaorg/typings/lib/ui';
 
 export type AppInfoProps = {
   integrationName: string;
@@ -74,8 +74,13 @@ const AppInfo: React.FC<AppInfoProps> = ({
       <Card elevation="1" padding={'p-4'} radius={{ bottom: 20 }}>
         <Stack direction="column" spacing="gap-y-4">
           <Stack direction="column" spacing="gap-y-4">
-            <Stack align="start" customStyle="relative">
-              <Stack align="center" spacing="gap-x-2" customStyle="h-[4.375rem] -mt-7">
+            <Stack direction="row" align="start" customStyle="relative">
+              <Stack
+                direction="row"
+                align="center"
+                spacing="gap-x-2"
+                customStyle="h-[4.375rem] -mt-7"
+              >
                 <Card
                   elevation="none"
                   radius={10}
@@ -94,7 +99,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   </Text>
                 </Stack>
               </Stack>
-              <Stack spacing="gap-x-2" customStyle="ml-auto">
+              <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto">
                 {status === 'not-installed' && (
                   <Button
                     icon="ArrowDownIcon"
@@ -140,7 +145,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   }}
                   plain
                 >
-                  <Stack align="center">
+                  <Stack direction="row" align="center">
                     <ProfileAvatarButton
                       profileId={developer.profileId}
                       label={developer.name}
@@ -161,7 +166,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
           <ContentBlock blockTitle={latestReleaseTitle}>
             <Stack direction="column" spacing="gap-y-4">
               <Stack direction="column">
-                <Stack align="center" spacing="gap-x-1">
+                <Stack direction="row" align="center" spacing="gap-x-1">
                   <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
                     {version}
                   </Text>

@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { Ens, EnsSchema, EthAddress, EthAddressSchema, TYPES } from '@akashaorg/typings/sdk';
+import { Ens, EnsSchema, EthAddress, EthAddressSchema, TYPES } from '@akashaorg/typings/lib/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';

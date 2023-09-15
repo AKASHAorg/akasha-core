@@ -14,6 +14,7 @@ export enum EventTypes {
   ExtensionPointMount = 'extension-point-mount',
   ExtensionPointMountRequest = 'extension-point-mount-request',
   ExtensionPointUnmount = 'extension-point-unmount',
+  ExtensionPointUpdate = 'extension-point-update',
   ExtensionPointUnmountRequest = 'extension-point-unmount-request',
   ModalRequest = 'modal-mount-request',
   ModalMount = 'modal-mount',
@@ -24,6 +25,8 @@ export enum EventTypes {
   HideWidgets = 'hide-widgets',
   SnoozeNotifications = 'snooze-notifications',
   UnsnoozeNotifications = 'unsnooze-notifications',
+  ShowNotification = 'show-notification',
+
   /*
    * Events that are handled by the layout widget
    */
@@ -61,6 +64,10 @@ export const EntityTypesMap = {
 
 export type EventDataTypes = {
   name: string;
+  //profile stream id
+  profileID?: string;
+  isLoggedIn?: boolean;
+  followId?: string;
   version?: string;
   itemId?: string;
   commentId?: string;

@@ -5,11 +5,11 @@ import {
   IntegrationRegistrationOptions,
   LogoTypeSource,
   RootComponentProps,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import { NotificationPlugin } from './plugins/notification-plugin';
 import getSDK from '@akashaorg/awf-sdk';
 import { filter, from, map, mergeMap } from 'rxjs';
-import { AUTH_EVENTS } from '@akashaorg/typings/sdk';
+import { AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { Logger } from '@akashaorg/awf-sdk';
 
 export const initialize = (options: IntegrationRegistrationOptions & { logger: Logger }) => {
@@ -70,6 +70,11 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     area: [MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'BellIcon' },
     subRoutes: [],
+  },
+  extends: (matcher, loader) => {
+    matcher({
+      'snackbar-notif-slot': loader(() => import('./extensions/snack-bar-notification')),
+    });
   },
 });
 

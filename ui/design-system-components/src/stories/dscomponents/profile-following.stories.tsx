@@ -15,6 +15,8 @@ export default meta;
 type Story = StoryObj<FollowingProps>;
 
 const commonProps = {
+  loggedInAccountId: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
+  followList: new Map(),
   viewerIsOwner: false,
   ownerUserName: 'espressolover',
   profileAnchorLink: '#',

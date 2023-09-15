@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -51,7 +51,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const optionsWrapperStyle = apply`absolute z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
+  const optionsWrapperStyle = apply`absolute z-10 max-h-60 mt-14 py-0 rounded-lg overflow-auto bg-(white dark:grey3) border(1 grey8 dark:grey5)`;
 
   const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey3)`;
 
@@ -65,7 +65,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
   };
 
   return (
-    <Stack fullWidth customStyle="relative">
+    <Stack fullWidth customStyle="relative" direction="row">
       {label && <Text variant="label">{label}</Text>}
 
       <button
@@ -84,15 +84,15 @@ const Dropdown: React.FC<IDropdownProps> = ({
 
       {/* <!-- Dropdown menu --> */}
       {dropOpen && (
-        <Stack fullWidth customStyle={optionsWrapperStyle}>
-          <ul aria-labelledby="dropdownDefaultButton">
+        <Stack fullWidth customStyle={optionsWrapperStyle} direction="row">
+          <ul aria-labelledby="dropdownDefaultButton" className="w-full">
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
               if (optgroup) {
                 if (menuItem.type === 'optgroup') {
                   return (
                     <>
-                      <Stack align="center" customStyle={`pt-3 pl-3`} key={idx}>
+                      <Stack direction="row" align="center" customStyle={`pt-3 pl-3`} key={idx}>
                         <Text
                           variant="body2"
                           customStyle="cursor-not-allowed"
@@ -118,6 +118,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                             >
                               <Button onClick={handleChange(item)} plain>
                                 <Stack
+                                  direction="row"
                                   align="center"
                                   spacing="gap-x-2"
                                   customStyle={`${
@@ -149,7 +150,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                             </li>
                           );
                         })}
-                      {divider && <Divider customStyle="border-t-0" />}
+                      {divider && <Divider />}
                     </>
                   );
                 } else {
@@ -164,6 +165,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                     >
                       <Button onClick={handleChange(menuItem)} plain>
                         <Stack
+                          direction="row"
                           align="center"
                           spacing="gap-x-2"
                           customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
@@ -205,6 +207,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                   >
                     <Button onClick={handleChange(menuItem)} plain>
                       <Stack
+                        direction="row"
                         align="center"
                         spacing="gap-x-2"
                         customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}

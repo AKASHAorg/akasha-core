@@ -1,4 +1,4 @@
-import { Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/ui';
+import { Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/lib/ui';
 
 const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2022') => {
   const timeStart = new Date(start).getTime();

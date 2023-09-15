@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { TYPES } from '@akashaorg/typings/sdk';
+import { TYPES } from '@akashaorg/typings/lib/sdk';
 import DB from '../db';
 import { createFormattedValue } from '../helpers/observable';
 import { validate } from '../common/validator';

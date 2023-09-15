@@ -12,5 +12,17 @@ export default meta;
 type Story = StoryObj<ListAppTopbarProps>;
 
 export const BaseListAppTopbar: Story = {
-  render: () => <ListAppTopbar handleIconMenuClick={() => ({})} />,
+  render: () => (
+    <ListAppTopbar
+      titleLabel="Your List"
+      resetLabel="Reset"
+      removeAllLabel="Remove All"
+      dropDownMenuItems={[
+        { id: '0', title: 'All Categories' },
+        { id: '1', title: 'Beams' },
+        { id: '2', title: 'Reflections' },
+      ]}
+      handleIconMenuClick={() => ({})}
+    />
+  ),
 };

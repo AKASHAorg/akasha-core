@@ -8,13 +8,14 @@ import {
   IContentClickDetails,
   ModalNavigationOptions,
   Profile,
-} from '@akashaorg/typings/ui';
+  TrackEventData,
+} from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
-import { AkashaBeamEdge } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useInfiniteBeams } from '../utils/use-infinite-beams';
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';

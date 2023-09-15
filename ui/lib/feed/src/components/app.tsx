@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { EntityTypes, Profile } from '@akashaorg/typings/ui';
+import { EntityTypes, Profile, IContentClickDetails, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import BeamFeed, { BeamFeedProps } from './beam-feed';
 import { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';

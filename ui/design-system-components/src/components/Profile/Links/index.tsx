@@ -7,7 +7,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { getIconFromLink } from '../../../utils/get-icon-from-link';
-import { AkashaProfileLinkSource } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type LinksProps = {
   title: string;
@@ -23,7 +23,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
         <Text variant="label">{title}</Text>
         {links.map((link, index) => (
           <CopyToClipboard key={`${link.href}${index}`} value={link.href}>
-            <Stack align="center" spacing="gap-x-2">
+            <Stack direction="row" align="center" spacing="gap-x-2">
               <AppIcon placeholderIconType={getIconFromLink(link.href)} size="xs" accentColor />
               <Text
                 variant="body2"

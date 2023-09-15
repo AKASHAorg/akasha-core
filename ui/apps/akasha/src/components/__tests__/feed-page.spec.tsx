@@ -13,7 +13,7 @@ import {
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
 import { when } from 'jest-when';
-import { EntityTypes } from '@akashaorg/typings/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 const partialArgs = (...argsToMatch) =>
   when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));

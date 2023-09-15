@@ -2,21 +2,20 @@ import React, { ReactElement } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { Profile } from '@akashaorg/typings/ui';
-import { AkashaProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
+import { Profile } from '@akashaorg/typings/lib/ui';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type EntryProps = {
   profileAnchorLink: string;
-  profileId: string;
-  profileStreamId: string;
+  profileIds: { did: string; id: string };
   avatar: Profile['avatar'];
   name: string;
-  followStreamId: string;
+  followId: string;
   isFollowing: boolean;
   getMediaUrl: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
   renderFollowElement: (
-    profileStreamId: string,
-    followStreamId: string,
+    profileId: string,
+    followId: string,
     isFollowing: boolean,
   ) => ReactElement | null;
   onProfileClick: (profileId: string) => void;
@@ -25,11 +24,10 @@ export type EntryProps = {
 const Entry: React.FC<EntryProps> = props => {
   const {
     profileAnchorLink,
-    profileId,
-    profileStreamId,
+    profileIds,
     avatar,
     name,
-    followStreamId,
+    followId,
     isFollowing,
     getMediaUrl,
     renderFollowElement,
@@ -37,23 +35,21 @@ const Entry: React.FC<EntryProps> = props => {
   } = props;
 
   return (
-    <Stack spacing="gap-y-4">
-      <Stack align="center" justify="between">
-        <Anchor
-          href={`${profileAnchorLink}/${profileId}`}
-          onClick={event => {
-            event.preventDefault();
-            onProfileClick(profileId);
-          }}
-        >
-          <ProfileAvatarButton
-            profileId={profileId}
-            avatarImage={getMediaUrl(avatar)}
-            label={name}
-          />
-        </Anchor>
-        {renderFollowElement && renderFollowElement(profileStreamId, followStreamId, isFollowing)}
-      </Stack>
+    <Stack direction="row" align="center" justify="between" customStyle="pb-4" fullWidth>
+      <Anchor
+        href={`${profileAnchorLink}/${profileIds.did}`}
+        onClick={event => {
+          event.preventDefault();
+          onProfileClick(profileIds.did);
+        }}
+      >
+        <ProfileAvatarButton
+          profileId={profileIds.did}
+          avatarImage={getMediaUrl(avatar)}
+          label={name}
+        />
+      </Anchor>
+      {renderFollowElement && renderFollowElement(profileIds.id, followId, isFollowing)}
     </Stack>
   );
 };

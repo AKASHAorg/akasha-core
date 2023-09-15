@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({
               />
             </Stack>
             <Stack customStyle="relative ml-auto mt-2">
-              <Stack direction="row" spacing="gap-x-2">
+              <Stack direction="row" align="center" spacing="gap-x-2">
                 {viewerIsOwner && handleEdit ? (
                   <Button
                     aria-label="edit"

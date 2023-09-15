@@ -1,5 +1,5 @@
-import { PartialAkashaProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
-import { ProfileImageType } from '@akashaorg/typings/ui';
+import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { ProfileImageType } from '@akashaorg/typings/lib/ui';
 
 interface IDeleteImage {
   profileData?: PartialAkashaProfileInput;

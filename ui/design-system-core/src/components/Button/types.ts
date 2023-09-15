@@ -1,4 +1,4 @@
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import { LegacyRef } from 'react';
 import { BasicSize, BreakPointSize, Color } from '../types/common.types';
 

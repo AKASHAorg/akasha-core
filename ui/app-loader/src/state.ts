@@ -1,5 +1,5 @@
-import { APP_EVENTS } from '@akashaorg/typings/sdk';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import {
   ModalNavigationOptions,
   WorldConfig,
@@ -9,7 +9,7 @@ import {
   PluginConf,
   IntegrationRegistrationOptions,
   EventDataTypes,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import {
   Observable,
   distinctUntilChanged,
@@ -143,11 +143,11 @@ export const initState = (
             ...state,
             mountedExtPoints: extPoints,
           });
-        // case EventTypes.ExtensionPointUnmount:
-        //   return of({
-        //     ...state,
-        //     unmountingExtensionPoints: state.unmountingExtensionPoints.concat(newData.data),
-        //   });
+        case EventTypes.ExtensionPointUnmount:
+          return of({
+            ...state,
+            unmountingExtensionPoints: state.unmountingExtensionPoints.concat(newData.data),
+          });
         case APP_EVENTS.INFO_READY:
           const manifests = state.manifests.slice();
           if (worldConfig.registryOverrides.find(override => override.name === newData.data.name)) {

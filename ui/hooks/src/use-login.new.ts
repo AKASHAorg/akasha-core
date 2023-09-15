@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
+import { lastValueFrom } from 'rxjs';
 
-import { CurrentUser, EthProviders } from '@akashaorg/typings/sdk';
+import { CurrentUser, EthProviders } from '@akashaorg/typings/lib/sdk';
 
 import { useGlobalLogin } from './use-global-login';
 import { logError } from './utils/error-handler';
@@ -26,6 +27,9 @@ export function useConnectWallet(provider: EthProviders) {
  */
 export function useGetLogin(onError?: (error: Error) => void) {
   const queryClient = useQueryClient();
+  const sdk = getSDK();
+
+  sdk.api.auth.getCurrentUser();
 
   useGlobalLogin({
     onLogin: data => {

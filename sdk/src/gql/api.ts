@@ -1,4 +1,4 @@
-import type * as Types from '@akashaorg/typings/sdk/graphql-operation-types-new';
+import type * as Types from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 import type { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
@@ -528,6 +528,35 @@ export const GetInterestsDocument = /*#__PURE__*/ gql`
   }
 }
     `;
+export const GetInterestsStreamDocument = /*#__PURE__*/ gql`
+    query GetInterestsStream($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput) {
+  akashaInterestsStreamIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    sorting: $sorting
+    filters: $filters
+  ) {
+    edges {
+      node {
+        labelType
+        value
+        active
+        createdAt
+        id
+      }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
 export const GetInterestsByDidDocument = /*#__PURE__*/ gql`
     query GetInterestsByDid($id: ID!) {
   node(id: $id) {
@@ -950,6 +979,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetInterests(variables?: Types.GetInterestsQueryVariables, options?: C): Promise<Types.GetInterestsQuery> {
       return requester<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options) as Promise<Types.GetInterestsQuery>;
+    },
+    GetInterestsStream(variables?: Types.GetInterestsStreamQueryVariables, options?: C): Promise<Types.GetInterestsStreamQuery> {
+      return requester<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, variables, options) as Promise<Types.GetInterestsStreamQuery>;
     },
     GetInterestsByDid(variables: Types.GetInterestsByDidQueryVariables, options?: C): Promise<Types.GetInterestsByDidQuery> {
       return requester<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, variables, options) as Promise<Types.GetInterestsByDidQuery>;

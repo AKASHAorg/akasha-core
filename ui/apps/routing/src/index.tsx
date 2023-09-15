@@ -8,9 +8,9 @@ import {
   RootComponentProps,
   IntegrationRegistrationOptions,
   EventDataTypes,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/awf-sdk';
-import { APP_EVENTS } from '@akashaorg/typings/sdk';
+import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { RouteRepository } from './types';
 
 export class RoutingPlugin {

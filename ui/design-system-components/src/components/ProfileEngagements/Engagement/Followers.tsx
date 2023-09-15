@@ -6,17 +6,17 @@ import EmptyEntry from '../Entry/EmptyEntry';
 import { tw } from '@twind/core';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
-import { AkashaFollowers } from '@akashaorg/typings/ui';
+import { AkashaFollowers } from '@akashaorg/typings/lib/ui';
 import { EngagementProps } from '../types';
 
 export type FollowersProps = {
   followers: AkashaFollowers;
-  viewerIsOwner: boolean;
 } & EngagementProps;
 
 const Followers: React.FC<FollowersProps> = ({
+  followList,
+  loggedInAccountId,
   followers,
-  viewerIsOwner,
   profileAnchorLink,
   loadMore,
   onLoadMore,
@@ -62,15 +62,19 @@ const Followers: React.FC<FollowersProps> = ({
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            profileId={engagement?.did?.akashaProfile?.did?.id}
-            profileStreamId={engagement?.did?.akashaProfile?.id}
+            profileIds={{
+              id: engagement?.did?.akashaProfile?.id,
+              did: engagement?.did?.akashaProfile?.did?.id,
+            }}
             avatar={engagement?.did?.akashaProfile?.avatar}
             name={engagement?.did?.akashaProfile?.name}
-            followStreamId={engagement.id}
-            isFollowing={engagement.isFollowing}
+            followId={followList.get(engagement?.did?.akashaProfile?.id)?.id}
+            isFollowing={followList.get(engagement?.did?.akashaProfile?.id)?.isFollowing}
             getMediaUrl={getMediaUrl}
             renderFollowElement={
-              null /*@TODO: isFollowing check is giving wrong result, revisit when the check works as expected  */
+              loggedInAccountId !== engagement?.did?.akashaProfile?.did?.id
+                ? renderFollowElement
+                : null
             }
             onProfileClick={onProfileClick}
           />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
 
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Icon from '../Icon';
 import Text from '../Text';
@@ -68,7 +68,7 @@ const Toggle: React.FC<ToggleProps> = ({
         checked={checked}
         disabled={disabled}
         onChange={handleChange}
-        className={tw('sr-only peer relative')}
+        className={tw('sr-only peer relative invisible')} // adding 'invisible' to remove the small blue dot on Firefox
       />
       <div className={tw(knobStyle)} />
 

@@ -1,6 +1,6 @@
-import { APP_EVENTS } from '@akashaorg/typings/sdk';
-import { IntegrationInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { EventTypes, ExtensionMatcherFn, EventDataTypes } from '@akashaorg/typings/ui';
+import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { IntegrationInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
+import { EventTypes, ExtensionMatcherFn, EventDataTypes } from '@akashaorg/typings/lib/ui';
 import { filter, from, map, mergeMap, ReplaySubject } from 'rxjs';
 import { filterEvent } from './events';
 import { stringToRegExp } from './utils';
@@ -60,13 +60,48 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
       .subscribe({
         next: ({ loader, event }) => {
           // do not wait for unmount
-          loader.unload(event, parentConfig.name);
+          loader.unmount(event, parentConfig.name);
         },
         error: err => {
           // sometimes this error si swallowed..
           // TODO: force the error from the stream
           props.logger.error(
             `Error unloading extension from app ${parentConfig.name}: ${
+              err.message ?? err.toString()
+            }`,
+          );
+        },
+      });
+
+    uiEvents
+      .pipe(
+        filterEvent(EventTypes.ExtensionPointUpdate),
+        mergeMap((event: { event: EventTypes; data?: EventDataTypes }) =>
+          from(Object.entries(extConfig)).pipe(
+            filter(([mountPoint]) => stringToRegExp(mountPoint).test(event.data.name)),
+            map(([mountPoint, loader]) => ({
+              mountPoint,
+              loader,
+              event,
+            })),
+          ),
+        ),
+      )
+      .subscribe({
+        next: ({ loader, event }) => {
+          loader.update(
+            {
+              uiEvents,
+              extensionData: event.data,
+              domElement: document.getElementById(event.data.name),
+              ...props,
+            },
+            parentConfig.name,
+          );
+        },
+        error: err => {
+          props.logger.error(
+            `Error updating extension from app ${parentConfig.name}: ${
               err.message ?? err.toString()
             }`,
           );
@@ -92,7 +127,7 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
         ),
       )
       .subscribe({
-        next: ({ loader, event }) => loader.unload(event, parentConfig.name),
+        next: ({ loader, event }) => loader.unmount(event, parentConfig.name),
         error: err => {
           props.logger.error(
             `Error unloading extension from app ${parentConfig.name}: ${

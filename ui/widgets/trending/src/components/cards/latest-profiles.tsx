@@ -1,45 +1,40 @@
 import React from 'react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { FollowList, Profile, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 
 export type LatestProfilesProps = {
   // data
   profiles: Profile[];
-  followedProfiles?: string[];
+  followList?: FollowList;
   loggedUserDid?: string | null;
   isLoadingProfiles?: boolean;
+  isLoggedIn: boolean;
+  uiEvents: RootComponentProps['uiEvents'];
   // labels
   noProfilesLabel?: string;
   titleLabel: string;
-  followLabel?: string;
-  followersLabel?: string;
-  unfollowLabel?: string;
   // handlers
   onClickProfile: (did: string) => void;
-  handleFollowProfile: (did: string) => void;
-  handleUnfollowProfile: (did: string) => void;
 };
 
 export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
   const {
     onClickProfile,
-    handleFollowProfile,
-    handleUnfollowProfile,
     titleLabel,
     profiles,
+    followList,
+    isLoggedIn,
+    uiEvents,
     isLoadingProfiles,
     noProfilesLabel,
-    followLabel,
-    unfollowLabel,
-    followedProfiles,
     loggedUserDid,
   } = props;
 
@@ -71,9 +66,9 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
 
           <Stack spacing="gap-y-4">
             {profiles.length !== 0 &&
-              profiles.map((profile, index) => (
+              profiles.map(profile => (
                 <Stack
-                  key={index}
+                  key={profile.id}
                   direction="row"
                   align="center"
                   justify="between"
@@ -88,13 +83,15 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                   />
 
                   {loggedUserDid !== profile.did.id && (
-                    <DuplexButton
-                      inactiveLabel={followLabel}
-                      activeLabel={unfollowLabel}
-                      onClickInactive={() => handleFollowProfile(profile.did.id)}
-                      onClickActive={() => handleUnfollowProfile(profile.did.id)}
-                      active={followedProfiles?.includes(profile.did.id)}
-                      allowMinimization={false}
+                    <Extension
+                      name={`follow_${profile.id}`}
+                      uiEvents={uiEvents}
+                      data={{
+                        profileID: profile.id,
+                        isFollowing: followList?.get(profile.id)?.isFollowing,
+                        isLoggedIn,
+                        followId: followList?.get(profile.id)?.id,
+                      }}
                     />
                   )}
                 </Stack>

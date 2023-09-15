@@ -3,7 +3,7 @@ import TabList from '@akashaorg/design-system-core/lib/components/TabList';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { FOLLOWERS, FOLLOWING } from '../../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { NavigateToParams } from '@akashaorg/typings/ui';
+import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
