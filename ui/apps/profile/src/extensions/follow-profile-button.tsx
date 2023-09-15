@@ -7,8 +7,7 @@ import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 const App = (props: RootExtensionProps) => {
-  const { profileID, invalidateFollowList, isLoggedIn, isFollowing, followId } =
-    props.extensionData;
+  const { profileID, isLoggedIn, isFollowing, followId } = props.extensionData;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
@@ -20,7 +19,6 @@ const App = (props: RootExtensionProps) => {
       isLoggedIn={isLoggedIn}
       isFollowing={!!isFollowing}
       followId={followId}
-      invalidateFollowList={!!invalidateFollowList}
       showLoginModal={showLoginModal}
     />
   );

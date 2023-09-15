@@ -17,21 +17,12 @@ export type FollowProfileButtonProps = {
   isLoggedIn: boolean;
   isFollowing: boolean;
   followId: string | null;
-  invalidateFollowList?: boolean;
   iconOnly?: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
-  const {
-    profileID,
-    invalidateFollowList,
-    isLoggedIn,
-    isFollowing,
-    followId,
-    iconOnly,
-    showLoginModal,
-  } = props;
+  const { profileID, isLoggedIn, isFollowing, followId, iconOnly, showLoginModal } = props;
 
   const { t } = useTranslation('app-profile');
   const [following, setFollowing] = useState(isFollowing);
@@ -46,7 +37,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     onSuccess: async ({ createAkashaFollow }) => {
       setFollowing(createAkashaFollow.document.isFollowing);
       await queryClient.invalidateQueries(useGetFollowDocumentsQuery.getKey());
-      if (invalidateFollowList) {
+      if (createAkashaFollow.document.isFollowing) {
         await queryClient.invalidateQueries(
           useInfiniteGetFollowersListByDidQuery.getKey({
             id: createAkashaFollow.document.did.id,
@@ -71,7 +62,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     onSuccess: async ({ updateAkashaFollow }) => {
       setFollowing(updateAkashaFollow.document.isFollowing);
       await queryClient.invalidateQueries(useGetFollowDocumentsQuery.getKey());
-      if (invalidateFollowList) {
+      if (updateAkashaFollow.document.isFollowing) {
         await queryClient.invalidateQueries(
           useInfiniteGetFollowersListByDidQuery.getKey({
             id: updateAkashaFollow.document.did.id,

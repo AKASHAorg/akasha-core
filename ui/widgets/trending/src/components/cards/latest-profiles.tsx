@@ -91,7 +91,6 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                         isFollowing: followList?.get(profile.id)?.isFollowing,
                         isLoggedIn,
                         followId: followList?.get(profile.id)?.id,
-                        invalidateFollowList: true,
                       }}
                     />
                   )}
