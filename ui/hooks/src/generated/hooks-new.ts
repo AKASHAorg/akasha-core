@@ -3,9 +3,11 @@ import type * as Types from '@akashaorg/typings/lib/sdk/graphql-operation-types-
 import { useQuery, useInfiniteQuery, useMutation, type UseQueryOptions, type UseInfiniteQueryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-const sdk = getSDK();
-const { optionName } = getSDK().services.gql.mutationNotificationConfig;
+
 export function fetcher<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
+  const sdk = getSDK();
+  const { optionName } = sdk.services.gql.mutationNotificationConfig;
+
   return async (): Promise<TData> => {
 
     const call = sdk.services.ceramic.getComposeClient().executeQuery(query, variables);

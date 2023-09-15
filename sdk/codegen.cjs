@@ -54,9 +54,11 @@ const config = {
             content:
               `
 import getSDK from '@akashaorg/awf-sdk';
-const sdk = getSDK();
-const { optionName } = getSDK().services.gql.mutationNotificationConfig;
+
 export function fetcher<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
+  const sdk = getSDK();
+  const { optionName } = sdk.services.gql.mutationNotificationConfig;
+
   return async (): Promise<TData> => {
 
     const call = sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
@@ -89,7 +91,9 @@ export function fetcher<TData, TVariables extends Record<string, unknown>>(query
         exposeMutationKeys: true,
         exposeFetcher: true,
         fetcher: {
-          func: 'fetcher'
+          func: 'fetcher',
+          isReactHook: false,
+
         }
       },
     },
