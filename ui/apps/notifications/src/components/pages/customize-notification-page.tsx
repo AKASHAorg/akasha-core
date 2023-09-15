@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { tw } from '@twind/core';
 import { useTranslation } from 'react-i18next';
 
 import { EventTypes } from '@akashaorg/typings/lib/ui';
@@ -11,7 +10,6 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
@@ -28,11 +26,11 @@ export type CustomizeNotificationPageProps = {
 
 const Title = ({ title }: { title: string }): JSX.Element => {
   return (
-    <div className={tw('flex flex-row items-center')}>
+    <Stack direction="row" justifyItems="center">
       <Text variant="h6" align="center">
         {title}
       </Text>
-    </div>
+    </Stack>
   );
 };
 
@@ -53,54 +51,34 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         selected: true,
       },
       {
-        label: t('Replies to my post'),
-        value: 'Replies to my post',
+        label: t('Reflects on my Beam'),
+        value: 'Reflects on my Beam',
         selected: true,
       },
       {
-        label: t('Mentions me in a post / reply'),
-        value: 'Mentions me in a post / reply',
+        label: t('Mentions me in a Beam / Reflect'),
+        value: 'Mentions me in a Beam / Reflect',
         selected: true,
       },
       {
-        label: t('Someone sharing my post'),
-        value: 'Someone sharing my post',
+        label: t('Someone sharing my Beam'),
+        value: 'Someone sharing my Beam',
         selected: true,
       },
       {
-        label: t('When someone I am following posts new content'),
-        value: 'When someone I am following posts new content',
+        label: t('When someone I am following Beams new content'),
+        value: 'When someone I am following Beams new content',
         selected: true,
       },
       {
-        label: t('When there’s new content in topics I’m Subscribed to'),
-        value: 'When there’s new content in topics I’m Subscribed to',
+        label: t('When there’s new content in topics I’m subscribed to'),
+        value: 'When there’s new content in topics I’m subscribed to',
         selected: true,
       },
     ],
     [t],
   );
 
-  const articleAppCheckboxes = useMemo(
-    () => [
-      {
-        label: t('Replies to my Article'),
-        value: 'Replies to my Article',
-        selected: true,
-      },
-      {
-        label: t('Quotes me in an Article.'),
-        value: 'Quotes me in an Article',
-        selected: true,
-      },
-      {
-        label: t('Someone shares my Article'),
-        value: 'Someone shares my Article',
-        selected: true,
-      },
-    ],
-    [t],
-  );
   const moderationAppCheckboxes = useMemo(
     () => [
       {
@@ -124,25 +102,11 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   const [allStates, setAllStates] = useState({
     socialapp: socialAppCheckboxes.map(e => e.selected),
-    articleApp: articleAppCheckboxes.map(e => e.selected),
     moderationApp: moderationAppCheckboxes.map(e => e.selected),
     integrationCenter: integrationCenterCheckboxes.map(e => e.selected),
   });
 
-  // for displaying feedback messages
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState('success');
-
-  const [showFeedback, setShowFeedback] = useState(false);
-
-  if (showFeedback) {
-    setTimeout(() => {
-      setShowFeedback(false);
-      setMessage('');
-    }, 6000);
-  }
-
-  const [snoozed, setSnoozed] = useState(false);
+  const [snoozed, setSnoozed] = React.useState(false);
 
   // check if snooze notification option has already been set
   useEffect(() => {
@@ -170,8 +134,6 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       switch (section) {
         case 'socialapp':
           return allStates.socialapp;
-        case 'articleApp':
-          return allStates.articleApp;
         case 'moderationApp':
           return allStates.moderationApp;
         case 'integrationCenter':
@@ -194,7 +156,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       <div>
         {checkboxArray.map(({ label, value }, index) => {
           return (
-            <div className={tw('')} key={index}>
+            <div key={index}>
               <Checkbox
                 label={label}
                 value={value}
@@ -224,7 +186,6 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       setAllStates({
         ...allStates,
         socialapp: Array(socialAppCheckboxes.length).fill(true),
-        articleApp: Array(articleAppCheckboxes.length).fill(true),
         moderationApp: Array(moderationAppCheckboxes.length).fill(true),
         integrationCenter: Array(integrationCenterCheckboxes.length).fill(true),
       });
@@ -239,7 +200,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       getNavigationUrl: () =>
         initial
           ? routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]
-          : `${routes[SHOW_NOTIFICATIONS_PAGE]}/?message=${message}&type=success`,
+          : `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
     });
   };
 
@@ -258,7 +219,13 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
     try {
       if (window.localStorage) {
         localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
-        setMessage('Notification settings updated successfully');
+        _uiEvents.current.next({
+          event: EventTypes.ShowNotification,
+          data: {
+            name: 'success',
+            message: 'Notification settings updated successfully',
+          },
+        });
 
         if (snoozed && !localStorage.getItem('notifications-snoozed')) {
           localStorage.setItem('notifications-snoozed', JSON.stringify(true));
@@ -267,7 +234,13 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           _uiEvents.current.next({
             event: EventTypes.SnoozeNotifications,
           });
-          setMessage('You have snoozed your notifications successfully');
+          _uiEvents.current.next({
+            event: EventTypes.ShowNotification,
+            data: {
+              name: 'success',
+              message: 'You have snoozed your notifications successfully',
+            },
+          });
         }
 
         if (!snoozed && localStorage.getItem('notifications-snoozed')) {
@@ -277,7 +250,14 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           _uiEvents.current.next({
             event: EventTypes.UnsnoozeNotifications,
           });
-          setMessage('You have unsnoozed your notifications successfully');
+
+          _uiEvents.current.next({
+            event: EventTypes.ShowNotification,
+            data: {
+              name: 'success',
+              message: 'You have unsnoozed your notifications successfully',
+            },
+          });
         }
       }
 
@@ -288,10 +268,14 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       // navigate to final step
       initial && goToNextStep();
     } catch (error) {
-      setMessage('Something went wrong. Retry');
-      setMessageType('error');
+      _uiEvents.current.next({
+        event: EventTypes.ShowNotification,
+        data: {
+          name: 'error',
+          message: 'Something went wrong. Retry',
+        },
+      });
     }
-    setShowFeedback(true);
   };
 
   if (!isLoggedIn) {
@@ -303,83 +287,93 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   return (
     <>
-      <Card elevation={'1'} radius={16} padding={'p-2'} customStyle="h-full md:h-min space-y-4">
+      <Card
+        elevation={'1'}
+        radius={16}
+        padding={'py-2,px-0'}
+        customStyle="h-full md:h-min space-y-4"
+      >
         <Text variant="h5" align="center">
           {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
-        {!initial && (
-          <>
-            <Divider customStyle="my-2" />
-            <Stack justify="between">
-              <Text variant="footnotes2">
-                <>{t('Snooze Notifications')}</>
-              </Text>
-              <Toggle
-                iconChecked="BellSnoozeIcon"
-                iconUnchecked="BellAlertIcon"
-                checked={snoozed}
-                onChange={snoozeChangeHandler}
-              />
-            </Stack>
-            <Divider customStyle="my-2" />
-          </>
-        )}
-        {initial ? (
-          <Text variant="footnotes2" color={{ dark: 'grey6', light: 'grey4' }}>
-            <>
-              {t(
-                'Choose the notifications that you would like to receive from other applications. Remember, you can change this anytime from the notifications settings.',
-              )}
-            </>
-          </Text>
-        ) : (
-          <Text variant="h6">
-            <>{t('Receiving Notifications')}</>
-          </Text>
-        )}
-        <Checkbox
-          id="receive-all-notifications-checkbox"
-          label={t('I want to receive all types of notifications')}
-          value="I want to receive all types of notifications"
-          name="check-all"
-          isSelected={selected}
-          handleChange={() => {
-            setSelected(!selected);
-            !initial && setIsChanged(true);
-          }}
-          customStyle="ml-2"
-        />
         <Divider customStyle="my-2" />
-        <div className={tw('min-h-[80%]')}>
+        <Stack direction="column" customStyle="mx-4">
+          {!initial && (
+            <>
+              <Stack justify="between" direction="row">
+                <Text variant="footnotes2">
+                  <>{t('Snooze Notifications')}</>
+                </Text>
+                <Toggle
+                  iconChecked="BellSnoozeIcon"
+                  iconUnchecked="BellAlertIcon"
+                  checked={snoozed}
+                  onChange={snoozeChangeHandler}
+                />
+              </Stack>
+            </>
+          )}
+        </Stack>
+        <Divider customStyle="my-2" />
+        <Stack direction="column" customStyle="mx-4">
+          {initial ? (
+            <Text variant="footnotes2" weight="normal" color={{ dark: 'grey6', light: 'grey4' }}>
+              <>
+                {t(
+                  'Choose the notifications that you would like to receive from other applications. Remember, you can change this anytime from the notifications settings.',
+                )}
+              </>
+            </Text>
+          ) : (
+            <Text variant="h6">
+              <>{t('Receiving Notifications')}</>
+            </Text>
+          )}
+          <Checkbox
+            id="receive-all-notifications-checkbox"
+            label={t('I want to receive all types of notifications')}
+            value="I want to receive all types of notifications"
+            name="check-all"
+            isSelected={selected}
+            handleChange={() => {
+              setSelected(!selected);
+              !initial && setIsChanged(true);
+            }}
+            customStyle="ml-2 my-4"
+          />
+        </Stack>
+        <Divider customStyle="my-2" />
+        <Stack direction="column" customStyle="min-h-[80%]">
           <Accordion
-            titleNode={<Title title={t('Social App')} />}
+            titleNode={<Title title={t('Antenna')} />}
             contentNode={<Content checkboxArray={socialAppCheckboxes} section={'socialapp'} />}
             open={initial}
+            customStyle="mx-4"
+            contentStyle="mx-6"
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={<Title title={t('Article App')} />}
-            contentNode={<Content checkboxArray={articleAppCheckboxes} section={'articleApp'} />}
-            open={initial}
-          />
-          <Divider customStyle="my-2" />
-          <Accordion
-            titleNode={<Title title={t('Vibe App')} />}
+            titleNode={<Title title={t('Vibes')} />}
             contentNode={
               <Content checkboxArray={moderationAppCheckboxes} section={'moderationApp'} />
             }
             open={initial}
+            customStyle="mx-4"
+            contentStyle="mx-6"
           />
           <Divider customStyle="my-2" />
           <Accordion
-            titleNode={<Title title={t('AKASHAVerse')} />}
+            titleNode={<Title title={t('Extensions')} />}
             contentNode={
               <Content checkboxArray={integrationCenterCheckboxes} section={'integrationCenter'} />
             }
             open={initial}
+            customStyle="mx-4"
+            contentStyle="mx-6"
           />
-        </div>
-        <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2')}>
+          <Divider customStyle="my-2" />
+        </Stack>
+        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-16">
           {initial ? (
             <>
               <Button
@@ -406,17 +400,8 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
               />
             </>
           )}
-        </div>
+        </Stack>
       </Card>
-      {showFeedback && (
-        <div className={tw('-mt-12 md:mt-4 z-50 w-full')}>
-          <Snackbar
-            title={message}
-            type={messageType as SnackBarType}
-            handleDismiss={() => setShowFeedback(false)}
-          />
-        </div>
-      )}
     </>
   );
 };

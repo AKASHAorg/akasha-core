@@ -30,7 +30,12 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
   }]`;
 
   return (
-    <Card elevation={noBorder ? 'none' : '1'} radius={20} padding={'p-4'}>
+    <Card
+      elevation={noBorder ? 'none' : '1'}
+      radius={20}
+      padding={'p-4'}
+      customStyle="dark:bg-transparent"
+    >
       {image ? (
         <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
       ) : (

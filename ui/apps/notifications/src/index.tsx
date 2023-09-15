@@ -71,6 +71,11 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     logo: { type: LogoTypeSource.ICON, value: 'BellIcon' },
     subRoutes: [],
   },
+  extends: (matcher, loader) => {
+    matcher({
+      'snackbar-notif-slot': loader(() => import('./extensions/snack-bar-notification')),
+    });
+  },
 });
 
 export const getPlugin = async (props: RootComponentProps) => {

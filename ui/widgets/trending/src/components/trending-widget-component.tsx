@@ -10,7 +10,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import {
   useGetProfilesQuery,
-  useGetInterestsQuery,
+  useGetInterestsStreamQuery,
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
   useGetFollowDocumentsQuery,
@@ -38,11 +38,11 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     { last: 4 },
     { select: result => result?.akashaProfileIndex?.edges.map(profile => profile.node) },
   );
-  const latestTopicsReq = useGetInterestsQuery(
+  const latestTopicsReq = useGetInterestsStreamQuery(
     { last: 4 },
     {
       select: result =>
-        result?.akashaProfileInterestsIndex?.edges.flatMap(interest => interest.node?.topics),
+        result?.akashaInterestsStreamIndex?.edges.flatMap(interest => interest.node),
     },
   );
   const tagSubscriptionsReq = useGetInterestsByDidQuery(

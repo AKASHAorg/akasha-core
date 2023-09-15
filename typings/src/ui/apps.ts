@@ -40,6 +40,10 @@ export type Extensions = { [key: string]: string } & {
    * @warning: In the future, this will be deprecated
    */
   focusedPluginSlotId?: string;
+  /**
+   * snackbar notification slot
+   */
+  snackbarNotifSlotId?: string;
 };
 
 export type AppName = string;
