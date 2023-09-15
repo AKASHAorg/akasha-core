@@ -164,6 +164,7 @@ const FeedPage: React.FC<FeedPageProps> = props => {
         onRebeam={handleRebeam}
         trackEvent={analyticsActions.trackEvent}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
+        newItemsPublishedLabel={t('New Beams published recently')}
       />
     </Stack>
   );

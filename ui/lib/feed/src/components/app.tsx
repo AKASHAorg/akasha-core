@@ -30,6 +30,7 @@ export type FeedWidgetCommonProps = {
   accentBorderTop?: boolean;
   trackEvent?: BeamFeedProps['trackEvent'];
   scrollerOptions?: { overscan: number };
+  newItemsPublishedLabel: string;
 };
 
 const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {

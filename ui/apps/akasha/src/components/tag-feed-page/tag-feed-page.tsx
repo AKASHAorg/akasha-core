@@ -118,6 +118,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
         itemSpacing={8}
         onRebeam={handleRebeam}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
+        newItemsPublishedLabel={t('New Beams published recently')}
       />
     </Stack>
   );

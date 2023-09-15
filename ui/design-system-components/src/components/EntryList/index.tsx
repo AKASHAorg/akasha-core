@@ -8,6 +8,7 @@ import ScrollTopButton from '@akashaorg/design-system-core/lib/components/Scroll
 import { defaultRangeExtractor, useWindowVirtualizer, VirtualItem } from '@tanstack/react-virtual';
 import { useScrollTop } from './use-scroll-top';
 import { mergeWithCache } from '../../utils/virtual-list-utils';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export type CardListProps<T> = {
   items: VirtualItem[];
@@ -38,12 +39,11 @@ export type EntryListProps<T> = {
   children?: (props: CardListProps<T>) => React.ReactElement[];
   itemSpacing?: number;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';
-  hasNextPage?: boolean;
   languageDirection?: 'ltr' | 'rtl';
   isFetchingNextPage?: boolean;
   isFetchingPreviousPage?: boolean;
   onScrollStateChange?: (scrollerState: ScrollerOnChangeState<T>) => void;
-  onScrollStateReset?: () => void;
+  onScrollStateReset?: (hardReset?: boolean) => void;
   initialScrollState?: ScrollerState & { isFetched: boolean };
   getItemKey?: (index: number, entries: (T | VirtualItem)[]) => string;
   newItemsCount?: number;
@@ -51,6 +51,7 @@ export type EntryListProps<T> = {
   onFetchNextPage: (lastCursor: string) => void;
   onFetchPreviousPage: (firstCursor: string, force?: boolean) => void;
   onScrollStateSave: (scrollState: ScrollerOnChangeState<T>) => void;
+  newItemsPublishedLabel: string;
 };
 
 function EntryList<T>(props: EntryListProps<T>) {
@@ -58,7 +59,6 @@ function EntryList<T>(props: EntryListProps<T>) {
     pages = [],
     itemSpacing = 0,
     languageDirection = 'ltr',
-    hasNextPage,
     isFetchingNextPage,
     isFetchingPreviousPage,
     requestStatus,
@@ -71,10 +71,13 @@ function EntryList<T>(props: EntryListProps<T>) {
     onFetchPreviousPage,
     onFetchNextPage,
     onScrollStateSave,
+    newItemsPublishedLabel,
   } = props;
 
   const rootElementRef = React.useRef<HTMLDivElement>();
   const isScrollRestored = React.useRef(false);
+  const [resetList, setResetList] = React.useReducer();
+
   // @TODO: maybe pass the topbar slotId here?
   const topbarHeight = document.getElementById('topbar-slot')?.offsetParent?.clientHeight || 0;
 
@@ -86,32 +89,37 @@ function EntryList<T>(props: EntryListProps<T>) {
     }
   }, [initialScrollState]);
 
+  const cachedScrollState = React.useRef<ScrollerState & { isFetched: boolean }>();
+  React.useLayoutEffect(() => {
+    if (initialScrollState.isFetched) {
+      cachedScrollState.current = initialScrollState;
+    }
+  }, [initialScrollState]);
+
+  const measurementsCache = React.useMemo(() => {
+    if (initialScrollState.isFetched) {
+      return initialScrollState.measurementsCache;
+    }
+    return cachedScrollState.current?.measurementsCache || [];
+  }, [initialScrollState]);
+
   // merge pages and measurementsCache
   const pageItems: (T & { index: number; key: string })[] = React.useMemo(() => {
-    if (initialScrollStateRef.current && pages.length) {
-      return mergeWithCache(initialScrollStateRef.current.measurementsCache, pages);
+    if (pages.length) {
+      return mergeWithCache(measurementsCache, pages);
     }
-    return [];
-  }, [pages]);
+    return measurementsCache;
+  }, [measurementsCache, pages]);
 
   const virtualizer = useWindowVirtualizer({
     count: pageItems.length,
     scrollPaddingEnd: 100,
-    estimateSize: () => 240,
+    estimateSize: () => 150,
     scrollMargin: rootElementRef.current?.offsetTop || 0,
     initialMeasurementsCache: initialScrollStateRef.current?.measurementsCache || [],
     scrollingDelay: 250,
     overscan: scrollerOptions.overscan,
     getItemKey: index => getItemKey(index, pageItems),
-    rangeExtractor: React.useCallback(
-      range => {
-        if (!initialScrollState.isFetched) {
-          return [];
-        }
-        return defaultRangeExtractor(range);
-      },
-      [initialScrollState],
-    ),
   });
 
   const items = virtualizer.getVirtualItems();
@@ -126,6 +134,8 @@ function EntryList<T>(props: EntryListProps<T>) {
     return [0, 0];
   }, [items, virtualizer]);
 
+  const prevPopulatedItem = React.useRef<T & { index: number; key: string }>();
+
   const [firstPopulatedItem, lastPopulatedItem] = React.useMemo(() => {
     if (pages.length) {
       const firstItem = pageItems.find(it => it.key === pages[0]['cursor']);
@@ -136,6 +146,15 @@ function EntryList<T>(props: EntryListProps<T>) {
   }, [pageItems, pages]);
 
   React.useEffect(() => {
+    if (!prevPopulatedItem.current && firstPopulatedItem) {
+      prevPopulatedItem.current = firstPopulatedItem;
+    }
+  }, [firstPopulatedItem]);
+
+  React.useEffect(() => {
+    if (!firstPopulatedItem) {
+      return;
+    }
     if (items[0] && items[0].index < firstPopulatedItem.index && !isScrollRestored.current) {
       virtualizer.scrollToIndex(firstPopulatedItem.index, { align: 'start' });
       const firstDomEl = rootElementRef.current.querySelector(
@@ -143,7 +162,7 @@ function EntryList<T>(props: EntryListProps<T>) {
       );
       if (firstDomEl) {
         const rect = firstDomEl.getClientRects().item(0);
-        if (rect.top <= topbarHeight) {
+        if (Math.abs(rect.top - topbarHeight) < topbarHeight) {
           isScrollRestored.current = true;
         }
       }
@@ -157,7 +176,9 @@ function EntryList<T>(props: EntryListProps<T>) {
   React.useLayoutEffect(() => {
     if (virtualizer.isScrolling) {
       const { startIndex, endIndex } = virtualizer.calculateRange();
-
+      if (!firstPopulatedItem) {
+        return;
+      }
       if (
         startIndex < firstPopulatedItem.index &&
         prevRange.current.startIndex === startIndex &&
@@ -201,7 +222,7 @@ function EntryList<T>(props: EntryListProps<T>) {
   // next page loading logic
   React.useLayoutEffect(() => {
     const lastItem = items[items.length - 1];
-    if (!lastItem) {
+    if (!lastItem || !lastPopulatedItem) {
       return;
     }
     if (lastItem.index >= lastPopulatedItem.index) {
@@ -216,12 +237,14 @@ function EntryList<T>(props: EntryListProps<T>) {
       !isFetchingNextPage &&
       virtualizer.scrollDirection === 'backward' &&
       isScrollRestored.current &&
-      items[0].index + 1 < firstPopulatedItem.index
+      items[0].index < firstPopulatedItem?.index &&
+      firstPopulatedItem?.index > 0
     ) {
       return onFetchPreviousPage(firstPopulatedItem.key, true);
     }
   }, [
     firstPopulatedItem,
+    isFetchingNextPage,
     items,
     onFetchPreviousPage,
     paddingTop,
@@ -230,13 +253,18 @@ function EntryList<T>(props: EntryListProps<T>) {
     virtualizer.scrollDirection,
   ]);
 
-  const handleScrollToTop = React.useCallback(() => {
-    const [offset] = virtualizer.getOffsetForIndex(0, 'start');
-    virtualizer.scrollToOffset(offset - topbarHeight - itemSpacing, { align: 'start' });
-    if (onScrollStateReset) {
-      onScrollStateReset();
-    }
-  }, [itemSpacing, onScrollStateReset, topbarHeight, virtualizer]);
+  const handleScrollToTop = React.useCallback(
+    (reset?: boolean) => () => {
+      const [offset] = virtualizer.getOffsetForIndex(0, 'start');
+      virtualizer.scrollToOffset(offset - topbarHeight - itemSpacing, { align: 'start' });
+      if (onScrollStateReset) {
+        onScrollStateReset(reset);
+      }
+      cachedScrollState.current = null;
+      initialScrollStateRef.current = null;
+    },
+    [itemSpacing, onScrollStateReset, topbarHeight, virtualizer],
+  );
 
   return (
     <div
@@ -245,12 +273,20 @@ function EntryList<T>(props: EntryListProps<T>) {
         paddingTop,
         paddingBottom,
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: itemSpacing,
       }}
     >
       {newItemsCount > 0 && (
-        <div style={{ position: 'absolute', top: 0, left: 0 }}>
-          <span>{newItemsCount} New Items</span>
-        </div>
+        <Button
+          customStyle={`sticky top-[${
+            topbarHeight + 8
+          }px] bg-grey5 hover:(bg-grey4) p-4 max-w-fit z-10 self-center rounded-md`}
+          variant="text"
+          label={newItemsPublishedLabel}
+          onClick={handleScrollToTop(true)}
+        />
       )}
       {requestStatus === 'loading' &&
         isFetchingPreviousPage &&
@@ -267,7 +303,7 @@ function EntryList<T>(props: EntryListProps<T>) {
         itemSpacing,
       })}
       <ScrollTopWrapper placement={scrollTopButtonPlacement}>
-        <ScrollTopButton hide={isHidden} onClick={handleScrollToTop} />
+        <ScrollTopButton hide={isHidden} onClick={handleScrollToTop()} />
       </ScrollTopWrapper>
     </div>
   );

@@ -85,6 +85,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
           itemSpacing={8}
           onRebeam={handleRebeam}
           onNavigate={useEntryNavigation(getRoutingPlugin()?.routing?.navigateTo)}
+          newItemsPublishedLabel={t('New Beams published recently')}
         />
       </>
     </Stack>

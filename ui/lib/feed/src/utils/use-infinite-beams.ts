@@ -1,6 +1,9 @@
 import * as React from 'react';
 import type { ScrollerState } from '@akashaorg/design-system-components/lib/components/EntryList';
-import { useInfiniteGetBeamsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import {
+  useGetBeamsQuery,
+  useInfiniteGetBeamsQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { SortOrder } from '@akashaorg/typings/sdk/graphql-types-new';
 import { useGetScrollState, useRemoveScrollState, useSaveScrollState } from './use-scroll-state';
 import { ScrollStateDBWrapper } from './scroll-state-db';
@@ -61,9 +64,8 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
     }
   }, [initialScrollState.isFetched, getScrollState]);
 
-  //get the items newer that the first seed item
-  const newBeamReq = useInfiniteGetBeamsQuery(
-    'last',
+  //get the items newer that the first seen item
+  const newBeamReq = useGetBeamsQuery(
     {
       last: 2,
       sorting: { createdAt: SortOrder.Desc },
@@ -117,11 +119,6 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
     return beamsReq.status;
   }, [beamsReq, newBeamReq]);
 
-  const handleRemoveScrollState = React.useCallback(() => {
-    // remove scroll state
-    removeScrollState.mutate();
-  }, [removeScrollState]);
-
   const handleScrollStateSave = (scrollerOnChangeState: ScrollerOnChangeState<unknown>) => {
     const { allEntries, ...scrollState } = scrollerOnChangeState;
 
@@ -133,8 +130,8 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
   };
 
   const newItemsCount = React.useMemo(() => {
-    if (newBeamReq.data && hasOwn(newBeamReq.data, 'pages')) {
-      return newBeamReq.data.pages.flatMap(p => p.akashaBeamIndex.edges).length;
+    if (newBeamReq.data && hasOwn(newBeamReq.data, 'akashaBeamIndex')) {
+      return newBeamReq.data.akashaBeamIndex.edges.length;
     }
     return 0;
   }, [newBeamReq.data]);
@@ -185,12 +182,42 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
     },
     [beamsReq, onFetchError, options.scrollerOptions.overscan],
   );
-
+  const handleResetScrollState = React.useCallback(
+    async (remove?: boolean) => {
+      if (remove) {
+        try {
+          await removeScrollState.mutateAsync();
+          beamsReq.remove();
+          await getScrollState.refetch();
+          await newBeamReq.refetch();
+          return await beamsReq.refetch();
+        } catch (err) {
+          return console.error('cannot reset and remove scroll state', err);
+        }
+      }
+      try {
+        const currentScrollState = await getScrollState.refetch();
+        const updatedScrollState = await saveScrollState.mutateAsync({
+          ...currentScrollState.data,
+          visibleCursorRange: {
+            ...currentScrollState.data.visibleCursorRange,
+            startCursor: currentScrollState.data.startItemCursor,
+          },
+        });
+        await getScrollState.refetch();
+        beamsReq.remove();
+        tryFetchNextPage(updatedScrollState.startItemCursor);
+      } catch (err) {
+        console.error('Cannot reset scroll state', err);
+      }
+    },
+    [beamsReq, getScrollState, newBeamReq, removeScrollState, saveScrollState, tryFetchNextPage],
+  );
   return {
     pages: beamsReq.data?.pages || [],
     status: requestStatus,
     newItemsCount,
-    onScrollStateRemove: handleRemoveScrollState,
+    onScrollStateReset: handleResetScrollState,
     onScrollStateSave: handleScrollStateSave,
     isFetchingNextPage: beamsReq.isFetchingNextPage,
     isFetchingPreviousPage: beamsReq.isFetchingPreviousPage,

@@ -132,6 +132,7 @@ const BaseEntryPage: React.FC<BaseEntryProps> = props => {
         itemSpacing={8}
         trackEvent={analyticsActions.trackEvent}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
+        newItemsPublishedLabel={t('New Beams published recently')}
       />
     </Card>
   );

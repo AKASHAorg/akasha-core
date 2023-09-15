@@ -115,6 +115,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
         itemSpacing={8}
         accentBorderTop={true}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
+        newItemsPublishedLabel={t('New Beams published recently')}
       />
 
       {userHasSubscriptions && !postsReq.isFetching && (

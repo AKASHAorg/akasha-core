@@ -55,6 +55,7 @@ export type BeamFeedProps = Omit<
   db: ScrollStateDBWrapper;
   scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
   queryKey: string;
+  newItemsPublishedLabel: string;
 };
 
 const BeamFeed: React.FC<BeamFeedProps> = props => {
@@ -67,8 +68,8 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     db,
     scrollerOptions = { overscan: 5 },
     queryKey,
+    newItemsPublishedLabel,
   } = props;
-
   const beamsReq = useInfiniteBeams({
     db,
     scrollerOptions,
@@ -91,7 +92,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
         languageDirection={i18n?.dir() || 'ltr'}
         onScrollStateSave={beamsReq.onScrollStateSave}
         initialScrollState={beamsReq.initialScrollState}
-        onScrollStateReset={beamsReq.onScrollStateRemove}
+        onScrollStateReset={beamsReq.onScrollStateReset}
         getItemKey={(idx, items) => {
           if (!items || !items.length) return null;
           return hasOwn(items[idx], 'key') ? items[idx]['key'] : items[idx]['cursor'];
@@ -99,6 +100,9 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
         scrollerOptions={scrollerOptions}
         onFetchNextPage={beamsReq.tryFetchNextPage}
         onFetchPreviousPage={beamsReq.tryFetchPreviousPage}
+        newItemsCount={beamsReq.newItemsCount}
+        isFetchingPreviousPage={beamsReq.isFetchingPreviousPage}
+        newItemsPublishedLabel={newItemsPublishedLabel}
       >
         {cardProps => {
           const { items, allEntries, measureElementRef } = cardProps;
@@ -118,11 +122,10 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
             }
             return (
               <div
-                key={`${index}_${key}`}
+                key={key}
                 data-index={index}
                 ref={measureElementRef}
-                style={{ paddingBottom: itemSpacing }}
-                data-cursor={entryData?.cursor || ''}
+                data-cursor={entryData?.cursor || entryData?.['key'] || ''}
               >
                 {!entryData.node && (
                   <div>

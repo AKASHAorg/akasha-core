@@ -55,12 +55,12 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     isFetchingNextPage,
     pages,
     itemSpacing = 8,
-    hasNextPage,
     i18n,
     initialScrollState,
     onScrollStateReset,
     onScrollStateChange,
     scrollerOptions,
+    newItemsPublishedLabel,
   } = props;
 
   return (
@@ -69,7 +69,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       isFetchingNextPage={isFetchingNextPage}
       pages={pages}
       itemSpacing={itemSpacing}
-      hasNextPage={hasNextPage}
       languageDirection={i18n?.dir() || 'ltr'}
       initialScrollState={initialScrollState}
       onScrollStateReset={onScrollStateReset}
@@ -85,6 +84,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       onScrollStateSave={() => {
         //@TODO:
       }}
+      newItemsPublishedLabel={newItemsPublishedLabel}
     >
       {cardProps => {
         const { items, allEntries, measureElementRef } = cardProps;
