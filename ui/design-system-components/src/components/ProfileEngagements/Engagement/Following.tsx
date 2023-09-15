@@ -61,13 +61,12 @@ const Following: React.FC<FollowingProps> = ({
       {following.map((engagement, index, engagements) => (
         <Stack
           direction="row"
-          key={`${engagement?.profile.id}-${index}`}
+          key={`${engagement?.id}-${index}`}
           customStyle={index + 1 !== engagements.length ? borderBottomStyle : ''}
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            accountId={engagement?.profile?.did.id}
-            profileId={engagement?.profile?.id}
+            profileIds={{ id: engagement?.profile?.id, did: engagement?.profile?.did.id }}
             avatar={engagement?.profile?.avatar}
             name={engagement?.profile?.name}
             followId={followList.get(engagement?.profile?.id)?.id}

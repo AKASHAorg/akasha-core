@@ -18,6 +18,7 @@ export enum EventTypes {
   ExtensionPointMount = 'extension-point-mount',
   ExtensionPointMountRequest = 'extension-point-mount-request',
   ExtensionPointUnmount = 'extension-point-unmount',
+  ExtensionPointUpdate = 'extension-point-update',
   ExtensionPointUnmountRequest = 'extension-point-unmount-request',
   ModalRequest = 'modal-mount-request',
   ModalMount = 'modal-mount',
@@ -67,6 +68,10 @@ export const EntityTypesMap = {
 
 export type EventDataTypes = {
   name: string;
+  //profile stream id
+  profileID?: string;
+  isLoggedIn?: boolean;
+  followId?: string;
   version?: string;
   itemId?: string;
   commentId?: string;

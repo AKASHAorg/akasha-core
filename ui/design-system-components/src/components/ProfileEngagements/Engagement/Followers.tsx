@@ -62,8 +62,10 @@ const Followers: React.FC<FollowersProps> = ({
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            accountId={engagement?.did?.akashaProfile?.did?.id}
-            profileId={engagement?.did?.akashaProfile?.id}
+            profileIds={{
+              id: engagement?.did?.akashaProfile?.id,
+              did: engagement?.did?.akashaProfile?.did?.id,
+            }}
             avatar={engagement?.did?.akashaProfile?.avatar}
             name={engagement?.did?.akashaProfile?.name}
             followId={followList.get(engagement?.did?.akashaProfile?.id)?.id}

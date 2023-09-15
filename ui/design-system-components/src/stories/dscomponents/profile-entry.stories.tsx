@@ -19,10 +19,12 @@ export const BaseEntry: Story = {
   render: () => (
     <Entry
       profileAnchorLink=""
-      profileId={profileId}
       avatar={avatar}
       name="Coffee Lover"
-      accountId="id"
+      profileIds={{
+        id: 'id',
+        did: profileId,
+      }}
       followId="id"
       isFollowing={false}
       getMediaUrl={() => ({

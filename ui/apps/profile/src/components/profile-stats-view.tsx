@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useGetLogin, useProfileStats } from '@akashaorg/ui-awf-hooks';
 
-
 import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
 
 export type ProfileStatsViewProps = {

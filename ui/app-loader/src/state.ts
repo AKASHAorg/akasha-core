@@ -143,11 +143,11 @@ export const initState = (
             ...state,
             mountedExtPoints: extPoints,
           });
-        // case EventTypes.ExtensionPointUnmount:
-        //   return of({
-        //     ...state,
-        //     unmountingExtensionPoints: state.unmountingExtensionPoints.concat(newData.data),
-        //   });
+        case EventTypes.ExtensionPointUnmount:
+          return of({
+            ...state,
+            unmountingExtensionPoints: state.unmountingExtensionPoints.concat(newData.data),
+          });
         case APP_EVENTS.INFO_READY:
           const manifests = state.manifests.slice();
           if (worldConfig.registryOverrides.find(override => override.name === newData.data.name)) {
