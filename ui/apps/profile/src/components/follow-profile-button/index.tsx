@@ -105,7 +105,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     }
     if (!followId) {
       createFollowMutation.mutate({
-        i: { content: { isFollowing: true, profileID: profileID } },
+        i: { content: { isFollowing: true, profileID } },
       });
     } else {
       updateFollowMutation.mutate({
@@ -113,7 +113,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
           id: followId,
           content: {
             isFollowing: true,
-            profileID: profileID,
+            profileID,
           },
         },
       });
@@ -129,7 +129,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
         id: followId,
         content: {
           isFollowing: false,
-          profileID: profileID,
+          profileID,
         },
       },
     });

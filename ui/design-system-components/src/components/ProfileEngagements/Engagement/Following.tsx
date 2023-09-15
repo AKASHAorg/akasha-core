@@ -66,8 +66,7 @@ const Following: React.FC<FollowingProps> = ({
         >
           <Entry
             profileAnchorLink={profileAnchorLink}
-            profileId={engagement?.profile?.did.id}
-            profileID={engagement?.profile?.id}
+            profileIds={{ id: engagement?.profile?.id, did: engagement?.profile?.did.id }}
             avatar={engagement?.profile?.avatar}
             name={engagement?.profile?.name}
             followId={followList.get(engagement?.profile?.id)?.id}
