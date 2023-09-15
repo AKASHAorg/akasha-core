@@ -207,6 +207,7 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
         await getScrollState.refetch();
         beamsReq.remove();
         tryFetchNextPage(updatedScrollState.startItemCursor);
+        setInitialScrollState(prev => ({ ...prev, isFetched: false }));
       } catch (err) {
         console.error('Cannot reset scroll state', err);
       }
