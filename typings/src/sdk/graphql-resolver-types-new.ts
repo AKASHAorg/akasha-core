@@ -70,15 +70,20 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 ) => TResult | Promise<TResult>;
 
 
+/** Mapping of interface types */
+export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
+  Node: ( Types.AkashaApp ) | ( Types.AkashaAppRelease ) | ( Types.AkashaAppsStream ) | ( Types.AkashaBeam ) | ( Types.AkashaBeamStream ) | ( Types.AkashaBlockStorage ) | ( Types.AkashaContentBlock ) | ( Types.AkashaContentBlockStream ) | ( Types.AkashaFollow ) | ( Types.AkashaInterestsStream ) | ( Types.AkashaProfile ) | ( Types.AkashaProfileInterests ) | ( Types.AkashaProfileStream ) | ( Types.AkashaReflect ) | ( Types.AkashaReflectStream ) | ( Types.CeramicAccount );
+};
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   AkashaApp: ResolverTypeWrapper<Types.AkashaApp>;
-  String: ResolverTypeWrapper<Types.Scalars['String']>;
-  ID: ResolverTypeWrapper<Types.Scalars['ID']>;
-  Int: ResolverTypeWrapper<Types.Scalars['Int']>;
+  String: ResolverTypeWrapper<Types.Scalars['String']['output']>;
+  ID: ResolverTypeWrapper<Types.Scalars['ID']['output']>;
+  Int: ResolverTypeWrapper<Types.Scalars['Int']['output']>;
   AkashaAppApplicationType: Types.AkashaAppApplicationType;
   AkashaAppApplicationTypeValueFilterInput: Types.AkashaAppApplicationTypeValueFilterInput;
-  Boolean: ResolverTypeWrapper<Types.Scalars['Boolean']>;
+  Boolean: ResolverTypeWrapper<Types.Scalars['Boolean']['output']>;
   AkashaAppConnection: ResolverTypeWrapper<Types.AkashaAppConnection>;
   AkashaAppEdge: ResolverTypeWrapper<Types.AkashaAppEdge>;
   AkashaAppFiltersInput: Types.AkashaAppFiltersInput;
@@ -216,8 +221,8 @@ export type ResolversTypes = {
   AkashaReflectStreamSortingInput: Types.AkashaReflectStreamSortingInput;
   BooleanValueFilterInput: Types.BooleanValueFilterInput;
   CeramicAccount: ResolverTypeWrapper<Types.CeramicAccount>;
-  CeramicCommitID: ResolverTypeWrapper<Types.Scalars['CeramicCommitID']>;
-  CeramicStreamID: ResolverTypeWrapper<Types.Scalars['CeramicStreamID']>;
+  CeramicCommitID: ResolverTypeWrapper<Types.Scalars['CeramicCommitID']['output']>;
+  CeramicStreamID: ResolverTypeWrapper<Types.Scalars['CeramicStreamID']['output']>;
   CreateAkashaAppInput: Types.CreateAkashaAppInput;
   CreateAkashaAppPayload: ResolverTypeWrapper<Types.CreateAkashaAppPayload>;
   CreateAkashaAppReleaseInput: Types.CreateAkashaAppReleaseInput;
@@ -248,11 +253,11 @@ export type ResolversTypes = {
   CreateAkashaReflectPayload: ResolverTypeWrapper<Types.CreateAkashaReflectPayload>;
   CreateAkashaReflectStreamInput: Types.CreateAkashaReflectStreamInput;
   CreateAkashaReflectStreamPayload: ResolverTypeWrapper<Types.CreateAkashaReflectStreamPayload>;
-  DID: ResolverTypeWrapper<Types.Scalars['DID']>;
-  DateTime: ResolverTypeWrapper<Types.Scalars['DateTime']>;
-  InterPlanetaryCID: ResolverTypeWrapper<Types.Scalars['InterPlanetaryCID']>;
+  DID: ResolverTypeWrapper<Types.Scalars['DID']['output']>;
+  DateTime: ResolverTypeWrapper<Types.Scalars['DateTime']['output']>;
+  InterPlanetaryCID: ResolverTypeWrapper<Types.Scalars['InterPlanetaryCID']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
-  Node: ResolversTypes['AkashaApp'] | ResolversTypes['AkashaAppRelease'] | ResolversTypes['AkashaAppsStream'] | ResolversTypes['AkashaBeam'] | ResolversTypes['AkashaBeamStream'] | ResolversTypes['AkashaBlockStorage'] | ResolversTypes['AkashaContentBlock'] | ResolversTypes['AkashaContentBlockStream'] | ResolversTypes['AkashaFollow'] | ResolversTypes['AkashaInterestsStream'] | ResolversTypes['AkashaProfile'] | ResolversTypes['AkashaProfileInterests'] | ResolversTypes['AkashaProfileStream'] | ResolversTypes['AkashaReflect'] | ResolversTypes['AkashaReflectStream'] | ResolversTypes['CeramicAccount'];
+  Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
   PageInfo: ResolverTypeWrapper<Types.PageInfo>;
   PartialAkashaAppInput: Types.PartialAkashaAppInput;
   PartialAkashaAppReleaseInput: Types.PartialAkashaAppReleaseInput;
@@ -272,7 +277,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   SortOrder: Types.SortOrder;
   StringValueFilterInput: Types.StringValueFilterInput;
-  URI: ResolverTypeWrapper<Types.Scalars['URI']>;
+  URI: ResolverTypeWrapper<Types.Scalars['URI']['output']>;
   UpdateAkashaAppInput: Types.UpdateAkashaAppInput;
   UpdateAkashaAppPayload: ResolverTypeWrapper<Types.UpdateAkashaAppPayload>;
   UpdateAkashaAppReleaseInput: Types.UpdateAkashaAppReleaseInput;
@@ -309,11 +314,11 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   AkashaApp: Types.AkashaApp;
-  String: Types.Scalars['String'];
-  ID: Types.Scalars['ID'];
-  Int: Types.Scalars['Int'];
+  String: Types.Scalars['String']['output'];
+  ID: Types.Scalars['ID']['output'];
+  Int: Types.Scalars['Int']['output'];
   AkashaAppApplicationTypeValueFilterInput: Types.AkashaAppApplicationTypeValueFilterInput;
-  Boolean: Types.Scalars['Boolean'];
+  Boolean: Types.Scalars['Boolean']['output'];
   AkashaAppConnection: Types.AkashaAppConnection;
   AkashaAppEdge: Types.AkashaAppEdge;
   AkashaAppFiltersInput: Types.AkashaAppFiltersInput;
@@ -443,8 +448,8 @@ export type ResolversParentTypes = {
   AkashaReflectStreamSortingInput: Types.AkashaReflectStreamSortingInput;
   BooleanValueFilterInput: Types.BooleanValueFilterInput;
   CeramicAccount: Types.CeramicAccount;
-  CeramicCommitID: Types.Scalars['CeramicCommitID'];
-  CeramicStreamID: Types.Scalars['CeramicStreamID'];
+  CeramicCommitID: Types.Scalars['CeramicCommitID']['output'];
+  CeramicStreamID: Types.Scalars['CeramicStreamID']['output'];
   CreateAkashaAppInput: Types.CreateAkashaAppInput;
   CreateAkashaAppPayload: Types.CreateAkashaAppPayload;
   CreateAkashaAppReleaseInput: Types.CreateAkashaAppReleaseInput;
@@ -475,11 +480,11 @@ export type ResolversParentTypes = {
   CreateAkashaReflectPayload: Types.CreateAkashaReflectPayload;
   CreateAkashaReflectStreamInput: Types.CreateAkashaReflectStreamInput;
   CreateAkashaReflectStreamPayload: Types.CreateAkashaReflectStreamPayload;
-  DID: Types.Scalars['DID'];
-  DateTime: Types.Scalars['DateTime'];
-  InterPlanetaryCID: Types.Scalars['InterPlanetaryCID'];
+  DID: Types.Scalars['DID']['output'];
+  DateTime: Types.Scalars['DateTime']['output'];
+  InterPlanetaryCID: Types.Scalars['InterPlanetaryCID']['output'];
   Mutation: {};
-  Node: ResolversParentTypes['AkashaApp'] | ResolversParentTypes['AkashaAppRelease'] | ResolversParentTypes['AkashaAppsStream'] | ResolversParentTypes['AkashaBeam'] | ResolversParentTypes['AkashaBeamStream'] | ResolversParentTypes['AkashaBlockStorage'] | ResolversParentTypes['AkashaContentBlock'] | ResolversParentTypes['AkashaContentBlockStream'] | ResolversParentTypes['AkashaFollow'] | ResolversParentTypes['AkashaInterestsStream'] | ResolversParentTypes['AkashaProfile'] | ResolversParentTypes['AkashaProfileInterests'] | ResolversParentTypes['AkashaProfileStream'] | ResolversParentTypes['AkashaReflect'] | ResolversParentTypes['AkashaReflectStream'] | ResolversParentTypes['CeramicAccount'];
+  Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
   PageInfo: Types.PageInfo;
   PartialAkashaAppInput: Types.PartialAkashaAppInput;
   PartialAkashaAppReleaseInput: Types.PartialAkashaAppReleaseInput;
@@ -498,7 +503,7 @@ export type ResolversParentTypes = {
   PartialAkashaReflectStreamInput: Types.PartialAkashaReflectStreamInput;
   Query: {};
   StringValueFilterInput: Types.StringValueFilterInput;
-  URI: Types.Scalars['URI'];
+  URI: Types.Scalars['URI']['output'];
   UpdateAkashaAppInput: Types.UpdateAkashaAppInput;
   UpdateAkashaAppPayload: Types.UpdateAkashaAppPayload;
   UpdateAkashaAppReleaseInput: Types.UpdateAkashaAppReleaseInput;

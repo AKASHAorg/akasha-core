@@ -40,7 +40,7 @@ class Gql {
     }).data;
     this._ceramic = ceramic;
     const { optionName } = this.mutationNotificationConfig;
-    const requester = async <R, V> (doc: DocumentNode, vars?: V, options?: Record<string, unknown>): Promise<R> => {
+    const requester = async <R, V> (doc: DocumentNode, vars?: V, options?: unknown): Promise<R> => {
       const call = this._ceramic
         .getComposeClient()
         .execute(doc, vars as Record<string, unknown> | undefined);
@@ -72,6 +72,7 @@ class Gql {
         event: GQL_EVENTS.MUTATION,
       });
     } else {
+      sessionStorage.setItem(uuid, JSON.stringify({errors: result.errors, successInfo: m}));
       this._globalChannel.next({
         data: { uuid, success: false, errors: result.errors, pending: false },
         event: GQL_EVENTS.MUTATION,
@@ -89,7 +90,7 @@ class Gql {
 
   get mutationNotificationConfig () {
     return Object.freeze({
-      optionName: 'emitNotification',
+      optionName: 'EmitNotification',
     });
   }
 

@@ -4,10 +4,14 @@ import { useQuery, useInfiniteQuery, useMutation, type UseQueryOptions, type Use
 
 import getSDK from '@akashaorg/awf-sdk';
 const sdk = getSDK();
+const { optionName } = getSDK().services.gql.mutationNotificationConfig;
 export function fetcher<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
   return async (): Promise<TData> => {
 
-    const result = await sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+    const call = sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+
+    const result = options?.hasOwnProperty(optionName) ?
+      await sdk.services.gql.wrapWithMutationEvent(call, JSON.stringify(options[optionName])) : await call;
     if (!result.errors || !result.errors.length) {
         // emit eventbus notif
         return result.data as TData;
