@@ -2,9 +2,9 @@
 
 ## Table of contents
 
-- [Design System](./design/README.md)
+- [App Loader](./app-loader/README.md)
+- [Apps](./apps/README.md)
+- [Design system core](./design-system-core/README.md)
+- [Design system components](./design-system-components/README.md)
 - [Hooks](./hooks/README.md)
-- [Plugins](./plugins/README.md)
-- [Testing Utils](./testing-utils/README.md)
-- [Typings](./typings/README.md)
 - [Widgets](./widgets/README.md)

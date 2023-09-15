@@ -23,7 +23,6 @@
   - [Install](#install)
   - [Usage](#usage)
     - [Run](#run)
-- [](#)
     - [SDK](#sdk)
       - [Build the sdk package](#build-the-sdk-package)
       - [Running Tests](#running-tests)
@@ -90,13 +89,13 @@ where `<package-group>` can be one of `apps`, `widgets`, `plugins`, `design-syst
 
 ### UI workspace
 
-- [Design system](./ui/design/README.md)
+- [Apps](./ui/apps/README.md)
 - [Design system core](./ui/design-system-core/README.md)
 - [Design system components](./ui/design-system-components/README.md)
 - [React hooks](./ui/hooks/README.md)
-- [Plugins](./ui/plugins/README.md)
 - [Widgets](./ui/widgets/README.md)
-- [Apps](./apps/README.md)
+- [Testing Utils](./tests/README.md)
+- [Typings](./typings/README.md)
 
 ### Playground test-app
 
