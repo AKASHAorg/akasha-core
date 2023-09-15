@@ -87,11 +87,11 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                       name={`follow_${profile.id}`}
                       uiEvents={uiEvents}
                       data={{
-                        profileId: loggedUserDid,
                         profileID: profile.id,
                         isFollowing: followList?.get(profile.id)?.isFollowing,
                         isLoggedIn,
                         followId: followList?.get(profile.id)?.id,
+                        invalidateFollowList: true,
                       }}
                     />
                   )}
