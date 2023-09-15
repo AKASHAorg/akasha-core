@@ -58,7 +58,7 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
         </Stack>
       </Stack>
       <div className={tw('flex justify-between items-center my-2')}>
-        <div className={tw('w-full md:w-2/6')}>
+        <div className={tw('w-8/12 sm:w-full md:w-3/6')}>
           <DropDown
             name="filterByCategory"
             selected={filterByCategory}
