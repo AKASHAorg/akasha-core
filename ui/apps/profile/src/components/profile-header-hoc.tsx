@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import routes, { EDIT } from '../routes';
 import FollowProfileButton from './follow-profile-button';
 import {
@@ -10,8 +10,8 @@ import { EntityTypes, ModalNavigationOptions, NavigateToParams } from '@akashaor
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import {
-  useGetProfileByDidQuery,
   useGetFollowDocumentsQuery,
+  useGetProfileByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hasOwn, useGetLogin, useValidDid } from '@akashaorg/ui-awf-hooks';
 
@@ -44,7 +44,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       : { isViewer: null, akashaProfile: null };
 
   const { validDid, isEthAddress } = useValidDid(profileId, !!profileData);
-  const isLoggedIn = React.useMemo(() => {
+  const isLoggedIn = useMemo(() => {
     return !!loginQuery.data?.id;
   }, [loginQuery.data]);
   const handleFlag = React.useCallback(
@@ -121,7 +121,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       publicImagePath="/images"
       followElement={
         <FollowProfileButton
-          profileId={profileData?.id}
+          profileID={profileData?.id}
           isLoggedIn={!!loginQuery.data?.id}
           followId={followDocument?.node?.id}
           isFollowing={followDocument?.node?.isFollowing}
@@ -137,7 +137,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
 export const withProfileHeader = <T extends ProfileHeaderViewProps>(
   wrappedComponent: ReactNode,
 ) => {
-  const ComponentWithProfileHeader = (props: T) => {
+  return (props: T) => {
     return (
       <>
         <ProfileHeaderView {...props} />
@@ -145,8 +145,6 @@ export const withProfileHeader = <T extends ProfileHeaderViewProps>(
       </>
     );
   };
-
-  return ComponentWithProfileHeader;
 };
 
 export default withProfileHeader;
