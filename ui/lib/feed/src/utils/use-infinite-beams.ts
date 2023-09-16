@@ -4,7 +4,7 @@ import {
   useGetBeamsQuery,
   useInfiniteGetBeamsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { SortOrder } from '@akashaorg/typings/sdk/graphql-types-new';
+import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useGetScrollState, useRemoveScrollState, useSaveScrollState } from './use-scroll-state';
 import { ScrollStateDBWrapper } from './scroll-state-db';
 import { ScrollerOnChangeState } from '@akashaorg/design-system-components/lib/components/EntryList';
