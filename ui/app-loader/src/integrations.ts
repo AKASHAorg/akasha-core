@@ -3,7 +3,6 @@ import type {
   RootExtensionProps,
   IAppConfig,
   WorldConfig,
-  EventDataTypes,
 } from '@akashaorg/typings/lib/ui';
 import { EventTypes } from '@akashaorg/typings/lib/ui';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
@@ -39,7 +38,7 @@ import { getIntegrationsData } from './manifests';
 import { loadI18nNamespaces } from './i18n-utils';
 import { extensionMatcher } from './extension-matcher';
 import { extensionLoader } from './extension-loader';
-import { EditorBlockEvents } from '@akashaorg/typings/ui/editor-blocks';
+import { EditorBlockEvents } from '@akashaorg/typings/lib/ui/editor-blocks';
 
 export const getMountPoint = (appConfig: IAppConfig) => {
   let mountPoint: string;

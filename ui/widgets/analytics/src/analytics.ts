@@ -2,7 +2,6 @@ import type { SingleSpaCustomEventDetail } from 'single-spa';
 import {
   AnalyticsEventData,
   AnalyticsEventTypes,
-  TrackEventData,
   RootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { filterEvents } from '@akashaorg/ui-awf-hooks';

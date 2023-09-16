@@ -8,7 +8,6 @@ import {
   IContentClickDetails,
   ModalNavigationOptions,
   Profile,
-  TrackEventData,
 } from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';

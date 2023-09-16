@@ -7,7 +7,6 @@ import {
   ModalNavigationOptions,
   NavigateToParams,
   Profile,
-  TrackEventData,
 } from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BlockCommandResponse, RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { BlockCommandResponse, RootComponentProps, BlockAction } from '@akashaorg/typings/lib/ui';
 import { BlockActionType, EditorBlock } from '@akashaorg/typings/lib/ui/editor-blocks';
 import { filterEvents } from '@akashaorg/ui-awf-hooks';
 

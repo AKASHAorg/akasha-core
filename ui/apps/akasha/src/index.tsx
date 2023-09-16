@@ -11,12 +11,12 @@ import {
   RootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/lib/ui/editor-blocks';
-import { filter } from 'rxjs';
+import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
 /**
  * Initialization of the integration is optional.
  * It is called before all `register` calls but after all `getPlugin`;
- * @example Initialization an integration and triggerin of a notification
+ * @example Initialization an integration and triggering of a notification
  * ```
  * export const initialize: (opts: IntegrationInitOptions) => void = opts => {
  *  const notificationPlugin: any = opts.plugins["@akashaorg/app-notifications"].notification;
