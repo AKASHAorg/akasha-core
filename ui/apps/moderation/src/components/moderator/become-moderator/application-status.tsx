@@ -16,7 +16,7 @@ export type ApplicationStatusProps = PageHeaderProps &
 
 const ApplicationStatus: React.FC<ApplicationStatusProps> = props => {
   const {
-    assetName = 'moderation',
+    assetName = 'vibe-overview',
     publicImgPath = '/images',
     assetExtension = 'webp',
     titleLabel,

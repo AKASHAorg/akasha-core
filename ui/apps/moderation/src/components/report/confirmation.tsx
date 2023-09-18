@@ -21,7 +21,7 @@ export type ReportItemConfirmationProps = {
 
 export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = props => {
   const {
-    assetName = 'moderation',
+    assetName = 'vibe-overview',
     publicImgPath = '/images',
     assetExtension = 'webp',
     titleLabel,
