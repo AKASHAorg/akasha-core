@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -28,9 +28,8 @@ export const VerifySignature: React.FC<unknown> = () => {
   const { t } = useTranslation('app-dev-dashboard');
   const { getRoutingPlugin } = useRootComponentProps();
 
-  const loginQuery = useGetLogin();
+  const { loggedInProfileId } = useLoggedIn();
 
-  const did = loginQuery.data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
 
   // const handleFieldChange = (ev, field: string) => {
@@ -50,7 +49,7 @@ export const VerifySignature: React.FC<unknown> = () => {
   // };
 
   const handleVerifySignature = () => {
-    verifySignatureMutation.mutate({ did: did, signature, data: message });
+    verifySignatureMutation.mutate({ did: loggedInProfileId, signature, data: message });
   };
 
   const handleButtonClick = () => {
@@ -95,7 +94,7 @@ export const VerifySignature: React.FC<unknown> = () => {
             subtitleLabel={t('The message was successfully verified using the DID below')}
             paragraph1TitleLabel={t('DID 🔑')}
             paragraph2TitleLabel={t('Original Message ✉️')}
-            paragraph1Content={did || '3fLBxdVgUkWj8UjVvUXcIdak5qe5xRRowUDkIuVRRQ'}
+            paragraph1Content={loggedInProfileId || '3fLBxdVgUkWj8UjVvUXcIdak5qe5xRRowUDkIuVRRQ'}
             paragraph2Content={sampleMessage}
           />
         )}

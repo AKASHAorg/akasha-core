@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 export type EngagementTabProps = {
-  isLoggedIn: boolean;
   navigateTo: (args: NavigateToParams) => void;
 };
 
@@ -23,15 +22,13 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
 };
 
 const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => {
-  const { isLoggedIn, children, navigateTo } = props;
+  const { children, navigateTo } = props;
   const { t } = useTranslation('app-profile');
   const { profileId } = useParams<{ profileId: string }>();
 
   const pathname = location.pathname.substring(location.pathname.lastIndexOf('/'));
 
-  const [activeTab, setActiveTab] = useState(
-    isLoggedIn ? ROUTE_TO_TAB_INDEX_MAP[pathname] || 0 : 0,
-  );
+  const [activeTab, setActiveTab] = useState(ROUTE_TO_TAB_INDEX_MAP[pathname] || 0);
 
   const onTabChange = (selectedIndex: number) => {
     navigateTo?.({

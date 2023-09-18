@@ -36,7 +36,7 @@ export function getTextClasses({
             'group-hover:text',
           )
         : '';
-    return `${disabled ? 'opacity-50' : ''} ${textColorStyle} ${hoverStyle}`;
+    return `${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${textColorStyle} ${hoverStyle}`;
   }
 
   if (variant === 'primary') {

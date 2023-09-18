@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/lib/ui';
-import { withProviders, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { withProviders, useRootComponentProps, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -20,14 +20,9 @@ const ICWidget: React.FC<unknown> = () => {
 
   const { t } = useTranslation('app-akasha-verse');
   const { worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
-
-  const loginQuery = useGetLogin();
+  const { isLoggedIn } = useLoggedIn();
 
   const navigateTo = getRoutingPlugin().navigateTo;
-
-  const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data?.id;
-  }, [loginQuery.data]);
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({ name: 'login', redirectTo });

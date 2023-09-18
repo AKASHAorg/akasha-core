@@ -4,8 +4,8 @@ import { Route, Routes } from 'react-router-dom';
 import { EthProviders } from '@akashaorg/typings/lib/sdk';
 
 import {
-  useGetLogin,
   useInjectedProvider,
+  useLoggedIn,
   useLogin,
   useLogout,
   useRootComponentProps,
@@ -18,17 +18,17 @@ import routes, { CONNECT } from '../../routes';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 const Connect: React.FC<unknown> = () => {
-  const loginQuery = useGetLogin();
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
   const logoutQuery = useLogout();
   const injectedProviderQuery = useInjectedProvider();
 
   const profileDataReq = useGetProfileByDidQuery(
-    { id: loginQuery.data?.id },
+    { id: loggedInProfileId },
     {
       select: resp => {
         return resp.node;
       },
-      enabled: !!loginQuery.data?.id,
+      enabled: isLoggedIn,
     },
   );
 
@@ -52,11 +52,11 @@ const Connect: React.FC<unknown> = () => {
     const searchParam = new URLSearchParams(location.search);
 
     // if user is logged in, do not show the connect page
-    if (loginQuery.data?.id && profileDataReq.status !== 'loading') {
+    if (isLoggedIn && profileDataReq.status !== 'loading') {
       if (!profile) {
         routingPlugin.current?.navigateTo({
           appName: '@akashaorg/app-profile',
-          getNavigationUrl: () => `/${loginQuery.data?.id}/edit`,
+          getNavigationUrl: () => `/${loggedInProfileId}/edit`,
         });
         return;
       }
@@ -68,7 +68,7 @@ const Connect: React.FC<unknown> = () => {
         },
       });
     }
-  }, [loginQuery, profile, profileDataReq, worldConfig.homepageApp]);
+  }, [isLoggedIn, loggedInProfileId, profile, profileDataReq, worldConfig.homepageApp]);
 
   const handleProviderSelect = (provider: EthProviders) => {
     //this is required because of the backend

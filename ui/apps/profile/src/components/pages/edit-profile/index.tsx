@@ -15,7 +15,7 @@ import {
 import {
   getProfileImageVersionsWithMediaUrl,
   hasOwn,
-  useGetLogin,
+  useLoggedIn,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useQueryClient } from '@tanstack/react-query';
@@ -57,7 +57,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   };
 
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
-  const loginQuery = useGetLogin();
+  const { isLoggedIn } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -102,7 +102,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     onSettled,
   });
 
-  if (!loginQuery.data?.id) {
+  if (!isLoggedIn) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,

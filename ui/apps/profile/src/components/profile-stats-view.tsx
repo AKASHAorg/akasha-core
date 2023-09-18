@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useGetLogin, useProfileStats } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useProfileStats } from '@akashaorg/ui-awf-hooks';
 
 import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
 
@@ -18,11 +18,7 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
 }) => {
   const { t } = useTranslation('app-profile');
 
-  const loginQuery = useGetLogin();
-  const isLoggedIn = useMemo(() => {
-    return !!loginQuery.data?.id;
-  }, [loginQuery.data]);
-
+  const { isLoggedIn } = useLoggedIn();
   const profileStatsQuery = useProfileStats(profileId);
 
   const {

@@ -52,7 +52,9 @@ function getPrimaryClasses({ greyBg, loading, disabled, active, hover }: IPrimar
       'bg',
     );
   }
-  return `${disabled ? 'opacity-50' : ''} ${backgroundStyle} ${hoverStyle} ${activeStyle}`;
+  return `${
+    disabled ? 'opacity-50 cursor-not-allowed' : ''
+  } ${backgroundStyle} ${hoverStyle} ${activeStyle}`;
 }
 interface ISecondaryClasses {
   loading: ButtonProps['loading'];
@@ -99,6 +101,6 @@ function getSecondaryClasses({ loading, disabled, active, hover, hoverColor }: I
         )}`
       : '';
   return `${
-    disabled ? 'opacity-50' : ''
+    disabled ? 'opacity-50 cursor-not-allowed' : ''
   }border ${backgroundStyle} ${hoverStyle} ${activeStyle} ${borderStyle}`;
 }

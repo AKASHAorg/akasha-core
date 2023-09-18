@@ -3,6 +3,7 @@ import FollowProfileButton from '../../follow-profile-button';
 import Following from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Following';
 import EngagementTab from './engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
@@ -16,8 +17,8 @@ import {
   getProfileImageVersionsWithMediaUrl,
   hasOwn,
   getFollowList,
-  useGetLogin,
   useRootComponentProps,
+  useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
 
 const FollowingPage: React.FC<unknown> = () => {
@@ -28,14 +29,14 @@ const FollowingPage: React.FC<unknown> = () => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const loginQuery = useGetLogin();
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
     },
     {
       select: response => response.node,
-      enabled: !!loginQuery.data?.id,
+      enabled: isLoggedIn,
     },
   );
 
@@ -72,7 +73,7 @@ const FollowingPage: React.FC<unknown> = () => {
       onSettled: () => {
         setLoadingMore(false);
       },
-      enabled: !!loginQuery.data?.id,
+      enabled: isLoggedIn,
     },
   );
   const following = useMemo(
@@ -98,10 +99,10 @@ const FollowingPage: React.FC<unknown> = () => {
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    { select: response => response.viewer?.akashaFollowList },
+    { select: response => response.viewer?.akashaFollowList, enabled: isLoggedIn },
   );
 
-  if (!loginQuery.data?.id) {
+  if (!isLoggedIn) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
@@ -129,7 +130,7 @@ const FollowingPage: React.FC<unknown> = () => {
   };
 
   return (
-    <EngagementTab isLoggedIn={!!loginQuery.data?.id} navigateTo={navigateTo}>
+    <EngagementTab navigateTo={navigateTo}>
       {followingReq.status === 'loading' && <ProfileEngagementLoading />}
       {followingReq.status === 'error' && (
         <Stack customStyle="mt-8">
@@ -138,7 +139,7 @@ const FollowingPage: React.FC<unknown> = () => {
       )}
       {followingReq.status === 'success' && (
         <Following
-          loggedInAccountId={loginQuery.data?.id}
+          loggedInProfileId={loggedInProfileId}
           followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
@@ -151,15 +152,19 @@ const FollowingPage: React.FC<unknown> = () => {
               followingReq.fetchNextPage();
             }
           }}
-          renderFollowElement={(profileId, followId, isFollowing) => (
-            <FollowProfileButton
-              profileID={profileId}
-              isLoggedIn={!!loginQuery.data?.id}
-              followId={followId}
-              isFollowing={isFollowing}
-              showLoginModal={showLoginModal}
-            />
-          )}
+          renderFollowElement={(profileId, followId, isFollowing) =>
+            followDocumentsReq.status === 'loading' ? (
+              <TextLine width="w-24" animated />
+            ) : (
+              <FollowProfileButton
+                profileID={profileId}
+                isLoggedIn={isLoggedIn}
+                followId={followId}
+                isFollowing={isFollowing}
+                showLoginModal={showLoginModal}
+              />
+            )
+          }
           onProfileClick={onProfileClick}
           getMediaUrl={getProfileImageVersionsWithMediaUrl}
         />

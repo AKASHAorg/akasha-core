@@ -11,6 +11,7 @@ import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Te
 type Stat = {
   label: string;
   total: number | string;
+  disabled?: boolean;
   onClick?: React.EventHandler<React.SyntheticEvent>;
 };
 
@@ -52,14 +53,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
       <Stack spacing="gap-4" fullWidth>
         <Stack direction="row" justify="between">
           {stats.map((stat, index) => (
-            <Button
-              onClick={
-                +stat.total > 0 || stat.label.includes('Interests') ? stat.onClick : undefined
-              }
-              key={stat.label + index}
-              disabled={+stat.total === 0 && !stat.label.includes('Interests')}
-              plain
-            >
+            <Button onClick={stat.onClick} key={stat.label + index} disabled={stat.disabled} plain>
               <Stack align="center" customStyle="group">
                 <AppIcon
                   placeholderIconType={stat.icon}
@@ -67,7 +61,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
                   breakPointSize={{ breakPoint: 'sm', size: 'lg' }}
                   customStyle={stat.className}
                   accentColor
-                  hover
+                  hover={!stat.disabled}
                 />
                 <Text {...labelProp}>{stat.label}</Text>
                 <Text {...totalProps}>{stat.total}</Text>

@@ -15,8 +15,8 @@ import {
 import {
   useShowFeedback,
   hasOwn,
-  useGetLogin,
   useRootComponentProps,
+  useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
 
 const InterestsPage: React.FC<unknown> = () => {
@@ -39,7 +39,7 @@ const InterestsPage: React.FC<unknown> = () => {
   };
 
   const queryClient = useQueryClient();
-  const loginQuery = useGetLogin();
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
   const ownInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node },
@@ -56,7 +56,7 @@ const InterestsPage: React.FC<unknown> = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: useGetInterestsByDidQuery.getKey({
-          id: profileId !== loginQuery.data?.id ? loginQuery.data?.id : profileId,
+          id: profileId !== loggedInProfileId ? loggedInProfileId : profileId,
         }),
       });
       setShowFeedback(true);
@@ -64,7 +64,7 @@ const InterestsPage: React.FC<unknown> = () => {
     onSettled,
   });
 
-  if (!loginQuery.data?.id) {
+  if (!isLoggedIn) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
@@ -90,7 +90,7 @@ const InterestsPage: React.FC<unknown> = () => {
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
       <Card elevation="1" radius={20} padding={'p-4'}>
-        {profileId !== loginQuery.data?.id && (
+        {profileId !== loggedInProfileId && (
           <Stack direction="column" spacing="gap-y-2.5">
             <Text variant="h5">{t('Interests')} </Text>
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
@@ -120,7 +120,7 @@ const InterestsPage: React.FC<unknown> = () => {
             </Stack>
           </Stack>
         )}
-        {profileId === loginQuery.data?.id && (
+        {profileId === loggedInProfileId && (
           <EditInterests
             title={t('Your interests')}
             subTitle={t('(30 topics max.)')}
