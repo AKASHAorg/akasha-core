@@ -4,7 +4,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import {
   serializeSlateToBase64,
   useEditorBlocks,
-  useGetLogin,
+  useLoggedIn,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { IEntryData, RootExtensionProps } from '@akashaorg/typings/lib/ui';
@@ -21,12 +21,12 @@ const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9
 
 export const SlateEditorBlock = () => {
   const { uiEvents, extensionData } = useRootComponentProps<RootExtensionProps>();
-  const loginQuery = useGetLogin();
+  const { loggedInProfileId } = useLoggedIn();
   const createContentBlock = useCreateContentBlockMutation();
   const postDraft = new Draft<IEntryData['slateContent']>({
     storage: localStorage,
     appName: extensionData.block['appName'],
-    userId: loginQuery.data?.id,
+    userId: loggedInProfileId,
     action: 'post',
   });
   const canSaveDraft = !extensionData.readonly; //action === 'post' || action === 'repost';

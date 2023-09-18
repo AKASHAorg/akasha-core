@@ -24,11 +24,11 @@ const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {
         </div>
       </div>
       <div className={tw(`flex flex-col mt-4 gap-x-1`)}>
-        <TextLine title="entry-publish-date" width="w-full" animated={animated} />
-        <TextLine title="entry-publish-date" width="w-11/12" animated={animated} />
-        <TextLine title="entry-publish-date" width="w-6/12" animated={animated} />
-        <TextLine title="entry-publish-date" width="w-10/12" animated={animated} />
-        <TextLine title="entry-publish-date" width="w-8/12" animated={animated} />
+        <TextLine title="entry-publish-date" width="w-full" animated={animated} round={'none'} />
+        <TextLine title="entry-publish-date" width="w-11/12" animated={animated} round={'none'} />
+        <TextLine title="entry-publish-date" width="w-6/12" animated={animated} round={'none'} />
+        <TextLine title="entry-publish-date" width="w-10/12" animated={animated} round={'none'} />
+        <TextLine title="entry-publish-date" width="w-8/12" animated={animated} round={'none'} />
         {children}
       </div>
     </Card>

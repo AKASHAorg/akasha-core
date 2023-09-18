@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { GenerateMessage, KeyConfirmation } from '../components/onboarding';
 
@@ -12,7 +12,7 @@ export const AddDevKey: React.FC<unknown> = () => {
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');
 
-  const loginQuery = useGetLogin();
+  const { loggedInProfileId } = useLoggedIn();
 
   const { t } = useTranslation('app-dev-dashboard');
 
@@ -33,7 +33,7 @@ export const AddDevKey: React.FC<unknown> = () => {
 
   useEffect(() => {
     // add key after validating
-    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loginQuery.data?.id) {
+    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loggedInProfileId) {
       addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

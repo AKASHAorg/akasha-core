@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { ONBOARDING_STATUS } from './intro-card';
 
@@ -34,7 +34,7 @@ export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = pro
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');
 
-  const loginQuery = useGetLogin();
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
 
   const { t } = useTranslation('app-dev-dashboard');
 
@@ -57,7 +57,7 @@ export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = pro
   ].map(el => `${baseRouteName}${menuRoute[el]}`);
 
   useEffect(() => {
-    if (!loginQuery.data?.id) {
+    if (!isLoggedIn) {
       // if guest, redirect to onboarding step 1 after authentication
       navigateTo?.({
         appName: '@akashaorg/app-auth-ewa',
@@ -82,7 +82,7 @@ export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = pro
 
   useEffect(() => {
     // add key after validating
-    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loginQuery.data?.id) {
+    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loggedInProfileId) {
       addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

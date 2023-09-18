@@ -1,19 +1,15 @@
 import { IMenuItem } from './menu-items';
 import {
-  BlockAction,
-  BlockActionType,
-  BlockName,
-  EditorBlock,
-  EditorBlockInterface,
+  BlockCommandRequest,
+  BlockCommandResponse,
+  EditorBlockRegisterEvent,
 } from './editor-blocks';
 import { AnalyticsEventData } from './analytics';
-import { AppName } from './apps';
 
 export enum EventTypes {
   Instantiated = 'instantiated',
   InstallIntegration = 'install-integration',
   RegisterIntegration = 'register-integration',
-  RegisterEditorBlock = 'register-editor-block',
   UninstallIntegration = 'uninstall-integration',
   ExtensionPointMount = 'extension-point-mount',
   ExtensionPointMountRequest = 'extension-point-mount-request',
@@ -64,7 +60,7 @@ export const EntityTypesMap = {
   [EntityTypes.REFLECT]: 'reply',
   [EntityTypes.TAG]: 'tag',
   [EntityTypes.ARTICLE]: 'article',
-} as const;
+};
 
 export type EventDataTypes = {
   name: string;
@@ -81,32 +77,13 @@ export type EventDataTypes = {
   [key: string]: unknown;
 };
 
-export type BlockCommandRequest = {
-  event: `${AppName}_${BlockName}/${BlockAction}`;
-  data: EditorBlock;
-};
-
-export type BlockCommandResponse = {
-  event: `${AppName}_${BlockName}/${BlockAction}_${BlockActionType}`;
-  data: {
-    block: EditorBlock;
-    // @TODO: this response must contain published content block id ??
-    response: { error?: string; blockID?: string };
-  };
-};
-
-export type EditorBlockRegisterEvent = {
-  event: EventTypes.RegisterEditorBlock;
-  data?: (EditorBlockInterface & { appName: string })[];
-};
-
-// @TODO: merge UIEventData with AnalyticsEventData!!
 // @TODO: split EventTypes with their respective EventDataTypes as the example below
 export type UIEventData =
   | {
-      event: Omit<EventTypes, EventTypes.RegisterEditorBlock>;
+      event: EventTypes;
       data?: EventDataTypes;
     }
   | EditorBlockRegisterEvent
   | BlockCommandRequest
-  | BlockCommandResponse;
+  | BlockCommandResponse
+  | AnalyticsEventData;

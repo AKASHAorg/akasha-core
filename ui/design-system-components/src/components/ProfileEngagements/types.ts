@@ -5,7 +5,7 @@ import { ReactElement } from 'react';
 export const LOADING_LIST_SIZE = 10;
 
 export type EngagementProps = {
-  loggedInAccountId: string;
+  loggedInProfileId: string;
   profileAnchorLink: string;
   loadMore: boolean;
   followList: FollowList;

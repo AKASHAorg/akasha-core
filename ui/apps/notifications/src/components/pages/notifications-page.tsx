@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGetLogin, useMarkAsRead, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useMarkAsRead, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
@@ -44,11 +44,7 @@ const NotificationsPage: React.FC<unknown> = () => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const loginQuery = useGetLogin();
-
-  const isLoggedIn = useMemo(() => {
-    return !!loginQuery.data?.id;
-  }, [loginQuery.data]);
+  const { isLoggedIn } = useLoggedIn();
 
   const _uiEvents = useRef(uiEvents);
 
