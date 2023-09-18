@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode } from 'react';
 import routes, { EDIT } from '../routes';
 import FollowProfileButton from './follow-profile-button';
 import {
@@ -13,7 +13,7 @@ import {
   useGetFollowDocumentsQuery,
   useGetProfileByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { hasOwn, useGetLogin, useValidDid } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useLoggedIn, useValidDid } from '@akashaorg/ui-awf-hooks';
 
 type ProfileHeaderViewProps = {
   handleFeedback: () => void;
@@ -27,7 +27,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const { handleFeedback, showLoginModal, navigateToModal, navigateTo } = props;
   const { profileId } = useParams<{ profileId: string }>();
 
-  const loginQuery = useGetLogin();
+  const { isLoggedIn } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -44,9 +44,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       : { isViewer: null, akashaProfile: null };
 
   const { validDid, isEthAddress } = useValidDid(profileId, !!profileData);
-  const isLoggedIn = useMemo(() => {
-    return !!loginQuery.data?.id;
-  }, [loginQuery.data]);
+
   const handleFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes, user: string) => () => {
       if (!isLoggedIn) {
@@ -122,7 +120,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       followElement={
         <FollowProfileButton
           profileID={profileData?.id}
-          isLoggedIn={!!loginQuery.data?.id}
+          isLoggedIn={isLoggedIn}
           followId={followDocument?.node?.id}
           isFollowing={followDocument?.node?.isFollowing}
           showLoginModal={showLoginModal}

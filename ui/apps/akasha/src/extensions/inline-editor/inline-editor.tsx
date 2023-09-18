@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { EntityTypes, RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { ReplyEditor } from './reply-editor';
 import { PostEditor } from './post-editor';
 import { IDraftStorage } from './utils';
@@ -9,7 +9,7 @@ export const InlineEditor = (
   props: Partial<RootExtensionProps> & { draftStorage?: IDraftStorage },
 ) => {
   const { extensionData, worldConfig, singleSpa } = props;
-  const loginQuery = useGetLogin();
+  const { loggedInProfileId } = useLoggedIn();
   const { action, itemId, itemType } = extensionData;
   const draftStorage = props.draftStorage || localStorage;
 
@@ -29,7 +29,7 @@ export const InlineEditor = (
       <PostEditor
         appName={worldConfig?.homepageApp || 'inline-editor'}
         postId={itemId}
-        userId={loginQuery?.data?.id}
+        userId={loggedInProfileId}
         singleSpa={singleSpa}
         action={action}
         draftStorage={draftStorage}

@@ -7,18 +7,14 @@ import AppsPage from './pages/apps-page';
 import MasterPage from './pages/master-page';
 import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO, APPS } from '../routes';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hiddenIntegrations } from '../hidden-integrations';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { worldConfig, baseRouteName } = useRootComponentProps();
 
-  const loginQuery = useGetLogin();
-
-  const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data?.id;
-  }, [loginQuery.data]);
+  const { isLoggedIn } = useLoggedIn();
 
   const defaultIntegrations = [].concat(
     worldConfig.defaultApps,

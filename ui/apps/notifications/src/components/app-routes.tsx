@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import CustomizeNotificationPage from './pages/customize-notification-page';
 import NotificationsPage from './pages/notifications-page';
@@ -20,11 +20,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-notifications');
   const { baseRouteName } = useRootComponentProps();
 
-  const loginQuery = useGetLogin();
-
-  const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data?.id;
-  }, [loginQuery.data]);
+  const { isLoggedIn } = useLoggedIn();
 
   return (
     <Router basename={baseRouteName}>

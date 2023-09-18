@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
-import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Topbar from './topbar';
 import {
   startWidgetsTogglingBreakpoint,
@@ -16,7 +16,7 @@ const TopbarComponent: React.FC<unknown> = () => {
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
 
-  const loginQuery = useGetLogin();
+  const { isLoggedIn } = useLoggedIn();
 
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
@@ -175,7 +175,7 @@ const TopbarComponent: React.FC<unknown> = () => {
 
   return (
     <Topbar
-      isLoggedIn={!!loginQuery.data?.id}
+      isLoggedIn={isLoggedIn}
       sidebarVisible={sidebarVisible}
       onSidebarToggle={handleSidebarToggle}
       onAppWidgetClick={handleWidgetToggle}
