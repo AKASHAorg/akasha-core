@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   AnalyticsEventData,
   AnalyticsEventTypes,
-  TrackEventData,
   RootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { BehaviorSubject } from 'rxjs';
@@ -31,7 +30,7 @@ const AnalyticsProvider = ({
 
 export interface UseAnalyticsActions {
   /* Track a custom event */
-  trackEvent: (eventData: Omit<TrackEventData, 'eventType'>) => void;
+  trackEvent: (eventData: AnalyticsEventData['data']) => void;
 }
 
 /**
@@ -56,8 +55,8 @@ const useAnalytics = (): [UseAnalyticsActions] => {
   const actions: UseAnalyticsActions = {
     trackEvent(eventData) {
       analyticsBus.next({
-        eventType: AnalyticsEventTypes.TRACK_EVENT,
-        ...eventData,
+        event: AnalyticsEventTypes.TRACK_EVENT,
+        data: eventData,
       });
     },
   };

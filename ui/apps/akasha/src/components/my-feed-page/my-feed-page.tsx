@@ -106,18 +106,16 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
 
       <FeedWidget
         queryKey="akasha-my-feed-query"
-        modalSlotId={layoutConfig.modalSlotId}
         itemType={EntityTypes.BEAM}
-        navigateToModal={_navigateToModal.current}
         onLoginModalOpen={showLoginModal.current}
         loggedProfileData={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
         itemSpacing={8}
-        i18n={getTranslationPlugin().i18n}
         accentBorderTop={true}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
+        newItemsPublishedLabel={t('New Beams published recently')}
       />
 
       {userHasSubscriptions && !postsReq.isFetching && (

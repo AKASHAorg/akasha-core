@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ScrollStateDBWrapper, ScrollStateSchema } from './scroll-state-db';
+import { ScrollStateDBWrapper } from './scroll-state-db';
+import { ScrollerState } from '@akashaorg/design-system-components/lib/components/EntryList';
 
 const getScrollState = async (key: string, database: ScrollStateDBWrapper) => {
   const collection = database.scrollState;
@@ -12,14 +13,27 @@ const getScrollState = async (key: string, database: ScrollStateDBWrapper) => {
 
 const saveScrollState = async (
   key: string,
-  data: Omit<ScrollStateSchema, 'id'>,
+  data: Partial<Omit<ScrollerState, 'id'>>,
   database: ScrollStateDBWrapper,
 ) => {
   const collection = database.scrollState;
   const doc = await collection.where('id').equals(key).first();
-  const updated = Object.assign(doc ?? { id: key }, data);
-  await collection.put(updated, key);
-  return updated;
+
+  const mergedState: ScrollerState & { id: string } = {
+    id: doc?.id || key,
+    startItemCursor: undefined,
+    measurementsCache: [],
+    itemsCount: 0,
+    visibleCursorRange: {
+      startCursor: undefined,
+      endCursor: undefined,
+    },
+    ...doc,
+    ...data,
+  };
+
+  await collection.put(mergedState, key);
+  return mergedState;
 };
 
 const removeScrollState = async (key: string, database: ScrollStateDBWrapper) => {
@@ -34,7 +48,7 @@ export const useSaveScrollState = (key: string, database: ScrollStateDBWrapper) 
   const queryClient = useQueryClient();
   return useMutation(
     [key],
-    (data: Omit<ScrollStateSchema, 'id'>) => saveScrollState(key, data, database),
+    (data: Partial<Omit<ScrollerState, 'id'>>) => saveScrollState(key, data, database),
     {
       onMutate: async () => {
         await queryClient.invalidateQueries([key]);
