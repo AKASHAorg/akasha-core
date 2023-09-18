@@ -1,6 +1,6 @@
-# AKASHAVerse plugin
+# Extensions App
 
-> AKASHAVerse app allows users to manage, install and/or uninstall apps and widgets compatible with AKASHA Core.
+> Extensions app allows users to manage, install and/or uninstall apps and widgets compatible with AKASHA Core.
 
 ## Usage
 

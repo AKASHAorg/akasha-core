@@ -6,9 +6,9 @@
 
 - [AKASHA App](./akasha/README.md)
 - [Vibe](./moderation/README.md)
-- [Auth App](./auth-app/README.md)
-- [Settings App](./settings-app/README.md)
-- [AKASHAVerse](./akasha-verse/README.md)
+- [Authentication](./auth-app/README.md)
+- [Settings](./settings-app/README.md)
+- [Extensions](./akasha-verse/README.md)
 - [Lists](./bookmarks/README.md)
 - [Legal](./legal/README.md)
 - [Notifcations](./notifications/README.md)
