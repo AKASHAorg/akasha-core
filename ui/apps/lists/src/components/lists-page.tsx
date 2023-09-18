@@ -71,7 +71,17 @@ const ListsPage: React.FC<unknown> = () => {
 
   return (
     <Card elevation={'1'} radius={16} padding={'p-4'}>
-      <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
+      <ListAppTopbar
+        titleLabel={t('Your List')}
+        resetLabel={t('Reset')}
+        removeAllLabel={t('Remove All')}
+        dropDownMenuItems={[
+          { id: '0', title: t('All Categories') },
+          { id: '1', title: t('Beams') },
+          { id: '2', title: t('Reflections') },
+        ]}
+        handleIconMenuClick={handleIconMenuClick}
+      />
       {listsReq?.status === 'error' && (
         <ErrorLoader
           type="script-error"

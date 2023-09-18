@@ -2,6 +2,9 @@ import * as React from 'react';
 
 import Icon from '../Icon';
 import Button from '../Button';
+import ReactMarkdown from 'react-markdown';
+import children = ReactMarkdown.propTypes.children;
+import Text from '../Text';
 
 export type ScrollTopButtonProps = {
   onClick: () => void;
@@ -10,8 +13,7 @@ export type ScrollTopButtonProps = {
 
 const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
   ({ onClick, hide }, ref) => {
-    const styledDiv =
-      'flex items-center justify-center w-[48px] h-[48px] rounded-3xl bg-[#DCE3FF] cursor-pointer hover:(bg-[#4666E6] [&>*]:stroke-[#fff])';
+    const styledDiv = `flex items-center justify-center w-12 h-12 rounded-3xl bg-grey5 cursor-pointer hover:(bg-grey4 [&>*]:stroke-[#fff])`;
 
     return (
       !hide && (

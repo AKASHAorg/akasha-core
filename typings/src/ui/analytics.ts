@@ -1,22 +1,17 @@
 export enum AnalyticsEventTypes {
-  ENABLE_TRACKING = 0,
-  TRACK_EVENT,
-  SEARCH_EVENT,
+  ENABLE_TRACKING = 'analytics:enable-tracking',
+  TRACK_EVENT = 'analytics:track-event',
 }
 
-export interface EnableTrackingEvent {
-  eventType: AnalyticsEventTypes.ENABLE_TRACKING;
-}
-
-export interface TrackEventData {
-  eventType: AnalyticsEventTypes.TRACK_EVENT;
-  category: AnalyticsCategories;
-  action?: string;
-  name?: string;
-  value?: string;
-}
-
-export type AnalyticsEventData = TrackEventData | EnableTrackingEvent;
+export type AnalyticsEventData = {
+  event: AnalyticsEventTypes;
+  data: {
+    category: AnalyticsCategories;
+    action?: string;
+    name?: string;
+    value?: string;
+  };
+};
 
 export enum AnalyticsCategories {
   APPS = 'Apps',

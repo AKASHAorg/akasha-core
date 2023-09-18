@@ -76,18 +76,16 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
       <>
         <FeedWidget
           queryKey="akasha-profile-beams-query-key"
-          modalSlotId={layoutConfig.modalSlotId}
           itemType={EntityTypes.BEAM}
           loggedProfileData={loggedProfileData}
-          navigateToModal={navigateToModal}
           onLoginModalOpen={showLoginModal}
           contentClickable={true}
           onEntryFlag={handleEntryFlag}
           onEntryRemove={handleEntryRemove}
           itemSpacing={8}
-          i18n={getTranslationPlugin().i18n}
           onRebeam={handleRebeam}
           onNavigate={useEntryNavigation(getRoutingPlugin()?.routing?.navigateTo)}
+          newItemsPublishedLabel={t('New Beams published recently')}
         />
       </>
     </Stack>

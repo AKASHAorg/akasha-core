@@ -5,8 +5,10 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { useWindowVirtualizer, VirtualItem, Virtualizer } from '@tanstack/react-virtual';
-import { tw } from '@twind/core';
+import { defaultRangeExtractor, useWindowVirtualizer, VirtualItem } from '@tanstack/react-virtual';
+import { useScrollTop } from './use-scroll-top';
+import { mergeWithCache } from '../../utils/virtual-list-utils';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export type CardListProps<T> = {
   items: VirtualItem[];
@@ -17,172 +19,294 @@ export type CardListProps<T> = {
 };
 
 export type ScrollerState = {
-  startItemId: string;
-  startItemOffset: number;
+  startItemCursor: string;
   measurementsCache: VirtualItem[];
-  scrollDirection: Virtualizer<Window, HTMLElement>['scrollDirection'];
   itemsCount: number;
-  lastItemId?: string;
-  firstItemId?: string;
+  visibleCursorRange: {
+    startCursor: string;
+    endCursor: string;
+  };
 };
 
 export type ScrollerOnChangeState<T> = ScrollerState & {
   allEntries: T[];
-  firstItemIdx: number;
-  lastItemIdx: number;
 };
 
 export type EntryListProps<T> = {
+  // array of pages, each page having multiple nodes
+  // important because we need to reverse the items in pages
   pages: T[];
   children?: (props: CardListProps<T>) => React.ReactElement[];
   itemSpacing?: number;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';
-  hasNextPage?: boolean;
   languageDirection?: 'ltr' | 'rtl';
   isFetchingNextPage?: boolean;
   isFetchingPreviousPage?: boolean;
   onScrollStateChange?: (scrollerState: ScrollerOnChangeState<T>) => void;
-  onScrollStateReset?: () => void;
-  initialScrollState?: ScrollerState;
-  getItemKey?: (index: number, entries: T[]) => string;
+  onScrollStateReset?: (hardReset?: boolean) => void;
+  initialScrollState?: ScrollerState & { isFetched: boolean };
+  getItemKey?: (index: number, entries: (T | VirtualItem)[]) => string;
+  newItemsCount?: number;
+  scrollerOptions?: { overscan: number };
+  onFetchNextPage: (lastCursor: string) => void;
+  onFetchPreviousPage: (firstCursor: string, force?: boolean) => void;
+  onScrollStateSave: (scrollState: ScrollerOnChangeState<T>) => void;
+  newItemsPublishedLabel: string;
 };
 
 function EntryList<T>(props: EntryListProps<T>) {
   const {
-    pages,
+    pages = [],
     itemSpacing = 0,
     languageDirection = 'ltr',
-    hasNextPage,
     isFetchingNextPage,
     isFetchingPreviousPage,
     requestStatus,
     children,
-    onScrollStateChange,
     initialScrollState,
     onScrollStateReset,
     getItemKey,
+    newItemsCount,
+    scrollerOptions,
+    onFetchPreviousPage,
+    onFetchNextPage,
+    onScrollStateSave,
+    newItemsPublishedLabel,
   } = props;
-  const [hideScrollTop, setHideScrollTop] = React.useState(true);
+
   const rootElementRef = React.useRef<HTMLDivElement>();
+  const isScrollRestored = React.useRef(false);
+  const [listReset, resetList] = React.useReducer(() => ({}), {});
 
-  const rootElementOffset = React.useRef(0);
+  // @TODO: maybe pass the topbar slotId here?
+  const topbarHeight = document.getElementById('topbar-slot')?.offsetParent?.clientHeight || 0;
 
-  const allEntries = React.useMemo(() => {
-    if (pages) {
-      return pages.flatMap(page => page);
+  // keep the first scroll state as ref
+  const initialScrollStateRef = React.useRef<ScrollerState & { isFetched: boolean }>();
+  React.useEffect(() => {
+    if (!initialScrollStateRef.current && initialScrollState.isFetched) {
+      initialScrollStateRef.current = initialScrollState;
     }
-    return [];
-  }, [pages]);
+  }, [initialScrollState]);
 
+  const cachedScrollState = React.useRef<ScrollerState & { isFetched: boolean }>();
   React.useLayoutEffect(() => {
-    rootElementOffset.current = rootElementRef.current?.offsetTop || 0;
-  }, []);
+    if (initialScrollState.isFetched) {
+      cachedScrollState.current = initialScrollState;
+    }
+  }, [initialScrollState, listReset]);
+
+  const measurementsCache = React.useMemo(() => {
+    if (initialScrollState.isFetched) {
+      return initialScrollState.measurementsCache;
+    }
+    return cachedScrollState.current?.measurementsCache || [];
+  }, [initialScrollState]);
+
+  // merge pages and measurementsCache
+  const pageItems: (T & { index: number; key: string })[] = React.useMemo(() => {
+    if (pages.length) {
+      return mergeWithCache(measurementsCache, pages);
+    }
+    return measurementsCache;
+  }, [measurementsCache, pages, listReset]);
 
   const virtualizer = useWindowVirtualizer({
-    count: hasNextPage ? allEntries.length + 1 : allEntries.length,
-    estimateSize: () => 100,
-    scrollMargin: rootElementOffset.current,
-    initialOffset: initialScrollState?.startItemOffset || 0,
-    initialMeasurementsCache: initialScrollState?.measurementsCache,
+    count: pageItems.length,
+    scrollPaddingEnd: 100,
+    estimateSize: () => 150,
+    scrollMargin: rootElementRef.current?.offsetTop || 0,
+    initialMeasurementsCache: initialScrollStateRef.current?.measurementsCache || [],
     scrollingDelay: 250,
-    getItemKey: index => getItemKey(index, allEntries),
-    onChange: vInstance => {
-      // only save the state when isScrolling
-      if (!vInstance.isScrolling) {
-        return;
-      }
-      const vItems = vInstance.getVirtualItems();
-      if (!vItems.length || !allEntries.length) {
-        return;
-      }
-      const startItemId = allEntries[vItems[0].index]['id'];
-      const { startIndex, endIndex } = vInstance.range;
-      const [offset] = vInstance.getOffsetForIndex(startIndex, 'center');
-      if (onScrollStateChange) {
-        onScrollStateChange({
-          allEntries,
-          startItemId,
-          startItemOffset: offset,
-          measurementsCache: vInstance.measurementsCache,
-          scrollDirection: vInstance.scrollDirection,
-          itemsCount: allEntries.length,
-          lastItemId: allEntries[allEntries.length - 1]['id'],
-          firstItemId: allEntries[0]['id'],
-          firstItemIdx: startIndex,
-          lastItemIdx: endIndex,
-        });
-      }
-    },
+    overscan: scrollerOptions.overscan,
+    getItemKey: index => getItemKey(index, pageItems),
   });
+
   const items = virtualizer.getVirtualItems();
-  /**
-   * Handle scroll to top button visibility
-   */
-  React.useLayoutEffect(() => {
-    const onScroll = () => {
-      if (window.scrollY > 0) {
-        return setHideScrollTop(false);
-      }
-      return setHideScrollTop(true);
-    };
-    window.addEventListener('scroll', onScroll);
-  }, []);
 
-  const scrollTopButtonPlacement = React.useMemo(() => {
-    if (languageDirection === 'rtl') return 0;
-    return rootElementRef.current ? rootElementRef.current.clientWidth - 64 : null;
-  }, [languageDirection, rootElementRef]);
-
-  const handleScrollToTop = () => {
-    virtualizer.scrollToIndex(0, {
-      align: 'start',
-    });
-    if (onScrollStateReset) {
-      onScrollStateReset();
+  const [paddingTop, paddingBottom] = React.useMemo(() => {
+    if (items.length) {
+      return [
+        Math.max(0, items[0].start - virtualizer.options.scrollMargin),
+        Math.max(0, virtualizer.getTotalSize() - items[items.length - 1].end),
+      ];
     }
-  };
+    return [0, 0];
+  }, [items, virtualizer]);
 
-  if (items.length === 0) {
-    return null;
-  }
+  const prevPopulatedItem = React.useRef<T & { index: number; key: string }>();
+
+  const [firstPopulatedItem, lastPopulatedItem] = React.useMemo(() => {
+    if (pages.length) {
+      const firstItem = pageItems.find(it => it.key === pages[0]['cursor']);
+      const lastItem = pageItems.find(it => it.key === pages[pages.length - 1]['cursor']);
+      return [firstItem, lastItem];
+    }
+    return [];
+  }, [pageItems, pages]);
+
+  React.useEffect(() => {
+    if (!prevPopulatedItem.current && firstPopulatedItem) {
+      prevPopulatedItem.current = firstPopulatedItem;
+    }
+  }, [firstPopulatedItem]);
+
+  React.useEffect(() => {
+    if (!firstPopulatedItem) {
+      return;
+    }
+    if (items[0] && items[0].index < firstPopulatedItem.index && !isScrollRestored.current) {
+      virtualizer.scrollToIndex(firstPopulatedItem.index, { align: 'start' });
+      const firstDomEl = rootElementRef.current.querySelector(
+        `[data-index="${firstPopulatedItem.index}"]`,
+      );
+      if (firstDomEl) {
+        const rect = firstDomEl.getClientRects().item(0);
+        if (Math.abs(rect.top - topbarHeight) < topbarHeight) {
+          isScrollRestored.current = true;
+        }
+      }
+    }
+  }, [firstPopulatedItem, items, topbarHeight, virtualizer]);
+
+  // save scroll state hook
+  const prevRange = React.useRef<{ startIndex: number; endIndex: number }>(
+    virtualizer.calculateRange(),
+  );
+  React.useLayoutEffect(() => {
+    if (virtualizer.isScrolling) {
+      const { startIndex, endIndex } = virtualizer.calculateRange();
+      if (!firstPopulatedItem) {
+        return;
+      }
+      if (
+        startIndex < firstPopulatedItem.index &&
+        prevRange.current.startIndex === startIndex &&
+        prevRange.current.endIndex === endIndex
+      ) {
+        return;
+      }
+
+      const state: ScrollerOnChangeState<T> = {
+        allEntries: pages,
+        startItemCursor: pageItems[0]['key'],
+        measurementsCache: virtualizer.measurementsCache,
+        itemsCount: pageItems.length,
+        visibleCursorRange: {
+          startCursor: pages[startIndex]?.['cursor'] || firstPopulatedItem.key,
+          endCursor: pages[endIndex]?.['cursor'] || lastPopulatedItem.key,
+        },
+      };
+      onScrollStateSave(state);
+      prevRange.current = { startIndex, endIndex };
+    }
+  }, [
+    pageItems.length,
+    onScrollStateSave,
+    paddingBottom,
+    paddingTop,
+    pages,
+    virtualizer,
+    firstPopulatedItem,
+    pageItems,
+    lastPopulatedItem,
+  ]);
+
+  const { isHidden, scrollTopButtonPlacement } = useScrollTop({
+    rootElementRef,
+    topbarHeight,
+    itemSpacing,
+    languageDirection,
+  });
+
+  // next page loading logic
+  React.useLayoutEffect(() => {
+    const lastItem = items[items.length - 1];
+    if (!lastItem || !lastPopulatedItem) {
+      return;
+    }
+    if (lastItem.index >= lastPopulatedItem.index) {
+      onFetchNextPage(lastPopulatedItem.key as string);
+    }
+  }, [items, lastPopulatedItem, onFetchNextPage]);
+
+  // prev page loading logic
+  React.useLayoutEffect(() => {
+    if (
+      items.length &&
+      !isFetchingNextPage &&
+      virtualizer.scrollDirection === 'backward' &&
+      isScrollRestored.current &&
+      items[0].index < firstPopulatedItem?.index &&
+      firstPopulatedItem?.index > 0
+    ) {
+      return onFetchPreviousPage(firstPopulatedItem.key, true);
+    }
+  }, [
+    firstPopulatedItem,
+    isFetchingNextPage,
+    items,
+    onFetchPreviousPage,
+    paddingTop,
+    pageItems,
+    scrollerOptions.overscan,
+    virtualizer.scrollDirection,
+  ]);
+
+  const handleScrollToTop = React.useCallback(
+    (reset?: boolean) => () => {
+      const [offset] = virtualizer.getOffsetForIndex(0, 'start');
+      virtualizer.scrollToOffset(offset - topbarHeight - itemSpacing, { align: 'start' });
+      if (onScrollStateReset) {
+        onScrollStateReset(reset);
+      }
+      cachedScrollState.current = null;
+      initialScrollStateRef.current = null;
+      resetList();
+    },
+    [itemSpacing, onScrollStateReset, topbarHeight, virtualizer],
+  );
 
   return (
-    <Stack ref={rootElementRef}>
-      <div
-        className={tw('relative')}
-        style={{
-          height: virtualizer.getTotalSize(),
-        }}
-      >
-        <div
-          className={tw(`absolute w-full top-0 left-0`)}
-          style={{
-            transform: `translateY(${items[0].start - virtualizer.options.scrollMargin}px)`,
-          }}
-        >
-          {requestStatus === 'loading' && isFetchingPreviousPage && (
-            <Stack fullWidth={true} customStyle="p-8">
-              <Spinner />
-            </Stack>
-          )}
-          {children({
-            items,
-            allEntries,
-            measureElementRef: virtualizer.measureElement,
-            isFetchingNextPage,
-            itemSpacing,
-          })}
-          {isFetchingNextPage && (
-            <Stack fullWidth={true} customStyle="p-8">
-              <Spinner />
-            </Stack>
-          )}
-        </div>
-        <ScrollTopWrapper placement={scrollTopButtonPlacement}>
-          <ScrollTopButton hide={hideScrollTop} onClick={handleScrollToTop} />
-        </ScrollTopWrapper>
-      </div>
-    </Stack>
+    <div
+      ref={rootElementRef}
+      style={{
+        paddingTop,
+        paddingBottom,
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: itemSpacing,
+      }}
+    >
+      {newItemsCount > 0 && (
+        <Button
+          customStyle={`sticky top-[${
+            topbarHeight + 8
+          }px] bg-grey5 hover:(bg-grey4) p-4 max-w-fit z-10 self-center rounded-md`}
+          variant="text"
+          label={newItemsPublishedLabel}
+          onClick={handleScrollToTop(true)}
+        />
+      )}
+      {requestStatus === 'loading' &&
+        isFetchingPreviousPage &&
+        firstPopulatedItem.index === items[0].index && (
+          <Stack fullWidth={true} customStyle="p-8">
+            <Spinner />
+          </Stack>
+        )}
+      {children({
+        items,
+        allEntries: pageItems,
+        measureElementRef: virtualizer.measureElement,
+        isFetchingNextPage,
+        itemSpacing,
+      })}
+      <ScrollTopWrapper placement={scrollTopButtonPlacement}>
+        <ScrollTopButton hide={isHidden} onClick={handleScrollToTop()} />
+      </ScrollTopWrapper>
+    </div>
   );
 }
 

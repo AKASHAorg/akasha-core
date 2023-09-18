@@ -154,18 +154,17 @@ const FeedPage: React.FC<FeedPageProps> = props => {
       )}
       <FeedWidget
         queryKey="akashaorg-antenna-page-query"
-        modalSlotId={layoutConfig.modalSlotId}
         itemType={EntityTypes.BEAM}
         loggedProfileData={loggedProfileData}
-        navigateToModal={navigateToModal}
         onLoginModalOpen={showLoginModal}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
         itemSpacing={8}
-        i18n={getTranslationPlugin().i18n}
         onRebeam={handleRebeam}
+        trackEvent={analyticsActions.trackEvent}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
+        newItemsPublishedLabel={t('New Beams published recently')}
       />
     </Stack>
   );
