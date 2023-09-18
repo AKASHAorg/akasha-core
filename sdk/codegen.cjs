@@ -55,7 +55,7 @@ const config = {
               `
 import getSDK from '@akashaorg/awf-sdk';
 
-export function fetcher<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
+export function composeDbFetch<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
   const sdk = getSDK();
   const { optionName } = sdk.services.gql.mutationNotificationConfig;
 
@@ -66,8 +66,7 @@ export function fetcher<TData, TVariables extends Record<string, unknown>>(query
     const result = options?.hasOwnProperty(optionName) ?
       await sdk.services.gql.wrapWithMutationEvent(call, JSON.stringify(options[optionName])) : await call;
     if (!result.errors || !result.errors.length) {
-        // emit eventbus notif
-        return result.data as TData;
+      return result.data as TData;
     }
     throw result.errors;
   };
@@ -91,7 +90,7 @@ export function fetcher<TData, TVariables extends Record<string, unknown>>(query
         exposeMutationKeys: true,
         exposeFetcher: true,
         fetcher: {
-          func: 'fetcher',
+          func: 'composeDbFetch',
           isReactHook: false,
 
         }
