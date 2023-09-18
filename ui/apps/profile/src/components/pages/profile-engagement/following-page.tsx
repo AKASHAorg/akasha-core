@@ -3,6 +3,7 @@ import FollowProfileButton from '../../follow-profile-button';
 import Following from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Following';
 import EngagementTab from './engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
@@ -151,15 +152,19 @@ const FollowingPage: React.FC<unknown> = () => {
               followingReq.fetchNextPage();
             }
           }}
-          renderFollowElement={(profileId, followId, isFollowing) => (
-            <FollowProfileButton
-              profileID={profileId}
-              isLoggedIn={isLoggedIn}
-              followId={followId}
-              isFollowing={isFollowing}
-              showLoginModal={showLoginModal}
-            />
-          )}
+          renderFollowElement={(profileId, followId, isFollowing) =>
+            followDocumentsReq.status === 'loading' ? (
+              <TextLine width="w-24" animated />
+            ) : (
+              <FollowProfileButton
+                profileID={profileId}
+                isLoggedIn={isLoggedIn}
+                followId={followId}
+                isFollowing={isFollowing}
+                showLoginModal={showLoginModal}
+              />
+            )
+          }
           onProfileClick={onProfileClick}
           getMediaUrl={getProfileImageVersionsWithMediaUrl}
         />
