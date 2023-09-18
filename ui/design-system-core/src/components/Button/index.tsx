@@ -33,12 +33,20 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     ...rest
   } = props;
 
-  if (plain)
+  if (plain) {
+    const disabledStyle = disabled ? 'opacity-50 cursor-not-allowed' : '';
     return (
-      <button ref={ref} type="button" className={tw(customStyle)} disabled={disabled} {...rest}>
+      <button
+        ref={ref}
+        type="button"
+        className={tw(`${disabledStyle} ${customStyle}`)}
+        disabled={disabled}
+        {...rest}
+      >
         {children}
       </button>
     );
+  }
 
   if (iconOnly || size === 'xs') {
     if (!icon) return null;
