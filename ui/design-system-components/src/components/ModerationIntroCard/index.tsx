@@ -18,6 +18,7 @@ export type OverviewCTA = {
 
 export type ModerationIntroCardProps = {
   assetName?: string;
+  assetExtension?: string;
   titleLabel: string;
   introLabel: string;
   subtitleLabel: string;
@@ -33,6 +34,7 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
     titleLabel,
     introLabel,
     subtitleLabel,
+    assetExtension = 'webp',
     publicImgPath = '/images',
     codeOfConductLabel,
     overviewCTAArr,
@@ -50,7 +52,7 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
           <img
             className={tw('object-contain')}
             aria-label={assetName}
-            src={`${publicImgPath}/${assetName}.webp`}
+            src={`${publicImgPath}/${assetName}.${assetExtension}`}
             alt={assetName}
             data-testid={`${assetName}-image`}
           />

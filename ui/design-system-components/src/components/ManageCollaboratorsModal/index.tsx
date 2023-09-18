@@ -13,6 +13,7 @@ import SearchBar, { SearchBarProps } from '../SearchBar';
 
 export type ManageCollaboratorsModalProps = Omit<SearchBarProps, 'searchInputSize' | 'iconSize'> & {
   assetName?: string;
+  assetExtension?: string;
   publicImgPath?: string;
   titleLabel: string;
   collaborators: Profile[];
@@ -28,6 +29,7 @@ export type ManageCollaboratorsModalProps = Omit<SearchBarProps, 'searchInputSiz
 const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props => {
   const {
     assetName = 'no-collaborators',
+    assetExtension = 'webp',
     publicImgPath = '/images',
     titleLabel,
     inputValue,
@@ -88,7 +90,10 @@ const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props 
             {!collaborators.length && (
               <div className={tw(`flex w-full gap-2`)}>
                 <div className={tw(`w-60 h-60 self-center`)}>
-                  <Image customStyle="object-contain" src={`${publicImgPath}/${assetName}.webp`} />
+                  <Image
+                    customStyle="object-contain"
+                    src={`${publicImgPath}/${assetName}.${assetExtension}`}
+                  />
                 </div>
                 <Text variant="h4" align="center">
                   {noCollaboratorsLabel}
