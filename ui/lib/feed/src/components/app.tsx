@@ -1,244 +1,63 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { EntityTypes, IContentClickDetails, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, Profile, IContentClickDetails, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import BeamFeed, { BeamFeedProps } from './beam-feed';
-import ReflectFeed, { ReflectFeedProps } from './reflect-feed';
-import {
-  useGetScrollState,
-  useRemoveScrollState,
-  useSaveScrollState,
-} from '../utils/use-scroll-state';
 import { ScrollStateDBWrapper } from '../utils/scroll-state-db';
-import type { ScrollerOnChangeState } from '@akashaorg/design-system-components/lib/components/EntryList';
+import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import {
-  useInfiniteGetBeamsQuery,
-  useInfiniteGetReflectionsFromBeamQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-
-const canFetchNextPage = (req: {
-  isFetchingNextPage: boolean;
-  hasNextPage?: boolean;
-  isError: boolean;
-}) => !req.isFetchingNextPage && req.hasNextPage && !req.isError;
-
-const canFetchPreviousPage = (req: {
-  isFetchingPreviousPage: boolean;
-  hasPreviousPage?: boolean;
-  isError: boolean;
-}) => !req.isFetchingPreviousPage && req.hasPreviousPage && !req.isError;
+/**
+ * Scroll restoration:
+ * start from the first item that was visible in the viewport (firstItemCursor)
+ *  - if first time visitor - start from most recent item
+ * fetch \{ overscan \} number of items that were published \{ before \} the first item in the list
+ *  - first item in the list (startItemCursor) is different from the (firstItemCursor)
+ *  - if there are items in the response, show the "New items" pill
+ *    - on click - reset the list including the new items
+ */
 
 export type FeedWidgetCommonProps = {
   queryKey: string;
-  navigateToModal: (props: ModalNavigationOptions) => void;
-  onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  scrollerOptions?: {
-    overscan: number;
-  };
+  itemType: EntityTypes;
+  loggedProfileData?: Profile;
+  onLoginModalOpen: BeamFeedProps['onLoginModalOpen'];
+  onEntryFlag: BeamFeedProps['onEntryFlag'];
+  onEntryRemove: BeamFeedProps['onEntryRemove'];
+  itemSpacing: BeamFeedProps['itemSpacing'];
+  onNavigate: BeamFeedProps['onNavigate'];
+  contentClickable?: boolean;
+  onRebeam?: BeamFeedProps['onRebeam'];
+  accentBorderTop?: boolean;
+  trackEvent?: BeamFeedProps['trackEvent'];
+  scrollerOptions?: { overscan: number };
+  newItemsPublishedLabel: string;
 };
 
-type OmitProps =
-  | 'requestStatus'
-  | 'pages'
-  | 'isFetchingNextPage'
-  | 'hasNextPage'
-  | 'onLoadMore'
-  | 'onScrollStateChange'
-  | 'initialScrollState'
-  | 'onScrollStateReset';
-type FeedProps = Omit<BeamFeedProps, OmitProps> | Omit<ReflectFeedProps, OmitProps>;
+const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
+  const { itemType } = props;
 
-const FeedWidgetRoot: React.FC<
-  FeedWidgetCommonProps & Extract<FeedProps, { itemType: EntityTypes }>
-> = props => {
-  const { itemType, i18n, queryKey, scrollerOptions = { overscan: 5 } } = props;
-  const { pathname } = window.location;
-  const scrollStateQK = `${pathname}_${queryKey}`;
+  const { getTranslationPlugin, layoutConfig } = useRootComponentProps();
+  const { i18n } = getTranslationPlugin();
 
   const db = React.useMemo(() => {
-    return new ScrollStateDBWrapper('lib-feed-scroll-state');
+    return new ScrollStateDBWrapper('scroll-state');
   }, []);
 
-  const getScrollState = useGetScrollState(scrollStateQK, db);
-  const saveScrollState = useSaveScrollState(scrollStateQK, db);
-  const removeScrollState = useRemoveScrollState(scrollStateQK, db);
-
-  // forward pagination: first, after? - most recent -> least recent
-  // backward pagination: last, before? - least recent -> most recent
-  const initialItemId = React.useMemo(() => {
-    if (getScrollState.data) {
-      return getScrollState.data.firstItemId;
-    }
-  }, [getScrollState.data]);
-
-  const beamsReq = useInfiniteGetBeamsQuery(
-    'first',
-    {
-      first: scrollerOptions.overscan,
-      after: initialItemId,
-    },
-    {
-      enabled: itemType === EntityTypes.BEAM && getScrollState.isFetched,
-      select: data => {
-        if (itemType !== EntityTypes.BEAM) return;
-        return {
-          pages: data.pages.flatMap(page => page.akashaBeamIndex.edges.flatMap(edge => edge.node)),
-          pageParams: data.pageParams,
-        };
-      },
-      getNextPageParam: (last, all) => {
-        if (itemType !== EntityTypes.BEAM) return;
-        if (last.akashaBeamIndex.pageInfo.hasNextPage) {
-          return all.length;
-        }
-      },
-      getPreviousPageParam: firstPage => {
-        if (itemType !== EntityTypes.BEAM) return;
-        if (firstPage.akashaBeamIndex.pageInfo.hasPreviousPage) {
-          return { before: firstPage.akashaBeamIndex.pageInfo.startCursor };
-        }
-      },
-    },
-  );
-
-  const reflectReq = useInfiniteGetReflectionsFromBeamQuery(
-    'last',
-    { id: '@TODO: fix', last: scrollerOptions.overscan },
-    {
-      enabled: itemType === EntityTypes.REFLECT && getScrollState.isFetched,
-      select: data => {
-        if (itemType !== EntityTypes.REFLECT) return;
-        return {
-          pages: data.pages.flatMap(page => {
-            if (page.node && page.node['reflections']) {
-              return page.node['reflections'].edges.flatMap(edge => edge.node);
-            }
-          }),
-          pageParams: data.pageParams,
-        };
-      },
-      getNextPageParam: (last, all) => {
-        if (itemType !== EntityTypes.REFLECT) return;
-        if (last.node['reflections'].edges.pageInfo.hasNextPage) {
-          return all.length;
-        }
-      },
-      getPreviousPageParam: firstPage => {
-        if (itemType !== EntityTypes.REFLECT) return;
-        if (firstPage.node['reflections'].edges.pageInfo.hasNextPage) {
-          return firstPage.node['reflections'].edges.pageInfo.startCursor;
-        }
-      },
-    },
-  );
-
-  const handleRemoveScrollState = React.useCallback(() => {
-    // remove scroll state
-    removeScrollState.mutate();
-  }, [removeScrollState]);
-
-  const handleScrollStateChange = React.useCallback(
-    (scrollState: ScrollerOnChangeState<unknown>) => {
-      const onFetchError = (err: Error) => {
-        // @TODO: handle this error. Through state maybe?
-        console.error(err, beamsReq, reflectReq);
-      };
-      const tryFetchNextPage = (lastItemId: string) => {
-        if (itemType === EntityTypes.BEAM && canFetchNextPage(beamsReq)) {
-          beamsReq
-            .fetchNextPage({ pageParam: { first: scrollerOptions.overscan, after: lastItemId } })
-            .catch(onFetchError);
-        }
-        if (itemType === EntityTypes.REFLECT && canFetchNextPage(reflectReq)) {
-          reflectReq
-            .fetchNextPage({ pageParam: { first: scrollerOptions.overscan, after: lastItemId } })
-            .catch(onFetchError);
-        }
-      };
-      const tryFetchPreviousPage = (firstItemId: string) => {
-        if (itemType === EntityTypes.BEAM && canFetchPreviousPage(beamsReq)) {
-          beamsReq
-            .fetchPreviousPage({
-              pageParam: { last: scrollerOptions.overscan, before: firstItemId },
-            })
-            .catch(onFetchError);
-        }
-
-        if (itemType === EntityTypes.REFLECT && canFetchPreviousPage(reflectReq)) {
-          reflectReq
-            .fetchPreviousPage({
-              pageParam: { last: scrollerOptions.overscan, before: firstItemId },
-            })
-            .catch(onFetchError);
-        }
-      };
-
-      const {
-        measurementsCache,
-        scrollDirection,
-        firstItemId,
-        lastItemIdx,
-        firstItemIdx,
-        lastItemId,
-        allEntries,
-        itemsCount,
-        startItemOffset,
-      } = scrollState;
-
-      saveScrollState.mutate({
-        scrollDirection,
-        startItemId: firstItemId,
-        lastItemId,
-        measurementsCache,
-        startItemOffset,
-        itemsCount,
-      });
-      if (scrollDirection === 'forward') {
-        if (lastItemIdx >= allEntries.length - 1) {
-          tryFetchNextPage(lastItemId);
-        }
-      }
-      if (scrollDirection === 'backward') {
-        if (firstItemIdx < scrollerOptions.overscan) {
-          tryFetchPreviousPage(firstItemId);
-        }
-        return;
-      }
-    },
-    [beamsReq, itemType, reflectReq, saveScrollState, scrollerOptions.overscan],
-  );
-
   return (
-    <I18nextProvider i18n={i18n}>
-      {itemType === EntityTypes.BEAM && (
-        <BeamFeed
-          {...props}
-          requestStatus={beamsReq.status}
-          pages={beamsReq.data?.pages}
-          isFetchingNextPage={beamsReq.isFetchingNextPage}
-          isFetchingPreviousPage={beamsReq.isFetchingPreviousPage}
-          hasNextPage={beamsReq.hasNextPage}
-          onScrollStateChange={handleScrollStateChange}
-          initialScrollState={getScrollState.data}
-          onScrollStateReset={handleRemoveScrollState}
-          getItemKey={(idx, items) => items[idx]['id']}
-        />
-      )}
-      {itemType === EntityTypes.REFLECT && (
-        <ReflectFeed
-          {...props}
-          requestStatus={reflectReq.status}
-          pages={reflectReq.data?.pages}
-          isFetchingNextPage={reflectReq.isFetchingNextPage}
-          isFetchingPreviousPage={reflectReq.isFetchingPreviousPage}
-          hasNextPage={reflectReq.hasNextPage}
-          onScrollStateChange={handleScrollStateChange}
-          initialScrollState={getScrollState.data}
-          onScrollStateReset={handleRemoveScrollState}
-          getItemKey={(idx, items) => items[idx]['id']}
-        />
-      )}
-    </I18nextProvider>
+    <StrictMode>
+      <I18nextProvider i18n={i18n}>
+        {itemType === EntityTypes.BEAM && (
+          <BeamFeed
+            {...props}
+            i18n={i18n}
+            modalSlotId={layoutConfig.modalSlotId}
+            locale={i18n.languages[0].toLowerCase() as ILocale}
+            db={db}
+          />
+        )}
+        {/*{itemType === EntityTypes.REFLECT && <ReflectFeed {...props} db={db} />}*/}
+      </I18nextProvider>
+    </StrictMode>
   );
 };
 

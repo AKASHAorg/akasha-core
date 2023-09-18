@@ -1,7 +1,8 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import routes, { BEAM, FEED, MY_FEED, PROFILE_FEED, REFLECT, TAGS } from './routes';
 import {
-  EventTypes,
+  EditorBlockEvents,
+  EditorBlockRegisterEvent,
   IAppConfig,
   IntegrationRegistrationOptions,
   LogoTypeSource,
@@ -10,12 +11,12 @@ import {
   RootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/lib/ui/editor-blocks';
-import { filter } from 'rxjs';
+import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
 /**
  * Initialization of the integration is optional.
  * It is called before all `register` calls but after all `getPlugin`;
- * @example Initialization an integration and triggerin of a notification
+ * @example Initialization an integration and triggering of a notification
  * ```
  * export const initialize: (opts: IntegrationInitOptions) => void = opts => {
  *  const notificationPlugin: any = opts.plugins["@akashaorg/app-notifications"].notification;
@@ -97,16 +98,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
 class EditorBlocksPlugin {
   static readonly editorBlocks: EditorBlockInterface[] = [];
   static observe = (uiEvents: RootComponentProps['uiEvents']) => {
-    const filterEvent = (eventType: EventTypes) => {
-      return filter(
-        (eventData: { event: string }) =>
-          eventData && eventData.hasOwnProperty('event') && eventData.event === eventType,
-      );
-    };
-    uiEvents.pipe(filterEvent(EventTypes.RegisterEditorBlock)).subscribe({
-      next: (evData: { event: EventTypes.RegisterEditorBlock; data: EditorBlockInterface[] }) => {
+    uiEvents.pipe(filterEvent(EditorBlockEvents.RegisterEditorBlock)).subscribe({
+      next: (evData: EditorBlockRegisterEvent) => {
         if (!evData.data) {
-          console.log('event =>', evData);
           return;
         }
         for (const block of evData.data) {

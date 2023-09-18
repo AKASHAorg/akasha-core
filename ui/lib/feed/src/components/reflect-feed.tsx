@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
+  AnalyticsEventData,
   EntityTypes,
   IContentClickDetails,
   ModalNavigationOptions,
   NavigateToParams,
   Profile,
-  TrackEventData,
 } from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -16,10 +16,11 @@ import EntryList, {
   EntryListProps,
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
+import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
+import type { FeedWidgetCommonProps } from './app';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
-  itemType: EntityTypes.REFLECT;
   beamId?: string;
   locale?: ILocale;
   onEntryFlag?: (
@@ -32,7 +33,7 @@ export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> &
   className?: string;
   modalSlotId: string;
   accentBorderTop?: boolean;
-  trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
+  trackEvent?: (data: AnalyticsEventData['data']) => void;
   totalEntryCount?: number;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (props: ModalNavigationOptions) => void;
@@ -42,6 +43,8 @@ export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> &
   onScrollStateChange: (scrollState: ScrollerState) => void;
   initialScrollState: ScrollerState;
   onScrollStateReset: () => void;
+  db: ScrollStateDBWrapper;
+  scrollerOptions: FeedWidgetCommonProps['scrollerOptions'];
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
@@ -52,12 +55,12 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     isFetchingNextPage,
     pages,
     itemSpacing = 8,
-    hasNextPage,
     i18n,
     initialScrollState,
     onScrollStateReset,
     onScrollStateChange,
-    getItemKey,
+    scrollerOptions,
+    newItemsPublishedLabel,
   } = props;
 
   return (
@@ -66,12 +69,22 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       isFetchingNextPage={isFetchingNextPage}
       pages={pages}
       itemSpacing={itemSpacing}
-      hasNextPage={hasNextPage}
       languageDirection={i18n?.dir() || 'ltr'}
       initialScrollState={initialScrollState}
       onScrollStateReset={onScrollStateReset}
       onScrollStateChange={onScrollStateChange}
-      getItemKey={getItemKey}
+      getItemKey={(idx, items) => items[idx]['id']}
+      scrollerOptions={scrollerOptions}
+      onFetchNextPage={(lastCursor: string) => {
+        //@TODO:
+      }}
+      onFetchPreviousPage={firstCursor => {
+        //@TODO:
+      }}
+      onScrollStateSave={() => {
+        //@TODO:
+      }}
+      newItemsPublishedLabel={newItemsPublishedLabel}
     >
       {cardProps => {
         const { items, allEntries, measureElementRef } = cardProps;
