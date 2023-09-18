@@ -3,7 +3,7 @@ import {
   AUTH_EVENTS,
   COMMENTS_EVENTS,
   ENS_EVENTS,
-  ENTRY_EVENTS,
+  ENTRY_EVENTS, GQL_EVENTS,
   PROFILE_EVENTS,
   TAG_EVENTS,
   WEB3_EVENTS,
@@ -42,7 +42,8 @@ export type GlobalEventBusData<D = unknown> = {
     | ENTRY_EVENTS
     | PROFILE_EVENTS
     | TAG_EVENTS
-    | WEB3_EVENTS;
+    | WEB3_EVENTS
+    | GQL_EVENTS;
   args?: unknown;
 };
 

@@ -131,7 +131,10 @@ const mockSDK: any = (overrides?: any) => {
         getDb: () => Promise.resolve(),
         getCollection: () => Promise.resolve(),
       },
-      gql: { run: () => Promise.resolve() },
+      gql: {
+        run: () => Promise.resolve(),
+        mutationNotificationConfig: { optionName: "testMutationConfig"}
+      },
       log: {
         create: () => ({
           info: console.info,

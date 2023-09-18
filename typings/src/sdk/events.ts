@@ -61,3 +61,7 @@ export enum APP_EVENTS {
   UPDATE_VERSION = '#integration#UpdateVersion',
   UPDATE_CONFIG = '#integration#UpdateConfig',
 }
+
+export enum GQL_EVENTS {
+  MUTATION = 'gql#mutation#event'
+}
