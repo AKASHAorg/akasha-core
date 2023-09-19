@@ -33,8 +33,8 @@ const ApplicationDetailIntro: React.FC<ApplicationDetailIntroProps> = props => {
 
   return (
     <Card padding={0}>
-      <Stack align="center" justify="between" customStyle="p-4">
-        <Stack customStyle="flex space-x-2 items-center">
+      <Stack direction="row" align="center" justify="between" padding="p-4">
+        <Stack direction="row" spacing="gap-x-2" align="center">
           <Avatar size="lg" avatar={selectedApplicant.avatar} />
 
           <Stack>
@@ -63,7 +63,7 @@ const ApplicationDetailIntro: React.FC<ApplicationDetailIntroProps> = props => {
 
       <Divider />
 
-      <Stack align="center" justify="between" customStyle=" p-4">
+      <Stack direction="row" align="center" justify="between" padding="p-4">
         <Stack customStyle="space-y-2">
           <Text variant="footnotes2">{applicationDateLabel}</Text>
 

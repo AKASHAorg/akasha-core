@@ -38,7 +38,7 @@ const ApplicationDetail: React.FC<ApplicationDetailProps> = props => {
             {categoryLabel}
           </Text>
 
-          <Stack spacing="gap-y-3" customStyle="flex-wrap">
+          <Stack direction="row" spacing="gap-x-3" customStyle="flex-wrap">
             {categories.map((category, idx) => (
               <Pill key={category + idx} label={category} active={true} customStyle="mt-3" />
             ))}
