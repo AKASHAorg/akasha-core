@@ -29,7 +29,7 @@ export type ModerationIntroCardProps = {
 
 const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
   const {
-    assetName = 'moderation',
+    assetName = 'vibe-overview',
     titleLabel,
     introLabel,
     subtitleLabel,

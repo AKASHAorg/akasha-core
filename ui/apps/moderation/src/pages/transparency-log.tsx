@@ -4,13 +4,14 @@ import { useTranslation } from 'react-i18next';
 
 import { IModerationLogItem } from '@akashaorg/typings/lib/ui';
 
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { BasePageProps } from './dashboard';
 import PaginatedTable from '../components/transparency-log/paginated-table';
+import NoFlaggedItems from '../components/transparency-log/no-flagged-items';
 
 import { generateModerationHistory } from '../utils';
 
@@ -132,23 +133,29 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
         </Button>
       </Stack>
 
-      <PaginatedTable
-        theadValues={[t('Date'), t('Category'), t('Decision'), '']}
-        rows={trimmedRows}
-        hasIcons={true}
-        clickableRows={true}
-        customStyle="mt-3 justify-end"
-        pageCount={pages.length}
-        currentPage={curPage}
-        prevButtonLabel={t('Prev')}
-        nextButtonLabel={t('Next')}
-        prevButtonDisabled={curPage === 1}
-        nextButtonDisabled={curPage === pages.length - 1}
-        onRowClick={handleRowClick}
-        onClickPage={handleClickPage}
-        onClickPrev={handleClickPrev}
-        onClickNext={handleClickNext}
-      />
+      {trimmedRows.length && (
+        <NoFlaggedItems noflaggedItemsLabel={t('Looks like there are no flagged items yet!')} />
+      )}
+
+      {!trimmedRows.length && (
+        <PaginatedTable
+          theadValues={[t('Date'), t('Category'), t('Decision'), '']}
+          rows={trimmedRows}
+          hasIcons={true}
+          clickableRows={true}
+          customStyle="mt-3 justify-end"
+          pageCount={pages.length}
+          currentPage={curPage}
+          prevButtonLabel={t('Prev')}
+          nextButtonLabel={t('Next')}
+          prevButtonDisabled={curPage === 1}
+          nextButtonDisabled={curPage === pages.length - 1}
+          onRowClick={handleRowClick}
+          onClickPage={handleClickPage}
+          onClickPrev={handleClickPrev}
+          onClickNext={handleClickNext}
+        />
+      )}
     </Stack>
   );
 };

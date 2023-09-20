@@ -1,20 +1,30 @@
 import React from 'react';
 
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type ResignConfirmationProps = {
+  assetName?: string;
+  publicImgPath?: string;
+  assetExtension?: string;
   titleLabel: string;
   subtitleLabel: string;
-  assetName?: string;
   onCloseButtonClick: () => void;
 };
 
 const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
-  const { titleLabel, subtitleLabel, onCloseButtonClick } = props;
+  const {
+    assetName = 'vibe-byemoderator',
+    publicImgPath = '/images',
+    assetExtension = 'webp',
+    titleLabel,
+    subtitleLabel,
+    onCloseButtonClick,
+  } = props;
 
   return (
     <Card padding={20}>
@@ -27,7 +37,12 @@ const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
-        <Stack customStyle="w-36 h-36 rounded-xl bg(grey7 dark:grey5)" />
+        <Stack customStyle="w-40 h-40 my-2 mx-auto">
+          <Image
+            src={`${publicImgPath}/${assetName}.${assetExtension}`}
+            dataTestId={`${assetName}-image`}
+          />
+        </Stack>
         <Text variant="footnotes2" align="center">
           {subtitleLabel}
         </Text>

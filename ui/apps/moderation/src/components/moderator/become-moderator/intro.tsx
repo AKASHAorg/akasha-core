@@ -21,7 +21,7 @@ export type BMIntroProps = PageButtonsProps &
 
 const BMIntro: React.FC<BMIntroProps> = props => {
   const {
-    assetName = 'moderation',
+    assetName = 'vibe-overview',
     assetExtension = 'webp',
     publicImgPath = '/images',
     titleLabel,
@@ -43,9 +43,7 @@ const BMIntro: React.FC<BMIntroProps> = props => {
 
         <SubtitleRenderer {...props} />
 
-        <Stack align="center" justify="end" spacing="gap-x-6">
-          <PageButtons {...props} />
-        </Stack>
+        <PageButtons {...props} />
       </Stack>
     </Card>
   );
