@@ -1,7 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { createWrapper } from './utils';
-import { mockSDK } from '@akashaorg/af-testing';
-import { of as mockOf } from 'rxjs';
 import {
   HAS_NEW_NOTIFICATIONS_KEY,
   NOTIFICATIONS_KEY,
@@ -9,22 +7,7 @@ import {
   useFetchNotifications,
   useMarkAsRead,
 } from '../use-notifications';
-import { mockNotifications, mockNotificationsProfiles } from '../__mocks__/notifications';
-
-jest.mock(
-  '@akashaorg/awf-sdk',
-  () => () =>
-    mockSDK({
-      auth: {
-        getMessages: () => Promise.resolve({ data: mockNotifications }),
-        markMessageAsRead: () => Promise.resolve({ data: true }),
-        hasNewNotifications: () => ({ data: true }),
-      },
-      profile: {
-        getProfile: () => Promise.resolve(mockNotificationsProfiles[0]),
-      },
-    }),
-);
+import { mockNotifications } from '../__mocks__/notifications';
 
 describe('useNotifications', () => {
   it('should get notifications', async () => {
@@ -44,8 +27,10 @@ describe('useNotifications', () => {
 
     await act(async () => {
       await result.current.mutateAsync(mockNotifications[0].id);
-      const notifications = queryClient.getQueryData([NOTIFICATIONS_KEY]);
+      const notifications = queryClient.getQueryData([NOTIFICATIONS_KEY]) as { read: boolean }[];
+
       const hasNewNotifs = queryClient.getQueryData([HAS_NEW_NOTIFICATIONS_KEY]);
+
       expect(notifications).toHaveLength(4);
       expect(notifications[0].read).toBeTruthy();
       expect(hasNewNotifs).toBeFalsy();
