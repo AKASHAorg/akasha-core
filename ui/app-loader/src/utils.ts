@@ -28,15 +28,18 @@ export const checkActivityFn = (opts: CheckActivityOptions) => {
   if (!location) {
     location = window.location;
   }
+
   if (manifest && manifest.hasOwnProperty('enabled') && manifest.enabled === false) {
     return false;
   }
+
   if (config.hasOwnProperty('activeWhen') && typeof config.activeWhen === 'function') {
     return config.activeWhen(location, (path, exact?: boolean) => {
       // path can contain the app name;
       return singleSpa.pathToActiveWhen(path, exact);
     });
   }
+
   return singleSpa.pathToActiveWhen(`/${encodedAppName}`)(location);
 };
 
