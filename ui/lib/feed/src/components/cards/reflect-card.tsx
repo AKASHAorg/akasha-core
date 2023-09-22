@@ -27,8 +27,8 @@ const ReflectCard: React.FC<ReflectCardProps> = props => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const onAvatarClick = (id: string) => () => {
-    navigateTo?.({
+  const onAvatarClick = (id: string) => {
+    navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
     });

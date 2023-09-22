@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -102,24 +101,16 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
-  const href = `${profileAnchorLink}/${entryData.author.id}`;
 
   return (
     <Card ref={ref} padding="p-0">
       <Stack direction="row" justify="between" customStyle="p-4 shrink-0">
-        <Anchor
-          customStyle="flex min-w-0 no-underline"
-          href={href}
-          data-testid="entry-profile-detail"
-          onClick={event => {
-            event.preventDefault();
-            if (onAvatarClick) onAvatarClick(entryData.author.id);
-          }}
-        >
+        <>
           {authorProfile.status === 'loading' ? (
             <AuthorProfileLoading />
           ) : (
             <ProfileAvatarButton
+              data-testid="entry-profile-detail"
               profileId={
                 authorProfile.status === 'error' ? entryData.author.id : authorProfile.data.did?.id
               }
@@ -127,10 +118,15 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                 authorProfile.status === 'error' ? entryData.author.id : authorProfile.data.name
               }
               avatarImage={authorProfile.status === 'error' ? null : authorProfile.data?.avatar}
+              href={`${profileAnchorLink}/${entryData.author.id}`}
+              onClick={event => {
+                event.preventDefault();
+                if (onAvatarClick) onAvatarClick(entryData.author.id);
+              }}
               ref={profileRef}
             />
           )}
-        </Anchor>
+        </>
         <Stack direction="row" spacing="gap-2" align="center" customStyle="shrink-0">
           {entryData?.createdAt && !hidePublishTime && (
             <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
@@ -193,7 +189,11 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               />
             ) : (
               rest.sortedContents.map(item => (
-                <Extension name={`${item.blockID}_content_block`} uiEvents={rest.uiEvents} />
+                <Extension
+                  key={item.blockID}
+                  name={`${item.blockID}_content_block`}
+                  uiEvents={rest.uiEvents}
+                />
               ))
             )}
           </Stack>

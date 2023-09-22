@@ -27,8 +27,8 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       : { akashaProfile: null };
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const onAvatarClick = (id: string) => () => {
-    navigateTo?.({
+  const onAvatarClick = (id: string) => {
+    navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: routes => `${routes.rootRoute}/${id}`,
     });
