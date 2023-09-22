@@ -1,12 +1,7 @@
-import { mockSDK } from '@akashaorg/af-testing';
 import { map, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { pipelineEvents } from '../src/events';
 import { defaultInitialState, initState, LoaderState } from '../src/state';
-
-jest.mock('@akashaorg/awf-sdk', () => {
-  return () => mockSDK();
-});
 
 describe('[AppLoader] state.ts', () => {
   let state: Observable<LoaderState>;

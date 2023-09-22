@@ -1,29 +1,32 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useLoggedIn, useProfileStats } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn } from '@akashaorg/ui-awf-hooks';
 
 import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
 
 export type ProfileStatsViewProps = {
   profileId: string;
+  totalBeams: number;
+  totalTopics: number;
+  totalFollowers: number;
+  totalFollowing: number;
   navigateTo: (args: NavigateToParams) => void;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
   profileId,
+  totalBeams,
+  totalTopics,
+  totalFollowers,
+  totalFollowing,
   navigateTo,
   showLoginModal,
 }) => {
   const { t } = useTranslation('app-profile');
 
   const { isLoggedIn } = useLoggedIn();
-  const profileStatsQuery = useProfileStats(profileId);
-
-  const {
-    data: { totalBeams, totalFollowers, totalFollowing, totalTopics },
-  } = profileStatsQuery.data;
 
   const handleNavigateToProfilePosts = () => {
     if (!isLoggedIn) {

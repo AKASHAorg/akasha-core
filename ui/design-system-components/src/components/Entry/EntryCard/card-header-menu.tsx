@@ -1,27 +1,29 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
 import { Menu } from '@headlessui/react';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { IconType } from '@akashaorg/typings/lib/ui';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
-export interface IMenuItem {
+export type MenuItem = {
   label?: string;
   icon?: string;
   iconColor?: string;
   plain?: boolean;
   handler?: (arg1?: React.SyntheticEvent) => void;
   disabled?: boolean;
-}
+};
 
-export interface ICardHeaderMenuProps {
+export type CardHeaderMenuProps = {
   disabled?: boolean;
-  menuItems: (IMenuItem | null)[];
+  menuItems: (MenuItem | null)[];
   headerMenuExt?: React.ReactElement;
-}
+};
 
-const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
-  const { menuItems, disabled } = props;
+const CardHeaderMenuDropdown: React.FC<CardHeaderMenuProps> = props => {
+  const { menuItems, disabled, headerMenuExt } = props;
 
   return (
     <Menu>
@@ -29,29 +31,31 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
         <Icon type="EllipsisHorizontalIcon" accentColor={true} />
       </Menu.Button>
       <Menu.Items>
-        <div className={tw(`p-1`)}>
-          <Menu.Item>{!!props.headerMenuExt && React.cloneElement(props.headerMenuExt)}</Menu.Item>
+        <Stack customStyle="p-1">
+          <Menu.Item>{!!headerMenuExt && React.cloneElement(headerMenuExt)}</Menu.Item>
 
           {menuItems.map((menuItem, idx) => {
             if (!menuItem) {
               return null;
             }
             return (
+              //@TODO: refactor
               <Menu.Item key={`${menuItem.label}-${idx}`}>
-                <div className={tw(`rounded-xs p-2 hover:cursor-pointer hover:bg-secondary/30`)}>
-                  <button
+                <Stack customStyle="rounded-xs p-2 hover:cursor-pointer hover:bg-secondary/30">
+                  <Button
                     onClick={menuItem.handler}
                     className={tw(`flex flex-row space-x-4`)}
                     disabled={menuItem.disabled}
+                    plain
                   >
                     <Text>{menuItem.label}</Text>
                     <Icon type={menuItem.icon as IconType} />
-                  </button>
-                </div>
+                  </Button>
+                </Stack>
               </Menu.Item>
             );
           })}
-        </div>
+        </Stack>
       </Menu.Items>
     </Menu>
   );
