@@ -13,6 +13,7 @@ export type CardActionProps = {
   onReflect: () => void;
 };
 
+//@TODO: Refactor this component
 const CardActions: React.FC<CardActionProps> = props => {
   const { profileId, repliesAnchorLink, disableActions, isModerated, actionsRightExt, onReflect } =
     props;
@@ -24,7 +25,8 @@ const CardActions: React.FC<CardActionProps> = props => {
         justify="end"
         align="center"
         spacing="gap-x-4"
-        customStyle="w-3/4 self-center py-4"
+        padding="py-4"
+        customStyle="w-3/4 self-center"
       >
         <Button onClick={onReflect} plain>
           <Icon type="ChatBubbleLeftRightIcon" accentColor={true} />
@@ -34,7 +36,7 @@ const CardActions: React.FC<CardActionProps> = props => {
   }
 
   return (
-    <Stack direction="row" align="center" justify="end" spacing="gap-x-4" customStyle="p-4">
+    <Stack direction="row" align="center" justify="end" spacing="gap-x-4" padding="p-4">
       <>{actionsRightExt}</>
       <Anchor
         href={`${repliesAnchorLink}/${profileId}`}
