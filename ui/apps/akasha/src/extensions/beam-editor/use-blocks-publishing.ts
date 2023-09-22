@@ -1,6 +1,11 @@
 import * as React from 'react';
-import { BlockCommandResponse, RootComponentProps, BlockAction } from '@akashaorg/typings/lib/ui';
-import { BlockActionType, EditorBlock } from '@akashaorg/typings/lib/ui/editor-blocks';
+import {
+  BlockCommandResponse,
+  RootComponentProps,
+  BlockAction,
+  ContentBlock,
+} from '@akashaorg/typings/lib/ui';
+import { BlockActionType } from '@akashaorg/typings/lib/ui/editor-blocks';
 import { filterEvents } from '@akashaorg/ui-awf-hooks';
 
 /**
@@ -18,17 +23,17 @@ const DEFAULT_TEXT_BLOCK = 'slate-block';
 
 export type UseBlocksPublishingProps = {
   uiEvents: RootComponentProps['uiEvents'];
-  availableBlocks: Omit<EditorBlock, 'idx'>[];
+  availableBlocks: Omit<ContentBlock, 'idx'>[];
   onBeamPublish: (publishedBlocks: BlockCommandResponse['data'][]) => Promise<void>;
 };
 
 export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const { uiEvents, availableBlocks, onBeamPublish } = props;
   const [isPublishing, setIsPublishing] = React.useState(false);
-  const [blocksInUse, setBlocksInUse] = React.useState<EditorBlock[]>([]);
+  const [blocksInUse, setBlocksInUse] = React.useState<ContentBlock[]>([]);
 
   const [publishedBlocks, setPublishedBlocks] = React.useState<BlockCommandResponse['data'][]>([]);
-  const defaultTextBlock = availableBlocks.find(block => block.name === DEFAULT_TEXT_BLOCK);
+  const defaultTextBlock = availableBlocks.find(block => block.propertyType === DEFAULT_TEXT_BLOCK);
   const publishBeam = React.useRef(onBeamPublish);
 
   React.useEffect(() => {
@@ -52,7 +57,8 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
         if (
           publishedBlocks.some(
             published =>
-              published.block.name === blockData.name && published.block.idx === blockData.idx,
+              published.block.propertyType === blockData.propertyType &&
+              published.block.idx === blockData.idx,
           )
         ) {
           return;
@@ -75,7 +81,9 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     const isAllPublishedWithSuccess = blocksInUse.every(bl =>
       publishedBlocks.some(
         pBlock =>
-          pBlock.block.name === bl.name && pBlock.block.idx === bl.idx && !pBlock.response.error,
+          pBlock.block.propertyType === bl.propertyType &&
+          pBlock.block.idx === bl.idx &&
+          !pBlock.response.error,
       ),
     );
     // @TODO: handle errors!

@@ -2,7 +2,7 @@ import { IMenuItem } from './menu-items';
 import {
   BlockCommandRequest,
   BlockCommandResponse,
-  EditorBlockRegisterEvent,
+  ContentBlockRegisterEvent,
 } from './editor-blocks';
 import { AnalyticsEventData } from './analytics';
 
@@ -83,7 +83,7 @@ export type UIEventData =
       event: EventTypes;
       data?: EventDataTypes;
     }
-  | EditorBlockRegisterEvent
+  | ContentBlockRegisterEvent
   | BlockCommandRequest
   | BlockCommandResponse
   | AnalyticsEventData;

@@ -1,5 +1,10 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typings/lib/ui';
+import {
+  IntegrationRegistrationOptions,
+  IWidgetConfig,
+  RootComponentProps,
+} from '@akashaorg/typings/lib/ui';
+import { ContentBlockStore } from './plugins/content-block-store';
 
 export const register: (props: IntegrationRegistrationOptions) => IWidgetConfig = props => {
   return {
@@ -17,6 +22,20 @@ export const register: (props: IntegrationRegistrationOptions) => IWidgetConfig 
       focusedPluginSlotId: 'focused-plugin-slot',
       cookieWidgetSlotId: 'cookie-widget-slot',
       snackbarNotifSlotId: 'snackbar-notif-slot',
+    },
+  };
+};
+
+export const getPlugin = (
+  props: RootComponentProps & {
+    encodeAppName: (name: string) => string;
+    decodeAppName: (name: string) => string;
+  },
+) => {
+  const contentBlockStore = ContentBlockStore.getInstance(props.uiEvents);
+  return {
+    contentBlockStore: {
+      getInfos: contentBlockStore.getContentBlockInfos,
     },
   };
 };

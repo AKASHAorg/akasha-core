@@ -1,16 +1,17 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import routes, { BEAM, FEED, MY_FEED, PROFILE_FEED, REFLECT, TAGS } from './routes';
 import {
-  EditorBlockEvents,
-  EditorBlockRegisterEvent,
+  ContentBlockEvents,
   IAppConfig,
   IntegrationRegistrationOptions,
   LogoTypeSource,
   MenuItemAreaType,
   MenuItemType,
   RootComponentProps,
+  ContentBlockExtensionInterface,
+  BlockAction,
+  ContentBlockRegisterEvent,
 } from '@akashaorg/typings/lib/ui';
-import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/lib/ui/editor-blocks';
 import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
 /**
@@ -73,15 +74,21 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     ],
   },
-  editorBlocks: [
+  contentBlocks: [
     {
-      name: 'slate-block',
+      // name should match blockInfo.content[i].propertyType
+      propertyType: 'slate-block',
       icon: 'Bars3BottomLeftIcon',
       displayName: 'Slate text block',
       eventMap: {
         publish: `slate-block/${BlockAction.PUBLISH}`,
         update: `slate-block/${BlockAction.UPDATE}`,
         validate: `slate-block/${BlockAction.VALIDATE}`,
+      },
+      loadingFn: (blockInfo, loader) => {
+        if (blockInfo) {
+          return loader(() => import('./extensions/slate-block'));
+        }
       },
     },
   ],
@@ -96,21 +103,27 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
 });
 
 class EditorBlocksPlugin {
-  static readonly editorBlocks: EditorBlockInterface[] = [];
+  static readonly editorBlocks: ContentBlockExtensionInterface[] = [];
+  static uiEventsSub = null;
   static observe = (uiEvents: RootComponentProps['uiEvents']) => {
-    uiEvents.pipe(filterEvent(EditorBlockEvents.RegisterEditorBlock)).subscribe({
-      next: (evData: EditorBlockRegisterEvent) => {
-        if (!evData.data) {
-          return;
-        }
-        for (const block of evData.data) {
-          if (EditorBlocksPlugin.editorBlocks.some(b => b.name === block.name)) {
+    if (EditorBlocksPlugin.uiEventsSub) {
+      EditorBlocksPlugin.uiEventsSub.unsubscribe();
+    }
+    EditorBlocksPlugin.uiEventsSub = uiEvents
+      .pipe(filterEvent(ContentBlockEvents.RegisterContentBlock))
+      .subscribe({
+        next: (evData: ContentBlockRegisterEvent) => {
+          if (!evData.data) {
             return;
           }
-          EditorBlocksPlugin.editorBlocks.push(block);
-        }
-      },
-    });
+          for (const block of evData.data) {
+            if (EditorBlocksPlugin.editorBlocks.some(b => b.propertyType === block.propertyType)) {
+              return;
+            }
+            EditorBlocksPlugin.editorBlocks.push(block);
+          }
+        },
+      });
   };
   static getAllBlocks = () => {
     return EditorBlocksPlugin.editorBlocks;

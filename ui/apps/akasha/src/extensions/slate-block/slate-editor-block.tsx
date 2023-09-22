@@ -7,14 +7,13 @@ import {
   useLoggedIn,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { IEntryData, RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { IEntryData, RootExtensionProps, ContentBlock } from '@akashaorg/typings/lib/ui';
 import { Draft } from '../inline-editor/utils';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   AkashaContentBlockBlockDef,
   AkashaContentBlockLabeledValueInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { EditorBlock } from '@akashaorg/typings/lib/ui/editor-blocks';
 
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9r1pcwsu441cf';
@@ -34,7 +33,7 @@ export const SlateEditorBlock = () => {
 
   const [editorState, setEditorState] = React.useState(draftPostData);
 
-  const blockData = React.useMemo(() => extensionData.block as EditorBlock, [extensionData]);
+  const blockData = React.useMemo(() => extensionData.block as ContentBlock, [extensionData]);
 
   useEditorBlocks({
     uiEvents,

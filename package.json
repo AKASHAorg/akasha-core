@@ -25,7 +25,7 @@
     "pack:only": "nx run-many --target=build --projects=$AWF_PACKAGE",
     "pack:watch": "nx run-many --target=pack:watch --projects=$AWF_PACKAGE",
     "tsc:sdk": "nx run @akashaorg/awf-sdk:tsc",
-    "tsc:ui": "nx run @akashaorg/ui-awf-hooks:tsc",
+    "tsc:ui": "nx run-many --target=tsc --projects=@akashaorg/ui-awf-hooks,@akashaorg/ui-lib-feed,@akashaorg/ui-lib-extensions",
     "tsc:all": "nx run-many --target=tsc --all --skip-nx-cache",
     "start:feed-app": "nx run @akashaorg/akasha.world:start",
     "build:feed-app": "nx run @akashaorg/akasha.world:build",

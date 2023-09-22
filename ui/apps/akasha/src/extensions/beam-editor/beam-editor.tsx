@@ -60,9 +60,9 @@ export const BeamEditor: React.FC = () => {
   return (
     <Card>
       {blocksInUse.map((block, idx) => (
-        <div key={`${block.name}-${idx}`}>
+        <div key={`${block.propertyType}-${idx}`}>
           <Extension
-            name={`${block.name}_${idx}`}
+            name={`${block.propertyType}_${idx}`}
             data={{ readOnly: false, action: 'post', block }}
             uiEvents={uiEvents}
           />
