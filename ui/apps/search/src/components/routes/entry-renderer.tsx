@@ -169,7 +169,6 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               entryData={itemData}
               authorProfile={{ data: profileData, status: profileDataReq.status }}
               sortedContents={sortByKey(itemData.content, 'order')}
-              uiEvents={uiEvents}
               itemType={EntityTypes.BEAM}
               onAvatarClick={handleClickAvatar}
               onContentClick={handleContentClick}
@@ -193,7 +192,9 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
                   <Extension name={`entry-card-edit-button_${id}`} uiEvents={uiEvents} />
                 )
               }
-            />
+            >
+              {({ blockID }) => <Extension name={`${blockID}_content_block`} uiEvents={uiEvents} />}
+            </EntryCard>
           )}
         </div>
       )}

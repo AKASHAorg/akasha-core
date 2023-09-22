@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export type CardActionProps = {
-  profileId: string;
+  beamId: string;
   repliesAnchorLink?: string;
   disableActions?: boolean;
   isModerated?: boolean;
@@ -15,7 +15,7 @@ export type CardActionProps = {
 
 //@TODO: Refactor this component
 const CardActions: React.FC<CardActionProps> = props => {
-  const { profileId, repliesAnchorLink, disableActions, isModerated, actionsRightExt, onReflect } =
+  const { beamId, repliesAnchorLink, disableActions, isModerated, actionsRightExt, onReflect } =
     props;
 
   if (isModerated) {
@@ -39,7 +39,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     <Stack direction="row" align="center" justify="end" spacing="gap-x-4" padding="p-4">
       <>{actionsRightExt}</>
       <Anchor
-        href={`${repliesAnchorLink}/${profileId}`}
+        href={`${repliesAnchorLink}/${beamId}`}
         customStyle="no-underline"
         onClick={e => {
           e.preventDefault();

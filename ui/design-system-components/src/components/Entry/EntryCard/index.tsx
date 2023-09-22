@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement, ReactNode, Ref, CSSProperties, Fragment } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -10,18 +10,12 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import CardHeaderMenuDropdown from './card-header-menu';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
-import Extension from '../../Extension';
 import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
 import { ILocale, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 import { formatDate } from '../../../utils/time';
 import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import {
-  AkashaProfile,
-  EntityTypes,
-  NavigateToParams,
-  RootComponentProps,
-} from '@akashaorg/typings/lib/ui';
+import { AkashaProfile, EntityTypes, NavigateToParams } from '@akashaorg/typings/lib/ui';
 
 export type EntryCardProps = {
   entryData: Omit<AkashaBeam, 'reflectionsCount' | 'reflections'> | AkashaReflect;
@@ -47,10 +41,10 @@ export type EntryCardProps = {
   isRemoved?: boolean;
   scrollHiddenContent?: boolean;
   contentClickable?: boolean;
-  headerMenuExt?: React.ReactElement;
-  actionsRightExt?: React.ReactNode;
-  customStyle?: React.CSSProperties;
-  ref?: React.Ref<HTMLDivElement>;
+  headerMenuExt?: ReactElement;
+  actionsRightExt?: ReactNode;
+  customStyle?: CSSProperties;
+  ref?: Ref<HTMLDivElement>;
   onAvatarClick?: (profileId: string) => void;
   onContentClick?: () => void;
   onEntryRemove?: (itemId: string) => void;
@@ -59,7 +53,8 @@ export type EntryCardProps = {
 } & (
   | {
       sortedContents: AkashaBeam['content'];
-      uiEvents: RootComponentProps['uiEvents'];
+
+      children: (props: { blockID: string }) => ReactElement;
       itemType: EntityTypes.BEAM;
     }
   | {
@@ -188,12 +183,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                 }}
               />
             ) : (
-              rest.sortedContents.map(item => (
-                <Extension
-                  key={item.blockID}
-                  name={`${item.blockID}_content_block`}
-                  uiEvents={rest.uiEvents}
-                />
+              rest.sortedContents?.map(item => (
+                <Fragment key={item.blockID}>{rest.children({ blockID: item.blockID })}</Fragment>
               ))
             )}
           </Stack>
@@ -201,7 +192,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       )}
       {!hideActionButtons && (
         <CardActions
-          profileId={entryData.author.id}
+          beamId={entryData.id}
           repliesAnchorLink={repliesAnchorLink}
           disableActions={disableActions}
           isModerated={isModerated}

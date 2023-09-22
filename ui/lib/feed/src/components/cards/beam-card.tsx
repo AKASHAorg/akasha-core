@@ -1,5 +1,7 @@
 import React from 'react';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -42,11 +44,12 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
       sortedContents={sortByKey(entryData.content, 'order')}
-      uiEvents={uiEvents}
       itemType={EntityTypes.BEAM}
       onAvatarClick={onAvatarClick}
       onContentClick={onContentClick}
-    />
+    >
+      {({ blockID }) => <Extension name={`${blockID}_content_block`} uiEvents={uiEvents} />}
+    </EntryCard>
   );
 };
 

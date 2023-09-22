@@ -154,7 +154,6 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
           isRemoved={!entryData?.active}
           entryData={entryData}
           sortedContents={sortByKey(entryData.content, 'order')}
-          uiEvents={uiEvents}
           itemType={EntityTypes.BEAM}
           authorProfile={{ data: profileData, status: profileDataReq.status }}
           flagAsLabel={t('Report Post')}
@@ -197,7 +196,9 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
               }}
             />
           }
-        />
+        >
+          {({ blockID }) => <Extension name={`${blockID}_content_block`} uiEvents={uiEvents} />}
+        </EntryCard>
       </Stack>
       <Stack customStyle="m-4">
         {!loggedProfileData?.did?.id && (
