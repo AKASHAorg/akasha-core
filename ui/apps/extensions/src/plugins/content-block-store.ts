@@ -19,9 +19,8 @@ export class ContentBlockStore {
     this.listenRegisterEvents();
   }
 
-  public getMatchingBlocks = (appName: string, propertyType: string) => {
-    // todo:
-    return this.blocks.filter(
+  public getMatchingBlock = (appName: string, propertyType: string) => {
+    return this.blocks.find(
       block => block.propertyType === propertyType && block.appName === appName,
     );
   };

@@ -7,12 +7,15 @@ export type ContentBlockEditProps = {
   mode: ContentBlockModes.EDIT;
   propertyType: string;
   appName: string;
+  blockRef?: React.RefObject<any>;
 };
 export type ContentBlockReadOnlyProps = {
   mode: ContentBlockModes.READONLY;
+  blockRef?: React.RefObject<any>;
 };
 export type ContentBlockInteractiveProps = {
   mode: ContentBlockModes.INTERACTIVE;
+  blockRef?: React.RefObject<any>;
 };
 
 export type ContentBlockExtensionProps =
@@ -26,30 +29,28 @@ export const ContentBlockExtension = (
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
   const contentBlockStoreRef = React.useRef(getExtensionsPlugin().contentBlockStore);
 
-  const matchingBlocks: (ContentBlockExtensionInterface & { appName: string })[] =
-    React.useMemo(() => {
-      switch (props.mode) {
-        case ContentBlockModes.EDIT:
-          return contentBlockStoreRef.current.getMatchingBlocks(props.appName, props.propertyType);
-        default:
-          break;
-      }
-      return [];
-    }, [props]);
+  const matchingBlock: ContentBlockExtensionInterface & { appName: string } = React.useMemo(() => {
+    switch (props.mode) {
+      case ContentBlockModes.EDIT:
+        return contentBlockStoreRef.current.getMatchingBlock(props.appName, props.propertyType);
+      default:
+        break;
+    }
+    return [];
+  }, [props]);
 
   return (
     <div>
-      {matchingBlocks.map((block, idx) => {
-        return (
-          <div key={`${props.mode}_${block.propertyType}_${idx}`}>
-            <Parcel
-              config={block.loadingFn({ mode: props.mode })}
-              {...getContext()}
-              blockInfo={{ ...block, mode: props.mode }}
-            />
-          </div>
-        );
-      })}
+      {matchingBlock && (
+        <div key={`${props.mode}_${matchingBlock.propertyType}`}>
+          <Parcel
+            config={matchingBlock.loadingFn({ mode: props.mode })}
+            {...getContext()}
+            blockInfo={{ ...matchingBlock, mode: props.mode }}
+            blockRef={props.blockRef}
+          />
+        </div>
+      )}
     </div>
   );
 };

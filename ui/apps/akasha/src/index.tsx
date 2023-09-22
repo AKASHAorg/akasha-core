@@ -1,20 +1,14 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import routes, { BEAM, FEED, MY_FEED, PROFILE_FEED, REFLECT, TAGS } from './routes';
 import {
-  ContentBlockEvents,
   IAppConfig,
   IntegrationRegistrationOptions,
   LogoTypeSource,
   MenuItemAreaType,
   MenuItemType,
-  RootComponentProps,
-  ContentBlockExtensionInterface,
-  BlockAction,
-  ContentBlockRegisterEvent,
   ContentBlockModes,
   BlockInfo,
 } from '@akashaorg/typings/lib/ui';
-import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
 /**
  * Initialization of the integration is optional.
@@ -82,12 +76,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       propertyType: 'slate-block',
       icon: 'Bars3BottomLeftIcon',
       displayName: 'Slate text block',
-      eventMap: {
-        publish: `slate-block/${BlockAction.PUBLISH}`,
-        update: `slate-block/${BlockAction.UPDATE}`,
-        validate: `slate-block/${BlockAction.VALIDATE}`,
-      },
       loadingFn: (blockInfo: BlockInfo) => {
+        // @TODO: expand more on this logic
         if (blockInfo.mode === ContentBlockModes.EDIT) {
           return () => import('./extensions/slate-block');
         }
@@ -104,45 +94,3 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     });
   },
 });
-
-class EditorBlocksPlugin {
-  static readonly editorBlocks: ContentBlockExtensionInterface[] = [];
-  static uiEventsSub = null;
-  static observe = (uiEvents: RootComponentProps['uiEvents']) => {
-    if (EditorBlocksPlugin.uiEventsSub) {
-      EditorBlocksPlugin.uiEventsSub.unsubscribe();
-    }
-    EditorBlocksPlugin.uiEventsSub = uiEvents
-      .pipe(filterEvent(ContentBlockEvents.RegisterContentBlock))
-      .subscribe({
-        next: (evData: ContentBlockRegisterEvent) => {
-          if (!evData.data) {
-            return;
-          }
-          for (const block of evData.data) {
-            if (EditorBlocksPlugin.editorBlocks.some(b => b.propertyType === block.propertyType)) {
-              return;
-            }
-            EditorBlocksPlugin.editorBlocks.push(block);
-          }
-        },
-      });
-  };
-  static getAllBlocks = () => {
-    return EditorBlocksPlugin.editorBlocks;
-  };
-}
-
-export const getPlugin = async (
-  props: RootComponentProps & {
-    encodeAppName: (name: string) => string;
-    decodeAppName: (name: string) => string;
-  },
-) => {
-  EditorBlocksPlugin.observe(props.uiEvents);
-  return {
-    editorBlocks: {
-      getAll: EditorBlocksPlugin.getAllBlocks,
-    },
-  };
-};

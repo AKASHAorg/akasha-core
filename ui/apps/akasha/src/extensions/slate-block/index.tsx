@@ -6,7 +6,9 @@ import { withProviders } from '@akashaorg/ui-awf-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ContentBlockRootProps, RootComponentProps } from '@akashaorg/typings/lib/ui';
 
-const SlateBlockExtension = (props: ContentBlockRootProps) => {
+const SlateBlockExtension = (
+  props: ContentBlockRootProps & { blockRef?: React.RefObject<any> },
+) => {
   return <SlateEditorBlock {...props} />;
 };
 

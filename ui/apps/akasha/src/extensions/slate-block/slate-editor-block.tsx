@@ -1,13 +1,17 @@
-import * as React from 'react';
+import React, { useImperativeHandle } from 'react';
 import EditorBox from '@akashaorg/design-system-components/lib/components/Editor';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import {
   serializeSlateToBase64,
-  useEditorBlocks,
   useLoggedIn,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { ContentBlockRootProps, IEntryData, RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import {
+  BlockInfo,
+  BlockInstanceMethods,
+  ContentBlockRootProps,
+  IEntryData,
+  RootExtensionProps,
+} from '@akashaorg/typings/lib/ui';
 import { Draft } from '../inline-editor/utils';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
@@ -18,9 +22,10 @@ import {
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9r1pcwsu441cf';
 
-export const SlateEditorBlock = (props: ContentBlockRootProps) => {
-  console.log(props, '>>> slate editor props');
-  const { uiEvents, name } = useRootComponentProps<RootExtensionProps>();
+export const SlateEditorBlock = (
+  props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
+) => {
+  const { name } = useRootComponentProps<RootExtensionProps>();
   const { loggedInProfileId } = useLoggedIn();
 
   const createContentBlock = useCreateContentBlockMutation();
@@ -37,39 +42,46 @@ export const SlateEditorBlock = (props: ContentBlockRootProps) => {
 
   const [editorState, setEditorState] = React.useState(draftPostData);
 
-  useEditorBlocks({
-    uiEvents,
-    blockData: props.blockInfo,
-    blockState: editorState,
-    onBlockCreate: async blockState => {
-      const content = serializeSlateToBase64(blockState);
-      const contentBlockValue: AkashaContentBlockLabeledValueInput = {
-        label: props.blockInfo.appName,
-        propertyType: props.blockInfo.propertyType,
-        value: content,
-      };
-      try {
-        const resp = await createContentBlock.mutateAsync({
-          i: {
-            content: {
-              // @TODO: replace this mock appVersionID
-              appVersionID: TEST_APP_VERSION_ID,
-              createdAt: new Date().toISOString(),
-              content: [contentBlockValue],
-              active: true,
-              kind: AkashaContentBlockBlockDef.Text,
-            },
-          },
-        });
-        return { blockID: resp.createAkashaContentBlock.document.id };
-      } catch (err) {
-        console.error(err);
-        return {
-          error: err.message,
+  useImperativeHandle(
+    props.blockRef,
+    () => ({
+      createBlock: async () => {
+        const content = serializeSlateToBase64(editorState);
+        const contentBlockValue: AkashaContentBlockLabeledValueInput = {
+          label: props.blockInfo.appName,
+          propertyType: props.blockInfo.propertyType,
+          value: content,
         };
-      }
-    },
-  });
+        try {
+          const resp = await createContentBlock.mutateAsync({
+            i: {
+              content: {
+                // @TODO: replace this mock appVersionID
+                appVersionID: TEST_APP_VERSION_ID,
+                createdAt: new Date().toISOString(),
+                content: [contentBlockValue],
+                active: true,
+                kind: AkashaContentBlockBlockDef.Text,
+              },
+            },
+          });
+          return {
+            response: { blockID: resp.createAkashaContentBlock.document.id },
+            blockInfo: props.blockInfo,
+          };
+        } catch (err) {
+          console.error('error creating content block', err);
+          return {
+            response: {
+              error: err.message,
+            },
+            blockInfo: props.blockInfo,
+          };
+        }
+      },
+    }),
+    [editorState, props.blockInfo],
+  );
 
   return (
     <EditorBox
