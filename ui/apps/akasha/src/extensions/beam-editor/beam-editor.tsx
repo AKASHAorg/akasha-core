@@ -8,6 +8,8 @@ import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hoo
 import { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
+import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 
 export const BeamEditor: React.FC = () => {
   const { getEditorBlocksPlugin, uiEvents, logger } = useRootComponentProps();
@@ -23,7 +25,7 @@ export const BeamEditor: React.FC = () => {
           active: true,
           content: blockResponseData.map(blockData => ({
             blockID: blockData.response.blockID,
-            order: blockData.block.idx,
+            order: blockData.block.order,
           })),
           createdAt: new Date().toISOString(),
         };
@@ -61,10 +63,15 @@ export const BeamEditor: React.FC = () => {
     <Card>
       {blocksInUse.map((block, idx) => (
         <div key={`${block.propertyType}-${idx}`}>
-          <Extension
-            name={`${block.propertyType}_${idx}`}
-            data={{ readOnly: false, action: 'post', block }}
-            uiEvents={uiEvents}
+          {/*<Extension*/}
+          {/*  name={`${block.propertyType}_${idx}`}*/}
+          {/*  data={{ readOnly: false, action: 'post', block }}*/}
+          {/*  uiEvents={uiEvents}*/}
+          {/*/>*/}
+          <ContentBlockExtension
+            appName={'@akashaorg/app-akasha-integration'}
+            propertyType="slate-block"
+            mode={ContentBlockModes.EDIT}
           />
           <Dropdown
             placeholderLabel={'Add Block'}

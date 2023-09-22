@@ -11,6 +11,8 @@ import {
   ContentBlockExtensionInterface,
   BlockAction,
   ContentBlockRegisterEvent,
+  ContentBlockModes,
+  BlockInfo,
 } from '@akashaorg/typings/lib/ui';
 import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
@@ -76,7 +78,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   contentBlocks: [
     {
-      // name should match blockInfo.content[i].propertyType
+      // propertyType should match beam's content[i].propertyType
       propertyType: 'slate-block',
       icon: 'Bars3BottomLeftIcon',
       displayName: 'Slate text block',
@@ -85,17 +87,18 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
         update: `slate-block/${BlockAction.UPDATE}`,
         validate: `slate-block/${BlockAction.VALIDATE}`,
       },
-      loadingFn: (blockInfo, loader) => {
-        if (blockInfo) {
-          return loader(() => import('./extensions/slate-block'));
+      loadingFn: (blockInfo: BlockInfo) => {
+        if (blockInfo.mode === ContentBlockModes.EDIT) {
+          return () => import('./extensions/slate-block');
         }
+        return () => Promise.resolve(null);
       },
     },
   ],
   extends: (matcher, loader) => {
     matcher({
       'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
-      'slate-block_*': loader(() => import('./extensions/slate-block')),
+      // 'slate-block_*': loader(() => import('./extensions/slate-block')),
       'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
       'beam-editor_*': loader(() => import('./extensions/beam-editor')),
     });

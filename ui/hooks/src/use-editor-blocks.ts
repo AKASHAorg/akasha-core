@@ -1,12 +1,17 @@
 import * as React from 'react';
-import { BlockCommandResponse, ContentBlock, RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import {
+  BlockCommandResponse,
+  ContentBlockRootProps,
+  RootExtensionProps,
+  BlockAction,
+  BlockActionType,
+} from '@akashaorg/typings/lib/ui';
 import { filterEvents } from './utils/event-utils';
-import { BlockAction, BlockActionType } from '@akashaorg/typings/lib/ui/editor-blocks';
 import { useRootComponentProps } from './use-root-props';
 
 export type UseEditorBlocksProps = {
   uiEvents: RootExtensionProps['uiEvents'];
-  blockData: ContentBlock;
+  blockData: ContentBlockRootProps['blockInfo'];
   onBlockCreate: (blockState: unknown) => Promise<BlockCommandResponse['data']['response']>;
   blockState: unknown;
 };

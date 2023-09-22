@@ -1,9 +1,12 @@
 import * as React from 'react';
 import {
-  BlockCommandResponse,
-  RootComponentProps,
   BlockAction,
-  ContentBlock,
+  BlockCommandRequest,
+  BlockCommandResponse,
+  ContentBlockExtensionInterface,
+  ContentBlockModes,
+  ContentBlockRootProps,
+  RootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import { BlockActionType } from '@akashaorg/typings/lib/ui/editor-blocks';
 import { filterEvents } from '@akashaorg/ui-awf-hooks';
@@ -23,14 +26,18 @@ const DEFAULT_TEXT_BLOCK = 'slate-block';
 
 export type UseBlocksPublishingProps = {
   uiEvents: RootComponentProps['uiEvents'];
-  availableBlocks: Omit<ContentBlock, 'idx'>[];
+  availableBlocks: (Omit<ContentBlockExtensionInterface, 'loadingFn'> & { appName: string })[];
   onBeamPublish: (publishedBlocks: BlockCommandResponse['data'][]) => Promise<void>;
 };
 
 export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const { uiEvents, availableBlocks, onBeamPublish } = props;
   const [isPublishing, setIsPublishing] = React.useState(false);
-  const [blocksInUse, setBlocksInUse] = React.useState<ContentBlock[]>([]);
+  const [blocksInUse, setBlocksInUse] = React.useState<
+    (ContentBlockRootProps['blockInfo'] & {
+      appName: string;
+    })[]
+  >([]);
 
   const [publishedBlocks, setPublishedBlocks] = React.useState<BlockCommandResponse['data'][]>([]);
   const defaultTextBlock = availableBlocks.find(block => block.propertyType === DEFAULT_TEXT_BLOCK);
@@ -39,7 +46,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   React.useEffect(() => {
     if (blocksInUse.length === 0) {
       // always add the default block
-      setBlocksInUse([{ ...defaultTextBlock, idx: 0 }]);
+      setBlocksInUse([{ ...defaultTextBlock, order: 0, mode: ContentBlockModes.EDIT }]);
     }
   }, [blocksInUse, defaultTextBlock]);
 
@@ -58,7 +65,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
           publishedBlocks.some(
             published =>
               published.block.propertyType === blockData.propertyType &&
-              published.block.idx === blockData.idx,
+              published.block.order === blockData.order,
           )
         ) {
           return;
@@ -82,7 +89,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
       publishedBlocks.some(
         pBlock =>
           pBlock.block.propertyType === bl.propertyType &&
-          pBlock.block.idx === bl.idx &&
+          pBlock.block.order === bl.order &&
           !pBlock.response.error,
       ),
     );
@@ -101,7 +108,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     for (const block of blocksInUse) {
       uiEvents.next({
         event: `${block.appName}_${block.eventMap.publish}`,
-        data: block,
+        data: block as BlockCommandRequest['data'],
       });
     }
   }, [blocksInUse, uiEvents]);
@@ -110,16 +117,16 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   // if index (idx) param is omitted, it will be added as the last block in the list
   const addBlockToList = (block: UseBlocksPublishingProps['availableBlocks'][0], idx?: number) => {
     if (idx) {
-      setBlocksInUse(prev => [
-        ...prev.slice(0, idx),
-        { ...block, idx: idx },
-        ...prev.slice(idx).map(bl => ({
-          ...bl,
-          idx: bl.idx + 1,
-        })),
-      ]);
+      // setBlocksInUse(prev => [
+      //   ...prev.slice(0, idx),
+      //   { ...block, idx: idx },
+      //   ...prev.slice(idx).map(bl => ({
+      //     ...bl,
+      //     idx: bl.order + 1,
+      //   })),
+      // ]);
     }
-    setBlocksInUse(prev => [...prev, { ...block, idx: prev.length }]);
+    // setBlocksInUse(prev => [...prev, { ...block, idx: prev.length }]);
   };
 
   return {

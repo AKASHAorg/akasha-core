@@ -8,7 +8,10 @@ import AppList from '@akashaorg/design-system-components/lib/components/AppList'
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
-import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import {
+  GetAppsQuery,
+  GetAppsByIdQuery,
+} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type ExplorePageProps = {
   installableApps: GetAppsQuery['akashaAppIndex']['edges'];
@@ -43,13 +46,13 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   }, []);
 
   const sdk = getSDK();
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
 
   // const uninstallAppReq = null;
 
   // const handleAppClick = (app: IntegrationReleaseInfo) => {
   //   getRoutingPlugin().navigateTo?.({
-  //     appName: '@akashaorg/app-akasha-verse',
+  //     appName: '@akashaorg/app-extensions',
   //     getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
   //   });
   // };

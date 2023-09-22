@@ -7,7 +7,7 @@ import {
   useLoggedIn,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { IEntryData, RootExtensionProps, ContentBlock } from '@akashaorg/typings/lib/ui';
+import { ContentBlockRootProps, IEntryData, RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { Draft } from '../inline-editor/utils';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
@@ -18,32 +18,34 @@ import {
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9r1pcwsu441cf';
 
-export const SlateEditorBlock = () => {
-  const { uiEvents, extensionData } = useRootComponentProps<RootExtensionProps>();
+export const SlateEditorBlock = (props: ContentBlockRootProps) => {
+  console.log(props, '>>> slate editor props');
+  const { uiEvents, name } = useRootComponentProps<RootExtensionProps>();
   const { loggedInProfileId } = useLoggedIn();
+
   const createContentBlock = useCreateContentBlockMutation();
+
   const postDraft = new Draft<IEntryData['slateContent']>({
     storage: localStorage,
-    appName: extensionData.block['appName'],
+    appName: name,
     userId: loggedInProfileId,
     action: 'post',
   });
-  const canSaveDraft = !extensionData.readonly; //action === 'post' || action === 'repost';
+
+  const canSaveDraft = !props.blockInfo.mode; //action === 'post' || action === 'repost';
   const draftPostData = canSaveDraft ? postDraft.get() : null;
 
   const [editorState, setEditorState] = React.useState(draftPostData);
 
-  const blockData = React.useMemo(() => extensionData.block as ContentBlock, [extensionData]);
-
   useEditorBlocks({
     uiEvents,
-    blockData,
+    blockData: props.blockInfo,
     blockState: editorState,
     onBlockCreate: async blockState => {
       const content = serializeSlateToBase64(blockState);
       const contentBlockValue: AkashaContentBlockLabeledValueInput = {
-        label: blockData['appName'],
-        propertyType: blockData['name'],
+        label: props.blockInfo.appName,
+        propertyType: props.blockInfo.propertyType,
         value: content,
       };
       try {

@@ -345,29 +345,29 @@
         }
       }
     },
-    "@akashaorg/app-akasha-verse": {
-      "root": "ui/apps/akasha-verse",
-      "sourceRoot": "ui/apps/akasha-verse/src",
+    "@akashaorg/app-extensions": {
+      "root": "ui/apps/extensions",
+      "sourceRoot": "ui/apps/extensions/src",
       "projectType": "application",
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
           "outputs": [
-            "ui/apps/akasha-verse"
+            "ui/apps/extensions"
           ],
           "options": {
             "commands": [
               "yarn run pack",
               "yarn postpack"
             ],
-            "cwd": "ui/apps/akasha-verse",
+            "cwd": "ui/apps/extensions",
             "parallel": false
           }
         },
         "extract:translations": {
           "builder": "./tools/executors/i18n:extract",
           "options": {
-            "cwd": "ui/apps/akasha-verse"
+            "cwd": "ui/apps/extensions"
           }
         }
       }

@@ -109,7 +109,7 @@ export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = pro
 
   const handleCTAClick = () => {
     navigateTo?.({
-      appName: '@akashaorg/app-akasha-verse',
+      appName: '@akashaorg/app-extensions',
       getNavigationUrl: (routes: Record<string, string>) => routes.explore,
     });
   };

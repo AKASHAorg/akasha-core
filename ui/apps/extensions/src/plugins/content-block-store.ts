@@ -1,7 +1,6 @@
 import {
   ContentBlockEvents,
   ContentBlockRegisterEvent,
-  IAppConfig,
   RootComponentProps,
   RootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
@@ -10,7 +9,7 @@ import { Subscription } from 'rxjs';
 
 export class ContentBlockStore {
   static instance: ContentBlockStore;
-  private blocks: IAppConfig['contentBlocks'];
+  private blocks: ContentBlockRegisterEvent['data'];
   uiEventsSub: Subscription;
   uiEvents: RootComponentProps['uiEvents'];
 
@@ -20,8 +19,11 @@ export class ContentBlockStore {
     this.listenRegisterEvents();
   }
 
-  public getMatchingBlocks = (propertyType: string) => {
+  public getMatchingBlocks = (appName: string, propertyType: string) => {
     // todo:
+    return this.blocks.filter(
+      block => block.propertyType === propertyType && block.appName === appName,
+    );
   };
 
   public getContentBlockInfos = () => {
