@@ -7,7 +7,6 @@ import {
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { CreateContentBlockMutation } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 
 /**
  * Steps when publishBeam is called:

@@ -76,13 +76,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       propertyType: 'slate-block',
       icon: 'Bars3BottomLeftIcon',
       displayName: 'Slate text block',
-      loadingFn: (blockInfo: BlockInfo) => {
-        // @TODO: expand more on this logic
-        if (blockInfo.mode === ContentBlockModes.EDIT) {
-          return () => import('./extensions/slate-block');
-        }
-        return () => Promise.resolve(null);
-      },
+      // eslint-disable-next-line unicorn/consistent-function-scoping
+      loadingFn: () => () => import('./extensions/slate-block'),
     },
   ],
   extends: (matcher, loader) => {

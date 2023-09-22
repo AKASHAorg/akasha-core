@@ -16,7 +16,7 @@ export type ContentBlockExtensionInterface = {
   displayName: string;
   loadingFn: (
     blockInfo: BlockInfo,
-  ) => () => Promise<singleSpa.ParcelConfigObject<RootComponentProps & BlockInfo>>;
+  ) => () => Promise<singleSpa.ParcelConfigObject<ContentBlockRootProps>>;
 };
 
 export type ContentBlock = ContentBlockExtensionInterface & {

@@ -4,10 +4,14 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { ContentBlockRootProps, RootComponentProps } from '@akashaorg/typings/lib/ui';
+import {
+  BlockInstanceMethods,
+  ContentBlockRootProps,
+  RootComponentProps,
+} from '@akashaorg/typings/lib/ui';
 
 const SlateBlockExtension = (
-  props: ContentBlockRootProps & { blockRef?: React.RefObject<any> },
+  props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
   return <SlateEditorBlock {...props} />;
 };
