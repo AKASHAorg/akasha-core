@@ -27,7 +27,8 @@ describe('useNotifications', () => {
 
     await act(async () => {
       await result.current.mutateAsync(mockNotifications[0].id);
-      const notifications = queryClient.getQueryData([NOTIFICATIONS_KEY]) as { read: boolean }[];
+      const notifications =
+        queryClient.getQueryData<{ read: boolean }[]>([NOTIFICATIONS_KEY]) || [];
 
       const hasNewNotifs = queryClient.getQueryData([HAS_NEW_NOTIFICATIONS_KEY]);
 
