@@ -14,7 +14,13 @@ import {
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { hasOwn, useLoggedIn, useRootComponentProps, useValidDid } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  useLoggedIn,
+  useProfileStats,
+  useRootComponentProps,
+  useValidDid,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 export type ProfilePageProps = {
@@ -44,6 +50,12 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   );
   const { validDid, isLoading } = useValidDid(profileId, !!profileDataReq.data);
 
+  const profileStatsQuery = useProfileStats(profileId);
+
+  const {
+    data: { totalBeams, totalFollowers, totalFollowing, totalTopics },
+  } = profileStatsQuery.data;
+
   const { akashaProfile: profileData } =
     profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
       ? profileDataReq.data
@@ -58,7 +70,7 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
     });
   };
 
-  if (status === 'loading' || isLoading) return <ProfileLoading />;
+  if (status === 'loading' || profileStatsQuery.isLoading || isLoading) return <ProfileLoading />;
 
   if (status === 'error')
     return (
@@ -106,6 +118,10 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
       )}
       <ProfileStatsView
         profileId={profileId}
+        totalBeams={totalBeams}
+        totalTopics={totalTopics}
+        totalFollowers={totalFollowers}
+        totalFollowing={totalFollowing}
         navigateTo={navigateTo}
         showLoginModal={() => showLoginModal({ modal: { name: location.pathname } })}
       />

@@ -8,7 +8,10 @@ import AppList from '@akashaorg/design-system-components/lib/components/AppList'
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useTranslation } from 'react-i18next';
 import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
-import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import {
+  GetAppsQuery,
+  GetAppsByIdQuery,
+} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type ExplorePageProps = {
   installableApps: GetAppsQuery['akashaAppIndex']['edges'];
@@ -103,7 +106,8 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                 )}
                 titleVariant="h4"
                 bodyVariant="body1"
-                assetName="akasha-verse"
+                publicImgPath="/images/"
+                assetName="akasha-verse.webp"
               />
             )}
             {!isUserLoggedIn && (

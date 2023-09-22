@@ -11,7 +11,8 @@ import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 export type EntryCardRendererProps = {
   itemData?: AkashaBeam;
@@ -50,6 +51,15 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
 
   const { t } = useTranslation('app-search');
   const { uiEvents, navigateToModal } = useRootComponentProps();
+  const profileDataReq = useGetProfileByDidQuery(
+    { id: itemData.author.id },
+    { select: response => response.node },
+  );
+
+  const { akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { akashaProfile: null };
 
   const handleClickAvatar = () => {
     navigateTo?.({
@@ -157,23 +167,20 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
             <EntryCard
               isRemoved={!itemData.active}
               entryData={itemData}
-              onClickAvatar={handleClickAvatar}
+              authorProfile={{ data: profileData, status: profileDataReq.status }}
+              sortedContents={sortByKey(itemData.content, 'order')}
+              uiEvents={uiEvents}
+              itemType={EntityTypes.BEAM}
+              onAvatarClick={handleClickAvatar}
+              onContentClick={handleContentClick}
               flagAsLabel={t('Report Post')}
               locale={locale || 'en'}
-              style={{ height: 'auto', ...style }}
               moderatedContentLabel={t('This content has been moderated')}
-              showMore={true}
               profileAnchorLink={'/@akashaorg/app-profile'}
               repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
                 itemType === EntityTypes.REFLECT ? 'reply' : 'post'
               }`}
-              onRepost={handleRebeam}
-              onContentClick={handleContentClick}
-              onMentionClick={onMentionClick}
-              onTagClick={onTagClick}
-              navigateTo={navigateTo}
               contentClickable={contentClickable}
-              disableReposting={!itemData.active}
               removeEntryLabel={t('Delete Post')}
               onEntryRemove={handleEntryRemove}
               onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}

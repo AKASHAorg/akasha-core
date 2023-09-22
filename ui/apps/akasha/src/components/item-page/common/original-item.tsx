@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { useAnalytics, useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  sortByKey,
+  useAnalytics,
+  useEntryNavigation,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import {
   EntityTypes,
   ModalNavigationOptions,
@@ -12,9 +18,10 @@ import routes, { BEAM } from '../../../routes';
 import { UseQueryResult } from '@tanstack/react-query';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 export type OriginalItemProps = {
   itemId: string;
@@ -38,6 +45,10 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const [analyticsActions] = useAnalytics();
   const handleEntryNavigate = useEntryNavigation(navigateTo, itemId);
+  const profileDataReq = useGetProfileByDidQuery(
+    { id: entryData.author.id },
+    { select: response => response.node },
+  );
 
   const [showReplyEditor, setShowReplyEditor] = React.useState(true);
 
@@ -54,6 +65,11 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
   );
 
   const showEditButton = React.useMemo(() => entryData?.author?.isViewer, [entryData?.author]);
+
+  const { akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { akashaProfile: null };
 
   if (!showEntry) return null;
 
@@ -134,33 +150,33 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
   return (
     <Stack customStyle={`rounded-t-lg`}>
       <Stack customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
-        <EntryBox
+        <EntryCard
           isRemoved={!entryData?.active}
           entryData={entryData}
-          onClickAvatar={handleAvatarClick(entryData?.author?.id)}
+          sortedContents={sortByKey(entryData.content, 'order')}
+          uiEvents={uiEvents}
+          itemType={EntityTypes.BEAM}
+          authorProfile={{ data: profileData, status: profileDataReq.status }}
           flagAsLabel={t('Report Post')}
           locale={locale}
-          showMore={true}
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[BEAM]}
-          onRepost={handleRepost}
+          onAvatarClick={handleAvatarClick}
+          onContentClick={() => {
+            handleEntryNavigate(
+              { authorId: entryData.author.id, id: entryData.id },
+              EntityTypes.BEAM,
+            );
+          }}
           onEntryFlag={handleEntryFlag(entryData?.id, EntityTypes.BEAM)}
-          onContentClick={handleEntryNavigate}
-          navigateTo={navigateTo}
           contentClickable={true}
-          onMentionClick={handleMentionClick}
-          onTagClick={handleTagClick}
           moderatedContentLabel={t('This content has been moderated')}
           ctaLabel={t('See it anyway')}
-          handleFlipCard={handleFlipCard}
-          scrollHiddenContent={true}
           onEntryRemove={handlePostRemove}
-          onRepliesClick={() => setShowReplyEditor(show => !show)}
+          onReflect={() => setShowReplyEditor(show => !show)}
           removeEntryLabel={t('Delete Post')}
           removedByMeLabel={t('You deleted this post')}
           removedByAuthorLabel={t('This post was deleted by its author')}
-          disableReposting={!entryData?.active || itemType === EntityTypes.REFLECT}
-          hideRepost={itemType === EntityTypes.REFLECT}
           headerMenuExt={
             showEditButton && (
               <Extension

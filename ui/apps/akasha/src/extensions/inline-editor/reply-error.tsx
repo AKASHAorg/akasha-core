@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { IEntryData, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, IEntryData, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
 import { createPendingEntry, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { BEAM } from '../../routes';
 
-import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 
 export interface IReplyErrorState {
   state: 'error' | 'retry';
@@ -44,22 +44,19 @@ export function ReplyError({ postId, loggedProfileData, onChange }: Props) {
   return (
     <>
       {entryData && (
-        <EntryBox
+        <EntryCard
           // @TODO fix createPendingEntry method
-          entryData={null} //createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
+          entryData={null}
+          authorProfile={null} //createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
           locale={'en'}
-          showMore={true}
+          slateContent={null}
+          itemType={EntityTypes.REFLECT}
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[BEAM]}
           contentClickable={false}
           hidePublishTime={true}
           disableActions={true}
           hideActionButtons={true}
-          error={t('Oops! Something went wrong.')}
-          onRetry={() => {
-            clear();
-            onChange({ state: 'retry', content: entryData.slateContent });
-          }}
         />
       )}
     </>
