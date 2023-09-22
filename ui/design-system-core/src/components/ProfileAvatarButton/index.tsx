@@ -16,11 +16,12 @@ export interface ProfileAvatarButtonProps {
   profileId: Profile['did']['id'];
   bold?: boolean;
   active?: boolean;
+  truncateText?: boolean;
+  href?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   onClickAvatar?: () => void;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLButtonElement>;
-  truncateText?: boolean;
 }
 
 const ProfileAvatarButton = React.forwardRef(
@@ -32,6 +33,7 @@ const ProfileAvatarButton = React.forwardRef(
       label,
       profileId,
       truncateText = true,
+      href,
       onClick,
       onClickAvatar,
       onMouseEnter,
@@ -62,6 +64,7 @@ const ProfileAvatarButton = React.forwardRef(
             avatar={avatarImage}
             profileId={profileId}
             customStyle="cursor-pointer"
+            href={href}
             onClick={handleClickAvatar}
           />
         </Stack>

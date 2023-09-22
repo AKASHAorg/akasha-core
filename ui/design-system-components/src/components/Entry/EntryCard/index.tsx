@@ -1,130 +1,207 @@
-import * as React from 'react';
+import React, { ReactElement, ReactNode, Ref, CSSProperties, Fragment } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import SocialBox from '../../SocialBox';
-import EntryBox, { EntryBoxProps } from '../EntryBox';
-import { NavigateToParams } from '@akashaorg/typings/lib/ui';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import EntryCardRemoved from '../EntryCardRemoved';
+import CardActions from './card-actions';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import CardHeaderMenuDropdown from './card-header-menu';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import ReadOnlyEditor from '../../ReadOnlyEditor';
+import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
+import { ILocale, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
+import { formatDate } from '../../../utils/time';
+import { Descendant } from 'slate';
+import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaProfile, EntityTypes, NavigateToParams } from '@akashaorg/typings/lib/ui';
 
-export type EntryCardProps = EntryBoxProps & {
-  // labels
-  repostedThisLabel?: string;
-  andLabel?: string;
-  othersLabel?: string;
-  // external css
-  className?: string;
-  style?: React.CSSProperties;
-  ref?: React.Ref<HTMLDivElement>;
+export type EntryCardProps = {
+  entryData: Omit<AkashaBeam, 'reflectionsCount' | 'reflections'> | AkashaReflect;
+  authorProfile: {
+    data: Pick<AkashaProfile, 'name' | 'avatar' | 'did'>;
+    status: 'loading' | 'error' | 'success';
+  };
+  locale?: ILocale;
+  editedLabel?: string;
+  profileAnchorLink?: string;
+  repliesAnchorLink?: string;
+  flagAsLabel?: string;
+  removedByMeLabel?: string;
+  removedByAuthorLabel?: string;
+  removeEntryLabel?: string;
+  moderatedContentLabel?: string;
+  ctaLabel?: string;
+  disableReporting?: boolean;
+  hidePublishTime?: boolean;
+  isModerated?: boolean;
+  disableActions?: boolean;
+  hideActionButtons?: boolean;
+  isRemoved?: boolean;
+  scrollHiddenContent?: boolean;
   contentClickable?: boolean;
-  border?: boolean;
-  noBorderRadius?: boolean;
-  bottomBorderOnly?: boolean;
-  accentBorderTop?: boolean;
-  navigateTo?: (args: NavigateToParams) => void;
-  hideRepost?: boolean;
-};
+  headerMenuExt?: ReactElement;
+  actionsRightExt?: ReactNode;
+  customStyle?: CSSProperties;
+  ref?: Ref<HTMLDivElement>;
+  onAvatarClick?: (profileId: string) => void;
+  onContentClick?: () => void;
+  onEntryRemove?: (itemId: string) => void;
+  onEntryFlag?: () => void;
+  onReflect?: () => void;
+} & (
+  | {
+      sortedContents: AkashaBeam['content'];
+
+      children: (props: { blockID: string }) => ReactElement;
+      itemType: EntityTypes.BEAM;
+    }
+  | {
+      slateContent: Descendant[];
+      itemType: EntityTypes.REFLECT;
+      onMentionClick?: (profileId: string) => void;
+      onTagClick?: (name: string) => void;
+      navigateTo?: (args: NavigateToParams) => void;
+    }
+);
 
 const EntryCard: React.FC<EntryCardProps> = props => {
   const {
     entryData,
-    repostedThisLabel,
-    andLabel,
-    othersLabel,
-    onClickAvatar,
+    authorProfile,
+    editedLabel,
     locale,
     ref,
-    showMore,
     profileAnchorLink,
     repliesAnchorLink,
-    onRepost,
-    onEntryFlag,
-    onMentionClick,
-    onTagClick,
-    navigateTo,
-    onContentClick,
     flagAsLabel,
-    contentClickable,
-    disableReposting,
-    disableReporting,
-    hidePublishTime,
-    headerTextLabel,
-    footerTextLabel,
-    moderatedContentLabel,
-    ctaLabel,
-    handleFlipCard,
-    isModerated,
-    scrollHiddenContent,
-    disableActions,
-    hideActionButtons,
-    removeEntryLabel,
-    isRemoved,
-    onEntryRemove,
     removedByMeLabel,
     removedByAuthorLabel,
-    border,
-    noBorderRadius,
-    // bottomBorderOnly,
-    // accentBorderTop,
-    hideRepost,
-    error,
-    onRetry,
+    disableReporting,
+    hidePublishTime,
+    isModerated,
+    disableActions,
+    hideActionButtons,
+    isRemoved,
+    scrollHiddenContent,
+    contentClickable,
     headerMenuExt,
     actionsRightExt,
+    onAvatarClick,
+    onContentClick,
+    onEntryFlag,
+    onReflect,
+    ...rest
   } = props;
 
+  const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
+
   return (
-    <Card ref={ref} border={border} noBorderRadius={noBorderRadius} padding="p-0">
-      {/* {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
-        <SocialBox
-          socialData={entryData.quotedByAuthors}
-          repostedThisLabel={repostedThisLabel}
-          andLabel={andLabel}
-          othersLabel={othersLabel}
-          onClickUser={onMentionClick}
+    <Card ref={ref} padding="p-0">
+      <Stack direction="row" justify="between" customStyle="p-4 shrink-0">
+        <>
+          {authorProfile.status === 'loading' ? (
+            <AuthorProfileLoading />
+          ) : (
+            <ProfileAvatarButton
+              data-testid="entry-profile-detail"
+              profileId={
+                authorProfile.status === 'error' ? entryData.author.id : authorProfile.data.did?.id
+              }
+              label={
+                authorProfile.status === 'error' ? entryData.author.id : authorProfile.data.name
+              }
+              avatarImage={authorProfile.status === 'error' ? null : authorProfile.data?.avatar}
+              href={`${profileAnchorLink}/${entryData.author.id}`}
+              onClick={event => {
+                event.preventDefault();
+                if (onAvatarClick) onAvatarClick(entryData.author.id);
+              }}
+              ref={profileRef}
+            />
+          )}
+        </>
+        <Stack direction="row" spacing="gap-2" align="center" customStyle="shrink-0">
+          {entryData?.createdAt && !hidePublishTime && (
+            <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
+              <Text customStyle="flex shrink-0 text(grey4 dark:grey7)">
+                {formatRelativeTime(entryData?.createdAt, locale)}
+              </Text>
+            </Tooltip>
+          )}
+          {entryData?.createdAt && (
+            <Tooltip
+              placement={'top'}
+              content={`${editedLabel} ${formatRelativeTime(entryData?.createdAt, locale)}`}
+            >
+              <Icon size="sm" type="PencilIcon" />
+            </Tooltip>
+          )}
+          {!entryData.active && (
+            <CardHeaderMenuDropdown
+              disabled={disableActions}
+              menuItems={
+                !entryData.author.isViewer
+                  ? [
+                      {
+                        icon: 'FlagIcon',
+                        handler: onEntryFlag,
+                        label: flagAsLabel,
+                        disabled: disableReporting,
+                      },
+                    ]
+                  : []
+              }
+              headerMenuExt={headerMenuExt}
+            />
+          )}
+        </Stack>
+      </Stack>
+      {isRemoved && (
+        <EntryCardRemoved
+          isAuthor={entryData.author.isViewer}
+          removedByAuthorLabel={removedByAuthorLabel}
+          removedByMeLabel={removedByMeLabel}
         />
-      )} */}
-      <EntryBox
-        entryData={entryData}
-        onClickAvatar={onClickAvatar}
-        flagAsLabel={flagAsLabel}
-        showMore={showMore}
-        locale={locale}
-        profileAnchorLink={profileAnchorLink}
-        repliesAnchorLink={repliesAnchorLink}
-        onRepost={onRepost}
-        onEntryFlag={onEntryFlag}
-        onContentClick={onContentClick}
-        onMentionClick={onMentionClick}
-        onTagClick={onTagClick}
-        navigateTo={navigateTo}
-        contentClickable={contentClickable}
-        disableReposting={disableReposting}
-        disableReporting={disableReporting}
-        hidePublishTime={hidePublishTime}
-        headerTextLabel={headerTextLabel}
-        footerTextLabel={footerTextLabel}
-        moderatedContentLabel={moderatedContentLabel}
-        ctaLabel={ctaLabel}
-        handleFlipCard={handleFlipCard}
-        isModerated={isModerated}
-        scrollHiddenContent={scrollHiddenContent}
-        disableActions={disableActions}
-        hideActionButtons={hideActionButtons}
-        removeEntryLabel={removeEntryLabel}
-        onEntryRemove={onEntryRemove}
-        isRemoved={isRemoved}
-        removedByMeLabel={removedByMeLabel}
-        removedByAuthorLabel={removedByAuthorLabel}
-        headerMenuExt={headerMenuExt}
-        actionsRightExt={actionsRightExt}
-        hideRepost={hideRepost}
-        error={error}
-        onRetry={onRetry}
-      />
+      )}
+      {!isRemoved && (
+        <Button onClick={onContentClick} plain>
+          <Stack
+            customStyle={`px-4 max-h-[50rem] ${
+              scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'
+            } ${contentClickable ? 'cursor-pointer' : 'cursor-default'}`}
+            data-testid="entry-content"
+          >
+            {rest.itemType === EntityTypes.REFLECT ? (
+              <ReadOnlyEditor
+                content={rest.slateContent}
+                handleMentionClick={rest.onMentionClick}
+                handleTagClick={rest.onTagClick}
+                handleLinkClick={url => {
+                  rest.navigateTo?.({ getNavigationUrl: () => url });
+                }}
+              />
+            ) : (
+              rest.sortedContents?.map(item => (
+                <Fragment key={item.blockID}>{rest.children({ blockID: item.blockID })}</Fragment>
+              ))
+            )}
+          </Stack>
+        </Button>
+      )}
+      {!hideActionButtons && (
+        <CardActions
+          beamId={entryData.id}
+          repliesAnchorLink={repliesAnchorLink}
+          disableActions={disableActions}
+          isModerated={isModerated}
+          actionsRightExt={actionsRightExt}
+          onReflect={onReflect}
+        />
+      )}
     </Card>
   );
-};
-
-EntryCard.defaultProps = {
-  flagAsLabel: 'Report',
 };
 
 export default EntryCard;
