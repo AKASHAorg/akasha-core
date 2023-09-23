@@ -205,7 +205,7 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
           <EditorPlaceholder
             onClick={handlePlaceholderClick}
             profileId={null}
-            replyLabel={t('Reply')}
+            actionLabel={t('Reply')}
             placeholderLabel={t('Share your thoughts')}
           />
         )}
