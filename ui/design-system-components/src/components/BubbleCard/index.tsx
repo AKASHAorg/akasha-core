@@ -17,7 +17,7 @@ export type BubbleCardProps = {
   content?: Descendant[];
   isFromLoggedUser?: boolean;
   chatTimestamp?: string;
-  handleMentionClick?: (pubKey: string) => void;
+  handleMentionClick?: (profileId: string) => void;
   handleTagClick?: (name: string) => void;
   handleLinkClick?: (url: string) => void;
 };

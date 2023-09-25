@@ -19,7 +19,7 @@ describe('<DevKeyCard /> Component', () => {
           unusedLabel="Unused"
           usedLabel="Used"
           pendingConfirmationLabel="Pending Confirmation"
-          devPubKeyLabel="Dev Public Key 🔑"
+          devPublicKeyLabel="Dev Public Key 🔑"
           dateAddedLabel="Date added 🗓"
         />,
         {},

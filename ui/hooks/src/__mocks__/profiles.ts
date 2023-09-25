@@ -1,6 +1,8 @@
 export const mockSearchProfiles = [
   {
-    pubKey: 'bbaareifew3pxeyvtf42zufjnvewevqih7yg4zpgqfj63pw7k23sn63omsa',
+    did: {
+      id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+    },
     name: 'Test',
     userName: 'test',
     avatar: null,
@@ -13,7 +15,9 @@ export const mockSearchProfiles = [
     totalInterests: 1,
   },
   {
-    pubKey: 'bbaareiaf2pleir7wnkmihyy36qvt2m6m6pnegv5jldt5kz7glp46mh2jk4',
+    did: {
+      id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+    },
     name: 'lalala',
     userName: 'testing',
     avatar: null,
@@ -26,7 +30,9 @@ export const mockSearchProfiles = [
     totalInterests: 1,
   },
   {
-    pubKey: 'bbaareid3j3dllpd6ym2epxvuecxsplawxjqjzkjg7mhwx4h3blxpj4ubia',
+    did: {
+      id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+    },
     name: null,
     userName: 'test7acc',
     avatar: null,
@@ -39,7 +45,9 @@ export const mockSearchProfiles = [
     totalInterests: 0,
   },
   {
-    pubKey: 'bbaareicsxuvjunshgtj2fvkncj6yfszvv32pbhoqsz7mu7cwlbwkfxv5g4',
+    did: {
+      id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+    },
     name: 'test333',
     userName: 'test333a',
     avatar: 'bafkreiccot7ck2ovlv4rlhl6bazwqt3vkkjubd3jn5rkbldkmxpobh6ada',
@@ -64,7 +72,9 @@ export const mockProfile = {
     fallbackUrl:
       'https://bafkreig5wajd7vnssqrq35qzzwzwz5c53ptfiklqsx6rndttgxbcw5u2q4.ipfs.infura-ipfs.io',
   },
-  pubKey: 'bbaareiav5sekussb27f6e3f7z66weker43fqdlmmlxsnkq735pfbfy3lxu',
+  did: {
+    id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+  },
   name: 'Tetrarcha',
   userName: 'tetrarch',
   description: null,

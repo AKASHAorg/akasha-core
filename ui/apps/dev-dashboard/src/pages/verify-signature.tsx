@@ -34,7 +34,7 @@ export const VerifySignature: React.FC<unknown> = () => {
 
   // const handleFieldChange = (ev, field: string) => {
   //   switch (field) {
-  //     case 'pubKey':
+  //     case 'profileId':
   //       setDid(ev.target.value);
   //       break;
   //     case 'message':

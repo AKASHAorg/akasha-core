@@ -25,7 +25,9 @@ export const mockGetComments = {
           },
         ],
         author: {
-          pubKey: 'bbaareihb5fdjg5ozj7d77tnjq2mexcktik3bwe3w7ds3yhgp335vupythi',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'TesterTest',
           userName: 'testertest',
           avatar: 'bafkreiadd5c2nczwoqmtqlvwjk5g2wwhzumuhikxpowkfj3sng6akoxfvu',
@@ -61,7 +63,9 @@ export const mockGetComments = {
           },
         ],
         author: {
-          pubKey: 'bbaareiaft3o2qrx4cbb73okxmyyksqzdgehh5vsk3wfd2nh7a7ko3jgv6a',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e12345',
+          },
           name: 'mcim',
           userName: 'mcim',
           avatar: 'bafkreiet7kmqarvediohaunqnegmfpb2gwyeku36yc6nprny6ex5skma7m',
@@ -107,7 +111,9 @@ export const mockGetReplies = {
           },
         ],
         author: {
-          pubKey: 'bbaareihb5fdjg5ozj7d77tnjq2mexcktik3bwe3w7ds3yhgp335vupythi',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e13456',
+          },
           name: 'TesterTest',
           userName: 'testertest',
           avatar: 'bafkreiadd5c2nczwoqmtqlvwjk5g2wwhzumuhikxpowkfj3sng6akoxfvu',
@@ -143,7 +149,9 @@ export const mockGetReplies = {
           },
         ],
         author: {
-          pubKey: 'bbaareiaft3o2qrx4cbb73okxmyyksqzdgehh5vsk3wfd2nh7a7ko3jgv6a',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e14567',
+          },
           name: 'mcim',
           userName: 'mcim',
           avatar: 'bafkreiet7kmqarvediohaunqnegmfpb2gwyeku36yc6nprny6ex5skma7m',

@@ -19,12 +19,11 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
   const { loggedProfileData, showLoginModal } = props;
 
   const { t } = useTranslation('app-profile');
-  const { did } = useParams<{ did: string }>();
-  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
+  const { profileId } = useParams<{ profileId: string }>();
+  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
 
   const profileDataQuery = useGetProfileByDidQuery(
-    { id: did },
+    { id: profileId },
     {
       select: data => (hasOwn(data.node, 'akashaProfile') ? data.node.akashaProfile : null),
     },
@@ -35,8 +34,8 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     if (profileState && profileState.name) {
       return profileState.name;
     }
-    return did;
-  }, [profileState, did]);
+    return profileId;
+  }, [profileState, profileId]);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {

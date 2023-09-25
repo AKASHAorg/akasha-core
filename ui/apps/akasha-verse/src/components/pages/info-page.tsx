@@ -44,10 +44,10 @@ const InfoPage: React.FC<unknown> = () => {
   //   }
   // };
 
-  // const handleAuthorClick = (author: { pubKey: string }) => {
+  // const handleAuthorClick = (author: { profileId: string }) => {
   //   navigateTo?.({
   //     appName: '@akashaorg/app-profile',
-  //     getNavigationUrl: routes => `${routes.rootRoute}/${author.pubKey}`,
+  //     getNavigationUrl: routes => `${routes.rootRoute}/${author.profileId}`,
   //   });
   // };
 
