@@ -35,6 +35,7 @@ export {
   useCheckNewNotifications,
   useFetchNotifications,
   useMarkAsRead,
+  useListenForMutationEvents,
 } from './use-notifications';
 
 export { useShowFeedback } from './use-show-feedback';

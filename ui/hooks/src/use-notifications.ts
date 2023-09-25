@@ -1,7 +1,8 @@
+import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { IMessage } from '@akashaorg/typings/lib/sdk';
+import { IMessage, GQL_EVENTS } from '@akashaorg/typings/lib/sdk';
 
 import { logError } from './utils/error-handler';
 import { buildProfileMediaLinks } from './utils/media-utils';
@@ -121,4 +122,47 @@ export function useCheckNewNotifications(loggedEthAddress: string) {
     keepPreviousData: true,
     onError: (err: Error) => logError('useNotifications.checkNewNotifications', err),
   });
+}
+
+/**
+ * Hook to listen for mutation events
+ * @example useListenForMutationEvents hook
+ * ```typescript
+ * const mutationEvent = useListenForMutationEvents();
+ *
+ * const { messageObj, appid, success, pending } = mutationEvent;
+ * ```
+ */
+export function useListenForMutationEvents() {
+  const [data, setData] = useState(null);
+
+  const sdk = getSDK();
+
+  const messageObj = useRef(null);
+  const uuid = useRef('');
+
+  useEffect(() => {
+    const subSDK = sdk.api.globalChannel.subscribe({
+      next: (eventData: {
+        data: { uuid: string; [key: string]: unknown };
+        event: GQL_EVENTS.MUTATION;
+      }) => {
+        if (eventData.event === GQL_EVENTS.MUTATION) {
+          const currentUuid = eventData.data.uuid;
+
+          if (currentUuid !== uuid.current) {
+            uuid.current = currentUuid;
+            messageObj.current = sdk.services.gql.consumeMutationNotificationObject(currentUuid);
+          }
+          setData({ ...eventData.data, messageObj: messageObj.current, appid: uuid.current });
+        }
+      },
+    });
+    return () => {
+      if (subSDK) {
+        subSDK.unsubscribe();
+      }
+    };
+  }, []);
+  return data;
 }
