@@ -1,4 +1,4 @@
-# AWF Apps
+# AKASHA World Apps
 
 > An app (application) is a holistic, standalone service that usually includes associated widgets and plugins.
 

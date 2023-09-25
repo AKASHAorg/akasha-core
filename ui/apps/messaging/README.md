@@ -1,6 +1,6 @@
-# List plugin
+# Messaging App
 
-> The List app allows users to save and manage a list of their favorite or interesting contents for easy reference.
+> The Messaging App allows private communication between users.
 
 ## Usage
 

@@ -5,6 +5,4 @@
 ## Usage
 
 ```tsx
-import LoginWidget from '@akashaorg/ui-widget-login/lib/bootstrap';
-
 ```
