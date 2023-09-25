@@ -71,7 +71,7 @@ export const ReportItemPage: React.FC<BasePageProps> = props => {
   if (step === 2) {
     return (
       <ReportItemConfirmation
-        titleLabel={t('Thank you for keeping our community safe')}
+        titleLabel={t('Thank you for keeping the good vibes')}
         subtitleLabel={t('Our moderators will review the report as soon as possible')}
         footnoteLabel={t('Feel like you want to contribute more to improve our community?')}
         ctaLabel={t('Join our Moderation Discourd channel')}

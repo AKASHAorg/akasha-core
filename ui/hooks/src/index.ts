@@ -11,6 +11,7 @@ export * from './utils/media-utils';
 export * from './utils/event-utils';
 export * from './use-login.new';
 export { hasOwn } from './utils/has-own';
+export { sortByKey } from './utils/sort-by-key';
 export { getFollowList } from './utils/getFollowList';
 export { useQueryListener, useMutationListener, useMutationsListener } from './use-query-listener';
 export {

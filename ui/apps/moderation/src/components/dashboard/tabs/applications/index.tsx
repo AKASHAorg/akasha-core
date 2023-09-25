@@ -15,9 +15,9 @@ export const ApplicationsTab: React.FC<ApplicationsTabProps> = props => {
   const { applicants, onClickApplicant } = props;
 
   return (
-    <Stack>
+    <Stack spacing="gap-y-4">
       {applicants.map((applicant, idx) => (
-        <Stack key={applicant.name + idx}>
+        <Stack key={applicant.name + idx} spacing="gap-y-4">
           <Applicant applicant={applicant} onClickApplicant={onClickApplicant} />
 
           {idx < applicants.length - 1 && <Divider />}

@@ -23,7 +23,7 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
   } = props;
 
   return (
-    <Stack customStyle="flex-wrap">
+    <Stack direction="row" customStyle="flex-wrap">
       {allCategoriesLabel && (
         <Pill
           label={allCategoriesLabel}

@@ -41,14 +41,11 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
           <>
             <CategoryPills {...props} />
 
-            <Stack>
+            <Stack spacing="gap-y-2">
               {accordionNodes.map(({ titleNode, contentNode }, idx) => (
-                <Accordion
-                  key={idx}
-                  titleNode={titleNode}
-                  contentNode={contentNode}
-                  contentStyle="p-0"
-                />
+                <Stack key={idx}>
+                  <Accordion titleNode={titleNode} contentNode={contentNode} contentStyle="p-0" />
+                </Stack>
               ))}
             </Stack>
           </>

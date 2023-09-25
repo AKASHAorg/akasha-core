@@ -27,14 +27,12 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
 
       <Divider />
 
-      <Stack padding="p-4">{children}</Stack>
+      <Stack padding="p-4" spacing="gap-y-3">
+        {children}
 
-      {/* show buttons only when the labels are specified */}
-      {(cancelButtonLabel || confirmButtonLabel) && (
-        <Stack align="center" justify="end" spacing="gap-x-6" customStyle="p-4 my-2">
-          <PageButtons {...props} />
-        </Stack>
-      )}
+        {/* show buttons only when the labels are specified */}
+        {(cancelButtonLabel || confirmButtonLabel) && <PageButtons {...props} />}
+      </Stack>
     </Card>
   );
 };

@@ -21,7 +21,7 @@ export type ReportItemConfirmationProps = {
 
 export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = props => {
   const {
-    assetName = 'moderation',
+    assetName = 'vibe-report',
     publicImgPath = '/images',
     assetExtension = 'webp',
     titleLabel,
@@ -61,7 +61,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
 
           <a href={ctaUrl} target="_blank" rel="noreferrer noopener">
             <Button plain={true}>
-              <Stack align="center" spacing="gap-x-2">
+              <Stack direction="row" align="center" spacing="gap-x-2">
                 <Icon size="sm" accentColor={true} type="discord" customStyle="mx-auto my-0" />
 
                 <Text

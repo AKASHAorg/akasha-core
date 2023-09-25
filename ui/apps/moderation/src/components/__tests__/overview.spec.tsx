@@ -13,7 +13,7 @@ describe('<Overview /> component', () => {
     />
   );
 
-  const assetName = 'moderation';
+  const assetName = 'vibe-overview';
 
   let componentWrapper = renderWithAllProviders(<></>, {});
 

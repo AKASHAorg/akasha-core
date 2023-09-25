@@ -34,14 +34,12 @@ export const SteppedActionWrapper: React.FC<
 
         {children}
 
-        <Stack align="center" justify="between">
+        <Stack direction="row" align="center" justify="between">
           <Anchor href={footerCTAUrl} customStyle="text-sm text-center font-bold">
             {footerCTALabel}
           </Anchor>
 
-          <Stack align="center" spacing="gap-x-6">
-            <PageButtons {...props} />
-          </Stack>
+          <PageButtons {...props} />
         </Stack>
       </Stack>
     </Card>

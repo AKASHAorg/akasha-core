@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { IPublishData, Profile } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
 import { useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import routes, { REFLECT } from '../../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 
 export type PendingReplyProps = {
   postId: string;
@@ -33,12 +33,14 @@ export function PendingReply({ postId, commentIds }: PendingReplyProps) {
               data-testid="pending-entry"
               key={pendingReplyState.mutationId}
             >
-              <EntryBox
+              <EntryCard
                 // @TODO: Fix createPendingEntry method
-                entryData={null} //createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
+                entryData={null}
+                authorProfile={null} //createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
+                slateContent={null}
+                itemType={EntityTypes.REFLECT}
                 flagAsLabel={t('Report Comment')}
                 locale={'en'}
-                showMore={true}
                 profileAnchorLink={'/profile'}
                 repliesAnchorLink={routes[REFLECT]}
                 contentClickable={false}

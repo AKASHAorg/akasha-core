@@ -1,19 +1,15 @@
-import { genAppConfig, genWorldConfig, mockSDK } from '@akashaorg/af-testing';
+import * as singleSpa from 'single-spa';
+import { concatMap, map, mergeMap, Observable, of, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
+import { genAppConfig, genWorldConfig } from '@akashaorg/af-testing';
 import {
   handleExtPointMountOfApps,
   handleIntegrationUninstall,
   systemImport,
 } from '../src/integrations';
 import getSDK from '@akashaorg/awf-sdk';
-import { concatMap, map, mergeMap, Observable, of, ReplaySubject, tap, withLatestFrom } from 'rxjs';
-import { initState, LoaderState } from '../src/state';
 import { pipelineEvents } from '../src/events';
-import * as singleSpa from 'single-spa';
-
-jest.mock('@akashaorg/awf-sdk', () => {
-  return () => mockSDK();
-});
+import { initState, LoaderState } from '../src/state';
 
 jest.mock('single-spa', () => {
   const orig = jest.requireActual('single-spa');
