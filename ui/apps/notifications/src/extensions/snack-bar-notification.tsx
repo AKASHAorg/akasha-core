@@ -120,7 +120,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
 
   const icon = (
     <AppIcon
-      size="md"
+      size="xs"
       accentColor={true}
       placeholderIconType={findAppIcon(appTitle)?.logo?.value ?? null}
     />
@@ -131,7 +131,13 @@ const SnackBarNotification = (_: RootExtensionProps) => {
       {message && (
         <Snackbar
           title={
-            <Stack direction="row" align="center" justify="center" spacing="gap-x-2">
+            <Stack
+              direction="row"
+              align="center"
+              justify="center"
+              spacing="gap-x-2"
+              padding={'pb-4'}
+            >
               {appTitle && findAppIcon(appTitle) && icon} {findAppIcon(appTitle)?.label}
             </Stack>
           }
