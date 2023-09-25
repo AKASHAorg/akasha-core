@@ -123,10 +123,10 @@ const NotificationsPage: React.FC<unknown> = () => {
 
   const markAsRead = useMarkAsRead();
 
-  const handleAvatarClick = (profileId: string) => {
+  const handleAvatarClick = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${id}`,
     });
   };
 

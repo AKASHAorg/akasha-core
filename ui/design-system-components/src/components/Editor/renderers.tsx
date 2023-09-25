@@ -133,7 +133,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
 
 const renderElement = (
   props: RenderElementProps,
-  handleMentionClick?: (profileId: string) => void,
+  handleMentionClick?: (id: string) => void,
   handleTagClick?: (name: string) => void,
   handleLinkClick?: (url: string) => void,
   handleDeleteImage?: ((element: ImageElement) => void) | null,

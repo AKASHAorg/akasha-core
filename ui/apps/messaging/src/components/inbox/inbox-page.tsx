@@ -59,16 +59,16 @@ const InboxPage: React.FC<InboxPageProps> = () => {
     }
   }, []);
 
-  const handlePinConversation = (profileId: string) => {
+  const handlePinConversation = (id: string) => {
     let currentData: string[] = [];
     if (localStorage.getItem('Pinned Conversations')) {
       currentData = JSON.parse(localStorage.getItem('Pinned Conversations'));
     }
-    const index = currentData.indexOf(profileId);
+    const index = currentData.indexOf(id);
     if (index !== -1) {
       currentData.splice(index, 1);
     } else {
-      currentData.push(profileId);
+      currentData.push(id);
     }
     const uniqueData = new Set(currentData);
     const newData = Array.from(uniqueData);
@@ -76,17 +76,17 @@ const InboxPage: React.FC<InboxPageProps> = () => {
     setPinnedConvos(newData);
   };
 
-  const handleCardClick = (profileId: string) => {
+  const handleCardClick = (id: string) => {
     getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-messaging',
-      getNavigationUrl: routes => `${routes.chat}/${profileId}`,
+      getNavigationUrl: routes => `${routes.chat}/${id}`,
     });
   };
 
-  const handleAvatarClick = (profileId: string) => {
+  const handleAvatarClick = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${id}`,
     });
   };
 

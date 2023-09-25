@@ -57,7 +57,7 @@ const AppRoutes: React.FC<unknown> = () => {
             }
           />
           <Route
-            path={`${routes[PROFILE_FEED]}/:profileId`}
+            path={`${routes[PROFILE_FEED]}/:did`}
             element={
               <ProfileFeedPage
                 loggedProfileData={loggedProfileData}
