@@ -7,4 +7,3 @@ export function getInputColor(isDisabled: boolean, error: boolean) {
   }
   return 'secondaryLight';
 }
-

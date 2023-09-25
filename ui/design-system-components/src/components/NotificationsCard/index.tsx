@@ -180,13 +180,13 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
             />
           </Button>
         </Stack>
-        <Divider />
+        {index !== notifications.length - 1 && <Divider />}
       </div>
     );
   };
 
   return (
-    <Card elevation={'1'} radius={16} customStyle="p-0 pb-16">
+    <Card elevation={'1'} radius={16} customStyle="p-0 w-full grow">
       {loggedIn && !isFetching && notifications.length === 0 && (
         <BasicInfoCard titleLabel={emptyTitle} image={'/images/longbeam-notfound.webp'} />
       )}

@@ -221,7 +221,7 @@ const NotificationsPage: React.FC<unknown> = () => {
 
   return (
     <>
-      <Stack direction="column" customStyle="pb-16">
+      <Stack direction="column" customStyle="pb-32">
         <Stack customStyle="py-4 relative w-full" direction="row">
           <Text variant="h5" align="center">
             <>{t('Notifications')}</>

@@ -306,7 +306,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
               </>
             ))}
         </Stack>
-        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-16">
+        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-32">
           {initial ? (
             <>
               <Button
