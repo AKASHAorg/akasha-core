@@ -1,9 +1,10 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DropDown, { DropdownMenuItemGroupType } from '../SearchAppDropdownFilter';
 
-export type SearchAppFilterProps = {
+export type DropDownFilterProps = {
   dropdownMenuItems: DropdownMenuItemGroupType[];
   selected: DropdownMenuItemGroupType;
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemGroupType>>;
@@ -11,7 +12,7 @@ export type SearchAppFilterProps = {
   resetHandler: () => void;
 };
 
-const SearchAppFilter: React.FC<SearchAppFilterProps> = ({
+const DropDownFilter: React.FC<DropDownFilterProps> = ({
   dropdownMenuItems,
   selected,
   setSelected,
@@ -19,8 +20,8 @@ const SearchAppFilter: React.FC<SearchAppFilterProps> = ({
   resetHandler,
 }) => {
   return (
-    <div className={tw('flex justify-between items-center my-6')}>
-      <div className={tw('w-2/6')}>
+    <Stack direction="row" justify="between" align="center" customStyle="my-6">
+      <Stack direction="row" customStyle="w-7/12 lg:w-2/6">
         <DropDown
           menuItems={dropdownMenuItems}
           selected={selected}
@@ -28,7 +29,7 @@ const SearchAppFilter: React.FC<SearchAppFilterProps> = ({
           optgroup={true}
           divider={true}
         />
-      </div>
+      </Stack>
       <Button
         variant="text"
         size="md"
@@ -38,8 +39,8 @@ const SearchAppFilter: React.FC<SearchAppFilterProps> = ({
       >
         {resetLabel}
       </Button>
-    </div>
+    </Stack>
   );
 };
 
-export default SearchAppFilter;
+export default DropDownFilter;

@@ -26,7 +26,7 @@ import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '@akashaorg/design-system-components/lib/components/ProfileSearchCard';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import SearchStartCard from '@akashaorg/design-system-components/lib/components/SearchStartCard';
-import SearchAppFilter from '@akashaorg/design-system-components/lib/components/SearchAppFilter';
+import DropDownFilter from '@akashaorg/design-system-components/lib/components/DropDownFilter';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import SwitchCard from '@akashaorg/design-system-components/lib/components/SwitchCard';
 import TagSearchCard from '@akashaorg/design-system-components/lib/components/TagSearchCard';
@@ -78,7 +78,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   // const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.CONTENT, [activeButton]);
 
-  const dropdownMenuItems: DropdownMenuItemGroupType[] = [
+  const dropDownMenuItems: DropdownMenuItemGroupType[] = [
     {
       id: '00',
       title: t('All'),
@@ -106,11 +106,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   ];
 
   const [selected, setSelected] = React.useState<DropdownMenuItemGroupType | null>(
-    dropdownMenuItems[0],
+    dropDownMenuItems[0],
   );
 
   const updateSearchState = (
-    // type: Exclude<ButtonValues, ButtonValues.PEOPLE>,
     type: ButtonValues,
     data: Array<DataResponse & { delisted?: boolean }>,
   ) => {
@@ -394,7 +393,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleResetClick = () => {
-    setSelected(dropdownMenuItems[0]);
+    setSelected(dropDownMenuItems[0]);
   };
 
   return (
@@ -418,8 +417,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         />
       </SearchStartCard>
       {activeButton === ButtonValues.CONTENT && (
-        <SearchAppFilter
-          dropdownMenuItems={dropdownMenuItems}
+        <DropDownFilter
+          dropdownMenuItems={dropDownMenuItems}
           selected={selected}
           setSelected={setSelected}
           resetLabel={t('Reset')}
@@ -555,29 +554,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               ))}
             </>
           )}
-        {/* {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
-          searchReflectionsState?.map(itemData => (
-            <EntryCardRenderer
-              key={itemData.itemId}
-              itemData={itemData}
-              itemType={EntityTypes.REPLY}
-              logger={props.logger}
-              singleSpa={singleSpa}
-              loggedProfileData={loggedProfileData}
-              onContentClick={handleEntryNavigation}
-              navigateTo={navigateTo}
-              onRepost={handleRebeam}
-              onAvatarClick={handleAvatarClick}
-              onMentionClick={handleMentionClick}
-              onTagClick={handleTagClick}
-              contentClickable={true}
-              locale={locale}
-              moderatedContentLabel={t('This content has been moderated')}
-              ctaLabel={t('See it anyway')}
-              uiEvents={props.uiEvents}
-              navigateToModal={props.navigateToModal}
-            />
-          ))} */}
       </Stack>
       {isFetchingSearch && (
         <Stack align="center" justify="center" spacing="gap-y-8" customStyle="p-8 m-auto">

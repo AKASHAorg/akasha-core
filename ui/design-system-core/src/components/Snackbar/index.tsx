@@ -15,7 +15,7 @@ import { Color } from '../types/common.types';
 export type SnackBarType = 'alert' | 'caution' | 'success' | 'info';
 
 export type SnackbarProps = {
-  title: string;
+  title: React.ReactNode;
   type?: SnackBarType;
   iconType?: IconType;
   description?: string;
@@ -60,7 +60,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
           size="lg"
           solid={true}
         />
-        <Stack direction="row">
+        <Stack direction="column">
           <Text variant="button-md" color={textColor}>
             {title}
           </Text>

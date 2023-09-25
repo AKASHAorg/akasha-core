@@ -2,6 +2,7 @@ import React from 'react';
 
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -166,30 +167,26 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
     const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
     return (
       <div key={index}>
-        <Card
-          elevation="none"
-          padding="py-3 pl-4"
-          onClick={clickHandler}
-          customStyle="flex-row"
-          radius="none"
-        >
-          <ProfileAvatarNotificationApp
-            profileId={profileData.did?.id}
-            avatarImage={profileData.avatar}
-            label={fullLabel}
-            info={relativeTime}
-            onClickAvatar={clickHandler}
-            onClick={clickHandler}
-            active={!notif.read}
-          />
-        </Card>
+        <Stack padding="py-3 pl-4" customStyle="flex-row">
+          <Button plain onClick={clickHandler}>
+            <ProfileAvatarNotificationApp
+              profileId={profileData.did?.id}
+              avatarImage={profileData.avatar}
+              label={fullLabel}
+              info={relativeTime}
+              onClickAvatar={clickHandler}
+              onClick={clickHandler}
+              active={!notif.read}
+            />
+          </Button>
+        </Stack>
         <Divider />
       </div>
     );
   };
 
   return (
-    <Card padding={0} elevation="none">
+    <Card elevation={'1'} radius={16} customStyle="p-0 pb-16">
       {loggedIn && !isFetching && notifications.length === 0 && (
         <BasicInfoCard titleLabel={emptyTitle} image={'/images/longbeam-notfound.webp'} />
       )}

@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventTypes } from '@akashaorg/typings/lib/ui';
+import { EventTypes, MenuItemAreaType } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -24,93 +23,82 @@ export type CustomizeNotificationPageProps = {
   isLoggedIn: boolean;
 };
 
-const Title = ({ title }: { title: string }): JSX.Element => {
-  return (
-    <Stack direction="row" justifyItems="center">
-      <Text variant="h6" align="center">
-        {title}
-      </Text>
-    </Stack>
-  );
-};
+const NOTIF_REF = 'notification-preference';
 
 const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   initial = true,
   isLoggedIn,
 }) => {
   const { t } = useTranslation('app-notifications');
-  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
+  const { uiEvents, getRoutingPlugin, plugins } = useRootComponentProps();
+
+  const [routeData, setRouteData] = useState(null);
+
+  const routing = plugins['@akashaorg/app-routing']?.routing;
+
+  const [appNames, setAppNames] = useState<string[]>([]);
+
+  const allowedApps = [
+    '@akashaorg/app-akasha-integration',
+    '@akashaorg/app-moderation-ewa',
+    '@akashaorg/app-akasha-verse',
+  ];
+
+  useEffect(() => {
+    let sub;
+    if (routing) {
+      sub = routing.routeObserver.subscribe({
+        next: routeData => {
+          setRouteData({ ...routeData.byArea });
+        },
+      });
+    }
+    return () => {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    };
+  }, [routing]);
+
+  const defaultInstalledApps = useMemo(() => {
+    return routeData?.[MenuItemAreaType.AppArea];
+  }, [routeData]);
+
+  React.useEffect(() => {
+    if (defaultInstalledApps) {
+      defaultInstalledApps.map(app => {
+        if (allowedApps.includes(app.name)) setAppNames(prev => [...prev, app.label]);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultInstalledApps]);
 
   const [selected, setSelected] = useState(true);
+  const [allStates, setAllStates] = useState<{ app: string; selected: boolean }[]>([]);
 
-  const socialAppCheckboxes = useMemo(
-    () => [
-      {
-        label: t('New Followers'),
-        value: 'New Followers',
-        selected: true,
-      },
-      {
-        label: t('Reflects on my Beam'),
-        value: 'Reflects on my Beam',
-        selected: true,
-      },
-      {
-        label: t('Mentions me in a Beam / Reflect'),
-        value: 'Mentions me in a Beam / Reflect',
-        selected: true,
-      },
-      {
-        label: t('Someone sharing my Beam'),
-        value: 'Someone sharing my Beam',
-        selected: true,
-      },
-      {
-        label: t('When someone I am following Beams new content'),
-        value: 'When someone I am following Beams new content',
-        selected: true,
-      },
-      {
-        label: t('When there’s new content in topics I’m subscribed to'),
-        value: 'When there’s new content in topics I’m subscribed to',
-        selected: true,
-      },
-    ],
-    [t],
-  );
+  React.useEffect(() => {
+    if (appNames) {
+      if (localStorage && localStorage.getItem(NOTIF_REF)) {
+        setAllStates(JSON.parse(localStorage.getItem(NOTIF_REF)));
+      } else {
+        setAllStates(appNames.map(app => ({ app: app, selected: true })));
+      }
+    }
+  }, [appNames]);
 
-  const moderationAppCheckboxes = useMemo(
-    () => [
-      {
-        label: t('My content gets delisted/kept'),
-        value: 'My content gets delisted/kept',
-        selected: true,
-      },
-    ],
-    [t],
-  );
-  const integrationCenterCheckboxes = useMemo(
-    () => [
-      {
-        label: t('New versions of installed integrations'),
-        value: 'New versions of installed integrations',
-        selected: true,
-      },
-    ],
-    [t],
-  );
-
-  const [allStates, setAllStates] = useState({
-    socialapp: socialAppCheckboxes.map(e => e.selected),
-    moderationApp: moderationAppCheckboxes.map(e => e.selected),
-    integrationCenter: integrationCenterCheckboxes.map(e => e.selected),
-  });
+  React.useEffect(() => {
+    if (allStates) {
+      if (allStates.find(state => state.selected === false)) {
+        setSelected(false);
+      }
+    }
+  }, [allStates]);
 
   const [snoozed, setSnoozed] = React.useState(false);
 
   // check if snooze notification option has already been set
   useEffect(() => {
-    if (window.localStorage) {
+    if (window.localStorage && localStorage.getItem('notifications-snoozed')) {
       setSnoozed(JSON.parse(localStorage.getItem('notifications-snoozed')));
     }
   }, []);
@@ -129,66 +117,22 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   // added for emitting snooze notification event
   const _uiEvents = useRef(uiEvents);
 
-  const changeHandler = (pos: number, section: string): void => {
-    const stateArray = (() => {
-      switch (section) {
-        case 'socialapp':
-          return allStates.socialapp;
-        case 'moderationApp':
-          return allStates.moderationApp;
-        case 'integrationCenter':
-          return allStates.integrationCenter;
+  const changeHandler = ({ app }): void => {
+    const newStates = allStates?.map(state => {
+      if (state.app === app) {
+        state.selected = !state.selected;
       }
-    })();
-    const updatedCheckedState = stateArray.map((item, idx) => (idx === pos ? !item : item));
-    setAllStates({ ...allStates, [section]: updatedCheckedState });
+      return state;
+    });
+
+    setAllStates([...newStates]);
     setIsChanged(true);
   };
-
-  const Content = ({
-    checkboxArray,
-    section,
-  }: {
-    checkboxArray: Array<{ label: string; value: string; selected: boolean }>;
-    section: string;
-  }): JSX.Element => {
-    return (
-      <div>
-        {checkboxArray.map(({ label, value }, index) => {
-          return (
-            <div key={index}>
-              <Checkbox
-                label={label}
-                value={value}
-                id={index.toString()}
-                isSelected={allStates[section][index]}
-                handleChange={() => changeHandler(index, section)}
-                name={label}
-                customStyle="mb-4"
-              />
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  // detects if user changes any of the setting options and then enable the Update button
-  // useEffect(() => {
-  //   // setUpdateButtonDisabled(!updateButtonDisabled);
-  //   setIsChanged(!isChanged);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isChanged]);
 
   // auto-selects all when I want to receive all notification is checked
   useEffect(() => {
     if (selected == true) {
-      setAllStates({
-        ...allStates,
-        socialapp: Array(socialAppCheckboxes.length).fill(true),
-        moderationApp: Array(moderationAppCheckboxes.length).fill(true),
-        integrationCenter: Array(integrationCenterCheckboxes.length).fill(true),
-      });
+      setAllStates(appNames.map(app => ({ app: app, selected: true })));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
@@ -218,7 +162,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
     // @TODO: save preferences somewhere, now we just save a key in localstorage to mark as set
     try {
       if (window.localStorage) {
-        localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
+        localStorage.setItem(NOTIF_REF, JSON.stringify(allStates)); // @TODO: where to save settings?
         _uiEvents.current.next({
           event: EventTypes.ShowNotification,
           data: {
@@ -344,34 +288,23 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         </Stack>
         <Divider customStyle="!mt-0" />
         <Stack direction="column" customStyle="min-h-[80%] !mt-0 gap-y-2 pt-2">
-          <Accordion
-            titleNode={<Title title={t('Antenna')} />}
-            contentNode={<Content checkboxArray={socialAppCheckboxes} section={'socialapp'} />}
-            open={initial}
-            customStyle="mx-4"
-            contentStyle="mx-6"
-          />
-          <Divider customStyle="!mt-0" />
-          <Accordion
-            titleNode={<Title title={t('Vibes')} />}
-            contentNode={
-              <Content checkboxArray={moderationAppCheckboxes} section={'moderationApp'} />
-            }
-            open={initial}
-            customStyle="mx-4"
-            contentStyle="mx-6"
-          />
-          <Divider customStyle="!mt-0" />
-          <Accordion
-            titleNode={<Title title={t('Extensions')} />}
-            contentNode={
-              <Content checkboxArray={integrationCenterCheckboxes} section={'integrationCenter'} />
-            }
-            open={initial}
-            customStyle="mx-4"
-            contentStyle="mx-6"
-          />
-          <Divider customStyle="!mt-0" />
+          {allStates.length !== 0 &&
+            allStates.map(appState => (
+              <>
+                <Stack direction="row" justify="between" align="center" customStyle="px-6">
+                  <Text variant="h6">{appState?.app}</Text>
+                  <Checkbox
+                    value={appState.app}
+                    id={appState.app.concat(String(Math.round(Math.random() * 100)))}
+                    isSelected={appState.selected}
+                    handleChange={() => changeHandler(appState)}
+                    name={appState.app}
+                    customStyle="mb-4"
+                  />
+                </Stack>
+                <Divider customStyle="!mt-0" />
+              </>
+            ))}
         </Stack>
         <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-16">
           {initial ? (
