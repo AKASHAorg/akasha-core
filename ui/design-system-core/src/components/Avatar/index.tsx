@@ -30,6 +30,7 @@ export type AvatarProps = {
   faded?: boolean;
   active?: boolean;
   isClickable?: boolean;
+  href?: string;
   customStyle?: string;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
@@ -47,6 +48,7 @@ const Avatar: React.FC<AvatarProps> = props => {
     faded,
     active,
     isClickable = false,
+    href,
     customStyle = '',
     onClick,
   } = props;
@@ -70,7 +72,7 @@ const Avatar: React.FC<AvatarProps> = props => {
   const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Anchor onClick={onClick} tabIndex={-6}>
+    <Anchor href={href} onClick={onClick} tabIndex={-6}>
       <Stack customStyle={containerStyle}>
         {/* updating this logic, so that avatarImage loads with fallbackUrl even when avatar is null */}
         {(avatar || avatarImageFallback) && (

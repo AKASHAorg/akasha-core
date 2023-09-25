@@ -60,7 +60,7 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
   } = props;
 
   return (
-    <Stack spacing="gap-y-4" customStyle="p-4">
+    <Stack spacing="gap-y-4">
       <Stack direction="row" align="center" justify="between">
         <Text weight="bold">{moderatorSinceLabel}</Text>
         <Text color="grey4">{dayjs(moderatorSince).format('DD-MMM-YYYY')}</Text>
@@ -73,7 +73,11 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
           <Text weight="bold">{moderationCategoriesLabel}</Text>
 
           <Button plain={true} onClick={onButtonClick(EDIT_CATEGORIES)}>
-            <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+            <Text
+              variant="button-sm"
+              weight="bold"
+              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+            >
               {changeLabel}
             </Text>
           </Button>
@@ -96,7 +100,11 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
           <Text weight="bold">{contactInfoLabel}</Text>
 
           <Button plain={true} onClick={onButtonClick(EDIT_CONTACT_INFO)}>
-            <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+            <Text
+              variant="button-sm"
+              weight="bold"
+              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+            >
               {changeLabel}
             </Text>
           </Button>
@@ -124,7 +132,11 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
               <Text weight="bold">{maxApplicantsLabel}</Text>
 
               <Button plain={true} onClick={onButtonClick(EDIT_MAX_APPLICANTS)}>
-                <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                <Text
+                  variant="button-sm"
+                  weight="bold"
+                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                >
                   {changeLabel}
                 </Text>
               </Button>

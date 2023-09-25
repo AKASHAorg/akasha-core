@@ -20,8 +20,8 @@ const Applicant: React.FC<ApplicantProps> = props => {
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
   return (
-    <Stack justify="between" customStyle="p-4">
-      <Stack spacing="gap-x-2" align="start">
+    <Stack direction="row" justify="between">
+      <Stack direction="row" align="start" spacing="gap-x-2">
         <Avatar avatar={applicant.avatar} />
 
         <Stack>

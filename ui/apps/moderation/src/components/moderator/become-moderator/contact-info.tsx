@@ -52,19 +52,17 @@ const BMContactInfo: React.FC<BMContactInfoProps> = props => {
         <TextField label={emailLabel} placeholder={emailPlaceholderLabel} type="text" />
       </Stack>
 
-      <Stack justify="end">
-        <Button plain={true} onClick={onFillFromProfileClick}>
-          <Text
-            as="span"
-            variant="subtitle2"
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-            weight="bold"
-            customStyle="cursor-pointer"
-          >
-            {fillFromProfileLabel}
-          </Text>
-        </Button>
-      </Stack>
+      <Button plain={true} onClick={onFillFromProfileClick} customStyle="w-fit ml-auto">
+        <Text
+          as="span"
+          variant="subtitle2"
+          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+          weight="bold"
+          customStyle="cursor-pointer"
+        >
+          {fillFromProfileLabel}
+        </Text>
+      </Button>
 
       {checks.map((check, idx) => (
         <Checkbox
@@ -75,6 +73,7 @@ const BMContactInfo: React.FC<BMContactInfoProps> = props => {
           value={check}
           isSelected={!!checkedState[idx]}
           handleChange={onCheckBoxClick(idx)}
+          customStyle="mx-2 my-0"
         />
       ))}
     </SteppedActionWrapper>

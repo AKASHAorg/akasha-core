@@ -18,7 +18,7 @@ export type BMConfirmationProps = SteppedActionWrapperProps &
   };
 
 const BMConfirmation: React.FC<BMConfirmationProps> = props => {
-  const { assetName = 'moderation', assetExtension = 'webp', publicImgPath = '/images' } = props;
+  const { assetName = 'vibe-received', assetExtension = 'webp', publicImgPath = '/images' } = props;
 
   return (
     <SteppedActionWrapper {...props}>

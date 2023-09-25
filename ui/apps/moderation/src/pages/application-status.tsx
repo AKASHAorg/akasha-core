@@ -21,13 +21,22 @@ export const ApplicationStatusPage: React.FC<ApplicationStatusPageProps> = props
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const subtitleLabelsMap = {
-    [ApplicationStatusType.review]: applicationUnderReviewSubtitles,
-    [ApplicationStatusType.approved]: applicationApprovedSubtitles,
-    [ApplicationStatusType.rejected]: applicationRejectedSubtitles,
+  const contentMap = {
+    [ApplicationStatusType.review]: {
+      assetName: 'vibe-review',
+      subtitle: applicationUnderReviewSubtitles,
+    },
+    [ApplicationStatusType.approved]: {
+      assetName: 'vibe-approved',
+      subtitle: applicationApprovedSubtitles,
+    },
+    [ApplicationStatusType.rejected]: {
+      assetName: 'vibe-rejected',
+      subtitle: applicationRejectedSubtitles,
+    },
   };
 
-  const subtitles = subtitleLabelsMap[applicationStatus] ?? [];
+  const content = contentMap[applicationStatus];
 
   const handleLinkClick = (link: string) => () => {
     navigateTo?.({
@@ -39,8 +48,9 @@ export const ApplicationStatusPage: React.FC<ApplicationStatusPageProps> = props
   return (
     <ApplicationStatus
       label={t('Application Status')}
+      assetName={content.assetName}
       titleLabel={t('{{applicationStatus}}', { applicationStatus: applicationStatus })}
-      subtitleLabels={subtitles.map(subtitle => ({
+      subtitleLabels={content.subtitle.map((subtitle: { [key: string]: string }) => ({
         ...subtitle,
         label: t('{{label}}', { label: subtitle.label }),
       }))}

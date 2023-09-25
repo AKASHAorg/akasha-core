@@ -19,7 +19,7 @@ export type GuestProps = {
 
 const GuestDashboard: React.FC<GuestProps> = props => {
   const {
-    assetName = 'moderation',
+    assetName = 'vibe-overview',
     assetExtension = 'webp',
     publicImgPath = '/images',
     navigateTo,
