@@ -126,7 +126,7 @@ const InboxPage: React.FC<InboxPageProps> = () => {
                     }
                     senderName={contact?.name}
                     senderAvatar={contact?.avatar}
-                    senderProfileId={contact?.did.id}
+                    senderDid={contact?.did.id}
                     onClickCard={() => handleCardClick(contact.did.id)}
                     onClickAvatar={() => handleAvatarClick(contact.did.id)}
                     onConvoPin={() => handlePinConversation(contact.did.id)}
@@ -158,7 +158,7 @@ const InboxPage: React.FC<InboxPageProps> = () => {
                   }
                   senderName={contact?.name}
                   senderAvatar={contact?.avatar}
-                  senderProfileId={contact?.did.id}
+                  senderDid={contact?.did.id}
                   onClickCard={() => handleCardClick(contact.did.id)}
                   onClickAvatar={() => handleAvatarClick(contact.did.id)}
                   onConvoPin={() => handlePinConversation(contact.did.id)}

@@ -51,10 +51,10 @@ const ChatPage = (props: ChatPageProps) => {
 
   const disablePublishing = React.useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
 
-  const handleMentionClick = (profileId: string) => {
+  const handleMentionClick = (did: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${did}`,
     });
   };
 
