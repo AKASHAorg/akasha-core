@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import TrendingWidgetButton from '@akashaorg/design-system-components/lib/components/TrendingWidgetButton';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import {
@@ -149,20 +149,16 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       iconOnly={true}
     />
   ) : (
-    <DuplexButton
+    <TrendingWidgetButton
       inactiveLabel={t('Follow')}
       activeLabel={t('Following')}
       activeHoverLabel={t('Unfollow')}
-      onClickInactive={() => handleFollow(profileID, followId)}
-      onClickActive={() => handleUnfollow(profileID, followId)}
       active={following}
-      size="sm"
+      activeIcon="CheckIcon"
+      activeHoverIcon="XMarkIcon"
+      onClickActive={() => handleUnfollow(profileID, followId)}
+      onClickInactive={() => handleFollow(profileID, followId)}
       loading={loading}
-      hoverColor={{
-        background: { light: 'errorLight/20', dark: 'errorDark/20' },
-        border: { light: 'errorLight', dark: 'errorDark' },
-        text: { light: 'errorLight', dark: 'errorDark' },
-      }}
     />
   );
 };
