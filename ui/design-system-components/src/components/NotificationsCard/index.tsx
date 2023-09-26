@@ -31,7 +31,7 @@ export type NotificationsCardProps = {
   // handlers
   handleMessageRead: (notifId: string) => void;
   handleEntryClick: (itemId: string, itemType: EntityTypes) => void;
-  handleProfileClick: (profileId: string) => void;
+  handleProfileClick: (id: string) => void;
   loggedIn?: boolean;
 };
 

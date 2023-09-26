@@ -30,7 +30,7 @@ const ChatPage = (props: ChatPageProps) => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { profileId } = useParams<{ profileId: string }>();
+  const { did } = useParams<{ did: string }>();
 
   const onChevronLeftClick = () => {
     navigateTo?.({
@@ -42,11 +42,11 @@ const ChatPage = (props: ChatPageProps) => {
   const handleProfileClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `${routes.rootRoute}/${profileId}`,
+      getNavigationUrl: routes => `${routes.rootRoute}/${did}`,
     });
   };
 
-  const contactProfileId = React.useMemo(() => profileId, [profileId]);
+  const contactProfileId = React.useMemo(() => did, [did]);
   const loggedUserId = React.useMemo(() => loggedProfileData?.did?.id, [loggedProfileData]);
 
   const disablePublishing = React.useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
@@ -81,7 +81,7 @@ const ChatPage = (props: ChatPageProps) => {
   };
 
   const profileDataReq = useGetProfileByDidQuery(
-    { id: profileId },
+    { id: did },
     {
       select: data => {
         if (data.node && 'akashaProfile' in data.node) {
@@ -89,7 +89,7 @@ const ChatPage = (props: ChatPageProps) => {
         }
         return null;
       },
-      enabled: !!profileId,
+      enabled: !!did,
     },
   );
 
@@ -110,7 +110,7 @@ const ChatPage = (props: ChatPageProps) => {
       read: res.read,
       id: res.id,
       loggedUserId: loggedUserId,
-      chatPartnerId: profileId,
+      chatPartnerId: did,
     };
     // save the published messsage to the local db
     // db.messages.put(newMessage);
@@ -119,16 +119,14 @@ const ChatPage = (props: ChatPageProps) => {
   // real time query to get messages from local db
   const dexieMessages =
     useLiveQuery(() =>
-      db.messages
-        .where({ loggedUserId: loggedUserId, chatPartnerId: profileId })
-        .sortBy('timestamp'),
+      db.messages.where({ loggedUserId: loggedUserId, chatPartnerId: did }).sortBy('timestamp'),
     ) || [];
 
   // hydrate user data on messages
   const localMessages = dexieMessages.map(msg => {
     if (msg.from === loggedUserId) {
       return msg;
-    } else if (msg.from === profileId) {
+    } else if (msg.from === did) {
       return { ...msg, name: contactId };
     }
   });
@@ -140,19 +138,19 @@ const ChatPage = (props: ChatPageProps) => {
   const unreadMessages = localMessages.slice(indexOfLatestReadMessage);
 
   const markLatestMessagesRead = () => {
-    if (unreadMessages?.length && profileId) {
+    if (unreadMessages?.length && did) {
       const unreadMessageIds = unreadMessages.map(message => message.id);
       // mark messages as read through textile api
       markAsRead(unreadMessageIds);
       // optimistic mark messages as read on local db
       db.messages
-        .where({ from: profileId })
+        .where({ from: did })
         .filter(msg => msg.read === false)
         .modify({ read: true });
       // clear new messages conversation marker
       if (localStorage.getItem('Unread Chats')) {
         const unreadChats = JSON.parse(localStorage.getItem('Unread Chats'));
-        const filteredChats = unreadChats.filter(unreadChat => unreadChat !== profileId);
+        const filteredChats = unreadChats.filter(unreadChat => unreadChat !== did);
         localStorage.setItem('Unread Chats', JSON.stringify(filteredChats));
       }
     }

@@ -21,9 +21,9 @@ export interface OnboardingSuggestionsCardProps {
   subscribedTags?: string[];
   followedProfiles?: string[];
   onClickTag?: (tagName: string) => void;
-  onClickProfile?: (profileId: string) => void;
-  onClickFollow?: (profileId: string) => void;
-  onClickUnfollow?: (profileId: string) => void;
+  onClickProfile?: (id: string) => void;
+  onClickFollow?: (id: string) => void;
+  onClickUnfollow?: (id: string) => void;
   isViewer?: boolean;
 }
 const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = props => {

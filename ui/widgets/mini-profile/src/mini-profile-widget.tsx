@@ -116,10 +116,10 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
     }
   };
 
-  const handleProfileClick = (profileId: string) => {
+  const handleProfileClick = (id: string) => {
     plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${id}`,
     });
   };
 
