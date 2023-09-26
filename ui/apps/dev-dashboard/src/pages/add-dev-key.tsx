@@ -95,7 +95,7 @@ export const AddDevKey: React.FC<unknown> = () => {
           unusedLabel={t('Unused')}
           usedLabel={t('Used')}
           pendingConfirmationLabel={t('Pending Confirmation')}
-          devPubKeyLabel={t('Dev Public Key 🔑')}
+          devPublicKeyLabel={t('Dev Public Key 🔑')}
           dateAddedLabel={t('Date added 🗓')}
           confirmButtonLabel={t('Confirm')}
           onConfirmButtonClick={handleFinishAddingKey}

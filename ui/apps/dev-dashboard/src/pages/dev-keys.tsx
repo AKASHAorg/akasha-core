@@ -68,7 +68,7 @@ export const DevKeysCard: React.FC<unknown> = () => {
                     nonameLabel={t('Unnamed Key')}
                     unusedLabel={t('Inactive')}
                     usedLabel={t('Active')}
-                    devPubKeyLabel={t('Dev Public Key 🔑')}
+                    devPublicKeyLabel={t('Dev Public Key 🔑')}
                     dateAddedLabel={t('Date added 🗓')}
                     editable={true}
                     item={item}

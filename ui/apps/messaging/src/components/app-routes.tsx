@@ -77,7 +77,7 @@ const AppRoutes: React.FC<unknown> = () => {
           element={<SettingsPage loggedProfileData={loggedProfileData} />}
         ></Route>
         <Route
-          path={`${routes[CHAT]}/:pubKey`}
+          path={`${routes[CHAT]}/:did`}
           element={
             <ChatPage loggedProfileData={loggedProfileData} fetchingMessages={fetchingMessages} />
           }

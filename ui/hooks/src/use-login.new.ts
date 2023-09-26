@@ -20,7 +20,7 @@ export function useConnectWallet(provider: EthProviders) {
  * ```typescript
  * const loginQuery = useGetLogin();
  * // can be used with useGetProfile hook to get the logged profile data
- * const profileDataQuery = useGetProfile(loginQuery.data?.pubKey);
+ * const profileDataQuery = useGetProfile(loginQuery.data?.id);
  *
  const loggedProfileData = profileDataQuery.data;
  * ```

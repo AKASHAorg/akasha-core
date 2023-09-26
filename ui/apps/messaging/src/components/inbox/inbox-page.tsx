@@ -40,11 +40,11 @@ const InboxPage: React.FC<InboxPageProps> = () => {
     [followingQuery.data?.pages],
   );
   const contactList = followers?.filter(followerProfile =>
-    following?.some(followingProfile => followerProfile.pubKey === followingProfile.pubKey),
+    following?.some(followingProfile => followerProfile.did.id === followingProfile.did.id),
   );
   const pinnedContacts = [];
   const unpinnedContacts = contactList?.filter(contact => {
-    if (pinnedConvos?.includes(contact.pubKey)) {
+    if (pinnedConvos?.includes(contact.did.id)) {
       pinnedContacts.push(contact);
       return false;
     } else {
@@ -59,16 +59,16 @@ const InboxPage: React.FC<InboxPageProps> = () => {
     }
   }, []);
 
-  const handlePinConversation = (pubKey: string) => {
+  const handlePinConversation = (id: string) => {
     let currentData: string[] = [];
     if (localStorage.getItem('Pinned Conversations')) {
       currentData = JSON.parse(localStorage.getItem('Pinned Conversations'));
     }
-    const index = currentData.indexOf(pubKey);
+    const index = currentData.indexOf(id);
     if (index !== -1) {
       currentData.splice(index, 1);
     } else {
-      currentData.push(pubKey);
+      currentData.push(id);
     }
     const uniqueData = new Set(currentData);
     const newData = Array.from(uniqueData);
@@ -76,17 +76,17 @@ const InboxPage: React.FC<InboxPageProps> = () => {
     setPinnedConvos(newData);
   };
 
-  const handleCardClick = (pubKey: string) => {
+  const handleCardClick = (id: string) => {
     getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-messaging',
-      getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
+      getNavigationUrl: routes => `${routes.chat}/${id}`,
     });
   };
 
-  const handleAvatarClick = (pubKey: string) => {
+  const handleAvatarClick = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${id}`,
     });
   };
 
@@ -121,15 +121,15 @@ const InboxPage: React.FC<InboxPageProps> = () => {
                     isPinned={true}
                     isRead={
                       !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(
-                        contact.pubKey,
+                        contact.did.id,
                       )
                     }
                     senderName={contact?.name}
                     senderAvatar={contact?.avatar}
-                    senderProfileId={contact?.did.id}
-                    onClickCard={() => handleCardClick(contact.pubKey)}
-                    onClickAvatar={() => handleAvatarClick(contact.pubKey)}
-                    onConvoPin={() => handlePinConversation(contact.pubKey)}
+                    senderDid={contact?.did.id}
+                    onClickCard={() => handleCardClick(contact.did.id)}
+                    onClickAvatar={() => handleAvatarClick(contact.did.id)}
+                    onConvoPin={() => handlePinConversation(contact.did.id)}
                   />
                 ))}
               </Stack>
@@ -153,15 +153,15 @@ const InboxPage: React.FC<InboxPageProps> = () => {
                   isPinned={false}
                   isRead={
                     !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(
-                      contact.pubKey,
+                      contact.did.id,
                     )
                   }
                   senderName={contact?.name}
                   senderAvatar={contact?.avatar}
-                  senderProfileId={contact?.did.id}
-                  onClickCard={() => handleCardClick(contact.pubKey)}
-                  onClickAvatar={() => handleAvatarClick(contact.pubKey)}
-                  onConvoPin={() => handlePinConversation(contact.pubKey)}
+                  senderDid={contact?.did.id}
+                  onClickCard={() => handleCardClick(contact.did.id)}
+                  onClickAvatar={() => handleAvatarClick(contact.did.id)}
+                  onConvoPin={() => handlePinConversation(contact.did.id)}
                 />
               ))}
             </Stack>
