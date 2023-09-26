@@ -1,7 +1,7 @@
 import { TIMEOUT } from '../utils/constants';
 
-describe('AKASHAVerse', () => {
-  context('AKASHAVerse', () => {
+describe('Extensions', () => {
+  context('Extensions', () => {
     before(() => {
       cy.visit('/@akashaorg/app-akasha-verse', { timeout: TIMEOUT });
     });

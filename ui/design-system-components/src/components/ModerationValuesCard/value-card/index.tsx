@@ -6,6 +6,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export type ModerationValueCardProps = {
   publicImgPath?: string;
+  assetExtension?: string;
   assetName: string;
   label: string;
   description?: string;
@@ -18,6 +19,7 @@ export type ModerationValueCardProps = {
 const ModerationValueCard: React.FC<ModerationValueCardProps> = props => {
   const {
     publicImgPath = '/images',
+    assetExtension = 'webp',
     assetName,
     label,
     description,
@@ -39,7 +41,7 @@ const ModerationValueCard: React.FC<ModerationValueCardProps> = props => {
             <img
               alt={assetName}
               className={tw('object-contain')}
-              src={`${publicImgPath}/${assetName}.webp`}
+              src={`${publicImgPath}/${assetName}.${assetExtension}`}
             />
           </div>
 

@@ -1,6 +1,6 @@
-# Routing plugin
+# Routing App
 
-> The Routing plugin serves as base for routing of all registered apps and widgets.
+> The Routing app serves as base for routing of all registered apps and widgets.
 > It collects real-time data from single-spa about all registered apps, both world apps and user apps, uses their exported routing info to provide a data single source - which is then used to render menus (ie. sidebar and topbar), but also provides a navigation function which can be used dynamically by any app or widget using it, which greatly simplifies navigation between different apps.
 
 ## Usage
