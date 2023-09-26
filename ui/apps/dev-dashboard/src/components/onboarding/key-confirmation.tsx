@@ -1,10 +1,9 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import {
-  DevKeyCard,
+import DevKeyCard, {
   DevKeyCardProps,
 } from '@akashaorg/design-system-components/lib/components/DevKeyCard';
 import {
@@ -33,15 +32,15 @@ export const KeyConfirmation: React.FC<KeyConfirmationProps> = props => {
 
   return (
     <SteppedActionWrapper {...props}>
-      <Box customStyle="flex flex-col w-full">
+      <Stack fullWidth={true}>
         <Text>{subtitleLabel}</Text>
 
-        <Box customStyle="w-[17.5rem] h-[17.5rem] my-6 self-center">
+        <Stack customStyle="w-[17.5rem] h-[17.5rem] my-6 self-center">
           <Image src={`${publicImgPath}/${assetName}.${assetExtension}`} />
-        </Box>
+        </Stack>
 
         <DevKeyCard {...props} item={sampleDevKeys[0]} />
-      </Box>
+      </Stack>
     </SteppedActionWrapper>
   );
 };

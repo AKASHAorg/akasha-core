@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
 import DevProfileCard from '../components/profile/dev-profile-card';
@@ -18,14 +18,14 @@ import menuRoute, {
 } from '../routes';
 import { sampleDevKeys } from '../utils/dummy-data';
 
-export const DevDashboard = (props: RootComponentProps) => {
-  const { plugins } = props;
+export const DevDashboard: React.FC<unknown> = () => {
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const isOnboarded = React.useMemo(() => {
+  const isOnboarded = useMemo(() => {
     return Boolean(window.localStorage.getItem(ONBOARDING_STATUS));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -39,9 +39,9 @@ export const DevDashboard = (props: RootComponentProps) => {
   }
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet>
-        <title>Dev Dashboard | Akasha World</title>
+        <title>Dev Dashboard | AKASHA World</title>
       </Helmet>
 
       <>
@@ -70,6 +70,6 @@ export const DevDashboard = (props: RootComponentProps) => {
           navigateTo={navigateTo}
         />
       </>
-    </Box>
+    </Stack>
   );
 };

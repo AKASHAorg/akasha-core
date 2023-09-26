@@ -1,27 +1,30 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { Profile } from '@akashaorg/typings/ui';
+import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
+import { Profile } from '@akashaorg/typings/lib/ui';
 import {
-  useGetFollowingListByDidQuery,
   useGetInterestsByDidQuery,
   useInfiniteGetBeamsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
 import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
+import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-export interface MyFeedPageProps {
+export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: Profile;
-}
+};
 
-const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
-  const { logger, loggedProfileData } = props;
+const MyFeedPage: React.FC<MyFeedPageProps> = props => {
+  const { loggedProfileData } = props;
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const isLoggedUser = React.useMemo(() => !!loggedProfileData?.did.id, [loggedProfileData]);
 
@@ -33,30 +36,18 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
     {
       select: data => {
         if (data?.node) {
-          if ('interests' in data.node) {
-            return data.node.interests;
+          if ('akashaProfileInterests' in data.node) {
+            return data.node.akashaProfileInterests;
           }
         }
         return null;
       },
     },
   );
-  const followingReq = useGetFollowingListByDidQuery({ id: loggedProfileData?.did.id });
-  const navigateToModal = React.useRef(props.navigateToModal);
+
+  const _navigateToModal = React.useRef(navigateToModal);
+
   const showLoginModal = React.useRef(props.showLoginModal);
-
-  const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage) {
-      postsReq.fetchNextPage();
-    }
-  }, [postsReq]);
-
-  const postPages = React.useMemo(() => {
-    if (postsReq.data) {
-      return postsReq.data.pages;
-    }
-    return [];
-  }, [postsReq.data]);
 
   const userHasSubscriptions = React.useMemo(() => {
     return loggedProfileData?.followers?.edges?.length > 0 || tagSubsReq.data?.topics?.length > 0;
@@ -67,15 +58,15 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       if (!isLoggedUser) {
         return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
-      navigateToModal.current({ name: 'report-modal', itemId, itemType });
+      _navigateToModal.current({ name: 'report-modal', itemId, itemType });
     },
     [isLoggedUser],
   );
 
   const handleEntryRemove = React.useCallback((itemId: string) => {
-    navigateToModal.current({
+    _navigateToModal.current({
       name: 'entry-remove-confirmation',
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
       itemId,
     });
   }, []);
@@ -91,19 +82,19 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   };
 
   return (
-    <Box customStyle="w-full">
+    <Stack fullWidth={true}>
       <Helmet.Helmet>
-        <title>Akasha World</title>
+        <title>AKASHA World</title>
       </Helmet.Helmet>
 
-      <Box customStyle="mb-2">
+      <Stack customStyle="mb-2">
         <StartCard
           title={t('My Feed')}
           heading={t('Add some magic to your feed 🪄')}
           description={t(
             'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
           )}
-          secondaryDescription={t('Your customized view of Akasha World')}
+          secondaryDescription={t('Your customized view of AKASHA World')}
           image="/images/news-feed.webp"
           showMainArea={!userHasSubscriptions}
           hideMainAreaOnMobile={false}
@@ -111,40 +102,27 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           CTALabel={t('Customize My Feed')}
           onClickCTA={handleCTAClick}
         />
-      </Box>
+      </Stack>
 
       <FeedWidget
-        modalSlotId={props.layoutConfig.modalSlotId}
-        logger={logger}
-        itemType={EntityTypes.POST}
-        pages={postPages}
-        onLoadMore={handleLoadMore}
-        getShareUrl={(itemId: string) =>
-          `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-        }
-        navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-        navigateToModal={props.navigateToModal}
-        onLoginModalOpen={props.showLoginModal}
-        requestStatus={postsReq.status}
-        hasNextPage={postsReq.hasNextPage}
+        queryKey="akasha-my-feed-query"
+        itemType={EntityTypes.BEAM}
+        onLoginModalOpen={showLoginModal.current}
         loggedProfileData={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
-        removeEntryLabel={t('Delete Post')}
-        removedByMeLabel={t('You deleted this post')}
-        removedByAuthorLabel={t('This post was deleted by its author')}
-        uiEvents={props.uiEvents}
         itemSpacing={8}
-        i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
         accentBorderTop={true}
+        onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
+        newItemsPublishedLabel={t('New Beams published recently')}
       />
 
       {userHasSubscriptions && !postsReq.isFetching && (
         <MyFeedCard
           title={t('✨ Add a little magic to your feed ✨')}
           description={t(
-            'Follow topics and wonderful people you care about most to feel at home every time you visit Akasha World. ',
+            'Follow topics and wonderful people you care about most to feel at home every time you visit AKASHA World. ',
           )}
           noPostsTitle={t('No Posts Yet')}
           noPostsDescription={t(
@@ -155,7 +133,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           hasPosts={postsReq.hasNextPage && postsReq.data?.pages?.length > 0}
         />
       )}
-    </Box>
+    </Stack>
   );
 };
 

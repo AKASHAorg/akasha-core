@@ -1,10 +1,10 @@
 import * as React from 'react';
 import MyWidgetsPage from '../pages/my-widgets-page';
 
-import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, act } from '@akashaorg/af-testing';
 
 describe('< MyWidgetsPage /> component', () => {
-  const BaseComponent = <MyWidgetsPage {...genAppProps()} />;
+  const BaseComponent = <MyWidgetsPage />;
 
   beforeEach(async () => {
     await act(async () => {

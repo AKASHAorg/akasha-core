@@ -1,17 +1,22 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { FEED, MY_FEED, POST, PROFILE_FEED, REPLY, TAGS } from './routes';
+import routes, { BEAM, FEED, MY_FEED, PROFILE_FEED, REFLECT, TAGS } from './routes';
 import {
+  EditorBlockEvents,
+  EditorBlockRegisterEvent,
   IAppConfig,
   IntegrationRegistrationOptions,
+  LogoTypeSource,
   MenuItemAreaType,
   MenuItemType,
-  LogoTypeSource,
-} from '@akashaorg/typings/ui';
+  RootComponentProps,
+} from '@akashaorg/typings/lib/ui';
+import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/lib/ui/editor-blocks';
+import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
 /**
  * Initialization of the integration is optional.
  * It is called before all `register` calls but after all `getPlugin`;
- * @example Initialization an integration and triggerin of a notification
+ * @example Initialization an integration and triggering of a notification
  * ```
  * export const initialize: (opts: IntegrationInitOptions) => void = opts => {
  *  const notificationPlugin: any = opts.plugins["@akashaorg/app-notifications"].notification;
@@ -41,17 +46,17 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     defaultRoute: routes[FEED],
     [MY_FEED]: routes[MY_FEED],
     [PROFILE_FEED]: routes[PROFILE_FEED],
-    [POST]: routes[POST],
+    [BEAM]: routes[BEAM],
     [TAGS]: routes[TAGS],
-    [REPLY]: routes[REPLY],
+    [REFLECT]: routes[REFLECT],
   },
-  title: 'Akasha World',
-  logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
+  title: 'AKASHA World',
+  logo: { type: LogoTypeSource.ICON, value: 'antenna' },
   i18nNamespace: ['app-akasha-integration', 'ui-lib-feed'],
   menuItems: {
-    label: 'Social',
+    label: 'Antenna',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'akasha' },
+    logo: { type: LogoTypeSource.ICON, value: 'antenna' },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [
       {
@@ -68,11 +73,60 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     ],
   },
+  editorBlocks: [
+    {
+      name: 'slate-block',
+      icon: 'Bars3BottomLeftIcon',
+      displayName: 'Slate text block',
+      eventMap: {
+        publish: `slate-block/${BlockAction.PUBLISH}`,
+        update: `slate-block/${BlockAction.UPDATE}`,
+        validate: `slate-block/${BlockAction.VALIDATE}`,
+      },
+    },
+  ],
   extends: (matcher, loader) => {
     matcher({
       'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
-      'inline-editor_*': loader(() => import('./extensions/inline-editor')),
+      'slate-block_*': loader(() => import('./extensions/slate-block')),
       'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
+      'beam-editor_*': loader(() => import('./extensions/beam-editor')),
     });
   },
 });
+
+class EditorBlocksPlugin {
+  static readonly editorBlocks: EditorBlockInterface[] = [];
+  static observe = (uiEvents: RootComponentProps['uiEvents']) => {
+    uiEvents.pipe(filterEvent(EditorBlockEvents.RegisterEditorBlock)).subscribe({
+      next: (evData: EditorBlockRegisterEvent) => {
+        if (!evData.data) {
+          return;
+        }
+        for (const block of evData.data) {
+          if (EditorBlocksPlugin.editorBlocks.some(b => b.name === block.name)) {
+            return;
+          }
+          EditorBlocksPlugin.editorBlocks.push(block);
+        }
+      },
+    });
+  };
+  static getAllBlocks = () => {
+    return EditorBlocksPlugin.editorBlocks;
+  };
+}
+
+export const getPlugin = async (
+  props: RootComponentProps & {
+    encodeAppName: (name: string) => string;
+    decodeAppName: (name: string) => string;
+  },
+) => {
+  EditorBlocksPlugin.observe(props.uiEvents);
+  return {
+    editorBlocks: {
+      getAll: EditorBlocksPlugin.getAllBlocks,
+    },
+  };
+};

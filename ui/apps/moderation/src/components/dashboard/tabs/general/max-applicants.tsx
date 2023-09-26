@@ -1,8 +1,7 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
 import { PageHeaderProps, PageHeader } from '../../../common';
@@ -18,7 +17,7 @@ const EditMaxApplicants: React.FC<EditMaxApplicantsProps> = props => {
 
   return (
     <PageHeader {...props}>
-      <Box customStyle="flex flex-col space-y-4">
+      <Stack spacing="gap-y-4">
         <Text variant="footnotes2" color={{ light: 'black', dark: 'grey6' }}>
           {introLabel}
         </Text>
@@ -28,7 +27,7 @@ const EditMaxApplicants: React.FC<EditMaxApplicantsProps> = props => {
           placeholder={maxApplicantsPlaceholderLabel}
           type="text"
         />
-      </Box>
+      </Stack>
     </PageHeader>
   );
 };

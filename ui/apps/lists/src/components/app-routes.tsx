@@ -1,17 +1,21 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import * as React from 'react';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import ListsPage from './lists-page';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
-const AppRoutes = (props: RootComponentProps) => {
+const AppRoutes: React.FC<unknown> = () => {
+  const { baseRouteName } = useRootComponentProps();
+
   return (
-    <Router basename={props.baseRouteName}>
+    <Router basename={baseRouteName}>
       <Helmet>
-        <title>My List | Akasha World</title>
+        <title>My List | AKASHA World</title>
       </Helmet>
       <Routes>
-        <Route path="/" element={<ListsPage {...props} />} />
+        <Route path="/" element={<ListsPage />} />
       </Routes>
     </Router>
   );

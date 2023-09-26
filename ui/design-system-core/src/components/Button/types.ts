@@ -1,6 +1,6 @@
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import { LegacyRef } from 'react';
-import { BasicSize, BreakPointSize } from '../types/common.types';
+import { BasicSize, BreakPointSize, Color } from '../types/common.types';
 
 export type ButtonProps = {
   label?: string;
@@ -17,6 +17,7 @@ export type ButtonProps = {
   customStyle?: string;
   active?: boolean;
   hover?: boolean;
+  hoverColor?: { background?: Color; border?: Color; text?: Color };
   ref?: LegacyRef<HTMLButtonElement>;
 } & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 

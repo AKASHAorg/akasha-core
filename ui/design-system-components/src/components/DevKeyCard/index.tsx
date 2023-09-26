@@ -1,7 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -34,7 +34,7 @@ export type DevKeyCardProps = {
   onDeleteButtonClick?: () => void;
 };
 
-export const DevKeyCard: React.FC<DevKeyCardProps> = props => {
+const DevKeyCard: React.FC<DevKeyCardProps> = props => {
   const {
     item,
     nonameLabel,
@@ -53,17 +53,16 @@ export const DevKeyCard: React.FC<DevKeyCardProps> = props => {
   }
 
   return (
-    <Box
-      customStyle={`space-y-2 relative p-4 bg-(${
-        !editable ? 'grey9 dark:grey3' : 'none'
-      }) rounded-[1.25rem]`}
+    <Stack
+      spacing="gap-y-2"
+      customStyle={`relative p-4 bg-(${!editable ? 'grey9 dark:grey3' : 'none'}) rounded-[1.25rem]`}
     >
       {/* key name section */}
-      <Box customStyle="flex items-center justify-between">
-        <Box customStyle="flex space-x-2 items-center">
+      <Stack align="center" justify="between">
+        <Stack align="center" spacing="gap-x-2">
           <Text weight="bold">{item?.name?.length ? item?.name : nonameLabel}</Text>
 
-          <Box
+          <Stack
             customStyle={`w-2 h-2 rounded-full bg-(${
               item?.usedAt ? 'success' : 'warningLight dark: warningDark'
             })`}
@@ -72,20 +71,20 @@ export const DevKeyCard: React.FC<DevKeyCardProps> = props => {
           {pendingConfirmationLabel && <Text>{pendingConfirmationLabel}</Text>}
 
           {!pendingConfirmationLabel && <Text>{item?.usedAt ? usedLabel : unusedLabel}</Text>}
-        </Box>
+        </Stack>
         {editable && (
-          <Box customStyle="flex space-x-8 items-center">
+          <Stack spacing="gap-x-8" align="center">
             {/* date added section - editable card */}
-            <Box customStyle="flex space-x-2 items-center">
+            <Stack align="center" spacing="gap-x-2">
               <Text variant="button-sm" weight="bold" color={{ light: 'grey4', dark: 'grey7' }}>
                 {dateAddedLabel}
               </Text>
 
               <Text>{dayjs(item?.addedAt).format('DD/MM/YYYY')}</Text>
-            </Box>
+            </Stack>
 
             {/* action buttons */}
-            <Box customStyle="flex items-center space-x-4">
+            <Stack align="center" spacing="gap-x-4">
               <Button
                 icon="PencilIcon"
                 variant="primary"
@@ -101,13 +100,13 @@ export const DevKeyCard: React.FC<DevKeyCardProps> = props => {
                 greyBg={true}
                 onClick={onDeleteButtonClick}
               />
-            </Box>
-          </Box>
+            </Stack>
+          </Stack>
         )}
-      </Box>
+      </Stack>
 
       {/* dev public key section */}
-      <Box>
+      <Stack>
         {editable ? (
           <Text variant="button-sm" weight="bold" color={{ light: 'grey4', dark: 'grey7' }}>
             {devPubKeyLabel}
@@ -119,18 +118,20 @@ export const DevKeyCard: React.FC<DevKeyCardProps> = props => {
         )}
 
         <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{item?.id}</Text>
-      </Box>
+      </Stack>
 
       {/* date added section - non-editable card */}
       {!editable && (
-        <Box>
+        <Stack>
           <Text variant="h6" weight="bold">
             {dateAddedLabel}
           </Text>
 
           <Text>{dayjs(item?.addedAt).format('DD/MM/YYYY')}</Text>
-        </Box>
+        </Stack>
       )}
-    </Box>
+    </Stack>
   );
 };
+
+export default DevKeyCard;

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import AppsPage from '../pages/apps-page';
 
-import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, act } from '@akashaorg/af-testing';
 
 describe('< AppsPage /> component', () => {
-  const BaseComponent = <AppsPage {...genAppProps()} />;
+  const BaseComponent = <AppsPage />;
 
   beforeEach(async () => {
     await act(async () => {

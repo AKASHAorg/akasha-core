@@ -1,19 +1,22 @@
 import React from 'react';
+
+import { DuplexAppButton } from './duplex-app-button';
+
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
-import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Menu from '@akashaorg/design-system-core/lib/components/Menu';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import { Developer } from '../types/common.types';
-import { DuplexAppButton } from './duplex-app-button';
+import Menu from '@akashaorg/design-system-core/lib/components/Menu';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+
+import type { Developer } from '@akashaorg/typings/lib/ui';
 
 export type AppInfoProps = {
   integrationName: string;
@@ -68,11 +71,16 @@ const AppInfo: React.FC<AppInfoProps> = ({
         radius={{ top: 20 }}
         customStyle="h-[7.3125rem]"
       />
-      <Card elevation="1" padding={16} radius={{ bottom: 20 }}>
+      <Card elevation="1" padding={'p-4'} radius={{ bottom: 20 }}>
         <Stack direction="column" spacing="gap-y-4">
           <Stack direction="column" spacing="gap-y-4">
-            <Stack align="start" customStyle="relative">
-              <Stack align="center" spacing="gap-x-2" customStyle="h-[4.375rem] -mt-7">
+            <Stack direction="row" align="start" customStyle="relative">
+              <Stack
+                direction="row"
+                align="center"
+                spacing="gap-x-2"
+                customStyle="h-[4.375rem] -mt-7"
+              >
                 <Card
                   elevation="none"
                   radius={10}
@@ -91,7 +99,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   </Text>
                 </Stack>
               </Stack>
-              <Stack spacing="gap-x-2" customStyle="ml-auto">
+              <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto">
                 {status === 'not-installed' && (
                   <Button
                     icon="ArrowDownIcon"
@@ -111,15 +119,13 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   />
                 )}
                 <Menu
-                  anchorElement={
-                    <Button
-                      icon="EllipsisVerticalIcon"
-                      variant="primary"
-                      size="xs"
-                      greyBg
-                      iconOnly
-                    />
-                  }
+                  anchor={{
+                    icon: 'EllipsisVerticalIcon',
+                    variant: 'primary',
+                    size: 'xs',
+                    greyBg: true,
+                    iconOnly: true,
+                  }}
                   items={[share, report]}
                 />
               </Stack>
@@ -139,12 +145,12 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   }}
                   plain
                 >
-                  <Stack align="center">
-                    <AvatarBlock
+                  <Stack direction="row" align="center">
+                    <ProfileAvatarButton
                       profileId={developer.profileId}
-                      avatar={developer.avatar}
-                      name={developer.name}
-                      userName={developer.userName}
+                      label={developer.name}
+                      size="md"
+                      avatarImage={developer.avatar}
                     />
                     <Icon
                       type="ChevronRightIcon"
@@ -160,7 +166,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
           <ContentBlock blockTitle={latestReleaseTitle}>
             <Stack direction="column" spacing="gap-y-4">
               <Stack direction="column">
-                <Stack align="center" spacing="gap-x-1">
+                <Stack direction="row" align="center" spacing="gap-x-1">
                   <Text variant="body1" color={{ light: 'grey5', dark: 'grey6' }}>
                     {version}
                   </Text>

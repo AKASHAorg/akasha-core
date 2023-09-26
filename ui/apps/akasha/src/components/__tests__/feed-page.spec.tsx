@@ -4,40 +4,35 @@ import * as Extension from '@akashaorg/design-system-components/lib/components/E
 import userEvent from '@testing-library/user-event';
 
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
-import { Draft } from '../../extensions/inline-editor/utils/draft';
 import {
   screen,
   renderWithAllProviders,
-  genAppProps,
-  genLoggedInState,
   localStorageMock,
+  genAppProps,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
 import { when } from 'jest-when';
-import * as hooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
-import { EntityTypes } from '@akashaorg/typings/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 const partialArgs = (...argsToMatch) =>
   when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
 
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
-    {...genAppProps()}
     extensionData={{
       name: 'name',
       itemId: '01gf',
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
       action,
     }}
   />
 );
 
-const appProps = genAppProps();
 describe('< FeedPage /> component', () => {
   const BaseComponent = () => (
     <AnalyticsProvider {...genAppProps()}>
-      <FeedPage {...appProps} showLoginModal={jest.fn()} />
+      <FeedPage showLoginModal={jest.fn()} />
     </AnalyticsProvider>
   );
 
@@ -46,17 +41,16 @@ describe('< FeedPage /> component', () => {
       .spyOn(Extension, 'default')
       .mockReturnValue(
         <InlineEditor
-          {...genAppProps()}
           draftStorage={localStorageMock}
           extensionData={{ name: 'post', action: 'post' }}
         />,
       );
 
-    (
-      jest.spyOn(hooks, 'useGetProfile') as unknown as jest.SpyInstance<{
-        status: string;
-      }>
-    ).mockReturnValue({ status: 'success' });
+    // (
+    //   jest.spyOn(hooks, 'useGetProfile') as unknown as jest.SpyInstance<{
+    //     status: string;
+    //   }>
+    // ).mockReturnValue({ status: 'success' });
   });
   // @TODO fix after new hooks
   it.skip('should render feed page for anonymous users', async () => {
@@ -119,7 +113,7 @@ describe('< FeedPage /> component', () => {
     history.pushState(null, '', location.origin);
   });
   it.skip('should show saved draft post', async () => {
-    const loginState = genLoggedInState(true);
+    // const loginState = genLoggedInState(true);
 
     // localStorageMock.setItem(
     //   Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState.pubKey, 'post'),

@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
+
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ModeratorListItem from './moderator-list-item';
@@ -31,7 +32,7 @@ const AssignAdmin: React.FC<AssignAdminProps> = props => {
 
   return (
     <PageHeader {...props}>
-      <Box customStyle="space-y-6">
+      <Stack spacing="gap-y-6">
         <Text>{introLabel}</Text>
 
         {!assignedAdmin && (
@@ -48,7 +49,7 @@ const AssignAdmin: React.FC<AssignAdminProps> = props => {
           selectedModerator={selectedModerator}
           onClickAssign={onClickAssign}
         />
-      </Box>
+      </Stack>
     </PageHeader>
   );
 };

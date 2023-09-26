@@ -1,15 +1,13 @@
 import React from 'react';
-import { IntegrationTypes } from '@akashaorg/typings/ui';
 
-import {
-  avatarBorderColorsMap,
-  avatarBorderSizesMap,
-  avatarSizesMap,
-  AvatarProps,
-} from '../Avatar';
-import Box from '../Box';
+import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
 
+import Anchor from '../Anchor';
+import { AvatarProps } from '../Avatar';
 import AvatarImage from '../Avatar/avatar-image';
+import Stack from '../Stack';
+
+import { generateActiveOverlayClass, generateAvatarContainerStyle } from '../../utils';
 
 export type AppAvatarProps = AvatarProps & {
   appType: IntegrationTypes;
@@ -28,6 +26,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     faded,
     active,
     isClickable = false,
+    customStyle = '',
     onClick,
   } = props;
 
@@ -51,29 +50,32 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     }.webp`;
   }
 
-  const className = `box-border cursor-${
-    isClickable ? 'pointer' : 'default'
-  } select-none relative overflow-hidden w-${avatarSizesMap[size]} h-${
-    avatarSizesMap[size]
-  } rounded-full bg-${backgroundColor ? backgroundColor : 'white'} border-${
-    border ? avatarBorderSizesMap[border] : '0'
-  } border-${borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'}`;
+  const className = generateAvatarContainerStyle({
+    size,
+    border,
+    borderColor,
+    customStyle,
+    isClickable,
+    backgroundColor,
+  });
 
-  const activeOverlayClass = 'bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';
+  const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Box customStyle={className} onClick={onClick}>
-      <React.Suspense fallback={<></>}>
-        <AvatarImage
-          url={avatar?.default?.src}
-          alt={alt}
-          fallbackUrl={avatarImageFallback}
-          faded={faded}
-        />
-      </React.Suspense>
+    <Anchor onClick={onClick} tabIndex={-6}>
+      <Stack customStyle={className}>
+        <React.Suspense fallback={<></>}>
+          <AvatarImage
+            url={avatar?.default?.src}
+            alt={alt}
+            fallbackUrl={avatarImageFallback}
+            faded={faded}
+          />
+        </React.Suspense>
 
-      {active && <div className={activeOverlayClass}></div>}
-    </Box>
+        {active && <div className={activeOverlayClass}></div>}
+      </Stack>
+    </Anchor>
   );
 };
 

@@ -1,5 +1,5 @@
-import { APP_EVENTS } from '@akashaorg/typings/sdk';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import {
   ModalNavigationOptions,
   WorldConfig,
@@ -8,7 +8,8 @@ import {
   EventTypes,
   PluginConf,
   IntegrationRegistrationOptions,
-} from '@akashaorg/typings/ui';
+  EventDataTypes,
+} from '@akashaorg/typings/lib/ui';
 import {
   Observable,
   distinctUntilChanged,
@@ -51,7 +52,7 @@ export interface LoaderState {
       register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
       initialize?: (opts: Partial<IntegrationRegistrationOptions>) => Promise<void> | void;
       getPlugin?: (
-        opts: IntegrationRegistrationOptions & {
+        opts: Omit<IntegrationRegistrationOptions, 'layoutConfig'> & {
           encodeAppName: (name: string) => string;
           decodeAppName: (name: string) => string;
         },
@@ -66,7 +67,7 @@ export interface LoaderState {
    * @param key - name of the extension point
    * @param value - extensionPoint's data {@link UIEventData.data}
    */
-  mountedExtPoints: Map<string, UIEventData['data']>;
+  mountedExtPoints: Map<string, EventDataTypes>;
 
   /**
    * Identifier of the app that will be uninstalled
@@ -118,10 +119,10 @@ type GetStateSlice = <K extends keyof LoaderState>(
 export const getStateSlice: GetStateSlice = key => obs$ =>
   obs$.pipe(pluck(key), distinctUntilChanged());
 
-/*
- * Initialize the state from from initialState
- */
-interface EventDataTypes {
+// /*
+//  * Initialize the state from initialState
+//  */
+export interface MergedEventDataTypes {
   event?: EventTypes & APP_EVENTS.REMOVED & APP_EVENTS.INFO_READY;
   data?: UIEventData['data'] & IntegrationReleaseInfoFragmentFragment;
 }
@@ -133,20 +134,20 @@ export const initState = (
 ): Observable<LoaderState> => {
   const logger = getSDK().services.log.create('AppLoader-State');
   return getEvents(globalChannel /* , worldConfig */).pipe(
-    mergeScan<Partial<LoaderState> & EventDataTypes, LoaderState>((state, newData) => {
+    mergeScan<Partial<LoaderState> & MergedEventDataTypes, LoaderState>((state, newData) => {
       switch (newData.event) {
         case EventTypes.ExtensionPointMount:
           const extPoints = new Map(state.mountedExtPoints);
-          extPoints.set(newData.data.name, newData.data);
+          extPoints.set(newData.data.name, newData.data as EventDataTypes);
           return of({
             ...state,
             mountedExtPoints: extPoints,
           });
-        // case EventTypes.ExtensionPointUnmount:
-        //   return of({
-        //     ...state,
-        //     unmountingExtensionPoints: state.unmountingExtensionPoints.concat(newData.data),
-        //   });
+        case EventTypes.ExtensionPointUnmount:
+          return of({
+            ...state,
+            unmountingExtensionPoints: state.unmountingExtensionPoints.concat(newData.data),
+          });
         case APP_EVENTS.INFO_READY:
           const manifests = state.manifests.slice();
           if (worldConfig.registryOverrides.find(override => override.name === newData.data.name)) {

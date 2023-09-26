@@ -27,7 +27,7 @@
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/my-apps",
     "watch": "webpack --config webpack.config.cjs --watch",
     "pretest": "tsc -m commonjs",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
@@ -40,7 +40,7 @@
     "i18next-localstorage-backend": "4.1.1",
     "react-i18next": "12.2.0",
     "react-router-dom": "6.3.0",
-    "single-spa-react": "5.0.2"
+    "single-spa-react": "5.1.4"
   },
   "devDependencies": {
     "@akashaorg/af-testing": "*",

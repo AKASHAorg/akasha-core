@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
-import { useMentionSearch, useTagSearch } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
 import { useLiveQuery } from 'dexie-react-hooks';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ChatList from '@akashaorg/design-system-components/lib/components/ChatList';
@@ -17,7 +17,7 @@ import ChatAreaHeader from '@akashaorg/design-system-components/lib/components/C
 import ChatEditor from '@akashaorg/design-system-components/lib/components/ChatEditor';
 import BubbleCard from '@akashaorg/design-system-components/lib/components/BubbleCard';
 
-export interface ChatPageProps extends RootComponentProps {
+export interface ChatPageProps {
   loggedProfileData: Profile;
   fetchingMessages?: boolean;
 }
@@ -26,8 +26,9 @@ const ChatPage = (props: ChatPageProps) => {
   const { loggedProfileData, fetchingMessages } = props;
 
   const { t } = useTranslation('app-messaging');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const { profileId } = useParams<{ profileId: string }>();
 
@@ -70,8 +71,8 @@ const ChatPage = (props: ChatPageProps) => {
 
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
-  const mentionQueryReq = useMentionSearch(mentionQuery);
-  const tagQueryReq = useTagSearch(tagQuery);
+  const mentionQueryReq = null;
+  const tagQueryReq = null;
   const handleMentionQueryChange = (query: string) => {
     setMentionQuery(query);
   };
@@ -83,7 +84,7 @@ const ChatPage = (props: ChatPageProps) => {
     { id: profileId },
     {
       select: data => {
-        if (data.node && 'profile' in data.node) {
+        if (data.node && 'akashaProfile' in data.node) {
           return data.node;
         }
         return null;
@@ -93,7 +94,7 @@ const ChatPage = (props: ChatPageProps) => {
   );
 
   const contactId = React.useMemo(
-    () => profileDataReq?.data?.profile?.name || profileDataReq?.data?.profile?.did,
+    () => profileDataReq?.data?.akashaProfile?.name || profileDataReq?.data?.akashaProfile?.did,
     [profileDataReq?.data],
   );
 
@@ -158,8 +159,8 @@ const ChatPage = (props: ChatPageProps) => {
   };
 
   return (
-    <BasicCardBox customStyle="max-h-[92vh]">
-      <Box customStyle="flx flex-row p-4 items-center">
+    <Card customStyle="max-h-[92vh]">
+      <Stack direction="row" align="center" customStyle="p-4">
         <button onClick={onChevronLeftClick}>
           <Icon type="ChevronLeftIcon" />
         </button>
@@ -167,13 +168,13 @@ const ChatPage = (props: ChatPageProps) => {
         <Text variant="h5" customStyle="mx-auto">
           {t('Message')}
         </Text>
-      </Box>
-      <Box customStyle="p-2">
-        <Box customStyle="flex justify-between w-full rounded-lg border(grey8 dark:grey3)">
+      </Stack>
+      <Stack padding="p-2">
+        <Stack fullWidth={true} justify="between" customStyle="rounded-lg border(grey8 dark:grey3)">
           <ChatAreaHeader
-            name={profileDataReq.data?.profile?.name}
-            avatar={profileDataReq.data?.profile?.avatar}
-            did={profileDataReq.data?.profile?.did}
+            name={profileDataReq.data?.akashaProfile?.name}
+            avatar={profileDataReq.data?.akashaProfile?.avatar}
+            did={profileDataReq.data?.akashaProfile?.did}
             onClickAvatar={handleProfileClick}
           />
 
@@ -213,9 +214,9 @@ const ChatPage = (props: ChatPageProps) => {
             tags={tagQueryReq.data}
             mentions={mentionQueryReq.data}
           />
-        </Box>
-      </Box>
-    </BasicCardBox>
+        </Stack>
+      </Stack>
+    </Card>
   );
 };
 

@@ -1,73 +1,63 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
 import SettingsPage from './settings-page';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-const AppRoutes: React.FC<RootComponentProps> = props => {
+import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
+
+const AppRoutes: React.FC<unknown> = () => {
+  const { baseRouteName, navigateToModal } = useRootComponentProps();
+
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
   const loggedProfileData = profileDataReq.data;
   const showLoginModal = () => {
-    props.navigateToModal({ name: 'login' });
+    navigateToModal({ name: 'login' });
   };
 
   return (
-    <Router basename={props.baseRouteName}>
-      <Box testId="search-box">
+    <Router basename={baseRouteName}>
+      <Stack testId="search-box">
         <Routes>
           <Route path="/" element={<Navigate to={routes[RESULTS]} replace />} />
           <Route path={routes[RESULTS]}>
             <Route
               path=":searchKeyword"
               element={
-                <SearchPage
-                  {...props}
-                  showLoginModal={showLoginModal}
-                  loggedProfileData={loggedProfileData}
-                />
+                <SearchPage showLoginModal={showLoginModal} loggedProfileData={loggedProfileData} />
               }
             />
             <Route
               path=""
               element={
-                <SearchPage
-                  {...props}
-                  showLoginModal={showLoginModal}
-                  loggedProfileData={loggedProfileData}
-                />
+                <SearchPage showLoginModal={showLoginModal} loggedProfileData={loggedProfileData} />
               }
             />
           </Route>
           <Route
             path={routes[SETTINGS]}
             element={
-              <SettingsPage
-                {...props}
-                showLoginModal={showLoginModal}
-                loggedProfileData={loggedProfileData}
-              />
+              <SettingsPage showLoginModal={showLoginModal} loggedProfileData={loggedProfileData} />
             }
           />
           <Route
             path={routes[ONBOARDING]}
             element={
               <OnboardingPage
-                {...props}
                 showLoginModal={showLoginModal}
                 loggedProfileData={loggedProfileData}
               />
             }
           />
         </Routes>
-      </Box>
+      </Stack>
     </Router>
   );
 };

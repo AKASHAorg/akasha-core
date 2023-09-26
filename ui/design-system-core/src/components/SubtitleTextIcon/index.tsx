@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
-import Box from '../Box';
+import Stack from '../Stack';
 import Button from '../Button';
 import Icon from '../Icon';
 import Text from '../Text';
 
-export interface ISubtitleTextIcon {
+export type SubtitleTextIconProps = {
   customStyle?: string;
   dataTestId?: string;
   iconType?: IconType;
@@ -19,9 +19,9 @@ export interface ISubtitleTextIcon {
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
   maxWidth?: string;
   onClick?: React.EventHandler<React.SyntheticEvent>;
-}
+};
 
-const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
+const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   const {
     customStyle = '',
     iconType,
@@ -34,13 +34,13 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     onClick,
   } = props;
 
-  const baseStyles = `flex items-center justify-center bg(white dark:grey2) space-x-2`;
+  const baseStyles = `flex items-center justify-center bg(white dark:grey2) gap-x-2`;
 
   const InstanceWrapperStyle = `${baseStyles} ${maxWidth} ${customStyle}`;
 
-  const iconBackgroundStyle = `flex flex-row justify-center items-center ${
-    backgroundSize ? backgroundSize : 'w-10 h-10'
-  } ${backgroundColor ? 'bg(grey8 dark:grey3) rounded-full' : 'none'}`;
+  const iconBackgroundStyle = `${backgroundSize ? backgroundSize : 'w-10 h-10'} ${
+    backgroundColor ? 'bg(grey8 dark:grey3) rounded-full' : 'none'
+  }`;
 
   return (
     <Button
@@ -50,16 +50,16 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
       onClick={onClick}
     >
       {iconType && (
-        <Box customStyle={iconBackgroundStyle}>
+        <Stack direction="row" align="center" justify="center" customStyle={iconBackgroundStyle}>
           <Icon
             type={iconType}
             size={{ width: 'w-4', height: 'h-5' }}
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
           />
-        </Box>
+        </Stack>
       )}
 
-      <Box customStyle="flex flex-col max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])">
+      <Stack customStyle="max-w(xl:[7rem] lg:[6rem] md:[6rem] xs:[2rem])">
         <Text variant="button-sm" weight="bold" truncate={true}>
           {label}
         </Text>
@@ -67,7 +67,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
         <Text variant="footnotes2" color="grey7" truncate={true}>
           {subtitle}
         </Text>
-      </Box>
+      </Stack>
     </Button>
   );
 };

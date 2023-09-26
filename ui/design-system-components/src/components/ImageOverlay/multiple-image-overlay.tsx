@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { tw, apply, tx } from '@twind/core';
-import ModalContainer from '@akashaorg/design-system-core/lib/components/ModalContainer';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Portal } from '../Editor/helpers';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
@@ -67,54 +66,52 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
 
   return (
     <Portal>
-      <ModalContainer style={{ zIndex: 103 }}>
-        <div
-          className={tw(`${flexCenteredClass} w-screen h-screen bg-grey3`)}
-          onClick={(ev: React.SyntheticEvent) => {
-            /**
-             * prevents click bubbling to parent so the user doesn't get redirected
-             */
-            ev.stopPropagation();
-          }}
-        >
-          <div className={tw(`flex flex-row gap-3 p-3 absolute top-1 right-1 z-1`)}>
-            <div className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
-              <Icon type="MagnifyingGlassPlusIcon" />
-            </div>
-            <div className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
-              <Icon type="MagnifyingGlassMinusIcon" />
-            </div>
-            <div className={tx(`${closeDivClass}`)} onClick={closeModal}>
-              <Icon type="XMarkIcon" />
+      <div
+        className={tw(`${flexCenteredClass} w-screen h-screen bg-grey3 z-20`)}
+        onClick={(ev: React.SyntheticEvent) => {
+          /**
+           * prevents click bubbling to parent so the user doesn't get redirected
+           */
+          ev.stopPropagation();
+        }}
+      >
+        <div className={tw(`flex flex-row gap-3 p-3 absolute top-1 right-1 z-1`)}>
+          <div className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
+            <Icon type="MagnifyingGlassPlusIcon" />
+          </div>
+          <div className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
+            <Icon type="MagnifyingGlassMinusIcon" />
+          </div>
+          <div className={tx(`${closeDivClass}`)} onClick={closeModal}>
+            <Icon type="XMarkIcon" />
+          </div>
+        </div>
+        {images.length > 1 && (
+          <div className={tw(`absolute left-2.5 top-1/2 z-1`)}>
+            <div className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
+              <Icon type="ArrowLeftIcon" />
             </div>
           </div>
-          {images.length > 1 && (
-            <div className={tw(`absolute left-2.5 top-1/2 z-1`)}>
-              <div className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
-                <Icon type="ArrowLeftIcon" />
-              </div>
+        )}
+        {images.length > 1 && (
+          <div className={tw(`absolute right-2.5 top-1/2 z-1`)}>
+            <div className={tx(`${closeDivClass}`)} onClick={handleNextImg}>
+              <Icon type="ArrowRightIcon" />
             </div>
-          )}
-          {images.length > 1 && (
-            <div className={tw(`absolute right-2.5 top-1/2 z-1`)}>
-              <div className={tx(`${closeDivClass}`)} onClick={handleNextImg}>
-                <Icon type="ArrowRightIcon" />
-              </div>
-            </div>
-          )}
+          </div>
+        )}
 
-          {currentImg && (
-            <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
-              <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
-                <picture className={tw(`flex`)}>
-                  <source srcSet={currentImg.src.url} />
-                  <img src={currentImg.src.fallbackUrl} alt="" />
-                </picture>
-              </TransformComponent>
-            </TransformWrapper>
-          )}
-        </div>
-      </ModalContainer>
+        {currentImg && (
+          <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
+            <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
+              <picture className={tw(`flex`)}>
+                <source srcSet={currentImg.src.url} />
+                <img src={currentImg.src.fallbackUrl} alt="" />
+              </picture>
+            </TransformComponent>
+          </TransformWrapper>
+        )}
+      </div>
     </Portal>
   );
 };

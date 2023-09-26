@@ -1,7 +1,7 @@
 import { mergeMap } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
-import { IAppConfig } from '@akashaorg/typings/ui';
 import * as singleSpa from 'single-spa';
+import { TestScheduler } from 'rxjs/testing';
+import { genAppConfig } from '@akashaorg/af-testing';
 import { getModalFromParams, checkActivityFn, stringToRegExp } from '../src/utils';
 
 describe('[AppLoader] utils/getModalFromParams', () => {
@@ -34,18 +34,35 @@ describe('[AppLoader] utils/getModalFromParams', () => {
 });
 
 describe('[AppLoader] utils/checkActivityFn', () => {
+  let _location: Location;
+
   test('should return true by default', () => {
-    const active = checkActivityFn({} as IAppConfig);
+    const active = checkActivityFn({
+      config: genAppConfig(),
+      encodedAppName: 'encoded app name',
+    });
     expect(active).toBe(true);
   });
+
   test('should call singleSpa.pathToActiveWhen and return false', () => {
     const pathToActiveWhenSpy = jest.spyOn(singleSpa, 'pathToActiveWhen');
     const mockRootRoute = '/test';
+
     const active = checkActivityFn({
-      activeWhen: (location, pathToActiveWhen) => pathToActiveWhen(mockRootRoute)(location),
-    } as IAppConfig);
-    expect(pathToActiveWhenSpy).toHaveBeenCalledWith(mockRootRoute);
+      config: {
+        ...genAppConfig(),
+        activeWhen: (location, pathToActiveWhen) => pathToActiveWhen(mockRootRoute)(location),
+      },
+      encodedAppName: 'encoded app name',
+      location,
+    });
+
     expect(active).toBe(false);
+    expect(pathToActiveWhenSpy).toHaveBeenCalledTimes(1);
+    /**
+     * since activeWhen is defined, _location will not be passed
+     */
+    expect(pathToActiveWhenSpy).toHaveBeenLastCalledWith(mockRootRoute, _location);
   });
 });
 

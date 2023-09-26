@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '../Box';
+import Stack from '../Stack';
 import Button from '../Button';
 import Text from '../Text';
 
@@ -8,22 +8,22 @@ import PageBubble from './page-bubble';
 
 import { Color } from '../types/common.types';
 
-export interface IPaginationProps {
+export type PaginationProps = {
   pageCount: number;
   currentPage: number;
   maxPagesToShow?: number;
   customStyle?: string;
-  prevButtonLabel: string;
-  nextButtonLabel: string;
+  prevButtonLabel?: string;
+  nextButtonLabel?: string;
   hasButtons?: boolean;
   prevButtonDisabled?: boolean;
   nextButtonDisabled?: boolean;
   onClickPage: (page: number) => () => void;
   onClickPrev: () => void;
   onClickNext: () => void;
-}
+};
 
-const Pagination: React.FC<IPaginationProps> = props => {
+const Pagination: React.FC<PaginationProps> = props => {
   const {
     pageCount,
     currentPage,
@@ -50,7 +50,7 @@ const Pagination: React.FC<IPaginationProps> = props => {
   const disabledButtonTextColor = 'grey7';
 
   return (
-    <Box customStyle={`flex items-center space-x-2 ${customStyle}`}>
+    <Stack direction="row" align="center" spacing="gap-x-2" customStyle={customStyle}>
       {showButtons && (
         <Button
           plain={true}
@@ -146,7 +146,7 @@ const Pagination: React.FC<IPaginationProps> = props => {
           </Text>
         </Button>
       )}
-    </Box>
+    </Stack>
   );
 };
 

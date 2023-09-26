@@ -1,26 +1,40 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
-import { MESSAGING } from '../routes';
-import { getTextileUsage } from '../api/message';
-import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import { Profile } from '@akashaorg/typings/lib/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
-export interface SettingsPageProps extends RootComponentProps {
+import { getTextileUsage } from '../api/message';
+import { MESSAGING } from '../routes';
+
+export type SettingsPageProps = {
   loggedProfileData: Profile;
-}
+};
+
+const convertFromBytes = val => {
+  if (val) {
+    const k = val > 0 ? Math.floor(Math.log2(val) / 10) : 0;
+    const rank = (k > 0 ? 'KMGT'[k - 1] : '') + 'b';
+    const count = (val / Math.pow(1024, k)).toFixed(2);
+    return `${count} ${rank}`;
+  }
+  if (val == 0) {
+    return `${val} Kb`;
+  }
+};
 
 const InboxPage = (props: SettingsPageProps) => {
   const { t } = useTranslation('app-messaging');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
-  const uninstallAppReq = useUninstallApp();
+  const uninstallAppReq = null;
 
   const onChevronLeftClick = () => {
     navigateTo?.({
@@ -40,18 +54,6 @@ const InboxPage = (props: SettingsPageProps) => {
   const storageUsed = storageData?.total;
   const storageTotal = storageData?.free;
 
-  const convertFromBytes = val => {
-    if (val) {
-      const k = val > 0 ? Math.floor(Math.log2(val) / 10) : 0;
-      const rank = (k > 0 ? 'KMGT'[k - 1] : '') + 'b';
-      const count = (val / Math.pow(1024, k)).toFixed(2);
-      return `${count} ${rank}`;
-    }
-    if (val == 0) {
-      return `${val} Kb`;
-    }
-  };
-
   const handleUninstall = () => {
     uninstallAppReq.mutate('@akashaorg/app-messaging');
     navigateTo?.({
@@ -61,8 +63,8 @@ const InboxPage = (props: SettingsPageProps) => {
   };
 
   return (
-    <BasicCardBox customStyle="max-h-[92vh]">
-      <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
+    <Card customStyle="max-h-[92vh]">
+      <Stack direction="row" align="center" customStyle="p-4 border(b grey8 dark:grey3)">
         <button onClick={onChevronLeftClick}>
           <Icon type="ChevronLeftIcon" />
         </button>
@@ -70,11 +72,11 @@ const InboxPage = (props: SettingsPageProps) => {
         <Text variant="h5" customStyle="mx-auto">
           {t('Message App Settings')}
         </Text>
-      </Box>
-      <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
+      </Stack>
+      <Stack direction="row" align="center" customStyle="p-4 border(b grey8 dark:grey3)">
         <Text variant="h6">{t('Storage and data')}</Text>
-      </Box>
-      <Box customStyle="flex flex-row py-4 px-8 justify-between border(b grey8 dark:grey3)">
+      </Stack>
+      <Stack direction="row" justify="between" customStyle="py-4 px-8 border(b grey8 dark:grey3)">
         <Text variant="h6">{t('Message storage')}</Text>
         {!storageTotal && <TextLine title="textileStorage" animated={false} width="80px" />}
         {storageTotal && (
@@ -82,17 +84,17 @@ const InboxPage = (props: SettingsPageProps) => {
             storageTotal,
           )} used`}</Text>
         )}
-      </Box>
-      <Box customStyle="flex flex-row p-4 items-center border(b grey8 dark:grey3)">
+      </Stack>
+      <Stack direction="row" align="center" customStyle="p-4 border(b grey8 dark:grey3)">
         <Text weight={'bold'}>{t('Ethereum Public Key')}</Text>
-      </Box>
-      <Box customStyle="flex flex-row py-4 px-8 justify-between border(b grey8 dark:grey3)">
+      </Stack>
+      <Stack direction="row" justify="between" customStyle="py-4 px-8 border(b grey8 dark:grey3)">
         <Text>{props.loggedProfileData?.did?.id}</Text>
-      </Box>
-      <Box customStyle="flex flex-row justify-end p-4">
+      </Stack>
+      <Stack direction="row" justify="end" customStyle="p-4">
         <Button label={t('Uninstall')} onClick={handleUninstall} icon="XMarkIcon" />
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };
 

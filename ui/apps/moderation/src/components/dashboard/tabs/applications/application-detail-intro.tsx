@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { ModeratorApplicantData } from '@akashaorg/typings/ui';
+import { ModeratorApplicantData } from '@akashaorg/typings/lib/ui';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -31,12 +32,12 @@ const ApplicationDetailIntro: React.FC<ApplicationDetailIntroProps> = props => {
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
   return (
-    <BasicCardBox pad="p-0">
-      <Box customStyle="flex justify-between items-center p-4">
-        <Box customStyle="flex space-x-2 items-center">
+    <Card padding={0}>
+      <Stack direction="row" align="center" justify="between" padding="p-4">
+        <Stack direction="row" spacing="gap-x-2" align="center">
           <Avatar size="lg" avatar={selectedApplicant.avatar} />
 
-          <Box>
+          <Stack>
             <Tooltip content={selectedApplicant.name} placement="right">
               <Text variant="body2" weight="bold" truncate={true} customStyle={textStyle}>
                 {selectedApplicant.name}
@@ -54,32 +55,32 @@ const ApplicationDetailIntro: React.FC<ApplicationDetailIntroProps> = props => {
                 @{selectedApplicant.did.id}
               </Text>
             </Tooltip>
-          </Box>
-        </Box>
+          </Stack>
+        </Stack>
 
         <Button label={viewProfileLabel} onClick={onButtonClick()} />
-      </Box>
+      </Stack>
 
       <Divider />
 
-      <Box customStyle="flex justify-between items-center p-4">
-        <Box customStyle="space-y-2">
+      <Stack direction="row" align="center" justify="between" padding="p-4">
+        <Stack customStyle="space-y-2">
           <Text variant="footnotes2">{applicationDateLabel}</Text>
 
           <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }}>
             {formatDate(selectedApplicant.applicationDate, 'DD-MMM-YYYY')}
           </Text>
-        </Box>
+        </Stack>
 
-        <Box customStyle="space-y-2">
+        <Stack spacing="gap-y-2">
           <Text variant="footnotes2">{memberSinceLabel}</Text>
 
           <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey6' }}>
             {formatDate(selectedApplicant.createdAt, 'DD-MMM-YYYY')}
           </Text>
-        </Box>
-      </Box>
-    </BasicCardBox>
+        </Stack>
+      </Stack>
+    </Card>
   );
 };
 

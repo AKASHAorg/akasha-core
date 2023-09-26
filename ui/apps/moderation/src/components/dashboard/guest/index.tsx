@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
+import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -19,7 +19,7 @@ export type GuestProps = {
 
 const GuestDashboard: React.FC<GuestProps> = props => {
   const {
-    assetName = 'moderation',
+    assetName = 'vibe-overview',
     assetExtension = 'webp',
     publicImgPath = '/images',
     navigateTo,
@@ -34,15 +34,15 @@ const GuestDashboard: React.FC<GuestProps> = props => {
   };
 
   return (
-    <BasicCardBox pad="p-4">
-      <Box customStyle="grid gap-4 grid-cols-1">
+    <Card padding={16}>
+      <Stack spacing="gap-4" customStyle="grid grid-cols-1">
         <Text variant="h5" align="center">
           {t('Moderating')}
         </Text>
 
-        <Box customStyle="w-40 h-40 my-2 mx-auto">
+        <Stack customStyle="w-40 h-40 my-2 mx-auto">
           <Image src={`${publicImgPath}/${assetName}.${assetExtension}`} />
-        </Box>
+        </Stack>
 
         <Text weight="bold" align="center">
           {t('Are you interested in Moderating?')}
@@ -50,7 +50,7 @@ const GuestDashboard: React.FC<GuestProps> = props => {
 
         <Text variant="subtitle2" align="center">
           {t(
-            "We are currently creating new Moderating Systems for Akasha World. If you'd like to join us click",
+            "We are currently creating new Moderating Systems for AKASHA World. If you'd like to join us click",
           )}{' '}
           <Anchor
             href="https://akasha-foundation.notion.site/The-AKASHA-Moderating-Open-Design-Challenge-15cb49cf57e740be92534958828ca210"
@@ -74,8 +74,8 @@ const GuestDashboard: React.FC<GuestProps> = props => {
           </Button>{' '}
           {t('to learn more about our moderation criteria')}
         </Text>
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };
 

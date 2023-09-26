@@ -5,13 +5,13 @@ import {
   MenuItemAreaType,
   MenuItemType,
   LogoTypeSource,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import routes, { DASHBOARD, HISTORY, HOME, MODERATORS } from './routes';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
+  logo: { type: LogoTypeSource.ICON, value: 'vibe' },
   i18nNamespace: ['app-moderation-ewa'],
   routes: {
     ...routes,
@@ -19,7 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Vibe',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
+    logo: { type: LogoTypeSource.ICON, value: 'vibe' },
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.OtherArea],
     subRoutes: [
       {

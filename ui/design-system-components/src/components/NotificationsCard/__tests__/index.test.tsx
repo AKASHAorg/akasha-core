@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import NotificationsCard from '../';
 import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
+
+import NotificationsCard from '../';
 
 describe('<NotificationsCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -77,7 +78,7 @@ describe('<NotificationsCard /> Component', () => {
     const { getByRole } = componentWrapper;
 
     const avatar = getByRole('img');
-    expect(avatar).toHaveAttribute('src', expect.stringMatching(/placeholder/));
+    expect(avatar).toHaveAttribute('src', expect.stringMatching(/avatar-/));
   });
 
   it('has correct label based on type (POST_MENTION)', () => {

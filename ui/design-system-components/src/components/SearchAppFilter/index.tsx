@@ -8,6 +8,7 @@ export type SearchAppFilterProps = {
   selected: DropdownMenuItemGroupType;
   setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemGroupType>>;
   resetLabel?: string;
+  resetHandler: () => void;
 };
 
 const SearchAppFilter: React.FC<SearchAppFilterProps> = ({
@@ -15,20 +16,26 @@ const SearchAppFilter: React.FC<SearchAppFilterProps> = ({
   selected,
   setSelected,
   resetLabel = 'Reset',
+  resetHandler,
 }) => {
   return (
-    <div className={tw('flex justify-between items-center')}>
-      <div className={tw('w-2/6 mt-6')}>
+    <div className={tw('flex justify-between items-center my-6')}>
+      <div className={tw('w-2/6')}>
         <DropDown
           menuItems={dropdownMenuItems}
           selected={selected}
           setSelected={setSelected}
           optgroup={true}
           divider={true}
-          placeholderLabel="All"
         />
       </div>
-      <Button variant="text" size="md" plain={true} customStyle="text-grey4 dark:text-grey7">
+      <Button
+        variant="text"
+        size="md"
+        plain={true}
+        customStyle="text-grey4 dark:text-grey7"
+        onClick={resetHandler}
+      >
         {resetLabel}
       </Button>
     </div>

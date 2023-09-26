@@ -1,6 +1,6 @@
-import { Weight } from './index';
+import { FontWeight } from './index';
 
-export function getWeightClasses(align: Weight) {
+export function getWeightClasses(align: FontWeight) {
   switch (align) {
     case 'normal':
       return 'font-normal';

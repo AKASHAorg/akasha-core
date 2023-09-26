@@ -4,7 +4,7 @@ import {
   MenuItemAreaType,
   IntegrationRegistrationOptions,
   LogoTypeSource,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import routes from './routes';
 
 /**
@@ -17,11 +17,11 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   i18nNamespace: ['app-akasha-verse'],
   loadingFn: () => import('./components'),
-  title: 'App center',
+  title: 'AKASHA Core Extensions',
   menuItems: {
-    label: 'AKASHAVerse',
+    label: 'Extensions',
     area: [MenuItemAreaType.AppArea],
-    logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
+    logo: { type: LogoTypeSource.ICON, value: 'akasha' },
     subRoutes: [],
   },
   extends: (matcher, loader) => {

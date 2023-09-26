@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { IEntryData } from '@akashaorg/typings/ui';
+import { IEntryData } from '@akashaorg/typings/lib/ui';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 
 export interface IEmbedEntryBox {
@@ -17,7 +17,6 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
   >
     <ProfileAvatarButton
       label={props.embedEntryData.author?.name}
-      info={props.embedEntryData.author?.name}
       avatarImage={props.embedEntryData.author?.avatar}
       profileId={props.embedEntryData.author?.did?.id}
     />

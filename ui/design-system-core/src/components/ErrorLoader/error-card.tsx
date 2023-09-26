@@ -3,6 +3,8 @@ import { tw } from '@twind/core';
 
 import { ErrorLoaderProps } from '.';
 import Text from '../Text';
+import Card from '../Card';
+import Stack from '../Stack';
 
 interface ErrorRendererProps {
   customStyle?: string; // use valid twind classes;
@@ -32,34 +34,36 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
   const message = details ?? devDetails;
 
   return (
-    <div className={tw(`flex flex-col items-center p-[1em] bg-white ${customStyle}`)}>
-      <div>
-        <img className={tw('max-w-[50%] h-auto my-0 mx-auto py-[2em] px-0')} src={imageSrc} />
-      </div>
-
-      <Text variant="h5">{title}</Text>
-
+    <Card elevation="1" customStyle={tw(`items-center ${customStyle}`)}>
+      <Stack>
+        <img alt={''} className={tw('max-w-[50%] h-auto my-0 mx-auto py-8 px-0')} src={imageSrc} />
+      </Stack>
+      <Text variant="h5" align="center" customStyle="px-4">
+        {title}
+      </Text>
       {isDevMode && devDetails ? (
         <ErrorRenderer customStyle={customStyle}>
           <Text
-            variant="label"
+            variant="body2"
+            align="center"
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-            customStyle="pt-[1em] max-w-[70%] w-full"
+            customStyle="px-4 pt-4 w-full"
           >
             {message}
           </Text>
         </ErrorRenderer>
       ) : (
         <Text
-          variant="label"
+          variant="body2"
           color={{ light: 'secondaryLight', dark: 'secondaryLight' }}
-          customStyle="text-center pt-[1em] max-w-[70%] w-full"
+          customStyle="text-center pt-4 px-4 w-full"
+          align="center"
         >
           {message}
         </Text>
       )}
-      <div className={tw('pt-[1.5em] pb-[1em]')}>{children}</div>
-    </div>
+      <Stack customStyle={'pt-6 pb-4'}>{children}</Stack>
+    </Card>
   );
 };
 

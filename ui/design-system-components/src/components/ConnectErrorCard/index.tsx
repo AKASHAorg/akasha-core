@@ -1,9 +1,10 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type ConnectErrorCardProps = {
   title: string;
@@ -13,10 +14,15 @@ export type ConnectErrorCardProps = {
 
 const ConnectErrorCard: React.FC<ConnectErrorCardProps> = ({ title, message, action }) => {
   return (
-    <Card elevation="none" background={{ light: 'grey9', dark: 'grey5' }} radius={20} padding={16}>
+    <Card
+      elevation="none"
+      background={{ light: 'grey9', dark: 'grey5' }}
+      radius={20}
+      padding={'p-4'}
+    >
       <Stack direction="column" spacing="gap-y-2">
         <Stack justify="between">
-          <Stack align="center" spacing="gap-x-2">
+          <Stack direction="row" align="center" spacing="gap-x-2">
             <Icon
               type="ExclamationTriangleIcon"
               color={{ light: 'errorLight', dark: 'errorDark' }}

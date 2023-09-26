@@ -1,11 +1,10 @@
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { useCheckModerator } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import {
   Dashboard,
@@ -55,36 +54,38 @@ import routes, {
   MODERATION_ACTIVITY,
 } from '../routes';
 
-const AppRoutes: React.FC<RootComponentProps> = props => {
+const AppRoutes: React.FC<unknown> = () => {
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
 
   const loggedProfileData = profileDataReq.data;
 
-  const checkModeratorQuery = useCheckModerator(loggedProfileData?.did.id);
+  const checkModeratorQuery = { data: 200 };
 
   const checkModeratorResp = checkModeratorQuery.data;
 
-  const isAuthorised = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
+  const isAuthorised = useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   const applicationStatus = null;
 
   const isAdmin = false;
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   return (
-    <Box>
-      <Router basename={props.baseRouteName}>
+    <Stack>
+      <Router basename={baseRouteName}>
         <Routes>
           <Route
             path={routes[HOME]}
             element={
               <Overview
-                {...props}
+                user={loggedProfileData?.did.id}
                 isAuthorised={isAuthorised}
                 applicationStatus={applicationStatus}
                 navigateTo={navigateTo}
@@ -208,7 +209,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
       </Router>
-    </Box>
+    </Stack>
   );
 };
 

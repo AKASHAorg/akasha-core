@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
-import { getWidthClasses } from '../../utils/getWidthClasses';
-import { getHeightClasses } from '../../utils/getHeightClasses';
+
+import { getWidthClasses, getHeightClasses } from '../../utils';
 
 export type TextLineProps = {
   title?: string;

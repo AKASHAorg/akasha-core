@@ -1,5 +1,6 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
+
 import Button from '../Button';
 import Tooltip from '../Tooltip';
 
@@ -22,7 +23,7 @@ const CopyToClipboard: React.FC<PropsWithChildren<CopyToClipboardChildren>> = ({
     setCopied(true);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (copied) {
       setTimeout(() => {
         setCopied(false);

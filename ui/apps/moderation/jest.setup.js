@@ -1,7 +1,7 @@
 import '../jest.setup';
 
 /*TODO: This mock should be removed when using proper babel plugin */
-jest.mock('@akashaorg/typings/ui', () => ({
+jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     POST: 0,
     PROFILE: 1,

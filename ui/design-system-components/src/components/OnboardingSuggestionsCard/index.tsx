@@ -1,12 +1,14 @@
-import * as React from 'react';
-import { ITag, Profile } from '@akashaorg/typings/ui';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-
-import { TagButton } from './TagButton';
+import React from 'react';
 import { tw } from '@twind/core';
+
+import { ITag, Profile } from '@akashaorg/typings/lib/ui';
+
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import { TagButton } from './tag-button';
 
 export interface OnboardingSuggestionsCardProps {
   topicsLabel?: string;
@@ -14,7 +16,6 @@ export interface OnboardingSuggestionsCardProps {
   followLabel?: string;
   unfollowLabel?: string;
   followingLabel?: string;
-  loggedProfileId?: string;
   tags?: ITag[];
   profiles?: Profile[];
   subscribedTags?: string[];
@@ -32,7 +33,6 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
     followLabel,
     unfollowLabel,
     followingLabel,
-    loggedProfileId,
     tags,
     profiles,
     subscribedTags,
@@ -45,7 +45,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
   } = props;
 
   return (
-    <BasicCardBox>
+    <Card>
       <div className={tw(`flex p-4 gap-4`)}>
         <div className={tw(`flex gap-4`)}>
           <Text variant="h2">{topicsLabel}</Text>
@@ -92,7 +92,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
           ))}
         </div>
       </div>
-    </BasicCardBox>
+    </Card>
   );
 };
 

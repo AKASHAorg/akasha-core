@@ -1,7 +1,7 @@
 import * as React from 'react';
 import WelcomePage from '../pages/welcome-page';
 
-import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, act } from '@akashaorg/af-testing';
 
 describe('< WelcomePage /> component', () => {
   const BaseComponent = (
@@ -10,7 +10,7 @@ describe('< WelcomePage /> component', () => {
       description="Get the latest updates about what’s going on with your world. You can personalize your notifications and get only what you want to see!"
       leftButtonLabel="Skip"
       rightButtonLabel="Customize your notifications"
-      {...genAppProps()}
+      isLoggedIn={true}
     />
   );
   beforeEach(async () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
@@ -9,96 +9,54 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListAppTopbar from '@akashaorg/design-system-components/lib/components/ListAppTopbar';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import {
-  useGetBookmarks,
-  useDeleteBookmark,
-  usePosts,
-  checkEntryActive,
-} from '@akashaorg/ui-awf-hooks';
+import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-type ListsPageProps = Omit<
-  RootComponentProps,
-  'layout' | 'events' | 'domElement' | 'name' | 'unmountSelf' | 'activeWhen' | 'rootNodeId'
->;
-
-const ListsPage: React.FC<ListsPageProps> = props => {
-  const { t } = useTranslation('app-lists');
-
+const ListsPage: React.FC<unknown> = () => {
   const [showModal, setShowModal] = React.useState(false);
-  const bookmarkDelete = useDeleteBookmark();
+
+  const { t } = useTranslation('app-lists');
+  const { navigateToModal } = useRootComponentProps();
+
+  const bookmarkDelete = null;
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
-  const loggedProfileData = profileDataReq.data;
+  const loggedProfileData = profileDataReq?.data;
 
-  const isLoggedIn = React.useMemo(() => {
-    return loggedProfileData?.did?.id;
-  }, [loggedProfileData?.did?.id]);
+  const { isLoggedIn } = useLoggedIn();
 
-  const listsReq = useGetBookmarks(isLoggedIn);
-  /**
-   * Currently react query's initialData isn't working properly so listsReq.data will return undefined even if we supply initialData.
-   * This will be fixed in v4 of react query(https://github.com/DamianOsipiuk/vue-query/issues/124).
-   * In the mean time, the following check will ensure undefined data is handled.  */
-  const lists = listsReq.data || [];
+  const listsReq = null;
+  const lists = listsReq?.data || [];
 
-  const bookmarkedBeamsIds = lists.map((bm: Record<string, string>) => bm.itemId);
-  const bookmarkedBeams = usePosts({ postIds: bookmarkedBeamsIds, enabler: true });
+  const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);
+  const bookmarkedBeams = undefined;
   const numberOfBookmarkedInactivePosts = React.useMemo(
-    () => bookmarkedBeams.filter(({ data }) => (data ? !checkEntryActive(data) : false)).length,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [bookmarkedBeamsIds],
+    () => bookmarkedBeams?.filter(({ data }) => (data ? data.active : false)).length,
+    [bookmarkedBeams],
   );
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    props.navigateToModal({ name: 'login', redirectTo });
+    navigateToModal({ name: 'login', redirectTo });
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', itemId, itemType });
+    navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleEntryRemove = (itemId: string) => {
-    props.navigateToModal({
+    navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
     });
-  };
-
-  const description = t('Lists help you save your favorite posts for quick access at any time.');
-
-  const getInactivePostsText = (numberOfBookmarkedInactivePosts: number) => {
-    const linkingVerb = numberOfBookmarkedInactivePosts > 1 ? t('are') : t('is');
-    const result = numberOfBookmarkedInactivePosts
-      ? t('{{ deletedCount }} of which {{ linkingVerb }} deleted', {
-          deletedCount: numberOfBookmarkedInactivePosts,
-          linkingVerb,
-        })
-      : '';
-    return result ? ` (${result})` : '';
-  };
-
-  const getSubtitleText = () => {
-    if (isLoggedIn && lists?.length) {
-      return t('You have {{ bookmarkCount }} lists.{{ inactivePostsText }}', {
-        bookmarkCount: lists.length,
-        inactivePostsText: getInactivePostsText(numberOfBookmarkedInactivePosts),
-      });
-    }
-    if (isLoggedIn && !lists?.length) {
-      return description;
-    }
-    return t('Check out the posts saved in your lists');
   };
 
   const handleIconMenuClick = () => {
@@ -110,18 +68,28 @@ const ListsPage: React.FC<ListsPageProps> = props => {
   };
 
   return (
-    <Card direction="row" elevation={'1'} radius={16} padding={16}>
-      <ListAppTopbar resetLabel={t('Reset')} handleIconMenuClick={handleIconMenuClick} />
-      {listsReq.status === 'error' && (
+    <Card elevation={'1'} radius={16} padding={'p-4'}>
+      <ListAppTopbar
+        titleLabel={t('Your List')}
+        resetLabel={t('Reset')}
+        removeAllLabel={t('Remove All')}
+        dropDownMenuItems={[
+          { id: '0', title: t('All Categories') },
+          { id: '1', title: t('Beams') },
+          { id: '2', title: t('Reflections') },
+        ]}
+        handleIconMenuClick={handleIconMenuClick}
+      />
+      {listsReq?.status === 'error' && (
         <ErrorLoader
           type="script-error"
           title={t('There was an error loading the lists')}
-          details={listsReq.error as string}
+          details={listsReq?.error as string}
         />
       )}
-      {listsReq.status !== 'error' && (
-        <Box data-testid="lists" customStyle="space-x-8 space-y-8">
-          {/* <StartCard
+
+      <Stack data-testid="lists" spacing="gap-8">
+        {/* <StartCard
             title={t('Lists')}
             subtitle={getSubtitleText()}
             heading={t('✨ Save what inspires you ✨')}
@@ -130,41 +98,15 @@ const ListsPage: React.FC<ListsPageProps> = props => {
             showMainArea={!isLoggedIn}
           /> */}
 
-          {!listsReq.isFetched && isLoggedIn && <Spinner />}
-          {(!isLoggedIn || (listsReq.isFetched && (!lists || !lists.length))) && (
-            <DefaultEmptyCard infoText={t('You don’t have any saved content in your List')} />
-          )}
-          {listsReq.status === 'success' && lists.length > 0 && (
-            <FeedWidget
-              modalSlotId={props.layoutConfig.modalSlotId}
-              itemType={EntityTypes.POST}
-              logger={props.logger}
-              onLoadMore={() => {
-                /* if next page, load more */
-              }}
-              getShareUrl={(itemId: string) =>
-                `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-              }
-              pages={[{ results: bookmarkedBeamsIds, total: bookmarkedBeamsIds.length }]}
-              requestStatus={listsReq.status}
-              loggedProfileData={loggedProfileData}
-              navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-              navigateToModal={props.navigateToModal}
-              onLoginModalOpen={showLoginModal}
-              hasNextPage={false}
-              contentClickable={true}
-              onEntryFlag={handleEntryFlag}
-              onEntryRemove={handleEntryRemove}
-              removeEntryLabel={t('Delete Beam')}
-              removedByMeLabel={t('You deleted this beam')}
-              removedByAuthorLabel={t('This beam was deleted by its author')}
-              uiEvents={props.uiEvents}
-              itemSpacing={8}
-              i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
-            />
-          )}
-        </Box>
-      )}
+        {!listsReq?.isFetched && isLoggedIn && <Spinner />}
+        {(!isLoggedIn || (listsReq?.isFetched && (!lists || !lists.length))) && (
+          <DefaultEmptyCard
+            infoText={t('You don’t have any saved content in your List')}
+            noBorder
+            image="/images/listsapp-empty-min.webp"
+          />
+        )}
+      </Stack>
       <Modal
         title={{ label: t('Remove Content') }}
         show={showModal}

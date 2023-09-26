@@ -1,19 +1,21 @@
 import React from 'react';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
-import IconDrop, { IconEntry } from './icon-drop';
-import { IconType } from '@akashaorg/typings/ui';
-import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export interface IEditorToolbarProps {
+import { IconType } from '@akashaorg/typings/lib/ui';
+
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
+
+import IconDrop, { IconEntry } from './icon-drop';
+
+export type EditorToolbarProps = {
   onBoldClick: () => void;
   onItalicClick: () => void;
   onUnderlineClick: () => void;
   onStrikeThroughClick: () => void;
-}
+};
 
-const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
+const EditorToolbar: React.FC<EditorToolbarProps> = props => {
   const { onBoldClick, onItalicClick, onUnderlineClick, onStrikeThroughClick } = props;
 
   const caseStyleRef = useCloseActions(() => {
@@ -69,21 +71,19 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
     }
   };
   return (
-    <Box customStyle="flex flex-row justify-center p-2 gap-2">
+    <Stack direction="row" justify="center" spacing="gap-2" customStyle="p-2">
       {/* emoji */}
 
       {/* uncomment this code to enable color-picker. You must install react-color, or react-colorful -
       a light weight alternative (recommended) */}
 
       <Stack customStyle="relative">
-        <Box
-          customStyle="flex flex-row items-center"
-          onClick={() => setDropOpen('case')}
-          ref={caseStyleRef}
-        >
-          <Icon type={caseStyle as IconType} size="sm" />
-          <Icon type="ChevronDownIcon" />
-        </Box>
+        <button onClick={() => setDropOpen('case')}>
+          <Stack customStyle="flex flex-row items-center" ref={caseStyleRef}>
+            <Icon type={caseStyle as IconType} size="sm" />
+            <Icon type="ChevronDownIcon" />
+          </Stack>
+        </button>
 
         {caseStyleRef.current && dropOpen === 'case' && <IconDrop dropItems={caseIcons} />}
       </Stack>
@@ -102,24 +102,24 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
 
       <Stack customStyle="relative">
         <button onClick={() => setDropOpen('list')}>
-          <Box customStyle="flex flex-row items-center" ref={listStyleRef}>
+          <Stack direction="row" align="center" ref={listStyleRef}>
             <Icon type={listStyle as IconType} size="sm" />
             <Icon type="ChevronDownIcon" />
-          </Box>
+          </Stack>
         </button>
         {listStyleRef.current && dropOpen === 'list' && <IconDrop dropItems={listIcons} />}
       </Stack>
 
-      <Stack customStyle="flex flex-row">
+      <Stack direction="row">
         <button onClick={() => setDropOpen('align')}>
-          <Box customStyle="flex flex-row items-center" ref={alignStyleRef}>
+          <Stack direction="row" align="center" ref={alignStyleRef}>
             <Icon type={alignStyle as IconType} size="sm" />
             <Icon type="ChevronDownIcon" />
-          </Box>
+          </Stack>
         </button>
         {alignStyleRef.current && dropOpen === 'align' && <IconDrop dropItems={alignIcons} />}
       </Stack>
-    </Box>
+    </Stack>
   );
 };
 

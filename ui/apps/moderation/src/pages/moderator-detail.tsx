@@ -2,14 +2,12 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
-
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import ModeratorDetailCard from '../components/moderator';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 
-import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
+import { PaginatedItem, contentTypeMap } from './transparency-log';
 
 import { BasePageProps } from './dashboard';
 import { generateModerators, formatDate, generateTenureInfoLabel } from '../utils';
@@ -32,7 +30,7 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
+  const logItemsQuery = { data: null };
 
   React.useEffect(() => {
     if (logItemsQuery.data) {
@@ -84,7 +82,7 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
     ]) ?? [];
 
   return (
-    <Box customStyle="space-y-4">
+    <Stack spacing="gap-y-4">
       <ModeratorDetailCard
         moderator={moderator}
         viewProfileLabel={t('View Profile')}
@@ -113,6 +111,6 @@ export const ModeratorDetailPage: React.FC<BasePageProps> = props => {
         onClickPrev={handleClickPrev}
         onClickNext={handleClickNext}
       />
-    </Box>
+    </Stack>
   );
 };

@@ -1,20 +1,20 @@
 import React, { useCallback, useMemo } from 'react';
-import Box from '../Box';
+
 import Button from '../Button';
+import Divider from '../Divider';
 import Icon from '../Icon';
 import Stack from '../Stack';
-import Divider from '../Divider';
 
-export interface IAccordionProps {
+export type AccordionProps = {
   customStyle?: string;
   contentStyle?: string;
   titleNode: React.ReactNode;
   contentNode: React.ReactNode;
   open?: boolean;
   headerDivider?: boolean;
-}
+};
 
-const Accordion: React.FC<IAccordionProps> = props => {
+const Accordion: React.FC<AccordionProps> = props => {
   const {
     customStyle = '',
     contentStyle = '',
@@ -31,7 +31,7 @@ const Accordion: React.FC<IAccordionProps> = props => {
 
   const headerUi = useMemo(
     () => (
-      <Stack align="center" justify="between" customStyle={customStyle}>
+      <Stack direction="row" align="center" justify="between" customStyle={customStyle}>
         {titleNode}
         <Icon
           accentColor={true}
@@ -58,7 +58,7 @@ const Accordion: React.FC<IAccordionProps> = props => {
         </Button>
       )}
 
-      {isToggled && <Box customStyle={`${contentStyle}`}>{contentNode}</Box>}
+      {isToggled && <Stack customStyle={`${contentStyle}`}>{contentNode}</Stack>}
     </>
   );
 };

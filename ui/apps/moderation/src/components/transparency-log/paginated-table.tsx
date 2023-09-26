@@ -1,17 +1,17 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Pagination, {
-  IPaginationProps,
+  PaginationProps,
 } from '@akashaorg/design-system-core/lib/components/Pagination';
-import Table, { ITableProps } from '@akashaorg/design-system-core/lib/components/Table';
+import Table, { TableProps } from '@akashaorg/design-system-core/lib/components/Table';
 
-const PaginatedTable: React.FC<ITableProps & IPaginationProps> = props => {
+const PaginatedTable: React.FC<TableProps & PaginationProps> = props => {
   return (
     <>
-      <BasicCardBox pad="p-0">
+      <Card padding={0}>
         <Table {...props} />
-      </BasicCardBox>
+      </Card>
 
       <Pagination {...props} />
     </>

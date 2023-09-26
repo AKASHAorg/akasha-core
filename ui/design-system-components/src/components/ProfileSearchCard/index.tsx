@@ -1,10 +1,12 @@
 import React from 'react';
-import { Profile } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+
+import { Profile } from '@akashaorg/typings/lib/ui';
+
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 
-export type IProfileSearchCard = {
+export type ProfileSearchCardProps = {
   className?: string;
   handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
@@ -22,7 +24,7 @@ export type IProfileSearchCard = {
   isViewer?: boolean;
 };
 
-const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
+const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
   const {
     handleFollow,
     handleUnfollow,
@@ -36,12 +38,8 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
     onClickProfile,
   } = props;
 
-  const BaseItemStyles = `
-  flex justify-between items-center py-2
-  `;
-
   return (
-    <Box customStyle={BaseItemStyles}>
+    <Stack align="center" justify="between" customStyle={'py-2'}>
       <a
         onClick={e => {
           e.preventDefault();
@@ -52,7 +50,6 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
         <ProfileAvatarButton
           onClick={onClickProfile}
           label={profileData.name}
-          info={profileData.did.id}
           size="md"
           avatarImage={profileData.avatar}
           truncateText={false}
@@ -63,7 +60,8 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
         <div>
           <DuplexButton
             inactiveLabel={followLabel}
-            activeLabel={unfollowLabel}
+            activeLabel={followingLabel}
+            activeHoverLabel={unfollowLabel}
             onClickInactive={() => handleFollow}
             onClickActive={() => handleUnfollow}
             active={isFollowing}
@@ -71,7 +69,7 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
           />
         </div>
       )}
-    </Box>
+    </Stack>
   );
 };
 

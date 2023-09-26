@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -22,10 +22,10 @@ export const HeroImage: React.FC<HeroImageProps> = props => {
   } = props;
 
   return (
-    <Box customStyle="flex flex-col items-center space-y-4">
-      <Box customStyle="w-[16rem] h-[13rem]">
+    <Stack align="center" spacing="gap-y-4">
+      <Stack customStyle="w-[16rem] h-[13rem]">
         <Image src={`${publicImgPath}/${assetName}.${assetExtension}`} />
-      </Box>
+      </Stack>
 
       {titleLabel && (
         <Text variant="h5" weight="bold" align="center">
@@ -38,6 +38,6 @@ export const HeroImage: React.FC<HeroImageProps> = props => {
           {subtitleLabel}
         </Text>
       )}
-    </Box>
+    </Stack>
   );
 };

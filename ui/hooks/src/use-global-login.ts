@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
 import getSDK from '@akashaorg/awf-sdk';
-import { AUTH_EVENTS, CurrentUser } from '@akashaorg/typings/sdk';
+import { AUTH_EVENTS, CurrentUser } from '@akashaorg/typings/lib/sdk';
 
 export type OnLoginSuccessHandler = (data: CurrentUser) => void;
 export type OnLogoutSuccessHandler = () => void;
@@ -28,7 +28,7 @@ export interface UseGlobalLoginProps {
  * })
  * ```
  */
-const useGlobalLogin = (props: UseGlobalLoginProps): void => {
+export const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   const { onError, onLogin, onLogout } = props;
   const onErrorHandler = React.useRef(onError);
   const onLoginHandler = React.useRef(onLogin);
@@ -67,5 +67,3 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
     return () => sub.unsubscribe();
   }, []);
 };
-
-export default useGlobalLogin;

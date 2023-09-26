@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
 import {
@@ -18,23 +18,21 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = props =>
   const { labelTextVariant = 'h5', label, cancelButtonLabel, confirmButtonLabel, children } = props;
 
   return (
-    <BasicCardBox pad="p-0">
-      <Box customStyle="px-4 py-6">
+    <Card padding={0}>
+      <Stack padding="px-4 py-6">
         <Text variant={labelTextVariant} align="center">
           {label}
         </Text>
-      </Box>
+      </Stack>
 
       <Divider />
 
-      <Box customStyle="p-4">{children}</Box>
+      <Stack padding="p-4" spacing="gap-y-3">
+        {children}
 
-      {/* show buttons only when the labels are specified */}
-      {(cancelButtonLabel || confirmButtonLabel) && (
-        <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
-          <PageButtons {...props} />
-        </Box>
-      )}
-    </BasicCardBox>
+        {/* show buttons only when the labels are specified */}
+        {(cancelButtonLabel || confirmButtonLabel) && <PageButtons {...props} />}
+      </Stack>
+    </Card>
   );
 };

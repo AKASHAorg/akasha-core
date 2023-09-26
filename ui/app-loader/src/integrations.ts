@@ -3,10 +3,9 @@ import type {
   RootExtensionProps,
   IAppConfig,
   WorldConfig,
-  EventDataTypes,
-} from '@akashaorg/typings/ui';
-import { EventTypes } from '@akashaorg/typings/ui';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+} from '@akashaorg/typings/lib/ui';
+import { EventTypes } from '@akashaorg/typings/lib/ui';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import {
   Observable,
   mergeMap,
@@ -39,6 +38,7 @@ import { getIntegrationsData } from './manifests';
 import { loadI18nNamespaces } from './i18n-utils';
 import { extensionMatcher } from './extension-matcher';
 import { extensionLoader } from './extension-loader';
+import { EditorBlockEvents } from '@akashaorg/typings/lib/ui/editor-blocks';
 
 export const getMountPoint = (appConfig: IAppConfig) => {
   let mountPoint: string;
@@ -170,6 +170,12 @@ export const processSystemModules = (
                     navRoutes: appConf?.routes,
                   },
                 });
+                if (appConf?.editorBlocks) {
+                  uiEvents.next({
+                    event: EditorBlockEvents.RegisterEditorBlock,
+                    data: appConf.editorBlocks.map(eb => ({ ...eb, appName: moduleName })),
+                  });
+                }
               }
               return {
                 ...appConf,
@@ -283,7 +289,7 @@ export const handleExtPointMountOfApps = (
           };
         }
 
-        const unique: [string, EventDataTypes][] = Array.from(mountedExtPoints).filter(([name]) => {
+        const unique = Array.from(mountedExtPoints).filter(([name]) => {
           const _prevIntegrationsCount = prevIntegrations.get(name)?.length || 0;
           const _nextIntegrationsCount = integrationsByMountPoint.get(name)?.length || 0;
 

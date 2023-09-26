@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { LEGAL_DOCS, LegalDocsSchema, TYPES } from '@akashaorg/typings/sdk';
+import { LEGAL_DOCS, LegalDocsSchema, TYPES } from '@akashaorg/typings/lib/sdk';
 import Logging from '../logging/index';
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';

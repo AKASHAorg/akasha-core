@@ -1,13 +1,13 @@
 import getSDK, { Logger } from '@akashaorg/awf-sdk';
-import type { WorldConfig } from '@akashaorg/typings/ui';
+import type { WorldConfig } from '@akashaorg/typings/lib/ui';
 import { Observable, mergeMap, tap, catchError, switchMap, filter, withLatestFrom } from 'rxjs';
 import { pipelineEvents } from './events';
 import { getStateSlice, LoaderState } from './state';
 
 export const getLatestReleaseInfo = async (integrations: { name: string }[]) => {
   const sdk = getSDK();
-  const data = await sdk.api.icRegistry.getLatestReleaseInfo(integrations);
-  return data.getLatestRelease;
+  // const data = await sdk.api.icRegistry.getLatestReleaseInfo(integrations);
+  return Promise.resolve([]);
 };
 
 export const getIntegrationsData = async (integrationNames: string[], worldConfig: WorldConfig) => {

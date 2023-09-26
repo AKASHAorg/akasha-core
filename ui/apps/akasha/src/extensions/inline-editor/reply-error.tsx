@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { IEntryData, IPublishData, Profile } from '@akashaorg/typings/ui';
+import { EntityTypes, IEntryData, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
 import { createPendingEntry, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import routes, { POST } from '../../routes';
-import { PUBLISH_PENDING_KEY } from '@akashaorg/ui-awf-hooks/lib/use-comments';
-import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
+import routes, { BEAM } from '../../routes';
+
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 
 export interface IReplyErrorState {
   state: 'error' | 'retry';
@@ -22,7 +22,7 @@ export function ReplyError({ postId, loggedProfileData, onChange }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutation: publishCommentMutation, clear } = useMutationListener<
     IPublishData & { postID: string }
-  >([PUBLISH_PENDING_KEY]);
+  >(['PUBLISH_PENDING_KEY']);
 
   React.useEffect(() => {
     if (publishCommentMutation && publishCommentMutation.state.status === 'error') {
@@ -44,21 +44,19 @@ export function ReplyError({ postId, loggedProfileData, onChange }: Props) {
   return (
     <>
       {entryData && (
-        <EntryBox
-          entryData={createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
+        <EntryCard
+          // @TODO fix createPendingEntry method
+          entryData={null}
+          authorProfile={null} //createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
           locale={'en'}
-          showMore={true}
+          slateContent={null}
+          itemType={EntityTypes.REFLECT}
           profileAnchorLink={'/profile'}
-          repliesAnchorLink={routes[POST]}
+          repliesAnchorLink={routes[BEAM]}
           contentClickable={false}
           hidePublishTime={true}
           disableActions={true}
           hideActionButtons={true}
-          error={t('Oops! Something went wrong.')}
-          onRetry={() => {
-            clear();
-            onChange({ state: 'retry', content: entryData.slateContent });
-          }}
         />
       )}
     </>

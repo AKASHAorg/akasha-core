@@ -1,22 +1,21 @@
 import * as React from 'react';
-import { IPublishData, Profile } from '@akashaorg/typings/ui';
-import { createPendingEntry, useMutationsListener } from '@akashaorg/ui-awf-hooks';
+import { EntityTypes, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
+import { useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import routes, { REPLY } from '../../../routes';
-import { PUBLISH_PENDING_KEY } from '@akashaorg/ui-awf-hooks/lib/use-comments';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
-import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
+import routes, { REFLECT } from '../../../routes';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 
-type PendingReplyProps = {
+export type PendingReplyProps = {
   postId: string;
   loggedProfileData: Profile;
   commentIds: string[];
 };
 
-export function PendingReply({ postId, loggedProfileData, commentIds }: PendingReplyProps) {
+export function PendingReply({ postId, commentIds }: PendingReplyProps) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutations: pendingReplyStates } = useMutationsListener<IPublishData & { postID: string }>(
-    [PUBLISH_PENDING_KEY],
+    ['PUBLISH_PENDING_KEY'],
   );
 
   return (
@@ -29,24 +28,27 @@ export function PendingReply({ postId, loggedProfileData, commentIds }: PendingR
             (pendingReplyState.state.status === 'success' &&
               !commentIds.includes(pendingReplyState.state.data.toString()))) &&
           pendingReplyState.state.variables.postID === postId && (
-            <Box
+            <Stack
               customStyle={`px-4 border border(grey8 dark:grey3) bg-secondaryLight/30`}
               data-testid="pending-entry"
               key={pendingReplyState.mutationId}
             >
-              <EntryBox
-                entryData={createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
+              <EntryCard
+                // @TODO: Fix createPendingEntry method
+                entryData={null}
+                authorProfile={null} //createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
+                slateContent={null}
+                itemType={EntityTypes.REFLECT}
                 flagAsLabel={t('Report Comment')}
                 locale={'en'}
-                showMore={true}
                 profileAnchorLink={'/profile'}
-                repliesAnchorLink={routes[REPLY]}
+                repliesAnchorLink={routes[REFLECT]}
                 contentClickable={false}
                 hidePublishTime={true}
                 disableActions={true}
                 hideActionButtons={true}
               />
-            </Box>
+            </Stack>
           ),
       )}
     </>

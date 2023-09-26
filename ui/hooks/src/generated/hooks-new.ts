@@ -1,65 +1,159 @@
-import type * as Types from '@akashaorg/typings/sdk/graphql-operation-types-new';
+import type * as Types from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 import { useQuery, useInfiniteQuery, useMutation, type UseQueryOptions, type UseInfiniteQueryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-const sdk = getSDK();
-export function fetcher<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
+
+export function composeDbFetch<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
+  const sdk = getSDK();
+  const { optionName } = sdk.services.gql.mutationNotificationConfig;
+
   return async (): Promise<TData> => {
 
-    const result = await sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+    const call = sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+
+    const result = options?.hasOwnProperty(optionName) ?
+      await sdk.services.gql.wrapWithMutationEvent(call, JSON.stringify(options[optionName])) : await call;
     if (!result.errors || !result.errors.length) {
-        return result.data as TData;
+      return result.data as TData;
     }
     throw result.errors;
   };
 }
 
 export const BeamFragmentDoc = /*#__PURE__*/ `
-    fragment BeamFragment on Beam {
+    fragment BeamFragment on AkashaBeam {
   id
   reflectionsCount
-  rebeamsCount
   active
+  embeddedBeam {
+    label
+    embeddedID
+  }
   author {
     id
+    isViewer
   }
   content {
-    property
-    provider
-    value
+    blockID
+    order
   }
   tags
   version
-}
-    `;
-export const ReflectFragmentDoc = /*#__PURE__*/ `
-    fragment ReflectFragment on Reflect {
-  author {
-    id
-  }
-  version
-  active
-  content {
-    provider
-    property
-    value
-  }
-  isReply
-  reflectionsCount
-  beam {
-    id
-    author {
-      id
+  createdAt
+  nsfw
+  reflections(last: 1) {
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
     }
   }
 }
     `;
+export const ContentBlockFragmentDoc = /*#__PURE__*/ `
+    fragment ContentBlockFragment on AkashaContentBlock {
+  id
+  content {
+    propertyType
+    value
+    label
+  }
+  active
+  appVersion {
+    application {
+      name
+      displayName
+      id
+    }
+    applicationID
+    id
+    version
+  }
+  appVersionID
+  createdAt
+  kind
+  author {
+    id
+    isViewer
+  }
+  version
+  nsfw
+}
+    `;
+export const BlockStorageFragmentDoc = /*#__PURE__*/ `
+    fragment BlockStorageFragment on AkashaBlockStorage {
+  id
+  appVersionID
+  appVersion {
+    application {
+      name
+      displayName
+      id
+    }
+    applicationID
+    id
+    version
+  }
+  createdAt
+  active
+  version
+  content {
+    propertyType
+    label
+    value
+  }
+  author {
+    id
+    isViewer
+  }
+  blockID
+  block {
+    id
+    active
+    author {
+      id
+      isViewer
+    }
+  }
+}
+    `;
+export const ReflectFragmentDoc = /*#__PURE__*/ `
+    fragment ReflectFragment on AkashaReflect {
+  id
+  author {
+    id
+    isViewer
+  }
+  version
+  active
+  content {
+    label
+    propertyType
+    value
+  }
+  isReply
+  reflection
+  beam {
+    id
+    author {
+      id
+      isViewer
+    }
+  }
+  nsfw
+}
+    `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ `
-    fragment UserProfileFragment on Profile {
+    fragment UserProfileFragment on AkashaProfile {
   id
   did {
     id
+    isViewer
   }
   name
   links {
@@ -100,6 +194,7 @@ export const UserProfileFragmentDoc = /*#__PURE__*/ `
     }
   }
   createdAt
+  nsfw
 }
     `;
 export const AkashaAppFragmentDoc = /*#__PURE__*/ `
@@ -111,7 +206,7 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ `
   name
   displayName
   keywords
-  releases {
+  releases(last: 5) {
     edges {
       node {
         id
@@ -119,27 +214,28 @@ export const AkashaAppFragmentDoc = /*#__PURE__*/ `
         source
         version
       }
+      cursor
     }
   }
-  releasessCount
+  releasesCount
   author {
     id
     isViewer
-    profile {
+    akashaProfile {
       ...UserProfileFragment
     }
   }
   contributors {
     id
     isViewer
-    profile {
+    akashaProfile {
       ...UserProfileFragment
     }
   }
 }
     `;
 export const AppReleaseFragmentDoc = /*#__PURE__*/ `
-    fragment AppReleaseFragment on AppRelease {
+    fragment AppReleaseFragment on AkashaAppRelease {
   application {
     ...AkashaAppFragment
   }
@@ -151,12 +247,20 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ `
 }
     `;
 export const GetBeamsDocument = /*#__PURE__*/ `
-    query GetBeams($after: String, $before: String, $first: Int, $last: Int) {
-  beamIndex(after: $after, before: $before, first: $first, last: $last) {
+    query GetBeams($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamFiltersInput, $sorting: AkashaBeamSortingInput) {
+  akashaBeamIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...BeamFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -176,7 +280,7 @@ export const useGetBeamsQuery = <
     ) =>
     useQuery<Types.GetBeamsQuery, TError, TData>(
       variables === undefined ? ['GetBeams'] : ['GetBeams', variables],
-      fetcher<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables),
+      composeDbFetch<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables),
       options
     );
 useGetBeamsQuery.document = GetBeamsDocument;
@@ -196,7 +300,7 @@ export const useInfiniteGetBeamsQuery = <
     
     return useInfiniteQuery<Types.GetBeamsQuery, TError, TData>(
       variables === undefined ? ['GetBeams.infinite'] : ['GetBeams.infinite', variables],
-      (metaData) => fetcher<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -204,16 +308,24 @@ export const useInfiniteGetBeamsQuery = <
 useInfiniteGetBeamsQuery.getKey = (variables?: Types.GetBeamsQueryVariables) => variables === undefined ? ['GetBeams.infinite'] : ['GetBeams.infinite', variables];
 ;
 
-useGetBeamsQuery.fetcher = (variables?: Types.GetBeamsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables, options);
+useGetBeamsQuery.fetcher = (variables?: Types.GetBeamsQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables, options);
 export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ `
-    query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamFiltersInput, $sorting: AkashaBeamSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
-      beamList(after: $after, before: $before, first: $first, last: $last) {
+      akashaBeamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
         edges {
           node {
             ...BeamFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -236,7 +348,7 @@ export const useGetBeamsByAuthorDidQuery = <
     ) =>
     useQuery<Types.GetBeamsByAuthorDidQuery, TError, TData>(
       ['GetBeamsByAuthorDid', variables],
-      fetcher<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, variables),
+      composeDbFetch<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, variables),
       options
     );
 useGetBeamsByAuthorDidQuery.document = GetBeamsByAuthorDidDocument;
@@ -256,7 +368,7 @@ export const useInfiniteGetBeamsByAuthorDidQuery = <
     
     return useInfiniteQuery<Types.GetBeamsByAuthorDidQuery, TError, TData>(
       ['GetBeamsByAuthorDid.infinite', variables],
-      (metaData) => fetcher<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -264,11 +376,11 @@ export const useInfiniteGetBeamsByAuthorDidQuery = <
 useInfiniteGetBeamsByAuthorDidQuery.getKey = (variables: Types.GetBeamsByAuthorDidQueryVariables) => ['GetBeamsByAuthorDid.infinite', variables];
 ;
 
-useGetBeamsByAuthorDidQuery.fetcher = (variables: Types.GetBeamsByAuthorDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, variables, options);
+useGetBeamsByAuthorDidQuery.fetcher = (variables: Types.GetBeamsByAuthorDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBeamsByAuthorDidQuery, Types.GetBeamsByAuthorDidQueryVariables>(GetBeamsByAuthorDidDocument, variables, options);
 export const GetBeamByIdDocument = /*#__PURE__*/ `
     query GetBeamById($id: ID!) {
   node(id: $id) {
-    ... on Beam {
+    ... on AkashaBeam {
       ...BeamFragment
     }
   }
@@ -283,7 +395,7 @@ export const useGetBeamByIdQuery = <
     ) =>
     useQuery<Types.GetBeamByIdQuery, TError, TData>(
       ['GetBeamById', variables],
-      fetcher<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables),
+      composeDbFetch<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables),
       options
     );
 useGetBeamByIdQuery.document = GetBeamByIdDocument;
@@ -303,7 +415,7 @@ export const useInfiniteGetBeamByIdQuery = <
     
     return useInfiniteQuery<Types.GetBeamByIdQuery, TError, TData>(
       ['GetBeamById.infinite', variables],
-      (metaData) => fetcher<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -311,130 +423,108 @@ export const useInfiniteGetBeamByIdQuery = <
 useInfiniteGetBeamByIdQuery.getKey = (variables: Types.GetBeamByIdQueryVariables) => ['GetBeamById.infinite', variables];
 ;
 
-useGetBeamByIdQuery.fetcher = (variables: Types.GetBeamByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options);
-export const GetRebeamsFromBeamDocument = /*#__PURE__*/ `
-    query GetRebeamsFromBeam($id: ID!) {
+useGetBeamByIdQuery.fetcher = (variables: Types.GetBeamByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options);
+export const GetContentBlockByIdDocument = /*#__PURE__*/ `
+    query GetContentBlockById($id: ID!) {
   node(id: $id) {
-    ... on Beam {
-      rebeams(first: 5) {
-        edges {
-          node {
-            quotedBeam {
-              ...BeamFragment
-            }
-            beam {
-              ...BeamFragment
-            }
-          }
-        }
-      }
+    ... on AkashaContentBlock {
+      ...ContentBlockFragment
     }
   }
 }
-    ${BeamFragmentDoc}`;
-export const useGetRebeamsFromBeamQuery = <
-      TData = Types.GetRebeamsFromBeamQuery,
+    ${ContentBlockFragmentDoc}`;
+export const useGetContentBlockByIdQuery = <
+      TData = Types.GetContentBlockByIdQuery,
       TError = unknown
     >(
-      variables: Types.GetRebeamsFromBeamQueryVariables,
-      options?: UseQueryOptions<Types.GetRebeamsFromBeamQuery, TError, TData>
+      variables: Types.GetContentBlockByIdQueryVariables,
+      options?: UseQueryOptions<Types.GetContentBlockByIdQuery, TError, TData>
     ) =>
-    useQuery<Types.GetRebeamsFromBeamQuery, TError, TData>(
-      ['GetRebeamsFromBeam', variables],
-      fetcher<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, variables),
+    useQuery<Types.GetContentBlockByIdQuery, TError, TData>(
+      ['GetContentBlockById', variables],
+      composeDbFetch<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>(GetContentBlockByIdDocument, variables),
       options
     );
-useGetRebeamsFromBeamQuery.document = GetRebeamsFromBeamDocument;
+useGetContentBlockByIdQuery.document = GetContentBlockByIdDocument;
 
 
-useGetRebeamsFromBeamQuery.getKey = (variables: Types.GetRebeamsFromBeamQueryVariables) => ['GetRebeamsFromBeam', variables];
+useGetContentBlockByIdQuery.getKey = (variables: Types.GetContentBlockByIdQueryVariables) => ['GetContentBlockById', variables];
 ;
 
-export const useInfiniteGetRebeamsFromBeamQuery = <
-      TData = Types.GetRebeamsFromBeamQuery,
+export const useInfiniteGetContentBlockByIdQuery = <
+      TData = Types.GetContentBlockByIdQuery,
       TError = unknown
     >(
-      pageParamKey: keyof Types.GetRebeamsFromBeamQueryVariables,
-      variables: Types.GetRebeamsFromBeamQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetRebeamsFromBeamQuery, TError, TData>
+      pageParamKey: keyof Types.GetContentBlockByIdQueryVariables,
+      variables: Types.GetContentBlockByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetContentBlockByIdQuery, TError, TData>
     ) =>{
     
-    return useInfiniteQuery<Types.GetRebeamsFromBeamQuery, TError, TData>(
-      ['GetRebeamsFromBeam.infinite', variables],
-      (metaData) => fetcher<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+    return useInfiniteQuery<Types.GetContentBlockByIdQuery, TError, TData>(
+      ['GetContentBlockById.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>(GetContentBlockByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetRebeamsFromBeamQuery.getKey = (variables: Types.GetRebeamsFromBeamQueryVariables) => ['GetRebeamsFromBeam.infinite', variables];
+useInfiniteGetContentBlockByIdQuery.getKey = (variables: Types.GetContentBlockByIdQueryVariables) => ['GetContentBlockById.infinite', variables];
 ;
 
-useGetRebeamsFromBeamQuery.fetcher = (variables: Types.GetRebeamsFromBeamQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetRebeamsFromBeamQuery, Types.GetRebeamsFromBeamQueryVariables>(GetRebeamsFromBeamDocument, variables, options);
-export const GetMentionsFromBeamDocument = /*#__PURE__*/ `
-    query GetMentionsFromBeam($id: ID!) {
+useGetContentBlockByIdQuery.fetcher = (variables: Types.GetContentBlockByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>(GetContentBlockByIdDocument, variables, options);
+export const GetBlockStorageByIdDocument = /*#__PURE__*/ `
+    query GetBlockStorageById($id: ID!) {
   node(id: $id) {
-    ... on Beam {
-      mentions(first: 10) {
-        edges {
-          node {
-            profile {
-              ...UserProfileFragment
-            }
-            beam {
-              ...BeamFragment
-            }
-          }
-        }
-      }
+    ... on AkashaBlockStorage {
+      ...BlockStorageFragment
     }
   }
 }
-    ${UserProfileFragmentDoc}
-${BeamFragmentDoc}`;
-export const useGetMentionsFromBeamQuery = <
-      TData = Types.GetMentionsFromBeamQuery,
+    ${BlockStorageFragmentDoc}`;
+export const useGetBlockStorageByIdQuery = <
+      TData = Types.GetBlockStorageByIdQuery,
       TError = unknown
     >(
-      variables: Types.GetMentionsFromBeamQueryVariables,
-      options?: UseQueryOptions<Types.GetMentionsFromBeamQuery, TError, TData>
+      variables: Types.GetBlockStorageByIdQueryVariables,
+      options?: UseQueryOptions<Types.GetBlockStorageByIdQuery, TError, TData>
     ) =>
-    useQuery<Types.GetMentionsFromBeamQuery, TError, TData>(
-      ['GetMentionsFromBeam', variables],
-      fetcher<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, variables),
+    useQuery<Types.GetBlockStorageByIdQuery, TError, TData>(
+      ['GetBlockStorageById', variables],
+      composeDbFetch<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables),
       options
     );
-useGetMentionsFromBeamQuery.document = GetMentionsFromBeamDocument;
+useGetBlockStorageByIdQuery.document = GetBlockStorageByIdDocument;
 
 
-useGetMentionsFromBeamQuery.getKey = (variables: Types.GetMentionsFromBeamQueryVariables) => ['GetMentionsFromBeam', variables];
+useGetBlockStorageByIdQuery.getKey = (variables: Types.GetBlockStorageByIdQueryVariables) => ['GetBlockStorageById', variables];
 ;
 
-export const useInfiniteGetMentionsFromBeamQuery = <
-      TData = Types.GetMentionsFromBeamQuery,
+export const useInfiniteGetBlockStorageByIdQuery = <
+      TData = Types.GetBlockStorageByIdQuery,
       TError = unknown
     >(
-      pageParamKey: keyof Types.GetMentionsFromBeamQueryVariables,
-      variables: Types.GetMentionsFromBeamQueryVariables,
-      options?: UseInfiniteQueryOptions<Types.GetMentionsFromBeamQuery, TError, TData>
+      pageParamKey: keyof Types.GetBlockStorageByIdQueryVariables,
+      variables: Types.GetBlockStorageByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetBlockStorageByIdQuery, TError, TData>
     ) =>{
     
-    return useInfiniteQuery<Types.GetMentionsFromBeamQuery, TError, TData>(
-      ['GetMentionsFromBeam.infinite', variables],
-      (metaData) => fetcher<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+    return useInfiniteQuery<Types.GetBlockStorageByIdQuery, TError, TData>(
+      ['GetBlockStorageById.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetMentionsFromBeamQuery.getKey = (variables: Types.GetMentionsFromBeamQueryVariables) => ['GetMentionsFromBeam.infinite', variables];
+useInfiniteGetBlockStorageByIdQuery.getKey = (variables: Types.GetBlockStorageByIdQueryVariables) => ['GetBlockStorageById.infinite', variables];
 ;
 
-useGetMentionsFromBeamQuery.fetcher = (variables: Types.GetMentionsFromBeamQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetMentionsFromBeamQuery, Types.GetMentionsFromBeamQueryVariables>(GetMentionsFromBeamDocument, variables, options);
+useGetBlockStorageByIdQuery.fetcher = (variables: Types.GetBlockStorageByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables, options);
 export const CreateBeamDocument = /*#__PURE__*/ `
-    mutation CreateBeam($i: CreateBeamInput!) {
-  createBeam(input: $i) {
+    mutation CreateBeam($i: CreateAkashaBeamInput!) {
+  createAkashaBeam(input: $i) {
     document {
       ...BeamFragment
     }
+    clientMutationId
   }
 }
     ${BeamFragmentDoc}`;
@@ -444,15 +534,15 @@ export const useCreateBeamMutation = <
     >(options?: UseMutationOptions<Types.CreateBeamMutation, TError, Types.CreateBeamMutationVariables, TContext>) =>
     useMutation<Types.CreateBeamMutation, TError, Types.CreateBeamMutationVariables, TContext>(
       ['CreateBeam'],
-      (variables?: Types.CreateBeamMutationVariables) => fetcher<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables)(),
+      (variables?: Types.CreateBeamMutationVariables) => composeDbFetch<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables)(),
       options
     );
 useCreateBeamMutation.getKey = () => ['CreateBeam'];
 
-useCreateBeamMutation.fetcher = (variables: Types.CreateBeamMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables, options);
+useCreateBeamMutation.fetcher = (variables: Types.CreateBeamMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables, options);
 export const UpdateBeamDocument = /*#__PURE__*/ `
-    mutation UpdateBeam($i: UpdateBeamInput!) {
-  updateBeam(input: $i) {
+    mutation UpdateBeam($i: UpdateAkashaBeamInput!) {
+  updateAkashaBeam(input: $i) {
     document {
       ...BeamFragment
     }
@@ -466,76 +556,66 @@ export const useUpdateBeamMutation = <
     >(options?: UseMutationOptions<Types.UpdateBeamMutation, TError, Types.UpdateBeamMutationVariables, TContext>) =>
     useMutation<Types.UpdateBeamMutation, TError, Types.UpdateBeamMutationVariables, TContext>(
       ['UpdateBeam'],
-      (variables?: Types.UpdateBeamMutationVariables) => fetcher<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables)(),
+      (variables?: Types.UpdateBeamMutationVariables) => composeDbFetch<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables)(),
       options
     );
 useUpdateBeamMutation.getKey = () => ['UpdateBeam'];
 
-useUpdateBeamMutation.fetcher = (variables: Types.UpdateBeamMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables, options);
-export const CreateRebeamDocument = /*#__PURE__*/ `
-    mutation CreateRebeam($i: CreateRebeamInput!) {
-  createRebeam(input: $i) {
+useUpdateBeamMutation.fetcher = (variables: Types.UpdateBeamMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables, options);
+export const CreateContentBlockDocument = /*#__PURE__*/ `
+    mutation CreateContentBlock($i: CreateAkashaContentBlockInput!) {
+  createAkashaContentBlock(input: $i) {
     document {
-      beam {
-        ...BeamFragment
-      }
-      quotedBeam {
-        ...BeamFragment
-      }
-      active
+      ...ContentBlockFragment
     }
     clientMutationId
   }
 }
-    ${BeamFragmentDoc}`;
-export const useCreateRebeamMutation = <
+    ${ContentBlockFragmentDoc}`;
+export const useCreateContentBlockMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.CreateRebeamMutation, TError, Types.CreateRebeamMutationVariables, TContext>) =>
-    useMutation<Types.CreateRebeamMutation, TError, Types.CreateRebeamMutationVariables, TContext>(
-      ['CreateRebeam'],
-      (variables?: Types.CreateRebeamMutationVariables) => fetcher<Types.CreateRebeamMutation, Types.CreateRebeamMutationVariables>(CreateRebeamDocument, variables)(),
+    >(options?: UseMutationOptions<Types.CreateContentBlockMutation, TError, Types.CreateContentBlockMutationVariables, TContext>) =>
+    useMutation<Types.CreateContentBlockMutation, TError, Types.CreateContentBlockMutationVariables, TContext>(
+      ['CreateContentBlock'],
+      (variables?: Types.CreateContentBlockMutationVariables) => composeDbFetch<Types.CreateContentBlockMutation, Types.CreateContentBlockMutationVariables>(CreateContentBlockDocument, variables)(),
       options
     );
-useCreateRebeamMutation.getKey = () => ['CreateRebeam'];
+useCreateContentBlockMutation.getKey = () => ['CreateContentBlock'];
 
-useCreateRebeamMutation.fetcher = (variables: Types.CreateRebeamMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateRebeamMutation, Types.CreateRebeamMutationVariables>(CreateRebeamDocument, variables, options);
-export const CreateBeamProfileMentionDocument = /*#__PURE__*/ `
-    mutation CreateBeamProfileMention($i: CreateProfileMentionInput!) {
-  createProfileMention(input: $i) {
+useCreateContentBlockMutation.fetcher = (variables: Types.CreateContentBlockMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.CreateContentBlockMutation, Types.CreateContentBlockMutationVariables>(CreateContentBlockDocument, variables, options);
+export const UpdateContentBlockDocument = /*#__PURE__*/ `
+    mutation UpdateContentBlock($i: UpdateAkashaContentBlockInput!) {
+  updateAkashaContentBlock(input: $i) {
     document {
-      beam {
-        ...BeamFragment
-      }
-      profile {
-        ...UserProfileFragment
-      }
+      ...ContentBlockFragment
     }
+    clientMutationId
   }
 }
-    ${BeamFragmentDoc}
-${UserProfileFragmentDoc}`;
-export const useCreateBeamProfileMentionMutation = <
+    ${ContentBlockFragmentDoc}`;
+export const useUpdateContentBlockMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.CreateBeamProfileMentionMutation, TError, Types.CreateBeamProfileMentionMutationVariables, TContext>) =>
-    useMutation<Types.CreateBeamProfileMentionMutation, TError, Types.CreateBeamProfileMentionMutationVariables, TContext>(
-      ['CreateBeamProfileMention'],
-      (variables?: Types.CreateBeamProfileMentionMutationVariables) => fetcher<Types.CreateBeamProfileMentionMutation, Types.CreateBeamProfileMentionMutationVariables>(CreateBeamProfileMentionDocument, variables)(),
+    >(options?: UseMutationOptions<Types.UpdateContentBlockMutation, TError, Types.UpdateContentBlockMutationVariables, TContext>) =>
+    useMutation<Types.UpdateContentBlockMutation, TError, Types.UpdateContentBlockMutationVariables, TContext>(
+      ['UpdateContentBlock'],
+      (variables?: Types.UpdateContentBlockMutationVariables) => composeDbFetch<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables)(),
       options
     );
-useCreateBeamProfileMentionMutation.getKey = () => ['CreateBeamProfileMention'];
+useUpdateContentBlockMutation.getKey = () => ['UpdateContentBlock'];
 
-useCreateBeamProfileMentionMutation.fetcher = (variables: Types.CreateBeamProfileMentionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateBeamProfileMentionMutation, Types.CreateBeamProfileMentionMutationVariables>(CreateBeamProfileMentionDocument, variables, options);
+useUpdateContentBlockMutation.fetcher = (variables: Types.UpdateContentBlockMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables, options);
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
     query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
-    ... on Beam {
+    ... on AkashaBeam {
       reflections(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -557,7 +637,7 @@ export const useGetReflectionsFromBeamQuery = <
     ) =>
     useQuery<Types.GetReflectionsFromBeamQuery, TError, TData>(
       ['GetReflectionsFromBeam', variables],
-      fetcher<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables),
+      composeDbFetch<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables),
       options
     );
 useGetReflectionsFromBeamQuery.document = GetReflectionsFromBeamDocument;
@@ -577,7 +657,7 @@ export const useInfiniteGetReflectionsFromBeamQuery = <
     
     return useInfiniteQuery<Types.GetReflectionsFromBeamQuery, TError, TData>(
       ['GetReflectionsFromBeam.infinite', variables],
-      (metaData) => fetcher<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -585,16 +665,17 @@ export const useInfiniteGetReflectionsFromBeamQuery = <
 useInfiniteGetReflectionsFromBeamQuery.getKey = (variables: Types.GetReflectionsFromBeamQueryVariables) => ['GetReflectionsFromBeam.infinite', variables];
 ;
 
-useGetReflectionsFromBeamQuery.fetcher = (variables: Types.GetReflectionsFromBeamQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables, options);
+useGetReflectionsFromBeamQuery.fetcher = (variables: Types.GetReflectionsFromBeamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables, options);
 export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ `
     query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
     ... on CeramicAccount {
-      reflectList(after: $after, before: $before, first: $first, last: $last) {
+      akashaReflectList(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
             ...ReflectFragment
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -617,7 +698,7 @@ export const useGetReflectionsByAuthorDidQuery = <
     ) =>
     useQuery<Types.GetReflectionsByAuthorDidQuery, TError, TData>(
       ['GetReflectionsByAuthorDid', variables],
-      fetcher<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables),
+      composeDbFetch<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables),
       options
     );
 useGetReflectionsByAuthorDidQuery.document = GetReflectionsByAuthorDidDocument;
@@ -637,7 +718,7 @@ export const useInfiniteGetReflectionsByAuthorDidQuery = <
     
     return useInfiniteQuery<Types.GetReflectionsByAuthorDidQuery, TError, TData>(
       ['GetReflectionsByAuthorDid.infinite', variables],
-      (metaData) => fetcher<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -645,26 +726,28 @@ export const useInfiniteGetReflectionsByAuthorDidQuery = <
 useInfiniteGetReflectionsByAuthorDidQuery.getKey = (variables: Types.GetReflectionsByAuthorDidQueryVariables) => ['GetReflectionsByAuthorDid.infinite', variables];
 ;
 
-useGetReflectionsByAuthorDidQuery.fetcher = (variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options);
+useGetReflectionsByAuthorDidQuery.fetcher = (variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options);
 export const GetReflectReflectionsDocument = /*#__PURE__*/ `
-    query GetReflectReflections($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
-  node(id: $id) {
-    ... on Reflect {
-      reflections(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            reflect {
-              ...ReflectFragment
-            }
-          }
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
+    query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput) {
+  akashaReflectIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: {where: {reflection: {equalTo: $id}}}
+    sorting: $sorting
+  ) {
+    edges {
+      node {
+        ...ReflectFragment
       }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
     }
   }
 }
@@ -678,7 +761,7 @@ export const useGetReflectReflectionsQuery = <
     ) =>
     useQuery<Types.GetReflectReflectionsQuery, TError, TData>(
       ['GetReflectReflections', variables],
-      fetcher<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables),
+      composeDbFetch<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables),
       options
     );
 useGetReflectReflectionsQuery.document = GetReflectReflectionsDocument;
@@ -698,7 +781,7 @@ export const useInfiniteGetReflectReflectionsQuery = <
     
     return useInfiniteQuery<Types.GetReflectReflectionsQuery, TError, TData>(
       ['GetReflectReflections.infinite', variables],
-      (metaData) => fetcher<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -706,10 +789,10 @@ export const useInfiniteGetReflectReflectionsQuery = <
 useInfiniteGetReflectReflectionsQuery.getKey = (variables: Types.GetReflectReflectionsQueryVariables) => ['GetReflectReflections.infinite', variables];
 ;
 
-useGetReflectReflectionsQuery.fetcher = (variables: Types.GetReflectReflectionsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options);
+useGetReflectReflectionsQuery.fetcher = (variables: Types.GetReflectReflectionsQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options);
 export const CreateReflectDocument = /*#__PURE__*/ `
-    mutation CreateReflect($i: CreateReflectInput!) {
-  createReflect(input: $i) {
+    mutation CreateReflect($i: CreateAkashaReflectInput!) {
+  createAkashaReflect(input: $i) {
     document {
       ...ReflectFragment
     }
@@ -723,15 +806,15 @@ export const useCreateReflectMutation = <
     >(options?: UseMutationOptions<Types.CreateReflectMutation, TError, Types.CreateReflectMutationVariables, TContext>) =>
     useMutation<Types.CreateReflectMutation, TError, Types.CreateReflectMutationVariables, TContext>(
       ['CreateReflect'],
-      (variables?: Types.CreateReflectMutationVariables) => fetcher<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables)(),
+      (variables?: Types.CreateReflectMutationVariables) => composeDbFetch<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables)(),
       options
     );
 useCreateReflectMutation.getKey = () => ['CreateReflect'];
 
-useCreateReflectMutation.fetcher = (variables: Types.CreateReflectMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables, options);
-export const UpdateReflectDocument = /*#__PURE__*/ `
-    mutation UpdateReflect($i: UpdateReflectInput!) {
-  updateReflect(input: $i) {
+useCreateReflectMutation.fetcher = (variables: Types.CreateReflectMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables, options);
+export const UpdateAkashaReflectDocument = /*#__PURE__*/ `
+    mutation UpdateAkashaReflect($i: UpdateAkashaReflectInput!) {
+  updateAkashaReflect(input: $i) {
     document {
       ...ReflectFragment
     }
@@ -739,76 +822,22 @@ export const UpdateReflectDocument = /*#__PURE__*/ `
   }
 }
     ${ReflectFragmentDoc}`;
-export const useUpdateReflectMutation = <
+export const useUpdateAkashaReflectMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<Types.UpdateReflectMutation, TError, Types.UpdateReflectMutationVariables, TContext>) =>
-    useMutation<Types.UpdateReflectMutation, TError, Types.UpdateReflectMutationVariables, TContext>(
-      ['UpdateReflect'],
-      (variables?: Types.UpdateReflectMutationVariables) => fetcher<Types.UpdateReflectMutation, Types.UpdateReflectMutationVariables>(UpdateReflectDocument, variables)(),
+    >(options?: UseMutationOptions<Types.UpdateAkashaReflectMutation, TError, Types.UpdateAkashaReflectMutationVariables, TContext>) =>
+    useMutation<Types.UpdateAkashaReflectMutation, TError, Types.UpdateAkashaReflectMutationVariables, TContext>(
+      ['UpdateAkashaReflect'],
+      (variables?: Types.UpdateAkashaReflectMutationVariables) => composeDbFetch<Types.UpdateAkashaReflectMutation, Types.UpdateAkashaReflectMutationVariables>(UpdateAkashaReflectDocument, variables)(),
       options
     );
-useUpdateReflectMutation.getKey = () => ['UpdateReflect'];
+useUpdateAkashaReflectMutation.getKey = () => ['UpdateAkashaReflect'];
 
-useUpdateReflectMutation.fetcher = (variables: Types.UpdateReflectMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateReflectMutation, Types.UpdateReflectMutationVariables>(UpdateReflectDocument, variables, options);
-export const CreateReflectReflectionDocument = /*#__PURE__*/ `
-    mutation CreateReflectReflection($i: CreateReflectionInput!) {
-  createReflection(input: $i) {
-    document {
-      active
-      reflect {
-        ...ReflectFragment
-      }
-      reflection {
-        ...ReflectFragment
-      }
-    }
-  }
-}
-    ${ReflectFragmentDoc}`;
-export const useCreateReflectReflectionMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<Types.CreateReflectReflectionMutation, TError, Types.CreateReflectReflectionMutationVariables, TContext>) =>
-    useMutation<Types.CreateReflectReflectionMutation, TError, Types.CreateReflectReflectionMutationVariables, TContext>(
-      ['CreateReflectReflection'],
-      (variables?: Types.CreateReflectReflectionMutationVariables) => fetcher<Types.CreateReflectReflectionMutation, Types.CreateReflectReflectionMutationVariables>(CreateReflectReflectionDocument, variables)(),
-      options
-    );
-useCreateReflectReflectionMutation.getKey = () => ['CreateReflectReflection'];
-
-useCreateReflectReflectionMutation.fetcher = (variables: Types.CreateReflectReflectionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateReflectReflectionMutation, Types.CreateReflectReflectionMutationVariables>(CreateReflectReflectionDocument, variables, options);
-export const UpdateReflectReflectionDocument = /*#__PURE__*/ `
-    mutation UpdateReflectReflection($i: UpdateReflectionInput!) {
-  updateReflection(input: $i) {
-    document {
-      active
-      reflect {
-        ...ReflectFragment
-      }
-      reflection {
-        ...ReflectFragment
-      }
-    }
-  }
-}
-    ${ReflectFragmentDoc}`;
-export const useUpdateReflectReflectionMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(options?: UseMutationOptions<Types.UpdateReflectReflectionMutation, TError, Types.UpdateReflectReflectionMutationVariables, TContext>) =>
-    useMutation<Types.UpdateReflectReflectionMutation, TError, Types.UpdateReflectReflectionMutationVariables, TContext>(
-      ['UpdateReflectReflection'],
-      (variables?: Types.UpdateReflectReflectionMutationVariables) => fetcher<Types.UpdateReflectReflectionMutation, Types.UpdateReflectReflectionMutationVariables>(UpdateReflectReflectionDocument, variables)(),
-      options
-    );
-useUpdateReflectReflectionMutation.getKey = () => ['UpdateReflectReflection'];
-
-useUpdateReflectReflectionMutation.fetcher = (variables: Types.UpdateReflectReflectionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateReflectReflectionMutation, Types.UpdateReflectReflectionMutationVariables>(UpdateReflectReflectionDocument, variables, options);
+useUpdateAkashaReflectMutation.fetcher = (variables: Types.UpdateAkashaReflectMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateAkashaReflectMutation, Types.UpdateAkashaReflectMutationVariables>(UpdateAkashaReflectDocument, variables, options);
 export const GetProfileByIdDocument = /*#__PURE__*/ `
     query GetProfileByID($id: ID!) {
   node(id: $id) {
-    ... on Profile {
+    ... on AkashaProfile {
       ...UserProfileFragment
     }
   }
@@ -823,7 +852,7 @@ export const useGetProfileByIdQuery = <
     ) =>
     useQuery<Types.GetProfileByIdQuery, TError, TData>(
       ['GetProfileByID', variables],
-      fetcher<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables),
+      composeDbFetch<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables),
       options
     );
 useGetProfileByIdQuery.document = GetProfileByIdDocument;
@@ -843,7 +872,7 @@ export const useInfiniteGetProfileByIdQuery = <
     
     return useInfiniteQuery<Types.GetProfileByIdQuery, TError, TData>(
       ['GetProfileByID.infinite', variables],
-      (metaData) => fetcher<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -851,12 +880,12 @@ export const useInfiniteGetProfileByIdQuery = <
 useInfiniteGetProfileByIdQuery.getKey = (variables: Types.GetProfileByIdQueryVariables) => ['GetProfileByID.infinite', variables];
 ;
 
-useGetProfileByIdQuery.fetcher = (variables: Types.GetProfileByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables, options);
+useGetProfileByIdQuery.fetcher = (variables: Types.GetProfileByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables, options);
 export const GetProfileByDidDocument = /*#__PURE__*/ `
     query GetProfileByDid($id: ID!) {
   node(id: $id) {
     ... on CeramicAccount {
-      profile {
+      akashaProfile {
         ...UserProfileFragment
       }
       isViewer
@@ -873,7 +902,7 @@ export const useGetProfileByDidQuery = <
     ) =>
     useQuery<Types.GetProfileByDidQuery, TError, TData>(
       ['GetProfileByDid', variables],
-      fetcher<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables),
+      composeDbFetch<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables),
       options
     );
 useGetProfileByDidQuery.document = GetProfileByDidDocument;
@@ -893,7 +922,7 @@ export const useInfiniteGetProfileByDidQuery = <
     
     return useInfiniteQuery<Types.GetProfileByDidQuery, TError, TData>(
       ['GetProfileByDid.infinite', variables],
-      (metaData) => fetcher<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -901,14 +930,73 @@ export const useInfiniteGetProfileByDidQuery = <
 useInfiniteGetProfileByDidQuery.getKey = (variables: Types.GetProfileByDidQueryVariables) => ['GetProfileByDid.infinite', variables];
 ;
 
-useGetProfileByDidQuery.fetcher = (variables: Types.GetProfileByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables, options);
+useGetProfileByDidQuery.fetcher = (variables: Types.GetProfileByDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables, options);
+export const GetProfileStatsByDidDocument = /*#__PURE__*/ `
+    query GetProfileStatsByDid($id: ID!) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaProfile {
+        ...UserProfileFragment
+        followersCount(filters: {where: {isFollowing: {equalTo: true}}}, account: $id)
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const useGetProfileStatsByDidQuery = <
+      TData = Types.GetProfileStatsByDidQuery,
+      TError = unknown
+    >(
+      variables: Types.GetProfileStatsByDidQueryVariables,
+      options?: UseQueryOptions<Types.GetProfileStatsByDidQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetProfileStatsByDidQuery, TError, TData>(
+      ['GetProfileStatsByDid', variables],
+      composeDbFetch<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, variables),
+      options
+    );
+useGetProfileStatsByDidQuery.document = GetProfileStatsByDidDocument;
+
+
+useGetProfileStatsByDidQuery.getKey = (variables: Types.GetProfileStatsByDidQueryVariables) => ['GetProfileStatsByDid', variables];
+;
+
+export const useInfiniteGetProfileStatsByDidQuery = <
+      TData = Types.GetProfileStatsByDidQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetProfileStatsByDidQueryVariables,
+      variables: Types.GetProfileStatsByDidQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetProfileStatsByDidQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetProfileStatsByDidQuery, TError, TData>(
+      ['GetProfileStatsByDid.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetProfileStatsByDidQuery.getKey = (variables: Types.GetProfileStatsByDidQueryVariables) => ['GetProfileStatsByDid.infinite', variables];
+;
+
+useGetProfileStatsByDidQuery.fetcher = (variables: Types.GetProfileStatsByDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetProfileStatsByDidQuery, Types.GetProfileStatsByDidQueryVariables>(GetProfileStatsByDidDocument, variables, options);
 export const GetProfilesDocument = /*#__PURE__*/ `
-    query GetProfiles($after: String, $before: String, $first: Int, $last: Int) {
-  profileIndex(after: $after, before: $before, first: $first, last: $last) {
+    query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileFiltersInput, $sorting: AkashaProfileSortingInput) {
+  akashaProfileIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...UserProfileFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -928,7 +1016,7 @@ export const useGetProfilesQuery = <
     ) =>
     useQuery<Types.GetProfilesQuery, TError, TData>(
       variables === undefined ? ['GetProfiles'] : ['GetProfiles', variables],
-      fetcher<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables),
+      composeDbFetch<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables),
       options
     );
 useGetProfilesQuery.document = GetProfilesDocument;
@@ -948,7 +1036,7 @@ export const useInfiniteGetProfilesQuery = <
     
     return useInfiniteQuery<Types.GetProfilesQuery, TError, TData>(
       variables === undefined ? ['GetProfiles.infinite'] : ['GetProfiles.infinite', variables],
-      (metaData) => fetcher<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -956,10 +1044,15 @@ export const useInfiniteGetProfilesQuery = <
 useInfiniteGetProfilesQuery.getKey = (variables?: Types.GetProfilesQueryVariables) => variables === undefined ? ['GetProfiles.infinite'] : ['GetProfiles.infinite', variables];
 ;
 
-useGetProfilesQuery.fetcher = (variables?: Types.GetProfilesQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options);
+useGetProfilesQuery.fetcher = (variables?: Types.GetProfilesQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options);
 export const GetInterestsDocument = /*#__PURE__*/ `
     query GetInterests($after: String, $before: String, $first: Int, $last: Int) {
-  interestsIndex(after: $after, before: $before, first: $first, last: $last) {
+  akashaProfileInterestsIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
     edges {
       node {
         topics {
@@ -971,6 +1064,7 @@ export const GetInterestsDocument = /*#__PURE__*/ `
         }
         id
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -990,7 +1084,7 @@ export const useGetInterestsQuery = <
     ) =>
     useQuery<Types.GetInterestsQuery, TError, TData>(
       variables === undefined ? ['GetInterests'] : ['GetInterests', variables],
-      fetcher<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables),
+      composeDbFetch<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables),
       options
     );
 useGetInterestsQuery.document = GetInterestsDocument;
@@ -1010,7 +1104,7 @@ export const useInfiniteGetInterestsQuery = <
     
     return useInfiniteQuery<Types.GetInterestsQuery, TError, TData>(
       variables === undefined ? ['GetInterests.infinite'] : ['GetInterests.infinite', variables],
-      (metaData) => fetcher<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1018,12 +1112,79 @@ export const useInfiniteGetInterestsQuery = <
 useInfiniteGetInterestsQuery.getKey = (variables?: Types.GetInterestsQueryVariables) => variables === undefined ? ['GetInterests.infinite'] : ['GetInterests.infinite', variables];
 ;
 
-useGetInterestsQuery.fetcher = (variables?: Types.GetInterestsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options);
+useGetInterestsQuery.fetcher = (variables?: Types.GetInterestsQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options);
+export const GetInterestsStreamDocument = /*#__PURE__*/ `
+    query GetInterestsStream($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput) {
+  akashaInterestsStreamIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    sorting: $sorting
+    filters: $filters
+  ) {
+    edges {
+      node {
+        labelType
+        value
+        active
+        createdAt
+        id
+      }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
+export const useGetInterestsStreamQuery = <
+      TData = Types.GetInterestsStreamQuery,
+      TError = unknown
+    >(
+      variables?: Types.GetInterestsStreamQueryVariables,
+      options?: UseQueryOptions<Types.GetInterestsStreamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetInterestsStreamQuery, TError, TData>(
+      variables === undefined ? ['GetInterestsStream'] : ['GetInterestsStream', variables],
+      composeDbFetch<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, variables),
+      options
+    );
+useGetInterestsStreamQuery.document = GetInterestsStreamDocument;
+
+
+useGetInterestsStreamQuery.getKey = (variables?: Types.GetInterestsStreamQueryVariables) => variables === undefined ? ['GetInterestsStream'] : ['GetInterestsStream', variables];
+;
+
+export const useInfiniteGetInterestsStreamQuery = <
+      TData = Types.GetInterestsStreamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetInterestsStreamQueryVariables,
+      variables?: Types.GetInterestsStreamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetInterestsStreamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetInterestsStreamQuery, TError, TData>(
+      variables === undefined ? ['GetInterestsStream.infinite'] : ['GetInterestsStream.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetInterestsStreamQuery.getKey = (variables?: Types.GetInterestsStreamQueryVariables) => variables === undefined ? ['GetInterestsStream.infinite'] : ['GetInterestsStream.infinite', variables];
+;
+
+useGetInterestsStreamQuery.fetcher = (variables?: Types.GetInterestsStreamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, variables, options);
 export const GetInterestsByDidDocument = /*#__PURE__*/ `
     query GetInterestsByDid($id: ID!) {
   node(id: $id) {
     ... on CeramicAccount {
-      interests {
+      akashaProfileInterests {
         topics {
           value
           labelType
@@ -1047,7 +1208,7 @@ export const useGetInterestsByDidQuery = <
     ) =>
     useQuery<Types.GetInterestsByDidQuery, TError, TData>(
       ['GetInterestsByDid', variables],
-      fetcher<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, variables),
+      composeDbFetch<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, variables),
       options
     );
 useGetInterestsByDidQuery.document = GetInterestsByDidDocument;
@@ -1067,7 +1228,7 @@ export const useInfiniteGetInterestsByDidQuery = <
     
     return useInfiniteQuery<Types.GetInterestsByDidQuery, TError, TData>(
       ['GetInterestsByDid.infinite', variables],
-      (metaData) => fetcher<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1075,11 +1236,11 @@ export const useInfiniteGetInterestsByDidQuery = <
 useInfiniteGetInterestsByDidQuery.getKey = (variables: Types.GetInterestsByDidQueryVariables) => ['GetInterestsByDid.infinite', variables];
 ;
 
-useGetInterestsByDidQuery.fetcher = (variables: Types.GetInterestsByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, variables, options);
+useGetInterestsByDidQuery.fetcher = (variables: Types.GetInterestsByDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, variables, options);
 export const GetInterestsByIdDocument = /*#__PURE__*/ `
     query GetInterestsById($id: ID!) {
   node(id: $id) {
-    ... on Interests {
+    ... on AkashaProfileInterests {
       topics {
         value
         labelType
@@ -1101,7 +1262,7 @@ export const useGetInterestsByIdQuery = <
     ) =>
     useQuery<Types.GetInterestsByIdQuery, TError, TData>(
       ['GetInterestsById', variables],
-      fetcher<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, variables),
+      composeDbFetch<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, variables),
       options
     );
 useGetInterestsByIdQuery.document = GetInterestsByIdDocument;
@@ -1121,7 +1282,7 @@ export const useInfiniteGetInterestsByIdQuery = <
     
     return useInfiniteQuery<Types.GetInterestsByIdQuery, TError, TData>(
       ['GetInterestsById.infinite', variables],
-      (metaData) => fetcher<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1129,20 +1290,32 @@ export const useInfiniteGetInterestsByIdQuery = <
 useInfiniteGetInterestsByIdQuery.getKey = (variables: Types.GetInterestsByIdQueryVariables) => ['GetInterestsById.infinite', variables];
 ;
 
-useGetInterestsByIdQuery.fetcher = (variables: Types.GetInterestsByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, variables, options);
+useGetInterestsByIdQuery.fetcher = (variables: Types.GetInterestsByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, variables, options);
 export const GetFollowingListByDidDocument = /*#__PURE__*/ `
-    query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
-      followList(after: $after, before: $before, first: $first, last: $last) {
+      akashaFollowList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: {where: {isFollowing: {equalTo: true}}}
+        sorting: $sorting
+      ) {
         edges {
           node {
             id
             isFollowing
+            profileID
             profile {
               ...UserProfileFragment
             }
+            did {
+              id
+            }
           }
+          cursor
         }
         pageInfo {
           startCursor
@@ -1165,7 +1338,7 @@ export const useGetFollowingListByDidQuery = <
     ) =>
     useQuery<Types.GetFollowingListByDidQuery, TError, TData>(
       ['GetFollowingListByDid', variables],
-      fetcher<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, variables),
+      composeDbFetch<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, variables),
       options
     );
 useGetFollowingListByDidQuery.document = GetFollowingListByDidDocument;
@@ -1185,7 +1358,7 @@ export const useInfiniteGetFollowingListByDidQuery = <
     
     return useInfiniteQuery<Types.GetFollowingListByDidQuery, TError, TData>(
       ['GetFollowingListByDid.infinite', variables],
-      (metaData) => fetcher<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1193,21 +1366,35 @@ export const useInfiniteGetFollowingListByDidQuery = <
 useInfiniteGetFollowingListByDidQuery.getKey = (variables: Types.GetFollowingListByDidQueryVariables) => ['GetFollowingListByDid.infinite', variables];
 ;
 
-useGetFollowingListByDidQuery.fetcher = (variables: Types.GetFollowingListByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, variables, options);
+useGetFollowingListByDidQuery.fetcher = (variables: Types.GetFollowingListByDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, variables, options);
 export const GetFollowersListByDidDocument = /*#__PURE__*/ `
-    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
-      profile {
-        followers(after: $after, before: $before, first: $first, last: $last) {
+      akashaProfile {
+        followers(
+          after: $after
+          before: $before
+          first: $first
+          last: $last
+          filters: {where: {isFollowing: {equalTo: true}}}
+          sorting: $sorting
+        ) {
           edges {
             node {
               id
               isFollowing
+              profileID
               profile {
                 ...UserProfileFragment
               }
+              did {
+                akashaProfile {
+                  ...UserProfileFragment
+                }
+              }
             }
+            cursor
           }
           pageInfo {
             startCursor
@@ -1231,7 +1418,7 @@ export const useGetFollowersListByDidQuery = <
     ) =>
     useQuery<Types.GetFollowersListByDidQuery, TError, TData>(
       ['GetFollowersListByDid', variables],
-      fetcher<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables),
+      composeDbFetch<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables),
       options
     );
 useGetFollowersListByDidQuery.document = GetFollowersListByDidDocument;
@@ -1251,7 +1438,7 @@ export const useInfiniteGetFollowersListByDidQuery = <
     
     return useInfiniteQuery<Types.GetFollowersListByDidQuery, TError, TData>(
       ['GetFollowersListByDid.infinite', variables],
-      (metaData) => fetcher<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1259,11 +1446,11 @@ export const useInfiniteGetFollowersListByDidQuery = <
 useInfiniteGetFollowersListByDidQuery.getKey = (variables: Types.GetFollowersListByDidQueryVariables) => ['GetFollowersListByDid.infinite', variables];
 ;
 
-useGetFollowersListByDidQuery.fetcher = (variables: Types.GetFollowersListByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables, options);
+useGetFollowersListByDidQuery.fetcher = (variables: Types.GetFollowersListByDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables, options);
 export const GetMyProfileDocument = /*#__PURE__*/ `
     query GetMyProfile {
   viewer {
-    profile {
+    akashaProfile {
       ...UserProfileFragment
     }
   }
@@ -1278,7 +1465,7 @@ export const useGetMyProfileQuery = <
     ) =>
     useQuery<Types.GetMyProfileQuery, TError, TData>(
       variables === undefined ? ['GetMyProfile'] : ['GetMyProfile', variables],
-      fetcher<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables),
+      composeDbFetch<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables),
       options
     );
 useGetMyProfileQuery.document = GetMyProfileDocument;
@@ -1298,7 +1485,7 @@ export const useInfiniteGetMyProfileQuery = <
     
     return useInfiniteQuery<Types.GetMyProfileQuery, TError, TData>(
       variables === undefined ? ['GetMyProfile.infinite'] : ['GetMyProfile.infinite', variables],
-      (metaData) => fetcher<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1306,10 +1493,81 @@ export const useInfiniteGetMyProfileQuery = <
 useInfiniteGetMyProfileQuery.getKey = (variables?: Types.GetMyProfileQueryVariables) => variables === undefined ? ['GetMyProfile.infinite'] : ['GetMyProfile.infinite', variables];
 ;
 
-useGetMyProfileQuery.fetcher = (variables?: Types.GetMyProfileQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options);
+useGetMyProfileQuery.fetcher = (variables?: Types.GetMyProfileQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options);
+export const GetFollowDocumentsDocument = /*#__PURE__*/ `
+    query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
+  viewer {
+    akashaFollowList(
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      filters: {where: {profileID: {in: $following}}}
+      sorting: $sorting
+    ) {
+      edges {
+        node {
+          id
+          isFollowing
+          profileID
+          profile {
+            ...UserProfileFragment
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    isViewer
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const useGetFollowDocumentsQuery = <
+      TData = Types.GetFollowDocumentsQuery,
+      TError = unknown
+    >(
+      variables?: Types.GetFollowDocumentsQueryVariables,
+      options?: UseQueryOptions<Types.GetFollowDocumentsQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetFollowDocumentsQuery, TError, TData>(
+      variables === undefined ? ['GetFollowDocuments'] : ['GetFollowDocuments', variables],
+      composeDbFetch<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables),
+      options
+    );
+useGetFollowDocumentsQuery.document = GetFollowDocumentsDocument;
+
+
+useGetFollowDocumentsQuery.getKey = (variables?: Types.GetFollowDocumentsQueryVariables) => variables === undefined ? ['GetFollowDocuments'] : ['GetFollowDocuments', variables];
+;
+
+export const useInfiniteGetFollowDocumentsQuery = <
+      TData = Types.GetFollowDocumentsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetFollowDocumentsQueryVariables,
+      variables?: Types.GetFollowDocumentsQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetFollowDocumentsQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetFollowDocumentsQuery, TError, TData>(
+      variables === undefined ? ['GetFollowDocuments.infinite'] : ['GetFollowDocuments.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetFollowDocumentsQuery.getKey = (variables?: Types.GetFollowDocumentsQueryVariables) => variables === undefined ? ['GetFollowDocuments.infinite'] : ['GetFollowDocuments.infinite', variables];
+;
+
+useGetFollowDocumentsQuery.fetcher = (variables?: Types.GetFollowDocumentsQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options);
 export const CreateProfileDocument = /*#__PURE__*/ `
-    mutation CreateProfile($i: CreateProfileInput!) {
-  createProfile(input: $i) {
+    mutation CreateProfile($i: CreateAkashaProfileInput!) {
+  createAkashaProfile(input: $i) {
     document {
       ...UserProfileFragment
     }
@@ -1323,15 +1581,15 @@ export const useCreateProfileMutation = <
     >(options?: UseMutationOptions<Types.CreateProfileMutation, TError, Types.CreateProfileMutationVariables, TContext>) =>
     useMutation<Types.CreateProfileMutation, TError, Types.CreateProfileMutationVariables, TContext>(
       ['CreateProfile'],
-      (variables?: Types.CreateProfileMutationVariables) => fetcher<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables)(),
+      (variables?: Types.CreateProfileMutationVariables) => composeDbFetch<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables)(),
       options
     );
 useCreateProfileMutation.getKey = () => ['CreateProfile'];
 
-useCreateProfileMutation.fetcher = (variables: Types.CreateProfileMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options);
+useCreateProfileMutation.fetcher = (variables: Types.CreateProfileMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options);
 export const UpdateProfileDocument = /*#__PURE__*/ `
-    mutation UpdateProfile($i: UpdateProfileInput!) {
-  updateProfile(input: $i) {
+    mutation UpdateProfile($i: UpdateAkashaProfileInput!) {
+  updateAkashaProfile(input: $i) {
     document {
       ...UserProfileFragment
     }
@@ -1345,15 +1603,15 @@ export const useUpdateProfileMutation = <
     >(options?: UseMutationOptions<Types.UpdateProfileMutation, TError, Types.UpdateProfileMutationVariables, TContext>) =>
     useMutation<Types.UpdateProfileMutation, TError, Types.UpdateProfileMutationVariables, TContext>(
       ['UpdateProfile'],
-      (variables?: Types.UpdateProfileMutationVariables) => fetcher<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables)(),
+      (variables?: Types.UpdateProfileMutationVariables) => composeDbFetch<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables)(),
       options
     );
 useUpdateProfileMutation.getKey = () => ['UpdateProfile'];
 
-useUpdateProfileMutation.fetcher = (variables: Types.UpdateProfileMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables, options);
+useUpdateProfileMutation.fetcher = (variables: Types.UpdateProfileMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables, options);
 export const CreateInterestsDocument = /*#__PURE__*/ `
-    mutation CreateInterests($i: CreateInterestsInput!) {
-  createInterests(input: $i) {
+    mutation CreateInterests($i: CreateAkashaProfileInterestsInput!) {
+  createAkashaProfileInterests(input: $i) {
     document {
       topics {
         value
@@ -1374,15 +1632,15 @@ export const useCreateInterestsMutation = <
     >(options?: UseMutationOptions<Types.CreateInterestsMutation, TError, Types.CreateInterestsMutationVariables, TContext>) =>
     useMutation<Types.CreateInterestsMutation, TError, Types.CreateInterestsMutationVariables, TContext>(
       ['CreateInterests'],
-      (variables?: Types.CreateInterestsMutationVariables) => fetcher<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables)(),
+      (variables?: Types.CreateInterestsMutationVariables) => composeDbFetch<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables)(),
       options
     );
 useCreateInterestsMutation.getKey = () => ['CreateInterests'];
 
-useCreateInterestsMutation.fetcher = (variables: Types.CreateInterestsMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables, options);
+useCreateInterestsMutation.fetcher = (variables: Types.CreateInterestsMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables, options);
 export const UpdateInterestsDocument = /*#__PURE__*/ `
-    mutation UpdateInterests($i: UpdateInterestsInput!) {
-  updateInterests(input: $i) {
+    mutation UpdateInterests($i: UpdateAkashaProfileInterestsInput!) {
+  updateAkashaProfileInterests(input: $i) {
     document {
       topics {
         value
@@ -1403,15 +1661,15 @@ export const useUpdateInterestsMutation = <
     >(options?: UseMutationOptions<Types.UpdateInterestsMutation, TError, Types.UpdateInterestsMutationVariables, TContext>) =>
     useMutation<Types.UpdateInterestsMutation, TError, Types.UpdateInterestsMutationVariables, TContext>(
       ['UpdateInterests'],
-      (variables?: Types.UpdateInterestsMutationVariables) => fetcher<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables)(),
+      (variables?: Types.UpdateInterestsMutationVariables) => composeDbFetch<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables)(),
       options
     );
 useUpdateInterestsMutation.getKey = () => ['UpdateInterests'];
 
-useUpdateInterestsMutation.fetcher = (variables: Types.UpdateInterestsMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables, options);
+useUpdateInterestsMutation.fetcher = (variables: Types.UpdateInterestsMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables, options);
 export const CreateFollowDocument = /*#__PURE__*/ `
-    mutation CreateFollow($i: CreateFollowInput!) {
-  createFollow(input: $i) {
+    mutation CreateFollow($i: CreateAkashaFollowInput!) {
+  createAkashaFollow(input: $i) {
     document {
       isFollowing
       profile {
@@ -1431,15 +1689,15 @@ export const useCreateFollowMutation = <
     >(options?: UseMutationOptions<Types.CreateFollowMutation, TError, Types.CreateFollowMutationVariables, TContext>) =>
     useMutation<Types.CreateFollowMutation, TError, Types.CreateFollowMutationVariables, TContext>(
       ['CreateFollow'],
-      (variables?: Types.CreateFollowMutationVariables) => fetcher<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables)(),
+      (variables?: Types.CreateFollowMutationVariables) => composeDbFetch<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables)(),
       options
     );
 useCreateFollowMutation.getKey = () => ['CreateFollow'];
 
-useCreateFollowMutation.fetcher = (variables: Types.CreateFollowMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables, options);
+useCreateFollowMutation.fetcher = (variables: Types.CreateFollowMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables, options);
 export const UpdateFollowDocument = /*#__PURE__*/ `
-    mutation UpdateFollow($i: UpdateFollowInput!) {
-  updateFollow(input: $i) {
+    mutation UpdateFollow($i: UpdateAkashaFollowInput!) {
+  updateAkashaFollow(input: $i) {
     document {
       isFollowing
       profile {
@@ -1459,12 +1717,12 @@ export const useUpdateFollowMutation = <
     >(options?: UseMutationOptions<Types.UpdateFollowMutation, TError, Types.UpdateFollowMutationVariables, TContext>) =>
     useMutation<Types.UpdateFollowMutation, TError, Types.UpdateFollowMutationVariables, TContext>(
       ['UpdateFollow'],
-      (variables?: Types.UpdateFollowMutationVariables) => fetcher<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables)(),
+      (variables?: Types.UpdateFollowMutationVariables) => composeDbFetch<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables)(),
       options
     );
 useUpdateFollowMutation.getKey = () => ['UpdateFollow'];
 
-useUpdateFollowMutation.fetcher = (variables: Types.UpdateFollowMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options);
+useUpdateFollowMutation.fetcher = (variables: Types.UpdateFollowMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options);
 export const CreateAppDocument = /*#__PURE__*/ `
     mutation CreateApp($i: CreateAkashaAppInput!) {
   createAkashaApp(input: $i) {
@@ -1482,12 +1740,12 @@ export const useCreateAppMutation = <
     >(options?: UseMutationOptions<Types.CreateAppMutation, TError, Types.CreateAppMutationVariables, TContext>) =>
     useMutation<Types.CreateAppMutation, TError, Types.CreateAppMutationVariables, TContext>(
       ['CreateApp'],
-      (variables?: Types.CreateAppMutationVariables) => fetcher<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables)(),
+      (variables?: Types.CreateAppMutationVariables) => composeDbFetch<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables)(),
       options
     );
 useCreateAppMutation.getKey = () => ['CreateApp'];
 
-useCreateAppMutation.fetcher = (variables: Types.CreateAppMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables, options);
+useCreateAppMutation.fetcher = (variables: Types.CreateAppMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables, options);
 export const UpdateAppDocument = /*#__PURE__*/ `
     mutation UpdateApp($i: UpdateAkashaAppInput!) {
   updateAkashaApp(input: $i) {
@@ -1505,19 +1763,27 @@ export const useUpdateAppMutation = <
     >(options?: UseMutationOptions<Types.UpdateAppMutation, TError, Types.UpdateAppMutationVariables, TContext>) =>
     useMutation<Types.UpdateAppMutation, TError, Types.UpdateAppMutationVariables, TContext>(
       ['UpdateApp'],
-      (variables?: Types.UpdateAppMutationVariables) => fetcher<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables)(),
+      (variables?: Types.UpdateAppMutationVariables) => composeDbFetch<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables)(),
       options
     );
 useUpdateAppMutation.getKey = () => ['UpdateApp'];
 
-useUpdateAppMutation.fetcher = (variables: Types.UpdateAppMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables, options);
+useUpdateAppMutation.fetcher = (variables: Types.UpdateAppMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateAppMutation, Types.UpdateAppMutationVariables>(UpdateAppDocument, variables, options);
 export const GetAppsDocument = /*#__PURE__*/ `
-    query GetApps($after: String, $before: String, $first: Int, $last: Int) {
-  akashaAppIndex(after: $after, before: $before, first: $first, last: $last) {
+    query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
+  akashaAppIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...AkashaAppFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -1538,7 +1804,7 @@ export const useGetAppsQuery = <
     ) =>
     useQuery<Types.GetAppsQuery, TError, TData>(
       variables === undefined ? ['GetApps'] : ['GetApps', variables],
-      fetcher<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables),
+      composeDbFetch<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables),
       options
     );
 useGetAppsQuery.document = GetAppsDocument;
@@ -1558,7 +1824,7 @@ export const useInfiniteGetAppsQuery = <
     
     return useInfiniteQuery<Types.GetAppsQuery, TError, TData>(
       variables === undefined ? ['GetApps.infinite'] : ['GetApps.infinite', variables],
-      (metaData) => fetcher<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1566,7 +1832,7 @@ export const useInfiniteGetAppsQuery = <
 useInfiniteGetAppsQuery.getKey = (variables?: Types.GetAppsQueryVariables) => variables === undefined ? ['GetApps.infinite'] : ['GetApps.infinite', variables];
 ;
 
-useGetAppsQuery.fetcher = (variables?: Types.GetAppsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options);
+useGetAppsQuery.fetcher = (variables?: Types.GetAppsQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options);
 export const GetAppsByIdDocument = /*#__PURE__*/ `
     query GetAppsByID($id: ID!) {
   node(id: $id) {
@@ -1586,7 +1852,7 @@ export const useGetAppsByIdQuery = <
     ) =>
     useQuery<Types.GetAppsByIdQuery, TError, TData>(
       ['GetAppsByID', variables],
-      fetcher<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables),
+      composeDbFetch<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables),
       options
     );
 useGetAppsByIdQuery.document = GetAppsByIdDocument;
@@ -1606,7 +1872,7 @@ export const useInfiniteGetAppsByIdQuery = <
     
     return useInfiniteQuery<Types.GetAppsByIdQuery, TError, TData>(
       ['GetAppsByID.infinite', variables],
-      (metaData) => fetcher<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1614,10 +1880,10 @@ export const useInfiniteGetAppsByIdQuery = <
 useInfiniteGetAppsByIdQuery.getKey = (variables: Types.GetAppsByIdQueryVariables) => ['GetAppsByID.infinite', variables];
 ;
 
-useGetAppsByIdQuery.fetcher = (variables: Types.GetAppsByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options);
+useGetAppsByIdQuery.fetcher = (variables: Types.GetAppsByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options);
 export const CreateAppReleaseDocument = /*#__PURE__*/ `
-    mutation CreateAppRelease($i: CreateAppReleaseInput!) {
-  createAppRelease(input: $i) {
+    mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
+  createAkashaAppRelease(input: $i) {
     document {
       ...AppReleaseFragment
     }
@@ -1633,15 +1899,15 @@ export const useCreateAppReleaseMutation = <
     >(options?: UseMutationOptions<Types.CreateAppReleaseMutation, TError, Types.CreateAppReleaseMutationVariables, TContext>) =>
     useMutation<Types.CreateAppReleaseMutation, TError, Types.CreateAppReleaseMutationVariables, TContext>(
       ['CreateAppRelease'],
-      (variables?: Types.CreateAppReleaseMutationVariables) => fetcher<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables)(),
+      (variables?: Types.CreateAppReleaseMutationVariables) => composeDbFetch<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables)(),
       options
     );
 useCreateAppReleaseMutation.getKey = () => ['CreateAppRelease'];
 
-useCreateAppReleaseMutation.fetcher = (variables: Types.CreateAppReleaseMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options);
+useCreateAppReleaseMutation.fetcher = (variables: Types.CreateAppReleaseMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options);
 export const UpdateAppReleaseDocument = /*#__PURE__*/ `
-    mutation UpdateAppRelease($i: UpdateAppReleaseInput!) {
-  updateAppRelease(input: $i) {
+    mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!) {
+  updateAkashaAppRelease(input: $i) {
     document {
       ...AppReleaseFragment
     }
@@ -1657,19 +1923,27 @@ export const useUpdateAppReleaseMutation = <
     >(options?: UseMutationOptions<Types.UpdateAppReleaseMutation, TError, Types.UpdateAppReleaseMutationVariables, TContext>) =>
     useMutation<Types.UpdateAppReleaseMutation, TError, Types.UpdateAppReleaseMutationVariables, TContext>(
       ['UpdateAppRelease'],
-      (variables?: Types.UpdateAppReleaseMutationVariables) => fetcher<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables)(),
+      (variables?: Types.UpdateAppReleaseMutationVariables) => composeDbFetch<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables)(),
       options
     );
 useUpdateAppReleaseMutation.getKey = () => ['UpdateAppRelease'];
 
-useUpdateAppReleaseMutation.fetcher = (variables: Types.UpdateAppReleaseMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options);
+useUpdateAppReleaseMutation.fetcher = (variables: Types.UpdateAppReleaseMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options);
 export const GetAppsReleasesDocument = /*#__PURE__*/ `
-    query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int) {
-  appReleaseIndex(after: $after, before: $before, first: $first, last: $last) {
+    query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
+  akashaAppReleaseIndex(
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+    filters: $filters
+    sorting: $sorting
+  ) {
     edges {
       node {
         ...AppReleaseFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -1691,7 +1965,7 @@ export const useGetAppsReleasesQuery = <
     ) =>
     useQuery<Types.GetAppsReleasesQuery, TError, TData>(
       variables === undefined ? ['GetAppsReleases'] : ['GetAppsReleases', variables],
-      fetcher<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables),
+      composeDbFetch<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables),
       options
     );
 useGetAppsReleasesQuery.document = GetAppsReleasesDocument;
@@ -1711,7 +1985,7 @@ export const useInfiniteGetAppsReleasesQuery = <
     
     return useInfiniteQuery<Types.GetAppsReleasesQuery, TError, TData>(
       variables === undefined ? ['GetAppsReleases.infinite'] : ['GetAppsReleases.infinite', variables],
-      (metaData) => fetcher<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1719,11 +1993,11 @@ export const useInfiniteGetAppsReleasesQuery = <
 useInfiniteGetAppsReleasesQuery.getKey = (variables?: Types.GetAppsReleasesQueryVariables) => variables === undefined ? ['GetAppsReleases.infinite'] : ['GetAppsReleases.infinite', variables];
 ;
 
-useGetAppsReleasesQuery.fetcher = (variables?: Types.GetAppsReleasesQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables, options);
+useGetAppsReleasesQuery.fetcher = (variables?: Types.GetAppsReleasesQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables, options);
 export const GetAppReleaseByIdDocument = /*#__PURE__*/ `
     query GetAppReleaseByID($id: ID!) {
   node(id: $id) {
-    ... on AppRelease {
+    ... on AkashaAppRelease {
       ...AppReleaseFragment
     }
   }
@@ -1740,7 +2014,7 @@ export const useGetAppReleaseByIdQuery = <
     ) =>
     useQuery<Types.GetAppReleaseByIdQuery, TError, TData>(
       ['GetAppReleaseByID', variables],
-      fetcher<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, variables),
+      composeDbFetch<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, variables),
       options
     );
 useGetAppReleaseByIdQuery.document = GetAppReleaseByIdDocument;
@@ -1760,7 +2034,7 @@ export const useInfiniteGetAppReleaseByIdQuery = <
     
     return useInfiniteQuery<Types.GetAppReleaseByIdQuery, TError, TData>(
       ['GetAppReleaseByID.infinite', variables],
-      (metaData) => fetcher<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => composeDbFetch<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
@@ -1768,4 +2042,4 @@ export const useInfiniteGetAppReleaseByIdQuery = <
 useInfiniteGetAppReleaseByIdQuery.getKey = (variables: Types.GetAppReleaseByIdQueryVariables) => ['GetAppReleaseByID.infinite', variables];
 ;
 
-useGetAppReleaseByIdQuery.fetcher = (variables: Types.GetAppReleaseByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, variables, options);
+useGetAppReleaseByIdQuery.fetcher = (variables: Types.GetAppReleaseByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetAppReleaseByIdQuery, Types.GetAppReleaseByIdQueryVariables>(GetAppReleaseByIdDocument, variables, options);

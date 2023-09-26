@@ -2,9 +2,8 @@ import * as React from 'react';
 import {
   AnalyticsEventData,
   AnalyticsEventTypes,
-  TrackEventData,
   RootComponentProps,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import { BehaviorSubject } from 'rxjs';
 
 /**
@@ -19,13 +18,19 @@ export enum CookieConsentTypes {
 
 const AnalyticsContext = React.createContext(null);
 
-export const AnalyticsProvider: React.FC<RootComponentProps> = ({ uiEvents, children }) => {
+const AnalyticsProvider = ({
+  uiEvents,
+  children,
+}: {
+  uiEvents: RootComponentProps['uiEvents'];
+  children?: React.ReactNode;
+}) => {
   return <AnalyticsContext.Provider value={uiEvents}>{children}</AnalyticsContext.Provider>;
 };
 
 export interface UseAnalyticsActions {
   /* Track a custom event */
-  trackEvent: (eventData: Omit<TrackEventData, 'eventType'>) => void;
+  trackEvent: (eventData: AnalyticsEventData['data']) => void;
 }
 
 /**
@@ -35,9 +40,9 @@ export interface UseAnalyticsActions {
  * const [analyticsActions] = useAnalytics();
  *
  * analyticsActions.trackEvent({
-      category: 'some-category',
-      action: 'some-action',
-    });
+ category: 'some-category',
+ action: 'some-action',
+ });
  * ```
  */
 const useAnalytics = (): [UseAnalyticsActions] => {
@@ -50,8 +55,8 @@ const useAnalytics = (): [UseAnalyticsActions] => {
   const actions: UseAnalyticsActions = {
     trackEvent(eventData) {
       analyticsBus.next({
-        eventType: AnalyticsEventTypes.TRACK_EVENT,
-        ...eventData,
+        event: AnalyticsEventTypes.TRACK_EVENT,
+        data: eventData,
       });
     },
   };
@@ -59,4 +64,4 @@ const useAnalytics = (): [UseAnalyticsActions] => {
   return [actions];
 };
 
-export default useAnalytics;
+export { useAnalytics, AnalyticsProvider };

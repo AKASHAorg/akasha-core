@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonValues, IModerationLogItem } from '@akashaorg/typings/ui';
-import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
+import { IModerationLogItem } from '@akashaorg/typings/lib/ui';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-// import { NoItemsFound } from '../components/error-cards';
-
 import { BasePageProps } from './dashboard';
-// import getReasonPrefix from '../utils/getReasonPrefix';
 import PaginatedTable from '../components/transparency-log/paginated-table';
+import NoFlaggedItems from '../components/transparency-log/no-flagged-items';
+
+import { generateModerationHistory } from '../utils';
 
 export type PaginatedItem = IModerationLogItem[];
 
@@ -29,8 +28,6 @@ export const contentTypeMap = {
 export const TransparencyLog: React.FC<BasePageProps> = props => {
   const { navigateTo } = props;
 
-  const [, setActiveButton] = useState<string>(ButtonValues.ALL);
-  const [selected, setSelected] = useState<IModerationLogItem | null>(null);
   const [pages, setPages] = useState<PaginatedItem[]>([]);
 
   // list filters
@@ -43,15 +40,13 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
   const decisionPlaceholderLabel = t('Decision');
   const categoryPlaceholderLabel = t('Category');
 
-  const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
+  const logItemsQuery = { data: null };
 
   useEffect(() => {
     if (logItemsQuery.data) {
       const results = logItemsQuery.data.pages[0].results;
 
       setPages([...pages, results]);
-
-      // logItemsQuery.fetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logItemsQuery.data]);
@@ -71,45 +66,6 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
       setCurPage(curPage + 1);
     }
   };
-
-  const onTabClick = (value: string) => () => {
-    setActiveButton(value);
-  };
-
-  const handleClickArrowLeft = () => {
-    setSelected(null);
-  };
-
-  const handleClickAvatar = (profileId: string) => () => {
-    if (profileId)
-      navigateTo?.({
-        appName: '@akashaorg/app-profile',
-        getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}`,
-      });
-  };
-
-  const handleCardClick = (el: IModerationLogItem) => () => {
-    selected?.contentID === el.contentID ? setSelected(null) : setSelected(el);
-  };
-
-  const buttonValues = [
-    {
-      value: ButtonValues.ALL,
-      label: t('{{ buttonValueAll }}', { buttonValueAll: ButtonValues.ALL }),
-    },
-    {
-      value: ButtonValues.KEPT,
-      label: t('{{ buttonValueKept }}', { buttonValueKept: ButtonValues.KEPT }),
-    },
-    {
-      value: ButtonValues.DELISTED,
-      label: t('{{ buttonValueDelisted }}', { buttonValueDelisted: ButtonValues.DELISTED }),
-    },
-    {
-      value: ButtonValues.STATS,
-      label: t('{{ buttonValueStats }}', { buttonValueStats: ButtonValues.STATS }),
-    },
-  ];
 
   const resetFilters = () => {
     setfilterByDecision({
@@ -132,18 +88,19 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
     });
   };
 
-  const trimmedRows =
-    pages[curPage - 1]?.map(el => [
-      dayjs(el.moderatedDate).format('DD MMM YYYY'),
-      t('{{type}}', { type: contentTypeMap[el.contentType] }),
-      el.delisted ? t('Delisted') : t('Kept'),
-      el.contentID,
-    ]) ?? [];
+  const moderationEntries = generateModerationHistory();
+
+  const trimmedRows = moderationEntries.map(el => [
+    dayjs(el.moderatedDate).format('DD MMM YYYY'),
+    t('{{type}}', { type: contentTypeMap[el.contentType] }),
+    el.delisted ? t('Delisted') : t('Kept'),
+    el.contentID,
+  ]);
 
   return (
-    <>
-      <Box customStyle="flex justify-between items-center mb-3">
-        <Box customStyle="flex items-center space-x-3">
+    <Stack spacing="gap-y-4">
+      <Stack direction="row" align="center" justify="between">
+        <Stack direction="row" align="center" spacing="gap-x-3">
           <Dropdown
             name="filterByDecision"
             placeholderLabel={decisionPlaceholderLabel}
@@ -167,32 +124,38 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
             ]}
             setSelected={setfilterByCategory}
           />
-        </Box>
+        </Stack>
 
         <Button plain={true} onClick={resetFilters}>
           <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {`${t('Reset')}`}
           </Text>
         </Button>
-      </Box>
+      </Stack>
 
-      <PaginatedTable
-        theadValues={[t('Date'), t('Category'), t('Decision'), '']}
-        rows={trimmedRows}
-        hasIcons={true}
-        clickableRows={true}
-        customStyle="mt-3 justify-end"
-        pageCount={pages.length}
-        currentPage={curPage}
-        prevButtonLabel={t('Prev')}
-        nextButtonLabel={t('Next')}
-        prevButtonDisabled={curPage === 1}
-        nextButtonDisabled={curPage === pages.length - 1}
-        onRowClick={handleRowClick}
-        onClickPage={handleClickPage}
-        onClickPrev={handleClickPrev}
-        onClickNext={handleClickNext}
-      />
-    </>
+      {trimmedRows.length && (
+        <NoFlaggedItems noflaggedItemsLabel={t('Looks like there are no flagged items yet!')} />
+      )}
+
+      {!trimmedRows.length && (
+        <PaginatedTable
+          theadValues={[t('Date'), t('Category'), t('Decision'), '']}
+          rows={trimmedRows}
+          hasIcons={true}
+          clickableRows={true}
+          customStyle="mt-3 justify-end"
+          pageCount={pages.length}
+          currentPage={curPage}
+          prevButtonLabel={t('Prev')}
+          nextButtonLabel={t('Next')}
+          prevButtonDisabled={curPage === 1}
+          nextButtonDisabled={curPage === pages.length - 1}
+          onRowClick={handleRowClick}
+          onClickPage={handleClickPage}
+          onClickPrev={handleClickPrev}
+          onClickNext={handleClickNext}
+        />
+      )}
+    </Stack>
   );
 };

@@ -1,12 +1,10 @@
 import '../jest.setup';
 
 import { genLoggedInState, genPostData, genCommentData } from '@akashaorg/af-testing';
-import * as postHooks from '@akashaorg/ui-awf-hooks/lib/use-posts';
-import * as commentHooks from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import * as loginHooks from '@akashaorg/ui-awf-hooks/lib/use-login.new';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 
-jest.mock('@akashaorg/typings/ui', () => ({
+jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     POST: 0,
     PROFILE: 1,
@@ -21,6 +19,7 @@ jest.mock('@akashaorg/typings/ui', () => ({
     ExtensionPointMount: 'extension-point-mount',
     ExtensionPointMountRequest: 'extension-point-mount-request',
     ExtensionPointUnmount: 'extension-point-unmount',
+    ExtensionPointUpdate: 'extension-point-update',
     ExtensionPointUnmountRequest: 'extension-point-unmount-request',
     ModalRequest: 'modal-mount-request',
     ModalMount: 'modal-mount',
@@ -38,20 +37,6 @@ jest.mock('@akashaorg/typings/ui', () => ({
 jest
   .spyOn(mediaHooks, 'getMediaUrl')
   .mockReturnValue({ originLink: '', fallbackLink: '', pathLink: '' });
-
-jest.spyOn(postHooks, 'usePost').mockReturnValue({
-  data: { ...genPostData() },
-  status: 'success',
-  isSuccess: true,
-  reported: true,
-});
-
-jest.spyOn(commentHooks, 'useComment').mockReturnValue({
-  data: { ...genCommentData() },
-  status: 'success',
-  isSuccess: true,
-  reported: true,
-});
 
 jest.spyOn(loginHooks, 'useGetLogin').mockReturnValue({
   data: { ...genLoggedInState(true) },

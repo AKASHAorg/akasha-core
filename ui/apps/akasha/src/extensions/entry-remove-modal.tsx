@@ -4,22 +4,17 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import {
-  useDeletePost,
-  useDeleteComment,
-  withProviders,
-  useAnalytics,
-} from '@akashaorg/ui-awf-hooks';
-import {
   RootExtensionProps,
   AnalyticsCategories,
   EntityTypes,
   EntityTypesMap,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   const { extensionData, logger, singleSpa } = props;
@@ -28,9 +23,9 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
 
   const { t } = useTranslation('app-akasha-integration');
 
-  const postDeleteQuery = useDeletePost(extensionData.itemId);
-  const commentDeleteQuery = useDeleteComment(extensionData.itemId);
-  const [analyticsActions] = useAnalytics();
+  const postDeleteQuery = undefined;
+  const commentDeleteQuery = undefined;
+  const [analyticsActions] = [undefined];
 
   const handleModalClose = useCallback(() => {
     setShowModal(false);
@@ -40,13 +35,13 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   // extensionData.itemType comes as a string from navigateToModal this can lead to bugs
   const handleDelete = useCallback(() => {
     if (!!extensionData && extensionData.itemType !== undefined) {
-      if (extensionData.itemType === EntityTypes.REPLY) {
+      if (extensionData.itemType === EntityTypes.REFLECT) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.itemId);
-      } else if (extensionData.itemType === EntityTypes.POST) {
+      } else if (extensionData.itemType === EntityTypes.BEAM) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
@@ -63,7 +58,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = useMemo(() => {
-    if (extensionData.itemType === EntityTypes.POST) {
+    if (extensionData.itemType === EntityTypes.BEAM) {
       return t('post');
     }
     return t('reply');

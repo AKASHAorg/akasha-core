@@ -1,6 +1,17 @@
 import '../jest.setup';
+import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
+import * as reactUse from 'react-use';
+import ResizeObserver from 'resize-observer-polyfill';
 
-jest.mock('@akashaorg/typings/ui', () => ({
+global.ResizeObserver = ResizeObserver;
+
+jest
+  .spyOn(mediaHooks, 'getProfileImageVersionsWithMediaUrl')
+  .mockReturnValue({ defaults: { height: 0, width: 0, src: '' } });
+
+jest.spyOn(reactUse, 'useMedia').mockReturnValue(true);
+
+jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     PROFILE: 1,
   },
@@ -18,6 +29,7 @@ jest.mock('@akashaorg/typings/ui', () => ({
     ExtensionPointMount: 'extension-point-mount',
     ExtensionPointMountRequest: 'extension-point-mount-request',
     ExtensionPointUnmount: 'extension-point-unmount',
+    ExtensionPointUpdate: 'extension-point-update',
     ExtensionPointUnmountRequest: 'extension-point-unmount-request',
     ModalRequest: 'modal-mount-request',
     ModalMount: 'modal-mount',

@@ -1,4 +1,4 @@
-import { Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/ui';
+import { Moderator, ModeratorApplicantData, Profile } from '@akashaorg/typings/lib/ui';
 
 const randomDateBetweenValues = (start = 'Jan 01 2020', end = 'Dec 31 2022') => {
   const timeStart = new Date(start).getTime();
@@ -119,6 +119,34 @@ export const generateApplicationsHistory = () => {
       reviewDate: randomDateBetweenValues(),
       name: name,
       approved: idx % 2 === 0,
+    };
+  });
+
+  return logItems;
+};
+
+const moderationHistoryItems = [
+  'post',
+  'reply',
+  'reply',
+  'account',
+  'reply',
+  'post',
+  'post',
+  'reply',
+  'account',
+];
+
+export const generateModerationHistory = () => {
+  const logItems = moderationHistoryItems.map((type, idx) => {
+    const id = (Math.random() + 1).toString(36).substring(2);
+
+    return {
+      id: `${idx + 1}`,
+      contentID: id,
+      moderatedDate: randomDateBetweenValues(),
+      contentType: type,
+      delisted: idx % 2 === 0,
     };
   });
 

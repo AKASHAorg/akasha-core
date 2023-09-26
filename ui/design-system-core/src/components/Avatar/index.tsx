@@ -1,12 +1,16 @@
 import React from 'react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
-import Box from '../Box';
+import Anchor from '../Anchor';
+import Stack from '../Stack';
 
 import AvatarImage from './avatar-image';
-
-import { getAvatarFromSeed } from '../../utils/get-avatar-from-seed';
+import {
+  generateActiveOverlayClass,
+  generateAvatarContainerStyle,
+  getImageFromSeed,
+} from '../../utils';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
@@ -26,32 +30,9 @@ export type AvatarProps = {
   faded?: boolean;
   active?: boolean;
   isClickable?: boolean;
+  href?: string;
   customStyle?: string;
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
-};
-
-export const avatarSizesMap = {
-  xs: 'w-6 h-6',
-  sm: 'w-8 h-8',
-  md: 'w-10 h-10',
-  lg: 'w-16 h-16',
-  xl: 'w-20 h-20',
-  xxl: 'w-[7.5rem] h-[7.5rem]',
-};
-
-export const avatarBorderSizesMap = {
-  xs: '1',
-  sm: '2',
-  md: '4',
-  lg: '8',
-  xl: '[12px]',
-  xxl: '[16px]',
-};
-
-export const avatarBorderColorsMap = {
-  white: 'white',
-  darkerBlue: 'grey2',
-  accent: 'secondaryDark',
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 const Avatar: React.FC<AvatarProps> = props => {
@@ -67,6 +48,7 @@ const Avatar: React.FC<AvatarProps> = props => {
     faded,
     active,
     isClickable = false,
+    href,
     customStyle = '',
     onClick,
   } = props;
@@ -74,37 +56,39 @@ const Avatar: React.FC<AvatarProps> = props => {
   let avatarImageFallback: string;
 
   if (!avatarImageFallback) {
-    const seed = getAvatarFromSeed(profileId);
-    avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
+    const seed = getImageFromSeed(profileId, 7);
+    avatarImageFallback = `${publicImgPath}/avatar-${seed}-min.webp`;
   }
 
-  const containerStyle = `box-border cursor-${
-    isClickable ? 'pointer' : 'default'
-  } select-none relative overflow-hidden ${avatarSizesMap[size]} rounded-full bg-${
-    backgroundColor ? backgroundColor : 'white'
-  } border-${border ? avatarBorderSizesMap[border] : '0'} border-${
-    borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'
-  } ${customStyle}`;
+  const containerStyle = generateAvatarContainerStyle({
+    size,
+    border,
+    borderColor,
+    customStyle,
+    isClickable,
+    backgroundColor,
+  });
 
-  const activeOverlayClass =
-    'bg-grey6 dark:bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';
+  const activeOverlayClass = generateActiveOverlayClass();
 
   return (
-    <Box customStyle={containerStyle} onClick={onClick}>
-      {/* updating this logic, so that avatarImage loads with fallbackUrl even when avatar is null */}
-      {(avatar || avatarImageFallback) && (
-        <React.Suspense fallback={<></>}>
-          <AvatarImage
-            url={avatar?.default?.src}
-            alt={alt}
-            fallbackUrl={avatarImageFallback}
-            faded={faded}
-          />
-        </React.Suspense>
-      )}
+    <Anchor href={href} onClick={onClick} tabIndex={-6}>
+      <Stack customStyle={containerStyle}>
+        {/* updating this logic, so that avatarImage loads with fallbackUrl even when avatar is null */}
+        {(avatar || avatarImageFallback) && (
+          <React.Suspense fallback={<></>}>
+            <AvatarImage
+              url={avatar?.default?.src}
+              alt={alt}
+              fallbackUrl={avatarImageFallback}
+              faded={faded}
+            />
+          </React.Suspense>
+        )}
 
-      {active && <Box customStyle={activeOverlayClass} />}
-    </Box>
+        {active && <Stack customStyle={activeOverlayClass} />}
+      </Stack>
+    </Anchor>
   );
 };
 

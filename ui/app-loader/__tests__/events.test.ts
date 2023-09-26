@@ -1,5 +1,5 @@
-import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/sdk';
-import { EventTypes } from '@akashaorg/typings/ui';
+import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { EventTypes } from '@akashaorg/typings/lib/ui';
 import { map, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { getGlobalChannelEvents, getUiEvents, spaEvents$, uiEvents } from '../src/events';
@@ -30,11 +30,19 @@ describe('[AppLoader]: events', () => {
           event: EventTypes.ExtensionPointUnmount,
           data: { name: 'TestExtension2' },
         },
+        c: {
+          event: EventTypes.ExtensionPointUpdate,
+          data: { name: 'TestExtension2', prop: 'new-prop' },
+        },
       };
       const expectedMarble = 'ab';
       const expectedValues = {
         a: { data: { name: 'TestExtension1' }, event: EventTypes.ExtensionPointMount },
         b: { data: { name: 'TestExtension2' }, event: EventTypes.ExtensionPointUnmount },
+        c: {
+          event: EventTypes.ExtensionPointUpdate,
+          data: { name: 'TestExtension2', prop: 'new-prop' },
+        },
       };
 
       const uiEventsInput$ = cold(eventsMarble, uiEventValues).pipe(

@@ -1,18 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import routes, { ONBOARDING_STEP_ONE } from '../routes';
 
-export type DevDashOnboardingIntroProps = RootComponentProps & {
+export type DevDashOnboardingIntroProps = {
   publicImgPath?: string;
   assetName?: string;
   assetExtension?: string;
@@ -25,19 +24,19 @@ export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = pro
     assetName = 'dev-dashboard-intro',
     assetExtension = 'webp',
     publicImgPath = '/images',
-    baseRouteName,
-    plugins,
   } = props;
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const loginQuery = useGetLogin();
+  const { isLoggedIn } = useLoggedIn();
 
   const handleOnboardingCTAClick = () => {
     // if logged in, navigate to step 1
-    if (loginQuery.data?.id) {
+    if (isLoggedIn) {
       return navigateTo?.({
         appName: '@akashaorg/app-dev-dashboard',
         getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
@@ -58,15 +57,15 @@ export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = pro
   };
 
   return (
-    <BasicCardBox>
-      <Box customStyle="flex flex-col items-center w-full p-2">
+    <Card>
+      <Stack fullWidth={true} align="center" customStyle="p-2">
         <Text variant="h5" align="center" weight="bold">
           {t('Developer Dashboard')}
         </Text>
 
-        <Box customStyle="w-[17.5rem] h-[17.5rem] my-6">
+        <Stack customStyle="w-[17.5rem] h-[17.5rem] my-6">
           <Image src={`${publicImgPath}/${assetName}.${assetExtension}`} />
-        </Box>
+        </Stack>
 
         <Text variant="h5" align="center" weight="bold" customStyle="mt-2">
           {t('✨ Your journey begins here ✨')}
@@ -85,7 +84,7 @@ export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = pro
           label={t('Unleash your creativity')}
           onClick={handleOnboardingCTAClick}
         />
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };

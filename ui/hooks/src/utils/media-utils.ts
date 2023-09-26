@@ -1,7 +1,7 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { UserProfileFragmentDataFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import { logError } from './error-handler';
-import { ProfileImageVersions } from '@akashaorg/typings/sdk/graphql-types-new';
+import type { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export const MEDIA_UPLOAD_EMAIL = '@mediaUploadEmail';
 
@@ -125,7 +125,7 @@ export const getLinkPreview = async (url: string) => {
   const sdk = getSDK();
   const imageSources = { url: '', fallbackUrl: '' };
   const faviconSources = { url: '', fallbackUrl: '' };
-  const linkPreviewResp = await sdk.api.entries.getLinkPreview(url);
+  const linkPreviewResp = { getLinkPreview: undefined };
   const linkPreview = Object.assign({}, linkPreviewResp.getLinkPreview);
 
   // fetch media links for image and favicon sources
@@ -187,8 +187,8 @@ export const saveMediaFile = async ({ name, content, isUrl, email }: ISaveMediaF
  * Utility to get profile image versions with media url
  */
 export const getProfileImageVersionsWithMediaUrl = (
-  image?: ProfileImageVersions,
-): ProfileImageVersions => {
+  image?: AkashaProfileImageVersions,
+): AkashaProfileImageVersions => {
   if (!image) return null;
 
   const mediaUrl = getMediaUrl(image.default.src);

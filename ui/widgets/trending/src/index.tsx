@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typings/ui';
+import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typings/lib/ui';
 
 /**
  * All widgets must export a register function:

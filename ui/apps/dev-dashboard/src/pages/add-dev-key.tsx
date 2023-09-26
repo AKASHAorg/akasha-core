@@ -1,32 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useValidateMessage, useAddDevKeyFromMessage, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { GenerateMessage, KeyConfirmation } from '../components/onboarding';
 
 import menuRoute, { DEV_KEYS } from '../routes';
 
-export const AddDevKey: React.FC<RootComponentProps> = props => {
-  const { plugins } = props;
-
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
-
+export const AddDevKey: React.FC<unknown> = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');
 
-  const loginQuery = useGetLogin();
+  const { loggedInProfileId } = useLoggedIn();
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const validateMutation = useValidateMessage();
-  const addKeyMutation = useAddDevKeyFromMessage();
+  const { getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
+
+  const validateMutation = { isSuccess: false, data: null, isError: false, error: null };
+
+  // @TODO: needs update
+  const addKeyMutation = {
+    isSuccess: false,
+    data: null,
+    isError: false,
+    error: null,
+    mutate: _args => _args,
+  };
 
   useEffect(() => {
     // add key after validating
-    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loginQuery.data?.id) {
+    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loggedInProfileId) {
       addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

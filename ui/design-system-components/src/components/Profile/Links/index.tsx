@@ -1,27 +1,29 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import { getIconFromLink } from '../../../utils/get-icon-from-link';
-import { Link } from '../../types/common.types';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface LinksProps {
+import { getIconFromLink } from '../../../utils/get-icon-from-link';
+import { AkashaProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+
+export type LinksProps = {
   title: string;
-  links: Link[];
+  links: AkashaProfileLinkSource[];
   copyLabel?: string;
   copiedLabel?: string;
-}
+};
 
 const Links: React.FC<LinksProps> = ({ title, links }) => {
   return (
-    <Card elevation="1" radius={20} padding={16}>
+    <Card elevation="1" radius={20} padding={'p-4'}>
       <Stack direction="column" spacing="gap-y-2.5">
         <Text variant="label">{title}</Text>
         {links.map((link, index) => (
           <CopyToClipboard key={`${link.href}${index}`} value={link.href}>
-            <Stack align="center" spacing="gap-x-2">
+            <Stack direction="row" align="center" spacing="gap-x-2">
               <AppIcon placeholderIconType={getIconFromLink(link.href)} size="xs" accentColor />
               <Text
                 variant="body2"

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
-import { RootExtensionProps, EntityTypes } from '@akashaorg/typings/ui';
+import { RootExtensionProps, EntityTypes } from '@akashaorg/typings/lib/ui';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -19,24 +19,24 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
     if (props.extensionData && props.extensionData.hasOwnProperty('itemId')) {
       props.singleSpa.navigateToUrl(
         `${window.location.origin}/@akashaorg/app-akasha-integration/${
-          props.extensionData?.itemType === EntityTypes.POST ? 'post' : 'reply'
+          props.extensionData?.itemType === EntityTypes.BEAM ? 'post' : 'reply'
         }/${props.extensionData.itemId}?action=edit`,
       );
     }
   };
 
   const itemTypeLabel = React.useMemo(() => {
-    if (props.extensionData.itemType === EntityTypes.REPLY) {
+    if (props.extensionData.itemType === EntityTypes.REFLECT) {
       return t('reply');
     }
-    if (props.extensionData.itemType === EntityTypes.POST) {
-      return t('post');
+    if (props.extensionData.itemType === EntityTypes.BEAM) {
+      return t('beam');
     }
   }, [props.extensionData.itemType, t]);
 
   return (
     <Button plain={true} onClick={handleClick}>
-      <Stack align="center" spacing="gap-x-3" customStyle="py-2 px-4">
+      <Stack direction="row" align="center" spacing="gap-x-3" customStyle="py-2 px-4">
         <Icon type="PencilIcon" size="sm" />
 
         <Text variant="body1">{t('Edit {{ itemTypeLabel }}', { itemTypeLabel })}</Text>

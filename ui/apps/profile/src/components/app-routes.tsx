@@ -1,43 +1,72 @@
-import React, { useState } from 'react';
-import menuRoute, { EDIT, FOLLOWERS, FOLLOWING } from '../routes';
-import EditProfilePage from './pages/edit-profile';
-import ProfileInfoPage from './pages/profile-info-page';
-import ProfileEngagementsPage from './pages/profile-engagement';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { useShowFeedback, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useTranslation } from 'react-i18next';
+import withProfileHeader from './profile-header-hoc';
+import InterestsPage from './pages/interests';
+import EditProfilePage from './pages/edit-profile';
+import FollowingPage from './pages/profile-engagement/following-page';
+import FollowersPage from './pages/profile-engagement/followers-page';
+import ProfileInfoPage from './pages/profile-info';
 
-const AppRoutes: React.FC<RootComponentProps> = props => {
+import menuRoute, { EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
+
+const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
+  const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
 
-  const [showFeedback, setShowFeedback] = useState(false);
+  const [showFeedback, setShowFeedback] = useShowFeedback(false);
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const handleFeedback = () => {
     setShowFeedback(true);
-    setTimeout(() => {
-      setShowFeedback(false);
-    }, 5000);
+  };
+
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    navigateToModal({ name: 'login', redirectTo });
+  };
+
+  const commonHeaderViewProps = {
+    handleFeedback,
+    navigateTo,
+    navigateToModal: navigateToModal,
+    showLoginModal,
   };
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="mb-8">
-      <Router basename={props.baseRouteName}>
+      <Router basename={baseRouteName}>
         <Routes>
           <Route path="/">
-            <Route path={':profileId'} element={<ProfileInfoPage {...props} />} />
+            <Route
+              path={':profileId'}
+              element={withProfileHeader(<ProfileInfoPage showLoginModal={showLoginModal} />)(
+                commonHeaderViewProps,
+              )}
+            />
             <Route
               path={`:profileId${menuRoute[FOLLOWERS]}`}
-              element={<ProfileEngagementsPage {...props} engagementType={'followers'} />}
+              element={withProfileHeader(<FollowersPage />)(commonHeaderViewProps)}
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWING]}`}
-              element={<ProfileEngagementsPage {...props} engagementType={'following'} />}
+              element={withProfileHeader(<FollowingPage />)(commonHeaderViewProps)}
             />
             <Route
+              path={`:profileId${menuRoute[INTERESTS]}`}
+              element={withProfileHeader(<InterestsPage />)(commonHeaderViewProps)}
+            />
+            <Route path={`:profileId${menuRoute[FOLLOWERS]}`} element={<FollowersPage />} />
+            <Route path={`:profileId${menuRoute[FOLLOWING]}`} element={<FollowingPage />} />
+            <Route path={`:profileId${menuRoute[INTERESTS]}`} element={<InterestsPage />} />
+            <Route
               path={`:profileId${menuRoute[EDIT]}`}
-              element={<EditProfilePage handleFeedback={handleFeedback} {...props} />}
+              element={<EditProfilePage handleFeedback={handleFeedback} />}
             />
           </Route>
         </Routes>
@@ -56,4 +85,5 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     </Stack>
   );
 };
+
 export default AppRoutes;

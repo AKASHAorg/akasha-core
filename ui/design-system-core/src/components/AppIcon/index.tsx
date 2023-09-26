@@ -1,21 +1,19 @@
 import * as React from 'react';
-import Stack from '../Stack';
-import IconByType from './IconByType';
-import { IconType, LogoSourceType } from '@akashaorg/typings/ui';
 import { apply, tw } from '@twind/core';
+
+import { IconType, LogoSourceType } from '@akashaorg/typings/lib/ui';
+
+import Stack from '../Stack';
+
+import IconByType from './icon-by-type';
+import { BasicIconSize, BasicSize, BreakPointSize, Color, Radius } from '../types/common.types';
 import {
-  BasicIconSize,
-  BasicSize,
-  BreakPointSize,
-  Color,
-  Padding,
-  Radius,
-} from '../types/common.types';
-import { getElevationClasses } from '../../utils/getElevationClasses';
-import { getColorClasses } from '../../utils/getColorClasses';
-import { getRadiusClasses } from '../../utils/getRadiusClasses';
-import { getWidthClasses } from '../../utils/getWidthClasses';
-import { getHeightClasses } from '../../utils/getHeightClasses';
+  getWidthClasses,
+  getHeightClasses,
+  getElevationClasses,
+  getRadiusClasses,
+  getColorClasses,
+} from '../../utils';
 
 export type AppIconProps = {
   appImg?: LogoSourceType;

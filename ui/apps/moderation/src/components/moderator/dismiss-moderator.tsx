@@ -1,7 +1,7 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -34,7 +34,7 @@ const DismissModerator: React.FC<DismissModeratorProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox pad="p-4 space-y-3">
+    <Card padding={16} customStyle="space-y-3">
       <Text variant="h6">{titleLabel}</Text>
 
       <TextField placeholder={placeholderLabel} type="multiline" />
@@ -62,7 +62,7 @@ const DismissModerator: React.FC<DismissModeratorProps> = props => {
         </Button>
       </Text>
 
-      <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
+      <Stack align="center" justify="end" spacing="gap-x-6" customStyle="p-4 my-2">
         <Button plain={true} onClick={onCancelButtonClick}>
           <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {cancelButtonLabel}
@@ -75,8 +75,8 @@ const DismissModerator: React.FC<DismissModeratorProps> = props => {
           label={confirmButtonLabel}
           onClick={onConfirmButtonClick}
         />
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };
 

@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { IArticleData } from '@akashaorg/typings/ui';
+import { IArticleData } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
@@ -61,9 +61,9 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
   const isCollaborator = articleData.collaborators?.find(el => el.did?.id === loggedProfileId);
 
   return (
-    <BasicCardBox customStyle="p-4 gap-4">
-      <Box customStyle="flex flex-row justify-between">
-        <Box customStyle="flex flex-row gap-0.5 items-center">
+    <Card customStyle="p-4 gap-4">
+      <Stack direction="row" justify="between">
+        <Stack direction="row" spacing="gap-0.5" align="center">
           <Avatar
             avatar={articleData.authorAvatar}
             profileId={articleData.authorProfileId}
@@ -82,81 +82,86 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
           {articleData.isDraft && (
             <Text variant="subtitle2">{`· ${lastUpdatedLabel} ${articleData.lastUpdateDate}`}</Text>
           )}
-        </Box>
-        <Box customStyle="flex-flex-row gap-2 items-center">
+        </Stack>
+        <Stack direction="row" spacing="gap-2" align="center">
           {articleData.isDraft && (
-            <Box customStyle="rounded-lg px-1 py-px bg(grey4 dark:grey7)">
+            <Stack customStyle="rounded-lg px-1 py-px bg(grey4 dark:grey7)">
               <Text color="white">{draftLabel}</Text>
-            </Box>
+            </Stack>
           )}
           <Icon type="akasha" />
           <button onClick={ev => toggleMenuDrop(ev, articleData.id)}>
             <Icon type="EllipsisVerticalIcon" />
           </button>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
       <button onClick={() => onClickArticle(articleData.id)}>
-        <Box customStyle="flex flex-row justify-between items-center">
-          <Box customStyle="gap-2">
+        <Stack
+          direction="row"
+          align="center"
+          justify="between"
+          customStyle="flex flex-row justify-between items-center"
+        >
+          <Stack spacing="gap-2">
             <Text variant="h2">{articleData.title}</Text>
             <Text variant="h6">{articleData.subtitle}</Text>
-          </Box>
-          <Box>
-            <Box customStyle="h-[5.1875rem] w-[17.25rem] self-center">
+          </Stack>
+          <Stack>
+            <Stack customStyle="h-[5.1875rem] w-[17.25rem] self-center">
               <Image customStyle="object-contain" src={articleData.image} />
-            </Box>
-          </Box>
-        </Box>
+            </Stack>
+          </Stack>
+        </Stack>
       </button>
       {articleData.isPublished && (
         <>
-          <Box customStyle="flex flex-row flex-wrap gap-1">
+          <Stack direction="row" spacing="gap-1" customStyle="flex-wrap">
             {articleData.topics.map((tag, idx) => (
               <button key={idx} onClick={() => onTagClick(tag)}>
-                <Box customStyle="flex flex-row rounded-lg gap-0.5 mb-2 px-1 py-0.5 border(secondaryLight dark:secondaryDark)">
+                <Stack customStyle="flex flex-row rounded-lg gap-0.5 mb-2 px-1 py-0.5 border(secondaryLight dark:secondaryDark)">
                   <Text color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>{tag}</Text>
-                </Box>
+                </Stack>
               </button>
             ))}
-          </Box>
+          </Stack>
 
-          <Box customStyle="flex flex-row justify-between items-center">
+          <Stack direction="row" align="center" justify="between">
             <button onClick={onMentionsClick}>
-              <Box customStyle="flex flex-row gap-1">
+              <Stack direction="row" spacing="gap-1">
                 <Icon type="AtSymbolIcon" />
                 <Text variant="h6">{articleData.mentions}</Text>
                 <Text variant="h6">{mentionsLabel}</Text>
-              </Box>
+              </Stack>
             </button>
             <button onClick={onRepliesClick}>
-              <Box customStyle="flex flex-row gap-1">
+              <Stack direction="row" spacing="gap-1">
                 <Icon type="ArrowPathIcon" />
                 <Text variant="h6">{articleData.replies}</Text>
                 <Text variant="h6">{repliesLabel}</Text>
-              </Box>
+              </Stack>
             </button>
             <button onClick={onSaveClick}>
-              <Box customStyle="flex flex-row gap-1" onClick={onSaveClick}>
-                <Icon type="bookmark" />
+              <Stack direction="row" spacing="gap-1">
+                <Icon type="BookmarkIcon" />
                 <Text variant="h6">{isSaved ? savedLabel : saveLabel}</Text>
-              </Box>
+              </Stack>
             </button>
-          </Box>
+          </Stack>
         </>
       )}
       {activeTabIndex === 1 && articleData.collaborators?.length > 0 && (
-        <Box customStyle="flex flex-row gap-2 items-center">
+        <Stack direction="row" spacing="gap-2" align="center">
           <StackedAvatar size="md" userData={articleData.collaborators} maxAvatars={4} />
           <Text variant="subtitle2">{collaboratingLabel}</Text>
-        </Box>
+        </Stack>
       )}
       {activeTabIndex === 2 && isCollaborator && (
-        <Box customStyle="flex flex-row gap-2 items-center">
+        <Stack direction="row" spacing="gap-2" align="center">
           <Avatar size="md" profileId={loggedProfileId} />
           <Text variant="subtitle2">{collaboratingLabel}</Text>
-        </Box>
+        </Stack>
       )}
-    </BasicCardBox>
+    </Card>
   );
 };
 

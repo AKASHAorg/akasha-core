@@ -1,31 +1,22 @@
 import * as React from 'react';
 import PostPage from '../item-page/post-page';
 import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
-import * as commentHooks from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
-import {
-  screen,
-  renderWithAllProviders,
-  act,
-  genAppProps,
-  genLoggedInState,
-} from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import { when } from 'jest-when';
-import { EntityTypes } from '@akashaorg/typings/ui';
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 const partialArgs = (...argsToMatch) =>
   when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
 
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
-    {...genAppProps()}
     extensionData={{
       name: 'name',
       itemId: '01gf',
-      itemType: EntityTypes.POST,
+      itemType: EntityTypes.BEAM,
       action,
     }}
   />
@@ -34,29 +25,17 @@ const MockedInlineEditor = ({ action }) => (
 describe('< PostPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <PostPage {...genAppProps()} showLoginModal={jest.fn()} />
+      <PostPage showLoginModal={jest.fn()} />
     </AnalyticsProvider>
   );
 
   beforeAll(() => {
-    (
-      jest.spyOn(profileHooks, 'useGetProfile') as unknown as jest.SpyInstance<{
-        data: Record<string, unknown>;
-        status: string;
-      }>
-    ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
-
-    (
-      jest.spyOn(commentHooks, 'useInfiniteComments') as unknown as jest.SpyInstance<{
-        data: { pages: [{ results: string[] }] };
-      }>
-    ).mockReturnValue({ data: { pages: [{ results: ['oxaa'] }] } });
-
-    (
-      jest.spyOn(commentHooks, 'useInfiniteReplies') as unknown as jest.SpyInstance<{
-        data: { pages: [{ results: string[]; total?: number }] };
-      }>
-    ).mockReturnValue({ data: { pages: [{ results: ['oxrr', 'oxgg', 'oxrrt'], total: 3 }] } });
+    // (
+    //   jest.spyOn(profileHooks, 'useGetProfile') as unknown as jest.SpyInstance<{
+    //     data: Record<string, unknown>;
+    //     status: string;
+    //   }>
+    // ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
   });
 
   // @TODO fix after replacing hooks

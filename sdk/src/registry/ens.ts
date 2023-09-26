@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { Ens, EnsSchema, EthAddress, EthAddressSchema, TYPES } from '@akashaorg/typings/sdk';
+import { Ens, EnsSchema, EthAddress, EthAddressSchema, TYPES } from '@akashaorg/typings/lib/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
@@ -157,15 +157,17 @@ class AWF_ENS {
     //   return createFormattedValue(true);
     // }
     // const result = await this._ENSinstance.isAvailable(name);
-    const validatedName = validateName(name);
-    const auth = await this._auth.authenticateMutationData({ userName: validatedName });
-    return this._gql.getAPI().IsUserNameAvailable(
-      { userName: validatedName },
-      {
-        Authorization: `Bearer ${auth.token}`,
-        Signature: auth.signedData.signature.toString(),
-      },
-    );
+    // const validatedName = validateName(name);
+    // const auth = await this._auth.authenticateMutationData({ userName: validatedName });
+    // return this._gql.getAPI().IsUserNameAvailable(
+    //   { userName: validatedName },
+    //   {
+    //     Authorization: `Bearer ${auth.token}`,
+    //     Signature: auth.signedData.signature.toString(),
+    //   },
+    // );
+
+    return false;
   }
 
   /**

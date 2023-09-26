@@ -1,7 +1,9 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import CustomizeNotificationPage from './pages/customize-notification-page';
 import NotificationsPage from './pages/notifications-page';
 import WelcomePage from './pages/welcome-page';
@@ -14,11 +16,14 @@ import routes, {
   SETTINGS_PAGE,
 } from '../routes';
 
-const AppRoutes = (props: RootComponentProps) => {
+const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-notifications');
+  const { baseRouteName } = useRootComponentProps();
+
+  const { isLoggedIn } = useLoggedIn();
 
   return (
-    <Router basename={props.baseRouteName}>
+    <Router basename={baseRouteName}>
       <Routes>
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE]}
@@ -28,15 +33,16 @@ const AppRoutes = (props: RootComponentProps) => {
               description={t(
                 'Get the latest updates about what’s going on with your world. You can personalize your notifications and get only what you want to see!',
               )}
+              image="/images/notificationapp-welcome-min.webp"
               leftButtonLabel={t('Skip')}
               rightButtonLabel={t('Customize your notifications')}
-              {...props}
+              isLoggedIn={isLoggedIn}
             />
           }
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]}
-          element={<CustomizeNotificationPage {...props} initial={true} />}
+          element={<CustomizeNotificationPage initial={true} isLoggedIn={isLoggedIn} />}
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]}
@@ -46,16 +52,17 @@ const AppRoutes = (props: RootComponentProps) => {
               description={t(
                 'You will receive notifications based on your choices now! You can always change that or even pause it from the notifications settings!',
               )}
+              image={'/images/notificationapp-success-min.webp'}
               finalStep={true}
               rightButtonLabel={t('Go to my notifications')}
-              {...props}
+              isLoggedIn={isLoggedIn}
             />
           }
         />
-        <Route path={routes[SHOW_NOTIFICATIONS_PAGE]} element={<NotificationsPage {...props} />} />
+        <Route path={routes[SHOW_NOTIFICATIONS_PAGE]} element={<NotificationsPage />} />
         <Route
           path={routes[SETTINGS_PAGE]}
-          element={<CustomizeNotificationPage {...props} initial={false} />}
+          element={<CustomizeNotificationPage initial={false} isLoggedIn={isLoggedIn} />}
         />
       </Routes>
     </Router>

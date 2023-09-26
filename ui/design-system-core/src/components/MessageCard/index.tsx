@@ -1,13 +1,15 @@
 import React from 'react';
-import Card from '../Card';
-import Text, { TextProps } from '../Text';
-import Stack from '../Stack';
-import Icon, { IconProps } from '../Icon';
-import Button from '../Button';
-import { Color, Elevation } from '../types/common.types';
-import { getColorClasses } from '../../utils/getColorClasses';
 
-type MessageCardProps = {
+import Button from '../Button';
+import Card from '../Card';
+import Icon, { IconProps } from '../Icon';
+import Stack from '../Stack';
+import Text, { TextProps } from '../Text';
+
+import { Color, Elevation } from '../types/common.types';
+import { getColorClasses } from '../../utils';
+
+export type MessageCardProps = {
   title: string;
   message: string;
   titleVariant?: TextProps['variant'];
@@ -39,12 +41,12 @@ const MessageCard: React.FC<MessageCardProps> = ({
       elevation={elevation}
       background={background}
       radius={20}
-      padding={16}
+      padding={'p-4'}
       testId={testId}
       customStyle={`${borderStyle} ${customStyle}`}
     >
       <Stack direction="column" spacing="gap-y-2">
-        <Stack justify="between">
+        <Stack direction="row" justify="between">
           <Stack align="center" justify="center" spacing="gap-x-1" fullWidth>
             {titleIconType && <Icon type={titleIconType} size="sm" />}
             <Text variant={titleVariant} align="center">

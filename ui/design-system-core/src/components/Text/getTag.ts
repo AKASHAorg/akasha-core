@@ -17,7 +17,5 @@ function isButtonText(variant: Variant): variant is ButtonText {
 export function getTag(variant: Variant) {
   if (isHeading(variant)) return variant;
 
-  if (isBodyText(variant)) return 'p';
-
-  if (isButtonText(variant)) return 'span';
+  if (isBodyText(variant) || isButtonText(variant)) return 'p';
 }

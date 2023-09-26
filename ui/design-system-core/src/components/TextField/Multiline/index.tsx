@@ -11,16 +11,21 @@ import { getRadiusClasses } from '../../../utils/getRadiusClasses';
 const MAX_LENGTH = 280;
 
 export const Multiline: React.FC<MultlineProps> = forwardRef(
-  ({ status, disabled, radius, ...rest }, ref) => {
+  ({ id, status, disabled, radius, ...rest }, ref) => {
     const [letterCount, setLetterCount] = useState(rest.value?.toString().length);
     const containerStyle = getContainerClasses(disabled, status);
     const textAreaStyle = getInputClasses(disabled, status);
     const radiusStyle = getRadiusClasses(radius);
 
     return (
-      <Stack customStyle={`${containerStyle} ${radiusStyle} py-2.5`} spacing="gap-x-2">
+      <Stack
+        direction="row"
+        customStyle={`${containerStyle} ${radiusStyle} py-2.5`}
+        spacing="gap-x-2"
+      >
         <textarea
           {...rest}
+          aria-labelledby={id}
           className={tw(`resize-none w-full ${textAreaStyle}`)}
           maxLength={MAX_LENGTH}
           ref={ref}

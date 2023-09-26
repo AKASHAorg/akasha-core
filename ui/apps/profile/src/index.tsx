@@ -4,7 +4,7 @@ import {
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   LogoTypeSource,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 import routes, { EDIT, FOLLOWERS, FOLLOWING } from './routes';
 /**
@@ -30,8 +30,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   extends: (matcher, loader) => {
     matcher({
       login: loader(() => import('./extensions/login-modal')),
-      'profile-share': loader(() => import('./extensions/share-profile-modal')),
-      'follow-profile_*': loader(() => import('./extensions/follow-profile')),
+      'follow_*': loader(() => import('./extensions/follow-profile-button')),
     });
   },
   routes: {

@@ -1,30 +1,23 @@
-import React, { useState } from 'react';
-import { tw } from '@twind/core';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
-import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useMarkAsRead, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import NotificationsCard from '@akashaorg/design-system-components/lib/components/NotificationsCard';
-import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
+import { EntityTypes, EventTypes } from '@akashaorg/typings/lib/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
 
-interface Notification {
+export type Notification = {
   id: string;
+  [key: string]: unknown;
+};
 
-  [key: string]: any;
-}
-
-const NotificationsPage: React.FC<RootComponentProps> = props => {
-  const [searchParams] = useSearchParams();
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState('');
+const NotificationsPage: React.FC<unknown> = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
 
@@ -34,7 +27,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     savedPreferences = JSON.parse(localStorage.getItem('notification-preference'));
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     /* @TODO:  uncomment this part when backend data becomes available */
     // redirect to sign in page if not logged in
     // if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
@@ -46,32 +39,14 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //find if any message is passed in the url params and display it
-  React.useEffect(() => {
-    if (searchParams.get('message')) {
-      setMessage(searchParams.get('message'));
-      setMessageType(searchParams.get('type'));
-
-      setShowFeedback(true);
-    }
-  }, [searchParams]);
-
-  const [showFeedback, setShowFeedback] = React.useState(false);
-
-  if (showFeedback) {
-    setTimeout(() => {
-      setShowFeedback(false);
-      setMessage('');
-    }, 6000);
-  }
-
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
   const { t } = useTranslation('app-notifications');
+  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
 
-  const loginQuery = useGetLogin();
+  const navigateTo = getRoutingPlugin().navigateTo;
 
-  const notifReq = useFetchNotifications(!loginQuery.isSuccess && loginQuery.data?.id);
+  const { isLoggedIn } = useLoggedIn();
+
+  const _uiEvents = useRef(uiEvents);
 
   // mock data used for displaying something. Change when there's real data
   const allNotifications: Notification[] = [
@@ -156,12 +131,12 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   };
 
   const handleEntryClick = (itemId: string, itemType: EntityTypes) => {
-    if (itemType === EntityTypes.POST) {
+    if (itemType === EntityTypes.BEAM) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemId}`,
       });
-    } else if (itemType === EntityTypes.REPLY) {
+    } else if (itemType === EntityTypes.REFLECT) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Reply}/${itemId}`,
@@ -185,9 +160,13 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     });
     setShowMenu(!showMenu);
 
-    setMessage('Marked all as read successfully.');
-    setMessageType('success');
-    setShowFeedback(true);
+    _uiEvents.current.next({
+      event: EventTypes.ShowNotification,
+      data: {
+        name: 'success',
+        message: 'Marked all as read successfully.',
+      },
+    });
   };
 
   const redirectToSettingsPage = () => {
@@ -211,14 +190,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     },
   ];
 
-  if (!loginQuery.isSuccess) {
-    return navigateTo?.({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: navRoutes => navRoutes.CONNECT,
-    });
-  }
-
-  if (!savedPreferences) {
+  if (!isLoggedIn || !savedPreferences) {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
@@ -227,14 +199,8 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   return (
     <>
-      <Card
-        direction="row"
-        elevation={'1'}
-        radius={16}
-        padding={{ x: 0, y: 8 }}
-        customStyle="pb-16"
-      >
-        <div className={tw('py-4 relative w-full')}>
+      <Card elevation={'1'} radius={16} padding={'py-2'} customStyle="pb-16">
+        <Stack customStyle="py-4 relative w-full" direction="column">
           <Text variant="h5" align="center">
             <>{t('Notifications')}</>
           </Text>
@@ -246,7 +212,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
               <List items={dropDownActions} customStyle="absolute right-0 top-7 w-max" />
             )}
           </Stack>
-        </div>
+        </Stack>
         <Tab value={activeTab} onChange={setActiveTab} labels={labels}>
           <NotificationsCard
             notifications={unreadNotifications || []}
@@ -294,15 +260,6 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
           </div>
         </Tab>
       </Card>
-      {showFeedback && (
-        <div className={tw('-mt-12 md:mt-4 z-50 w-full')}>
-          <Snackbar
-            title={message}
-            type={messageType as SnackBarType}
-            handleDismiss={() => setShowFeedback(false)}
-          />
-        </div>
-      )}
     </>
   );
 };

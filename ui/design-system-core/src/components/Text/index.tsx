@@ -1,10 +1,11 @@
 import React, { PropsWithChildren } from 'react';
 import { apply, tw } from '@twind/core';
+
 import { getTag } from './getTag';
 import { getAlignmentClasses } from './getAlignmentClasses';
-import { getColorClasses } from '../../utils/getColorClasses';
 import { getWeightClasses } from './getWeightClasses';
 import { Color } from '../types/common.types';
+import { getColorClasses } from '../../utils';
 
 export type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
@@ -21,20 +22,21 @@ export type ButtonText = 'button-lg' | 'button-md' | 'button-sm';
 
 export type Variant = Heading | BodyText | ButtonText;
 
-export type Alignment = 'start' | 'center' | 'end' | 'justify';
+export type TextAlignment = 'start' | 'center' | 'end' | 'justify';
 
-export type Weight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
+export type FontWeight = 'normal' | 'semibold' | 'bold' | 'light' | 'medium';
 
 export type TextProps = {
+  id?: string;
   customStyle?: string; // pass only the string classes without 'apply' or 'tw'
   variant?: Variant;
   color?: Color;
-  as?: Heading | 'p' | 'span';
-  align?: Alignment;
+  as?: Heading | 'p' | 'span' | 'label';
+  align?: TextAlignment;
   truncate?: boolean;
   breakWord?: boolean;
   lineClamp?: number;
-  weight?: Weight;
+  weight?: FontWeight;
   ref?: React.Ref<HTMLElement>;
   selectable?: boolean;
 };
@@ -59,6 +61,7 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
 };
 
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
+  id,
   as,
   customStyle = '',
   variant = 'body1',
@@ -87,6 +90,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
 
     {
+      id,
       className: tw(
         apply`${noSelectClass} ${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${lineClampStyle} ${customStyle}`,
       ),

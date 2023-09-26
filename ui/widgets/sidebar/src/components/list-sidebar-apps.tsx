@@ -1,24 +1,27 @@
-import React from 'react';
-import { IMenuItem } from '@akashaorg/typings/ui';
+import React, { useMemo } from 'react';
+
+import { IMenuItem } from '@akashaorg/typings/lib/ui';
+
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
 import MenuItemLabel from './menu-item-label';
 import MenuSubItems from './menu-sub-items';
 
-export interface IListSidebarAppsProps {
+export type ListSidebarAppsProps = {
   list: IMenuItem[];
   activeOption: IMenuItem;
   hasBorderTop?: boolean;
   onOptionClick: (menu: IMenuItem, submenu: IMenuItem) => void;
-  onClickMenuItem?: (menuItem: IMenuItem, isMobile?: boolean) => void;
-}
+  onClickMenuItem?: (menuItem: IMenuItem, isMobile?: boolean) => () => void;
+};
 
-const ListSidebarApps: React.FC<IListSidebarAppsProps> = props => {
+const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
   const { list, activeOption, hasBorderTop = false, onOptionClick, onClickMenuItem } = props;
 
-  const borderStyle = hasBorderTop ? 'border-t-1 border-grey8' : '';
+  const borderStyle = hasBorderTop ? 'border(t-1 grey8)' : '';
 
-  const [appsWithSubroutes, otherApps]: IMenuItem[][] = React.useMemo(() => {
+  const [appsWithSubroutes, otherApps]: IMenuItem[][] = useMemo(() => {
     return list.reduce(
       (acc, app) => {
         if (app.subRoutes.length > 0) {
@@ -33,12 +36,12 @@ const ListSidebarApps: React.FC<IListSidebarAppsProps> = props => {
   }, [list]);
 
   return (
-    <Box customStyle={`flex flex-col py-2 ${borderStyle}`}>
+    <Stack direction="column" customStyle={`py-2 ${borderStyle}`}>
       {appsWithSubroutes.map((app, idx) => (
         <Accordion
           key={app.label + idx}
-          customStyle="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
-          titleNode={<MenuItemLabel menuItem={app} isActive={false} />}
+          customStyle="py-2 px-6 bg(hover:grey8 dark:hover:grey5)"
+          titleNode={<MenuItemLabel menuItem={app} />}
           contentNode={
             <MenuSubItems
               menuItem={app}
@@ -48,14 +51,15 @@ const ListSidebarApps: React.FC<IListSidebarAppsProps> = props => {
           }
         />
       ))}
+
       {otherApps.map((app, idx) => (
-        <Box key={app.label + idx} customStyle={'px-4 hover:bg-grey8 dark:hover:bg-grey5'}>
-          <Box customStyle={'p-2 cursor-pointer'}>
-            <MenuItemLabel menuItem={app} isActive={false} onClickMenuItem={onClickMenuItem} />
-          </Box>
-        </Box>
+        <button key={app.label + idx} onClick={onClickMenuItem(app)}>
+          <Stack padding="py-2 px-6" customStyle="bg(hover:grey8 dark:hover:grey5)">
+            <MenuItemLabel menuItem={app} />
+          </Stack>
+        </button>
       ))}
-    </Box>
+    </Stack>
   );
 };
 

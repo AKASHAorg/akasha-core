@@ -1,32 +1,33 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { useTranslation } from 'react-i18next';
+
+import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
+import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
 import { INFO } from '../../routes';
 
-export interface IMyAppsPage extends RootComponentProps {
-  latestReleasesInfo?: IntegrationReleaseInfoFragmentFragment[];
-  installedAppsInfo?: IntegrationReleaseInfo[];
+export type MyAppsPageProps = {
+  availableApps?: GetAppsQuery['akashaAppIndex']['edges'];
+  installedAppsInfo?: GetAppsByIdQuery['node'][];
   defaultIntegrations?: string[];
-  isFetching?: boolean;
-}
+};
 
-const MyAppsPage: React.FC<IMyAppsPage> = props => {
-  const { worldConfig, latestReleasesInfo, installedAppsInfo, defaultIntegrations, isFetching } =
-    props;
+const MyAppsPage: React.FC<MyAppsPageProps> = props => {
+  const { availableApps } = props;
 
   const { t } = useTranslation('app-akasha-verse');
+  const { worldConfig, getRoutingPlugin } = useRootComponentProps();
 
   const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
 
   const defaultAppsNamesNormalized = React.useMemo(() => {
-    return defaultApps.map(app => {
+    return defaultApps?.map(app => {
       if (typeof app === 'string') {
         return {
           name: app,
@@ -37,27 +38,43 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
   }, [defaultApps]);
 
   // select default apps from list of installed apps
-  const filteredDefaultApps = latestReleasesInfo?.filter(app => {
-    if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
+  const filteredDefaultApps = availableApps?.filter(app => {
+    if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.node?.name)) {
       return app;
     }
   });
-  // select user installed apps from list of installed apps
-  const filteredInstalledApps = latestReleasesInfo
-    ?.filter(app => {
-      if (!installedAppsInfo?.length) {
-        return null;
-      }
-      if (!defaultIntegrations?.some(defaultApp => defaultApp === app.name)) {
-        return app;
-      }
-    })
-    .filter(Boolean);
 
-  const handleAppClick = (app: IntegrationReleaseInfoFragmentFragment) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+  const defaultAppsInfo = filteredDefaultApps?.map(app => {
+    return {
+      id: app.node.id,
+      name: app.node.displayName,
+      description: app.node.description,
+      action: (
+        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
+          Default App
+        </Text>
+      ),
+    };
+  });
+
+  /**
+   * TODO: select user installed apps from list of installed apps
+   */
+  // const filteredInstalledApps = availableApps
+  //   ?.filter(app => {
+  //     if (!installedAppsInfo?.length) {
+  //       return null;
+  //     }
+  //     if (!defaultIntegrations?.some(defaultApp => defaultApp === app.node?.name)) {
+  //       return app;
+  //     }
+  //   })
+  //   .filter(Boolean);
+
+  const handleAppClick = appId => {
+    getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-akasha-verse',
-      getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
+      getNavigationUrl: routes => `${routes[INFO]}/${appId}`,
     });
   };
 
@@ -77,42 +94,8 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
     },
   ];
 
-  /*@TODO: replace with the relevant hook once it's ready */
-  const dummyDefaultApps = [
-    {
-      name: 'Social Feed',
-      description:
-        'Keep up with what’s happening in the world! The social feed is the star app of AKASHA World.',
-      action: (
-        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-          Default App
-        </Text>
-      ),
-    },
-    {
-      name: 'Profile App',
-      description:
-        'Control your profile, your preferences and everything else about you from the profile app.',
-      action: (
-        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-          Default App
-        </Text>
-      ),
-    },
-    {
-      name: 'Settings App',
-      description:
-        'You can control many things through the Settings app, like changing your theme, analytics options among many other things.',
-      action: (
-        <Text variant="footnotes2" color={{ light: 'grey4', dark: 'grey7' }}>
-          Default App
-        </Text>
-      ),
-    },
-  ];
-
   return (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack spacing="gap-y-4">
       <Text variant="h6">{t('Installed Apps')}</Text>
       {dummyInstalledApps.length ? (
         <AppList
@@ -130,12 +113,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
         />
       )}
       <Text variant="h6">{t('Default Apps')}</Text>
-      <AppList
-        apps={dummyDefaultApps}
-        onAppSelected={() => {
-          /*TODO: get app id from new hooks when they are ready and navigate to info page*/
-        }}
-      />
+      <AppList apps={defaultAppsInfo} onAppSelected={handleAppClick} />
     </Stack>
   );
 };

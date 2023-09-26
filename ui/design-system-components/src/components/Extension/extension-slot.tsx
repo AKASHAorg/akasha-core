@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { apply } from '@twind/core';
+import React, { useRef, useEffect, ReactNode, CSSProperties } from 'react';
+import { tw } from '@twind/core';
 
-export interface ExtensionPointProps {
+export type ExtensionPointProps = {
   name: string;
   customStyle?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   mountOnRequest?: boolean;
   shouldMount?: boolean;
   data?: Record<string, unknown>;
@@ -12,8 +12,9 @@ export interface ExtensionPointProps {
   onWrapperClick?: () => void;
   onMount: (name: string, data?: Record<string, unknown>) => void;
   onUnmount: (name: string) => void;
-  children?: React.ReactNode;
-}
+  onUpdate: (name: string, data?: Record<string, unknown>) => void;
+  children?: ReactNode;
+};
 
 const ExtensionSlot: React.FC<ExtensionPointProps> = props => {
   const {
@@ -27,13 +28,14 @@ const ExtensionSlot: React.FC<ExtensionPointProps> = props => {
     name,
   } = props;
 
-  const isMounted = React.useRef(false);
+  const isMounted = useRef(false);
 
-  const onMount = React.useRef(props.onMount);
-  const onUnmount = React.useRef(props.onUnmount);
+  const onMount = useRef(props.onMount);
+  const onUnmount = useRef(props.onUnmount);
+  const onUpdate = useRef(props.onUpdate);
 
-  const nodeRef = React.useRef(null);
-  const clickHandler = React.useRef(() => {
+  const nodeRef = useRef(null);
+  const clickHandler = useRef(() => {
     if (onClick) {
       props.onClick();
     }
@@ -42,7 +44,7 @@ const ExtensionSlot: React.FC<ExtensionPointProps> = props => {
     }
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!mountOnRequest || (mountOnRequest && shouldMount)) {
       if (!isMounted.current) {
         onMount.current(`${name}`, data);
@@ -56,7 +58,13 @@ const ExtensionSlot: React.FC<ExtensionPointProps> = props => {
     }
   }, [mountOnRequest, shouldMount, name, data]);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (isMounted.current) {
+      onUpdate.current(`${name}`, data);
+    }
+  }, [name, data]);
+
+  useEffect(() => {
     const onClick = clickHandler.current;
     const unmount = onUnmount.current;
     return () => {
@@ -70,7 +78,7 @@ const ExtensionSlot: React.FC<ExtensionPointProps> = props => {
 
   if (!mountOnRequest || (mountOnRequest && shouldMount)) {
     return (
-      <div id={name} className={apply(customStyle)}>
+      <div id={name} className={tw(customStyle)}>
         {children}
       </div>
     );

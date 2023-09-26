@@ -1,9 +1,11 @@
 import React, { forwardRef, HTMLAttributes } from 'react';
-import Stack from '../../Stack';
-import { getContainerClasses } from '../getContainerClasses';
-import { ButtonProps, ButtonSize } from '../types';
-import { ButtonIcon } from '../ButtonIcon';
 import { apply, tw } from '@twind/core';
+
+import { ButtonIcon } from '../ButtonIcon';
+import { ButtonProps, ButtonSize } from '../types';
+import Stack from '../../Stack';
+
+import { getContainerClasses } from '../getContainerClasses';
 
 type IconOnlyButtonProps = {
   icon: ButtonProps['icon'];
@@ -16,6 +18,7 @@ type IconOnlyButtonProps = {
   customStyle: ButtonProps['customStyle'];
   active: ButtonProps['active'];
   hover: ButtonProps['hover'];
+  hoverColor: ButtonProps['hoverColor'];
   ref?: ButtonProps['ref'];
 };
 
@@ -33,6 +36,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         customStyle,
         active,
         hover,
+        hoverColor,
         ...rest
       },
       ref,
@@ -44,6 +48,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         disabled,
         active,
         hover,
+        hoverColor,
       });
       const breakPointStyle = breakPointSize
         ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]

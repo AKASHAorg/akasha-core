@@ -1,35 +1,48 @@
 import React from 'react';
-import { tw } from '@twind/core';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import { useTranslation } from 'react-i18next';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
-import { RootComponentProps } from '@akashaorg/typings/ui';
 
-interface IWelcomePageProps {
+import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
+
+export type WelcomePageProps = {
   header: string;
   description: string;
+  image?: string;
   leftButtonLabel?: string;
-  // leftButtonClickHandler?: () => void;
   rightButtonLabel: string;
-  // rightButtonClickHandler?: () => void;
   finalStep?: boolean;
-}
+  isLoggedIn: boolean;
+};
 
-const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
+const WelcomePage: React.FC<WelcomePageProps> = props => {
   const {
-    plugins,
     leftButtonLabel,
-    // leftButtonClickHandler,
     rightButtonLabel,
-    // rightButtonClickHandler,
     header,
     description,
+    image,
     finalStep = false,
+    isLoggedIn,
   } = props;
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const { t } = useTranslation('app-notifications');
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
+  const navigateTo = getRoutingPlugin().navigateTo;
+
+  // check if user has gone through onboarding steps before
+  let savedPreferences;
+  if (window.localStorage) {
+    savedPreferences = JSON.parse(localStorage.getItem('notification-preference'));
+  }
+
   let message = '';
 
   const goToNextStep = () => {
@@ -45,6 +58,17 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}?message=${message}&type=success`,
+    });
+  };
+
+  const connect = () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: (routes: Record<string, string>) => {
+        return `${routes.Connect}?${new URLSearchParams({
+          redirectTo: `${baseRouteName}`,
+        }).toString()}`;
+      },
     });
   };
 
@@ -67,22 +91,34 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
     goToNotificationsPage();
   };
 
+  if (!finalStep && isLoggedIn && savedPreferences) {
+    return navigateTo?.({
+      appName: '@akashaorg/app-notifications',
+      getNavigationUrl: () => routes[SHOW_NOTIFICATIONS_PAGE],
+    });
+  }
+
   return (
-    <Card direction="row" elevation={'1'} radius={16} padding={8} testId="notifications">
-      <div className={tw('flex(& col) justify-center align-center mb-32')}>
-        <BasicCardBox
-          customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
-          round="rounded-xl"
-        />
+    <Card elevation={'1'} radius={16} padding={'p-2'} testId="notifications">
+      <Stack justify="center" align="center" customStyle="mb-32">
+        {image && isLoggedIn ? (
+          <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
+        ) : (
+          <Card
+            customStyle="bg(grey8 dark:grey5) w-[180px] h-[180px] m-auto my-4"
+            radius="rounded-xl"
+          />
+        )}
+
         <Text variant={finalStep ? 'h5' : 'h6'} align="center">
-          {header}
+          {isLoggedIn ? header : t('Uh-oh! You are not connected!')}
         </Text>
         <Text variant="footnotes2" align="center" color={{ light: 'black', dark: 'grey6' }}>
-          {description}
+          {isLoggedIn ? description : t('To check your notifications you must be connected ⚡️')}
         </Text>
-      </div>
-      <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2')}>
-        {leftButtonLabel && (
+      </Stack>
+      <Stack direction="row" fullWidth justify="end" spacing="gap-x-4" customStyle="pr-2 pb-2">
+        {isLoggedIn && leftButtonLabel && (
           <Button
             variant="text"
             label={leftButtonLabel}
@@ -90,8 +126,12 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
             onClick={skipCustomization}
           />
         )}
-        <Button variant="primary" label={rightButtonLabel} onClick={confirmCustomization} />
-      </div>
+        <Button
+          variant="primary"
+          label={isLoggedIn ? rightButtonLabel : t('Connect')}
+          onClick={isLoggedIn ? confirmCustomization : connect}
+        />
+      </Stack>
     </Card>
   );
 };

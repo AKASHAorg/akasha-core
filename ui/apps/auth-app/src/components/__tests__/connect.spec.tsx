@@ -9,7 +9,7 @@ describe('< SignIn /> component', () => {
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-auth-ewa/provider']}>
       <AnalyticsProvider {...genAppProps()}>
-        <Connect {...genAppProps()} />;
+        <Connect />;
       </AnalyticsProvider>
     </Router>
   );

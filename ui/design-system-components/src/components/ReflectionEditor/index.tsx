@@ -1,18 +1,19 @@
 import * as React from 'react';
-import { apply, tw } from '@twind/core';
 import EditorPlaceholder from '../EditorPlaceholder';
-import EditorBox, { IEditorBox } from '../Editor';
+import EditorBox, { EditorBoxProps } from '../Editor';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
-import { IPublishData } from '@akashaorg/typings/ui';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import { IPublishData } from '@akashaorg/typings/lib/ui';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Colors } from '@akashaorg/typings/lib/ui';
 
-export type ReflectionEditorProps = IEditorBox & {
+export type ReflectionEditorProps = EditorBoxProps & {
   openEditor?: boolean;
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
-  background?: string;
+  background?: { light: Colors; dark: Colors };
 };
 
 const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
@@ -44,9 +45,8 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     setEditorState,
     showDraft,
     uploadedImages,
-    borderBottomOnly,
-    noBorderRound,
     onClear,
+    background,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(openEditor);
@@ -58,7 +58,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
       !openEditor &&
       showEditor &&
       isEqual(editorState, editorDefaultValue) &&
-      !editorRef.current?.getPopoversState() &&
       !editorRef.current?.getUploadingState() &&
       !editorRef.current?.getImagesState()
     ) {
@@ -85,11 +84,8 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     setShowEditor(!showEditor);
   };
 
-  const bordePositionClass = borderBottomOnly ? 'border-b' : 'border';
-  const borderRoundClass = noBorderRound ? '' : 'rounded-lg';
-
   return (
-    <Box ref={wrapperRef}>
+    <Stack ref={wrapperRef} customStyle="grid">
       {!showEditor && (
         <EditorPlaceholder
           onClick={handleToggleEditor}
@@ -99,7 +95,12 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
         />
       )}
       {showEditor && (
-        <Box customStyle={`p-0.5 ${bordePositionClass} ${borderRoundClass}  ${props.background}`}>
+        <Card
+          padding={0}
+          accentBorder={true}
+          background={!!background && background}
+          customStyle="overflow-hidden"
+        >
           <EditorBox
             ref={editorRef}
             avatar={avatar}
@@ -130,9 +131,9 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             showDraft={showDraft}
             onClear={onClear}
           />
-        </Box>
+        </Card>
       )}
-    </Box>
+    </Stack>
   );
 };
 

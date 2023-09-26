@@ -1,8 +1,10 @@
 import React from 'react';
+import { apply, tw } from '@twind/core';
+
 import Button from '../Button';
 import Text, { TextProps } from '../Text';
-import { getColorClasses } from '../../utils/getColorClasses';
-import { apply, tw } from '@twind/core';
+
+import { getColorClasses } from '../../utils';
 
 export type TabListProps = {
   labels: string[];
@@ -42,7 +44,7 @@ const TabList: React.FC<TabListProps> = ({
     <div className={tw(apply`grid grid-cols-${labels.length} ${tabListDividerStyle}`)}>
       {labels.map((label, index) => (
         <Button
-          key={index}
+          key={label}
           onClick={() => onChange(index, selected)}
           customStyle={`${baseStyle} ${hoverStyle} ${selected === index ? activeStyle : ''}`}
           plain

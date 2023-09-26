@@ -1,25 +1,18 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/ui';
-import {
-  useDeleteBookmark,
-  useGetBookmarks,
-  useGetLogin,
-  useSaveBookmark,
-  withProviders,
-  useAnalytics,
-} from '@akashaorg/ui-awf-hooks';
+import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
+import { useGetLogin, withProviders, useAnalytics } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const EntryCardSaveButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
   const loggedUserReq = useGetLogin();
-  const bookmarkReq = useGetBookmarks(loggedUserReq.data?.id, loggedUserReq.isSuccess);
-  const bookmarkCreate = useSaveBookmark();
-  const bookmarkDelete = useDeleteBookmark();
+  const bookmarkReq = null;
+  const bookmarkCreate = null;
+  const bookmarkDelete = null;
   const [analyticsActions] = useAnalytics();
 
   const isBookmarked = React.useMemo(() => {
@@ -52,7 +45,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
   };
 
   return (
-    <Box customStyle={'flex items-center'}>
+    <Stack align="center">
       <button onClick={handleEntryBookmark}>
         <Icon
           type="BookmarkIcon"
@@ -60,7 +53,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
           customStyle={isBookmarked && `[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark`}
         />
       </button>
-    </Box>
+    </Stack>
   );
 };
 

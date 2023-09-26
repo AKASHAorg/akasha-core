@@ -1,50 +1,50 @@
-import * as React from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+
+import AppList from '@akashaorg/design-system-components/lib/components/AppList';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import AppList from '@akashaorg/design-system-components/lib/components/AppList';
-import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
-import { INFO } from '../../routes';
 
-export interface IWidgetsPage extends RootComponentProps {
-  latestReleasesInfo?: IntegrationReleaseInfoFragmentFragment[];
-  installedAppsInfo?: IntegrationReleaseInfo[];
+export type WidgetsPageProps = {
+  availableApps?: GetAppsQuery['akashaAppIndex']['edges'];
+  installedAppsInfo?: GetAppsByIdQuery['node'][];
   defaultIntegrations?: string[];
-  isFetching?: boolean;
-}
+};
 
-const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
-  const { worldConfig, latestReleasesInfo, isFetching } = props;
-
+const MyWidgetsPage: React.FC<WidgetsPageProps> = () => {
   const { t } = useTranslation('app-akasha-verse');
 
-  const defaultWidgetNamesNormalized = React.useMemo(() => {
-    return worldConfig?.defaultWidgets.map(app => {
-      if (typeof app === 'string') {
-        return {
-          name: app,
-        };
-      }
-      return app;
-    });
-  }, [worldConfig.defaultWidgets]);
+  // const defaultWidgetNamesNormalized = React.useMemo(() => {
+  //   return worldConfig?.defaultWidgets.map(app => {
+  //     if (typeof app === 'string') {
+  //       return {
+  //         name: app,
+  //       };
+  //     }
+  //     return app;
+  //   });
+  // }, [worldConfig.defaultWidgets]);
 
-  // select default widgets from list of installed integrations
-  const filteredDefaultWidgets = latestReleasesInfo?.filter(app => {
-    if (defaultWidgetNamesNormalized?.some(defaultWidget => defaultWidget.name === app.name)) {
-      return app;
-    }
-  });
+  /**
+   * TODO: select default widgets from list of installed integrations
+   */
+  // const filteredDefaultWidgets = availableApps?.filter(app => {
+  //   if (
+  //     defaultWidgetNamesNormalized?.some(defaultWidget => defaultWidget.name === app.node?.name)
+  //   ) {
+  //     return app;
+  //   }
+  // });
 
-  const handleAppClick = (app: IntegrationReleaseInfo) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-akasha-verse',
-      getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
-    });
-  };
+  // const handleAppClick = appId => {
+  //   getRoutingPlugin().navigateTo?.({
+  //     appName: '@akashaorg/app-akasha-verse',
+  //     getNavigationUrl: routes => `${routes[INFO]}/${appId}`,
+  //   });
+  // };
 
   /*@TODO: replace with the relevant hook once it's ready */
   const dummyNewestWidgets = [
@@ -63,7 +63,7 @@ const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
   ];
 
   return (
-    <Stack direction="column" spacing="gap-y-4">
+    <Stack spacing="gap-y-4">
       <Text variant="h6">{t('Newest Widgets')}</Text>
       <AppList
         apps={dummyNewestWidgets}

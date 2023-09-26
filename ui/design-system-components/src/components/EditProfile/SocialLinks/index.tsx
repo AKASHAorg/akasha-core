@@ -1,56 +1,31 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import React, { useMemo, useState } from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import * as z from 'zod';
-import { apply, tw } from '@twind/core';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SocialLink } from './SocialLink';
-import { ButtonType } from '../types';
-import { Link } from '../../types/common.types';
+import { SocialLink } from './social-link';
+import { AkashaProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { Controller, Control } from 'react-hook-form';
+import { EditProfileFormValues } from '../types';
 
-type SocialLinkFormValue = {
-  links: string[];
-};
-
-export type SocialLinksProp = {
-  title: string;
-  addNewButtonLabel: string;
+export type SocialLinksProps = {
+  linkLabel: string;
+  addNewLinkButtonLabel: string;
   description: string;
-  socialLinks: Link[];
-  cancelButton: ButtonType;
-  saveButton: {
-    label: string;
-    loading?: boolean;
-    handleClick: (formValues: { links: Link[] }) => void;
-  };
+  socialLinks: AkashaProfileLinkSource[];
   customStyle?: string;
-  onDelete: (index: number) => void;
-  onFormDirty?: React.Dispatch<React.SetStateAction<boolean>>;
+  control: Control<EditProfileFormValues>;
+  onDeleteLink: (index: number) => void;
 };
 
-export const SocialLinks: React.FC<SocialLinksProp> = ({
-  title,
-  addNewButtonLabel,
+export const SocialLinks: React.FC<SocialLinksProps> = ({
+  linkLabel,
+  addNewLinkButtonLabel,
   description,
   socialLinks,
-  cancelButton,
-  saveButton,
   customStyle = '',
-  onDelete,
-  onFormDirty,
+  control,
+  onDeleteLink,
 }) => {
-  const {
-    control,
-    handleSubmit,
-    unregister,
-    formState: { isDirty, isValid },
-  } = useForm<SocialLinkFormValue>({
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-  });
-
   const linkWithPseudoId = useMemo(
     () => socialLinks.map((link, index) => ({ _id: index, ...link })),
     [socialLinks],
@@ -59,86 +34,54 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   const [links, setLinks] = useState(
     socialLinks.length === 0 ? [{ _id: 0, href: '' }] : linkWithPseudoId,
   );
-  const onSave = (formValues: SocialLinkFormValue) =>
-    saveButton.handleClick({ links: formValues.links.map(link => ({ href: link })) });
+
   const onAddNew = () => {
     setLinks([...links, { _id: links.length, href: '' }]);
   };
 
-  useEffect(() => {
-    if (onFormDirty) onFormDirty(isDirty);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDirty]);
-
   return (
-    <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
-      <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
-        <Stack spacing="gap-y-1" direction="column">
-          <Stack spacing="gap-x-2" justify="between" align="center">
-            <Text variant="h6">{title}</Text>
-            <Button
-              variant="text"
-              icon="PlusIcon"
-              iconDirection="left"
-              label={addNewButtonLabel}
-              onClick={onAddNew}
-            />
-          </Stack>
-          <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
-            {description}
-          </Text>
-        </Stack>
-        {links.map((link, index) => {
-          const defaultValue = link.href ? { defaultValue: link.href } : {};
-          return (
-            <Controller
-              key={link._id}
-              control={control}
-              name={`links.${index}`}
-              render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
-                <SocialLink
-                  type="text"
-                  onDelete={() => {
-                    unregister(`links.${index}`);
-                    setLinks(links.filter(_link => _link._id !== link._id));
-                    onDelete(index);
-                  }}
-                  name={name}
-                  value={value || ''}
-                  caption={error?.message}
-                  status={error?.message ? 'error' : null}
-                  onChange={onChange}
-                  inputRef={ref}
-                />
-              )}
-              {...defaultValue}
-            />
-          );
-        })}
-        <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
+    <Stack direction="column" spacing="gap-y-4" customStyle={customStyle}>
+      <Stack spacing="gap-y-1" direction="column">
+        <Stack direction="row" spacing="gap-x-2" justify="between" align="center">
+          <Text variant="h6">{linkLabel}</Text>
           <Button
             variant="text"
-            label={cancelButton.label}
-            onClick={cancelButton.handleClick}
-            disabled={cancelButton.disabled}
-          />
-          <Button
-            variant="primary"
-            loading={saveButton.loading}
-            label={saveButton.label}
-            disabled={!isDirty || !isValid}
-            onClick={handleSubmit(onSave)}
-            type="submit"
+            icon="PlusIcon"
+            iconDirection="left"
+            label={addNewLinkButtonLabel}
+            onClick={onAddNew}
           />
         </Stack>
+        <Text variant="body2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
+          {description}
+        </Text>
       </Stack>
-    </form>
+      {links.map((link, index) => {
+        const defaultValue = link.href ? { defaultValue: link.href } : {};
+        return (
+          <Controller
+            key={link._id}
+            control={control}
+            name={`links.${index}`}
+            render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
+              <SocialLink
+                type="text"
+                onDelete={() => {
+                  setLinks(links.filter(_link => _link._id !== link._id));
+                  onDeleteLink(index);
+                }}
+                name={name}
+                value={value || ''}
+                caption={error?.message}
+                status={error?.message ? 'error' : null}
+                onChange={onChange}
+                inputRef={ref}
+              />
+            )}
+            {...defaultValue}
+          />
+        );
+      })}
+    </Stack>
   );
 };
-
-const schema = z.object({
-  links: z
-    .string({ required_error: 'Url is required' })
-    .url({ message: `Hmm this doesn't look like a URL 🤔` })
-    .array(),
-});

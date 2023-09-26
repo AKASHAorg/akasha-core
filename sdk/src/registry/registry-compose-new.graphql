@@ -6,7 +6,7 @@ fragment AkashaAppFragment on AkashaApp{
   name
   displayName
   keywords
-  releases{
+  releases(last: 5){
     edges {
       node {
         id
@@ -14,26 +14,27 @@ fragment AkashaAppFragment on AkashaApp{
         source
         version
       }
+      cursor
     }
   }
-  releasessCount
+  releasesCount
   author {
     id
     isViewer
-    profile {
+    akashaProfile {
      ...UserProfileFragment
     }
   }
   contributors {
     id
     isViewer
-    profile {
+    akashaProfile {
       ...UserProfileFragment
     }
   }
 }
 
-fragment AppReleaseFragment on AppRelease{
+fragment AppReleaseFragment on AkashaAppRelease{
   application {
     ...AkashaAppFragment
   }
@@ -62,12 +63,13 @@ mutation UpdateApp($i: UpdateAkashaAppInput!){
   }
 }
 
-query GetApps($after: String, $before: String, $first: Int, $last: Int){
-  akashaAppIndex(after: $after, before: $before, first: $first, last: $last ){
+query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput){
+  akashaAppIndex(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
     edges {
       node {
         ...AkashaAppFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -86,8 +88,8 @@ query GetAppsByID($id: ID!) {
   }
 }
 
-mutation CreateAppRelease($i: CreateAppReleaseInput!){
-  createAppRelease(input: $i){
+mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!){
+  createAkashaAppRelease(input: $i){
     document {
       ...AppReleaseFragment
     }
@@ -96,8 +98,8 @@ mutation CreateAppRelease($i: CreateAppReleaseInput!){
 }
 
 
-mutation UpdateAppRelease($i: UpdateAppReleaseInput!){
-  updateAppRelease(input: $i){
+mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!){
+  updateAkashaAppRelease(input: $i){
     document {
       ...AppReleaseFragment
     }
@@ -105,12 +107,13 @@ mutation UpdateAppRelease($i: UpdateAppReleaseInput!){
   }
 }
 
-query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int){
-  appReleaseIndex(after: $after, before: $before, first: $first, last: $last ){
+query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput){
+  akashaAppReleaseIndex(after: $after, before: $before, first: $first, last: $last, filters:  $filters, sorting: $sorting){
     edges {
       node {
         ...AppReleaseFragment
       }
+      cursor
     }
     pageInfo {
       startCursor
@@ -123,7 +126,7 @@ query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int){
 
 query GetAppReleaseByID($id: ID!) {
   node(id: $id) {
-    ...on AppRelease {
+    ...on AkashaAppRelease {
       ...AppReleaseFragment
     }
   }

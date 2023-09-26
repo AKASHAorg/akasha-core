@@ -10,14 +10,19 @@ import { forwardRef } from 'react';
 import { getRadiusClasses } from '../../../utils/getRadiusClasses';
 
 export const Input: React.FC<InputProps> = forwardRef(
-  ({ radius, status, iconLeft, iconRight, readOnly, disabled, ...rest }, ref) => {
+  ({ id, radius, status, iconLeft, iconRight, readOnly, disabled, ...rest }, ref) => {
     const containerStyle = getContainerClasses(disabled, status, readOnly);
     const inputStyle = getInputClasses(disabled, status, readOnly);
-    const iconColor = getIconClasses(disabled, status);
+    const iconColor = getIconClasses(status, disabled);
     const radiusStyle = getRadiusClasses(radius);
 
     return (
-      <Stack align="center" spacing="gap-x-2" customStyle={`${containerStyle} ${radiusStyle}`}>
+      <Stack
+        direction="row"
+        align="center"
+        spacing="gap-x-2"
+        customStyle={`${containerStyle} ${radiusStyle}`}
+      >
         {iconLeft && <Icon type={iconLeft} color={iconColor} disabled={disabled} />}
         <input
           ref={ref}
@@ -25,6 +30,7 @@ export const Input: React.FC<InputProps> = forwardRef(
           className={tw(apply`${inputStyle}`)}
           disabled={disabled}
           readOnly={readOnly}
+          aria-labelledby={id}
           {...rest}
         />
         {iconRight && <Icon type={iconRight} color={iconColor} disabled={disabled} />}

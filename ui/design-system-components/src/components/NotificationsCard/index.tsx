@@ -1,14 +1,18 @@
 import React from 'react';
-import { EntityTypes } from '@akashaorg/typings/ui';
-import { formatRelativeTime } from '../../utils/time';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import BasicInfoCard from '@akashaorg/design-system-core/lib/components/BasicInfoCard';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+
+import { EntityTypes } from '@akashaorg/typings/lib/ui';
+
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import ProfileAvatarNotificationApp from './ProfileAvatarNotificationApp';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
-export interface INotificationsCard {
+import BasicInfoCard from './basic-info-card';
+import ProfileAvatarNotificationApp from './profile-avatar-notification-app';
+
+import { formatRelativeTime } from '../../utils/time';
+
+export type NotificationsCardProps = {
   // data
   notifications: Record<string, unknown>[];
   isFetching?: boolean;
@@ -29,9 +33,9 @@ export interface INotificationsCard {
   handleEntryClick: (itemId: string, itemType: EntityTypes) => void;
   handleProfileClick: (pubKey: string) => void;
   loggedIn?: boolean;
-}
+};
 
-const NotificationsCard: React.FC<INotificationsCard> = props => {
+const NotificationsCard: React.FC<NotificationsCardProps> = props => {
   const {
     notifications,
     isFetching,
@@ -72,7 +76,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID, EntityTypes.POST);
+            handleEntryClick(postID, EntityTypes.BEAM);
           }
         };
         break;
@@ -81,9 +85,9 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (replyID) {
-            handleEntryClick(replyID, EntityTypes.REPLY);
+            handleEntryClick(replyID, EntityTypes.REFLECT);
           } else if (postID) {
-            handleEntryClick(postID, EntityTypes.POST);
+            handleEntryClick(postID, EntityTypes.BEAM);
           }
         };
         break;
@@ -92,7 +96,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID, EntityTypes.POST);
+            handleEntryClick(postID, EntityTypes.BEAM);
           }
         };
         break;
@@ -101,7 +105,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (replyID) {
-            handleEntryClick(replyID, EntityTypes.REPLY);
+            handleEntryClick(replyID, EntityTypes.REFLECT);
           }
         };
         break;
@@ -110,7 +114,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID, EntityTypes.POST);
+            handleEntryClick(postID, EntityTypes.BEAM);
           }
         };
         break;
@@ -126,7 +130,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (moderatedID) {
-            handleEntryClick(moderatedID, EntityTypes.POST);
+            handleEntryClick(moderatedID, EntityTypes.BEAM);
           }
         };
         break;
@@ -135,7 +139,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (moderatedID) {
-            handleEntryClick(moderatedID, EntityTypes.REPLY);
+            handleEntryClick(moderatedID, EntityTypes.REFLECT);
           }
         };
         break;
@@ -162,12 +166,12 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
     return (
       <div key={index}>
-        <BasicCardBox
+        <Card
           elevation="none"
-          pad="py-3 pl-4"
+          padding="py-3 pl-4"
           onClick={clickHandler}
           customStyle="flex-row"
-          round="none"
+          radius="none"
         >
           <ProfileAvatarNotificationApp
             profileId={profileData.did?.id}
@@ -178,30 +182,31 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
             onClick={clickHandler}
             active={!notif.read}
           />
-        </BasicCardBox>
+        </Card>
         <Divider />
       </div>
     );
   };
 
   return (
-    <BasicCardBox pad="p-0" elevation="none">
+    <Card padding={0} elevation="none">
       {loggedIn && !isFetching && notifications.length === 0 && (
-        <BasicInfoCard titleLabel={emptyTitle} />
+        <BasicInfoCard titleLabel={emptyTitle} image={'/images/longbeam-notfound.webp'} />
       )}
       {loggedIn && notifications.length !== 0 && (
         <div>
           {notifications?.map((notif: any, index: number) => renderNotificationCard(notif, index))}
           {isFetching && (
-            <Box customStyle="py-4">
+            <Stack padding="py-4">
               <Spinner />
-            </Box>
+            </Stack>
           )}
         </div>
       )}
-    </BasicCardBox>
+    </Card>
   );
 };
+
 NotificationsCard.defaultProps = {
   mentionedPostLabel: 'mentioned you in a post',
   mentionedCommentLabel: 'mentioned you in a comment',

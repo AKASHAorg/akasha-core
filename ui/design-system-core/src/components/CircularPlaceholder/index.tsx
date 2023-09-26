@@ -1,7 +1,7 @@
 import React from 'react';
 import { apply, tw } from '@twind/core';
-import { getHeightClasses } from '../../utils/getHeightClasses';
-import { getWidthClasses } from '../../utils/getWidthClasses';
+
+import { getWidthClasses, getHeightClasses } from '../../utils';
 
 export type CircularPlaceholderProps = {
   title?: string;

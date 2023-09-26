@@ -30,14 +30,17 @@ type AkashaApp implements Node {
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaAppReleaseFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
-    ): AppReleaseConnection!
-    releasessCount(
+        last: Int,
+        sorting: AkashaAppReleaseSortingInput
+    ): AkashaAppReleaseConnection!
+    releasesCount(
         "Counts only documents created by the provided account"
-        account: ID
+        account: ID,
+        filters: AkashaAppReleaseFiltersInput
     ): Int!
 }
 
@@ -57,7 +60,7 @@ type AkashaAppEdge {
     node: AkashaApp
 }
 
-type AppRelease implements Node {
+type AkashaAppRelease implements Node {
     application: AkashaApp
     applicationID: CeramicStreamID!
     createdAt: DateTime!
@@ -67,56 +70,57 @@ type AppRelease implements Node {
 }
 
 "A connection to a list of items."
-type AppReleaseConnection {
+type AkashaAppReleaseConnection {
     "A list of edges."
-    edges: [AppReleaseEdge]
+    edges: [AkashaAppReleaseEdge]
     "Information to aid in pagination."
     pageInfo: PageInfo!
 }
 
 "An edge in a connection."
-type AppReleaseEdge {
+type AkashaAppReleaseEdge {
     "A cursor for use in pagination"
     cursor: String!
     "The item at the end of the edge"
-    node: AppRelease
+    node: AkashaAppRelease
 }
 
-type Beam implements Node {
+type AkashaAppsStream implements Node {
+    active: Boolean!
+    application: AkashaApp
+    applicationID: CeramicStreamID!
+    createdAt: DateTime!
+    id: ID!
+    moderationID: CeramicStreamID
+    status: AkashaAppsStreamModerationStatus
+}
+
+"A connection to a list of items."
+type AkashaAppsStreamConnection {
+    "A list of edges."
+    edges: [AkashaAppsStreamEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaAppsStreamEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaAppsStream
+}
+
+type AkashaBeam implements Node {
     active: Boolean!
     "Account controlling the document"
     author: CeramicAccount!
-    content: [BeamProviderValue!]!
+    content: [AkashaBeamBlockRecord!]!
     createdAt: DateTime!
+    embeddedBeam: AkashaBeamEmbeddedType
     id: ID!
-    mentions(
-        "Returns only documents created by the provided account"
-        account: ID,
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): ProfileMentionConnection!
-    rebeams(
-        "Returns only documents created by the provided account"
-        account: ID,
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): RebeamConnection!
-    rebeamsCount(
-        "Counts only documents created by the provided account"
-        account: ID
-    ): Int!
+    mentions: [CeramicStreamID]
+    nsfw: Boolean
     reflections(
         "Returns only documents created by the provided account"
         account: ID,
@@ -124,40 +128,411 @@ type Beam implements Node {
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaReflectFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
-    ): ReflectConnection!
+        last: Int,
+        sorting: AkashaReflectSortingInput
+    ): AkashaReflectConnection!
     reflectionsCount(
         "Counts only documents created by the provided account"
-        account: ID
+        account: ID,
+        filters: AkashaReflectFiltersInput
     ): Int!
     tags: [String]
     "Current version of the document"
     version: CeramicCommitID!
 }
 
+type AkashaBeamBlockRecord {
+    blockID: CeramicStreamID!
+    order: Int!
+}
+
 "A connection to a list of items."
-type BeamConnection {
+type AkashaBeamConnection {
     "A list of edges."
-    edges: [BeamEdge]
+    edges: [AkashaBeamEdge]
     "Information to aid in pagination."
     pageInfo: PageInfo!
 }
 
 "An edge in a connection."
-type BeamEdge {
+type AkashaBeamEdge {
     "A cursor for use in pagination"
     cursor: String!
     "The item at the end of the edge"
-    node: Beam
+    node: AkashaBeam
 }
 
-type BeamProviderValue {
-    property: String!
-    provider: String!
+type AkashaBeamEmbeddedType {
+    embeddedID: CeramicStreamID!
+    label: String!
+}
+
+type AkashaBeamStream implements Node {
+    active: Boolean!
+    beam: AkashaBeam
+    beamID: CeramicStreamID!
+    createdAt: DateTime!
+    id: ID!
+    moderationID: CeramicStreamID
+    status: AkashaBeamStreamModerationStatus
+}
+
+"A connection to a list of items."
+type AkashaBeamStreamConnection {
+    "A list of edges."
+    edges: [AkashaBeamStreamEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaBeamStreamEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaBeamStream
+}
+
+type AkashaBlockStorage implements Node {
+    active: Boolean!
+    appVersion: AkashaAppRelease
+    appVersionID: CeramicStreamID!
+    "Account controlling the document"
+    author: CeramicAccount!
+    block: AkashaContentBlock
+    blockID: CeramicStreamID!
+    content: [AkashaBlockStorageLabeledValue!]!
+    createdAt: DateTime!
+    id: ID!
+    kind: AkashaBlockStorageBlockStorageDef
+    "Current version of the document"
+    version: CeramicCommitID!
+}
+
+"A connection to a list of items."
+type AkashaBlockStorageConnection {
+    "A list of edges."
+    edges: [AkashaBlockStorageEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaBlockStorageEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaBlockStorage
+}
+
+type AkashaBlockStorageLabeledValue {
+    label: String!
+    propertyType: String!
     value: String!
+}
+
+type AkashaContentBlock implements Node {
+    active: Boolean!
+    appVersion: AkashaAppRelease
+    appVersionID: CeramicStreamID!
+    "Account controlling the document"
+    author: CeramicAccount!
+    content: [AkashaContentBlockLabeledValue!]!
+    createdAt: DateTime!
+    id: ID!
+    kind: AkashaContentBlockBlockDef
+    nsfw: Boolean
+    "Current version of the document"
+    version: CeramicCommitID!
+}
+
+"A connection to a list of items."
+type AkashaContentBlockConnection {
+    "A list of edges."
+    edges: [AkashaContentBlockEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaContentBlockEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaContentBlock
+}
+
+type AkashaContentBlockLabeledValue {
+    label: String!
+    propertyType: String!
+    value: String!
+}
+
+type AkashaContentBlockStream implements Node {
+    active: Boolean!
+    beamID: CeramicStreamID!
+    block: AkashaContentBlock
+    blockID: CeramicStreamID!
+    createdAt: DateTime!
+    id: ID!
+    moderationID: CeramicStreamID
+    status: AkashaContentBlockStreamModerationStatus
+}
+
+"A connection to a list of items."
+type AkashaContentBlockStreamConnection {
+    "A list of edges."
+    edges: [AkashaContentBlockStreamEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaContentBlockStreamEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaContentBlockStream
+}
+
+type AkashaFollow implements Node {
+    "Account controlling the document"
+    did: CeramicAccount!
+    id: ID!
+    isFollowing: Boolean!
+    profile: AkashaProfile
+    profileID: CeramicStreamID!
+}
+
+"A connection to a list of items."
+type AkashaFollowConnection {
+    "A list of edges."
+    edges: [AkashaFollowEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaFollowEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaFollow
+}
+
+type AkashaInterestsStream implements Node {
+    active: Boolean!
+    createdAt: DateTime!
+    id: ID!
+    labelType: String!
+    moderationID: CeramicStreamID
+    status: AkashaInterestsStreamModerationStatus
+    value: String!
+}
+
+"A connection to a list of items."
+type AkashaInterestsStreamConnection {
+    "A list of edges."
+    edges: [AkashaInterestsStreamEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaInterestsStreamEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaInterestsStream
+}
+
+type AkashaProfile implements Node {
+    avatar: AkashaProfileImageVersions
+    background: AkashaProfileImageVersions
+    createdAt: DateTime!
+    description: String
+    "Account controlling the document"
+    did: CeramicAccount!
+    followers(
+        "Returns only documents created by the provided account"
+        account: ID,
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaFollowFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaFollowSortingInput
+    ): AkashaFollowConnection!
+    followersCount(
+        "Counts only documents created by the provided account"
+        account: ID,
+        filters: AkashaFollowFiltersInput
+    ): Int!
+    id: ID!
+    links: [AkashaProfileLinkSource]
+    name: String!
+    nsfw: Boolean
+}
+
+"A connection to a list of items."
+type AkashaProfileConnection {
+    "A list of edges."
+    edges: [AkashaProfileEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaProfileEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaProfile
+}
+
+type AkashaProfileImageSource {
+    height: Int!
+    src: URI!
+    width: Int!
+}
+
+type AkashaProfileImageVersions {
+    alternatives: [AkashaProfileImageSource]
+    default: AkashaProfileImageSource!
+}
+
+type AkashaProfileInterests implements Node {
+    "Account controlling the document"
+    did: CeramicAccount!
+    id: ID!
+    topics: [AkashaProfileInterestsLabeled!]!
+}
+
+"A connection to a list of items."
+type AkashaProfileInterestsConnection {
+    "A list of edges."
+    edges: [AkashaProfileInterestsEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaProfileInterestsEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaProfileInterests
+}
+
+type AkashaProfileInterestsLabeled {
+    labelType: String!
+    value: String!
+}
+
+type AkashaProfileLinkSource {
+    href: URI!
+    label: String
+}
+
+type AkashaProfileStream implements Node {
+    active: Boolean!
+    createdAt: DateTime!
+    id: ID!
+    moderationID: CeramicStreamID
+    profile: AkashaProfile
+    profileID: CeramicStreamID!
+    status: AkashaProfileStreamModerationStatus
+}
+
+"A connection to a list of items."
+type AkashaProfileStreamConnection {
+    "A list of edges."
+    edges: [AkashaProfileStreamEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaProfileStreamEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaProfileStream
+}
+
+type AkashaReflect implements Node {
+    active: Boolean!
+    "Account controlling the document"
+    author: CeramicAccount!
+    beam: AkashaBeam
+    beamID: CeramicStreamID!
+    content: [AkashaReflectProviderValue!]!
+    createdAt: DateTime!
+    id: ID!
+    isReply: Boolean!
+    mentions: [CeramicStreamID]
+    nsfw: Boolean
+    reflection: CeramicStreamID
+    tags: [String]
+    "Current version of the document"
+    version: CeramicCommitID!
+}
+
+"A connection to a list of items."
+type AkashaReflectConnection {
+    "A list of edges."
+    edges: [AkashaReflectEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaReflectEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaReflect
+}
+
+type AkashaReflectProviderValue {
+    label: String!
+    propertyType: String!
+    value: String!
+}
+
+type AkashaReflectStream implements Node {
+    active: Boolean!
+    beamID: CeramicStreamID!
+    createdAt: DateTime!
+    id: ID!
+    moderationID: CeramicStreamID
+    reflection: AkashaReflect
+    reflectionID: CeramicStreamID!
+    status: AkashaReflectStreamModerationStatus
+}
+
+"A connection to a list of items."
+type AkashaReflectStreamConnection {
+    "A list of edges."
+    edges: [AkashaReflectStreamEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AkashaReflectStreamEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AkashaReflectStream
 }
 
 type CeramicAccount implements Node {
@@ -166,87 +541,163 @@ type CeramicAccount implements Node {
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaAppFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
+        last: Int,
+        sorting: AkashaAppSortingInput
     ): AkashaAppConnection
-    appReleaseList(
+    akashaAppReleaseList(
         "Returns the items in the list that come after the specified cursor."
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaAppReleaseFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
-    ): AppReleaseConnection
-    beamList(
+        last: Int,
+        sorting: AkashaAppReleaseSortingInput
+    ): AkashaAppReleaseConnection
+    akashaAppsStreamList(
         "Returns the items in the list that come after the specified cursor."
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaAppsStreamFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
-    ): BeamConnection
-    followList(
+        last: Int,
+        sorting: AkashaAppsStreamSortingInput
+    ): AkashaAppsStreamConnection
+    akashaBeamList(
         "Returns the items in the list that come after the specified cursor."
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaBeamFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
-    ): FollowConnection
+        last: Int,
+        sorting: AkashaBeamSortingInput
+    ): AkashaBeamConnection
+    akashaBeamStreamList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaBeamStreamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaBeamStreamSortingInput
+    ): AkashaBeamStreamConnection
+    akashaBlockStorageList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaBlockStorageFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaBlockStorageSortingInput
+    ): AkashaBlockStorageConnection
+    akashaContentBlockList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaContentBlockFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaContentBlockSortingInput
+    ): AkashaContentBlockConnection
+    akashaContentBlockStreamList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaContentBlockStreamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaContentBlockStreamSortingInput
+    ): AkashaContentBlockStreamConnection
+    akashaFollowList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaFollowFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaFollowSortingInput
+    ): AkashaFollowConnection
+    akashaInterestsStreamList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaInterestsStreamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaInterestsStreamSortingInput
+    ): AkashaInterestsStreamConnection
+    akashaProfile: AkashaProfile
+    akashaProfileInterests: AkashaProfileInterests
+    akashaProfileStreamList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaProfileStreamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaProfileStreamSortingInput
+    ): AkashaProfileStreamConnection
+    akashaReflectList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaReflectFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaReflectSortingInput
+    ): AkashaReflectConnection
+    akashaReflectStreamList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaReflectStreamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaReflectStreamSortingInput
+    ): AkashaReflectStreamConnection
     "Globally unique identifier of the account (DID string)"
     id: ID!
-    interests: Interests
     "Whether the Ceramic instance is currently authenticated with this account or not"
     isViewer: Boolean!
-    profile: Profile
-    profileMentionList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): ProfileMentionConnection
-    rebeamList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): RebeamConnection
-    reflectList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): ReflectConnection
-    reflectionList(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): ReflectionConnection
 }
 
 type CreateAkashaAppPayload {
@@ -261,9 +712,9 @@ type CreateAkashaAppPayload {
     viewer: CeramicAccount
 }
 
-type CreateAppReleasePayload {
+type CreateAkashaAppReleasePayload {
     clientMutationId: String
-    document: AppRelease!
+    document: AkashaAppRelease!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -273,9 +724,9 @@ type CreateAppReleasePayload {
     viewer: CeramicAccount
 }
 
-type CreateBeamPayload {
+type CreateAkashaAppsStreamPayload {
     clientMutationId: String
-    document: Beam!
+    document: AkashaAppsStream!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -285,9 +736,9 @@ type CreateBeamPayload {
     viewer: CeramicAccount
 }
 
-type CreateFollowPayload {
+type CreateAkashaBeamPayload {
     clientMutationId: String
-    document: Follow!
+    document: AkashaBeam!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -297,9 +748,9 @@ type CreateFollowPayload {
     viewer: CeramicAccount
 }
 
-type CreateInterestsPayload {
+type CreateAkashaBeamStreamPayload {
     clientMutationId: String
-    document: Interests!
+    document: AkashaBeamStream!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -309,9 +760,9 @@ type CreateInterestsPayload {
     viewer: CeramicAccount
 }
 
-type CreateProfileMentionPayload {
+type CreateAkashaBlockStoragePayload {
     clientMutationId: String
-    document: ProfileMention!
+    document: AkashaBlockStorage!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -321,9 +772,9 @@ type CreateProfileMentionPayload {
     viewer: CeramicAccount
 }
 
-type CreateProfilePayload {
+type CreateAkashaContentBlockPayload {
     clientMutationId: String
-    document: Profile!
+    document: AkashaContentBlock!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -333,9 +784,9 @@ type CreateProfilePayload {
     viewer: CeramicAccount
 }
 
-type CreateRebeamPayload {
+type CreateAkashaContentBlockStreamPayload {
     clientMutationId: String
-    document: Rebeam!
+    document: AkashaContentBlockStream!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -345,9 +796,9 @@ type CreateRebeamPayload {
     viewer: CeramicAccount
 }
 
-type CreateReflectPayload {
+type CreateAkashaFollowPayload {
     clientMutationId: String
-    document: Reflect!
+    document: AkashaFollow!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -357,9 +808,9 @@ type CreateReflectPayload {
     viewer: CeramicAccount
 }
 
-type CreateReflectionPayload {
+type CreateAkashaInterestsStreamPayload {
     clientMutationId: String
-    document: Reflection!
+    document: AkashaInterestsStream!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -369,80 +820,97 @@ type CreateReflectionPayload {
     viewer: CeramicAccount
 }
 
-type Follow implements Node {
-    "Account controlling the document"
-    did: CeramicAccount!
-    id: ID!
-    isFollowing: Boolean!
-    profile: Profile
-    profileID: CeramicStreamID!
+type CreateAkashaProfileInterestsPayload {
+    clientMutationId: String
+    document: AkashaProfileInterests!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
 }
 
-"A connection to a list of items."
-type FollowConnection {
-    "A list of edges."
-    edges: [FollowEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
+type CreateAkashaProfilePayload {
+    clientMutationId: String
+    document: AkashaProfile!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
 }
 
-"An edge in a connection."
-type FollowEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: Follow
+type CreateAkashaProfileStreamPayload {
+    clientMutationId: String
+    document: AkashaProfileStream!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
 }
 
-type Interests implements Node {
-    "Account controlling the document"
-    did: CeramicAccount!
-    id: ID!
-    topics: [InterestsLabeled!]!
+type CreateAkashaReflectPayload {
+    clientMutationId: String
+    document: AkashaReflect!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
 }
 
-"A connection to a list of items."
-type InterestsConnection {
-    "A list of edges."
-    edges: [InterestsEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
-}
-
-"An edge in a connection."
-type InterestsEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: Interests
-}
-
-type InterestsLabeled {
-    labelType: String!
-    value: String!
+type CreateAkashaReflectStreamPayload {
+    clientMutationId: String
+    document: AkashaReflectStream!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
 }
 
 type Mutation {
     createAkashaApp(input: CreateAkashaAppInput!): CreateAkashaAppPayload
-    createAppRelease(input: CreateAppReleaseInput!): CreateAppReleasePayload
-    createBeam(input: CreateBeamInput!): CreateBeamPayload
-    createFollow(input: CreateFollowInput!): CreateFollowPayload
-    createInterests(input: CreateInterestsInput!): CreateInterestsPayload
-    createProfile(input: CreateProfileInput!): CreateProfilePayload
-    createProfileMention(input: CreateProfileMentionInput!): CreateProfileMentionPayload
-    createRebeam(input: CreateRebeamInput!): CreateRebeamPayload
-    createReflect(input: CreateReflectInput!): CreateReflectPayload
-    createReflection(input: CreateReflectionInput!): CreateReflectionPayload
+    createAkashaAppRelease(input: CreateAkashaAppReleaseInput!): CreateAkashaAppReleasePayload
+    createAkashaAppsStream(input: CreateAkashaAppsStreamInput!): CreateAkashaAppsStreamPayload
+    createAkashaBeam(input: CreateAkashaBeamInput!): CreateAkashaBeamPayload
+    createAkashaBeamStream(input: CreateAkashaBeamStreamInput!): CreateAkashaBeamStreamPayload
+    createAkashaBlockStorage(input: CreateAkashaBlockStorageInput!): CreateAkashaBlockStoragePayload
+    createAkashaContentBlock(input: CreateAkashaContentBlockInput!): CreateAkashaContentBlockPayload
+    createAkashaContentBlockStream(input: CreateAkashaContentBlockStreamInput!): CreateAkashaContentBlockStreamPayload
+    createAkashaFollow(input: CreateAkashaFollowInput!): CreateAkashaFollowPayload
+    createAkashaInterestsStream(input: CreateAkashaInterestsStreamInput!): CreateAkashaInterestsStreamPayload
+    createAkashaProfile(input: CreateAkashaProfileInput!): CreateAkashaProfilePayload
+    createAkashaProfileInterests(input: CreateAkashaProfileInterestsInput!): CreateAkashaProfileInterestsPayload
+    createAkashaProfileStream(input: CreateAkashaProfileStreamInput!): CreateAkashaProfileStreamPayload
+    createAkashaReflect(input: CreateAkashaReflectInput!): CreateAkashaReflectPayload
+    createAkashaReflectStream(input: CreateAkashaReflectStreamInput!): CreateAkashaReflectStreamPayload
     updateAkashaApp(input: UpdateAkashaAppInput!): UpdateAkashaAppPayload
-    updateAppRelease(input: UpdateAppReleaseInput!): UpdateAppReleasePayload
-    updateBeam(input: UpdateBeamInput!): UpdateBeamPayload
-    updateFollow(input: UpdateFollowInput!): UpdateFollowPayload
-    updateInterests(input: UpdateInterestsInput!): UpdateInterestsPayload
-    updateProfile(input: UpdateProfileInput!): UpdateProfilePayload
-    updateProfileMention(input: UpdateProfileMentionInput!): UpdateProfileMentionPayload
-    updateRebeam(input: UpdateRebeamInput!): UpdateRebeamPayload
-    updateReflect(input: UpdateReflectInput!): UpdateReflectPayload
-    updateReflection(input: UpdateReflectionInput!): UpdateReflectionPayload
+    updateAkashaAppRelease(input: UpdateAkashaAppReleaseInput!): UpdateAkashaAppReleasePayload
+    updateAkashaAppsStream(input: UpdateAkashaAppsStreamInput!): UpdateAkashaAppsStreamPayload
+    updateAkashaBeam(input: UpdateAkashaBeamInput!): UpdateAkashaBeamPayload
+    updateAkashaBeamStream(input: UpdateAkashaBeamStreamInput!): UpdateAkashaBeamStreamPayload
+    updateAkashaBlockStorage(input: UpdateAkashaBlockStorageInput!): UpdateAkashaBlockStoragePayload
+    updateAkashaContentBlock(input: UpdateAkashaContentBlockInput!): UpdateAkashaContentBlockPayload
+    updateAkashaContentBlockStream(input: UpdateAkashaContentBlockStreamInput!): UpdateAkashaContentBlockStreamPayload
+    updateAkashaFollow(input: UpdateAkashaFollowInput!): UpdateAkashaFollowPayload
+    updateAkashaInterestsStream(input: UpdateAkashaInterestsStreamInput!): UpdateAkashaInterestsStreamPayload
+    updateAkashaProfile(input: UpdateAkashaProfileInput!): UpdateAkashaProfilePayload
+    updateAkashaProfileInterests(input: UpdateAkashaProfileInterestsInput!): UpdateAkashaProfileInterestsPayload
+    updateAkashaProfileStream(input: UpdateAkashaProfileStreamInput!): UpdateAkashaProfileStreamPayload
+    updateAkashaReflect(input: UpdateAkashaReflectInput!): UpdateAkashaReflectPayload
+    updateAkashaReflectStream(input: UpdateAkashaReflectStreamInput!): UpdateAkashaReflectStreamPayload
 }
 
 "Information about pagination in a connection."
@@ -457,98 +925,140 @@ type PageInfo {
     startCursor: String
 }
 
-type Profile implements Node {
-    avatar: ProfileImageVersions
-    background: ProfileImageVersions
-    createdAt: DateTime!
-    description: String
-    "Account controlling the document"
-    did: CeramicAccount!
-    followers(
-        "Returns only documents created by the provided account"
-        account: ID,
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): FollowConnection!
-    id: ID!
-    links: [ProfileLinkSource]
-    name: String!
-}
-
-"A connection to a list of items."
-type ProfileConnection {
-    "A list of edges."
-    edges: [ProfileEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
-}
-
-"An edge in a connection."
-type ProfileEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: Profile
-}
-
-type ProfileImageSource {
-    height: Int!
-    src: URI!
-    width: Int!
-}
-
-type ProfileImageVersions {
-    alternatives: [ProfileImageSource]
-    default: ProfileImageSource!
-}
-
-type ProfileLinkSource {
-    href: URI!
-    label: String
-}
-
-type ProfileMention implements Node {
-    beam: Beam
-    beamID: CeramicStreamID!
-    id: ID!
-    profile: Profile
-    profileID: CeramicStreamID!
-}
-
-"A connection to a list of items."
-type ProfileMentionConnection {
-    "A list of edges."
-    edges: [ProfileMentionEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
-}
-
-"An edge in a connection."
-type ProfileMentionEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: ProfileMention
-}
-
 type Query {
     akashaAppIndex(
         "Returns the items in the list that come after the specified cursor."
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaAppFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
+        last: Int,
+        sorting: AkashaAppSortingInput
     ): AkashaAppConnection
-    appReleaseIndex(
+    akashaAppReleaseIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaAppReleaseFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaAppReleaseSortingInput
+    ): AkashaAppReleaseConnection
+    akashaAppsStreamIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaAppsStreamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaAppsStreamSortingInput
+    ): AkashaAppsStreamConnection
+    akashaBeamIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaBeamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaBeamSortingInput
+    ): AkashaBeamConnection
+    akashaBeamStreamIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaBeamStreamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaBeamStreamSortingInput
+    ): AkashaBeamStreamConnection
+    akashaBlockStorageIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaBlockStorageFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaBlockStorageSortingInput
+    ): AkashaBlockStorageConnection
+    akashaContentBlockIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaContentBlockFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaContentBlockSortingInput
+    ): AkashaContentBlockConnection
+    akashaContentBlockStreamIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaContentBlockStreamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaContentBlockStreamSortingInput
+    ): AkashaContentBlockStreamConnection
+    akashaFollowIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaFollowFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaFollowSortingInput
+    ): AkashaFollowConnection
+    akashaInterestsStreamIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaInterestsStreamFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaInterestsStreamSortingInput
+    ): AkashaInterestsStreamConnection
+    akashaProfileIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        filters: AkashaProfileFiltersInput,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int,
+        sorting: AkashaProfileSortingInput
+    ): AkashaProfileConnection
+    akashaProfileInterestsIndex(
         "Returns the items in the list that come after the specified cursor."
         after: String,
         "Returns the items in the list that come before the specified cursor."
@@ -557,196 +1067,50 @@ type Query {
         first: Int,
         "Returns the last n items from the list."
         last: Int
-    ): AppReleaseConnection
-    beamIndex(
+    ): AkashaProfileInterestsConnection
+    akashaProfileStreamIndex(
         "Returns the items in the list that come after the specified cursor."
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaProfileStreamFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
-    ): BeamConnection
-    followIndex(
+        last: Int,
+        sorting: AkashaProfileStreamSortingInput
+    ): AkashaProfileStreamConnection
+    akashaReflectIndex(
         "Returns the items in the list that come after the specified cursor."
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaReflectFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
-    ): FollowConnection
-    interestsIndex(
+        last: Int,
+        sorting: AkashaReflectSortingInput
+    ): AkashaReflectConnection
+    akashaReflectStreamIndex(
         "Returns the items in the list that come after the specified cursor."
         after: String,
         "Returns the items in the list that come before the specified cursor."
         before: String,
+        filters: AkashaReflectStreamFiltersInput,
         "Returns the first n items from the list."
         first: Int,
         "Returns the last n items from the list."
-        last: Int
-    ): InterestsConnection
+        last: Int,
+        sorting: AkashaReflectStreamSortingInput
+    ): AkashaReflectStreamConnection
     "Fetches an object given its ID"
     node(
         "The ID of an object"
         id: ID!
     ): Node
-    profileIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): ProfileConnection
-    profileMentionIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): ProfileMentionConnection
-    rebeamIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): RebeamConnection
-    reflectIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): ReflectConnection
-    reflectionIndex(
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): ReflectionConnection
     "Account currently authenticated on the Ceramic instance, if set"
     viewer: CeramicAccount
-}
-
-type Rebeam implements Node {
-    active: Boolean!
-    beam: Beam
-    beamID: CeramicStreamID!
-    id: ID!
-    quotedBeam: Beam
-    quotedBeamID: CeramicStreamID!
-}
-
-"A connection to a list of items."
-type RebeamConnection {
-    "A list of edges."
-    edges: [RebeamEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
-}
-
-"An edge in a connection."
-type RebeamEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: Rebeam
-}
-
-type Reflect implements Node {
-    active: Boolean!
-    "Account controlling the document"
-    author: CeramicAccount!
-    beam: Beam
-    beamID: CeramicStreamID!
-    content: [ReflectProviderValue!]!
-    createdAt: DateTime!
-    id: ID!
-    isReply: Boolean!
-    reflections(
-        "Returns only documents created by the provided account"
-        account: ID,
-        "Returns the items in the list that come after the specified cursor."
-        after: String,
-        "Returns the items in the list that come before the specified cursor."
-        before: String,
-        "Returns the first n items from the list."
-        first: Int,
-        "Returns the last n items from the list."
-        last: Int
-    ): ReflectionConnection!
-    reflectionsCount(
-        "Counts only documents created by the provided account"
-        account: ID
-    ): Int!
-    "Current version of the document"
-    version: CeramicCommitID!
-}
-
-"A connection to a list of items."
-type ReflectConnection {
-    "A list of edges."
-    edges: [ReflectEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
-}
-
-"An edge in a connection."
-type ReflectEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: Reflect
-}
-
-type ReflectProviderValue {
-    property: String!
-    provider: String!
-    value: String!
-}
-
-type Reflection implements Node {
-    active: Boolean!
-    id: ID!
-    reflect: Reflect
-    reflectID: CeramicStreamID!
-    reflection: Reflect
-    reflectionID: CeramicStreamID!
-}
-
-"A connection to a list of items."
-type ReflectionConnection {
-    "A list of edges."
-    edges: [ReflectionEdge]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
-}
-
-"An edge in a connection."
-type ReflectionEdge {
-    "A cursor for use in pagination"
-    cursor: String!
-    "The item at the end of the edge"
-    node: Reflection
 }
 
 type UpdateAkashaAppPayload {
@@ -761,9 +1125,9 @@ type UpdateAkashaAppPayload {
     viewer: CeramicAccount
 }
 
-type UpdateAppReleasePayload {
+type UpdateAkashaAppReleasePayload {
     clientMutationId: String
-    document: AppRelease!
+    document: AkashaAppRelease!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -773,9 +1137,9 @@ type UpdateAppReleasePayload {
     viewer: CeramicAccount
 }
 
-type UpdateBeamPayload {
+type UpdateAkashaAppsStreamPayload {
     clientMutationId: String
-    document: Beam!
+    document: AkashaAppsStream!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -785,9 +1149,9 @@ type UpdateBeamPayload {
     viewer: CeramicAccount
 }
 
-type UpdateFollowPayload {
+type UpdateAkashaBeamPayload {
     clientMutationId: String
-    document: Follow!
+    document: AkashaBeam!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -797,9 +1161,9 @@ type UpdateFollowPayload {
     viewer: CeramicAccount
 }
 
-type UpdateInterestsPayload {
+type UpdateAkashaBeamStreamPayload {
     clientMutationId: String
-    document: Interests!
+    document: AkashaBeamStream!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -809,9 +1173,9 @@ type UpdateInterestsPayload {
     viewer: CeramicAccount
 }
 
-type UpdateProfileMentionPayload {
+type UpdateAkashaBlockStoragePayload {
     clientMutationId: String
-    document: ProfileMention!
+    document: AkashaBlockStorage!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -821,9 +1185,9 @@ type UpdateProfileMentionPayload {
     viewer: CeramicAccount
 }
 
-type UpdateProfilePayload {
+type UpdateAkashaContentBlockPayload {
     clientMutationId: String
-    document: Profile!
+    document: AkashaContentBlock!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -833,9 +1197,9 @@ type UpdateProfilePayload {
     viewer: CeramicAccount
 }
 
-type UpdateRebeamPayload {
+type UpdateAkashaContentBlockStreamPayload {
     clientMutationId: String
-    document: Rebeam!
+    document: AkashaContentBlockStream!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -845,9 +1209,9 @@ type UpdateRebeamPayload {
     viewer: CeramicAccount
 }
 
-type UpdateReflectPayload {
+type UpdateAkashaFollowPayload {
     clientMutationId: String
-    document: Reflect!
+    document: AkashaFollow!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -857,9 +1221,69 @@ type UpdateReflectPayload {
     viewer: CeramicAccount
 }
 
-type UpdateReflectionPayload {
+type UpdateAkashaInterestsStreamPayload {
     clientMutationId: String
-    document: Reflection!
+    document: AkashaInterestsStream!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateAkashaProfileInterestsPayload {
+    clientMutationId: String
+    document: AkashaProfileInterests!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateAkashaProfilePayload {
+    clientMutationId: String
+    document: AkashaProfile!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateAkashaProfileStreamPayload {
+    clientMutationId: String
+    document: AkashaProfileStream!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateAkashaReflectPayload {
+    clientMutationId: String
+    document: AkashaReflect!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateAkashaReflectStreamPayload {
+    clientMutationId: String
+    document: AkashaReflectStream!
     "Fetches an object given its ID"
     node(
         "The ID of an object"
@@ -874,6 +1298,79 @@ enum AkashaAppApplicationType {
     OTHER
     PLUGIN
     WIDGET
+}
+
+enum AkashaAppsStreamModerationStatus {
+    IN_REVIEW
+    NSFW
+    OK
+    OTHER
+    REMOVED
+    SUSPENDED
+}
+
+enum AkashaBeamStreamModerationStatus {
+    IN_REVIEW
+    NSFW
+    OK
+    OTHER
+    REMOVED
+    SUSPENDED
+}
+
+enum AkashaBlockStorageBlockStorageDef {
+    BOOL
+    EMOJI
+    FORM_DATA
+    OTHER
+    TEXT
+}
+
+enum AkashaContentBlockBlockDef {
+    FORM
+    OTHER
+    TEXT
+}
+
+enum AkashaContentBlockStreamModerationStatus {
+    IN_REVIEW
+    NSFW
+    OK
+    OTHER
+    REMOVED
+    SUSPENDED
+}
+
+enum AkashaInterestsStreamModerationStatus {
+    IN_REVIEW
+    NSFW
+    OK
+    OTHER
+    REMOVED
+    SUSPENDED
+}
+
+enum AkashaProfileStreamModerationStatus {
+    IN_REVIEW
+    NSFW
+    OK
+    OTHER
+    REMOVED
+    SUSPENDED
+}
+
+enum AkashaReflectStreamModerationStatus {
+    IN_REVIEW
+    NSFW
+    OK
+    OTHER
+    REMOVED
+    SUSPENDED
+}
+
+enum SortOrder {
+    ASC
+    DESC
 }
 
 "A Ceramic Commit ID"
@@ -894,6 +1391,21 @@ scalar InterPlanetaryCID
 "A field whose value conforms to the standard Uniform Resource Identifier (URI) format as specified in RFC3986."
 scalar URI
 
+input AkashaAppApplicationTypeValueFilterInput {
+    equalTo: AkashaAppApplicationType
+    in: [AkashaAppApplicationType!]
+    isNull: Boolean
+    notEqualTo: AkashaAppApplicationType
+    notIn: [AkashaAppApplicationType!]
+}
+
+input AkashaAppFiltersInput {
+    and: [AkashaAppFiltersInput!]
+    not: AkashaAppFiltersInput
+    or: [AkashaAppFiltersInput!]
+    where: AkashaAppObjectFilterInput
+}
+
 input AkashaAppInput {
     applicationType: AkashaAppApplicationType
     contributors: [DID]
@@ -905,24 +1417,536 @@ input AkashaAppInput {
     name: String!
 }
 
-input AppReleaseInput {
+input AkashaAppObjectFilterInput {
+    applicationType: AkashaAppApplicationTypeValueFilterInput
+    createdAt: StringValueFilterInput
+    displayName: StringValueFilterInput
+    name: StringValueFilterInput
+}
+
+input AkashaAppReleaseFiltersInput {
+    and: [AkashaAppReleaseFiltersInput!]
+    not: AkashaAppReleaseFiltersInput
+    or: [AkashaAppReleaseFiltersInput!]
+    where: AkashaAppReleaseObjectFilterInput
+}
+
+input AkashaAppReleaseInput {
     applicationID: CeramicStreamID!
     createdAt: DateTime!
     source: InterPlanetaryCID!
     version: String!
 }
 
-input BeamInput {
+input AkashaAppReleaseObjectFilterInput {
+    applicationID: StringValueFilterInput
+    createdAt: StringValueFilterInput
+    version: StringValueFilterInput
+}
+
+input AkashaAppReleaseSortingInput {
+    applicationID: SortOrder
+    createdAt: SortOrder
+    version: SortOrder
+}
+
+input AkashaAppSortingInput {
+    applicationType: SortOrder
+    createdAt: SortOrder
+    displayName: SortOrder
+    name: SortOrder
+}
+
+input AkashaAppsStreamFiltersInput {
+    and: [AkashaAppsStreamFiltersInput!]
+    not: AkashaAppsStreamFiltersInput
+    or: [AkashaAppsStreamFiltersInput!]
+    where: AkashaAppsStreamObjectFilterInput
+}
+
+input AkashaAppsStreamInput {
     active: Boolean!
-    content: [BeamProviderValueInput]!
+    applicationID: CeramicStreamID!
     createdAt: DateTime!
+    moderationID: CeramicStreamID
+    status: AkashaAppsStreamModerationStatus
+}
+
+input AkashaAppsStreamModerationStatusValueFilterInput {
+    equalTo: AkashaAppsStreamModerationStatus
+    in: [AkashaAppsStreamModerationStatus!]
+    isNull: Boolean
+    notEqualTo: AkashaAppsStreamModerationStatus
+    notIn: [AkashaAppsStreamModerationStatus!]
+}
+
+input AkashaAppsStreamObjectFilterInput {
+    active: BooleanValueFilterInput
+    applicationID: StringValueFilterInput
+    createdAt: StringValueFilterInput
+    moderationID: StringValueFilterInput
+    status: AkashaAppsStreamModerationStatusValueFilterInput
+}
+
+input AkashaAppsStreamSortingInput {
+    active: SortOrder
+    applicationID: SortOrder
+    createdAt: SortOrder
+    moderationID: SortOrder
+    status: SortOrder
+}
+
+input AkashaBeamBlockRecordInput {
+    blockID: CeramicStreamID!
+    order: Int!
+}
+
+input AkashaBeamEmbeddedTypeInput {
+    embeddedID: CeramicStreamID!
+    label: String!
+}
+
+input AkashaBeamFiltersInput {
+    and: [AkashaBeamFiltersInput!]
+    not: AkashaBeamFiltersInput
+    or: [AkashaBeamFiltersInput!]
+    where: AkashaBeamObjectFilterInput
+}
+
+input AkashaBeamInput {
+    active: Boolean!
+    content: [AkashaBeamBlockRecordInput]!
+    createdAt: DateTime!
+    embeddedBeam: AkashaBeamEmbeddedTypeInput
+    mentions: [CeramicStreamID]
+    nsfw: Boolean
     tags: [String]
 }
 
-input BeamProviderValueInput {
-    property: String!
-    provider: String!
+input AkashaBeamObjectFilterInput {
+    active: BooleanValueFilterInput
+    createdAt: StringValueFilterInput
+    nsfw: BooleanValueFilterInput
+}
+
+input AkashaBeamSortingInput {
+    active: SortOrder
+    createdAt: SortOrder
+    nsfw: SortOrder
+}
+
+input AkashaBeamStreamFiltersInput {
+    and: [AkashaBeamStreamFiltersInput!]
+    not: AkashaBeamStreamFiltersInput
+    or: [AkashaBeamStreamFiltersInput!]
+    where: AkashaBeamStreamObjectFilterInput
+}
+
+input AkashaBeamStreamInput {
+    active: Boolean!
+    beamID: CeramicStreamID!
+    createdAt: DateTime!
+    moderationID: CeramicStreamID
+    status: AkashaBeamStreamModerationStatus
+}
+
+input AkashaBeamStreamModerationStatusValueFilterInput {
+    equalTo: AkashaBeamStreamModerationStatus
+    in: [AkashaBeamStreamModerationStatus!]
+    isNull: Boolean
+    notEqualTo: AkashaBeamStreamModerationStatus
+    notIn: [AkashaBeamStreamModerationStatus!]
+}
+
+input AkashaBeamStreamObjectFilterInput {
+    active: BooleanValueFilterInput
+    beamID: StringValueFilterInput
+    createdAt: StringValueFilterInput
+    moderationID: StringValueFilterInput
+    status: AkashaBeamStreamModerationStatusValueFilterInput
+}
+
+input AkashaBeamStreamSortingInput {
+    active: SortOrder
+    beamID: SortOrder
+    createdAt: SortOrder
+    moderationID: SortOrder
+    status: SortOrder
+}
+
+input AkashaBlockStorageBlockStorageDefValueFilterInput {
+    equalTo: AkashaBlockStorageBlockStorageDef
+    in: [AkashaBlockStorageBlockStorageDef!]
+    isNull: Boolean
+    notEqualTo: AkashaBlockStorageBlockStorageDef
+    notIn: [AkashaBlockStorageBlockStorageDef!]
+}
+
+input AkashaBlockStorageFiltersInput {
+    and: [AkashaBlockStorageFiltersInput!]
+    not: AkashaBlockStorageFiltersInput
+    or: [AkashaBlockStorageFiltersInput!]
+    where: AkashaBlockStorageObjectFilterInput
+}
+
+input AkashaBlockStorageInput {
+    active: Boolean!
+    appVersionID: CeramicStreamID!
+    blockID: CeramicStreamID!
+    content: [AkashaBlockStorageLabeledValueInput]!
+    createdAt: DateTime!
+    kind: AkashaBlockStorageBlockStorageDef
+}
+
+input AkashaBlockStorageLabeledValueInput {
+    label: String!
+    propertyType: String!
     value: String!
+}
+
+input AkashaBlockStorageObjectFilterInput {
+    active: BooleanValueFilterInput
+    createdAt: StringValueFilterInput
+    kind: AkashaBlockStorageBlockStorageDefValueFilterInput
+}
+
+input AkashaBlockStorageSortingInput {
+    active: SortOrder
+    createdAt: SortOrder
+    kind: SortOrder
+}
+
+input AkashaContentBlockBlockDefValueFilterInput {
+    equalTo: AkashaContentBlockBlockDef
+    in: [AkashaContentBlockBlockDef!]
+    isNull: Boolean
+    notEqualTo: AkashaContentBlockBlockDef
+    notIn: [AkashaContentBlockBlockDef!]
+}
+
+input AkashaContentBlockFiltersInput {
+    and: [AkashaContentBlockFiltersInput!]
+    not: AkashaContentBlockFiltersInput
+    or: [AkashaContentBlockFiltersInput!]
+    where: AkashaContentBlockObjectFilterInput
+}
+
+input AkashaContentBlockInput {
+    active: Boolean!
+    appVersionID: CeramicStreamID!
+    content: [AkashaContentBlockLabeledValueInput]!
+    createdAt: DateTime!
+    kind: AkashaContentBlockBlockDef
+    nsfw: Boolean
+}
+
+input AkashaContentBlockLabeledValueInput {
+    label: String!
+    propertyType: String!
+    value: String!
+}
+
+input AkashaContentBlockObjectFilterInput {
+    active: BooleanValueFilterInput
+    appVersionID: StringValueFilterInput
+    createdAt: StringValueFilterInput
+    kind: AkashaContentBlockBlockDefValueFilterInput
+    nsfw: BooleanValueFilterInput
+}
+
+input AkashaContentBlockSortingInput {
+    active: SortOrder
+    appVersionID: SortOrder
+    createdAt: SortOrder
+    kind: SortOrder
+    nsfw: SortOrder
+}
+
+input AkashaContentBlockStreamFiltersInput {
+    and: [AkashaContentBlockStreamFiltersInput!]
+    not: AkashaContentBlockStreamFiltersInput
+    or: [AkashaContentBlockStreamFiltersInput!]
+    where: AkashaContentBlockStreamObjectFilterInput
+}
+
+input AkashaContentBlockStreamInput {
+    active: Boolean!
+    beamID: CeramicStreamID!
+    blockID: CeramicStreamID!
+    createdAt: DateTime!
+    moderationID: CeramicStreamID
+    status: AkashaContentBlockStreamModerationStatus
+}
+
+input AkashaContentBlockStreamModerationStatusValueFilterInput {
+    equalTo: AkashaContentBlockStreamModerationStatus
+    in: [AkashaContentBlockStreamModerationStatus!]
+    isNull: Boolean
+    notEqualTo: AkashaContentBlockStreamModerationStatus
+    notIn: [AkashaContentBlockStreamModerationStatus!]
+}
+
+input AkashaContentBlockStreamObjectFilterInput {
+    active: BooleanValueFilterInput
+    beamID: StringValueFilterInput
+    blockID: StringValueFilterInput
+    createdAt: StringValueFilterInput
+    moderationID: StringValueFilterInput
+    status: AkashaContentBlockStreamModerationStatusValueFilterInput
+}
+
+input AkashaContentBlockStreamSortingInput {
+    active: SortOrder
+    beamID: SortOrder
+    blockID: SortOrder
+    createdAt: SortOrder
+    moderationID: SortOrder
+    status: SortOrder
+}
+
+input AkashaFollowFiltersInput {
+    and: [AkashaFollowFiltersInput!]
+    not: AkashaFollowFiltersInput
+    or: [AkashaFollowFiltersInput!]
+    where: AkashaFollowObjectFilterInput
+}
+
+input AkashaFollowInput {
+    isFollowing: Boolean!
+    profileID: CeramicStreamID!
+}
+
+input AkashaFollowObjectFilterInput {
+    isFollowing: BooleanValueFilterInput
+    profileID: StringValueFilterInput
+}
+
+input AkashaFollowSortingInput {
+    isFollowing: SortOrder
+    profileID: SortOrder
+}
+
+input AkashaInterestsStreamFiltersInput {
+    and: [AkashaInterestsStreamFiltersInput!]
+    not: AkashaInterestsStreamFiltersInput
+    or: [AkashaInterestsStreamFiltersInput!]
+    where: AkashaInterestsStreamObjectFilterInput
+}
+
+input AkashaInterestsStreamInput {
+    active: Boolean!
+    createdAt: DateTime!
+    labelType: String!
+    moderationID: CeramicStreamID
+    status: AkashaInterestsStreamModerationStatus
+    value: String!
+}
+
+input AkashaInterestsStreamModerationStatusValueFilterInput {
+    equalTo: AkashaInterestsStreamModerationStatus
+    in: [AkashaInterestsStreamModerationStatus!]
+    isNull: Boolean
+    notEqualTo: AkashaInterestsStreamModerationStatus
+    notIn: [AkashaInterestsStreamModerationStatus!]
+}
+
+input AkashaInterestsStreamObjectFilterInput {
+    active: BooleanValueFilterInput
+    createdAt: StringValueFilterInput
+    labelType: StringValueFilterInput
+    moderationID: StringValueFilterInput
+    status: AkashaInterestsStreamModerationStatusValueFilterInput
+    value: StringValueFilterInput
+}
+
+input AkashaInterestsStreamSortingInput {
+    active: SortOrder
+    createdAt: SortOrder
+    labelType: SortOrder
+    moderationID: SortOrder
+    status: SortOrder
+    value: SortOrder
+}
+
+input AkashaProfileFiltersInput {
+    and: [AkashaProfileFiltersInput!]
+    not: AkashaProfileFiltersInput
+    or: [AkashaProfileFiltersInput!]
+    where: AkashaProfileObjectFilterInput
+}
+
+input AkashaProfileImageSourceInput {
+    height: Int!
+    src: URI!
+    width: Int!
+}
+
+input AkashaProfileImageVersionsInput {
+    alternatives: [AkashaProfileImageSourceInput]
+    default: AkashaProfileImageSourceInput!
+}
+
+input AkashaProfileInput {
+    avatar: AkashaProfileImageVersionsInput
+    background: AkashaProfileImageVersionsInput
+    createdAt: DateTime!
+    description: String
+    links: [AkashaProfileLinkSourceInput]
+    name: String!
+    nsfw: Boolean
+}
+
+input AkashaProfileInterestsInput {
+    topics: [AkashaProfileInterestsLabeledInput]!
+}
+
+input AkashaProfileInterestsLabeledInput {
+    labelType: String!
+    value: String!
+}
+
+input AkashaProfileLinkSourceInput {
+    href: URI!
+    label: String
+}
+
+input AkashaProfileObjectFilterInput {
+    createdAt: StringValueFilterInput
+    name: StringValueFilterInput
+    nsfw: BooleanValueFilterInput
+}
+
+input AkashaProfileSortingInput {
+    createdAt: SortOrder
+    name: SortOrder
+    nsfw: SortOrder
+}
+
+input AkashaProfileStreamFiltersInput {
+    and: [AkashaProfileStreamFiltersInput!]
+    not: AkashaProfileStreamFiltersInput
+    or: [AkashaProfileStreamFiltersInput!]
+    where: AkashaProfileStreamObjectFilterInput
+}
+
+input AkashaProfileStreamInput {
+    active: Boolean!
+    createdAt: DateTime!
+    moderationID: CeramicStreamID
+    profileID: CeramicStreamID!
+    status: AkashaProfileStreamModerationStatus
+}
+
+input AkashaProfileStreamModerationStatusValueFilterInput {
+    equalTo: AkashaProfileStreamModerationStatus
+    in: [AkashaProfileStreamModerationStatus!]
+    isNull: Boolean
+    notEqualTo: AkashaProfileStreamModerationStatus
+    notIn: [AkashaProfileStreamModerationStatus!]
+}
+
+input AkashaProfileStreamObjectFilterInput {
+    active: BooleanValueFilterInput
+    createdAt: StringValueFilterInput
+    moderationID: StringValueFilterInput
+    profileID: StringValueFilterInput
+    status: AkashaProfileStreamModerationStatusValueFilterInput
+}
+
+input AkashaProfileStreamSortingInput {
+    active: SortOrder
+    createdAt: SortOrder
+    moderationID: SortOrder
+    profileID: SortOrder
+    status: SortOrder
+}
+
+input AkashaReflectFiltersInput {
+    and: [AkashaReflectFiltersInput!]
+    not: AkashaReflectFiltersInput
+    or: [AkashaReflectFiltersInput!]
+    where: AkashaReflectObjectFilterInput
+}
+
+input AkashaReflectInput {
+    active: Boolean!
+    beamID: CeramicStreamID!
+    content: [AkashaReflectProviderValueInput]!
+    createdAt: DateTime!
+    isReply: Boolean!
+    mentions: [CeramicStreamID]
+    nsfw: Boolean
+    reflection: CeramicStreamID
+    tags: [String]
+}
+
+input AkashaReflectObjectFilterInput {
+    active: BooleanValueFilterInput
+    createdAt: StringValueFilterInput
+    isReply: BooleanValueFilterInput
+    nsfw: BooleanValueFilterInput
+    reflection: StringValueFilterInput
+}
+
+input AkashaReflectProviderValueInput {
+    label: String!
+    propertyType: String!
+    value: String!
+}
+
+input AkashaReflectSortingInput {
+    active: SortOrder
+    createdAt: SortOrder
+    isReply: SortOrder
+    nsfw: SortOrder
+    reflection: SortOrder
+}
+
+input AkashaReflectStreamFiltersInput {
+    and: [AkashaReflectStreamFiltersInput!]
+    not: AkashaReflectStreamFiltersInput
+    or: [AkashaReflectStreamFiltersInput!]
+    where: AkashaReflectStreamObjectFilterInput
+}
+
+input AkashaReflectStreamInput {
+    active: Boolean!
+    beamID: CeramicStreamID!
+    createdAt: DateTime!
+    moderationID: CeramicStreamID
+    reflectionID: CeramicStreamID!
+    status: AkashaReflectStreamModerationStatus
+}
+
+input AkashaReflectStreamModerationStatusValueFilterInput {
+    equalTo: AkashaReflectStreamModerationStatus
+    in: [AkashaReflectStreamModerationStatus!]
+    isNull: Boolean
+    notEqualTo: AkashaReflectStreamModerationStatus
+    notIn: [AkashaReflectStreamModerationStatus!]
+}
+
+input AkashaReflectStreamObjectFilterInput {
+    active: BooleanValueFilterInput
+    beamID: StringValueFilterInput
+    createdAt: StringValueFilterInput
+    moderationID: StringValueFilterInput
+    reflectionID: StringValueFilterInput
+    status: AkashaReflectStreamModerationStatusValueFilterInput
+}
+
+input AkashaReflectStreamSortingInput {
+    active: SortOrder
+    beamID: SortOrder
+    createdAt: SortOrder
+    moderationID: SortOrder
+    reflectionID: SortOrder
+    status: SortOrder
+}
+
+input BooleanValueFilterInput {
+    equalTo: Boolean
+    isNull: Boolean
 }
 
 input CreateAkashaAppInput {
@@ -930,63 +1954,74 @@ input CreateAkashaAppInput {
     content: AkashaAppInput!
 }
 
-input CreateAppReleaseInput {
+input CreateAkashaAppReleaseInput {
     clientMutationId: String
-    content: AppReleaseInput!
+    content: AkashaAppReleaseInput!
 }
 
-input CreateBeamInput {
+input CreateAkashaAppsStreamInput {
     clientMutationId: String
-    content: BeamInput!
+    content: AkashaAppsStreamInput!
 }
 
-input CreateFollowInput {
+input CreateAkashaBeamInput {
     clientMutationId: String
-    content: FollowInput!
+    content: AkashaBeamInput!
 }
 
-input CreateInterestsInput {
+input CreateAkashaBeamStreamInput {
     clientMutationId: String
-    content: InterestsInput!
+    content: AkashaBeamStreamInput!
 }
 
-input CreateProfileInput {
+input CreateAkashaBlockStorageInput {
     clientMutationId: String
-    content: ProfileInput!
+    content: AkashaBlockStorageInput!
 }
 
-input CreateProfileMentionInput {
+input CreateAkashaContentBlockInput {
     clientMutationId: String
-    content: ProfileMentionInput!
+    content: AkashaContentBlockInput!
 }
 
-input CreateRebeamInput {
+input CreateAkashaContentBlockStreamInput {
     clientMutationId: String
-    content: RebeamInput!
+    content: AkashaContentBlockStreamInput!
 }
 
-input CreateReflectInput {
+input CreateAkashaFollowInput {
     clientMutationId: String
-    content: ReflectInput!
+    content: AkashaFollowInput!
 }
 
-input CreateReflectionInput {
+input CreateAkashaInterestsStreamInput {
     clientMutationId: String
-    content: ReflectionInput!
+    content: AkashaInterestsStreamInput!
 }
 
-input FollowInput {
-    isFollowing: Boolean!
-    profileID: CeramicStreamID!
+input CreateAkashaProfileInput {
+    clientMutationId: String
+    content: AkashaProfileInput!
 }
 
-input InterestsInput {
-    topics: [InterestsLabeledInput]!
+input CreateAkashaProfileInterestsInput {
+    clientMutationId: String
+    content: AkashaProfileInterestsInput!
 }
 
-input InterestsLabeledInput {
-    labelType: String!
-    value: String!
+input CreateAkashaProfileStreamInput {
+    clientMutationId: String
+    content: AkashaProfileStreamInput!
+}
+
+input CreateAkashaReflectInput {
+    clientMutationId: String
+    content: AkashaReflectInput!
+}
+
+input CreateAkashaReflectStreamInput {
+    clientMutationId: String
+    content: AkashaReflectStreamInput!
 }
 
 input PartialAkashaAppInput {
@@ -1000,117 +2035,133 @@ input PartialAkashaAppInput {
     name: String
 }
 
-input PartialAppReleaseInput {
+input PartialAkashaAppReleaseInput {
     applicationID: CeramicStreamID
     createdAt: DateTime
     source: InterPlanetaryCID
     version: String
 }
 
-input PartialBeamInput {
+input PartialAkashaAppsStreamInput {
     active: Boolean
-    content: [BeamProviderValueInput]
+    applicationID: CeramicStreamID
     createdAt: DateTime
+    moderationID: CeramicStreamID
+    status: AkashaAppsStreamModerationStatus
+}
+
+input PartialAkashaBeamInput {
+    active: Boolean
+    content: [AkashaBeamBlockRecordInput]
+    createdAt: DateTime
+    embeddedBeam: AkashaBeamEmbeddedTypeInput
+    mentions: [CeramicStreamID]
+    nsfw: Boolean
     tags: [String]
 }
 
-input PartialFollowInput {
+input PartialAkashaBeamStreamInput {
+    active: Boolean
+    beamID: CeramicStreamID
+    createdAt: DateTime
+    moderationID: CeramicStreamID
+    status: AkashaBeamStreamModerationStatus
+}
+
+input PartialAkashaBlockStorageInput {
+    active: Boolean
+    appVersionID: CeramicStreamID
+    blockID: CeramicStreamID
+    content: [AkashaBlockStorageLabeledValueInput]
+    createdAt: DateTime
+    kind: AkashaBlockStorageBlockStorageDef
+}
+
+input PartialAkashaContentBlockInput {
+    active: Boolean
+    appVersionID: CeramicStreamID
+    content: [AkashaContentBlockLabeledValueInput]
+    createdAt: DateTime
+    kind: AkashaContentBlockBlockDef
+    nsfw: Boolean
+}
+
+input PartialAkashaContentBlockStreamInput {
+    active: Boolean
+    beamID: CeramicStreamID
+    blockID: CeramicStreamID
+    createdAt: DateTime
+    moderationID: CeramicStreamID
+    status: AkashaContentBlockStreamModerationStatus
+}
+
+input PartialAkashaFollowInput {
     isFollowing: Boolean
     profileID: CeramicStreamID
 }
 
-input PartialInterestsInput {
-    topics: [InterestsLabeledInput]
+input PartialAkashaInterestsStreamInput {
+    active: Boolean
+    createdAt: DateTime
+    labelType: String
+    moderationID: CeramicStreamID
+    status: AkashaInterestsStreamModerationStatus
+    value: String
 }
 
-input PartialProfileInput {
-    avatar: ProfileImageVersionsInput
-    background: ProfileImageVersionsInput
+input PartialAkashaProfileInput {
+    avatar: AkashaProfileImageVersionsInput
+    background: AkashaProfileImageVersionsInput
     createdAt: DateTime
     description: String
-    links: [ProfileLinkSourceInput]
+    links: [AkashaProfileLinkSourceInput]
     name: String
+    nsfw: Boolean
 }
 
-input PartialProfileMentionInput {
-    beamID: CeramicStreamID
+input PartialAkashaProfileInterestsInput {
+    topics: [AkashaProfileInterestsLabeledInput]
+}
+
+input PartialAkashaProfileStreamInput {
+    active: Boolean
+    createdAt: DateTime
+    moderationID: CeramicStreamID
     profileID: CeramicStreamID
+    status: AkashaProfileStreamModerationStatus
 }
 
-input PartialRebeamInput {
+input PartialAkashaReflectInput {
     active: Boolean
     beamID: CeramicStreamID
-    quotedBeamID: CeramicStreamID
-}
-
-input PartialReflectInput {
-    active: Boolean
-    beamID: CeramicStreamID
-    content: [ReflectProviderValueInput]
+    content: [AkashaReflectProviderValueInput]
     createdAt: DateTime
     isReply: Boolean
+    mentions: [CeramicStreamID]
+    nsfw: Boolean
+    reflection: CeramicStreamID
+    tags: [String]
 }
 
-input PartialReflectionInput {
+input PartialAkashaReflectStreamInput {
     active: Boolean
-    reflectID: CeramicStreamID
+    beamID: CeramicStreamID
+    createdAt: DateTime
+    moderationID: CeramicStreamID
     reflectionID: CeramicStreamID
+    status: AkashaReflectStreamModerationStatus
 }
 
-input ProfileImageSourceInput {
-    height: Int!
-    src: URI!
-    width: Int!
-}
-
-input ProfileImageVersionsInput {
-    alternatives: [ProfileImageSourceInput]
-    default: ProfileImageSourceInput!
-}
-
-input ProfileInput {
-    avatar: ProfileImageVersionsInput
-    background: ProfileImageVersionsInput
-    createdAt: DateTime!
-    description: String
-    links: [ProfileLinkSourceInput]
-    name: String!
-}
-
-input ProfileLinkSourceInput {
-    href: URI!
-    label: String
-}
-
-input ProfileMentionInput {
-    beamID: CeramicStreamID!
-    profileID: CeramicStreamID!
-}
-
-input RebeamInput {
-    active: Boolean!
-    beamID: CeramicStreamID!
-    quotedBeamID: CeramicStreamID!
-}
-
-input ReflectInput {
-    active: Boolean!
-    beamID: CeramicStreamID!
-    content: [ReflectProviderValueInput]!
-    createdAt: DateTime!
-    isReply: Boolean!
-}
-
-input ReflectProviderValueInput {
-    property: String!
-    provider: String!
-    value: String!
-}
-
-input ReflectionInput {
-    active: Boolean!
-    reflectID: CeramicStreamID!
-    reflectionID: CeramicStreamID!
+input StringValueFilterInput {
+    equalTo: String
+    greaterThan: String
+    greaterThanOrEqualTo: String
+    in: [String!]
+    isNull: Boolean
+    lessThan: String
+    lessThanOrEqualTo: String
+    notEqualTo: String
+    notIn: [String!]
 }
 
 input UpdateAkashaAppInput {
@@ -1120,30 +2171,100 @@ input UpdateAkashaAppInput {
     options: UpdateOptionsInput
 }
 
-input UpdateAppReleaseInput {
+input UpdateAkashaAppReleaseInput {
     clientMutationId: String
-    content: PartialAppReleaseInput!
+    content: PartialAkashaAppReleaseInput!
     id: ID!
     options: UpdateOptionsInput
 }
 
-input UpdateBeamInput {
+input UpdateAkashaAppsStreamInput {
     clientMutationId: String
-    content: PartialBeamInput!
+    content: PartialAkashaAppsStreamInput!
     id: ID!
     options: UpdateOptionsInput
 }
 
-input UpdateFollowInput {
+input UpdateAkashaBeamInput {
     clientMutationId: String
-    content: PartialFollowInput!
+    content: PartialAkashaBeamInput!
     id: ID!
     options: UpdateOptionsInput
 }
 
-input UpdateInterestsInput {
+input UpdateAkashaBeamStreamInput {
     clientMutationId: String
-    content: PartialInterestsInput!
+    content: PartialAkashaBeamStreamInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaBlockStorageInput {
+    clientMutationId: String
+    content: PartialAkashaBlockStorageInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaContentBlockInput {
+    clientMutationId: String
+    content: PartialAkashaContentBlockInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaContentBlockStreamInput {
+    clientMutationId: String
+    content: PartialAkashaContentBlockStreamInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaFollowInput {
+    clientMutationId: String
+    content: PartialAkashaFollowInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaInterestsStreamInput {
+    clientMutationId: String
+    content: PartialAkashaInterestsStreamInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaProfileInput {
+    clientMutationId: String
+    content: PartialAkashaProfileInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaProfileInterestsInput {
+    clientMutationId: String
+    content: PartialAkashaProfileInterestsInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaProfileStreamInput {
+    clientMutationId: String
+    content: PartialAkashaProfileStreamInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaReflectInput {
+    clientMutationId: String
+    content: PartialAkashaReflectInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAkashaReflectStreamInput {
+    clientMutationId: String
+    content: PartialAkashaReflectStreamInput!
     id: ID!
     options: UpdateOptionsInput
 }
@@ -1153,39 +2274,4 @@ input UpdateOptionsInput {
     replace: Boolean = false
     "Only perform mutation if the document matches the provided version"
     version: CeramicCommitID
-}
-
-input UpdateProfileInput {
-    clientMutationId: String
-    content: PartialProfileInput!
-    id: ID!
-    options: UpdateOptionsInput
-}
-
-input UpdateProfileMentionInput {
-    clientMutationId: String
-    content: PartialProfileMentionInput!
-    id: ID!
-    options: UpdateOptionsInput
-}
-
-input UpdateRebeamInput {
-    clientMutationId: String
-    content: PartialRebeamInput!
-    id: ID!
-    options: UpdateOptionsInput
-}
-
-input UpdateReflectInput {
-    clientMutationId: String
-    content: PartialReflectInput!
-    id: ID!
-    options: UpdateOptionsInput
-}
-
-input UpdateReflectionInput {
-    clientMutationId: String
-    content: PartialReflectionInput!
-    id: ID!
-    options: UpdateOptionsInput
 }

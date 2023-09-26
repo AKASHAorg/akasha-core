@@ -1,27 +1,30 @@
 import React from 'react';
+
+import { Developer } from '@akashaorg/typings/lib/ui';
+
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import AppList, { AppListProp } from '../AppList';
-import { Developer } from '../types/common.types';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import AppList, { AppListProps } from '../AppList';
 
 export type DevInfoProps = {
   developerTitle: string;
   developers: Developer[];
-  apps: AppListProp['apps'];
-  onAppSelected: () => void;
+  apps: AppListProps['apps'];
+  onAppSelected: (appId: string) => void;
 };
 
 const DevInfo: React.FC<DevInfoProps> = ({ developerTitle, developers, apps, onAppSelected }) => {
   return (
-    <Card elevation="1" padding={16} radius={20}>
+    <Card elevation="1" padding={'p-4'} radius={20}>
       <Stack direction="column" spacing="gap-y-2">
         <Text variant="h5">{developerTitle}</Text>
         {developers.map(developer => (
           <Stack key={developer.profileId} direction="column" spacing="gap-y-2">
-            <AvatarBlock {...developer} />
+            <ProfileAvatarButton {...developer} />
             <Divider />
             <AppList apps={apps} onAppSelected={onAppSelected} />
           </Stack>

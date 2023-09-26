@@ -2,18 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import SidebarComponent from './components/sidebar-component';
 
-const Widget: React.FC<RootComponentProps> = props => {
+const Widget: React.FC<unknown> = () => {
+  const { getTranslationPlugin } = useRootComponentProps();
+
   return (
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <Router>
-        <SidebarComponent {...props} />
+        <SidebarComponent />
       </Router>
     </I18nextProvider>
   );

@@ -1,4 +1,4 @@
-# Akasha World Framework UI Components
+# AKASHA Core UI Components
 
 ## Table of contents
 

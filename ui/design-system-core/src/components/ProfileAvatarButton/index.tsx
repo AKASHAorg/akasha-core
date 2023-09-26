@@ -1,27 +1,27 @@
 import React from 'react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar, { AvatarSize } from '../Avatar';
-import Box from '../Box';
+import Stack from '../Stack';
 import Button from '../Button';
-import Text from '../Text';
 import DidField from '../DidField';
+import Text from '../Text';
 
 export interface ProfileAvatarButtonProps {
   customStyle?: string;
-  info?: string | React.ReactElement;
   avatarImage?: Profile['avatar'];
   label?: string;
   size?: AvatarSize;
   profileId: Profile['did']['id'];
   bold?: boolean;
   active?: boolean;
+  truncateText?: boolean;
+  href?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   onClickAvatar?: () => void;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLButtonElement>;
-  truncateText?: boolean;
 }
 
 const ProfileAvatarButton = React.forwardRef(
@@ -31,9 +31,9 @@ const ProfileAvatarButton = React.forwardRef(
       size = 'md',
       avatarImage,
       label,
-      info,
       profileId,
       truncateText = true,
+      href,
       onClick,
       onClickAvatar,
       onMouseEnter,
@@ -58,24 +58,30 @@ const ProfileAvatarButton = React.forwardRef(
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        <Box role="img" aria-label="avatar-box" customStyle="shrink-0">
+        <Stack customStyle="shrink-0" testId="avatar-box" aria-label="avatar-box">
           <Avatar
             size={size}
             avatar={avatarImage}
             profileId={profileId}
             customStyle="cursor-pointer"
+            href={href}
             onClick={handleClickAvatar}
           />
-        </Box>
-
-        <Box role="listitem" aria-label="info-box" customStyle="justify-center align-top space-y-1">
-          <Box ref={ref}>
+        </Stack>
+        <Stack
+          justify="center"
+          spacing="gap-y-1"
+          customStyle="align-top"
+          testId="info-box"
+          aria-label="info-box"
+        >
+          <Stack ref={ref}>
             <Text variant="button-sm" weight="bold" truncate={true} customStyle={textTruncateStyle}>
               {label || profileId}
             </Text>
-          </Box>
-          <DidField did={profileId} copiable={false} />
-        </Box>
+          </Stack>
+          <DidField did={profileId} isValid={true} copiable={false} />
+        </Stack>
       </Button>
     );
   },

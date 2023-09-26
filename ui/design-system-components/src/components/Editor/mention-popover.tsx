@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Portal } from './helpers';
 import { tw, tx } from '@twind/core';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
 export interface IMentionPopover {
   values: Profile[];
@@ -40,7 +40,6 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
           >
             <ProfileAvatarButton
               label={value.name}
-              info={value.name}
               avatarImage={value.avatar}
               profileId={value.did.id}
             />

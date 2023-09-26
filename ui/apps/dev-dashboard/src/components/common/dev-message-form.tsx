@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
@@ -22,14 +22,14 @@ export const DevMessageForm: React.FC<DevMessageFormProps> = props => {
   } = props;
 
   return (
-    <Box customStyle="mt-2 space-y-6">
+    <Stack spacing="gap-y-6" customStyle="mt-2">
       <TextField
         label={messageNameTitleLabel}
         placeholder={messageNameInputPlaceholder}
         type="text"
       />
 
-      <Box customStyle="space-y-1">
+      <Stack spacing="gap-y-1">
         <TextField
           label={messageTitleLabel}
           placeholder={messageInputPlaceholder}
@@ -45,7 +45,7 @@ export const DevMessageForm: React.FC<DevMessageFormProps> = props => {
         {!!validationStatus.extraInfo?.length && (
           <Text variant="footnotes2">*{validationStatus.extraInfo}</Text>
         )}
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };

@@ -8,36 +8,32 @@ import {
   Element,
   Descendant,
 } from 'slate';
+import isUrl from 'is-url';
+import { tw } from '@twind/core';
 import { withHistory } from 'slate-history';
-import { Editable } from 'slate-react';
-import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
-
-// import data from '@emoji-mart/data';
-// import Picker from '@emoji-mart/react';
-
-import { tw, tx } from '@twind/core';
 import { Popover } from '@headlessui/react';
-import { IEntryData, IMetadata, IPublishData } from '@akashaorg/typings/ui';
+import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
+
+import { IEntryData, IMetadata, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Meter from '@akashaorg/design-system-core/lib/components/Meter';
-
-import EmbedBox from '../EmbedBox';
-import { TagPopover } from './tag-popover';
-import LinkPreview from '../LinkPreview';
-import { ImageObject } from '../ImageGallery/image-grid-item';
-import ImageGallery from '../ImageGallery';
+import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
 import { CustomEditor } from './helpers';
-import { withMentions, withImages, withTags, withLinks } from './plugins';
-import { renderElement, renderLeaf } from './renderers';
-import { ImageData, ImageUpload } from './image-upload';
-import { MentionPopover } from './mention-popover';
+import { TagPopover } from './tag-popover';
 import { serializeToPlainText } from './serialize';
+import { MentionPopover } from './mention-popover';
 import { editorDefaultValue } from './initialValue';
-import isUrl from 'is-url';
-import { Profile } from '@akashaorg/typings/ui';
+import { ImageData, ImageUpload } from './image-upload';
+import { renderElement, renderLeaf } from './renderers';
+import { withMentions, withImages, withTags, withLinks } from './plugins';
+
+import EmbedBox from '../EmbedBox';
+import LinkPreview from '../LinkPreview';
+import ImageGallery from '../ImageGallery';
+import { ImageObject } from '../ImageGallery/image-grid-item';
 
 const MAX_LENGTH = 280;
 
@@ -45,7 +41,7 @@ const MAX_LENGTH = 280;
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
  * @param editorState - the state of the editor is controlled from the parent component
  */
-export interface IEditorBox {
+export type EditorBoxProps = {
   avatar?: Profile['avatar'];
   showAvatar?: boolean;
   profileId: string | null;
@@ -83,14 +79,16 @@ export interface IEditorBox {
   onPlaceholderClick?: () => void;
   showDraft?: boolean;
   onClear?: () => void;
-}
+  showPostButton?: boolean;
+};
 
 /* eslint-disable complexity */
-const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
+const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
   const {
     avatar,
     showAvatar = true,
     showDraft = false,
+    onClear,
     profileId,
     postLabel,
     placeholderLabel,
@@ -118,7 +116,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     cancelButtonLabel,
     onCancelClick,
     showCancelButton,
-    onClear,
+    showPostButton = true,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -508,9 +506,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     }
   };
 
-  const handleInsertEmoji = (emojiCode: string) => {
-    CustomEditor.insertText(editor, emojiCode);
-  };
+  // const handleInsertEmoji = (emojiCode: string) => {
+  //   CustomEditor.insertText(editor, emojiCode);
+  // };
 
   // image insertion
 
@@ -564,11 +562,15 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   return (
     <div
-      className={tx(`flex justify-between w-full bg(grey9 dark:grey1) h-[45vh] md:max-h-[38rem]`)}
+      className={tw(
+        `flex flex-col justify-between w-full bg(white dark:grey2) h-[45vh] md:max-h-[38rem]`,
+      )}
     >
       <div
-        className={tx(
-          `flex flex-row px-4 items-start overflow-auto ${minHeight && `min-h-[${minHeight}]`}`,
+        className={tw(
+          `flex flex-row items-start h-full w-full p-2 overflow-auto ${
+            minHeight && `min-h-[${minHeight}]`
+          }`,
         )}
       >
         {showAvatar && (
@@ -576,8 +578,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
             <Avatar avatar={avatar} profileId={profileId} />
           </div>
         )}
-        <div className={tw(`w-full px-2 flex flex-row justify-between`)}>
-          <div className={tw(`w-full flex`)}>
+        <div className={tw(`w-full p-2 flex flex-col overflow-auto`)}>
+          <div className={tw(`w-full flex flex-col`)}>
             <Slate
               editor={editor}
               value={editorState || editorDefaultValue}
@@ -645,12 +647,12 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           </div>
         </div>
       </div>
-      <div className={tw(`w-full px-4 pt-2 pb-4 justify-between flex flex-row`)}>
+      <div className={tw(`flex flex-row w-full p-2 justify-between`)}>
         <div className={tw(`flex flex-row gap-2 items-center`)}>
-          <div className={tw('md:hidden')}>
+          <div className={tw('sm:hidden')}>
             <Popover className="relative">
               <Popover.Button>
-                <Icon type="FaceSmileIcon" />
+                <Icon type="FaceSmileIcon" accentColor={true} />
               </Popover.Button>
               <Popover.Panel className="absolute z-10">
                 <Popover.Button>
@@ -661,13 +663,17 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           </div>
           {uploadRequest && (
             <button className={tw(`flex items-center`)} onClick={handleMediaClick}>
-              <Icon type="PhotoIcon" disabled={uploading || imageUploadDisabled} />
+              <Icon
+                accentColor={true}
+                type="PhotoIcon"
+                disabled={uploading || imageUploadDisabled}
+              />
             </button>
           )}
         </div>
 
         <div className={tw(`flex flex-row gap-2 items-center`)}>
-          {showDraft && (
+          {/* {showDraft && (
             <div className={tw(`flex flex-row gap-2 items-center`)}>
               {!publishDisabled && (
                 <p className={tw(`text(secondaryLight dark:secondaryDark)`)}>Draft</p>
@@ -683,18 +689,18 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 Clear
               </button>
             </div>
-          )}
-          {withMeter && (
-            <Meter type="circle" value={letterCount} max={MAX_LENGTH} size={24} thickness={3} />
-          )}
+          )} */}
+          {withMeter && <EditorMeter value={letterCount} max={MAX_LENGTH} />}
           {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
-          <Button
-            variant={'primary'}
-            icon={disablePublish ? 'ArrowPathIcon' : null}
-            label={disablePublish ? disablePublishLabel : postLabel}
-            onClick={handlePublish}
-            disabled={publishDisabled}
-          />
+          {showPostButton && (
+            <Button
+              variant={'primary'}
+              icon={disablePublish ? 'ArrowPathIcon' : null}
+              label={disablePublish ? disablePublishLabel : postLabel}
+              onClick={handlePublish}
+              disabled={publishDisabled}
+            />
+          )}
         </div>
       </div>
     </div>

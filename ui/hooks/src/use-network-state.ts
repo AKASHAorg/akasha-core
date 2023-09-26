@@ -1,15 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { filter } from 'rxjs';
-import { GlobalEventBusData, WEB3_EVENTS } from '@akashaorg/typings/sdk';
-import constants from './constants';
+import { GlobalEventBusData, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
 import React from 'react';
 
 export const NETWORK_STATE_KEY = 'Network_State';
 export const CURRENT_NETWORK_KEY = 'Current Network';
 
-const { REQUIRED_NETWORK_KEY } = constants;
-
+export const REQUIRED_NETWORK_KEY = 'REQUIRED_NETWORK';
 /**
  * A utility function to switch to required network for supported wallets
  */

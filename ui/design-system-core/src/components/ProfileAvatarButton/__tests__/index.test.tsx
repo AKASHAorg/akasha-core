@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { act, fireEvent } from '@testing-library/react';
+import { act, fireEvent, getByTestId } from '@testing-library/react';
 import ProfileAvatarButton from '../';
 import { customRender } from '../../../test-utils';
 
 describe('<ProfileAvatarButton /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const info = 'info';
   const label = 'label';
 
   const profileId = 'profileId';
@@ -28,7 +27,6 @@ describe('<ProfileAvatarButton /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         <ProfileAvatarButton
-          info={info}
           label={label}
           avatarImage={avatar}
           profileId={profileId}
@@ -61,9 +59,9 @@ describe('<ProfileAvatarButton /> Component', () => {
   });
 
   it('calls avatar handler', () => {
-    const { getByRole } = componentWrapper;
+    const { getByTestId } = componentWrapper;
 
-    const avatarBox = getByRole('img', { name: /avatar-box/i });
+    const avatarBox = getByTestId('avatar-box');
     expect(avatarBox.childNodes[0]).toBeDefined();
     expect(handleClickAvatar).toBeCalledTimes(0);
 
@@ -73,9 +71,9 @@ describe('<ProfileAvatarButton /> Component', () => {
   });
 
   it('calls info handlers', () => {
-    const { getByRole } = componentWrapper;
+    const { getByTestId } = componentWrapper;
 
-    const infoBox = getByRole('listitem', { name: /info-box/i });
+    const infoBox = getByTestId('info-box');
     expect(infoBox).toBeDefined();
     expect(handleClick).toBeCalledTimes(0);
     expect(handleMouseEnter).toBeCalledTimes(0);

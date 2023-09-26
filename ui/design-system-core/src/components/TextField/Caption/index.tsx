@@ -4,11 +4,11 @@ import Text from '../../Text';
 import Stack from '../../Stack';
 import { Color, Status } from '../../types/common.types';
 import { CaptionProps } from '../types';
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import { getIconClasses } from '../Input/getIconClasses';
 
-const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, disabled, children }) => {
-  const iconStyle = getIconClasses(disabled, status);
+const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, children }) => {
+  const iconStyle = getIconClasses(status);
   const textColor: Color = status
     ? status
     : {
@@ -16,10 +16,8 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, disabled, 
         dark: 'grey6',
       };
 
-  if (disabled) return null;
-
   return (
-    <Stack align="center" spacing="gap-1.5">
+    <Stack direction="row" align="center" spacing="gap-1.5">
       {status && <Icon type={STATUS_TO_ICON_MAP[status]} color={iconStyle} />}
       <Text color={textColor} variant="footnotes2" weight="normal">
         {children}

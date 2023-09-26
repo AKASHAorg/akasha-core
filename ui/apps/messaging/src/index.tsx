@@ -6,10 +6,10 @@ import {
   MenuItemAreaType,
   MenuItemType,
   LogoTypeSource,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import getSDK, { Logger } from '@akashaorg/awf-sdk';
 import { filter, mergeMap } from 'rxjs';
-import { AUTH_EVENTS } from '@akashaorg/typings/sdk';
+import { AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
 
 export const initialize = (options: IntegrationRegistrationOptions & { logger: Logger }) => {
   const notification: any = options.plugins['@akashaorg/app-notifications'].notification;
@@ -74,7 +74,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       'profile-card-action-extension': loader(() => import('./extensions/profile-message-button')),
     });
   },
-  title: 'Messaging | Akasha World',
+  title: 'Messaging | AKASHA World',
   menuItems: {
     label: 'Messaging',
     type: MenuItemType.App,

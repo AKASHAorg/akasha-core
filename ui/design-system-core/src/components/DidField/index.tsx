@@ -1,31 +1,37 @@
 import React from 'react';
-import { iconForDid, truncateDid } from '../../utils/did-utils';
-import Stack from '../Stack';
+
 import Icon from '../Icon';
+import Stack from '../Stack';
 import Text from '../Text';
+
 import CopyToClipboard from '../CopyToClipboard';
 
 import { Color } from '../types/common.types';
+import { iconForDid, truncateDid } from '../../utils/did-utils';
 
-type DidFieldProps = {
+export type DidFieldProps = {
   did: string;
+  isValid?: boolean;
   textColor?: Color;
   copyLabel?: string;
   copiedLabel?: string;
   copiable?: boolean;
+  customStyle?: string;
 };
 const DidField: React.FC<DidFieldProps> = ({
   did,
+  isValid = true,
   textColor = { light: 'secondaryLight', dark: 'secondaryDark' },
   copiable = true,
   copyLabel,
   copiedLabel,
+  customStyle = '',
 }) => {
   const networkType = iconForDid(did);
   const truncatedDid = truncateDid(did, networkType);
   const didDisplayBlock = (
-    <Stack spacing="gap-x-1.5" align="center">
-      {networkType && <Icon type={networkType} />}
+    <Stack direction="row" spacing="gap-x-1.5" align="center" customStyle={customStyle}>
+      {networkType && <Icon type={isValid ? networkType : 'noEth'} />}
       <Text variant="footnotes1" color={textColor}>
         {truncatedDid}
       </Text>

@@ -1,18 +1,17 @@
 import React from 'react';
-
-import Collaborator from './collaborator';
-
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-
-import SearchBar, { ISearchBar } from '../SearchBar';
-import { Profile } from '@akashaorg/typings/ui';
 import { tw } from '@twind/core';
 
-export interface IManageCollaboratorsModalProps
-  extends Omit<ISearchBar, 'searchInputSize' | 'iconSize'> {
+import { Profile } from '@akashaorg/typings/lib/ui';
+
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+import Collaborator from './collaborator';
+import SearchBar, { SearchBarProps } from '../SearchBar';
+
+export type ManageCollaboratorsModalProps = Omit<SearchBarProps, 'searchInputSize' | 'iconSize'> & {
   assetName?: string;
   publicImgPath?: string;
   titleLabel: string;
@@ -24,9 +23,9 @@ export interface IManageCollaboratorsModalProps
   removeButtonLabel: string;
   closeModal: () => void;
   onClickCollaborator: (profileId: string, action: 'add' | 'remove') => () => void;
-}
+};
 
-const ManageCollaboratorsModal: React.FC<IManageCollaboratorsModalProps> = props => {
+const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props => {
   const {
     assetName = 'no-collaborators',
     publicImgPath = '/images',
@@ -52,7 +51,7 @@ const ManageCollaboratorsModal: React.FC<IManageCollaboratorsModalProps> = props
       )}
     >
       <div className={tw(`w-full sm:w-1/2 md:w-1/3 flex h-full justify-center`)}>
-        <BasicCardBox>
+        <Card>
           <div
             className={tw(`flex flex-row mt-1 items-start px-4 pt-2 border(b grey8 dark:grey3)`)}
           >
@@ -110,7 +109,7 @@ const ManageCollaboratorsModal: React.FC<IManageCollaboratorsModalProps> = props
               </div>
             )}
           </div>
-        </BasicCardBox>
+        </Card>
       </div>
     </div>
   );

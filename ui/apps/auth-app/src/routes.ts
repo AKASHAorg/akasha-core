@@ -1,4 +1,4 @@
-import { EthProviders } from '@akashaorg/typings/sdk/web3.connector';
+import { EthProviders } from '@akashaorg/typings/lib/sdk/web3.connector';
 
 export const WELCOME = 'Welcome';
 export const CONNECT = 'Connect';

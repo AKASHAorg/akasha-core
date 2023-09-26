@@ -3,21 +3,19 @@ import { useTranslation } from 'react-i18next';
 import {
   EntityTypes,
   ModalNavigationOptions,
-  IEntryData,
   NavigateToParams,
-  RootComponentProps,
   Profile,
   IContentClickDetails,
-} from '@akashaorg/typings/ui';
-import { Logger } from '@akashaorg/awf-sdk';
+} from '@akashaorg/typings/lib/ui';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { hasOwn, sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-export interface IEntryCardRendererProps {
-  logger: Logger;
-  singleSpa: RootComponentProps['singleSpa'];
-  itemData?: IEntryData;
+export type EntryCardRendererProps = {
+  itemData?: AkashaBeam;
   itemType?: EntityTypes;
   locale?: ILocale;
   loggedProfileData?: Profile;
@@ -31,12 +29,10 @@ export interface IEntryCardRendererProps {
   contentClickable?: boolean;
   moderatedContentLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
-  uiEvents: RootComponentProps['uiEvents'];
-  navigateToModal: RootComponentProps['navigateToModal'];
-}
+  handleFlipCard?: (entry: AkashaBeam, isQuote: boolean) => () => void;
+};
 
-const EntryCardRenderer = (props: IEntryCardRendererProps) => {
+const EntryCardRenderer = (props: EntryCardRendererProps) => {
   const {
     loggedProfileData,
     locale,
@@ -46,35 +42,38 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     contentClickable,
     onRebeam,
     navigateTo,
-    uiEvents,
     onMentionClick,
     onTagClick,
-    navigateToModal,
     onContentClick,
   } = props;
 
-  const { entryId } = itemData || {};
+  const { id } = itemData || {};
+
   const { t } = useTranslation('app-search');
+  const { uiEvents, navigateToModal } = useRootComponentProps();
+  const profileDataReq = useGetProfileByDidQuery(
+    { id: itemData.author.id },
+    { select: response => response.node },
+  );
 
-  // const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
-
-  // const handleFlipCard = () => {
-  //   setShowAnyway(true);
-  // };
+  const { akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { akashaProfile: null };
 
   const handleClickAvatar = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${itemData?.author.did.id}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${itemData?.author.id}`,
     });
   };
 
   const handleContentClick = () => {
     onContentClick(
       {
-        id: itemData.entryId,
-        authorId: itemData.author.did.id,
-        replyTo: itemData.postId ? { itemId: itemData.postId } : null,
+        id: itemData.id,
+        authorId: itemData.author.id,
+        replyTo: itemData.id ? { itemId: itemData.id } : null,
       },
       itemType,
     );
@@ -110,7 +109,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     if (itemId)
       navigateToModal({
         name: 'entry-remove-confirmation',
-        itemType: EntityTypes.POST,
+        itemType: EntityTypes.BEAM,
         itemId,
       });
   };
@@ -136,15 +135,15 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const handleRebeam = () => {
     if (onRebeam) {
-      onRebeam(false, entryId);
+      onRebeam(false, id);
     }
   };
 
-  const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
+  const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REFLECT, [itemType]);
 
   return (
     <>
-      {itemData && itemData.author?.did.id && (
+      {itemData && itemData.author?.id && (
         <div style={{ marginBottom: '8px' }}>
           {/* {(accountAwaitingModeration || entryAwaitingModeration) && (
             <EntryCardHidden
@@ -164,40 +163,38 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
           {/* {!entryAwaitingModeration &&
             !accountAwaitingModeration && */}
-          {!itemData.delisted && !itemData.isRemoved && (
+          {!itemData.nsfw && itemData.active && (
             <EntryCard
-              isRemoved={itemData.isRemoved}
+              isRemoved={!itemData.active}
               entryData={itemData}
-              onClickAvatar={handleClickAvatar}
+              authorProfile={{ data: profileData, status: profileDataReq.status }}
+              sortedContents={sortByKey(itemData.content, 'order')}
+              itemType={EntityTypes.BEAM}
+              onAvatarClick={handleClickAvatar}
+              onContentClick={handleContentClick}
               flagAsLabel={t('Report Post')}
               locale={locale || 'en'}
-              style={{ height: 'auto', ...style }}
               moderatedContentLabel={t('This content has been moderated')}
-              showMore={true}
               profileAnchorLink={'/@akashaorg/app-profile'}
               repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
-                itemType === EntityTypes.REPLY ? 'reply' : 'post'
+                itemType === EntityTypes.REFLECT ? 'reply' : 'post'
               }`}
-              onRepost={handleRebeam}
-              onContentClick={handleContentClick}
-              onMentionClick={onMentionClick}
-              onTagClick={onTagClick}
-              navigateTo={navigateTo}
               contentClickable={contentClickable}
-              disableReposting={itemData.isRemoved}
               removeEntryLabel={t('Delete Post')}
               onEntryRemove={handleEntryRemove}
-              onEntryFlag={handleEntryFlag(itemData.entryId, EntityTypes.POST)}
+              onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}
               hideActionButtons={hideActionButtons}
               actionsRightExt={
-                <Extension name={`entry-card-actions-right_${entryId}`} uiEvents={uiEvents} />
+                <Extension name={`entry-card-actions-right_${id}`} uiEvents={uiEvents} />
               }
               headerMenuExt={
-                itemData.author.did.isViewer && (
-                  <Extension name={`entry-card-edit-button_${entryId}`} uiEvents={uiEvents} />
+                itemData.author.isViewer && (
+                  <Extension name={`entry-card-edit-button_${id}`} uiEvents={uiEvents} />
                 )
               }
-            />
+            >
+              {({ blockID }) => <Extension name={`${blockID}_content_block`} uiEvents={uiEvents} />}
+            </EntryCard>
           )}
         </div>
       )}

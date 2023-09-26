@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -21,10 +22,10 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
 
   if (assignedAdmin) {
     return (
-      <Box customStyle="flex space-x-2 items-center">
+      <Stack spacing="gap-x-2" align="center">
         <Avatar avatar={selectedModerator.avatar} />
 
-        <Box>
+        <Stack>
           <Text
             variant="button-md"
             weight="bold"
@@ -37,20 +38,20 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
             truncate={true}
             color={{ light: 'grey4', dark: 'grey7' }}
           >{`@${selectedModerator.name}`}</Text>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     );
   }
 
   return (
-    <Box customStyle="space-y-4">
+    <Stack spacing="gap-y-4">
       {activeModerators.map((moderator, idx) => (
         <React.Fragment key={moderator.name}>
-          <Box customStyle="flex justify-between">
-            <Box customStyle="flex space-x-2 items-center">
+          <Stack justify="between">
+            <Stack spacing="gap-x-2" align="center">
               <Avatar avatar={moderator.avatar} />
 
-              <Box>
+              <Stack>
                 <Text variant="button-md" weight="bold" truncate={true}>{`${moderator.name}`}</Text>
 
                 <Text
@@ -59,16 +60,16 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
                   truncate={true}
                   color={{ light: 'grey4', dark: 'grey7' }}
                 >{`@${moderator.did.id}`}</Text>
-              </Box>
-            </Box>
+              </Stack>
+            </Stack>
 
             <Button label={assignButtonLabel} onClick={onClickAssign} />
-          </Box>
+          </Stack>
 
           {idx < activeModerators.length - 1 && <Divider />}
         </React.Fragment>
       ))}
-    </Box>
+    </Stack>
   );
 };
 

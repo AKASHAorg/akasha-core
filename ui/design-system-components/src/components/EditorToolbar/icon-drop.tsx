@@ -1,8 +1,9 @@
 import React from 'react';
 
+import { IconType } from '@akashaorg/typings/lib/ui';
+
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
-import { IconType } from '@akashaorg/typings/ui';
 
 export type IconEntry = {
   type: IconType;
@@ -16,17 +17,15 @@ export interface IIconDropProps {
 const IconDrop: React.FC<IIconDropProps> = props => {
   const { dropItems } = props;
   return (
-    <Box customStyle="absolute top-7 right-0">
+    <Stack customStyle="absolute top-7 right-0">
       {dropItems.map((icon, idx) => (
-        <Box
-          key={`${icon.type}-${idx}`}
-          customStyle="flex items-center rounded-lg cursor-pointer"
-          onClick={icon.handler}
-        >
-          <Icon type={icon.type} size="sm" />
-        </Box>
+        <button onClick={icon.handler}>
+          <Stack key={`${icon.type}-${idx}`} align="center" customStyle="rounded-lg cursor-pointer">
+            <Icon type={icon.type} size="sm" />
+          </Stack>
+        </button>
       ))}
-    </Box>
+    </Stack>
   );
 };
 

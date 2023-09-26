@@ -1,8 +1,9 @@
-import { IAppConfig, INTEGRATION_TYPES, RootComponentProps } from '@akashaorg/typings/ui';
+import { IAppConfig, INTEGRATION_TYPES, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { genLifecycles } from '../mocks/single-spa';
 import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
-import { ReleaseInfo } from '@akashaorg/typings/sdk';
+import { ReleaseInfo } from '@akashaorg/typings/lib/sdk';
+import { Subject } from 'rxjs';
 
 export const genAppConfig = (
   overrides?: Partial<IAppConfig & { name: string }>,
@@ -34,13 +35,23 @@ const log: any = {
     /*  */
   },
 };
-export const genAppProps = (): RootComponentProps => ({
+export const genAppProps = (): RootComponentProps & {
+  getRoutingPlugin: (ns?: string) => any;
+  getTranslationPlugin: (ns?: string) => any;
+} => ({
   logger: log,
   navigateToModal: () => ({}),
   uiEvents: uiEventsMock,
   layoutConfig: {},
   singleSpa: null,
   worldConfig: genWorldConfig(),
+  getRoutingPlugin: () => ({
+    routeObserver: new Subject(),
+    navigateTo: jest.fn(),
+    handleRedirect: jest.fn(),
+    getUrlForApp: jest.fn(),
+  }),
+  getTranslationPlugin: () => ({ i18n: {} }),
   parseQueryString: () => ({}),
   plugins: {},
   baseRouteName: '',

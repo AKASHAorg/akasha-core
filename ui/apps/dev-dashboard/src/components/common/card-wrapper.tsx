@@ -1,7 +1,7 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
@@ -17,20 +17,20 @@ export const CardWrapper: React.FC<React.PropsWithChildren<ICardWrapperProps>> =
   const { titleLabel, children } = props;
 
   return (
-    <BasicCardBox pad="p-0">
-      <Box customStyle="p-4">
+    <Card padding={0}>
+      <Stack padding="p-4">
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
-      </Box>
+      </Stack>
 
       <Divider />
 
       <>{children}</>
 
-      <Box customStyle="flex p-4 space-x-6 items-center justify-end">
+      <Stack spacing="gap-x-6" align="center" justify="end" padding="p-4">
         <PageButtons {...props} />
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };

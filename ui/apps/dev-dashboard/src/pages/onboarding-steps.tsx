@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin, useValidateMessage, useAddDevKeyFromMessage } from '@akashaorg/ui-awf-hooks';
+import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { ONBOARDING_STATUS } from './intro-card';
 
@@ -26,23 +25,29 @@ type DevDashOnboardingStepsProps = {
   activeIndex?: number;
 };
 
-export const DevDashOnboardingSteps: React.FC<
-  RootComponentProps & DevDashOnboardingStepsProps
-> = props => {
-  const { baseRouteName, plugins } = props;
+export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = props => {
+  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const [activeIndex, setActiveIndex] = useState<number>(props.activeIndex || 0);
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');
 
-  const loginQuery = useGetLogin();
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
 
   const { t } = useTranslation('app-dev-dashboard');
 
-  const validateMutation = useValidateMessage();
-  const addKeyMutation = useAddDevKeyFromMessage();
+  const validateMutation = { isSuccess: false, data: null, isError: false, error: null };
+
+  // @TODO: needs update
+  const addKeyMutation = {
+    isSuccess: false,
+    data: null,
+    isError: false,
+    error: null,
+    mutate: _args => _args,
+  };
 
   const pathnameArr = [
     ONBOARDING_STEP_ONE,
@@ -52,7 +57,7 @@ export const DevDashOnboardingSteps: React.FC<
   ].map(el => `${baseRouteName}${menuRoute[el]}`);
 
   useEffect(() => {
-    if (!loginQuery.data?.id) {
+    if (!isLoggedIn) {
       // if guest, redirect to onboarding step 1 after authentication
       navigateTo?.({
         appName: '@akashaorg/app-auth-ewa',
@@ -77,7 +82,7 @@ export const DevDashOnboardingSteps: React.FC<
 
   useEffect(() => {
     // add key after validating
-    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loginQuery.data?.id) {
+    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loggedInProfileId) {
       addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

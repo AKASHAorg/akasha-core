@@ -1,13 +1,15 @@
-import * as React from 'react';
+import React, { useEffect, useState, EventHandler, SyntheticEvent } from 'react';
+import { tw } from '@twind/core';
+
+import { IconType } from '@akashaorg/typings/lib/ui';
+
 import Button from '../Button';
 import Icon from '../Icon/';
-import { tw } from '@twind/core';
-import { IconType } from '@akashaorg/typings/ui';
 import { ButtonProps } from '../Button/types';
 
-export type DuplexButtonProps = ButtonProps & {
-  onClickInactive?: React.EventHandler<React.SyntheticEvent>;
-  onClickActive?: React.EventHandler<React.SyntheticEvent>;
+export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
+  onClickInactive?: EventHandler<SyntheticEvent>;
+  onClickActive?: EventHandler<SyntheticEvent>;
   inactiveLabel?: string;
   activeLabel?: string;
   activeHoverLabel?: string;
@@ -32,14 +34,15 @@ const DuplexButton = (props: DuplexButtonProps) => {
     activeHoverIcon,
     allowMinimization,
     loading,
+    ...rest
   } = props;
 
-  const [hovered, setHovered] = React.useState(false);
-  const [iconOnly, setIconOnly] = React.useState(window.matchMedia('(max-width: 992px)').matches);
+  const [hovered, setHovered] = useState(false);
+  const [iconOnly, setIconOnly] = useState(window.matchMedia('(max-width: 992px)').matches);
   const activeHoverIconElem = activeHoverIcon || icon;
   const activeIconElem = activeIcon || icon;
 
-  React.useEffect(() => {
+  useEffect(() => {
     const mql = window.matchMedia('(max-width: 992px)');
     const resize = e => {
       setIconOnly(e.matches);
@@ -51,39 +54,50 @@ const DuplexButton = (props: DuplexButtonProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    //Reset hovered state when button is set as active
+    if (active) setHovered(false);
+  }, [active]);
+
   if (loading) {
-    return <Button loading={true} />;
+    return <Button loading={true} {...rest} />;
   }
+
+  const getLabel = () => {
+    if (active) return hovered ? activeHoverLabel : activeLabel;
+    return inactiveLabel;
+  };
+
+  const getIcon = () => {
+    if (active) return hovered ? activeHoverIconElem : activeIconElem;
+    return icon;
+  };
 
   if (iconOnly && allowMinimization) {
     return (
       <Button
-        data-testid="duplex-button"
         onClick={active ? onClickActive : onClickInactive}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         className={tw('rounded-sm border-1 border-secondaryLight p-1')}
         plain
       >
-        <Icon
-          type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-          customStyle="text-secondaryLight h-5 w-5"
-        />
+        <Icon type={getIcon()} customStyle="text-secondaryLight h-5 w-5" />
       </Button>
     );
   }
 
   return (
     <Button
-      data-testid="duplex-button"
-      label={active ? (hovered ? activeHoverLabel : activeLabel) : inactiveLabel}
+      label={getLabel()}
       onClick={active ? onClickActive : onClickInactive}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      icon={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
+      icon={getIcon()}
       variant={active ? 'secondary' : 'primary'}
       size={size}
       customStyle={customStyle}
+      {...rest}
     />
   );
 };

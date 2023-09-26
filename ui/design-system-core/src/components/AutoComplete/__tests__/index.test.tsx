@@ -38,9 +38,9 @@ describe('<AutoComplete /> Component', () => {
     expect(input.value).toBe('');
     expect(changeHandler).toBeCalledTimes(0);
 
-    fireEvent.change(input, { target: { value: 'Akasha' } });
+    fireEvent.change(input, { target: { value: 'AKASHA' } });
 
-    expect(input.value).toBe('Akasha');
+    expect(input.value).toBe('AKASHA');
     expect(changeHandler).toBeCalledTimes(1);
   });
 });

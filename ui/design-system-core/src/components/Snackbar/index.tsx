@@ -1,7 +1,7 @@
 import React from 'react';
 import { apply } from '@twind/core';
 
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Button from '../Button';
 import Card from '../Card';
@@ -14,7 +14,7 @@ import { Color } from '../types/common.types';
 
 export type SnackBarType = 'alert' | 'caution' | 'success' | 'info';
 
-export interface ISnackbar {
+export type SnackbarProps = {
   title: string;
   type?: SnackBarType;
   iconType?: IconType;
@@ -23,9 +23,9 @@ export interface ISnackbar {
   customStyle?: string;
   handleButtonClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   handleDismiss?: (event: React.SyntheticEvent<Element, Event>) => void;
-}
+};
 
-const Snackbar: React.FC<ISnackbar> = ({
+const Snackbar: React.FC<SnackbarProps> = ({
   title,
   type = 'info',
   iconType = 'InformationCircleIcon',
@@ -48,12 +48,11 @@ const Snackbar: React.FC<ISnackbar> = ({
 
   return (
     <Card
-      elevation="1"
       background={{ light: 'white', dark: 'grey1' }}
       radius={8}
       customStyle={`${instanceStyle} ${customStyle}`}
     >
-      <Stack spacing="gap-x-3" fullWidth>
+      <Stack spacing="gap-x-3" fullWidth direction="row">
         <Icon
           type={iconType}
           color={{ light: colorLight, dark: colorDark }}
@@ -61,7 +60,7 @@ const Snackbar: React.FC<ISnackbar> = ({
           size="lg"
           solid={true}
         />
-        <Stack direction="column">
+        <Stack direction="row">
           <Text variant="button-md" color={textColor}>
             {title}
           </Text>

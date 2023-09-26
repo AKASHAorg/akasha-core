@@ -2,14 +2,18 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { NavigateToParams } from '@akashaorg/typings/ui';
-import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
+import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 
-import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
+import { PaginatedItem, contentTypeMap } from './transparency-log';
 import ModeratorDashboard from '../components/dashboard';
 import GuestDashboard from '../components/dashboard/guest';
 
-import { generateApplicants, generateApplicationsHistory, preSelectedReasons } from '../utils';
+import {
+  generateApplicants,
+  generateApplicationsHistory,
+  generateModerationHistory,
+  preSelectedReasons,
+} from '../utils';
 import { baseDashboardUrl } from '../routes';
 
 export type BasePageProps = {
@@ -29,7 +33,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
+  const logItemsQuery = { data: null };
 
   useEffect(() => {
     if (logItemsQuery.data) {
@@ -77,13 +81,14 @@ export const Dashboard: React.FC<DashboardProps> = props => {
 
   const role = isAdmin ? 'Admin' : 'Moderator';
 
-  const moderationRows =
-    pages[0]?.map(el => [
-      dayjs(el.moderatedDate).format('DD MMM YYYY'),
-      t('{{type}}', { type: contentTypeMap[el.contentType] }),
-      el.delisted ? t('Delisted') : t('Kept'),
-      el.contentID,
-    ]) ?? [];
+  const moderationEntries = generateModerationHistory();
+
+  const moderationRows = moderationEntries.map(el => [
+    dayjs(el.moderatedDate).format('DD MMM YYYY'),
+    t('{{type}}', { type: contentTypeMap[el.contentType] }),
+    el.delisted ? t('Delisted') : t('Kept'),
+    el.contentID,
+  ]);
 
   const applications = generateApplicationsHistory();
 
@@ -113,7 +118,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
       )}
       contactInfo={[
         { type: 'discord', value: 'julie#t112' },
-        { type: 'message', value: 'juliet112@gmail.com' },
+        { type: 'EnvelopeIcon', value: 'juliet112@gmail.com' },
       ]}
       maxApplicantsLabel={t('Maximum Number of Applicant')}
       maxApplicantsIntroLabel={t(

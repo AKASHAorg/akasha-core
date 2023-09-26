@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { tw } from '@twind/core';
-
 import Stack from '../Stack';
 import List, { ListItem } from '../List';
 import TextField from '../TextField';
-import { InputProps } from '../TextField/types';
+import Tag from './Tag';
+import { InputProps, TextFieldProps } from '../TextField/types';
+import { useCloseActions } from '../../utils';
+import { Separator } from './types';
+import { isSeparator } from './isSeparator';
 
-import { useCloseActions } from '../../utils/useCloseActions';
+type Selected = { value: string; index?: number };
 
 export type AutoCompleteProps = {
   options: string[];
@@ -14,19 +16,29 @@ export type AutoCompleteProps = {
   disabled?: InputProps['disabled'];
   value?: string;
   customStyle?: string;
-  onChange?: (value: string) => void;
-  onSelected?: (value: string) => void;
-};
+  multiple?: boolean;
+  separators?: Separator[];
+  tags?: Set<string>;
+  onChange?: (value: string | string[]) => void;
+  onSelected?: ({ value, index }: Selected) => void;
+} & Pick<TextFieldProps, 'label' | 'caption' | 'status'>;
 
-const AutoComplete: React.FC<AutoCompleteProps> = ({
-  options,
-  placeholder,
-  disabled,
-  customStyle = '',
-  value,
-  onChange,
-  onSelected,
-}) => {
+const AutoComplete: React.FC<AutoCompleteProps> = props => {
+  const {
+    options,
+    placeholder,
+    disabled,
+    customStyle = '',
+    value,
+    multiple,
+    separators = ['Enter'],
+    tags,
+    label,
+    caption,
+    status,
+    onChange,
+    onSelected,
+  } = props;
   const [filters, setFilters] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -46,22 +58,29 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
     () =>
       filters.map(filter => ({
         label: filter,
-        onClick: (label: string) => {
-          setShowSuggestions(false);
-          if (onChange) onChange(label);
-          if (onSelected) onSelected(label);
-        },
         variant: 'subtitle2',
       })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [filters],
   );
+
+  const updateTag = (tag: string, remove?: boolean) => {
+    const newTags = new Set(tags);
+
+    if (remove) {
+      newTags.delete(tag);
+      if (onChange) onChange([...newTags]);
+      return;
+    }
+
+    newTags.add(tag);
+    if (onChange) onChange([...newTags]);
+  };
 
   return (
     <Stack
       direction="column"
       justify="center"
-      spacing="gap-y-1"
+      spacing="gap-y-2"
       customStyle={customStyle}
       ref={autoCompleteRef}
     >
@@ -70,6 +89,9 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
         placeholder={placeholder}
         iconRight="MagnifyingGlassIcon"
         value={value}
+        label={label}
+        caption={caption}
+        status={status}
         onChange={event => {
           setShowSuggestions(true);
           if (onChange) onChange(event.target.value);
@@ -77,18 +99,49 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
         onFocus={() => {
           setShowSuggestions(true);
         }}
+        onKeyDown={event => {
+          if (multiple) {
+            if (isSeparator(event.code, separators)) {
+              if (value) {
+                if (onChange) onChange('');
+                updateTag(value);
+                setShowSuggestions(false);
+              }
+              event.preventDefault();
+              event.nativeEvent.stopImmediatePropagation();
+            }
+          }
+        }}
         customStyle="rounded-3xl"
         radius={100}
         disabled={disabled}
       />
       {showSuggestions && suggestions.length > 0 && (
-        <div className={tw('relative')}>
+        <Stack direction="row" customStyle={'relative'}>
           <List
             items={suggestions}
             showDivider={false}
+            onSelected={({ label, index }) => {
+              setShowSuggestions(false);
+              if (onChange) onChange(label);
+              if (onSelected) onSelected({ value: label, index });
+            }}
             customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar"
           />
-        </div>
+        </Stack>
+      )}
+      {tags?.size > 0 && (
+        <Stack direction="row" align="center" spacing="gap-2" customStyle="flex-wrap">
+          {[...tags].map(tag => (
+            <Tag
+              key={tag}
+              tag={tag}
+              onRemove={() => {
+                updateTag(tag, true);
+              }}
+            />
+          ))}
+        </Stack>
       )}
     </Stack>
   );

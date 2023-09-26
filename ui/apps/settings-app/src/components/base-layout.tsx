@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IBaseLayout {
@@ -11,16 +11,15 @@ export interface IBaseLayout {
 const BaseLayout: React.FC<PropsWithChildren<IBaseLayout>> = props => {
   const { title, children } = props;
   return (
-    <BasicCardBox pad="p-0">
-      <React.Fragment>
-        <Box customStyle="p-4 border(b-1 solid grey8)">
-          <Text variant="h5" align="center">
-            {title}
-          </Text>
-        </Box>
-        {children}
-      </React.Fragment>
-    </BasicCardBox>
+    <Card padding={0}>
+      <Stack padding="p-4" customStyle="border(b-1 solid grey8 dark:grey5)">
+        <Text variant="h5" align="center">
+          {title}
+        </Text>
+      </Stack>
+
+      {children}
+    </Card>
   );
 };
 

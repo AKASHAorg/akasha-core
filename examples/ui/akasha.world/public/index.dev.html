@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <!-- DEV HTML FILE -->
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
   <meta
     http-equiv="Content-Security-Policy"
     content="default-src 'self' 'unsafe-inline' 'unsafe-eval' cloudflare.com *.cloudflare.com *.ipfs.cf-ipfs.com *.cf-ipfs.com cloudflare-ipfs.com unpkg.com *.akasha.network *.akasha.world *.walletconnect.org *.infura.io *.ipfs.infura-ipfs.io *.ipfs.hub.textile.io *.textile.io *.litgateway.com:* https://* wss://* ; img-src https: data: blob:"
@@ -11,20 +11,20 @@
     name="viewport"
     content="width=device-width,viewport-fit=cover,initial-scale=1,user-scalable=0,maximum-scale=1"
   />
-  <meta name="robots" content="noindex, nofollow" />
-  <meta name="theme-color" content="#000000" />
-  <link rel="shortcut icon" href="/icons/icon-48x48.png" />
-  <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png" />
-  <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png" />
-  <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png" />
-  <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png" />
-  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
-  <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png" />
-  <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png" />
-  <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="stylesheet" href="/fonts/inter.css" />
-  <title>Akasha World</title>
+  <meta name="robots" content="noindex, nofollow"/>
+  <meta name="theme-color" content="#000000"/>
+  <link rel="shortcut icon" href="/icons/icon-48x48.png"/>
+  <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png"/>
+  <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png"/>
+  <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png"/>
+  <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png"/>
+  <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png"/>
+  <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png"/>
+  <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="stylesheet" href="/fonts/inter.css"/>
+  <title>AKASHA World</title>
   <script src="https://cdn.jsdelivr.net/npm/@twind/core@1" crossorigin></script>
   <script src="/setup.twind.js"></script>
   <script
@@ -60,21 +60,22 @@
     referrerpolicy="no-referrer"
   ></script>
   <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.5/lib/umd/single-spa.dev.js"
-          integrity="sha256-Px9B1v3wMkR1sHpxZbDfaM8U45nyMD9BaS49pLGzG7w=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@5.0.2/lib/umd/single-spa-react.js"
-          integrity="sha256-JIQDgDH4WQZ6a9YCreoISXaYNxROMuRdz34l5Xv3h4M=" crossorigin="anonymous"></script>
+          integrity="sha256-Px9B1v3wMkR1sHpxZbDfaM8U45nyMD9BaS49pLGzG7w="
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@5.1.4/lib/umd/single-spa-react.js"
+          integrity="sha256-JIQDgDH4WQZ6a9YCreoISXaYNxROMuRdz34l5Xv3h4M="
+          crossorigin="anonymous"></script>
   <script src="/scripts/theme.js"></script>
-  <meta name="importmap-type" content="systemjs-importmap" />
+  <meta name="importmap-type" content="systemjs-importmap"/>
 
   <script type="systemjs-importmap">
-      {
-        "imports": {
-          "@akashaorg/ui-app-loader": "/app-loader/index.js",
-          "@akashaorg/awf-sdk": "/sdk/akasha.sdk.js",
-          "@akashaorg/ui-awf-hooks": "/hooks/index.js"
-        }
+    {
+      "imports": {
+        "@akashaorg/ui-app-loader": "/app-loader/index.js",
+        "@akashaorg/awf-sdk": "/sdk/akasha.sdk.js",
+        "@akashaorg/ui-awf-hooks": "/hooks/index.js"
       }
-
+    }
 
 
   </script>
@@ -86,7 +87,7 @@
 <div id="root"></div>
 <template id="splash-screen-tpl">
   <div id="splash-screen-root" class="global-styles__splash-screen-root">
-    <img src="/img/eth_logo_splash.png" alt="Loading scripts. Please wait..." />
+    <img src="/img/eth_logo_splash.png" alt="Loading scripts. Please wait..."/>
   </div>
 </template>
 <template id="four-oh-four-tpl">
@@ -96,18 +97,18 @@
   </div>
 </template>
 <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker
-                .register('/sw.js', { scope: '/' })
-                .then(registration => {
-                    console.log('SW registered: ', registration);
-                })
-                .catch(registrationError => {
-                    console.log('SW registration failed: ', registrationError);
-                });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js', { scope: '/' })
+        .then(registration => {
+          console.log('SW registered: ', registration);
+        })
+        .catch(registrationError => {
+          console.log('SW registration failed: ', registrationError);
         });
-    }
+    });
+  }
 </script>
 <script type="module" src="/main.js" async></script>
 </body>

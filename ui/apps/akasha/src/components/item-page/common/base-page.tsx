@@ -1,72 +1,55 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import EntryCardHidden from '@akashaorg/design-system-components/lib/components/Entry/EntryCardHidden';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import { Logger } from '@akashaorg/awf-sdk';
-import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { useInfiniteComments } from '@akashaorg/ui-awf-hooks';
-import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import {
-  RootComponentProps,
-  EntityTypes,
-  ModalNavigationOptions,
-  IEntryData,
-} from '@akashaorg/typings/ui';
+  useAnalytics,
+  useDummyQuery,
+  useEntryNavigation,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 import { OriginalItem } from './original-item';
 import { PendingReply } from './pending-reply';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
-type BaseEntryProps = {
+export type BaseEntryProps = {
   postId: string;
   commentId?: string;
   itemType: EntityTypes;
   entryReq: UseQueryResult;
-  entryData?: IEntryData;
-  logger: Logger;
+  entryData?: AkashaBeam;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  feedQueryKey: string;
 };
 
-const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
-  const {
-    postId,
-    commentId,
-    itemType,
-    entryData,
-    entryReq,
-    showLoginModal,
-    logger,
-    plugins,
-    children,
-    layoutConfig,
-    uiEvents,
-    navigateToModal,
-  } = props;
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-  const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
+const BaseEntryPage: React.FC<BaseEntryProps> = props => {
+  const { postId, commentId, itemType, entryData, entryReq, showLoginModal, feedQueryKey } = props;
+  const [showAnyway, setShowAnyway] = useState<boolean>(false);
   const { t } = useTranslation('app-akasha-integration');
 
-  const isReported = React.useMemo(() => {
+  const { children, navigateToModal, getRoutingPlugin } = useRootComponentProps();
+
+  const isReported = useMemo(() => {
     if (showAnyway) {
       return false;
     }
-    return entryReq.isSuccess && entryData?.reported;
-  }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
+    return entryReq.isSuccess && entryData?.nsfw;
+  }, [entryData?.nsfw, showAnyway, entryReq.isSuccess]);
   // @TODO replace with new hooks
-  const reqComments = useInfiniteComments({ limit: 15, postID: postId }, !commentId);
-  const reqReplies = useInfiniteReplies(
-    { limit: 15, postID: postId, commentID: commentId },
-    !!commentId,
-  );
+  const reqComments = useDummyQuery([]);
+  const reqReplies = useDummyQuery([]);
   const reqCommentsOrReplies = commentId ? reqReplies : reqComments;
   const [analyticsActions] = useAnalytics();
 
-  const commentPages = React.useMemo(() => {
+  const commentPages = useMemo(() => {
     if (reqCommentsOrReplies.data) {
       return reqCommentsOrReplies.data.pages;
     }
@@ -75,22 +58,16 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
 
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
-      return resp.viewer?.profile;
+      return resp.viewer?.akashaProfile;
     },
   });
   const loggedProfileData = profileDataReq.data;
-
-  const handleLoadMore = () => {
-    if (reqCommentsOrReplies.isSuccess && reqCommentsOrReplies.hasNextPage) {
-      reqCommentsOrReplies.fetchNextPage();
-    }
-  };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', itemId, itemType });
+    navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleFlipCard = () => {
@@ -98,15 +75,15 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   };
 
   const handleCommentRemove = (commentId: string) => {
-    props.navigateToModal({
+    navigateToModal({
       name: 'entry-remove-confirmation',
-      itemType: EntityTypes.REPLY,
+      itemType: EntityTypes.REFLECT,
       itemId: commentId,
     });
   };
 
   return (
-    <BasicCardBox customStyle="h-auto overflow-hidden" pad="p-0">
+    <Card customStyle="h-auto overflow-hidden" padding="p-0">
       {children}
       {entryReq.isLoading && <EntryCardLoading />}
       {entryReq.isError && (
@@ -117,71 +94,47 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
           devDetails={entryReq.error as string}
         />
       )}
-      {entryReq.isSuccess && (
-        <>
-          {entryData?.moderated && entryData?.delisted && (
-            <EntryCardHidden
-              moderatedContentLabel={t('This content has been moderated')}
-              isDelisted={true}
-            />
-          )}
-          {!entryData?.moderated && isReported && (
-            <EntryCardHidden
-              reason={entryData?.reason}
-              headerTextLabel={t('You reported this post for the following reason')}
-              footerTextLabel={t('It is awaiting moderation.')}
-              ctaLabel={t('See it anyway')}
-              handleFlipCard={handleFlipCard}
-            />
-          )}
-          <OriginalItem
-            itemId={commentId || postId}
-            itemType={itemType}
-            entryReq={entryReq}
-            loggedProfileData={loggedProfileData}
-            uiEvents={uiEvents}
-            plugins={plugins}
-            layoutConfig={layoutConfig}
-            entryData={entryData}
-            navigateToModal={navigateToModal}
-            showLoginModal={showLoginModal}
-          />
-          <PendingReply
-            postId={postId}
-            loggedProfileData={loggedProfileData}
-            commentIds={commentPages[0]?.results || []}
-          />
-          <FeedWidget
-            modalSlotId={layoutConfig.modalSlotId}
-            logger={logger}
-            // @TODO replace with real data source
-            pages={[]}
-            itemType={EntityTypes.REPLY}
-            onLoadMore={handleLoadMore}
-            getShareUrl={(itemId: string) =>
-              `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${itemId}`
-            }
-            loggedProfileData={loggedProfileData}
-            navigateTo={navigateTo}
-            navigateToModal={navigateToModal}
-            onLoginModalOpen={showLoginModal}
-            requestStatus={reqCommentsOrReplies.status}
-            hasNextPage={reqCommentsOrReplies.hasNextPage}
-            contentClickable={true}
-            onEntryFlag={handleEntryFlag}
-            onEntryRemove={handleCommentRemove}
-            removeEntryLabel={t('Delete Reply')}
-            removedByMeLabel={t('You deleted this reply')}
-            removedByAuthorLabel={t('This reply was deleted by its author')}
-            uiEvents={uiEvents}
-            itemSpacing={8}
-            i18n={plugins['@akashaorg/app-translation']?.translation?.i18n}
-            trackEvent={analyticsActions.trackEvent}
-            showReplyFragment={true}
-          />
-        </>
+      {entryData?.nsfw && entryData?.nsfw && (
+        <EntryCardHidden
+          moderatedContentLabel={t('This content has been moderated')}
+          isDelisted={true}
+        />
       )}
-    </BasicCardBox>
+      {!entryData?.nsfw && isReported && (
+        <EntryCardHidden
+          reason={t('This beam was marked as NSFW')}
+          headerTextLabel={t('You reported this post for the following reason')}
+          footerTextLabel={t('It is awaiting moderation.')}
+          ctaLabel={t('See it anyway')}
+          handleFlipCard={handleFlipCard}
+        />
+      )}
+      <OriginalItem
+        itemId={commentId || postId}
+        itemType={itemType}
+        entryReq={entryReq}
+        loggedProfileData={loggedProfileData}
+        entryData={entryData}
+        showLoginModal={showLoginModal}
+      />
+      <PendingReply
+        postId={postId}
+        loggedProfileData={loggedProfileData}
+        commentIds={commentPages[0]?.results || []}
+      />
+      <FeedWidget
+        queryKey={feedQueryKey}
+        itemType={EntityTypes.REFLECT}
+        loggedProfileData={loggedProfileData}
+        onLoginModalOpen={showLoginModal}
+        onEntryFlag={handleEntryFlag}
+        onEntryRemove={handleCommentRemove}
+        itemSpacing={8}
+        trackEvent={analyticsActions.trackEvent}
+        onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
+        newItemsPublishedLabel={t('New Beams published recently')}
+      />
+    </Card>
   );
 };
 

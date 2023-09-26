@@ -1,14 +1,17 @@
 import React from 'react';
+
+import { IconType } from '@akashaorg/typings/lib/ui';
+
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
-import { IconType } from '@akashaorg/typings/ui';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 
 type Stat = {
   label: string;
   total: number | string;
+  disabled?: boolean;
   onClick?: React.EventHandler<React.SyntheticEvent>;
 };
 
@@ -46,24 +49,19 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
   ];
 
   return (
-    <Card elevation="1" radius={20} padding={16}>
-      <Stack direction="column" spacing="gap-4" fullWidth>
-        <Stack justify="between">
+    <Card elevation="1" radius={20} padding={'p-4'}>
+      <Stack spacing="gap-4" fullWidth>
+        <Stack direction="row" justify="between">
           {stats.map((stat, index) => (
-            <Button
-              onClick={+stat.total > 0 ? stat.onClick : undefined}
-              key={stat.label + index}
-              disabled={+stat.total === 0}
-              plain
-            >
-              <Stack direction="column" align="center" customStyle="group">
+            <Button onClick={stat.onClick} key={stat.label + index} disabled={stat.disabled} plain>
+              <Stack align="center" customStyle="group">
                 <AppIcon
                   placeholderIconType={stat.icon}
                   size="sm"
                   breakPointSize={{ breakPoint: 'sm', size: 'lg' }}
                   customStyle={stat.className}
                   accentColor
-                  hover
+                  hover={!stat.disabled}
                 />
                 <Text {...labelProp}>{stat.label}</Text>
                 <Text {...totalProps}>{stat.total}</Text>

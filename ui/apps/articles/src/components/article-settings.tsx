@@ -1,8 +1,8 @@
 import React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 
@@ -38,16 +38,16 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
   const [inputValue, setInputValue] = React.useState<string>(searchKeyword);
 
   return (
-    <BasicCardBox>
-      <Box customStyle="flex flex-row w-full p-4 border(b grey8 dark:grey3)">
+    <Card>
+      <Stack direction="row" fullWidth={true} customStyle="p-4 border(b grey8 dark:grey3)">
         <button onClick={onClickCloseSettings}>
           <Icon type="XMarkIcon" />
         </button>
         <Text variant="h2" customStyle="mx-auto">
           {titleLabel}
         </Text>
-      </Box>
-      <Box customStyle="flex w-full px-4 pt-4 items-center">
+      </Stack>
+      <Stack fullWidth={true} align="center" customStyle="px-4 pt-4">
         <SearchBar
           inputValue={inputValue}
           inputPlaceholderLabel={inputPlaceholderLabel}
@@ -56,25 +56,29 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
           searchInputSize="large"
           iconSize="sm"
         />
-      </Box>
-      <Box customStyle="flex p-4 border(b grey8 dark:grey3) gap-1">
+      </Stack>
+      <Stack spacing="gap-1" customStyle="p-4 border(b grey8 dark:grey3)">
         <Text variant="h2">{subscribedTopicsTitleLabel}:</Text>
         <Text variant="subtitle2">{subscribedTopicsSubtitleLabel}</Text>
-        <Box customStyle="flex flex-row flex-wrap gap-1">
+        <Stack direction="row" spacing="gap-1" customStyle="flex-wrap">
           {subscribedTopics.map((topic, idx) => (
             <button key={idx} onClick={onClickTopic(topic)}>
-              <Box customStyle="flex flex-row rounded-lg gap-0.5 border(secondaryLight dark:secondaryDark)">
+              <Stack
+                direction="row"
+                spacing="gap-0.5"
+                customStyle="rounded-lg border(secondaryLight dark:secondaryDark)"
+              >
                 <Text>{topic}</Text>
                 <Icon type="XMarkIcon" />
-              </Box>
+              </Stack>
             </button>
           ))}
-        </Box>
-      </Box>
-      <Box customStyle="flex flex-row w-full justify-end items-center p-4">
+        </Stack>
+      </Stack>
+      <Stack direction="row" fullWidth={true} align="center" justify="end" customStyle="p-4">
         <Button size="lg" icon="XMarkIcon" label={uninstallLabel} onClick={onClickUninstall} />
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };
 

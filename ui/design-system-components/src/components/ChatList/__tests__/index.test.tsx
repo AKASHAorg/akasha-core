@@ -6,18 +6,18 @@ import BubbleCard from '../../BubbleCard';
 
 import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
 
+const intersectionObserverMock = function () {
+  return {
+    observe: jest.fn(),
+    disconnect: jest.fn(),
+  };
+};
+
 describe('<ChatList /> Component', () => {
   let componentWrapper = customRender(<></>, {});
   window.HTMLElement.prototype.scrollIntoView = jest.fn;
 
-  const mock = function () {
-    return {
-      observe: jest.fn(),
-      disconnect: jest.fn(),
-    };
-  };
-
-  window.IntersectionObserver = jest.fn().mockImplementation(mock);
+  window.IntersectionObserver = jest.fn().mockImplementation(intersectionObserverMock);
 
   const profileId = 'did:0x003410490050000320006570034567114572000';
   const emptyChatLabel = 'Start by saying hello! 👋🏼';

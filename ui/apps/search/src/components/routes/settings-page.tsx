@@ -1,37 +1,29 @@
-import React from 'react';
-import { tw } from '@twind/core';
-import routes, { RESULTS } from '../../routes';
-import { RootComponentProps, ModalNavigationOptions, Profile } from '@akashaorg/typings/ui';
+import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+
+import { EventTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
-interface ISettingsPageProps extends RootComponentProps {
+import routes, { RESULTS } from '../../routes';
+
+export type SettingsPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const SettingsPage: React.FC<ISettingsPageProps> = props => {
+const SettingsPage: React.FC<SettingsPageProps> = () => {
   const { t } = useTranslation('app-search');
-  const { plugins } = props;
+  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
 
-  // for displaying feedback messages
-  const [message, setMessage] = React.useState('');
-  const [messageType, setMessageType] = React.useState('success');
-
-  const [showFeedback, setShowFeedback] = React.useState(false);
-
-  if (showFeedback) {
-    setTimeout(() => {
-      setShowFeedback(false);
-    }, 3000);
-  }
+  const _uiEvents = useRef(uiEvents);
 
   const [showNsfwContent, setShowNsfwContent] = React.useState(false);
 
@@ -49,7 +41,7 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
     setShowNsfwContent(!showNsfwContent);
   };
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const goToSearchPage = () => {
     return navigateTo?.({
@@ -78,7 +70,13 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
         if (!showNsfwContent && localStorage.getItem('searchApp-showNsfwContent')) {
           localStorage.removeItem('searchApp-showNsfwContent');
         }
-        setMessage('Search settings updated successfully');
+        _uiEvents.current.next({
+          event: EventTypes.ShowNotification,
+          data: {
+            name: 'success',
+            message: 'Search settings updated successfully',
+          },
+        });
       }
 
       // disable the button again after saving preferences
@@ -89,32 +87,35 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
         goToSearchPage();
       }, 3000);
     } catch (error) {
-      setMessage('Something went wrong. Retry');
-      setMessageType('error');
+      _uiEvents.current.next({
+        event: EventTypes.ShowNotification,
+        data: {
+          name: 'error',
+          message: 'Something went wrong. Retry',
+        },
+      });
     }
-    setShowFeedback(true);
   };
 
   return (
     <>
       <Card
-        direction="row"
         elevation={'1'}
         radius={16}
-        padding={{ x: 8, y: 8 }}
-        customStyle="h-full md:h-min space-y-4"
+        padding={'p-2'}
+        customStyle="h-full md:h-min space-y-4 flex flex-col"
       >
         <Text variant="h5" align="center">
           {t('Search Settings')}
         </Text>
 
         <Divider customStyle="my-2" />
-        <Box customStyle="flex justify-between">
+        <Stack justify="between" direction="row">
           <Text variant="h6">
             <>{t('Show NSFW Content')}</>
           </Text>
-          <Toggle checked={showNsfwContent} onChange={showNSFWChangeHandler} size="large" />
-        </Box>
+          <Toggle checked={showNsfwContent} onChange={showNSFWChangeHandler} size="small" />
+        </Stack>
         <Text variant="footnotes2" color={{ light: 'grey7', dark: 'grey6' }}>
           <>
             {t(
@@ -122,7 +123,13 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
             )}
           </>
         </Text>
-        <div className={tw('w-full flex justify-end space-x-4 pr-2 pb-2 pt-32')}>
+        <Stack
+          direction="row"
+          fullWidth
+          justify="end"
+          spacing="gap-x-4"
+          customStyle="pr-2 pb-2 pt-32"
+        >
           <Button
             variant="text"
             label={t('Cancel')}
@@ -135,17 +142,8 @@ const SettingsPage: React.FC<ISettingsPageProps> = props => {
             onClick={confirmHandler}
             disabled={updateButtonDisabled}
           />
-        </div>
+        </Stack>
       </Card>
-      {showFeedback && (
-        <div className={tw('-mt-12 md:mt-4 z-50 w-full')}>
-          <Snackbar
-            title={t('{{notificationMessage}}', { notificationMessage: message })}
-            type={messageType as SnackBarType}
-            handleDismiss={() => setShowFeedback(false)}
-          />
-        </div>
-      )}
     </>
   );
 };

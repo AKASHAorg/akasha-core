@@ -1,6 +1,6 @@
 import { ReplaySubject, Subject } from 'rxjs';
 import { ParcelConfigObject } from 'single-spa';
-import { IconType, RootComponentProps, RootExtensionProps } from './index';
+import { EventDataTypes, IconType, RootComponentProps, RootExtensionProps } from './index';
 
 import { UIEventData } from './ui-events';
 import { Extensions, IAppConfig } from './apps';
@@ -27,7 +27,7 @@ export interface IntegrationRegistrationOptions {
 
 export interface ExtensionMatcherFn<G = ReplaySubject<GlobalEventBusData>> {
   (
-    uiEvents: Subject<UIEventData>,
+    uiEvents: RootComponentProps['uiEvents'],
     globalChannel: G,
     extProps: Omit<
       RootExtensionProps,
@@ -45,7 +45,8 @@ export type ExtensionLoaderFn = (
   loadingFunction: () => Promise<ParcelConfigObject<Omit<RootExtensionProps, 'baseRouteName'>>>,
 ) => {
   load: (props: Omit<RootExtensionProps, 'baseRouteName'>, parentAppName: string) => void;
-  unload: (event: UIEventData, parentAppName: string) => Promise<void>;
+  unmount: (event: { data?: EventDataTypes }, parentAppName: string) => Promise<void>;
+  update: (props: Omit<RootExtensionProps, 'baseRouteName'>, parentAppName: string) => void;
 };
 
 export type ExtendsFn = (

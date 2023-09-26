@@ -4,21 +4,18 @@ import {
   IPublishData,
   AnalyticsCategories,
   IEntryData,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import isEqual from 'lodash.isequal';
-import {
-  useCreatePost,
-  useEditPost,
-  usePost,
-  mapEntry,
-  useAnalytics,
-  useCreateComment,
-} from '@akashaorg/ui-awf-hooks';
+
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
 import { Draft, IDraftStorage } from '../utils';
 import { editorDefaultValue } from '@akashaorg/design-system-components/lib/components/Editor/initialValue';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import {
+  useCreateBeamMutation,
+  useCreateContentBlockMutation,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 type Props = {
   appName: string;
@@ -31,16 +28,14 @@ type Props = {
 
 export function PostEditor({ appName, postId, userId, singleSpa, action, draftStorage }: Props) {
   const { t } = useTranslation('app-akasha-integration');
-  const [analyticsActions] = useAnalytics();
+  const [analyticsActions] = [undefined];
 
   // @TODO replace with new hooks
-  const post = usePost({
-    postId,
-    enabler: action !== 'post',
-  });
-  const editPost = useEditPost();
-  const publishPost = useCreatePost();
-  const publishComment = useCreateComment();
+  const post = undefined;
+  const editPost = undefined;
+  const editorBlockCreator = useCreateContentBlockMutation();
+  const publishPost = useCreateBeamMutation();
+  const publishComment = undefined;
 
   const postDraft = new Draft<Partial<IEntryData>>({
     storage: draftStorage,
@@ -59,23 +54,12 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
   const draftRepostData = canSaveDraft ? repostDraft.get() : null;
 
   const entryData = React.useMemo(() => {
-    if (post.status === 'success') {
-      return mapEntry(post.data);
-    }
     return undefined;
-  }, [post.data, post.status]);
+  }, []);
 
   const embedEntryData = React.useMemo(() => {
-    if (entryData && action === 'repost') {
-      return entryData;
-    }
-    if (action === 'repost' || action === 'edit') {
-      if (post.data?.quotes.length) {
-        return mapEntry(post.data?.quotes[0]);
-      }
-    }
     return undefined;
-  }, [action, entryData, post.data?.quotes]);
+  }, []);
 
   const [editorState, setEditorState] = React.useState(
     action === 'edit' ? entryData?.slateContent : draftPostData,
@@ -105,52 +89,53 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
 
   const handlePublish = React.useCallback(
     (data: IPublishData) => {
-      switch (action) {
-        case 'edit':
-          editPost.mutate(
-            { entryID: postId, ...data },
-            {
-              onSuccess: () => {
-                analyticsActions.trackEvent({
-                  category: AnalyticsCategories.POST,
-                  action: 'Post Edited',
-                });
-              },
-            },
-          );
-          singleSpa.navigateToUrl(location.pathname);
-          break;
-        case 'post':
-        case 'repost':
-          publishPost.mutate(
-            { ...data, userId },
-            {
-              onSuccess: () => {
-                analyticsActions.trackEvent({
-                  category: AnalyticsCategories.POST,
-                  action: `${action === 'repost' ? 'Repost' : 'New Post'} Published`,
-                });
-              },
-            },
-          );
-          break;
-        case 'reply':
-          publishComment.mutate(
-            {
-              ...data,
-              postID: postId,
-            },
-            {
-              onSuccess: () => {
-                analyticsActions.trackEvent({
-                  category: AnalyticsCategories.REPLY,
-                  action: 'Reply Published',
-                });
-              },
-            },
-          );
-          singleSpa.navigateToUrl(location.pathname);
-      }
+      console.log('publish post:', data);
+      // switch (action) {
+      //   case 'edit':
+      //     editPost.mutate(
+      //       { entryID: postId, ...data },
+      //       {
+      //         onSuccess: () => {
+      //           analyticsActions.trackEvent({
+      //             category: AnalyticsCategories.POST,
+      //             action: 'Post Edited',
+      //           });
+      //         },
+      //       },
+      //     );
+      //     singleSpa.navigateToUrl(location.pathname);
+      //     break;
+      //   case 'post':
+      //   case 'repost':
+      //     publishPost.mutate(
+      //       { ...data, userId },
+      //       {
+      //         onSuccess: () => {
+      //           analyticsActions.trackEvent({
+      //             category: AnalyticsCategories.POST,
+      //             action: `${action === 'repost' ? 'Repost' : 'New Post'} Published`,
+      //           });
+      //         },
+      //       },
+      //     );
+      //     break;
+      //   case 'reply':
+      //     publishComment.mutate(
+      //       {
+      //         ...data,
+      //         postID: postId,
+      //       },
+      //       {
+      //         onSuccess: () => {
+      //           analyticsActions.trackEvent({
+      //             category: AnalyticsCategories.REPLY,
+      //             action: 'Reply Published',
+      //           });
+      //         },
+      //       },
+      //     );
+      //     singleSpa.navigateToUrl(location.pathname);
+      // }
     },
     [action, postId, userId, singleSpa, editPost, publishPost, publishComment, analyticsActions],
   );
@@ -158,15 +143,24 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
-  if (post.error) return <>Error loading {action === 'repost' && 'embedded'} post</>;
+  // if (post.error) return <>Error loading {action === 'repost' && 'embedded'} post</>;
+  //
+  // if (post.status === 'loading') return <EntryCardLoading />;
 
-  if (post.status === 'loading') return <EntryCardLoading />;
+  const postLabelAction = React.useMemo(() => {
+    switch (action) {
+      case 'edit':
+        return t('Save Changes');
+      case 'reply':
+        return t('Reflect');
+      default:
+        return t('Beam it');
+    }
+  }, [action]);
 
   return (
     <Base
-      postLabel={
-        action === 'edit' ? t('Save Changes') : action === 'reply' ? t('Reply') : t('Publish')
-      }
+      postLabel={postLabelAction}
       placeholderLabel={
         action === 'reply' ? `${t('Reply to')} ${entryAuthorName || ''}` : t('Share your thoughts')
       }
@@ -185,13 +179,13 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
       handleSaveImagesDraft={handleSaveImagesDraft}
       handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
       setEditorState={(value: IEntryData['slateContent']) => {
-        if (canSaveDraft) {
-          if (isEqual(value, editorDefaultValue)) {
-            postDraft.clear();
-            return;
-          }
-          postDraft.save({ ...postDraft.get(), slateContent: value });
-        }
+        // if (canSaveDraft) {
+        //   if (isEqual(value, editorDefaultValue)) {
+        //     postDraft.clear();
+        //     return;
+        //   }
+        //   postDraft.save({ ...postDraft.get(), slateContent: value });
+        // }
         setEditorState(value);
       }}
       onClear={() => {
@@ -200,8 +194,6 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
         setEmbededEntry(null);
         setEditorState(editorDefaultValue);
       }}
-      noBorderRound={action === 'edit'}
-      borderBottomOnly={action === 'edit'}
     />
   );
 }

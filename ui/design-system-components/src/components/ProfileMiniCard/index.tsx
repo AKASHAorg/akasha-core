@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
+
+import { Profile } from '@akashaorg/typings/lib/ui';
+
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
 import { truncateMiddle } from '../../utils/string-utils';
-import { Profile } from '@akashaorg/typings/ui';
 
 export interface IProfileMiniCard {
   // data
@@ -34,7 +38,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     followingLabel,
     followersLabel,
     unfollowLabel,
-    postsLabel,
+    // postsLabel,
     isViewer,
     handleClick,
     handleFollow,
@@ -66,7 +70,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
 
   return (
     <Card elevation={{ light: '1', dark: '1' }} radius={'rounded-2xl'}>
-      <div onClick={onClick}>
+      <Button plain={true} onClick={onClick}>
         <div
           style={{ backgroundImage: `url(${profileData.background})` }}
           className={tw(`flex items-center justify-center w-full h-28 rounded-t-2xl`)}
@@ -119,7 +123,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
           )}
           {footerExt}
         </div>
-      </div>
+      </Button>
     </Card>
   );
 };

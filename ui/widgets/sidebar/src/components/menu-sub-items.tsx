@@ -1,15 +1,17 @@
 import React from 'react';
-import { IMenuItem } from '@akashaorg/typings/ui';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 
-export interface IMenuSubItemsProps {
+import { IMenuItem } from '@akashaorg/typings/lib/ui';
+
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+export type MenuSubItemsProps = {
   menuItem: IMenuItem;
   activeOption: IMenuItem | null;
   onOptionClick: (menu: IMenuItem, submenu: IMenuItem) => void;
-}
+};
 
-const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
+const MenuSubItems: React.FC<MenuSubItemsProps> = props => {
   const { menuItem, activeOption, onOptionClick } = props;
 
   const subRoutes = React.useMemo(() => {
@@ -18,32 +20,46 @@ const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
     });
   }, [menuItem.subRoutes]);
 
-  const genBorderStyles = (route: string) => {
-    if (route === activeOption?.route) {
-      return 'border-secondaryLight dark:border-secondaryDark';
-    }
-    return 'border-grey9 dark:border-grey3';
-  };
-
   return (
-    <Box customStyle={'text-black dark:text-white cursor-pointer'}>
-      {subRoutes.map((subRoute, idx) => (
-        <Box key={subRoute.label + idx} customStyle={'hover:bg-grey8 dark:hover:bg-grey5'}>
-          <Box
+    <Stack customStyle="cursor-pointer">
+      {subRoutes.map((subRoute, idx) => {
+        const isActive =
+          subRoute?.route === activeOption?.route || location.pathname.includes(subRoute?.route);
+
+        return (
+          <Stack
             key={subRoute.label + idx}
-            customStyle={`ml-8 border-l-4 hover:border-transparent dark:hover:border-transparent ${genBorderStyles(
-              subRoute?.route,
-            )}`}
-            onClick={e => {
-              e.preventDefault();
-              onOptionClick(menuItem, subRoute);
-            }}
+            direction="row"
+            customStyle={'hover:bg-grey8 dark:hover:bg-grey5'}
           >
-            <Text customStyle="py-4 px-8">{subRoute.label}</Text>
-          </Box>
-        </Box>
-      ))}
-    </Box>
+            <button
+              onClick={e => {
+                e.preventDefault();
+                onOptionClick(menuItem, subRoute);
+              }}
+            >
+              <Stack
+                key={subRoute.label + idx}
+                customStyle={`ml-8 border(l-4 ${
+                  isActive ? 'secondaryLight dark:secondaryDark' : 'grey9 dark:grey3'
+                })`}
+              >
+                <Text
+                  color={
+                    isActive
+                      ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                      : { light: 'black', dark: 'white' }
+                  }
+                  customStyle="py-4 px-8"
+                >
+                  {subRoute.label}
+                </Text>
+              </Stack>
+            </button>
+          </Stack>
+        );
+      })}
+    </Stack>
   );
 };
 

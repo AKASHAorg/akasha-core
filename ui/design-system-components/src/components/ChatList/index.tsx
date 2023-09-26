@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { IChatMessage } from '@akashaorg/typings/ui';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { tw } from '@twind/core';
 
-export interface IChatListProps {
+import { IChatMessage } from '@akashaorg/typings/lib/ui';
+
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
+export type ChatListProps = {
   emptyChatLabel: string;
   fetchingMessagesLabel?: string;
   unreadMessagesLabel?: string;
@@ -14,9 +16,9 @@ export interface IChatListProps {
   markLatestMessagesRead?: () => void;
   oldMessages?: IChatMessage[];
   newMessages?: IChatMessage[];
-}
+};
 
-const ChatList: React.FC<IChatListProps> = props => {
+const ChatList: React.FC<ChatListProps> = props => {
   const {
     emptyChatLabel,
     loggedUserProfileId,

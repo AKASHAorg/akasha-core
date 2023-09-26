@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -18,10 +18,10 @@ export const SummaryCard: React.FC<SummaryCardProps> = props => {
     props;
 
   return (
-    <Box customStyle="space-y-3">
+    <Stack spacing="gap-y-3">
       <HeroImage {...props} />
 
-      <Box customStyle="rounded-lg space-y-2 p-4 bg-(grey9 dark:grey3)">
+      <Stack spacing="gap-y-2" customStyle="rounded-lg p-4 bg-(grey9 dark:grey3)">
         <Text weight="bold">{paragraph1TitleLabel}</Text>
 
         {paragraph1Content && (
@@ -39,7 +39,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = props => {
             {paragraph2Content}
           </Text>
         )}
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };

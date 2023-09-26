@@ -1,7 +1,7 @@
 import faker from 'faker';
-import { Profile } from '@akashaorg/typings/ui';
+import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 
-const genUser = (ethAddress?: string): Profile => {
+const genUser = (ethAddress?: string): AkashaProfile => {
   const avatarUrl = faker.image.avatar();
   const coverImageUrl = faker.image.imageUrl();
   return {
@@ -9,13 +9,18 @@ const genUser = (ethAddress?: string): Profile => {
     avatar: { default: { src: avatarUrl, width: 200, height: 200 } },
     background: { default: { src: coverImageUrl, width: 200, height: 200 } },
     description: faker.lorem.sentences(3),
+    links: [
+      { href: 'https://github.com/AKASHAorg/akasha-core' },
+      { href: 'https://twitter.com/AKASHAorg' },
+    ],
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
     did: { id: `did:${ethAddress}` },
     createdAt: faker.date.past().toISOString(),
+    followersCount: 0,
   };
 };
 
-export const genLoggedInState = (loggedIn = false): Profile => {
+export const genLoggedInState = (loggedIn = false): AkashaProfile => {
   if (!loggedIn) return null;
   return {
     id: '124',
@@ -37,6 +42,7 @@ export const genLoggedInState = (loggedIn = false): Profile => {
     },
     description: 'profile description',
     createdAt: faker.date.past().toISOString(),
+    followersCount: 2,
   };
 };
 

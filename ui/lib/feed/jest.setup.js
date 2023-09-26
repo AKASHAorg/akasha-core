@@ -1,5 +1,4 @@
 import { genPostData, mockSDK } from '@akashaorg/af-testing';
-import * as postHooks from '@akashaorg/ui-awf-hooks/lib/use-posts';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 
 require('@testing-library/jest-dom/extend-expect');
@@ -13,7 +12,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK({});
 });
 
-jest.mock('@akashaorg/typings/ui', () => ({
+jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     POST: 0,
     PROFILE: 1,
@@ -28,6 +27,7 @@ jest.mock('@akashaorg/typings/ui', () => ({
     ExtensionPointMount: 'extension-point-mount',
     ExtensionPointMountRequest: 'extension-point-mount-request',
     ExtensionPointUnmount: 'extension-point-unmount',
+    ExtensionPointUpdate: 'extension-point-update',
     ExtensionPointUnmountRequest: 'extension-point-unmount-request',
     ModalRequest: 'modal-mount-request',
     ModalMount: 'modal-mount',
@@ -41,13 +41,6 @@ jest.mock('@akashaorg/typings/ui', () => ({
     ThemeChange: 'theme-change',
   },
 }));
-
-jest.spyOn(postHooks, 'usePost').mockReturnValue({
-  data: { ...genPostData() },
-  status: 'success',
-  isSuccess: true,
-  reported: true,
-});
 
 jest
   .spyOn(mediaHooks, 'getMediaUrl')

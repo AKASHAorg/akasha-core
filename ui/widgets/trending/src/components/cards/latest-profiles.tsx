@@ -1,66 +1,59 @@
 import React from 'react';
 
-import { Profile } from '@akashaorg/typings/ui';
+import { FollowList, Profile, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { getProfileImageVersionsWithMediaUrl } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 
 export type LatestProfilesProps = {
   // data
   profiles: Profile[];
-  followedProfiles?: string[];
-  loggedUserDid?: string | null;
+  followList?: FollowList;
+  loggedInProfileId?: string | null;
   isLoadingProfiles?: boolean;
+  isLoggedIn: boolean;
+  uiEvents: RootComponentProps['uiEvents'];
   // labels
   noProfilesLabel?: string;
   titleLabel: string;
-  followLabel?: string;
-  followersLabel?: string;
-  unfollowLabel?: string;
   // handlers
   onClickProfile: (did: string) => void;
-  handleFollowProfile: (did: string) => void;
-  handleUnfollowProfile: (did: string) => void;
 };
 
 export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
   const {
     onClickProfile,
-    handleFollowProfile,
-    handleUnfollowProfile,
     titleLabel,
     profiles,
+    followList,
+    isLoggedIn,
+    uiEvents,
     isLoadingProfiles,
     noProfilesLabel,
-    followLabel,
-    unfollowLabel,
-    followedProfiles,
-    loggedUserDid,
+    loggedInProfileId,
   } = props;
 
   const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none';
 
-  const BaseItemStyles = 'flex justify-between items-center space-y-2';
-
   return (
-    <BasicCardBox pad="p-4">
-      <Box customStyle="mb-4">
+    <Card padding={16}>
+      <Stack customStyle="mb-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}
         </Text>
-      </Box>
+      </Stack>
 
-      <Box customStyle={BaseTabPanelStyles}>
+      <Stack customStyle={BaseTabPanelStyles}>
         <ul>
           {profiles.length === 0 && !isLoadingProfiles && (
-            <Box customStyle="flex justify-center items-center py-2">
+            <Stack justify="center" align="center" customStyle="py-2">
               <Text>{noProfilesLabel}</Text>
-            </Box>
+            </Stack>
           )}
 
           {profiles.length === 0 &&
@@ -71,34 +64,41 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
               </React.Fragment>
             ))}
 
-          <Box customStyle="space-y-4">
+          <Stack spacing="gap-y-4">
             {profiles.length !== 0 &&
-              profiles.map((profile, index) => (
-                <Box key={index} customStyle={BaseItemStyles}>
+              profiles.map(profile => (
+                <Stack
+                  key={profile.id}
+                  direction="row"
+                  align="center"
+                  justify="between"
+                  spacing="gap-y-2"
+                >
                   <ProfileAvatarButton
                     profileId={profile.did.id}
                     label={profile.name}
-                    info={profile.did.id}
                     size="md"
                     avatarImage={getProfileImageVersionsWithMediaUrl(profile.avatar)}
                     onClick={() => onClickProfile(profile.did.id)}
                   />
 
-                  {loggedUserDid !== profile.did.id && (
-                    <DuplexButton
-                      inactiveLabel={followLabel}
-                      activeLabel={unfollowLabel}
-                      onClickInactive={() => handleFollowProfile(profile.did.id)}
-                      onClickActive={() => handleUnfollowProfile(profile.did.id)}
-                      active={followedProfiles?.includes(profile.did.id)}
-                      allowMinimization={false}
+                  {loggedInProfileId !== profile.did.id && (
+                    <Extension
+                      name={`follow_${profile.id}`}
+                      uiEvents={uiEvents}
+                      data={{
+                        profileID: profile.id,
+                        isFollowing: followList?.get(profile.id)?.isFollowing,
+                        isLoggedIn,
+                        followId: followList?.get(profile.id)?.id,
+                      }}
                     />
                   )}
-                </Box>
+                </Stack>
               ))}
-          </Box>
+          </Stack>
         </ul>
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };

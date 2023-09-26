@@ -1,55 +1,54 @@
 import * as React from 'react';
-import { useAnalytics, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  sortByKey,
+  useAnalytics,
+  useEntryNavigation,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import {
   EntityTypes,
-  IEntryData,
-  RootComponentProps,
   ModalNavigationOptions,
   AnalyticsCategories,
   Profile,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
-import routes, { POST } from '../../../routes';
+import routes, { BEAM } from '../../../routes';
 import { UseQueryResult } from '@tanstack/react-query';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
-import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
-type Props = {
+export type OriginalItemProps = {
   itemId: string;
   itemType: EntityTypes;
   entryReq: UseQueryResult;
   loggedProfileData?: Profile;
-  uiEvents: RootComponentProps['uiEvents'];
-  plugins: RootComponentProps['plugins'];
-  layoutConfig: RootComponentProps['layoutConfig'];
-  entryData?: IEntryData;
-  navigateToModal: RootComponentProps['navigateToModal'];
+  entryData?: AkashaBeam;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-export function OriginalItem({
-  itemId,
-  itemType,
-  entryReq,
-  loggedProfileData,
-  uiEvents,
-  plugins,
-  entryData,
-  navigateToModal,
-  showLoginModal,
-}: Props) {
+export const OriginalItem: React.FC<OriginalItemProps> = props => {
+  const { itemId, itemType, entryReq, loggedProfileData, entryData, showLoginModal } = props;
+
   const { t } = useTranslation('app-akasha-integration');
+  const { uiEvents, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
+    useRootComponentProps();
 
   const action = new URLSearchParams(location.search).get('action');
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-  const locale = (plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
-    'en') as ILocale;
+  const navigateTo = getRoutingPlugin().navigateTo;
+  const locale = (getTranslationPlugin().i18n?.languages?.[0] || 'en') as ILocale;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const [analyticsActions] = useAnalytics();
   const handleEntryNavigate = useEntryNavigation(navigateTo, itemId);
+  const profileDataReq = useGetProfileByDidQuery(
+    { id: entryData.author.id },
+    { select: response => response.node },
+  );
 
   const [showReplyEditor, setShowReplyEditor] = React.useState(true);
 
@@ -57,18 +56,20 @@ export function OriginalItem({
     if (showAnyway) {
       return false;
     }
-    return entryReq.isSuccess && entryData?.reported;
-  }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
+    return entryReq.isSuccess && entryData?.nsfw;
+  }, [entryData?.nsfw, showAnyway, entryReq.isSuccess]);
 
   const showEntry = React.useMemo(
-    () => !entryData?.delisted && (!isReported || (isReported && entryData?.moderated)),
-    [entryData?.delisted, entryData?.moderated, isReported],
+    () => !entryData?.active && (!isReported || (isReported && entryData?.nsfw)),
+    [entryData?.active, entryData?.nsfw, isReported],
   );
 
-  const showEditButton = React.useMemo(
-    () => entryData?.author?.did.isViewer,
-    [entryData?.author?.did],
-  );
+  const showEditButton = React.useMemo(() => entryData?.author?.isViewer, [entryData?.author]);
+
+  const { akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+      ? profileDataReq.data
+      : { akashaProfile: null };
 
   if (!showEntry) return null;
 
@@ -76,7 +77,7 @@ export function OriginalItem({
     if (action === 'edit') {
       return (
         <Extension
-          name={`inline-editor_postedit_${entryData?.entryId}`}
+          name={`inline-editor_postedit_${entryData?.id}`}
           uiEvents={uiEvents}
           data={{ itemId, itemType, action: 'edit' }}
         />
@@ -147,39 +148,38 @@ export function OriginalItem({
   const replyActive = !action && loggedProfileData?.did?.id;
 
   return (
-    <Box customStyle={`rounded-t-lg`}>
-      <Box customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
-        <EntryBox
-          isRemoved={entryData?.isRemoved}
+    <Stack customStyle={`rounded-t-lg`}>
+      <Stack customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
+        <EntryCard
+          isRemoved={!entryData?.active}
           entryData={entryData}
-          onClickAvatar={handleAvatarClick(entryData?.author?.did?.id)}
+          sortedContents={sortByKey(entryData.content, 'order')}
+          itemType={EntityTypes.BEAM}
+          authorProfile={{ data: profileData, status: profileDataReq.status }}
           flagAsLabel={t('Report Post')}
           locale={locale}
-          showMore={true}
           profileAnchorLink={'/profile'}
-          repliesAnchorLink={routes[POST]}
-          onRepost={handleRepost}
-          onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.POST)}
-          onContentClick={handleEntryNavigate}
-          navigateTo={navigateTo}
+          repliesAnchorLink={routes[BEAM]}
+          onAvatarClick={handleAvatarClick}
+          onContentClick={() => {
+            handleEntryNavigate(
+              { authorId: entryData.author.id, id: entryData.id },
+              EntityTypes.BEAM,
+            );
+          }}
+          onEntryFlag={handleEntryFlag(entryData?.id, EntityTypes.BEAM)}
           contentClickable={true}
-          onMentionClick={handleMentionClick}
-          onTagClick={handleTagClick}
           moderatedContentLabel={t('This content has been moderated')}
           ctaLabel={t('See it anyway')}
-          handleFlipCard={handleFlipCard}
-          scrollHiddenContent={true}
           onEntryRemove={handlePostRemove}
-          onRepliesClick={() => setShowReplyEditor(show => !show)}
+          onReflect={() => setShowReplyEditor(show => !show)}
           removeEntryLabel={t('Delete Post')}
           removedByMeLabel={t('You deleted this post')}
           removedByAuthorLabel={t('This post was deleted by its author')}
-          disableReposting={entryData?.isRemoved || itemType === EntityTypes.REPLY}
-          hideRepost={itemType === EntityTypes.REPLY}
           headerMenuExt={
             showEditButton && (
               <Extension
-                name={`entry-card-edit-button_${entryData?.entryId}`}
+                name={`entry-card-edit-button_${entryData?.id}`}
                 style={{ width: '100%' }}
                 uiEvents={uiEvents}
                 data={{ itemId, itemType }}
@@ -188,7 +188,7 @@ export function OriginalItem({
           }
           actionsRightExt={
             <Extension
-              name={`entry-card-actions-right_${entryData?.entryId}`}
+              name={`entry-card-actions-right_${entryData?.id}`}
               uiEvents={uiEvents}
               data={{
                 itemId,
@@ -196,9 +196,11 @@ export function OriginalItem({
               }}
             />
           }
-        />
-      </Box>
-      <Box customStyle="m-4">
+        >
+          {({ blockID }) => <Extension name={`${blockID}_content_block`} uiEvents={uiEvents} />}
+        </EntryCard>
+      </Stack>
+      <Stack customStyle="m-4">
         {!loggedProfileData?.did?.id && (
           <EditorPlaceholder
             onClick={handlePlaceholderClick}
@@ -207,9 +209,9 @@ export function OriginalItem({
             placeholderLabel={t('Share your thoughts')}
           />
         )}
-        {showReplyEditor && loggedProfileData?.did?.id && !entryData?.isRemoved && (
+        {showReplyEditor && loggedProfileData?.did?.id && entryData?.active && (
           <Extension
-            name={`inline-editor_reply_${entryData?.entryId}`}
+            name={`inline-editor_reply_${entryData?.id}`}
             uiEvents={uiEvents}
             data={{
               itemId,
@@ -218,7 +220,7 @@ export function OriginalItem({
             }}
           />
         )}
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
-}
+};

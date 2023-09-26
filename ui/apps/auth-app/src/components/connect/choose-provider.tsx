@@ -8,10 +8,11 @@ import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Web3ConnectCard from './web3-connect-card';
 import { useTranslation } from 'react-i18next';
-import { IconType, RootComponentProps } from '@akashaorg/typings/ui';
-import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
+import { IconType } from '@akashaorg/typings/lib/ui';
+import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/lib/sdk';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-interface ChooseProviderProps {
+export type ChooseProviderProps = {
   injectedProvider: {
     name: INJECTED_PROVIDERS;
     iconType?: IconType;
@@ -19,14 +20,14 @@ interface ChooseProviderProps {
     subtitleLabel?: string;
   };
   onProviderSelect: (provider: EthProviders) => void;
-  plugins: RootComponentProps['plugins'];
-}
+};
 
 const ChooseProvider: React.FC<ChooseProviderProps> = props => {
-  const { injectedProvider, plugins, onProviderSelect } = props;
+  const { injectedProvider, onProviderSelect } = props;
   const { t } = useTranslation('app-auth-ewa');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const routingPlugin = React.useRef(plugins['@akashaorg/app-routing']?.routing);
+  const routingPlugin = React.useRef(getRoutingPlugin());
 
   const termsUrl = routingPlugin.current?.getUrlForApp({
     appName: '@akashaorg/app-legal',
@@ -48,10 +49,11 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
   };
 
   return (
-    <Stack testId="providers-list" direction="column" spacing="gap-y-4">
+    <Stack testId="providers-list" spacing="gap-y-4">
       <Text variant="h5" align="center">
         {`✨ ${t('Welcome to AKASHA World')} ✨`}
       </Text>
+
       <Text
         variant="subtitle2"
         weight="light"
@@ -60,8 +62,10 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
       >
         {t('Choose a way to connect')}
       </Text>
-      <Stack direction="column" spacing="gap-y-4">
+
+      <Stack spacing="gap-y-4">
         <Text variant="h6">{t('Web3 Wallets')}</Text>
+
         <Accordion
           headerDivider={true}
           titleNode={
@@ -70,7 +74,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
             </Text>
           }
           contentNode={
-            <Stack direction="column" spacing="gap-y-4">
+            <Stack spacing="gap-y-4">
               <Text variant="button-sm" weight="normal" customStyle="p-2">
                 {t(
                   'A web3 wallet is simply a digital wallet that can be used to store digital assets. These digital assets include Non-fungible tokens (NFTs).',
@@ -79,11 +83,14 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                   "It's also a tool that allows people to interact with Dapps and platforms like AKASHA world with out storing any personal data.",
                 )}
               </Text>
+
               <Divider />
+
               <Text variant="button-md" align="center" weight="bold">
                 {t('Get your own wallet')}
               </Text>
-              <Stack align="center" justify="center" spacing="gap-x-2">
+
+              <Stack direction="row" align="center" justify="center" spacing="gap-x-2">
                 <AppIcon
                   placeholderIconType="metamask"
                   background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
@@ -91,12 +98,13 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                   radius={4}
                   iconColor="self-color"
                 />
+
                 <Anchor
                   title={t('Get a MetaMask Wallet')}
                   href="https://metamask.io"
                   target="_blank"
                 >
-                  <Stack align="center" spacing="gap-x-2">
+                  <Stack direction="row" align="center" spacing="gap-x-2">
                     <Text
                       variant="button-sm"
                       weight="bold"
@@ -104,6 +112,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                     >
                       {t('Get MetaMask Wallet')}
                     </Text>
+
                     <Icon type="ArrowTopRightOnSquareIcon" size="md" accentColor />
                   </Stack>
                 </Anchor>
@@ -111,7 +120,8 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
             </Stack>
           }
         />
-        <Stack direction="column" spacing="gap-y-2">
+
+        <Stack spacing="gap-y-2">
           {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
             <Web3ConnectCard
               leftIconType={injectedProvider.iconType}
@@ -134,6 +144,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
               boxSize={{ width: 40, height: 40 }}
             />
           )}
+
           <Web3ConnectCard
             leftIconType="walletconnect"
             subtitleLabel={t('Scan with WalletConnect')}
@@ -146,7 +157,9 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
           />
         </Stack>
       </Stack>
+
       <Divider />
+
       <Text
         align="center"
         variant="footnotes2"
@@ -154,35 +167,19 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
         color={{ light: 'grey4', dark: 'grey7' }}
       >
         {t('By connecting to AKASHA world, you agree to our ')}
-        <Anchor href={termsUrl} title={t('Terms & Conditions')} target="_blank">
-          <Text
-            variant="button-sm"
-            weight="bold"
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-          >
-            {t('Terms & Conditions')}
-          </Text>
+
+        <Anchor href={termsUrl} title={t('Terms & Conditions')} weight="bold">
+          {t('Terms & Conditions')}
         </Anchor>
         {', '}
-        <Anchor href={privacyUrl} title={t('Privacy Policy')} target="_blank">
-          <Text
-            variant="button-sm"
-            weight="bold"
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-          >
-            {t('Privacy Policy')}
-          </Text>
+        <Anchor href={privacyUrl} title={t('Privacy Policy')} weight="bold">
+          {t('Privacy Policy')}
         </Anchor>
         {', and '}
-        <Anchor href={cocUrl} title={t('Code of Conduct')} target="_blank">
-          <Text
-            variant="button-sm"
-            weight="bold"
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-          >
-            {t('Code of Conduct')}
-          </Text>
+        <Anchor href={cocUrl} title={t('Code of Conduct')} weight="bold">
+          {t('Code of Conduct')}
         </Anchor>
+
         {'.'}
       </Text>
     </Stack>

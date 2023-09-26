@@ -29,15 +29,24 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     customStyle = '',
     active,
     hover = true,
+    hoverColor,
     ...rest
   } = props;
 
-  if (plain)
+  if (plain) {
+    const disabledStyle = disabled ? 'opacity-50 cursor-not-allowed' : '';
     return (
-      <button ref={ref} type="button" className={tw(customStyle)} disabled={disabled} {...rest}>
+      <button
+        ref={ref}
+        type="button"
+        className={tw(`${disabledStyle} ${customStyle}`)}
+        disabled={disabled}
+        {...rest}
+      >
         {children}
       </button>
     );
+  }
 
   if (iconOnly || size === 'xs') {
     if (!icon) return null;
@@ -53,15 +62,24 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         customStyle={customStyle}
         active={active}
         hover={hover}
+        hoverColor={hoverColor}
         ref={ref}
         {...rest}
       />
     );
   }
 
-  const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled, active, hover });
+  const containerStyle = getContainerClasses({
+    variant,
+    loading,
+    greyBg,
+    disabled,
+    active,
+    hover,
+    hoverColor,
+  });
 
-  const textStyle = getTextClasses({ variant, loading, disabled, hover, active });
+  const textStyle = getTextClasses({ variant, loading, disabled, hover, hoverColor, active });
 
   const breakPointStyle = breakPointSize
     ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
@@ -70,6 +88,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
   return (
     <button ref={ref} className={tw(customStyle)} type="button" {...rest} disabled={disabled}>
       <Stack
+        direction="row"
         align="center"
         justify="center"
         spacing="gap-x-1"
@@ -101,7 +120,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 active={active}
               />
             )}
-            <Text variant={BUTTON_SIZE_TEXT_MAP[size]} customStyle={textStyle}>
+            <Text variant={BUTTON_SIZE_TEXT_MAP[size]} as="span" customStyle={textStyle}>
               {label}
             </Text>
             {icon && iconDirection === 'right' && (

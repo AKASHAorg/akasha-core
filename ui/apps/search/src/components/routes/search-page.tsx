@@ -3,44 +3,31 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { tw } from '@twind/core';
 import {
-  RootComponentProps,
   IEntryData,
   ITag,
   EntityTypes,
   ModalNavigationOptions,
   AnalyticsCategories,
   Profile,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { SETTINGS } from '../../routes';
 
-import {
-  useTagSubscriptions,
-  useToggleTagSubscription,
-  useIsFollowingMultiple,
-  useFollow,
-  useUnfollow,
-  useSearchPosts,
-  useSearchProfiles,
-  useSearchComments,
-  useSearchTags,
-  useEntryNavigation,
-  useAnalytics,
-} from '@akashaorg/ui-awf-hooks';
+import { useEntryNavigation, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
+import { SearchTagsResult } from '@akashaorg/typings/lib/sdk/graphql-types';
 
 import EntryCardRenderer from './entry-renderer';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '@akashaorg/design-system-components/lib/components/ProfileSearchCard';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import SearchStartCard from '@akashaorg/design-system-components/lib/components/SearchStartCard';
 import SearchAppFilter from '@akashaorg/design-system-components/lib/components/SearchAppFilter';
-import SeventyFivePercentSpinner from '@akashaorg/design-system-core/lib/components/SeventyFivePercentSpinner';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import SwitchCard from '@akashaorg/design-system-components/lib/components/SwitchCard';
 import TagSearchCard from '@akashaorg/design-system-components/lib/components/TagSearchCard';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -54,11 +41,11 @@ export enum ButtonValues {
   TAGS = 'Tags',
 }
 
-interface SearchPageProps extends RootComponentProps {
+export type SearchPageProps = {
   onError?: (err: Error) => void;
   loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
 type DataResponse = SearchTagsResult | IEntryData;
 
@@ -69,22 +56,24 @@ const initSearchState = {
 };
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { singleSpa, loggedProfileData, showLoginModal } = props;
+  const { loggedProfileData, showLoginModal } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
 
   const [analyticsActions] = useAnalytics();
   const { t, i18n } = useTranslation('app-search');
+  const { getRoutingPlugin } = useRootComponentProps();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   // @TODO replace with new hooks
-  const tagSubscriptionsReq = useTagSubscriptions(loggedProfileData?.did?.id);
-  const tagSubscriptionsState = tagSubscriptionsReq.data;
+  const tagSubscriptionsReq = null;
+  const tagSubscriptionsState = tagSubscriptionsReq?.data;
 
-  const toggleTagSubscriptionReq = useToggleTagSubscription();
+  const toggleTagSubscriptionReq = null;
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
+
   const handleEntryNavigation = useEntryNavigation(navigateTo);
 
   // const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.CONTENT, [activeButton]);
@@ -106,7 +95,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     },
     {
       id: '21',
-      title: 'Akashaverse',
+      title: 'Extensions',
       type: 'optgroup',
       children: [
         { id: '4', title: 'Apps' },
@@ -184,60 +173,59 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   }, [searchKeyword]);
 
   // @TODO replace with new hooks
-  const searchProfilesReq = useSearchProfiles(
-    decodeURIComponent(searchKeyword),
-    searchState[ButtonValues.PEOPLE].page,
-    loggedProfileData?.did?.id,
-  );
+  const searchProfilesReq = null;
+  // const searchProfilesReq = useSearchProfiles(
+  //   decodeURIComponent(searchKeyword),
+  //   searchState[ButtonValues.PEOPLE].page,
+  //   loggedProfileData?.did?.id,
+  // );
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
-  const searchBeamsReq = useSearchPosts(
-    decodeURIComponent(searchKeyword),
-    searchState[ButtonValues.CONTENT].page,
-    loggedProfileData?.did?.id,
-  );
+  // const searchBeamsReq = useSearchPosts(
+  //   decodeURIComponent(searchKeyword),
+  //   searchState[ButtonValues.CONTENT].page,
+  //   loggedProfileData?.did?.id,
+  // );
+
   const searchBeamsState = getSearchStateForTab(ButtonValues.CONTENT);
 
-  const searchCommentsReq = useSearchComments(
-    decodeURIComponent(searchKeyword),
-    searchState[ButtonValues.CONTENT].page,
-    loggedProfileData?.did?.id,
-  );
-  // const searchReflectionsState = searchState[ButtonValues.CONTENT].results;
+  // const searchCommentsReq = useSearchComments(
+  //   decodeURIComponent(searchKeyword),
+  //   searchState[ButtonValues.CONTENT].page,
+  //   loggedProfileData?.did?.id,
+  // );
 
-  const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
+  // const searchReflectionsState = searchState[ButtonValues.CONTENT].results;
+  const searchTagsReq = null;
+  // const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TAGS);
 
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   if (searchBeamsReq.isFetched) {
   //     updateSearchState(ButtonValues.CONTENT, searchBeamsReq.data);
   //   }
   // }, [searchBeamsReq.data, searchBeamsReq.isFetched]);
 
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   if (searchCommentsReq.isFetched) {
   //     updateSearchState(ButtonValues.CONTENT, searchCommentsReq.data);
   //   }
   // }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
 
   React.useEffect(() => {
-    if (searchProfilesReq.isFetched) {
-      updateSearchState(ButtonValues.PEOPLE, searchProfilesReq.data);
+    if (searchProfilesReq?.isFetched) {
+      updateSearchState(ButtonValues.PEOPLE, searchProfilesReq?.data);
     }
-  }, [searchProfilesReq.data, searchProfilesReq.isFetched]);
+  }, [searchProfilesReq, searchProfilesReq?.isFetched]);
 
   React.useEffect(() => {
-    if (searchTagsReq.isFetched) updateSearchState(ButtonValues.TAGS, searchTagsReq.data);
-  }, [searchTagsReq.data, searchTagsReq.isFetched]);
+    if (searchTagsReq?.isFetched) updateSearchState(ButtonValues.TAGS, searchTagsReq.data);
+  }, [searchTagsReq, searchTagsReq?.isFetched]);
 
-  const followPubKeyArr = searchProfilesState?.map(profile => profile.pubKey);
-  const isFollowingMultipleReq = useIsFollowingMultiple(
-    loggedProfileData?.did?.id,
-    followPubKeyArr,
-  );
-  const followedProfiles = isFollowingMultipleReq.data;
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
+  const isFollowingMultipleReq = null;
+  const followedProfiles = isFollowingMultipleReq?.data;
+  const followReq = null;
+  const unfollowReq = null;
 
   const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
     if (!loggedProfileData?.did?.id) {
@@ -273,7 +261,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     const trimmedValue = inputValue.trim();
     if (!trimmedValue) return;
     const encodedSearchKey = encodeURIComponent(trimmedValue);
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-search',
       getNavigationUrl: routes => `${routes.Results}/${encodedSearchKey}`,
     });
@@ -330,11 +318,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
   };
 
-  const emptySearchState =
-    searchProfilesState?.length === 0 &&
-    searchBeamsState?.length === 0 &&
-    // searchReflectionsState?.length === 0 &&
-    searchTagsState?.length === 0;
+  // const emptySearchState =
+  //   searchProfilesState?.length === 0 &&
+  //   searchBeamsState?.length === 0 &&
+  //   // searchReflectionsState?.length === 0 &&
+  //   searchTagsState?.length === 0;
 
   React.useEffect(() => {
     if (activeButton !== ButtonValues.CONTENT) {
@@ -365,30 +353,30 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     setActiveButton(value);
   };
 
-  const onNavBack = () => {
-    history.back();
-  };
+  // const onNavBack = () => {
+  //   history.back();
+  // };
 
-  const searchCount =
-    searchProfilesState?.length ||
-    0 + searchBeamsState?.length ||
-    // 0 + searchReflectionsState?.length ||
-    0 + searchTagsState?.length ||
-    0;
+  // const searchCount =
+  //   searchProfilesState?.length ||
+  //   0 + searchBeamsState?.length ||
+  //   // 0 + searchReflectionsState?.length ||
+  //   0 + searchTagsState?.length ||
+  //   0;
 
-  const allQueriesFinished = React.useMemo(() => {
-    return (
-      !searchProfilesReq.isFetching &&
-      !searchBeamsReq.isFetching &&
-      !searchCommentsReq.isFetching &&
-      !searchTagsReq.isFetching
-    );
-  }, [
-    searchCommentsReq.isFetching,
-    searchBeamsReq.isFetching,
-    searchProfilesReq.isFetching,
-    searchTagsReq.isFetching,
-  ]);
+  // const allQueriesFinished = React.useMemo(() => {
+  //   return (
+  //     !searchProfilesReq.isFetching &&
+  //     !searchBeamsReq.isFetching &&
+  //     !searchCommentsReq.isFetching &&
+  //     !searchTagsReq.isFetching
+  //   );
+  // }, [
+  //   searchCommentsReq.isFetching,
+  //   searchBeamsReq.isFetching,
+  //   searchProfilesReq.isFetching,
+  //   searchTagsReq.isFetching,
+  // ]);
 
   const isFetchingSearch = React.useMemo(() => {
     // if (activeButton === ButtonValues.ALL) {
@@ -405,8 +393,12 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
 
+  const handleResetClick = () => {
+    setSelected(dropdownMenuItems[0]);
+  };
+
   return (
-    <Box customStyle="flex(& col)">
+    <Stack>
       <SearchStartCard
         searchKeyword={searchKeyword}
         handleSearch={handleSearch}
@@ -421,10 +413,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         <SwitchCard
           activeButton={activeButton}
           onTabClick={onTabClick}
-          onIconClick={onNavBack}
           buttonValues={buttonValues}
           loggedUser={loggedProfileData?.did?.id}
-          style="-mb-px" // overlaps border with parent's bottom border
         />
       </SearchStartCard>
       {activeButton === ButtonValues.CONTENT && (
@@ -433,33 +423,41 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           selected={selected}
           setSelected={setSelected}
           resetLabel={t('Reset')}
+          resetHandler={handleResetClick}
         />
       )}
-      {searchKeyword === '' && <DefaultEmptyCard infoText=" ✨ Start searching for something ✨" />}
+      {searchKeyword === '' && (
+        <DefaultEmptyCard
+          noBorder={true}
+          infoText=" ✨ Start searching for something ✨"
+          image="/images/search-1.webp"
+        />
+      )}
 
       {
         /* allQueriesFinished */ !isFetchingSearch &&
           searchKeyword &&
           /* isAllTabActive ? emptySearchState : */ !searchState[activeButton]?.results?.length && (
-            <Box customStyle="mt-8">
+            <Stack customStyle="mt-8">
               <InfoCard
                 titleLabel=""
                 bodyLabel={
                   <>
                     {t('Oops! Looks like there’re no results for the word ')}{' '}
-                    <span className={tw('font-bold')}>{searchKeyword}</span> {t('in ')}{' '}
-                    <span className={tw('font-bold')}>{activeButton}</span>.{' '}
+                    <Text weight="bold">{searchKeyword}</Text> {t('in ')}{' '}
+                    <Text weight="bold">{activeButton}</Text>.{' '}
                     {t(' Try searching for something else or try a different Category!')}
                   </>
                 }
                 bodyVariant="body1"
                 customWidthStyle="w-[90%] md:w-[50%] m-auto"
+                assetName="SearchApp_NotFound-min.webp"
               />
-            </Box>
+            </Stack>
           )
       }
 
-      <Box customStyle="mt-4">
+      <Stack customStyle="mt-4">
         {activeButton === ButtonValues.PEOPLE &&
           searchState[ButtonValues.PEOPLE].done &&
           !!searchProfilesState.length && (
@@ -474,7 +472,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 />
               }
               {searchProfilesState?.map((profileData: Profile, index: number) => (
-                <Box key={index} customStyle="pb-4">
+                <Stack key={index} customStyle="pb-4">
                   <ProfileSearchCard
                     handleFollow={() => handleFollowProfile(profileData.did.id)}
                     handleUnfollow={() => handleUnfollowProfile(profileData.did.id)}
@@ -489,7 +487,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     profileAnchorLink={'/profile'}
                     onClickProfile={() => handleProfileClick(profileData.did.id)}
                   />
-                </Box>
+                </Stack>
               ))}
             </>
           )}
@@ -506,9 +504,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   })}
                 />
               }
-              <BasicCardBox customStyle="pb-0">
+              <Card customStyle="pb-0">
                 {searchTagsState?.map((tag: ITag, index: number) => (
-                  <Box key={index}>
+                  <Stack key={index}>
                     <TagSearchCard
                       tag={tag}
                       subscribedTags={tagSubscriptionsState}
@@ -520,9 +518,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                       handleUnsubscribeTag={handleTagSubscribe(false)}
                     />
                     {index < searchTagsState?.length - 1 && <Divider />}
-                  </Box>
+                  </Stack>
                 ))}
-              </BasicCardBox>
+              </Card>
             </>
           )}
         {activeButton === ButtonValues.CONTENT &&
@@ -542,9 +540,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 <EntryCardRenderer
                   key={itemData.itemId}
                   itemData={itemData}
-                  itemType={EntityTypes.POST}
-                  logger={props.logger}
-                  singleSpa={singleSpa}
+                  itemType={EntityTypes.BEAM}
                   onContentClick={handleEntryNavigation}
                   navigateTo={navigateTo}
                   onRebeam={handleRebeam}
@@ -555,8 +551,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   locale={locale}
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}
-                  uiEvents={props.uiEvents}
-                  navigateToModal={props.navigateToModal}
                 />
               ))}
             </>
@@ -584,20 +578,21 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               navigateToModal={props.navigateToModal}
             />
           ))} */}
-      </Box>
+      </Stack>
       {isFetchingSearch && (
-        <Box customStyle="p-8 flex flex-col items-center justify-center m-auto space-y-8">
-          <SeventyFivePercentSpinner
+        <Stack align="center" justify="center" spacing="gap-y-8" customStyle="p-8 m-auto">
+          <Spinner
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             size="xxl"
             loadingLabel="Loading..."
+            partialSpinner={true}
           />
           <Text variant="footnotes2">{t('Searching...')}</Text>
-        </Box>
+        </Stack>
       )}
       {/* triggers intersection observer */}
-      <Box customStyle="p-2" ref={loadmoreRef} />
-    </Box>
+      <Stack padding="p-2" ref={loadmoreRef} />
+    </Stack>
   );
 };
 

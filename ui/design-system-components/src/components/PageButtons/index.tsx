@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type PageButtonsProps = {
@@ -27,7 +28,7 @@ export const PageButtons: React.FC<PageButtonsProps> = props => {
   };
 
   return (
-    <>
+    <Stack direction="row" spacing="gap-x-4" align="center" justify="end">
       {cancelButtonLabel && (
         <Button plain={true} onClick={handleCancelButtonClick}>
           <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
@@ -44,6 +45,6 @@ export const PageButtons: React.FC<PageButtonsProps> = props => {
           onClick={handleConfirmButtonClick}
         />
       )}
-    </>
+    </Stack>
   );
 };

@@ -2,15 +2,15 @@ import React from 'react';
 import { apply, tw } from '@twind/core';
 
 import Avatar, { AvatarSize } from '../Avatar';
-import { Profile } from '@akashaorg/typings/ui';
+import { Profile } from '@akashaorg/typings/lib/ui';
 
-export interface IStackedAvatarProps {
+export type StackedAvatarProps = {
   userData: { did: Profile['did']; avatar?: Profile['avatar'] }[];
   maxAvatars?: number;
   size?: AvatarSize;
-}
+};
 
-const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
+const StackedAvatar: React.FC<StackedAvatarProps> = props => {
   const { userData, maxAvatars, size } = props;
   let data = userData;
   if (maxAvatars) {

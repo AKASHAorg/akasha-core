@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -37,29 +36,33 @@ const AppsList: React.FC<AppListProps> = props => {
           customStyle="px-4"
           fullWidth={true}
         >
-          <Stack direction="row" customStyle="content-between flex-grow justify-between">
-            <Box customStyle="cursor-pointer flex flex-row" onClick={handleAppClick(app.name)}>
-              <Icon
-                type="PaperAirplaneIcon"
-                size="md"
-                customStyle="p-4 bg(grey6 dark:grey5) rounded-xl mr-4"
-              />
-              <Stack direction="column" customStyle="cursor-pointer">
-                <Text variant="body2" customStyle="truncate">
-                  {app.name}
-                </Text>
-                <Text
-                  weight="normal"
-                  variant="footnotes2"
-                  color={{ light: 'grey4', dark: 'grey7' }}
-                  customStyle="truncate"
-                >
-                  {app.name}
-                </Text>
+          <Stack direction="row" justify="between" customStyle="content-between flex-grow">
+            <button onClick={handleAppClick(app.name)}>
+              <Stack direction="row">
+                <Icon
+                  type="PaperAirplaneIcon"
+                  size="md"
+                  customStyle="p-4 bg(grey6 dark:grey5) rounded-xl mr-4"
+                />
+                <Stack direction="column" customStyle="cursor-pointer">
+                  <Text variant="body2" customStyle="truncate">
+                    {app.name}
+                  </Text>
+                  <Text
+                    weight="normal"
+                    variant="footnotes2"
+                    color={{ light: 'grey4', dark: 'grey7' }}
+                    customStyle="truncate"
+                  >
+                    {app.name}
+                  </Text>
+                </Stack>
               </Stack>
-            </Box>
+            </button>
             <Stack justify="center" align="center">
-              <Box onClick={handleAppActionClick(app.appId)}>{React.cloneElement(appAction)}</Box>
+              <button onClick={handleAppActionClick(app.appId)}>
+                <Stack>{React.cloneElement(appAction)}</Stack>
+              </button>
             </Stack>
           </Stack>
         </Stack>

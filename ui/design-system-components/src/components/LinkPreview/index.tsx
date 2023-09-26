@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw, apply, tx } from '@twind/core';
 import isUrl from 'is-url';
-import { LinkPreviewExt } from '@akashaorg/typings/ui';
+import { LinkPreviewExt } from '@akashaorg/typings/lib/ui';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const closeDivClass = apply(

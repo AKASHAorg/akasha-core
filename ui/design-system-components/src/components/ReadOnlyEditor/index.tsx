@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createEditor, Descendant } from 'slate';
 import { Slate, withReact, Editable, RenderElementProps } from 'slate-react';
-import { ImageElement } from '@akashaorg/typings/ui';
+import { ImageElement } from '@akashaorg/typings/lib/ui';
 import { withMentions, withImages, withTags, withLinks } from '../Editor/plugins';
 import { renderElement, renderLeaf } from '../Editor/renderers';
 import ImageOverlay from '../ImageOverlay';

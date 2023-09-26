@@ -6,7 +6,7 @@ import {
   MenuItemAreaType,
   MenuItemType,
   LogoTypeSource,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
 
 /**
  * All the plugins must export an object like this:
@@ -19,7 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     label: 'Search',
     area: [MenuItemAreaType.SearchArea, MenuItemAreaType.AppArea],
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'search' },
+    logo: { type: LogoTypeSource.ICON, value: 'MagnifyingGlassIcon' },
     subRoutes: [],
   },
   routes: {

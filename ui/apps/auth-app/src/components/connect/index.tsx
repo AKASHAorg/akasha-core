@@ -1,38 +1,48 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
-import { EthProviders } from '@akashaorg/typings/sdk';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { useGetLogin, useInjectedProvider, useLogin, useLogout } from '@akashaorg/ui-awf-hooks';
+import { EthProviders } from '@akashaorg/typings/lib/sdk';
+
+import {
+  useInjectedProvider,
+  useLoggedIn,
+  useLogin,
+  useLogout,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import ConnectWallet from './connect-wallet';
 import ChooseProvider from './choose-provider';
 import { getInjectedProviderDetails } from '../../utils/getInjectedProvider';
 import routes, { CONNECT } from '../../routes';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 
-const Connect: React.FC<RootComponentProps> = props => {
-  const loginQuery = useGetLogin();
+const Connect: React.FC<unknown> = () => {
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
   const logoutQuery = useLogout();
   const injectedProviderQuery = useInjectedProvider();
 
   const profileDataReq = useGetProfileByDidQuery(
-    { id: loginQuery.data?.id },
+    { id: loggedInProfileId },
     {
       select: resp => {
         return resp.node;
       },
-      enabled: !!loginQuery.data?.id,
+      enabled: isLoggedIn,
     },
   );
 
   const profile =
-    profileDataReq.data && 'isViewer' in profileDataReq.data ? profileDataReq.data?.profile : null;
+    profileDataReq.data && 'isViewer' in profileDataReq.data
+      ? profileDataReq.data?.akashaProfile
+      : null;
 
   const { t } = useTranslation('app-auth-ewa');
+  const { worldConfig, getRoutingPlugin } = useRootComponentProps();
+
   const loginMutation = useLogin();
 
-  const routingPlugin = React.useRef(props.plugins['@akashaorg/app-routing']?.routing);
+  const routingPlugin = React.useRef(getRoutingPlugin());
 
   const injectedProvider = React.useMemo(() => {
     return getInjectedProviderDetails(injectedProviderQuery.data, t);
@@ -40,23 +50,25 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     const searchParam = new URLSearchParams(location.search);
+
     // if user is logged in, do not show the connect page
-    if (loginQuery.data?.id && profileDataReq.status !== 'loading') {
+    if (isLoggedIn && profileDataReq.status !== 'loading') {
       if (!profile) {
         routingPlugin.current?.navigateTo({
           appName: '@akashaorg/app-profile',
-          getNavigationUrl: () => `/${loginQuery.data?.id}/edit`,
+          getNavigationUrl: () => `/${loggedInProfileId}/edit`,
         });
         return;
       }
+
       routingPlugin.current?.handleRedirect({
         search: searchParam,
         fallback: {
-          appName: props.worldConfig.homepageApp,
+          appName: worldConfig.homepageApp,
         },
       });
     }
-  }, [loginQuery, profile, profileDataReq, props.worldConfig.homepageApp]);
+  }, [isLoggedIn, loggedInProfileId, profile, profileDataReq, worldConfig.homepageApp]);
 
   const handleProviderSelect = (provider: EthProviders) => {
     //this is required because of the backend
@@ -66,7 +78,8 @@ const Connect: React.FC<RootComponentProps> = props => {
     }
     routingPlugin.current?.navigateTo({
       appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: appRoutes => `${appRoutes[CONNECT]}${appRoutes[provider]}`,
+      getNavigationUrl: appRoutes =>
+        `${appRoutes[CONNECT]}${appRoutes[provider]}${location.search ? `${location.search}` : ''}`,
     });
   };
 
@@ -83,7 +96,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <BasicCardBox>
+    <Card>
       <Routes>
         <Route
           path="*"
@@ -91,7 +104,6 @@ const Connect: React.FC<RootComponentProps> = props => {
             <ChooseProvider
               injectedProvider={injectedProvider}
               onProviderSelect={handleProviderSelect}
-              plugins={props.plugins}
             />
           }
         />
@@ -102,7 +114,7 @@ const Connect: React.FC<RootComponentProps> = props => {
               selectedProvider={EthProviders.Web3Injected}
               onSignIn={handleSignIn}
               onDisconnect={handleDisconnect}
-              worldName={props.worldConfig.title}
+              worldName={worldConfig.title}
               signInError={loginMutation.error}
             />
           }
@@ -114,13 +126,13 @@ const Connect: React.FC<RootComponentProps> = props => {
               selectedProvider={EthProviders.WalletConnect}
               onSignIn={handleSignIn}
               onDisconnect={handleDisconnect}
-              worldName={props.worldConfig.title}
+              worldName={worldConfig.title}
               signInError={loginMutation.error}
             />
           }
         />
       </Routes>
-    </BasicCardBox>
+    </Card>
   );
 };
 

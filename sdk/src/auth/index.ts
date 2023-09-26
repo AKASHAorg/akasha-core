@@ -13,7 +13,7 @@ import {
   PubKey,
   PubKeySchema,
   TYPES,
-} from '@akashaorg/typings/sdk';
+} from '@akashaorg/typings/lib/sdk';
 import DB from '../db';
 import Web3Connector from '../common/web3.connector';
 import EventBus from '../common/event-bus';

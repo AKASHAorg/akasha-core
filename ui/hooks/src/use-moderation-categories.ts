@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ModerationCategory } from '@akashaorg/typings/ui';
+import { ModerationCategory } from '@akashaorg/typings/lib/ui';
 
 export interface useModerationCategoryProps {
   moderationCategories: ModerationCategory[];
@@ -51,5 +51,3 @@ export const useModerationCategory = (
 
   return { categories, handleCategoryClick };
 };
-
-export default useModerationCategory;

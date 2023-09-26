@@ -1,13 +1,11 @@
 import * as React from 'react';
 
-import { renderWithAllProviders, act, genAppProps, cleanup } from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, cleanup } from '@akashaorg/af-testing';
 
 import { HeroImage } from '../profile/hero-image-card';
 
 describe('<HeroImageCard /> component', () => {
-  const Base = (
-    <HeroImage titleLabel="Step title" subtitleLabel="Step subtitle" {...genAppProps()} />
-  );
+  const Base = <HeroImage titleLabel="Step title" subtitleLabel="Step subtitle" />;
 
   let componentWrapper = renderWithAllProviders(<></>, {});
 

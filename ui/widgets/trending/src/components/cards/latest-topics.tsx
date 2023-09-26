@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Interest } from '@akashaorg/typings/ui';
+import { Interest } from '@akashaorg/typings/lib/ui';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -14,6 +14,7 @@ export type LatestTopicsProps = {
   tags: Interest[];
   subscribedTags?: string[];
   isLoadingTags?: boolean;
+  isProcessingTags?: string[];
   // labels
   noTagsLabel?: string;
   titleLabel: string;
@@ -36,6 +37,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     tagSubtitleLabel,
     tags,
     isLoadingTags,
+    isProcessingTags,
     noTagsLabel,
     subscribeLabel,
     subscribedLabel,
@@ -46,19 +48,19 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const baseItemStyles = 'flex justify-between items-center space-y-2';
 
   return (
-    <BasicCardBox pad="p-4">
-      <Box customStyle="mb-4">
+    <Card padding={16}>
+      <Stack customStyle="mb-4">
         <Text variant="button-md" weight="bold">
           {titleLabel}
         </Text>
-      </Box>
+      </Stack>
 
-      <Box>
+      <Stack>
         <ul>
           {tags.length === 0 && !isLoadingTags && (
-            <Box customStyle="flex justify-center items-center">
+            <Stack align="center" justify="center">
               <Text>{noTagsLabel}</Text>
-            </Box>
+            </Stack>
           )}
 
           {tags.length === 0 &&
@@ -69,10 +71,16 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               </React.Fragment>
             ))}
 
-          <Box customStyle="space-y-4">
+          <Stack spacing="gap-y-4">
             {tags.length !== 0 &&
               tags.slice(0, 4).map((tag, index) => (
-                <Box key={index} customStyle={baseItemStyles}>
+                <Stack
+                  key={index}
+                  direction="row"
+                  align="center"
+                  justify="between"
+                  spacing="gap-y-2"
+                >
                   <SubtitleTextIcon
                     label={tag.value}
                     subtitle={`${tag.totalPosts || 0} ${tagSubtitleLabel}`}
@@ -89,12 +97,13 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                     onClickActive={() => handleUnsubscribeTopic(tag.value)}
                     active={subscribedTags?.includes(tag.value)}
                     allowMinimization={false}
+                    loading={!!isProcessingTags?.find(processingTag => processingTag === tag.value)}
                   />
-                </Box>
+                </Stack>
               ))}
-          </Box>
+          </Stack>
         </ul>
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };

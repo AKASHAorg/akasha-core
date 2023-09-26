@@ -1,8 +1,9 @@
 import React from 'react';
+
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 export type VersionInfoProps = {
   integrationName: string;
@@ -24,7 +25,7 @@ const VersionInfo: React.FC<VersionInfoProps> = ({
   additionalNotesBody,
 }) => {
   return (
-    <Card elevation="1" padding={16} radius={20}>
+    <Card elevation="1" padding={'p-4'} radius={20}>
       <Stack direction="column" spacing="gap-y-4">
         <ContentBlock blockTitle={integrationName}>
           <Text variant="footnotes2" weight="normal" color="grey7">

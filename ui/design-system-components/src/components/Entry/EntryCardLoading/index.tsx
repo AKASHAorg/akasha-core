@@ -1,37 +1,30 @@
-import * as React from 'react';
-import { tw } from '@twind/core';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import React from 'react';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import AuthorProfileLoading from './author-profile-loading';
 
-export interface IPlaceholderProps {
+export type EntryLoadingPlaceholderProps = {
   height?: number;
   animated?: boolean;
   children?: React.ReactNode;
-}
+};
 
-const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {
-  const { height = 200, animated = false } = props;
+const EntryLoadingPlaceholder: React.FC<EntryLoadingPlaceholderProps> = props => {
+  const { height = 144, animated = true, children } = props;
   return (
-    <BasicCardBox pad={'p-4'} customStyle={`min-h-[${height}]`}>
-      <div className={tw(`flex flex-row`)}>
-        <div className={tw(`flex flex-row items-center`)}>
-          <TextLine title="avatar" width="40" height="40" round={'rounded-full'} />
-
-          <div className={tw(`flex flex-col ml-2 gap-x-1`)}>
-            <TextLine title="author name" width="220" animated={animated} />
-            <TextLine title="entry-publish-date" width="160" animated={animated} />
-          </div>
-        </div>
-      </div>
-      <div className={tw(`flex flex-col mt-4 gap-x-1`)}>
-        <TextLine title="entry-publish-date" width="w-full" animated={animated} />
-        <TextLine title="entry-publish-date" width="w-11/12" animated={animated} />
-        <TextLine title="entry-publish-date" width="w-6/12" animated={animated} />
-        <TextLine title="entry-publish-date" width="w-10/12" animated={animated} />
-        <TextLine title="entry-publish-date" width="w-8/12" animated={animated} />
-        {props.children}
-      </div>
-    </BasicCardBox>
+    <Card padding={'p-4'} customStyle={`min-h-[${height / 16}rem]`}>
+      <Stack direction="row" align="center" justify="between" customStyle={`pb-4`}>
+        <AuthorProfileLoading animated={animated} />
+        <TextLine width="w-24" height="h-4" animated={animated} />
+      </Stack>
+      <Stack direction="column" justify="center" spacing="gap-y-1">
+        <TextLine title="entry-publish-date" height="h-4" width="w-6/12" animated={animated} />
+        <TextLine title="entry-publish-date" height="h-4" width="w-10/12" animated={animated} />
+        <TextLine title="entry-publish-date" height="h-4" width="w-full" animated={animated} />
+        {children}
+      </Stack>
+    </Card>
   );
 };
 

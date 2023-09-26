@@ -1,20 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { createWrapper } from './utils';
-import { mockSDK } from '@akashaorg/af-testing';
 import { useNetworkState } from '../use-network-state';
-import { of as mockOf } from 'rxjs';
-
-jest.mock(
-  '@akashaorg/awf-sdk',
-  () => () =>
-    mockSDK({
-      common: {
-        web3: {
-          checkCurrentNetwork: () => mockOf({ data: undefined }),
-        },
-      },
-    }),
-);
 
 describe('useNetworkState', () => {
   it('should return the network state', async () => {
@@ -22,6 +8,6 @@ describe('useNetworkState', () => {
 
     const { result, waitFor } = renderHook(() => useNetworkState(true), { wrapper });
     await waitFor(() => result.current.isFetched, { timeout: 5000 });
-    expect(result.current.data.networkNotSupported).toBeFalsy();
+    expect(result.current.data?.networkNotSupported).toBeFalsy();
   });
 });

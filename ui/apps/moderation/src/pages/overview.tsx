@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ModerationIntroCard from '@akashaorg/design-system-components/lib/components/ModerationIntroCard';
 import ModerationValuesCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard';
 
@@ -51,7 +51,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
   };
 
   return (
-    <Box customStyle="space-y-4">
+    <Stack spacing="gap-y-4">
       {isAuthorised && (
         <HelloModeratorCard
           titleLabel={t('Hello Moderator!')}
@@ -75,17 +75,17 @@ export const Overview: React.FC<OverviewPageProps> = props => {
           {
             label: t('CoC discussions'),
             url: externalLinks.discourse.CoC,
-            iconType: 'explore',
+            iconType: 'SparklesIcon',
           },
           {
             label: t('Moderation thoughts'),
             url: externalLinks.discord,
-            iconType: 'chatBubble',
+            iconType: 'ChatBubbleOvalLeftEllipsisIcon',
           },
           {
             label: t('Send us a message'),
             url: externalLinks.email,
-            iconType: 'message',
+            iconType: 'EnvelopeIcon',
           },
         ]}
         onCodeOfConductClick={handleCodeOfConductClick}
@@ -118,6 +118,6 @@ export const Overview: React.FC<OverviewPageProps> = props => {
         }))}
         onValueClick={handleValueClick}
       />
-    </Box>
+    </Stack>
   );
 };

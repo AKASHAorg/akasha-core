@@ -1,13 +1,6 @@
 import * as React from 'react';
 
-import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/ui';
-import {
-  useEditComment,
-  mapEntry,
-  useAnalytics,
-  useComment,
-  useCreateComment,
-} from '@akashaorg/ui-awf-hooks';
+import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
@@ -20,19 +13,16 @@ type Props = {
 
 export function ReplyEditor({ commentId, singleSpa, action }: Props) {
   const { t } = useTranslation('app-akasha-integration');
-  const [analyticsActions] = useAnalytics();
+  const [analyticsActions] = [undefined];
 
   // @TODO replace with new hooks
-  const comment = useComment(commentId, true);
-  const editComment = useEditComment(commentId, true);
-  const publishComment = useCreateComment();
+  const comment = undefined;
+  const editComment = undefined;
+  const publishComment = undefined;
 
   const entryData = React.useMemo(() => {
-    if (comment.status === 'success') {
-      return mapEntry(comment.data);
-    }
     return undefined;
-  }, [comment.data, comment.status]);
+  }, []);
 
   const [editorState, setEditorState] = React.useState(
     action === 'edit' ? entryData?.slateContent : null,
@@ -84,17 +74,17 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
       action: 'Reply Placeholder Clicked',
     });
   };
-
-  const entryAuthorName =
-    entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
+  // @TODO: fix author name
+  const entryAuthorName = undefined;
+  // entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
   if (comment.error) return <>Error loading comment</>;
 
-  if (comment.status === 'loading') return <EntryCardLoading />;
+  if (comment.isLoading) return <EntryCardLoading />;
 
   return (
     <Base
-      postLabel={action === 'edit' ? t('Save Changes') : t('Reply')}
+      postLabel={action === 'edit' ? t('Save Changes') : t('Reflect')}
       placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
       onPublish={handlePublish}
       onPlaceholderClick={handlePlaceholderClick}
@@ -106,8 +96,6 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
       openEditor={true}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
-      noBorderRound={action === 'edit'}
-      borderBottomOnly={action === 'edit'}
     />
   );
 }

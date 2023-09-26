@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
-import { LEGAL_DOCS } from '@akashaorg/typings/ui';
+import { LEGAL_DOCS } from '@akashaorg/typings/lib/ui';
 import { logError } from './utils/error-handler';
 
 export const LEGAL_KEY = 'Legal';

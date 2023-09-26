@@ -1,5 +1,9 @@
-export type ButtonType = {
-  label: string;
-  disabled?: boolean;
-  handleClick: (event: React.SyntheticEvent<Element, Event>) => void;
+export type EditProfileFormValues = {
+  userName?: string;
+  name?: string;
+  avatar?: File | null;
+  coverImage?: File | null;
+  ens?: string;
+  bio?: string;
+  links: string[];
 };

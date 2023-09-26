@@ -1,10 +1,11 @@
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import akasha from './akasha';
 import alignCenter from './align-center';
 import alignJustify from './align-justify';
 import alignLeft from './align-left';
 import alignRight from './align-right';
+import antenna from './antenna';
 import boldAlt from './bold-alt';
 import didKey from './didKey';
 import discord from './discord';
@@ -23,7 +24,7 @@ import licenseShareAlike from './license-share-alike';
 import licenseSomeRights from './license-some-rights';
 import listBulleted from './list-bulleted';
 import listNumbered from './list-numbered';
-import underline from './underline';
+import noEth from './no-eth';
 import shield from './shield';
 import strikethrough from './strikethrough';
 import solana from './solana';
@@ -32,6 +33,8 @@ import textcaseLower from './textcase-lower';
 import textcaseSentence from './textcase-sentence';
 import textcaseUpper from './textcase-upper';
 import twitter from './twitter';
+import underline from './underline';
+import vibe from './vibe';
 import widget from './widget';
 import metamask from './metamask';
 import walletconnect from './walletconnect';
@@ -46,6 +49,7 @@ export type CustomIconTypes = Extract<
   | 'alignLeft'
   | 'alignRight'
   | 'alignJustify'
+  | 'antenna'
   | 'boldAlt'
   | 'didKey'
   | 'discord'
@@ -65,7 +69,7 @@ export type CustomIconTypes = Extract<
   | 'listNumbered'
   | 'listBulleted'
   | 'metamask'
-  | 'underline'
+  | 'noEth'
   | 'shield'
   | 'strikethrough'
   | 'solana'
@@ -74,6 +78,8 @@ export type CustomIconTypes = Extract<
   | 'textcaseSentence'
   | 'textcaseUpper'
   | 'twitter'
+  | 'underline'
+  | 'vibe'
   | 'walletconnect'
   | 'widget'
 >;
@@ -84,6 +90,7 @@ export {
   alignJustify,
   alignLeft,
   alignRight,
+  antenna,
   boldAlt,
   discord,
   didKey,
@@ -107,11 +114,13 @@ export {
   textcaseUpper,
   eth,
   metamask,
-  underline,
+  noEth,
   shield,
   solana,
   telegram,
   twitter,
+  underline,
+  vibe,
   walletconnect,
   widget,
 };

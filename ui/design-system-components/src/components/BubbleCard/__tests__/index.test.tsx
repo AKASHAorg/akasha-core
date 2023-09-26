@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
+import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
+
 import BubbleCard from '..';
 
-import { customRender } from '@akashaorg/design-system-core/lib/test-utils';
 import { editorDefaultValue } from '../../Editor/initialValue';
 
 describe('<BubbleCard /> Component', () => {
@@ -18,7 +19,6 @@ describe('<BubbleCard /> Component', () => {
           youLabel="You"
           content={editorDefaultValue}
           isFromLoggedUser={false}
-          isRead={true}
           chatTimestamp="2022-06-16T10:07:15.000Z"
         />,
 

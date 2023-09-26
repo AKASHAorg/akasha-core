@@ -1,4 +1,5 @@
-import { FollowConnection, Profile } from '@akashaorg/typings/sdk/graphql-types-new';
+import { AkashaFollowConnection } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaProfile } from '@akashaorg/typings/lib/ui';
 
 const userAvatar = (width = 360, height = 360) => {
   return {
@@ -20,10 +21,11 @@ const createUser = n => {
     },
     avatar: userAvatar(),
     createdAt: '2021-03-01T00:00:00.000Z',
-    followers: {} as FollowConnection,
+    followers: {} as AkashaFollowConnection,
+    followersCount: 0
   };
 };
-const userData: Profile[] = Array.from({ length: 4 }, (v, k) => createUser(k));
+const userData: AkashaProfile[] = Array.from({ length: 4 }, (v, k) => createUser(k));
 
 const sidebarItems = [
   {
@@ -55,16 +57,17 @@ const sidebarItems = [
   },
 ];
 
-const profileData: Profile = {
+const profileData: AkashaProfile = {
   did: { id: 'did:pkh:eip155:1:0x003410490050000320006570034567114572000', isViewer: true },
   avatar: userAvatar(),
   background: userAvatar(540, 320),
   name: 'Gilbert The Bearded',
   description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Management. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-  followers: {} as FollowConnection,
+  followers: {} as AkashaFollowConnection,
   createdAt: '2023-01-01T00:00:00.000Z',
   id: '31231',
+  followersCount: 12
 };
 
 const randomMentions = n => {

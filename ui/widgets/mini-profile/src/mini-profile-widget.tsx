@@ -5,10 +5,10 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateFollowMutation,
@@ -26,7 +26,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const { t } = useTranslation('app-akasha-integration');
 
   const loggedProfileQuery = useGetMyProfileQuery(null, {
-    select: data => data.viewer?.profile,
+    select: data => data.viewer?.akashaProfile,
   });
 
   const beamAuthorId = useGetBeamByIdQuery(
@@ -46,7 +46,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
     {
       enabled: beamAuthorId.isSuccess,
       select: data => {
-        if (data.node && 'profile' in data.node) {
+        if (data.node && 'akashaProfile' in data.node) {
           return data.node;
         }
         return null;
@@ -56,29 +56,29 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
 
   const followersListReq = useGetFollowersListByDidQuery(
     {
-      id: authorProfileDataReq.data?.profile?.did.id,
+      id: authorProfileDataReq.data?.akashaProfile?.did.id,
     },
     {
       select: data => {
-        if (data.node && 'profile' in data.node) {
-          return data.node.profile.followers.edges;
+        if (data.node && 'akashaProfile' in data.node) {
+          return data.node.akashaProfile.followers.edges;
         }
       },
-      enabled: authorProfileDataReq.isSuccess && !!authorProfileDataReq.data?.profile?.did,
+      enabled: authorProfileDataReq.isSuccess && !!authorProfileDataReq.data?.akashaProfile?.did,
     },
   );
 
   const followingListReq = useGetFollowingListByDidQuery(
     {
-      id: authorProfileDataReq.data?.profile.did.id,
+      id: authorProfileDataReq.data?.akashaProfile.did.id,
     },
     {
       select: data => {
-        if (data.node && 'followList' in data.node) {
-          return data.node.followList.edges;
+        if (data.node && 'akashaFollowList' in data.node) {
+          return data.node.akashaFollowList.edges;
         }
       },
-      enabled: authorProfileDataReq.isSuccess && !!authorProfileDataReq.data.profile.did,
+      enabled: authorProfileDataReq.isSuccess && !!authorProfileDataReq.data.akashaProfile.did,
     },
   );
 
@@ -124,14 +124,14 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   };
 
   return (
-    <Box customStyle="pb-2 max-h-[30rem]">
+    <Stack padding="pb-2" customStyle="max-h-[30rem]">
       <ProfileMiniCard
         handleClick={handleProfileClick}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         isFollowing={!!hasFollowed && hasFollowed.node.isFollowing}
         loggedEthAddress={loggedProfileQuery.data?.did.id}
-        profileData={authorProfileDataReq.data.profile}
+        profileData={authorProfileDataReq.data.akashaProfile}
         isViewer={authorProfileDataReq.data.isViewer}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
@@ -140,7 +140,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         postsLabel={t('Posts')}
         footerExt={<Extension name={`profile-mini-card-footer-extension`} uiEvents={uiEvents} />}
       />
-    </Box>
+    </Stack>
   );
 };
 

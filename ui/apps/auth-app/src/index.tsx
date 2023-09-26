@@ -1,6 +1,6 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import routes from './routes';
-import { IAppConfig, IntegrationRegistrationOptions, LogoTypeSource } from '@akashaorg/typings/ui';
+import { IAppConfig, IntegrationRegistrationOptions, LogoTypeSource } from '@akashaorg/typings/lib/ui';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => {
   return {

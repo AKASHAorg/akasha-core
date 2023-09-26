@@ -4,8 +4,8 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 
-import { RootExtensionProps } from '@akashaorg/typings/ui';
-import { withProviders, useDeleteDevKey } from '@akashaorg/ui-awf-hooks';
+import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { withProviders } from '@akashaorg/ui-awf-hooks';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
@@ -23,19 +23,20 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
-  const pubKey = React.useMemo(() => {
-    if (extensionData.hasOwnProperty('pubKey') && typeof extensionData.pubKey === 'string') {
-      return extensionData.pubKey;
-    }
-  }, [extensionData]);
-
   const keyName = React.useMemo(() => {
     if (extensionData.hasOwnProperty('keyName') && typeof extensionData.keyName === 'string') {
       return extensionData.keyName;
     }
   }, [extensionData]);
 
-  const deleteKeyMutation = useDeleteDevKey();
+  // @TODO: needs update
+  const deleteKeyMutation = {
+    isSuccess: false,
+    data: null,
+    isError: false,
+    error: null,
+    mutate: () => null,
+  };
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -43,7 +44,7 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
   };
 
   const handleDelete = () => {
-    deleteKeyMutation.mutate(pubKey);
+    deleteKeyMutation.mutate();
 
     setShowModal(false);
     navigateTo?.({
@@ -64,26 +65,26 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
     >
       <Text align="center">{`${t('Are you sure you wish to delete')} "${keyName}"?`}</Text>
 
-      {/* <BasicCardBox pad="p-4">
-        <Box customStyle="w-[36rem] space-y-3">
-          <Box customStyle="flex justify-center relative">
+      {/* <Card padding={16}>
+        <Stack spacing="gap-y-3" customStyle="w-[36rem]">
+          <Stack justify="center" customStyle="relative">
             <Text variant="h5" align="center" weight="bold">
               {t('Deleting a Dev Key')}
             </Text>
             <Button plain={true} customStyle="absolute right-0" onClick={handleModalClose}>
               <Icon type="XMarkIcon" color="gray" />
             </Button>
-          </Box>
+          </Stack>
 
           <Text align="center">{t(`Are you sure you wish to delete "${keyName}"`)}?</Text>
 
-          <Box customStyle="flex space-x-4 items-center justify-center">
+          <Stack align="center" justify="center" spacing="gap-x-4">
             <Button size="sm" variant="secondary" label={t('Cancel')} onClick={handleModalClose} />
 
             <Button size="sm" variant="primary" label={t('Delete')} onClick={handleDelete} />
-          </Box>
-        </Box>
-      </BasicCardBox> */}
+          </Stack>
+        </Stack>
+      </Card> */}
     </Modal>
   );
 };

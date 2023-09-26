@@ -1,11 +1,11 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -16,7 +16,7 @@ export type OverviewCTA = {
   iconType: IconType;
 };
 
-export interface IModerationIntroCardProps {
+export type ModerationIntroCardProps = {
   assetName?: string;
   titleLabel: string;
   introLabel: string;
@@ -25,11 +25,11 @@ export interface IModerationIntroCardProps {
   codeOfConductLabel: string;
   overviewCTAArr: OverviewCTA[];
   onCodeOfConductClick?: () => void;
-}
+};
 
-const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
+const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
   const {
-    assetName = 'moderation',
+    assetName = 'vibe-overview',
     titleLabel,
     introLabel,
     subtitleLabel,
@@ -40,13 +40,13 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox pad="p-4">
-      <Box customStyle="grid gap-4 grid-cols-1">
+    <Card padding={16}>
+      <Stack customStyle="grid gap-4 grid-cols-1">
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
 
-        <Box customStyle="w-40 h-40 my-2 mx-auto">
+        <Stack customStyle="w-40 h-40 my-2 mx-auto">
           <img
             className={tw('object-contain')}
             aria-label={assetName}
@@ -54,7 +54,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
             alt={assetName}
             data-testid={`${assetName}-image`}
           />
-        </Box>
+        </Stack>
 
         {introLabel && (
           <Text weight="bold" align="center">
@@ -69,7 +69,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
         )}
 
         {codeOfConductLabel && (
-          <Box customStyle="flex justify-center">
+          <Stack justify="center">
             <Button plain={true} onClick={onCodeOfConductClick}>
               <Text
                 variant="subtitle2"
@@ -81,13 +81,13 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
                 {codeOfConductLabel}
               </Text>
             </Button>
-          </Box>
+          </Stack>
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
-          <Box customStyle="flex md:px-20 justify-between">
+          <Stack direction="row" justify="between" customStyle="md:px-20">
             {overviewCTAArr.map(({ url, label, iconType }) => (
-              <Box key={label + iconType} customStyle="grid gap-1 grid-cols-1 w-[30%]">
+              <Stack key={label + iconType} customStyle="grid gap-1 grid-cols-1 w-[30%]">
                 <Icon size="sm" accentColor={true} type={iconType} customStyle="mx-auto my-0" />
 
                 <Anchor
@@ -97,12 +97,12 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
                 >
                   {label}
                 </Anchor>
-              </Box>
+              </Stack>
             ))}
-          </Box>
+          </Stack>
         )}
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };
 

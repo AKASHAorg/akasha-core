@@ -1,6 +1,6 @@
 import React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
@@ -13,14 +13,14 @@ const MiniHeader: React.FC<IMiniHeaderProps> = props => {
   const { titleLabel, onClickIcon } = props;
 
   return (
-    <BasicCardBox pad="p-2">
-      <Box customStyle="flex flex-row w-full">
+    <Card padding={8}>
+      <Stack direction="row" fullWidth={true}>
         <button onClick={onClickIcon}>
           <Icon type="ChevronLeftIcon" />
         </button>
         <Text variant="h2">{titleLabel}</Text>
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };
 

@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { apply, tw } from '@twind/core';
+
 import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export type ISearchBar = {
+export type SearchBarProps = {
   inputValue: string;
   onInputChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   inputPlaceholderLabel?: string;
@@ -13,7 +14,7 @@ export type ISearchBar = {
   iconSize?: IconProps['size'];
 };
 
-const SearchBar: React.FC<ISearchBar> = props => {
+const SearchBar: React.FC<SearchBarProps> = props => {
   const {
     inputValue,
     onInputChange,
@@ -32,6 +33,7 @@ const SearchBar: React.FC<ISearchBar> = props => {
 
   return (
     <Stack
+      direction="row"
       spacing="gap-y-2"
       align="center"
       customStyle="px-2.5 bg-grey9 dark:bg-grey3 rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark"

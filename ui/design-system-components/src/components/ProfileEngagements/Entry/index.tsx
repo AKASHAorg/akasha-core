@@ -1,55 +1,55 @@
 import React, { ReactElement } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import AvatarBlock from '@akashaorg/design-system-core/lib/components/AvatarBlock';
-import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
-import { Profile } from '@akashaorg/typings/ui';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import { Profile } from '@akashaorg/typings/lib/ui';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type EntryProps = {
   profileAnchorLink: string;
-  profileId: string;
+  profileIds: { did: string; id: string };
   avatar: Profile['avatar'];
   name: string;
-  borderBottom?: boolean;
-  renderFollowElement: (profileId) => ReactElement;
+  followId: string;
+  isFollowing: boolean;
+  getMediaUrl: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
+  renderFollowElement: (
+    profileId: string,
+    followId: string,
+    isFollowing: boolean,
+  ) => ReactElement | null;
   onProfileClick: (profileId: string) => void;
 };
 
 const Entry: React.FC<EntryProps> = props => {
   const {
     profileAnchorLink,
-    profileId,
+    profileIds,
     avatar,
     name,
-    borderBottom = true,
+    followId,
+    isFollowing,
+    getMediaUrl,
     renderFollowElement,
     onProfileClick,
   } = props;
 
-  const borderBottomStyle = borderBottom
-    ? `border-b ${getColorClasses(
-        {
-          light: 'grey8',
-          dark: 'grey5',
-        },
-        'border',
-      )}`
-    : '';
-
   return (
-    <Stack direction="column" spacing="gap-y-4" customStyle={`px-4 pb-4 ${borderBottomStyle}`}>
-      <Stack align="center" justify="between">
-        <Anchor href={`${profileAnchorLink}/${profileId}`}>
-          <AvatarBlock
-            profileId={profileId}
-            avatar={avatar}
-            name={name}
-            userName={'' /*@TODO: revisit this part when username is implemented on the API side */}
-            onClick={() => onProfileClick(profileId)}
-          />
-        </Anchor>
-        {renderFollowElement(profileId)}
-      </Stack>
+    <Stack direction="row" align="center" justify="between" customStyle="pb-4" fullWidth>
+      <Anchor
+        href={`${profileAnchorLink}/${profileIds.did}`}
+        onClick={event => {
+          event.preventDefault();
+          onProfileClick(profileIds.did);
+        }}
+      >
+        <ProfileAvatarButton
+          profileId={profileIds.did}
+          avatarImage={getMediaUrl(avatar)}
+          label={name}
+        />
+      </Anchor>
+      {renderFollowElement && renderFollowElement(profileIds.id, followId, isFollowing)}
     </Stack>
   );
 };

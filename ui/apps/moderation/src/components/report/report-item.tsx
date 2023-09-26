@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Accordion, { IAccordionProps } from '@akashaorg/design-system-core/lib/components/Accordion';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Accordion, { AccordionProps } from '@akashaorg/design-system-core/lib/components/Accordion';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 
@@ -20,7 +20,7 @@ export type ReportItemProps = PageHeaderProps &
     step: number;
     introLabel: string;
     subTextLabel: string;
-    accordionNodes: IAccordionProps[];
+    accordionNodes: AccordionProps[];
     reasonPlaceholderLabel: string;
   };
 
@@ -29,7 +29,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
 
   return (
     <PageHeader {...props}>
-      <Box customStyle="space-y-4">
+      <Stack spacing="gap-y-4">
         <Text>
           {introLabel}{' '}
           <Text as="span" variant="footnotes2" color={{ light: 'grey7', dark: 'grey6' }}>
@@ -41,16 +41,13 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
           <>
             <CategoryPills {...props} />
 
-            <Box>
+            <Stack spacing="gap-y-2">
               {accordionNodes.map(({ titleNode, contentNode }, idx) => (
-                <Accordion
-                  key={idx}
-                  titleNode={titleNode}
-                  contentNode={contentNode}
-                  contentStyle="p-0"
-                />
+                <Stack key={idx}>
+                  <Accordion titleNode={titleNode} contentNode={contentNode} contentStyle="p-0" />
+                </Stack>
               ))}
-            </Box>
+            </Stack>
           </>
         )}
 
@@ -66,7 +63,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
             />
           </>
         )}
-      </Box>
+      </Stack>
     </PageHeader>
   );
 };

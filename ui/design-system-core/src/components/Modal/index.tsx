@@ -1,13 +1,14 @@
 import React, { Fragment, PropsWithChildren } from 'react';
-import Stack from '../Stack';
-import Text, { TextProps } from '../Text';
-import Card from '../Card';
-import Icon from '../Icon';
-import Button from '../Button';
-import Divider from '../Divider';
 import { tw } from '@twind/core';
 import { Dialog, Transition } from '@headlessui/react';
+
+import Button from '../Button';
 import { ButtonProps } from '../Button/types';
+import Card from '../Card';
+import Divider from '../Divider';
+import Icon from '../Icon';
+import Stack from '../Stack';
+import Text, { TextProps } from '../Text';
 
 export type ActionsAlign = 'center' | 'end';
 
@@ -33,7 +34,7 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
 }) => {
   return (
     <Transition show={show} as={Fragment}>
-      <Dialog as="div" onClose={onClose} className={tw('relative z-[99999]')}>
+      <Dialog as="div" onClose={onClose} className={tw('relative z-[11]')}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -43,7 +44,7 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/70" />
+          <div className="fixed inset-0 bg-black/50" />
         </Transition.Child>
         <Transition.Child
           as={Fragment}
@@ -55,16 +56,16 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
           leaveTo="opacity-0 scale-95"
         >
           <Stack align="center" justify="center" customStyle="fixed inset-0">
-            <Dialog.Panel className={tw(customStyle)}>
-              <Card elevation="1" radius={20} padding={{ y: 16, x: 0 }}>
+            <Dialog.Panel>
+              <Card radius={20} padding={'py-4'} customStyle={`${customStyle} relative`}>
                 <Stack direction="column" spacing="gap-y-4">
                   {title && (
                     <Dialog.Title className={tw('px-4')}>
-                      <Stack align="center" spacing="gap-x-4">
-                        <Text customStyle="ml-auto" variant="h5" {...title}>
+                      <Stack align="center" justify="center">
+                        <Text align="center" variant="h5" {...title}>
                           {title.label}
                         </Text>
-                        <Button onClick={onClose} plain customStyle="ml-auto">
+                        <Button onClick={onClose} plain customStyle="absolute top-4 right-4">
                           <Icon
                             type="XMarkIcon"
                             size="md"
@@ -85,7 +86,12 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
                     customStyle="px-4"
                   >
                     {children}
-                    <Stack spacing="gap-x-4" justify={actionsAlign} customStyle="mt-auto">
+                    <Stack
+                      direction="row"
+                      spacing="gap-x-4"
+                      justify={actionsAlign}
+                      customStyle="mt-auto"
+                    >
                       {actions.map((action, index) => (
                         <Button key={index} size="md" {...action} />
                       ))}

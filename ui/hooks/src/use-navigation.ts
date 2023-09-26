@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigateToParams, EntityTypes, IContentClickDetails } from '@akashaorg/typings/ui';
+import { NavigateToParams, EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 
 /**
  * Hook to navigation to entry's page
@@ -23,7 +23,7 @@ export const useEntryNavigation = (
       navigateFn({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes =>
-          `${itemType === EntityTypes.REPLY ? navRoutes.Reply : navRoutes.Post}/${id}`,
+          `${itemType === EntityTypes.REFLECT ? navRoutes.Reflect : navRoutes.Beam}/${id}`,
       });
     },
     [navigateFn, currentPostId],

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Moderator } from '@akashaorg/typings/ui';
+import { Moderator } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -34,10 +34,14 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
   }`;
 
   return (
-    <Box customStyle={`flex py-4 flex-none ${borderBottomStyle}`}>
-      <Box customStyle="flex space-x-2 items-start w([50%] md:[30%]) px-4 border(r-1 solid grey8 dark:grey3)">
+    <Stack customStyle={`py-4 flex-none ${borderBottomStyle}`}>
+      <Stack
+        spacing="gap-x-2"
+        align="start"
+        customStyle=" w([50%] md:[30%]) px-4 border(r-1 solid grey8 dark:grey3)"
+      >
         <Avatar avatar={moderator.avatar} />
-        <Box>
+        <Stack>
           <Tooltip content={moderator.name} placement="right">
             <Text variant="body2" weight="bold" truncate={true} customStyle={textStyle}>
               {moderator.name}
@@ -54,17 +58,17 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
             >{`${moderator.name}`}</Text>
           </Tooltip>
 
-          <Box customStyle="flex space-x-1.5 items-center">
-            <Box customStyle={`w-1.5 h-1.5 rounded-full ${moderatorStatusIndicator}`} />
+          <Stack align="center" spacing="gap-x-1.5">
+            <Stack customStyle={`w-1.5 h-1.5 rounded-full ${moderatorStatusIndicator}`} />
             <Text variant="button-md" weight="normal" customStyle="capitalize">
               {moderator.status}
             </Text>
-          </Box>
-        </Box>
-      </Box>
+          </Stack>
+        </Stack>
+      </Stack>
 
-      <Box customStyle="flex w([50%] md:[70%]) px-4 justify-between items-center">
-        <Box>
+      <Stack justify="between" align="center" customStyle="w([50%] md:[70%]) px-4">
+        <Stack>
           <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
             {tenureInfoLabel}:
           </Text>
@@ -74,13 +78,13 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
               ? formatDate(new Date(moderator.createdAt))
               : formatDate(moderator.moderatorEndDate)}
           </Text>
-        </Box>
+        </Stack>
 
         <Button plain={true} onClick={() => onCardClick(moderator.did.id)}>
           <Icon type="ChevronRightIcon" accentColor={true} customStyle="justify-end" />
         </Button>
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };
 

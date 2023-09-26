@@ -31,8 +31,6 @@
     "pack": "tsc --build tsconfig.json",
     "postpack": "yarn run copy-images",
     "tsc": "tsc --build tsconfig.json",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
     "build": "tsc --build tsconfig.json",
     "test": "BABEL_ENV=test jest --runInBand",

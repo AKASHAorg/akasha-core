@@ -22,7 +22,6 @@ export {
 
 const ServiceTypes = {
   Gql: Symbol.for('awf-Gql'),
-  GqlNew: Symbol.for('awf-Gql-new'),
   Stash: Symbol.for('awf-Stash'),
   Log: Symbol.for('awf-Log'),
   Settings: Symbol.for('awf-Settings'),
@@ -41,6 +40,7 @@ const ServiceTypes = {
   Misc: Symbol.for('awf-Misc'),
   Lit: Symbol.for('awf-LIT'),
   Ceramic: Symbol.for('awf-Ceramic'),
+  ScrollState: Symbol.for('awf-scroll-state'),
 };
 
 export type IMessageBody = {

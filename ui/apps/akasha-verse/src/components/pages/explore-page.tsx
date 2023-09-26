@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import getSDK from '@akashaorg/awf-sdk';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
@@ -7,30 +7,27 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { useTranslation } from 'react-i18next';
-import { APP_EVENTS } from '@akashaorg/typings/sdk';
-import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/ui';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
-import { INFO } from '../../routes';
+import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
+import {
+  GetAppsQuery,
+  GetAppsByIdQuery,
+} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
-export interface IExplorePage extends RootComponentProps {
-  installableApps: IntegrationReleaseInfoFragmentFragment[];
-  installedAppsInfo?: IntegrationReleaseInfo[];
+export type ExplorePageProps = {
+  installableApps: GetAppsQuery['akashaAppIndex']['edges'];
+  installedAppsInfo?: GetAppsByIdQuery['node'][];
   isFetching?: boolean;
   reqError?: Error;
   isUserLoggedIn?: boolean;
-}
+};
 
-const ExplorePage: React.FC<IExplorePage> = props => {
-  const { installableApps, isFetching, reqError, installedAppsInfo, isUserLoggedIn } = props;
-  const sdk = getSDK();
-  const { t } = useTranslation('app-akasha-verse');
+const ExplorePage: React.FC<ExplorePageProps> = props => {
+  const { isFetching, reqError, isUserLoggedIn } = props;
 
-  const [uninstallingApps, setUninstallingApps] = React.useState([]);
-  const [showNotifPill, setShowNotifPill] = React.useState('');
+  const [, setUninstallingApps] = useState([]);
+  const [, setShowNotifPill] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: APP_EVENTS }) => {
         if (eventData.event === APP_EVENTS.REMOVED) {
@@ -48,26 +45,29 @@ const ExplorePage: React.FC<IExplorePage> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const uninstallAppReq = useUninstallApp();
+  const sdk = getSDK();
+  const { t } = useTranslation('app-akasha-verse');
 
-  const handleAppClick = (app: IntegrationReleaseInfo) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-akasha-verse',
-      getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
-    });
-  };
+  // const uninstallAppReq = null;
 
-  const handleAppInstall = (integrationName: string) => {
-    props.navigateToModal({
-      name: 'install-modal',
-      integrationName: integrationName,
-    });
-  };
+  // const handleAppClick = (app: IntegrationReleaseInfo) => {
+  //   getRoutingPlugin().navigateTo?.({
+  //     appName: '@akashaorg/app-akasha-verse',
+  //     getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
+  //   });
+  // };
 
-  const handleAppUninstall = (integrationName: string) => {
-    setUninstallingApps(prev => [...prev, integrationName]);
-    uninstallAppReq.mutate(integrationName);
-  };
+  // const handleAppInstall = (integrationName: string) => {
+  //   navigateToModal({
+  //     name: 'install-modal',
+  //     integrationName: integrationName,
+  //   });
+  // };
+
+  // const handleAppUninstall = (integrationName: string) => {
+  //   setUninstallingApps(prev => [...prev, integrationName]);
+  //   uninstallAppReq.mutate(integrationName);
+  // };
 
   /*@TODO: replace with the relevant hook once it's ready */
   const dummyApps = [
@@ -87,7 +87,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
 
   return (
     <>
-      <Stack direction="column" testId="akasha-verse">
+      <Stack testId="akasha-verse">
         {!isFetching && reqError && (
           <ErrorLoader
             type="script-error"
@@ -102,15 +102,16 @@ const ExplorePage: React.FC<IExplorePage> = props => {
               <InfoCard
                 titleLabel={t('Welcome to the Integration Centre!')}
                 bodyLabel={t(
-                  'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to Akasha World.',
+                  'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to AKASHA World.',
                 )}
                 titleVariant="h4"
                 bodyVariant="body1"
-                assetName="akasha-verse"
+                publicImgPath="/images/"
+                assetName="akasha-verse.webp"
               />
             )}
             {!isUserLoggedIn && (
-              <Stack direction="column" spacing="gap-y-4">
+              <Stack spacing="gap-y-4">
                 <Text variant="h6">{t('Latest Apps')}</Text>
                 <AppList
                   apps={dummyApps}
@@ -131,7 +132,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
             {/*@TODO: Remove the lines below once the page is connected with relevant hooks */}
             {/* {installableApps?.length !== 0 &&
               installableApps?.map((app, index) => (
-                <Box key={index} direction="row" justify="between" align="center" gap="xsmall">
+                <Stack key={index} direction="row" justify="between" align="center" gap="xsmall">
                   <SubtitleTextIcon
                     label={app.manifestData?.displayName}
                     subtitle={app.name}
@@ -153,7 +154,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
                     onClickActive={() => handleAppUninstall(app.name)}
                     onClickInactive={() => handleAppInstall(app.name)}
                   />
-                </Box>
+                </Stack>
               ))} */}
           </>
         )}

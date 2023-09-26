@@ -1,4 +1,4 @@
-# Scripts Guide -  Akasha Core
+# Scripts Guide -  AKASHA Core
 
 Here is a definitive guide for all the scripts found in the [root package file](./package.json) of this project.
 

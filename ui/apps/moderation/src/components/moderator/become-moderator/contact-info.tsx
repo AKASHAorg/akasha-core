@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -44,27 +44,25 @@ const BMContactInfo: React.FC<BMContactInfoProps> = props => {
         {subtitleLabel}{' '}
       </Text>
 
-      <Box>
+      <Stack>
         <TextField label={discordLabel} placeholder={discordPlaceholderLabel} type="text" />
-      </Box>
+      </Stack>
 
-      <Box>
+      <Stack>
         <TextField label={emailLabel} placeholder={emailPlaceholderLabel} type="text" />
-      </Box>
+      </Stack>
 
-      <Box customStyle="flex justify-end">
-        <Button plain={true} onClick={onFillFromProfileClick}>
-          <Text
-            as="span"
-            variant="subtitle2"
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-            weight="bold"
-            customStyle="cursor-pointer"
-          >
-            {fillFromProfileLabel}
-          </Text>
-        </Button>
-      </Box>
+      <Button plain={true} onClick={onFillFromProfileClick} customStyle="w-fit ml-auto">
+        <Text
+          as="span"
+          variant="subtitle2"
+          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+          weight="bold"
+          customStyle="cursor-pointer"
+        >
+          {fillFromProfileLabel}
+        </Text>
+      </Button>
 
       {checks.map((check, idx) => (
         <Checkbox
@@ -75,6 +73,7 @@ const BMContactInfo: React.FC<BMContactInfoProps> = props => {
           value={check}
           isSelected={!!checkedState[idx]}
           handleChange={onCheckBoxClick(idx)}
+          customStyle="mx-2 my-0"
         />
       ))}
     </SteppedActionWrapper>

@@ -1,57 +1,83 @@
-import React from 'react';
+import React, {
+  StrictMode,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
+import { EventDataTypes, EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
-
-import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
+import {
+  filterEvents,
+  usePlaformHealthCheck,
+  useRootComponentProps,
+  useTheme,
+} from '@akashaorg/ui-awf-hooks';
 import {
   startMobileSidebarHidingBreakpoint,
   startWidgetsTogglingBreakpoint,
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
+import { useScrollbarWidth } from 'react-use/lib/useScrollbarWidth';
 import { useClickAway } from 'react-use';
-
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 
-const Layout: React.FC<RootComponentProps> = props => {
-  const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
-  const [needSidebarToggling, setNeedSidebarToggling] = React.useState(
+const Layout: React.FC<unknown> = () => {
+  const [activeModal, setActiveModal] = useState<EventDataTypes | null>(null);
+  const [needSidebarToggling, setNeedSidebarToggling] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
-
-  React.useEffect(() => {
-    setNeedSidebarToggling(window.matchMedia(startMobileSidebarHidingBreakpoint).matches);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.matchMedia(startMobileSidebarHidingBreakpoint).matches]);
-
   // sidebar is open by default on larger screens >=1440px
-  const [showSidebar, setShowSidebar] = React.useState(
+  const [showSidebar, setShowSidebar] = useState(
     !window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
 
-  React.useEffect(() => {
+  const scrollBarWidth = useScrollbarWidth();
+
+  const { uiEvents, layoutConfig } = useRootComponentProps();
+  // initialise fallback theme, if none is set
+  useTheme();
+
+  useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
+
     const resize = () => {
       setShowSidebar(!mql.matches);
     };
+
     window.addEventListener('resize', resize);
+
     return () => {
       window.removeEventListener('resize', resize);
     };
   }, []);
 
   // widgets are autohidden starting on screens <=768px
-  const [showWidgets, setshowWidgets] = React.useState(
+  const [showWidgets, setshowWidgets] = useState(
     window.matchMedia(startWidgetsTogglingBreakpoint).matches,
   );
 
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      setshowWidgets(window.matchMedia(startWidgetsTogglingBreakpoint).matches);
+      setNeedSidebarToggling(window.matchMedia(startMobileSidebarHidingBreakpoint).matches);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const maintenanceReq = usePlaformHealthCheck();
 
-  const isPlatformHealthy = React.useMemo(() => {
+  const isPlatformHealthy = useMemo(() => {
     if (maintenanceReq.status === 'success') {
       return maintenanceReq.data.success;
     }
@@ -59,12 +85,13 @@ const Layout: React.FC<RootComponentProps> = props => {
     return true;
   }, [maintenanceReq.status, maintenanceReq.data]);
 
-  const uiEvents = React.useRef(props.uiEvents);
+  const _uiEvents = useRef(uiEvents);
   const { t } = useTranslation();
 
   const handleSidebarShow = () => {
     setShowSidebar(true);
   };
+
   const handleSidebarHide = () => {
     setShowSidebar(false);
   };
@@ -76,8 +103,8 @@ const Layout: React.FC<RootComponentProps> = props => {
     setshowWidgets(false);
   };
 
-  const handleModal = React.useCallback(
-    (data: UIEventData['data']) => {
+  const handleModal = useCallback(
+    (data: EventDataTypes) => {
       setActiveModal(active => {
         if ((!active || !active.name) && data.name) {
           return data;
@@ -94,39 +121,49 @@ const Layout: React.FC<RootComponentProps> = props => {
     [activeModal],
   );
 
-  const wrapperRef = React.useRef(null);
+  const wrapperRef = useRef(null);
 
   useClickAway(wrapperRef, () => {
-    uiEvents.current.next({
+    _uiEvents.current.next({
       event: EventTypes.HideSidebar,
     });
   });
 
-  React.useEffect(() => {
-    const eventsSub = uiEvents.current.subscribe({
-      next: (eventInfo: UIEventData) => {
-        switch (eventInfo.event) {
-          case EventTypes.ModalRequest:
-            handleModal(eventInfo.data);
-            break;
-          case EventTypes.ShowSidebar:
-            handleSidebarShow();
-            break;
-          case EventTypes.HideSidebar:
-            handleSidebarHide();
-            break;
-          case EventTypes.ShowWidgets:
-            handleWidgetsShow();
-            break;
-          case EventTypes.HideWidgets:
-            handleWidgetsHide();
-            break;
-          default:
-            break;
-        }
-      },
-    });
-    uiEvents.current.next({
+  useEffect(() => {
+    const eventsSub = _uiEvents.current
+      .pipe(
+        filterEvents([
+          EventTypes.ModalRequest,
+          EventTypes.ShowSidebar,
+          EventTypes.HideSidebar,
+          EventTypes.ShowSidebar,
+          EventTypes.HideWidgets,
+        ]),
+      )
+      .subscribe({
+        next: (eventInfo: UIEventData) => {
+          switch (eventInfo.event) {
+            case EventTypes.ModalRequest:
+              handleModal(eventInfo.data as EventDataTypes);
+              break;
+            case EventTypes.ShowSidebar:
+              handleSidebarShow();
+              break;
+            case EventTypes.HideSidebar:
+              handleSidebarHide();
+              break;
+            case EventTypes.ShowWidgets:
+              handleWidgetsShow();
+              break;
+            case EventTypes.HideWidgets:
+              handleWidgetsHide();
+              break;
+            default:
+              break;
+          }
+        },
+      });
+    _uiEvents.current.next({
       event: EventTypes.LayoutReady,
     });
     return () => {
@@ -137,21 +174,19 @@ const Layout: React.FC<RootComponentProps> = props => {
   }, [handleModal]);
 
   const layoutStyle = `
-      grid md:(grid-flow-row) min-h-screen
+      grid md:(grid-flow-col) min-h-screen
       lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
-      ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '}
+      ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'}
       xl:max-w-7xl xl:mx-auto gap-x-4
       `;
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
   const mobileLayoverStyle = `
-  fixed xl:sticky h-full
-      ${
+      fixed xl:sticky h-full ${
         showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
-          ? 'min-w-[100vw] xl:min-w-max bg(black/30 dark:white/30) z-[99]'
+          ? 'min-w([100vw] xl:max) bg(black/30 dark:white/30) z-[99]'
           : ''
-      }
-      `;
+      }`;
 
   const sidebarSlotStyle = `
       sticky top-0 h-screen transition-all duration-300 transform ${
@@ -159,58 +194,49 @@ const Layout: React.FC<RootComponentProps> = props => {
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
 
+  //style to prevent horizontal shift when vertical scrollbar appears
+  const widthStyle = `w-[calc(100vw-${scrollBarWidth}px)]`;
+
   return (
-    <Box customStyle="bg(white dark:black) min-h-screen">
-      <Box
-        customStyle="h-full w-11/12 m-auto lg:w-[95%] xl:w-full min-h-screen"
-        onKeyDown={() => {
-          void 0;
-        }}
-        role="presentation"
-      >
-        <Box customStyle={layoutStyle}>
+    <Stack customStyle={`bg(white dark:black) min-h-screen ${widthStyle}`}>
+      <Stack customStyle="h-full m-auto w-[95%] xl:w-full min-h-screen">
+        <Stack customStyle={layoutStyle}>
           <ScrollRestorer />
-          <Box customStyle={mobileLayoverStyle}>
-            <Box customStyle={sidebarSlotStyle}>
+
+          <Stack customStyle={mobileLayoverStyle}>
+            <Stack customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
-                <Box customStyle="pt-0 xl:pt-4 h-screen" ref={wrapperRef}>
-                  <Extension
-                    fullHeight
-                    name={props.layoutConfig.sidebarSlotId}
-                    uiEvents={props.uiEvents}
-                  />
-                </Box>
+                <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
+                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
+                </Stack>
               ) : (
-                <Box customStyle="pt-0 xl:pt-4 h-screen">
-                  <Extension
-                    fullHeight
-                    name={props.layoutConfig.sidebarSlotId}
-                    uiEvents={props.uiEvents}
-                  />
-                </Box>
+                <Stack padding="pt-0 xl:pt-4" customStyle="h-screen">
+                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
+                </Stack>
               )}
-            </Box>
-          </Box>
-          <Box customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
-            <Box customStyle="sticky top-0 z-10">
-              <Box customStyle="pt-4 bg(white dark:black) rounded-b-2xl">
-                <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
-              </Box>
-            </Box>
-            <Box id="scrollTopStop"></Box>
-            <Box customStyle="pt-4">
+            </Stack>
+          </Stack>
+
+          <Stack customStyle={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
+            <Stack
+              padding="pt-4"
+              customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
+            >
+              <Extension name={layoutConfig.topbarSlotId} uiEvents={uiEvents} />
+            </Stack>
+            <Stack padding="pt-4">
               {!isPlatformHealthy && (
-                <BasicCardBox
+                <Card
                   margin="mb-4"
                   customStyle="bg(warningLight dark:warningDark) border(errorLight dark:errorDark)"
                 >
-                  <Box customStyle="flex flex-row">
+                  <Stack direction="row">
                     <Icon
                       color={{ light: 'grey3', dark: 'grey3' }}
                       type="ExclamationTriangleIcon"
                       customStyle="mr-4"
                     />
-                    <Box>
+                    <Stack>
                       <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>
                         {`${t(
                           'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
@@ -219,46 +245,55 @@ const Layout: React.FC<RootComponentProps> = props => {
                       <Text variant="footnotes2" color={{ light: 'grey3', dark: 'grey3' }}>{`${t(
                         'Thank you for your patience',
                       )} 😸`}</Text>
-                    </Box>
-                  </Box>
-                </BasicCardBox>
+                    </Stack>
+                  </Stack>
+                </Card>
               )}
-              <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
-            </Box>
-          </Box>
-          <Box customStyle="sticky top-0">
-            <Box customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
-              <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
-              <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
-            </Box>
-            <Box customStyle="fixed bottom-0 mr-4 mb-4">
-              <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
-            </Box>
-          </Box>
-        </Box>
+              <Extension name={layoutConfig.pluginSlotId} uiEvents={uiEvents} />
+              <Stack customStyle="fixed bottom-0 mr-4 mb-4">
+                <Extension name={layoutConfig.snackbarNotifSlotId} uiEvents={uiEvents} />
+              </Stack>
+            </Stack>
+          </Stack>
+
+          <Stack customStyle="sticky top-0 h-screen">
+            <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
+              <Extension name={layoutConfig.widgetSlotId} uiEvents={uiEvents} />
+              <Extension name={layoutConfig.rootWidgetSlotId} uiEvents={uiEvents} />
+            </Stack>
+
+            <Stack customStyle="fixed bottom-0 mr-4 mb-4">
+              <Extension name={layoutConfig.cookieWidgetSlotId} uiEvents={uiEvents} />
+            </Stack>
+          </Stack>
+        </Stack>
+
         {activeModal && (
-          <Extension
-            name={activeModal.name}
-            uiEvents={props.uiEvents}
-            customStyle="relative z-999"
-          />
+          <Extension name={activeModal.name} uiEvents={uiEvents} customStyle="relative z-999" />
         )}
+
         <Extension
-          name={props.layoutConfig.modalSlotId}
-          uiEvents={props.uiEvents}
+          name={layoutConfig.modalSlotId}
+          uiEvents={uiEvents}
           customStyle="relative z-999"
         />
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };
 
-const LayoutWidget: React.FC<RootComponentProps> = props => (
-  <Router>
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
-      <Layout {...props} />
-    </I18nextProvider>
-  </Router>
-);
+const LayoutWidget = () => {
+  const { getTranslationPlugin } = useRootComponentProps();
+
+  return (
+    <StrictMode>
+      <Router>
+        <I18nextProvider i18n={getTranslationPlugin().i18n}>
+          <Layout />
+        </I18nextProvider>
+      </Router>
+    </StrictMode>
+  );
+};
 
 export default React.memo(LayoutWidget);

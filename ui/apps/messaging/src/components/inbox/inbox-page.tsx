@@ -1,27 +1,24 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Profile, RootComponentProps } from '@akashaorg/typings/ui';
-import { useFollowers, useFollowing } from '@akashaorg/ui-awf-hooks';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import { Profile } from '@akashaorg/typings/lib/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import MessageContactCard from '@akashaorg/design-system-components/lib/components/MessageContactCard';
 
-export interface InboxPageProps extends RootComponentProps {
+export type InboxPageProps = {
   loggedProfileData: Profile;
-}
+};
 
-const InboxPage: React.FC<InboxPageProps> = props => {
-  const { loggedProfileData } = props;
-
+const InboxPage: React.FC<InboxPageProps> = () => {
   const { t } = useTranslation('app-messaging');
+  const { getRoutingPlugin } = useRootComponentProps();
 
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const [pinnedConvos, setPinnedConvos] = React.useState([]);
-
-  const loggedUserId = React.useMemo(() => loggedProfileData?.did?.id, [loggedProfileData]);
 
   const handleSettingsClick = () => {
     navigateTo?.({
@@ -31,13 +28,13 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   };
 
   // @TODO: replace with new hooks
-  const followersQuery = useFollowers(loggedUserId, 500);
+  const followersQuery = null;
   const followers = React.useMemo(
     () => followersQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followersQuery.data?.pages],
   );
 
-  const followingQuery = useFollowing(loggedUserId, 500);
+  const followingQuery = null;
   const following = React.useMemo(
     () => followingQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followingQuery.data?.pages],
@@ -80,7 +77,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   };
 
   const handleCardClick = (pubKey: string) => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-messaging',
       getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
     });
@@ -94,25 +91,25 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   };
 
   return (
-    <BasicCardBox customStyle="max-h-[92vh]">
-      <Box customStyle="flex p-4 gap-2">
-        <Box customStyle="flex flex-row justify-between">
+    <Card customStyle="max-h-[92vh]">
+      <Stack spacing="gap-2" customStyle="p-4 ">
+        <Stack customStyle="flex-row justify-between">
           <Text variant="h1">{t('Messaging App')}</Text>
           <button onClick={handleSettingsClick}>
-            <Icon type="settingsAlt" />
+            <Icon type="Cog8ToothIcon" />
           </button>
-        </Box>
-        <Text>{t('Write and send private, encrypted messages 🔐 to people in Akasha World.')}</Text>
-        <Box customStyle="flex border(grey8 dark:grey3) rounded-lg">
-          <Box customStyle="flex px-2 py-4">
+        </Stack>
+        <Text>{t('Write and send private, encrypted messages 🔐 to people in AKASHA World.')}</Text>
+        <Stack customStyle="border(grey8 dark:grey3) rounded-lg">
+          <Stack padding="px-2 py-4">
             <Text variant="h2">{t('Conversations')}</Text>
-          </Box>
-          <Box customStyle="rounded-b-lg overflow-auto">
+          </Stack>
+          <Stack customStyle="rounded-b-lg overflow-auto">
             {!!pinnedContacts.length && (
-              <Box customStyle="flex shrink-0">
-                <Box customStyle="p-4 flex shrink-0">
+              <Stack customStyle="shrink-0">
+                <Stack padding="p-4 shrink-0">
                   <Text variant="body1">{t('PINNED')}</Text>
-                </Box>
+                </Stack>
 
                 {pinnedContacts.map((contact, idx) => (
                   <MessageContactCard
@@ -135,14 +132,14 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                     onConvoPin={() => handlePinConversation(contact.pubKey)}
                   />
                 ))}
-              </Box>
+              </Stack>
             )}
 
-            <Box customStyle="flex shrink-0">
+            <Stack customStyle="shrink-0">
               {!!pinnedContacts.length && (
-                <Box customStyle="flex p-4">
+                <Stack customStyle="flex p-4">
                   <Text variant="body1">{t('ALL CONVERSATIONS')}</Text>
-                </Box>
+                </Stack>
               )}
 
               {unpinnedContacts?.map((contact, idx) => (
@@ -167,11 +164,11 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                   onConvoPin={() => handlePinConversation(contact.pubKey)}
                 />
               ))}
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-    </BasicCardBox>
+            </Stack>
+          </Stack>
+        </Stack>
+      </Stack>
+    </Card>
   );
 };
 

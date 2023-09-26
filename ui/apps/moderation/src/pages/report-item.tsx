@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useModerationCategory } from '@akashaorg/ui-awf-hooks';
 
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { ReportItem, ReportItemConfirmation } from '../components/report';
@@ -71,7 +71,7 @@ export const ReportItemPage: React.FC<BasePageProps> = props => {
   if (step === 2) {
     return (
       <ReportItemConfirmation
-        titleLabel={t('Thank you for keeping our community safe')}
+        titleLabel={t('Thank you for keeping the good vibes')}
         subtitleLabel={t('Our moderators will review the report as soon as possible')}
         footnoteLabel={t('Feel like you want to contribute more to improve our community?')}
         ctaLabel={t('Join our Moderation Discourd channel')}
@@ -101,16 +101,16 @@ export const ReportItemPage: React.FC<BasePageProps> = props => {
         .map(cat => reasons.find(el => el.title === cat))
         .map(el => ({
           titleNode: (
-            <Box>
+            <Stack>
               <Text variant="button-sm">{el.title}</Text>
-            </Box>
+            </Stack>
           ),
           contentNode: (
-            <Box>
+            <Stack>
               <Text variant="footnotes2" color={{ light: 'grey5', dark: 'grey6' }}>
                 {el.description}
               </Text>
-            </Box>
+            </Stack>
           ),
         }))}
       reasonPlaceholderLabel={`${t('Place some details here, if any')}...`}

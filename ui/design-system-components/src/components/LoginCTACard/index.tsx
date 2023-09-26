@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface ILoginCTACardProps {
+export type LoginCTACardProps = {
   onWriteToUsLabelClick?: () => void;
   title: string;
   subtitle: string;
@@ -16,9 +16,10 @@ export interface ILoginCTACardProps {
   image?: React.ReactElement;
   publicImgPath?: string;
   onCloseIconClick?: () => void;
-}
-const LoginCTACard: React.FC<ILoginCTACardProps> = props => {
+};
+const LoginCTACard: React.FC<LoginCTACardProps> = props => {
   const {
+    image,
     title,
     subtitle,
     beforeLinkLabel,
@@ -31,8 +32,8 @@ const LoginCTACard: React.FC<ILoginCTACardProps> = props => {
     onCloseIconClick,
   } = props;
   return (
-    <BasicCardBox accentBorder={true}>
-      {props.image}
+    <Card accentBorder={true}>
+      {image}
       <div className={tw(`flex flex-row items-start justify-between`)}>
         <div className={tw(`flex flex-col-reverse md:flex-row items-center justify-between`)}>
           <div className={tw(`flex flex-col md:w-1/2 gap-1`)}>
@@ -54,16 +55,17 @@ const LoginCTACard: React.FC<ILoginCTACardProps> = props => {
           </div>
           <div className={tw(`md:w-[43%] md:pr-2 mb-2 md:mb-0`)}>
             <img
+              alt="login widget illustration"
               className={tw(`flex self-center w-[60%] md:(self-auto w-full) object-contain`)}
               src={`${publicImgPath}/login-widget-illustration.webp`}
             />
           </div>
         </div>
         <button onClick={onCloseIconClick}>
-          <Icon type="XMarkIcon" size="xs" data-testid="close-icon-alpha-notification" />
+          <Icon type="XMarkIcon" size="sm" data-testid="close-icon-alpha-notification" />
         </button>
       </div>
-    </BasicCardBox>
+    </Card>
   );
 };
 

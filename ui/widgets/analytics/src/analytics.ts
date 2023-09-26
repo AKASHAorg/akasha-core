@@ -1,16 +1,16 @@
-import { filter } from 'rxjs';
 import type { SingleSpaCustomEventDetail } from 'single-spa';
 import {
   AnalyticsEventData,
   AnalyticsEventTypes,
-  TrackEventData,
   RootComponentProps,
-} from '@akashaorg/typings/ui';
+} from '@akashaorg/typings/lib/ui';
+import { filterEvents } from '@akashaorg/ui-awf-hooks';
 
 export interface CustomSingleSpaEvent extends Event {
   detail: SingleSpaCustomEventDetail;
   currentTarget: typeof window;
 }
+
 export const enableTracking = () => {
   if (window['_paq']) {
     window['_paq'].push(['setConsentGiven']);
@@ -20,27 +20,33 @@ export const enableTracking = () => {
   }
 };
 
-export const trackEvent = (event: TrackEventData) => {
+export const trackEvent = (event: AnalyticsEventData) => {
   if (checkTrackingIsAllowed() && window['_paq']) {
-    window['_paq'].push(['trackEvent', event.category, event.action, event.name, event.value]);
+    window['_paq'].push([
+      'trackEvent',
+      event.data.category,
+      event.data.action,
+      event.data.name,
+      event.data.value,
+    ]);
   }
 };
 
 export const registerEventBusSubscriber = (eventBus: RootComponentProps['uiEvents']) => {
   return eventBus
-    .pipe(filter(ev => ev.hasOwnProperty('eventType') && !!AnalyticsEventTypes[ev['eventType']]))
-    .subscribe((event: AnalyticsEventData) => {
-      if (!event) {
+    .pipe(filterEvents([AnalyticsEventTypes.TRACK_EVENT, AnalyticsEventTypes.ENABLE_TRACKING]))
+    .subscribe(evData => {
+      if (!evData.event) {
         return;
       }
       if (checkTrackingIsAllowed()) {
-        switch (event.eventType) {
+        switch (evData.event) {
           // enable tracking can be 'requested' from another integration. e.g. User Settings
           case AnalyticsEventTypes.ENABLE_TRACKING:
             enableTracking();
             break;
           case AnalyticsEventTypes.TRACK_EVENT:
-            trackEvent(event);
+            trackEvent(evData);
             break;
           default:
             break;

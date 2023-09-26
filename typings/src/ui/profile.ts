@@ -1,9 +1,17 @@
-import { CeramicAccount, FollowConnection, Profile as ProfileData } from '../sdk/graphql-types-new';
+import {
+  CeramicAccount,
+  AkashaFollowConnection,
+  AkashaProfile as ProfileData,
+  AkashaFollow,
+} from '../sdk/graphql-types-new';
 
-export type Profile = Omit<ProfileData, 'followers' | 'did'> & {
+export type AkashaProfile = Omit<ProfileData, 'followers' | 'did' | 'followersCount'> & {
   did: Partial<CeramicAccount>;
-  followers?: FollowConnection;
+  followers?: AkashaFollowConnection;
+  followersCount?: number;
 };
+
+export type Profile = AkashaProfile;
 
 export enum UsernameTypes {
   TEXTILE = 0,
@@ -46,6 +54,26 @@ export enum StepStatus {
   GETTING_KEYS = 'gettingKeys',
 }
 
-export type EngagementType = 'followers' | 'following';
-
 export type ProfileImageType = 'avatar' | 'cover-image';
+
+export type AkashaFollowers = {
+  id: AkashaFollow['id'];
+  isFollowing: AkashaFollow['isFollowing'];
+  did?: { [key in keyof Pick<CeramicAccount, 'akashaProfile'>]: AkashaProfile };
+}[];
+
+export type AkashaFollowing = {
+  id: AkashaFollow['id'];
+  isFollowing: AkashaFollow['isFollowing'];
+  profile?: AkashaProfile;
+  did?: { id: string };
+}[];
+
+export type AkashaFollowDocument = {
+  id: AkashaFollow['id'];
+  isFollowing: AkashaFollow['isFollowing'];
+  profile?: AkashaProfile;
+  profileID: AkashaFollow['profileID'];
+};
+
+export type FollowList = Map<string, AkashaFollowDocument>;

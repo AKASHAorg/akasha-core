@@ -1,8 +1,8 @@
 import React from 'react';
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IArticleHeaderProps {
@@ -16,18 +16,18 @@ export interface IArticleHeaderProps {
 const ArticleHeader: React.FC<IArticleHeaderProps> = props => {
   const { titleLabel, subtitleLabel, writeArticleLabel, onIconClick, onClickWriteArticle } = props;
   return (
-    <BasicCardBox customStyle="p-4 gap-4">
-      <Box customStyle="flex-flex-row justify-between">
+    <Card customStyle="p-4 gap-4">
+      <Stack direction="row" justify="between">
         <Text variant="h2">{titleLabel}</Text>
         <button onClick={onIconClick}>
-          <Icon type="settingsAlt" />
+          <Icon type="Cog8ToothIcon" />
         </button>
-      </Box>
-      <Box customStyle="flex-flex-row justify-between items-center">
+      </Stack>
+      <Stack direction="row" justify="between" align="center">
         <Text variant="h6">{subtitleLabel}</Text>
         <Button size="lg" label={writeArticleLabel} onClick={onClickWriteArticle} />
-      </Box>
-    </BasicCardBox>
+      </Stack>
+    </Card>
   );
 };
 

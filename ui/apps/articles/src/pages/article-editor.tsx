@@ -2,17 +2,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
-import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import EditorToolbar from '@akashaorg/design-system-components/lib/components/EditorToolbar';
 
 import ArticleEditorCard from '../components/article-editor-card';
 
-const ArticleEditor: React.FC<RootComponentProps> = props => {
+const ArticleEditor: React.FC<unknown> = () => {
+  const { navigateToModal } = useRootComponentProps();
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
 
@@ -21,26 +22,18 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
   };
 
   const handleManageCollaborators = () => {
-    props.navigateToModal({ name: 'manage-collaborators' });
-  };
-
-  const handleSaveDraft = () => {
-    /** do something */
-  };
-
-  const handlePublish = () => {
-    /** do something */
+    navigateToModal({ name: 'manage-collaborators' });
   };
 
   return (
-    <BasicCardBox>
-      <Box customStyle="flex flex-row p-4 w-full">
+    <Card>
+      <Stack direction="row" fullWidth={true} customStyle="p-4">
         <button onClick={handleNavigateBack}>
           <Icon type="ChevronLeftIcon" />
         </button>
 
         <Text variant="h2">{t('Article Editor')}</Text>
-      </Box>
+      </Stack>
       <EditorToolbar
         onBoldClick={() => {
           return;
@@ -62,10 +55,10 @@ const ArticleEditor: React.FC<RootComponentProps> = props => {
         publishLabel={t('Publish')}
         canPublish={true}
         onManageCollaborators={handleManageCollaborators}
-        onSaveDraft={handleSaveDraft}
-        onPublish={handlePublish}
+        onSaveDraft={() => null}
+        onPublish={() => null}
       />
-    </BasicCardBox>
+    </Card>
   );
 };
 
