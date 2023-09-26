@@ -4,9 +4,9 @@ import { Interest } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import TrendingWidgetButton from '@akashaorg/design-system-components/lib/components/TrendingWidgetButton';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 
 export type LatestTopicsProps = {
@@ -44,8 +44,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     unsubscribeLabel,
     subscribedTags,
   } = props;
-
-  const baseItemStyles = 'flex justify-between items-center space-y-2';
 
   return (
     <Card padding={16}>
@@ -89,14 +87,15 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                     onClick={() => onClickTopic(tag.value)}
                   />
 
-                  <DuplexButton
+                  <TrendingWidgetButton
                     inactiveLabel={subscribeLabel}
                     activeLabel={subscribedLabel}
                     activeHoverLabel={unsubscribeLabel}
-                    onClickInactive={() => handleSubscribeTopic(tag.value)}
-                    onClickActive={() => handleUnsubscribeTopic(tag.value)}
                     active={subscribedTags?.includes(tag.value)}
-                    allowMinimization={false}
+                    activeIcon="CheckIcon"
+                    activeHoverIcon="XMarkIcon"
+                    onClickActive={() => handleUnsubscribeTopic(tag.value)}
+                    onClickInactive={() => handleSubscribeTopic(tag.value)}
                     loading={!!isProcessingTags?.find(processingTag => processingTag === tag.value)}
                   />
                 </Stack>
