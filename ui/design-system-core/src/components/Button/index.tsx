@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { apply, tw } from '@twind/core';
 
-import { ButtonIcon } from './ButtonIcon';
+import { ButtonIcon } from './button-icon';
 import { IconOnlyButton } from './IconOnlyButton';
 
 import Stack from '../Stack';
@@ -142,19 +142,19 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
   );
 });
 
-const BUTTON_SIZE_MAP: Record<Exclude<ButtonSize, 'xs'>, string> = {
+export const BUTTON_SIZE_MAP: Record<Exclude<ButtonSize, 'xs'>, string> = {
   sm: 'h-8 rounded-3xl',
   md: 'h-12 rounded-3xl',
   lg: 'h-14 rounded-[1.875rem]',
 };
 
-const BUTTON_SIZE_PADDING_MAP: Record<Exclude<ButtonSize, 'xs'>, string> = {
+export const BUTTON_SIZE_PADDING_MAP: Record<Exclude<ButtonSize, 'xs'>, string> = {
   sm: 'px-4',
   md: 'px-6',
   lg: 'px-6',
 };
 
-const BUTTON_SIZE_TEXT_MAP: Record<Exclude<ButtonSize, 'xs'>, TextProps['variant']> = {
+export const BUTTON_SIZE_TEXT_MAP: Record<Exclude<ButtonSize, 'xs'>, TextProps['variant']> = {
   sm: 'button-sm',
   md: 'button-md',
   lg: 'button-lg',

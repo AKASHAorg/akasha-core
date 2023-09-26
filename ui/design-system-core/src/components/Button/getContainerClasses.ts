@@ -102,5 +102,5 @@ function getSecondaryClasses({ loading, disabled, active, hover, hoverColor }: I
       : '';
   return `${
     disabled ? 'opacity-50 cursor-not-allowed' : ''
-  }border ${backgroundStyle} ${hoverStyle} ${activeStyle} ${borderStyle}`;
+  } border ${backgroundStyle} ${hoverStyle} ${activeStyle} ${borderStyle}`;
 }

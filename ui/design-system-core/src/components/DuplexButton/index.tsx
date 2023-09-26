@@ -1,5 +1,4 @@
 import React, { useEffect, useState, EventHandler, SyntheticEvent } from 'react';
-import { tw } from '@twind/core';
 
 import { IconType } from '@akashaorg/typings/lib/ui';
 
@@ -79,10 +78,12 @@ const DuplexButton = (props: DuplexButtonProps) => {
         onClick={active ? onClickActive : onClickInactive}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className={tw('rounded-sm border-1 border-secondaryLight p-1')}
         plain
       >
-        <Icon type={getIcon()} customStyle="text-secondaryLight h-5 w-5" />
+        <Icon
+          type={getIcon()}
+          customStyle="text-secondaryLight h-5 w-5 rounded-sm border-1 border-secondaryLight p-1"
+        />
       </Button>
     );
   }

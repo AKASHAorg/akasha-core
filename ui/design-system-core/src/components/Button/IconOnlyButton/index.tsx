@@ -1,7 +1,7 @@
 import React, { forwardRef, HTMLAttributes } from 'react';
 import { apply, tw } from '@twind/core';
 
-import { ButtonIcon } from '../ButtonIcon';
+import { ButtonIcon } from '../button-icon';
 import { ButtonProps, ButtonSize } from '../types';
 import Stack from '../../Stack';
 
