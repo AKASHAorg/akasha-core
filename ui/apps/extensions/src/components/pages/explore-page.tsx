@@ -106,7 +106,8 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                 )}
                 titleVariant="h4"
                 bodyVariant="body1"
-                assetName="akasha-verse"
+                publicImgPath="/images/"
+                assetName="akasha-verse.webp"
               />
             )}
             {!isUserLoggedIn && (

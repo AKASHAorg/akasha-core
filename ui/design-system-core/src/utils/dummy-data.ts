@@ -22,7 +22,7 @@ const createUser = n => {
     avatar: userAvatar(),
     createdAt: '2021-03-01T00:00:00.000Z',
     followers: {} as AkashaFollowConnection,
-    followersCount: 0
+    followersCount: 0,
   };
 };
 const userData: AkashaProfile[] = Array.from({ length: 4 }, (v, k) => createUser(k));
@@ -33,7 +33,7 @@ const sidebarItems = [
     submenu: {},
   },
   {
-    title: 'AKASHAVerse',
+    title: 'Extensions',
   },
   {
     title: 'Moderation',
@@ -67,7 +67,7 @@ const profileData: AkashaProfile = {
   followers: {} as AkashaFollowConnection,
   createdAt: '2023-01-01T00:00:00.000Z',
   id: '31231',
-  followersCount: 12
+  followersCount: 12,
 };
 
 const randomMentions = n => {

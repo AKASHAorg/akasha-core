@@ -1,8 +1,8 @@
-## Description
+# App Loader
 
-App loader is the central module for micro-frontends (apps)
+> App loader is the central module for micro-frontends (apps)
 Built as a layer over the single-spa library, it provides the required functionality
-to install/uninstall, load/unload apps, widgets and plugins.
+to install/uninstall, load/unload apps and widgets.
 
 
 ## Usage
@@ -36,7 +36,7 @@ The following steps are a high level view of the execution flow after the start(
 
 ## Development
  - clone the repository
- - execute `yarn run pack:app-loader` from the root of the repository to build the package
+ - execute `yarn pack:app-loader` from the root of the repository to build the package
 
 ## `License`
 

@@ -1,6 +1,6 @@
 # My Apps widget
 
-> Shows world apps and installed apps in the AKASHAVerse.
+> Shows world apps and installed apps in the Extensions app.
 
 ## Usage
 

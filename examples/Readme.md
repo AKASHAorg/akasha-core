@@ -1,11 +1,12 @@
-## Examples
+# Examples
 
 - [Simple feed app](./ui/akasha.world/)
 
-## The apps from playground require a build from the sdk and plugins/widgets
+> The apps from playground require a build from the sdk and ui
+
+From the root of the project:
 
 ```shell script
-// from the root of the project
-$ npm run build:sdk
-$ npm run pack:plugins
+$ yarn build:all
+$ yarn start:feed-app
 ```

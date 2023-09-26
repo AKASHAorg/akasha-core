@@ -4,5 +4,5 @@ export const externalLinks = {
     values: 'https://forum.akasha.org/c/moderating/ethereum-world-values-of-moderation/21',
   },
   discord: 'https://discord.com/invite/UAQkfRMp',
-  email: 'mailto:moderators@ethereum.world',
+  email: 'mailto:moderators@akasha.world',
 };

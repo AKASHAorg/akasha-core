@@ -183,7 +183,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
     return (
-      <ErrorLoader type="script-error" title="Error in AKASHAVerse widget" details={err.message} />
+      <ErrorLoader type="script-error" title="Error in Extensions widget" details={err.message} />
     );
   },
 });

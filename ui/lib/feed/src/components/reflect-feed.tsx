@@ -11,7 +11,6 @@ import {
 import { i18n } from 'i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import EntryList, {
   EntryListProps,
   ScrollerState,
@@ -19,6 +18,7 @@ import EntryList, {
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import ReflectCard from './cards/reflect-card';
 
 export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
   beamId?: string;
@@ -106,11 +106,16 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
               ref={measureElementRef}
               style={{ paddingBottom: itemSpacing }}
             >
-              <EntryCard
-                showMore={true}
+              <ReflectCard
                 entryData={entryData}
                 locale={locale}
-                onContentClick={onNavigate}
+                //@TODO: refactor prop
+                onContentClick={() =>
+                  onNavigate(
+                    { authorId: entryData.author.id, id: entryData.id },
+                    EntityTypes.REFLECT,
+                  )
+                }
               />
             </div>
           );
@@ -119,4 +124,5 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     </EntryList>
   );
 };
+
 export default ReflectFeed;
