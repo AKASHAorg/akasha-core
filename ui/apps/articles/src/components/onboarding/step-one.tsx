@@ -6,10 +6,11 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IStepOneProps {
+export type StepOneProps = {
   assetName?: string;
-  titleLabel: string;
+  assetExtension?: string;
   publicImgPath?: string;
+  titleLabel: string;
   textLine1Label: string;
   textLine2Label: string;
   textLine3Label: string;
@@ -18,13 +19,14 @@ export interface IStepOneProps {
   onClickIcon: () => void;
   onClickSkip: () => void;
   onClickNext: () => void;
-}
+};
 
-const StepOne: React.FC<IStepOneProps> = props => {
+const StepOne: React.FC<StepOneProps> = props => {
   const {
     assetName = 'blocks',
-    titleLabel,
+    assetExtension = 'webp',
     publicImgPath = '/images',
+    titleLabel,
     textLine1Label,
     textLine2Label,
     textLine3Label,
@@ -48,7 +50,10 @@ const StepOne: React.FC<IStepOneProps> = props => {
           <Text variant="h6">{textLine1Label}</Text>
           <Text variant="h6">{textLine2Label}</Text>
           <Stack customStyle="w-48">
-            <Image customStyle="object-contain" src={`${publicImgPath}/${assetName}.webp`} />
+            <Image
+              customStyle="object-contain"
+              src={`${publicImgPath}/${assetName}.${assetExtension}`}
+            />
           </Stack>
           <Text variant="h6">{textLine3Label}</Text>
         </Stack>

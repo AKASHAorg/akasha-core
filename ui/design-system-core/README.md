@@ -1,32 +1,6 @@
-# akasha-design-system
+# Design System Core
 
-## Available Scripts
-
-> Run test
-
-``` shell script
-$ yarn run test
-```
-
-> Start the storybook dev
-
-``` shell script
-$ yarn run storybook
-```
-
-> Package the storybook
-
-``` shell script
-$ yarn run build-storybook
-```
-
-> Package the library
-
-``` shell script
-yarn run build
-```
-
-<small><em>This library is based on create-react-app and storybook</em></small>
+> Base level components built with TailwindCSS using [Twind](https://twind.style)
 
 ## Usage
 TODO:

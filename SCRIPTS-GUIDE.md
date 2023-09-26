@@ -3,241 +3,279 @@
 Here is a definitive guide for all the scripts found in the [root package file](./package.json) of this project.
 
 ## `bootstrap`
-> Installs all other dependencies specified in the nested package.json files using [lerna](https://github.com/lerna/lerna)
+> Installs all other dependencies specified in the nested package.json files using [nx](https://nx.dev/). It executes yarn command together with [build:executors](#buildexecutors)
 
 ``` shell script
-$ npm run bootstrap
+$ yarn bootstrap
 ```
 
-## `bootstrap:hoist`
-> Executes [bootstrap](#bootstrap) script with hoist flag 
-
-> This allows different nested package.json files in this project requiring a specific dependency to have just one version of such dependency installed on the root of the project
+## `build:staging`
+> Similar to [build:all](#buildall), however it runs `yarn` command first to install packages
 
 ``` shell script
-$ npm run bootstrap:hoist
+$ yarn build:staging
 ```
 
 ## `build:all`
-> Executes the [bootstrap](#bootstrap) with no-ci flag, tsc (typescript compiler), [build:sdk](#build:sdk), [pack:ui-apps](#pack:ui-apps) and [extract:translations](#extract:translations) scripts in order
-
-> npm-ci is somewhat similar to npm install except that while npm install can be run without a package-lock file, npm ci requires that an up-to-date pacage-lock be present, for consistent builds in automated test environments and CI/D pipelines
-
- >**Read more:** [npm-ci documentation](https://docs.npmjs.com/cli/ci.html), [npm-ci vs npm-install](https://stackoverflow.com/questions/52499617/what-is-the-difference-between-npm-install-and-npm-ci)
+> Runs tsc for all packages, builds sdk, packs ui and ui libs, build feed app and extracts translation, in order.
 
 ``` shell script
-$ npm run build:all
+$ yarn build:all
 ```
 
 ## `build:sdk`
-> Executes [tsc:sdk](#tsc:sdk) and build scripts with stream flag within the scope of [sdk](./sdk-packages) sub-directory
+> runs tsc for sdk and builds sdk using Nx.
 
-> stream flag allows the logging of the i/o of the execution process on the cli
+> Pass `--skip-nx-cache` to skip cache
 
 ``` shell script
-$ npm run build:sdk
+$ yarn build:sdk
+```
+
+## `build:example`
+> Runs target `build:staging` using Nx, on example app
+
+``` shell script
+$ yarn build:example
+```
+
+## `build:executors`
+> Builds Nx [executors](./tools/executors/README.md), specified in the [nx workspace](./workspace.json).
+
+``` shell script
+$ yarn build:executors
 ```
 
 ## `clean`
-> Removes all **node modules** folders and clears the cache
+> Resets Nx workspaces, clears the cache and removes all **node modules** and built folders
 
 ``` shell script
-$ npm run clean
-```
-
-## `compile:sc`
-> Executes the sc:compile script to compile the smart contracts in [sdk-packages registry](./sdk-packages/registry) directory
-
-``` shell script
-$ npm run compile:sc
-```
-
-## `docs`
-> Executes all **docs** scripts within scope of [sdk](./sdk-packages) and [sdk-common](./sdk-packages/common) sub-directories
-
-``` shell script
-$ npm run docs
-```
-
-## `deploy:sc`
-> Executes the sc:deploy script to deploy the [compiled](#compile:sc) smart contracts on the test network -  Rinkeby
-
-``` shell script
-$ npm run deploy:sc
-```
-
-## `extract:translations`
-> Executes the extract:translations on all package.json files using the stream flag
-
-``` shell script
-$ npm run extract:translations
+$ yarn clean
 ```
 
 ## `install:clean`
-> Removes all **node modules** folders, clears the cache and re-installs the node modules by running [clean](#clean) and [build:all](#build:all) in order
+> Runs [clean](#clean), [bootstrap](#bootstrap) and [build:all](#build:all) in order
 
 ``` shell script
-$ npm run install:clean
+$ yarn install:clean
+```
+
+## `compile:sc`
+> Compiles smart contracts by running `sc:compile` script on sdk using Nx. You can optionally define how Nx emits outputs tasks logs using `--output-style` flag
+
+
+``` shell script
+$ yarn compile:sc
+```
+
+## `deploy:sc`
+> Deploys [compiled](#compilesc) smart contracts to Goerli Test Network by running `sc:deploy:goerli` script on sdk using Nx
+
+``` shell script
+$ yarn deploy:sc
+```
+
+## `extract:translations`
+> Extracts translations in all packages using Nx
+
+``` shell script
+$ yarn extract:translations
 ```
 
 ## `linter:check`
-> Executes **tslint** script with project flag set to [root tsconfig file](./tsconfig.json)
+> Executes **eslint** script on `ts` and `tsx` files using the `--fix-dry-run` flag, which automatically fixes the issues without saving the changes to the file system. 
 
 ``` shell script
-$ npm run linter:check
+$ yarn linter:check
 ```
 
 ## `linter:fix`
-> Executes [linter:check](#linter:check) script with fix flag
+> Executes **eslint** script on `ts` and `tsx` files using the `--fix` flag, which automatically fixes the issues.
+
+> More about Eslint CLI flags [here](https://eslint.org/docs/latest/use/command-line-interface)
 
 ``` shell script
-$ npm run linter:fix
+$ yarn linter:fix
+```
+
+## `pack:design-system-core`
+> Builds [design-system-core](./ui/design-system-core/package.json) using Nx
+
+``` shell script
+$ yarn pack:design-system-core
+```
+
+## `pack:design-system-components`
+> Builds [design-system-components](./ui/design-system-components/package.json) using Nx
+
+``` shell script
+$ yarn pack:design-system-components
+```
+
+## `pack:ui-widgets`
+> Runs target `build` using Nx, on the specified [ui widgets](./ui/widgets/README.md)
+
+``` shell script
+$ yarn pack:ui-widgets
+```
+
+## `pack:ui-libs`
+> Runs target `build` using Nx, on [feed app](./ui/lib/feed/README.md)
+
+``` shell script
+$ yarn pack:ui-libs
 ```
 
 ## `pack:ui-apps`
-> Executes the pack script in all nested package.json files using the stream flag and within the scope of [ui](./ui), [design](./ui/design) and [apps](./apps) sub-directories
+> Runs target `build` using Nx, on the specified [apps](./ui/apps/README.md)
 
 ``` shell script
-$ npm run pack:ui-apps
+$ yarn pack:ui-apps
+```
+
+
+## `pack:app-loader`
+> Runs target `build` using Nx, on [app loader](./ui/app-loader/README.md)
+
+``` shell script
+$ yarn pack:app-loader
+```
+
+## `pack:ui`
+> Runs [tsc:ui](#tscui) and respective pack scripts for design system core, design system components, widgets, apps and app loader, in order
+
+``` shell script
+$ yarn pack:ui
 ```
 
 ## `pack:only`
-> Executes the pack script in package.json file(s) within the specified scope using the stream flags. You need to specify [the name on the package's package.json file - click for sample](./ui/plugins/profile/package.json)  using AWF_PACKAGE variable passed to the scope flag
+> Executes the pack script in package.json file(s) within the specified scope. You need to specify [the name on the package's package.json file - click for sample](./ui/apps/profile/package.json)  using AWF_PACKAGE variable passed to the scope flag
 
 ``` shell script
-$ AWF_PACKAGE=@akashaorg/ui-plugin-profile npm run pack:only
+$ AWF_PACKAGE=@akashaorg/app-profile yarn pack:only
 ```
 
 ## `pack-watch`
-> Executes the pack:watch script in package.json file(s) within the specified scope using the stream flags. You need to specify [the name on the package's package.json file - click for sample](./ui/plugins/profile/package.json)  using AWF_PACKAGE variable passed to the scope flag
-
-> This is similar to the command above except that this time the watch flag is used to enable hot re-building of file changes using nodemon
+> Executes the pack:watch script in package.json file(s) within the specified scope. You need to specify [the name on the package's package.json file - click for sample](./ui/apps/profile/package.json)  using AWF_PACKAGE variable passed to the scope flag
 
 ``` shell script
-$ AWF_PACKAGE=@akashaorg/ui-plugin-profile npm run pack:watch
+$ AWF_PACKAGE=@akashaorg/app-profile yarn pack:watch
 ```
 
 > You can as well use * to watch all packages, in a single command
 
 ``` shell script
-$ AWF_PACKAGE=@akashaorg/* npm run pack:watch
-```
-
-## `script:dev-db`
-> Executes the start script within the scope of [script server db](./scripts/server-db/package.json) using the stream flag
-
-``` shell script
-$ npm run script:dev-db
-```
-
-## `start:feed-app`
-> Starts the feed app and makes it available only on localhost. To expose the app on the local machine's IP, use [start:expose-feed-app](#start:expose-feed-app) instead
-
-``` shell script
-$ npm run start:feed-app
-```
-
-## `start:expose-feed-app`
-> Starts and exposes the feed app to localhost as well as the local machine's IP,
-
-``` shell script
-$ npm run start:expose-feed-app
-```
-
-## `start:translations-server`
-> Executes the start script in the [script translations server](./scripts/translations-server)
-
-``` shell script
-$ npm run start:translations-server
-```
-
-## `start:design-system:storybook`
-> Starts the storybook and makes it available on the localhost as well as the local machine's IP
-
-``` shell script
-$ npm run start:design-system:storybook
-```
-
-## `start:design-system-core:storybook`
-> Starts the storybook for Design System Core components and makes it available on the localhost as well as the local machine's IP
-
-``` shell script
-$ npm run start:design-system-core:storybook
-```
-
-## `start:design-system-components:storybook`
-> Starts the storybook for Design System Components (bigger components that are not atomic and cannot be included in DS Core) and makes it available on the localhost as well as the local machine's IP
-
-``` shell script
-$ npm run start:design-system-components:storybook
-```
-
-## `start:only`
-> Executes the start script within the specified scope and using the stream flags. You need to specify [the name on the package's package.json file - click for sample](./ui/plugins/profile/package.json)  using AWF_PACKAGE variable passed to the scope flag
-
-``` shell script
-$ AWF_PACKAGE=@akashaorg/ui-plugin-profile npm run start:only
-```
-
-## `start:api`
-> Spins up the api using docker
-
-``` shell script
-$ npm run start:api
-```
-
-## `stop:api`
-> Stops the api running on docker
-
-``` shell script
-$ npm run stop:api
-```
-
-## `test:sdk`
-> Executes all test scripts within the scope of [sdk](./sdk-packages) sub-directory
-
-``` shell script
-$ npm run test:sdk
-```
-
-## `test:ui`
-> Executes all test scripts within the scope of [ui](./ui), [design](./ui/design) and [apps](./apps) sub-directories
-
-``` shell script
-$ npm run test:ui
-```
-
-## `test:ui:watch`
-> Executes [test:ui](#test:ui) script using jest watch flag 
-
-``` shell script
-$ npm run test:ui:watch
+$ AWF_PACKAGE=@akashaorg/* yarn pack:watch
 ```
 
 ## `tsc:sdk`
-> Executes tsc and compiles the files within the scope of [sdk](./sdk-packages) sub-directory
+> Runs tsc command on [sdk](./sdk/package.json)
 
 ``` shell script
-$ npm run tsc:sdk
+$ yarn tsc:sdk
 ```
 
 ## `tsc:ui`
-> Executes tsc and compiles the files within the scope of [ui](./ui), [design](./ui/design) and [apps](./apps) sub-directories
+> Runs tsc command on [ui hooks](./ui/hooks/package.json)
 
 ``` shell script
-$ npm run tsc:ui
+$ yarn tsc:ui
 ```
 
-## `tsc:scripts`
-> Executes tsc and compiles the files within the scope of [scripts](./scripts) sub-directory
+## `tsc:all`
+> Runs tsc on all packages while skipping cache
 
 ``` shell script
-$ npm run tsc:scripts
+$ yarn tsc:all
 ```
 
-## `watch-plugins`
-> Executes the tsc script in all package.json files within the scope of [ui-widget](./ui/widgets) and [ui-plugin](./ui/plugins) using the parallel and -w flags
+## `start:feed-app`
+> Starts the [feed app](./ui/lib/feed/package.json) and makes it available on localhost. 
 
 ``` shell script
-$ npm run watch-plugins
+$ yarn start:feed-app
+```
+
+## `build:feed-app`
+> Builds the [feed app](./ui/lib/feed/package.json)
+
+``` shell script
+$ yarn build:feed-app
+```
+
+## `start:storybook`
+> Starts the storybook and makes it available on the localhost as well as the local machine's IP
+
+``` shell script
+$ yarn start:storybook
+```
+
+## `build:storybook`
+> Builds the storybook and makes it available on the localhost as well as the local machine's IP
+
+``` shell script
+$ yarn build:storybook
+```
+
+## `test:apps`
+> Executes all test scripts for apps specified in the `--projects` flag 
+
+``` shell script
+$ yarn test:apps
+```
+
+## `test:design-system-core`
+> Executes test script for design system core 
+
+``` shell script
+$ yarn test:design-system-core
+```
+
+## `test:design-system-components`
+> Executes test script for design system components
+
+``` shell script
+$ yarn test:design-system-components
+```
+
+## `test:hooks`
+> Executes test script for hooks 
+
+``` shell script
+$ yarn test:hooks
+```
+
+## `test:widgets`
+> Executes all test scripts for widgets specified in the `--projects` flag 
+
+``` shell script
+$ yarn test:widgets
+```
+
+## `test:app-loader`
+> Executes test script for app loader
+
+``` shell script
+$ yarn test:app-loader
+```
+
+## `test:all`
+> Executes test scripts for design system core, design system components and hooks, in order
+
+``` shell script
+$ yarn test:all
+```
+
+## `push:integrations`
+> Executes node command on [integrations bucket](./build/integrations_bucket_store.js)
+
+``` shell script
+$ yarn push:integrations
+```
+
+## `sdk:graphql:generate`
+> Runs target `graphql:generate` using Nx, on sdk 
+
+``` shell script
+$ yarn sdk:graphql:generate
 ```
