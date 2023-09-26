@@ -7,7 +7,7 @@
 
 | App                                              | Staging                                                                                                                                                                                          | Production                                                       |
 |--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
-| [AKASHA World](https://akasha.ethereum.world/) | [https://next.akasha-world-framework.pages.dev/](https://next.akasha-world-framework.pages.dev/)                                                                                                 | [https://akasha.ethereum.world/](https://akasha.ethereum.world/) |
+| [Akasha World](https://beta.akasha.world/) | [https://next.akasha-world-framework.pages.dev/](https://next.akasha-world-framework.pages.dev/)                                                                                                 | [https://akasha.world/](https://beta.akasha.world/) |
 | [Storybook](https://storybook-awf.netlify.app/)  | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)                               | NA                                                               |
 
 
