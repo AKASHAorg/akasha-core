@@ -50,7 +50,6 @@ const TrendingWidgetButton: React.FC<TrendingWidgetButtonProps> = forwardRef((pr
     size = 'sm',
     breakPointSize,
     disabled = false,
-    variant = 'secondary',
     customStyle = '',
   } = props;
 
@@ -88,7 +87,7 @@ const TrendingWidgetButton: React.FC<TrendingWidgetButtonProps> = forwardRef((pr
         justify="center"
         spacing="gap-x-1"
         customStyle={`group ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${
-          variant !== 'text' ? BUTTON_SIZE_PADDING_MAP[size] : ''
+          active ? 'px-2' : BUTTON_SIZE_PADDING_MAP[size]
         }`}
       >
         {loading ? (
@@ -97,8 +96,9 @@ const TrendingWidgetButton: React.FC<TrendingWidgetButtonProps> = forwardRef((pr
             type="ArrowPathIcon"
             breakPointSize={breakPointSize}
             accentColor={true}
-            customStyle="animate-spin"
+            hoverColor={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             disabled={disabled}
+            customStyle="animate-spin"
           />
         ) : (
           <>

@@ -72,7 +72,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                   direction="row"
                   align="center"
                   justify="between"
-                  spacing="gap-y-2"
+                  spacing="gap-x-4"
                 >
                   <ProfileAvatarButton
                     profileId={profile.did.id}
