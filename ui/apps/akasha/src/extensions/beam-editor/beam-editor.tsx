@@ -27,8 +27,10 @@ export const BeamEditor: React.FC = () => {
       {blocksInUse.map((block, idx) => (
         <div key={`${block.propertyType}-${idx}`}>
           <ContentBlockExtension
-            appName={'@akashaorg/app-akasha-integration'}
-            propertyType="slate-block"
+            editMode={{
+              appName: block.appName,
+              propertyType: block.propertyType,
+            }}
             mode={ContentBlockModes.EDIT}
             blockRef={block.blockRef}
           />

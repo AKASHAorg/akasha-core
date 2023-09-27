@@ -1,5 +1,6 @@
 import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
+import { GetContentBlockByIdQuery } from '../sdk/graphql-operation-types-new';
 
 export const enum ContentBlockModes {
   EDIT = 'edit-mode',
@@ -14,9 +15,10 @@ export type ContentBlockExtensionInterface = {
   propertyType: string;
   icon?: string;
   displayName: string;
-  loadingFn: (
-    blockInfo: BlockInfo,
-  ) => () => Promise<singleSpa.ParcelConfigObject<ContentBlockRootProps>>;
+  loadingFn: (options: {
+    blockInfo: BlockInfo;
+    blockData: GetContentBlockByIdQuery['node'];
+  }) => () => Promise<singleSpa.ParcelConfigObject<ContentBlockRootProps>>;
 };
 
 export type ContentBlock = ContentBlockExtensionInterface & {
@@ -44,3 +46,27 @@ export type BlockInstanceMethods = {
     blockInfo: BlockInfo;
   }>;
 };
+
+export interface ContentBlockStorePluginInterface {
+  getInfos(): Omit<
+    ContentBlockExtensionInterface & {
+      appName: string;
+    },
+    'loadingFn'
+  >;
+
+  getMatchingBlocks: (
+    blockInfo:
+      | {
+          appName: string;
+          propertyType: string;
+        }
+      | GetContentBlockByIdQuery['node'],
+  ) => {
+    blockInfo: ContentBlockExtensionInterface & {
+      appName: string;
+    };
+    blockData?: unknown;
+    content?: unknown;
+  }[];
+}

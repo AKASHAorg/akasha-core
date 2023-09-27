@@ -43,7 +43,7 @@ export const getPlugin = (
   return {
     contentBlockStore: {
       getInfos: contentBlockStore.getContentBlockInfos,
-      getMatchingBlock: contentBlockStore.getMatchingBlock,
+      getMatchingBlocks: contentBlockStore.getMatchingBlocks,
     },
   };
 };

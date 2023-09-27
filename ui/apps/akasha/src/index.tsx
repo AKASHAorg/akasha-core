@@ -6,8 +6,6 @@ import {
   LogoTypeSource,
   MenuItemAreaType,
   MenuItemType,
-  ContentBlockModes,
-  BlockInfo,
 } from '@akashaorg/typings/lib/ui';
 
 /**
@@ -76,14 +74,14 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       propertyType: 'slate-block',
       icon: 'Bars3BottomLeftIcon',
       displayName: 'Slate text block',
-      // eslint-disable-next-line unicorn/consistent-function-scoping
-      loadingFn: () => () => import('./extensions/slate-block'),
+      loadingFn: data => {
+        return () => import('./extensions/slate-block');
+      },
     },
   ],
   extends: (matcher, loader) => {
     matcher({
       'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
-      // 'slate-block_*': loader(() => import('./extensions/slate-block')),
       'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
       'beam-editor_*': loader(() => import('./extensions/beam-editor')),
     });

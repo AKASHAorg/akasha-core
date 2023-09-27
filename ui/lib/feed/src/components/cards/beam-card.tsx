@@ -1,11 +1,11 @@
 import React from 'react';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { EntityTypes, RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { ContentBlockModes, EntityTypes, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
@@ -48,7 +48,9 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       onAvatarClick={onAvatarClick}
       onContentClick={onContentClick}
     >
-      {({ blockID }) => <Extension name={`${blockID}_content_block`} uiEvents={uiEvents} />}
+      {({ blockID }) => (
+        <ContentBlockExtension readMode={{ blockID }} mode={ContentBlockModes.READONLY} />
+      )}
     </EntryCard>
   );
 };

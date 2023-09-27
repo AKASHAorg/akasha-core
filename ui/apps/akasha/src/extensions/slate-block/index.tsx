@@ -1,19 +1,23 @@
 import * as React from 'react';
-import { SlateEditorBlock } from './slate-editor-block';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
   BlockInstanceMethods,
+  ContentBlockModes,
   ContentBlockRootProps,
   RootComponentProps,
 } from '@akashaorg/typings/lib/ui';
+import { SlateEditorBlock } from './slate-editor-block';
+import { SlateReadonlyBlock } from './slate-readonly-block';
 
 const SlateBlockExtension = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
-  return <SlateEditorBlock {...props} />;
+  console.log(props, '<<< slate block props');
+  if (props.blockInfo.mode === ContentBlockModes.EDIT) return <SlateEditorBlock {...props} />;
+  if (props.blockInfo.mode === ContentBlockModes.READONLY) return <SlateReadonlyBlock {...props} />;
 };
 
 const reactLifecycles = singleSpaReact({

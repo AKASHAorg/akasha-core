@@ -7,6 +7,7 @@ import {
   ContentBlockModes,
 } from '@akashaorg/typings/lib/ui';
 import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type BlockExtensionInterface = {
   createBlock?: () => Promise<{
@@ -15,40 +16,33 @@ export type BlockExtensionInterface = {
   }>;
 };
 
-export type ContentBlockEditProps = {
-  mode: ContentBlockModes.EDIT;
-  propertyType: string;
-  appName: string;
+export type ContentBlockExtensionProps = {
+  mode: ContentBlockModes;
+  editMode?: {
+    propertyType: string;
+    appName: string;
+  };
+  readMode?: {
+    blockID: string;
+  };
   blockRef?: React.RefObject<BlockExtensionInterface>;
 };
-export type ContentBlockReadOnlyProps = {
-  mode: ContentBlockModes.READONLY;
-  blockId: string;
-  blockRef?: React.RefObject<BlockExtensionInterface>;
-};
 
-// export type ContentBlockInteractiveProps = {
-//   mode: ContentBlockModes.INTERACTIVE;
-//   blockRef?: React.RefObject<BlockExtensionInterface>;
-// };
-
-export type ContentBlockExtensionProps = ContentBlockEditProps | ContentBlockReadOnlyProps;
-
-export const ContentBlockExtension = (
-  props: Extract<ContentBlockExtensionProps, { mode: ContentBlockModes }>,
-) => {
+export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
+  const { blockRef, mode, editMode, readMode } = props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
-  const contentBlockStoreRef = React.useRef(getExtensionsPlugin().contentBlockStore);
-  const blockId = React.useMemo(() => {
-    if (hasOwn(props, 'blockId')) {
-      return blockId;
+  const contentBlockStoreRef = React.useRef(getExtensionsPlugin()?.contentBlockStore);
+
+  React.useLayoutEffect(() => {
+    if (!contentBlockStoreRef.current && !!getExtensionsPlugin()) {
+      contentBlockStoreRef.current = getExtensionsPlugin().contentBlockStore;
     }
-  }, [props]);
+  }, [getExtensionsPlugin]);
 
   const blockInfoQuery = useGetContentBlockByIdQuery(
-    { id: blockId },
+    { id: readMode?.blockID },
     {
-      enabled: props.mode === ContentBlockModes.EDIT && blockId,
+      enabled: !!readMode?.blockID,
       select: data => {
         if (hasOwn(data.node, 'id')) {
           return data.node;
@@ -57,31 +51,55 @@ export const ContentBlockExtension = (
     },
   );
 
-  const matchingBlock: ContentBlockExtensionInterface & { appName: string } = React.useMemo(() => {
-    switch (props.mode) {
+  const matchingBlocks: {
+    blockInfo: ContentBlockExtensionInterface & {
+      appName: string;
+    };
+    blockData?: GetContentBlockByIdQuery['node'];
+    content?: unknown;
+  }[] = React.useMemo(() => {
+    if (!contentBlockStoreRef.current) return [];
+    switch (mode) {
       case ContentBlockModes.EDIT:
-        return contentBlockStoreRef.current.getMatchingBlock(props.appName, props.propertyType);
+        return contentBlockStoreRef.current.getMatchingBlocks({
+          name: editMode.appName,
+          propertyType: editMode.propertyType,
+        });
       case ContentBlockModes.READONLY:
-        console.log(blockInfoQuery.data, '<< block info');
-        return contentBlockStoreRef.current.getMatchingBlock();
+        if (!blockInfoQuery.data) return [];
+        return contentBlockStoreRef.current.getMatchingBlocks(blockInfoQuery.data);
       default:
-        break;
+        return [];
     }
-    return [];
-  }, [props, blockInfoQuery]);
+  }, [props, blockInfoQuery.data]);
+
+  console.log('matching blocks for', mode, matchingBlocks, readMode?.blockID);
 
   return (
     <div>
-      {matchingBlock && (
-        <div key={`${props.mode}_${matchingBlock.propertyType}`}>
-          <Parcel
-            config={matchingBlock.loadingFn({ mode: props.mode })}
-            {...getContext()}
-            blockInfo={{ ...matchingBlock, mode: props.mode }}
-            blockRef={props.blockRef}
-          />
-        </div>
-      )}
+      {matchingBlocks &&
+        matchingBlocks.map((matchingBlock, index) => (
+          <div
+            id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
+            key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
+          >
+            <Parcel
+              config={matchingBlock.blockInfo.loadingFn({
+                blockInfo: { ...matchingBlock.blockInfo, mode },
+                blockData: matchingBlock.blockData,
+              })}
+              wrapClassName={'relative'}
+              {...getContext()}
+              blockInfo={{
+                ...matchingBlock.blockInfo,
+                mode,
+              }}
+              blockData={matchingBlock.blockData}
+              blockRef={blockRef}
+              content={matchingBlock.content}
+            />
+          </div>
+        ))}
     </div>
   );
 };
