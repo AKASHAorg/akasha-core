@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { EventTypes, MenuItemAreaType } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useSaveSettings, useGetSettings } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -22,7 +22,6 @@ export type CustomizeNotificationPageProps = {
   initial?: boolean;
   isLoggedIn: boolean;
 };
-
 const NOTIF_REF = 'notification-preference';
 
 const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
@@ -30,11 +29,11 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   isLoggedIn,
 }) => {
   const { t } = useTranslation('app-notifications');
-  const { uiEvents, getRoutingPlugin, plugins } = useRootComponentProps();
+  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
 
   const [routeData, setRouteData] = useState(null);
 
-  const routing = plugins['@akashaorg/app-routing']?.routing;
+  const routing = getRoutingPlugin();
 
   const [appNames, setAppNames] = useState<string[]>([]);
 
@@ -75,24 +74,35 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   const [selected, setSelected] = useState(true);
   const [allStates, setAllStates] = useState<{ app: string; selected: boolean }[]>([]);
+  const [formatedSettings, setFormatedSettings] = useState(null);
+
+  const appname = '@akashaorg/app-notifications';
+
+  const fetchSettingsQuery = useGetSettings(appname);
+  const existingSettings = fetchSettingsQuery.data;
+
+  const saveSettingsQuery = useSaveSettings(appname, formatedSettings);
+  const saveSetttingsRes = saveSettingsQuery.data;
 
   React.useEffect(() => {
     if (appNames) {
-      if (localStorage && localStorage.getItem(NOTIF_REF)) {
-        setAllStates(JSON.parse(localStorage.getItem(NOTIF_REF)));
-      } else {
-        setAllStates(appNames.map(app => ({ app: app, selected: true })));
-      }
-    }
-  }, [appNames]);
+      setAllStates(appNames.map(app => ({ app: app, selected: true })));
 
-  React.useEffect(() => {
-    if (allStates) {
-      if (allStates.find(state => state.selected === false)) {
-        setSelected(false);
+      if (existingSettings && existingSettings.data?.options) {
+        const convertToObject = existingSettings.data?.options.map(([k, v]) => ({
+          app: k,
+          selected: v,
+        }));
+
+        const savedStates = convertToObject.filter(e => {
+          return allStates.some(state => state.app === e.app);
+        });
+
+        setAllStates(Object.assign(allStates, savedStates));
       }
     }
-  }, [allStates]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appNames, existingSettings]);
 
   const [snoozed, setSnoozed] = React.useState(false);
 
@@ -150,9 +160,10 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   const skipHandler = () => {
     // save to localstorage so we don't come back again after skipping
-    if (window.localStorage) {
-      localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
-    }
+    // if (window.localStorage) {
+    //   localStorage.setItem('notification-preference', JSON.stringify([])); // @TODO: where to save settings?
+    // }
+    setFormatedSettings(allStates?.map(state => Object.values(state)));
 
     // navigate to final step
     goToNextStep();
@@ -161,49 +172,50 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   const confirmHandler = () => {
     // @TODO: save preferences somewhere, now we just save a key in localstorage to mark as set
     try {
-      if (window.localStorage) {
-        localStorage.setItem(NOTIF_REF, JSON.stringify(allStates)); // @TODO: where to save settings?
+      //   if (window.localStorage) {
+      localStorage.setItem(NOTIF_REF, JSON.stringify(true)); // @TODO: where to save settings?
+      setFormatedSettings(allStates?.map(state => Object.values(state)));
+      _uiEvents.current.next({
+        event: EventTypes.ShowNotification,
+        data: {
+          name: 'success',
+          message: 'Notification settings updated successfully',
+        },
+      });
+
+      if (snoozed && !localStorage.getItem('notifications-snoozed')) {
+        localStorage.setItem('notifications-snoozed', JSON.stringify(true));
+
+        // emit snooze notification event so the topbar's notification icon can be updated
+        _uiEvents.current.next({
+          event: EventTypes.SnoozeNotifications,
+        });
         _uiEvents.current.next({
           event: EventTypes.ShowNotification,
           data: {
             name: 'success',
-            message: 'Notification settings updated successfully',
+            message: 'You have snoozed your notifications successfully',
           },
         });
-
-        if (snoozed && !localStorage.getItem('notifications-snoozed')) {
-          localStorage.setItem('notifications-snoozed', JSON.stringify(true));
-
-          // emit snooze notification event so the topbar's notification icon can be updated
-          _uiEvents.current.next({
-            event: EventTypes.SnoozeNotifications,
-          });
-          _uiEvents.current.next({
-            event: EventTypes.ShowNotification,
-            data: {
-              name: 'success',
-              message: 'You have snoozed your notifications successfully',
-            },
-          });
-        }
-
-        if (!snoozed && localStorage.getItem('notifications-snoozed')) {
-          localStorage.removeItem('notifications-snoozed');
-
-          // emit unsnooze notification event so the topbar's notification icon can be updated
-          _uiEvents.current.next({
-            event: EventTypes.UnsnoozeNotifications,
-          });
-
-          _uiEvents.current.next({
-            event: EventTypes.ShowNotification,
-            data: {
-              name: 'success',
-              message: 'You have unsnoozed your notifications successfully',
-            },
-          });
-        }
       }
+
+      if (!snoozed && localStorage.getItem('notifications-snoozed')) {
+        localStorage.removeItem('notifications-snoozed');
+
+        // emit unsnooze notification event so the topbar's notification icon can be updated
+        _uiEvents.current.next({
+          event: EventTypes.UnsnoozeNotifications,
+        });
+
+        _uiEvents.current.next({
+          event: EventTypes.ShowNotification,
+          data: {
+            name: 'success',
+            message: 'You have unsnoozed your notifications successfully',
+          },
+        });
+      }
+      //   }
 
       // disable the button again after saving preferences
       // setUpdateButtonDisabled(true);

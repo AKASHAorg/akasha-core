@@ -20,7 +20,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 
 const SnackBarNotification = (_: RootExtensionProps) => {
-  const { uiEvents, plugins } = useRootComponentProps();
+  const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [message, setMessage] = useState('');
   const [appTitle, setAppTitle] = useState(null);
   const [messageType, setMessageType] = useState('success');
@@ -46,7 +46,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
     }
   }, [message]);
 
-  const routing = plugins['@akashaorg/app-routing']?.routing;
+  const routing = getRoutingPlugin();
 
   useEffect(() => {
     let sub;
