@@ -22,8 +22,14 @@ import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hoo
 const DEFAULT_TEXT_BLOCK = 'slate-block';
 
 export const useBlocksPublishing = () => {
+  const [availableBlocks, setAvailableBlocks] = React.useState([]);
   const { getExtensionsPlugin } = useRootComponentProps();
-  const availableBlocks = getExtensionsPlugin().contentBlockStore.getInfos();
+  React.useLayoutEffect(() => {
+    if (getExtensionsPlugin()) {
+      setAvailableBlocks(getExtensionsPlugin().contentBlockStore.getInfos());
+    }
+  }, [getExtensionsPlugin]);
+
   const createBeam = useCreateBeamMutation();
 
   const [isPublishing, setIsPublishing] = React.useState(false);

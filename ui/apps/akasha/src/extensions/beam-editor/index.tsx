@@ -9,7 +9,6 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 
 const Wrapped = (_: RootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
-  console.log(_, '<< the props!');
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <BeamEditor />
