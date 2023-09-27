@@ -1,6 +1,6 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
@@ -20,9 +20,9 @@ const SlateBlockExtension = (
   if (props.blockInfo.mode === ContentBlockModes.READONLY) return <SlateReadonlyBlock {...props} />;
 };
 
-const reactLifecycles = singleSpaReact({
+export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders<ContentBlockRootProps>(SlateBlockExtension),
   errorBoundary: (err, errorInfo, props: RootComponentProps & ContentBlockRootProps) => {
     if (props.logger) {
@@ -32,9 +32,3 @@ const reactLifecycles = singleSpaReact({
     return <ErrorLoader type="script-error" title="Error in slate-block" details={err.message} />;
   },
 });
-
-export const bootstrap = reactLifecycles.bootstrap;
-
-export const mount = reactLifecycles.mount;
-
-export const unmount = reactLifecycles.unmount;

@@ -6,10 +6,10 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { i18n } from 'i18next';
 
 const Wrapped = (_: RootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
+  console.log(_, '<< the props!');
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <BeamEditor />

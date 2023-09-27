@@ -71,9 +71,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
       default:
         return [];
     }
-  }, [props, blockInfoQuery.data]);
-
-  console.log('matching blocks for', mode, matchingBlocks, readMode?.blockID);
+  }, [mode, editMode, blockInfoQuery.data]);
 
   return (
     <div>
@@ -88,7 +86,6 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
                 blockInfo: { ...matchingBlock.blockInfo, mode },
                 blockData: matchingBlock.blockData,
               })}
-              wrapClassName={'relative'}
               {...getContext()}
               blockInfo={{
                 ...matchingBlock.blockInfo,
