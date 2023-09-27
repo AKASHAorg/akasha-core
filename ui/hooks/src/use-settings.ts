@@ -55,7 +55,7 @@ export function useSaveSettings(app: string, options: any) {
 const getSettings = async (app: string) => {
   const sdk = getSDK();
 
-  return await sdk.services.settings.get(app);
+  return sdk.services.settings.get(app);
 };
 
 /**
