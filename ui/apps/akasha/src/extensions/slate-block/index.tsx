@@ -15,7 +15,6 @@ import { SlateReadonlyBlock } from './slate-readonly-block';
 const SlateBlockExtension = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
-  console.log(props, '<<< slate block props');
   if (props.blockInfo.mode === ContentBlockModes.EDIT) return <SlateEditorBlock {...props} />;
   if (props.blockInfo.mode === ContentBlockModes.READONLY) return <SlateReadonlyBlock {...props} />;
 };
