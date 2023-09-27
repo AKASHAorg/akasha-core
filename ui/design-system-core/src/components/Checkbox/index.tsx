@@ -54,24 +54,14 @@ const Checkbox: React.FC<CheckboxProps> = ({
     }
   }, [indeterminate]);
 
-  const textColor = getTextColor(isDisabled, error); /*  error
-    ? 'text-errorLight dark:text-errorDark hover:text-errorLight'
-    : isDisabled
-    ? 'text-grey4 hover:text-grey4'
-    : 'text(black dark:white) hover:text-secondaryLight dark:hover:text-secondaryDark'; */
+  const textColor = getTextColor(isDisabled, error);
   const textColorIndeterminate = isDisabled
     ? 'text-black dark:text-grey4'
     : 'text-black dark:text-white';
   const inputColor = getInputColor(isDisabled, error);
   const checkmarkColor = getCheckmarkColor(isDisabled, error);
   const minusMarkColor = isDisabled ? 'bg-grey6 dark:bg-grey5' : 'bg-grey4 dark:bg-white';
-  const bgColor = getBgColor(isDisabled, isSelected, error); /* isDisabled
-    ? 'before:bg-grey4'
-    : isSelected
-    ? error
-      ? 'before:bg-errorDark'
-      : 'before:bg-secondaryLight dark:before:bg-secondaryDark'
-    : 'before:bg-transparent before:disabled:opacity-75 disabled:before:bg-grey4'; */
+  const bgColor = getBgColor(isDisabled, isSelected, error);
   const checkboxSizes =
     size === 'small'
       ? 'before:w-5 before:h-5 before:-ml-2 before:mt-px'
