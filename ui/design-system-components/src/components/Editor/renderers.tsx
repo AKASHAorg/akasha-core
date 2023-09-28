@@ -71,11 +71,12 @@ const MentionElement = (props: any) => {
   const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
   return (
     <span
+      role="presentation"
       className={tw(`cursor-pointer text-secondaryLight dark:text-secondaryDark`)}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
-        handleMentionClick(element.pubKey);
+        handleMentionClick(element.did.id);
         ev.stopPropagation();
         ev.preventDefault();
         return false;
@@ -132,7 +133,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
 
 const renderElement = (
   props: RenderElementProps,
-  handleMentionClick?: (pubKey: string) => void,
+  handleMentionClick?: (id: string) => void,
   handleTagClick?: (name: string) => void,
   handleLinkClick?: (url: string) => void,
   handleDeleteImage?: ((element: ImageElement) => void) | null,

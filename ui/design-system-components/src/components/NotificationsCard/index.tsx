@@ -31,7 +31,7 @@ export type NotificationsCardProps = {
   // handlers
   handleMessageRead: (notifId: string) => void;
   handleEntryClick: (itemId: string, itemType: EntityTypes) => void;
-  handleProfileClick: (pubKey: string) => void;
+  handleProfileClick: (id: string) => void;
   loggedIn?: boolean;
 };
 
@@ -122,7 +122,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         label = followingLabel;
         clickHandler = () => {
           handleMessageRead(notif.id);
-          handleProfileClick(profileData.pubKey);
+          handleProfileClick(profileData.did.id);
         };
         break;
       case 'MODERATED_POST':

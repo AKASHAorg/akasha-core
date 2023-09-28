@@ -14,7 +14,7 @@ require('@testing-library/jest-dom/extend-expect');
 jest.doMock('@akashaorg/awf-sdk', () => () => ({
   api: {
     auth: {
-      getCurrentUser: () => Promise.resolve({ data: { ethAddress: '0x0', pubKey: 'testPubKey' } }),
+      getCurrentUser: () => Promise.resolve({ data: { id: 'id' } }),
     },
     globalChannel: new ReplaySubject(),
   },

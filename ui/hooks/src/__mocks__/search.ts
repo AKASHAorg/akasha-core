@@ -14,7 +14,9 @@ export const mockSearchTags = {
 export const mockSearchProfiles = {
   searchProfiles: [
     {
-      pubKey: 'bbaareifew3pxeyvtf42zufjnvewevqih7yg4zpgqfj63pw7k23sn63omsa',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'Test',
       userName: 'test',
       avatar: null,
@@ -27,7 +29,9 @@ export const mockSearchProfiles = {
       totalInterests: 1,
     },
     {
-      pubKey: 'bbaareiaf2pleir7wnkmihyy36qvt2m6m6pnegv5jldt5kz7glp46mh2jk4',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'lalala',
       userName: 'testing',
       avatar: null,
@@ -40,7 +44,9 @@ export const mockSearchProfiles = {
       totalInterests: 1,
     },
     {
-      pubKey: 'bbaareid3j3dllpd6ym2epxvuecxsplawxjqjzkjg7mhwx4h3blxpj4ubia',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: null,
       userName: 'test7acc',
       avatar: null,
@@ -53,7 +59,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareicsxuvjunshgtj2fvkncj6yfszvv32pbhoqsz7mu7cwlbwkfxv5g4',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'test333',
       userName: 'test333a',
       avatar: 'bafkreiccot7ck2ovlv4rlhl6bazwqt3vkkjubd3jn5rkbldkmxpobh6ada',
@@ -66,7 +74,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareidho6jwhybosymramthh6twk3losurzhz7xdjbedyvyqrcvdk3qfu',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'Test_Name',
       userName: 'testname123',
       avatar: 'bafkreid3etmvx64ysebzdjnwitzynccgki2da6syspmyovujbkjwhhjaci',
@@ -79,7 +89,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareienv3b3uval4xszix2ojwkdzbtrs3dhd56y3wrqsbbadq4ivzbcw4',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'EPtest4',
       userName: 'testfour',
       avatar: null,
@@ -92,7 +104,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareid5jmf32gkcbr7boh4khdr4ev53ba72nuuxaxerc6quainigekqkq',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'EPtest3',
       userName: 'testthree',
       avatar: null,
@@ -105,7 +119,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareiatvveipkmd2s6orkfqsznkuvfkwpo2b6u3hnqf2zgv33p6mpjqwe',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'EPtest2',
       userName: 'testtwo',
       avatar: null,
@@ -118,7 +134,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareihchk3udch7nn4prrb5ca5hy7nnqaquydyocl6mkap3leaodwsz74',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'EPtest1',
       userName: 'testone',
       avatar: null,
@@ -131,7 +149,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareiedso6mnynktzdeqmdtuhcfysttmzy725okxso3arco7shtqynhwe',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'TESTRRRR',
       userName: 'testrrrr',
       avatar: null,
@@ -144,7 +164,9 @@ export const mockSearchProfiles = {
       totalInterests: 1,
     },
     {
-      pubKey: 'bbaareihb5fdjg5ozj7d77tnjq2mexcktik3bwe3w7ds3yhgp335vupythi',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'TesterTest',
       userName: 'testertest',
       avatar: 'bafkreiadd5c2nczwoqmtqlvwjk5g2wwhzumuhikxpowkfj3sng6akoxfvu',
@@ -157,7 +179,9 @@ export const mockSearchProfiles = {
       totalInterests: 1,
     },
     {
-      pubKey: 'bbaareifcntpvbvm6qdkyg6mnb2eumnszwzrkificv2g4bbjmyhnrq7mnsq',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'Test',
       userName: 'plm',
       avatar: 'bafkreibubnjfoqcx25frhcut7ohljlybjqwdcehi3smxopqrl74sio7ikq',
@@ -170,7 +194,9 @@ export const mockSearchProfiles = {
       totalInterests: 5,
     },
     {
-      pubKey: 'bbaareieeoufgnvi6izyvaalsv4tuvz6q3ccszygalvzyovsq3ukw6wbepe',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'testing',
       userName: 'heelloo',
       avatar: 'bafkreicikxus5pp5r5yi4sczeek3lfds3j3vpfyfe2yrrmr4krcyrmkmsi',
@@ -183,7 +209,9 @@ export const mockSearchProfiles = {
       totalInterests: 2,
     },
     {
-      pubKey: 'bbaareibhmem67b27ctex4zmi5f6ndidt6fyh2e53qy3jrg5thjjaflr24i',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'test_lemons',
       userName: 'eptestlemons',
       avatar: 'bafkreiafebdyftbpouamagd76ug2ceoldsl6pyeco3pdw7ohq5acygf7jq',
@@ -196,7 +224,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareigfhn5iayp6xkk5gdwy7rgff4b4a3owp6tjvaiyfs5srcxt37rjam',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'Turtle_Test',
       userName: 'thisisatestname',
       avatar: 'bafkreigoipbodbftdp3b562po4j56k53tlznnwc2aphx3vifcnjatwsrii',
@@ -209,7 +239,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareif4h3u4m2ck55ozo3e7l3s27ktl7evr4bjlrfzwydle7jktb3e2wa',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'Name_Test',
       userName: 'nametest',
       avatar: 'bafkreig2lc533wupc2vfknsey2kvhk57xjajctguteszcc5x35s5obq2ae',
@@ -222,7 +254,9 @@ export const mockSearchProfiles = {
       totalInterests: 1,
     },
     {
-      pubKey: 'bbaareicb25md7qtisxuahevu2kcml5jclhuwsu5njiaxf7vuwwtc2nenda',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'tesster',
       userName: 'tesster',
       avatar: null,
@@ -235,7 +269,9 @@ export const mockSearchProfiles = {
       totalInterests: 0,
     },
     {
-      pubKey: 'bbaareiav5sekussb27f6e3f7z66weker43fqdlmmlxsnkq735pfbfy3lxu',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'Tetrarcha',
       userName: 'tetrarch',
       avatar: 'bafkreig3met3m6gkcysgu4krykapfjzrhz54jdntn4y7esu6ga36jqld7i',
@@ -248,7 +284,9 @@ export const mockSearchProfiles = {
       totalInterests: 4,
     },
     {
-      pubKey: 'bbaareia6b3f23tah7cdqq6vbnyt32om5onaaey25nkdc66bdqhglzeybtq',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'teest',
       userName: '00011100011001',
       avatar: 'bafkreiccot7ck2ovlv4rlhl6bazwqt3vkkjubd3jn5rkbldkmxpobh6ada',
@@ -261,7 +299,9 @@ export const mockSearchProfiles = {
       totalInterests: 2,
     },
     {
-      pubKey: 'bbaareic6eouhr646chfhb2e6cfdumdgsmdzgo4mxr5hvf2oboay5ru2uxi',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'MTEST',
       userName: 'smerakimaria',
       avatar: 'bafkreie37vhpgehizgdt77slhulotzqmp7yxeivci433h7izid7g5bitga',

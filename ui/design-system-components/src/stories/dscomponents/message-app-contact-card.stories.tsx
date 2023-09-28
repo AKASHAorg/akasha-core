@@ -13,7 +13,7 @@ type Story = StoryObj<MessageContactCardProps>;
 
 const senderAvatar = { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } };
 
-const senderProfileId = 'did:key:003410490050000320006570034567114572000';
+const senderDid = 'did:key:003410490050000320006570034567114572000';
 
 export const BaseMessageContactCard: Story = {
   render: () => (
@@ -26,7 +26,7 @@ export const BaseMessageContactCard: Story = {
       pinConvoLabel="Pin"
       unpinConvoLabel="Unpin"
       senderAvatar={senderAvatar}
-      senderProfileId={senderProfileId}
+      senderDid={senderDid}
     />
   ),
 };

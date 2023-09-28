@@ -26,7 +26,7 @@ describe('<MessageContactCard /> Component', () => {
           senderAvatar={{
             default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },
           }}
-          senderProfileId="did:0x003410490050000320006570034567114572000"
+          senderDid="did:0x003410490050000320006570034567114572000"
           onClickCard={handleClickCard}
           onClickAvatar={handleClickAvatar}
           onConvoPin={handleConvoPin}

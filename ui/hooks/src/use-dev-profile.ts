@@ -88,9 +88,9 @@ export function useGetDevKeys(enabled: boolean) {
   });
 }
 
-const deleteDevKey = async (pubKey: string) => {
+const deleteDevKey = async (keyId: string) => {
   const sdk = getSDK();
-  await sdk.api.auth.removeDevKey(pubKey);
+  await sdk.api.auth.removeDevKey(keyId);
   return 'successfully deleted!';
 };
 
@@ -106,7 +106,7 @@ const deleteDevKey = async (pubKey: string) => {
 export function useDeleteDevKey() {
   const queryClient = useQueryClient();
 
-  return useMutation((pubKey: string) => deleteDevKey(pubKey), {
+  return useMutation((keyId: string) => deleteDevKey(keyId), {
     onSuccess: () => queryClient.invalidateQueries([DEV_DASHBOARD_KEY, 'get_keys']),
     onError: (err: Error) => logError('useDevDashboard.deleteDevKey', err),
   });
@@ -143,7 +143,7 @@ const verifySignature = async (payload: VerifySignaturePayload) => {
  * ```typescript
  * const verifySignatureMutation = useVerifySignature();
 
- * verifySignatureMutation.mutate({pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', message: 'original message', signature: 'some signature to be verified'})
+ * verifySignatureMutation.mutate({keyId: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', message: 'original message', signature: 'some signature to be verified'})
  * ```
  */
 export function useVerifySignature() {
