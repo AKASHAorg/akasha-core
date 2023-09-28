@@ -238,13 +238,13 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
-  const handleProfileClick = (pubKey: string) => {
+  const handleProfileClick = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${id}`,
     });
   };
-  const handleFollowProfile = (pubKey: string) => {
+  const handleFollowProfile = (id: string) => {
     if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
@@ -253,7 +253,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       category: AnalyticsCategories.FILTER_SEARCH,
       action: 'Trending People Followed',
     });
-    followReq.mutate(pubKey);
+    followReq.mutate(id);
   };
 
   const handleSearch = (inputValue: string) => {
@@ -281,7 +281,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
 
-  const handleUnfollowProfile = (pubKey: string) => {
+  const handleUnfollowProfile = (id: string) => {
     if (!loggedProfileData?.did?.id) {
       showLoginModal();
       return;
@@ -290,7 +290,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       category: AnalyticsCategories.FILTER_SEARCH,
       action: 'Trending People Unfollowed',
     });
-    unfollowReq.mutate(pubKey);
+    unfollowReq.mutate(id);
   };
 
   const handleTagClick = (name: string) => {

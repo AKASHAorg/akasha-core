@@ -20,8 +20,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
 
   const { t } = useTranslation('app-profile');
   const { did } = useParams<{ did: string }>();
-  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
+  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
 
   const profileDataQuery = useGetProfileByDidQuery(
     { id: did },

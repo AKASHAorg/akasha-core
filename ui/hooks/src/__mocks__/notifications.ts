@@ -14,7 +14,9 @@ export const mockNotifications = [
             url: '',
             fallbackUrl: '',
           },
-          pubKey: 'bbaareib3aep4yf3woi4v2cde7op55yomqe2iri7vgma5zv6zgry4pwu2oa',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: null,
           userName: 'sssss',
           description: null,
@@ -63,7 +65,9 @@ export const mockNotifications = [
             fallbackUrl:
               'https://bafkreibhr7bsg2bw7m2p6aakwba3k7dhnwrqe3q2tamgnrgt3ddpx5wf4q.ipfs.infura-ipfs.io',
           },
-          pubKey: 'bbaareidnmxbszqtl25ifbg6ydyfkswyzyn6xy2adv75fcuuarxql4b72tq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'Chinemeze 1 nke Oraeri 😁',
           userName: 'chinemeze',
           description: '!Afraid ✊',
@@ -132,7 +136,9 @@ export const mockNotifications = [
             fallbackUrl:
               'https://bafkreibhr7bsg2bw7m2p6aakwba3k7dhnwrqe3q2tamgnrgt3ddpx5wf4q.ipfs.infura-ipfs.io',
           },
-          pubKey: 'bbaareidnmxbszqtl25ifbg6ydyfkswyzyn6xy2adv75fcuuarxql4b72tq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'Chinemeze 1 nke Oraeri 😁',
           userName: 'chinemeze',
           description: '!Afraid ✊',
@@ -202,7 +208,9 @@ export const mockNotifications = [
             fallbackUrl:
               'https://bafkreibhr7bsg2bw7m2p6aakwba3k7dhnwrqe3q2tamgnrgt3ddpx5wf4q.ipfs.infura-ipfs.io',
           },
-          pubKey: 'bbaareidnmxbszqtl25ifbg6ydyfkswyzyn6xy2adv75fcuuarxql4b72tq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'Chinemeze 1 nke Oraeri 😁',
           userName: 'chinemeze',
           description: '!Afraid ✊',
@@ -261,7 +269,9 @@ export const mockNotificationsProfiles = [
   {
     data: {
       resolveProfile: {
-        pubKey: 'bbaareib3aep4yf3woi4v2cde7op55yomqe2iri7vgma5zv6zgry4pwu2oa',
+        did: {
+          id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+        },
         name: null,
         userName: 'sssss',
         avatar: null,
@@ -292,7 +302,9 @@ export const mockNotificationsProfiles = [
   {
     data: {
       resolveProfile: {
-        pubKey: 'bbaareidnmxbszqtl25ifbg6ydyfkswyzyn6xy2adv75fcuuarxql4b72tq',
+        did: {
+          id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+        },
         name: 'Chinemeze 1 nke Oraeri 😁',
         userName: 'chinemeze',
         avatar: 'bafkreib73igatefyq3kumfoankvbk7ctr33hhh3rpdinpeu3a7yfcts5iy',
@@ -343,7 +355,9 @@ export const mockNotificationsProfiles = [
   {
     data: {
       resolveProfile: {
-        pubKey: 'bbaareidnmxbszqtl25ifbg6ydyfkswyzyn6xy2adv75fcuuarxql4b72tq',
+        did: {
+          id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+        },
         name: 'Chinemeze 1 nke Oraeri 😁',
         userName: 'chinemeze',
         avatar: 'bafkreib73igatefyq3kumfoankvbk7ctr33hhh3rpdinpeu3a7yfcts5iy',
@@ -394,7 +408,9 @@ export const mockNotificationsProfiles = [
   {
     data: {
       resolveProfile: {
-        pubKey: 'bbaareidnmxbszqtl25ifbg6ydyfkswyzyn6xy2adv75fcuuarxql4b72tq',
+        did: {
+          id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+        },
         name: 'Chinemeze 1 nke Oraeri 😁',
         userName: 'chinemeze',
         avatar: 'bafkreib73igatefyq3kumfoankvbk7ctr33hhh3rpdinpeu3a7yfcts5iy',

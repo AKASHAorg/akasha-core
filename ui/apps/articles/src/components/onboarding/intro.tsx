@@ -5,22 +5,24 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IArticleOnboardingIntroProps {
+export type ArticleOnboardingIntroProps = {
   assetName?: string;
-  titleLabel: string;
+  assetExtension?: string;
   publicImgPath?: string;
+  titleLabel: string;
   introLabel: string;
   descriptionLabel: string;
   buttonLabel: string;
   onStart: () => void;
-}
+};
 
 export const ONBOARDING_STATUS = 'ewa-articles-app-onboarding-status';
 
-const ArticleOnboardingIntro: React.FC<IArticleOnboardingIntroProps> = props => {
+const ArticleOnboardingIntro: React.FC<ArticleOnboardingIntroProps> = props => {
   const {
     assetName = 'articles',
     titleLabel,
+    assetExtension = 'webp',
     publicImgPath = '/images',
     introLabel,
     descriptionLabel,
@@ -36,7 +38,10 @@ const ArticleOnboardingIntro: React.FC<IArticleOnboardingIntroProps> = props => 
         </Stack>
         <Stack fullWidth={true} customStyle="p-4">
           <Stack customStyle="h-40 w-40 mb-1 flex self-center">
-            <Image customStyle="object-contain" src={`${publicImgPath}/${assetName}.webp`} />
+            <Image
+              customStyle="object-contain"
+              src={`${publicImgPath}/${assetName}.${assetExtension}`}
+            />
           </Stack>
           <Text variant="h6" align="center" customStyle="mb-1" weight="bold">
             {introLabel}

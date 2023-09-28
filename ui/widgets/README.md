@@ -4,10 +4,10 @@
 
 ## Components
 
-- [Feed](./feed/README.md)
+- [Analytics](./analytics/README.md)
 - [Layout](./layout/README.md)
-- [Login](./login/README.md)
+- [Mini Profile](./mini-profile/README.md)
+- [My Apps](./my-apps/README.md)
 - [Sidebar](./sidebar/README.md)
 - [Top Bar](./top-bar/README.md)
 - [Trending](./trending/README.md)
-- [Mini Profile](./mini-profile/README.md)

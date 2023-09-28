@@ -1,6 +1,6 @@
-# AKASHA integration app
+# AKASHA Integration App
 
-> Implementation of AWF
+> Implementation of the AKASHA Core
 
 ## Table of contents
 
@@ -8,6 +8,8 @@
 - [Components](#components)
     - [Feed-Page](#feed-page)
     - [Post-Page](#post-page)
+    - [My-Feed-Page](#my-feed-page)
+    - [Profile-Feed-Page](#profile-feed-page)
     - [Tag-Feed-Page](#tag-feed-page)
 - [Services](#services)
 - [Widgets](#widgets)
@@ -21,21 +23,21 @@ AKASHA Integration App (AKASHA World) is the foremost implementation of the AKAS
 
 The core components include:
 
-> ### Feed page
-> A scrollable list of entries. 
+### Feed page
+> A scrollable list of entries.
 
-> ### Post page
-> A single entry with its comment(s).
+### Post page
+> A single entry with its comment(s) and available actions.
 
-> ### Tag feed page
+### My Feed page
+> A scrollable curated list of entries, based on logged-in user's interests.
+
+### Profile feed page
+> A scrollable list of entries associated with a specific user profile.
+
+### Tag feed page
 > A scrollable list of entries associated with a specific tag.
 
-## Services
+ ## Services
 
 These are methods that interact with, modify and/enrich data from the API or affect the overall behaviour of components. They include `Posting service`, `Routing service`
-
-## Widgets
-Standalone elements that are conditionally rendered on the widget area of the app based on the active route. A sample widget include:
-
-> ### Trending widget
-> Displays the trending tags.

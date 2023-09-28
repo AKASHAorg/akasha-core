@@ -7,7 +7,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppList, { AppListProps } from '../../components/AppList';
 
 const meta: Meta<AppListProps> = {
-  title: 'DSComponents/AkashaVerse/AppList',
+  title: 'DSComponents/Extensions/AppList',
   component: AppList,
 };
 

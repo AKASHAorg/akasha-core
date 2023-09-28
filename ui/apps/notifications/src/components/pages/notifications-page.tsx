@@ -28,7 +28,7 @@ const NotificationsPage: React.FC<unknown> = () => {
   useEffect(() => {
     /* @TODO:  uncomment this part when backend data becomes available */
     // redirect to sign in page if not logged in
-    // if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
+    // if (loginQuery.isSuccess && !loginQuery.data?.id) {
     //   navigateTo?.({
     //     appName: '@akashaorg/app-auth-ewa',
     //     getNavigationUrl: navRoutes => navRoutes.Connect,
@@ -122,10 +122,10 @@ const NotificationsPage: React.FC<unknown> = () => {
 
   const markAsRead = useMarkAsRead();
 
-  const handleAvatarClick = (profilePubKey: string) => {
+  const handleAvatarClick = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profilePubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${id}`,
     });
   };
 

@@ -23,7 +23,7 @@ export const BaseDevKeyCard: Story = {
         unusedLabel="Unused"
         usedLabel="Used"
         nonameLabel="Unnamed key"
-        devPubKeyLabel="Dev Public Key 🔑"
+        devPublicKeyLabel="Dev Public Key 🔑"
         dateAddedLabel="Date added 🗓"
       />
     </Stack>

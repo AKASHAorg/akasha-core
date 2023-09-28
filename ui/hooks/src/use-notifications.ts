@@ -14,18 +14,18 @@ const getNotifications = async () => {
   const sdk = getSDK();
   const getMessagesResp = await sdk.api.auth.getMessages({});
   const messages = getMessagesResp.data.map(async message => {
-    const pubKey = message.body.value.author || message.body.value.follower;
-    if (pubKey) {
+    const ethAddress = message.body.value.author || message.body.value.follower;
+    if (ethAddress) {
       let populatedMessage;
-      const profile = await sdk.api.profile.getProfile({ pubKey });
+      const profile = await sdk.api.profile.getProfile({ ethAddress });
       const profileData = buildProfileMediaLinks(profile.data);
-      if (message.body.value.author === profileData.pubKey) {
+      if (message.body.value.author === profileData.ethAddress) {
         populatedMessage = {
           ...message,
           body: { ...message.body, value: { ...message.body.value, author: profileData } },
         };
       }
-      if (message.body.value.follower === profileData.pubKey) {
+      if (message.body.value.follower === profileData.ethAddress) {
         populatedMessage = {
           ...message,
           body: { ...message.body, value: { ...message.body.value, follower: profileData } },

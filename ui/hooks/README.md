@@ -1,10 +1,10 @@
-# AWF Hooks
+# Hooks
 
 This package contains all hooks required for proper functioning of the AKASHA Core
 
 ## Available Hooks
 
-### [useAnalytics](./src/use-analytics.ts)
+### [useAnalytics](./src/use-analytics.tsx)
 
 > handles user consent to tracking and analytics functions. Available actions include;
 
@@ -23,24 +23,15 @@ This package contains all hooks required for proper functioning of the AKASHA Co
 
 - getLegalDoc
 
-### [useModalState](./src/use-modal-state.ts)
-
-> handles rendering and dismissal of modals. Available actions include;
-
-- show
-- showAfterLogin
-- hide
-
 ### [useNetworkState](./src/use-network-state.ts)
 
-> handles checks to ensure that the user is on the appropriate ethereum network required for the app. Available actions
-> include;
+> handles checks to ensure that the user is on the appropriate ethereum network required for the app. Available actions include;
 
 - checkNetwork
 
 ### [useNotifications](./src/use-notifications.ts)
 
-> handles notification related functionalities in the [notifications plugin](../plugins/notifications/README.md).
+> handles notification related functionalities in the [notifications app](../apps/notifications/README.md).
 > Available actions include;
 
 - getMessages

@@ -20,7 +20,7 @@ export type MessageContactCardProps = {
   unpinConvoLabel: string;
   newMessageLabel?: string;
   senderAvatar: Profile['avatar'];
-  senderProfileId: Profile['did']['id'];
+  senderDid: Profile['did']['id'];
   onClickAvatar?: () => void;
   onClickCard?: () => void;
   onConvoPin?: () => void;
@@ -37,7 +37,7 @@ const MessageContactCard: React.FC<MessageContactCardProps> = props => {
     unpinConvoLabel,
     newMessageLabel,
     senderAvatar,
-    senderProfileId,
+    senderDid,
     onClickAvatar,
     onClickCard,
     onConvoPin,
@@ -80,7 +80,7 @@ const MessageContactCard: React.FC<MessageContactCardProps> = props => {
       <div className={tw(`flex flex-row justify-between`)}>
         <div className={tw(`flex flex-row items-start`)}>
           <button onClick={handleAvatarClick}>
-            <Avatar size="lg" avatar={senderAvatar} profileId={senderProfileId} />
+            <Avatar size="lg" avatar={senderAvatar} profileId={senderDid} />
           </button>
 
           <div className={tw(`flex items-start ml-2`)}>

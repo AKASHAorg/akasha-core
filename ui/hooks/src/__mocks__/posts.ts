@@ -14,7 +14,9 @@ export const mockEntry = {
       },
     ],
     author: {
-      pubKey: 'bbaareiav5sekussb27f6e3f7z66weker43fqdlmmlxsnkq735pfbfy3lxu',
+      did: {
+        id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+      },
       name: 'Tetrarcha',
       userName: 'tetrarch',
       avatar: 'bafkreig3met3m6gkcysgu4krykapfjzrhz54jdntn4y7esu6ga36jqld7i',
@@ -35,7 +37,9 @@ export const mockEntry = {
     quotedBy: ['01fkzaywfd9ryzgzrj228j7nn6'],
     quotedByAuthors: [
       {
-        pubKey: 'bbaareie2jtrzgls5grsnrn4qa3o56wc43jryzb64jjetryqlpgydfskvna',
+        did: {
+          id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+        },
         name: 'Sever 3',
         userName: 'updatemyname',
         avatar: 'bafkreifyewlc3ar4xotltmjqvyzfw42d5wv7a2vks6f2tnwi5r5nnmkkti',
@@ -74,7 +78,9 @@ export const mockEntriesByAuthor = {
           },
         ],
         author: {
-          pubKey: 'bbaareiav5sekussb27f6e3f7z66weker43fqdlmmlxsnkq735pfbfy3lxu',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'Tetrarcha',
           userName: 'tetrarch',
           avatar: 'bafkreig3met3m6gkcysgu4krykapfjzrhz54jdntn4y7esu6ga36jqld7i',
@@ -95,7 +101,9 @@ export const mockEntriesByAuthor = {
         quotedBy: ['01g1jh8zf9d5wbtszdxhb22ep7'],
         quotedByAuthors: [
           {
-            pubKey: 'bbaareib3aep4yf3woi4v2cde7op55yomqe2iri7vgma5zv6zgry4pwu2oa',
+            did: {
+              id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+            },
             name: null,
             userName: 'sssss',
             avatar: null,
@@ -129,7 +137,9 @@ export const mockEntriesByAuthor = {
           },
         ],
         author: {
-          pubKey: 'bbaareiav5sekussb27f6e3f7z66weker43fqdlmmlxsnkq735pfbfy3lxu',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'Tetrarcha',
           userName: 'tetrarch',
           avatar: 'bafkreig3met3m6gkcysgu4krykapfjzrhz54jdntn4y7esu6ga36jqld7i',
@@ -150,7 +160,9 @@ export const mockEntriesByAuthor = {
         quotedBy: ['01fwk4taj7rasw2ygb0pyxay6v'],
         quotedByAuthors: [
           {
-            pubKey: 'bbaareidnmxbszqtl25ifbg6ydyfkswyzyn6xy2adv75fcuuarxql4b72tq',
+            did: {
+              id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+            },
             name: 'Chinemeze 1 nke Oraeri 😁',
             userName: 'chinemeze',
             avatar: 'bafkreib73igatefyq3kumfoankvbk7ctr33hhh3rpdinpeu3a7yfcts5iy',
@@ -179,7 +191,9 @@ export const mockEntriesByAuthor = {
           },
         ],
         author: {
-          pubKey: 'bbaareiav5sekussb27f6e3f7z66weker43fqdlmmlxsnkq735pfbfy3lxu',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'Tetrarcha',
           userName: 'tetrarch',
           avatar: 'bafkreig3met3m6gkcysgu4krykapfjzrhz54jdntn4y7esu6ga36jqld7i',
@@ -200,7 +214,9 @@ export const mockEntriesByAuthor = {
         quotedBy: ['01fkzaywfd9ryzgzrj228j7nn6'],
         quotedByAuthors: [
           {
-            pubKey: 'bbaareie2jtrzgls5grsnrn4qa3o56wc43jryzb64jjetryqlpgydfskvna',
+            did: {
+              id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+            },
             name: 'Sever 3',
             userName: 'updatemyname',
             avatar: 'bafkreifyewlc3ar4xotltmjqvyzfw42d5wv7a2vks6f2tnwi5r5nnmkkti',
@@ -243,7 +259,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareifoejvsiunffwtbmuxbjg4wpgxnksqamddokxj4srribo467j7i3m',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'tootie',
           userName: 'tootie',
           avatar: 'bafkreig425xf6xjfcznyqnf4q67sl5tmeepjp3dezn6vtql4svwlylgqwi',
@@ -284,7 +302,9 @@ export const mockGetEntries = {
               },
             ],
             author: {
-              pubKey: 'bbaareib3aep4yf3woi4v2cde7op55yomqe2iri7vgma5zv6zgry4pwu2oa',
+              did: {
+                id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+              },
               name: null,
               userName: 'sssss',
               avatar: null,
@@ -324,7 +344,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareifoejvsiunffwtbmuxbjg4wpgxnksqamddokxj4srribo467j7i3m',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'tootie',
           userName: 'tootie',
           avatar: 'bafkreig425xf6xjfcznyqnf4q67sl5tmeepjp3dezn6vtql4svwlylgqwi',
@@ -365,7 +387,9 @@ export const mockGetEntries = {
               },
             ],
             author: {
-              pubKey: 'bbaareifoejvsiunffwtbmuxbjg4wpgxnksqamddokxj4srribo467j7i3m',
+              did: {
+                id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+              },
               name: 'tootie',
               userName: 'tootie',
               avatar: 'bafkreig425xf6xjfcznyqnf4q67sl5tmeepjp3dezn6vtql4svwlylgqwi',
@@ -405,7 +429,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareifoejvsiunffwtbmuxbjg4wpgxnksqamddokxj4srribo467j7i3m',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'tootie',
           userName: 'tootie',
           avatar: 'bafkreig425xf6xjfcznyqnf4q67sl5tmeepjp3dezn6vtql4svwlylgqwi',
@@ -426,7 +452,9 @@ export const mockGetEntries = {
         quotedBy: ['01g24jxf255hmt6nvwt7xvynty'],
         quotedByAuthors: [
           {
-            pubKey: 'bbaareifoejvsiunffwtbmuxbjg4wpgxnksqamddokxj4srribo467j7i3m',
+            did: {
+              id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+            },
             name: 'tootie',
             userName: 'tootie',
             avatar: 'bafkreig425xf6xjfcznyqnf4q67sl5tmeepjp3dezn6vtql4svwlylgqwi',
@@ -459,7 +487,9 @@ export const mockGetEntries = {
               },
             ],
             author: {
-              pubKey: 'bbaareihb5fdjg5ozj7d77tnjq2mexcktik3bwe3w7ds3yhgp335vupythi',
+              did: {
+                id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+              },
               name: 'TesterTest',
               userName: 'testertest',
               avatar: 'bafkreiadd5c2nczwoqmtqlvwjk5g2wwhzumuhikxpowkfj3sng6akoxfvu',
@@ -499,7 +529,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareie2zhdat2ttqslkwon4pesnsb7djg45kzww2i6filzfkkshe24edq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: null,
           userName: 'gicu',
           avatar: null,
@@ -542,7 +574,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareie2zhdat2ttqslkwon4pesnsb7djg45kzww2i6filzfkkshe24edq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: null,
           userName: 'gicu',
           avatar: null,
@@ -584,7 +618,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareie2zhdat2ttqslkwon4pesnsb7djg45kzww2i6filzfkkshe24edq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: null,
           userName: 'gicu',
           avatar: null,
@@ -625,7 +661,9 @@ export const mockGetEntries = {
               },
             ],
             author: {
-              pubKey: 'bbaareie2zhdat2ttqslkwon4pesnsb7djg45kzww2i6filzfkkshe24edq',
+              did: {
+                id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+              },
               name: null,
               userName: 'gicu',
               avatar: null,
@@ -665,7 +703,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareie2zhdat2ttqslkwon4pesnsb7djg45kzww2i6filzfkkshe24edq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: null,
           userName: 'gicu',
           avatar: null,
@@ -686,7 +726,9 @@ export const mockGetEntries = {
         quotedBy: ['01g22r6yynjd4zajr51khbw9qk'],
         quotedByAuthors: [
           {
-            pubKey: 'bbaareie2zhdat2ttqslkwon4pesnsb7djg45kzww2i6filzfkkshe24edq',
+            did: {
+              id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+            },
             name: null,
             userName: 'gicu',
             avatar: null,
@@ -720,7 +762,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareia6b3f23tah7cdqq6vbnyt32om5onaaey25nkdc66bdqhglzeybtq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'teest',
           userName: '00011100011001',
           avatar: 'bafkreiccot7ck2ovlv4rlhl6bazwqt3vkkjubd3jn5rkbldkmxpobh6ada',
@@ -762,7 +806,9 @@ export const mockGetEntries = {
               },
             ],
             author: {
-              pubKey: 'bbaareia6b3f23tah7cdqq6vbnyt32om5onaaey25nkdc66bdqhglzeybtq',
+              did: {
+                id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+              },
               name: 'teest',
               userName: '00011100011001',
               avatar: 'bafkreiccot7ck2ovlv4rlhl6bazwqt3vkkjubd3jn5rkbldkmxpobh6ada',
@@ -803,7 +849,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareia6b3f23tah7cdqq6vbnyt32om5onaaey25nkdc66bdqhglzeybtq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'teest',
           userName: '00011100011001',
           avatar: 'bafkreiccot7ck2ovlv4rlhl6bazwqt3vkkjubd3jn5rkbldkmxpobh6ada',
@@ -824,7 +872,9 @@ export const mockGetEntries = {
         quotedBy: ['01g1jm533p3emznc4q0frhhh19'],
         quotedByAuthors: [
           {
-            pubKey: 'bbaareia6b3f23tah7cdqq6vbnyt32om5onaaey25nkdc66bdqhglzeybtq',
+            did: {
+              id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+            },
             name: 'teest',
             userName: '00011100011001',
             avatar: 'bafkreiccot7ck2ovlv4rlhl6bazwqt3vkkjubd3jn5rkbldkmxpobh6ada',
@@ -858,7 +908,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareib3aep4yf3woi4v2cde7op55yomqe2iri7vgma5zv6zgry4pwu2oa',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: null,
           userName: 'sssss',
           avatar: null,
@@ -879,7 +931,9 @@ export const mockGetEntries = {
         quotedBy: ['01g24jy7adpsz5rmt8n5tt3cr1'],
         quotedByAuthors: [
           {
-            pubKey: 'bbaareifoejvsiunffwtbmuxbjg4wpgxnksqamddokxj4srribo467j7i3m',
+            did: {
+              id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+            },
             name: 'tootie',
             userName: 'tootie',
             avatar: 'bafkreig425xf6xjfcznyqnf4q67sl5tmeepjp3dezn6vtql4svwlylgqwi',
@@ -912,7 +966,9 @@ export const mockGetEntries = {
               },
             ],
             author: {
-              pubKey: 'bbaareiav5sekussb27f6e3f7z66weker43fqdlmmlxsnkq735pfbfy3lxu',
+              did: {
+                id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+              },
               name: 'Tetrarcha',
               userName: 'tetrarch',
               avatar: 'bafkreig3met3m6gkcysgu4krykapfjzrhz54jdntn4y7esu6ga36jqld7i',
@@ -952,7 +1008,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareiav5sekussb27f6e3f7z66weker43fqdlmmlxsnkq735pfbfy3lxu',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'Tetrarcha',
           userName: 'tetrarch',
           avatar: 'bafkreig3met3m6gkcysgu4krykapfjzrhz54jdntn4y7esu6ga36jqld7i',
@@ -973,7 +1031,9 @@ export const mockGetEntries = {
         quotedBy: ['01g1jh8zf9d5wbtszdxhb22ep7'],
         quotedByAuthors: [
           {
-            pubKey: 'bbaareib3aep4yf3woi4v2cde7op55yomqe2iri7vgma5zv6zgry4pwu2oa',
+            did: {
+              id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+            },
             name: null,
             userName: 'sssss',
             avatar: null,
@@ -1007,7 +1067,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareic6eouhr646chfhb2e6cfdumdgsmdzgo4mxr5hvf2oboay5ru2uxi',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'MTEST',
           userName: 'smerakimaria',
           avatar: 'bafkreie37vhpgehizgdt77slhulotzqmp7yxeivci433h7izid7g5bitga',
@@ -1054,7 +1116,9 @@ export const mockGetEntries = {
               },
             ],
             author: {
-              pubKey: 'bbaareibf4kaf722umqxovj4aldl7eiwwrmo3gljjjxyeexdzoivhz33lwa',
+              did: {
+                id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+              },
               name: 'severs',
               userName: 'ssvvrr',
               avatar: null,
@@ -1100,7 +1164,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareibf4kaf722umqxovj4aldl7eiwwrmo3gljjjxyeexdzoivhz33lwa',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'severs',
           userName: 'ssvvrr',
           avatar: null,
@@ -1121,7 +1187,9 @@ export const mockGetEntries = {
         quotedBy: ['01g119x09zhhwf4ac00zhpgrdz'],
         quotedByAuthors: [
           {
-            pubKey: 'bbaareic6eouhr646chfhb2e6cfdumdgsmdzgo4mxr5hvf2oboay5ru2uxi',
+            did: {
+              id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+            },
             name: 'MTEST',
             userName: 'smerakimaria',
             avatar: 'bafkreie37vhpgehizgdt77slhulotzqmp7yxeivci433h7izid7g5bitga',
@@ -1156,7 +1224,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareia6b3f23tah7cdqq6vbnyt32om5onaaey25nkdc66bdqhglzeybtq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'teest',
           userName: '00011100011001',
           avatar: 'bafkreiccot7ck2ovlv4rlhl6bazwqt3vkkjubd3jn5rkbldkmxpobh6ada',
@@ -1199,7 +1269,9 @@ export const mockGetEntries = {
           },
         ],
         author: {
-          pubKey: 'bbaareia6b3f23tah7cdqq6vbnyt32om5onaaey25nkdc66bdqhglzeybtq',
+          did: {
+            id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+          },
           name: 'teest',
           userName: '00011100011001',
           avatar: 'bafkreiccot7ck2ovlv4rlhl6bazwqt3vkkjubd3jn5rkbldkmxpobh6ada',
@@ -1247,7 +1319,9 @@ export const mockCreatePost = {
   ],
   textContent: 'tldr;',
   author: '0x3Ff1621520d621b39572b952138c869758a41201',
-  pubKey: 'bbaareiav5sekussb27f6e3f7z66weker43fqdlmmlxsnkq735pfbfy3lxu',
+  did: {
+    id: 'did:pkh:eip155:5:0x36c703c4d2fa2437dc883e2e0884e57404e11234',
+  },
 };
 
 export const mockPostEntry = {
