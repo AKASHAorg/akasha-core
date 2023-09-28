@@ -6,7 +6,6 @@ import { AkashaContentBlockLabeledValue } from '../sdk/graphql-types-new';
 export const enum ContentBlockModes {
   EDIT = 'edit-mode',
   READONLY = 'read-only-mode',
-  INTERACTIVE = 'interactive-mode',
 }
 
 export type BlockInfo = {

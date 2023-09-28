@@ -89,6 +89,9 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
     },
     {
       enabled: initialScrollState.isFetched,
+      keepPreviousData: true,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
       select: data => {
         return {
           pages: data.pages.flatMap(page => page.akashaBeamIndex.edges),
@@ -136,10 +139,13 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
     return 0;
   }, [newBeamReq.data]);
 
-  const onFetchError = (err: Error) => {
-    // @TODO: handle this error. Through state maybe?
-    console.error(err, beamsReq);
-  };
+  const onFetchError = React.useCallback(
+    (err: Error) => {
+      // @TODO: handle this error. Through state maybe?
+      console.error(err, beamsReq);
+    },
+    [beamsReq],
+  );
 
   const tryFetchNextPage = React.useCallback(
     (lastCursor: string) => {
