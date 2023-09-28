@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 
@@ -8,7 +8,9 @@ function convertArray(array: [[string, string | number | boolean]]) {
   return Object.fromEntries(array);
 }
 
-async function saveSettings(app: string, options: any /* [[string, string | number | boolean]] */) {
+async function saveSettings(params: string /* [[string, string | number | boolean]] */) {
+  const { app, options } = JSON.parse(params);
+
   if (!options || !app) return;
 
   const sdk = getSDK();
@@ -32,7 +34,7 @@ async function saveSettings(app: string, options: any /* [[string, string | numb
   }
 
   const res = await sdk.services.settings.set(app, settings);
-  return res;
+  return res.data;
 }
 
 /**
@@ -41,14 +43,20 @@ async function saveSettings(app: string, options: any /* [[string, string | numb
  * @param options - Array of option pairs [optionName, value]
  * @example useSaveSettings hook
  * ```typescript
- * const saveSettings = useSaveSettings('@akashaorg/app-akasha-verse', [['key', 'value']]);
+ * const saveSettings = useSaveSettings();
+ * saveSettings.mutate(JSON.stringify({ app: '@akashaorg/app-akasha-verse', options: [['key', 'value']] }))
  * ```
  */
-export function useSaveSettings(app: string, options: any) {
-  return useQuery([SETTING_KEY, app], () => saveSettings(app, options), {
-    enabled: !!options,
+export function useSaveSettings() {
+  const queryClient = useQueryClient();
+
+  return useMutation((params: string) => saveSettings(params), {
     onError: (err: Error) => logError('useSaveSettings', err),
-    onSuccess: data => data,
+    onSuccess: data => {
+      queryClient.invalidateQueries([SETTING_KEY]);
+      return data;
+    },
+    mutationKey: [SETTING_KEY],
   });
 }
 

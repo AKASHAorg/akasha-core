@@ -81,40 +81,49 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   const fetchSettingsQuery = useGetSettings(appname);
   const existingSettings = fetchSettingsQuery.data;
 
-  const saveSettingsQuery = useSaveSettings(appname, formatedSettings);
-  const saveSetttingsRes = saveSettingsQuery.data;
+  const saveSettingsMutation = useSaveSettings();
+  const saveSettingsRes = saveSettingsMutation.data;
 
   React.useEffect(() => {
     if (appNames) {
-      setAllStates(appNames.map(app => ({ app: app, selected: true })));
-
       if (existingSettings && existingSettings.data?.options) {
-        const convertToObject = existingSettings.data?.options.map(([k, v]) => ({
-          app: k,
-          selected: v,
-        }));
+        const convertToObject = existingSettings.data?.options
+          .map(([k, v]) => {
+            if (appNames.includes(k)) {
+              return {
+                app: k,
+                selected: v,
+              };
+            }
+            if (k === 'snoozed' && typeof v === 'boolean') {
+              setSnoozed(v);
+            }
+          })
+          .filter(item => !!item);
 
-        const savedStates = convertToObject.filter(e => {
-          return allStates.some(state => state.app === e.app);
-        });
-
-        setAllStates(Object.assign(allStates, savedStates));
+        const mergedArray = [...allStates, ...convertToObject];
+        const uniqueData = [
+          ...mergedArray.reduce((map, obj) => map.set(obj.app, obj), new Map()).values(),
+        ];
+        return setAllStates(uniqueData);
+      } else {
+        setAllStates(appNames.map(app => ({ app: app, selected: true })));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appNames, existingSettings]);
 
-  const [snoozed, setSnoozed] = React.useState(false);
-
-  // check if snooze notification option has already been set
-  useEffect(() => {
-    if (window.localStorage && localStorage.getItem('notifications-snoozed')) {
-      setSnoozed(JSON.parse(localStorage.getItem('notifications-snoozed')));
+  React.useEffect(() => {
+    if (formatedSettings) {
+      saveSettingsMutation.mutate(JSON.stringify({ app: appname, options: formatedSettings }));
     }
-  }, []);
+    if (saveSettingsRes) {
+      setFormatedSettings(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [existingSettings, saveSettingsRes, formatedSettings]);
 
-  //for the button, disabled when no change made, enabled when there's an change
-  // const [updateButtonDisabled, setUpdateButtonDisabled] = useState(true);
+  const [snoozed, setSnoozed] = React.useState(false);
   const [isChanged, setIsChanged] = useState(false);
 
   const snoozeChangeHandler = () => {
@@ -141,7 +150,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   // auto-selects all when I want to receive all notification is checked
   useEffect(() => {
-    if (selected == true) {
+    if (selected && isChanged) {
       setAllStates(appNames.map(app => ({ app: app, selected: true })));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -159,10 +168,9 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   };
 
   const skipHandler = () => {
-    // save to localstorage so we don't come back again after skipping
-    // if (window.localStorage) {
-    //   localStorage.setItem('notification-preference', JSON.stringify([])); // @TODO: where to save settings?
-    // }
+    if (window.localStorage) {
+      localStorage.setItem(NOTIF_REF, JSON.stringify(true));
+    }
     setFormatedSettings(allStates?.map(state => Object.values(state)));
 
     // navigate to final step
@@ -170,11 +178,17 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   };
 
   const confirmHandler = () => {
-    // @TODO: save preferences somewhere, now we just save a key in localstorage to mark as set
+    // @TODO: we save preferences using the settings service, but we also save a key in localstorage to mark as set
     try {
-      //   if (window.localStorage) {
-      localStorage.setItem(NOTIF_REF, JSON.stringify(true)); // @TODO: where to save settings?
-      setFormatedSettings(allStates?.map(state => Object.values(state)));
+      if (window.localStorage) {
+        localStorage.setItem(NOTIF_REF, JSON.stringify(true));
+      }
+
+      const allPrefs = allStates?.map(state => Object.values(state));
+      allPrefs.push(['snoozed', snoozed]);
+
+      setFormatedSettings(allPrefs);
+
       _uiEvents.current.next({
         event: EventTypes.ShowNotification,
         data: {
@@ -183,9 +197,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         },
       });
 
-      if (snoozed && !localStorage.getItem('notifications-snoozed')) {
-        localStorage.setItem('notifications-snoozed', JSON.stringify(true));
-
+      if (snoozed) {
         // emit snooze notification event so the topbar's notification icon can be updated
         _uiEvents.current.next({
           event: EventTypes.SnoozeNotifications,
@@ -199,9 +211,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         });
       }
 
-      if (!snoozed && localStorage.getItem('notifications-snoozed')) {
-        localStorage.removeItem('notifications-snoozed');
-
+      if (!snoozed) {
         // emit unsnooze notification event so the topbar's notification icon can be updated
         _uiEvents.current.next({
           event: EventTypes.UnsnoozeNotifications,
@@ -215,10 +225,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           },
         });
       }
-      //   }
 
-      // disable the button again after saving preferences
-      // setUpdateButtonDisabled(true);
       setIsChanged(false);
 
       // navigate to final step
@@ -304,7 +311,9 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
             allStates.map(appState => (
               <>
                 <Stack direction="row" justify="between" align="center" customStyle="px-6">
-                  <Text variant="h6">{appState?.app}</Text>
+                  <Text variant="h6">
+                    {appState?.app}- {String(appState.selected)}
+                  </Text>
                   <Checkbox
                     value={appState.app}
                     id={appState.app.concat(String(Math.round(Math.random() * 100)))}
