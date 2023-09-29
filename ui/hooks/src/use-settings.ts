@@ -8,7 +8,7 @@ function convertArray(array: [[string, string | number | boolean]]) {
   return Object.fromEntries(array);
 }
 
-async function saveSettings(params: string /* [[string, string | number | boolean]] */) {
+async function saveSettings(params: string) {
   const { app, options } = JSON.parse(params);
 
   if (!options || !app) return;
@@ -63,7 +63,7 @@ export function useSaveSettings() {
 const getSettings = async (app: string) => {
   const sdk = getSDK();
 
-  return sdk.services.settings.get(app);
+  return await sdk.services.settings.get(app);
 };
 
 /**
