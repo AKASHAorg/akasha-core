@@ -131,17 +131,21 @@ const SnackBarNotification = (_: RootExtensionProps) => {
       {message && (
         <Snackbar
           title={
-            <Stack
-              direction="row"
-              align="center"
-              justify="center"
-              spacing="gap-x-2"
-              padding={'pb-4'}
-            >
-              {appTitle && findAppIcon(appTitle) && icon} {findAppIcon(appTitle)?.label}
-            </Stack>
+            appTitle ? (
+              <Stack
+                direction="row"
+                align="center"
+                justify="center"
+                spacing="gap-x-2"
+                padding={'pb-4'}
+              >
+                {findAppIcon(appTitle) && icon} {findAppIcon(appTitle)?.label}
+              </Stack>
+            ) : (
+              message
+            )
           }
-          description={message}
+          description={appTitle ? message : null}
           type={messageType as SnackBarType}
           handleDismiss={dismissHandler}
         />
