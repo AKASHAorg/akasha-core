@@ -22,7 +22,9 @@ export type CustomizeNotificationPageProps = {
   initial?: boolean;
   isLoggedIn: boolean;
 };
-const NOTIF_REF = 'notification-preference';
+export const NOTIF_REF = 'notification-preference-set';
+const Appname = '@akashaorg/app-notifications';
+const SnoozeOption = 'snoozed';
 
 const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   initial = true,
@@ -30,6 +32,12 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 }) => {
   const { t } = useTranslation('app-notifications');
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
+
+  const fetchSettingsQuery = useGetSettings(Appname);
+  const existingSettings = fetchSettingsQuery.data;
+
+  const saveSettingsMutation = useSaveSettings();
+  const saveSettingsRes = saveSettingsMutation.data;
 
   const [routeData, setRouteData] = useState(null);
 
@@ -76,18 +84,10 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   const [allStates, setAllStates] = useState<{ app: string; selected: boolean }[]>([]);
   const [formatedSettings, setFormatedSettings] = useState(null);
 
-  const appname = '@akashaorg/app-notifications';
-
-  const fetchSettingsQuery = useGetSettings(appname);
-  const existingSettings = fetchSettingsQuery.data;
-
-  const saveSettingsMutation = useSaveSettings();
-  const saveSettingsRes = saveSettingsMutation.data;
-
   React.useEffect(() => {
     if (appNames) {
       if (existingSettings && existingSettings.data?.options) {
-        const convertToObject = existingSettings.data?.options
+        const convertToObject = existingSettings.data.options
           .map(([k, v]) => {
             if (appNames.includes(k)) {
               return {
@@ -95,7 +95,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
                 selected: v,
               };
             }
-            if (k === 'snoozed' && typeof v === 'boolean') {
+            if (k === SnoozeOption && typeof v === 'boolean') {
               setSnoozed(v);
             }
           })
@@ -105,6 +105,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         const uniqueData = [
           ...mergedArray.reduce((map, obj) => map.set(obj.app, obj), new Map()).values(),
         ];
+
         return setAllStates(uniqueData);
       } else {
         setAllStates(appNames.map(app => ({ app: app, selected: true })));
@@ -115,7 +116,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   React.useEffect(() => {
     if (formatedSettings) {
-      saveSettingsMutation.mutate(JSON.stringify({ app: appname, options: formatedSettings }));
+      saveSettingsMutation.mutate(JSON.stringify({ app: Appname, options: formatedSettings }));
     }
     if (saveSettingsRes) {
       setFormatedSettings(null);
@@ -156,6 +157,14 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
+  React.useEffect(() => {
+    if (allStates) {
+      if (allStates.find(state => state.selected === false)) {
+        setSelected(false);
+      }
+    }
+  }, [allStates]);
+
   const goToNextStep = () => {
     // navigate to final step or go back to notifications page depending whether it's the first time accessing the app or not
     return navigateTo?.({
@@ -185,23 +194,18 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       }
 
       const allPrefs = allStates?.map(state => Object.values(state));
-      allPrefs.push(['snoozed', snoozed]);
+
+      // add the snooze preference
+      allPrefs.push([SnoozeOption, snoozed]);
 
       setFormatedSettings(allPrefs);
-
-      _uiEvents.current.next({
-        event: EventTypes.ShowNotification,
-        data: {
-          name: 'success',
-          message: 'Notification settings updated successfully',
-        },
-      });
 
       if (snoozed) {
         // emit snooze notification event so the topbar's notification icon can be updated
         _uiEvents.current.next({
           event: EventTypes.SnoozeNotifications,
         });
+
         _uiEvents.current.next({
           event: EventTypes.ShowNotification,
           data: {
@@ -225,6 +229,14 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           },
         });
       }
+
+      _uiEvents.current.next({
+        event: EventTypes.ShowNotification,
+        data: {
+          name: 'success',
+          message: 'Notification settings updated successfully',
+        },
+      });
 
       setIsChanged(false);
 
@@ -260,24 +272,26 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
         <Divider customStyle="!mt-0" />
-        <Stack direction="column" customStyle="mx-4 !my-0 py-2">
-          {!initial && (
-            <>
-              <Stack justify="between" direction="row">
-                <Text variant="footnotes2">
-                  <>{t('Snooze Notifications')}</>
-                </Text>
-                <Toggle
-                  iconChecked="BellSnoozeIcon"
-                  iconUnchecked="BellAlertIcon"
-                  checked={snoozed}
-                  onChange={snoozeChangeHandler}
-                />
-              </Stack>
-            </>
-          )}
-        </Stack>
-        <Divider customStyle="!mt-0" />
+        {!initial && (
+          <>
+            <Stack direction="column" customStyle="px-6 !my-0 py-2">
+              <>
+                <Stack justify="between" direction="row">
+                  <Text variant="footnotes2">
+                    <>{t('Snooze Notifications')}</>
+                  </Text>
+                  <Toggle
+                    iconChecked="BellSnoozeIcon"
+                    iconUnchecked="BellAlertIcon"
+                    checked={snoozed}
+                    onChange={snoozeChangeHandler}
+                  />
+                </Stack>
+              </>
+            </Stack>
+            <Divider customStyle="!mt-0" />
+          </>
+        )}
         <Stack direction="column" customStyle="mx-4">
           {initial ? (
             <Text variant="footnotes2" weight="normal" color={{ dark: 'grey6', light: 'grey4' }}>
@@ -309,11 +323,12 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         <Stack direction="column" customStyle="min-h-[80%] !mt-0 gap-y-2 pt-2">
           {allStates.length !== 0 &&
             allStates.map(appState => (
-              <>
+              <Stack
+                direction="column"
+                key={appState.app.concat(String(Math.round(Math.random() * 100)))}
+              >
                 <Stack direction="row" justify="between" align="center" customStyle="px-6">
-                  <Text variant="h6">
-                    {appState?.app}- {String(appState.selected)}
-                  </Text>
+                  <Text variant="h6">{appState?.app}</Text>
                   <Checkbox
                     value={appState.app}
                     id={appState.app.concat(String(Math.round(Math.random() * 100)))}
@@ -324,7 +339,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
                   />
                 </Stack>
                 <Divider customStyle="!mt-0" />
-              </>
+              </Stack>
             ))}
         </Stack>
         <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-32">

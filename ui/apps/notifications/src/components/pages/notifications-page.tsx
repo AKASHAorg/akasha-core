@@ -10,6 +10,7 @@ import DropDownFilter from '@akashaorg/design-system-components/lib/components/D
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { EntityTypes, EventTypes } from '@akashaorg/typings/lib/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
+import { NOTIF_REF } from './customize-notification-page';
 
 export type Notification = {
   id: string;
@@ -22,7 +23,7 @@ const NotificationsPage: React.FC<unknown> = () => {
   // check if user has gone through onboarding steps before
   let savedPreferences;
   if (window.localStorage) {
-    savedPreferences = JSON.parse(localStorage.getItem('notification-preference'));
+    savedPreferences = JSON.parse(localStorage.getItem(NOTIF_REF));
   }
 
   useEffect(() => {

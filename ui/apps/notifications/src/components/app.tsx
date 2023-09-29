@@ -9,9 +9,11 @@ const App: React.FC<unknown> = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (
-    <I18nextProvider i18n={getTranslationPlugin().i18n}>
-      <AppRoutes />
-    </I18nextProvider>
+    <React.Suspense fallback={'...'}>
+      <I18nextProvider i18n={getTranslationPlugin().i18n}>
+        <AppRoutes />
+      </I18nextProvider>
+    </React.Suspense>
   );
 };
 

@@ -168,17 +168,15 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
     return (
       <div key={index}>
         <Stack padding="py-3 pl-4" customStyle="flex-row">
-          <Button plain onClick={clickHandler}>
-            <ProfileAvatarNotificationApp
-              profileId={profileData.did?.id}
-              avatarImage={profileData.avatar}
-              label={fullLabel}
-              info={relativeTime}
-              onClickAvatar={clickHandler}
-              onClick={clickHandler}
-              active={!notif.read}
-            />
-          </Button>
+          <ProfileAvatarNotificationApp
+            profileId={profileData.did?.id}
+            avatarImage={profileData.avatar}
+            label={fullLabel}
+            info={relativeTime}
+            onClickAvatar={clickHandler}
+            onClick={clickHandler}
+            active={!notif.read}
+          />
         </Stack>
         {index !== notifications.length - 1 && <Divider />}
       </div>
