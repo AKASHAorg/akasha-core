@@ -25,7 +25,7 @@ export const BeamEditor: React.FC = () => {
   return (
     <Card>
       {blocksInUse.map((block, idx) => (
-        <div key={`${block.propertyType}-${idx}`}>
+        <div key={`${block.propertyType}-${idx}`} id={`${block.propertyType}-${idx}`}>
           <ContentBlockExtension
             editMode={{
               appName: block.appName,
@@ -36,11 +36,11 @@ export const BeamEditor: React.FC = () => {
           />
           <Dropdown
             placeholderLabel={'Add Block'}
-            menuItems={availableBlocks.map(eb => ({
-              id: eb.propertyType,
-              iconName: eb.icon,
-              title: eb.displayName,
-              appName: eb.appName,
+            menuItems={availableBlocks.map(block => ({
+              id: block.propertyType,
+              iconName: block.icon,
+              title: block.displayName,
+              appName: block.appName,
             }))}
             setSelected={onBlockSelectAfter(idx)}
           />

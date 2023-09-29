@@ -16,7 +16,7 @@ const Wrapped = (_: RootExtensionProps) => {
   );
 };
 
-const reactLifecycles = singleSpaReact({
+export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(Wrapped),
@@ -28,9 +28,3 @@ const reactLifecycles = singleSpaReact({
     return <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />;
   },
 });
-
-export const bootstrap = reactLifecycles.bootstrap;
-
-export const mount = reactLifecycles.mount;
-
-export const unmount = reactLifecycles.unmount;

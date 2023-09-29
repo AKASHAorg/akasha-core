@@ -23,10 +23,10 @@ export class ContentBlockStore {
 
   public getMatchingBlocks: ContentBlockStorePluginInterface['getMatchingBlocks'] = blockInfo => {
     if (!blockInfo) {
-      console.warn('Block info not found:', blockInfo);
+      console.warn('Block info not defined:', blockInfo);
       return [];
     }
-    if (hasOwn(blockInfo, 'appName') && hasOwn(blockInfo, 'propertyType')) {
+    if (hasOwn(blockInfo, 'propertyType') && hasOwn(blockInfo, 'appName')) {
       const blocks = this.#blocks
         .map(block => {
           if (

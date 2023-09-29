@@ -45,5 +45,6 @@ export const getPlugin = (
       getInfos: contentBlockStore.getContentBlockInfos,
       getMatchingBlocks: contentBlockStore.getMatchingBlocks,
     },
+    extensionStore: {},
   };
 };

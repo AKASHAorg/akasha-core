@@ -44,6 +44,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
   const [parcels, setParcels] = React.useState<(MatchingBlock & { config: ParcelConfigObject })[]>(
     [],
   );
+  const isLoadingBlocks = React.useRef(false);
 
   React.useLayoutEffect(() => {
     if (!contentBlockStoreRef.current && !!getExtensionsPlugin()) {
@@ -68,7 +69,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     switch (mode) {
       case ContentBlockModes.EDIT:
         return contentBlockStoreRef.current.getMatchingBlocks({
-          name: editMode.appName,
+          appName: editMode.appName,
           propertyType: editMode.propertyType,
         });
       case ContentBlockModes.READONLY:
@@ -92,14 +93,22 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
           console.error(err);
         }
       }
+      isLoadingBlocks.current = false;
     };
-    if (matchingBlocks && matchingBlocks.length) {
-      resolveConfigs().catch(err => console.error('failed to load content blocks'));
+    if (
+      matchingBlocks &&
+      matchingBlocks.length &&
+      matchingBlocks.length !== parcels.length &&
+      !isLoadingBlocks.current
+    ) {
+      isLoadingBlocks.current = true;
+      resolveConfigs().catch(err => console.error('failed to load content blocks', err));
     }
-  }, [matchingBlocks, mode]);
+  }, [matchingBlocks, mode, parcels.length]);
 
   return (
     <div>
+      {matchingBlocks && matchingBlocks.length > parcels.length && <div>Loading content</div>}
       {parcels.map((matchingBlock, index) => {
         return (
           <div
