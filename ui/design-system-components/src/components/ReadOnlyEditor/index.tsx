@@ -8,6 +8,7 @@ import ImageOverlay from '../ImageOverlay';
 
 export interface IReadOnlyEditor {
   content: Descendant[];
+  disabled?: boolean;
   handleMentionClick?: (id: string) => void;
   handleTagClick?: (name: string) => void;
   handleLinkClick?: (url: string) => void;
@@ -21,7 +22,7 @@ export interface IReadOnlyEditor {
  * @param handleLinkClick - click handler for links in the content, will open external links in new tab
  */
 const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
-  const { content, handleMentionClick, handleTagClick, handleLinkClick } = props;
+  const { content, disabled, handleMentionClick, handleTagClick, handleLinkClick } = props;
 
   const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
   const [value, setValue] = React.useState(content);
@@ -77,7 +78,7 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
               handleTagClick,
               handleLinkClick,
               null,
-              handleClickImage,
+              !disabled ? handleClickImage : null,
             )
           }
           renderLeaf={renderLeaf}

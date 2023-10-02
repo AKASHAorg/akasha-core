@@ -8,6 +8,7 @@ import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useTranslation } from 'react-i18next';
 
 type BeamCardProps = {
   entryData: AkashaBeam;
@@ -18,6 +19,8 @@ type BeamCardProps = {
 
 const BeamCard: React.FC<BeamCardProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
+  const { t } = useTranslation('ui-lib-feed');
+
   const { entryData, locale, uiEvents, onContentClick } = props;
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },
@@ -44,6 +47,24 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
       sortedContents={sortByKey(entryData.content, 'order')}
+      removed={{
+        author: {
+          firstPart: t('AKASHA world members won’t be able to see the content '),
+          secondPart: t('of your reflection because you have violated the following '),
+          thirdPart: { url: '' /*@TODO */, content: t('Code of Conduct.') },
+          tapToViewLabel: t('Tap to view'),
+        },
+        others: {
+          firstLine: t(
+            'This reflection has been delisted for the violation of our Code of Conduct.',
+          ),
+          secondLine: t('All reflections are disabled.'),
+        },
+      }}
+      nsfw={{
+        sensitiveContentLabel: t('Sensitive Content!'),
+        clickToViewLabel: t('Click to View'),
+      }}
       itemType={EntityTypes.BEAM}
       onAvatarClick={onAvatarClick}
       onContentClick={onContentClick}
