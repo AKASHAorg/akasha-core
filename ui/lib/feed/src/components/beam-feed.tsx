@@ -108,16 +108,16 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
       >
         {cardProps => {
           const { items, allEntries, measureElementRef } = cardProps;
-          return items.map((item, idx) => {
+          return items.map(item => {
             if (!item) {
-              return <div key={idx} />;
+              return <div key={item.key} />;
             }
             const { index, key } = item;
             const entryData = allEntries[index];
             const isNextLoader = index > allEntries.length - 1;
             if (isNextLoader) {
               return (
-                <Stack fullWidth={true} key={`${index}_${key}`} customStyle="p-8">
+                <Stack fullWidth={true} key={'$next-loader'} customStyle="p-8">
                   <Spinner />
                 </Stack>
               );

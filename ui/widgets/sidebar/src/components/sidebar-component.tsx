@@ -178,7 +178,7 @@ const SidebarComponent: React.FC<unknown> = () => {
 
   const handleClickExplore = () => {
     routing?.navigateTo({
-      appName: '@akashaorg/app-akasha-verse',
+      appName: '@akashaorg/app-extensions',
       getNavigationUrl: routes => routes.explore,
     });
 

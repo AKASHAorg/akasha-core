@@ -1,9 +1,5 @@
 import { IMenuItem } from './menu-items';
-import {
-  BlockCommandRequest,
-  BlockCommandResponse,
-  EditorBlockRegisterEvent,
-} from './editor-blocks';
+import { ContentBlockRegisterEvent } from './editor-blocks';
 import { AnalyticsEventData } from './analytics';
 
 export enum EventTypes {
@@ -83,7 +79,5 @@ export type UIEventData =
       event: EventTypes;
       data?: EventDataTypes;
     }
-  | EditorBlockRegisterEvent
-  | BlockCommandRequest
-  | BlockCommandResponse
+  | ContentBlockRegisterEvent
   | AnalyticsEventData;

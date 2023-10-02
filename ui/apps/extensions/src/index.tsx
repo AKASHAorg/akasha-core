@@ -4,8 +4,10 @@ import {
   MenuItemAreaType,
   IntegrationRegistrationOptions,
   LogoTypeSource,
+  RootComponentProps,
 } from '@akashaorg/typings/lib/ui';
 import routes from './routes';
+import { ContentBlockStore } from './plugins/content-block-store';
 
 /**
  * All the plugins must export an object like this:
@@ -15,7 +17,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   routes: {
     ...routes,
   },
-  i18nNamespace: ['app-akasha-verse'],
+  i18nNamespace: ['app-extensions'],
   loadingFn: () => import('./components'),
   title: 'AKASHA Core Extensions',
   menuItems: {
@@ -30,3 +32,19 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     });
   },
 });
+
+export const getPlugin = (
+  props: RootComponentProps & {
+    encodeAppName: (name: string) => string;
+    decodeAppName: (name: string) => string;
+  },
+) => {
+  const contentBlockStore = ContentBlockStore.getInstance(props.uiEvents);
+  return {
+    contentBlockStore: {
+      getInfos: contentBlockStore.getContentBlockInfos,
+      getMatchingBlocks: contentBlockStore.getMatchingBlocks,
+    },
+    extensionStore: {},
+  };
+};

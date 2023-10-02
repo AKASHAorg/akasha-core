@@ -1,51 +1,74 @@
-import { AppName } from './apps';
+import singleSpa from 'single-spa';
+import { RootComponentProps } from './root-component';
+import { GetContentBlockByIdQuery } from '../sdk/graphql-operation-types-new';
+import { AkashaContentBlockLabeledValue } from '../sdk/graphql-types-new';
 
-export const enum BlockAction {
-  PUBLISH = 'publish',
-  UPDATE = 'update',
-  VALIDATE = 'validate',
+export const enum ContentBlockModes {
+  EDIT = 'edit-mode',
+  READONLY = 'read-only-mode',
 }
 
-export const enum BlockActionType {
-  SUCCESS = 'success',
-  ERROR = 'error',
-}
-
-export type EditorBlockInterface = {
-  name: string;
+export type BlockInfo = {
+  mode: ContentBlockModes;
+};
+export type ContentBlockExtensionInterface = {
+  propertyType: string;
   icon?: string;
   displayName: string;
-  eventMap: {
-    publish: `${string}/${BlockAction.PUBLISH}`;
-    update: `${string}/${BlockAction.UPDATE}`;
-    validate: `${string}/${BlockAction.VALIDATE}`;
-  };
-};
-export type BlockName = string;
-export type EditorBlock = EditorBlockInterface & {
-  appName: string;
-  idx: number;
+  loadingFn: (options: {
+    blockInfo: BlockInfo;
+    blockData: GetContentBlockByIdQuery['node'];
+  }) => () => Promise<singleSpa.ParcelConfigObject<ContentBlockRootProps>>;
 };
 
-export const enum EditorBlockEvents {
-  RegisterEditorBlock = 'register-editor-block',
+export type ContentBlock = ContentBlockExtensionInterface & {
+  appName: string;
+  propertyType: string;
+  order: number;
+};
+
+export type ContentBlockRootProps = RootComponentProps & {
+  blockInfo: Omit<ContentBlock, 'loadingFn'> & { mode: ContentBlockModes };
+  blockData: GetContentBlockByIdQuery['node'];
+  content: AkashaContentBlockLabeledValue;
+};
+
+export const enum ContentBlockEvents {
+  RegisterContentBlock = 'register-content-block',
 }
 
-export type EditorBlockRegisterEvent = {
-  event: EditorBlockEvents.RegisterEditorBlock;
-  data?: (EditorBlockInterface & { appName: string })[];
+export type ContentBlockRegisterEvent = {
+  event: ContentBlockEvents.RegisterContentBlock;
+  data?: (ContentBlockExtensionInterface & { appName: string })[];
 };
 
-export type BlockCommandRequest = {
-  event: `${AppName}_${BlockName}/${BlockAction}`;
-  data: EditorBlock;
+export type BlockInstanceMethods = {
+  createBlock: () => Promise<{
+    response: { blockID?: string; error?: string };
+    blockInfo: BlockInfo;
+  }>;
 };
 
-export type BlockCommandResponse = {
-  event: `${AppName}_${BlockName}/${BlockAction}_${BlockActionType}`;
-  data: {
-    block: EditorBlock;
-    // @TODO: this response must contain published content block id ??
-    response: { error?: string; blockID?: string };
-  };
-};
+export interface ContentBlockStorePluginInterface {
+  getInfos(): Omit<
+    ContentBlockExtensionInterface & {
+      appName: string;
+    },
+    'loadingFn'
+  >;
+
+  getMatchingBlocks: (
+    blockInfo:
+      | {
+          appName: string;
+          propertyType: string;
+        }
+      | GetContentBlockByIdQuery['node'],
+  ) => {
+    blockInfo: ContentBlockExtensionInterface & {
+      appName: string;
+    };
+    blockData?: unknown;
+    content?: unknown;
+  }[];
+}

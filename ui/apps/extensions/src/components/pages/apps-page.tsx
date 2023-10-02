@@ -6,7 +6,7 @@ import AppList from '@akashaorg/design-system-components/lib/components/AppList'
 import { useTranslation } from 'react-i18next';
 
 const AppsPage: React.FC<unknown> = () => {
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
 
   /*@TODO: replace with the relevant hook once it's ready */
   const dummyNewestApps = [

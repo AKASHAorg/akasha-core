@@ -30,7 +30,7 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
 const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => {
   const { isLoggedIn, children } = props;
 
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
   const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
 
   const location = useLocation();
@@ -49,7 +49,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
   const handleTabChange = (selectedIndex: number) => {
     if (navigateTo) {
       navigateTo({
-        appName: '@akashaorg/app-akasha-verse',
+        appName: '@akashaorg/app-extensions',
         getNavigationUrl: () => TAB_INDEX_TO_ROUTE_MAP[selectedIndex],
       });
     }
@@ -59,7 +59,7 @@ const MasterPage: React.FC<React.PropsWithChildren<MasterPageProps>> = props => 
     if (!isLoggedIn && location.pathname !== routes[EXPLORE]) {
       if (navigateTo) {
         navigateTo({
-          appName: '@akashaorg/app-akasha-verse',
+          appName: '@akashaorg/app-extensions',
           getNavigationUrl: () => routes[EXPLORE],
         });
       }
