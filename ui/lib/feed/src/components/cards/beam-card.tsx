@@ -1,7 +1,6 @@
 import React from 'react';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
