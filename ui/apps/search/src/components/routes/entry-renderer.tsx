@@ -165,7 +165,6 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
             !accountAwaitingModeration && */}
           {!itemData.nsfw && itemData.active && (
             <EntryCard
-              isRemoved={!itemData.active}
               entryData={itemData}
               authorProfile={{ data: profileData, status: profileDataReq.status }}
               sortedContents={sortByKey(itemData.content, 'order')}
