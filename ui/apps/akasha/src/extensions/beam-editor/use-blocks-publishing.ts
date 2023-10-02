@@ -1,7 +1,12 @@
 import * as React from 'react';
-import { BlockCommandResponse, RootComponentProps, BlockAction } from '@akashaorg/typings/lib/ui';
-import { BlockActionType, EditorBlock } from '@akashaorg/typings/lib/ui/editor-blocks';
-import { filterEvents } from '@akashaorg/ui-awf-hooks';
+import {
+  BlockInstanceMethods,
+  ContentBlockModes,
+  ContentBlockRootProps,
+} from '@akashaorg/typings/lib/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 /**
  * Steps when publishBeam is called:
@@ -16,102 +21,129 @@ import { filterEvents } from '@akashaorg/ui-awf-hooks';
 // this can be made configurable via world config
 const DEFAULT_TEXT_BLOCK = 'slate-block';
 
-export type UseBlocksPublishingProps = {
-  uiEvents: RootComponentProps['uiEvents'];
-  availableBlocks: Omit<EditorBlock, 'idx'>[];
-  onBeamPublish: (publishedBlocks: BlockCommandResponse['data'][]) => Promise<void>;
-};
+export const useBlocksPublishing = () => {
+  const [availableBlocks, setAvailableBlocks] = React.useState([]);
+  const { getExtensionsPlugin } = useRootComponentProps();
+  React.useLayoutEffect(() => {
+    if (getExtensionsPlugin()) {
+      setAvailableBlocks(getExtensionsPlugin().contentBlockStore.getInfos());
+    }
+  }, [getExtensionsPlugin]);
 
-export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
-  const { uiEvents, availableBlocks, onBeamPublish } = props;
+  const createBeam = useCreateBeamMutation();
+
   const [isPublishing, setIsPublishing] = React.useState(false);
-  const [blocksInUse, setBlocksInUse] = React.useState<EditorBlock[]>([]);
 
-  const [publishedBlocks, setPublishedBlocks] = React.useState<BlockCommandResponse['data'][]>([]);
-  const defaultTextBlock = availableBlocks.find(block => block.name === DEFAULT_TEXT_BLOCK);
-  const publishBeam = React.useRef(onBeamPublish);
+  const [blocksInUse, setBlocksInUse] = React.useState<
+    (ContentBlockRootProps['blockInfo'] & {
+      appName: string;
+      blockRef: React.RefObject<any>;
+      status?: 'success' | 'pending' | 'error';
+      response?: { blockID: string; error?: string };
+    })[]
+  >([]);
 
+  const defaultTextBlock = availableBlocks.find(block => block.propertyType === DEFAULT_TEXT_BLOCK);
+
+  // always add the default block
   React.useEffect(() => {
     if (blocksInUse.length === 0) {
-      // always add the default block
-      setBlocksInUse([{ ...defaultTextBlock, idx: 0 }]);
+      setBlocksInUse([
+        {
+          ...defaultTextBlock,
+          order: 0,
+          mode: ContentBlockModes.EDIT,
+          blockRef: React.createRef<BlockInstanceMethods>(),
+        },
+      ]);
     }
   }, [blocksInUse, defaultTextBlock]);
 
-  // subscribe to contentBlock creation event
-  // add the response along with the block data to the publishedBlocks state
   React.useEffect(() => {
-    const blockEvents =
-      blocksInUse.map<`${string}_${string}/${BlockAction.PUBLISH}_${BlockActionType.SUCCESS}`>(
-        block => `${block.appName}_${block.eventMap.publish}_${BlockActionType.SUCCESS}`,
-      );
+    if (!blocksInUse.length) return;
+    if (blocksInUse.every(bl => bl.status === 'success')) {
+      const beamContent: AkashaBeamInput = {
+        active: true,
+        content: blocksInUse.map(blockData => ({
+          blockID: blockData.response.blockID,
+          order: blockData.order,
+        })),
+        createdAt: new Date().toISOString(),
+      };
 
-    const sub = uiEvents.pipe(filterEvents(blockEvents)).subscribe({
-      next: (event: BlockCommandResponse) => {
-        const blockData = event.data.block;
-        if (
-          publishedBlocks.some(
-            published =>
-              published.block.name === blockData.name && published.block.idx === blockData.idx,
-          )
-        ) {
-          return;
-        }
-        setPublishedBlocks(prev => [...prev, event.data]);
-      },
-    });
-    return () => {
-      sub.unsubscribe();
-    };
-  }, [blocksInUse, publishedBlocks, uiEvents]);
+      if (createBeam.isLoading || createBeam.error) return;
 
-  // check if all used blocks are published
-  // and then trigger beam publishing;
-  React.useEffect(() => {
-    // this check is mandatory because array.some returns true if the array is empty :O
-    if (!publishedBlocks.length) {
-      return;
+      createBeam
+        .mutateAsync({
+          i: {
+            content: beamContent,
+          },
+        })
+        .then(res => {
+          console.info('Beam successfully created', res);
+          setBlocksInUse([]);
+          setIsPublishing(false);
+        })
+        .catch(err => {
+          // @TODO: handle errors!
+          console.error('error creating beam.', err);
+        });
     }
-    const isAllPublishedWithSuccess = blocksInUse.every(bl =>
-      publishedBlocks.some(
-        pBlock =>
-          pBlock.block.name === bl.name && pBlock.block.idx === bl.idx && !pBlock.response.error,
-      ),
-    );
-    // @TODO: handle errors!
-    if (isAllPublishedWithSuccess) {
-      publishBeam.current(publishedBlocks).finally(() => {
-        // @TODO: check for errors before reseting publishedBlocks
-        setPublishedBlocks([]);
-        setIsPublishing(false);
-      });
-    }
-  }, [blocksInUse, publishedBlocks]);
+  }, [blocksInUse]);
 
-  const createContentBlocks = React.useCallback(() => {
+  const createContentBlocks = React.useCallback(async () => {
     setIsPublishing(true);
-    for (const block of blocksInUse) {
-      uiEvents.next({
-        event: `${block.appName}_${block.eventMap.publish}`,
-        data: block,
-      });
+    for (const [idx, block] of blocksInUse.entries()) {
+      if (block.status !== 'success' && block.status !== 'pending') {
+        setBlocksInUse(prev => [
+          ...prev.slice(0, idx),
+          { ...block, status: 'pending' },
+          ...prev.slice(idx + 1),
+        ]);
+        const data = await block.blockRef.current.createBlock();
+        if (data.response) {
+          console.log('block:', data.blockInfo, 'created successfully...');
+          setBlocksInUse(prev => [
+            ...prev.slice(0, idx),
+            { ...block, status: 'success', response: data.response },
+            ...prev.slice(idx + 1),
+          ]);
+        }
+      }
     }
-  }, [blocksInUse, uiEvents]);
+  }, [blocksInUse]);
 
   // convenience method to add a new block into the beam editor
   // if index (idx) param is omitted, it will be added as the last block in the list
-  const addBlockToList = (block: UseBlocksPublishingProps['availableBlocks'][0], idx?: number) => {
-    if (idx) {
+  const addBlockToList = (selectedBlock: { id: string; appName: string }, afterIdx: number) => {
+    const block = availableBlocks.find(
+      bl => bl.propertyType === selectedBlock.id && bl.appName === selectedBlock.appName,
+    );
+
+    if (afterIdx) {
       setBlocksInUse(prev => [
-        ...prev.slice(0, idx),
-        { ...block, idx: idx },
-        ...prev.slice(idx).map(bl => ({
+        ...prev.slice(0, afterIdx),
+        {
+          ...block,
+          order: afterIdx,
+          blockRef: React.createRef<BlockInstanceMethods>(),
+          mode: ContentBlockModes.EDIT,
+        },
+        ...prev.slice(afterIdx).map(bl => ({
           ...bl,
-          idx: bl.idx + 1,
+          order: bl.order + 1,
         })),
       ]);
     }
-    setBlocksInUse(prev => [...prev, { ...block, idx: prev.length }]);
+    setBlocksInUse(prev => [
+      ...prev,
+      {
+        ...block,
+        order: prev.length,
+        blockRef: React.createRef<BlockInstanceMethods>(),
+        mode: ContentBlockModes.EDIT,
+      },
+    ]);
   };
 
   return {
@@ -120,5 +152,6 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
     createContentBlocks,
     blocksInUse,
     addBlockToList,
+    availableBlocks,
   };
 };

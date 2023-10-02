@@ -6,7 +6,6 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { i18n } from 'i18next';
 
 const Wrapped = (_: RootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
@@ -17,7 +16,7 @@ const Wrapped = (_: RootExtensionProps) => {
   );
 };
 
-const reactLifecycles = singleSpaReact({
+export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(Wrapped),
@@ -29,9 +28,3 @@ const reactLifecycles = singleSpaReact({
     return <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />;
   },
 });
-
-export const bootstrap = reactLifecycles.bootstrap;
-
-export const mount = reactLifecycles.mount;
-
-export const unmount = reactLifecycles.unmount;

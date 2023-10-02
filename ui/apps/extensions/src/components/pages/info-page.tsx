@@ -14,7 +14,7 @@ const InfoPage: React.FC<unknown> = () => {
 
   // const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
 
   const { isLoggedIn } = useLoggedIn();
 
