@@ -50,14 +50,12 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       removed={{
         author: {
           firstPart: t('AKASHA world members won’t be able to see the content '),
-          secondPart: t('of your reflection because you have violated the following '),
+          secondPart: t('of your beam because you have violated the following '),
           thirdPart: { url: '' /*@TODO */, content: t('Code of Conduct.') },
           tapToViewLabel: t('Tap to view'),
         },
         others: {
-          firstLine: t(
-            'This reflection has been delisted for the violation of our Code of Conduct.',
-          ),
+          firstLine: t('This beam has been delisted for the violation of our Code of Conduct.'),
           secondLine: t('All reflections are disabled.'),
         },
       }}
