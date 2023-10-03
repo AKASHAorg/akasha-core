@@ -8,7 +8,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
   mountsIn: opts.layoutConfig?.widgetSlotId,
   loadingFn: () => import('./my-apps-widget'),
   activeWhen: (location, pathToActiveWhen) =>
-    pathToActiveWhen('/@akashaorg/app-akasha-verse/', false)(location),
+    pathToActiveWhen('/@akashaorg/app-extensions/', false)(location),
   name: 'ui-widget-my-apps',
   i18nNamespace: [],
 });

@@ -1,7 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import {
+  GetAppsQuery,
+  GetAppsByIdQuery,
+} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -15,7 +18,7 @@ export type WidgetsPageProps = {
 };
 
 const MyWidgetsPage: React.FC<WidgetsPageProps> = () => {
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
 
   // const defaultWidgetNamesNormalized = React.useMemo(() => {
   //   return worldConfig?.defaultWidgets.map(app => {
@@ -41,7 +44,7 @@ const MyWidgetsPage: React.FC<WidgetsPageProps> = () => {
 
   // const handleAppClick = appId => {
   //   getRoutingPlugin().navigateTo?.({
-  //     appName: '@akashaorg/app-akasha-verse',
+  //     appName: '@akashaorg/app-extensions',
   //     getNavigationUrl: routes => `${routes[INFO]}/${appId}`,
   //   });
   // };

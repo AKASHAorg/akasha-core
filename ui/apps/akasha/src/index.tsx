@@ -1,17 +1,12 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import routes, { BEAM, FEED, MY_FEED, PROFILE_FEED, REFLECT, TAGS } from './routes';
 import {
-  EditorBlockEvents,
-  EditorBlockRegisterEvent,
   IAppConfig,
   IntegrationRegistrationOptions,
   LogoTypeSource,
   MenuItemAreaType,
   MenuItemType,
-  RootComponentProps,
 } from '@akashaorg/typings/lib/ui';
-import { BlockAction, EditorBlockInterface } from '@akashaorg/typings/lib/ui/editor-blocks';
-import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
 /**
  * Initialization of the integration is optional.
@@ -73,60 +68,22 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     ],
   },
-  editorBlocks: [
+  contentBlocks: [
     {
-      name: 'slate-block',
+      // propertyType should match beam's content[i].propertyType
+      propertyType: 'slate-block',
       icon: 'Bars3BottomLeftIcon',
       displayName: 'Slate text block',
-      eventMap: {
-        publish: `slate-block/${BlockAction.PUBLISH}`,
-        update: `slate-block/${BlockAction.UPDATE}`,
-        validate: `slate-block/${BlockAction.VALIDATE}`,
+      loadingFn: data => {
+        return () => import('./extensions/slate-block');
       },
     },
   ],
   extends: (matcher, loader) => {
     matcher({
       'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
-      'slate-block_*': loader(() => import('./extensions/slate-block')),
       'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
       'beam-editor_*': loader(() => import('./extensions/beam-editor')),
     });
   },
 });
-
-class EditorBlocksPlugin {
-  static readonly editorBlocks: EditorBlockInterface[] = [];
-  static observe = (uiEvents: RootComponentProps['uiEvents']) => {
-    uiEvents.pipe(filterEvent(EditorBlockEvents.RegisterEditorBlock)).subscribe({
-      next: (evData: EditorBlockRegisterEvent) => {
-        if (!evData.data) {
-          return;
-        }
-        for (const block of evData.data) {
-          if (EditorBlocksPlugin.editorBlocks.some(b => b.name === block.name)) {
-            return;
-          }
-          EditorBlocksPlugin.editorBlocks.push(block);
-        }
-      },
-    });
-  };
-  static getAllBlocks = () => {
-    return EditorBlocksPlugin.editorBlocks;
-  };
-}
-
-export const getPlugin = async (
-  props: RootComponentProps & {
-    encodeAppName: (name: string) => string;
-    decodeAppName: (name: string) => string;
-  },
-) => {
-  EditorBlocksPlugin.observe(props.uiEvents);
-  return {
-    editorBlocks: {
-      getAll: EditorBlocksPlugin.getAllBlocks,
-    },
-  };
-};

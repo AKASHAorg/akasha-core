@@ -76,40 +76,38 @@ function EntryList<T>(props: EntryListProps<T>) {
 
   const rootElementRef = React.useRef<HTMLDivElement>();
   const isScrollRestored = React.useRef(false);
-  const [listReset, resetList] = React.useReducer(() => ({}), {});
+  const [, resetList] = React.useReducer(() => ({}), {});
 
   // @TODO: maybe pass the topbar slotId here?
   const topbarHeight = document.getElementById('topbar-slot')?.offsetParent?.clientHeight || 0;
 
   // keep the first scroll state as ref
   const initialScrollStateRef = React.useRef<ScrollerState & { isFetched: boolean }>();
-  React.useEffect(() => {
-    if (!initialScrollStateRef.current && initialScrollState.isFetched) {
-      initialScrollStateRef.current = initialScrollState;
-    }
-  }, [initialScrollState]);
 
-  const cachedScrollState = React.useRef<ScrollerState & { isFetched: boolean }>();
-  React.useLayoutEffect(() => {
-    if (initialScrollState.isFetched) {
-      cachedScrollState.current = initialScrollState;
-    }
-  }, [initialScrollState, listReset]);
+  if (!initialScrollStateRef.current && initialScrollState.isFetched) {
+    initialScrollStateRef.current = initialScrollState;
+  }
 
   const measurementsCache = React.useMemo(() => {
     if (initialScrollState.isFetched) {
       return initialScrollState.measurementsCache;
     }
-    return cachedScrollState.current?.measurementsCache || [];
+    return undefined;
   }, [initialScrollState]);
 
   // merge pages and measurementsCache
   const pageItems: (T & { index: number; key: string })[] = React.useMemo(() => {
     if (pages.length) {
-      return mergeWithCache(measurementsCache, pages);
+      if (measurementsCache) {
+        return mergeWithCache(measurementsCache, pages);
+      }
+      return pages;
     }
-    return measurementsCache;
-  }, [measurementsCache, pages, listReset]);
+    if (measurementsCache) {
+      return measurementsCache;
+    }
+    return [];
+  }, [measurementsCache, pages]);
 
   const virtualizer = useWindowVirtualizer({
     count: pageItems.length,
@@ -151,28 +149,24 @@ function EntryList<T>(props: EntryListProps<T>) {
     }
   }, [firstPopulatedItem]);
 
-  React.useEffect(() => {
-    if (!firstPopulatedItem) {
-      return;
-    }
-    if (items[0] && items[0].index < firstPopulatedItem.index && !isScrollRestored.current) {
-      virtualizer.scrollToIndex(firstPopulatedItem.index, { align: 'start' });
-      const firstDomEl = rootElementRef.current.querySelector(
-        `[data-index="${firstPopulatedItem.index}"]`,
-      );
-      if (firstDomEl) {
-        const rect = firstDomEl.getClientRects().item(0);
-        if (Math.abs(rect.top - topbarHeight) < topbarHeight) {
-          isScrollRestored.current = true;
-        }
+  if (items[0] && items[0].index < firstPopulatedItem?.index && !isScrollRestored.current) {
+    virtualizer.scrollToIndex(firstPopulatedItem.index, { align: 'start' });
+    const firstDomEl = rootElementRef.current.querySelector(
+      `[data-index="${firstPopulatedItem.index}"]`,
+    );
+    if (firstDomEl) {
+      const rect = firstDomEl.getClientRects().item(0);
+      if (Math.abs(rect.top - topbarHeight) < topbarHeight) {
+        isScrollRestored.current = true;
       }
     }
-  }, [firstPopulatedItem, items, topbarHeight, virtualizer]);
+  }
 
   // save scroll state hook
   const prevRange = React.useRef<{ startIndex: number; endIndex: number }>(
     virtualizer.calculateRange(),
   );
+
   React.useLayoutEffect(() => {
     if (virtualizer.isScrolling) {
       const { startIndex, endIndex } = virtualizer.calculateRange();
@@ -260,7 +254,6 @@ function EntryList<T>(props: EntryListProps<T>) {
       if (onScrollStateReset) {
         onScrollStateReset(reset);
       }
-      cachedScrollState.current = null;
       initialScrollStateRef.current = null;
       resetList();
     },
