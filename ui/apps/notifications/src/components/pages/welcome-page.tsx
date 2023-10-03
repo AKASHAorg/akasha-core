@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useGetSettings, useSaveSettings } from '@akashaorg/ui-awf-hooks';
 import { EventTypes } from '@akashaorg/typings/lib/ui';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -11,7 +11,6 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
-import { NOTIF_REF } from './customize-notification-page';
 
 export type WelcomePageProps = {
   header: string;
@@ -41,11 +40,12 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
   const _uiEvents = useRef(uiEvents);
 
-  // check if user has gone through onboarding steps before
-  let savedPreferences;
-  if (window.localStorage) {
-    savedPreferences = JSON.parse(localStorage.getItem(NOTIF_REF));
-  }
+  const Appname = '@akashaorg/app-notifications';
+
+  const fetchSettingsQuery = useGetSettings(Appname);
+  const existingSettings = fetchSettingsQuery.data;
+
+  const saveSettingsMutation = useSaveSettings();
 
   const goToNextStep = () => {
     // navigate to step 2
@@ -91,14 +91,13 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   };
 
   const skipCustomization = () => {
-    if (window.localStorage) {
-      localStorage.setItem(NOTIF_REF, JSON.stringify(true));
-    }
+    saveSettingsMutation.mutate({ app: Appname, options: { default: true } });
+
     // navigate to notifications
     goToNotificationsPage();
   };
 
-  if (!finalStep && isLoggedIn && savedPreferences) {
+  if (!finalStep && existingSettings) {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[SHOW_NOTIFICATIONS_PAGE],

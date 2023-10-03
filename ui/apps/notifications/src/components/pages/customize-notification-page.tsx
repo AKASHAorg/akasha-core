@@ -71,6 +71,15 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
     return routeData?.[MenuItemAreaType.AppArea];
   }, [routeData]);
 
+  // const appNames = useMemo(() => {
+  //   if (defaultInstalledApps) {
+  //     defaultInstalledApps.map(app => {
+  //       if (allowedApps.includes(app.name)) return prev => [...prev, app.label];
+  //     });
+  //   }
+  //   return [];
+  // }, [defaultInstalledApps]);
+
   React.useEffect(() => {
     if (defaultInstalledApps) {
       defaultInstalledApps.map(app => {
@@ -81,34 +90,32 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   }, [defaultInstalledApps]);
 
   const [selected, setSelected] = useState(true);
-  const [allStates, setAllStates] = useState<{ app: string; selected: boolean }[]>([]);
+  const [allStates, setAllStates] = useState<{ [k: string]: string | number | boolean }>({});
   const [formatedSettings, setFormatedSettings] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const setDefaultValues = () => {
+    setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
+  };
 
   React.useEffect(() => {
     if (appNames) {
-      if (existingSettings && existingSettings.data?.options) {
-        const convertToObject = existingSettings.data.options
-          .map(([k, v]) => {
-            if (appNames.includes(k)) {
-              return {
-                app: k,
-                selected: v,
-              };
-            }
-            if (k === SnoozeOption && typeof v === 'boolean') {
-              setSnoozed(v);
-            }
-          })
-          .filter(item => !!item);
+      if (existingSettings) {
+        const appStates = Object.fromEntries(
+          Object.entries(existingSettings).filter(app => appNames.includes(app[0])),
+        );
 
-        const mergedArray = [...allStates, ...convertToObject];
-        const uniqueData = [
-          ...mergedArray.reduce((map, obj) => map.set(obj.app, obj), new Map()).values(),
-        ];
+        Object.keys(appStates).length !== 0 && appStates.constructor === Object
+          ? setAllStates(appStates)
+          : setDefaultValues();
 
-        return setAllStates(uniqueData);
+        const snoozePref = Object.entries(existingSettings).find(key => key.includes(SnoozeOption));
+
+        if (snoozePref && typeof snoozePref[1] === 'boolean') {
+          setSnoozed(snoozePref[1]);
+        }
       } else {
-        setAllStates(appNames.map(app => ({ app: app, selected: true })));
+        setDefaultValues();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,13 +123,21 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   React.useEffect(() => {
     if (formatedSettings) {
-      saveSettingsMutation.mutate(JSON.stringify({ app: Appname, options: formatedSettings }));
+      setLoading(true);
+      saveSettingsMutation.mutate(
+        { app: Appname, options: formatedSettings },
+        {
+          onSettled() {
+            setLoading(false);
+          },
+        },
+      );
     }
     if (saveSettingsRes) {
       setFormatedSettings(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existingSettings, saveSettingsRes, formatedSettings]);
+  }, [saveSettingsRes, formatedSettings]);
 
   const [snoozed, setSnoozed] = React.useState(false);
   const [isChanged, setIsChanged] = useState(false);
@@ -137,29 +152,29 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   // added for emitting snooze notification event
   const _uiEvents = useRef(uiEvents);
 
-  const changeHandler = ({ app }): void => {
-    const newStates = allStates?.map(state => {
-      if (state.app === app) {
-        state.selected = !state.selected;
+  const changeHandler = (appName): void => {
+    const newStates = Object.entries(allStates).map(state => {
+      if (state[0] === appName) {
+        state[1] = !state[1];
       }
       return state;
     });
 
-    setAllStates([...newStates]);
+    setAllStates(Object.fromEntries(newStates));
     setIsChanged(true);
   };
 
   // auto-selects all when I want to receive all notification is checked
   useEffect(() => {
     if (selected && isChanged) {
-      setAllStates(appNames.map(app => ({ app: app, selected: true })));
+      setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   React.useEffect(() => {
     if (allStates) {
-      if (allStates.find(state => state.selected === false)) {
+      if (Object.entries(allStates).filter(app => app[1] === false).length > 0) {
         setSelected(false);
       }
     }
@@ -177,26 +192,18 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   };
 
   const skipHandler = () => {
-    if (window.localStorage) {
-      localStorage.setItem(NOTIF_REF, JSON.stringify(true));
-    }
-    setFormatedSettings(allStates?.map(state => Object.values(state)));
+    setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
 
     // navigate to final step
     goToNextStep();
   };
 
   const confirmHandler = () => {
-    // @TODO: we save preferences using the settings service, but we also save a key in localstorage to mark as set
     try {
-      if (window.localStorage) {
-        localStorage.setItem(NOTIF_REF, JSON.stringify(true));
-      }
+      const allPrefs = allStates;
 
-      const allPrefs = allStates?.map(state => Object.values(state));
-
-      // add the snooze preference
-      allPrefs.push([SnoozeOption, snoozed]);
+      //add snooze pref
+      allPrefs[SnoozeOption] = snoozed;
 
       setFormatedSettings(allPrefs);
 
@@ -321,20 +328,21 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         </Stack>
         <Divider customStyle="!mt-0" />
         <Stack direction="column" customStyle="min-h-[80%] !mt-0 gap-y-2 pt-2">
-          {allStates.length !== 0 &&
-            allStates.map(appState => (
+          {Object.keys(allStates).length > 0 &&
+            !Object.keys(allStates).find(key => key === SnoozeOption) &&
+            Object.entries(allStates).map(appState => (
               <Stack
                 direction="column"
-                key={appState.app.concat(String(Math.round(Math.random() * 100)))}
+                key={appState[0].concat(String(Math.round(Math.random() * 100)))}
               >
                 <Stack direction="row" justify="between" align="center" customStyle="px-6">
-                  <Text variant="h6">{appState?.app}</Text>
+                  <Text variant="h6">{appState[0]}</Text>
                   <Checkbox
-                    value={appState.app}
-                    id={appState.app.concat(String(Math.round(Math.random() * 100)))}
-                    isSelected={appState.selected}
-                    handleChange={() => changeHandler(appState)}
-                    name={appState.app}
+                    value={appState[0]}
+                    id={appState[0].concat(String(Math.round(Math.random() * 100)))}
+                    isSelected={Boolean(appState[1])}
+                    handleChange={() => changeHandler(appState[0])}
+                    name={appState[0]}
                     customStyle="mb-4"
                   />
                 </Stack>
@@ -342,34 +350,36 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
               </Stack>
             ))}
         </Stack>
-        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-32">
-          {initial ? (
-            <>
-              <Button
-                variant="text"
-                label={t('Do it later')}
-                color="secondaryLight dark:secondaryDark"
-                onClick={skipHandler}
-              />
-              <Button variant="primary" label={t('Confirm')} onClick={confirmHandler} />
-            </>
-          ) : (
-            <>
-              <Button
-                variant="text"
-                label={t('Cancel')}
-                color="secondaryLight dark:secondaryDark"
-                onClick={skipHandler}
-              />
-              <Button
-                variant="primary"
-                label={t('Update')}
-                onClick={confirmHandler}
-                disabled={!isChanged}
-              />
-            </>
-          )}
-        </Stack>
+        {!loading && (
+          <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-32">
+            {initial ? (
+              <>
+                <Button
+                  variant="text"
+                  label={t('Do it later')}
+                  color="secondaryLight dark:secondaryDark"
+                  onClick={skipHandler}
+                />
+                <Button variant="primary" label={t('Confirm')} onClick={confirmHandler} />
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="text"
+                  label={t('Cancel')}
+                  color="secondaryLight dark:secondaryDark"
+                  onClick={skipHandler}
+                />
+                <Button
+                  variant="primary"
+                  label={t('Update')}
+                  onClick={confirmHandler}
+                  disabled={!isChanged}
+                />
+              </>
+            )}
+          </Stack>
+        )}
       </Card>
     </>
   );

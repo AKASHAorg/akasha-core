@@ -4,36 +4,25 @@ import { logError } from './utils/error-handler';
 
 export const SETTING_KEY = 'Notification-Settings';
 
-function convertArray(array: [[string, string | number | boolean]]) {
-  return Object.fromEntries(array);
-}
-
-async function saveSettings(params: string) {
-  const { app, options } = JSON.parse(params);
-
+async function saveSettings({
+  app,
+  options,
+}: {
+  app: string;
+  options: Record<string, string | boolean | number>;
+}) {
   if (!options || !app) return;
 
   const sdk = getSDK();
 
-  const fetchExistingSettings = await sdk.services.settings.get(app);
-  const existingSettings = fetchExistingSettings.data?.options;
+  const existingSettings = await getSettings(app);
 
-  let settings = null;
+  const newSettings = existingSettings ? Object.assign(existingSettings, options) : options;
 
-  if (existingSettings && existingSettings.length > 0) {
-    const optionsConverted = convertArray(options);
-    const existingSettingsConverted = convertArray(existingSettings);
-
-    Object.assign(existingSettingsConverted, optionsConverted);
-    settings = Object.keys(existingSettingsConverted).map(key => [
-      key,
-      existingSettingsConverted[key],
-    ]);
-  } else {
-    settings = options;
-  }
-
-  const res = await sdk.services.settings.set(app, settings);
+  const res = await sdk.services.settings.set(
+    app,
+    Object.entries(newSettings) as [[string, string | number | boolean]],
+  );
   return res.data;
 }
 
@@ -50,20 +39,29 @@ async function saveSettings(params: string) {
 export function useSaveSettings() {
   const queryClient = useQueryClient();
 
-  return useMutation((params: string) => saveSettings(params), {
-    onError: (err: Error) => logError('useSaveSettings', err),
-    onSuccess: data => {
-      queryClient.invalidateQueries([SETTING_KEY]);
-      return data;
+  return useMutation(
+    (params: { app: string; options: Record<string, string | boolean | number> }) =>
+      saveSettings(params),
+    {
+      onError: (err: Error) => logError('useSaveSettings', err),
+      onSuccess: data => {
+        queryClient.invalidateQueries([SETTING_KEY]);
+        return data;
+      },
+      onMutate: () => {
+        true;
+      },
+      mutationKey: [SETTING_KEY],
     },
-    mutationKey: [SETTING_KEY],
-  });
+  );
 }
 
 const getSettings = async (app: string) => {
   const sdk = getSDK();
 
-  return sdk.services.settings.get(app);
+  const res = await sdk.services.settings.get(app);
+  if (res.data?.options) return Object.fromEntries(res.data.options);
+  return undefined;
 };
 
 /**

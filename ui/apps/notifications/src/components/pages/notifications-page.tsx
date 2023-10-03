@@ -1,6 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLoggedIn, useMarkAsRead, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  useLoggedIn,
+  useMarkAsRead,
+  useRootComponentProps,
+  useGetSettings,
+} from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -10,7 +15,6 @@ import DropDownFilter from '@akashaorg/design-system-components/lib/components/D
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { EntityTypes, EventTypes } from '@akashaorg/typings/lib/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
-import { NOTIF_REF } from './customize-notification-page';
 
 export type Notification = {
   id: string;
@@ -20,23 +24,8 @@ export type Notification = {
 const NotificationsPage: React.FC<unknown> = () => {
   const [showMenu, setShowMenu] = useState(false);
 
-  // check if user has gone through onboarding steps before
-  let savedPreferences;
-  if (window.localStorage) {
-    savedPreferences = JSON.parse(localStorage.getItem(NOTIF_REF));
-  }
-
-  useEffect(() => {
-    /* @TODO:  uncomment this part when backend data becomes available */
-    // redirect to sign in page if not logged in
-    // if (loginQuery.isSuccess && !loginQuery.data?.id) {
-    //   navigateTo?.({
-    //     appName: '@akashaorg/app-auth-ewa',
-    //     getNavigationUrl: navRoutes => navRoutes.Connect,
-    //   });
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const fetchSettingsQuery = useGetSettings('@akashaorg/app-notifications');
+  const existingSettings = fetchSettingsQuery.data;
 
   const { t } = useTranslation('app-notifications');
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
@@ -200,7 +189,7 @@ const NotificationsPage: React.FC<unknown> = () => {
     },
   ];
 
-  if (!isLoggedIn || !savedPreferences) {
+  if (!isLoggedIn || !existingSettings) {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
