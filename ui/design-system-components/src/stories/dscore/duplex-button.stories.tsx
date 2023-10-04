@@ -13,7 +13,7 @@ const meta: Meta<DuplexButtonProps> = {
 export default meta;
 type Story = StoryObj<DuplexButtonProps>;
 
-const Component = () => {
+const Component = (props: DuplexButtonProps) => {
   const [active, setActive] = useState(false);
 
   const handleClick = () => {
@@ -26,13 +26,36 @@ const Component = () => {
       activeLabel="Following"
       activeHoverLabel="Unfollow"
       active={active}
-      icon="RssIcon"
+      hoverColors={{
+        background: { light: 'transparent', dark: 'transparent' },
+        border: { light: 'errorLight', dark: 'errorDark' },
+        text: { light: 'errorLight', dark: 'errorDark' },
+        icon: { light: 'errorLight', dark: 'errorDark' },
+      }}
       onClickActive={handleClick}
       onClickInactive={handleClick}
+      {...props}
     />
   );
 };
 
 export const BaseDuplexButton: Story = {
   render: () => <Component />,
+};
+
+export const DuplexButtonWithIcon: Story = {
+  render: () => (
+    <Component iconDirection="left" activeIcon="CheckIcon" activeHoverIcon="XMarkIcon" />
+  ),
+};
+
+export const SecondaryDuplexButton: Story = {
+  render: () => (
+    <Component
+      iconDirection="left"
+      activeIcon="CheckIcon"
+      activeHoverIcon="XMarkIcon"
+      inactiveVariant="secondary"
+    />
+  ),
 };
