@@ -6,7 +6,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import TrendingWidgetButton from '@akashaorg/design-system-components/lib/components/TrendingWidgetButton';
+import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 
 export type LatestTopicsProps = {
@@ -87,16 +87,24 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                     onClick={() => onClickTopic(tag.value)}
                   />
 
-                  <TrendingWidgetButton
+                  <DuplexButton
                     inactiveLabel={subscribeLabel}
                     activeLabel={subscribedLabel}
                     activeHoverLabel={unsubscribeLabel}
                     active={subscribedTags?.includes(tag.value)}
+                    iconDirection="left"
                     activeIcon="CheckIcon"
                     activeHoverIcon="XMarkIcon"
+                    inactiveVariant="secondary"
+                    loading={!!isProcessingTags?.find(processingTag => processingTag === tag.value)}
+                    hoverColors={{
+                      background: { light: 'transparent', dark: 'transparent' },
+                      border: { light: 'errorLight', dark: 'errorDark' },
+                      text: { light: 'errorLight', dark: 'errorDark' },
+                      icon: { light: 'errorLight', dark: 'errorDark' },
+                    }}
                     onClickActive={() => handleUnsubscribeTopic(tag.value)}
                     onClickInactive={() => handleSubscribeTopic(tag.value)}
-                    loading={!!isProcessingTags?.find(processingTag => processingTag === tag.value)}
                   />
                 </Stack>
               ))}
