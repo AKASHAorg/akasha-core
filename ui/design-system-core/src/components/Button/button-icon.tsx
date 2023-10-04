@@ -14,7 +14,7 @@ export const ButtonIcon: React.FC<
     disabled: ButtonProps['disabled'];
     active?: ButtonProps['active'];
   }
-> = ({ size, type, variant, greyBg, loading, breakPointSize, disabled, active }) => {
+> = ({ size, type, variant, greyBg, loading, breakPointSize, disabled, active, hoverColor }) => {
   let color = null;
 
   if (variant === 'primary' && !greyBg) {
@@ -35,7 +35,7 @@ export const ButtonIcon: React.FC<
         (variant === 'secondary' && !active) ||
         (variant === 'primary' && greyBg)
       }
-      hoverColor={getHoverColor(variant)}
+      hoverColor={hoverColor ?? getHoverColor(variant)}
       hover={!disabled && !loading}
       customStyle={loading ? 'animate-spin' : ''}
       disabled={disabled}

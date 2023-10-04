@@ -10,7 +10,9 @@ export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
   onClickInactive?: EventHandler<SyntheticEvent>;
   onClickActive?: EventHandler<SyntheticEvent>;
   inactiveLabel?: string;
+  inactiveVariant?: ButtonProps['variant'];
   activeLabel?: string;
+  activeVariant?: ButtonProps['variant'];
   activeHoverLabel?: string;
   active?: boolean;
   activeIcon?: IconType;
@@ -25,7 +27,9 @@ const DuplexButton = (props: DuplexButtonProps) => {
     size = 'sm',
     customStyle,
     inactiveLabel,
+    inactiveVariant = 'primary',
     activeLabel,
+    activeVariant = 'secondary',
     activeHoverLabel,
     active,
     icon,
@@ -38,8 +42,8 @@ const DuplexButton = (props: DuplexButtonProps) => {
 
   const [hovered, setHovered] = useState(false);
   const [iconOnly, setIconOnly] = useState(window.matchMedia('(max-width: 992px)').matches);
-  const activeHoverIconElem = activeHoverIcon || icon;
-  const activeIconElem = activeIcon || icon;
+  const activeHoverIconElem = activeHoverIcon ?? icon;
+  const activeIconElem = activeIcon ?? icon;
 
   useEffect(() => {
     const mql = window.matchMedia('(max-width: 992px)');
@@ -95,19 +99,13 @@ const DuplexButton = (props: DuplexButtonProps) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       icon={getIcon()}
-      variant={active ? 'secondary' : 'primary'}
+      variant={active ? activeVariant : inactiveVariant}
       size={size}
+      hover={hovered && active}
       customStyle={customStyle}
       {...rest}
     />
   );
-};
-
-DuplexButton.defaultProps = {
-  inactiveLabel: 'Activate',
-  activeLabel: 'Activated',
-  activeHoverLabel: 'Deactivate',
-  active: false,
 };
 
 export default DuplexButton;

@@ -8,7 +8,7 @@ interface IContainerClasses {
   disabled: ButtonProps['disabled'];
   active: ButtonProps['active'];
   hover: ButtonProps['hover'];
-  hoverColor: ButtonProps['hoverColor'];
+  hoverColors: ButtonProps['hoverColors'];
 }
 
 export function getContainerClasses({
@@ -18,14 +18,14 @@ export function getContainerClasses({
   disabled,
   active,
   hover,
-  hoverColor,
+  hoverColors,
 }: IContainerClasses) {
   if (variant === 'primary') {
     return getPrimaryClasses({ greyBg, loading, disabled, active, hover });
   }
 
   if (variant === 'secondary') {
-    return getSecondaryClasses({ loading, disabled, active, hover, hoverColor });
+    return getSecondaryClasses({ loading, disabled, active, hover, hoverColors });
   }
 
   return '';
@@ -61,10 +61,10 @@ interface ISecondaryClasses {
   disabled: ButtonProps['disabled'];
   active: ButtonProps['active'];
   hover: ButtonProps['hover'];
-  hoverColor: ButtonProps['hoverColor'];
+  hoverColors: ButtonProps['hoverColors'];
 }
 
-function getSecondaryClasses({ loading, disabled, active, hover, hoverColor }: ISecondaryClasses) {
+function getSecondaryClasses({ loading, disabled, active, hover, hoverColors }: ISecondaryClasses) {
   const backgroundStyle = 'bg-transparent';
   const borderStyle = getColorClasses(
     {
@@ -73,16 +73,16 @@ function getSecondaryClasses({ loading, disabled, active, hover, hoverColor }: I
     },
     'border',
   );
-  const hoverBorderColor = hoverColor?.border
+  const hoverBorderColor = hoverColors?.border
     ? getColorClasses(
-        hoverColor.border,
+        hoverColors.border,
 
         'hover:border',
       )
     : '';
   const hoverBgColor = getColorClasses(
-    hoverColor?.background
-      ? hoverColor.background
+    hoverColors?.background
+      ? hoverColors.background
       : {
           light: 'secondaryLight/30',
           dark: 'secondaryDark',

@@ -29,7 +29,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     customStyle = '',
     active,
     hover = true,
-    hoverColor,
+    hoverColors,
     ...rest
   } = props;
 
@@ -62,7 +62,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         customStyle={customStyle}
         active={active}
         hover={hover}
-        hoverColor={hoverColor}
+        hoverColors={hoverColors}
         ref={ref}
         {...rest}
       />
@@ -76,10 +76,10 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     disabled,
     active,
     hover,
-    hoverColor,
+    hoverColors,
   });
 
-  const textStyle = getTextClasses({ variant, loading, disabled, hover, hoverColor, active });
+  const textStyle = getTextClasses({ variant, loading, disabled, hover, hoverColors, active });
 
   const breakPointStyle = breakPointSize
     ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
@@ -118,6 +118,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 breakPointSize={breakPointSize}
                 disabled={disabled}
                 active={active}
+                hoverColor={hover ? hoverColors.icon : null}
               />
             )}
             <Text variant={BUTTON_SIZE_TEXT_MAP[size]} as="span" customStyle={textStyle}>
@@ -133,6 +134,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 breakPointSize={breakPointSize}
                 disabled={disabled}
                 active={active}
+                hoverColor={hover ? hoverColors.icon : null}
               />
             )}
           </>
