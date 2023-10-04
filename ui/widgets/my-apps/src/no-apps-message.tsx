@@ -5,7 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { useTranslation } from 'react-i18next';
 
 const NoAppsMessage = () => {
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
   return (
     <Stack direction="column" align="center" spacing="gap-y-4" customStyle="px-4">
       <Icon type="akasha" size="xl" customStyle="p-4 bg(grey6 dark:grey5) rounded-xl mr-4" />

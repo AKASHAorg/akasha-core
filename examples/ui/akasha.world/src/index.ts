@@ -74,7 +74,7 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/app-routing',
       '@akashaorg/app-moderation-ewa',
       '@akashaorg/app-auth-ewa',
-      '@akashaorg/app-akasha-verse',
+      '@akashaorg/app-extensions',
       '@akashaorg/app-search',
       '@akashaorg/app-profile',
       '@akashaorg/app-notifications',

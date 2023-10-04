@@ -1,7 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { GetAppsQuery, GetAppsByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import {
+  GetAppsQuery,
+  GetAppsByIdQuery,
+} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import AppList from '@akashaorg/design-system-components/lib/components/AppList';
@@ -21,7 +24,7 @@ export type MyAppsPageProps = {
 const MyAppsPage: React.FC<MyAppsPageProps> = props => {
   const { availableApps } = props;
 
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
   const { worldConfig, getRoutingPlugin } = useRootComponentProps();
 
   const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
@@ -73,7 +76,7 @@ const MyAppsPage: React.FC<MyAppsPageProps> = props => {
 
   const handleAppClick = appId => {
     getRoutingPlugin().navigateTo?.({
-      appName: '@akashaorg/app-akasha-verse',
+      appName: '@akashaorg/app-extensions',
       getNavigationUrl: routes => `${routes[INFO]}/${appId}`,
     });
   };

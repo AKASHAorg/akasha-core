@@ -46,13 +46,13 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   }, []);
 
   const sdk = getSDK();
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
 
   // const uninstallAppReq = null;
 
   // const handleAppClick = (app: IntegrationReleaseInfo) => {
   //   getRoutingPlugin().navigateTo?.({
-  //     appName: '@akashaorg/app-akasha-verse',
+  //     appName: '@akashaorg/app-extensions',
   //     getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
   //   });
   // };

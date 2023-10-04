@@ -1,4 +1,4 @@
-import { Align } from './index';
+import { Align, AlignSelf } from './index';
 
 export function getAlignClasses(align: Align) {
   switch (align) {
@@ -12,5 +12,20 @@ export function getAlignClasses(align: Align) {
       return 'items-stretch';
     case 'baseline':
       return 'items-baseline';
+  }
+}
+
+export function getAlignSelfClasses(align: AlignSelf) {
+  switch (align) {
+    case 'auto':
+      return 'self-auto';
+    case 'start':
+      return 'self-start';
+    case 'end':
+      return 'self-end';
+    case 'center':
+      return 'self-center';
+    case 'stretch':
+      return 'self-stretch';
   }
 }
