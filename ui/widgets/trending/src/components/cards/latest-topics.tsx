@@ -77,7 +77,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                   direction="row"
                   align="center"
                   justify="between"
-                  spacing="gap-y-2"
+                  spacing="gap-x-3"
+                  customStyle="w-[19rem]"
                 >
                   <SubtitleTextIcon
                     label={tag.value}
