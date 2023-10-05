@@ -201,11 +201,19 @@ const Layout: React.FC<unknown> = () => {
             <Stack customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
-                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
+                  <Widget
+                    fullHeight
+                    name={layoutConfig.sidebarSlotId}
+                    loadingIndicator={<Spinner />}
+                  />
                 </Stack>
               ) : (
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen">
-                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
+                  <Widget
+                    fullHeight
+                    name={layoutConfig.sidebarSlotId}
+                    loadingIndicator={<Spinner />}
+                  />
                 </Stack>
               )}
             </Stack>
@@ -245,7 +253,7 @@ const Layout: React.FC<unknown> = () => {
               )}
               <Extension name={layoutConfig.pluginSlotId} uiEvents={uiEvents} />
               <Stack customStyle="fixed bottom-0 mr-4 mb-4">
-                <Extension name={layoutConfig.snackbarNotifSlotId} uiEvents={uiEvents} />
+                <Widget name={layoutConfig.snackbarNotifSlotId} loadingIndicator={<Spinner />} />
               </Stack>
             </Stack>
           </Stack>

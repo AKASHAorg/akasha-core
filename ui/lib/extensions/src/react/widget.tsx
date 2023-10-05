@@ -10,10 +10,11 @@ export type WidgetExtensionProps = {
   loadingIndicator?: React.ReactNode;
   onError?: (widget: WidgetInterface & { appName: string }, message?: string) => void;
   customStyle?: string;
+  fullHeight?: boolean;
 };
 
 export const Widget: React.FC<WidgetExtensionProps> = props => {
-  const { name, loadingIndicator, onError, customStyle } = props;
+  const { name, loadingIndicator, onError, customStyle, fullHeight } = props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
   const widgetStore = React.useRef<WidgetStorePlugin>(getExtensionsPlugin().widgetStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
@@ -41,7 +42,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
   }, []);
   const isLoading = widgets.length > parcelConfigs.length;
   return (
-    <Stack customStyle={customStyle} id={name}>
+    <Stack customStyle={`${customStyle} ${fullHeight ? 'h-full' : ''}`} id={name}>
       {isLoading && loadingIndicator}
       {parcelConfigs.map(parcelConf => (
         <Parcel
