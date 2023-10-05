@@ -10,9 +10,12 @@ import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hook
 import { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
+
+import { Header } from './header';
+import { Footer } from './footer';
+
+export type uiState = 'editor' | 'tags' | 'blocks' | 'image';
 
 export const BeamEditor: React.FC = () => {
   const { t } = useTranslation('app-akasha-integration');
@@ -71,7 +74,7 @@ export const BeamEditor: React.FC = () => {
   });
   const loggedProfileData = profileDataReq.data;
 
-  const [showPlaceholder, setShowPlaceholder] = React.useState(true);
+  const [uiState, setUiState] = React.useState<uiState>('editor');
   const [isNsfw, setIsNsfw] = React.useState(false);
 
   const handleNsfwCheckbox = () => {
@@ -79,41 +82,41 @@ export const BeamEditor: React.FC = () => {
   };
 
   const handleAddBlockBtn = () => {
-    return;
+    setUiState('blocks');
   };
 
   const handleTagsBtn = () => {
-    return;
+    setUiState('tags');
   };
 
-  if (showPlaceholder) {
-    return (
-      <Stack customStyle="mb-4">
-        <EditorPlaceholder
-          profileId={loggedProfileData.did.id}
-          avatar={loggedProfileData.avatar}
-          actionLabel={t(`Start Beaming`)}
-          placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
-          onClick={() => setShowPlaceholder(false)}
-        />
-      </Stack>
-    );
-  }
+  const handleClickCancel = () => {
+    setUiState('editor');
+  };
+
+  const [selectedBlock, setSelectedBlock] = React.useState(0);
+
+  const handleAddBlock = () => {
+    onBlockSelectAfter(selectedBlock);
+  };
+
+  const [tagSelection, setTagSelection] = React.useState([]);
+  const [editorTags, setEditorTags] = React.useState([]);
+
+  const handleAddTags = () => {
+    setEditorTags(tagSelection);
+  };
 
   return (
     <Card customStyle="divide(y grey9 dark:grey3)" padding={0} margin="m-4">
-      <Stack justify="between" direction="row" align="center">
-        <Text>{t(`Beam Editor`)}</Text>
-
-        <Checkbox
-          id="nsfw"
-          label={'NSFW'}
-          name="nsfw"
-          value="nsfw"
-          handleChange={handleNsfwCheckbox}
-          isSelected={isNsfw}
-        />
-      </Stack>
+      <Header
+        addBlockLabel={t('Add a Block')}
+        beamEditorLabel={t('Beam Editor')}
+        addTagsLabel={t('Add Tags')}
+        addImageLabel={t('Add an Image')}
+        isNsfw={isNsfw}
+        handleNsfwCheckbox={handleNsfwCheckbox}
+        uiState={uiState}
+      />
       <Stack>
         {blocksInUse.map((block, idx) => (
           <div key={`${block.name}-${idx}`}>
@@ -134,24 +137,21 @@ export const BeamEditor: React.FC = () => {
           </div>
         ))}
       </Stack>
-      <Stack justify={'between'} direction="row">
-        <Button
-          onClick={handleAddBlockBtn}
-          icon="PlusIcon"
-          variant="text"
-          greyBg={true}
-          label={t('Add a Block')}
-        />
-        <Stack direction="row">
-          <Button variant="text" label={t('Tags')} onClick={handleTagsBtn} />
-          <Button
-            variant="primary"
-            disabled={isPublishing}
-            label={t('Beam it')}
-            onClick={handleBeamPublish}
-          />
-        </Stack>
-      </Stack>
+      <Footer
+        uiState={uiState}
+        handleClickAddBlock={handleAddBlockBtn}
+        handleClickTags={handleTagsBtn}
+        handleClickCancel={handleClickCancel}
+        handleAddBlock={handleAddBlock}
+        handleAddTags={handleAddTags}
+        handleBeamPublish={handleBeamPublish}
+        addBlockLabel={t('Add a Block')}
+        addLabel={t('Add')}
+        cancelLabel={t('Cancel')}
+        blocksLabel={t('Blocks')}
+        tagsLabel={t('Tags')}
+        publishLabel={t('Beam it')}
+      />
     </Card>
   );
 };

@@ -5,6 +5,7 @@ import {
   IPublishData,
   EntityTypes,
   AnalyticsCategories,
+  Profile,
 } from '@akashaorg/typings/lib/ui';
 import {
   useMutationsListener,
@@ -13,9 +14,9 @@ import {
   useEntryNavigation,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import routes, { EDITOR } from '../../routes';
+import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { Profile } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
@@ -29,8 +30,7 @@ export type FeedPageProps = {
 const FeedPage: React.FC<FeedPageProps> = props => {
   const { loggedProfileData, showLoginModal } = props;
 
-  const { uiEvents, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
+  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
 
   const { t } = useTranslation('app-akasha-integration');
 
@@ -98,29 +98,28 @@ const FeedPage: React.FC<FeedPageProps> = props => {
     }
   };
 
+  const handleEditorPlaceholderClick = () => {
+    getRoutingPlugin().navigateTo?.({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: () => `/${routes[EDITOR]}`,
+    });
+  };
+
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
       {loggedProfileData?.did?.id ? (
-        <>
-          <Stack customStyle="mb-1">
-            {postId ? (
-              <Extension
-                name={`inline-editor_repost_${postId}`}
-                uiEvents={uiEvents}
-                data={{ itemId: postId, itemType: EntityTypes.BEAM, action: 'repost' }}
-              />
-            ) : (
-              <Extension
-                name="beam-editor_feed_page"
-                uiEvents={uiEvents}
-                data={{ action: 'post' }}
-              />
-            )}
-          </Stack>
-        </>
+        <Stack customStyle="mb-4">
+          <EditorPlaceholder
+            profileId={loggedProfileData.did.id}
+            avatar={loggedProfileData.avatar}
+            actionLabel={t(`Start Beaming`)}
+            placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
+            onClick={handleEditorPlaceholderClick}
+          />
+        </Stack>
       ) : (
         !dismissed && (
           <Stack customStyle="mb-2">

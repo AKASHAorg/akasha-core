@@ -7,11 +7,21 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import FeedPage from './feed-page/feed-page';
 import MyFeedPage from './my-feed-page/my-feed-page';
 import ProfileFeedPage from './profile-feed-page/profile-feed-page';
+import EditorPage from './editor-page/editor-page';
 import PostPage from './item-page/post-page';
 import InvitePage from './item-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
 
-import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, INVITE } from '../routes';
+import routes, {
+  FEED,
+  MY_FEED,
+  PROFILE_FEED,
+  BEAM,
+  EDITOR,
+  REFLECT,
+  TAGS,
+  INVITE,
+} from '../routes';
 import ReplyPage from './item-page/reply-page';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -45,6 +55,10 @@ const AppRoutes: React.FC<unknown> = () => {
             element={
               <MyFeedPage loggedProfileData={loggedProfileData} showLoginModal={showLoginModal} />
             }
+          />
+          <Route
+            path={routes[EDITOR]}
+            element={<EditorPage loggedProfileData={loggedProfileData} />}
           />
           <Route
             path={`${routes[BEAM]}/:postId`}
