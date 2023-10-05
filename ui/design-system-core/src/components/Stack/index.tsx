@@ -28,6 +28,7 @@ export type StackProps = {
   fullWidth?: boolean;
   testId?: string;
   ref?: LegacyRef<HTMLDivElement>;
+  id?: string;
 };
 
 const Stack: React.FC<PropsWithChildren<StackProps>> = forwardRef(
@@ -44,6 +45,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = forwardRef(
       fullWidth,
       testId,
       children,
+      id,
     },
     ref,
   ) => {
@@ -57,6 +59,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = forwardRef(
     const fullWidthStyle = fullWidth ? 'w-full' : '';
     return (
       <div
+        id={id}
         className={tw(
           apply`${baseStyle} ${directionStyle} ${paddingStyle} ${justifyStyle} ${justifyItemsStyle} ${justifySelfStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
         )}

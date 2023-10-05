@@ -5,20 +5,25 @@ import {
   RootComponentProps,
   RootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
-import { filterEvent, hasOwn } from '@akashaorg/ui-awf-hooks';
-import { Subscription } from 'rxjs';
+import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { AkashaContentBlockLabeledValue } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { BaseStore } from './base-store';
 
-export class ContentBlockStore {
+export class ContentBlockStore extends BaseStore {
   static instance: ContentBlockStore;
   #blocks: ContentBlockRegisterEvent['data'];
-  #uiEventsSub: Subscription;
-  #uiEvents: RootComponentProps['uiEvents'];
 
   constructor(uiEvents: RootComponentProps['uiEvents']) {
-    this.#uiEvents = uiEvents;
+    super(uiEvents);
     this.#blocks = [];
-    this.listenRegisterEvents();
+    this.subscribeRegisterEvents(ContentBlockEvents.RegisterContentBlock, {
+      next: (eventInfo: ContentBlockRegisterEvent) => {
+        if (!Array.isArray(eventInfo.data)) {
+          return;
+        }
+        this.#blocks.push(...eventInfo.data);
+      },
+    });
   }
 
   public getMatchingBlocks: ContentBlockStorePluginInterface['getMatchingBlocks'] = blockInfo => {
@@ -95,22 +100,6 @@ export class ContentBlockStore {
       const { loadingFn, ...info } = cblock;
       return info;
     });
-  };
-  private listenRegisterEvents = () => {
-    if (this.#uiEventsSub) {
-      this.#uiEventsSub.unsubscribe();
-      this.#uiEventsSub = null;
-    }
-    this.#uiEventsSub = this.#uiEvents
-      .pipe(filterEvent(ContentBlockEvents.RegisterContentBlock))
-      .subscribe({
-        next: (event: ContentBlockRegisterEvent) => {
-          if (!Array.isArray(event.data)) {
-            return;
-          }
-          this.#blocks.push(...event.data);
-        },
-      });
   };
 
   static getInstance(uiEvents: RootExtensionProps['uiEvents']) {

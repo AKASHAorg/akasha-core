@@ -74,7 +74,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       propertyType: 'slate-block',
       icon: 'Bars3BottomLeftIcon',
       displayName: 'Slate text block',
-      loadingFn: data => {
+      loadingFn: () => {
         return () => import('./extensions/slate-block');
       },
     },
@@ -86,4 +86,11 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       'beam-editor_*': loader(() => import('./extensions/beam-editor')),
     });
   },
+  extensions: [
+    {
+      mountsIn: 'beam-editor_*',
+      activeWhen: (location, pathToActiveWhen) => true,
+      loadingFn: () => import('./extensions/beam-editor'),
+    },
+  ],
 });

@@ -1,15 +1,12 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typings/lib/ui';
+import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typings/lib/ui';
 /**
  * All widgets must export an object like this:
  */
-export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => {
+export const register: (opts: IntegrationRegistrationOptions) => WidgetInterface = opts => {
   return {
     mountsIn: opts.layoutConfig.cookieWidgetSlotId,
     loadingFn: () => import('./components'),
     activeWhen: () => true,
-    // does not have routes
-    i18nNamespace: ['ui-widget-analytics'],
-    tags: ['analytics-widget'],
   };
 };

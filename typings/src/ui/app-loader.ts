@@ -1,4 +1,4 @@
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { ParcelConfigObject } from 'single-spa';
 import { EventDataTypes, IconType, RootComponentProps, RootExtensionProps } from './index';
 
