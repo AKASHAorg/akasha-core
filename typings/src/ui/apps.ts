@@ -1,8 +1,9 @@
-import { ActivityFn, ExtendsFn, IntegrationRegistrationOptions } from './app-loader';
+import { ActivityFn, ExtendsFn } from './app-loader';
 import { IMenuItem } from './menu-items';
 import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
 import { ContentBlockExtensionInterface } from './editor-blocks';
+import { ExtensionInterface } from './extensions';
 
 export type Extensions = { [key: string]: string } & {
   /**
@@ -85,16 +86,17 @@ export interface IAppConfig {
    * @TODO: add docs
    */
   contentBlocks?: ContentBlockExtensionInterface[];
+  extensions?: ExtensionInterface[];
   /**
-   * A simple mapping of the extensions exposed by this widget.
-   * This is the main mechanism that can be used to
-   * extend or link different apps.
-   * Extensions declared here should be used as id's for
+   * A simple mapping of the extensions exposed by this app.
+   * Can be used to target a specific app's extension
+   * Note that this is optional
    */
-  extensions?: Extensions;
+  extensionsMap?: Extensions;
 
   /**
    * Defines the component that will be mounted into an extension point
+   * @deprecated - use `extensions` property instead
    */
   extends?: ExtendsFn;
 

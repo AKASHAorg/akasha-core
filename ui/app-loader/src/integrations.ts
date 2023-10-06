@@ -4,7 +4,13 @@ import type {
   IAppConfig,
   WorldConfig,
 } from '@akashaorg/typings/lib/ui';
-import { ContentBlockEvents, EventTypes } from '@akashaorg/typings/lib/ui';
+import {
+  ContentBlockEvents,
+  EventTypes,
+  ExtensionEvents,
+  INTEGRATION_TYPES,
+  WidgetEvents,
+} from '@akashaorg/typings/lib/ui';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import {
   Observable,
@@ -144,10 +150,11 @@ export const processSystemModules = (
     .pipe(filter(({ layoutConfig }) => !!layoutConfig))
     .pipe(
       mergeMap(results => {
-        const { layoutConfig, modules, integrationConfigs, integrationsByMountPoint } = results;
+        const { layoutConfig, modules, integrationConfigs, integrationsByMountPoint, manifests } =
+          results;
 
         const registrationProps = {
-          layoutConfig: layoutConfig.extensions,
+          layoutConfig: layoutConfig.extensionsMap,
           worldConfig,
           logger,
           uiEvents,
@@ -157,7 +164,7 @@ export const processSystemModules = (
           .pipe(
             map(async ([moduleName, mod]) => {
               let appConf: IAppConfig;
-
+              const manifest = manifests.find(man => man.name === moduleName);
               if (mod?.register && typeof mod.register === 'function') {
                 appConf = await Promise.resolve(mod.register(registrationProps));
                 // each app must have menuItems exposed in config, widgets do not
@@ -175,7 +182,20 @@ export const processSystemModules = (
                     data: appConf.contentBlocks.map(eb => ({ ...eb, appName: moduleName })),
                   });
                 }
+                if (appConf?.extensions) {
+                  uiEvents.next({
+                    event: ExtensionEvents.RegisterExtension,
+                    data: appConf.extensions.map(ext => ({ ...ext, appName: moduleName })),
+                  });
+                }
+                if (manifest && manifest.integrationType === INTEGRATION_TYPES.WIDGET) {
+                  uiEvents.next({
+                    event: WidgetEvents.RegisterWidget,
+                    data: { ...appConf, appName: moduleName },
+                  });
+                }
               }
+              // @TODO: Except for apps, the app loader should stop here. The rest should be managed by plugins
               return {
                 ...appConf,
                 name: moduleName,
@@ -205,7 +225,7 @@ export const processSystemModules = (
             RootExtensionProps,
             'uiEvents' | 'extensionData' | 'domElement' | 'baseRouteName'
           > = {
-            layoutConfig: layoutConfig.extensions,
+            layoutConfig: layoutConfig.extensionsMap,
             logger,
             singleSpa,
             navigateToModal,
@@ -375,7 +395,7 @@ export const handleExtPointMountOfApps = (
             parseQueryString: parseQueryString,
             worldConfig: worldConfig,
             uiEvents: uiEvents,
-            layoutConfig: layoutConfig.extensions,
+            layoutConfig: layoutConfig.extensionsMap,
             logger: sdk.services.log.create(manifest.name),
             domElementGetter: () => domElement,
             navigateToModal: navigateToModal,
@@ -391,7 +411,7 @@ export const handleExtPointMountOfApps = (
               uiEvents,
               plugins,
               worldConfig,
-              layoutConfig: results.layoutConfig.extensions,
+              layoutConfig: results.layoutConfig.extensionsMap,
               logger: sdk.services.log.create(`${manifest.name}/initFn`),
             }),
           );
