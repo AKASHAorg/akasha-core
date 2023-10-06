@@ -118,7 +118,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 breakPointSize={breakPointSize}
                 disabled={disabled}
                 active={active}
-                hoverColor={hover ? hoverColors.icon : null}
+                hoverColor={hover ? hoverColors?.icon : null}
               />
             )}
             <Text variant={BUTTON_SIZE_TEXT_MAP[size]} as="span" customStyle={textStyle}>
@@ -134,7 +134,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 breakPointSize={breakPointSize}
                 disabled={disabled}
                 active={active}
-                hoverColor={hover ? hoverColors.icon : null}
+                hoverColor={hover ? hoverColors?.icon : null}
               />
             )}
           </>
