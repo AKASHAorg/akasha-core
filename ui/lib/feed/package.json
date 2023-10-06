@@ -57,5 +57,8 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "directories": {
+    "lib": "lib"
+  }
 }
