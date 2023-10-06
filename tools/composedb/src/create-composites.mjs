@@ -7,7 +7,8 @@ import {
   readEncodedComposite,
   writeEncodedComposite,
   writeEncodedCompositeRuntime,
-  mergeEncodedComposites
+  mergeEncodedComposites,
+  writeGraphQLSchema
 } from '@composedb/devtools-node';
 
 import { DID } from 'dids';
@@ -183,6 +184,10 @@ const mergeComposites = async () => {
       path.resolve(__dirname, '../lib/runtime-definition.json'),
       path.resolve(__dirname, '../lib/runtime-definition.js')
     )
+    // await writeGraphQLSchema(
+    //   path.resolve(__dirname, '../lib/runtime-definition.json'),
+    //   path.resolve(__dirname, '../lib/schemas.graphql')
+    //   )
     const deployedComposite = await readEncodedComposite(ceramic, path.resolve(__dirname, '../lib/runtime-definition.json'))
     await deployedComposite.startIndexingOn(ceramic)
   }, 3000)
