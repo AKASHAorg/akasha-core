@@ -20,7 +20,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('ui-lib-feed');
 
-  const { entryData, locale, uiEvents, onContentClick } = props;
+  const { entryData, locale, onContentClick } = props;
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },
     { select: response => response.node },

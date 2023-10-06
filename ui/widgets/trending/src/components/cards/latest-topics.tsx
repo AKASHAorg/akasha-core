@@ -4,9 +4,9 @@ import { Interest } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 
 export type LatestTopicsProps = {
@@ -45,8 +45,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     subscribedTags,
   } = props;
 
-  const baseItemStyles = 'flex justify-between items-center space-y-2';
-
   return (
     <Card padding={16}>
       <Stack customStyle="mb-4">
@@ -79,7 +77,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                   direction="row"
                   align="center"
                   justify="between"
-                  spacing="gap-y-2"
+                  spacing="gap-x-3"
+                  customStyle="w-[19rem]"
                 >
                   <SubtitleTextIcon
                     label={tag.value}
@@ -93,11 +92,20 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                     inactiveLabel={subscribeLabel}
                     activeLabel={subscribedLabel}
                     activeHoverLabel={unsubscribeLabel}
-                    onClickInactive={() => handleSubscribeTopic(tag.value)}
-                    onClickActive={() => handleUnsubscribeTopic(tag.value)}
                     active={subscribedTags?.includes(tag.value)}
-                    allowMinimization={false}
+                    iconDirection="left"
+                    activeIcon="CheckIcon"
+                    activeHoverIcon="XMarkIcon"
+                    inactiveVariant="secondary"
                     loading={!!isProcessingTags?.find(processingTag => processingTag === tag.value)}
+                    hoverColors={{
+                      background: { light: 'transparent', dark: 'transparent' },
+                      border: { light: 'errorLight', dark: 'errorDark' },
+                      text: { light: 'errorLight', dark: 'errorDark' },
+                      icon: { light: 'errorLight', dark: 'errorDark' },
+                    }}
+                    onClickActive={() => handleUnsubscribeTopic(tag.value)}
+                    onClickInactive={() => handleSubscribeTopic(tag.value)}
                   />
                 </Stack>
               ))}

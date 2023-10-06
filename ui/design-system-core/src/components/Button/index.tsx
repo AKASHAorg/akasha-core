@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { apply, tw } from '@twind/core';
 
-import { ButtonIcon } from './ButtonIcon';
+import { ButtonIcon } from './button-icon';
 import { IconOnlyButton } from './IconOnlyButton';
 
 import Stack from '../Stack';
@@ -29,7 +29,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     customStyle = '',
     active,
     hover = true,
-    hoverColor,
+    hoverColors,
     ...rest
   } = props;
 
@@ -62,7 +62,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         customStyle={customStyle}
         active={active}
         hover={hover}
-        hoverColor={hoverColor}
+        hoverColors={hoverColors}
         ref={ref}
         {...rest}
       />
@@ -76,10 +76,10 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     disabled,
     active,
     hover,
-    hoverColor,
+    hoverColors,
   });
 
-  const textStyle = getTextClasses({ variant, loading, disabled, hover, hoverColor, active });
+  const textStyle = getTextClasses({ variant, loading, disabled, hover, hoverColors, active });
 
   const breakPointStyle = breakPointSize
     ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
@@ -118,6 +118,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 breakPointSize={breakPointSize}
                 disabled={disabled}
                 active={active}
+                hoverColor={hover ? hoverColors.icon : null}
               />
             )}
             <Text variant={BUTTON_SIZE_TEXT_MAP[size]} as="span" customStyle={textStyle}>
@@ -133,6 +134,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 breakPointSize={breakPointSize}
                 disabled={disabled}
                 active={active}
+                hoverColor={hover ? hoverColors.icon : null}
               />
             )}
           </>
@@ -142,19 +144,19 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
   );
 });
 
-const BUTTON_SIZE_MAP: Record<Exclude<ButtonSize, 'xs'>, string> = {
+export const BUTTON_SIZE_MAP: Record<Exclude<ButtonSize, 'xs'>, string> = {
   sm: 'h-8 rounded-3xl',
   md: 'h-12 rounded-3xl',
   lg: 'h-14 rounded-[1.875rem]',
 };
 
-const BUTTON_SIZE_PADDING_MAP: Record<Exclude<ButtonSize, 'xs'>, string> = {
+export const BUTTON_SIZE_PADDING_MAP: Record<Exclude<ButtonSize, 'xs'>, string> = {
   sm: 'px-4',
   md: 'px-6',
   lg: 'px-6',
 };
 
-const BUTTON_SIZE_TEXT_MAP: Record<Exclude<ButtonSize, 'xs'>, TextProps['variant']> = {
+export const BUTTON_SIZE_TEXT_MAP: Record<Exclude<ButtonSize, 'xs'>, TextProps['variant']> = {
   sm: 'button-sm',
   md: 'button-md',
   lg: 'button-lg',
