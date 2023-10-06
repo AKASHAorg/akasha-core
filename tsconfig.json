@@ -42,6 +42,9 @@
       "path": "./ui/lib/feed"
     },
     {
+      "path": "./ui/lib/extensions"
+    },
+    {
       "path": "./ui/widgets/layout"
     },
     {
