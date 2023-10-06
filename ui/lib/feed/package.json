@@ -22,9 +22,6 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
-    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs --profile --json ../../stats/feed-widget.json",
-    "postpack": "copyfiles -f ./dist/* ../../build/widgets/feed",
     "watch": "webpack --config webpack.config.cjs --watch",
     "pretest": "tsc -m commonjs",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
