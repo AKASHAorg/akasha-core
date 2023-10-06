@@ -48,7 +48,7 @@ const BeamPage: React.FC = () => {
 
   return (
     <>
-      {beamReq.status === 'loading' && <EntryCardLoading />}
+      {beamReq.status === 'loading' && <EntryCardLoading /> /*@TODO create full beam page loader */}
       {beamReq.status === 'error' && (
         <ErrorLoader
           type="script-error"
@@ -72,6 +72,7 @@ const BeamPage: React.FC = () => {
                 />
               )}
               {loggedProfileData?.did?.id && entryData?.active && (
+                /*@TODO fix inline editor */
                 <Extension
                   name={`inline-editor_reply_${entryData?.id}`}
                   uiEvents={uiEvents}
