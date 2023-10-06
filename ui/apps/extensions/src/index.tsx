@@ -10,7 +10,6 @@ import routes from './routes';
 import { ContentBlockStore } from './plugins/content-block-store';
 import { ExtensionStore } from './plugins/extension-store';
 import { WidgetStore } from './plugins/widget-store';
-import { uiEvents } from '@akashaorg/ui-app-loader/lib/events';
 
 /**
  * All the plugins must export an object like this:
