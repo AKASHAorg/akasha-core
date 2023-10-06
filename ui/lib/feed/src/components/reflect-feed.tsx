@@ -11,6 +11,7 @@ import {
 import { i18n } from 'i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import ReflectCard from './cards/reflect-card';
 import EntryList, {
   EntryListProps,
   ScrollerState,
@@ -18,9 +19,20 @@ import EntryList, {
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import ReflectCard from './cards/reflect-card';
+import { useInfiniteGetReflectionsFromBeamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { hasOwn } from '@akashaorg/ui-awf-hooks';
 
-export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> & {
+export type ReflectFeedProps = Omit<
+  EntryListProps<AkashaReflect>,
+  | 'itemCard'
+  | 'isFetchingNextPage'
+  | 'requestStatus'
+  | 'pages'
+  | 'isFetchingPreviousPage'
+  | 'onFetchPreviousPage'
+  | 'onFetchNextPage'
+  | 'onScrollStateSave'
+> & {
   beamId?: string;
   locale?: ILocale;
   onEntryFlag?: (
@@ -28,7 +40,6 @@ export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> &
     itemType: EntityTypes,
     reporterEthAddress?: string | null,
   ) => () => void;
-  navigateTo: (args: NavigateToParams) => void;
   onEntryRemove?: (entryId: string) => void;
   className?: string;
   modalSlotId: string;
@@ -36,38 +47,47 @@ export type ReflectFeedProps = Omit<EntryListProps<AkashaReflect>, 'itemCard'> &
   trackEvent?: (data: AnalyticsEventData['data']) => void;
   totalEntryCount?: number;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  navigateToModal: (props: ModalNavigationOptions) => void;
   loggedProfileData?: Profile;
   i18n: i18n;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  onScrollStateChange: (scrollState: ScrollerState) => void;
-  initialScrollState: ScrollerState;
-  onScrollStateReset: () => void;
+  initialScrollState?: ScrollerState;
+  onScrollStateReset?: () => void;
   db: ScrollStateDBWrapper;
-  scrollerOptions: FeedWidgetCommonProps['scrollerOptions'];
+  scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
-    onNavigate,
+    beamId,
     locale,
-    requestStatus,
-    isFetchingNextPage,
-    pages,
     itemSpacing = 8,
     i18n,
     initialScrollState,
+    scrollerOptions = { overscan: 5 },
+    newItemsPublishedLabel,
+    onNavigate,
     onScrollStateReset,
     onScrollStateChange,
-    scrollerOptions,
-    newItemsPublishedLabel,
   } = props;
+
+  //@TODO replace this hook with one handling scroll restoration
+  const reflectionsReq = useInfiniteGetReflectionsFromBeamQuery('last', { id: beamId, last: 10 });
+  const entryData = reflectionsReq.data?.pages?.flatMap(page =>
+    hasOwn(page.node, 'reflections')
+      ? page.node?.reflections.edges?.map(edge => ({
+          ...edge.node,
+          beam: null,
+          beamID: edge.node.beam?.id,
+          createdAt: new Date(), //@TODO node has missing createdAt field
+        }))
+      : null,
+  );
 
   return (
     <EntryList<AkashaReflect>
-      requestStatus={requestStatus}
-      isFetchingNextPage={isFetchingNextPage}
-      pages={pages}
+      requestStatus={reflectionsReq.status}
+      isFetchingNextPage={reflectionsReq.isFetchingNextPage}
+      pages={entryData}
       itemSpacing={itemSpacing}
       languageDirection={i18n?.dir() || 'ltr'}
       initialScrollState={initialScrollState}
@@ -92,7 +112,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           const { index, key } = item;
           const entryData = allEntries[index];
           const isLoader = index > allEntries.length - 1;
-          if (isLoader || isFetchingNextPage) {
+          if (isLoader || reflectionsReq.isFetchingNextPage) {
             return (
               <Stack key={key} customStyle="p-8 w-full">
                 <Spinner />

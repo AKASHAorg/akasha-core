@@ -1,4 +1,8 @@
 import * as React from 'react';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import BeamCard from './cards/beam-card';
 import EntryList, {
   EntryListProps,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
@@ -10,16 +14,12 @@ import {
   Profile,
 } from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useInfiniteBeams } from '../utils/use-infinite-beams';
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import BeamCard from './cards/beam-card';
 
 export type BeamFeedProps = Omit<
   EntryListProps<AkashaBeamEdge>,
@@ -129,13 +129,11 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
                 ref={measureElementRef}
                 data-cursor={entryData?.cursor || entryData?.['key'] || ''}
               >
-                {!entryData.node && <EntryLoadingPlaceholder />}
+                {!entryData.node && <EntryCardLoading />}
                 {entryData.node && (
                   <BeamCard
                     entryData={entryData.node}
-                    locale={locale}
-                    uiEvents={uiEvents}
-                    //@TODO: refactor prop
+                    contentClickable={true}
                     onContentClick={() =>
                       onNavigate(
                         { authorId: entryData.node?.author.id, id: entryData.node?.id },

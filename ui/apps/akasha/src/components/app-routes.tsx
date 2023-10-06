@@ -1,20 +1,17 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import FeedPage from './feed-page/feed-page';
 import MyFeedPage from './my-feed-page/my-feed-page';
 import ProfileFeedPage from './profile-feed-page/profile-feed-page';
-import PostPage from './item-page/post-page';
+import BeamPage from './item-page/beam-page';
+import ReflectPage from './item-page/reflect-page';
 import InvitePage from './item-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
-
 import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, INVITE } from '../routes';
-import ReplyPage from './item-page/reply-page';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal } = useRootComponentProps();
@@ -46,10 +43,7 @@ const AppRoutes: React.FC<unknown> = () => {
               <MyFeedPage loggedProfileData={loggedProfileData} showLoginModal={showLoginModal} />
             }
           />
-          <Route
-            path={`${routes[BEAM]}/:postId`}
-            element={<PostPage showLoginModal={showLoginModal} />}
-          />
+          <Route path={`${routes[BEAM]}/:beamId`} element={<BeamPage />} />
           <Route
             path={`${routes[TAGS]}/:tagName`}
             element={
@@ -65,10 +59,7 @@ const AppRoutes: React.FC<unknown> = () => {
               />
             }
           />
-          <Route
-            path={`${routes[REFLECT]}/:commentId`}
-            element={<ReplyPage showLoginModal={showLoginModal} />}
-          />
+          <Route path={`${routes[REFLECT]}/:reflectId`} element={<ReflectPage />} />
           <Route path={`${routes[INVITE]}/:inviteCode`} element={<InvitePage />} />
           <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
         </Routes>

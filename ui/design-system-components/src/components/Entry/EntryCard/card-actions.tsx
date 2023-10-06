@@ -4,7 +4,7 @@ import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 export type CardActionProps = {
-  beamId: string;
+  itemId: string;
   repliesAnchorLink?: string;
   disableActions?: boolean;
   actionsRightExt?: React.ReactNode;
@@ -12,13 +12,13 @@ export type CardActionProps = {
 };
 
 const CardActions: React.FC<CardActionProps> = props => {
-  const { beamId, repliesAnchorLink, disableActions, actionsRightExt, onReflect } = props;
+  const { itemId, repliesAnchorLink, disableActions, actionsRightExt, onReflect } = props;
 
   return (
     <Stack direction="row" align="center" justify="end" spacing="gap-x-4">
       <>{actionsRightExt}</>
       <Anchor
-        href={`${repliesAnchorLink}/${beamId}`}
+        href={`${repliesAnchorLink}/${itemId}`}
         customStyle="no-underline"
         onClick={e => {
           e.preventDefault();

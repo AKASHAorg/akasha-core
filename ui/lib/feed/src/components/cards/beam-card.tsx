@@ -1,26 +1,30 @@
 import React from 'react';
-import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import EntryCard, {
+  EntryCardProps,
+} from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
-import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { ContentBlockModes, EntityTypes, RootComponentProps } from '@akashaorg/typings/lib/ui';
+import { ContentBlockModes, EntityTypes } from '@akashaorg/typings/lib/ui';
 import { sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
+import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 
-type BeamCardProps = {
+type BeamCardProps = Pick<
+  EntryCardProps,
+  'contentClickable' | 'noWrapperCard' | 'onContentClick'
+> & {
   entryData: AkashaBeam;
-  locale: ILocale;
-  uiEvents: RootComponentProps['uiEvents'];
-  onContentClick: () => void;
 };
 
 const BeamCard: React.FC<BeamCardProps> = props => {
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { entryData, ...rest } = props;
   const { t } = useTranslation('ui-lib-feed');
+  const { getRoutingPlugin } = useRootComponentProps();
+  const { getTranslationPlugin } = useRootComponentProps();
+  const locale = (getTranslationPlugin().i18n?.languages?.[0] as ILocale) || 'en';
 
-  const { entryData, locale, onContentClick } = props;
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },
     { select: response => response.node },
@@ -64,7 +68,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       }}
       itemType={EntityTypes.BEAM}
       onAvatarClick={onAvatarClick}
-      onContentClick={onContentClick}
+      {...rest}
     >
       {({ blockID }) => (
         <ContentBlockExtension readMode={{ blockID }} mode={ContentBlockModes.READONLY} />
