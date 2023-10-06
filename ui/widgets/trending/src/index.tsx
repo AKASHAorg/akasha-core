@@ -1,12 +1,11 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typings/lib/ui';
+import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typings/lib/ui';
 
 /**
  * All widgets must export a register function:
  */
-export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
+export const register: (opts: IntegrationRegistrationOptions) => WidgetInterface = opts => ({
   loadingFn: () => import('./components'),
-  i18nNamespace: ['ui-widget-trending'],
   mountsIn: opts.layoutConfig?.rootWidgetSlotId,
   activeWhen: () => true,
 });

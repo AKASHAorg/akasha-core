@@ -86,8 +86,8 @@ export const spaEvents$ = merge(
    * loaded, bootstrapped, mounted, and unmounted.
    *
    * Using this event for:
-   *   - hiding app loader;
-   *   - decide it it's 404;
+   *   - hiding splash screen;
+   *   - decide if it's 404;
    * @internal
    */
   fromEvent(window, 'single-spa:routing-event').pipe(

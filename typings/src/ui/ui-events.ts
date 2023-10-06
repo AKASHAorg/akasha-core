@@ -1,6 +1,8 @@
 import { IMenuItem } from './menu-items';
 import { ContentBlockRegisterEvent } from './editor-blocks';
 import { AnalyticsEventData } from './analytics';
+import { ExtensionRegisterEvent } from './extensions';
+import { WidgetRegisterEvent } from './widgets';
 
 export enum EventTypes {
   Instantiated = 'instantiated',
@@ -80,4 +82,6 @@ export type UIEventData =
       data?: EventDataTypes;
     }
   | ContentBlockRegisterEvent
+  | ExtensionRegisterEvent
+  | WidgetRegisterEvent
   | AnalyticsEventData;

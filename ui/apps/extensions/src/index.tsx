@@ -8,6 +8,8 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import routes from './routes';
 import { ContentBlockStore } from './plugins/content-block-store';
+import { ExtensionStore } from './plugins/extension-store';
+import { WidgetStore } from './plugins/widget-store';
 
 /**
  * All the plugins must export an object like this:
@@ -40,11 +42,21 @@ export const getPlugin = (
   },
 ) => {
   const contentBlockStore = ContentBlockStore.getInstance(props.uiEvents);
+  const extensionStore = ExtensionStore.getInstance(props.uiEvents);
+  const widgetStore = WidgetStore.getInstance(props.uiEvents);
+
   return {
     contentBlockStore: {
       getInfos: contentBlockStore.getContentBlockInfos,
       getMatchingBlocks: contentBlockStore.getMatchingBlocks,
     },
-    extensionStore: {},
+    extensionStore: {
+      getExtensions: extensionStore.getExtensions,
+      getMatchingExtension: extensionStore.getMatchingExtensions,
+    },
+    widgetStore: {
+      getWidgets: widgetStore.getWidgets,
+      getMatchingWidgets: widgetStore.getMatchingWidgets,
+    },
   };
 };

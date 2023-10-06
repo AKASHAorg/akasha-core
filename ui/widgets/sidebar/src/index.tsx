@@ -1,14 +1,11 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typings/lib/ui';
+import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typings/lib/ui';
 
 /**
  * All widgets must export an object like this:
  */
-export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
+export const register: (opts: IntegrationRegistrationOptions) => WidgetInterface = opts => ({
   mountsIn: opts.layoutConfig?.sidebarSlotId,
   loadingFn: () => import('./sidebar'),
   activeWhen: () => true,
-  name: 'ui-widget-sidebar',
-  i18nNamespace: ['ui-widget-sidebar'],
-  tags: ['sidebar'],
 });

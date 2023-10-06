@@ -67,7 +67,7 @@ export const loadLayout = (
           domElementGetter: () => getDomElement(config, layoutManifest.name, logger),
           parseQueryString: parseQueryString,
           worldConfig: worldConfig,
-          layoutConfig: config.extensions,
+          layoutConfig: config.extensionsMap,
           uiEvents,
           logger,
           plugins,
