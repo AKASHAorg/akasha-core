@@ -1,4 +1,5 @@
 import React from 'react';
+import ReflectFeed from './reflect-feed';
 import { I18nextProvider } from 'react-i18next';
 import {
   EntityTypes,
@@ -59,7 +60,15 @@ const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
           db={db}
         />
       )}
-      {/*{itemType === EntityTypes.REFLECT && <ReflectFeed {...props} db={db} />}*/}
+      {itemType === EntityTypes.REFLECT && (
+        <ReflectFeed
+          {...props}
+          i18n={i18n}
+          modalSlotId={layoutConfig.modalSlotId}
+          locale={i18n.languages[0].toLowerCase() as ILocale}
+          db={db}
+        />
+      )}
     </I18nextProvider>
   );
 };

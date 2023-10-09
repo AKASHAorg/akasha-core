@@ -84,12 +84,12 @@ function EntryList<T>(props: EntryListProps<T>) {
   // keep the first scroll state as ref
   const initialScrollStateRef = React.useRef<ScrollerState & { isFetched: boolean }>();
 
-  if (!initialScrollStateRef.current && initialScrollState.isFetched) {
+  if (!initialScrollStateRef.current && initialScrollState?.isFetched) {
     initialScrollStateRef.current = initialScrollState;
   }
 
   const measurementsCache = React.useMemo(() => {
-    if (initialScrollState.isFetched) {
+    if (initialScrollState?.isFetched) {
       return initialScrollState.measurementsCache;
     }
     return undefined;
