@@ -48,7 +48,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   const allowedApps = [
     '@akashaorg/app-akasha-integration',
     '@akashaorg/app-moderation-ewa',
-    '@akashaorg/app-akasha-verse',
+    '@akashaorg/app-extensions',
   ];
 
   useEffect(() => {
