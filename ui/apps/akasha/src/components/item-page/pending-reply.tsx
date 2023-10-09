@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
+import routes, { REFLECT } from '../../routes';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { EntityTypes, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
 import { useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import routes, { REFLECT } from '../../../routes';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 
 export type PendingReplyProps = {
   postId: string;

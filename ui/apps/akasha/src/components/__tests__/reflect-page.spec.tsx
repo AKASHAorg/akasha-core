@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PostPage from '../item-page/post-page';
+import ReflectPage from '../item-page/reflect-page';
 import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 
 import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
@@ -16,16 +16,16 @@ const MockedInlineEditor = ({ action }) => (
     extensionData={{
       name: 'name',
       itemId: '01gf',
-      itemType: EntityTypes.BEAM,
+      itemType: EntityTypes.REFLECT,
       action,
     }}
   />
 );
 
-describe('< PostPage /> component', () => {
+describe('< ReplyPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <PostPage showLoginModal={jest.fn()} />
+      <ReflectPage />
     </AnalyticsProvider>
   );
 
@@ -37,9 +37,8 @@ describe('< PostPage /> component', () => {
     //   }>
     // ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
   });
-
-  // @TODO fix after replacing hooks
-  it.skip('should render post page', async () => {
+  // @TODO fix after new hooks
+  it.skip('should render reply page', async () => {
     const spiedExtension = jest.spyOn(Extension, 'default');
 
     when(spiedExtension)
@@ -57,31 +56,4 @@ describe('< PostPage /> component', () => {
     // expect(screen.getByText(/Reply to/i)).toBeInTheDocument();
     // expect(screen.getByRole('button', { name: /Reply/i })).toBeInTheDocument();
   });
-  // it('should render reply fragment with view all replies link', async () => {
-  //   await act(async () => {
-  //     renderWithAllProviders(BaseComponent, {});
-  //   });
-
-  //   expect(screen.getByTestId('reply-fragment')).toBeInTheDocument();
-  //   expect(screen.getByText(/View all replies/)).toBeInTheDocument();
-  // });
-  // it('should render edit page', async () => {
-  //   history.pushState(null, '', `${location.origin}?action=edit`);
-
-  //   const spiedExtension = jest.spyOn(extension, 'Extension');
-
-  //   when(spiedExtension)
-  //     .calledWith(
-  //       partialArgs(
-  //         expect.objectContaining({ name: expect.stringMatching(/inline-editor_postedit/) }),
-  //       ),
-  //     )
-  //     .mockReturnValue(<MockedInlineEditor action="edit" />);
-
-  //   await act(async () => {
-  //     renderWithAllProviders(BaseComponent, {});
-  //   });
-
-  //   expect(screen.getByRole('button', { name: /Save Changes/i })).toBeInTheDocument();
-  // });
 });

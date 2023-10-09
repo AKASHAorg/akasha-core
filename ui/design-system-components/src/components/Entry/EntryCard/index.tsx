@@ -40,6 +40,7 @@ export type EntryCardProps = {
   disableReporting?: boolean;
   hidePublishTime?: boolean;
   disableActions?: boolean;
+  noWrapperCard?: boolean;
   hideActionButtons?: boolean;
   scrollHiddenContent?: boolean;
   contentClickable?: boolean;
@@ -82,6 +83,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     disableReporting,
     hidePublishTime,
     disableActions,
+    noWrapperCard = false,
     hideActionButtons,
     scrollHiddenContent,
     contentClickable,
@@ -103,133 +105,133 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const nsfwHeightStyle = entryData.nsfw && !showNSFW ? 'min-h-[6rem]' : '';
   const nsfwBlurStyle = entryData.nsfw && !showNSFW ? 'blur-lg' : '';
 
-  return (
-    <Card ref={ref} padding="p-0">
-      <Stack spacing="gap-y-2" padding="p-4">
-        <Stack direction="row" justify="between">
-          <>
-            {authorProfile.status === 'loading' ? (
-              <AuthorProfileLoading />
-            ) : (
-              <ProfileAvatarButton
-                data-testid="entry-profile-detail"
-                profileId={
-                  authorProfile.status === 'error'
-                    ? entryData.author.id
-                    : authorProfile.data.did?.id
-                }
-                label={
-                  authorProfile.status === 'error' ? entryData.author.id : authorProfile.data.name
-                }
-                avatarImage={authorProfile.status === 'error' ? null : authorProfile.data?.avatar}
-                href={`${profileAnchorLink}/${entryData.author.id}`}
-                onClick={event => {
-                  event.preventDefault();
-                  if (onAvatarClick) onAvatarClick(entryData.author.id);
-                }}
-                ref={profileRef}
-              />
-            )}
-          </>
-          <Stack direction="row" spacing="gap-2" align="center" customStyle="shrink-0">
-            {entryData?.createdAt && !hidePublishTime && (
-              <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
-                <Text customStyle="flex shrink-0 text(grey4 dark:grey7)">
-                  {formatRelativeTime(entryData?.createdAt, locale)}
-                </Text>
-              </Tooltip>
-            )}
-            {entryData?.createdAt && (
-              <Tooltip
-                placement={'top'}
-                content={`${editedLabel} ${formatRelativeTime(entryData?.createdAt, locale)}`}
-              >
-                <Icon size="sm" type="PencilIcon" />
-              </Tooltip>
-            )}
-            {!entryData.active && (
-              <CardHeaderMenuDropdown
-                disabled={disableActions}
-                menuItems={
-                  !entryData.author.isViewer
-                    ? [
-                        {
-                          icon: 'FlagIcon',
-                          label: flagAsLabel,
-                          disabled: disableReporting,
-                          handler: onEntryFlag,
-                        },
-                      ]
-                    : []
-                }
-                headerMenuExt={headerMenuExt}
-              />
-            )}
-          </Stack>
-        </Stack>
-        {!entryData.active && (
-          <EntryCardRemoved
-            {...(entryData.author.isViewer
-              ? {
-                  type: 'author',
-                  message: removed.author,
-                  onTapToView: () => {
-                    //@TODO
-                  },
-                }
-              : { type: 'others', message: removed.others })}
-          />
-        )}
-        {entryData.active && (
-          <Button onClick={onContentClick} plain>
-            <Stack
-              align="center"
-              justify="center"
-              customStyle={`relative max-h-[50rem] ${scrollHiddenStyle} ${contentClickableStyle} ${nsfwHeightStyle}`}
-              data-testid="entry-content"
+  const entryCardUi = (
+    <Stack spacing="gap-y-2" padding="p-4">
+      <Stack direction="row" justify="between">
+        <>
+          {authorProfile.status === 'loading' ? (
+            <AuthorProfileLoading />
+          ) : (
+            <ProfileAvatarButton
+              data-testid="entry-profile-detail"
+              profileId={entryData.author.id}
+              label={
+                authorProfile.status === 'error' ? entryData.author.id : authorProfile.data?.name
+              }
+              avatarImage={authorProfile.status === 'error' ? null : authorProfile.data?.avatar}
+              href={`${profileAnchorLink}/${entryData.author.id}`}
+              onClick={event => {
+                event.preventDefault();
+                if (onAvatarClick) onAvatarClick(entryData.author.id);
+              }}
+              ref={profileRef}
+            />
+          )}
+        </>
+        <Stack direction="row" spacing="gap-2" align="center" customStyle="shrink-0">
+          {entryData?.createdAt && !hidePublishTime && (
+            <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
+              <Text customStyle="flex shrink-0 text(grey4 dark:grey7)">
+                {formatRelativeTime(entryData?.createdAt, locale)}
+              </Text>
+            </Tooltip>
+          )}
+          {entryData?.createdAt && (
+            <Tooltip
+              placement={'top'}
+              content={`${editedLabel} ${formatRelativeTime(entryData?.createdAt, locale)}`}
             >
-              {entryData.nsfw && !showNSFW && (
-                <Stack customStyle="absolute w-36 h-16 z-10">
-                  <NSFW
-                    {...nsfw}
-                    onClickToView={() => {
-                      setShowNSFW(true);
-                    }}
-                  />
-                </Stack>
-              )}
-              <Stack justifySelf="start" alignSelf="start" customStyle={nsfwBlurStyle}>
-                {rest.itemType === EntityTypes.REFLECT ? (
-                  <ReadOnlyEditor
-                    content={rest.slateContent}
-                    disabled={entryData.nsfw}
-                    handleMentionClick={rest.onMentionClick}
-                    handleTagClick={rest.onTagClick}
-                    handleLinkClick={url => {
-                      rest.navigateTo?.({ getNavigationUrl: () => url });
-                    }}
-                  />
-                ) : (
-                  rest.sortedContents?.map(item => (
-                    <Fragment key={item.blockID}>
-                      {rest.children({ blockID: item.blockID })}
-                    </Fragment>
-                  ))
-                )}
-              </Stack>
-            </Stack>
-          </Button>
-        )}
-        {!hideActionButtons && (
-          <CardActions
-            beamId={entryData.id}
-            repliesAnchorLink={repliesAnchorLink}
-            disableActions={disableActions || !entryData.active}
-            actionsRightExt={actionsRightExt}
-            onReflect={onReflect}
-          />
-        )}
+              <Icon size="sm" type="PencilIcon" />
+            </Tooltip>
+          )}
+          {!entryData.active && (
+            <CardHeaderMenuDropdown
+              disabled={disableActions}
+              menuItems={
+                !entryData.author.isViewer
+                  ? [
+                      {
+                        icon: 'FlagIcon',
+                        label: flagAsLabel,
+                        disabled: disableReporting,
+                        handler: onEntryFlag,
+                      },
+                    ]
+                  : []
+              }
+              headerMenuExt={headerMenuExt}
+            />
+          )}
+        </Stack>
       </Stack>
+      {!entryData.active && (
+        <EntryCardRemoved
+          {...(entryData.author.isViewer
+            ? {
+                type: 'author',
+                message: removed.author,
+                onTapToView: () => {
+                  //@TODO
+                },
+              }
+            : { type: 'others', message: removed.others })}
+        />
+      )}
+      {entryData.active && (
+        <Button onClick={onContentClick} plain>
+          <Stack
+            align="center"
+            justify="center"
+            customStyle={`relative max-h-[50rem] ${scrollHiddenStyle} ${contentClickableStyle} ${nsfwHeightStyle}`}
+            data-testid="entry-content"
+          >
+            {entryData.nsfw && !showNSFW && (
+              <Stack customStyle="absolute w-36 h-16 z-10">
+                <NSFW
+                  {...nsfw}
+                  onClickToView={() => {
+                    setShowNSFW(true);
+                  }}
+                />
+              </Stack>
+            )}
+            <Stack justifySelf="start" alignSelf="start" customStyle={nsfwBlurStyle}>
+              {rest.itemType === EntityTypes.REFLECT ? (
+                <ReadOnlyEditor
+                  content={rest.slateContent}
+                  disabled={entryData.nsfw}
+                  handleMentionClick={rest.onMentionClick}
+                  handleTagClick={rest.onTagClick}
+                  handleLinkClick={url => {
+                    rest.navigateTo?.({ getNavigationUrl: () => url });
+                  }}
+                />
+              ) : (
+                rest.sortedContents?.map(item => (
+                  <Fragment key={item.blockID}>{rest.children({ blockID: item.blockID })}</Fragment>
+                ))
+              )}
+            </Stack>
+          </Stack>
+        </Button>
+      )}
+      {!hideActionButtons && (
+        <CardActions
+          itemId={entryData.id}
+          repliesAnchorLink={repliesAnchorLink}
+          disableActions={disableActions || !entryData.active}
+          actionsRightExt={actionsRightExt}
+          onReflect={onReflect}
+        />
+      )}
+    </Stack>
+  );
+
+  return noWrapperCard ? (
+    <>{entryCardUi}</>
+  ) : (
+    <Card ref={ref} padding="p-0">
+      {entryCardUi}
     </Card>
   );
 };
