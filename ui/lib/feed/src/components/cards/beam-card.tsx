@@ -1,6 +1,5 @@
 import React from 'react';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -8,6 +7,7 @@ import { ContentBlockModes, EntityTypes, RootComponentProps } from '@akashaorg/t
 import { sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
+import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 
 type BeamCardProps = {
   entryData: AkashaBeam;
@@ -20,7 +20,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('ui-lib-feed');
 
-  const { entryData, locale, uiEvents, onContentClick } = props;
+  const { entryData, locale, onContentClick } = props;
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },
     { select: response => response.node },

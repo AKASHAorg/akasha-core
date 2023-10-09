@@ -1,5 +1,4 @@
 import React, { useEffect, useState, EventHandler, SyntheticEvent } from 'react';
-import { tw } from '@twind/core';
 
 import { IconType } from '@akashaorg/typings/lib/ui';
 
@@ -11,7 +10,9 @@ export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
   onClickInactive?: EventHandler<SyntheticEvent>;
   onClickActive?: EventHandler<SyntheticEvent>;
   inactiveLabel?: string;
+  inactiveVariant?: ButtonProps['variant'];
   activeLabel?: string;
+  activeVariant?: ButtonProps['variant'];
   activeHoverLabel?: string;
   active?: boolean;
   activeIcon?: IconType;
@@ -26,7 +27,9 @@ const DuplexButton = (props: DuplexButtonProps) => {
     size = 'sm',
     customStyle,
     inactiveLabel,
+    inactiveVariant = 'primary',
     activeLabel,
+    activeVariant = 'secondary',
     activeHoverLabel,
     active,
     icon,
@@ -39,8 +42,8 @@ const DuplexButton = (props: DuplexButtonProps) => {
 
   const [hovered, setHovered] = useState(false);
   const [iconOnly, setIconOnly] = useState(window.matchMedia('(max-width: 992px)').matches);
-  const activeHoverIconElem = activeHoverIcon || icon;
-  const activeIconElem = activeIcon || icon;
+  const activeHoverIconElem = activeHoverIcon ?? icon;
+  const activeIconElem = activeIcon ?? icon;
 
   useEffect(() => {
     const mql = window.matchMedia('(max-width: 992px)');
@@ -79,10 +82,12 @@ const DuplexButton = (props: DuplexButtonProps) => {
         onClick={active ? onClickActive : onClickInactive}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className={tw('rounded-sm border-1 border-secondaryLight p-1')}
         plain
       >
-        <Icon type={getIcon()} customStyle="text-secondaryLight h-5 w-5" />
+        <Icon
+          type={getIcon()}
+          customStyle="text-secondaryLight h-5 w-5 rounded-sm border-1 border-secondaryLight p-1"
+        />
       </Button>
     );
   }
@@ -94,19 +99,13 @@ const DuplexButton = (props: DuplexButtonProps) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       icon={getIcon()}
-      variant={active ? 'secondary' : 'primary'}
+      variant={active ? activeVariant : inactiveVariant}
       size={size}
+      hover={hovered && active}
       customStyle={customStyle}
       {...rest}
     />
   );
-};
-
-DuplexButton.defaultProps = {
-  inactiveLabel: 'Activate',
-  activeLabel: 'Activated',
-  activeHoverLabel: 'Deactivate',
-  active: false,
 };
 
 export default DuplexButton;

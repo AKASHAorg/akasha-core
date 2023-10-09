@@ -1,3 +1,5 @@
+import singleSpa from 'single-spa';
+
 export * from './root-component';
 export * from './app-loader';
 export * from './analytics';
@@ -34,3 +36,5 @@ export enum LEGAL_DOCS {
   CODE_OF_CONDUCT = 'CodeOfConduct',
   APP_GUIDE = 'AppGuide',
 }
+
+export type SingleSpaRoutingEvent = CustomEvent<singleSpa.SingleSpaCustomEventDetail>;

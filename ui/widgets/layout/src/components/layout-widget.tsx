@@ -20,6 +20,8 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 const Layout: React.FC<unknown> = () => {
   const [activeModal, setActiveModal] = useState<EventDataTypes | null>(null);
@@ -199,11 +201,19 @@ const Layout: React.FC<unknown> = () => {
             <Stack customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
-                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
+                  <Widget
+                    fullHeight
+                    name={layoutConfig.sidebarSlotId}
+                    loadingIndicator={<Spinner />}
+                  />
                 </Stack>
               ) : (
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen">
-                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
+                  <Widget
+                    fullHeight
+                    name={layoutConfig.sidebarSlotId}
+                    loadingIndicator={<Spinner />}
+                  />
                 </Stack>
               )}
             </Stack>
@@ -214,7 +224,7 @@ const Layout: React.FC<unknown> = () => {
               padding="pt-4"
               customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
             >
-              <Extension name={layoutConfig.topbarSlotId} uiEvents={uiEvents} />
+              <Widget name={layoutConfig.topbarSlotId} loadingIndicator={<Spinner />} />
             </Stack>
             <Stack padding="pt-4">
               {!isPlatformHealthy && (
@@ -243,19 +253,19 @@ const Layout: React.FC<unknown> = () => {
               )}
               <Extension name={layoutConfig.pluginSlotId} uiEvents={uiEvents} />
               <Stack customStyle="fixed bottom-0 mr-4 mb-4">
-                <Extension name={layoutConfig.snackbarNotifSlotId} uiEvents={uiEvents} />
+                <Widget name={layoutConfig.snackbarNotifSlotId} loadingIndicator={<Spinner />} />
               </Stack>
             </Stack>
           </Stack>
 
           <Stack customStyle="sticky top-0 h-screen">
             <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
-              <Extension name={layoutConfig.widgetSlotId} uiEvents={uiEvents} />
-              <Extension name={layoutConfig.rootWidgetSlotId} uiEvents={uiEvents} />
+              <Widget name={layoutConfig.widgetSlotId} loadingIndicator={<Spinner />} />
+              <Widget name={layoutConfig.rootWidgetSlotId} loadingIndicator={<Spinner />} />
             </Stack>
 
             <Stack customStyle="fixed bottom-0 mr-4 mb-4">
-              <Extension name={layoutConfig.cookieWidgetSlotId} uiEvents={uiEvents} />
+              <Widget name={layoutConfig.cookieWidgetSlotId} loadingIndicator={<Spinner />} />
             </Stack>
           </Stack>
         </Stack>

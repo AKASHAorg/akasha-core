@@ -54,7 +54,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           akashaProfileInterests: { topics: { value: string; labelType: string }[] };
         };
 
-        return akashaProfileInterests?.topics;
+        return akashaProfileInterests?.topics ?? [];
       },
     },
   );

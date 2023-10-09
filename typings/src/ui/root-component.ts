@@ -14,7 +14,7 @@ export interface RootComponentProps {
   uiEvents: Subject<UIEventData>;
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
-  layoutConfig: IAppConfig['extensions'];
+  layoutConfig: IAppConfig['extensionsMap'];
   logger: ILogger;
   name?: string;
   singleSpa: typeof singleSpa;

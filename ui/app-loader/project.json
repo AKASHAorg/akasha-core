@@ -2,7 +2,7 @@
   "name": "@akashaorg/ui-app-loader",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "ui/app-loader/src",
-  "projectType": "application",
+  "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/workspace:run-commands",
