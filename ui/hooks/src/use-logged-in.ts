@@ -13,5 +13,5 @@ export function useLoggedIn() {
   const data = useMemo(() => {
     return loginQuery.data;
   }, [loginQuery.data]);
-  return { isLoggedIn: !!data?.id, loggedInProfileId: data?.id };
+  return { isLoggedIn: !!data?.id, loggedInProfileId: (data?.id || '').toLowerCase() };
 }
