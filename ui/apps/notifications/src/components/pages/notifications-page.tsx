@@ -211,7 +211,7 @@ const NotificationsPage: React.FC<unknown> = () => {
 
   return (
     <>
-      <Stack direction="column" customStyle="pb-32">
+      <Stack direction="column" customStyle="pb-32 h-[calc(100vh-88px)]">
         <Stack customStyle="py-4 relative w-full" direction="row">
           <Text variant="h5" align="center">
             <>{t('Notifications')}</>
@@ -250,10 +250,8 @@ const NotificationsPage: React.FC<unknown> = () => {
           handleMessageRead={markAsRead.mutate}
           handleEntryClick={handleEntryClick}
           handleProfileClick={handleAvatarClick}
-          // loggedIn={!!loginQuery.data?.ethAddress}
           loggedIn={true}
           isFetching={false}
-          // isFetching={notifReq.isFetching}
         />
       </Stack>
     </>

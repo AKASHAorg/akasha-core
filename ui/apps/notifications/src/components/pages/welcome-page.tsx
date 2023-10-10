@@ -56,7 +56,6 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   };
 
   const goToNotificationsPage = () => {
-    // go to notifications page
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
@@ -93,7 +92,6 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   const skipCustomization = () => {
     saveSettingsMutation.mutate({ app: Appname, options: { default: true } });
 
-    // navigate to notifications
     goToNotificationsPage();
   };
 

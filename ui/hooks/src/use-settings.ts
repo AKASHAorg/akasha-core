@@ -61,7 +61,7 @@ const getSettings = async (app: string) => {
 
   const res = await sdk.services.settings.get(app);
   if (res.data?.options) return Object.fromEntries(res.data.options);
-  return undefined;
+  return null;
 };
 
 /**

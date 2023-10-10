@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { EventTypes, MenuItemAreaType } from '@akashaorg/typings/lib/ui';
@@ -34,10 +34,10 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
 
   const fetchSettingsQuery = useGetSettings(Appname);
-  const existingSettings = fetchSettingsQuery.data;
+  const existingSettings: { [k: string]: string | number | boolean } | null =
+    fetchSettingsQuery.data;
 
   const saveSettingsMutation = useSaveSettings();
-  const saveSettingsRes = saveSettingsMutation.data;
 
   const [routeData, setRouteData] = useState(null);
 
@@ -45,11 +45,14 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   const [appNames, setAppNames] = useState<string[]>([]);
 
-  const allowedApps = [
-    '@akashaorg/app-akasha-integration',
-    '@akashaorg/app-moderation-ewa',
-    '@akashaorg/app-extensions',
-  ];
+  const allowedApps = React.useMemo(
+    () => [
+      '@akashaorg/app-akasha-integration',
+      '@akashaorg/app-moderation-ewa',
+      '@akashaorg/app-extensions',
+    ],
+    [],
+  );
 
   useEffect(() => {
     let sub;
@@ -71,32 +74,21 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
     return routeData?.[MenuItemAreaType.AppArea];
   }, [routeData]);
 
-  // const appNames = useMemo(() => {
-  //   if (defaultInstalledApps) {
-  //     defaultInstalledApps.map(app => {
-  //       if (allowedApps.includes(app.name)) return prev => [...prev, app.label];
-  //     });
-  //   }
-  //   return [];
-  // }, [defaultInstalledApps]);
-
   React.useEffect(() => {
     if (defaultInstalledApps) {
       defaultInstalledApps.map(app => {
         if (allowedApps.includes(app.name)) setAppNames(prev => [...prev, app.label]);
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultInstalledApps]);
+  }, [allowedApps, defaultInstalledApps]);
 
-  const [selected, setSelected] = useState(true);
+  const [selected, setSelected] = useState(false);
   const [allStates, setAllStates] = useState<{ [k: string]: string | number | boolean }>({});
-  const [formatedSettings, setFormatedSettings] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const setDefaultValues = () => {
+  const setDefaultValues = useCallback(() => {
     setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
-  };
+  }, [appNames]);
 
   React.useEffect(() => {
     if (appNames) {
@@ -105,9 +97,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           Object.entries(existingSettings).filter(app => appNames.includes(app[0])),
         );
 
-        Object.keys(appStates).length !== 0 && appStates.constructor === Object
-          ? setAllStates(appStates)
-          : setDefaultValues();
+        Object.keys(appStates).length !== 0 ? setAllStates(appStates) : setDefaultValues();
 
         const snoozePref = Object.entries(existingSettings).find(key => key.includes(SnoozeOption));
 
@@ -118,26 +108,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         setDefaultValues();
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appNames, existingSettings]);
-
-  React.useEffect(() => {
-    if (formatedSettings) {
-      setLoading(true);
-      saveSettingsMutation.mutate(
-        { app: Appname, options: formatedSettings },
-        {
-          onSettled() {
-            setLoading(false);
-          },
-        },
-      );
-    }
-    if (saveSettingsRes) {
-      setFormatedSettings(null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [saveSettingsRes, formatedSettings]);
+  }, [appNames, existingSettings, setDefaultValues]);
 
   const [snoozed, setSnoozed] = React.useState(false);
   const [isChanged, setIsChanged] = useState(false);
@@ -166,16 +137,17 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
 
   // auto-selects all when I want to receive all notification is checked
   useEffect(() => {
-    if (selected && isChanged) {
+    if (selected) {
       setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
+  }, [appNames, selected]);
 
   React.useEffect(() => {
-    if (allStates) {
+    if (Object.keys(allStates).length !== 0) {
       if (Object.entries(allStates).filter(app => app[1] === false).length > 0) {
         setSelected(false);
+      } else {
+        setSelected(true);
       }
     }
   }, [allStates]);
@@ -199,13 +171,22 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   };
 
   const confirmHandler = () => {
+    setLoading(true);
+
     try {
       const allPrefs = allStates;
 
       //add snooze pref
       allPrefs[SnoozeOption] = snoozed;
 
-      setFormatedSettings(allPrefs);
+      saveSettingsMutation.mutate(
+        { app: Appname, options: allPrefs },
+        {
+          onSettled() {
+            setLoading(false);
+          },
+        },
+      );
 
       if (snoozed) {
         // emit snooze notification event so the topbar's notification icon can be updated
@@ -250,6 +231,8 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       // navigate to final step
       initial && goToNextStep();
     } catch (error) {
+      setLoading(false);
+
       _uiEvents.current.next({
         event: EventTypes.ShowNotification,
         data: {
