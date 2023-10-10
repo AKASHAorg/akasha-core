@@ -2,7 +2,6 @@ import React from 'react';
 
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -166,8 +165,8 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
 
     const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
     return (
-      <div key={index}>
-        <Stack padding="py-3 pl-4" customStyle="flex-row">
+      <Stack key={index} customStyle={`${index === notifications.length - 1 ? 'basis-full' : ''}`}>
+        <Stack key={index} padding="py-3 pl-4" customStyle="flex-row">
           <ProfileAvatarNotificationApp
             profileId={profileData.did?.id}
             avatarImage={profileData.avatar}
@@ -179,12 +178,12 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
           />
         </Stack>
         {index !== notifications.length - 1 && <Divider />}
-      </div>
+      </Stack>
     );
   };
 
   return (
-    <Card elevation={'1'} radius={16} customStyle="p-0 w-full grow">
+    <Card elevation={'1'} radius={16} customStyle="p-0 w-full grow flex-wrap">
       {loggedIn && !isFetching && notifications.length === 0 && (
         <BasicInfoCard titleLabel={emptyTitle} image={'/images/longbeam-notfound.webp'} />
       )}
