@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useGetSettings, useSaveSettings } from '@akashaorg/ui-awf-hooks';
+import { EventTypes } from '@akashaorg/typings/lib/ui';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -33,17 +34,18 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   } = props;
 
   const { t } = useTranslation('app-notifications');
-  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+  const { baseRouteName, getRoutingPlugin, uiEvents } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  // check if user has gone through onboarding steps before
-  let savedPreferences;
-  if (window.localStorage) {
-    savedPreferences = JSON.parse(localStorage.getItem('notification-preference'));
-  }
+  const _uiEvents = useRef(uiEvents);
 
-  let message = '';
+  const Appname = '@akashaorg/app-notifications';
+
+  const fetchSettingsQuery = useGetSettings(Appname);
+  const existingSettings = fetchSettingsQuery.data;
+
+  const saveSettingsMutation = useSaveSettings();
 
   const goToNextStep = () => {
     // navigate to step 2
@@ -54,10 +56,9 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   };
 
   const goToNotificationsPage = () => {
-    // go to notifications page
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}?message=${message}&type=success`,
+      getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}`,
     });
   };
 
@@ -74,7 +75,13 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
   const confirmCustomization = () => {
     if (finalStep) {
-      message = 'Notification settings updated successfully';
+      _uiEvents.current.next({
+        event: EventTypes.ShowNotification,
+        data: {
+          name: 'success',
+          message: 'Notification settings updated successfully',
+        },
+      });
 
       goToNotificationsPage();
     } else {
@@ -83,15 +90,12 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   };
 
   const skipCustomization = () => {
-    if (window.localStorage) {
-      localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
-    }
-    message = '';
-    // navigate to notifications
+    saveSettingsMutation.mutate({ app: Appname, options: { default: true } });
+
     goToNotificationsPage();
   };
 
-  if (!finalStep && isLoggedIn && savedPreferences) {
+  if (!finalStep && existingSettings) {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[SHOW_NOTIFICATIONS_PAGE],

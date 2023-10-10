@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventTypes } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { EventTypes, MenuItemAreaType } from '@akashaorg/typings/lib/ui';
+import { useRootComponentProps, useSaveSettings, useGetSettings } from '@akashaorg/ui-awf-hooks';
 
-import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -23,16 +22,9 @@ export type CustomizeNotificationPageProps = {
   initial?: boolean;
   isLoggedIn: boolean;
 };
-
-const Title = ({ title }: { title: string }): JSX.Element => {
-  return (
-    <Stack direction="row" justifyItems="center">
-      <Text variant="h6" align="center">
-        {title}
-      </Text>
-    </Stack>
-  );
-};
+export const NOTIF_REF = 'notification-preference-set';
+const Appname = '@akashaorg/app-notifications';
+const SnoozeOption = 'snoozed';
 
 const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   initial = true,
@@ -41,82 +33,84 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   const { t } = useTranslation('app-notifications');
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
 
-  const [selected, setSelected] = useState(true);
+  const fetchSettingsQuery = useGetSettings(Appname);
+  const existingSettings: { [k: string]: string | number | boolean } | null =
+    fetchSettingsQuery.data;
 
-  const socialAppCheckboxes = useMemo(
+  const saveSettingsMutation = useSaveSettings();
+
+  const [routeData, setRouteData] = useState(null);
+
+  const routing = getRoutingPlugin();
+
+  const [appNames, setAppNames] = useState<string[]>([]);
+
+  const allowedApps = React.useMemo(
     () => [
-      {
-        label: t('New Followers'),
-        value: 'New Followers',
-        selected: true,
-      },
-      {
-        label: t('Reflects on my Beam'),
-        value: 'Reflects on my Beam',
-        selected: true,
-      },
-      {
-        label: t('Mentions me in a Beam / Reflect'),
-        value: 'Mentions me in a Beam / Reflect',
-        selected: true,
-      },
-      {
-        label: t('Someone sharing my Beam'),
-        value: 'Someone sharing my Beam',
-        selected: true,
-      },
-      {
-        label: t('When someone I am following Beams new content'),
-        value: 'When someone I am following Beams new content',
-        selected: true,
-      },
-      {
-        label: t('When there’s new content in topics I’m subscribed to'),
-        value: 'When there’s new content in topics I’m subscribed to',
-        selected: true,
-      },
+      '@akashaorg/app-akasha-integration',
+      '@akashaorg/app-moderation-ewa',
+      '@akashaorg/app-extensions',
     ],
-    [t],
+    [],
   );
 
-  const moderationAppCheckboxes = useMemo(
-    () => [
-      {
-        label: t('My content gets delisted/kept'),
-        value: 'My content gets delisted/kept',
-        selected: true,
-      },
-    ],
-    [t],
-  );
-  const integrationCenterCheckboxes = useMemo(
-    () => [
-      {
-        label: t('New versions of installed integrations'),
-        value: 'New versions of installed integrations',
-        selected: true,
-      },
-    ],
-    [t],
-  );
+  useEffect(() => {
+    let sub;
+    if (routing) {
+      sub = routing.routeObserver.subscribe({
+        next: routeData => {
+          setRouteData({ ...routeData.byArea });
+        },
+      });
+    }
+    return () => {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    };
+  }, [routing]);
 
-  const [allStates, setAllStates] = useState({
-    socialapp: socialAppCheckboxes.map(e => e.selected),
-    moderationApp: moderationAppCheckboxes.map(e => e.selected),
-    integrationCenter: integrationCenterCheckboxes.map(e => e.selected),
-  });
+  const defaultInstalledApps = useMemo(() => {
+    return routeData?.[MenuItemAreaType.AppArea];
+  }, [routeData]);
+
+  React.useEffect(() => {
+    if (defaultInstalledApps) {
+      defaultInstalledApps.map(app => {
+        if (allowedApps.includes(app.name)) setAppNames(prev => [...prev, app.label]);
+      });
+    }
+  }, [allowedApps, defaultInstalledApps]);
+
+  const [selected, setSelected] = useState(false);
+  const [allStates, setAllStates] = useState<{ [k: string]: string | number | boolean }>({});
+  const [loading, setLoading] = useState(false);
+
+  const setDefaultValues = useCallback(() => {
+    setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
+  }, [appNames]);
+
+  React.useEffect(() => {
+    if (appNames) {
+      if (existingSettings) {
+        const appStates = Object.fromEntries(
+          Object.entries(existingSettings).filter(app => appNames.includes(app[0])),
+        );
+
+        Object.keys(appStates).length !== 0 ? setAllStates(appStates) : setDefaultValues();
+
+        const snoozePref = Object.entries(existingSettings).find(key => key.includes(SnoozeOption));
+
+        if (snoozePref && typeof snoozePref[1] === 'boolean') {
+          setSnoozed(snoozePref[1]);
+        }
+      } else {
+        setDefaultValues();
+      }
+    }
+  }, [appNames, existingSettings, setDefaultValues]);
 
   const [snoozed, setSnoozed] = React.useState(false);
-
-  // check if snooze notification option has already been set
-  useEffect(() => {
-    if (window.localStorage) {
-      setSnoozed(JSON.parse(localStorage.getItem('notifications-snoozed')));
-    }
-  }, []);
-
-  //for the button, disabled when no change made, enabled when there's an change
-  // const [updateButtonDisabled, setUpdateButtonDisabled] = useState(true);
   const [isChanged, setIsChanged] = useState(false);
 
   const snoozeChangeHandler = () => {
@@ -129,69 +123,34 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   // added for emitting snooze notification event
   const _uiEvents = useRef(uiEvents);
 
-  const changeHandler = (pos: number, section: string): void => {
-    const stateArray = (() => {
-      switch (section) {
-        case 'socialapp':
-          return allStates.socialapp;
-        case 'moderationApp':
-          return allStates.moderationApp;
-        case 'integrationCenter':
-          return allStates.integrationCenter;
+  const changeHandler = (appName): void => {
+    const newStates = Object.entries(allStates).map(state => {
+      if (state[0] === appName) {
+        state[1] = !state[1];
       }
-    })();
-    const updatedCheckedState = stateArray.map((item, idx) => (idx === pos ? !item : item));
-    setAllStates({ ...allStates, [section]: updatedCheckedState });
+      return state;
+    });
+
+    setAllStates(Object.fromEntries(newStates));
     setIsChanged(true);
   };
 
-  const Content = ({
-    checkboxArray,
-    section,
-  }: {
-    checkboxArray: Array<{ label: string; value: string; selected: boolean }>;
-    section: string;
-  }): JSX.Element => {
-    return (
-      <div>
-        {checkboxArray.map(({ label, value }, index) => {
-          return (
-            <div key={index}>
-              <Checkbox
-                label={label}
-                value={value}
-                id={index.toString()}
-                isSelected={allStates[section][index]}
-                handleChange={() => changeHandler(index, section)}
-                name={label}
-                customStyle="mb-4"
-              />
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  // detects if user changes any of the setting options and then enable the Update button
-  // useEffect(() => {
-  //   // setUpdateButtonDisabled(!updateButtonDisabled);
-  //   setIsChanged(!isChanged);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isChanged]);
-
   // auto-selects all when I want to receive all notification is checked
   useEffect(() => {
-    if (selected == true) {
-      setAllStates({
-        ...allStates,
-        socialapp: Array(socialAppCheckboxes.length).fill(true),
-        moderationApp: Array(moderationAppCheckboxes.length).fill(true),
-        integrationCenter: Array(integrationCenterCheckboxes.length).fill(true),
-      });
+    if (selected) {
+      setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
+  }, [appNames, selected]);
+
+  React.useEffect(() => {
+    if (Object.keys(allStates).length !== 0) {
+      if (Object.entries(allStates).filter(app => app[1] === false).length > 0) {
+        setSelected(false);
+      } else {
+        setSelected(true);
+      }
+    }
+  }, [allStates]);
 
   const goToNextStep = () => {
     // navigate to final step or go back to notifications page depending whether it's the first time accessing the app or not
@@ -205,69 +164,75 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
   };
 
   const skipHandler = () => {
-    // save to localstorage so we don't come back again after skipping
-    if (window.localStorage) {
-      localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
-    }
+    setAllStates(Object.fromEntries(appNames.map(app => [[app], true])));
 
     // navigate to final step
     goToNextStep();
   };
 
   const confirmHandler = () => {
-    // @TODO: save preferences somewhere, now we just save a key in localstorage to mark as set
+    setLoading(true);
+
     try {
-      if (window.localStorage) {
-        localStorage.setItem('notification-preference', JSON.stringify('1')); // @TODO: where to save settings?
+      const allPrefs = allStates;
+
+      //add snooze pref
+      allPrefs[SnoozeOption] = snoozed;
+
+      saveSettingsMutation.mutate(
+        { app: Appname, options: allPrefs },
+        {
+          onSettled() {
+            setLoading(false);
+          },
+        },
+      );
+
+      if (snoozed) {
+        // emit snooze notification event so the topbar's notification icon can be updated
+        _uiEvents.current.next({
+          event: EventTypes.SnoozeNotifications,
+        });
+
         _uiEvents.current.next({
           event: EventTypes.ShowNotification,
           data: {
             name: 'success',
-            message: 'Notification settings updated successfully',
+            message: 'You have snoozed your notifications successfully',
           },
         });
-
-        if (snoozed && !localStorage.getItem('notifications-snoozed')) {
-          localStorage.setItem('notifications-snoozed', JSON.stringify(true));
-
-          // emit snooze notification event so the topbar's notification icon can be updated
-          _uiEvents.current.next({
-            event: EventTypes.SnoozeNotifications,
-          });
-          _uiEvents.current.next({
-            event: EventTypes.ShowNotification,
-            data: {
-              name: 'success',
-              message: 'You have snoozed your notifications successfully',
-            },
-          });
-        }
-
-        if (!snoozed && localStorage.getItem('notifications-snoozed')) {
-          localStorage.removeItem('notifications-snoozed');
-
-          // emit unsnooze notification event so the topbar's notification icon can be updated
-          _uiEvents.current.next({
-            event: EventTypes.UnsnoozeNotifications,
-          });
-
-          _uiEvents.current.next({
-            event: EventTypes.ShowNotification,
-            data: {
-              name: 'success',
-              message: 'You have unsnoozed your notifications successfully',
-            },
-          });
-        }
       }
 
-      // disable the button again after saving preferences
-      // setUpdateButtonDisabled(true);
+      if (!snoozed) {
+        // emit unsnooze notification event so the topbar's notification icon can be updated
+        _uiEvents.current.next({
+          event: EventTypes.UnsnoozeNotifications,
+        });
+
+        _uiEvents.current.next({
+          event: EventTypes.ShowNotification,
+          data: {
+            name: 'success',
+            message: 'You have unsnoozed your notifications successfully',
+          },
+        });
+      }
+
+      _uiEvents.current.next({
+        event: EventTypes.ShowNotification,
+        data: {
+          name: 'success',
+          message: 'Notification settings updated successfully',
+        },
+      });
+
       setIsChanged(false);
 
       // navigate to final step
       initial && goToNextStep();
     } catch (error) {
+      setLoading(false);
+
       _uiEvents.current.next({
         event: EventTypes.ShowNotification,
         data: {
@@ -297,24 +262,26 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
           {initial ? t('Customize Your Notifications') : t('Notifications Settings')}
         </Text>
         <Divider customStyle="!mt-0" />
-        <Stack direction="column" customStyle="mx-4 !my-0 py-2">
-          {!initial && (
-            <>
-              <Stack justify="between" direction="row">
-                <Text variant="footnotes2">
-                  <>{t('Snooze Notifications')}</>
-                </Text>
-                <Toggle
-                  iconChecked="BellSnoozeIcon"
-                  iconUnchecked="BellAlertIcon"
-                  checked={snoozed}
-                  onChange={snoozeChangeHandler}
-                />
-              </Stack>
-            </>
-          )}
-        </Stack>
-        <Divider customStyle="!mt-0" />
+        {!initial && (
+          <>
+            <Stack direction="column" customStyle="px-6 !my-0 py-2">
+              <>
+                <Stack justify="between" direction="row">
+                  <Text variant="footnotes2">
+                    <>{t('Snooze Notifications')}</>
+                  </Text>
+                  <Toggle
+                    iconChecked="BellSnoozeIcon"
+                    iconUnchecked="BellAlertIcon"
+                    checked={snoozed}
+                    onChange={snoozeChangeHandler}
+                  />
+                </Stack>
+              </>
+            </Stack>
+            <Divider customStyle="!mt-0" />
+          </>
+        )}
         <Stack direction="column" customStyle="mx-4">
           {initial ? (
             <Text variant="footnotes2" weight="normal" color={{ dark: 'grey6', light: 'grey4' }}>
@@ -344,63 +311,58 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         </Stack>
         <Divider customStyle="!mt-0" />
         <Stack direction="column" customStyle="min-h-[80%] !mt-0 gap-y-2 pt-2">
-          <Accordion
-            titleNode={<Title title={t('Antenna')} />}
-            contentNode={<Content checkboxArray={socialAppCheckboxes} section={'socialapp'} />}
-            open={initial}
-            customStyle="mx-4"
-            contentStyle="mx-6"
-          />
-          <Divider customStyle="!mt-0" />
-          <Accordion
-            titleNode={<Title title={t('Vibes')} />}
-            contentNode={
-              <Content checkboxArray={moderationAppCheckboxes} section={'moderationApp'} />
-            }
-            open={initial}
-            customStyle="mx-4"
-            contentStyle="mx-6"
-          />
-          <Divider customStyle="!mt-0" />
-          <Accordion
-            titleNode={<Title title={t('Extensions')} />}
-            contentNode={
-              <Content checkboxArray={integrationCenterCheckboxes} section={'integrationCenter'} />
-            }
-            open={initial}
-            customStyle="mx-4"
-            contentStyle="mx-6"
-          />
-          <Divider customStyle="!mt-0" />
+          {Object.keys(allStates).length > 0 &&
+            !Object.keys(allStates).find(key => key === SnoozeOption) &&
+            Object.entries(allStates).map(appState => (
+              <Stack
+                direction="column"
+                key={appState[0].concat(String(Math.round(Math.random() * 100)))}
+              >
+                <Stack direction="row" justify="between" align="center" customStyle="px-6">
+                  <Text variant="h6">{appState[0]}</Text>
+                  <Checkbox
+                    value={appState[0]}
+                    id={appState[0].concat(String(Math.round(Math.random() * 100)))}
+                    isSelected={Boolean(appState[1])}
+                    handleChange={() => changeHandler(appState[0])}
+                    name={appState[0]}
+                    customStyle="mb-4"
+                  />
+                </Stack>
+                <Divider customStyle="!mt-0" />
+              </Stack>
+            ))}
         </Stack>
-        <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-16">
-          {initial ? (
-            <>
-              <Button
-                variant="text"
-                label={t('Do it later')}
-                color="secondaryLight dark:secondaryDark"
-                onClick={skipHandler}
-              />
-              <Button variant="primary" label={t('Confirm')} onClick={confirmHandler} />
-            </>
-          ) : (
-            <>
-              <Button
-                variant="text"
-                label={t('Cancel')}
-                color="secondaryLight dark:secondaryDark"
-                onClick={skipHandler}
-              />
-              <Button
-                variant="primary"
-                label={t('Update')}
-                onClick={confirmHandler}
-                disabled={!isChanged}
-              />
-            </>
-          )}
-        </Stack>
+        {!loading && (
+          <Stack fullWidth direction="row" justify="end" customStyle="space-x-4 pr-2 pb-2 pt-32">
+            {initial ? (
+              <>
+                <Button
+                  variant="text"
+                  label={t('Do it later')}
+                  color="secondaryLight dark:secondaryDark"
+                  onClick={skipHandler}
+                />
+                <Button variant="primary" label={t('Confirm')} onClick={confirmHandler} />
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="text"
+                  label={t('Cancel')}
+                  color="secondaryLight dark:secondaryDark"
+                  onClick={skipHandler}
+                />
+                <Button
+                  variant="primary"
+                  label={t('Update')}
+                  onClick={confirmHandler}
+                  disabled={!isChanged}
+                />
+              </>
+            )}
+          </Stack>
+        )}
       </Card>
     </>
   );

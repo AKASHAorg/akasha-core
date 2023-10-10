@@ -116,11 +116,12 @@ const Dropdown: React.FC<IDropdownProps> = ({
                                 cursor-pointer`,
                               )}
                             >
-                              <Button onClick={handleChange(item)} plain>
+                              <Button onClick={handleChange(item)} plain customStyle="w-full">
                                 <Stack
                                   direction="row"
                                   align="center"
                                   spacing="gap-x-2"
+                                  fullWidth
                                   customStyle={`${
                                     selected.id === item.id ? 'text-secondaryLight' : 'text-black'
                                   }`}
@@ -163,11 +164,12 @@ const Dropdown: React.FC<IDropdownProps> = ({
                         cursor-pointer`,
                       )}
                     >
-                      <Button onClick={handleChange(menuItem)} plain>
+                      <Button onClick={handleChange(menuItem)} plain customStyle="w-full">
                         <Stack
                           direction="row"
                           align="center"
                           spacing="gap-x-2"
+                          fullWidth
                           customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                         >
                           {menuItem?.iconName && (
@@ -205,11 +207,12 @@ const Dropdown: React.FC<IDropdownProps> = ({
                       } cursor-pointer`,
                     )}
                   >
-                    <Button onClick={handleChange(menuItem)} plain>
+                    <Button onClick={handleChange(menuItem)} plain customStyle="w-full">
                       <Stack
                         direction="row"
                         align="center"
                         spacing="gap-x-2"
+                        fullWidth
                         customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                       >
                         {menuItem?.iconName && (

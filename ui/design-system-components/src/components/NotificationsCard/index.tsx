@@ -165,14 +165,8 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
 
     const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
     return (
-      <div key={index}>
-        <Card
-          elevation="none"
-          padding="py-3 pl-4"
-          onClick={clickHandler}
-          customStyle="flex-row"
-          radius="none"
-        >
+      <Stack key={index} customStyle={`${index === notifications.length - 1 ? 'basis-full' : ''}`}>
+        <Stack key={index} padding="py-3 pl-4" customStyle="flex-row">
           <ProfileAvatarNotificationApp
             profileId={profileData.did?.id}
             avatarImage={profileData.avatar}
@@ -182,14 +176,14 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
             onClick={clickHandler}
             active={!notif.read}
           />
-        </Card>
-        <Divider />
-      </div>
+        </Stack>
+        {index !== notifications.length - 1 && <Divider />}
+      </Stack>
     );
   };
 
   return (
-    <Card padding={0} elevation="none">
+    <Card elevation={'1'} radius={16} customStyle="p-0 w-full grow flex-wrap">
       {loggedIn && !isFetching && notifications.length === 0 && (
         <BasicInfoCard titleLabel={emptyTitle} image={'/images/longbeam-notfound.webp'} />
       )}
