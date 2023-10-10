@@ -1,0 +1,44 @@
+{
+  "name": "@akashaorg/ui-lib-extensions",
+  "version": "0.1.0",
+  "description": "Feed widget",
+  "type": "module",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-core.git"
+  },
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "tsc": "tsc --build",
+    "prepare": "yarn run tsc",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
+    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs --profile --json ../../stats/feed-widget.json",
+    "postpack": "copyfiles -f ./dist/* ../../build/widgets/feed",
+    "watch": "webpack --config webpack.config.cjs --watch",
+    "pretest": "tsc -m commonjs",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "@akashaorg/design-system-core": "*",
+    "@akashaorg/ui-awf-hooks": "*"
+  },
+  "devDependencies": {
+    "@akashaorg/typings": "*",
+    "@akashaorg/awf-sdk": "*"
+  },
+  "peerDependencies": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "rxjs": "7.3.0"
+  },
+  "files": [
+    "lib"
+  ]
+}

@@ -12,7 +12,7 @@ export default {
   [FEED]: '/feed',
   [MY_FEED]: '/my-feed',
   [PROFILE_FEED]: '/profile-feed',
-  [EDITOR]: './editor',
+  [EDITOR]: 'editor',
   [BEAMS]: '/beams',
   [BEAM]: '/beam',
   [REFLECT]: '/reflect',

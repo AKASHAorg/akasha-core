@@ -38,8 +38,8 @@ export const Footer: React.FC<FooterProps> = props => {
     publishLabel,
     cancelLabel,
     blocksLabel,
-    blocksNumber,
-    tagsNumber,
+    blocksNumber = 0,
+    tagsNumber = 0,
     isPublishing,
   } = props;
 
@@ -49,8 +49,7 @@ export const Footer: React.FC<FooterProps> = props => {
         return (
           <>
             <Text>{`${blocksNumber}/10 ${blocksLabel}`}</Text>
-
-            <Stack direction="row">
+            <Stack direction="row" spacing="gap-2">
               <Button variant="text" label={cancelLabel} onClick={handleClickCancel} />
               <Button
                 variant="primary"
@@ -65,8 +64,7 @@ export const Footer: React.FC<FooterProps> = props => {
         return (
           <>
             <Text>{`${tagsNumber}/10 ${tagsLabel}`}</Text>
-
-            <Stack direction="row">
+            <Stack direction="row" spacing="gap-2">
               <Button variant="text" label={cancelLabel} onClick={handleClickCancel} />
               <Button
                 variant="primary"
@@ -77,19 +75,18 @@ export const Footer: React.FC<FooterProps> = props => {
             </Stack>
           </>
         );
-      case 'image':
-        return null;
       default:
         return (
           <>
             <Button
               onClick={handleClickAddBlock}
               icon="PlusIcon"
+              iconDirection="left"
               variant="text"
               greyBg={true}
               label={addBlockLabel}
             />
-            <Stack direction="row">
+            <Stack direction="row" spacing="gap-2">
               <Button variant="text" label={tagsLabel} onClick={handleClickTags} />
               <Button
                 variant="primary"
@@ -104,7 +101,7 @@ export const Footer: React.FC<FooterProps> = props => {
   };
 
   return (
-    <Stack justify={'between'} direction="row">
+    <Stack padding={16} justify={'between'} direction="row">
       {renderContent()}
     </Stack>
   );

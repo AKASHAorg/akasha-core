@@ -14,7 +14,7 @@ const InfoPage: React.FC<unknown> = () => {
 
   // const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
 
   const { isLoggedIn } = useLoggedIn();
 
@@ -44,10 +44,10 @@ const InfoPage: React.FC<unknown> = () => {
   //   }
   // };
 
-  // const handleAuthorClick = (author: { pubKey: string }) => {
+  // const handleAuthorClick = (author: { id: string }) => {
   //   navigateTo?.({
   //     appName: '@akashaorg/app-profile',
-  //     getNavigationUrl: routes => `${routes.rootRoute}/${author.pubKey}`,
+  //     getNavigationUrl: routes => `${routes.rootRoute}/${author.id}`,
   //   });
   // };
 

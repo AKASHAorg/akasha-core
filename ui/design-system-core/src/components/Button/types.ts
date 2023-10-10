@@ -17,7 +17,7 @@ export type ButtonProps = {
   customStyle?: string;
   active?: boolean;
   hover?: boolean;
-  hoverColor?: { background?: Color; border?: Color; text?: Color };
+  hoverColors?: { background?: Color; border?: Color; text?: Color; icon?: Color };
   ref?: LegacyRef<HTMLButtonElement>;
 } & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 

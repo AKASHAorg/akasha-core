@@ -1,6 +1,6 @@
-# Search plugin
+# Search App
 
-> Search plugin displays search results from searched string in the [Topbar Widget](../../widgets/top-bar/README.md)
+> Search app displays search results which may include contents, profiles or tags.
 
 ## Usage
 

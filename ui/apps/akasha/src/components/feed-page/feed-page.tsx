@@ -134,7 +134,7 @@ const FeedPage: React.FC<FeedPageProps> = props => {
                 "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",
               )}
               writeToUsLabel={t('drop us a message')}
-              writeToUsUrl={'mailto:alpha@ethereum.world'}
+              writeToUsUrl={'mailto:alpha@akasha.world'}
               onWriteToUsLabelClick={handleWriteToUsLabelClick}
               onCloseIconClick={dismissCard}
               key={dismissedCardId}

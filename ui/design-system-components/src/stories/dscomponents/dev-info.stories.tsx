@@ -6,7 +6,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DevInfo, { DevInfoProps } from '../../components/DevInfo';
 
 const meta: Meta<DevInfoProps> = {
-  title: 'DSComponents/AkashaVerse/DevInfo',
+  title: 'DSComponents/Extensions/DevInfo',
   component: DevInfo,
 };
 

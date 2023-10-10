@@ -7,7 +7,7 @@
 
 | App                                              | Staging                                                                                                                                                                                          | Production                                                       |
 |--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
-| [AKASHA World](https://akasha.ethereum.world/) | [https://next.akasha-world-framework.pages.dev/](https://next.akasha-world-framework.pages.dev/)                                                                                                 | [https://akasha.ethereum.world/](https://akasha.ethereum.world/) |
+| [Akasha World](https://beta.akasha.world/) | [https://next.akasha-world-framework.pages.dev/](https://next.akasha-world-framework.pages.dev/)                                                                                                 | [https://akasha.world/](https://beta.akasha.world/) |
 | [Storybook](https://storybook-awf.netlify.app/)  | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)                               | NA                                                               |
 
 
@@ -23,15 +23,14 @@
   - [Install](#install)
   - [Usage](#usage)
     - [Run](#run)
-- [](#)
-    - [SDK](#sdk)
-      - [Build the sdk package](#build-the-sdk-package)
-      - [Running Tests](#running-tests)
-    - [UI workspace](#ui-workspace)
-    - [Playground test-app](#playground-test-app)
+    - [Test](#test)
+    - [Explore](#explore)
+      - [SDK](#sdk)
+      - [UI workspace](#ui-workspace)
+      - [Playground test-app](#playground-test-app)
     - [Getting started with local development](#getting-started-with-local-development)
   - [Adding a new package](#adding-a-new-package)
-  - [Contributors ✨](#contributors-)
+  - [Contributors ✨](#contributors-✨)
   - [License](#license)
 
 ## Background
@@ -49,7 +48,6 @@ $ yarn bootstrap
 $ yarn build:all
 ```
 
-
 ## Usage
 
 For a definitive guide on all available scripts, check out [Scripts-Guide](./SCRIPTS-GUIDE.md)
@@ -62,43 +60,49 @@ To watch for changes in dependent packages
 ```shell script
 $ AWF_PACKAGE=<package-name> yarn pack:watch
 ```
-You can check which packages are available in the workspaces.json file in the root of the project.
-#
-This repository is split into four [lerna](https://github.com/lerna/lerna) workspaces:
+You can check which packages are available in the [workspace](./workspace.json) file in the root of the project.
 
-### SDK
-
-#### Build the sdk package
+### Test
 
 From the root of the project:
+
+```shell script
+$ yarn test:<package-group>
+```
+
+where `<package-group>` can be one of `apps`, `design-system-core`, `design-system-components`, `hooks`, `widgets`, `app-loader`
+
+To test all:
+
+```shell script
+$ yarn test:all
+```
+
+### Explore
+
+This repository is split into three major parts:
+
+#### SDK
+
+To build the [SDK](./sdk), from the root of the project:
 
 ```shell script
 $ yarn build:sdk
 ```
 
-This will create under the [akasha](./sdk-packages/akasha/README.md) package repo a folder `dist` that contains the built files.
+This will create under the SDK package repo a folder `dist` that contains the built files.
 
-#### Running Tests
+#### UI workspace
 
-From the root of the project:
-
-```shell script
-$ yarn build:test
-$ yarn test:<package-group>
-```
-where `<package-group>` can be one of `apps`, `widgets`, `plugins`, `design-system`, `hooks`
-
-### UI workspace
-
-- [Design system](./ui/design/README.md)
+- [Apps](./ui/apps/README.md)
 - [Design system core](./ui/design-system-core/README.md)
 - [Design system components](./ui/design-system-components/README.md)
-- [React hooks](./ui/hooks/README.md)
-- [Plugins](./ui/plugins/README.md)
+- [Hooks](./ui/hooks/README.md)
 - [Widgets](./ui/widgets/README.md)
-- [Apps](./apps/README.md)
+- [Testing Utils](./tests/README.md)
+- [Typings](./typings/README.md)
 
-### Playground test-app
+#### Playground test-app
 
 This [workspace](./examples) contains examples of applications that showcase the usage of AKASHA Core.
 

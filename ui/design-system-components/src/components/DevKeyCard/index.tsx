@@ -27,7 +27,7 @@ export type DevKeyCardProps = {
   usedLabel: string;
   unusedLabel: string;
   pendingConfirmationLabel?: string;
-  devPubKeyLabel: string;
+  devPublicKeyLabel: string;
   dateAddedLabel: string;
   editable?: boolean;
   onEditButtonClick?: () => void;
@@ -41,7 +41,7 @@ const DevKeyCard: React.FC<DevKeyCardProps> = props => {
     pendingConfirmationLabel,
     usedLabel,
     unusedLabel,
-    devPubKeyLabel,
+    devPublicKeyLabel,
     dateAddedLabel,
     editable = false,
     onEditButtonClick,
@@ -109,11 +109,11 @@ const DevKeyCard: React.FC<DevKeyCardProps> = props => {
       <Stack>
         {editable ? (
           <Text variant="button-sm" weight="bold" color={{ light: 'grey4', dark: 'grey7' }}>
-            {devPubKeyLabel}
+            {devPublicKeyLabel}
           </Text>
         ) : (
           <Text variant="h6" weight="bold">
-            {devPubKeyLabel}
+            {devPublicKeyLabel}
           </Text>
         )}
 

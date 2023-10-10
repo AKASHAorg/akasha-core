@@ -116,7 +116,7 @@ describe('< FeedPage /> component', () => {
     // const loginState = genLoggedInState(true);
 
     // localStorageMock.setItem(
-    //   Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState.pubKey, 'post'),
+    //   Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState?.id, 'post'),
     //   JSON.stringify([
     //     {
     //       type: 'paragraph',
@@ -140,7 +140,7 @@ describe('< FeedPage /> component', () => {
   // it('should clear draft post', async () => {
   //   const loginState = genLoggedInState(true);
   //   localStorageMock.setItem(
-  //     Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState.pubKey, 'post'),
+  //     Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState?.id, 'post'),
   //     JSON.stringify([
   //       {
   //         type: 'paragraph',

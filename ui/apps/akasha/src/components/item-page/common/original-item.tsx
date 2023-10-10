@@ -151,7 +151,6 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
     <Stack customStyle={`rounded-t-lg`}>
       <Stack customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
         <EntryCard
-          isRemoved={!entryData?.active}
           entryData={entryData}
           sortedContents={sortByKey(entryData.content, 'order')}
           itemType={EntityTypes.BEAM}
@@ -174,8 +173,6 @@ export const OriginalItem: React.FC<OriginalItemProps> = props => {
           onEntryRemove={handlePostRemove}
           onReflect={() => setShowReplyEditor(show => !show)}
           removeEntryLabel={t('Delete Post')}
-          removedByMeLabel={t('You deleted this post')}
-          removedByAuthorLabel={t('This post was deleted by its author')}
           headerMenuExt={
             showEditButton && (
               <Extension

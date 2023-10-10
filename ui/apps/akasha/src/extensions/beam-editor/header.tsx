@@ -11,19 +11,11 @@ export interface HeaderProps {
   addBlockLabel?: string;
   addTagsLabel?: string;
   beamEditorLabel?: string;
-  addImageLabel?: string;
 }
 
 export const Header: React.FC<HeaderProps> = props => {
-  const {
-    uiState,
-    handleNsfwCheckbox,
-    isNsfw,
-    addBlockLabel,
-    addTagsLabel,
-    beamEditorLabel,
-    addImageLabel,
-  } = props;
+  const { uiState, handleNsfwCheckbox, isNsfw, addBlockLabel, addTagsLabel, beamEditorLabel } =
+    props;
 
   const renderTitle = () => {
     switch (uiState) {
@@ -31,16 +23,19 @@ export const Header: React.FC<HeaderProps> = props => {
         return addBlockLabel;
       case 'tags':
         return addTagsLabel;
-      case 'image':
-        return addImageLabel;
       default:
         return beamEditorLabel;
     }
   };
 
   return (
-    <Stack justify={uiState === 'editor' ? 'between' : 'center'} direction="row" align="center">
-      <Text>{renderTitle()}</Text>
+    <Stack
+      padding={16}
+      justify={uiState === 'editor' ? 'between' : 'center'}
+      direction="row"
+      align="center"
+    >
+      <Text variant="h5">{renderTitle()}</Text>
 
       {uiState === 'editor' && (
         <Checkbox

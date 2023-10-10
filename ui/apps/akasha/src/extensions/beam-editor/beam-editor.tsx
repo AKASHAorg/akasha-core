@@ -1,66 +1,29 @@
 import * as React from 'react';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import { useBlocksPublishing } from './use-blocks-publishing';
-import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import List from '@akashaorg/design-system-core/lib/components/List';
+import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
+import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
 
 import { Header } from './header';
 import { Footer } from './footer';
 
-export type uiState = 'editor' | 'tags' | 'blocks' | 'image';
+export type uiState = 'editor' | 'tags' | 'blocks';
 
 export const BeamEditor: React.FC = () => {
   const { t } = useTranslation('app-akasha-integration');
 
-  const { getEditorBlocksPlugin, uiEvents, logger } = useRootComponentProps();
-  const createBeam = useCreateBeamMutation();
-  const availableBlocks = getEditorBlocksPlugin().getAll();
-
-  const { createContentBlocks, isPublishing, setIsPublishing, blocksInUse, addBlockToList } =
-    useBlocksPublishing({
-      uiEvents,
-      availableBlocks,
-      onBeamPublish: async blockResponseData => {
-        const beamContent: AkashaBeamInput = {
-          active: true,
-          content: blockResponseData.map(blockData => ({
-            blockID: blockData.response.blockID,
-            order: blockData.block.idx,
-          })),
-          createdAt: new Date().toISOString(),
-        };
-        try {
-          const resp = await createBeam.mutateAsync({
-            i: {
-              content: beamContent,
-            },
-          });
-          logger.info(`Beam successfuly created ${JSON.stringify(resp)}`);
-          return;
-        } catch (err) {
-          logger.error(`Error in beam publishing: ${err.message}`);
-          throw err;
-        }
-      },
-    });
+  const { availableBlocks, createContentBlocks, isPublishing, blocksInUse, addBlockToList } =
+    useBlocksPublishing();
 
   const onBlockSelectAfter = (after: number) => newSelection => {
     if (!newSelection.id) {
       return;
     }
-    const block = availableBlocks.find(bl => bl.name === newSelection.id);
-    if (!block) {
-      return;
-    }
-    addBlockToList(block, after);
+    addBlockToList({ id: newSelection.id, appName: newSelection.appName }, after);
   };
 
   const handleBeamPublish = () => {
@@ -93,10 +56,15 @@ export const BeamEditor: React.FC = () => {
     setUiState('editor');
   };
 
-  const [selectedBlock, setSelectedBlock] = React.useState(0);
+  const [selectedBlock, setSelectedBlock] = React.useState('');
 
   const handleAddBlock = () => {
-    onBlockSelectAfter(selectedBlock);
+    const newBlock = availableBlocks.find(block => block.displayName === selectedBlock);
+    onBlockSelectAfter(blocksInUse.length - 1)(newBlock);
+  };
+
+  const handleSelectBlock = ({ index, label }) => {
+    setSelectedBlock(label);
   };
 
   const [tagSelection, setTagSelection] = React.useState([]);
@@ -112,30 +80,41 @@ export const BeamEditor: React.FC = () => {
         addBlockLabel={t('Add a Block')}
         beamEditorLabel={t('Beam Editor')}
         addTagsLabel={t('Add Tags')}
-        addImageLabel={t('Add an Image')}
         isNsfw={isNsfw}
         handleNsfwCheckbox={handleNsfwCheckbox}
         uiState={uiState}
       />
-      <Stack>
-        {blocksInUse.map((block, idx) => (
-          <div key={`${block.name}-${idx}`}>
-            <Extension
-              name={`${block.name}_${idx}`}
-              data={{ readOnly: false, action: 'post', block }}
-              uiEvents={uiEvents}
-            />
-            <Dropdown
-              placeholderLabel={'Add Block'}
-              menuItems={availableBlocks.map(eb => ({
-                id: eb.name,
-                iconName: eb.icon,
-                title: eb.displayName,
-              }))}
-              setSelected={onBlockSelectAfter(idx)}
-            />
-          </div>
-        ))}
+      <Stack customStyle="relative">
+        <Stack>
+          {blocksInUse.map((block, idx) => (
+            <div key={`${block.propertyType}-${idx}`} id={`${block.propertyType}-${idx}`}>
+              <ContentBlockExtension
+                editMode={{
+                  appName: block.appName,
+                  propertyType: block.propertyType,
+                }}
+                mode={ContentBlockModes.EDIT}
+                blockRef={block.blockRef}
+              />
+            </div>
+          ))}
+        </Stack>
+        <Stack
+          customStyle={`absolute top-0 left-0 h-full z-10 ${
+            uiState === 'blocks' ? 'flex' : 'hidden'
+          }`}
+        >
+          <List
+            items={availableBlocks.map(block => ({
+              id: block.propertyType,
+              icon: block.icon,
+              label: block.displayName,
+              appName: block.appName,
+            }))}
+            showDivider={true}
+            onSelected={handleSelectBlock}
+          />
+        </Stack>
       </Stack>
       <Footer
         uiState={uiState}
@@ -151,6 +130,7 @@ export const BeamEditor: React.FC = () => {
         blocksLabel={t('Blocks')}
         tagsLabel={t('Tags')}
         publishLabel={t('Beam it')}
+        blocksNumber={availableBlocks.length}
       />
     </Card>
   );

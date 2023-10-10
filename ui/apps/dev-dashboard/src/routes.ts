@@ -22,7 +22,7 @@ export default {
   [ONBOARDING_STEP_FOUR]: `/onboarding/dev-key-confirmation`,
   [DEV_KEYS]: `/dev-keys`,
   [ADD_DEV_KEY]: `/dev-keys/add`,
-  [EDIT_MESSAGE_NAME]: `/dev-keys/:pubKey/edit`,
+  [EDIT_MESSAGE_NAME]: `/dev-keys/:keyId/edit`,
   [PUBLISHED_APPS]: `/published-apps`,
   [SIGN_MESSAGE]: `/sign-message`,
   [VERIFY_SIGNATURE]: `/verify-signature`,

@@ -18,7 +18,7 @@ import NoAppsMessage from './no-apps-message';
 const ICWidget: React.FC<unknown> = () => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  const { t } = useTranslation('app-akasha-verse');
+  const { t } = useTranslation('app-extensions');
   const { worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const { isLoggedIn } = useLoggedIn();
 
@@ -103,7 +103,7 @@ const ICWidget: React.FC<unknown> = () => {
       return showLoginModal();
     }
     navigateTo?.({
-      appName: '@akashaorg/app-akasha-verse',
+      appName: '@akashaorg/app-extensions',
       getNavigationUrl: navRoutes => `${navRoutes['info']}/${appName}`,
     });
   };
@@ -183,7 +183,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
     return (
-      <ErrorLoader type="script-error" title="Error in AKASHAVerse widget" details={err.message} />
+      <ErrorLoader type="script-error" title="Error in Extensions widget" details={err.message} />
     );
   },
 });

@@ -1,4 +1,4 @@
-# Developer dashboard app
+# Developer Dashboard app
 
 > The Developer Dashboard app allows users to create a developer profile, manage their keys and publish new apps and widgets
 

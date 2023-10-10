@@ -5,7 +5,7 @@ import { hasOwn } from './utils/has-own';
 const RootComponentPropsContext = React.createContext(null);
 const DEFAULT_ROUTING_PLUGIN = '@akashaorg/app-routing';
 const DEFAULT_TRANSLATION_PLUGIN = '@akashaorg/app-translation';
-const DEFAULT_EDITOR_BLOCKS_PLUGIN = '@akashaorg/app-akasha-integration';
+const DEFAULT_EXTENSIONS_PLUGIN = '@akashaorg/app-extensions';
 
 const RootComponentPropsProvider = ({
   children,
@@ -42,16 +42,19 @@ const useRootComponentProps = <T extends RootComponentProps>() => {
     [ctx?.plugins],
   );
 
-  const getEditorBlocksPlugin = React.useCallback(() => {
-    if (hasOwn(ctx?.plugins, DEFAULT_EDITOR_BLOCKS_PLUGIN)) {
-      return ctx?.plugins[DEFAULT_EDITOR_BLOCKS_PLUGIN].editorBlocks;
+  const getExtensionsPlugin = React.useCallback(() => {
+    if (hasOwn(ctx?.plugins, DEFAULT_EXTENSIONS_PLUGIN)) {
+      return ctx.plugins[DEFAULT_EXTENSIONS_PLUGIN];
     }
   }, [ctx?.plugins]);
+
+  const getContext = React.useCallback(() => ctx, [ctx]);
 
   return {
     getRoutingPlugin,
     getTranslationPlugin,
-    getEditorBlocksPlugin,
+    getExtensionsPlugin,
+    getContext,
     ...ctx,
   };
 };

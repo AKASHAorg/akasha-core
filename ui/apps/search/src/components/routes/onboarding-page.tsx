@@ -44,10 +44,10 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
     return loggedProfileData?.did?.id;
   }, [loggedProfileData?.did?.id]);
 
-  const handleAvatarClick = (profilePubKey: string) => {
+  const handleAvatarClick = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profilePubKey}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${id}`,
     });
   };
 
@@ -59,20 +59,20 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
-  const handleFollow = (pubKey: string) => {
+  const handleFollow = (id: string) => {
     if (!isLoggedIn) {
       showLoginModal();
       return;
     }
-    followReq.mutate(pubKey);
+    followReq.mutate(id);
   };
 
-  const handleUnfollow = (pubKey: string) => {
+  const handleUnfollow = (id: string) => {
     if (!isLoggedIn) {
       showLoginModal();
       return;
     }
-    unfollowReq.mutate(pubKey);
+    unfollowReq.mutate(id);
   };
 
   const handleShowMyFeed = () => {

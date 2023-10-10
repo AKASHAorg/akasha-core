@@ -6,6 +6,7 @@ import { tw } from '@twind/core';
 
 export type InfoCardProps = {
   assetName?: string;
+  assetExtension?: string;
   publicImgPath?: string;
   titleLabel: ReactNode;
   titleVariant?: TextProps['variant'];
@@ -20,6 +21,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
   bodyVariant = 'footnotes2',
   bodyLabel,
   assetName,
+  assetExtension = 'webp',
   publicImgPath = '/images',
   customWidthStyle,
 }) => {
@@ -35,7 +37,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
         <img
           className={tw('object-contain h-[11.25rem]')}
           aria-label={assetName}
-          src={`${publicImgPath}/${assetName}`}
+          src={`${publicImgPath}/${assetName}.${assetExtension}`}
           alt={assetName}
         />
       ) : (

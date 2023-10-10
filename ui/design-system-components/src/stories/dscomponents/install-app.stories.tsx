@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import InstallApps, { InstallAppProps } from '../../components/InstallApp';
 
 const meta: Meta<InstallAppProps> = {
-  title: 'DSComponents/AkashaVerse/Install App',
+  title: 'DSComponents/Extensions/Install App',
   component: InstallApps,
 };
 
