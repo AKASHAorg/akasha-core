@@ -76,8 +76,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const handleEntryNavigation = useEntryNavigation(navigateTo);
 
-  // const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.CONTENT, [activeButton]);
-
   const dropDownMenuItems: DropdownMenuItemGroupType[] = [
     {
       id: '00',
@@ -132,7 +130,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleLoadMore = () => {
-    // if (isAllTabActive) return;
     const { done, isLoading } = searchState[activeButton];
     if (done || isLoading) return;
 
@@ -154,62 +151,26 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   });
 
   const getSearchStateForTab = (tab: ButtonValues) => {
-    // if (activeButton === ButtonValues.CONTENT) {
-    //   return searchState[tab].results.slice(0, 4);
-    // }
     return searchState[tab].results;
   };
 
   React.useEffect(() => {
-    // if (isAllTabActive) {
-    //   return setSearchState(initSearchState);
-    // }
     setSearchState({
       ...initSearchState,
       [activeButton]: { ...initSearchState[activeButton], isLoading: true },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchKeyword]);
+  }, [activeButton, searchKeyword]);
 
   // @TODO replace with new hooks
   const searchProfilesReq = null;
-  // const searchProfilesReq = useSearchProfiles(
-  //   decodeURIComponent(searchKeyword),
-  //   searchState[ButtonValues.PEOPLE].page,
-  //   loggedProfileData?.did?.id,
-  // );
-  const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
-  // const searchBeamsReq = useSearchPosts(
-  //   decodeURIComponent(searchKeyword),
-  //   searchState[ButtonValues.CONTENT].page,
-  //   loggedProfileData?.did?.id,
-  // );
+  const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
   const searchBeamsState = getSearchStateForTab(ButtonValues.CONTENT);
 
-  // const searchCommentsReq = useSearchComments(
-  //   decodeURIComponent(searchKeyword),
-  //   searchState[ButtonValues.CONTENT].page,
-  //   loggedProfileData?.did?.id,
-  // );
-
-  // const searchReflectionsState = searchState[ButtonValues.CONTENT].results;
   const searchTagsReq = null;
   // const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TAGS);
-
-  // useEffect(() => {
-  //   if (searchBeamsReq.isFetched) {
-  //     updateSearchState(ButtonValues.CONTENT, searchBeamsReq.data);
-  //   }
-  // }, [searchBeamsReq.data, searchBeamsReq.isFetched]);
-
-  // useEffect(() => {
-  //   if (searchCommentsReq.isFetched) {
-  //     updateSearchState(ButtonValues.CONTENT, searchCommentsReq.data);
-  //   }
-  // }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
 
   React.useEffect(() => {
     if (searchProfilesReq?.isFetched) {
@@ -317,12 +278,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
   };
 
-  // const emptySearchState =
-  //   searchProfilesState?.length === 0 &&
-  //   searchBeamsState?.length === 0 &&
-  //   // searchReflectionsState?.length === 0 &&
-  //   searchTagsState?.length === 0;
-
   React.useEffect(() => {
     if (activeButton !== ButtonValues.CONTENT) {
       analyticsActions.trackEvent({
@@ -330,8 +285,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         action: `Filter Search By ${activeButton}`,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeButton]);
+  }, [activeButton, analyticsActions]);
 
   const buttonValues = [
     {
@@ -352,38 +306,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     setActiveButton(value);
   };
 
-  // const onNavBack = () => {
-  //   history.back();
-  // };
-
-  // const searchCount =
-  //   searchProfilesState?.length ||
-  //   0 + searchBeamsState?.length ||
-  //   // 0 + searchReflectionsState?.length ||
-  //   0 + searchTagsState?.length ||
-  //   0;
-
-  // const allQueriesFinished = React.useMemo(() => {
-  //   return (
-  //     !searchProfilesReq.isFetching &&
-  //     !searchBeamsReq.isFetching &&
-  //     !searchCommentsReq.isFetching &&
-  //     !searchTagsReq.isFetching
-  //   );
-  // }, [
-  //   searchCommentsReq.isFetching,
-  //   searchBeamsReq.isFetching,
-  //   searchProfilesReq.isFetching,
-  //   searchTagsReq.isFetching,
-  // ]);
-
   const isFetchingSearch = React.useMemo(() => {
-    // if (activeButton === ButtonValues.ALL) {
-    //   return !allQueriesFinished;
-    // }
     return searchKeyword && !searchState[activeButton].done;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchState, activeButton /* allQueriesFinished */]);
+  }, [searchKeyword, searchState, activeButton]);
 
   const handleTopMenuClick = () => {
     return navigateTo?.({
@@ -402,11 +327,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         searchKeyword={searchKeyword}
         handleSearch={handleSearch}
         inputPlaceholderLabel={t('Search')}
-        // titleLabel={t('Search')}
-        // introLabel={t('✨ Find what you’re looking for quickly ✨')}
-        // description={t(
-        //   'Search everything. Follow wonderful people. And subscribe to any and all topics that get your synapses firing.',
-        // )}
         handleTopMenuClick={handleTopMenuClick}
       >
         <SwitchCard
@@ -433,28 +353,24 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         />
       )}
 
-      {
-        /* allQueriesFinished */ !isFetchingSearch &&
-          searchKeyword &&
-          /* isAllTabActive ? emptySearchState : */ !searchState[activeButton]?.results?.length && (
-            <Stack customStyle="mt-8">
-              <InfoCard
-                titleLabel=""
-                bodyLabel={
-                  <>
-                    {t('Oops! Looks like there’re no results for the word ')}{' '}
-                    <Text weight="bold">{searchKeyword}</Text> {t('in ')}{' '}
-                    <Text weight="bold">{activeButton}</Text>.{' '}
-                    {t(' Try searching for something else or try a different Category!')}
-                  </>
-                }
-                bodyVariant="body1"
-                customWidthStyle="w-[90%] md:w-[50%] m-auto"
-                assetName="SearchApp_NotFound-min.webp"
-              />
-            </Stack>
-          )
-      }
+      {!isFetchingSearch && searchKeyword && !searchState[activeButton]?.results?.length && (
+        <Stack customStyle="mt-8">
+          <InfoCard
+            titleLabel=""
+            bodyLabel={
+              <>
+                {t('Oops! Looks like there’re no results for the word ')}{' '}
+                <Text weight="bold">{searchKeyword}</Text> {t('in ')}{' '}
+                <Text weight="bold">{activeButton}</Text>.{' '}
+                {t(' Try searching for something else or try a different Category!')}
+              </>
+            }
+            bodyVariant="body1"
+            customWidthStyle="w-[90%] md:w-[50%] m-auto"
+            assetName="SearchApp_NotFound-min.webp"
+          />
+        </Stack>
+      )}
 
       <Stack customStyle="mt-4">
         {activeButton === ButtonValues.PEOPLE &&
