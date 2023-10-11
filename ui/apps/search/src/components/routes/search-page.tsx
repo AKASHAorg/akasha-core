@@ -264,7 +264,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   // // repost related
   const handleRebeam = (_withComment: boolean, itemId: string) => {
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.POST,
+      category: AnalyticsCategories.BEAM,
       action: 'Repost Clicked',
     });
     if (!loggedProfileData?.did?.id) {

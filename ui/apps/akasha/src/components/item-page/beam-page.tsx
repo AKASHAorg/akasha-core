@@ -59,7 +59,7 @@ const BeamPage: React.FC = () => {
       )}
       {beamReq.status === 'success' && (
         <Card padding="p-0">
-          <Stack padding="pb-2" spacing="gap-y-2">
+          <Stack spacing="gap-y-2">
             <BeamCard entryData={entryData} noWrapperCard={true} contentClickable={false} />
             <Divider />
             <Stack padding="px-2">
@@ -67,19 +67,19 @@ const BeamPage: React.FC = () => {
                 <EditorPlaceholder
                   onClick={showLoginModal}
                   profileId={null}
-                  replyLabel={t('Reflect')}
+                  reflectLabel={t('Reflect')}
                   placeholderLabel={t('Share your thoughts')}
                 />
               )}
               {loggedProfileData?.did?.id && entryData?.active && (
                 /*@TODO fix inline editor */
                 <Extension
-                  name={`inline-editor_reply_${entryData?.id}`}
+                  name={`inline-editor_reflect_${entryData?.id}`}
                   uiEvents={uiEvents}
                   data={{
                     itemId: beamId,
                     itemType: EntityTypes.REFLECT,
-                    action: 'reply',
+                    action: 'reflect',
                   }}
                 />
               )}
