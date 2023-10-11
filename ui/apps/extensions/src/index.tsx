@@ -52,7 +52,7 @@ export const getPlugin = (
     },
     extensionStore: {
       getExtensions: extensionStore.getExtensions,
-      getMatchingExtension: extensionStore.getMatchingExtensions,
+      getMatchingExtensions: extensionStore.getMatchingExtensions,
     },
     widgetStore: {
       getWidgets: widgetStore.getWidgets,

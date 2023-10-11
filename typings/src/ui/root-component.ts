@@ -1,7 +1,8 @@
+import React from 'react';
 import type singleSpa from 'single-spa';
 import type { IAppConfig } from './apps';
 import type { Subject } from 'rxjs';
-import type { EventDataTypes, UIEventData } from './ui-events';
+import type { UIEventData } from './ui-events';
 import type { ModalNavigationOptions } from './navigation';
 import type i18n from 'i18next';
 import type { IPluginsMap } from './plugins';
@@ -28,6 +29,6 @@ export interface RootComponentProps {
   children?: React.ReactNode;
 }
 
-export interface RootExtensionProps extends RootComponentProps {
-  extensionData: EventDataTypes;
+export interface RootExtensionProps<D = Record<string, unknown>> extends RootComponentProps {
+  extensionData: D;
 }

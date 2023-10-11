@@ -9,7 +9,7 @@ import * as singleSpa from 'single-spa';
 export const extensionLoader: ExtensionLoaderFn = loadingFn => {
   const parcels = new Map<string, singleSpa.Parcel>();
   return {
-    async load(props: RootExtensionProps, parentName: string) {
+    async load(props: RootExtensionProps<any>, parentName: string) {
       const { domElement, extensionData, logger } = props;
       if (!parcels.get(extensionData.name)) {
         const parcelProps = {
@@ -56,7 +56,7 @@ export const extensionLoader: ExtensionLoaderFn = loadingFn => {
         });
       }
     },
-    async update(props: RootExtensionProps, _parentName: string) {
+    async update(props: RootExtensionProps<any>, _parentName: string) {
       const name = props.extensionData?.name;
       if (!parcels.get(name)) return;
       const parcelStatus = await parcels.get(name).getStatus();

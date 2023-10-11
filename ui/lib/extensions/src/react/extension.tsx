@@ -5,16 +5,17 @@ import { ExtensionInterface, ExtensionStorePlugin } from '@akashaorg/typings/lib
 import Parcel from 'single-spa-react/parcel';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export type ExtensionComponentProps = {
+export type ExtensionComponentProps<D> = {
   name: string;
   loadingIndicator?: React.ReactNode;
   emptyIndicator?: React.ReactNode;
   onError?: (extension: ExtensionInterface & { appName: string }, message?: string) => void;
   customStyle?: string;
+  extensionData?: D;
 };
 
-export const Extension: React.FC<ExtensionComponentProps> = props => {
-  const { name, loadingIndicator, emptyIndicator, onError, customStyle } = props;
+export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
+  const { name, loadingIndicator, emptyIndicator, onError, customStyle, extensionData } = props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
   const extensionStore = React.useRef<ExtensionStorePlugin>(getExtensionsPlugin().extensionStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
@@ -56,6 +57,7 @@ export const Extension: React.FC<ExtensionComponentProps> = props => {
         <Parcel
           config={parcel.config}
           {...getContext()}
+          extensionData={extensionData}
           handleError={err => onError(parcel.extension, `Failed to mount. ${err.message}`)}
         />
       ))}

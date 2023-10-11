@@ -24,13 +24,13 @@ export interface IntegrationRegistrationOptions {
   plugins?: PluginConf;
   logger: unknown;
 }
-
+// @TODO: remove
 export interface ExtensionMatcherFn<G = ReplaySubject<GlobalEventBusData>> {
   (
     uiEvents: RootComponentProps['uiEvents'],
     globalChannel: G,
     extProps: Omit<
-      RootExtensionProps,
+      RootExtensionProps<any>,
       'uiEvents' | 'extensionData' | 'domElement' | 'baseRouteName'
     >,
     parentConfig: IAppConfig & { name: string },
@@ -41,14 +41,17 @@ export interface ExtensionMatcherFn<G = ReplaySubject<GlobalEventBusData>> {
  * Extension loader function
  * must return a promise with a singleSpaLifecycle object
  */
+// @TODO: remove
 export type ExtensionLoaderFn = (
-  loadingFunction: () => Promise<ParcelConfigObject<Omit<RootExtensionProps, 'baseRouteName'>>>,
+  loadingFunction: () => Promise<
+    ParcelConfigObject<Omit<RootExtensionProps<any>, 'baseRouteName'>>
+  >,
 ) => {
-  load: (props: Omit<RootExtensionProps, 'baseRouteName'>, parentAppName: string) => void;
+  load: (props: Omit<RootExtensionProps<any>, 'baseRouteName'>, parentAppName: string) => void;
   unmount: (event: { data?: EventDataTypes }, parentAppName: string) => Promise<void>;
-  update: (props: Omit<RootExtensionProps, 'baseRouteName'>, parentAppName: string) => void;
+  update: (props: Omit<RootExtensionProps<any>, 'baseRouteName'>, parentAppName: string) => void;
 };
-
+// @TODO: remove
 export type ExtendsFn = (
   matcher: ReturnType<ExtensionMatcherFn>,
   extLoader: ExtensionLoaderFn,

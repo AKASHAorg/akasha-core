@@ -1,5 +1,9 @@
 import React from 'react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore-next-line
 import ProfileInfoPage from '../pages/profile-info';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore-next-line
 import withProfileHeader from '../../components/profile-header-hoc';
 
 import userEvent from '@testing-library/user-event';
@@ -83,7 +87,7 @@ describe('< ProfileInfoPage />', () => {
 
   // @TODO: fix test
   it.skip('should go to edit page when edit icon is clicked', async () => {
-    userEvent.click(screen.getByRole('button', { name: 'edit' }));
+    await userEvent.click(screen.getByRole('button', { name: 'edit' }));
     await waitFor(() => expect(navigateTo).toHaveBeenCalled());
   });
 });

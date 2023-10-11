@@ -6,7 +6,14 @@ import FollowProfileButton from '../components/follow-profile-button';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
-const App = (props: RootExtensionProps) => {
+type FollowProfileButtonExtensionData = {
+  profileID: string;
+  isLoggedIn: boolean;
+  isFollowing: boolean;
+  followId: string;
+};
+
+const App = (props: RootExtensionProps<FollowProfileButtonExtensionData>) => {
   const { profileID, isLoggedIn, isFollowing, followId } = props.extensionData;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -28,7 +35,11 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(App),
-  errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (
+    error,
+    errorInfo,
+    props: RootExtensionProps<FollowProfileButtonExtensionData>,
+  ) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }

@@ -5,8 +5,14 @@ import { ReplyEditor } from './reply-editor';
 import { PostEditor } from './post-editor';
 import { IDraftStorage } from './utils';
 
+export type InlineEditorExtensionData = {
+  action: 'reply' | 'edit' | 'post' | 'repost';
+  itemId: string;
+  itemType: EntityTypes;
+};
+
 export const InlineEditor = (
-  props: Partial<RootExtensionProps> & { draftStorage?: IDraftStorage },
+  props: Partial<RootExtensionProps<InlineEditorExtensionData>> & { draftStorage?: IDraftStorage },
 ) => {
   const { extensionData, worldConfig, singleSpa } = props;
   const { loggedInProfileId } = useLoggedIn();

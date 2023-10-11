@@ -4,13 +4,14 @@ import ReactDOM from 'react-dom';
 
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
-import { InlineEditor } from './inline-editor';
+import { InlineEditor, InlineEditorExtensionData } from './inline-editor';
 
-const Wrapped = (props: RootExtensionProps) => {
+const Wrapped = (props: RootExtensionProps<InlineEditorExtensionData>) => {
+  const { getTranslationPlugin } = useRootComponentProps();
   return (
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <InlineEditor {...props} />
     </I18nextProvider>
   );
@@ -20,7 +21,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps<InlineEditorExtensionData>) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

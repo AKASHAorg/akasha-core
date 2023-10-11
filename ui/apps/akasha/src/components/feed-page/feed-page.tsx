@@ -13,7 +13,7 @@ import {
   useEntryNavigation,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -109,15 +109,10 @@ const FeedPage: React.FC<FeedPageProps> = props => {
             {postId ? (
               <Extension
                 name={`inline-editor_repost_${postId}`}
-                uiEvents={uiEvents}
-                data={{ itemId: postId, itemType: EntityTypes.BEAM, action: 'repost' }}
+                extensionData={{ itemId: postId, itemType: EntityTypes.BEAM, action: 'rebeam' }}
               />
             ) : (
-              <Extension
-                name="beam-editor_feed_page"
-                uiEvents={uiEvents}
-                data={{ action: 'post' }}
-              />
+              <Extension name="beam-editor_feed_page" extensionData={{ action: 'beam' }} />
             )}
           </Stack>
         </>
