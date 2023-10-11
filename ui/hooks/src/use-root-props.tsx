@@ -46,6 +46,8 @@ const useRootComponentProps = <T extends RootComponentProps>() => {
     if (hasOwn(ctx?.plugins, DEFAULT_EXTENSIONS_PLUGIN)) {
       return ctx.plugins[DEFAULT_EXTENSIONS_PLUGIN];
     }
+    console.warn('Extension plugin not available yet!');
+    return {};
   }, [ctx?.plugins]);
 
   const getContext = React.useCallback(() => ctx, [ctx]);
