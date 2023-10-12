@@ -13,6 +13,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 type ReflectionEditorProps = {
   beamId: string;
@@ -98,37 +99,43 @@ export const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
 
   if (profileDataReq.status === 'loading') return <EntryCardLoading />;
 
-  if (profileDataReq.status === 'error') return <>Error occurred</>;
+  if (profileDataReq.status === 'error')
+    return (
+      <ErrorLoader
+        type="script-error"
+        title={t('There was an error loading the editor')}
+        details={t('We cannot show this entry right now')}
+        devDetails={profileDataReq.error as string}
+      />
+    );
 
   return (
     <>
-      {profileDataReq.status === 'success' && (
-        <Editor
-          postLabel={t('Reflect')}
-          cancelButtonLabel={t('Cancel')}
-          emojiPlaceholderLabel={t('Search')}
-          disablePublishLabel={t('Authenticating')}
-          placeholderButtonLabel={t('Reflect')}
-          editorState={editorState}
-          onPublish={data => {
-            if (!profileDataReq.data) {
-              return;
-            }
-            handlePublish(data);
-          }}
-          setEditorState={setEditorState}
-          onCancelClick={() => singleSpa.navigateToUrl(location.pathname)}
-          avatar={profileDataReq?.data?.avatar}
-          profileId={loggedProfileData?.did?.id}
-          disablePublish={disablePublishing}
-          getLinkPreview={getLinkPreview}
-          getMentions={handleMentionQueryChange}
-          getTags={handleTagQueryChange}
-          tags={tagSearch?.data}
-          mentions={mentionSearch?.data}
-          background={{ light: 'grey9', dark: 'grey3' }}
-        />
-      )}
+      <Editor
+        postLabel={t('Reflect')}
+        cancelButtonLabel={t('Cancel')}
+        emojiPlaceholderLabel={t('Search')}
+        disablePublishLabel={t('Authenticating')}
+        placeholderButtonLabel={t('Reflect')}
+        editorState={editorState}
+        onPublish={data => {
+          if (!profileDataReq.data) {
+            return;
+          }
+          handlePublish(data);
+        }}
+        setEditorState={setEditorState}
+        onCancelClick={() => singleSpa.navigateToUrl(location.pathname)}
+        avatar={profileDataReq?.data?.avatar}
+        profileId={loggedProfileData?.did?.id}
+        disablePublish={disablePublishing}
+        getLinkPreview={getLinkPreview}
+        getMentions={handleMentionQueryChange}
+        getTags={handleTagQueryChange}
+        tags={tagSearch?.data}
+        mentions={mentionSearch?.data}
+        background={{ light: 'grey9', dark: 'grey3' }}
+      />
       {/*@TODO reflect error logic goes here */}
     </>
   );
