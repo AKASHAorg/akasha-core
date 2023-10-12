@@ -95,7 +95,6 @@ export const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
 
   // @TODO: fix author name
   const entryAuthorName = undefined;
-  // entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
   if (profileDataReq.status === 'loading') return <EntryCardLoading />;
 
