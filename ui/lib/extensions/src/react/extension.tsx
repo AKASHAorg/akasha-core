@@ -12,10 +12,12 @@ export type ExtensionComponentProps<D> = {
   onError?: (extension: ExtensionInterface & { appName: string }, message?: string) => void;
   customStyle?: string;
   extensionData?: D;
+  isModal?: boolean;
 };
 
 export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
-  const { name, loadingIndicator, emptyIndicator, onError, customStyle, extensionData } = props;
+  const { name, loadingIndicator, emptyIndicator, onError, customStyle, extensionData, isModal } =
+    props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
   const extensionStore = React.useRef<ExtensionStorePlugin>(getExtensionsPlugin().extensionStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
@@ -29,13 +31,15 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
       setIsEmpty(true);
       return [];
     }
-    return exts;
+    return [...exts];
   }, [location, name]);
 
   React.useEffect(() => {
     const loadConfigs = async () => {
       for (const extension of extensions) {
-        if (parcelConfigs.find(parcel => parcel.extension.appName === extension.appName)) return;
+        if (parcelConfigs.find(parcel => parcel.extension.appName === extension.appName)) {
+          return;
+        }
         try {
           const conf = await extension.loadingFn();
           setParcelConfigs(prev => [...prev, { config: conf, extension }]);
@@ -47,18 +51,45 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
     loadConfigs().catch();
   }, [extensions, parcelConfigs]);
 
+  const handleParcelError =
+    (extension: ExtensionInterface & { appName: string }) => (err: Error) => {
+      onError?.(extension, `Failed to mount. ${err.message}`);
+    };
+
   const isLoading = extensions.length > parcelConfigs.length && !isEmpty;
 
+  if (isModal) {
+    return (
+      <div>
+        {parcelConfigs.length > 0 && (
+          <Parcel
+            key={parcelConfigs.at(0).extension.appName}
+            appendTo={document.body}
+            domElementGetter={() => document.body}
+            wrapWith="dialog"
+            config={{
+              ...parcelConfigs.at(0).config,
+              name: `${parcelConfigs.at(0).extension.app}#${name}`,
+            }}
+            {...getContext()}
+            extensionData={extensionData}
+            handleError={handleParcelError(parcelConfigs.at(0).extension)}
+          />
+        )}
+      </div>
+    );
+  }
   return (
     <Stack customStyle={customStyle} id={name}>
       {isLoading && loadingIndicator}
       {isEmpty && emptyIndicator}
       {parcelConfigs.map(parcel => (
         <Parcel
-          config={parcel.config}
+          key={parcel.extension.appName}
+          config={{ ...parcel.config, name: `${parcel.extension.appName}#${name}` }}
           {...getContext()}
           extensionData={extensionData}
-          handleError={err => onError(parcel.extension, `Failed to mount. ${err.message}`)}
+          handleError={handleParcelError(parcel.extension)}
         />
       ))}
     </Stack>

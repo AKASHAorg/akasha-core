@@ -1,11 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ModalNavigationOptions,
-  IPublishData,
-  EntityTypes,
-  AnalyticsCategories,
-} from '@akashaorg/typings/lib/ui';
+import { IPublishData, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import {
   useMutationsListener,
   useAnalytics,
@@ -22,20 +17,15 @@ import LoginCTACard from '@akashaorg/design-system-components/lib/components/Log
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
 
 export type FeedPageProps = {
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  showModal: (name: string, data?: Record<string, unknown>) => void;
   loggedProfileData?: Profile;
 };
 
 const FeedPage: React.FC<FeedPageProps> = props => {
-  const { loggedProfileData, showLoginModal } = props;
-
-  const { uiEvents, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
-
+  const { loggedProfileData, showModal } = props;
+  const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
-
   const [analyticsActions] = useAnalytics();
-
   //get the post id for repost from the search param
   const [postId, setPostId] = React.useState(new URLSearchParams(location.search).get('repost'));
 
@@ -59,25 +49,34 @@ const FeedPage: React.FC<FeedPageProps> = props => {
     'CREATE_POST_MUTATION_KEY',
   ]);
 
+  const showLoginModal = React.useCallback(
+    (modalData?: Record<string, unknown>) => {
+      showModal('login', modalData);
+    },
+    [showModal],
+  );
+
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
       if (!loggedProfileData?.did?.id) {
-        return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
+        return showLoginModal({
+          redirectTo: { modal: { name: 'report-modal', itemId, itemType } },
+        });
       }
-      navigateToModal({ name: 'report-modal', itemId, itemType });
+      showModal('report-modal', { itemId, itemType });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [loggedProfileData?.did?.id],
+    [loggedProfileData?.did?.id, showLoginModal, showModal],
   );
 
-  const handleEntryRemove = React.useCallback((itemId: string) => {
-    navigateToModal({
-      name: 'entry-remove-confirmation',
-      itemType: EntityTypes.BEAM,
-      itemId,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleEntryRemove = React.useCallback(
+    (itemId: string) => {
+      showModal('entry-remove-confirmation', {
+        itemType: EntityTypes.BEAM,
+        itemId,
+      });
+    },
+    [showModal],
+  );
 
   const handleWriteToUsLabelClick = () => {
     analyticsActions.trackEvent({
@@ -87,9 +86,9 @@ const FeedPage: React.FC<FeedPageProps> = props => {
     });
   };
 
-  const handleRebeam = (withComment: boolean, beamId: string) => {
+  const handleRebeam = (_: boolean, beamId: string) => {
     if (!loggedProfileData?.did.id) {
-      navigateToModal({ name: 'login' });
+      showLoginModal();
     } else {
       getRoutingPlugin().navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',

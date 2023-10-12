@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 
 import { hasOwn, useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import type { Profile, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import type { Profile } from '@akashaorg/typings/lib/ui';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
@@ -12,15 +12,15 @@ import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/h
 
 export type ProfilePageProps = {
   loggedProfileData: Profile;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  showModal: (name: string, modalData?: Record<string, unknown>) => void;
 };
 
 const ProfileFeedPage = (props: ProfilePageProps) => {
-  const { loggedProfileData, showLoginModal } = props;
+  const { loggedProfileData, showModal } = props;
 
   const { t } = useTranslation('app-profile');
   const { did } = useParams<{ did: string }>();
-  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin } = useRootComponentProps();
 
   const profileDataQuery = useGetProfileByDidQuery(
     { id: did },
@@ -29,6 +29,13 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     },
   );
   const profileState = profileDataQuery.data;
+
+  const showLoginModal = React.useCallback(
+    (modalData?: Record<string, unknown>) => {
+      showModal('login', modalData);
+    },
+    [showModal],
+  );
 
   const profileUserName = React.useMemo(() => {
     if (profileState && profileState.name) {
@@ -41,12 +48,11 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    navigateToModal({ name: 'report-modal', itemId, itemType });
+    showModal('report-modal', { itemId, itemType });
   };
 
   const handleEntryRemove = (itemId: string) => {
-    navigateToModal({
-      name: 'entry-remove-confirmation',
+    showModal('entry-remove-confirmation', {
       itemId,
       itemType: EntityTypes.BEAM,
     });
@@ -54,7 +60,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
 
   const handleRebeam = (withComment: boolean, beamId: string) => {
     if (!loggedProfileData?.did.id) {
-      navigateToModal({ name: 'login' });
+      showLoginModal();
     } else {
       getRoutingPlugin().navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',

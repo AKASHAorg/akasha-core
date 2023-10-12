@@ -19,7 +19,7 @@ import menuRoute, { EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
 const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
   const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
-
+  const [loginModal, setLoginModal] = React.useState({ isActive: false, modalData: {} });
   const [showFeedback, setShowFeedback] = useShowFeedback(false);
   const navigateTo = getRoutingPlugin().navigateTo;
 
@@ -27,8 +27,12 @@ const AppRoutes: React.FC<unknown> = () => {
     setShowFeedback(true);
   };
 
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
+  const showLoginModal = (modalData: { redirectTo?: { modal: ModalNavigationOptions } }) => {
+    setLoginModal({
+      isActive: true,
+      modalData,
+    });
+    // navigateToModal({ name: 'login', redirectTo });
   };
 
   const commonHeaderViewProps = {
@@ -51,18 +55,28 @@ const AppRoutes: React.FC<unknown> = () => {
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWERS]}`}
-              element={withProfileHeader(<FollowersPage />)(commonHeaderViewProps)}
+              element={withProfileHeader(<FollowersPage showLoginModal={showLoginModal} />)(
+                commonHeaderViewProps,
+              )}
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWING]}`}
-              element={withProfileHeader(<FollowingPage />)(commonHeaderViewProps)}
+              element={withProfileHeader(<FollowingPage showLoginModal={showLoginModal} />)(
+                commonHeaderViewProps,
+              )}
             />
             <Route
               path={`:profileId${menuRoute[INTERESTS]}`}
               element={withProfileHeader(<InterestsPage />)(commonHeaderViewProps)}
             />
-            <Route path={`:profileId${menuRoute[FOLLOWERS]}`} element={<FollowersPage />} />
-            <Route path={`:profileId${menuRoute[FOLLOWING]}`} element={<FollowingPage />} />
+            <Route
+              path={`:profileId${menuRoute[FOLLOWERS]}`}
+              element={<FollowersPage showLoginModal={showLoginModal} />}
+            />
+            <Route
+              path={`:profileId${menuRoute[FOLLOWING]}`}
+              element={<FollowingPage showLoginModal={showLoginModal} />}
+            />
             <Route path={`:profileId${menuRoute[INTERESTS]}`} element={<InterestsPage />} />
             <Route
               path={`:profileId${menuRoute[EDIT]}`}

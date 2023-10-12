@@ -5,6 +5,7 @@ import singleSpaReact from 'single-spa-react';
 import FollowProfileButton from '../components/follow-profile-button';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
 import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 
 type FollowProfileButtonExtensionData = {
   profileID: string;
@@ -15,19 +16,27 @@ type FollowProfileButtonExtensionData = {
 
 const App = (props: RootExtensionProps<FollowProfileButtonExtensionData>) => {
   const { profileID, isLoggedIn, isFollowing, followId } = props.extensionData;
-
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    props.navigateToModal({ name: 'login', redirectTo });
+  const [loginModal, setLoginModal] = React.useState({ isActive: false, modalData: {} });
+  const showLoginModal = (modalData: Record<string, unknown>) => {
+    setLoginModal({
+      isActive: true,
+      modalData,
+    });
   };
 
   return (
-    <FollowProfileButton
-      profileID={profileID}
-      isLoggedIn={isLoggedIn}
-      isFollowing={!!isFollowing}
-      followId={followId}
-      showLoginModal={showLoginModal}
-    />
+    <>
+      {loginModal.isActive && (
+        <Extension isModal={true} name="login" extensionData={loginModal.modalData} />
+      )}
+      <FollowProfileButton
+        profileID={profileID}
+        isLoggedIn={isLoggedIn}
+        isFollowing={!!isFollowing}
+        followId={followId}
+        showLoginModal={showLoginModal}
+      />
+    </>
   );
 };
 

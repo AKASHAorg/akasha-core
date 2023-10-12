@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { EntityTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, Profile } from '@akashaorg/typings/lib/ui';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -14,15 +14,14 @@ import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hoo
 
 export type TagFeedPageProps = {
   loggedProfileData?: Profile;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  showModal: (name: string, modalData?: Record<string, unknown>) => void;
 };
 
 const TagFeedPage: React.FC<TagFeedPageProps> = props => {
-  const { showLoginModal, loggedProfileData } = props;
+  const { loggedProfileData, showModal } = props;
 
   const { t } = useTranslation('app-akasha-integration');
-  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
+  const { getRoutingPlugin } = useRootComponentProps();
 
   // const { tagName } = useParams<{ tagName: string }>();
 
@@ -48,17 +47,22 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   //     reqPosts.fetchNextPage();
   //   }
   // }, [reqPosts]);
+  const showLoginModal = React.useCallback(
+    (modalData?: Record<string, unknown>) => {
+      showModal('login', modalData);
+    },
+    [showModal],
+  );
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
-      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
+      return showLoginModal({ redirectTo: { modal: { name: 'report-modal', itemId, itemType } } });
     }
-    navigateToModal({ name: 'report-modal', itemId, itemType });
+    showModal('report-modal', { itemId, itemType });
   };
 
   const handleEntryRemove = (itemId: string) => {
-    navigateToModal({
-      name: 'entry-remove-confirmation',
+    showModal('entry-remove-confirmation', {
       itemId,
       itemType: EntityTypes.BEAM,
     });
@@ -74,7 +78,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
 
   const handleRebeam = (withComment: boolean, beamId: string) => {
     if (!loggedProfileData?.did.id) {
-      navigateToModal({ name: 'login' });
+      showLoginModal();
     } else {
       getRoutingPlugin().navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',

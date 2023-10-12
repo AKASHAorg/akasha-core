@@ -60,11 +60,9 @@ const Wrapped = (props: RootExtensionProps) => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
     <Router>
-      <React.Suspense fallback={<></>}>
-        <I18nextProvider i18n={getTranslationPlugin().i18n}>
-          <LoginModal {...props} />
-        </I18nextProvider>
-      </React.Suspense>
+      <I18nextProvider i18n={getTranslationPlugin().i18n}>
+        <LoginModal {...props} />
+      </I18nextProvider>
     </Router>
   );
 };

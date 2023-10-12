@@ -21,10 +21,11 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 import { LatestProfiles, LatestTopics } from './cards';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 
 const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
-
+  const [loginModal, setLoginModal] = React.useState({ isActive: false, modalData: {} });
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('ui-widget-trending');
@@ -85,7 +86,10 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     : null;
 
   const showLoginModal = () => {
-    navigateToModal({ name: 'login' });
+    setLoginModal(prev => ({
+      ...prev,
+      isActive: true,
+    }));
   };
 
   const handleTopicClick = (topic: string) => {
@@ -145,6 +149,9 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
 
   return (
     <Stack spacing="gap-y-4">
+      {loginModal.isActive && (
+        <Extension isModal={true} name={'login'} extensionData={loginModal.modalData} />
+      )}
       {(latestTopicsReq.isError || latestProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
