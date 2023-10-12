@@ -10,12 +10,12 @@ export type EditorPlaceholderType = {
   avatar?: Profile['avatar'];
   profileId: string | null;
   placeholderLabel?: string;
-  reflectLabel?: string;
+  buttonLabel?: string;
   onClick?: React.MouseEventHandler<HTMLElement>;
 };
 
 const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
-  const { avatar, profileId, placeholderLabel, reflectLabel, onClick } = props;
+  const { avatar, profileId, placeholderLabel, buttonLabel, onClick } = props;
   return (
     <Card border={true} padding={0}>
       <button onClick={onClick}>
@@ -27,7 +27,7 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
             </Text>
           </div>
 
-          <Button variant="primary" disabled={true} label={reflectLabel} size="sm" />
+          <Button variant="primary" disabled={true} label={buttonLabel} size="sm" />
         </div>
       </button>
     </Card>

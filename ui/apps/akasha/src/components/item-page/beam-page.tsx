@@ -67,7 +67,7 @@ const BeamPage: React.FC = () => {
                 <EditorPlaceholder
                   onClick={showLoginModal}
                   profileId={null}
-                  reflectLabel={t('Reflect')}
+                  buttonLabel={t('Reflect')}
                   placeholderLabel={t('Share your thoughts')}
                 />
               )}
@@ -87,6 +87,7 @@ const BeamPage: React.FC = () => {
             <FeedWidget
               queryKey="akasha-beam-page-query"
               itemType={EntityTypes.REFLECT}
+              beamId={beamId}
               loggedProfileData={loggedProfileData}
               onLoginModalOpen={showLoginModal}
               onEntryFlag={() => {

@@ -108,6 +108,7 @@ export const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
           cancelButtonLabel={t('Cancel')}
           emojiPlaceholderLabel={t('Search')}
           disablePublishLabel={t('Authenticating')}
+          placeholderButtonLabel={t('Reflect')}
           editorState={editorState}
           onPublish={data => {
             if (!profileDataReq.data) {
