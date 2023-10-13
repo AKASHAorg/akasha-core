@@ -12,9 +12,10 @@ import InterestsPage from './pages/interests';
 import EditProfilePage from './pages/edit-profile';
 import FollowingPage from './pages/profile-engagement/following-page';
 import FollowersPage from './pages/profile-engagement/followers-page';
+import ProfileBeamsPage from './pages/profile-beams';
 import ProfileInfoPage from './pages/profile-info';
 
-import menuRoute, { EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
+import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
@@ -60,6 +61,12 @@ const AppRoutes: React.FC<unknown> = () => {
             <Route
               path={`:profileId${menuRoute[INTERESTS]}`}
               element={withProfileHeader(<InterestsPage />)(commonHeaderViewProps)}
+            />
+            <Route
+              path={`:profileId${menuRoute[BEAMS]}`}
+              element={withProfileHeader(<ProfileBeamsPage showLoginModal={showLoginModal} />)(
+                commonHeaderViewProps,
+              )}
             />
             <Route path={`:profileId${menuRoute[FOLLOWERS]}`} element={<FollowersPage />} />
             <Route path={`:profileId${menuRoute[FOLLOWING]}`} element={<FollowingPage />} />

@@ -28,13 +28,11 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
 
   const { isLoggedIn } = useLoggedIn();
 
-  const handleNavigateToProfilePosts = () => {
-    if (!isLoggedIn) {
-      return showLoginModal();
-    }
+  const handleNavigateToProfileBeams = () => {
+    if (totalBeams === 0) return;
     navigateTo({
-      appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: routes => `${routes.ProfileFeed}/${profileId}`,
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}/beams`,
     });
   };
 
@@ -53,7 +51,7 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
       posts={{
         label: t('Beams'),
         total: totalBeams,
-        onClick: handleNavigateToProfilePosts,
+        onClick: handleNavigateToProfileBeams,
       }}
       interests={{
         label: t('Interests'),
