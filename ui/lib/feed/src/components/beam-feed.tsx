@@ -56,6 +56,7 @@ export type BeamFeedProps = Omit<
   scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
   queryKey: string;
   newItemsPublishedLabel: string;
+  did?: string;
 };
 
 const BeamFeed: React.FC<BeamFeedProps> = props => {
@@ -69,6 +70,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     scrollerOptions = { overscan: 5 },
     queryKey,
     newItemsPublishedLabel,
+    did,
   } = props;
 
   const { uiEvents } = useRootComponentProps();
@@ -76,6 +78,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     db,
     scrollerOptions,
     queryKey,
+    did,
   });
 
   return (

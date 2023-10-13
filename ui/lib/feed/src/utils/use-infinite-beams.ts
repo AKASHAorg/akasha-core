@@ -3,6 +3,7 @@ import type { ScrollerState } from '@akashaorg/design-system-components/lib/comp
 import {
   useGetBeamsQuery,
   useInfiniteGetBeamsQuery,
+  useInfiniteGetBeamsByAuthorDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useGetScrollState, useRemoveScrollState, useSaveScrollState } from './use-scroll-state';
@@ -32,6 +33,7 @@ export type UseInfiniteBeamsOptions = {
   scrollerOptions: BeamFeedProps['scrollerOptions'];
   queryKey: string;
   db: ScrollStateDBWrapper;
+  did?: string;
 };
 
 export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
@@ -78,7 +80,49 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
 
   // forward pagination: first, after? - most recent -> least recent
   // backward pagination: last, before? - least recent -> most recent
-  const beamsReq = useInfiniteGetBeamsQuery(
+  const beamsReqByAuthor = useInfiniteGetBeamsByAuthorDidQuery(
+    'id',
+    {
+      id: options.did,
+      first: options.scrollerOptions.overscan,
+      after: initialScrollState.visibleCursorRange.startCursor ?? undefined,
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
+      //  filters: { where: { active: { equalTo: true } } },
+    },
+    {
+      enabled: !!options.did && initialScrollState.isFetched,
+      keepPreviousData: true,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      select: data => {
+        return {
+          pages: data.pages.flatMap(page => {
+            if (hasOwn(page.node, 'akashaBeamList')) {
+              return page.node.akashaBeamList.edges;
+            }
+          }),
+          pageParams: data.pageParams,
+        };
+      },
+      getNextPageParam: last => {
+        if (hasOwn(last.node, 'akashaBeamList') && last.node.akashaBeamList.pageInfo.hasNextPage) {
+          return last.node.akashaBeamList.pageInfo.endCursor;
+        }
+      },
+      getPreviousPageParam: firstPage => {
+        if (
+          hasOwn(firstPage.node, 'akashaBeamList') &&
+          firstPage.node.akashaBeamList.pageInfo.hasPreviousPage
+        ) {
+          return firstPage.node.akashaBeamList.pageInfo.startCursor;
+        }
+      },
+    },
+  );
+
+  const beamsFeedReq = useInfiniteGetBeamsQuery(
     'sorting',
     {
       first: options.scrollerOptions.overscan,
@@ -88,7 +132,7 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
       },
     },
     {
-      enabled: initialScrollState.isFetched,
+      enabled: !options.did && initialScrollState.isFetched,
       keepPreviousData: true,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
@@ -108,6 +152,13 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
       },
     },
   );
+
+  const beamsReq = React.useMemo(() => {
+    if (options.did) {
+      return beamsReqByAuthor;
+    }
+    return beamsFeedReq;
+  }, [beamsFeedReq, beamsReqByAuthor, options.did]);
 
   const requestStatus = React.useMemo(() => {
     if (newBeamReq.isError || beamsReq.isError) {
