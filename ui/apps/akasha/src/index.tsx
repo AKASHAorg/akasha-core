@@ -84,6 +84,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
       'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
       'beam-editor_*': loader(() => import('./extensions/beam-editor')),
+      'inline-editor_*': loader(() => import('./extensions/inline-editor')),
     });
   },
   extensions: [

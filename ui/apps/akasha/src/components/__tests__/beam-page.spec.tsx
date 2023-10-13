@@ -48,7 +48,7 @@ describe('< PostPage /> component', () => {
           expect.objectContaining({ name: expect.stringMatching(/inline-editor_reply/) }),
         ),
       )
-      .mockReturnValue(<MockedInlineEditor action="reply" />);
+      .mockReturnValue(<MockedInlineEditor action="reflect" />);
 
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
@@ -57,12 +57,12 @@ describe('< PostPage /> component', () => {
     // expect(screen.getByText(/Reply to/i)).toBeInTheDocument();
     // expect(screen.getByRole('button', { name: /Reply/i })).toBeInTheDocument();
   });
-  // it('should render reply fragment with view all replies link', async () => {
+  // it('should render reflect fragment with view all replies link', async () => {
   //   await act(async () => {
   //     renderWithAllProviders(BaseComponent, {});
   //   });
 
-  //   expect(screen.getByTestId('reply-fragment')).toBeInTheDocument();
+  //   expect(screen.getByTestId('reflect-fragment')).toBeInTheDocument();
   //   expect(screen.getByText(/View all replies/)).toBeInTheDocument();
   // });
   // it('should render edit page', async () => {

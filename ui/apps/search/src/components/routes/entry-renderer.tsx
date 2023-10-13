@@ -176,7 +176,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               moderatedContentLabel={t('This content has been moderated')}
               profileAnchorLink={'/@akashaorg/app-profile'}
               repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
-                itemType === EntityTypes.REFLECT ? 'reply' : 'post'
+                itemType === EntityTypes.REFLECT ? 'reflect' : 'beam'
               }`}
               contentClickable={contentClickable}
               removeEntryLabel={t('Delete Post')}

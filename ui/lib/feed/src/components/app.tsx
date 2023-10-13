@@ -24,7 +24,6 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type FeedWidgetCommonProps = {
   queryKey: string;
-  itemType: EntityTypes;
   loggedProfileData?: Profile;
   onLoginModalOpen: BeamFeedProps['onLoginModalOpen'];
   onEntryFlag: BeamFeedProps['onEntryFlag'];
@@ -37,11 +36,9 @@ export type FeedWidgetCommonProps = {
   trackEvent?: BeamFeedProps['trackEvent'];
   scrollerOptions?: { overscan: number };
   newItemsPublishedLabel: string;
-};
+} & ({ itemType: EntityTypes.BEAM } | { itemType: EntityTypes.REFLECT; beamId: string });
 
 const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
-  const { itemType } = props;
-
   const { getTranslationPlugin, layoutConfig } = useRootComponentProps();
   const { i18n } = getTranslationPlugin();
 
@@ -51,7 +48,7 @@ const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
 
   return (
     <I18nextProvider i18n={i18n}>
-      {itemType === EntityTypes.BEAM && (
+      {props.itemType === EntityTypes.BEAM && (
         <BeamFeed
           {...props}
           i18n={i18n}
@@ -60,9 +57,10 @@ const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
           db={db}
         />
       )}
-      {itemType === EntityTypes.REFLECT && (
+      {props.itemType === EntityTypes.REFLECT && (
         <ReflectFeed
           {...props}
+          beamId={props.beamId}
           i18n={i18n}
           modalSlotId={layoutConfig.modalSlotId}
           locale={i18n.languages[0].toLowerCase() as ILocale}

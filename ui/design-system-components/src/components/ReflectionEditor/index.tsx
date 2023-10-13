@@ -10,6 +10,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Colors } from '@akashaorg/typings/lib/ui';
 
 export type ReflectionEditorProps = EditorBoxProps & {
+  placeholderButtonLabel?: string;
   openEditor?: boolean;
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
@@ -35,6 +36,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     mentions,
     tags,
     uploadRequest,
+    placeholderButtonLabel,
     openEditor = false,
     showCancelButton,
     cancelButtonLabel,
@@ -91,6 +93,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
           onClick={handleToggleEditor}
           profileId={profileId}
           avatar={avatar}
+          buttonLabel={placeholderButtonLabel}
           placeholderLabel={placeholderLabel}
         />
       )}
