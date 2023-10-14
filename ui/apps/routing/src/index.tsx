@@ -175,13 +175,6 @@ export class RoutingPlugin {
   };
 }
 
-export const register = async (opts: IntegrationRegistrationOptions) => {
-  return {
-    loadingFn: () => Promise.resolve(),
-    mountsIn: opts.layoutConfig?.routerSlotId,
-  };
-};
-
 export const getPlugin = async (
   props: RootComponentProps & {
     encodeAppName: (name: string) => string;

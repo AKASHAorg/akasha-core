@@ -251,7 +251,7 @@ const Layout: React.FC<unknown> = () => {
                   </Stack>
                 </Card>
               )}
-              <Extension name={layoutConfig.pluginSlotId} uiEvents={uiEvents} />
+              <div id={layoutConfig.pluginSlotId} />
               <Stack customStyle="fixed bottom-0 mr-4 mb-4">
                 <Widget name={layoutConfig.snackbarNotifSlotId} loadingIndicator={<Spinner />} />
               </Stack>

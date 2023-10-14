@@ -11,7 +11,8 @@ import type { ILogger } from '../sdk/log';
 
 export interface RootComponentProps {
   activeWhen?: { path: string };
-  domElement: HTMLElement;
+  domElement?: HTMLElement;
+  domElementGetter?: () => HTMLElement;
   uiEvents: Subject<UIEventData>;
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;

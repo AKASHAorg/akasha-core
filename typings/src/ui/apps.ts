@@ -4,7 +4,22 @@ import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
 import { ContentBlockExtensionInterface } from './editor-blocks';
 import { ExtensionInterface } from './extensions';
+import { IntegrationReleaseInfoFragmentFragment } from '../sdk/graphql-operation-types';
 
+export const enum AppEvents {
+  RegisterApplication = 'register-application',
+}
+
+export type AppRegisterEvent = {
+  event: AppEvents.RegisterApplication;
+  data: { config: IAppConfig; manifest: IntegrationReleaseInfoFragmentFragment };
+};
+export type InstalledAppStorePlugin = {
+  getInstalledApps: () => {
+    config: IAppConfig;
+    manifest: IntegrationReleaseInfoFragmentFragment;
+  }[];
+};
 export type Extensions = { [key: string]: string } & {
   /**
    * load modals inside this node
