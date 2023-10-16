@@ -11,6 +11,7 @@ import {
 import { i18n } from 'i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import ReflectCard from './cards/reflect-card';
 import EntryList, {
   EntryListProps,
@@ -120,12 +121,8 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
             );
           }
           return (
-            <div
-              key={key}
-              data-index={index}
-              ref={measureElementRef}
-              style={{ paddingBottom: itemSpacing }}
-            >
+            <div key={key} data-index={index} ref={measureElementRef}>
+              <Divider />
               <ReflectCard
                 entryData={entryData}
                 locale={locale}

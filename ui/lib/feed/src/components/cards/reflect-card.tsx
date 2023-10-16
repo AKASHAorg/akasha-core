@@ -43,7 +43,8 @@ const ReflectCard: React.FC<ReflectCardProps> = props => {
       authorProfile={{ data: profileData, status: profileDataReq.status }}
       locale={locale}
       profileAnchorLink="/@akashaorg/app-profile"
-      slateContent={entryData.content.map(item => decodeb64SlateContent(item.value, null, true))}
+      slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
+      noWrapperCard={true}
       removed={{
         author: {
           firstPart: t('AKASHA world members won’t be able to see the content '),

@@ -6,16 +6,16 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { tw } from '@twind/core';
 
-export interface IEditorPlaceholder {
+export type EditorPlaceholderType = {
   avatar?: Profile['avatar'];
   profileId: string | null;
   placeholderLabel?: string;
-  replyLabel?: string;
+  buttonLabel?: string;
   onClick?: React.MouseEventHandler<HTMLElement>;
-}
+};
 
-const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
-  const { avatar, profileId, placeholderLabel, replyLabel, onClick } = props;
+const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
+  const { avatar, profileId, placeholderLabel, buttonLabel, onClick } = props;
   return (
     <Card border={true} padding={0}>
       <button onClick={onClick}>
@@ -27,7 +27,7 @@ const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
             </Text>
           </div>
 
-          <Button variant="primary" disabled={true} label={replyLabel} size="sm" />
+          <Button variant="primary" disabled={true} label={buttonLabel} size="sm" />
         </div>
       </button>
     </Card>

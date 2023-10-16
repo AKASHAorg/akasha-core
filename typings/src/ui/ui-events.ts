@@ -51,12 +51,12 @@ export const enum EntityTypes {
 }
 
 /**
- To be used as per example `EntityTypesMap[EntityTypes.POST]` to get the name of the entity type
+ To be used as per example `EntityTypesMap[EntityTypes.BEAM]` to get the name of the entity type
  */
 export const EntityTypesMap = {
   [EntityTypes.BEAM]: 'beam',
   [EntityTypes.PROFILE]: 'profile',
-  [EntityTypes.REFLECT]: 'reply',
+  [EntityTypes.REFLECT]: 'reflect',
   [EntityTypes.TAG]: 'tag',
   [EntityTypes.ARTICLE]: 'article',
 };
@@ -69,7 +69,7 @@ export type EventDataTypes = {
   followId?: string;
   version?: string;
   itemId?: string;
-  commentId?: string;
+  reflectId?: string;
   itemType?: EntityTypes;
   menuItems?: IMenuItem | IMenuItem[];
   navRoutes?: Record<string, string>;

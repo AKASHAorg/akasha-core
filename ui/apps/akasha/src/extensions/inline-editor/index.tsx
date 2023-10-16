@@ -1,10 +1,9 @@
 import React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-
-import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
+import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { withProviders, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import { InlineEditor, InlineEditorExtensionData } from './inline-editor';
 

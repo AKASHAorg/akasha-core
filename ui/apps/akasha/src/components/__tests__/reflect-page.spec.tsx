@@ -22,7 +22,7 @@ const MockedInlineEditor = ({ action }) => (
   />
 );
 
-describe('< ReplyPage /> component', () => {
+describe('< ReflectPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
       <ReflectPage />
@@ -38,22 +38,22 @@ describe('< ReplyPage /> component', () => {
     // ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
   });
   // @TODO fix after new hooks
-  it.skip('should render reply page', async () => {
+  it.skip('should render reflect page', async () => {
     const spiedExtension = jest.spyOn(Extension, 'default');
 
     when(spiedExtension)
       .calledWith(
         partialArgs(
-          expect.objectContaining({ name: expect.stringMatching(/inline-editor_reply/) }),
+          expect.objectContaining({ name: expect.stringMatching(/inline-editor_reflect/) }),
         ),
       )
-      .mockReturnValue(<MockedInlineEditor action="reply" />);
+      .mockReturnValue(<MockedInlineEditor action="reflect" />);
 
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
     });
 
-    // expect(screen.getByText(/Reply to/i)).toBeInTheDocument();
-    // expect(screen.getByRole('button', { name: /Reply/i })).toBeInTheDocument();
+    // expect(screen.getByText(/Reflect to/i)).toBeInTheDocument();
+    // expect(screen.getByRole('button', { name: /Reflect/i })).toBeInTheDocument();
   });
 });

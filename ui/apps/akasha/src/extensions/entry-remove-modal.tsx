@@ -42,13 +42,13 @@ const EntryRemoveModal: React.FC<RootExtensionProps<EntryRemoveModalExtensionDat
     if (!!extensionData && extensionData.itemType !== undefined) {
       if (extensionData.itemType === EntityTypes.REFLECT) {
         analyticsActions.trackEvent({
-          category: AnalyticsCategories.POST,
+          category: AnalyticsCategories.REFLECT,
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.itemId);
       } else if (extensionData.itemType === EntityTypes.BEAM) {
         analyticsActions.trackEvent({
-          category: AnalyticsCategories.POST,
+          category: AnalyticsCategories.BEAM,
           action: 'Post Deleted',
         });
         postDeleteQuery.mutate(extensionData.itemId);
@@ -66,7 +66,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps<EntryRemoveModalExtensionDat
     if (extensionData.itemType === EntityTypes.BEAM) {
       return t('post');
     }
-    return t('reply');
+    return t('reflect');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [extensionData.itemType]);
 

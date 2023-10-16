@@ -9,11 +9,11 @@ import {
   genPendingPost,
   genUser,
 } from '@akashaorg/af-testing';
-import { PendingReply } from '../item-page/pending-reply';
+import { PendingReflect } from '../item-page/pending-reflect';
 
-describe('< PendingReply /> component', () => {
+describe('< PendingReflect /> component', () => {
   const BaseComponent = (
-    <PendingReply postId="oxfg" loggedProfileData={genUser()} commentIds={[]} />
+    <PendingReflect postId="oxfg" loggedProfileData={genUser()} commentIds={[]} />
   );
 
   beforeAll(() => {
@@ -31,7 +31,7 @@ describe('< PendingReply /> component', () => {
     jest.spyOn(entryUtilHooks, 'createPendingEntry').mockReturnValue(genPendingPost());
   });
   // @TODO fix after new hooks
-  it.skip('should show pending reply', async () => {
+  it.skip('should show pending reflect', async () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
     });

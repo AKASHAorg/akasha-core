@@ -35,14 +35,14 @@ const EntryCardSaveButton = (props: RootExtensionProps<CardSaveButtonExtensionDa
     if (loggedUserReq.isSuccess && loggedUserReq.data.ethAddress) {
       if (isBookmarked) {
         analyticsActions.trackEvent({
-          category: AnalyticsCategories.POST,
+          category: AnalyticsCategories.BEAM,
           action: 'Beam Bookmark Removed',
         });
         bookmarkDelete.mutate(itemId);
       }
       if (!isBookmarked) {
         analyticsActions.trackEvent({
-          category: AnalyticsCategories.POST,
+          category: AnalyticsCategories.BEAM,
           action: 'Beam Bookmarked',
         });
         bookmarkCreate.mutate({ entryId: itemId, itemType: itemType });
