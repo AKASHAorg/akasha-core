@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { EventDataTypes, EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
+import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import ScrollRestorer from './scroll-restorer';
 import {
   filterEvents,
   usePlaformHealthCheck,
@@ -15,7 +14,7 @@ import {
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import { useScrollbarWidth } from 'react-use/lib/useScrollbarWidth';
 import { useClickAway } from 'react-use';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -24,7 +23,6 @@ import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 const Layout: React.FC<unknown> = () => {
-  const [activeModal, setActiveModal] = useState<EventDataTypes | null>(null);
   const [needSidebarToggling, setNeedSidebarToggling] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
@@ -97,24 +95,6 @@ const Layout: React.FC<unknown> = () => {
     setshowWidgets(false);
   };
 
-  const handleModal = useCallback(
-    (data: EventDataTypes) => {
-      setActiveModal(active => {
-        if ((!active || !active.name) && data.name) {
-          return data;
-        }
-        if (!data.name) {
-          return null;
-        }
-        if (activeModal && activeModal.name !== data.name) {
-          return data;
-        }
-        return active;
-      });
-    },
-    [activeModal],
-  );
-
   const wrapperRef = useRef(null);
 
   useClickAway(wrapperRef, () => {
@@ -127,7 +107,6 @@ const Layout: React.FC<unknown> = () => {
     const eventsSub = _uiEvents.current
       .pipe(
         filterEvents([
-          EventTypes.ModalRequest,
           EventTypes.ShowSidebar,
           EventTypes.HideSidebar,
           EventTypes.ShowSidebar,
@@ -137,9 +116,6 @@ const Layout: React.FC<unknown> = () => {
       .subscribe({
         next: (eventInfo: UIEventData) => {
           switch (eventInfo.event) {
-            case EventTypes.ModalRequest:
-              handleModal(eventInfo.data as EventDataTypes);
-              break;
             case EventTypes.ShowSidebar:
               handleSidebarShow();
               break;
@@ -165,7 +141,7 @@ const Layout: React.FC<unknown> = () => {
         eventsSub.unsubscribe();
       }
     };
-  }, [handleModal]);
+  }, []);
 
   const layoutStyle = `
       grid md:(grid-flow-col) min-h-screen
@@ -195,8 +171,6 @@ const Layout: React.FC<unknown> = () => {
     <Stack customStyle={`bg(white dark:black) min-h-screen ${widthStyle}`}>
       <Stack customStyle="h-full m-auto w-[95%] xl:w-full min-h-screen">
         <Stack customStyle={layoutStyle}>
-          <ScrollRestorer />
-
           <Stack customStyle={mobileLayoverStyle}>
             <Stack customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
@@ -253,7 +227,7 @@ const Layout: React.FC<unknown> = () => {
               )}
               <div id={layoutConfig.pluginSlotId} />
               <Stack customStyle="fixed bottom-0 mr-4 mb-4">
-                <Widget name={layoutConfig.snackbarNotifSlotId} loadingIndicator={<Spinner />} />
+                <Extension name={layoutConfig.snackbarNotifSlotId} />
               </Stack>
             </Stack>
           </Stack>
@@ -269,16 +243,6 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
           </Stack>
         </Stack>
-
-        {activeModal && (
-          <Extension name={activeModal.name} uiEvents={uiEvents} customStyle="relative z-999" />
-        )}
-
-        <Extension
-          name={layoutConfig.modalSlotId}
-          uiEvents={uiEvents}
-          customStyle="relative z-999"
-        />
       </Stack>
     </Stack>
   );
