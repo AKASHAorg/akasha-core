@@ -4,7 +4,7 @@ import { ReflectionEditor } from './reflection-editor';
 import { IDraftStorage } from './utils';
 
 export type InlineEditorExtensionData = {
-  action: 'reply' | 'edit' | 'post' | 'repost';
+  action: 'reply' | 'edit' | 'reflect' | 'repost';
   itemId: string;
   itemType: EntityTypes;
 };
