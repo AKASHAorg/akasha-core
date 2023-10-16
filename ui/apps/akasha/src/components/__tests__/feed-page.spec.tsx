@@ -1,6 +1,5 @@
 import * as React from 'react';
 import FeedPage from '../feed-page/feed-page';
-import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import userEvent from '@testing-library/user-event';
 
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
@@ -21,7 +20,6 @@ const partialArgs = (...argsToMatch) =>
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
     extensionData={{
-      name: 'name',
       itemId: '01gf',
       itemType: EntityTypes.BEAM,
       action,
@@ -32,13 +30,13 @@ const MockedInlineEditor = ({ action }) => (
 describe('< FeedPage /> component', () => {
   const BaseComponent = () => (
     <AnalyticsProvider {...genAppProps()}>
-      <FeedPage showLoginModal={jest.fn()} />
+      <FeedPage showModal={jest.fn()} />
     </AnalyticsProvider>
   );
 
   beforeAll(() => {
     jest
-      .spyOn(Extension, 'default')
+      .fn()
       .mockReturnValue(
         <InlineEditor
           draftStorage={localStorageMock}

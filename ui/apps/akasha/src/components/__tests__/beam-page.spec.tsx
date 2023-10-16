@@ -14,7 +14,6 @@ const partialArgs = (...argsToMatch) =>
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
     extensionData={{
-      name: 'name',
       itemId: '01gf',
       itemType: EntityTypes.BEAM,
       action,
