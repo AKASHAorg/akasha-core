@@ -16,7 +16,11 @@ import { Subject, Subscription } from 'rxjs';
 import { hidePageSplash, showPageSplash } from './splash-screen';
 import * as singleSpa from 'single-spa';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
-import { getUserInstalledExtensions, getWorldDefaultExtensions } from './extensions';
+import {
+  getExtensionsData,
+  getUserInstalledExtensions,
+  getWorldDefaultExtensions,
+} from './extensions';
 import getSDK from '@akashaorg/awf-sdk';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 import Logging from '@akashaorg/awf-sdk/src/logging/index';
@@ -90,30 +94,31 @@ export default class AppLoader {
       console.error('layout not found. Cannot continue.');
       return;
     }
-    await this.importModules(this.manifests);
-    await this.loadPlugins(this.extensionModules);
+    this.extensionModules = await this.importModules(this.manifests);
+    this.plugins = await this.loadPlugins(this.extensionModules);
     await this.loadLayoutConfig();
     await this.initializeExtensions(this.extensionModules);
-    this.registerExtensions(this.extensionModules);
+    this.extensionConfigs = this.registerExtensions(this.extensionModules);
     this.renderLayout();
     this.listenGlobalChannel().catch();
   };
   onBeforeFirstMount = () => hidePageSplash();
   onFirstMount = () => {
-    this.singleSpaRegister();
+    this.singleSpaRegister(this.extensionConfigs);
   };
   importModules = async (manifests: IntegrationReleaseInfoFragmentFragment[]) => {
     if (!this.manifests.length) return;
+    const modules = new Map();
     for (const manifest of manifests) {
-      if (this.extensionModules.has(manifest.name)) {
-        return;
+      if (this.extensionModules.has(manifest.name) || modules.has(manifest.name)) {
+        continue;
       }
       if (!manifest.enabled) {
-        return;
+        continue;
       }
       if (manifest.sources.length === 0) {
         this.logger.warn(`No source path was found for integration ${manifest.name}. Skipping!`);
-        return;
+        continue;
       }
 
       if (manifest.sources.length > 1) {
@@ -123,8 +128,9 @@ export default class AppLoader {
       }
       const source = manifest.sources[0];
       const module = await System.import<SystemModuleType>(source);
-      this.extensionModules.set(manifest.name, module);
+      modules.set(manifest.name, module);
     }
+    return modules;
   };
   listenGlobalChannel = async () => {
     // listen for user login event and fetch the extensions
@@ -176,24 +182,34 @@ export default class AppLoader {
   loadUserExtensions = async () => {
     // @TODO: implement when ready
     this.userExtensions = await getUserInstalledExtensions();
+    const manifests = await getExtensionsData(
+      this.userExtensions.map(e => e.name),
+      this.worldConfig,
+    );
+    const modules = await this.importModules(manifests);
+    const plugins = await this.loadPlugins(modules);
+    await this.initializeExtensions(modules);
+    const extensionConfigs = this.registerExtensions(modules);
+    this.singleSpaRegister(extensionConfigs);
   };
   loadPlugins = async (extensionModules: Map<string, SystemModuleType>) => {
+    const plugins = {};
     for (const [name, module] of extensionModules) {
       if (this.extensionConfigs.has(name)) {
-        return;
+        continue;
       }
       if (module.getPlugin && typeof module.getPlugin === 'function') {
         // load plugin;
-        const plugin = await module.getPlugin({
+        plugins[name] = await module.getPlugin({
           worldConfig: this.worldConfig,
           logger: this.parentLogger.create(`${name}_plugin`),
           uiEvents: this.uiEvents,
           encodeAppName: name => name,
           decodeAppName: (name: string) => decodeURIComponent(name),
         });
-        this.plugins = { ...this.plugins, ...{ [name]: plugin } };
       }
     }
+    return plugins;
   };
   initializeExtensions = async (extensionModules: Map<string, SystemModuleType>) => {
     for (const [name, module] of extensionModules) {
@@ -225,9 +241,10 @@ export default class AppLoader {
     }
   };
   registerExtensions = (extensionModules: Map<string, SystemModuleType>) => {
+    const extensionConfigs = new Map();
     for (const [name, mod] of extensionModules) {
       if (name === this.worldConfig.layout) continue;
-      if (this.extensionConfigs.has(name)) continue;
+      if (this.extensionConfigs.has(name) || extensionConfigs.has(name)) continue;
       if (mod.register && typeof mod.register === 'function') {
         const config = mod.register({
           layoutConfig: this.layoutConfig.extensionsMap,
@@ -235,7 +252,7 @@ export default class AppLoader {
           logger: this.parentLogger.create(name),
           uiEvents: this.uiEvents,
         });
-        this.extensionConfigs.set(name, { ...config, name });
+        extensionConfigs.set(name, { ...config, name });
         // fire register events
         this.uiEvents.next({
           event: EventTypes.RegisterIntegration,
@@ -272,6 +289,7 @@ export default class AppLoader {
         }
       }
     }
+    return extensionConfigs;
   };
   renderLayout = () => {
     const layoutConf = this.layoutConfig;
@@ -298,8 +316,8 @@ export default class AppLoader {
       },
     });
   };
-  singleSpaRegister = () => {
-    for (const [name, conf] of this.extensionConfigs) {
+  singleSpaRegister = (extensionConfigs: Map<string, IAppConfig & { name: string }>) => {
+    for (const [name, conf] of extensionConfigs) {
       if (singleSpa.getAppNames().includes(name)) continue;
       if (!conf.loadingFn || typeof conf.loadingFn !== 'function') continue;
 
