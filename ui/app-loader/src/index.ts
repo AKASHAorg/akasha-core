@@ -77,6 +77,7 @@ export default class AppLoader {
       showPageSplash();
       window.addEventListener('single-spa:before-first-mount', this.onBeforeFirstMount);
       window.addEventListener('single-spa:first-mount', this.onFirstMount);
+      window.addEventListener('single-spa:routing-event', this.onRouting);
     }
 
     singleSpa.start({
@@ -105,6 +106,19 @@ export default class AppLoader {
   onBeforeFirstMount = () => hidePageSplash();
   onFirstMount = () => {
     this.singleSpaRegister(this.extensionConfigs);
+  };
+  onRouting = (ev: CustomEvent) => {
+    const actuallyMountedApps = ev.detail.appsByNewStatus.MOUNTED.filter(
+      (name: string) => name !== this.worldConfig.layout,
+    );
+    if ((!actuallyMountedApps || !actuallyMountedApps.length) && location.pathname === '/') {
+      const homepageAppName = this.worldConfig.homepageApp;
+      if (!homepageAppName) {
+        this.logger.error(`There is no homepageApp defined in the world config! Cannot redirect!`);
+        return;
+      }
+      singleSpa.navigateToUrl(this.worldConfig.homepageApp);
+    }
   };
   importModules = async (manifests: IntegrationReleaseInfoFragmentFragment[]) => {
     if (!this.manifests.length) return;
