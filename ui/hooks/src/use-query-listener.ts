@@ -1,5 +1,6 @@
 import * as React from 'react';
 import uniqBy from 'lodash/uniqBy';
+import isEqual from 'lodash/isEqual';
 import {
   MutationKey,
   QueryKey,
@@ -55,10 +56,7 @@ export const useMutationsListener = <TVars, TData>(mutationKey: MutationKey) => 
   const mutationCache = queryClient.getMutationCache();
   React.useEffect(() => {
     const unsubscribe = mutationCache.subscribe(event => {
-      if (
-        event.mutation &&
-        JSON.stringify(event.mutation.options.mutationKey) === JSON.stringify(mutationKey)
-      ) {
+      if (event.mutation && isEqual(event.mutation.options.mutationKey, mutationKey)) {
         if (event.mutation.state.status === 'loading') {
           setMutations(mutations => uniqBy([event.mutation, ...mutations], 'mutationId'));
           return;

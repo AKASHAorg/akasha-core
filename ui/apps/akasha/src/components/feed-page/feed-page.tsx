@@ -55,9 +55,10 @@ const FeedPage: React.FC<FeedPageProps> = props => {
 
   const [dismissed, dismissCard] = useDismissedCard(dismissedCardId);
 
-  const { mutations: pendingPostStates } = useMutationsListener<IPublishData, unknown>([
-    'CREATE_POST_MUTATION_KEY',
-  ]);
+  const { mutations: pendingPostStates } = useMutationsListener<
+    IPublishData,
+    unknown //@TODO remove the mutations listener altogether or use proper type
+  >(['CREATE_POST_MUTATION_KEY']);
 
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {

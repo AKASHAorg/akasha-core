@@ -1,14 +1,13 @@
 import React from 'react';
-import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
-import EditorPlaceholderLoading from '@akashaorg/design-system-components/lib/components/EditorPlaceholder/EditorPlaceholderLoading';
 import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
+import BeamCardLoading from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card-loading';
 import { useParams } from 'react-router-dom';
 import {
   useGetBeamByIdQuery,
@@ -58,46 +57,35 @@ const BeamPage: React.FC = () => {
       />
     );
 
+  if (beamReq.status === 'loading') return <BeamCardLoading />;
+
   return (
     <Card padding="p-0">
       <Stack spacing="gap-y-2">
-        {beamReq.status === 'loading' && (
-          <>
-            <EntryCardLoading noWrapperCard={true} />
-            <Divider />
-            <Stack padding="px-2">
-              <EditorPlaceholderLoading />
-            </Stack>
-          </>
-        )}
-        {beamReq.status === 'success' && (
-          <>
-            <BeamCard entryData={entryData} noWrapperCard={true} contentClickable={false} />
-            <Divider />
-            <Stack padding="px-2">
-              {!loggedProfileData?.did?.id && (
-                <EditorPlaceholder
-                  onClick={showLoginModal}
-                  profileId={null}
-                  buttonLabel={t('Reflect')}
-                  placeholderLabel={t('Share your thoughts')}
-                />
-              )}
-              {loggedProfileData?.did?.id && entryData?.active && (
-                <Extension
-                  name={`inline-editor_reflect_${entryData?.id}`}
-                  uiEvents={uiEvents}
-                  data={{
-                    itemId: beamId,
-                    itemType: EntityTypes.REFLECT,
-                    action: 'reflect',
-                  }}
-                />
-              )}
-            </Stack>
-            <PendingReflect beamId={beamId} loggedProfileData={loggedProfileData} />
-          </>
-        )}
+        <BeamCard entryData={entryData} noWrapperCard={true} contentClickable={false} />
+        <Divider />
+        <Stack padding="px-2">
+          {!loggedProfileData?.did?.id && (
+            <EditorPlaceholder
+              onClick={showLoginModal}
+              profileId={null}
+              buttonLabel={t('Reflect')}
+              placeholderLabel={t('Share your thoughts')}
+            />
+          )}
+          {loggedProfileData?.did?.id && entryData?.active && (
+            <Extension
+              name={`inline-editor_reflect_${entryData?.id}`}
+              uiEvents={uiEvents}
+              data={{
+                itemId: beamId,
+                itemType: EntityTypes.REFLECT,
+                action: 'reflect',
+              }}
+            />
+          )}
+        </Stack>
+        <PendingReflect beamId={beamId} loggedProfileData={loggedProfileData} />
         <FeedWidget
           queryKey="akasha-beam-page-query"
           itemType={EntityTypes.REFLECT}
