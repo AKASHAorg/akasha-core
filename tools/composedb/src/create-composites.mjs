@@ -182,7 +182,7 @@ const mergeComposites = async () => {
     await writeEncodedCompositeRuntime(
       ceramic,
       path.resolve(__dirname, '../lib/runtime-definition.json'),
-      path.resolve(__dirname, '../lib/runtime-definition.js')
+      path.resolve(__dirname, '../lib/runtime-definition.ts')
     )
     // await writeGraphQLSchema(
     //   path.resolve(__dirname, '../lib/runtime-definition.json'),

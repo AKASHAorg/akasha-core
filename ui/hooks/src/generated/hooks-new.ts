@@ -138,6 +138,7 @@ export const ReflectFragmentDoc = /*#__PURE__*/ `
   }
   isReply
   reflection
+  createdAt
   beam {
     id
     author {
@@ -607,10 +608,17 @@ useUpdateContentBlockMutation.getKey = () => ['UpdateContentBlock'];
 
 useUpdateContentBlockMutation.fetcher = (variables: Types.UpdateContentBlockMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables, options);
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
-    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput) {
   node(id: $id) {
     ... on AkashaBeam {
-      reflections(after: $after, before: $before, first: $first, last: $last) {
+      reflections(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        sorting: $sorting
+        filters: $filters
+      ) {
         edges {
           node {
             ...ReflectFragment
@@ -667,10 +675,17 @@ useInfiniteGetReflectionsFromBeamQuery.getKey = (variables: Types.GetReflections
 
 useGetReflectionsFromBeamQuery.fetcher = (variables: Types.GetReflectionsFromBeamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables, options);
 export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ `
-    query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaReflectFiltersInput, $sorting: AkashaReflectSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
-      akashaReflectList(after: $after, before: $before, first: $first, last: $last) {
+      akashaReflectList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
         edges {
           node {
             ...ReflectFragment
@@ -734,7 +749,7 @@ export const GetReflectReflectionsDocument = /*#__PURE__*/ `
     before: $before
     first: $first
     last: $last
-    filters: {where: {reflection: {equalTo: $id}}}
+    filters: {and: [{where: {reflection: {equalTo: $id}}}, {where: {active: {equalTo: true}}}]}
     sorting: $sorting
   ) {
     edges {
