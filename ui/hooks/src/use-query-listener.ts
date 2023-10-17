@@ -49,26 +49,24 @@ export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
  * const variables = sampleMutations[0]?.state?.variables;
  * ```
  */
-export const useMutationsListener = <TVars>(mutationKey: MutationKey) => {
-  const [mutations, setMutations] = React.useState<Mutation<unknown, unknown, TVars>[]>([]);
+export const useMutationsListener = <TVars, TData>(mutationKey: MutationKey) => {
+  const [mutations, setMutations] = React.useState<Mutation<TData, unknown, TVars, unknown>[]>([]);
   const queryClient = useQueryClient();
   const mutationCache = queryClient.getMutationCache();
   React.useEffect(() => {
     const unsubscribe = mutationCache.subscribe(event => {
-      if (event.mutation && event.mutation.options.mutationKey === mutationKey) {
+      if (
+        event.mutation &&
+        JSON.stringify(event.mutation.options.mutationKey) === JSON.stringify(mutationKey)
+      ) {
         if (event.mutation.state.status === 'loading') {
-          setMutations(mutations =>
-            uniqBy(
-              [event as unknown as Mutation<unknown, unknown, TVars>, ...mutations],
-              'mutationId',
-            ),
-          );
+          setMutations(mutations => uniqBy([event.mutation, ...mutations], 'mutationId'));
           return;
         }
         setMutations(mutations =>
           mutations.map(_mutation => {
             if (_mutation.mutationId === event.mutation.mutationId) {
-              return event.mutation as unknown as Mutation<unknown, unknown, TVars>;
+              return event.mutation;
             }
             return _mutation;
           }),

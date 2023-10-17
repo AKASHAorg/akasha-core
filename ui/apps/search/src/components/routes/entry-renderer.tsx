@@ -21,7 +21,6 @@ export type EntryCardRendererProps = {
   loggedProfileData?: Profile;
   navigateTo?: (args: NavigateToParams) => void;
   onContentClick: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  onRebeam: (withComment: boolean, entryId: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (profileId: string) => void;
   onTagClick: (name: string) => void;
@@ -40,7 +39,6 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
     itemType,
     style,
     contentClickable,
-    onRebeam,
     navigateTo,
     onMentionClick,
     onTagClick,
@@ -131,12 +129,6 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
         itemId,
         itemType: itemType as unknown as EntityTypes,
       });
-  };
-
-  const handleRebeam = () => {
-    if (onRebeam) {
-      onRebeam(false, id);
-    }
   };
 
   const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REFLECT, [itemType]);

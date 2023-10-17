@@ -52,17 +52,6 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     });
   };
 
-  const handleRebeam = (withComment: boolean, beamId: string) => {
-    if (!loggedProfileData?.did.id) {
-      navigateToModal({ name: 'login' });
-    } else {
-      getRoutingPlugin().navigateTo?.({
-        appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: () => `/feed?repost=${beamId}`,
-      });
-    }
-  };
-
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
@@ -82,7 +71,6 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
           onEntryFlag={handleEntryFlag}
           onEntryRemove={handleEntryRemove}
           itemSpacing={8}
-          onRebeam={handleRebeam}
           onNavigate={useEntryNavigation(getRoutingPlugin()?.routing?.navigateTo)}
           newItemsPublishedLabel={t('New Beams published recently')}
         />

@@ -13,7 +13,7 @@ import { PendingReflect } from '../item-page/pending-reflect';
 
 describe('< PendingReflect /> component', () => {
   const BaseComponent = (
-    <PendingReflect postId="oxfg" loggedProfileData={genUser()} commentIds={[]} />
+    <PendingReflect beamId="oxfg" loggedProfileData={genUser()} reflectIds={[]} />
   );
 
   beforeAll(() => {

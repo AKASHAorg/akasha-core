@@ -120,8 +120,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               }
               avatarImage={authorProfile.status === 'error' ? null : authorProfile.data?.avatar}
               href={`${profileAnchorLink}/${entryData.author.id}`}
-              onClick={event => {
-                event.preventDefault();
+              onClick={() => {
                 if (onAvatarClick) onAvatarClick(entryData.author.id);
               }}
               ref={profileRef}

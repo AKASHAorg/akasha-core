@@ -1,15 +1,9 @@
 import React from 'react';
 import ReflectFeed from './reflect-feed';
 import { I18nextProvider } from 'react-i18next';
-import {
-  EntityTypes,
-  Profile,
-  IContentClickDetails,
-  ModalNavigationOptions,
-} from '@akashaorg/typings/lib/ui';
+import { EntityTypes, Profile } from '@akashaorg/typings/lib/ui';
 import BeamFeed, { BeamFeedProps } from './beam-feed';
 import { ScrollStateDBWrapper } from '../utils/scroll-state-db';
-import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 /**
@@ -31,7 +25,6 @@ export type FeedWidgetCommonProps = {
   itemSpacing: BeamFeedProps['itemSpacing'];
   onNavigate: BeamFeedProps['onNavigate'];
   contentClickable?: boolean;
-  onRebeam?: BeamFeedProps['onRebeam'];
   accentBorderTop?: boolean;
   trackEvent?: BeamFeedProps['trackEvent'];
   scrollerOptions?: { overscan: number };
@@ -49,13 +42,7 @@ const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
   return (
     <I18nextProvider i18n={i18n}>
       {props.itemType === EntityTypes.BEAM && (
-        <BeamFeed
-          {...props}
-          i18n={i18n}
-          modalSlotId={layoutConfig.modalSlotId}
-          locale={i18n.languages[0].toLowerCase() as ILocale}
-          db={db}
-        />
+        <BeamFeed {...props} i18n={i18n} modalSlotId={layoutConfig.modalSlotId} db={db} />
       )}
       {props.itemType === EntityTypes.REFLECT && (
         <ReflectFeed
@@ -63,7 +50,6 @@ const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
           beamId={props.beamId}
           i18n={i18n}
           modalSlotId={layoutConfig.modalSlotId}
-          locale={i18n.languages[0].toLowerCase() as ILocale}
           db={db}
         />
       )}

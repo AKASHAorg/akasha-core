@@ -72,17 +72,6 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
-  const handleRebeam = (withComment: boolean, beamId: string) => {
-    if (!loggedProfileData?.did.id) {
-      navigateToModal({ name: 'login' });
-    } else {
-      getRoutingPlugin().navigateTo?.({
-        appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: () => `/feed?repost=${beamId}`,
-      });
-    }
-  };
-
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
@@ -116,7 +105,6 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
         onEntryRemove={handleEntryRemove}
         onEntryFlag={handleEntryFlag}
         itemSpacing={8}
-        onRebeam={handleRebeam}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
         newItemsPublishedLabel={t('New Beams published recently')}
       />
