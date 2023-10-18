@@ -119,6 +119,7 @@ export const ReflectFragmentDoc = /*#__PURE__*/ gql`
   }
   isReply
   reflection
+  createdAt
   beam {
     id
     author {
@@ -350,10 +351,17 @@ export const UpdateContentBlockDocument = /*#__PURE__*/ gql`
 }
     ${ContentBlockFragmentDoc}`;
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
-    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput) {
   node(id: $id) {
     ... on AkashaBeam {
-      reflections(after: $after, before: $before, first: $first, last: $last) {
+      reflections(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        sorting: $sorting
+        filters: $filters
+      ) {
         edges {
           node {
             ...ReflectFragment
@@ -372,10 +380,17 @@ export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
 }
     ${ReflectFragmentDoc}`;
 export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ gql`
-    query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
+    query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaReflectFiltersInput, $sorting: AkashaReflectSortingInput) {
   node(id: $id) {
     ... on CeramicAccount {
-      akashaReflectList(after: $after, before: $before, first: $first, last: $last) {
+      akashaReflectList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
         edges {
           node {
             ...ReflectFragment
@@ -401,7 +416,7 @@ export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
     before: $before
     first: $first
     last: $last
-    filters: {where: {reflection: {equalTo: $id}}}
+    filters: {and: [{where: {reflection: {equalTo: $id}}}, {where: {active: {equalTo: true}}}]}
     sorting: $sorting
   ) {
     edges {

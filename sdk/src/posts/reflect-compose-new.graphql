@@ -13,6 +13,7 @@ fragment ReflectFragment on AkashaReflect{
   }
   isReply
   reflection
+  createdAt
   beam {
     id
     author{
@@ -23,10 +24,10 @@ fragment ReflectFragment on AkashaReflect{
   nsfw
 }
 
-query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput ){
   node(id: $id){
     ... on AkashaBeam{
-      reflections(after: $after, before: $before, first: $first, last: $last) {
+      reflections(after: $after, before: $before, first: $first, last: $last, sorting: $sorting, filters: $filters) {
         edges{
           node{
             ...ReflectFragment
@@ -44,10 +45,10 @@ query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: 
   }
 }
 
-query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaReflectFiltersInput, $sorting: AkashaReflectSortingInput){
   node(id: $id){
     ... on CeramicAccount{
-      akashaReflectList(after: $after, before: $before, first: $first, last: $last){
+      akashaReflectList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting: $sorting){
         edges{
           node{
             ...ReflectFragment
@@ -69,7 +70,7 @@ query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $firs
 # should be CeramicStreamID instead of String for $id
 #
 query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput){
-  akashaReflectIndex(after: $after, before: $before, first: $first, last: $last, filters: {where: {reflection: {equalTo: $id}}}, sorting: $sorting){
+  akashaReflectIndex(after: $after, before: $before, first: $first, last: $last, filters: {and: [{where: {reflection: {equalTo: $id}}}, {where: {active: {equalTo: true}}}]}, sorting: $sorting){
     edges{
       node{
           ...ReflectFragment
