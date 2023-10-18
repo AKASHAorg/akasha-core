@@ -1,10 +1,7 @@
-import { ReplaySubject } from 'rxjs';
-import { IconType, RootComponentProps, RootExtensionProps } from './index';
-
+import { IconType, RootComponentProps } from './index';
 import { UIEventData } from './ui-events';
-import { Extensions, IAppConfig } from './apps';
+import { Extensions } from './apps';
 import { PluginConf } from './plugins';
-import { GlobalEventBusData } from '../sdk';
 import { IntegrationReleaseInfoFragmentFragment } from '../sdk/graphql-operation-types';
 
 export type ActivityFn = (
@@ -22,18 +19,6 @@ export interface IntegrationRegistrationOptions {
   extensionData?: UIEventData['data'];
   plugins?: PluginConf;
   logger: unknown;
-}
-// @TODO: remove
-export interface ExtensionMatcherFn<G = ReplaySubject<GlobalEventBusData>> {
-  (
-    uiEvents: RootComponentProps['uiEvents'],
-    globalChannel: G,
-    extProps: Omit<
-      RootExtensionProps<any>,
-      'uiEvents' | 'extensionData' | 'domElement' | 'baseRouteName'
-    >,
-    parentConfig: IAppConfig & { name: string },
-  ): (extConfig: Record<string, ReturnType<ExtensionLoaderFn>>) => void;
 }
 
 export enum LogLevels {

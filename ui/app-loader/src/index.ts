@@ -1,7 +1,6 @@
 import {
   AppEvents,
   ContentBlockEvents,
-  EventTypes,
   ExtensionEvents,
   IAppConfig,
   INTEGRATION_TYPES,
