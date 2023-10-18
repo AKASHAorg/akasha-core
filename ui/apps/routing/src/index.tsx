@@ -2,16 +2,16 @@ import 'systemjs-webpack-interop/auto-public-path';
 import { BehaviorSubject } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import {
-  EventTypes,
   MenuItemAreaType,
   NavigateToParams,
   RootComponentProps,
-  IntegrationRegistrationOptions,
-  EventDataTypes,
+  RouteRegistrationEvents,
+  RoutesRegisterEvent,
 } from '@akashaorg/typings/lib/ui';
 import getSDK from '@akashaorg/awf-sdk';
 import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { RouteRepository } from './types';
+import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
 export class RoutingPlugin {
   static readonly routeRepository: RouteRepository = {
@@ -42,38 +42,36 @@ export class RoutingPlugin {
         }
       },
     });
-    uiEvents.subscribe({
-      next: (eventData: { event: EventTypes; data?: EventDataTypes }) => {
-        if (eventData.event && eventData.event === EventTypes.RegisterIntegration) {
-          // allow only one entry per app
-          if (RoutingPlugin.routeRepository.all[eventData.data.name]) {
-            return;
-          }
-          if (Array.isArray(eventData.data.menuItems)) {
-            eventData.data.menuItems.forEach(item => {
-              const appMenuItemData = {
-                ...item,
-                navRoutes: eventData.data.navRoutes,
-                name: eventData.data.name,
-              };
-              RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
-              item?.area?.forEach((area: MenuItemAreaType) =>
-                RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
-              );
-              RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
-            });
-          } else {
+    uiEvents.pipe(filterEvent(RouteRegistrationEvents.RegisterRoutes)).subscribe({
+      next: (eventData: RoutesRegisterEvent) => {
+        // allow only one entry per app
+        if (RoutingPlugin.routeRepository.all[eventData.data.name]) {
+          return;
+        }
+        if (Array.isArray(eventData.data.menuItems)) {
+          eventData.data.menuItems.forEach(item => {
             const appMenuItemData = {
-              ...eventData.data.menuItems,
+              ...item,
               navRoutes: eventData.data.navRoutes,
               name: eventData.data.name,
             };
             RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
-            eventData.data.menuItems?.area?.forEach((area: MenuItemAreaType) =>
+            item?.area?.forEach((area: MenuItemAreaType) =>
               RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
             );
             RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
-          }
+          });
+        } else {
+          const appMenuItemData = {
+            ...eventData.data.menuItems,
+            navRoutes: eventData.data.navRoutes,
+            name: eventData.data.name,
+          };
+          RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
+          eventData.data.menuItems?.area?.forEach((area: MenuItemAreaType) =>
+            RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
+          );
+          RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
         }
       },
     });
@@ -97,7 +95,7 @@ export class RoutingPlugin {
     });
   }
 
-  static navigateTo = ({ appName, getNavigationUrl }: NavigateToParams) => {
+  static navigateTo = ({ appName, getNavigationUrl }: NavigateToParams, replace?: boolean) => {
     const app = RoutingPlugin.routeRepository.all[appName];
     let url: string;
 
@@ -119,7 +117,12 @@ export class RoutingPlugin {
     if (targetUrl === location.pathname && !location.search) {
       return;
     }
-    return singleSpa.navigateToUrl(targetUrl);
+
+    if (replace) {
+      window.history.replaceState(null, null, targetUrl);
+    } else {
+      singleSpa.navigateToUrl(targetUrl);
+    }
   };
 
   static getUrlForApp = ({ appName, getNavigationUrl }: NavigateToParams) => {

@@ -12,12 +12,10 @@ export type ExtensionComponentProps<D> = {
   onError?: (extension: ExtensionInterface & { appName: string }, message?: string) => void;
   customStyle?: string;
   extensionData?: D;
-  isModal?: boolean;
 };
 
 export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
-  const { name, loadingIndicator, emptyIndicator, onError, customStyle, extensionData, isModal } =
-    props;
+  const { name, loadingIndicator, emptyIndicator, onError, customStyle, extensionData } = props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
   const extensionStore = React.useRef<ExtensionStorePlugin>(getExtensionsPlugin().extensionStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
@@ -58,27 +56,6 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
 
   const isLoading = extensions.length > parcelConfigs.length && !isEmpty;
 
-  if (isModal) {
-    return (
-      <div>
-        {parcelConfigs.length > 0 && (
-          <Parcel
-            key={parcelConfigs.at(0).extension.appName}
-            appendTo={document.body}
-            domElementGetter={() => document.body}
-            wrapWith="dialog"
-            config={{
-              ...parcelConfigs.at(0).config,
-              name: `${parcelConfigs.at(0).extension.app}#${name}`,
-            }}
-            {...getContext()}
-            extensionData={extensionData}
-            handleError={handleParcelError(parcelConfigs.at(0).extension)}
-          />
-        )}
-      </div>
-    );
-  }
   return (
     <Stack customStyle={customStyle} id={name}>
       {isLoading && loadingIndicator}

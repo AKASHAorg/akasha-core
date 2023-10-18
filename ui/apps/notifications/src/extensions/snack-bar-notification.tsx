@@ -4,19 +4,19 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import singleSpaReact from 'single-spa-react';
 import {
   withProviders,
-  filterEvents,
   hasOwn,
   useRootComponentProps,
   useListenForMutationEvents,
+  filterEvent,
 } from '@akashaorg/ui-awf-hooks';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   RootExtensionProps,
-  UIEventData,
-  EventTypes,
   MenuItemAreaType,
+  NotificationEvents,
+  NotificationEvent,
 } from '@akashaorg/typings/lib/ui';
 
 const SnackBarNotification = (_: RootExtensionProps) => {
@@ -92,12 +92,10 @@ const SnackBarNotification = (_: RootExtensionProps) => {
   }, [mutationEvents]);
 
   useEffect(() => {
-    const eventsSub = uiEvents.pipe(filterEvents([EventTypes.ShowNotification])).subscribe({
-      next: (eventInfo: UIEventData) => {
-        if (eventInfo.event === EventTypes.ShowNotification) {
-          if (eventInfo.data && hasOwn(eventInfo.data, 'message')) {
-            setMessage(eventInfo.data.message as string);
-          }
+    const eventsSub = uiEvents.pipe(filterEvent(NotificationEvents.ShowNotification)).subscribe({
+      next: (eventInfo: NotificationEvent) => {
+        if (eventInfo.data && hasOwn(eventInfo.data, 'message')) {
+          setMessage(eventInfo.data.message as string);
         }
       },
     });

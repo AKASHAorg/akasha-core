@@ -21,7 +21,7 @@ import {
   useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
 export type FollowingPageProps = {
-  showLoginModal: (modalData?: { redirectTo: { modal: ModalNavigationOptions } }) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 const FollowingPage: React.FC<FollowingPageProps> = props => {
   const { showLoginModal } = props;

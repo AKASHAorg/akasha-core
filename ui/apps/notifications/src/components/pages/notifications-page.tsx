@@ -13,7 +13,7 @@ import NotificationsCard from '@akashaorg/design-system-components/lib/component
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DropDownFilter from '@akashaorg/design-system-components/lib/components/DropDownFilter';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { EntityTypes, EventTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, NotificationEvents } from '@akashaorg/typings/lib/ui';
 import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
 
 export type Notification = {
@@ -160,7 +160,7 @@ const NotificationsPage: React.FC<unknown> = () => {
     setShowMenu(!showMenu);
 
     _uiEvents.current.next({
-      event: EventTypes.ShowNotification,
+      event: NotificationEvents.ShowNotification,
       data: {
         name: 'success',
         message: 'Marked all as read successfully.',

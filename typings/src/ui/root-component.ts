@@ -22,6 +22,7 @@ export interface RootComponentProps {
   singleSpa: typeof singleSpa;
   baseRouteName: string;
   navigateToModal: (opts: ModalNavigationOptions) => void;
+  getModalFromParams: (location: Location) => { name: string };
   getAppRoutes?: (appId: string) => IAppConfig['routes'];
   worldConfig: WorldConfig;
   parseQueryString: (queryString: string) => QueryStringType;

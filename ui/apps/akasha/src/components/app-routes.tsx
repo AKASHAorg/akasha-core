@@ -12,14 +12,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const { baseRouteName } = useRootComponentProps();
-  const [activeModal, setActiveModal] = React.useState<{
-    name: string;
-    modalData: Record<string, unknown>;
-  }>(null);
-
+  const { baseRouteName, navigateToModal } = useRootComponentProps();
+  const _navigateToModal = React.useRef(navigateToModal);
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
       return resp.viewer?.akashaProfile;
@@ -28,41 +25,40 @@ const AppRoutes: React.FC<unknown> = () => {
 
   const loggedProfileData = profileDataReq.data;
 
-  // const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-  //   navigateToModal({ name: 'login', redirectTo });
-  // };
-
-  const showModal = React.useCallback((name: string, modalData: Record<string, unknown>) => {
-    setActiveModal({
-      name,
-      modalData,
-    });
+  const showLoginModal = React.useCallback((redirectTo?: { modal: ModalNavigationOptions }) => {
+    _navigateToModal.current?.({ name: 'login', redirectTo });
   }, []);
 
   return (
     <Router basename={baseRouteName}>
       <Stack>
-        {activeModal && (
-          <Extension isModal={true} name={activeModal.name} extensionData={activeModal.modalData} />
-        )}
         <Routes>
           <Route
             path={routes[FEED]}
-            element={<FeedPage loggedProfileData={loggedProfileData} showModal={showModal} />}
+            element={
+              <FeedPage loggedProfileData={loggedProfileData} showLoginModal={showLoginModal} />
+            }
           />
           <Route
             path={routes[MY_FEED]}
-            element={<MyFeedPage loggedProfileData={loggedProfileData} showModal={showModal} />}
+            element={
+              <MyFeedPage loggedProfileData={loggedProfileData} showLoginModal={showLoginModal} />
+            }
           />
           <Route path={`${routes[BEAM]}/:beamId`} element={<BeamPage />} />
           <Route
             path={`${routes[TAGS]}/:tagName`}
-            element={<TagFeedPage loggedProfileData={loggedProfileData} showModal={showModal} />}
+            element={
+              <TagFeedPage loggedProfileData={loggedProfileData} showLoginModal={showLoginModal} />
+            }
           />
           <Route
             path={`${routes[PROFILE_FEED]}/:did`}
             element={
-              <ProfileFeedPage loggedProfileData={loggedProfileData} showModal={showModal} />
+              <ProfileFeedPage
+                loggedProfileData={loggedProfileData}
+                showLoginModal={showLoginModal}
+              />
             }
           />
           <Route path={`${routes[REFLECT]}/:reflectId`} element={<ReflectPage />} />

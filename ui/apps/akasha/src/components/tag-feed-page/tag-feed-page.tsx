@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { EntityTypes, Profile } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -14,14 +14,14 @@ import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hoo
 
 export type TagFeedPageProps = {
   loggedProfileData?: Profile;
-  showModal: (name: string, modalData?: Record<string, unknown>) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const TagFeedPage: React.FC<TagFeedPageProps> = props => {
-  const { loggedProfileData, showModal } = props;
+  const { loggedProfileData, showLoginModal } = props;
 
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
 
   // const { tagName } = useParams<{ tagName: string }>();
 
@@ -47,22 +47,17 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   //     reqPosts.fetchNextPage();
   //   }
   // }, [reqPosts]);
-  const showLoginModal = React.useCallback(
-    (modalData?: Record<string, unknown>) => {
-      showModal('login', modalData);
-    },
-    [showModal],
-  );
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
-      return showLoginModal({ redirectTo: { modal: { name: 'report-modal', itemId, itemType } } });
+      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    showModal('report-modal', { itemId, itemType });
+    navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleEntryRemove = (itemId: string) => {
-    showModal('entry-remove-confirmation', {
+    navigateToModal({
+      name: 'entry-remove-confirmation',
       itemId,
       itemType: EntityTypes.BEAM,
     });
@@ -92,18 +87,18 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
-      {getTagQuery.status === 'loading' && <Spinner />}
-      {getTagQuery.status === 'error' && (
+      {getTagQuery?.status === 'loading' && <Spinner />}
+      {getTagQuery?.status === 'error' && (
         <ErrorLoader
           type="script-error"
           title={t('Error loading tag data')}
-          details={getTagQuery.error?.message}
+          details={getTagQuery?.error?.message}
         />
       )}
-      {getTagQuery.status === 'success' && (
+      {getTagQuery?.status === 'success' && (
         <Stack customStyle="mb-2">
           <TagProfileCard
-            tag={getTagQuery.data}
+            tag={getTagQuery?.data}
             subscribedTags={tagSubscriptions}
             handleSubscribeTag={handleTagSubscribe}
             handleUnsubscribeTag={handleTagSubscribe}

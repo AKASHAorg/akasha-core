@@ -19,7 +19,6 @@ import menuRoute, { EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
 const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
   const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
-  const [loginModal, setLoginModal] = React.useState({ isActive: false, modalData: {} });
   const [showFeedback, setShowFeedback] = useShowFeedback(false);
   const navigateTo = getRoutingPlugin().navigateTo;
 
@@ -27,12 +26,11 @@ const AppRoutes: React.FC<unknown> = () => {
     setShowFeedback(true);
   };
 
-  const showLoginModal = (modalData: { redirectTo?: { modal: ModalNavigationOptions } }) => {
-    setLoginModal({
-      isActive: true,
-      modalData,
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    navigateToModal({
+      name: 'login',
+      redirectTo,
     });
-    // navigateToModal({ name: 'login', redirectTo });
   };
 
   const commonHeaderViewProps = {

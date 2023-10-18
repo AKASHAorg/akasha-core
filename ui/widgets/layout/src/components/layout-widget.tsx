@@ -15,11 +15,12 @@ import {
 import { useScrollbarWidth } from 'react-use/lib/useScrollbarWidth';
 import { useClickAway } from 'react-use';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
+import { ModalExtension } from '@akashaorg/ui-lib-extensions/lib/react/modal-extension';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 const Layout: React.FC<unknown> = () => {
@@ -133,9 +134,6 @@ const Layout: React.FC<unknown> = () => {
           }
         },
       });
-    _uiEvents.current.next({
-      event: EventTypes.LayoutReady,
-    });
     return () => {
       if (eventsSub) {
         eventsSub.unsubscribe();
@@ -243,6 +241,7 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
           </Stack>
         </Stack>
+        <ModalExtension />
       </Stack>
     </Stack>
   );

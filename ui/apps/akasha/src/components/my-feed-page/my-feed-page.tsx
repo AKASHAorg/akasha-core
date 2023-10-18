@@ -14,13 +14,13 @@ import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFee
 import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type MyFeedPageProps = {
-  showModal: (name: string, modalData?: Record<string, unknown>) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: Profile;
 };
 
 const MyFeedPage: React.FC<MyFeedPageProps> = props => {
-  const { loggedProfileData, showModal } = props;
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { loggedProfileData, showLoginModal } = props;
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
   const { t } = useTranslation('app-akasha-integration');
 
@@ -40,43 +40,32 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       },
     },
   );
-
+  const _navigateToModal = React.useRef(navigateToModal);
   const userHasSubscriptions = React.useMemo(() => {
     return loggedProfileData?.followers?.edges?.length > 0 || tagSubsReq.data?.topics?.length > 0;
   }, [loggedProfileData, tagSubsReq.data]);
 
-  const showLoginModal = React.useCallback(
-    (modalData?: Record<string, unknown>) => {
-      showModal('login', modalData);
-    },
-    [showModal],
-  );
-
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
       if (!isLoggedUser) {
-        return showLoginModal({
-          redirectTo: { modal: { name: 'report-modal', itemId, itemType } },
-        });
+        return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
       }
-      showModal('report-modal', { itemId, itemType });
+      _navigateToModal.current?.({ name: 'report-modal', itemId, itemType });
     },
-    [isLoggedUser, showLoginModal, showModal],
+    [isLoggedUser, showLoginModal],
   );
 
-  const handleEntryRemove = React.useCallback(
-    (itemId: string) => {
-      showModal('entry-remove-confirmation', {
-        itemType: EntityTypes.BEAM,
-        itemId,
-      });
-    },
-    [showModal],
-  );
+  const handleEntryRemove = React.useCallback((itemId: string) => {
+    _navigateToModal.current({
+      name: 'entry-remove-confirmation',
+      itemType: EntityTypes.BEAM,
+      itemId,
+    });
+  }, []);
 
   const handleCTAClick = () => {
     if (!isLoggedUser) {
-      return showLoginModal;
+      return showLoginModal();
     }
     navigateTo?.({
       appName: '@akashaorg/app-search',

@@ -8,6 +8,7 @@ import {
   IntegrationRegistrationOptions,
   PluginConf,
   RootComponentProps,
+  RouteRegistrationEvents,
   UIEventData,
   WidgetEvents,
   WorldConfig,
@@ -24,7 +25,13 @@ import {
 import getSDK from '@akashaorg/awf-sdk';
 import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 import Logging from '@akashaorg/awf-sdk/src/logging/index';
-import { checkActivityFn, getDomElement, parseQueryString } from './utils';
+import {
+  checkActivityFn,
+  getDomElement,
+  navigateToModal,
+  getModalFromParams,
+  parseQueryString,
+} from './utils';
 import EventBus from '@akashaorg/awf-sdk/src/common/event-bus';
 import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { IntegrationSchema } from '@akashaorg/awf-sdk/src/db/integrations.schema';
@@ -117,7 +124,9 @@ export default class AppLoader {
         this.logger.error(`There is no homepageApp defined in the world config! Cannot redirect!`);
         return;
       }
-      singleSpa.navigateToUrl(this.worldConfig.homepageApp);
+      if (isWindow) {
+        window.history.replaceState(null, null, `/${this.worldConfig.homepageApp}/`);
+      }
     }
   };
   importModules = async (manifests: IntegrationReleaseInfoFragmentFragment[]) => {
@@ -269,7 +278,7 @@ export default class AppLoader {
         extensionConfigs.set(name, { ...config, name });
         // fire register events
         this.uiEvents.next({
-          event: EventTypes.RegisterIntegration,
+          event: RouteRegistrationEvents.RegisterRoutes,
           data: {
             name,
             menuItems: config?.menuItems,
@@ -318,9 +327,8 @@ export default class AppLoader {
         baseRouteName: `/${this.worldConfig.layout}`,
         encodeAppName: (name: string) => name,
         decodeAppName: (name: string) => decodeURIComponent(name),
-        navigateToModal: () => {
-          //@TODO: this must be removed
-        },
+        navigateToModal: navigateToModal,
+        getModalFromParams: getModalFromParams,
         parseQueryString: parseQueryString,
         worldConfig: this.worldConfig,
         layoutConfig: layoutConf.extensionsMap,
@@ -344,9 +352,8 @@ export default class AppLoader {
         baseRouteName: `/${name}`,
         encodeAppName: name => name,
         decodeAppName: name => decodeURIComponent(name),
-        navigateToModal: () => {
-          // @TODO:
-        },
+        navigateToModal: navigateToModal,
+        getModalFromParams: getModalFromParams,
         parseQueryString: parseQueryString,
         worldConfig: this.worldConfig,
         layoutConfig: this.layoutConfig.extensionsMap,

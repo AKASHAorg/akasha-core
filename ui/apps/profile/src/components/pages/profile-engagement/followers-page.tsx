@@ -21,7 +21,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 export type FollowersPageProps = {
-  showLoginModal: (modalData?: { redirectTo: { modal: ModalNavigationOptions } }) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const FollowersPage: React.FC<FollowersPageProps> = props => {

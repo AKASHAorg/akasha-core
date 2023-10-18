@@ -19,20 +19,23 @@ const LoginModal = (props: RootExtensionProps) => {
   const [showModal, setShowModal] = React.useState(true);
 
   const handleModalClose = () => {
-    props.singleSpa.navigateToUrl(location.pathname);
+    window.history.replaceState(null, null, location.pathname);
     setShowModal(false);
   };
 
   const handleConnectClick = () => {
-    getRoutingPlugin().navigateTo?.({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: appRoutes => {
-        const redirectTo = new URLSearchParams(location.search).get('redirectTo');
-        return `${appRoutes.Connect}?${new URLSearchParams({
-          redirectTo: redirectTo || location.pathname,
-        }).toString()}`;
+    getRoutingPlugin().navigateTo?.(
+      {
+        appName: '@akashaorg/app-auth-ewa',
+        getNavigationUrl: appRoutes => {
+          const redirectTo = new URLSearchParams(location.search).get('redirectTo');
+          return `${appRoutes.Connect}?${new URLSearchParams({
+            redirectTo: redirectTo || location.pathname,
+          }).toString()}`;
+        },
       },
-    });
+      true,
+    );
     setShowModal(false);
   };
 

@@ -24,7 +24,7 @@ import {
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 export type ProfilePageProps = {
-  showLoginModal: (modalData?: { redirectTo: { modal: ModalNavigationOptions } }) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
@@ -123,9 +123,7 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
         totalFollowers={totalFollowers}
         totalFollowing={totalFollowing}
         navigateTo={navigateTo}
-        showLoginModal={() =>
-          showLoginModal({ redirectTo: { modal: { name: location.pathname } } })
-        }
+        showLoginModal={() => showLoginModal({ modal: { name: location.pathname } })}
       />
       {profileData?.links?.length > 0 && (
         <ProfileLinks

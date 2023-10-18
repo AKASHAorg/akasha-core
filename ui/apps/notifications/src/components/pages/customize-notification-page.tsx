@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventTypes, MenuItemAreaType } from '@akashaorg/typings/lib/ui';
+import { MenuItemAreaType, NotificationEvents } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, useSaveSettings, useGetSettings } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -191,11 +191,11 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       if (snoozed) {
         // emit snooze notification event so the topbar's notification icon can be updated
         _uiEvents.current.next({
-          event: EventTypes.SnoozeNotifications,
+          event: NotificationEvents.SnoozeNotifications,
         });
 
         _uiEvents.current.next({
-          event: EventTypes.ShowNotification,
+          event: NotificationEvents.ShowNotification,
           data: {
             name: 'success',
             message: 'You have snoozed your notifications successfully',
@@ -206,11 +206,11 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       if (!snoozed) {
         // emit unsnooze notification event so the topbar's notification icon can be updated
         _uiEvents.current.next({
-          event: EventTypes.UnsnoozeNotifications,
+          event: NotificationEvents.UnsnoozeNotifications,
         });
 
         _uiEvents.current.next({
-          event: EventTypes.ShowNotification,
+          event: NotificationEvents.ShowNotification,
           data: {
             name: 'success',
             message: 'You have unsnoozed your notifications successfully',
@@ -219,7 +219,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       }
 
       _uiEvents.current.next({
-        event: EventTypes.ShowNotification,
+        event: NotificationEvents.ShowNotification,
         data: {
           name: 'success',
           message: 'Notification settings updated successfully',
@@ -234,7 +234,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       setLoading(false);
 
       _uiEvents.current.next({
-        event: EventTypes.ShowNotification,
+        event: NotificationEvents.ShowNotification,
         data: {
           name: 'error',
           message: 'Something went wrong. Retry',

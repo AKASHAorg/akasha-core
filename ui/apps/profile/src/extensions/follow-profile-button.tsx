@@ -4,8 +4,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import singleSpaReact from 'single-spa-react';
 import FollowProfileButton from '../components/follow-profile-button';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
-import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import { ModalNavigationOptions, RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider } from 'react-i18next';
 
 type FollowProfileButtonExtensionData = {
@@ -16,13 +15,13 @@ type FollowProfileButtonExtensionData = {
 };
 
 const App = (props: RootExtensionProps<FollowProfileButtonExtensionData>) => {
-  const { profileID, isLoggedIn, isFollowing, followId } = props.extensionData;
-  const [loginModal, setLoginModal] = React.useState({ isActive: false, modalData: {} });
+  const { navigateToModal, extensionData } = props;
+  const { profileID, isLoggedIn, isFollowing, followId } = extensionData;
   const { getTranslationPlugin } = useRootComponentProps();
-  const showLoginModal = (modalData: Record<string, unknown>) => {
-    setLoginModal({
-      isActive: true,
-      modalData,
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    navigateToModal({
+      name: 'login',
+      redirectTo,
     });
   };
 

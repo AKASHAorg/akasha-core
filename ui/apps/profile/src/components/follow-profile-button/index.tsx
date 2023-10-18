@@ -18,7 +18,7 @@ export type FollowProfileButtonProps = {
   isFollowing: boolean;
   followId: string | null;
   iconOnly?: boolean;
-  showLoginModal: (data?: { redirectTo: { modal: ModalNavigationOptions } }) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {

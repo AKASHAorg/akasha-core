@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { EventTypes } from '@akashaorg/typings/lib/ui';
+import { ThemingEvents } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from './use-root-props';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
@@ -21,7 +21,7 @@ export const useTheme = () => {
       /*
        * Custom event used in main html file to update the theme in the <body> tag
        */
-      const ev = new CustomEvent(EventTypes.ThemeChange, {
+      const ev = new CustomEvent(ThemingEvents.ThemeChange, {
         detail: {
           theme: _theme,
         },
@@ -31,7 +31,7 @@ export const useTheme = () => {
        * Propagate the change to all apps and widgets
        */
       uiEvents.next({
-        event: EventTypes.ThemeChange,
+        event: ThemingEvents.ThemeChange,
         data: {
           name: _theme,
         },

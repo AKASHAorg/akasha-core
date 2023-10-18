@@ -17,7 +17,7 @@ import { hasOwn, useLoggedIn, useValidDid } from '@akashaorg/ui-awf-hooks';
 
 type ProfileHeaderViewProps = {
   handleFeedback: () => void;
-  showLoginModal: (data?: { redirectTo: { modal: ModalNavigationOptions } }) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (opts: ModalNavigationOptions) => void;
   navigateTo: (args: NavigateToParams) => void;
 };
@@ -48,9 +48,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const handleFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes, user: string) => () => {
       if (!isLoggedIn) {
-        return showLoginModal({
-          redirectTo: { modal: { name: 'report-modal', itemId, itemType, user } },
-        });
+        return showLoginModal({ modal: { name: 'report-modal', itemId, itemType, user } });
       }
       navigateToModal({ name: 'report-modal', itemId, itemType, user });
     },
