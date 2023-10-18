@@ -64,7 +64,7 @@ const BeamPage: React.FC = () => {
       <Stack spacing="gap-y-2">
         <BeamCard entryData={entryData} noWrapperCard={true} contentClickable={false} />
         <Divider />
-        <Stack padding="px-2">
+        <Stack padding="px-2 pb-2">
           {!loggedProfileData?.did?.id && (
             <EditorPlaceholder
               onClick={showLoginModal}
@@ -85,7 +85,9 @@ const BeamPage: React.FC = () => {
             />
           )}
         </Stack>
-        <PendingReflect beamId={beamId} loggedProfileData={loggedProfileData} />
+      </Stack>
+      <PendingReflect beamId={beamId} loggedProfileData={loggedProfileData} />
+      <Stack spacing="gap-y-2">
         <FeedWidget
           queryKey="akasha-beam-page-query"
           itemType={EntityTypes.REFLECT}
