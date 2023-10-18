@@ -1,6 +1,5 @@
 import { ReplaySubject } from 'rxjs';
-import { ParcelConfigObject } from 'single-spa';
-import { EventDataTypes, IconType, RootComponentProps, RootExtensionProps } from './index';
+import { IconType, RootComponentProps, RootExtensionProps } from './index';
 
 import { UIEventData } from './ui-events';
 import { Extensions, IAppConfig } from './apps';
@@ -36,26 +35,6 @@ export interface ExtensionMatcherFn<G = ReplaySubject<GlobalEventBusData>> {
     parentConfig: IAppConfig & { name: string },
   ): (extConfig: Record<string, ReturnType<ExtensionLoaderFn>>) => void;
 }
-
-/**
- * Extension loader function
- * must return a promise with a singleSpaLifecycle object
- */
-// @TODO: remove
-export type ExtensionLoaderFn = (
-  loadingFunction: () => Promise<
-    ParcelConfigObject<Omit<RootExtensionProps<any>, 'baseRouteName'>>
-  >,
-) => {
-  load: (props: Omit<RootExtensionProps<any>, 'baseRouteName'>, parentAppName: string) => void;
-  unmount: (event: { data?: EventDataTypes }, parentAppName: string) => Promise<void>;
-  update: (props: Omit<RootExtensionProps<any>, 'baseRouteName'>, parentAppName: string) => void;
-};
-// @TODO: remove
-export type ExtendsFn = (
-  matcher: ReturnType<ExtensionMatcherFn>,
-  extLoader: ExtensionLoaderFn,
-) => void;
 
 export enum LogLevels {
   FATAL = 'fatal',
