@@ -1,4 +1,6 @@
 import React from 'react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore-next-line
 import EditProfilePage from '../pages/edit-profile';
 
 import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -59,7 +61,7 @@ describe('< ProfileInfoPage />', () => {
   it('should have an enabled save button when name changes', async () => {
     const nameInput = screen.getByLabelText(/Name/i);
 
-    userEvent.clear(nameInput);
+    await userEvent.clear(nameInput);
     await userEvent.type(nameInput, 'Orion');
     await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled());
   });
@@ -67,7 +69,7 @@ describe('< ProfileInfoPage />', () => {
   it('should show error when name contains illegal characters', async () => {
     const nameInput = screen.getByLabelText(/Name/i);
 
-    userEvent.clear(nameInput);
+    await userEvent.clear(nameInput);
     await userEvent.type(nameInput, '&**$$');
     await waitFor(() =>
       expect(
@@ -79,7 +81,7 @@ describe('< ProfileInfoPage />', () => {
   it('should show error when name is less than 3 characters long', async () => {
     const nameInput = screen.getByLabelText(/Name/i);
 
-    userEvent.clear(nameInput);
+    await userEvent.clear(nameInput);
     await userEvent.type(nameInput, 'O');
     await waitFor(() =>
       expect(screen.getByText('Must be at least 3 characters')).toBeInTheDocument(),

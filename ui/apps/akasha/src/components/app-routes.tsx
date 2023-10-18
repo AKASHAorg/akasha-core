@@ -9,23 +9,25 @@ import InvitePage from './item-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
 import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, INVITE } from '../routes';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal } = useRootComponentProps();
-
+  const _navigateToModal = React.useRef(navigateToModal);
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
       return resp.viewer?.akashaProfile;
     },
   });
+
   const loggedProfileData = profileDataReq.data;
 
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
-  };
+  const showLoginModal = React.useCallback((redirectTo?: { modal: ModalNavigationOptions }) => {
+    _navigateToModal.current?.({ name: 'login', redirectTo });
+  }, []);
 
   return (
     <Router basename={baseRouteName}>

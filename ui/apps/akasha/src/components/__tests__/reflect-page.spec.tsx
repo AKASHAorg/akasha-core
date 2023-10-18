@@ -1,6 +1,5 @@
 import * as React from 'react';
 import ReflectPage from '../item-page/reflect-page';
-import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 
 import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
@@ -14,7 +13,6 @@ const partialArgs = (...argsToMatch) =>
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
     extensionData={{
-      name: 'name',
       itemId: '01gf',
       itemType: EntityTypes.REFLECT,
       action,
@@ -39,7 +37,7 @@ describe('< ReflectPage /> component', () => {
   });
   // @TODO fix after new hooks
   it.skip('should render reflect page', async () => {
-    const spiedExtension = jest.spyOn(Extension, 'default');
+    const spiedExtension = jest.fn();
 
     when(spiedExtension)
       .calledWith(

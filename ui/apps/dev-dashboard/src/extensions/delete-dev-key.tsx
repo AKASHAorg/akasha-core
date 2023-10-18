@@ -5,7 +5,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
@@ -13,15 +13,19 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import menuRoute, { DEV_KEYS } from '../routes';
 
-const DeleteDevKeyModal = (props: RootExtensionProps) => {
-  const { extensionData, plugins, singleSpa } = props;
+type DeleteDevKeyModalExtensionData = {
+  keyName: string;
+};
 
+const DeleteDevKeyModal = (props: RootExtensionProps<DeleteDevKeyModalExtensionData>) => {
+  const { extensionData, singleSpa } = props;
+  const { getRoutingPlugin } = useRootComponentProps();
   const [showModal, setShowModal] = useState(true);
 
   const { t } = useTranslation('app-dev-dashboard');
   const location = useLocation();
 
-  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const keyName = React.useMemo(() => {
     if (extensionData.hasOwnProperty('keyName') && typeof extensionData.keyName === 'string') {
@@ -89,21 +93,24 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
   );
 };
 
-const Wrapped = (props: RootExtensionProps) => (
-  <Router>
-    <React.Suspense fallback={<></>}>
-      <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
-        <DeleteDevKeyModal {...props} />
-      </I18nextProvider>
-    </React.Suspense>
-  </Router>
-);
+const Wrapped = (props: RootExtensionProps<DeleteDevKeyModalExtensionData>) => {
+  const { getTranslationPlugin } = useRootComponentProps();
+  return (
+    <Router>
+      <React.Suspense fallback={<></>}>
+        <I18nextProvider i18n={getTranslationPlugin().i18n}>
+          <DeleteDevKeyModal {...props} />
+        </I18nextProvider>
+      </React.Suspense>
+    </Router>
+  );
+};
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps<DeleteDevKeyModalExtensionData>) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }

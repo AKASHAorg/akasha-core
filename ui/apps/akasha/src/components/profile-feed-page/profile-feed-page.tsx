@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 
 import { hasOwn, useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import type { Profile, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import type { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
@@ -20,7 +20,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
 
   const { t } = useTranslation('app-profile');
   const { did } = useParams<{ did: string }>();
-  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
 
   const profileDataQuery = useGetProfileByDidQuery(
     { id: did },
@@ -54,7 +54,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
 
   const handleRebeam = (withComment: boolean, beamId: string) => {
     if (!loggedProfileData?.did.id) {
-      navigateToModal({ name: 'login' });
+      showLoginModal();
     } else {
       getRoutingPlugin().navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',

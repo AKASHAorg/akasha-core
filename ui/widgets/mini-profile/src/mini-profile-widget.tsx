@@ -6,10 +6,10 @@ import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateFollowMutation,
   useGetBeamByIdQuery,
@@ -21,7 +21,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
-  const { uiEvents, plugins } = props;
+  const { plugins } = props;
   const params: { beamId?: string } = useParams();
   const { t } = useTranslation('app-akasha-integration');
 
@@ -138,27 +138,30 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         followingLabel={t('Following')}
         followersLabel={t('Followers')}
         postsLabel={t('Posts')}
-        footerExt={<Extension name={`profile-mini-card-footer-extension`} uiEvents={uiEvents} />}
+        footerExt={<Extension name={`profile-mini-card-footer-extension`} />}
       />
     </Stack>
   );
 };
 
 // Router is required for the useRouteMatch hook to extract the postId from the url
-const Wrapped = (props: RootExtensionProps) => (
-  <Router>
-    <Routes>
-      <Route
-        path="@akashaorg/app-akasha-integration/post/:postId"
-        element={
-          <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
-            <ProfileCardWidget {...props} />
-          </I18nextProvider>
-        }
-      />
-    </Routes>
-  </Router>
-);
+const Wrapped = (props: RootExtensionProps) => {
+  const { getTranslationPlugin } = useRootComponentProps();
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="@akashaorg/app-akasha-integration/post/:postId"
+          element={
+            <I18nextProvider i18n={getTranslationPlugin().i18n}>
+              <ProfileCardWidget {...props} />
+            </I18nextProvider>
+          }
+        />
+      </Routes>
+    </Router>
+  );
+};
 
 const reactLifecycles = singleSpaReact({
   React,

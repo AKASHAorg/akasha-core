@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  ModalNavigationOptions,
   IPublishData,
   EntityTypes,
   AnalyticsCategories,
+  ModalNavigationOptions,
 } from '@akashaorg/typings/lib/ui';
 import {
   useMutationsListener,
@@ -13,7 +13,7 @@ import {
   useEntryNavigation,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -28,17 +28,12 @@ export type FeedPageProps = {
 
 const FeedPage: React.FC<FeedPageProps> = props => {
   const { loggedProfileData, showLoginModal } = props;
-
-  const { uiEvents, layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
-
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
-
   const [analyticsActions] = useAnalytics();
-
   //get the post id for repost from the search param
   const [postId, setPostId] = React.useState(new URLSearchParams(location.search).get('repost'));
-
+  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   React.useEffect(() => {
     const controller = new AbortController();
     /*The single-spa:before-routing-event listener is required for reposts happening from the feed page */
@@ -66,18 +61,19 @@ const FeedPage: React.FC<FeedPageProps> = props => {
       }
       navigateToModal({ name: 'report-modal', itemId, itemType });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [loggedProfileData?.did?.id],
+    [loggedProfileData?.did?.id, navigateToModal, showLoginModal],
   );
 
-  const handleEntryRemove = React.useCallback((itemId: string) => {
-    navigateToModal({
-      name: 'entry-remove-confirmation',
-      itemType: EntityTypes.BEAM,
-      itemId,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleEntryRemove = React.useCallback(
+    (itemId: string) => {
+      navigateToModal({
+        name: 'entry-remove-confirmation',
+        itemType: EntityTypes.BEAM,
+        itemId,
+      });
+    },
+    [navigateToModal],
+  );
 
   const handleWriteToUsLabelClick = () => {
     analyticsActions.trackEvent({
@@ -87,16 +83,19 @@ const FeedPage: React.FC<FeedPageProps> = props => {
     });
   };
 
-  const handleRebeam = (withComment: boolean, beamId: string) => {
-    if (!loggedProfileData?.did.id) {
-      navigateToModal({ name: 'login' });
-    } else {
-      getRoutingPlugin().navigateTo?.({
-        appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: () => `/feed?repost=${beamId}`,
-      });
-    }
-  };
+  const handleRebeam = React.useCallback(
+    (_: boolean, beamId: string) => {
+      if (!loggedProfileData?.did.id) {
+        showLoginModal();
+      } else {
+        navigateTo.current?.({
+          appName: '@akashaorg/app-akasha-integration',
+          getNavigationUrl: () => `/feed?repost=${beamId}`,
+        });
+      }
+    },
+    [loggedProfileData?.did.id, showLoginModal],
+  );
 
   return (
     <Stack fullWidth={true}>
@@ -109,15 +108,10 @@ const FeedPage: React.FC<FeedPageProps> = props => {
             {postId ? (
               <Extension
                 name={`inline-editor_repost_${postId}`}
-                uiEvents={uiEvents}
-                data={{ itemId: postId, itemType: EntityTypes.BEAM, action: 'repost' }}
+                extensionData={{ itemId: postId, itemType: EntityTypes.BEAM, action: 'rebeam' }}
               />
             ) : (
-              <Extension
-                name="beam-editor_feed_page"
-                uiEvents={uiEvents}
-                data={{ action: 'post' }}
-              />
+              <Extension name="beam-editor_feed_page" extensionData={{ action: 'beam' }} />
             )}
           </Stack>
         </>

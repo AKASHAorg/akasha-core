@@ -70,7 +70,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   contentBlocks: [
     {
-      // propertyType should match beam's content[i].propertyType
       propertyType: 'slate-block',
       icon: 'Bars3BottomLeftIcon',
       displayName: 'Slate text block',
@@ -79,19 +78,22 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     },
   ],
-  extends: (matcher, loader) => {
-    matcher({
-      'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
-      'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
-      'beam-editor_*': loader(() => import('./extensions/beam-editor')),
-      'inline-editor_*': loader(() => import('./extensions/inline-editor')),
-    });
-  },
   extensions: [
     {
       mountsIn: 'beam-editor_*',
-      activeWhen: (location, pathToActiveWhen) => true,
       loadingFn: () => import('./extensions/beam-editor'),
+    },
+    {
+      mountsIn: 'entry-remove-confirmation',
+      loadingFn: () => import('./extensions/entry-remove-modal'),
+    },
+    {
+      mountsIn: 'entry-card-edit-button_*',
+      loadingFn: () => import('./extensions/entry-edit-button'),
+    },
+    {
+      mountsIn: 'inline-editor_*',
+      loadingFn: () => import('./extensions/inline-editor'),
     },
   ],
 });

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, NotificationEvents, Profile } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -71,7 +71,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
           localStorage.removeItem('searchApp-showNsfwContent');
         }
         _uiEvents.current.next({
-          event: EventTypes.ShowNotification,
+          event: NotificationEvents.ShowNotification,
           data: {
             name: 'success',
             message: 'Search settings updated successfully',
@@ -88,7 +88,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       }, 3000);
     } catch (error) {
       _uiEvents.current.next({
-        event: EventTypes.ShowNotification,
+        event: NotificationEvents.ShowNotification,
         data: {
           name: 'error',
           message: 'Something went wrong. Retry',

@@ -7,8 +7,8 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 
 export type LatestProfilesProps = {
   // data
@@ -32,7 +32,6 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
     profiles,
     followList,
     isLoggedIn,
-    uiEvents,
     isLoadingProfiles,
     noProfilesLabel,
     loggedInProfileId,
@@ -86,8 +85,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                   {loggedInProfileId !== profile.did.id && (
                     <Extension
                       name={`follow_${profile.id}`}
-                      uiEvents={uiEvents}
-                      data={{
+                      extensionData={{
                         profileID: profile.id,
                         isFollowing: followList?.get(profile.id)?.isFollowing,
                         isLoggedIn,

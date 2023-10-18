@@ -3,7 +3,7 @@ import { RootExtensionProps, UIEventData } from '@akashaorg/typings/lib/ui';
 import { filterEvent } from '@akashaorg/ui-awf-hooks';
 
 export class BaseStore {
-  #uiEvents: RootExtensionProps['uiEvents'];
+  #uiEvents: RootExtensionProps<unknown>['uiEvents'];
   #uiEventsSub: Subscription;
   constructor(uiEvents) {
     this.#uiEvents = uiEvents;

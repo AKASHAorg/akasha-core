@@ -19,16 +19,12 @@ export type MyFeedPageProps = {
 };
 
 const MyFeedPage: React.FC<MyFeedPageProps> = props => {
-  const { loggedProfileData } = props;
-
-  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
-
+  const { loggedProfileData, showLoginModal } = props;
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
+  const { t } = useTranslation('app-akasha-integration');
 
   const isLoggedUser = React.useMemo(() => !!loggedProfileData?.did.id, [loggedProfileData]);
-
-  const { t } = useTranslation('app-akasha-integration');
 
   const postsReq = useInfiniteGetBeamsQuery('last', { last: 15 });
   const tagSubsReq = useGetInterestsByDidQuery(
@@ -44,11 +40,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       },
     },
   );
-
   const _navigateToModal = React.useRef(navigateToModal);
-
-  const showLoginModal = React.useRef(props.showLoginModal);
-
   const userHasSubscriptions = React.useMemo(() => {
     return loggedProfileData?.followers?.edges?.length > 0 || tagSubsReq.data?.topics?.length > 0;
   }, [loggedProfileData, tagSubsReq.data]);
@@ -56,11 +48,11 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
       if (!isLoggedUser) {
-        return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
+        return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
       }
-      _navigateToModal.current({ name: 'report-modal', itemId, itemType });
+      _navigateToModal.current?.({ name: 'report-modal', itemId, itemType });
     },
-    [isLoggedUser],
+    [isLoggedUser, showLoginModal],
   );
 
   const handleEntryRemove = React.useCallback((itemId: string) => {
@@ -73,7 +65,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
 
   const handleCTAClick = () => {
     if (!isLoggedUser) {
-      return showLoginModal.current();
+      return showLoginModal();
     }
     navigateTo?.({
       appName: '@akashaorg/app-search',
@@ -107,7 +99,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       <FeedWidget
         queryKey="akasha-my-feed-query"
         itemType={EntityTypes.BEAM}
-        onLoginModalOpen={showLoginModal.current}
+        onLoginModalOpen={showLoginModal}
         loggedProfileData={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
