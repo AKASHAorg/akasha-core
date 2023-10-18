@@ -7,7 +7,7 @@ export const getRemoteLatestExtensionInfos = async (extensions: { name: string }
 
 export const getExtensionsData = async (extNames: string[], worldConfig: WorldConfig) => {
   const remote = extNames.filter(extName => {
-    return !worldConfig.registryOverrides.find(ext => ext.name === extName);
+    return !worldConfig.registryOverrides.some(ext => ext.name === extName);
   });
   const local = extNames
     .filter(extensionName => {
