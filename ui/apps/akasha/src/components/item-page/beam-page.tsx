@@ -76,8 +76,7 @@ const BeamPage: React.FC = () => {
           {loggedProfileData?.did?.id && entryData?.active && (
             <Extension
               name={`inline-editor_reflect_${entryData?.id}`}
-              uiEvents={uiEvents}
-              data={{
+              extensionData={{
                 itemId: beamId,
                 itemType: EntityTypes.REFLECT,
                 action: 'reflect',
