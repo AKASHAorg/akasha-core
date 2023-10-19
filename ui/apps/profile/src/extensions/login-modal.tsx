@@ -10,28 +10,32 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 
 const LoginModal = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');
   const location = useLocation();
+  const { getRoutingPlugin } = useRootComponentProps();
   const [showModal, setShowModal] = React.useState(true);
 
   const handleModalClose = () => {
-    props.singleSpa.navigateToUrl(location.pathname);
+    window.history.replaceState(null, null, location.pathname);
     setShowModal(false);
   };
 
   const handleConnectClick = () => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: appRoutes => {
-        const redirectTo = new URLSearchParams(location.search).get('redirectTo');
-        return `${appRoutes.Connect}?${new URLSearchParams({
-          redirectTo: redirectTo || location.pathname,
-        }).toString()}`;
+    getRoutingPlugin().navigateTo?.(
+      {
+        appName: '@akashaorg/app-auth-ewa',
+        getNavigationUrl: appRoutes => {
+          const redirectTo = new URLSearchParams(location.search).get('redirectTo');
+          return `${appRoutes.Connect}?${new URLSearchParams({
+            redirectTo: redirectTo || location.pathname,
+          }).toString()}`;
+        },
       },
-    });
+      true,
+    );
     setShowModal(false);
   };
 
@@ -55,15 +59,16 @@ const LoginModal = (props: RootExtensionProps) => {
   );
 };
 
-const Wrapped = (props: RootExtensionProps) => (
-  <Router>
-    <React.Suspense fallback={<></>}>
-      <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
+const Wrapped = (props: RootExtensionProps) => {
+  const { getTranslationPlugin } = useRootComponentProps();
+  return (
+    <Router>
+      <I18nextProvider i18n={getTranslationPlugin().i18n}>
         <LoginModal {...props} />
       </I18nextProvider>
-    </React.Suspense>
-  </Router>
-);
+    </Router>
+  );
+};
 
 const reactLifecycles = singleSpaReact({
   React,

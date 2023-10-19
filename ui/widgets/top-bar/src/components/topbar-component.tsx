@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
-import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
+import { EventTypes, NotificationEvents, UIEventData } from '@akashaorg/typings/lib/ui';
 import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Topbar from './topbar';
 import {
@@ -43,10 +43,10 @@ const TopbarComponent: React.FC<unknown> = () => {
   React.useEffect(() => {
     const eventsSub = uiEventsRef.current.subscribe({
       next: (eventInfo: UIEventData) => {
-        if (eventInfo.event == EventTypes.SnoozeNotifications) {
+        if (eventInfo.event == NotificationEvents.SnoozeNotifications) {
           setSnoozeNotifications(true);
         }
-        if (eventInfo.event == EventTypes.UnsnoozeNotifications) {
+        if (eventInfo.event == NotificationEvents.UnsnoozeNotifications) {
           setSnoozeNotifications(false);
         }
       },
@@ -158,7 +158,7 @@ const TopbarComponent: React.FC<unknown> = () => {
   };
 
   const handleNotificationClick = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
+    getRoutingPlugin().navigateTo({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: routes => {
         return routes.myProfile;
@@ -167,7 +167,7 @@ const TopbarComponent: React.FC<unknown> = () => {
   };
 
   const handleLoginClick = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
+    getRoutingPlugin().navigateTo({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: () => '/',
     });

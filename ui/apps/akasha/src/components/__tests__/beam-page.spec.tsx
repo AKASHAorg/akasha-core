@@ -1,6 +1,5 @@
 import * as React from 'react';
 import BeamPage from '../item-page/beam-page';
-import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
 
 import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
@@ -14,7 +13,6 @@ const partialArgs = (...argsToMatch) =>
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
     extensionData={{
-      name: 'name',
       itemId: '01gf',
       itemType: EntityTypes.BEAM,
       action,
@@ -40,7 +38,7 @@ describe('< PostPage /> component', () => {
 
   // @TODO fix after replacing hooks
   it.skip('should render beam page', async () => {
-    const spiedExtension = jest.spyOn(Extension, 'default');
+    const spiedExtension = jest.fn();
 
     when(spiedExtension)
       .calledWith(

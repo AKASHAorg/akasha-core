@@ -1,26 +1,25 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { setupI18next } from './i18n';
-import { i18n } from 'i18next';
+import i18next, { i18n } from 'i18next';
 
 export class TranslationPlugin {
   static defaultPath = '/locales/{{lng}}/{{ns}}.json';
   static i18n: i18n;
-  static setupCalled = false;
 
-  static async initTranslation() {
+  static async initTranslation(): Promise<i18n> {
     const translationPath = await this.resolvePath();
     const sdk = getSDK();
     const logger = sdk.services.log.create('app-translation');
-    if (TranslationPlugin.i18n && TranslationPlugin.i18n.isInitialized) {
-      return TranslationPlugin.i18n;
+    await setupI18next({
+      logger,
+      translationPath: translationPath || '/locales/{{lng}}/{{ns}}.json',
+    });
+    if (i18next.isInitialized) {
+      return i18next;
     }
-    if (!TranslationPlugin.setupCalled) {
-      TranslationPlugin.setupCalled = true;
-      return setupI18next({
-        logger,
-        translationPath: translationPath || '/locales/{{lng}}/{{ns}}.json',
-      });
-    }
+    return new Promise(resolve => {
+      i18next.on('initialized', () => resolve(i18next));
+    });
   }
 
   static async resolvePath(): Promise<string> {
@@ -28,13 +27,6 @@ export class TranslationPlugin {
     return new Promise(resolve => resolve(this.defaultPath));
   }
 }
-
-export const register = async () => {
-  return {
-    loadingFn: () => Promise.resolve(),
-    name: 'app-translation',
-  };
-};
 
 export const getPlugin = async () => {
   TranslationPlugin.i18n = await TranslationPlugin.initTranslation();

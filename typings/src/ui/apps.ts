@@ -1,10 +1,25 @@
-import { ActivityFn, ExtendsFn } from './app-loader';
+import { ActivityFn } from './app-loader';
 import { IMenuItem } from './menu-items';
 import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
 import { ContentBlockExtensionInterface } from './editor-blocks';
 import { ExtensionInterface } from './extensions';
+import { IntegrationReleaseInfoFragmentFragment } from '../sdk/graphql-operation-types';
 
+export const enum AppEvents {
+  RegisterApplication = 'register-application',
+}
+
+export type AppRegisterEvent = {
+  event: AppEvents.RegisterApplication;
+  data: { config: IAppConfig; manifest: IntegrationReleaseInfoFragmentFragment };
+};
+export type InstalledAppStorePlugin = {
+  getInstalledApps: () => {
+    config: IAppConfig;
+    manifest: IntegrationReleaseInfoFragmentFragment;
+  }[];
+};
 export type Extensions = { [key: string]: string } & {
   /**
    * load modals inside this node
@@ -93,13 +108,6 @@ export interface IAppConfig {
    * Note that this is optional
    */
   extensionsMap?: Extensions;
-
-  /**
-   * Defines the component that will be mounted into an extension point
-   * @deprecated - use `extensions` property instead
-   */
-  extends?: ExtendsFn;
-
   /**
    * Keywords that defines this widget.
    * Useful for filtering through integrations

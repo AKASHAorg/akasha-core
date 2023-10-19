@@ -1,5 +1,6 @@
 let theme;
 
+// @warning: must be the same as ThemingEvents.ThemeChange enum in typings
 window.addEventListener('theme-change', ev => {
   if (ev.detail.theme === 'Dark-Theme') {
     return document.body.classList.add('dark', 'bg-black');

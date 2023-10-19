@@ -1,7 +1,8 @@
+import React from 'react';
 import type singleSpa from 'single-spa';
 import type { IAppConfig } from './apps';
 import type { Subject } from 'rxjs';
-import type { EventDataTypes, UIEventData } from './ui-events';
+import type { UIEventData } from './ui-events';
 import type { ModalNavigationOptions } from './navigation';
 import type i18n from 'i18next';
 import type { IPluginsMap } from './plugins';
@@ -10,7 +11,8 @@ import type { ILogger } from '../sdk/log';
 
 export interface RootComponentProps {
   activeWhen?: { path: string };
-  domElement: HTMLElement;
+  domElement?: HTMLElement;
+  domElementGetter?: () => HTMLElement;
   uiEvents: Subject<UIEventData>;
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
@@ -20,6 +22,7 @@ export interface RootComponentProps {
   singleSpa: typeof singleSpa;
   baseRouteName: string;
   navigateToModal: (opts: ModalNavigationOptions) => void;
+  getModalFromParams: (location: Location) => { name: string };
   getAppRoutes?: (appId: string) => IAppConfig['routes'];
   worldConfig: WorldConfig;
   parseQueryString: (queryString: string) => QueryStringType;
@@ -28,6 +31,6 @@ export interface RootComponentProps {
   children?: React.ReactNode;
 }
 
-export interface RootExtensionProps extends RootComponentProps {
-  extensionData: EventDataTypes;
+export interface RootExtensionProps<D = Record<string, unknown>> extends RootComponentProps {
+  extensionData: D;
 }

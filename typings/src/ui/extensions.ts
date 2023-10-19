@@ -1,7 +1,6 @@
 import { Profile } from './profile';
 import { ParcelConfigObject } from 'single-spa';
 import { ActivityFn } from './app-loader';
-import { SingleSpaRoutingEvent } from './index';
 
 export type Developer = {
   profileId: Profile['did']['id'];

@@ -27,12 +27,16 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       })),
     },
   ],
-  extends: (matcher, loader) => {
-    matcher({
-      login: loader(() => import('./extensions/login-modal')),
-      'follow_*': loader(() => import('./extensions/follow-profile-button')),
-    });
-  },
+  extensions: [
+    {
+      mountsIn: 'login',
+      loadingFn: () => import('./extensions/login-modal'),
+    },
+    {
+      mountsIn: 'follow_*',
+      loadingFn: () => import('./extensions/follow-profile-button'),
+    },
+  ],
   routes: {
     edit: routes[EDIT],
     followers: routes[FOLLOWERS],

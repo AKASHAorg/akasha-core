@@ -9,7 +9,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { hasOwn, sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -175,16 +175,12 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               onEntryRemove={handleEntryRemove}
               onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}
               hideActionButtons={hideActionButtons}
-              actionsRightExt={
-                <Extension name={`entry-card-actions-right_${id}`} uiEvents={uiEvents} />
-              }
+              actionsRightExt={<Extension name={`entry-card-actions-right_${id}`} />}
               headerMenuExt={
-                itemData.author.isViewer && (
-                  <Extension name={`entry-card-edit-button_${id}`} uiEvents={uiEvents} />
-                )
+                itemData.author.isViewer && <Extension name={`entry-card-edit-button_${id}`} />
               }
             >
-              {({ blockID }) => <Extension name={`${blockID}_content_block`} uiEvents={uiEvents} />}
+              {({ blockID }) => <Extension name={`${blockID}_content_block`} />}
             </EntryCard>
           )}
         </div>

@@ -24,7 +24,6 @@ import { LatestProfiles, LatestTopics } from './cards';
 
 const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
-
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('ui-widget-trending');

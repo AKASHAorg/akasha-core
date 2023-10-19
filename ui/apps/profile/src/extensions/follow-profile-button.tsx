@@ -3,24 +3,38 @@ import ReactDOM from 'react-dom';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import singleSpaReact from 'single-spa-react';
 import FollowProfileButton from '../components/follow-profile-button';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
-import { RootExtensionProps, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
+import { ModalNavigationOptions, RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { I18nextProvider } from 'react-i18next';
 
-const App = (props: RootExtensionProps) => {
-  const { profileID, isLoggedIn, isFollowing, followId } = props.extensionData;
+type FollowProfileButtonExtensionData = {
+  profileID: string;
+  isLoggedIn: boolean;
+  isFollowing: boolean;
+  followId: string;
+};
 
+const App = (props: RootExtensionProps<FollowProfileButtonExtensionData>) => {
+  const { navigateToModal, extensionData } = props;
+  const { profileID, isLoggedIn, isFollowing, followId } = extensionData;
+  const { getTranslationPlugin } = useRootComponentProps();
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    props.navigateToModal({ name: 'login', redirectTo });
+    navigateToModal({
+      name: 'login',
+      redirectTo,
+    });
   };
 
   return (
-    <FollowProfileButton
-      profileID={profileID}
-      isLoggedIn={isLoggedIn}
-      isFollowing={!!isFollowing}
-      followId={followId}
-      showLoginModal={showLoginModal}
-    />
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      <FollowProfileButton
+        profileID={profileID}
+        isLoggedIn={isLoggedIn}
+        isFollowing={!!isFollowing}
+        followId={followId}
+        showLoginModal={showLoginModal}
+      />
+    </I18nextProvider>
   );
 };
 
@@ -28,7 +42,11 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(App),
-  errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (
+    error,
+    errorInfo,
+    props: RootExtensionProps<FollowProfileButtonExtensionData>,
+  ) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
