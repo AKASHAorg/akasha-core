@@ -93,13 +93,6 @@ const SidebarComponent: React.FC<unknown> = () => {
           setIsLoading(false);
           return;
         }
-        if (eventData.event === WEB3_EVENTS.DISCONNECTED) {
-          setIsLoading(true);
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 1000);
-          return;
-        }
       },
     });
 
@@ -201,13 +194,12 @@ const SidebarComponent: React.FC<unknown> = () => {
     queryClient.resetQueries({
       queryKey: useGetMyProfileQuery.getKey(),
     });
-    await logoutQuery.mutateAsync().then(res => {
-      queryClient.setQueryData([LOGIN_STATE_KEY], null);
-
+    await logoutQuery.mutateAsync().then(() => {
       setTimeout(() => {
         setIsLoading(false);
+        console.log('stop wait');
         // longer wait time to sign out to make sure the user is really signed out on the sdk side
-      }, 6000);
+      }, 5000);
     });
     queryClient.setQueryData([LOGIN_STATE_KEY], null);
   }
