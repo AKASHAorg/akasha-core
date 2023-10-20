@@ -55,12 +55,12 @@ const SidebarComponent: React.FC<unknown> = () => {
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
   const profileName = useMemo(
-    () => (!isLoggedIn || isLoading ? t('Guest') : myProfileQuery.data?.akashaProfile?.name || ''),
-    [myProfileQuery.data, isLoggedIn, isLoading, t],
+    () => (!isLoggedIn ? t('Guest') : myProfileQuery.data?.akashaProfile?.name || ''),
+    [myProfileQuery.data, isLoggedIn, t],
   );
 
   //empty profile name implies the connection process is still in progress
-  const inProgress = isLoading || !profileName;
+  const inProgress = isLoading || (isLoggedIn && myProfileQuery.status === 'loading');
 
   const headerBackground = inProgress ? 'bg(secondaryLight/30 dark:grey5)' : '';
 
@@ -82,6 +82,7 @@ const SidebarComponent: React.FC<unknown> = () => {
 
   useEffect(() => {
     const sdk = getSDK();
+
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
         if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS) {
@@ -92,7 +93,6 @@ const SidebarComponent: React.FC<unknown> = () => {
           setIsLoading(false);
           return;
         }
-
         if (eventData.event === WEB3_EVENTS.DISCONNECTED) {
           setIsLoading(true);
           setTimeout(() => {
@@ -106,20 +106,13 @@ const SidebarComponent: React.FC<unknown> = () => {
     return () => {
       subSDK.unsubscribe();
     };
-  }, []);
+  }, [queryClient]);
 
   useEffect(() => {
-    const invalidateQuery = async () => {
-      await queryClient.invalidateQueries({
-        queryKey: useGetMyProfileQuery.getKey(),
-      });
-    };
-
     if (!isLoggedIn) {
-      invalidateQuery();
-      myProfileQuery.refetch();
+      queryClient.setQueryData(useGetMyProfileQuery.getKey(), null);
     }
-  }, [isLoggedIn, myProfileQuery, queryClient]);
+  }, [isLoggedIn, queryClient, myProfileQuery.status]);
 
   useEffect(() => {
     let sub;
@@ -203,10 +196,20 @@ const SidebarComponent: React.FC<unknown> = () => {
   }
 
   async function handleLogout() {
-    await logoutQuery.mutateAsync();
-    await queryClient.invalidateQueries({
-      queryKey: [LOGIN_STATE_KEY],
+    setIsLoading(true);
+
+    queryClient.resetQueries({
+      queryKey: useGetMyProfileQuery.getKey(),
     });
+    await logoutQuery.mutateAsync().then(res => {
+      queryClient.setQueryData([LOGIN_STATE_KEY], null);
+
+      setTimeout(() => {
+        setIsLoading(false);
+        // longer wait time to sign out to make sure the user is really signed out on the sdk side
+      }, 6000);
+    });
+    queryClient.setQueryData([LOGIN_STATE_KEY], null);
   }
 
   const handleLogoutClick = () => {

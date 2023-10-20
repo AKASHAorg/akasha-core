@@ -109,8 +109,8 @@ export function useLogout() {
     async () => {
       const resp = await sdk.api.auth.signOut();
       if (resp.data) {
-        await queryClient.resetQueries([LOGIN_STATE_KEY]);
-        // queryClient.setQueryData([LOGIN_STATE_KEY], {});
+        //await queryClient.resetQueries([LOGIN_STATE_KEY]);
+        queryClient.setQueryData([LOGIN_STATE_KEY], null);
         return resp.data;
       }
     },
