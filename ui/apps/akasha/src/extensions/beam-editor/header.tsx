@@ -35,7 +35,7 @@ export const Header: React.FC<HeaderProps> = props => {
       direction="row"
       align="center"
     >
-      <Text variant="h5">{renderTitle()}</Text>
+      <Text variant="h4">{renderTitle()}</Text>
 
       {uiState === 'editor' && (
         <Checkbox
