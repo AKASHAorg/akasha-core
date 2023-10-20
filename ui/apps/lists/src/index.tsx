@@ -14,13 +14,12 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
   i18nNamespace: ['app-lists'],
-  extends: (matchExtensionPoint, loadingHandler) => {
-    matchExtensionPoint({
-      'entry-card-actions-right_*': loadingHandler(
-        () => import('./extensions/entry-card-save-button'),
-      ),
-    });
-  },
+  extensions: [
+    {
+      mountsIn: 'entry-card-actions-right_*',
+      loadingFn: () => import('./extensions/entry-card-save-button'),
+    },
+  ],
   title: 'List | AKASHA World',
   menuItems: {
     label: 'List',

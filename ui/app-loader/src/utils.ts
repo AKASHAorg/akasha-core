@@ -1,7 +1,6 @@
 import { IAppConfig, ModalNavigationOptions, QueryStringType } from '@akashaorg/typings/lib/ui';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
-import { of } from 'rxjs';
 import { Logger } from '@akashaorg/awf-sdk';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 
@@ -43,21 +42,23 @@ export const checkActivityFn = (opts: CheckActivityOptions) => {
   return singleSpa.pathToActiveWhen(`/${encodedAppName}`)(location);
 };
 
-export const getModalFromParams = (location: Location) => () => {
+export const getModalFromParams = (location: Location) => {
   const { search } = location;
+
   try {
     const searchObj = qs.parse(search, {
       ignoreQueryPrefix: true,
     }) as { modal: ModalNavigationOptions } | undefined;
 
     if (searchObj.modal) {
-      return of({
+      return {
         ...searchObj.modal,
-      });
+      };
     }
-    return of({ name: null });
+
+    return null;
   } catch (err) {
-    return of({ name: null });
+    return null;
   }
 };
 
@@ -92,12 +93,15 @@ export const navigateToModal = (opts: ModalNavigationOptions) => {
     const { modal, ...others } = currentSearchObj;
     if (Object.keys(others).length) {
       const searchStr = qs.stringify({ modal: str, ...others });
-      singleSpa.navigateToUrl(`${currentPath}?${searchStr}`);
+      const nextUrl = `${currentPath}?${searchStr}`;
+      singleSpa.navigateToUrl(nextUrl);
       return;
     }
   }
+
   if (`${currentPath}?${str}` !== `${currentPath}${currentSearch}`) {
-    singleSpa.navigateToUrl(`${currentPath}?${str}`);
+    const nextUrl = `${currentPath}?${str}`;
+    singleSpa.navigateToUrl(nextUrl);
   }
 };
 

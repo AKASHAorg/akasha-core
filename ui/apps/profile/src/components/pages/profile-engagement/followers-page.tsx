@@ -20,12 +20,16 @@ import {
   useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
 
-const FollowersPage: React.FC<unknown> = () => {
+export type FollowersPageProps = {
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+};
+
+const FollowersPage: React.FC<FollowersPageProps> = props => {
+  const { showLoginModal } = props;
   const [loadMore, setLoadingMore] = useState(false);
   const { profileId } = useParams<{ profileId: string }>();
 
-  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
-
+  const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const { isLoggedIn, loggedInProfileId } = useLoggedIn();
@@ -97,10 +101,6 @@ const FollowersPage: React.FC<unknown> = () => {
   }
 
   const followList = getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node));
-
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
-  };
 
   const onProfileClick = (profileId: string) => {
     navigateTo?.({

@@ -5,16 +5,17 @@ import { ExtensionInterface, ExtensionStorePlugin } from '@akashaorg/typings/lib
 import Parcel from 'single-spa-react/parcel';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-export type ExtensionComponentProps = {
+export type ExtensionComponentProps<D> = {
   name: string;
   loadingIndicator?: React.ReactNode;
   emptyIndicator?: React.ReactNode;
   onError?: (extension: ExtensionInterface & { appName: string }, message?: string) => void;
   customStyle?: string;
+  extensionData?: D;
 };
 
-export const Extension: React.FC<ExtensionComponentProps> = props => {
-  const { name, loadingIndicator, emptyIndicator, onError, customStyle } = props;
+export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
+  const { name, loadingIndicator, emptyIndicator, onError, customStyle, extensionData } = props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
   const extensionStore = React.useRef<ExtensionStorePlugin>(getExtensionsPlugin().extensionStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
@@ -28,13 +29,15 @@ export const Extension: React.FC<ExtensionComponentProps> = props => {
       setIsEmpty(true);
       return [];
     }
-    return exts;
+    return [...exts];
   }, [location, name]);
 
   React.useEffect(() => {
     const loadConfigs = async () => {
       for (const extension of extensions) {
-        if (parcelConfigs.find(parcel => parcel.extension.appName === extension.appName)) return;
+        if (parcelConfigs.find(parcel => parcel.extension.appName === extension.appName)) {
+          return;
+        }
         try {
           const conf = await extension.loadingFn();
           setParcelConfigs(prev => [...prev, { config: conf, extension }]);
@@ -46,6 +49,11 @@ export const Extension: React.FC<ExtensionComponentProps> = props => {
     loadConfigs().catch();
   }, [extensions, parcelConfigs]);
 
+  const handleParcelError =
+    (extension: ExtensionInterface & { appName: string }) => (err: Error) => {
+      onError?.(extension, `Failed to mount. ${err.message}`);
+    };
+
   const isLoading = extensions.length > parcelConfigs.length && !isEmpty;
 
   return (
@@ -54,9 +62,11 @@ export const Extension: React.FC<ExtensionComponentProps> = props => {
       {isEmpty && emptyIndicator}
       {parcelConfigs.map(parcel => (
         <Parcel
-          config={parcel.config}
+          key={parcel.extension.appName}
+          config={{ ...parcel.config, name: `${parcel.extension.appName}#${name}` }}
           {...getContext()}
-          handleError={err => onError(parcel.extension, `Failed to mount. ${err.message}`)}
+          extensionData={extensionData}
+          handleError={handleParcelError(parcel.extension)}
         />
       ))}
     </Stack>

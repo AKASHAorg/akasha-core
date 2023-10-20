@@ -10,7 +10,7 @@ declare const __DEV__: boolean;
 declare const __LOAD_LOCAL_SOURCES__: boolean;
 
 (async function bootstrap(System) {
-  const { default: startLoader } = await System.import('@akashaorg/ui-app-loader');
+  const { default: AppLoader } = await System.import('@akashaorg/ui-app-loader');
   const { default: getSDK } = await System.import('@akashaorg/awf-sdk');
 
   let registryOverrides = [
@@ -107,7 +107,9 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
   };
 
   const sdk = getSDK();
-  startLoader(loaderConfig);
+  const appLoader = new AppLoader(loaderConfig);
+  appLoader.start();
+  // startLoader(loaderConfig);
 
   // tslint:disable-next-line:no-console
   console.log('initial sdk instance', sdk);

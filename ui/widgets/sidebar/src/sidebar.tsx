@@ -21,7 +21,7 @@ const Widget: React.FC<unknown> = () => {
   );
 };
 
-const reactLifecycles = singleSpaReact({
+export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(Widget),
@@ -34,9 +34,3 @@ const reactLifecycles = singleSpaReact({
     );
   },
 });
-
-export const bootstrap = reactLifecycles.bootstrap;
-
-export const mount = reactLifecycles.mount;
-
-export const unmount = reactLifecycles.unmount;

@@ -1,15 +1,12 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { useRootComponentProps, useGetSettings, useSaveSettings } from '@akashaorg/ui-awf-hooks';
-import { EventTypes } from '@akashaorg/typings/lib/ui';
-
+import { NotificationEvents } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
 import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 
 export type WelcomePageProps = {
@@ -76,7 +73,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
   const confirmCustomization = () => {
     if (finalStep) {
       _uiEvents.current.next({
-        event: EventTypes.ShowNotification,
+        event: NotificationEvents.ShowNotification,
         data: {
           name: 'success',
           message: 'Notification settings updated successfully',

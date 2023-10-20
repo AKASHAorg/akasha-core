@@ -18,11 +18,10 @@ export type TagFeedPageProps = {
 };
 
 const TagFeedPage: React.FC<TagFeedPageProps> = props => {
-  const { showLoginModal, loggedProfileData } = props;
+  const { loggedProfileData, showLoginModal } = props;
 
   const { t } = useTranslation('app-akasha-integration');
-  const { layoutConfig, navigateToModal, getRoutingPlugin, getTranslationPlugin } =
-    useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
 
   // const { tagName } = useParams<{ tagName: string }>();
 
@@ -74,7 +73,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
 
   const handleRebeam = (withComment: boolean, beamId: string) => {
     if (!loggedProfileData?.did.id) {
-      navigateToModal({ name: 'login' });
+      showLoginModal();
     } else {
       getRoutingPlugin().navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
@@ -88,18 +87,18 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
-      {getTagQuery.status === 'loading' && <Spinner />}
-      {getTagQuery.status === 'error' && (
+      {getTagQuery?.status === 'loading' && <Spinner />}
+      {getTagQuery?.status === 'error' && (
         <ErrorLoader
           type="script-error"
           title={t('Error loading tag data')}
-          details={getTagQuery.error?.message}
+          details={getTagQuery?.error?.message}
         />
       )}
-      {getTagQuery.status === 'success' && (
+      {getTagQuery?.status === 'success' && (
         <Stack customStyle="mb-2">
           <TagProfileCard
-            tag={getTagQuery.data}
+            tag={getTagQuery?.data}
             subscribedTags={tagSubscriptions}
             handleSubscribeTag={handleTagSubscribe}
             handleUnsubscribeTag={handleTagSubscribe}

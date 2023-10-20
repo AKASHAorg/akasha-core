@@ -66,14 +66,16 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     chat: chatRoute,
     settings: settingsRoute,
   },
-  extends: (match, loader) => {
-    match({
-      'profile-mini-card-footer-extension': loader(
-        () => import('./extensions/mini-profile-message-button'),
-      ),
-      'profile-card-action-extension': loader(() => import('./extensions/profile-message-button')),
-    });
-  },
+  extensions: [
+    {
+      mountsIn: 'profile-mini-card-footer-extension',
+      loadingFn: () => import('./extensions/mini-profile-message-button'),
+    },
+    {
+      mountsIn: 'profile-card-action-extension',
+      loadingFn: () => import('./extensions/profile-message-button'),
+    },
+  ],
   title: 'Messaging | AKASHA World',
   menuItems: {
     label: 'Messaging',

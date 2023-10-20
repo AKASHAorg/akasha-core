@@ -4,7 +4,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
@@ -27,7 +27,7 @@ const BeamPage: React.FC = () => {
     beamId: string;
   }>();
   const { t } = useTranslation('app-akasha-integration');
-  const { uiEvents, getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const beamReq = useGetBeamByIdQuery({ id: beamId }, { select: response => response.node });
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
@@ -75,8 +75,7 @@ const BeamPage: React.FC = () => {
                 /*@TODO fix inline editor */
                 <Extension
                   name={`inline-editor_reflect_${entryData?.id}`}
-                  uiEvents={uiEvents}
-                  data={{
+                  extensionData={{
                     itemId: beamId,
                     itemType: EntityTypes.REFLECT,
                     action: 'reflect',

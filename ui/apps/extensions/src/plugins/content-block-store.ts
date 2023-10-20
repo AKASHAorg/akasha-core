@@ -102,7 +102,7 @@ export class ContentBlockStore extends BaseStore {
     });
   };
 
-  static getInstance(uiEvents: RootExtensionProps['uiEvents']) {
+  static getInstance(uiEvents: RootExtensionProps<unknown>['uiEvents']) {
     if (!this.instance) {
       this.instance = new ContentBlockStore(uiEvents);
     }
