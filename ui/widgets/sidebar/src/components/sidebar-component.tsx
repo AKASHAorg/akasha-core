@@ -197,7 +197,6 @@ const SidebarComponent: React.FC<unknown> = () => {
     await logoutQuery.mutateAsync().then(() => {
       setTimeout(() => {
         setIsLoading(false);
-        console.log('stop wait');
         // longer wait time to sign out to make sure the user is really signed out on the sdk side
       }, 5000);
     });
