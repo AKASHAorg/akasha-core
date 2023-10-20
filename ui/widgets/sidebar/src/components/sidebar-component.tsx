@@ -93,13 +93,18 @@ const SidebarComponent: React.FC<unknown> = () => {
           setIsLoading(false);
           return;
         }
+        //listener in case user rejects signin popup
+        if (eventData.event === WEB3_EVENTS.DISCONNECTED) {
+          setIsLoading(false);
+          return;
+        }
       },
     });
 
     return () => {
       subSDK.unsubscribe();
     };
-  }, [queryClient]);
+  }, [isLoading]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -194,13 +199,16 @@ const SidebarComponent: React.FC<unknown> = () => {
     queryClient.resetQueries({
       queryKey: useGetMyProfileQuery.getKey(),
     });
-    await logoutQuery.mutateAsync().then(() => {
-      setTimeout(() => {
-        setIsLoading(false);
-        // longer wait time to sign out to make sure the user is really signed out on the sdk side
-      }, 5000);
+
+    const logoutPromise = logoutQuery.mutateAsync();
+    const timeoutPromise = new Promise((resolve, _) => {
+      setTimeout(resolve, 5000);
     });
-    queryClient.setQueryData([LOGIN_STATE_KEY], null);
+
+    Promise.race([logoutPromise, timeoutPromise]).then(() => {
+      setIsLoading(false);
+      queryClient.setQueryData([LOGIN_STATE_KEY], null);
+    });
   }
 
   const handleLogoutClick = () => {
