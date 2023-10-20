@@ -12,6 +12,10 @@ import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
 import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
 import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useInfiniteBeams } from '@akashaorg/ui-lib-feed/lib/utils/use-infinite-beams';
+import { ScrollStateDBWrapper } from '@akashaorg/ui-lib-feed/lib/utils/scroll-state-db';
+import { Virtualizer } from './virtual-list';
+import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
 export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -26,7 +30,17 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
 
   const isLoggedUser = React.useMemo(() => !!loggedProfileData?.did.id, [loggedProfileData]);
 
-  const postsReq = useInfiniteGetBeamsQuery('last', { last: 15 });
+  // const postsReq = useInfiniteGetBeamsQuery('last', { last: 15 });
+  const db = React.useMemo(() => {
+    return new ScrollStateDBWrapper('scroll-state');
+  }, []);
+
+  const { pages } = useInfiniteBeams({
+    scrollerOptions: { overscan: 10 },
+    queryKey: 'my-feed-page',
+    db,
+  });
+
   const tagSubsReq = useGetInterestsByDidQuery(
     { id: loggedProfileData?.did.id },
     {
@@ -79,52 +93,63 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
         <title>AKASHA World</title>
       </Helmet.Helmet>
 
-      <Stack customStyle="mb-2">
-        <StartCard
-          title={t('My Feed')}
-          heading={t('Add some magic to your feed 🪄')}
-          description={t(
-            'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
-          )}
-          secondaryDescription={t('Your customized view of AKASHA World')}
-          image="/images/news-feed.webp"
-          showMainArea={!userHasSubscriptions}
-          hideMainAreaOnMobile={false}
-          showSecondaryArea={userHasSubscriptions}
-          CTALabel={t('Customize My Feed')}
-          onClickCTA={handleCTAClick}
-        />
-      </Stack>
-
-      <FeedWidget
-        queryKey="akasha-my-feed-query"
-        itemType={EntityTypes.BEAM}
-        onLoginModalOpen={showLoginModal}
-        loggedProfileData={loggedProfileData}
-        contentClickable={true}
-        onEntryFlag={handleEntryFlag}
-        onEntryRemove={handleEntryRemove}
-        itemSpacing={8}
-        accentBorderTop={true}
-        onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
-        newItemsPublishedLabel={t('New Beams published recently')}
+      {/*<Stack customStyle="mb-2">*/}
+      {/*  <StartCard*/}
+      {/*    title={t('My Feed')}*/}
+      {/*    heading={t('Add some magic to your feed 🪄')}*/}
+      {/*    description={t(*/}
+      {/*      'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',*/}
+      {/*    )}*/}
+      {/*    secondaryDescription={t('Your customized view of AKASHA World')}*/}
+      {/*    image="/images/news-feed.webp"*/}
+      {/*    showMainArea={!userHasSubscriptions}*/}
+      {/*    hideMainAreaOnMobile={false}*/}
+      {/*    showSecondaryArea={userHasSubscriptions}*/}
+      {/*    CTALabel={t('Customize My Feed')}*/}
+      {/*    onClickCTA={handleCTAClick}*/}
+      {/*  />*/}
+      {/*</Stack>*/}
+      <Virtualizer
+        estimatedHeight={250}
+        items={pages}
+        itemKeyExtractor={item => item.cursor}
+        restorationKey={'my-feed-page-scroll-restore'}
+        itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
+        renderItem={itemData => (
+          <EntryLoadingPlaceholder>
+            <img alt="" src={`https://picsum.photos/600/300`} />
+          </EntryLoadingPlaceholder>
+        )}
       />
+      {/*<FeedWidget*/}
+      {/*  queryKey="akasha-my-feed-query"*/}
+      {/*  itemType={EntityTypes.BEAM}*/}
+      {/*  onLoginModalOpen={showLoginModal}*/}
+      {/*  loggedProfileData={loggedProfileData}*/}
+      {/*  contentClickable={true}*/}
+      {/*  onEntryFlag={handleEntryFlag}*/}
+      {/*  onEntryRemove={handleEntryRemove}*/}
+      {/*  itemSpacing={8}*/}
+      {/*  accentBorderTop={true}*/}
+      {/*  onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}*/}
+      {/*  newItemsPublishedLabel={t('New Beams published recently')}*/}
+      {/*/>*/}
 
-      {userHasSubscriptions && !postsReq.isFetching && (
-        <MyFeedCard
-          title={t('✨ Add a little magic to your feed ✨')}
-          description={t(
-            'Follow topics and wonderful people you care about most to feel at home every time you visit AKASHA World. ',
-          )}
-          noPostsTitle={t('No Posts Yet')}
-          noPostsDescription={t(
-            'Once you start following people or topics with published posts, they will be found here.',
-          )}
-          CTALabel={t('Find topics and people')}
-          onClickCTA={handleCTAClick}
-          hasPosts={postsReq.hasNextPage && postsReq.data?.pages?.length > 0}
-        />
-      )}
+      {/*{userHasSubscriptions && !postsReq.isFetching && (*/}
+      {/*  <MyFeedCard*/}
+      {/*    title={t('✨ Add a little magic to your feed ✨')}*/}
+      {/*    description={t(*/}
+      {/*      'Follow topics and wonderful people you care about most to feel at home every time you visit AKASHA World. ',*/}
+      {/*    )}*/}
+      {/*    noPostsTitle={t('No Posts Yet')}*/}
+      {/*    noPostsDescription={t(*/}
+      {/*      'Once you start following people or topics with published posts, they will be found here.',*/}
+      {/*    )}*/}
+      {/*    CTALabel={t('Find topics and people')}*/}
+      {/*    onClickCTA={handleCTAClick}*/}
+      {/*    hasPosts={postsReq.hasNextPage && postsReq.data?.pages?.length > 0}*/}
+      {/*  />*/}
+      {/*)}*/}
     </Stack>
   );
 };
