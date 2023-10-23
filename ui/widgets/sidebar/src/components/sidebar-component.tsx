@@ -205,10 +205,9 @@ const SidebarComponent: React.FC<unknown> = () => {
       setTimeout(resolve, 5000);
     });
 
-    Promise.race([logoutPromise, timeoutPromise]).then(() => {
-      setIsLoading(false);
-      queryClient.setQueryData([LOGIN_STATE_KEY], null);
-    });
+    await Promise.race([logoutPromise, timeoutPromise]);
+    setIsLoading(false);
+    queryClient.setQueryData([LOGIN_STATE_KEY], null);
   }
 
   const handleLogoutClick = () => {
