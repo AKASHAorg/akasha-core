@@ -1,41 +1,36 @@
-import * as React from 'react';
+import React, { MouseEventHandler } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Profile } from '@akashaorg/typings/lib/ui';
-import { tw } from '@twind/core';
 
 export type EditorPlaceholderType = {
   avatar?: Profile['avatar'];
   profileId: string | null;
   placeholderLabel?: string;
   buttonLabel?: string;
-  onClick?: React.MouseEventHandler<HTMLElement>;
+  onClick?: MouseEventHandler<HTMLElement>;
 };
 
 const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
   const { avatar, profileId, placeholderLabel, buttonLabel, onClick } = props;
   return (
     <Card border={true} padding={0}>
-      <button onClick={onClick}>
-        <div className={tw(`flex justify-between px-4 py-2 `)}>
-          <div className={tw(`flex flex-row items-center gap-4`)}>
+      <Button onClick={onClick} plain>
+        <Stack direction="row" justify="between" customStyle="px-4 py-2">
+          <Stack direction="row" align="center" spacing="gap-4">
             <Avatar avatar={avatar} profileId={profileId} size="sm" />
             <Text variant="subtitle2" truncate={true}>
               {placeholderLabel}
             </Text>
-          </div>
-
+          </Stack>
           <Button variant="primary" disabled={true} label={buttonLabel} size="sm" />
-        </div>
-      </button>
+        </Stack>
+      </Button>
     </Card>
   );
-};
-
-EditorPlaceholder.defaultProps = {
-  placeholderLabel: 'Share your thoughts',
 };
 
 export default EditorPlaceholder;

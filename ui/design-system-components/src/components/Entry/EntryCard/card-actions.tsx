@@ -22,7 +22,6 @@ const CardActions: React.FC<CardActionProps> = props => {
         customStyle="no-underline"
         onClick={e => {
           e.preventDefault();
-          //@TODO: refactor the onReflect prop
           if (!disableActions) onReflect();
         }}
       >
