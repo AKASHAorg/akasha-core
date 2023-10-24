@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import ReflectCard, { ReflectCardProps } from '../cards/reflect-card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   decodeb64SlateContent,
   getLinkPreview,
@@ -19,7 +20,8 @@ import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+const MAX_EDIT_TIME_IN_MINUTES = 10;
 
 const EditableReflection: React.FC<ReflectCardProps> = props => {
   const { entryData, ...rest } = props;
@@ -27,16 +29,18 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
   const [analyticsActions] = useAnalytics();
   const [editInProgress, setEditInProgress] = useState(false);
   const [newContent, setNewContent] = useState(null);
-  const [canEdit, setCanEdit] = useState(false);
+  const [edit, setEdit] = useState(false);
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
-  const [editorState, setEditorState] = useState(
-    entryData.content.flatMap(item => decodeb64SlateContent(item.value)),
-  );
+  const [editorState, setEditorState] = useState(null);
 
   const queryClient = useQueryClient();
   const mentionSearch = null;
   const tagSearch = null;
+
+  useEffect(() => {
+    setEditorState(entryData.content.flatMap(item => decodeb64SlateContent(item.value)));
+  }, [entryData.content]);
 
   const editReflection = useUpdateAkashaReflectMutation({
     onMutate: () => {
@@ -54,7 +58,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
       });
     },
     onSettled: () => {
-      setCanEdit(false);
+      setEdit(false);
       setEditInProgress(false);
       setNewContent(null);
     },
@@ -67,10 +71,13 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
   });
 
   const wrapperRef = useCloseActions(() => {
-    setCanEdit(false);
+    setEdit(false);
   });
 
-  const lastEditInMinutes = dayjs(new Date()).diff(entryData.createdAt, 'minutes');
+  const reflectionCreationElapsedTimeInMinutes = dayjs(new Date()).diff(
+    entryData.createdAt,
+    'minutes',
+  );
   const loggedProfileData = profileDataReq.data;
   const disablePublishing = useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
 
@@ -126,7 +133,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
 
   return (
     <>
-      {canEdit ? (
+      {edit ? (
         <div ref={wrapperRef}>
           <Editor
             actionLabel={t('Save')}
@@ -136,6 +143,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
             placeholderButtonLabel={t('Reflect')}
             editorState={editorState}
             showEditorInitialValue={true}
+            showCancelButton={true}
             avatar={profileDataReq?.data?.avatar}
             profileId={loggedProfileData?.did?.id}
             disablePublish={disablePublishing}
@@ -151,19 +159,21 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
             }}
             setEditorState={setEditorState}
             onCancelClick={() => {
-              //@TODO
+              setEdit(false);
             }}
             getLinkPreview={getLinkPreview}
             getMentions={setMentionQuery}
             getTags={setTagQuery}
+            customStyle="px-2 pt-2"
           />
           {/*@TODO reflect error logic goes here */}
         </div>
       ) : (
         <ReflectCard
           entryData={entryData}
-          editable={lastEditInMinutes <= 10000}
-          onEdit={() => setCanEdit(true)}
+          editable={reflectionCreationElapsedTimeInMinutes <= MAX_EDIT_TIME_IN_MINUTES}
+          onEdit={() => setEdit(true)}
+          notEditableLabel={t('A reflection created over 10 minutes ago cannot be edited.')}
           {...rest}
         />
       )}

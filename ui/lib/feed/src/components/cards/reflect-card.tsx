@@ -18,6 +18,7 @@ export type ReflectCardProps = Pick<
   | 'onEdit'
   | 'onReflect'
   | 'editable'
+  | 'notEditableLabel'
   | 'hidePublishTime'
   | 'hideActionButtons'
   | 'disableActions'

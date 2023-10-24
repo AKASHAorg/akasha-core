@@ -15,6 +15,7 @@ export type ReflectionEditorProps = EditorBoxProps & {
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
   background?: { light: Colors; dark: Colors };
+  customStyle?: string;
 };
 
 const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
@@ -38,6 +39,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     showDraft,
     uploadedImages,
     background,
+    customStyle,
     setEditorState,
     onPlaceholderClick,
     onCancelClick,
@@ -87,7 +89,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
   };
 
   return (
-    <Stack ref={wrapperRef} customStyle="grid">
+    <Stack ref={wrapperRef} customStyle={customStyle}>
       {!showEditor && (
         <EditorPlaceholder
           onClick={handleToggleEditor}
@@ -113,26 +115,26 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             emojiPlaceholderLabel={emojiPlaceholderLabel}
             disableActionLabel={disableActionLabel}
             disablePublish={disablePublish}
-            onPublish={handlePublish}
-            handleSaveImagesDraft={handleSaveImagesDraft}
-            handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
             linkPreview={linkPreview}
-            getLinkPreview={getLinkPreview}
-            getMentions={getMentions}
-            getTags={getTags}
             mentions={mentions}
             tags={tags}
-            uploadRequest={uploadRequest}
             uploadedImages={uploadedImages}
             withMeter={true}
             editorState={editorState}
-            setEditorState={setEditorState}
             cancelButtonLabel={cancelButtonLabel}
-            onCancelClick={onCancelClick}
             showCancelButton={showCancelButton}
             embedEntryData={embedEntryData}
             showDraft={showDraft}
+            setEditorState={setEditorState}
+            onPublish={handlePublish}
+            handleSaveImagesDraft={handleSaveImagesDraft}
+            handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
+            getLinkPreview={getLinkPreview}
+            getMentions={getMentions}
+            getTags={getTags}
             onClear={onClear}
+            onCancelClick={onCancelClick}
+            uploadRequest={uploadRequest}
           />
         </Card>
       )}

@@ -44,6 +44,7 @@ export type EntryCardProps = {
   scrollHiddenContent?: boolean;
   contentClickable?: boolean;
   editable?: boolean;
+  notEditableLabel?: string;
   headerMenuExt?: ReactElement;
   actionsRightExt?: ReactNode;
   customStyle?: CSSProperties;
@@ -87,7 +88,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     hideActionButtons,
     scrollHiddenContent,
     contentClickable,
-    editable,
+    notEditableLabel,
+    editable = true,
     headerMenuExt,
     actionsRightExt,
     onAvatarClick,
@@ -106,6 +108,12 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const contentClickableStyle = contentClickable ? 'cursor-pointer' : 'cursor-default';
   const nsfwHeightStyle = entryData.nsfw && !showNSFW ? 'min-h-[6rem]' : '';
   const nsfwBlurStyle = entryData.nsfw && !showNSFW ? 'blur-lg' : '';
+
+  const editableIconButtonUi = (
+    <Button onClick={editable ? onEdit : null} disabled={!editable} plain>
+      <Icon size="md" type="PencilIcon" />
+    </Button>
+  );
 
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4">
@@ -137,11 +145,14 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               </Text>
             </Tooltip>
           )}
-          {entryData?.createdAt && (
-            <Button onClick={editable ? onEdit : null} disabled={!editable} plain>
-              <Icon size="sm" type="PencilIcon" />
-            </Button>
-          )}
+          {entryData?.createdAt &&
+            (!editable && notEditableLabel ? (
+              <Tooltip placement={'top'} content={notEditableLabel}>
+                {editableIconButtonUi}
+              </Tooltip>
+            ) : (
+              editableIconButtonUi
+            ))}
           {!entryData.active && (
             <CardHeaderMenuDropdown
               disabled={disableActions}
