@@ -1,14 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
 import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   getProfileImageVersionsWithMediaUrl,
   useLogout,
-  LOGIN_STATE_KEY,
   useDismissedCard,
   useRootComponentProps,
   useLoggedIn,
@@ -43,29 +40,27 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
+  const { isLoggedIn, loggedInProfileId, userName, avatar } = useLoggedIn();
   const logoutQuery = useLogout();
-  const queryClient = useQueryClient();
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
-  const myProfileQuery = useGetMyProfileQuery(null, {
-    enabled: isLoggedIn,
-    select: response => response.viewer,
-  });
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
   const profileName = useMemo(
-    () => (!isLoggedIn ? t('Guest') : myProfileQuery.data?.akashaProfile?.name || ''),
-    [myProfileQuery.data, isLoggedIn, t],
+    () => (!isLoggedIn ? t('Guest') : userName),
+    [userName, isLoggedIn, t],
   );
 
-  //empty profile name implies the connection process is still in progress
-  const inProgress = isLoading || (isLoggedIn && myProfileQuery.status === 'loading');
+  useEffect(() => {
+    if (isLoggedIn) {
+      setIsLoading(false);
+    }
+  }, [isLoggedIn]);
 
-  const headerBackground = inProgress ? 'bg(secondaryLight/30 dark:grey5)' : '';
+  const headerBackground = isLoading ? 'bg(secondaryLight/30 dark:grey5)' : '';
 
   //this padding style will adjust the header's vertical space to maintain the same height through different states
-  const headerPadding = profileName && isLoggedIn && !inProgress ? 'pb-[2.125rem]' : '';
+  const headerPadding = profileName && isLoggedIn && !isLoading ? 'pb-[2.125rem]' : '';
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
@@ -86,11 +81,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
         if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS) {
-          setIsLoading(true);
-          return;
-        }
-        if (eventData.event === AUTH_EVENTS.READY) {
-          setIsLoading(false);
+          if (!isLoggedIn) setIsLoading(true);
           return;
         }
         //listener in case user rejects signin popup
@@ -104,13 +95,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     return () => {
       subSDK.unsubscribe();
     };
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      queryClient.setQueryData(useGetMyProfileQuery.getKey(), null);
-    }
-  }, [isLoggedIn, queryClient, myProfileQuery.status]);
+  }, [isLoading, isLoggedIn]);
 
   useEffect(() => {
     let sub;
@@ -196,10 +181,6 @@ const SidebarComponent: React.FC<unknown> = () => {
   async function handleLogout() {
     setIsLoading(true);
 
-    queryClient.resetQueries({
-      queryKey: useGetMyProfileQuery.getKey(),
-    });
-
     const logoutPromise = logoutQuery.mutateAsync();
     const timeoutPromise = new Promise((resolve, _) => {
       setTimeout(resolve, 5000);
@@ -207,7 +188,6 @@ const SidebarComponent: React.FC<unknown> = () => {
 
     await Promise.race([logoutPromise, timeoutPromise]);
     setIsLoading(false);
-    queryClient.setQueryData([LOGIN_STATE_KEY], null);
   }
 
   const handleLogoutClick = () => {
@@ -263,19 +243,15 @@ const SidebarComponent: React.FC<unknown> = () => {
       >
         <Stack customStyle="w-fit h-fit mr-2">
           <Avatar
-            profileId={!isLoggedIn || inProgress ? null : loggedInProfileId}
-            avatar={
-              !isLoggedIn || inProgress
-                ? null
-                : getProfileImageVersionsWithMediaUrl(myProfileQuery.data?.akashaProfile?.avatar)
-            }
+            profileId={!isLoggedIn || isLoading ? null : loggedInProfileId}
+            avatar={!isLoggedIn || isLoading ? null : getProfileImageVersionsWithMediaUrl(avatar)}
             isClickable={isLoggedIn}
             onClick={() => handleAvatarClick(loggedInProfileId)}
           />
         </Stack>
         <Stack justify="center" customStyle={'w-fit flex-grow'}>
-          <Text variant="button-md">{inProgress ? t('Guest') : profileName}</Text>
-          {isLoggedIn && !inProgress && (
+          <Text variant="button-md">{isLoading ? t('Guest') : profileName}</Text>
+          {isLoggedIn && !isLoading && (
             <DidField
               did={loggedInProfileId}
               textColor="grey7"
@@ -283,7 +259,7 @@ const SidebarComponent: React.FC<unknown> = () => {
               copiedLabel={t('Copied')}
             />
           )}
-          {(!isLoggedIn || inProgress) && (
+          {(!isLoggedIn || isLoading) && (
             <Text
               variant="footnotes2"
               color="grey7"
@@ -298,8 +274,8 @@ const SidebarComponent: React.FC<unknown> = () => {
           )}
         </Stack>
         <Stack customStyle="w-fit h-fit self-start">
-          {inProgress && <Button variant="primary" size="sm" loading onClick={handleLogoutClick} />}
-          {!inProgress && (
+          {isLoading && <Button variant="primary" size="sm" loading onClick={handleLogoutClick} />}
+          {!isLoading && (
             <>
               {isLoggedIn && (
                 <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
