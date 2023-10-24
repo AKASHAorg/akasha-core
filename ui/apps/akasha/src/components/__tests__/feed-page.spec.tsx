@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import FeedPage from '../pages/feed-page/feed-page';
 import userEvent from '@testing-library/user-event';
 

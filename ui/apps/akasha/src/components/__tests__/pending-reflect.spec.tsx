@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import * as queryListnerHooks from '@akashaorg/ui-awf-hooks/lib/use-query-listener';
 import * as entryUtilHooks from '@akashaorg/ui-awf-hooks/lib/utils/entry-utils';
 
