@@ -46,10 +46,19 @@ export type VirtualItemProps<T> = {
   estimatedHeight: number;
   onHeightChanged?: (itemKey: string, newHeight: number) => void;
   style?: React.CSSProperties;
+  itemSpacing?: number;
 };
 // renderer for a virtual item
 export const VirtualItem = <T,>(props: VirtualItemProps<T>) => {
-  const { item, interfaceRef, estimatedHeight, resizeObserver, onHeightChanged, style } = props;
+  const {
+    item,
+    interfaceRef,
+    estimatedHeight,
+    resizeObserver,
+    onHeightChanged,
+    style,
+    itemSpacing,
+  } = props;
   const rootNodeRef = React.useRef<HTMLDivElement>();
   const currentHeight = React.useRef(estimatedHeight);
 
@@ -58,17 +67,21 @@ export const VirtualItem = <T,>(props: VirtualItemProps<T>) => {
   }));
 
   const measureElementHeight = () => {
-    if (!currentHeight.current) {
-      currentHeight.current = rootNodeRef.current
-        ? rootNodeRef.current.getBoundingClientRect().height
-        : estimatedHeight;
+    const realHeight = rootNodeRef.current
+      ? rootNodeRef.current.getBoundingClientRect().height + itemSpacing
+      : estimatedHeight + itemSpacing;
+    if (currentHeight.current !== realHeight) {
+      currentHeight.current = realHeight;
     }
     return currentHeight.current;
   };
   const handleSizeChange = (entry: ResizeObserverEntry) => {
-    if (entry && currentHeight.current !== Math.floor(entry.contentRect.height)) {
-      currentHeight.current = Math.floor(entry.contentRect.height);
-      onHeightChanged?.(item.key, entry.contentRect.height);
+    if (entry) {
+      const realHeight = entry.contentRect.height;
+      if (currentHeight.current !== realHeight + itemSpacing) {
+        currentHeight.current = realHeight + itemSpacing;
+        onHeightChanged?.(item.key, currentHeight.current);
+      }
     }
   };
   const setRootRefs = (node: HTMLDivElement) => {

@@ -1,5 +1,5 @@
 import { Rect } from './rect';
-import { isWindow, pxToDPR } from './utils';
+import { dpr, isWindow, pxToDPR } from './utils';
 import React from 'react';
 
 export type UseViewportProps = {
@@ -10,11 +10,11 @@ export type UseViewportProps = {
 };
 export const useViewport = (props: UseViewportProps) => {
   const { initialRect, offsetTop, offsetBottom, rootNode } = props;
-  const dpr = isWindow ? window.devicePixelRatio || 1 : 1;
   const unregisterScroll = React.useRef<() => void>();
   const unregisterResize = React.useRef<() => void>();
   const scrollListeners = React.useRef([]);
   const resizeListeners = React.useRef([]);
+  const overScroll = React.useRef(0);
   const stateRef = React.useRef({
     rect: initialRect,
     offsetTop: offsetTop,
@@ -112,6 +112,16 @@ export const useViewport = (props: UseViewportProps) => {
     }
   };
 
+  const scrollTo = (x: number, y: number) => {
+    if (isWindow) {
+      window.scrollTo(x, y);
+    }
+  };
+
+  const scrollToTop = () => {
+    scrollTo(0, 0);
+  };
+
   const getRelativeToRootNode = () => {
     if (rootNode.current && stateRef.current.rect) {
       return new Rect(stateRef.current.rect.getTop(), stateRef.current.rect.getHeight()).translate(
@@ -126,6 +136,7 @@ export const useViewport = (props: UseViewportProps) => {
     const top = stateRef.current.rect.getTop();
     return pxToDPR(rect.top - top, dpr);
   };
+
   const getDocumentViewportHeight = (): number => {
     if (isWindow) return document.documentElement.clientHeight;
     if (initialRect) return initialRect.getHeight();
@@ -136,7 +147,8 @@ export const useViewport = (props: UseViewportProps) => {
     getRect: () => new Rect(stateRef.current.rect.getTop(), stateRef.current.rect.getHeight()),
     getOffsetTop: () => stateRef.current.offsetTop,
     getOffsetBottom: () => stateRef.current.offsetBottom,
-    getDpr: () => dpr,
+    getOverScroll: () => overScroll.current,
+    updateOverScroll: (overscroll: number) => (overScroll.current = overscroll),
     getOffsetCorrection,
     getRelativeToRootNode,
     getHeight,
@@ -144,6 +156,8 @@ export const useViewport = (props: UseViewportProps) => {
     addScrollListener,
     addResizeListener,
     scrollBy,
+    scrollTo,
+    scrollToTop,
     getDocumentViewportHeight,
   };
 };

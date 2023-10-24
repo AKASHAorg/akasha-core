@@ -22,6 +22,9 @@ export type VirtualizerProps<T> = {
   renderItem: (data: T) => React.ReactNode;
   initialRect?: VirtualListProps<unknown>['initialRect'];
   initialScrollState?: ScrollerState;
+  hasNextPage?: VirtualListProps<unknown>['hasNextPage'];
+  overscan?: VirtualListProps<unknown>['overscan'];
+  itemSpacing?: number;
 };
 
 export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -34,6 +37,9 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     items,
     renderItem,
     initialScrollState,
+    hasNextPage,
+    overscan = 5,
+    itemSpacing = 8,
   } = props;
   const prevRestoreKey = React.useRef(null);
   const vlistRef = React.useRef<VirtualListInterface>();
@@ -94,6 +100,9 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       scrollRestorationType={scrollRestorationType}
       onScrollSave={saveScroll}
       scrollRestoreItem={restoreItem.current[restorationKey]}
+      hasNextPage={hasNextPage}
+      overscan={overscan}
+      itemSpacing={itemSpacing}
     />
   );
 };
