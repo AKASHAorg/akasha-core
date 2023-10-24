@@ -22,7 +22,7 @@ export function useLoggedIn() {
 
   useEffect(() => {
     if (loginQuery.data?.id && !myProfileQuery.data) {
-      const refetchProfileData = async () => await myProfileQuery.refetch();
+      const refetchProfileData = async () => myProfileQuery.refetch();
 
       if (!refetchProfileData) {
         queryClient.setQueryData([LOGIN_STATE_KEY], null);
@@ -35,7 +35,7 @@ export function useLoggedIn() {
         setTimeout(resolve, 3000);
       });
 
-      const res = async () => await Promise.race([resetQueryPromise, timeoutPromise]);
+      const res = async () => Promise.race([resetQueryPromise, timeoutPromise]);
       res();
     }
   }, [loginQuery.data, myProfileQuery, queryClient]);
