@@ -50,9 +50,10 @@ const FeedPage: React.FC<FeedPageProps> = props => {
 
   const [dismissed, dismissCard] = useDismissedCard(dismissedCardId);
 
-  const { mutations: pendingPostStates } = useMutationsListener<IPublishData>([
-    'CREATE_POST_MUTATION_KEY',
-  ]);
+  const { mutations: pendingPostStates } = useMutationsListener<
+    IPublishData,
+    unknown //@TODO remove the mutations listener altogether or use proper type
+  >(['CREATE_POST_MUTATION_KEY']);
 
   const handleEntryFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes) => () => {
@@ -82,20 +83,6 @@ const FeedPage: React.FC<FeedPageProps> = props => {
       name: 'Feed',
     });
   };
-
-  const handleRebeam = React.useCallback(
-    (_: boolean, beamId: string) => {
-      if (!loggedProfileData?.did.id) {
-        showLoginModal();
-      } else {
-        navigateTo.current?.({
-          appName: '@akashaorg/app-akasha-integration',
-          getNavigationUrl: () => `/feed?repost=${beamId}`,
-        });
-      }
-    },
-    [loggedProfileData?.did.id, showLoginModal],
-  );
 
   return (
     <Stack fullWidth={true}>
@@ -155,7 +142,6 @@ const FeedPage: React.FC<FeedPageProps> = props => {
         onEntryFlag={handleEntryFlag}
         onEntryRemove={handleEntryRemove}
         itemSpacing={8}
-        onRebeam={handleRebeam}
         trackEvent={analyticsActions.trackEvent}
         onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
         newItemsPublishedLabel={t('New Beams published recently')}

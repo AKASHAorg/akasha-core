@@ -458,7 +458,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   itemType={EntityTypes.BEAM}
                   onContentClick={handleEntryNavigation}
                   navigateTo={navigateTo}
-                  onRebeam={handleRebeam}
                   onAvatarClick={handleAvatarClick}
                   onMentionClick={handleMentionClick}
                   onTagClick={handleTagClick}

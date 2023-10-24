@@ -10,10 +10,12 @@ import {
 import {
   useCreateReflectMutation,
   useGetMyProfileQuery,
+  useInfiniteGetReflectionsFromBeamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { useQueryClient } from '@tanstack/react-query';
 
 type ReflectionEditorProps = {
   beamId: string;
@@ -30,13 +32,15 @@ export const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
   const [tagQuery, setTagQuery] = useState(null);
   const [editorState, setEditorState] = useState(null);
 
+  const queryClient = useQueryClient();
   const mentionSearch = null;
   const tagSearch = null;
 
-  // @TODO replace with new hooks
-  const reflect = undefined;
   const publishReflect = useCreateReflectMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(
+        useInfiniteGetReflectionsFromBeamQuery.getKey({ id: beamId }),
+      );
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Published',

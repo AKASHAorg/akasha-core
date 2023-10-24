@@ -103,10 +103,11 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   });
 
   if (!isLoggedIn) {
-    return navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
+    return null;
   }
 
   const status = profileDataReq.status;

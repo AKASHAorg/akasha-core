@@ -1,14 +1,4 @@
-import * as React from 'react';
-import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
-import {
-  AnalyticsEventData,
-  EntityTypes,
-  IContentClickDetails,
-  ModalNavigationOptions,
-  NavigateToParams,
-  Profile,
-} from '@akashaorg/typings/lib/ui';
-import { i18n } from 'i18next';
+import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -17,11 +7,20 @@ import EntryList, {
   EntryListProps,
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
-import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
-import type { FeedWidgetCommonProps } from './app';
-import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import {
+  AnalyticsEventData,
+  EntityTypes,
+  IContentClickDetails,
+  ModalNavigationOptions,
+  Profile,
+} from '@akashaorg/typings/lib/ui';
+import { i18n } from 'i18next';
+import { AkashaReflect, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useInfiniteGetReflectionsFromBeamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
+import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
+import type { FeedWidgetCommonProps } from './app';
 
 export type ReflectFeedProps = Omit<
   EntryListProps<AkashaReflect>,
@@ -35,32 +34,30 @@ export type ReflectFeedProps = Omit<
   | 'onScrollStateSave'
 > & {
   beamId?: string;
-  locale?: ILocale;
+  className?: string;
+  modalSlotId: string;
+  accentBorderTop?: boolean;
+  totalEntryCount?: number;
+  loggedProfileData?: Profile;
+  i18n: i18n;
+  initialScrollState?: ScrollerState;
+  db: ScrollStateDBWrapper;
+  scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
   onEntryFlag?: (
     entryId: string,
     itemType: EntityTypes,
     reporterEthAddress?: string | null,
   ) => () => void;
   onEntryRemove?: (entryId: string) => void;
-  className?: string;
-  modalSlotId: string;
-  accentBorderTop?: boolean;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
-  totalEntryCount?: number;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  loggedProfileData?: Profile;
-  i18n: i18n;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  initialScrollState?: ScrollerState;
   onScrollStateReset?: () => void;
-  db: ScrollStateDBWrapper;
-  scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
     beamId,
-    locale,
     itemSpacing = 8,
     i18n,
     initialScrollState,
@@ -71,15 +68,31 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     onScrollStateChange,
   } = props;
 
-  //@TODO replace this hook with one handling scroll restoration
-  const reflectionsReq = useInfiniteGetReflectionsFromBeamQuery('last', { id: beamId, last: 10 });
+  //@TODO replace this hook with one handling virtual list
+  const reflectionsReq = useInfiniteGetReflectionsFromBeamQuery(
+    'sorting',
+    {
+      id: beamId,
+      first: 10,
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
+    },
+    {
+      select: data => {
+        return {
+          pages: data.pages,
+          pageParams: data.pageParams,
+        };
+      },
+    },
+  );
   const entryData = reflectionsReq.data?.pages?.flatMap(page =>
     hasOwn(page.node, 'reflections')
       ? page.node?.reflections.edges?.map(edge => ({
           ...edge.node,
-          beam: null,
+          beam: null /*Note: the hook returns partial result for beam, if complete result is needed the result of the hook should be modified*/,
           beamID: edge.node.beam?.id,
-          createdAt: new Date(), //@TODO node has missing createdAt field
         }))
       : null,
   );
@@ -122,18 +135,21 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           }
           return (
             <div key={key} data-index={index} ref={measureElementRef}>
-              <Divider />
-              <ReflectCard
-                entryData={entryData}
-                locale={locale}
-                //@TODO: refactor prop
-                onContentClick={() =>
-                  onNavigate(
-                    { authorId: entryData.author.id, id: entryData.id },
-                    EntityTypes.REFLECT,
-                  )
-                }
-              />
+              {!entryData && <EntryCardLoading />}
+              {entryData && (
+                <>
+                  <Divider />
+                  <ReflectCard
+                    entryData={entryData}
+                    onContentClick={() =>
+                      onNavigate(
+                        { authorId: entryData.author.id, id: entryData.id },
+                        EntityTypes.REFLECT,
+                      )
+                    }
+                  />
+                </>
+              )}
             </div>
           );
         });

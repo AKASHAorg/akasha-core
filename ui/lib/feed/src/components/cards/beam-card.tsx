@@ -13,7 +13,12 @@ import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 
 type BeamCardProps = Pick<
   EntryCardProps,
-  'contentClickable' | 'noWrapperCard' | 'onContentClick'
+  | 'contentClickable'
+  | 'noWrapperCard'
+  | 'onContentClick'
+  | 'hidePublishTime'
+  | 'hideActionButtons'
+  | 'disableActions'
 > & {
   entryData: AkashaBeam;
 };

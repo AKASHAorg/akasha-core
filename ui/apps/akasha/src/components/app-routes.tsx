@@ -5,9 +5,8 @@ import MyFeedPage from './my-feed-page/my-feed-page';
 import ProfileFeedPage from './profile-feed-page/profile-feed-page';
 import BeamPage from './item-page/beam-page';
 import ReflectPage from './item-page/reflect-page';
-import InvitePage from './item-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
-import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, INVITE } from '../routes';
+import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS } from '../routes';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -62,7 +61,6 @@ const AppRoutes: React.FC<unknown> = () => {
             }
           />
           <Route path={`${routes[REFLECT]}/:reflectId`} element={<ReflectPage />} />
-          <Route path={`${routes[INVITE]}/:inviteCode`} element={<InvitePage />} />
           <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
         </Routes>
       </Stack>
