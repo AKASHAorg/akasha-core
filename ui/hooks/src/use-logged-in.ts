@@ -22,7 +22,9 @@ export function useLoggedIn() {
 
   useEffect(() => {
     if (loginQuery.data?.id && !myProfileQuery.data) {
-      const refetchProfileData = async () => myProfileQuery.refetch();
+      const refetchProfileData = async () => {
+        return await myProfileQuery.refetch();
+      };
 
       if (!refetchProfileData) {
         queryClient.setQueryData([LOGIN_STATE_KEY], null);
