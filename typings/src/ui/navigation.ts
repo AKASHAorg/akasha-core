@@ -9,6 +9,7 @@ export interface NavigationOptions {
 export type IContentClickDetails = {
   authorId: string;
   id: string;
+  reflect?: boolean;
   replyTo?: {
     authorId?: string;
     itemId?: string;
