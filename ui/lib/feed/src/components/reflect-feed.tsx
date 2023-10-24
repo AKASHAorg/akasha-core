@@ -2,7 +2,7 @@ import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import ReflectCard from './cards/reflect-card';
+import EditableReflection from './editable-reflection';
 import EntryList, {
   EntryListProps,
   ScrollerState,
@@ -139,8 +139,19 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
               {entryData && (
                 <>
                   <Divider />
-                  <ReflectCard
+                  <EditableReflection
                     entryData={entryData}
+                    beamId={beamId}
+                    onReflect={() => {
+                      onNavigate(
+                        {
+                          authorId: entryData?.author.id,
+                          id: entryData?.id,
+                          reflect: true,
+                        },
+                        EntityTypes.REFLECT,
+                      );
+                    }}
                     onContentClick={() =>
                       onNavigate(
                         { authorId: entryData.author.id, id: entryData.id },

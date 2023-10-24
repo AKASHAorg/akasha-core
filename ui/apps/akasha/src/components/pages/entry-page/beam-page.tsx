@@ -1,13 +1,10 @@
 import React from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
-import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
-import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import BeamCardLoading from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card-loading';
+import BeamSection from './beam-section';
 import { useParams } from 'react-router-dom';
 import {
   useGetBeamByIdQuery,
@@ -23,7 +20,12 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
 
-const BeamPage: React.FC = () => {
+type BeamPageProps = {
+  reflect?: boolean;
+};
+
+const BeamPage: React.FC<BeamPageProps> = props => {
+  const { reflect } = props;
   const { beamId } = useParams<{
     beamId: string;
   }>();
@@ -61,30 +63,12 @@ const BeamPage: React.FC = () => {
 
   return (
     <Card padding="p-0">
-      <Stack spacing="gap-y-2">
-        <BeamCard entryData={entryData} noWrapperCard={true} contentClickable={false} />
-        <Divider />
-        <Stack padding="px-2 pb-2">
-          {!loggedProfileData?.did?.id && (
-            <EditorPlaceholder
-              onClick={showLoginModal}
-              profileId={null}
-              buttonLabel={t('Reflect')}
-              placeholderLabel={t('Share your thoughts')}
-            />
-          )}
-          {loggedProfileData?.did?.id && entryData?.active && (
-            <Extension
-              name={`inline-editor_reflect_${entryData?.id}`}
-              extensionData={{
-                itemId: beamId,
-                itemType: EntityTypes.REFLECT,
-                action: 'reflect',
-              }}
-            />
-          )}
-        </Stack>
-      </Stack>
+      <BeamSection
+        entryData={entryData}
+        isLoggedIn={!!loggedProfileData?.id}
+        onNavigate={onNavigate}
+        showLoginModal={showLoginModal}
+      />
       <PendingReflect beamId={beamId} loggedProfileData={loggedProfileData} />
       <Stack spacing="gap-y-2">
         <FeedWidget

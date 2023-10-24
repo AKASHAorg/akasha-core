@@ -1,5 +1,5 @@
 import * as React from 'react';
-import FeedPage from '../feed-page/feed-page';
+import FeedPage from '../pages/feed-page/feed-page';
 import userEvent from '@testing-library/user-event';
 
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
@@ -12,7 +12,6 @@ import {
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
 import { when } from 'jest-when';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 const partialArgs = (...argsToMatch) =>
   when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
@@ -20,8 +19,7 @@ const partialArgs = (...argsToMatch) =>
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
     extensionData={{
-      itemId: '01gf',
-      itemType: EntityTypes.BEAM,
+      beamId: '01gf',
       action,
     }}
   />
@@ -30,7 +28,7 @@ const MockedInlineEditor = ({ action }) => (
 describe('< FeedPage /> component', () => {
   const BaseComponent = () => (
     <AnalyticsProvider {...genAppProps()}>
-      <FeedPage showModal={jest.fn()} />
+      <FeedPage showLoginModal={jest.fn()} />
     </AnalyticsProvider>
   );
 
@@ -40,7 +38,7 @@ describe('< FeedPage /> component', () => {
       .mockReturnValue(
         <InlineEditor
           draftStorage={localStorageMock}
-          extensionData={{ name: 'post', action: 'post' }}
+          extensionData={{ name: 'inline-editor', action: 'reflect' }}
         />,
       );
 

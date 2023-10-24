@@ -16,6 +16,7 @@ type BeamCardProps = Pick<
   | 'contentClickable'
   | 'noWrapperCard'
   | 'onContentClick'
+  | 'onReflect'
   | 'hidePublishTime'
   | 'hideActionButtons'
   | 'disableActions'
@@ -24,21 +25,23 @@ type BeamCardProps = Pick<
 };
 
 const BeamCard: React.FC<BeamCardProps> = props => {
-  const { entryData, ...rest } = props;
+  const { entryData, onReflect, ...rest } = props;
   const { t } = useTranslation('ui-lib-feed');
   const { getRoutingPlugin } = useRootComponentProps();
   const { getTranslationPlugin } = useRootComponentProps();
-  const locale = (getTranslationPlugin().i18n?.languages?.[0] as ILocale) || 'en';
+
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },
     { select: response => response.node },
   );
+
   const { akashaProfile: profileData } =
     profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
       ? profileDataReq.data
       : { akashaProfile: null };
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const locale = (getTranslationPlugin().i18n?.languages?.[0] as ILocale) || 'en';
 
   const onAvatarClick = (id: string) => {
     navigateTo({
@@ -73,6 +76,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       }}
       itemType={EntityTypes.BEAM}
       onAvatarClick={onAvatarClick}
+      onReflect={onReflect}
       {...rest}
     >
       {({ blockID }) => (

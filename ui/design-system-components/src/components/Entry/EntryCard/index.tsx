@@ -25,7 +25,6 @@ export type EntryCardProps = {
     status: 'loading' | 'error' | 'success';
   };
   locale?: ILocale;
-  editedLabel?: string;
   flagAsLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
@@ -44,15 +43,17 @@ export type EntryCardProps = {
   hideActionButtons?: boolean;
   scrollHiddenContent?: boolean;
   contentClickable?: boolean;
+  editable?: boolean;
   headerMenuExt?: ReactElement;
   actionsRightExt?: ReactNode;
   customStyle?: CSSProperties;
   ref?: Ref<HTMLDivElement>;
+  onReflect?: (itemId: string) => void;
   onAvatarClick?: (profileId: string) => void;
   onContentClick?: () => void;
   onEntryRemove?: (itemId: string) => void;
   onEntryFlag?: () => void;
-  onReflect?: () => void;
+  onEdit?: () => void;
 } & (
   | {
       sortedContents: AkashaBeam['content'];
@@ -74,7 +75,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     locale,
     ref,
     authorProfile,
-    editedLabel,
     flagAsLabel,
     removed,
     nsfw,
@@ -87,12 +87,14 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     hideActionButtons,
     scrollHiddenContent,
     contentClickable,
+    editable,
     headerMenuExt,
     actionsRightExt,
     onAvatarClick,
     onContentClick,
     onEntryFlag,
     onReflect,
+    onEdit,
     ...rest
   } = props;
 
@@ -136,12 +138,9 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             </Tooltip>
           )}
           {entryData?.createdAt && (
-            <Tooltip
-              placement={'top'}
-              content={`${editedLabel} ${formatRelativeTime(entryData?.createdAt, locale)}`}
-            >
+            <Button onClick={editable ? onEdit : null} disabled={!editable} plain>
               <Icon size="sm" type="PencilIcon" />
-            </Tooltip>
+            </Button>
           )}
           {!entryData.active && (
             <CardHeaderMenuDropdown

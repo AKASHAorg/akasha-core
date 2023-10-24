@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ReflectPage from '../item-page/reflect-page';
+import ReflectPage from '../pages/entry-page/reflect-page';
 
 import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
@@ -13,8 +13,7 @@ const partialArgs = (...argsToMatch) =>
 const MockedInlineEditor = ({ action }) => (
   <InlineEditor
     extensionData={{
-      itemId: '01gf',
-      itemType: EntityTypes.REFLECT,
+      beamId: '01gf',
       action,
     }}
   />

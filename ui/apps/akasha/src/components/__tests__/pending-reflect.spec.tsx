@@ -9,12 +9,10 @@ import {
   genPendingPost,
   genUser,
 } from '@akashaorg/af-testing';
-import { PendingReflect } from '../item-page/pending-reflect';
+import { PendingReflect } from '../pages/entry-page/pending-reflect';
 
 describe('< PendingReflect /> component', () => {
-  const BaseComponent = (
-    <PendingReflect beamId="oxfg" loggedProfileData={genUser()} reflectIds={[]} />
-  );
+  const BaseComponent = <PendingReflect beamId="oxfg" loggedProfileData={genUser()} />;
 
   beforeAll(() => {
     (

@@ -1,22 +1,25 @@
 import React from 'react';
-import { EntityTypes, RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { ReflectionEditor } from './reflection-editor';
+import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { ReflectionEditor, ReflectionEditorProps } from '../../components/reflection-editor';
 import { IDraftStorage } from './utils';
 
-export type InlineEditorExtensionData = {
-  action: 'reply' | 'edit' | 'reflect' | 'repost';
-  itemId: string;
-  itemType: EntityTypes;
-};
-
 export const InlineEditor = (
-  props: Partial<RootExtensionProps<InlineEditorExtensionData>> & { draftStorage?: IDraftStorage },
+  props: Partial<RootExtensionProps<ReflectionEditorProps>> & { draftStorage?: IDraftStorage },
 ) => {
   const { extensionData } = props;
-  const { action, itemId, itemType } = extensionData;
+  const { action, beamId, reflectionId, content, showEditorInitialValue } = extensionData;
+  const editProps = {
+    beamId,
+    reflectionId,
+    content,
+    showEditorInitialValue,
+    action: 'edit' as const,
+  };
+  const reflectProps = { beamId, showEditorInitialValue, action: 'reflect' as const };
 
-  if (itemType === EntityTypes.REFLECT && itemId && (action === 'reflect' || action === 'edit')) {
-    return <ReflectionEditor beamId={itemId} action={action} />;
+  if (beamId) {
+    if (action === 'edit') return <ReflectionEditor {...editProps} />;
+    if (action === 'reflect') return <ReflectionEditor {...reflectProps} />;
   }
 
   throw new Error('Unknown action used');
