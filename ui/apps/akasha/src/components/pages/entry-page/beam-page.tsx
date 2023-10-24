@@ -20,12 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
 
-type BeamPageProps = {
-  reflect?: boolean;
-};
-
-const BeamPage: React.FC<BeamPageProps> = props => {
-  const { reflect } = props;
+const BeamPage: React.FC<unknown> = () => {
   const { beamId } = useParams<{
     beamId: string;
   }>();
@@ -64,6 +59,7 @@ const BeamPage: React.FC<BeamPageProps> = props => {
   return (
     <Card padding="p-0">
       <BeamSection
+        beamId={beamId}
         entryData={entryData}
         isLoggedIn={!!loggedProfileData?.id}
         onNavigate={onNavigate}

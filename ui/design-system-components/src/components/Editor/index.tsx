@@ -50,7 +50,7 @@ export type EditorBoxProps = {
   emojiPlaceholderLabel?: string;
   uploadFailedLabel?: string;
   uploadingImageLabel?: string;
-  disablePublishLabel?: string;
+  disableActionLabel?: string;
   onPublish: (publishData: IPublishData) => void;
   disablePublish?: boolean;
   embedEntryData?: IEntryData;
@@ -94,7 +94,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
     placeholderLabel,
     uploadFailedLabel,
     uploadingImageLabel,
-    disablePublishLabel,
+    disableActionLabel,
     disablePublish,
     onPublish,
     embedEntryData,
@@ -696,7 +696,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
             <Button
               variant={'primary'}
               icon={disablePublish ? 'ArrowPathIcon' : null}
-              label={disablePublish ? disablePublishLabel : actionLabel}
+              label={disablePublish ? disableActionLabel : actionLabel}
               onClick={handlePublish}
               disabled={publishDisabled}
             />

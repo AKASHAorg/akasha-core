@@ -24,7 +24,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     actionLabel,
     placeholderLabel,
     emojiPlaceholderLabel,
-    disablePublishLabel,
+    disableActionLabel,
     disablePublish,
     linkPreview,
     mentions,
@@ -111,7 +111,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             actionLabel={actionLabel}
             placeholderLabel={placeholderLabel}
             emojiPlaceholderLabel={emojiPlaceholderLabel}
-            disablePublishLabel={disablePublishLabel}
+            disableActionLabel={disableActionLabel}
             disablePublish={disablePublish}
             onPublish={handlePublish}
             handleSaveImagesDraft={handleSaveImagesDraft}

@@ -3,15 +3,16 @@ import EditorPlaceholder from '@akashaorg/design-system-components/lib/component
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
+import ReflectEditor from '../../reflect-editor';
+import routes, { REFLECT } from '../../../routes';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useTranslation } from 'react-i18next';
-import { ReflectionEditor } from '../../reflection-editor';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useLocation } from 'react-router-dom';
-import routes, { REFLECT } from '../../../routes';
 
 type BeamSectionProps = {
+  beamId: string;
   entryData: AkashaBeam;
   isLoggedIn: boolean;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
@@ -19,7 +20,7 @@ type BeamSectionProps = {
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { entryData, isLoggedIn, onNavigate, showLoginModal } = props;
+  const { beamId, entryData, isLoggedIn, onNavigate, showLoginModal } = props;
   const { t } = useTranslation('app-akasha-integration');
   const location = useLocation();
 
@@ -34,13 +35,12 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
         noWrapperCard={true}
         contentClickable={false}
         onReflect={() => {
-          if (location.pathname.includes(routes[REFLECT])) {
-            onNavigate({ authorId: entryData?.author?.id, id: entryData?.id }, EntityTypes.BEAM);
-            return;
-          }
-
           onNavigate(
-            { authorId: entryData?.author?.id, id: entryData?.id, reflect: true },
+            {
+              authorId: entryData?.author?.id,
+              id: entryData?.id,
+              reflect: !location.pathname.includes(routes[REFLECT]),
+            },
             EntityTypes.BEAM,
           );
         }}
@@ -56,9 +56,9 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
           />
         )}
         {isLoggedIn && entryData?.active && (
-          <ReflectionEditor
-            beamId={entryData.id}
-            action="reflect"
+          <ReflectEditor
+            beamId={beamId}
+            reflectToId={beamId}
             showEditorInitialValue={location.pathname.includes(routes[REFLECT])}
           />
         )}

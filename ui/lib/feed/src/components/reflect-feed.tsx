@@ -141,7 +141,6 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
                   <Divider />
                   <EditableReflection
                     entryData={entryData}
-                    beamId={beamId}
                     onReflect={() => {
                       onNavigate(
                         {

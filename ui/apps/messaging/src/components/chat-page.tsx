@@ -204,7 +204,7 @@ const ChatPage = (props: ChatPageProps) => {
             actionLabel={t('Send')}
             placeholderLabel={t('Message')}
             emojiPlaceholderLabel={t('Search')}
-            disablePublishLabel={t('Authenticating')}
+            disableActionLabel={t('Authenticating')}
             disablePublish={disablePublishing}
             onPublish={handleSendMessage}
             getMentions={handleMentionQueryChange}

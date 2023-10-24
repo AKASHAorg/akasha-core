@@ -44,10 +44,7 @@ const AppRoutes: React.FC<unknown> = () => {
             }
           />
           <Route path={`${routes[BEAM]}/:beamId`} element={<BeamPage />} />
-          <Route
-            path={`${routes[BEAM]}/:beamId${routes[REFLECT]}`}
-            element={<BeamPage reflect={true} />}
-          />
+          <Route path={`${routes[BEAM]}/:beamId${routes[REFLECT]}`} element={<BeamPage />} />
           <Route
             path={`${routes[TAGS]}/:tagName`}
             element={
