@@ -8,7 +8,7 @@ export type CardActionProps = {
   repliesAnchorLink?: string;
   disableActions?: boolean;
   actionsRightExt?: React.ReactNode;
-  onReflect: (itemId: string) => void;
+  onReflect: () => void;
 };
 
 const CardActions: React.FC<CardActionProps> = props => {
@@ -21,7 +21,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         href={`${repliesAnchorLink}/${itemId}`}
         onClick={e => {
           e.preventDefault();
-          if (!disableActions) onReflect(itemId);
+          if (!disableActions) onReflect();
         }}
       >
         <Stack direction="row" align="center" spacing="gap-x-2">

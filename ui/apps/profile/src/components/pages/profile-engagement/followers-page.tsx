@@ -69,7 +69,9 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
       followersReq.data?.pages
         ? followersReq.data.pages?.flatMap(page =>
             hasOwn(page.node, 'isViewer')
-              ? page.node?.akashaProfile?.followers?.edges?.map(edge => edge?.node) || []
+              ? page.node?.akashaProfile?.followers?.edges
+                  ?.map(edge => edge?.node)
+                  .filter(node => node.did.akashaProfile) || []
               : [],
           )
         : [],
@@ -82,7 +84,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
       : null;
   }, [followersReq]);
   const followProfileIds = useMemo(
-    () => followers.map(follower => follower.did?.akashaProfile?.id),
+    () => followers.map(follower => follower.did?.akashaProfile?.id).filter(id => !!id),
     [followers],
   );
   const followDocumentsReq = useGetFollowDocumentsQuery(

@@ -9,6 +9,7 @@ export interface NavigationOptions {
 export type IContentClickDetails = {
   authorId: string;
   id: string;
+  //flag to check reflect action
   reflect?: boolean;
   replyTo?: {
     authorId?: string;

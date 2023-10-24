@@ -49,7 +49,7 @@ export type EntryCardProps = {
   actionsRightExt?: ReactNode;
   customStyle?: CSSProperties;
   ref?: Ref<HTMLDivElement>;
-  onReflect?: (itemId: string) => void;
+  onReflect?: () => void;
   onAvatarClick?: (profileId: string) => void;
   onContentClick?: () => void;
   onEntryRemove?: (itemId: string) => void;

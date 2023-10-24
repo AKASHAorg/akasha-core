@@ -30,7 +30,7 @@ const LoginModal = (props: RootExtensionProps) => {
         getNavigationUrl: appRoutes => {
           const redirectTo = new URLSearchParams(location.search).get('redirectTo');
           return `${appRoutes.Connect}?${new URLSearchParams({
-            redirectTo: redirectTo || location.pathname + location.search,
+            redirectTo: redirectTo || location.pathname,
           }).toString()}`;
         },
       },

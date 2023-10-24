@@ -1,5 +1,5 @@
 import React from 'react';
-import ReflectPage from '../pages/entry-page/reflect-page';
+import ReflectionPage from '../pages/entry-page/reflection-page';
 import ReflectEditor from '../reflect-editor';
 
 import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
@@ -16,7 +16,7 @@ const MockedInlineEditor = ({ action }) => (
 describe('< ReflectPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <ReflectPage />
+      <ReflectionPage />
     </AnalyticsProvider>
   );
 
