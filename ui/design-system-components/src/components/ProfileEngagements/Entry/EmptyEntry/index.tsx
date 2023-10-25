@@ -21,7 +21,7 @@ const EmptyEntry: React.FC<EmptyEntryProps> = ({
       <InfoCard
         titleLabel={`@${userName} is not following anyone yet!`}
         publicImgPath="/images"
-        assetName="longbeam-notfound.webp"
+        assetName="longbeam-notfound"
       />
     );
 
