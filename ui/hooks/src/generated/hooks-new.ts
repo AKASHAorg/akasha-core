@@ -742,6 +742,53 @@ useInfiniteGetReflectionsByAuthorDidQuery.getKey = (variables: Types.GetReflecti
 ;
 
 useGetReflectionsByAuthorDidQuery.fetcher = (variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options);
+export const GetReflectionByIdDocument = /*#__PURE__*/ `
+    query GetReflectionById($id: ID!) {
+  node(id: $id) {
+    ... on AkashaReflect {
+      ...ReflectFragment
+    }
+  }
+}
+    ${ReflectFragmentDoc}`;
+export const useGetReflectionByIdQuery = <
+      TData = Types.GetReflectionByIdQuery,
+      TError = unknown
+    >(
+      variables: Types.GetReflectionByIdQueryVariables,
+      options?: UseQueryOptions<Types.GetReflectionByIdQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetReflectionByIdQuery, TError, TData>(
+      ['GetReflectionById', variables],
+      composeDbFetch<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>(GetReflectionByIdDocument, variables),
+      options
+    );
+useGetReflectionByIdQuery.document = GetReflectionByIdDocument;
+
+
+useGetReflectionByIdQuery.getKey = (variables: Types.GetReflectionByIdQueryVariables) => ['GetReflectionById', variables];
+;
+
+export const useInfiniteGetReflectionByIdQuery = <
+      TData = Types.GetReflectionByIdQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetReflectionByIdQueryVariables,
+      variables: Types.GetReflectionByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetReflectionByIdQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetReflectionByIdQuery, TError, TData>(
+      ['GetReflectionById.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>(GetReflectionByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetReflectionByIdQuery.getKey = (variables: Types.GetReflectionByIdQueryVariables) => ['GetReflectionById.infinite', variables];
+;
+
+useGetReflectionByIdQuery.fetcher = (variables: Types.GetReflectionByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>(GetReflectionByIdDocument, variables, options);
 export const GetReflectReflectionsDocument = /*#__PURE__*/ `
     query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput) {
   akashaReflectIndex(
