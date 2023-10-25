@@ -92,7 +92,10 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    { select: response => response.viewer?.akashaFollowList, enabled: isLoggedIn },
+    {
+      select: response => response.viewer?.akashaFollowList,
+      enabled: isLoggedIn && !!followProfileIds.length,
+    },
   );
 
   if (!isLoggedIn) {
