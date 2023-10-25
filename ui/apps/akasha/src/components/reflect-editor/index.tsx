@@ -1,12 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
-import {
-  getLinkPreview,
-  serializeSlateToBase64,
-  useAnalytics,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { getLinkPreview, serializeSlateToBase64, useAnalytics } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
   useGetMyProfileQuery,
@@ -14,32 +10,32 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { useQueryClient } from '@tanstack/react-query';
 
-type ReflectionEditorProps = {
+export type ReflectEditorProps = {
   beamId: string;
-  action: 'edit' | 'reflect';
+  reflectToId: string;
+  showEditorInitialValue: boolean;
 };
 
-export const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
-  const { action, beamId } = props;
+const ReflectEditor: React.FC<ReflectEditorProps> = props => {
+  const { beamId, reflectToId, showEditorInitialValue } = props;
   const { t } = useTranslation('app-akasha-integration');
-  const { singleSpa } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
-
+  const [editorState, setEditorState] = useState(null);
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
-  const [editorState, setEditorState] = useState(null);
 
   const queryClient = useQueryClient();
   const mentionSearch = null;
   const tagSearch = null;
 
-  const publishReflect = useCreateReflectMutation({
-    onSuccess: async () => {
+  const publishReflection = useCreateReflectMutation({
+    onSuccess: async data => {
       await queryClient.invalidateQueries(
-        useInfiniteGetReflectionsFromBeamQuery.getKey({ id: beamId }),
+        useInfiniteGetReflectionsFromBeamQuery.getKey({
+          id: data.createAkashaReflect.document.beam?.id,
+        }),
       );
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
@@ -57,44 +53,26 @@ export const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
   const loggedProfileData = profileDataReq.data;
   const disablePublishing = useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
 
-  const handlePublish = React.useCallback(
-    (data: IPublishData) => {
-      switch (action) {
-        case 'edit':
-          /* @TODO */
-          break;
-        case 'reflect':
-          publishReflect.mutate({
-            i: {
-              content: {
-                active: true,
-                beamID: beamId,
-                content: [
-                  {
-                    label: data.metadata.app,
-                    propertyType: 'slate-block',
-                    value: serializeSlateToBase64(data.slateContent),
-                  },
-                ],
-                createdAt: new Date().toISOString(),
-                isReply: true,
-              },
+  const handlePublish = (data: IPublishData) => {
+    const reflection = reflectToId !== beamId ? { reflection: reflectToId } : {};
+    publishReflection.mutate({
+      i: {
+        content: {
+          active: true,
+          beamID: beamId,
+          content: [
+            {
+              label: data.metadata.app,
+              propertyType: 'slate-block',
+              value: serializeSlateToBase64(data.slateContent),
             },
-          });
-          break;
-      }
-
-      singleSpa.navigateToUrl(location.pathname);
-    },
-    [action, beamId, publishReflect, singleSpa],
-  );
-
-  const handleMentionQueryChange = (query: string) => {
-    setMentionQuery(query);
-  };
-
-  const handleTagQueryChange = (query: string) => {
-    setTagQuery(query);
+          ],
+          createdAt: new Date().toISOString(),
+          isReply: true,
+          ...reflection,
+        },
+      },
+    });
   };
 
   // @TODO: fix author name
@@ -115,12 +93,19 @@ export const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
   return (
     <>
       <Editor
-        postLabel={t('Reflect')}
+        actionLabel={t('Reflect')}
+        placeholderButtonLabel={t('Reflect')}
         cancelButtonLabel={t('Cancel')}
         emojiPlaceholderLabel={t('Search')}
-        disablePublishLabel={t('Authenticating')}
-        placeholderButtonLabel={t('Reflect')}
+        disableActionLabel={t('Authenticating')}
         editorState={editorState}
+        showEditorInitialValue={showEditorInitialValue}
+        avatar={profileDataReq?.data?.avatar}
+        profileId={loggedProfileData?.did?.id}
+        disablePublish={disablePublishing}
+        tags={tagSearch?.data}
+        mentions={mentionSearch?.data}
+        background={{ light: 'grey9', dark: 'grey3' }}
         onPublish={data => {
           if (!profileDataReq.data) {
             return;
@@ -128,18 +113,16 @@ export const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
           handlePublish(data);
         }}
         setEditorState={setEditorState}
-        onCancelClick={() => singleSpa.navigateToUrl(location.pathname)}
-        avatar={profileDataReq?.data?.avatar}
-        profileId={loggedProfileData?.did?.id}
-        disablePublish={disablePublishing}
+        onCancelClick={() => {
+          //@TODO
+        }}
         getLinkPreview={getLinkPreview}
-        getMentions={handleMentionQueryChange}
-        getTags={handleTagQueryChange}
-        tags={tagSearch?.data}
-        mentions={mentionSearch?.data}
-        background={{ light: 'grey9', dark: 'grey3' }}
+        getMentions={setMentionQuery}
+        getTags={setTagQuery}
       />
       {/*@TODO reflect error logic goes here */}
     </>
   );
 };
+
+export default ReflectEditor;

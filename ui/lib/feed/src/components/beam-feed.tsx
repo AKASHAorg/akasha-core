@@ -129,6 +129,16 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
                   <BeamCard
                     entryData={entryData.node}
                     contentClickable={true}
+                    onReflect={() => {
+                      onNavigate(
+                        {
+                          authorId: entryData.node?.author.id,
+                          id: entryData.node?.id,
+                          reflect: true,
+                        },
+                        EntityTypes.BEAM,
+                      );
+                    }}
                     onContentClick={() =>
                       onNavigate(
                         { authorId: entryData.node?.author.id, id: entryData.node?.id },

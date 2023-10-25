@@ -52,7 +52,7 @@ const ArticleEditor: React.FC<unknown> = () => {
         inviteCollaboratorsLabel={t('Invite collaborators')}
         collaboratingLabel={t('Collaborating')}
         saveDraftLabel={t('Save draft')}
-        publishLabel={t('Publish')}
+        actionLabel={t('Publish')}
         canPublish={true}
         onManageCollaborators={handleManageCollaborators}
         onSaveDraft={() => null}

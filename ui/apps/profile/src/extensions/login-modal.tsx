@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
@@ -16,7 +16,7 @@ const LoginModal = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');
   const location = useLocation();
   const { getRoutingPlugin } = useRootComponentProps();
-  const [showModal, setShowModal] = React.useState(true);
+  const [showModal, setShowModal] = useState(true);
 
   const handleModalClose = () => {
     window.history.replaceState(null, null, location.pathname);
