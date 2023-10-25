@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { VirtualList, VirtualListInterface, VirtualListProps } from './virtual-list';
 import { createVirtualDataItem, HEADER_COMPONENT, VirtualDataItem } from './virtual-item';
+import { useEdgeDetector } from './use-edge-detector';
 
 export type RestorationItem = {
   key: string;
@@ -23,8 +24,11 @@ export type VirtualizerProps<T> = {
   initialRect?: VirtualListProps<unknown>['initialRect'];
   initialScrollState?: ScrollerState;
   hasNextPage?: VirtualListProps<unknown>['hasNextPage'];
+  hasPrevPage?: VirtualListProps<unknown>['hasPrevPage'];
   overscan?: VirtualListProps<unknown>['overscan'];
   itemSpacing?: number;
+  onFetchNextPage: (lastKey: string) => void;
+  onFetchPrevPage?: (firstKey: string) => void;
 };
 
 export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -38,13 +42,22 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     renderItem,
     initialScrollState,
     hasNextPage,
+    hasPrevPage,
     overscan = 5,
     itemSpacing = 8,
+    onFetchNextPage,
+    onFetchPrevPage,
   } = props;
   const prevRestoreKey = React.useRef(null);
   const vlistRef = React.useRef<VirtualListInterface>();
   const restoreItem = React.useRef<Record<string, RestorationItem>>({});
-
+  const edgeDetector = useEdgeDetector({
+    overscan,
+    onLoadNext: onFetchNextPage,
+    onLoadPrev: onFetchPrevPage,
+    hasNextPage,
+    hasPrevPage,
+  });
   const getSavedScroll = () => {
     // @TODO: load scroll positions from database
     let restorationItems = [];
@@ -103,6 +116,7 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       hasNextPage={hasNextPage}
       overscan={overscan}
       itemSpacing={itemSpacing}
+      onEdgeDetectorUpdate={edgeDetector.update}
     />
   );
 };

@@ -29,8 +29,10 @@ export type VirtualListProps<T> = {
   onScrollSave: () => void;
   scrollRestoreItem: RestorationItem;
   hasNextPage?: boolean;
+  hasPrevPage?: boolean;
   overscan: number;
   itemSpacing: number;
+  onEdgeDetectorUpdate: (itemList: VirtualItemInfo[], renderedList: RenderedItem[]) => void;
 };
 
 export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref) => {
@@ -52,6 +54,7 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     scrollRestoreItem,
     overscan,
     itemSpacing,
+    onEdgeDetectorUpdate,
   } = props;
   const isScrolling = React.useRef(false);
   const isInitialRender = React.useRef<boolean>();
@@ -84,13 +87,14 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     }
     if (mustReposition && mustMeasure) {
       const repositioned = reposition(startItem, nextProjection.nextRendered);
+      const renderedItems = repositioned.rendered.map<RenderedItem>(item => ({
+        start: item.start,
+        height: item.height,
+        item: itemList.find(vdata => vdata.key === item.itemKey),
+      }));
       setListState(
         {
-          renderedItems: repositioned.rendered.map<RenderedItem>(item => ({
-            start: item.start,
-            height: item.height,
-            item: itemList.find(vdata => vdata.key === item.itemKey),
-          })),
+          renderedItems: renderedItems,
           listHeight: listTotalHeight,
         },
         () => {
@@ -100,25 +104,26 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
             rect = viewport.getRelativeToRootNode();
           }
           if (rect) {
-            // @TODO: update positioning
+            onEdgeDetectorUpdate(nextProjection.allItems, renderedItems);
           }
         },
       );
     } else {
+      const renderedItems = nextProjection.nextRendered.map<RenderedItem>(it => ({
+        start: it.start,
+        height: it.height,
+        item: itemList.find(vdata => vdata.key === it.itemKey),
+      }));
       setListState(
         {
-          renderedItems: nextProjection.nextRendered.map<RenderedItem>(it => ({
-            start: it.start,
-            height: it.height,
-            item: itemList.find(vdata => vdata.key === it.itemKey),
-          })),
+          renderedItems: renderedItems,
           listHeight: listTotalHeight,
         },
         () => {
           if (mustReposition || !alreadyRendered) {
             updateScheduler.debouncedUpdate('setListState callback');
           }
-          //@TODO: update positioning
+          onEdgeDetectorUpdate(nextProjection.allItems, renderedItems);
         },
       );
     }

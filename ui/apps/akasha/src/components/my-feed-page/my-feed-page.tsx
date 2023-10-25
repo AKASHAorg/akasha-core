@@ -16,6 +16,8 @@ import { useInfiniteBeams } from '@akashaorg/ui-lib-feed/lib/utils/use-infinite-
 import { ScrollStateDBWrapper } from '@akashaorg/ui-lib-feed/lib/utils/scroll-state-db';
 import { Virtualizer } from './virtual-list';
 import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
+import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -35,11 +37,12 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
     return new ScrollStateDBWrapper('scroll-state');
   }, []);
 
-  const { pages } = useInfiniteBeams({
-    scrollerOptions: { overscan: 10 },
-    queryKey: 'my-feed-page',
-    db,
-  });
+  const { pages, hasNextPage, hasPreviousPage, tryFetchNextPage, tryFetchPreviousPage } =
+    useInfiniteBeams({
+      scrollerOptions: { overscan: 10 },
+      queryKey: 'my-feed-page',
+      db,
+    });
 
   const tagSubsReq = useGetInterestsByDidQuery(
     { id: loggedProfileData?.did.id },
@@ -87,6 +90,15 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
     });
   };
 
+  const handleFetchNextPage = (lastItemKey: string) => {
+    console.log('fetch next page', lastItemKey);
+    tryFetchNextPage(lastItemKey);
+  };
+  const handleFetchPrevPage = (firstItemKey: string) => {
+    console.log('fetch prev page', firstItemKey);
+    tryFetchPreviousPage(firstItemKey);
+  };
+
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
@@ -109,16 +121,27 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       {/*    onClickCTA={handleCTAClick}*/}
       {/*  />*/}
       {/*</Stack>*/}
-      <Virtualizer
+      <Virtualizer<AkashaBeamEdge>
         estimatedHeight={250}
         items={pages}
         itemKeyExtractor={item => item.cursor}
         restorationKey={'my-feed-page-scroll-restore'}
         itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
+        onFetchNextPage={handleFetchNextPage}
+        onFetchPrevPage={handleFetchPrevPage}
+        hasNextPage={hasNextPage}
+        hasPrevPage={hasPreviousPage}
         renderItem={itemData => (
-          <EntryLoadingPlaceholder>
-            <img alt="" src={`https://picsum.photos/600/300`} />
-          </EntryLoadingPlaceholder>
+          <BeamCard
+            entryData={itemData.node}
+            contentClickable={true}
+            onContentClick={() =>
+              navigateTo({
+                appName: '@akashaorg/app-akasha-integration',
+                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+              })
+            }
+          />
         )}
       />
       {/*<FeedWidget*/}
