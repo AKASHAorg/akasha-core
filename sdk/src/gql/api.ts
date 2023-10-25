@@ -409,6 +409,15 @@ export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ gql`
   }
 }
     ${ReflectFragmentDoc}`;
+export const GetReflectionByIdDocument = /*#__PURE__*/ gql`
+    query GetReflectionById($id: ID!) {
+  node(id: $id) {
+    ... on AkashaReflect {
+      ...ReflectFragment
+    }
+  }
+}
+    ${ReflectFragmentDoc}`;
 export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
     query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput) {
   akashaReflectIndex(
@@ -970,6 +979,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetReflectionsByAuthorDid(variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: C): Promise<Types.GetReflectionsByAuthorDidQuery> {
       return requester<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options) as Promise<Types.GetReflectionsByAuthorDidQuery>;
+    },
+    GetReflectionById(variables: Types.GetReflectionByIdQueryVariables, options?: C): Promise<Types.GetReflectionByIdQuery> {
+      return requester<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>(GetReflectionByIdDocument, variables, options) as Promise<Types.GetReflectionByIdQuery>;
     },
     GetReflectReflections(variables: Types.GetReflectReflectionsQueryVariables, options?: C): Promise<Types.GetReflectReflectionsQuery> {
       return requester<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options) as Promise<Types.GetReflectReflectionsQuery>;
