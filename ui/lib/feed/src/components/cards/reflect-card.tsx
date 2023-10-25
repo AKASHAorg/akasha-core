@@ -30,7 +30,9 @@ const ReflectCard: React.FC<ReflectCardProps> = props => {
   const { entryData, onReflect, ...rest } = props;
   const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const { t } = useTranslation('ui-lib-feed');
-  const locale = (getTranslationPlugin().i18n?.languages?.[0] as ILocale) || 'en';
+  const locale =
+    /*TODO: fix typing in translation plugin and avoid type assertion*/ (getTranslationPlugin().i18n
+      ?.languages?.[0] as ILocale) || 'en';
 
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },

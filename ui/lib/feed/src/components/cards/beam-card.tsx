@@ -41,7 +41,9 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
       ? profileDataReq.data
       : { akashaProfile: null };
-  const locale = (getTranslationPlugin().i18n?.languages?.[0] as ILocale) || 'en';
+  const locale =
+    /*TODO: fix typing in translation plugin and avoid type assertion*/ (getTranslationPlugin().i18n
+      ?.languages?.[0] as ILocale) || 'en';
 
   const onAvatarClick = (id: string) => {
     navigateTo({
