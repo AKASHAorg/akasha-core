@@ -347,7 +347,7 @@ class AWF_Auth {
       return Promise.resolve(null);
     }
     const localUser = localStorage.getItem(this.currentUserKey);
-    if (localUser) {
+    if (localUser && !this._lockSignIn) {
       this._globalChannel.next({
         data: { emit: true },
         event: AUTH_EVENTS.WAIT_FOR_AUTH,
