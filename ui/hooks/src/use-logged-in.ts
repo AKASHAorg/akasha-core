@@ -25,7 +25,7 @@ export function useLoggedIn() {
   useEffect(() => {
 
     if (!loginQuery.data?.id && myProfileQuery.data) {
-      const res = async () => await queryClient.resetQueries(useGetMyProfileQuery.getKey());
+      const res = async () => queryClient.resetQueries(useGetMyProfileQuery.getKey());
       res();
     }
   }, [loginQuery.data, myProfileQuery, queryClient]);
