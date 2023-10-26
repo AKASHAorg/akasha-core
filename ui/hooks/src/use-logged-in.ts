@@ -23,33 +23,15 @@ export function useLoggedIn() {
   console.log('useLoggedIn', 'useGetLogin', loginQuery, myProfileQuery);
 
   useEffect(() => {
-    if (loginQuery.data?.id && !myProfileQuery.data) {
-      console.log('first condition true');
-
-      const refetchProfileData = async () => {
-        const { data } = await myProfileQuery.refetch();
-        return data;
-      };
-
-      if (!refetchProfileData()) {
-        queryClient.setQueryData([LOGIN_STATE_KEY], null);
-      }
-    }
 
     if (!loginQuery.data?.id && myProfileQuery.data) {
-      console.log('second condition true');
-
-      const resetQueryPromise = queryClient.resetQueries(useGetMyProfileQuery.getKey());
-      const timeoutPromise = new Promise((resolve, _) => {
-        setTimeout(resolve, 3000);
-      });
-
-      const res = async () => Promise.race([resetQueryPromise, timeoutPromise]);
+      const res = async () => await queryClient.resetQueries(useGetMyProfileQuery.getKey());
       res();
     }
   }, [loginQuery.data, myProfileQuery, queryClient]);
 
   return {
+    // myProfileQuery.data is used for login state because it is more reliable than loginQuery.data for checking if a user is truly logged in on ceramic or not
     isLoggedIn: !!myProfileQuery.data,
     loggedInProfileId: (
       myProfileQuery.data?.akashaProfile?.did.id ??
