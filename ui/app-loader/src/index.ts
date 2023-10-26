@@ -107,14 +107,10 @@ export default class AppLoader {
     await this.initializeExtensions(this.extensionModules);
     this.extensionConfigs = this.registerExtensions(this.extensionModules);
     this.renderLayout();
-    // listen for user login event and fetch the extensions
-    const sdk = getSDK();
-    const user = await sdk.api.auth.getCurrentUser();
-    if (user) {
-      this.handleLogin(user);
-    }
 
     this.listenGlobalChannel().catch();
+    const sdk = getSDK();
+    await sdk.api.auth.getCurrentUser();
   };
   onBeforeFirstMount = () => hidePageSplash();
   onFirstMount = () => {

@@ -275,9 +275,11 @@ class Web3Connector {
     if (!provider.request) {
       throw new Error('Provider does not support request method');
     }
+    console.log('injected provider before eth_requestAccounts');
     const acc = await provider.request({
       method: 'eth_requestAccounts',
     });
+    console.log('injected provider after eth_requestAccounts', acc);
     if (!acc?.length) {
       throw new Error('Must connect at least one address from the wallet.');
     }
