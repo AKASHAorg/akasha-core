@@ -29,7 +29,7 @@ export function useLoggedIn() {
         return data;
       };
 
-      if (!refetchProfileData) {
+      if (!refetchProfileData()) {
         queryClient.setQueryData([LOGIN_STATE_KEY], null);
       }
     }
