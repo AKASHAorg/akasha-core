@@ -6,26 +6,28 @@ import { NavigateToParams, EntityTypes, IContentClickDetails } from '@akashaorg/
  * @example useEntryNavigation hook
  * ```typescript
  * // navigateFn handles the actual navigation
- * const handleEntryNavigate = useEntryNavigation(navigateTo, 'current-post-id');
+ * const handleEntryNavigate = useEntryNavigation(navigateTo, 'current-beam-id');
  * ```
  */
 export const useEntryNavigation = (
   navigateFn?: (args: NavigateToParams) => void,
-  currentPostId?: string,
+  currentBeamId?: string,
 ) => {
   return React.useCallback(
     (navigationDetails: IContentClickDetails, itemType: EntityTypes) => {
-      const { id } = navigationDetails;
-      if (typeof navigateFn !== 'function' || (currentPostId && currentPostId === id)) {
+      const { id, reflect } = navigationDetails;
+      if (typeof navigateFn !== 'function' || (currentBeamId && currentBeamId === id)) {
         return;
       }
 
       navigateFn({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes =>
-          `${itemType === EntityTypes.REFLECT ? navRoutes.Reflect : navRoutes.Beam}/${id}`,
+          `${itemType === EntityTypes.REFLECT ? navRoutes.Reflect : navRoutes.Beam}/${id}${
+            reflect ? navRoutes.Reflect : ''
+          }`,
       });
     },
-    [navigateFn, currentPostId],
+    [navigateFn, currentBeamId],
   );
 };

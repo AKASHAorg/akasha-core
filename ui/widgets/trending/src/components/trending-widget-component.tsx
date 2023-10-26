@@ -68,7 +68,10 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    { select: response => response.viewer?.akashaFollowList, enabled: isLoggedIn },
+    {
+      select: response => response.viewer?.akashaFollowList,
+      enabled: isLoggedIn && !!followProfileIds.length,
+    },
   );
   const createInterest = useCreateInterestsMutation({
     onSuccess: async () => {

@@ -9,10 +9,10 @@ const ChatEditor: React.FC<Omit<EditorBoxProps, 'setEditorState'>> = props => {
     profileId,
     avatar,
     showAvatar = false,
-    postLabel,
+    actionLabel,
     placeholderLabel,
     emojiPlaceholderLabel,
-    disablePublishLabel,
+    disableActionLabel,
     disablePublish,
     onPublish,
     getMentions,
@@ -34,10 +34,10 @@ const ChatEditor: React.FC<Omit<EditorBoxProps, 'setEditorState'>> = props => {
         avatar={avatar}
         showAvatar={showAvatar}
         profileId={profileId}
-        postLabel={postLabel}
+        actionLabel={actionLabel}
         placeholderLabel={placeholderLabel}
         emojiPlaceholderLabel={emojiPlaceholderLabel}
-        disablePublishLabel={disablePublishLabel}
+        disableActionLabel={disableActionLabel}
         disablePublish={disablePublish}
         onPublish={onPublish}
         getMentions={getMentions}

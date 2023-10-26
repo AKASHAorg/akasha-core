@@ -108,6 +108,13 @@ export type GetReflectionsByAuthorDidQueryVariables = Types.Exact<{
 
 export type GetReflectionsByAuthorDidQuery = { node?: { isViewer: boolean, akashaReflectList?: { edges?: Array<{ cursor: string, node?: { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
 
+export type GetReflectionByIdQueryVariables = Types.Exact<{
+  id: Types.Scalars['ID']['input'];
+}>;
+
+
+export type GetReflectionByIdQuery = { node?: { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | {} | null };
+
 export type GetReflectReflectionsQueryVariables = Types.Exact<{
   id: Types.Scalars['String']['input'];
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;

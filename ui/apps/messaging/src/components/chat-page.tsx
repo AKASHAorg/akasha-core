@@ -201,10 +201,10 @@ const ChatPage = (props: ChatPageProps) => {
           <ChatEditor
             showAvatar={false}
             profileId={loggedProfileData?.did.id}
-            postLabel={t('Send')}
+            actionLabel={t('Send')}
             placeholderLabel={t('Message')}
             emojiPlaceholderLabel={t('Search')}
-            disablePublishLabel={t('Authenticating')}
+            disableActionLabel={t('Authenticating')}
             disablePublish={disablePublishing}
             onPublish={handleSendMessage}
             getMentions={handleMentionQueryChange}
