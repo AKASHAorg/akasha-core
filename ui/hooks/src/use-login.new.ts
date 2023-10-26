@@ -27,9 +27,6 @@ export function useConnectWallet(provider: EthProviders) {
  */
 export function useGetLogin(onError?: (error: Error) => void) {
   const queryClient = useQueryClient();
-  const sdk = getSDK();
-
-  sdk.api.auth.getCurrentUser();
 
   useGlobalLogin({
     onLogin: data => {

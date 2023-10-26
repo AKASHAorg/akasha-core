@@ -157,10 +157,6 @@ export default class AppLoader {
   listenGlobalChannel = async () => {
     // listen for user login event and fetch the extensions
     const sdk = getSDK();
-    const user = await sdk.api.auth.getCurrentUser();
-    if (user) {
-      this.handleLogin(user);
-    }
     if (this.globalChannelSub) this.globalChannelSub.unsubscribe();
 
     this.globalChannelSub = sdk.api.globalChannel.subscribe({
