@@ -81,7 +81,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
         if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS) {
-          if (!isLoggedIn) setIsLoading(true);
+          setIsLoading(true);
           return;
         }
         //listener in case user rejects signin popup
@@ -95,7 +95,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     return () => {
       subSDK.unsubscribe();
     };
-  }, [isLoading, isLoggedIn]);
+  }, []);
 
   useEffect(() => {
     let sub;
