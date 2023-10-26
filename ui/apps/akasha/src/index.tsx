@@ -91,9 +91,5 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       mountsIn: 'entry-card-edit-button_*',
       loadingFn: () => import('./extensions/entry-edit-button'),
     },
-    {
-      mountsIn: 'inline-editor_*',
-      loadingFn: () => import('./extensions/inline-editor'),
-    },
   ],
 });

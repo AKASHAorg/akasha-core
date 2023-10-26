@@ -19,16 +19,16 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 export type FeedWidgetCommonProps = {
   queryKey: string;
   loggedProfileData?: Profile;
+  itemSpacing: BeamFeedProps['itemSpacing'];
+  contentClickable?: boolean;
+  accentBorderTop?: boolean;
+  scrollerOptions?: { overscan: number };
+  newItemsPublishedLabel: string;
+  trackEvent?: BeamFeedProps['trackEvent'];
+  onNavigate: BeamFeedProps['onNavigate'];
   onLoginModalOpen: BeamFeedProps['onLoginModalOpen'];
   onEntryFlag: BeamFeedProps['onEntryFlag'];
   onEntryRemove: BeamFeedProps['onEntryRemove'];
-  itemSpacing: BeamFeedProps['itemSpacing'];
-  onNavigate: BeamFeedProps['onNavigate'];
-  contentClickable?: boolean;
-  accentBorderTop?: boolean;
-  trackEvent?: BeamFeedProps['trackEvent'];
-  scrollerOptions?: { overscan: number };
-  newItemsPublishedLabel: string;
 } & ({ itemType: EntityTypes.BEAM } | { itemType: EntityTypes.REFLECT; beamId: string });
 
 const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {

@@ -15,7 +15,7 @@ export const BaseEditorBox: Story = {
   render: () => (
     <EditorBox
       profileId="some profile id"
-      postLabel="Publish"
+      actionLabel="Publish"
       placeholderLabel="Share your thought"
       setEditorState={() => ({})}
       onPublish={() => ({})}

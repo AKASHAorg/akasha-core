@@ -18,17 +18,17 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
   const { avatar, profileId, placeholderLabel, buttonLabel, onClick } = props;
   return (
     <Card border={true} padding={0}>
-      <Button onClick={onClick} plain>
-        <Stack direction="row" justify="between" customStyle="px-4 py-2">
+      <Stack direction="row" justify="between" customStyle="px-4 py-2">
+        <Button onClick={onClick} plain customStyle="grow">
           <Stack direction="row" align="center" spacing="gap-4">
             <Avatar avatar={avatar} profileId={profileId} size="sm" />
             <Text variant="subtitle2" truncate={true}>
               {placeholderLabel}
             </Text>
           </Stack>
-          <Button variant="primary" disabled={true} label={buttonLabel} size="sm" />
-        </Stack>
-      </Button>
+        </Button>
+        <Button variant="primary" disabled={true} label={buttonLabel} size="sm" />
+      </Stack>
     </Card>
   );
 };

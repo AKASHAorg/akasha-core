@@ -3,7 +3,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ReflectCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflect-card';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { useMutationsListener } from '@akashaorg/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
 import { useCreateReflectMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
@@ -14,7 +13,6 @@ export type PendingReflectProps = {
 
 export function PendingReflect(props: PendingReflectProps) {
   const { beamId, loggedProfileData } = props;
-  const { t } = useTranslation('app-akasha-integration');
   const { mutations: pendingReflectStates } = useMutationsListener<
     {
       i: { content: AkashaReflect };
