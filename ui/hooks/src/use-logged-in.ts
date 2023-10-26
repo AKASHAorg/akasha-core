@@ -24,6 +24,8 @@ export function useLoggedIn() {
 
   useEffect(() => {
     if (loginQuery.data?.id && !myProfileQuery.data) {
+      console.log('first condition true');
+
       const refetchProfileData = async () => {
         const { data } = await myProfileQuery.refetch();
         return data;
@@ -35,6 +37,8 @@ export function useLoggedIn() {
     }
 
     if (!loginQuery.data?.id && myProfileQuery.data) {
+      console.log('second condition true');
+
       const resetQueryPromise = queryClient.resetQueries(useGetMyProfileQuery.getKey());
       const timeoutPromise = new Promise((resolve, _) => {
         setTimeout(resolve, 3000);
