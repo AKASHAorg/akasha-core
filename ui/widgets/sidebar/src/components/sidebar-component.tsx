@@ -80,6 +80,14 @@ const SidebarComponent: React.FC<unknown> = () => {
 
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
+        console.log(
+          'eventData',
+          eventData.event,
+          ' isLoading ',
+          isLoading,
+          ' isLoggedIn ',
+          isLoggedIn,
+        );
         if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS) {
           setIsLoading(true);
           return;
