@@ -12,6 +12,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import AntennaLoader from '@akashaorg/design-system-components/lib/components/Loaders/antenna-loader';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal } = useRootComponentProps();
@@ -27,6 +28,8 @@ const AppRoutes: React.FC<unknown> = () => {
   const showLoginModal = React.useCallback((redirectTo?: { modal: ModalNavigationOptions }) => {
     _navigateToModal.current?.({ name: 'login', redirectTo });
   }, []);
+
+  if (profileDataReq.status === 'loading') return <AntennaLoader />;
 
   return (
     <Router basename={baseRouteName}>

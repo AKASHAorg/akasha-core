@@ -31,6 +31,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const queryClient = useQueryClient();
 
   const [processingTags, setProcessingTags] = useState([]);
+  const [needToProcessTags, setNeedToProcessTags] = useState([]);
 
   const [analyticsActions] = useAnalytics();
   const latestProfilesReq = useGetProfilesQuery(
@@ -78,7 +79,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   });
 
   const latestTopics = latestTopicsReq.data || [];
-  const tagSubscriptions = tagSubscriptionsReq.data;
+  const tagSubscriptions = isLoggedIn ? tagSubscriptionsReq.data : [];
   const followList = isLoggedIn
     ? getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node))
     : null;
@@ -93,6 +94,32 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${topic}`,
     });
   };
+  React.useEffect(() => {
+    if (needToProcessTags.length > 0) {
+      while (needToProcessTags.length > 0) {
+        console.log('needToProcessTags', needToProcessTags);
+
+        const tagToProcess = needToProcessTags.pop();
+
+        setProcessingTags(prevState => [...prevState, tagToProcess]);
+        const processTag = async () => {
+          await createInterest
+            .mutateAsync({
+              i: {
+                content: {
+                  topics: [...tagSubscriptions, { labelType: 'TOPIC', value: tagToProcess }],
+                },
+              },
+            })
+            .then(async () => {
+              // await queryClient.invalidateQueries(useGetInterestsByDidQuery.getKey());
+              // setProcessingTags(prevState => prevState.filter(value => value !== tagToProcess));
+            });
+        };
+        processTag();
+      }
+    }
+  }, [createInterest, needToProcessTags]);
 
   const handleTopicSubscribe = (topic: string) => {
     if (!isLoggedIn) {
@@ -103,15 +130,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       category: AnalyticsCategories.TRENDING_WIDGET,
       action: 'Trending Topic Subscribed',
     });
-
-    setProcessingTags(prevState => [...prevState, topic]);
-    createInterest
-      .mutateAsync({
-        i: { content: { topics: [...tagSubscriptions, { labelType: 'TOPIC', value: topic }] } },
-      })
-      .then(() => {
-        setProcessingTags(prevState => prevState.filter(value => value !== topic));
-      });
+    setNeedToProcessTags(prevState => [...prevState, topic]);
   };
 
   const handleTopicUnSubscribe = (topic: string) => {

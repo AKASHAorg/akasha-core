@@ -19,6 +19,7 @@ import { useInfiniteBeams } from '../utils/use-infinite-beams';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';
+import AntennaLoader from '@akashaorg/design-system-components/lib/components/Loaders/antenna-loader';
 
 export type BeamFeedProps = Omit<
   EntryListProps<AkashaBeamEdge>,
@@ -77,7 +78,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     <>
       {!beamsReq.initialScrollState.isFetched && (
         <Stack fullWidth={true} customStyle="p-8">
-          <Spinner />
+          <AntennaLoader />
         </Stack>
       )}
 
