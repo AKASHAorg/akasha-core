@@ -4,7 +4,7 @@ import { useResizeObserver } from './use-resize-observer';
 export const HEADER_COMPONENT = 'HEADER';
 
 export type VirtualItemInfo = {
-  itemKey: string;
+  key: string;
   start: number;
   height: number;
   visible: boolean;

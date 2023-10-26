@@ -122,7 +122,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       {/*  />*/}
       {/*</Stack>*/}
       <Virtualizer<AkashaBeamEdge>
-        estimatedHeight={250}
+        estimatedHeight={150}
         items={pages}
         itemKeyExtractor={item => item.cursor}
         restorationKey={'my-feed-page-scroll-restore'}

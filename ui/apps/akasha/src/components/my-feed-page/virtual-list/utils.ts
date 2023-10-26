@@ -1,6 +1,6 @@
-import { VirtualItemInfo } from './virtual-item';
+import { VirtualDataItem, VirtualItemInfo } from './virtual-item';
 import { Rect } from './rect';
-import { RenderedItem } from './use-projection';
+import { MountedItem } from './virtualizer-core';
 
 export const isWindow = typeof window !== 'undefined';
 export const dpr = isWindow ? window.devicePixelRatio ?? 1 : 1;
@@ -13,9 +13,9 @@ export const getHeightBetweenItems = (first: VirtualItemInfo, last: VirtualItemI
   }
   return 0;
 };
-export const findBestRef = (
-  items: RenderedItem[],
-  compareFn: (prev: RenderedItem, curr: RenderedItem) => number,
+export const findFirstInView = (
+  items: MountedItem[],
+  compareFn: (prev: MountedItem, curr: MountedItem) => number,
 ) => {
   if (!items.length) return undefined;
   return items.reduce((prev, curr) => (compareFn(prev, curr) > 0 ? curr : prev));
@@ -32,3 +32,25 @@ export const getVisibleItemsSlice = (
     end: last ? allItems.indexOf(last) + 1 : 0,
   };
 };
+
+export const memoize = <T extends (...args: unknown[]) => any>(fn: T): T => {
+  const cache = new WeakMap<unknown[], ReturnType<T>>();
+  return ((...args: Parameters<T>) => {
+    if (cache.has(args)) {
+      return cache.get(args);
+    }
+
+    const result: ReturnType<T> = fn(...args);
+    cache.set(args, result);
+
+    return result;
+  }) as T;
+};
+
+export const getItemDataMap = memoize(
+  <T>(arr: VirtualDataItem<T>[]): Map<string, VirtualDataItem<T>> => {
+    const map = new Map();
+    arr.forEach(it => map.set(it.key, it));
+    return map;
+  },
+);

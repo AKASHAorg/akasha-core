@@ -82,7 +82,7 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     prevRestoreKey.current = restorationKey;
   }
 
-  const itemList = React.useMemo(() => {
+  const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
     const list = [];
     if (header) {
       list.push(createVirtualDataItem(HEADER_COMPONENT, {}, true, () => header));
