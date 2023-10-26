@@ -30,6 +30,7 @@ export function useGetLogin(onError?: (error: Error) => void) {
 
   useGlobalLogin({
     onLogin: data => {
+      console.log('useGlobalLogin', 'onLogin', data);
       queryClient.setQueryData<CurrentUser>([LOGIN_STATE_KEY], prev => ({
         ...prev,
         ...data,
@@ -39,6 +40,8 @@ export function useGetLogin(onError?: (error: Error) => void) {
       queryClient.setQueryData([LOGIN_STATE_KEY], null);
     },
     onError: payload => {
+      console.log('useGlobalLogin', 'onError', payload);
+
       if (onError) {
         onError(payload.error);
       }
@@ -51,6 +54,7 @@ export function useGetLogin(onError?: (error: Error) => void) {
     () =>
       new Promise<CurrentUser>(() => {
         const currentData = queryClient.getQueryData<CurrentUser>([LOGIN_STATE_KEY]);
+        console.log('useGlobalLogin', 'useQuery', currentData);
         return currentData;
       }),
   );
