@@ -175,7 +175,6 @@ class AWF_Auth {
     let currentProvider = args.provider as EthProviders;
     if (!args.resumeSignIn) {
       if (this._lockSignIn) {
-        console.log(' this._lockSignIn ', this._lockSignIn);
         return null;
       }
       if (this.currentUser) {
@@ -349,7 +348,6 @@ class AWF_Auth {
     }
     const localUser = localStorage.getItem(this.currentUserKey);
 
-    console.log('localUser', localUser, ' this._lockSignIn ', this._lockSignIn);
     if (localUser) {
       this._globalChannel.next({
         data: { emit: true },

@@ -20,8 +20,6 @@ export function useLoggedIn() {
     select: response => response.viewer,
   });
 
-  console.log('useLoggedIn', 'useGetLogin', loginQuery, myProfileQuery);
-
   useEffect(() => {
     if (loginQuery.data?.id && !myProfileQuery.data) {
       const refetchProfileData = async () => {
