@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
 import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
 import {
   getProfileImageVersionsWithMediaUrl,
   useLogout,
+  LOGIN_STATE_KEY,
   useDismissedCard,
   useRootComponentProps,
   useLoggedIn,
@@ -42,6 +44,8 @@ const SidebarComponent: React.FC<unknown> = () => {
 
   const { isLoggedIn, loggedInProfileId, userName, avatar } = useLoggedIn();
   const logoutQuery = useLogout();
+  const queryClient = useQueryClient();
+
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
@@ -181,12 +185,9 @@ const SidebarComponent: React.FC<unknown> = () => {
   async function handleLogout() {
     setIsLoading(true);
 
-    const logoutPromise = logoutQuery.mutateAsync();
-    const timeoutPromise = new Promise((resolve, _) => {
-      setTimeout(resolve, 5000);
-    });
+    await logoutQuery.mutateAsync();
+    queryClient.setQueryData([LOGIN_STATE_KEY], null);
 
-    await Promise.race([logoutPromise, timeoutPromise]);
     setIsLoading(false);
   }
 
