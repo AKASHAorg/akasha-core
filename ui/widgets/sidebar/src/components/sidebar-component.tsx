@@ -182,11 +182,11 @@ const SidebarComponent: React.FC<unknown> = () => {
     }
   }
 
-  async function handleLogout() {
+  function handleLogout() {
     setIsLoading(true);
 
-    await logoutQuery.mutateAsync();
     queryClient.setQueryData([LOGIN_STATE_KEY], null);
+    logoutQuery.mutate();
 
     setIsLoading(false);
   }
