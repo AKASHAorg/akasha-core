@@ -43,7 +43,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { isLoggedIn, loggedInProfileId, userName, avatar } = useLoggedIn();
-  const logoutQuery = useLogout();
+  const logoutMutation = useLogout();
   const queryClient = useQueryClient();
 
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
@@ -186,7 +186,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     setIsLoading(true);
 
     queryClient.setQueryData([LOGIN_STATE_KEY], null);
-    logoutQuery.mutate();
+    logoutMutation.mutate();
 
     setIsLoading(false);
   }
