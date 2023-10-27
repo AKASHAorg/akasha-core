@@ -77,7 +77,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
   return (
     <>
       {!beamsReq.initialScrollState.isFetched && (
-        <Stack fullWidth={true} customStyle="p-8">
+        <Stack fullWidth={true}>
           <AntennaLoader />
         </Stack>
       )}
