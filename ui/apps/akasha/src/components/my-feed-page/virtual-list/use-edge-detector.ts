@@ -1,35 +1,60 @@
-import { VirtualItemInfo } from './virtual-item';
+import { HEADER_COMPONENT, LOADING_INDICATOR, VirtualItemInfo } from './virtual-item';
+import React from 'react';
 
 export type UseEdgeDetectorProps = {
   overscan: number;
   onLoadNext: (lastKey: string) => void;
   onLoadPrev: (firstKey: string) => void;
-  hasNextPage?: boolean;
-  hasPrevPage?: boolean;
 };
 
 export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
-  const { overscan, hasPrevPage, hasNextPage, onLoadPrev, onLoadNext } = props;
+  const { overscan, onLoadPrev, onLoadNext } = props;
+  const fetchPrevLock = React.useRef(true);
+  const lastFetchCursor = React.useRef<string>(null);
   return {
-    update: (itemList: VirtualItemInfo[], rendered: VirtualItemInfo[]) => {
-      const firstRendered = rendered.at(0);
-      const lastRendered = rendered.at(rendered.length - 1);
-      const firstIdx = itemList.findIndex(it => it.key === firstRendered.key);
-      const lastIdx = itemList.findIndex(it => it.key === lastRendered.key);
-
-      if (firstIdx > 0 && firstIdx <= overscan) {
-        if (hasPrevPage) {
-          onLoadPrev?.(itemList.at(0).key);
+    // @TODO: requires a bit of refactoring
+    // disallow fetching if it's not scrolling from outside the area
+    update: (
+      itemList: VirtualItemInfo[],
+      rendered: VirtualItemInfo[],
+      alreadyMeasured: boolean,
+    ) => {
+      if (!alreadyMeasured) return;
+      const items = rendered.filter(
+        it => !it.key.startsWith(LOADING_INDICATOR) && it.key !== HEADER_COMPONENT,
+      );
+      const filteredItemList = itemList.filter(
+        it => !it.key.startsWith(LOADING_INDICATOR) && it.key !== HEADER_COMPONENT,
+      );
+      const lastRendered = items.at(items.length - 1);
+      if (lastRendered) {
+        const lastIdx = itemList.findIndex(it => it.key === lastRendered.key);
+        if (
+          lastIdx > 0 &&
+          lastIdx + overscan >= itemList.length &&
+          lastFetchCursor.current !== lastRendered.key
+        ) {
+          onLoadNext(filteredItemList.at(filteredItemList.length - 1).key);
+          lastFetchCursor.current = filteredItemList.at(filteredItemList.length - 1).key;
+          return;
         }
-        return;
       }
-
-      if (lastIdx > 0 && lastIdx + overscan >= itemList.length) {
-        if (hasNextPage) {
-          console.log('load next:', itemList.at(itemList.length - 1));
-          onLoadNext(itemList.at(itemList.length - 1).key);
+      const firstRendered = items.at(0);
+      if (firstRendered) {
+        const firstIdx = itemList.findIndex(it => it.key === firstRendered.key);
+        if (
+          firstIdx > 0 &&
+          firstIdx <= overscan &&
+          !fetchPrevLock.current &&
+          lastFetchCursor.current !== firstRendered.key
+        ) {
+          onLoadPrev?.(filteredItemList.at(0).key);
+          fetchPrevLock.current = true;
+          lastFetchCursor.current = filteredItemList.at(0).key;
         }
-        return;
+        if (firstIdx > overscan) {
+          fetchPrevLock.current = false;
+        }
       }
     },
   };

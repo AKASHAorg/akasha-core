@@ -1,7 +1,18 @@
 import * as React from 'react';
 import { VirtualList, VirtualListInterface, VirtualListProps } from './virtual-list';
-import { createVirtualDataItem, HEADER_COMPONENT, VirtualDataItem } from './virtual-item';
+import {
+  createVirtualDataItem,
+  HEADER_COMPONENT,
+  LOADING_INDICATOR,
+  VirtualDataItem,
+  VirtualItemInfo,
+} from './virtual-item';
 import { useEdgeDetector } from './use-edge-detector';
+
+export const enum IndicatorPosition {
+  TOP,
+  BOTTOM,
+}
 
 export type RestorationItem = {
   key: string;
@@ -23,12 +34,14 @@ export type VirtualizerProps<T> = {
   renderItem: (data: T) => React.ReactNode;
   initialRect?: VirtualListProps<unknown>['initialRect'];
   initialScrollState?: ScrollerState;
-  hasNextPage?: VirtualListProps<unknown>['hasNextPage'];
-  hasPrevPage?: VirtualListProps<unknown>['hasPrevPage'];
   overscan?: VirtualListProps<unknown>['overscan'];
   itemSpacing?: number;
   onFetchNextPage: (lastKey: string) => void;
   onFetchPrevPage?: (firstKey: string) => void;
+  isFetchingNext?: boolean;
+  isFetchingPrev?: boolean;
+  loadingIndicator?: (position: IndicatorPosition) => React.ReactNode;
+  debug?: boolean;
 };
 
 export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -41,12 +54,12 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     items,
     renderItem,
     initialScrollState,
-    hasNextPage,
-    hasPrevPage,
     overscan = 5,
     itemSpacing = 8,
     onFetchNextPage,
     onFetchPrevPage,
+    loadingIndicator,
+    debug = false,
   } = props;
   const prevRestoreKey = React.useRef(null);
   const vlistRef = React.useRef<VirtualListInterface>();
@@ -55,8 +68,6 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     overscan,
     onLoadNext: onFetchNextPage,
     onLoadPrev: onFetchPrevPage,
-    hasNextPage,
-    hasPrevPage,
   });
   const getSavedScroll = () => {
     // @TODO: load scroll positions from database
@@ -75,6 +86,19 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   const saveScroll = () => {
     // @TODO: save scroll position object to database
     const items = vlistRef.current.getRestorationItems();
+    console.log(items, '<< restoration items');
+  };
+
+  const handleScrollEnd = () => {
+    saveScroll();
+  };
+
+  const handleEdgeDetectorUpdate = (
+    itemList: VirtualItemInfo[],
+    mountedItems: VirtualItemInfo[],
+    alreadyRendered: boolean,
+  ) => {
+    edgeDetector.update(itemList, mountedItems, alreadyRendered);
   };
 
   if (restorationKey && !prevRestoreKey.current) {
@@ -84,9 +108,17 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
 
   const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
     const list = [];
+    if (loadingIndicator) {
+      list.push(
+        createVirtualDataItem(`${LOADING_INDICATOR}_top`, {}, false, () =>
+          loadingIndicator(IndicatorPosition.TOP),
+        ),
+      );
+    }
     if (header) {
       list.push(createVirtualDataItem(HEADER_COMPONENT, {}, true, () => header));
     }
+
     list.push(
       ...items.map(it => {
         const itemKey = itemKeyExtractor(it);
@@ -94,8 +126,15 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
         return createVirtualDataItem(itemKey, it, true, renderItem, idx);
       }),
     );
+    if (loadingIndicator) {
+      list.push(
+        createVirtualDataItem(`${LOADING_INDICATOR}_bottom`, {}, false, () =>
+          loadingIndicator(IndicatorPosition.BOTTOM),
+        ),
+      );
+    }
     return list;
-  }, [header, itemIndexExtractor, itemKeyExtractor, items, renderItem]);
+  }, [header, itemIndexExtractor, itemKeyExtractor, items, loadingIndicator, renderItem]);
 
   const scrollRestorationType = React.useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -113,10 +152,11 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       scrollRestorationType={scrollRestorationType}
       onScrollSave={saveScroll}
       scrollRestoreItem={restoreItem.current[restorationKey]}
-      hasNextPage={hasNextPage}
       overscan={overscan}
       itemSpacing={itemSpacing}
-      onEdgeDetectorUpdate={edgeDetector.update}
+      onEdgeDetectorUpdate={handleEdgeDetectorUpdate}
+      onScrollEnd={handleScrollEnd}
+      debug={debug}
     />
   );
 };

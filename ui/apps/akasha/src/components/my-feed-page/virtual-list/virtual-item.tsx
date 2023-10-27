@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useResizeObserver } from './use-resize-observer';
 
 export const HEADER_COMPONENT = 'HEADER';
+export const LOADING_INDICATOR = 'LOADING_INDICATOR';
 
 export type VirtualItemInfo = {
   key: string;

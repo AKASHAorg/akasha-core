@@ -213,14 +213,16 @@ export class VirtualizerCore<T> {
         listHeight: height,
         allItems: nextProjection.allItems,
         repositionOffset: repositioned.offset,
+        alreadyRendered,
+        mustReposition,
       };
     } else {
       return {
         mountedItems: nextProjection.nextRendered,
         listHeight: height,
-        mustReposition: mustReposition,
-        alreadyRendered: alreadyRendered,
         allItems: nextProjection.allItems,
+        alreadyRendered,
+        mustReposition,
       };
     }
   };
@@ -337,7 +339,6 @@ export class VirtualizerCore<T> {
   /********************************
    *                              *
    *       PRIVATE METHODS        *
-   *                              *
    *                              *
    *******************************/
 

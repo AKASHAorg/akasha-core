@@ -16,7 +16,7 @@ export class Rect {
 
     return (
       (this.getTop() >= targetTop && this.getTop() < targetBottom) ||
-      (targetTop >= this.getTop() && this.getTop() < this.getBottom())
+      (targetTop >= this.getTop() && targetTop < this.getBottom())
     );
   };
   translateRelativeTo = (node: HTMLElement) => {

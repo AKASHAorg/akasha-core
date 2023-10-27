@@ -1,23 +1,16 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { Profile } from '@akashaorg/typings/lib/ui';
-import {
-  useGetInterestsByDidQuery,
-  useInfiniteGetBeamsQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { EntityTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
-import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
-import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
-import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useInfiniteBeams } from '@akashaorg/ui-lib-feed/lib/utils/use-infinite-beams';
 import { ScrollStateDBWrapper } from '@akashaorg/ui-lib-feed/lib/utils/scroll-state-db';
-import { Virtualizer } from './virtual-list';
-import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import { IndicatorPosition, Virtualizer } from './virtual-list';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -37,12 +30,17 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
     return new ScrollStateDBWrapper('scroll-state');
   }, []);
 
-  const { pages, hasNextPage, hasPreviousPage, tryFetchNextPage, tryFetchPreviousPage } =
-    useInfiniteBeams({
-      scrollerOptions: { overscan: 10 },
-      queryKey: 'my-feed-page',
-      db,
-    });
+  const {
+    pages,
+    isFetchingPreviousPage,
+    isFetchingNextPage,
+    tryFetchNextPage,
+    tryFetchPreviousPage,
+  } = useInfiniteBeams({
+    scrollerOptions: { overscan: 10 },
+    queryKey: 'my-feed-page',
+    db,
+  });
 
   const tagSubsReq = useGetInterestsByDidQuery(
     { id: loggedProfileData?.did.id },
@@ -122,15 +120,30 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       {/*  />*/}
       {/*</Stack>*/}
       <Virtualizer<AkashaBeamEdge>
+        debug={true}
         estimatedHeight={150}
         items={pages}
+        loadingIndicator={(position: IndicatorPosition) => {
+          if (isFetchingPreviousPage && position === IndicatorPosition.TOP) {
+            return (
+              <Stack align="center">
+                <Spinner />
+              </Stack>
+            );
+          }
+          if (isFetchingNextPage && position === IndicatorPosition.BOTTOM) {
+            return (
+              <Stack align="center">
+                <Spinner />
+              </Stack>
+            );
+          }
+        }}
         itemKeyExtractor={item => item.cursor}
         restorationKey={'my-feed-page-scroll-restore'}
         itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
         onFetchNextPage={handleFetchNextPage}
         onFetchPrevPage={handleFetchPrevPage}
-        hasNextPage={hasNextPage}
-        hasPrevPage={hasPreviousPage}
         renderItem={itemData => (
           <BeamCard
             entryData={itemData.node}

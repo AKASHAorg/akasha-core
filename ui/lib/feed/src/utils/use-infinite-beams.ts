@@ -19,14 +19,11 @@ const canFetchNextPage = (req: {
   return !req.isFetchingNextPage && req.hasNextPage && !req.isError;
 };
 
-const canFetchPreviousPage = (
-  req: {
-    isFetchingPreviousPage: boolean;
-    hasPreviousPage?: boolean;
-    isError: boolean;
-  },
-  force: boolean,
-) => !req.isFetchingPreviousPage && (force ? true : req.hasPreviousPage) && !req.isError;
+const canFetchPreviousPage = (req: {
+  isFetchingPreviousPage: boolean;
+  hasPreviousPage?: boolean;
+  isError: boolean;
+}) => !req.isFetchingPreviousPage && req.hasPreviousPage && !req.isError;
 
 export type UseInfiniteBeamsOptions = {
   scrollerOptions: BeamFeedProps['scrollerOptions'];
@@ -170,7 +167,7 @@ export const useInfiniteBeams = (options: UseInfiniteBeamsOptions) => {
 
   const tryFetchPreviousPage = React.useCallback(
     (firstCursor: string, force = false) => {
-      if (canFetchPreviousPage(beamsReq, force)) {
+      if (canFetchPreviousPage(beamsReq)) {
         beamsReq
           .fetchPreviousPage({
             pageParam: {
