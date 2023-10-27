@@ -31,7 +31,7 @@
     "build:feed-app": "nx run @akashaorg/akasha.world:build",
     "start:storybook": "nx run @akashaorg/design-system-components:storybook",
     "build:storybook": "nx run @akashaorg/design-system-components:build-storybook",
-    "test:apps": "nx run-many --target=test --projects=@akashaorg/app-akasha-integration,@akashaorg/app-translation,@akashaorg/app-akasha-verse,@akashaorg/app-auth-ewa,@akashaorg/app-lists,@akashaorg/app-legal,@akashaorg/app-moderation-ewa,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles,@akashaorg/app-dev-dashboard",
+    "test:apps": "nx run-many --target=test --projects=@akashaorg/app-akasha-integration,@akashaorg/app-translation,@akashaorg/app-extensions,@akashaorg/app-auth-ewa,@akashaorg/app-lists,@akashaorg/app-legal,@akashaorg/app-moderation-ewa,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles,@akashaorg/app-dev-dashboard",
     "test:design-system-core": "nx run @akashaorg/design-system-core:test",
     "test:design-system-components": "nx run @akashaorg/design-system-components:test",
     "test:hooks": "nx run @akashaorg/ui-awf-hooks:test",

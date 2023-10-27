@@ -107,7 +107,11 @@ export default class AppLoader {
     await this.initializeExtensions(this.extensionModules);
     this.extensionConfigs = this.registerExtensions(this.extensionModules);
     this.renderLayout();
+
     this.listenGlobalChannel().catch();
+    // automatic logging in if previous session is detected
+    const sdk = getSDK();
+    await sdk.api.auth.getCurrentUser();
   };
   onBeforeFirstMount = () => hidePageSplash();
   onFirstMount = () => {
@@ -157,10 +161,6 @@ export default class AppLoader {
   listenGlobalChannel = async () => {
     // listen for user login event and fetch the extensions
     const sdk = getSDK();
-    const user = await sdk.api.auth.getCurrentUser();
-    if (user) {
-      this.handleLogin(user);
-    }
     if (this.globalChannelSub) this.globalChannelSub.unsubscribe();
 
     this.globalChannelSub = sdk.api.globalChannel.subscribe({
