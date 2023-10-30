@@ -11,7 +11,7 @@ import {
   memoize,
   pxToDPR,
 } from './utils';
-import { RestorationItem } from './index';
+import { RestorationItem } from './virtual-list';
 
 export type VirtualizerCoreOptions<T> = {
   updateScheduler: ReturnType<typeof useUpdateScheduler>;
@@ -21,10 +21,10 @@ export type VirtualizerCoreOptions<T> = {
   viewport: ReturnType<typeof useViewport>;
 };
 
-export type MountedItem = {
+export type MountedItem<T> = {
   start: number;
   height: number;
-  virtualData: VirtualDataItem<unknown>;
+  virtualData: VirtualDataItem<T>;
   visible?: boolean;
 };
 
@@ -69,15 +69,15 @@ export class VirtualizerCore<T> {
   public hasMeasuredHeight = (itemKey: string) => {
     return this.itemHeights.has(itemKey);
   };
-  computeInitialProjection = (restoreItem: RestorationItem, itemList: VirtualDataItem<T>[]) => {
-    const projectionItems: MountedItem[] = [];
+  computeInitialProjection = (restoreItem: RestorationItem<T>, itemList: VirtualDataItem<T>[]) => {
+    const projectionItems: MountedItem<T>[] = [];
     if (!restoreItem) {
-      console.log('no restore item, returning...');
       return projectionItems;
     }
+    console.log('restoring from item...', restoreItem);
     const viewportHeight = this.options.viewport.getDocumentViewportHeight();
-    let offsetTop = restoreItem.offsetTop || 0;
-    const idx = itemList.findIndex(item => item.key === restoreItem.key);
+    let offsetTop = restoreItem.start || 0;
+    const idx = itemList.findIndex(item => item.key === restoreItem.virtualData.key);
     for (let i = idx; i < itemList.length && offsetTop < viewportHeight; i += 1) {
       const listItem = itemList[i];
       const itemHeight = this.itemHeights.get(listItem.key);
@@ -94,7 +94,7 @@ export class VirtualizerCore<T> {
       });
       offsetTop = offsetTop + itemHeight + this.options.itemSpacing;
     }
-    offsetTop = restoreItem.offsetTop || 0;
+    offsetTop = restoreItem.start || 0;
     for (let i = idx - 1; i > -1 && offsetTop > 0; i -= 1) {
       const listItem = itemList[i];
       const itemHeight = this.itemHeights.get(listItem.key);
@@ -115,7 +115,7 @@ export class VirtualizerCore<T> {
   computeProjection = (
     prevRendered: VirtualItemInfo[],
     itemList: VirtualDataItem<T>[],
-  ): MountedItem[] => {
+  ): MountedItem<T>[] => {
     const itemsMap = getItemDataMap(itemList);
     return prevRendered.reduce((acc, item) => {
       const itemVirtualData = itemsMap.get(item.key);
@@ -127,10 +127,12 @@ export class VirtualizerCore<T> {
         });
       }
       return acc;
-    }, [] as MountedItem[]);
+    }, [] as MountedItem<T>[]);
   };
 
-  getProjection = memoize(this.computeProjection);
+  public getProjection = memoize<
+    (prev: VirtualItemInfo[], itemList: VirtualDataItem<T>[]) => MountedItem<T>[]
+  >(this.computeProjection);
 
   getAllItemInfos = (startItem: VirtualItemInfo, itemList: VirtualDataItem<T>[]) => {
     const topDistance = this.getDistanceFromTop(startItem.key, itemList);

@@ -11,6 +11,8 @@ import { IndicatorPosition, Virtualizer } from './virtual-list';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { useBeams } from './use-beams';
+import { useScrollRestore } from './virtual-list/use-scroll-restore';
 
 export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -34,12 +36,12 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
     pages,
     isFetchingPreviousPage,
     isFetchingNextPage,
-    tryFetchNextPage,
-    tryFetchPreviousPage,
-  } = useInfiniteBeams({
-    scrollerOptions: { overscan: 10 },
+    fetchNextPage,
+    fetchPreviousPage,
+    fetchInitialData,
+  } = useBeams({
+    overscan: 10,
     queryKey: 'my-feed-page',
-    db,
   });
 
   const tagSubsReq = useGetInterestsByDidQuery(
@@ -90,11 +92,11 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
 
   const handleFetchNextPage = (lastItemKey: string) => {
     console.log('fetch next page', lastItemKey);
-    tryFetchNextPage(lastItemKey);
+    fetchNextPage(lastItemKey);
   };
   const handleFetchPrevPage = (firstItemKey: string) => {
     console.log('fetch prev page', firstItemKey);
-    tryFetchPreviousPage(firstItemKey);
+    fetchPreviousPage(firstItemKey);
   };
 
   return (
@@ -120,11 +122,12 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       {/*  />*/}
       {/*</Stack>*/}
       <Virtualizer<AkashaBeamEdge>
-        debug={true}
+        restorationKey={'app-akasha-integration_my-antenna'}
         estimatedHeight={150}
         items={pages}
+        onFetchInitialData={fetchInitialData}
         loadingIndicator={(position: IndicatorPosition) => {
-          if (isFetchingPreviousPage && position === IndicatorPosition.TOP) {
+          if (isFetchingPreviousPage && position === IndicatorPosition.TOP && !isFetchingNextPage) {
             return (
               <Stack align="center">
                 <Spinner />
@@ -140,7 +143,6 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
           }
         }}
         itemKeyExtractor={item => item.cursor}
-        restorationKey={'my-feed-page-scroll-restore'}
         itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
         onFetchNextPage={handleFetchNextPage}
         onFetchPrevPage={handleFetchPrevPage}
@@ -157,6 +159,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
           />
         )}
       />
+
       {/*<FeedWidget*/}
       {/*  queryKey="akasha-my-feed-query"*/}
       {/*  itemType={EntityTypes.BEAM}*/}

@@ -148,6 +148,7 @@ export const useViewport = (props: UseViewportProps) => {
     getOffsetTop: () => stateRef.current.offsetTop,
     getOffsetBottom: () => stateRef.current.offsetBottom,
     getOverScroll: () => overScroll.current,
+    setOffsetTop: (offset: number) => (stateRef.current.offsetTop = offset),
     updateOverScroll: (overscroll: number) => (overScroll.current = overscroll),
     getOffsetCorrection,
     getRelativeToRootNode,

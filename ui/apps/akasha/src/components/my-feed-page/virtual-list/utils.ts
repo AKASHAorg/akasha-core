@@ -13,9 +13,9 @@ export const getHeightBetweenItems = (first: VirtualItemInfo, last: VirtualItemI
   }
   return 0;
 };
-export const findFirstInView = (
-  items: MountedItem[],
-  compareFn: (prev: MountedItem, curr: MountedItem) => number,
+export const findFirstInView = <T>(
+  items: MountedItem<T>[],
+  compareFn: (prev: MountedItem<T>, curr: MountedItem<T>) => number,
 ) => {
   if (!items.length) return undefined;
   return items.reduce((prev, curr) => (compareFn(prev, curr) > 0 ? curr : prev));

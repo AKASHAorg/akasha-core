@@ -8,21 +8,12 @@ import {
   VirtualItemInfo,
 } from './virtual-item';
 import { useEdgeDetector } from './use-edge-detector';
+import { useScrollRestore } from './use-scroll-restore';
 
 export const enum IndicatorPosition {
   TOP,
   BOTTOM,
 }
-
-export type RestorationItem = {
-  key: string;
-  offsetTop: number;
-};
-
-export type ScrollerState = {
-  startItemCursor: string;
-  items: RestorationItem[];
-};
 
 export type VirtualizerProps<T> = {
   restorationKey: string;
@@ -33,60 +24,94 @@ export type VirtualizerProps<T> = {
   itemIndexExtractor: (itemKey: string) => number;
   renderItem: (data: T) => React.ReactNode;
   initialRect?: VirtualListProps<unknown>['initialRect'];
-  initialScrollState?: ScrollerState;
   overscan?: VirtualListProps<unknown>['overscan'];
   itemSpacing?: number;
   onFetchNextPage: (lastKey: string) => void;
   onFetchPrevPage?: (firstKey: string) => void;
+  onFetchInitialData?: (startKey: string) => void;
   isFetchingNext?: boolean;
   isFetchingPrev?: boolean;
   loadingIndicator?: (position: IndicatorPosition) => React.ReactNode;
   debug?: boolean;
+  onScrollSave?: (state: VirtualListProps<T>['initialScrollState']) => void;
 };
 
 export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   const {
-    restorationKey,
     estimatedHeight,
     itemKeyExtractor,
     itemIndexExtractor,
     header,
     items,
     renderItem,
-    initialScrollState,
     overscan = 5,
     itemSpacing = 8,
     onFetchNextPage,
     onFetchPrevPage,
     loadingIndicator,
     debug = false,
+    onFetchInitialData,
+    restorationKey,
+    onScrollSave,
   } = props;
-  const prevRestoreKey = React.useRef(null);
-  const vlistRef = React.useRef<VirtualListInterface>();
-  const restoreItem = React.useRef<Record<string, RestorationItem>>({});
+  const vlistRef = React.useRef<VirtualListInterface<T>>();
+  const prevRestoreKey = React.useRef<string>();
   const edgeDetector = useEdgeDetector({
     overscan,
     onLoadNext: onFetchNextPage,
     onLoadPrev: onFetchPrevPage,
   });
-  const getSavedScroll = () => {
-    // @TODO: load scroll positions from database
-    let restorationItems = [];
-    if (initialScrollState) {
-      const initialItems = initialScrollState.items;
-      if (initialItems.length) {
-        restorationItems = initialItems;
+
+  const scrollRestore = useScrollRestore<T>({
+    restoreKey: restorationKey,
+    enabled: !!onScrollSave,
+  });
+
+  React.useEffect(() => {
+    if (scrollRestore.isRestored) {
+      const state = scrollRestore.scrollState;
+      if (state && state.items.length) {
+        const initialItem = state.items.at(0);
+        console.log(
+          'fetch initial data starting from:',
+          initialItem.virtualData.index,
+          initialItem.virtualData.key,
+        );
       }
-      restoreItem.current[restorationKey] = restorationItems.find(it =>
-        items.some(item => itemKeyExtractor(item) === it.key),
-      );
     }
-  };
+  }, [scrollRestore]);
 
   const saveScroll = () => {
     // @TODO: save scroll position object to database
-    const items = vlistRef.current.getRestorationItems();
-    console.log(items, '<< restoration items');
+    const scrollState = vlistRef.current.getRestorationState();
+    const items = scrollState.items
+      .filter(
+        it =>
+          !it.virtualData.key.startsWith(LOADING_INDICATOR) &&
+          it.virtualData.key !== HEADER_COMPONENT,
+      )
+      .map(it => {
+        return {
+          ...it,
+          virtualData: {
+            key: it.virtualData.key,
+            data: it.virtualData.data,
+            index: it.virtualData.index,
+            maybeRef: it.virtualData.maybeRef,
+          },
+        };
+      });
+
+    const newScrollState = {
+      listHeight: scrollState.listHeight,
+      items,
+    };
+
+    if (onScrollSave) {
+      onScrollSave(newScrollState);
+    } else {
+      scrollRestore.saveScrollState(newScrollState);
+    }
   };
 
   const handleScrollEnd = () => {
@@ -102,7 +127,7 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   };
 
   if (restorationKey && !prevRestoreKey.current) {
-    getSavedScroll();
+    scrollRestore.fetchScrollState();
     prevRestoreKey.current = restorationKey;
   }
 
@@ -115,6 +140,7 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
         ),
       );
     }
+
     if (header) {
       list.push(createVirtualDataItem(HEADER_COMPONENT, {}, true, () => header));
     }
@@ -128,8 +154,12 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     );
     if (loadingIndicator) {
       list.push(
-        createVirtualDataItem(`${LOADING_INDICATOR}_bottom`, {}, false, () =>
-          loadingIndicator(IndicatorPosition.BOTTOM),
+        createVirtualDataItem(
+          `${LOADING_INDICATOR}_bottom`,
+          {},
+          false,
+          () => loadingIndicator(IndicatorPosition.BOTTOM),
+          list.length - 1,
         ),
       );
     }
@@ -150,8 +180,6 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       estimatedHeight={estimatedHeight}
       itemList={itemList}
       scrollRestorationType={scrollRestorationType}
-      onScrollSave={saveScroll}
-      scrollRestoreItem={restoreItem.current[restorationKey]}
       overscan={overscan}
       itemSpacing={itemSpacing}
       onEdgeDetectorUpdate={handleEdgeDetectorUpdate}

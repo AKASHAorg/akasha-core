@@ -1,5 +1,7 @@
 import * as React from 'react';
 import {
+  HEADER_COMPONENT,
+  LOADING_INDICATOR,
   VirtualDataItem,
   VirtualItem,
   VirtualItemInfo,
@@ -10,16 +12,27 @@ import { useViewport } from './use-viewport';
 import { Rect } from './rect';
 import { useUpdateScheduler } from './update-scheduler';
 import { useDebounce } from './use-debounce';
-import { RestorationItem } from './index';
 import { useStateWithCallback } from './use-state-with-callback';
 import { MountedItem, VirtualizerCore } from './virtualizer-core';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { useEdgeDetector } from './use-edge-detector';
 
-export type VirtualListInterface = {
+export type VirtualListInterface<T> = {
   scrollToNewest: () => void;
-  getRestorationItems: () => MountedItem[];
+  getRestorationState: () => ScrollerState<T>;
   isAtNewest: () => boolean;
+};
+
+export type RestorationItem<T> = {
+  start: MountedItem<T>['start'];
+  height: MountedItem<T>['height'];
+  visible?: MountedItem<T>['visible'];
+  virtualData: Omit<MountedItem<T>['virtualData'], 'render'>;
+};
+export type ScrollerState<T> = {
+  listHeight: number;
+  items: RestorationItem<T>[];
+  restored?: boolean;
 };
 
 export type VirtualListProps<T> = {
@@ -27,21 +40,20 @@ export type VirtualListProps<T> = {
   itemList: VirtualDataItem<T>[];
   scrollRestorationType: ScrollRestoration;
   initialRect?: Rect;
-  onScrollSave: () => void;
-  scrollRestoreItem: RestorationItem;
   overscan: number;
   itemSpacing: number;
   onEdgeDetectorUpdate: ReturnType<typeof useEdgeDetector>['update'];
   onScrollEnd?: () => void;
   debug: boolean;
+  initialScrollState?: ScrollerState<T>;
 };
 
 export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref) => {
   React.useImperativeHandle(
     ref,
-    (): VirtualListInterface => ({
+    (): VirtualListInterface<T> => ({
       scrollToNewest: scrollToNewest.current,
-      getRestorationItems,
+      getRestorationState,
       isAtNewest,
     }),
   );
@@ -51,7 +63,7 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     itemList,
     initialRect,
     scrollRestorationType,
-    scrollRestoreItem,
+    initialScrollState,
     overscan,
     itemSpacing,
     onEdgeDetectorUpdate,
@@ -157,13 +169,27 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
   );
 
   const onFirstMount = () => {
+    let scrollRestoreItem: RestorationItem<T>;
+
+    if (initialScrollState.restored && initialScrollState?.items) {
+      const scrollRestoreItemIdx = initialScrollState.items.findIndex(restoreItem =>
+        itemList.some(it => it.key === restoreItem.virtualData.key),
+      );
+
+      if (scrollRestoreItemIdx >= 0) {
+        scrollRestoreItem = initialScrollState.items[scrollRestoreItemIdx];
+      }
+    }
+
     const initialProjection = virtualCore.current.computeInitialProjection(
       scrollRestoreItem,
       itemList,
     );
+
     if (scrollRestorationType === 'manual') {
       viewport.scrollBy(-1);
     }
+
     if (initialProjection.length > 0) {
       const listHeight = viewport.getDocumentViewportHeight();
       setListState(
@@ -204,32 +230,36 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
   const isAtNewest = () => {
     const viewportRect = viewport.getRelativeToRootNode();
     if (!viewportRect) return true;
-    // if (hasNextPage) {
-    //   return viewportRect.getBottom() >= listState.listHeight;
-    // }
-    // @TODO: calculate list's root node offset top
+    // @TODO: calculate list's root node top
     return viewportRect.getTop() <= listNodeRef.current.offsetTop;
   };
 
-  const getRestorationItems = () => {
+  const getRestorationState = (): ScrollerState<T> => {
     const listRect = listNodeRef.current?.getBoundingClientRect();
     const viewportRect = viewport.getRelativeToRootNode();
-    console.log(viewportRect, 'viewport in restoration item getter');
     if (listRect && viewportRect) {
       // @TODO: get items that are in the viewportRect;
-      return virtualCore.current.getProjection(listState.mountedItems, itemList).filter(it => {
-        return new Rect(it.start, virtualCore.current.getItemHeight(it.virtualData.key)).overlaps(
-          viewportRect,
-        );
-      });
+      const projection = virtualCore.current.getProjection(
+        listState.mountedItems,
+        itemList,
+      ) as MountedItem<T>[];
+
+      return {
+        listHeight: listState.listHeight,
+        items: projection.filter(it => {
+          return new Rect(it.start, virtualCore.current.getItemHeight(it.virtualData.key)).overlaps(
+            viewportRect,
+          );
+        }),
+      };
     }
-    return [];
+    return {
+      listHeight: 0,
+      items: [],
+    };
   };
 
   const scrollToNewest = React.useRef((shouldUpdate?: boolean) => {
-    // if (hasNextPage) {
-    //   viewport.scrollTo(0, listState.listHeight);
-    // }
     viewport.scrollToTop();
     if (!shouldUpdate) return;
     updateScheduler.update('scrollToNewest');

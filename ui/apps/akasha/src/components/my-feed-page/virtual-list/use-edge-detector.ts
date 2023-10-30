@@ -10,7 +10,7 @@ export type UseEdgeDetectorProps = {
 export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
   const { overscan, onLoadPrev, onLoadNext } = props;
   const fetchPrevLock = React.useRef(true);
-  const lastFetchCursor = React.useRef<string>(null);
+  const pageCursors = React.useRef<string[]>([]);
   return {
     // @TODO: requires a bit of refactoring
     // disallow fetching if it's not scrolling from outside the area
@@ -32,11 +32,10 @@ export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
         if (
           lastIdx > 0 &&
           lastIdx + overscan >= itemList.length &&
-          lastFetchCursor.current !== lastRendered.key
+          !pageCursors.current.includes(filteredItemList.at(filteredItemList.length - 1).key)
         ) {
           onLoadNext(filteredItemList.at(filteredItemList.length - 1).key);
-          lastFetchCursor.current = filteredItemList.at(filteredItemList.length - 1).key;
-          return;
+          pageCursors.current.push(filteredItemList.at(filteredItemList.length - 1).key);
         }
       }
       const firstRendered = items.at(0);
@@ -46,11 +45,11 @@ export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
           firstIdx > 0 &&
           firstIdx <= overscan &&
           !fetchPrevLock.current &&
-          lastFetchCursor.current !== firstRendered.key
+          !pageCursors.current.includes(filteredItemList.at(0).key)
         ) {
           onLoadPrev?.(filteredItemList.at(0).key);
           fetchPrevLock.current = true;
-          lastFetchCursor.current = filteredItemList.at(0).key;
+          pageCursors.current.unshift(filteredItemList.at(0).key);
         }
         if (firstIdx > overscan) {
           fetchPrevLock.current = false;
