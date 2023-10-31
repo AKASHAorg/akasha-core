@@ -64,6 +64,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     scrollerOptions = { overscan: 5 },
     queryKey,
     newItemsPublishedLabel,
+    loggedProfileData,
   } = props;
 
   const { uiEvents } = useRootComponentProps();
@@ -127,6 +128,7 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
                 {!entryData.node && <EntryCardLoading />}
                 {entryData.node && (
                   <BeamCard
+                    loggedProfileData={loggedProfileData}
                     entryData={entryData.node}
                     contentClickable={true}
                     onReflect={() => {

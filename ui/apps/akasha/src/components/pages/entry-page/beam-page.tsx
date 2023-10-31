@@ -61,7 +61,7 @@ const BeamPage: React.FC<unknown> = () => {
       <BeamSection
         beamId={beamId}
         entryData={entryData}
-        isLoggedIn={!!loggedProfileData?.id}
+        loggedProfileData={loggedProfileData}
         onNavigate={onNavigate}
         showLoginModal={showLoginModal}
       />

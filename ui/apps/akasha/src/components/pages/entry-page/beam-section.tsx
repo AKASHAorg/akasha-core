@@ -8,21 +8,23 @@ import routes, { REFLECT } from '../../../routes';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useTranslation } from 'react-i18next';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, IContentClickDetails, Profile } from '@akashaorg/typings/lib/ui';
 import { useLocation } from 'react-router-dom';
 
 type BeamSectionProps = {
   beamId: string;
   entryData: AkashaBeam;
-  isLoggedIn: boolean;
+  loggedProfileData: Profile;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
   showLoginModal: () => void;
 };
 
 const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, entryData, isLoggedIn, onNavigate, showLoginModal } = props;
+  const { beamId, entryData, loggedProfileData, onNavigate, showLoginModal } = props;
   const { t } = useTranslation('app-akasha-integration');
   const location = useLocation();
+
+  const isLoggedIn = !!loggedProfileData.id;
 
   const wrapperRef = useCloseActions(() => {
     onNavigate({ authorId: entryData?.author?.id, id: entryData?.id }, EntityTypes.BEAM);
@@ -31,6 +33,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
   return (
     <Stack spacing="gap-y-2" ref={wrapperRef}>
       <BeamCard
+        loggedProfileData={loggedProfileData}
         entryData={entryData}
         noWrapperCard={true}
         contentClickable={false}

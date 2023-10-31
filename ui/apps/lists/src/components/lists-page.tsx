@@ -21,14 +21,15 @@ const ListsPage: React.FC<unknown> = () => {
 
   const bookmarkDelete = null;
 
+  const { isLoggedIn } = useLoggedIn();
+
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
       return resp.viewer?.akashaProfile;
     },
+    enabled: isLoggedIn,
   });
   const loggedProfileData = profileDataReq?.data;
-
-  const { isLoggedIn } = useLoggedIn();
 
   const listsReq = null;
   const lists = listsReq?.data || [];

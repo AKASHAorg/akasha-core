@@ -157,6 +157,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
             !accountAwaitingModeration && */}
           {!itemData.nsfw && itemData.active && (
             <EntryCard
+              editable={itemData.author.id === loggedProfileData?.did?.id}
               entryData={itemData}
               authorProfile={{ data: profileData, status: profileDataReq.status }}
               sortedContents={sortByKey(itemData.content, 'order')}

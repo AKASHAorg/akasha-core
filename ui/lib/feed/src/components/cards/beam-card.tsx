@@ -5,7 +5,7 @@ import EntryCard, {
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { ContentBlockModes, EntityTypes } from '@akashaorg/typings/lib/ui';
+import { ContentBlockModes, EntityTypes, Profile } from '@akashaorg/typings/lib/ui';
 import { sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
@@ -22,10 +22,11 @@ type BeamCardProps = Pick<
   | 'disableActions'
 > & {
   entryData: AkashaBeam;
+  loggedProfileData: Profile;
 };
 
 const BeamCard: React.FC<BeamCardProps> = props => {
-  const { entryData, onReflect, ...rest } = props;
+  const { entryData, loggedProfileData, onReflect, ...rest } = props;
   const { t } = useTranslation('ui-lib-feed');
   const { getRoutingPlugin } = useRootComponentProps();
   const { getTranslationPlugin } = useRootComponentProps();
@@ -54,6 +55,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
 
   return (
     <EntryCard
+      editable={entryData.author.id === loggedProfileData?.did?.id}
       entryData={entryData}
       authorProfile={{ data: profileData, status: profileDataReq.status }}
       locale={locale}
