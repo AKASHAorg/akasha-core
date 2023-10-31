@@ -11,7 +11,6 @@ import ListAppTopbar from '@akashaorg/design-system-components/lib/components/Li
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 
 const ListsPage: React.FC<unknown> = () => {
   const [showModal, setShowModal] = React.useState(false);
@@ -22,14 +21,6 @@ const ListsPage: React.FC<unknown> = () => {
   const bookmarkDelete = null;
 
   const { isLoggedIn } = useLoggedIn();
-
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-    enabled: isLoggedIn,
-  });
-  const loggedProfileData = profileDataReq?.data;
 
   const listsReq = null;
   const lists = listsReq?.data || [];
@@ -46,7 +37,7 @@ const ListsPage: React.FC<unknown> = () => {
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData?.did?.id) {
+    if (!isLoggedIn) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     navigateToModal({ name: 'report-modal', itemId, itemType });
