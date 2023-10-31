@@ -146,11 +146,13 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             </Tooltip>
           )}
           {entryData?.createdAt &&
-            (editable ? (
+            (notEditableLabel ? (
               <Tooltip placement={'top'} content={notEditableLabel}>
                 {editableIconButtonUi}
               </Tooltip>
-            ) : null)}
+            ) : (
+              editable && editableIconButtonUi
+            ))}
           {!entryData.active && (
             <CardHeaderMenuDropdown
               disabled={disableActions}
