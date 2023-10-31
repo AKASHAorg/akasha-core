@@ -235,10 +235,7 @@ const Layout: React.FC<unknown> = () => {
 
           <Stack customStyle="sticky top-0 h-screen">
             <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
-              <Widget
-                name={layoutConfig.widgetSlotId}
-                loadingIndicator={<TrendingWidgetLoader />}
-              />
+              <Widget name={layoutConfig.widgetSlotId} loadingIndicator={<Spinner />} />
               <Widget
                 name={layoutConfig.rootWidgetSlotId}
                 loadingIndicator={<TrendingWidgetLoader />}

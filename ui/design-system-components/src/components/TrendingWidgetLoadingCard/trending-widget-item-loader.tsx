@@ -6,8 +6,8 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
 const TrendingWidgetItemLoader: React.FC = () => {
   return (
-    <Stack direction="row" spacing="gap-x-4" align="center" justify="between" fullWidth>
-      <Stack direction="row" spacing="gap-x-2">
+    <Stack direction="row" spacing="gap-x-12" align="center" justify="between" fullWidth>
+      <Stack direction="row" spacing="gap-x-2" fullWidth>
         <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
         <Stack
           direction="column"

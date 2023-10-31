@@ -28,8 +28,6 @@ const AppRoutes: React.FC<unknown> = () => {
     _navigateToModal.current?.({ name: 'login', redirectTo });
   }, []);
 
-  if (profileDataReq.status === 'loading') return <AntennaLoader />;
-
   return (
     <Router basename={baseRouteName}>
       <Stack>

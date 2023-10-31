@@ -9,8 +9,8 @@ const TopbarLoader: React.FC = () => {
   return (
     <div>
       <Card
-        elevation="1"
-        customStyle="flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-8)"
+        padding="p-0"
+        customStyle="flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-8) w-full"
       >
         <Stack direction="row" spacing="gap-x-2">
           {Array.from({ length: 2 }).map((el, index: number) => (
