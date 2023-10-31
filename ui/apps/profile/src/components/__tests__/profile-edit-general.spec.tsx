@@ -4,7 +4,7 @@ import React from 'react';
 import EditProfilePage from '../pages/edit-profile';
 
 import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import * as loginHook from '@akashaorg/ui-awf-hooks/lib/use-login.new';
+import * as useLoggedIn from '@akashaorg/ui-awf-hooks/lib/use-logged-in';
 
 import userEvent from '@testing-library/user-event';
 
@@ -12,7 +12,7 @@ import { renderWithAllProviders, act, screen, genUser, waitFor } from '@akashaor
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { MemoryRouter as Router } from 'react-router-dom';
 
-describe('< ProfileInfoPage />', () => {
+describe('<EditProfilePage />', () => {
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
       <EditProfilePage handleFeedback={jest.fn} />
@@ -40,14 +40,8 @@ describe('< ProfileInfoPage />', () => {
     ).mockReturnValue({ data: { isViewer: true, akashaProfile: profile }, status: 'success' });
 
     (
-      jest.spyOn(loginHook, 'useGetLogin') as unknown as jest.SpyInstance<{
-        data: { id: string };
-        status: 'success' | 'error';
-      }>
-    ).mockReturnValue({
-      data: { id: 'did:pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff' },
-      status: 'success',
-    });
+      jest.spyOn(useLoggedIn, 'useLoggedIn') as unknown as jest.SpyInstance<{ isLoggedIn: boolean }>
+    ).mockReturnValue({ isLoggedIn: true });
   });
 
   it('should render edit page', async () => {
