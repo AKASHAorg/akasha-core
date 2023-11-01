@@ -115,9 +115,12 @@ export const useBlocksPublishing = () => {
 
   // convenience method to add a new block into the beam editor
   // if index (idx) param is omitted, it will be added as the last block in the list
-  const addBlockToList = (selectedBlock: { id: string; appName: string }, afterIdx: number) => {
+  const addBlockToList = (
+    selectedBlock: { propertyType: string; appName: string },
+    afterIdx?: number,
+  ) => {
     const block = availableBlocks.find(
-      bl => bl.propertyType === selectedBlock.id && bl.appName === selectedBlock.appName,
+      bl => bl.propertyType === selectedBlock.propertyType && bl.appName === selectedBlock.appName,
     );
 
     if (afterIdx) {
@@ -146,12 +149,21 @@ export const useBlocksPublishing = () => {
     ]);
   };
 
+  const removeBlockFromList = (index: number) => {
+    setBlocksInUse(prev => {
+      const beforeSlice = prev.slice(0, index);
+      const afterSlice = prev.slice(index + 1).map(bl => ({ ...bl, order: bl.order - 1 }));
+      return beforeSlice.concat(afterSlice);
+    });
+  };
+
   return {
     isPublishing,
     setIsPublishing,
     createContentBlocks,
     blocksInUse,
     addBlockToList,
+    removeBlockFromList,
     availableBlocks,
   };
 };

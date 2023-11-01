@@ -51,7 +51,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
           <EditorPlaceholder
             onClick={showLoginModal}
             profileId={null}
-            buttonLabel={t('Reflect')}
+            actionLabel={t('Reflect')}
             placeholderLabel={t('Share your thoughts')}
           />
         )}

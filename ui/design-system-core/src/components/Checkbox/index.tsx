@@ -128,7 +128,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     <div
       className={tw(
         apply(
-          `leading-6 my-2 hover:text-secondaryLight dark:hover:text-secondaryDark flex ${customStyle}`,
+          `cursor-pointer leading-6 my-2 hover:text-secondaryLight dark:hover:text-secondaryDark flex ${customStyle}`,
         ),
       )}
     >

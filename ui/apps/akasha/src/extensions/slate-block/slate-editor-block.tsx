@@ -85,18 +85,25 @@ export const SlateEditorBlock = (
 
   return (
     <EditorBox
+      // ref={editorRef}
+      showAvatar={false}
       profileId={'profileId'}
       placeholderLabel={'write here'}
       onPublish={() => {
         // void
       }}
+      // handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
+      // linkPreview={linkPreview}
+      // getLinkPreview={getLinkPreview}
       getMentions={() => {
         //void
       }}
       getTags={() => {
         // void
       }}
-      withMeter={false}
+      // mentions={mentions}
+      // tags={tags}
+      withMeter={true}
       editorState={editorState}
       setEditorState={(value: IEntryData['slateContent']) => {
         setEditorState(value);
