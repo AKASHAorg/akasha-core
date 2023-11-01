@@ -52,7 +52,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
           <EditorPlaceholder
             onClick={showLoginModal}
             profileId={null}
-            buttonLabel={t('Reflect')}
+            actionLabel={t('Reflect')}
             placeholderLabel={t('Share your thoughts')}
           />
         )}
