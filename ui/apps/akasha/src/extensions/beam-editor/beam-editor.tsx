@@ -141,22 +141,25 @@ export const BeamEditor: React.FC = () => {
           ))}
         </Stack>
         <Stack
-          padding={16}
-          spacing="gap-2"
           background={{ light: 'white', dark: 'grey2' }}
           customStyle={`absolute top-0 left-0 h-full w-full z-1 ${
             uiState === 'tags' ? 'flex' : 'hidden'
           }`}
         >
-          <Text variant="h6">{t('Beam Tags')}</Text>
-          <Text>
-            {t(
-              'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
+          <Stack padding={16} spacing="gap-2">
+            <Text variant="h6">{t('Beam Tags')}</Text>
+            <Text variant="subtitle1">
+              {t(
+                'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
+              )}
+            </Text>
+            <TextField value={tagValue} placeholder={t('Search for tags')} type="text" />
+            {tagSelection.length === 0 && (
+              <Text variant="body2">{t('You haven’t added any tags yet')}</Text>
             )}
-          </Text>
-          <TextField value={tagValue} placeholder={t('Search for tags')} type="text" />
-          {tagSelection.length === 0 && <Text>{t('You haven’t added any tags yet')}</Text>}
-          {tagSelection.length > 0 && tagSelection.map(tag => <Pill label={tag} />)}
+            {tagSelection.length > 0 &&
+              tagSelection.map((tag, index) => <Pill key={index} label={tag} />)}
+          </Stack>
         </Stack>
       </Stack>
       <Footer

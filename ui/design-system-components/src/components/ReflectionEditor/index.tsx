@@ -14,6 +14,7 @@ export type ReflectionEditorProps = EditorBoxProps & {
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
   background?: { light: Colors; dark: Colors };
+  onPlaceholderClick?: () => void;
 };
 
 const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
@@ -26,7 +27,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     disablePublishLabel,
     disablePublish,
     onPublish,
-    handleSaveImagesDraft,
     handleSaveLinkPreviewDraft,
     linkPreview,
     getLinkPreview,
@@ -34,7 +34,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     getTags,
     mentions,
     tags,
-    uploadRequest,
     openEditor = false,
     showCancelButton,
     cancelButtonLabel,
@@ -44,7 +43,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     embedEntryData,
     setEditorState,
     showDraft,
-    uploadedImages,
     onClear,
     background,
   } = props;
@@ -111,7 +109,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             disablePublishLabel={disablePublishLabel}
             disablePublish={disablePublish}
             onPublish={handlePublish}
-            handleSaveImagesDraft={handleSaveImagesDraft}
             handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
             linkPreview={linkPreview}
             getLinkPreview={getLinkPreview}
@@ -119,8 +116,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             getTags={getTags}
             mentions={mentions}
             tags={tags}
-            uploadRequest={uploadRequest}
-            uploadedImages={uploadedImages}
             withMeter={true}
             editorState={editorState}
             setEditorState={setEditorState}

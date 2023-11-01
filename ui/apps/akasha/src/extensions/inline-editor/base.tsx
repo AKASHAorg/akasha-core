@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { uploadMediaToTextile, getLinkPreview } from '@akashaorg/ui-awf-hooks';
+import { getLinkPreview } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
 import { IEntryData, RootExtensionProps } from '@akashaorg/typings/lib/ui';
@@ -73,7 +73,6 @@ export function Base(
           getTags={handleTagQueryChange}
           tags={tagSearch?.data}
           mentions={mentionSearch?.data}
-          uploadRequest={uploadMediaToTextile}
           background={props.entryData && { light: 'grey9', dark: 'grey3' }}
         />
       )}

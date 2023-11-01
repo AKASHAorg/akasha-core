@@ -19,7 +19,6 @@ const ChatEditor: React.FC<Omit<EditorBoxProps, 'setEditorState'>> = props => {
     getTags,
     mentions,
     tags,
-    uploadRequest,
     showCancelButton,
     cancelButtonLabel,
     onCancelClick,
@@ -44,7 +43,6 @@ const ChatEditor: React.FC<Omit<EditorBoxProps, 'setEditorState'>> = props => {
         getTags={getTags}
         mentions={mentions}
         tags={tags}
-        uploadRequest={uploadRequest}
         withMeter={true}
         editorState={contentState}
         setEditorState={setContentState}

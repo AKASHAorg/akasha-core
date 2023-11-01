@@ -26,14 +26,11 @@ import { TagPopover } from './tag-popover';
 import { serializeToPlainText } from './serialize';
 import { MentionPopover } from './mention-popover';
 import { editorDefaultValue } from './initialValue';
-import { ImageData, ImageUpload } from './image-upload';
 import { renderElement, renderLeaf } from './renderers';
 import { withMentions, withImages, withTags, withLinks } from './plugins';
 
 import EmbedBox from '../EmbedBox';
 import LinkPreview from '../LinkPreview';
-import ImageGallery from '../ImageGallery';
-import { ImageObject } from '../ImageGallery/image-grid-item';
 
 const MAX_LENGTH = 280;
 
@@ -48,27 +45,19 @@ export type EditorBoxProps = {
   postLabel?: string;
   placeholderLabel?: string;
   emojiPlaceholderLabel?: string;
-  uploadFailedLabel?: string;
-  uploadingImageLabel?: string;
   disablePublishLabel?: string;
   onPublish: (publishData: IPublishData) => void;
   disablePublish?: boolean;
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
-  handleSaveImagesDraft?: (images: IEntryData['images']) => void;
   handleSaveLinkPreviewDraft?: (LinkPreview: IEntryData['linkPreview']) => void;
   linkPreview?: IEntryData['linkPreview'];
-  uploadedImages?: IEntryData['images'];
   getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
   mentions?: Profile[];
   tags?: { name: string; totalPosts: number }[];
-  uploadRequest?: (
-    data: string | File,
-    isUrl?: boolean,
-  ) => Promise<{ data?: ImageData; error?: Error }>;
   publishingApp?: string;
   editorState?: Descendant[];
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
@@ -76,7 +65,6 @@ export type EditorBoxProps = {
   showCancelButton?: boolean;
   onCancelClick?: () => void;
   cancelButtonLabel?: string;
-  onPlaceholderClick?: () => void;
   showDraft?: boolean;
   onClear?: () => void;
   showPostButton?: boolean;
@@ -92,24 +80,19 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
     profileId,
     postLabel,
     placeholderLabel,
-    uploadFailedLabel,
-    uploadingImageLabel,
     disablePublishLabel,
     disablePublish,
     onPublish,
     embedEntryData,
     minHeight,
     withMeter,
-    handleSaveImagesDraft,
     handleSaveLinkPreviewDraft,
     linkPreview,
-    uploadedImages = [],
     getLinkPreview,
     getMentions,
     getTags,
     mentions = [],
     tags = [],
-    uploadRequest,
     publishingApp = 'AkashaApp',
     editorState,
     setEditorState,
@@ -120,7 +103,6 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
-  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
   const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
@@ -130,13 +112,9 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
   const [letterCount, setLetterCount] = useState(0);
 
   const [publishDisabledInternal, setPublishDisabledInternal] = useState(true);
-  const [imageUploadDisabled, setImageUploadDisabled] = useState(false);
 
   const [linkPreviewState, setLinkPreviewState] = useState(linkPreview);
   const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
-
-  const [uploading, setUploading] = React.useState(false);
-  const [images, setImages] = React.useState<ImageObject[]>(uploadedImages);
 
   const handleGetLinkPreview = async (url: string) => {
     setLinkPreviewUploading(true);
@@ -158,24 +136,6 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
   const slicedMentions = React.useMemo(() => mentions.slice(0, 3), [mentions]);
 
   /**
-   * this is needed to check internal state from the parent component
-   * to prevent closing the comment editor when the user has uploaded images
-   * or has an open popover
-   */
-  React.useImperativeHandle(
-    ref,
-    () => ({
-      getImagesState: () => {
-        return images.length > 0;
-      },
-      getUploadingState: () => {
-        return uploading;
-      },
-    }),
-    [images, uploading],
-  );
-
-  /**
    * initialise editor with all the required plugins
    */
   const editorRef = useRef(
@@ -193,7 +153,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
 
   const handleInsertLink = (text: string) => {
     CustomEditor.insertLink(editor, { url: text.trim() });
-    if (images.length === 0 && !uploading && typeof getLinkPreview === 'function') {
+    if (typeof getLinkPreview === 'function') {
       handleGetLinkPreview(text);
     }
   };
@@ -258,7 +218,6 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
       app: publishingApp,
       quote: embedEntryData,
       linkPreview: linkPreviewState,
-      images: images,
       tags: [],
       mentions: [],
       version: 1,
@@ -318,9 +277,9 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
     })(value);
 
     /** disable publishing if no images/text or text too long */
-    if ((textLength > 0 || images.length !== 0) && textLength <= MAX_LENGTH) {
+    if (textLength > 0 && textLength <= MAX_LENGTH) {
       setPublishDisabledInternal(false);
-    } else if ((textLength === 0 && images.length === 0) || textLength > MAX_LENGTH) {
+    } else if (textLength === 0 || textLength > MAX_LENGTH) {
       setPublishDisabledInternal(true);
     }
 
@@ -512,53 +471,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
 
   // image insertion
 
-  const handleInsertImageLink = (data: ImageData) => {
-    if (!data.src || !data.size) {
-      return;
-    }
-    if (images.length > 7) {
-      setImageUploadDisabled(true);
-    }
-    // clear any existing link preview when inserting an image
-    if (linkPreviewState) {
-      setLinkPreviewState(null);
-      handleSaveLinkPreviewDraft(null);
-    }
-    const imgData = { ...data, id: `${Date.now()}-${data.src?.url}` };
-    if (images.length < 9) {
-      setImages(prev => {
-        handleSaveImagesDraft([...prev, imgData]);
-        return [...prev, imgData];
-      });
-    }
-    setPublishDisabledInternal(false);
-
-    // CustomEditor.insertImage(editor, data.src, data.size);
-  };
-
-  /**
-   * disable uploading media if there is a picture uploading or max number of images already
-   */
-  const handleMediaClick = () => {
-    if (uploadInputRef.current && !uploading && !imageUploadDisabled) {
-      uploadInputRef.current.click();
-    }
-  };
-
-  const handleDeleteImage = (element: ImageObject) => {
-    const newImages = images.filter(image => image.id !== element.id);
-    if (newImages.length < 9) {
-      setImageUploadDisabled(false);
-    }
-    if (newImages.length === 0) {
-      setPublishDisabledInternal(true);
-    }
-    setImages(newImages);
-    handleSaveImagesDraft(newImages);
-    // CustomEditor.deleteImage(editor, element);
-  };
-
-  const publishDisabled = publishDisabledInternal || disablePublish || uploading;
+  const publishDisabled = publishDisabledInternal || disablePublish;
 
   return (
     <div
@@ -620,18 +533,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
                 />
               )}
             </Slate>
-            <ImageUpload
-              uploading={uploading}
-              setUploading={setUploading}
-              uploadFailedLabel={uploadFailedLabel}
-              uploadingImageLabel={uploadingImageLabel}
-              uploadRequest={uploadRequest}
-              handleInsertImage={handleInsertImageLink}
-              ref={uploadInputRef}
-            />
-            {images?.length > 0 && (
-              <ImageGallery images={images} handleDeleteImage={handleDeleteImage} />
-            )}
+
             {(linkPreviewState || linkPreviewUploading) && (
               <LinkPreview
                 uploading={linkPreviewUploading}
@@ -661,15 +563,6 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
               </Popover.Panel>
             </Popover>
           </div>
-          {uploadRequest && (
-            <button className={tw(`flex items-center`)} onClick={handleMediaClick}>
-              <Icon
-                accentColor={true}
-                type="PhotoIcon"
-                disabled={uploading || imageUploadDisabled}
-              />
-            </button>
-          )}
         </div>
 
         <div className={tw(`flex flex-row gap-2 items-center`)}>
@@ -713,8 +606,6 @@ EditorBox.defaultProps = {
   postLabel: 'Post',
   disablePublishLabel: 'Authenticating',
   placeholderLabel: 'Share your thoughts',
-  uploadingImageLabel: 'Loading',
-  uploadFailedLabel: 'Upload failed.',
 };
 
 export default EditorBox;

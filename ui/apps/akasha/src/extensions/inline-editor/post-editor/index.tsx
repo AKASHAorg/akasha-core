@@ -1,17 +1,10 @@
 import * as React from 'react';
-import {
-  RootExtensionProps,
-  IPublishData,
-  AnalyticsCategories,
-  IEntryData,
-} from '@akashaorg/typings/lib/ui';
-import isEqual from 'lodash.isequal';
+import { RootExtensionProps, IPublishData, IEntryData } from '@akashaorg/typings/lib/ui';
 
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
 import { Draft, IDraftStorage } from '../utils';
 import { editorDefaultValue } from '@akashaorg/design-system-components/lib/components/Editor/initialValue';
-import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 import {
   useCreateBeamMutation,
   useCreateContentBlockMutation,
@@ -67,12 +60,6 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
   const [embeddedEntry, setEmbededEntry] = React.useState(
     action === 'repost' ? embedEntryData : draftRepostData,
   );
-
-  const handleSaveImagesDraft = images => {
-    const currentDraftPost = postDraft.get();
-    const newDraftPost = { ...currentDraftPost, images };
-    postDraft.save(newDraftPost);
-  };
 
   const handleSaveLinkPreviewDraft = linkPreview => {
     const currentDraftPost = postDraft.get();
@@ -167,7 +154,6 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
       onPublish={handlePublish}
       singleSpa={singleSpa}
       linkPreview={entryData?.linkPreview || draftPostData?.linkPreview}
-      uploadedImages={entryData?.images || draftPostData?.images}
       // @TODO replace with real data after hook fix
       embedEntryData={null}
       entryData={null}
@@ -176,7 +162,6 @@ export function PostEditor({ appName, postId, userId, singleSpa, action, draftSt
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
       showDraft={canSaveDraft}
-      handleSaveImagesDraft={handleSaveImagesDraft}
       handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
       setEditorState={(value: IEntryData['slateContent']) => {
         // if (canSaveDraft) {
