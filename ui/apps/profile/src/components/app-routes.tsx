@@ -20,7 +20,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
   const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const [showUpdatedFeedback, setShowUpdatedFeedback] = useShowFeedback(false);
-  const [showLinkCopedFeedback, setLinkCopiedFeedback] = useShowFeedback(false);
+  const [showLinkCopiedFeedback, setLinkCopiedFeedback] = useShowFeedback(false);
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
@@ -96,7 +96,7 @@ const AppRoutes: React.FC<unknown> = () => {
           customStyle="mb-4"
         />
       )}
-      {showLinkCopedFeedback && (
+      {showLinkCopiedFeedback && (
         <Snackbar
           title={`${t('Profile link copied')}!`}
           type="success"
