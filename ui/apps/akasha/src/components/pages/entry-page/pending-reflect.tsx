@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ReflectionCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflect-card';
+import ReflectionCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflection-card';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useCreateReflectMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
