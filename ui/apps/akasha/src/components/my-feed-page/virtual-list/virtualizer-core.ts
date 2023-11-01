@@ -69,18 +69,24 @@ export class VirtualizerCore<T> {
   public hasMeasuredHeight = (itemKey: string) => {
     return this.itemHeights.has(itemKey);
   };
-  computeInitialProjection = (restoreItem: RestorationItem<T>, itemList: VirtualDataItem<T>[]) => {
+  computeInitialProjection = (
+    restoreItem: RestorationItem<T>,
+    itemList: VirtualDataItem<T>[],
+    restorationItems: RestorationItem<T>[],
+  ) => {
     const projectionItems: MountedItem<T>[] = [];
     if (!restoreItem) {
       return projectionItems;
     }
-    console.log('restoring from item...', restoreItem);
-    const viewportHeight = this.options.viewport.getDocumentViewportHeight();
+    const viewportHeight =
+      this.options.viewport.getRect().getTop() + this.options.viewport.getDocumentViewportHeight();
     let offsetTop = restoreItem.start || 0;
     const idx = itemList.findIndex(item => item.key === restoreItem.virtualData.key);
     for (let i = idx; i < itemList.length && offsetTop < viewportHeight; i += 1) {
       const listItem = itemList[i];
-      const itemHeight = this.itemHeights.get(listItem.key);
+      const rstItem = restorationItems.find(restItem => restItem.virtualData.key === listItem.key);
+      const itemHeight =
+        (this.itemHeights.get(listItem.key) || rstItem?.height) ?? this.itemHeightAverage;
       if (typeof itemHeight !== 'number') {
         break;
       }
@@ -94,21 +100,22 @@ export class VirtualizerCore<T> {
       });
       offsetTop = offsetTop + itemHeight + this.options.itemSpacing;
     }
-    offsetTop = restoreItem.start || 0;
-    for (let i = idx - 1; i > -1 && offsetTop > 0; i -= 1) {
-      const listItem = itemList[i];
-      const itemHeight = this.itemHeights.get(listItem.key);
-      if (typeof itemHeight !== 'number') {
-        break;
-      }
-      offsetTop = offsetTop - itemHeight + this.options.itemSpacing;
-      projectionItems.unshift({
-        start: offsetTop,
-        height: itemHeight,
-        visible: true,
-        virtualData: { ...listItem },
-      });
-    }
+    // offsetTop = restoreItem.start || 0;
+    // for (let i = idx - 1; i > -1 && offsetTop > 0; i -= 1) {
+    //   const listItem = itemList[i];
+    //   const rstItem = restorationItems.find(restItem => restItem.virtualData.key === listItem.key);
+    //   const itemHeight = this.itemHeights.get(listItem.key) ?? rstItem.height;
+    //   if (typeof itemHeight !== 'number') {
+    //     break;
+    //   }
+    //   offsetTop = offsetTop - itemHeight + this.options.itemSpacing;
+    //   projectionItems.unshift({
+    //     start: offsetTop,
+    //     height: itemHeight,
+    //     visible: true,
+    //     virtualData: { ...listItem },
+    //   });
+    // }
     return projectionItems;
   };
 
@@ -378,30 +385,30 @@ export class VirtualizerCore<T> {
     return 0;
   };
 
-  private getTopPadding = (items: VirtualItemInfo[], viewportRect: Rect) => {
-    const maybeRefs = items.filter(it => it.maybeRef);
-    const lastRef = maybeRefs.at(maybeRefs.length - 1);
-    const firstItem = items.at(0);
-    if (!firstItem) {
-      return 0;
-    }
-    const height =
-      Rect.fromItem(lastRef ?? firstItem).getBottom() - Rect.fromItem(firstItem).getTop();
-    const space = 0; // viewport.getDocumentViewportHeight() - viewportRect.getHeight();
-    return Math.max(0, viewportRect.getHeight() - height - space);
-  };
-
-  private getBottomPadding = (items: VirtualItemInfo[], viewportRect: Rect) => {
-    const maybeRefs = items.filter(it => it.maybeRef);
-    const lastRef = maybeRefs.at(maybeRefs.length - 1);
-    const lastItem = items.at(items.length - 1);
-    if (!lastItem) {
-      return 0;
-    }
-    const height =
-      Rect.fromItem(lastItem).getBottom() - Rect.fromItem(lastRef ?? lastItem).getTop();
-    return Math.max(0, viewportRect.getHeight() - height + this.options.viewport.getOffsetBottom());
-  };
+  // private getTopPadding = (items: VirtualItemInfo[], viewportRect: Rect) => {
+  //   const maybeRefs = items.filter(it => it.maybeRef);
+  //   const lastRef = maybeRefs.at(maybeRefs.length - 1);
+  //   const firstItem = items.at(0);
+  //   if (!firstItem) {
+  //     return 0;
+  //   }
+  //   const height =
+  //     Rect.fromItem(lastRef ?? firstItem).getBottom() - Rect.fromItem(firstItem).getTop();
+  //   const space = 0; // viewport.getDocumentViewportHeight() - viewportRect.getHeight();
+  //   return Math.max(0, viewportRect.getHeight() - height - space);
+  // };
+  //
+  // private getBottomPadding = (items: VirtualItemInfo[], viewportRect: Rect) => {
+  //   const maybeRefs = items.filter(it => it.maybeRef);
+  //   const lastRef = maybeRefs.at(maybeRefs.length - 1);
+  //   const lastItem = items.at(items.length - 1);
+  //   if (!lastItem) {
+  //     return 0;
+  //   }
+  //   const height =
+  //     Rect.fromItem(lastItem).getBottom() - Rect.fromItem(lastRef ?? lastItem).getTop();
+  //   return Math.max(0, viewportRect.getHeight() - height + this.options.viewport.getOffsetBottom());
+  // };
 
   private hasMeasuredHeights = (items: VirtualItemInfo[]) =>
     items.some(item => this.itemHeights.has(item.key));

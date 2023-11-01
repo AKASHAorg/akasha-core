@@ -4,6 +4,7 @@ import { RestorationItem } from './virtual-list';
 
 export type ScrollState<T> = {
   listHeight: number;
+  scrollOffset: number;
   items: RestorationItem<T>[];
 };
 
@@ -13,8 +14,8 @@ export type UseScrollRestoreProps = {
 };
 
 export const useScrollRestore = <T>({ restoreKey, enabled }: UseScrollRestoreProps) => {
-  const [isRestoring, setIsRestoring] = React.useState<boolean>();
-  const restored = React.useRef(false);
+  const isRestored = React.useRef(false);
+  const [isFetched, setIsFetched] = React.useState(false);
   const [scrollState, setScrollState] = React.useState<ScrollState<T>>();
 
   const saveScrollState = (state: ScrollState<T>) => {
@@ -24,22 +25,24 @@ export const useScrollRestore = <T>({ restoreKey, enabled }: UseScrollRestorePro
       '',
     );
   };
+
   const fetchScrollState = () => {
-    if (!enabled) return;
-    setIsRestoring(true);
+    if (!enabled) {
+      return setIsFetched(true);
+    }
     const historyState = window?.history?.state;
     if (historyState && hasOwn(historyState, restoreKey)) {
       setScrollState(historyState[restoreKey]);
     }
-    restored.current = true;
-    setIsRestoring(false);
+    setIsFetched(true);
   };
 
   return {
     saveScrollState,
     fetchScrollState,
     scrollState,
-    isRestoring,
-    isRestored: restored.current,
+    isFetched,
+    restore: () => (isRestored.current = true),
+    isRestored: isRestored.current,
   };
 };

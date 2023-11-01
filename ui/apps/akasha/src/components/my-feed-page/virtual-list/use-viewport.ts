@@ -21,6 +21,17 @@ export const useViewport = (props: UseViewportProps) => {
     offsetBottom: offsetBottom,
   });
 
+  React.useEffect(() => {
+    if (!stateRef.current.rect) {
+      const clientHeight = Math.ceil(window.document.documentElement.clientHeight);
+      const height = Math.max(
+        0,
+        clientHeight - stateRef.current.offsetTop - stateRef.current.offsetBottom,
+      );
+      stateRef.current.rect = new Rect(stateRef.current.offsetTop, height);
+    }
+  }, []);
+
   const defaultResizeListener = () => {
     resizeListeners.current.forEach(listener => {
       listener();
@@ -49,21 +60,12 @@ export const useViewport = (props: UseViewportProps) => {
   if (!scrollListeners.current.length && isWindow) {
     registerScrollListener();
   }
-  React.useLayoutEffect(() => {
-    if (!stateRef.current.rect) {
-      const clientHeight = Math.ceil(window.document.documentElement.clientHeight);
-      const height = Math.max(
-        0,
-        clientHeight - stateRef.current.offsetTop - stateRef.current.offsetBottom,
-      );
-      stateRef.current.rect = new Rect(stateRef.current.offsetTop, height);
-    }
-  }, []);
+
   const getHeight = () => {
     return stateRef.current.rect.getHeight();
   };
 
-  const addScrollListener = listener => {
+  const addScrollListener = (listener: () => void) => {
     if (!scrollListeners.current.length) {
       unregisterScroll.current = registerScrollListener();
     }
@@ -73,7 +75,7 @@ export const useViewport = (props: UseViewportProps) => {
     return () => removeScrollListener(listener);
   };
 
-  const removeScrollListener = listener => {
+  const removeScrollListener = (listener: () => void) => {
     const index = scrollListeners.current.indexOf(listener);
     if (index >= 0) {
       scrollListeners.current.splice(index, 1);
@@ -82,7 +84,7 @@ export const useViewport = (props: UseViewportProps) => {
       unregisterScroll.current?.();
     }
   };
-  const addResizeListener = listener => {
+  const addResizeListener = (listener: () => void) => {
     if (!resizeListeners.current.length) {
       unregisterResize.current = registerResizeListener();
     }
@@ -90,7 +92,7 @@ export const useViewport = (props: UseViewportProps) => {
     return () => removeResizeListener(listener);
   };
 
-  const removeResizeListener = listener => {
+  const removeResizeListener = (listener: () => void) => {
     const idx = resizeListeners.current.indexOf(listener);
     if (idx >= 0) {
       resizeListeners.current.splice(idx, 1);
@@ -138,18 +140,31 @@ export const useViewport = (props: UseViewportProps) => {
   };
 
   const getDocumentViewportHeight = (): number => {
-    if (isWindow) return document.documentElement.clientHeight;
     if (initialRect) return initialRect.getHeight();
+    if (isWindow) return document.documentElement.clientHeight;
     return 0;
+  };
+  const isAtTop = () => {
+    const viewportRect = getRelativeToRootNode();
+    if (!viewportRect) return true;
+    return viewportRect.getTop() <= rootNode.current.offsetTop;
+  };
+
+  const resizeRect = (top?: number, height?: number) => {
+    const newTop = top ?? stateRef.current.rect.getTop();
+    const newHeight = height ?? stateRef.current.rect.getHeight();
+    stateRef.current.rect = new Rect(newTop, newHeight);
   };
 
   return {
     getRect: () => new Rect(stateRef.current.rect.getTop(), stateRef.current.rect.getHeight()),
+    resizeRect,
     getOffsetTop: () => stateRef.current.offsetTop,
     getOffsetBottom: () => stateRef.current.offsetBottom,
     getOverScroll: () => overScroll.current,
     setOffsetTop: (offset: number) => (stateRef.current.offsetTop = offset),
     updateOverScroll: (overscroll: number) => (overScroll.current = overscroll),
+    isAtTop,
     getOffsetCorrection,
     getRelativeToRootNode,
     getHeight,

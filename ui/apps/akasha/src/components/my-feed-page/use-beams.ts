@@ -22,17 +22,15 @@ export const useBeams = ({ overscan, queryKey }: UseBeamsOptions) => {
     },
     {
       queryKey: [queryKey, 'nextQuery', nextPageCursor],
-      enabled: !!nextPageCursor || initialFetch,
+      enabled: nextPageCursor?.length > 0,
       onSuccess: resp => {
+        if (!resp.akashaBeamIndex.edges.length) return;
         const firstItem = resp.akashaBeamIndex.edges.at(0);
         if (beams.some(beam => beam.cursor === firstItem.cursor)) {
           // @TODO: update beams. this is a refetch
           return;
         }
         setBeams(prev => [...prev, ...resp.akashaBeamIndex.edges]);
-      },
-      onSettled: () => {
-        setInitialFetch(false);
       },
     },
   );
@@ -45,8 +43,9 @@ export const useBeams = ({ overscan, queryKey }: UseBeamsOptions) => {
     },
     {
       queryKey: [queryKey, 'previousQuery', prevPageCursor],
-      enabled: !!prevPageCursor,
+      enabled: prevPageCursor?.length > 0 || !!initialFetch,
       onSuccess: resp => {
+        if (!resp.akashaBeamIndex.edges.length) return;
         const firstItem = resp.akashaBeamIndex.edges.at(0);
         if (beams.some(beam => beam.cursor === firstItem.cursor)) {
           // @TODO: update beams. this is a refetch
@@ -59,28 +58,27 @@ export const useBeams = ({ overscan, queryKey }: UseBeamsOptions) => {
 
   const fetchNextPage = React.useCallback(
     (lastCursor: string) => {
-      if (nextReq.isLoading) return;
-      // do not fetch until we have a previously set cursor
-      // the initial cursor is set by fetchInitialData.
-      if (!nextPageCursor || nextPageCursor === lastCursor) return;
+      if (nextReq.isInitialLoading) return;
+      if (nextPageCursor === lastCursor) return;
       setNextPageCursor(lastCursor);
     },
-    [nextPageCursor, nextReq.isLoading],
+    [nextPageCursor, nextReq.isInitialLoading],
   );
   const fetchPreviousPage = React.useCallback(
     (firstCursor: string) => {
-      if (prevReq.isLoading) return;
+      if (prevReq.isInitialLoading) return;
       if (prevPageCursor === firstCursor) return;
       setPrevPageCursor(firstCursor);
     },
-    [prevPageCursor, prevReq.isLoading],
+    [prevPageCursor, prevReq.isInitialLoading],
   );
-  const fetchInitialData = React.useCallback((startCursor?: string) => {
-    if (!startCursor) {
+  const fetchInitialData = React.useCallback((cursors: string[]) => {
+    if (!cursors.length) {
       setInitialFetch(true);
       return;
     }
-    setNextPageCursor(startCursor);
+    const resumeItemCursor = cursors.at(cursors.length - 1);
+    setPrevPageCursor(resumeItemCursor);
   }, []);
 
   return {
@@ -88,7 +86,7 @@ export const useBeams = ({ overscan, queryKey }: UseBeamsOptions) => {
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,
-    isFetchingNextPage: nextReq.isFetching || nextReq.isInitialLoading,
-    isFetchingPreviousPage: prevReq.isFetching || prevReq.isInitialLoading,
+    isFetchingNextPage: nextReq.isInitialLoading,
+    isFetchingPreviousPage: prevReq.isInitialLoading,
   };
 };

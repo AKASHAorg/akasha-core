@@ -90,15 +90,6 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
     });
   };
 
-  const handleFetchNextPage = (lastItemKey: string) => {
-    console.log('fetch next page', lastItemKey);
-    fetchNextPage(lastItemKey);
-  };
-  const handleFetchPrevPage = (firstItemKey: string) => {
-    console.log('fetch prev page', firstItemKey);
-    fetchPreviousPage(firstItemKey);
-  };
-
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
@@ -144,8 +135,8 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
         }}
         itemKeyExtractor={item => item.cursor}
         itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
-        onFetchNextPage={handleFetchNextPage}
-        onFetchPrevPage={handleFetchPrevPage}
+        onFetchNextPage={fetchNextPage}
+        onFetchPrevPage={fetchPreviousPage}
         renderItem={itemData => (
           <BeamCard
             entryData={itemData.node}

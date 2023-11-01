@@ -8,7 +8,7 @@ import {
   VirtualItemInfo,
 } from './virtual-item';
 import { useEdgeDetector } from './use-edge-detector';
-import { useScrollRestore } from './use-scroll-restore';
+import { ScrollState, useScrollRestore } from './use-scroll-restore';
 
 export const enum IndicatorPosition {
   TOP,
@@ -28,12 +28,12 @@ export type VirtualizerProps<T> = {
   itemSpacing?: number;
   onFetchNextPage: (lastKey: string) => void;
   onFetchPrevPage?: (firstKey: string) => void;
-  onFetchInitialData?: (startKey: string) => void;
+  onFetchInitialData?: VirtualListProps<T>['onFetchInitialData'];
   isFetchingNext?: boolean;
   isFetchingPrev?: boolean;
   loadingIndicator?: (position: IndicatorPosition) => React.ReactNode;
   debug?: boolean;
-  onScrollSave?: (state: VirtualListProps<T>['initialScrollState']) => void;
+  onScrollSave?: (state: ScrollState<T>) => void;
 };
 
 export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -64,25 +64,10 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
 
   const scrollRestore = useScrollRestore<T>({
     restoreKey: restorationKey,
-    enabled: !!onScrollSave,
+    enabled: typeof onScrollSave !== 'function',
   });
 
-  React.useEffect(() => {
-    if (scrollRestore.isRestored) {
-      const state = scrollRestore.scrollState;
-      if (state && state.items.length) {
-        const initialItem = state.items.at(0);
-        console.log(
-          'fetch initial data starting from:',
-          initialItem.virtualData.index,
-          initialItem.virtualData.key,
-        );
-      }
-    }
-  }, [scrollRestore]);
-
   const saveScroll = () => {
-    // @TODO: save scroll position object to database
     const scrollState = vlistRef.current.getRestorationState();
     const items = scrollState.items
       .filter(
@@ -102,12 +87,13 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
         };
       });
 
-    const newScrollState = {
+    const newScrollState: ScrollState<T> = {
       listHeight: scrollState.listHeight,
+      scrollOffset: scrollState.scrollOffset,
       items,
     };
 
-    if (onScrollSave) {
+    if (onScrollSave && typeof onScrollSave === 'function') {
       onScrollSave(newScrollState);
     } else {
       scrollRestore.saveScrollState(newScrollState);
@@ -174,9 +160,18 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     return 'auto';
   }, []);
 
+  if (!scrollRestore.isFetched) {
+    scrollRestore.fetchScrollState();
+  }
+  if (!scrollRestore.isFetched) {
+    // probably not a good place and time to show a
+    // spinner or sorts because we might restore the scroll
+    return null;
+  }
   return (
     <VirtualList
       ref={vlistRef}
+      scrollRestore={scrollRestore}
       estimatedHeight={estimatedHeight}
       itemList={itemList}
       scrollRestorationType={scrollRestorationType}
@@ -185,6 +180,7 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       onEdgeDetectorUpdate={handleEdgeDetectorUpdate}
       onScrollEnd={handleScrollEnd}
       debug={debug}
+      onFetchInitialData={onFetchInitialData}
     />
   );
 };
