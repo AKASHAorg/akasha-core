@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileStatsView from '../../profile-stats-view';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
@@ -34,7 +33,6 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
 
   const { profileId } = useParams<{ profileId: string }>();
-  const [showFeedback, setShowFeedback] = useState(false);
   const { isLoggedIn } = useLoggedIn();
 
   const navigateTo = getRoutingPlugin().navigateTo;
@@ -131,17 +129,6 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
           links={profileData?.links}
           copiedLabel={t('Copied')}
           copyLabel={t('Copy to clipboard')}
-        />
-      )}
-      {showFeedback && (
-        <Snackbar
-          title={`${t('Profile link copied')}!`}
-          type="success"
-          iconType="CheckCircleIcon"
-          handleDismiss={() => {
-            setShowFeedback(false);
-          }}
-          customStyle="mb-4"
         />
       )}
     </Stack>
