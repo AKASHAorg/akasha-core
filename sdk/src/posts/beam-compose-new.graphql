@@ -98,6 +98,32 @@ fragment BlockStorageFragment on AkashaBlockStorage {
 
 }
 
+query GetBeamStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamStreamFiltersInput, $sorting: AkashaBeamStreamSortingInput){
+ node(id: $indexer) {
+   ... on CeramicAccount{
+     akashaBeamStreamList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting: $sorting){
+       edges {
+         node {
+           beamID
+           createdAt
+           active
+           status
+           moderationID
+         }
+         cursor
+       }
+       pageInfo {
+         startCursor
+         endCursor
+         hasPreviousPage
+         hasNextPage
+       }
+     }
+     isViewer
+   }
+ }
+}
+
 query GetBeams($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamFiltersInput, $sorting: AkashaBeamSortingInput){
   akashaBeamIndex(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting: $sorting){
     edges {
@@ -141,6 +167,33 @@ query GetBeamById($id: ID!){
   node(id: $id){
     ... on AkashaBeam{
       ...BeamFragment
+    }
+  }
+}
+
+query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $beamID: String!){
+  node(id: $indexer) {
+    ... on CeramicAccount{
+      akashaContentBlockStreamList(after: $after, before: $before, first: $first, last: $last, filters: {where: {beamID: {equalTo: $beamID}}}) {
+        edges {
+          node {
+            beamID
+            createdAt
+            active
+            status
+            blockID
+            moderationID
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+      }
+      isViewer
     }
   }
 }
