@@ -38,7 +38,7 @@ export const Multiline: React.FC<MultlineProps> = forwardRef(
           max={MAX_LENGTH}
           value={letterCount}
           background="grey6"
-          customStyle="ml-auto mt-auto"
+          customStyle="ml-auto mt-auto shrink-0"
         />
       </Stack>
     );

@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ReflectCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflect-card';
+import ReflectionCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflection-card';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useCreateReflectMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -32,7 +32,7 @@ export function PendingReflect(props: PendingReflectProps) {
               data-testid="pending-entry"
               key={pendingReflectState.mutationId}
             >
-              <ReflectCard
+              <ReflectionCard
                 entryData={{
                   ...pendingReflectState.state.variables.i.content,
                   author: {

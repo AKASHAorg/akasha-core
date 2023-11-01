@@ -61,7 +61,11 @@ const AppRoutes: React.FC<unknown> = () => {
               />
             }
           />
-          <Route path={`${routes[REFLECT]}/:reflectId`} element={<ReflectionPage />} />
+          <Route path={`${routes[REFLECT]}/:reflectionId`} element={<ReflectionPage />} />
+          <Route
+            path={`${routes[REFLECT]}/:reflectionId${routes[REFLECT]}`}
+            element={<ReflectionPage />}
+          />
           <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
           <Route
             path={routes[EDITOR]}

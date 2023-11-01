@@ -26,7 +26,7 @@ export type ReflectCardProps = Pick<
   entryData: AkashaReflect;
 };
 
-const ReflectCard: React.FC<ReflectCardProps> = props => {
+const ReflectionCard: React.FC<ReflectCardProps> = props => {
   const { entryData, onReflect, ...rest } = props;
   const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const { t } = useTranslation('ui-lib-feed');
@@ -86,4 +86,4 @@ const ReflectCard: React.FC<ReflectCardProps> = props => {
   );
 };
 
-export default ReflectCard;
+export default ReflectionCard;
