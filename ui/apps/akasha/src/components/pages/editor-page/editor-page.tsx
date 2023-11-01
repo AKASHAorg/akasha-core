@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Profile } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 
@@ -11,7 +10,6 @@ export type EditorPageProps = {
 
 const EditorPage: React.FC<EditorPageProps> = props => {
   const { loggedProfileData } = props;
-  const { uiEvents } = useRootComponentProps();
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
@@ -19,7 +17,7 @@ const EditorPage: React.FC<EditorPageProps> = props => {
       </Helmet.Helmet>
       {loggedProfileData?.did?.id && (
         <Stack customStyle="mb-1">
-          <Extension name="beam-editor_feed_page" uiEvents={uiEvents} />
+          <Extension name="beam-editor_feed_page" />
         </Stack>
       )}
     </Stack>
