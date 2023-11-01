@@ -68,12 +68,22 @@ export const BeamEditor: React.FC = () => {
     setSelectedBlock(null);
   };
 
-  const [tagSelection, setTagSelection] = React.useState([]);
   const [tagValue, setTagValue] = React.useState('');
   const [editorTags, setEditorTags] = React.useState([]);
 
   const handleAddTags = () => {
-    setEditorTags(tagSelection);
+    setEditorTags(prev => {
+      const removeDuplicates = new Set([...prev, tagValue]);
+      return [...removeDuplicates];
+    });
+    setTagValue('');
+  };
+
+  const handleDeleteTag = tag => {
+    setEditorTags(prev => {
+      const filtered = new Set(prev.filter(elem => tag !== elem));
+      return [...filtered];
+    });
   };
 
   return (
@@ -92,9 +102,27 @@ export const BeamEditor: React.FC = () => {
             <div key={`${block.propertyType}-${idx}`} id={`${block.propertyType}-${idx}`}>
               <Stack padding={16} direction="column" spacing="gap-2">
                 <Stack direction="row" justify="between">
-                  <Icon type={block.icon} />
+                  <Stack
+                    align="center"
+                    justify="center"
+                    customStyle={
+                      'h-6 w-6 group relative rounded-full bg(secondaryLight dark:secondaryDark)'
+                    }
+                  >
+                    <Icon size="xs" type={block.icon} />
+                  </Stack>
                   <button onClick={() => removeBlockFromList(block.order)}>
-                    <Icon type="TrashIcon" color={{ light: 'errorLight', dark: 'errorDark' }} />
+                    <Stack
+                      align="center"
+                      justify="center"
+                      customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey3)'}
+                    >
+                      <Icon
+                        size="xs"
+                        type="TrashIcon"
+                        color={{ light: 'errorLight', dark: 'errorDark' }}
+                      />
+                    </Stack>
                   </button>
                 </Stack>
                 <ContentBlockExtension
@@ -148,17 +176,32 @@ export const BeamEditor: React.FC = () => {
         >
           <Stack padding={16} spacing="gap-2">
             <Text variant="h6">{t('Beam Tags')}</Text>
-            <Text variant="subtitle1">
+            <Text variant="subtitle2">
               {t(
                 'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
               )}
             </Text>
-            <TextField value={tagValue} placeholder={t('Search for tags')} type="text" />
-            {tagSelection.length === 0 && (
+            <TextField
+              value={tagValue}
+              onChange={e => setTagValue(e.currentTarget.value)}
+              placeholder={t('Search for tags')}
+              type="text"
+            />
+            {editorTags.length === 0 && (
               <Text variant="body2">{t('You haven’t added any tags yet')}</Text>
             )}
-            {tagSelection.length > 0 &&
-              tagSelection.map((tag, index) => <Pill key={index} label={tag} />)}
+            <Stack direction="row" spacing="gap-2" customStyle="flex-wrap mt-2">
+              {editorTags.length > 0 &&
+                editorTags.map((tag, index) => (
+                  <Pill
+                    key={index}
+                    label={tag}
+                    icon="XMarkIcon"
+                    iconDirection="right"
+                    onPillClick={() => handleDeleteTag(tag)}
+                  />
+                ))}
+            </Stack>
           </Stack>
         </Stack>
       </Stack>
@@ -172,11 +215,12 @@ export const BeamEditor: React.FC = () => {
         handleBeamPublish={handleBeamPublish}
         addBlockLabel={t('Add a Block')}
         addLabel={t('Add')}
-        cancelLabel={t('Cancel')}
+        cancelLabel={t('Close')}
         blocksLabel={t('Blocks')}
         tagsLabel={t('Tags')}
         publishLabel={t('Beam it')}
         blocksNumber={blocksInUse.length}
+        tagsNumber={editorTags.length}
         isPublishing={isPublishing}
       />
     </Card>

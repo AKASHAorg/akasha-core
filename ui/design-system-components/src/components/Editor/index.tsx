@@ -481,7 +481,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
     >
       <div
         className={tw(
-          `flex flex-row items-start h-full w-full p-2 overflow-auto ${
+          `flex flex-row items-start h-full w-full overflow-auto ${
             minHeight && `min-h-[${minHeight}]`
           }`,
         )}
