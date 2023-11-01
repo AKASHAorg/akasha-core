@@ -29,7 +29,15 @@ export type FeedWidgetCommonProps = {
   onLoginModalOpen: BeamFeedProps['onLoginModalOpen'];
   onEntryFlag: BeamFeedProps['onEntryFlag'];
   onEntryRemove: BeamFeedProps['onEntryRemove'];
-} & ({ itemType: EntityTypes.BEAM } | { itemType: EntityTypes.REFLECT; beamId: string });
+} & (
+  | { itemType: EntityTypes.BEAM }
+  | {
+      itemType: EntityTypes.REFLECT;
+      reflectionsOf:
+        | { beamId: string; itemType: EntityTypes.BEAM }
+        | { reflectionId: string; itemType: EntityTypes.REFLECT };
+    }
+);
 
 const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
   const { getTranslationPlugin, layoutConfig } = useRootComponentProps();
@@ -47,7 +55,11 @@ const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
       {props.itemType === EntityTypes.REFLECT && (
         <ReflectFeed
           {...props}
-          beamId={props.beamId}
+          reflectionsOf={
+            props.reflectionsOf.itemType === EntityTypes.BEAM
+              ? { entryId: props.reflectionsOf.beamId, itemType: EntityTypes.BEAM }
+              : { entryId: props.reflectionsOf.reflectionId, itemType: EntityTypes.REFLECT }
+          }
           i18n={i18n}
           modalSlotId={layoutConfig.modalSlotId}
           db={db}

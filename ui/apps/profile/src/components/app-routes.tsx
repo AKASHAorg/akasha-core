@@ -19,12 +19,10 @@ import menuRoute, { EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
 const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
   const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
-  const [showFeedback, setShowFeedback] = useShowFeedback(false);
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const [showUpdatedFeedback, setShowUpdatedFeedback] = useShowFeedback(false);
+  const [showLinkCopedFeedback, setLinkCopiedFeedback] = useShowFeedback(false);
 
-  const handleFeedback = () => {
-    setShowFeedback(true);
-  };
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     navigateToModal({
@@ -34,9 +32,9 @@ const AppRoutes: React.FC<unknown> = () => {
   };
 
   const commonHeaderViewProps = {
-    handleFeedback,
+    handleCopyFeedback: () => setLinkCopiedFeedback(true),
     navigateTo,
-    navigateToModal: navigateToModal,
+    navigateToModal,
     showLoginModal,
   };
 
@@ -78,18 +76,33 @@ const AppRoutes: React.FC<unknown> = () => {
             <Route path={`:profileId${menuRoute[INTERESTS]}`} element={<InterestsPage />} />
             <Route
               path={`:profileId${menuRoute[EDIT]}`}
-              element={<EditProfilePage handleFeedback={handleFeedback} />}
+              element={
+                <EditProfilePage
+                  handleProfileUpdatedFeedback={() => setShowUpdatedFeedback(true)}
+                />
+              }
             />
           </Route>
         </Routes>
       </Router>
-      {showFeedback && (
+      {showUpdatedFeedback && (
         <Snackbar
           title={t('Profile updated successfully')}
           type="success"
           iconType="CheckCircleIcon"
           handleDismiss={() => {
-            setShowFeedback(false);
+            setShowUpdatedFeedback(false);
+          }}
+          customStyle="mb-4"
+        />
+      )}
+      {showLinkCopedFeedback && (
+        <Snackbar
+          title={`${t('Profile link copied')}!`}
+          type="success"
+          iconType="CheckCircleIcon"
+          handleDismiss={() => {
+            setLinkCopiedFeedback(false);
           }}
           customStyle="mb-4"
         />

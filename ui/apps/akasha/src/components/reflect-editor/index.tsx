@@ -6,6 +6,7 @@ import { getLinkPreview, serializeSlateToBase64, useAnalytics } from '@akashaorg
 import {
   useCreateReflectMutation,
   useGetMyProfileQuery,
+  useInfiniteGetReflectReflectionsQuery,
   useInfiniteGetReflectionsFromBeamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
@@ -26,17 +27,30 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
 
+  const isReflectOfReflection = reflectToId !== beamId;
+
   const queryClient = useQueryClient();
   const mentionSearch = null;
   const tagSearch = null;
 
   const publishReflection = useCreateReflectMutation({
     onSuccess: async data => {
-      await queryClient.invalidateQueries(
-        useInfiniteGetReflectionsFromBeamQuery.getKey({
-          id: data.createAkashaReflect.document.beam?.id,
-        }),
-      );
+      if (!isReflectOfReflection) {
+        await queryClient.invalidateQueries(
+          useInfiniteGetReflectionsFromBeamQuery.getKey({
+            id: data.createAkashaReflect.document.beam?.id,
+          }),
+        );
+      }
+
+      if (isReflectOfReflection) {
+        await queryClient.invalidateQueries(
+          useInfiniteGetReflectReflectionsQuery.getKey({
+            id: reflectToId,
+          }),
+        );
+      }
+
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Published',
@@ -54,7 +68,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const disablePublishing = useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
 
   const handlePublish = (data: IPublishData) => {
-    const reflection = reflectToId !== beamId ? { reflection: reflectToId } : {};
+    const reflection = isReflectOfReflection ? { reflection: reflectToId } : {};
     publishReflection.mutate({
       i: {
         content: {

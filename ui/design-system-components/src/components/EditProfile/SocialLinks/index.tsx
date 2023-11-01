@@ -11,10 +11,10 @@ export type SocialLinksProps = {
   linkLabel: string;
   addNewLinkButtonLabel: string;
   description: string;
-  socialLinks: AkashaProfileLinkSource[];
   customStyle?: string;
   control: Control<EditProfileFormValues>;
-  onDeleteLink: (index: number) => void;
+  socialLinks: AkashaProfileLinkSource[];
+  onDeleteLink: () => void;
 };
 
 export const SocialLinks: React.FC<SocialLinksProps> = ({
@@ -68,7 +68,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
                 type="text"
                 onDelete={() => {
                   setLinks(links.filter(_link => _link._id !== link._id));
-                  onDeleteLink(index);
+                  onDeleteLink();
                 }}
                 name={name}
                 value={value || ''}
@@ -79,6 +79,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
               />
             )}
             {...defaultValue}
+            shouldUnregister={true}
           />
         );
       })}
