@@ -6,7 +6,6 @@ export const BEAMS = 'Beams';
 export const BEAM = 'Beam';
 export const REFLECT = 'Reflect';
 export const TAGS = 'Tags';
-export const INVITE = 'Invite';
 
 export default {
   [FEED]: '/feed',
@@ -16,6 +15,5 @@ export default {
   [BEAMS]: '/beams',
   [BEAM]: '/beam',
   [REFLECT]: '/reflect',
-  [INVITE]: '/invite',
   [TAGS]: '/tags',
 };

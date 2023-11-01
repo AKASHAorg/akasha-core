@@ -27,9 +27,6 @@ export function useConnectWallet(provider: EthProviders) {
  */
 export function useGetLogin(onError?: (error: Error) => void) {
   const queryClient = useQueryClient();
-  const sdk = getSDK();
-
-  sdk.api.auth.getCurrentUser();
 
   useGlobalLogin({
     onLogin: data => {
@@ -109,8 +106,8 @@ export function useLogout() {
     async () => {
       const resp = await sdk.api.auth.signOut();
       if (resp.data) {
-        await queryClient.resetQueries([LOGIN_STATE_KEY]);
-        // queryClient.setQueryData([LOGIN_STATE_KEY], {});
+        //await queryClient.resetQueries([LOGIN_STATE_KEY]);
+        queryClient.setQueryData([LOGIN_STATE_KEY], null);
         return resp.data;
       }
     },

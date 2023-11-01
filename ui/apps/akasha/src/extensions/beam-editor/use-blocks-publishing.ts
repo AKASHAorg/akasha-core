@@ -89,7 +89,7 @@ export const useBlocksPublishing = () => {
           console.error('error creating beam.', err);
         });
     }
-  }, [blocksInUse]);
+  }, [blocksInUse, createBeam]);
 
   const createContentBlocks = React.useCallback(async () => {
     setIsPublishing(true);

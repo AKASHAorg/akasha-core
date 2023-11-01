@@ -65,10 +65,11 @@ const InterestsPage: React.FC<unknown> = () => {
   });
 
   if (!isLoggedIn) {
-    return navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
+    return null;
   }
 
   const handleInterestClick = topic => {

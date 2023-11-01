@@ -3,14 +3,18 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider } from 'react-i18next';
-import { useAnalytics, withProviders } from '@akashaorg/ui-awf-hooks';
+import { useAnalytics, useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
-const MessageIconButton: React.FC<RootExtensionProps> = props => {
-  const { extensionData, plugins } = props;
+type MessageIconExtensionData = {
+  profileId: string;
+};
 
+const MessageIconButton: React.FC<RootExtensionProps<MessageIconExtensionData>> = props => {
+  const { extensionData } = props;
+  const { getRoutingPlugin } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
   const { profileId } = extensionData;
 
@@ -34,7 +38,7 @@ const MessageIconButton: React.FC<RootExtensionProps> = props => {
       action: 'message-button-click',
     });
 
-    plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
+    getRoutingPlugin().navigateTo?.({
       appName: '@akashaorg/app-messaging',
       getNavigationUrl: routes => `${routes.chat}/${profileId}`,
     });
@@ -54,17 +58,20 @@ const MessageIconButton: React.FC<RootExtensionProps> = props => {
   );
 };
 
-const MessageIconButtonWrapper = (props: RootExtensionProps) => (
-  <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
-    <MessageIconButton {...props} />
-  </I18nextProvider>
-);
+const MessageIconButtonWrapper = (props: RootExtensionProps<MessageIconExtensionData>) => {
+  const { getTranslationPlugin } = useRootComponentProps();
+  return (
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      <MessageIconButton {...props} />
+    </I18nextProvider>
+  );
+};
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(MessageIconButtonWrapper),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps<MessageIconExtensionData>) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

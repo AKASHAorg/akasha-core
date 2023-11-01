@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { tw, apply } from '@twind/core';
+import { getBgColor } from './getBgColor';
+import { getTextColor } from './getTextColor';
+import { getInputColor } from './getInputColor';
+import { getCheckmarkColor } from './getCheckmarkColor';
 
 export type CheckboxSize = 'small' | 'large';
 
 export type CheckboxProps = {
   id: string;
-  label: string;
+  label?: string;
   value: string;
   name: string;
   size?: CheckboxSize;
@@ -50,24 +54,14 @@ const Checkbox: React.FC<CheckboxProps> = ({
     }
   }, [indeterminate]);
 
-  const textColor = error
-    ? 'text-errorLight dark:text-errorDark hover:text-errorLight'
-    : isDisabled
-    ? 'text-grey4 hover:text-grey4'
-    : 'text(black dark:white) hover:text-secondaryLight dark:hover:text-secondaryDark';
+  const textColor = getTextColor(isDisabled, error);
   const textColorIndeterminate = isDisabled
     ? 'text-black dark:text-grey4'
     : 'text-black dark:text-white';
-  const inputColor = error ? 'orange-400' : isDisabled ? 'grey4' : 'secondaryLight';
-  const checkmarkColor = error ? 'white dark:black' : isDisabled ? 'grey6 dark:grey5' : 'white';
+  const inputColor = getInputColor(isDisabled, error);
+  const checkmarkColor = getCheckmarkColor(isDisabled, error);
   const minusMarkColor = isDisabled ? 'bg-grey6 dark:bg-grey5' : 'bg-grey4 dark:bg-white';
-  const bgColor = isDisabled
-    ? 'before:bg-grey4'
-    : isSelected
-    ? error
-      ? 'before:bg-errorDark'
-      : 'before:bg-secondaryLight dark:before:bg-secondaryDark'
-    : 'before:bg-transparent before:disabled:opacity-75 disabled:before:bg-grey4';
+  const bgColor = getBgColor(isDisabled, isSelected, error);
   const checkboxSizes =
     size === 'small'
       ? 'before:w-5 before:h-5 before:-ml-2 before:mt-px'
@@ -120,6 +114,16 @@ const Checkbox: React.FC<CheckboxProps> = ({
     after:content-none invisible w-4 h-4 relative
     `;
 
+  const getInputClassname = () => {
+    if (indeterminate) {
+      return instanceInderterminateCheckboxStyle;
+    }
+    if (isSelected) {
+      return selectedPseudoCheckboxStyle;
+    }
+    return unselectedPseudoCheckboxStyle;
+  };
+
   return (
     <div
       className={tw(
@@ -137,17 +141,13 @@ const Checkbox: React.FC<CheckboxProps> = ({
         aria-labelledby={value}
         checked={isSelected}
         onChange={handleChange}
-        className={tw(
-          indeterminate
-            ? instanceInderterminateCheckboxStyle
-            : isSelected
-            ? selectedPseudoCheckboxStyle
-            : unselectedPseudoCheckboxStyle,
-        )}
+        className={tw(getInputClassname())}
       />
-      <label htmlFor={value} className={tw(instanceLabelStyle)}>
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={value} className={tw(instanceLabelStyle)}>
+          {label}
+        </label>
+      )}
     </div>
   );
 };

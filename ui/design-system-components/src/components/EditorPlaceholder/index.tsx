@@ -1,20 +1,20 @@
-import * as React from 'react';
+import React from 'react';
+import { tw } from '@twind/core';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { Profile } from '@akashaorg/typings/lib/ui';
-import { tw } from '@twind/core';
 
-export interface IEditorPlaceholder {
+export type EditorPlaceholderType = {
   avatar?: Profile['avatar'];
   profileId: string | null;
   placeholderLabel?: string;
   actionLabel?: string;
   onClick?: React.MouseEventHandler<HTMLElement>;
-}
+};
 
-const EditorPlaceholder: React.FC<IEditorPlaceholder> = props => {
+const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
   const { avatar, profileId, placeholderLabel, actionLabel, onClick } = props;
   return (
     <Card border={true} padding={0} background={{ light: 'grey9', dark: 'grey3' }}>

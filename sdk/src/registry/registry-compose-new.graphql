@@ -80,6 +80,31 @@ query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters
   }
 }
 
+query GetAppsStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppsStreamFiltersInput, $sorting: AkashaAppsStreamSortingInput){
+  node(id: $indexer){
+    ... on CeramicAccount{
+      akashaAppsStreamList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
+        edges {
+          node {
+            moderationID
+            active
+            applicationID
+            status
+            createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+
 query GetAppsByID($id: ID!) {
   node(id: $id) {
     ...on AkashaApp {

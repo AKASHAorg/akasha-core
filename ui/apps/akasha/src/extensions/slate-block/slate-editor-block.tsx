@@ -12,7 +12,7 @@ import {
   IEntryData,
   RootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
-import { Draft } from '../inline-editor/utils';
+import { Draft } from '../../utils';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   AkashaContentBlockBlockDef,
@@ -106,13 +106,6 @@ export const SlateEditorBlock = (
       withMeter={true}
       editorState={editorState}
       setEditorState={(value: IEntryData['slateContent']) => {
-        // if (canSaveDraft) {
-        //   if (isEqual(value, editorDefaultValue)) {
-        //     postDraft.clear();
-        //     return;
-        //   }
-        //   postDraft.save({ ...postDraft.get(), slateContent: value });
-        // }
         setEditorState(value);
       }}
       showCancelButton={false}

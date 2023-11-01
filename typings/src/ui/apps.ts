@@ -1,9 +1,25 @@
-import { ActivityFn, ExtendsFn, IntegrationRegistrationOptions } from './app-loader';
+import { ActivityFn } from './app-loader';
 import { IMenuItem } from './menu-items';
 import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
 import { ContentBlockExtensionInterface } from './editor-blocks';
+import { ExtensionInterface } from './extensions';
+import { IntegrationReleaseInfoFragmentFragment } from '../sdk/graphql-operation-types';
 
+export const enum AppEvents {
+  RegisterApplication = 'register-application',
+}
+
+export type AppRegisterEvent = {
+  event: AppEvents.RegisterApplication;
+  data: { config: IAppConfig; manifest: IntegrationReleaseInfoFragmentFragment };
+};
+export type InstalledAppStorePlugin = {
+  getInstalledApps: () => {
+    config: IAppConfig;
+    manifest: IntegrationReleaseInfoFragmentFragment;
+  }[];
+};
 export type Extensions = { [key: string]: string } & {
   /**
    * load modals inside this node
@@ -85,19 +101,13 @@ export interface IAppConfig {
    * @TODO: add docs
    */
   contentBlocks?: ContentBlockExtensionInterface[];
+  extensions?: ExtensionInterface[];
   /**
-   * A simple mapping of the extensions exposed by this widget.
-   * This is the main mechanism that can be used to
-   * extend or link different apps.
-   * Extensions declared here should be used as id's for
+   * A simple mapping of the extensions exposed by this app.
+   * Can be used to target a specific app's extension
+   * Note that this is optional
    */
-  extensions?: Extensions;
-
-  /**
-   * Defines the component that will be mounted into an extension point
-   */
-  extends?: ExtendsFn;
-
+  extensionsMap?: Extensions;
   /**
    * Keywords that defines this widget.
    * Useful for filtering through integrations

@@ -70,20 +70,26 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   contentBlocks: [
     {
-      // propertyType should match beam's content[i].propertyType
       propertyType: 'slate-block',
       icon: 'Bars3BottomLeftIcon',
       displayName: 'Slate text block',
-      loadingFn: data => {
+      loadingFn: () => {
         return () => import('./extensions/slate-block');
       },
     },
   ],
-  extends: (matcher, loader) => {
-    matcher({
-      'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
-      'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
-      'beam-editor_*': loader(() => import('./extensions/beam-editor')),
-    });
-  },
+  extensions: [
+    {
+      mountsIn: 'beam-editor_*',
+      loadingFn: () => import('./extensions/beam-editor'),
+    },
+    {
+      mountsIn: 'entry-remove-confirmation',
+      loadingFn: () => import('./extensions/entry-remove-modal'),
+    },
+    {
+      mountsIn: 'entry-card-edit-button_*',
+      loadingFn: () => import('./extensions/entry-edit-button'),
+    },
+  ],
 });

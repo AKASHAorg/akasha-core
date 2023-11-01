@@ -59,7 +59,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       following: [profileData?.id],
       last: 1,
     },
-    { select: response => response.viewer },
+    { select: response => response.viewer, enabled: !!profileData },
   );
 
   const followDocument = followDocuments.data?.akashaFollowList?.edges[0];

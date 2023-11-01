@@ -45,7 +45,7 @@ jobs:
       - run:
           name: Prepare continuation parameters
           command: |
-            #TODO: exclude messaging, af-testing, hup-api, and app loader apps till their tsc and failing tests are is fixed
+            #TODO: exclude messaging, af-testing, hup-api, and app loader apps till their tsc and failing tests are fixed
             export AFFECTED_PROJECTS=$(npx nx print-affected --target=tsc --select=tasks.target.project --base=next --exclude='@akashaorg/app-messaging', '@akashaorg/af-testing', '@akashaorg/hub-api', '@akashaorg/ui-app-loader')
             export NUM_AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | sed 's/, /\n/g' | wc -l | xargs)
 

@@ -1,9 +1,8 @@
-import * as React from 'react';
-import FeedPage from '../feed-page/feed-page';
-import * as Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import React from 'react';
+import FeedPage from '../pages/feed-page/feed-page';
 import userEvent from '@testing-library/user-event';
+import ReflectEditor from '../reflect-editor';
 
-import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import {
   screen,
   renderWithAllProviders,
@@ -13,20 +12,12 @@ import {
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
 import { when } from 'jest-when';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 const partialArgs = (...argsToMatch) =>
   when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
 
 const MockedInlineEditor = ({ action }) => (
-  <InlineEditor
-    extensionData={{
-      name: 'name',
-      itemId: '01gf',
-      itemType: EntityTypes.BEAM,
-      action,
-    }}
-  />
+  <ReflectEditor beamId="oxaa" reflectToId="oxaa" showEditorInitialValue={false} />
 );
 
 describe('< FeedPage /> component', () => {
@@ -36,22 +27,6 @@ describe('< FeedPage /> component', () => {
     </AnalyticsProvider>
   );
 
-  beforeAll(() => {
-    jest
-      .spyOn(Extension, 'default')
-      .mockReturnValue(
-        <InlineEditor
-          draftStorage={localStorageMock}
-          extensionData={{ name: 'post', action: 'post' }}
-        />,
-      );
-
-    // (
-    //   jest.spyOn(hooks, 'useGetProfile') as unknown as jest.SpyInstance<{
-    //     status: string;
-    //   }>
-    // ).mockReturnValue({ status: 'success' });
-  });
   // @TODO fix after new hooks
   it.skip('should render feed page for anonymous users', async () => {
     await act(async () => {
@@ -90,16 +65,6 @@ describe('< FeedPage /> component', () => {
   it.skip('should render repost feed page', async () => {
     //TODO: change URLSearchParams usage on feed page(and elsewhere) with a search param hook and mock the hook here
     history.pushState(null, '', `${location.origin}?repost=oxfceee`);
-
-    const spiedExtension = jest.spyOn(Extension, 'default');
-
-    when(spiedExtension)
-      .calledWith(
-        partialArgs(
-          expect.objectContaining({ name: expect.stringMatching(/inline-editor_repost/) }),
-        ),
-      )
-      .mockReturnValue(<MockedInlineEditor action="repost" />);
 
     await act(async () => {
       renderWithAllProviders(<BaseComponent />, {});

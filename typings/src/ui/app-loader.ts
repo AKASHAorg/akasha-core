@@ -1,11 +1,7 @@
-import { ReplaySubject, Subject } from 'rxjs';
-import { ParcelConfigObject } from 'single-spa';
-import { EventDataTypes, IconType, RootComponentProps, RootExtensionProps } from './index';
-
+import { IconType, RootComponentProps } from './index';
 import { UIEventData } from './ui-events';
-import { Extensions, IAppConfig } from './apps';
+import { Extensions } from './apps';
 import { PluginConf } from './plugins';
-import { GlobalEventBusData } from '../sdk';
 import { IntegrationReleaseInfoFragmentFragment } from '../sdk/graphql-operation-types';
 
 export type ActivityFn = (
@@ -24,35 +20,6 @@ export interface IntegrationRegistrationOptions {
   plugins?: PluginConf;
   logger: unknown;
 }
-
-export interface ExtensionMatcherFn<G = ReplaySubject<GlobalEventBusData>> {
-  (
-    uiEvents: RootComponentProps['uiEvents'],
-    globalChannel: G,
-    extProps: Omit<
-      RootExtensionProps,
-      'uiEvents' | 'extensionData' | 'domElement' | 'baseRouteName'
-    >,
-    parentConfig: IAppConfig & { name: string },
-  ): (extConfig: Record<string, ReturnType<ExtensionLoaderFn>>) => void;
-}
-
-/**
- * Extension loader function
- * must return a promise with a singleSpaLifecycle object
- */
-export type ExtensionLoaderFn = (
-  loadingFunction: () => Promise<ParcelConfigObject<Omit<RootExtensionProps, 'baseRouteName'>>>,
-) => {
-  load: (props: Omit<RootExtensionProps, 'baseRouteName'>, parentAppName: string) => void;
-  unmount: (event: { data?: EventDataTypes }, parentAppName: string) => Promise<void>;
-  update: (props: Omit<RootExtensionProps, 'baseRouteName'>, parentAppName: string) => void;
-};
-
-export type ExtendsFn = (
-  matcher: ReturnType<ExtensionMatcherFn>,
-  extLoader: ExtensionLoaderFn,
-) => void;
 
 export enum LogLevels {
   FATAL = 'fatal',

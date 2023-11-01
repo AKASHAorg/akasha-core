@@ -14,7 +14,7 @@ export interface IArticleEditorCardProps {
   inviteCollaboratorsLabel: string;
   collaboratingLabel: string;
   saveDraftLabel: string;
-  publishLabel: string;
+  actionLabel: string;
   canPublish: boolean;
   onManageCollaborators: () => void;
   onSaveDraft: () => void;
@@ -26,7 +26,7 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
     inviteCollaboratorsLabel,
     collaboratingLabel,
     saveDraftLabel,
-    publishLabel,
+    actionLabel,
     canPublish,
     onManageCollaborators,
     onSaveDraft,
@@ -83,7 +83,7 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
             size="lg"
             disabled={!canPublish}
             variant="primary"
-            label={publishLabel}
+            label={actionLabel}
             onClick={onPublish}
           />
         </Stack>

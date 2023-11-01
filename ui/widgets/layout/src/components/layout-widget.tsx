@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { EventDataTypes, EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
+import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import ScrollRestorer from './scroll-restorer';
 import {
   filterEvents,
   usePlaformHealthCheck,
@@ -15,14 +14,16 @@ import {
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import { useScrollbarWidth } from 'react-use/lib/useScrollbarWidth';
 import { useClickAway } from 'react-use';
-import Extension from '@akashaorg/design-system-components/lib/components/Extension';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
+import { ModalExtension } from '@akashaorg/ui-lib-extensions/lib/react/modal-extension';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 const Layout: React.FC<unknown> = () => {
-  const [activeModal, setActiveModal] = useState<EventDataTypes | null>(null);
   const [needSidebarToggling, setNeedSidebarToggling] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
@@ -95,24 +96,6 @@ const Layout: React.FC<unknown> = () => {
     setshowWidgets(false);
   };
 
-  const handleModal = useCallback(
-    (data: EventDataTypes) => {
-      setActiveModal(active => {
-        if ((!active || !active.name) && data.name) {
-          return data;
-        }
-        if (!data.name) {
-          return null;
-        }
-        if (activeModal && activeModal.name !== data.name) {
-          return data;
-        }
-        return active;
-      });
-    },
-    [activeModal],
-  );
-
   const wrapperRef = useRef(null);
 
   useClickAway(wrapperRef, () => {
@@ -125,7 +108,6 @@ const Layout: React.FC<unknown> = () => {
     const eventsSub = _uiEvents.current
       .pipe(
         filterEvents([
-          EventTypes.ModalRequest,
           EventTypes.ShowSidebar,
           EventTypes.HideSidebar,
           EventTypes.ShowSidebar,
@@ -135,9 +117,6 @@ const Layout: React.FC<unknown> = () => {
       .subscribe({
         next: (eventInfo: UIEventData) => {
           switch (eventInfo.event) {
-            case EventTypes.ModalRequest:
-              handleModal(eventInfo.data as EventDataTypes);
-              break;
             case EventTypes.ShowSidebar:
               handleSidebarShow();
               break;
@@ -155,15 +134,12 @@ const Layout: React.FC<unknown> = () => {
           }
         },
       });
-    _uiEvents.current.next({
-      event: EventTypes.LayoutReady,
-    });
     return () => {
       if (eventsSub) {
         eventsSub.unsubscribe();
       }
     };
-  }, [handleModal]);
+  }, []);
 
   const layoutStyle = `
       grid md:(grid-flow-col) min-h-screen
@@ -193,17 +169,23 @@ const Layout: React.FC<unknown> = () => {
     <Stack customStyle={`bg(white dark:black) min-h-screen ${widthStyle}`}>
       <Stack customStyle="h-full m-auto w-[95%] xl:w-full min-h-screen">
         <Stack customStyle={layoutStyle}>
-          <ScrollRestorer />
-
           <Stack customStyle={mobileLayoverStyle}>
             <Stack customStyle={sidebarSlotStyle}>
               {needSidebarToggling ? (
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen" ref={wrapperRef}>
-                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
+                  <Widget
+                    fullHeight
+                    name={layoutConfig.sidebarSlotId}
+                    loadingIndicator={<Spinner />}
+                  />
                 </Stack>
               ) : (
                 <Stack padding="pt-0 xl:pt-4" customStyle="h-screen">
-                  <Extension fullHeight name={layoutConfig.sidebarSlotId} uiEvents={uiEvents} />
+                  <Widget
+                    fullHeight
+                    name={layoutConfig.sidebarSlotId}
+                    loadingIndicator={<Spinner />}
+                  />
                 </Stack>
               )}
             </Stack>
@@ -214,7 +196,7 @@ const Layout: React.FC<unknown> = () => {
               padding="pt-4"
               customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
             >
-              <Extension name={layoutConfig.topbarSlotId} uiEvents={uiEvents} />
+              <Widget name={layoutConfig.topbarSlotId} loadingIndicator={<Spinner />} />
             </Stack>
             <Stack padding="pt-4">
               {!isPlatformHealthy && (
@@ -241,34 +223,25 @@ const Layout: React.FC<unknown> = () => {
                   </Stack>
                 </Card>
               )}
-              <Extension name={layoutConfig.pluginSlotId} uiEvents={uiEvents} />
+              <div id={layoutConfig.pluginSlotId} />
               <Stack customStyle="fixed bottom-0 mr-4 mb-4">
-                <Extension name={layoutConfig.snackbarNotifSlotId} uiEvents={uiEvents} />
+                <Extension name={layoutConfig.snackbarNotifSlotId} />
               </Stack>
             </Stack>
           </Stack>
 
           <Stack customStyle="sticky top-0 h-screen">
             <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
-              <Extension name={layoutConfig.widgetSlotId} uiEvents={uiEvents} />
-              <Extension name={layoutConfig.rootWidgetSlotId} uiEvents={uiEvents} />
+              <Widget name={layoutConfig.widgetSlotId} loadingIndicator={<Spinner />} />
+              <Widget name={layoutConfig.rootWidgetSlotId} loadingIndicator={<Spinner />} />
             </Stack>
 
             <Stack customStyle="fixed bottom-0 mr-4 mb-4">
-              <Extension name={layoutConfig.cookieWidgetSlotId} uiEvents={uiEvents} />
+              <Widget name={layoutConfig.cookieWidgetSlotId} loadingIndicator={<Spinner />} />
             </Stack>
           </Stack>
         </Stack>
-
-        {activeModal && (
-          <Extension name={activeModal.name} uiEvents={uiEvents} customStyle="relative z-999" />
-        )}
-
-        <Extension
-          name={layoutConfig.modalSlotId}
-          uiEvents={uiEvents}
-          customStyle="relative z-999"
-        />
+        <ModalExtension />
       </Stack>
     </Stack>
   );

@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import { RootExtensionProps, EntityTypes } from '@akashaorg/typings/lib/ui';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -12,14 +12,19 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-const EntryEditButton: React.FC<RootExtensionProps> = props => {
+type EntryEditButtonExtensionData = {
+  itemId: string;
+  itemType: EntityTypes;
+};
+
+const EntryEditButton: React.FC<RootExtensionProps<EntryEditButtonExtensionData>> = props => {
   const { t } = useTranslation('app-akasha-integration');
 
   const handleClick = () => {
     if (props.extensionData && props.extensionData.hasOwnProperty('itemId')) {
       props.singleSpa.navigateToUrl(
         `${window.location.origin}/@akashaorg/app-akasha-integration/${
-          props.extensionData?.itemType === EntityTypes.BEAM ? 'post' : 'reply'
+          props.extensionData?.itemType === EntityTypes.BEAM ? 'post' : 'reflect'
         }/${props.extensionData.itemId}?action=edit`,
       );
     }
@@ -27,7 +32,7 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
 
   const itemTypeLabel = React.useMemo(() => {
     if (props.extensionData.itemType === EntityTypes.REFLECT) {
-      return t('reply');
+      return t('reflect');
     }
     if (props.extensionData.itemType === EntityTypes.BEAM) {
       return t('beam');
@@ -45,10 +50,11 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
   );
 };
 
-const ModalWrapper: React.FC<RootExtensionProps> = props => {
+const ModalWrapper: React.FC<RootExtensionProps<EntryEditButtonExtensionData>> = props => {
+  const { getTranslationPlugin } = useRootComponentProps();
   return (
     <React.Suspense fallback={'...'}>
-      <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
+      <I18nextProvider i18n={getTranslationPlugin().i18n}>
         <EntryEditButton {...props} />
       </I18nextProvider>
     </React.Suspense>
@@ -59,7 +65,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(ModalWrapper),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps<EntryEditButtonExtensionData>) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

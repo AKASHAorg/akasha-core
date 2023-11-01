@@ -14,9 +14,14 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 
-const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
+type EntryRemoveModalExtensionData = {
+  itemType: EntityTypes;
+  itemId: string;
+};
+
+const EntryRemoveModal: React.FC<RootExtensionProps<EntryRemoveModalExtensionData>> = props => {
   const { extensionData, logger, singleSpa } = props;
 
   const [showModal, setShowModal] = useState(true);
@@ -37,13 +42,13 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
     if (!!extensionData && extensionData.itemType !== undefined) {
       if (extensionData.itemType === EntityTypes.REFLECT) {
         analyticsActions.trackEvent({
-          category: AnalyticsCategories.POST,
+          category: AnalyticsCategories.REFLECT,
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.itemId);
       } else if (extensionData.itemType === EntityTypes.BEAM) {
         analyticsActions.trackEvent({
-          category: AnalyticsCategories.POST,
+          category: AnalyticsCategories.BEAM,
           action: 'Post Deleted',
         });
         postDeleteQuery.mutate(extensionData.itemId);
@@ -61,7 +66,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
     if (extensionData.itemType === EntityTypes.BEAM) {
       return t('post');
     }
-    return t('reply');
+    return t('reflect');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [extensionData.itemType]);
 
@@ -88,9 +93,10 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   );
 };
 
-const ModalWrapper: React.FC<RootExtensionProps> = props => {
+const ModalWrapper: React.FC<RootExtensionProps<EntryRemoveModalExtensionData>> = props => {
+  const { getTranslationPlugin } = useRootComponentProps();
   return (
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <EntryRemoveModal {...props} />
     </I18nextProvider>
   );
@@ -100,7 +106,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(ModalWrapper),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps<EntryRemoveModalExtensionData>) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }

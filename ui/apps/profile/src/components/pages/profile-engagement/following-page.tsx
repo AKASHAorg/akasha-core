@@ -20,13 +20,15 @@ import {
   useRootComponentProps,
   useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
-
-const FollowingPage: React.FC<unknown> = () => {
+export type FollowingPageProps = {
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+};
+const FollowingPage: React.FC<FollowingPageProps> = props => {
+  const { showLoginModal } = props;
   const [loadMore, setLoadingMore] = useState(false);
   const { profileId } = useParams<{ profileId: string }>();
 
-  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
-
+  const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const { isLoggedIn, loggedInProfileId } = useLoggedIn();
@@ -99,7 +101,10 @@ const FollowingPage: React.FC<unknown> = () => {
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    { select: response => response.viewer?.akashaFollowList, enabled: isLoggedIn },
+    {
+      select: response => response.viewer?.akashaFollowList,
+      enabled: isLoggedIn && !!followProfileIds.length,
+    },
   );
 
   if (!isLoggedIn) {
@@ -110,10 +115,6 @@ const FollowingPage: React.FC<unknown> = () => {
   }
 
   const followList = getFollowList(followDocumentsReq.data?.edges.map(edge => edge?.node));
-
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
-  };
 
   const onProfileClick = (profileId: string) => {
     navigateTo?.({

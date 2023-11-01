@@ -48,5 +48,9 @@
   "files": [
     "lib",
     "dist"
-  ]
+  ],
+  "directories": {
+    "lib": "lib",
+    "dist": "dist"
+  }
 }

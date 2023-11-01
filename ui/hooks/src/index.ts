@@ -35,8 +35,10 @@ export {
   useCheckNewNotifications,
   useFetchNotifications,
   useMarkAsRead,
+  useListenForMutationEvents,
 } from './use-notifications';
 
 export { useShowFeedback } from './use-show-feedback';
 export { useTheme } from './use-theme';
 export { useProfileStats } from './use-profile-stats';
+export { useSaveSettings, useGetSettings } from './use-settings';

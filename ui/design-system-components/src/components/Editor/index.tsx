@@ -42,10 +42,10 @@ export type EditorBoxProps = {
   avatar?: Profile['avatar'];
   showAvatar?: boolean;
   profileId: string | null;
-  postLabel?: string;
+  actionLabel?: string;
   placeholderLabel?: string;
   emojiPlaceholderLabel?: string;
-  disablePublishLabel?: string;
+  disableActionLabel?: string;
   onPublish: (publishData: IPublishData) => void;
   disablePublish?: boolean;
   embedEntryData?: IEntryData;
@@ -78,9 +78,9 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
     showDraft = false,
     onClear,
     profileId,
-    postLabel,
+    actionLabel,
     placeholderLabel,
-    disablePublishLabel,
+    disableActionLabel,
     disablePublish,
     onPublish,
     embedEntryData,
@@ -589,7 +589,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
             <Button
               variant={'primary'}
               icon={disablePublish ? 'ArrowPathIcon' : null}
-              label={disablePublish ? disablePublishLabel : postLabel}
+              label={disablePublish ? disableActionLabel : actionLabel}
               onClick={handlePublish}
               disabled={publishDisabled}
             />
@@ -599,13 +599,5 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
     </div>
   );
 });
-
-/* eslint-enable complexity */
-
-EditorBox.defaultProps = {
-  postLabel: 'Post',
-  disablePublishLabel: 'Authenticating',
-  placeholderLabel: 'Share your thoughts',
-};
 
 export default EditorBox;

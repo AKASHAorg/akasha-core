@@ -1,14 +1,9 @@
 import React from 'react';
+import ReflectFeed from './reflect-feed';
 import { I18nextProvider } from 'react-i18next';
-import {
-  EntityTypes,
-  Profile,
-  IContentClickDetails,
-  ModalNavigationOptions,
-} from '@akashaorg/typings/lib/ui';
+import { EntityTypes, Profile } from '@akashaorg/typings/lib/ui';
 import BeamFeed, { BeamFeedProps } from './beam-feed';
 import { ScrollStateDBWrapper } from '../utils/scroll-state-db';
-import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 /**
@@ -23,24 +18,20 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type FeedWidgetCommonProps = {
   queryKey: string;
-  itemType: EntityTypes;
   loggedProfileData?: Profile;
+  itemSpacing: BeamFeedProps['itemSpacing'];
+  contentClickable?: boolean;
+  accentBorderTop?: boolean;
+  scrollerOptions?: { overscan: number };
+  newItemsPublishedLabel: string;
+  trackEvent?: BeamFeedProps['trackEvent'];
+  onNavigate: BeamFeedProps['onNavigate'];
   onLoginModalOpen: BeamFeedProps['onLoginModalOpen'];
   onEntryFlag: BeamFeedProps['onEntryFlag'];
   onEntryRemove: BeamFeedProps['onEntryRemove'];
-  itemSpacing: BeamFeedProps['itemSpacing'];
-  onNavigate: BeamFeedProps['onNavigate'];
-  contentClickable?: boolean;
-  onRebeam?: BeamFeedProps['onRebeam'];
-  accentBorderTop?: boolean;
-  trackEvent?: BeamFeedProps['trackEvent'];
-  scrollerOptions?: { overscan: number };
-  newItemsPublishedLabel: string;
-};
+} & ({ itemType: EntityTypes.BEAM } | { itemType: EntityTypes.REFLECT; beamId: string });
 
 const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
-  const { itemType } = props;
-
   const { getTranslationPlugin, layoutConfig } = useRootComponentProps();
   const { i18n } = getTranslationPlugin();
 
@@ -50,16 +41,18 @@ const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
 
   return (
     <I18nextProvider i18n={i18n}>
-      {itemType === EntityTypes.BEAM && (
-        <BeamFeed
+      {props.itemType === EntityTypes.BEAM && (
+        <BeamFeed {...props} i18n={i18n} modalSlotId={layoutConfig.modalSlotId} db={db} />
+      )}
+      {props.itemType === EntityTypes.REFLECT && (
+        <ReflectFeed
           {...props}
+          beamId={props.beamId}
           i18n={i18n}
           modalSlotId={layoutConfig.modalSlotId}
-          locale={i18n.languages[0].toLowerCase() as ILocale}
           db={db}
         />
       )}
-      {/*{itemType === EntityTypes.REFLECT && <ReflectFeed {...props} db={db} />}*/}
     </I18nextProvider>
   );
 };

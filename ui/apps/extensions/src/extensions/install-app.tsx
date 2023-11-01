@@ -4,12 +4,22 @@ import singleSpaReact from 'single-spa-react';
 import getSDK from '@akashaorg/awf-sdk';
 import InstallApp from '@akashaorg/design-system-components/lib/components/InstallApp';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { EventDataTypes, EventTypes, RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import {
+  RootExtensionProps,
+  RouteRegistrationEvents,
+  RoutesRegisterEvent,
+} from '@akashaorg/typings/lib/ui';
 import { APP_EVENTS } from '@akashaorg/typings/lib/sdk';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { filterEvent, useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 
-const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
+type IntegrationModalExtensionData = {
+  integrationName: string;
+};
+
+const IntegrationInstallModal: React.FC<
+  RootExtensionProps<IntegrationModalExtensionData>
+> = props => {
   const { extensionData, uiEvents, singleSpa } = props;
   const sdk = getSDK();
   const { t } = useTranslation('app-akasha-integration');
@@ -17,7 +27,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   const PROGRESS_STEP_TO_PROGRESS_INFO_MAP = {
     1: t('Saving install information...'),
     2: t('Downloading App resources...'),
-    3: t('Installing App intro your World...'),
+    3: t('Installing App into your World...'),
   };
 
   const integrationName: string = React.useMemo(() => {
@@ -38,13 +48,11 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
         }
       },
     });
-    // EventTypes.RegisterIntegration
-    const sub = uiEvents.subscribe({
-      next: (eventData: { event: EventTypes; data?: EventDataTypes }) => {
-        if (eventData.event && eventData.event === EventTypes.RegisterIntegration) {
-          if (eventData.data.name === integrationName) {
-            setModalState(3);
-          }
+    // @TODO: double check if this is needed.
+    const sub = uiEvents.pipe(filterEvent(RouteRegistrationEvents.RegisterRoutes)).subscribe({
+      next: (eventData: RoutesRegisterEvent) => {
+        if (eventData.data.name === integrationName) {
+          setModalState(3);
         }
       },
     });
@@ -90,9 +98,10 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   );
 };
 
-const ModalWrapper: React.FC<RootExtensionProps> = props => {
+const ModalWrapper: React.FC<RootExtensionProps<IntegrationModalExtensionData>> = props => {
+  const { getTranslationPlugin } = useRootComponentProps();
   return (
-    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
       <IntegrationInstallModal {...props} />
     </I18nextProvider>
   );
@@ -102,7 +111,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(ModalWrapper),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps<IntegrationModalExtensionData>) => {
     if (props.logger) {
       props.logger.error(`Error in InstallModal: ${JSON.stringify(err)}, ${errorInfo}`);
     }

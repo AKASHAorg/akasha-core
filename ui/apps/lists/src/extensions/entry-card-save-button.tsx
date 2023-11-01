@@ -2,12 +2,20 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
-import { useGetLogin, withProviders, useAnalytics } from '@akashaorg/ui-awf-hooks';
+import {
+  useGetLogin,
+  withProviders,
+  useAnalytics,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-
-const EntryCardSaveButton = (props: RootExtensionProps) => {
+type CardSaveButtonExtensionData = {
+  itemId: string;
+  itemType: EntityTypes;
+};
+const EntryCardSaveButton = (props: RootExtensionProps<CardSaveButtonExtensionData>) => {
   const { extensionData } = props;
   const loggedUserReq = useGetLogin();
   const bookmarkReq = null;
@@ -27,14 +35,14 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
     if (loggedUserReq.isSuccess && loggedUserReq.data.ethAddress) {
       if (isBookmarked) {
         analyticsActions.trackEvent({
-          category: AnalyticsCategories.POST,
+          category: AnalyticsCategories.BEAM,
           action: 'Beam Bookmark Removed',
         });
         bookmarkDelete.mutate(itemId);
       }
       if (!isBookmarked) {
         analyticsActions.trackEvent({
-          category: AnalyticsCategories.POST,
+          category: AnalyticsCategories.BEAM,
           action: 'Beam Bookmarked',
         });
         bookmarkCreate.mutate({ entryId: itemId, itemType: itemType });
@@ -57,17 +65,20 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
   );
 };
 
-const BookmarkButtonWrapper = (props: RootExtensionProps) => (
-  <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
-    <EntryCardSaveButton {...props} />
-  </I18nextProvider>
-);
+const BookmarkButtonWrapper = (props: RootExtensionProps<CardSaveButtonExtensionData>) => {
+  const { getTranslationPlugin } = useRootComponentProps();
+  return (
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      <EntryCardSaveButton {...props} />
+    </I18nextProvider>
+  );
+};
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient: ReactDOM,
   rootComponent: withProviders(BookmarkButtonWrapper),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps<CardSaveButtonExtensionData>) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

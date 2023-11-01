@@ -24,7 +24,6 @@ import { LatestProfiles, LatestTopics } from './cards';
 
 const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
-
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('ui-widget-trending');
@@ -68,7 +67,10 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    { select: response => response.viewer?.akashaFollowList, enabled: isLoggedIn },
+    {
+      select: response => response.viewer?.akashaFollowList,
+      enabled: isLoggedIn && !!followProfileIds.length,
+    },
   );
   const createInterest = useCreateInterestsMutation({
     onSuccess: async () => {

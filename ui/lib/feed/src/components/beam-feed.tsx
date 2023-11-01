@@ -1,4 +1,8 @@
-import * as React from 'react';
+import React from 'react';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import BeamCard from './cards/beam-card';
 import EntryList, {
   EntryListProps,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
@@ -10,16 +14,11 @@ import {
   Profile,
 } from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useInfiniteBeams } from '../utils/use-infinite-beams';
+import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';
-import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import BeamCard from './cards/beam-card';
 
 export type BeamFeedProps = Omit<
   EntryListProps<AkashaBeamEdge>,
@@ -34,37 +33,33 @@ export type BeamFeedProps = Omit<
   | 'onFetchNextPage'
   | 'onScrollStateSave'
 > & {
-  locale?: ILocale;
+  contentClickable?: boolean;
+  className?: string;
+  modalSlotId: string;
+  accentBorderTop?: boolean;
+  totalEntryCount?: number;
+  loggedProfileData?: Profile;
+  i18n: i18n;
+  db: ScrollStateDBWrapper;
+  scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
+  queryKey: string;
+  newItemsPublishedLabel: string;
   onEntryFlag?: (
     entryId: string,
     itemType: EntityTypes,
     reporterEthAddress?: string | null,
   ) => () => void;
-  contentClickable?: boolean;
   onEntryRemove?: (entryId: string) => void;
-  className?: string;
-  modalSlotId: string;
-  accentBorderTop?: boolean;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
-  totalEntryCount?: number;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  loggedProfileData?: Profile;
-  i18n: i18n;
-  onRebeam?: (withComment: boolean, beamId: string) => void;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  db: ScrollStateDBWrapper;
-  scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
-  queryKey: string;
-  newItemsPublishedLabel: string;
 };
 
 const BeamFeed: React.FC<BeamFeedProps> = props => {
   const {
-    locale = 'en',
     i18n,
     itemSpacing = 8,
     onNavigate,
-    onRebeam,
     db,
     scrollerOptions = { overscan: 5 },
     queryKey,
@@ -129,13 +124,21 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
                 ref={measureElementRef}
                 data-cursor={entryData?.cursor || entryData?.['key'] || ''}
               >
-                {!entryData.node && <EntryLoadingPlaceholder />}
+                {!entryData.node && <EntryCardLoading />}
                 {entryData.node && (
                   <BeamCard
                     entryData={entryData.node}
-                    locale={locale}
-                    uiEvents={uiEvents}
-                    //@TODO: refactor prop
+                    contentClickable={true}
+                    onReflect={() => {
+                      onNavigate(
+                        {
+                          authorId: entryData.node?.author.id,
+                          id: entryData.node?.id,
+                          reflect: true,
+                        },
+                        EntityTypes.BEAM,
+                      );
+                    }}
                     onContentClick={() =>
                       onNavigate(
                         { authorId: entryData.node?.author.id, id: entryData.node?.id },

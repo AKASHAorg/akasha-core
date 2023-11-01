@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@akashaorg/composedb-models": "*",
-    "@composedb/client": "0.5.0",
+    "@composedb/client": "0.5.2",
     "@didtools/cacao": "2.1.0",
     "@didtools/pkh-ethereum": "0.4.1",
     "@ensdomains/ens-contracts": "^0.0.22",
@@ -24,7 +24,7 @@
     "dexie": "3.2.3",
     "did-jwt": "^7.2.6",
     "did-resolver": "^4.1.0",
-    "did-session": "^2.0.1",
+    "did-session": "^2.1.1",
     "dids": "^4.0.4",
     "eth-ens-namehash": "2.0.8",
     "ethers": "5.7.2",
@@ -50,7 +50,7 @@
     "uint8arrays": "4.0.4",
     "util": "0.12.5",
     "web3-utils": "1.8.1",
-    "zod": "3.20.6"
+    "zod": "3.22.3"
   },
   "peerDependencies": {
     "@multiformats/multiaddr-to-uri": "^9.0.1",

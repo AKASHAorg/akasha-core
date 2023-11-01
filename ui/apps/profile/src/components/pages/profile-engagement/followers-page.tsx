@@ -20,12 +20,16 @@ import {
   useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
 
-const FollowersPage: React.FC<unknown> = () => {
+export type FollowersPageProps = {
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+};
+
+const FollowersPage: React.FC<FollowersPageProps> = props => {
+  const { showLoginModal } = props;
   const [loadMore, setLoadingMore] = useState(false);
   const { profileId } = useParams<{ profileId: string }>();
 
-  const { navigateToModal, getRoutingPlugin } = useRootComponentProps();
-
+  const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const { isLoggedIn, loggedInProfileId } = useLoggedIn();
@@ -65,7 +69,9 @@ const FollowersPage: React.FC<unknown> = () => {
       followersReq.data?.pages
         ? followersReq.data.pages?.flatMap(page =>
             hasOwn(page.node, 'isViewer')
-              ? page.node?.akashaProfile?.followers?.edges?.map(edge => edge?.node) || []
+              ? page.node?.akashaProfile?.followers?.edges
+                  ?.map(edge => edge?.node)
+                  .filter(node => node.did.akashaProfile) || []
               : [],
           )
         : [],
@@ -78,7 +84,7 @@ const FollowersPage: React.FC<unknown> = () => {
       : null;
   }, [followersReq]);
   const followProfileIds = useMemo(
-    () => followers.map(follower => follower.did?.akashaProfile?.id),
+    () => followers.map(follower => follower.did?.akashaProfile?.id).filter(id => !!id),
     [followers],
   );
   const followDocumentsReq = useGetFollowDocumentsQuery(
@@ -86,7 +92,10 @@ const FollowersPage: React.FC<unknown> = () => {
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    { select: response => response.viewer?.akashaFollowList, enabled: isLoggedIn },
+    {
+      select: response => response.viewer?.akashaFollowList,
+      enabled: isLoggedIn && !!followProfileIds.length,
+    },
   );
 
   if (!isLoggedIn) {
@@ -97,10 +106,6 @@ const FollowersPage: React.FC<unknown> = () => {
   }
 
   const followList = getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node));
-
-  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
-    navigateToModal({ name: 'login', redirectTo });
-  };
 
   const onProfileClick = (profileId: string) => {
     navigateTo?.({
