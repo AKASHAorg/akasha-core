@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
@@ -129,6 +129,30 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     });
   };
 
+  const mutateInterests = useCallback(
+    async topics => {
+      await createInterestMutation.mutateAsync({
+        i: {
+          content: {
+            topics: topics,
+          },
+        },
+      });
+    },
+    [createInterestMutation],
+  );
+
+  const removeProcessedTopic = topic => {
+    setTagsQueue(prev => prev.filter(tag => tag.topic !== topic));
+  };
+
+  const checkIfInterestExists = useCallback(
+    topic => {
+      return tagSubscriptions.find(tag => tag.value === topic);
+    },
+    [tagSubscriptions],
+  );
+
   React.useEffect(() => {
     if (isMutatingInterests > 0 || tagSubscriptionsReq.status === 'loading') return;
     if (tagsQueue.length > 0) {
@@ -136,29 +160,20 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
 
       switch (currentTag?.type) {
         case 'sub':
-          if (tagSubscriptions.find(tag => tag.value === currentTag?.topic)) return;
+          if (checkIfInterestExists(currentTag?.topic)) return;
           (async () => {
-            await createInterestMutation.mutateAsync({
-              i: {
-                content: {
-                  topics: [...tagSubscriptions, { value: currentTag?.topic, labelType: 'TOPIC' }],
-                },
-              },
-            });
-            setTagsQueue(prev => prev.filter(tag => tag.topic !== currentTag.topic));
+            await mutateInterests([
+              ...tagSubscriptions,
+              { value: currentTag?.topic, labelType: 'TOPIC' },
+            ]);
+            removeProcessedTopic(currentTag.topic);
           })();
           break;
         case 'unsub':
-          if (!tagSubscriptions.find(tag => tag.value === currentTag?.topic)) return;
+          if (!checkIfInterestExists(currentTag?.topic)) return;
           (async () => {
-            await createInterestMutation.mutateAsync({
-              i: {
-                content: {
-                  topics: tagSubscriptions.filter(tag => tag.value !== currentTag?.topic),
-                },
-              },
-            });
-            setTagsQueue(prev => prev.filter(tag => tag.topic !== currentTag.topic));
+            await mutateInterests(tagSubscriptions.filter(tag => tag.value !== currentTag?.topic));
+            removeProcessedTopic(currentTag.topic);
           })();
           break;
         default:
@@ -166,11 +181,12 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       }
     }
   }, [
-    createInterestMutation,
+    tagSubscriptionsReq.status,
+    checkIfInterestExists,
+    mutateInterests,
     isMutatingInterests,
     tagsQueue,
     tagSubscriptions,
-    tagSubscriptionsReq.status,
   ]);
 
   const handleProfileClick = (did: string) => {
