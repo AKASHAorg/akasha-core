@@ -149,6 +149,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           })();
           break;
         case 'unsub':
+          if (!tagSubscriptions.find(tag => tag.value === currentTag?.topic)) return;
           (async () => {
             await createInterestMutation.mutateAsync({
               i: {
