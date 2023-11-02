@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import routes, { EDIT } from '../routes';
 import FollowProfileButton from './follow-profile-button';
+import FollowingFeedback from './following-feedback';
 import {
   ProfileHeader,
   ProfileHeaderLoading,
@@ -142,6 +143,7 @@ export const withProfileHeader = <T extends ProfileHeaderViewProps>(
       <>
         <ProfileHeaderView {...props} />
         {wrappedComponent}
+        <FollowingFeedback />
       </>
     );
   };

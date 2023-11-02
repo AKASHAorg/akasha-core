@@ -143,7 +143,7 @@ const Tooltip: React.FC<
             ref={contentRef}
             align="center"
             justify="center"
-            customStyle={`flex-wrap ${contentStyle}`}
+            customStyle={`flex-wrap w-max ${contentStyle}`}
           >
             {isContentOfTypeString ? <Text variant={textSize}>{content}</Text> : content}
           </Stack>

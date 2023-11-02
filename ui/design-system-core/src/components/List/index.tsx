@@ -1,33 +1,32 @@
-import React, { LegacyRef, forwardRef } from 'react';
-
-import { IconType } from '@akashaorg/typings/lib/ui';
-
-import Button from '../Button';
+import React, { Fragment, LegacyRef, forwardRef } from 'react';
 import Card from '../Card';
-import Icon from '../Icon';
 import Stack from '../Stack';
-import Text, { TextProps } from '../Text';
-
+import Tooltip from '../Tooltip';
+import ListElement from './list-element';
 import { getColorClasses } from '../../utils';
+import { IconType } from '@akashaorg/typings/ui';
+import { TextProps } from '../Text';
 
 type Selected = { index: number; label?: string };
 
 export type ListItem = {
   label: string;
   icon?: IconType;
+  toolTipContent?: string;
+  disabled?: boolean;
   onClick?: (label?: string) => void;
 } & TextProps;
 
 export type ListProps = {
   items: ListItem[];
-  customStyle?: string;
   showDivider?: boolean;
   ref?: LegacyRef<HTMLDivElement>;
+  customStyle?: string;
   onSelected?: ({ index, label }: Selected) => void;
 };
 
 const List: React.FC<ListProps> = forwardRef(
-  ({ items, customStyle = '', showDivider = true, onSelected }, ref) => {
+  ({ items, showDivider = true, customStyle = '', onSelected }, ref) => {
     const borderStyle = showDivider
       ? `border-b ${getColorClasses(
           {
@@ -50,22 +49,26 @@ const List: React.FC<ListProps> = forwardRef(
     };
 
     return (
-      <Card radius={8} padding={0} customStyle={`w-fit ${customStyle}`} ref={ref}>
+      <Card radius={8} padding={0} customStyle={customStyle} ref={ref}>
         <Stack direction="column">
           {items.map((item, index) => (
-            <Button
-              key={item.label + index}
-              customStyle={`${baseStyle} ${hoverStyle} first:rounded-t-lg	last:rounded-b-lg`}
-              onClick={handleItemClick(item, index)}
-              plain
-            >
-              <Stack direction="row" align="center" spacing="gap-x-3" customStyle="py-2 px-4">
-                {item.icon && <Icon type={item.icon} color={item.color} size="sm" />}
-                <Text variant="body1" {...item}>
-                  {item.label}
-                </Text>
-              </Stack>
-            </Button>
+            <Fragment key={index}>
+              {item.toolTipContent ? (
+                <Tooltip placement="right" content={item.toolTipContent}>
+                  <ListElement
+                    {...item}
+                    onClick={handleItemClick(item, index)}
+                    customStyle={`${baseStyle} ${hoverStyle} first:rounded-t-lg	last:rounded-b-lg`}
+                  />
+                </Tooltip>
+              ) : (
+                <ListElement
+                  {...item}
+                  onClick={handleItemClick(item, index)}
+                  customStyle={`${baseStyle} ${hoverStyle} first:rounded-t-lg	last:rounded-b-lg`}
+                />
+              )}
+            </Fragment>
           ))}
         </Stack>
       </Card>
