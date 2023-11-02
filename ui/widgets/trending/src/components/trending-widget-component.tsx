@@ -15,7 +15,7 @@ import {
   useCreateInterestsMutation,
   useGetFollowDocumentsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useIsMutating } from '@tanstack/react-query';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -30,7 +30,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { isLoggedIn, loggedInProfileId } = useLoggedIn();
   const queryClient = useQueryClient();
 
-  const [processingTags, setProcessingTags] = useState([]);
+  const [tagsQueue, setTagsQueue] = useState([]);
 
   const [analyticsActions] = useAnalytics();
   const latestProfilesReq = useGetProfilesQuery(
@@ -72,13 +72,15 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       enabled: isLoggedIn && !!followProfileIds.length,
     },
   );
-  const createInterest = useCreateInterestsMutation({
+  const createInterestMutation = useCreateInterestsMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: useGetInterestsByDidQuery.getKey({ id: loggedInProfileId }),
       });
     },
   });
+
+  const isMutatingInterests = useIsMutating({ mutationKey: useCreateInterestsMutation.getKey() });
 
   const latestTopics = latestTopicsReq.data || [];
   const tagSubscriptions = tagSubscriptionsReq.data;
@@ -107,14 +109,9 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       action: 'Trending Topic Subscribed',
     });
 
-    setProcessingTags(prevState => [...prevState, topic]);
-    createInterest
-      .mutateAsync({
-        i: { content: { topics: [...tagSubscriptions, { labelType: 'TOPIC', value: topic }] } },
-      })
-      .then(() => {
-        setProcessingTags(prevState => prevState.filter(value => value !== topic));
-      });
+    setTagsQueue(prevState => {
+      return [...prevState, { topic: topic, type: 'sub' }];
+    });
   };
 
   const handleTopicUnSubscribe = (topic: string) => {
@@ -127,16 +124,53 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       action: 'Trending Topic Unsubscribed',
     });
 
-    setProcessingTags(prevState => [...prevState, topic]);
-
-    createInterest
-      .mutateAsync({
-        i: { content: { topics: tagSubscriptions.filter(tag => tag.value !== topic) } },
-      })
-      .then(() => {
-        setProcessingTags(prevState => prevState.filter(value => value !== topic));
-      });
+    setTagsQueue(prevState => {
+      return [...prevState, { topic: topic, type: 'unsub' }];
+    });
   };
+
+  React.useEffect(() => {
+    if (isMutatingInterests > 0 || tagSubscriptionsReq.status === 'loading') return;
+    if (tagsQueue.length > 0) {
+      const currentTag = tagsQueue[0];
+
+      switch (currentTag?.type) {
+        case 'sub':
+          if (tagSubscriptions.find(tag => tag.value === currentTag?.topic)) return;
+          (async () => {
+            await createInterestMutation.mutateAsync({
+              i: {
+                content: {
+                  topics: [...tagSubscriptions, { value: currentTag?.topic, labelType: 'TOPIC' }],
+                },
+              },
+            });
+            setTagsQueue(prev => prev.filter(tag => tag.topic !== currentTag.topic));
+          })();
+          break;
+        case 'unsub':
+          (async () => {
+            await createInterestMutation.mutateAsync({
+              i: {
+                content: {
+                  topics: tagSubscriptions.filter(tag => tag.value !== currentTag?.topic),
+                },
+              },
+            });
+            setTagsQueue(prev => prev.filter(tag => tag.topic !== currentTag.topic));
+          })();
+          break;
+        default:
+          break;
+      }
+    }
+  }, [
+    createInterestMutation,
+    isMutatingInterests,
+    tagsQueue,
+    tagSubscriptions,
+    tagSubscriptionsReq.status,
+  ]);
 
   const handleProfileClick = (did: string) => {
     navigateTo?.({
@@ -168,7 +202,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           unsubscribeLabel={t('Unsubscribe')}
           noTagsLabel={t('No topics found!')}
           isLoadingTags={latestTopicsReq.isFetching}
-          isProcessingTags={processingTags}
+          isProcessingTags={tagsQueue.map(tag => tag.topic)}
           tags={latestTopics}
           subscribedTags={tagSubscriptions?.map(el => el.value)}
           onClickTopic={handleTopicClick}
