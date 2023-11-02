@@ -20,14 +20,18 @@ import type { Mutation } from '@tanstack/react-query';
  * const variables = sampleMutation.state.variables;
  * ```
  */
-export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
-  const [mutation, setMutation] = React.useState<Mutation<unknown, unknown, TVars>>();
+export const useMutationListener = <TVars, TData>(mutationKey: MutationKey) => {
+  const [mutation, setMutation] = React.useState<Mutation<TData, unknown, TVars, unknown>>(null);
   const queryClient = useQueryClient();
   const mutationCache = queryClient.getMutationCache();
   React.useEffect(() => {
     const unsubscribe = mutationCache.subscribe(event => {
-      if (event.mutation && event.mutation.options.mutationKey === mutationKey) {
-        setMutation(event.mutation as unknown as Mutation<unknown, unknown, TVars>);
+      if (event.mutation && isEqual(event.mutation.options.mutationKey, mutationKey)) {
+        setMutation(_mutation =>
+          event.mutation.state.status !== _mutation?.state.status
+            ? Object.assign({}, event.mutation)
+            : _mutation,
+        );
       }
     });
     return () => {
@@ -75,7 +79,7 @@ export const useMutationsListener = <TVars, TData>(mutationKey: MutationKey) => 
       unsubscribe();
     };
   }, [mutationKey, mutationCache]);
-  return { mutations };
+  return { mutations, clear: () => setMutations(null) };
 };
 
 /**

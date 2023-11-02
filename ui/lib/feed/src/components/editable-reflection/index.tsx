@@ -13,6 +13,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import {
   useGetMyProfileQuery,
+  useGetReflectionByIdQuery,
   useInfiniteGetReflectReflectionsQuery,
   useInfiniteGetReflectionsFromBeamQuery,
   useUpdateAkashaReflectMutation,
@@ -35,7 +36,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [tagQuery, setTagQuery] = useState(null);
   const [editorState, setEditorState] = useState(null);
 
-  const beamId = entryData.beam?.id;
+  const beamId = entryData.beamID;
   const isReflectOfReflection = beamId !== reflectToId;
   const queryClient = useQueryClient();
   const mentionSearch = null;
@@ -49,7 +50,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     onMutate: () => {
       setEditInProgress(true);
     },
-    onSuccess: async () => {
+    onSuccess: async data => {
       if (!isReflectOfReflection) {
         await queryClient.invalidateQueries(
           useInfiniteGetReflectionsFromBeamQuery.getKey({
@@ -59,11 +60,20 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
       }
 
       if (isReflectOfReflection) {
-        await queryClient.invalidateQueries(
-          useInfiniteGetReflectReflectionsQuery.getKey({
-            id: reflectToId,
-          }),
-        );
+        if (data.updateAkashaReflect.document.id === reflectToId) {
+          await queryClient.invalidateQueries(
+            useGetReflectionByIdQuery.getKey({
+              id: reflectToId,
+            }),
+          );
+        }
+        if (data.updateAkashaReflect.document.id !== reflectToId) {
+          await queryClient.invalidateQueries(
+            useInfiniteGetReflectReflectionsQuery.getKey({
+              id: reflectToId,
+            }),
+          );
+        }
       }
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,

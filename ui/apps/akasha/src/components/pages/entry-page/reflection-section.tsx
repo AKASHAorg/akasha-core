@@ -3,7 +3,7 @@ import EditorPlaceholder from '@akashaorg/design-system-components/lib/component
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ReflectEditor from '../../reflect-editor';
-import ReflectionCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflection-card';
+import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import routes, { REFLECT } from '../../../routes';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useTranslation } from 'react-i18next';
@@ -31,14 +31,14 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
 
   return (
     <Stack spacing="gap-y-2" ref={wrapperRef}>
-      <ReflectionCard
+      <EditableReflection
         entryData={entryData}
-        noWrapperCard={true}
         contentClickable={false}
+        reflectToId={entryData.id}
         onReflect={() => {
           onNavigate(
             {
-              authorId: entryData?.author?.id,
+              authorId: entryData?.author.id,
               id: entryData?.id,
               reflect: !location.pathname.includes(routes[REFLECT]),
             },

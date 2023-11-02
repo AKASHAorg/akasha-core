@@ -39,4 +39,5 @@ export type IconType =
   | 'underline'
   | 'vibe'
   | 'walletconnect'
-  | 'widget';
+  | 'widget'
+  | 'following';

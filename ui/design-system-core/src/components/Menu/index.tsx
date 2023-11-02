@@ -8,9 +8,10 @@ import { useCloseActions } from '../../utils';
 
 export type MenuProps = {
   anchor: ButtonProps;
+  disabled?: boolean;
 } & ListProps;
 
-const Menu: React.FC<MenuProps> = ({ anchor, ...rest }) => {
+const Menu: React.FC<MenuProps> = ({ anchor, disabled, ...rest }) => {
   const [showList, setShowList] = useState(false);
   const anchorRef = useCloseActions(() => {
     setShowList(false);
@@ -22,7 +23,7 @@ const Menu: React.FC<MenuProps> = ({ anchor, ...rest }) => {
 
   return (
     <Stack ref={anchorRef} direction="column" spacing="gap-y-1">
-      <Button {...anchor} onClick={() => setShowList(!showList)} />
+      <Button {...anchor} disabled={disabled} onClick={() => setShowList(!showList)} />
 
       <div className={tw('relative')}>
         {showList && (

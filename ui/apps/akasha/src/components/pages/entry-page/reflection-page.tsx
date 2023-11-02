@@ -4,6 +4,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import EntrySectionLoading from './entry-section-loading';
+import ReflectionSection from './reflection-section';
 import { useParams } from 'react-router-dom';
 import {
   useGetMyProfileQuery,
@@ -18,7 +19,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
-import ReflectionSection from './reflection-section';
 
 const ReflectionPage: React.FC<unknown> = () => {
   const { reflectionId } = useParams<{
