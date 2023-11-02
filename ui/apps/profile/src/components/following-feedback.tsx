@@ -33,18 +33,21 @@ const FollowingFeedback = () => {
 
   const followState = createFollowState || updateFollowState;
 
-  const getStateData = useCallback((followStateData: CreateMutationData | UpdateMutationData) => {
-    if (followStateData) {
-      if (hasOwn(followStateData, 'createAkashaFollow')) {
-        return followStateData.createAkashaFollow.document;
-      }
+  const getFollowStateData = useCallback(
+    (followStateData: CreateMutationData | UpdateMutationData) => {
+      if (followStateData) {
+        if (hasOwn(followStateData, 'createAkashaFollow')) {
+          return followStateData.createAkashaFollow.document;
+        }
 
-      if (hasOwn(followStateData, 'updateAkashaFollow')) {
-        return followStateData.updateAkashaFollow.document;
+        if (hasOwn(followStateData, 'updateAkashaFollow')) {
+          return followStateData.updateAkashaFollow.document;
+        }
       }
-    }
-    return null;
-  }, []);
+      return null;
+    },
+    [],
+  );
 
   const followStateData = useMemo(() => {
     if (
@@ -52,33 +55,31 @@ const FollowingFeedback = () => {
       followState.state.status === 'success' &&
       followState.state.variables.i.content.isFollowing
     ) {
-      const stateData = getStateData(followState.state.data);
+      const stateData = getFollowStateData(followState.state.data);
       if (stateData.profile?.did.id === profileId) {
         return stateData;
       }
-      return false;
+      return null;
     }
-    return false;
-  }, [followState, getStateData, profileId]);
+    return null;
+  }, [followState, getFollowStateData, profileId]);
 
   useEffect(() => {
     if (followStateData) setTimeout(clear, 5000);
   }, [followStateData, clear]);
 
   return (
-    <>
-      {followStateData && (
-        <Snackbar
-          title={t('You are now following {{name}}', {
-            name: followStateData.profile?.name || profileId,
-          })}
-          handleDismiss={clear}
-          type="success"
-          iconType="CheckCircleIcon"
-          customStyle="mb-4"
-        />
-      )}
-    </>
+    followStateData && (
+      <Snackbar
+        title={t('You are now following {{name}}', {
+          name: followStateData.profile?.name || profileId,
+        })}
+        handleDismiss={clear}
+        type="success"
+        iconType="CheckCircleIcon"
+        customStyle="mb-4"
+      />
+    )
   );
 };
 
