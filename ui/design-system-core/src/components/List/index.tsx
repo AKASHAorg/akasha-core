@@ -4,7 +4,7 @@ import Stack from '../Stack';
 import Tooltip from '../Tooltip';
 import ListElement from './list-element';
 import { getColorClasses } from '../../utils';
-import { IconType } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/typings/lib/ui';
 import { TextProps } from '../Text';
 
 type Selected = { index: number; label?: string };
