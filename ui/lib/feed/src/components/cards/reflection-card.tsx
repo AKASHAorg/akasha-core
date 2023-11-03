@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 export type ReflectCardProps = Pick<
   EntryCardProps,
   | 'contentClickable'
-  | 'plainCard'
+  | 'noWrapperCard'
   | 'onContentClick'
   | 'onEdit'
   | 'onReflect'
@@ -61,7 +61,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       locale={locale}
       profileAnchorLink="/@akashaorg/app-profile"
       slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
-      plainCard={true}
+      noWrapperCard={true}
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}
       removed={{

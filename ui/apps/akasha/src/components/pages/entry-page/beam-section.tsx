@@ -32,7 +32,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
     <Stack spacing="gap-y-2" ref={wrapperRef}>
       <BeamCard
         entryData={entryData}
-        plainCard={true}
+        noWrapperCard={true}
         contentClickable={false}
         onReflect={() => {
           onNavigate(

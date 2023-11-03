@@ -6,13 +6,13 @@ import AuthorProfileLoading from './author-profile-loading';
 
 export type EntryLoadingPlaceholderProps = {
   animated?: boolean;
-  plainCard?: boolean;
+  noWrapperCard?: boolean;
 };
 
 const EntryLoadingPlaceholder: React.FC<
   PropsWithChildren<EntryLoadingPlaceholderProps>
 > = props => {
-  const { animated = true, plainCard, children } = props;
+  const { animated = true, noWrapperCard, children } = props;
   const loaderUi = (
     <Stack spacing="gap-y-2" padding="p-4">
       <Stack direction="row" align="center" justify="between">
@@ -31,7 +31,7 @@ const EntryLoadingPlaceholder: React.FC<
       </Stack>
     </Stack>
   );
-  return plainCard ? loaderUi : <Card padding="p-0">{loaderUi}</Card>;
+  return noWrapperCard ? loaderUi : <Card padding="p-0">{loaderUi}</Card>;
 };
 
 export default EntryLoadingPlaceholder;

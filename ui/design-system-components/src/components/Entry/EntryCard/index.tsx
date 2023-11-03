@@ -45,7 +45,7 @@ export type EntryCardProps = {
   disableReporting?: boolean;
   hidePublishTime?: boolean;
   disableActions?: boolean;
-  plainCard?: boolean;
+  noWrapperCard?: boolean;
   hideActionButtons?: boolean;
   scrollHiddenContent?: boolean;
   contentClickable?: boolean;
@@ -92,7 +92,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     disableReporting,
     hidePublishTime,
     disableActions,
-    plainCard = false,
+    noWrapperCard = false,
     hideActionButtons,
     scrollHiddenContent,
     contentClickable,
@@ -269,7 +269,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     </Stack>
   );
 
-  return plainCard ? (
+  return noWrapperCard ? (
     <>{entryCardUi}</>
   ) : (
     <Card ref={ref} padding="p-0">
