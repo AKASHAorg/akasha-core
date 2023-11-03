@@ -11,7 +11,6 @@ const MAXIMUM_REFLECTION_PREVIEWS = 2;
 
 type ReflectionPreviewProps = {
   reflectionId: string;
-
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
 };
 
