@@ -197,7 +197,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         <Menu
           anchor={{
             icon: 'EllipsisHorizontalIcon',
-            noBg: true,
+            plainIcon: true,
             iconOnly: true,
             size: 'md',
           }}

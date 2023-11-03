@@ -13,7 +13,7 @@ type IconOnlyButtonProps = {
   variant: ButtonProps['variant'];
   loading: ButtonProps['loading'];
   greyBg: ButtonProps['greyBg'];
-  noBg: ButtonProps['greyBg'];
+  plainIcon: ButtonProps['greyBg'];
   disabled: ButtonProps['disabled'];
   breakPointSize: ButtonProps['breakPointSize'];
   customStyle: ButtonProps['customStyle'];
@@ -32,7 +32,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         variant,
         loading,
         greyBg,
-        noBg,
+        plainIcon,
         breakPointSize,
         disabled,
         customStyle,
@@ -43,7 +43,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
       },
       ref,
     ) => {
-      const containerStyle = noBg
+      const containerStyle = plainIcon
         ? ''
         : getContainerClasses({
             variant,
@@ -59,14 +59,14 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
         : '';
 
-      const noBgStyle = noBg ? 'h-auto w-auto' : '';
+      const plainIconStyle = plainIcon ? 'h-auto w-auto' : '';
 
       return (
         <button ref={ref} className={tw(customStyle)} type="button" disabled={disabled} {...rest}>
           <Stack
             align="center"
-            justify={noBg ? null : 'center'}
-            customStyle={apply`group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${noBgStyle}`}
+            justify={plainIcon ? null : 'center'}
+            customStyle={apply`group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${plainIconStyle}`}
           >
             <ButtonIcon
               size={size}
