@@ -81,7 +81,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   });
 
   const latestTopics = latestTopicsReq.data || [];
-  const tagSubscriptions = tagSubscriptionsReq.data;
+  const tagSubscriptions = isLoggedIn ? tagSubscriptionsReq.data : [];
   const followList = isLoggedIn
     ? getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node))
     : null;

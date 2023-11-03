@@ -22,6 +22,9 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loaders/topbar-loader';
+import TrendingWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/trending-widget-loader';
+import SidebarLoader from '@akashaorg/design-system-components/lib/components/Loaders/sidebar-loader';
 
 const Layout: React.FC<unknown> = () => {
   const [needSidebarToggling, setNeedSidebarToggling] = useState(
@@ -146,6 +149,7 @@ const Layout: React.FC<unknown> = () => {
       lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
       ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'}
       xl:max-w-7xl xl:mx-auto gap-x-4
+      w-full
       `;
 
   // the bg(black/30 dark:white/30) is for the overlay background when the sidebar is open on mobile
@@ -176,7 +180,7 @@ const Layout: React.FC<unknown> = () => {
                   <Widget
                     fullHeight
                     name={layoutConfig.sidebarSlotId}
-                    loadingIndicator={<Spinner />}
+                    loadingIndicator={<SidebarLoader />}
                   />
                 </Stack>
               ) : (
@@ -184,7 +188,7 @@ const Layout: React.FC<unknown> = () => {
                   <Widget
                     fullHeight
                     name={layoutConfig.sidebarSlotId}
-                    loadingIndicator={<Spinner />}
+                    loadingIndicator={<SidebarLoader />}
                   />
                 </Stack>
               )}
@@ -196,7 +200,7 @@ const Layout: React.FC<unknown> = () => {
               padding="pt-4"
               customStyle="sticky top-0 z-10 bg(white dark:black) rounded-b-2xl"
             >
-              <Widget name={layoutConfig.topbarSlotId} loadingIndicator={<Spinner />} />
+              <Widget name={layoutConfig.topbarSlotId} loadingIndicator={<TopbarLoader />} />
             </Stack>
             <Stack padding="pt-4">
               {!isPlatformHealthy && (
@@ -233,7 +237,10 @@ const Layout: React.FC<unknown> = () => {
           <Stack customStyle="sticky top-0 h-screen">
             <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
               <Widget name={layoutConfig.widgetSlotId} loadingIndicator={<Spinner />} />
-              <Widget name={layoutConfig.rootWidgetSlotId} loadingIndicator={<Spinner />} />
+              <Widget
+                name={layoutConfig.rootWidgetSlotId}
+                loadingIndicator={<TrendingWidgetLoader />}
+              />
             </Stack>
 
             <Stack customStyle="fixed bottom-0 mr-4 mb-4">
