@@ -13,7 +13,7 @@ import {
 } from './utils';
 import { RestorationItem } from './virtual-list';
 
-export type VirtualizerCoreOptions<T> = {
+export type VirtualizerCoreOptions = {
   updateScheduler: ReturnType<typeof useUpdateScheduler>;
   overscan: number;
   itemSpacing: number;
@@ -29,7 +29,7 @@ export type MountedItem<T> = {
 };
 
 export class VirtualizerCore<T> {
-  options: VirtualizerCoreOptions<T>;
+  options: VirtualizerCoreOptions;
   isScrolling = false;
   batchedHeightUpdates: Set<string>;
   itemHeights: Map<string, number>;
@@ -38,7 +38,7 @@ export class VirtualizerCore<T> {
   itemHeightAverage: number;
   slice: { start: number; end: number };
 
-  constructor(options: VirtualizerCoreOptions<T>) {
+  constructor(options: VirtualizerCoreOptions) {
     this.setOptions(options);
     this.batchedHeightUpdates = new Set();
     this.itemHeights = new Map();
@@ -48,7 +48,7 @@ export class VirtualizerCore<T> {
     this.slice = { start: 0, end: 0 };
   }
 
-  setOptions = (options: Partial<VirtualizerCoreOptions<T>>) => {
+  setOptions = (options: Partial<VirtualizerCoreOptions>) => {
     // @TODO: double check if we really need to filter out undefined values
     Object.entries(options).forEach(([k, v]) => {
       if (typeof v === 'undefined') delete options[k];
@@ -241,6 +241,7 @@ export class VirtualizerCore<T> {
   };
 
   public getIsScrolling = () => this.isScrolling;
+
   public batchHeightUpdates = (itemKey: string, mountedItems: VirtualItemInfo[]) => {
     this.batchedHeightUpdates.add(itemKey);
     // only update when items in state are resized

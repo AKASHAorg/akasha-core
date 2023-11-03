@@ -6,16 +6,17 @@ export const useStateWithCallback = <S>(
   const [state, setState] = React.useState<S>(initialState);
   const callback = React.useRef<(state: S) => void>();
 
-  const stateSet = React.useCallback((newState, cb) => {
+  const stateSet = React.useCallback((newState: S, cb: (state: S) => void) => {
     callback.current = cb;
     setState(newState);
   }, []);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (callback.current) {
       callback.current(state);
       callback.current = null;
     }
   }, [state]);
+
   return [state, stateSet];
 };

@@ -15,6 +15,8 @@ export const useViewport = (props: UseViewportProps) => {
   const scrollListeners = React.useRef([]);
   const resizeListeners = React.useRef([]);
   const overScroll = React.useRef(0);
+  const preventNextScrollListener = React.useRef(false);
+
   const stateRef = React.useRef({
     rect: initialRect,
     offsetTop: offsetTop,
@@ -45,7 +47,7 @@ export const useViewport = (props: UseViewportProps) => {
   };
 
   const defaultScrollListener = () => {
-    scrollListeners.current.forEach(listener => listener());
+    scrollListeners.current.forEach(listener => listener(preventNextScrollListener.current));
   };
 
   const registerScrollListener = () => {
@@ -127,7 +129,7 @@ export const useViewport = (props: UseViewportProps) => {
   const getRelativeToRootNode = () => {
     if (rootNode.current && stateRef.current.rect) {
       return new Rect(stateRef.current.rect.getTop(), stateRef.current.rect.getHeight()).translate(
-        -rootNode.current.getBoundingClientRect().top,
+        -rootNode.current.getBoundingClientRect().top + rootNode.current.offsetTop,
       );
     }
   };
@@ -164,6 +166,7 @@ export const useViewport = (props: UseViewportProps) => {
     getOverScroll: () => overScroll.current,
     setOffsetTop: (offset: number) => (stateRef.current.offsetTop = offset),
     updateOverScroll: (overscroll: number) => (overScroll.current = overscroll),
+    preventNextScroll: (prevent = true) => (preventNextScrollListener.current = prevent),
     isAtTop,
     getOffsetCorrection,
     getRelativeToRootNode,

@@ -1,60 +1,73 @@
 import { HEADER_COMPONENT, LOADING_INDICATOR, VirtualItemInfo } from './virtual-item';
+import { Rect } from './rect';
 import React from 'react';
+
+export const enum EdgeArea {
+  TOP = 'top',
+  BOTTOM = 'bottom',
+  NEAR_TOP = 'near-top',
+  NEAR_BOTTOM = 'near-bottom',
+}
 
 export type UseEdgeDetectorProps = {
   overscan: number;
   onLoadNext: (lastKey: string) => void;
   onLoadPrev: (firstKey: string) => void;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  onEdgeDetectorChange: (edgeArea: EdgeArea) => void;
+};
+export type DetectorState = {
+  listSize?: number;
+  newArea?: EdgeArea;
 };
 
 export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
-  const { overscan, onLoadPrev, onLoadNext } = props;
-  const fetchPrevLock = React.useRef(true);
-  const pageCursors = React.useRef<string[]>([]);
+  const { overscan, onEdgeDetectorChange, onLoadPrev, onLoadNext, hasNextPage, hasPreviousPage } =
+    props;
+  const [detectorState, setDetectorState] = React.useState<DetectorState>({});
+
   return {
-    // @TODO: requires a bit of refactoring
-    // disallow fetching if it's not scrolling from outside the area
     update: (
       itemList: VirtualItemInfo[],
       rendered: VirtualItemInfo[],
-      alreadyMeasured: boolean,
+      viewportRect: Rect,
+      averageItemHeight: number,
+      isNewUpdate: boolean,
     ) => {
-      if (!alreadyMeasured) return;
-      const items = rendered.filter(
+      if (!isNewUpdate) return;
+      const overscanHeight = overscan * averageItemHeight;
+      const filteredItems = itemList.filter(
         it => !it.key.startsWith(LOADING_INDICATOR) && it.key !== HEADER_COMPONENT,
       );
-      const filteredItemList = itemList.filter(
-        it => !it.key.startsWith(LOADING_INDICATOR) && it.key !== HEADER_COMPONENT,
+      const listRect = new Rect(
+        filteredItems.at(0).start,
+        filteredItems.at(-1).start + filteredItems.at(-1).height,
       );
-      const lastRendered = items.at(items.length - 1);
-      if (lastRendered) {
-        const lastIdx = itemList.findIndex(it => it.key === lastRendered.key);
-        if (
-          lastIdx > 0 &&
-          lastIdx + overscan >= itemList.length &&
-          !pageCursors.current.includes(filteredItemList.at(filteredItemList.length - 1).key)
-        ) {
-          onLoadNext(filteredItemList.at(filteredItemList.length - 1).key);
-          pageCursors.current.push(filteredItemList.at(filteredItemList.length - 1).key);
-        }
+      let newArea: EdgeArea;
+      if (viewportRect.getTop() === listRect.getTop()) {
+        newArea = EdgeArea.TOP;
       }
-      const firstRendered = items.at(0);
-      if (firstRendered) {
-        const firstIdx = itemList.findIndex(it => it.key === firstRendered.key);
-        if (
-          firstIdx > 0 &&
-          firstIdx <= overscan &&
-          !fetchPrevLock.current &&
-          !pageCursors.current.includes(filteredItemList.at(0).key)
-        ) {
-          onLoadPrev?.(filteredItemList.at(0).key);
-          fetchPrevLock.current = true;
-          pageCursors.current.unshift(filteredItemList.at(0).key);
-        }
-        if (firstIdx > overscan) {
-          fetchPrevLock.current = false;
-        }
+      if (viewportRect.getBottom() === listRect.getBottom()) {
+        newArea = EdgeArea.BOTTOM;
       }
+      if (viewportRect.getTop() - listRect.getTop() <= overscanHeight && newArea !== EdgeArea.TOP) {
+        newArea = EdgeArea.NEAR_TOP;
+      }
+      if (
+        listRect.getBottom() - viewportRect.getBottom() <= overscanHeight &&
+        newArea !== EdgeArea.BOTTOM
+      ) {
+        newArea = EdgeArea.NEAR_BOTTOM;
+      }
+      if (newArea === detectorState.newArea && itemList.length === detectorState.listSize) {
+        return;
+      }
+      setDetectorState({
+        newArea,
+        listSize: itemList.length,
+      });
+      onEdgeDetectorChange(newArea);
     },
   };
 };

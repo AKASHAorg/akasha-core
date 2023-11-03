@@ -7,8 +7,9 @@ import {
   VirtualDataItem,
   VirtualItemInfo,
 } from './virtual-item';
-import { useEdgeDetector } from './use-edge-detector';
+import { useEdgeDetector, UseEdgeDetectorProps } from './use-edge-detector';
 import { ScrollState, useScrollRestore } from './use-scroll-restore';
+import { Rect } from './rect';
 
 export const enum IndicatorPosition {
   TOP,
@@ -31,9 +32,14 @@ export type VirtualizerProps<T> = {
   onFetchInitialData?: VirtualListProps<T>['onFetchInitialData'];
   isFetchingNext?: boolean;
   isFetchingPrev?: boolean;
+  hasNextPage?: boolean;
+  hasPreviousPage?: boolean;
   loadingIndicator?: (position: IndicatorPosition) => React.ReactNode;
   debug?: boolean;
   onScrollSave?: (state: ScrollState<T>) => void;
+  scrollTopIndicator?: VirtualListProps<T>['scrollTopIndicator'];
+  onListReset?: VirtualListProps<T>['onListReset'];
+  onEdgeDetectorChange: UseEdgeDetectorProps['onEdgeDetectorChange'];
 };
 
 export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -53,13 +59,58 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     onFetchInitialData,
     restorationKey,
     onScrollSave,
+    scrollTopIndicator,
+    hasNextPage,
+    hasPreviousPage,
+    onListReset,
+    onEdgeDetectorChange,
   } = props;
+
   const vlistRef = React.useRef<VirtualListInterface<T>>();
   const prevRestoreKey = React.useRef<string>();
+
+  const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
+    const list = [];
+    if (loadingIndicator) {
+      list.push(
+        createVirtualDataItem(`${LOADING_INDICATOR}_top`, {}, false, () =>
+          loadingIndicator(IndicatorPosition.TOP),
+        ),
+      );
+    }
+
+    if (header) {
+      list.push(createVirtualDataItem(HEADER_COMPONENT, {}, true, () => header));
+    }
+
+    list.push(
+      ...items.map(it => {
+        const itemKey = itemKeyExtractor(it);
+        const idx = itemIndexExtractor(itemKey);
+        return createVirtualDataItem(itemKey, it, true, renderItem, idx);
+      }),
+    );
+    if (loadingIndicator) {
+      list.push(
+        createVirtualDataItem(
+          `${LOADING_INDICATOR}_bottom`,
+          {},
+          false,
+          () => loadingIndicator(IndicatorPosition.BOTTOM),
+          list.length - 1,
+        ),
+      );
+    }
+    return list;
+  }, [header, itemIndexExtractor, itemKeyExtractor, items, loadingIndicator, renderItem]);
+
   const edgeDetector = useEdgeDetector({
     overscan,
     onLoadNext: onFetchNextPage,
     onLoadPrev: onFetchPrevPage,
+    hasNextPage,
+    hasPreviousPage,
+    onEdgeDetectorChange,
   });
 
   const scrollRestore = useScrollRestore<T>({
@@ -107,50 +158,17 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   const handleEdgeDetectorUpdate = (
     itemList: VirtualItemInfo[],
     mountedItems: VirtualItemInfo[],
-    alreadyRendered: boolean,
+    viewportRect: Rect,
+    averageItemHeight: number,
+    isNewUpdate: boolean,
   ) => {
-    edgeDetector.update(itemList, mountedItems, alreadyRendered);
+    edgeDetector.update(itemList, mountedItems, viewportRect, averageItemHeight, isNewUpdate);
   };
 
   if (restorationKey && !prevRestoreKey.current) {
     scrollRestore.fetchScrollState();
     prevRestoreKey.current = restorationKey;
   }
-
-  const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
-    const list = [];
-    if (loadingIndicator) {
-      list.push(
-        createVirtualDataItem(`${LOADING_INDICATOR}_top`, {}, false, () =>
-          loadingIndicator(IndicatorPosition.TOP),
-        ),
-      );
-    }
-
-    if (header) {
-      list.push(createVirtualDataItem(HEADER_COMPONENT, {}, true, () => header));
-    }
-
-    list.push(
-      ...items.map(it => {
-        const itemKey = itemKeyExtractor(it);
-        const idx = itemIndexExtractor(itemKey);
-        return createVirtualDataItem(itemKey, it, true, renderItem, idx);
-      }),
-    );
-    if (loadingIndicator) {
-      list.push(
-        createVirtualDataItem(
-          `${LOADING_INDICATOR}_bottom`,
-          {},
-          false,
-          () => loadingIndicator(IndicatorPosition.BOTTOM),
-          list.length - 1,
-        ),
-      );
-    }
-    return list;
-  }, [header, itemIndexExtractor, itemKeyExtractor, items, loadingIndicator, renderItem]);
 
   const scrollRestorationType = React.useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -163,11 +181,13 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   if (!scrollRestore.isFetched) {
     scrollRestore.fetchScrollState();
   }
+
   if (!scrollRestore.isFetched) {
     // probably not a good place and time to show a
     // spinner or sorts because we might restore the scroll
     return null;
   }
+
   return (
     <VirtualList
       ref={vlistRef}
@@ -181,6 +201,10 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       onScrollEnd={handleScrollEnd}
       debug={debug}
       onFetchInitialData={onFetchInitialData}
+      scrollTopIndicator={scrollTopIndicator}
+      hasNextPage={hasNextPage}
+      hasPreviousPage={hasPreviousPage}
+      onListReset={onListReset}
     />
   );
 };

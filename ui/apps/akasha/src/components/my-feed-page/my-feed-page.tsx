@@ -13,6 +13,9 @@ import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { useBeams } from './use-beams';
 import { useScrollRestore } from './virtual-list/use-scroll-restore';
+import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
+import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import { EdgeArea } from './virtual-list/use-edge-detector';
 
 export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -34,15 +37,31 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
 
   const {
     pages,
-    isFetchingPreviousPage,
-    isFetchingNextPage,
+    hasPreviousPage,
+    hasNextPage,
     fetchNextPage,
     fetchPreviousPage,
     fetchInitialData,
+    onReset,
   } = useBeams({
     overscan: 10,
     queryKey: 'my-feed-page',
   });
+
+  const handleFetch = (newArea: EdgeArea) => {
+    switch (newArea) {
+      case EdgeArea.NEAR_BOTTOM:
+        fetchNextPage(pages.at(-1).cursor);
+        break;
+      case EdgeArea.NEAR_TOP:
+        fetchPreviousPage(pages.at(0).cursor);
+        break;
+      case EdgeArea.TOP:
+      case EdgeArea.BOTTOM:
+      default:
+        break;
+    }
+  };
 
   const tagSubsReq = useGetInterestsByDidQuery(
     { id: loggedProfileData?.did.id },
@@ -89,7 +108,6 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       getNavigationUrl: navRoutes => `${navRoutes.Onboarding}`,
     });
   };
-
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
@@ -117,26 +135,19 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
         estimatedHeight={150}
         items={pages}
         onFetchInitialData={fetchInitialData}
-        loadingIndicator={(position: IndicatorPosition) => {
-          if (isFetchingPreviousPage && position === IndicatorPosition.TOP && !isFetchingNextPage) {
-            return (
-              <Stack align="center">
-                <Spinner />
-              </Stack>
-            );
-          }
-          if (isFetchingNextPage && position === IndicatorPosition.BOTTOM) {
-            return (
-              <Stack align="center">
-                <Spinner />
-              </Stack>
-            );
-          }
-        }}
         itemKeyExtractor={item => item.cursor}
         itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
         onFetchNextPage={fetchNextPage}
         onFetchPrevPage={fetchPreviousPage}
+        hasPreviousPage={hasPreviousPage}
+        hasNextPage={hasNextPage}
+        onListReset={onReset}
+        onEdgeDetectorChange={handleFetch}
+        scrollTopIndicator={(listRect, onScrollToTop) => (
+          <ScrollTopWrapper placement={listRect.left}>
+            <ScrollTopButton hide={false} onClick={onScrollToTop} />
+          </ScrollTopWrapper>
+        )}
         renderItem={itemData => (
           <BeamCard
             entryData={itemData.node}
