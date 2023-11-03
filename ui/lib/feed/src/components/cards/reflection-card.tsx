@@ -22,6 +22,8 @@ export type ReflectCardProps = Pick<
   | 'hidePublishTime'
   | 'hideActionButtons'
   | 'disableActions'
+  | 'hover'
+  | 'lastEntry'
 > & {
   entryData: AkashaReflect;
 };
