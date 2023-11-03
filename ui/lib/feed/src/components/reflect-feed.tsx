@@ -8,6 +8,7 @@ import EntryList, {
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import ReflectionPreview from './reflection-preview';
 import {
   AnalyticsEventData,
   EntityTypes,
@@ -161,7 +162,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     >
       {cardProps => {
         const { items, allEntries, measureElementRef } = cardProps;
-        return items.map(item => {
+        return items.map((item, idx) => {
           const { index, key } = item;
           const entryData = allEntries[index];
           const isLoader = index > allEntries.length - 1;
@@ -180,8 +181,10 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
                   <Divider />
                   <EditableReflection
                     entryData={entryData}
-                    contentClickable={true}
                     reflectToId={reflectionsOf.entryId}
+                    contentClickable={true}
+                    lastEntry={idx === items.length - 1}
+                    hover={true}
                     onReflect={() => {
                       onNavigate(
                         {
@@ -194,11 +197,12 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
                     }}
                     onContentClick={() =>
                       onNavigate(
-                        { authorId: entryData.author.id, id: entryData.id },
+                        { authorId: entryData?.author.id, id: entryData.id },
                         EntityTypes.REFLECT,
                       )
                     }
                   />
+                  <ReflectionPreview reflectionId={entryData?.id} onNavigate={onNavigate} />
                 </>
               )}
             </div>

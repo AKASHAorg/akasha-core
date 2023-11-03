@@ -27,7 +27,7 @@ const MAX_EDIT_TIME_IN_MINUTES = 10;
 
 const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> = props => {
   const { entryData, reflectToId, ...rest } = props;
-  const { t } = useTranslation('app-akasha-integration');
+  const { t } = useTranslation('ui-lib-feed');
   const [analyticsActions] = useAnalytics();
   const [editInProgress, setEditInProgress] = useState(false);
   const [newContent, setNewContent] = useState(null);

@@ -11,7 +11,11 @@ import ReadOnlyEditor from '../../ReadOnlyEditor';
 import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
 import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
-import { ILocale, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
+import {
+  ILocale,
+  formatRelativeTime,
+  getColorClasses,
+} from '@akashaorg/design-system-core/lib/utils';
 import { formatDate } from '../../../utils/time';
 import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -45,6 +49,8 @@ export type EntryCardProps = {
   hideActionButtons?: boolean;
   scrollHiddenContent?: boolean;
   contentClickable?: boolean;
+  lastEntry?: boolean;
+  hover?: boolean;
   editable?: boolean;
   actionsRightExt?: ReactNode;
   customStyle?: CSSProperties;
@@ -91,6 +97,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     scrollHiddenContent,
     contentClickable,
     editable = true,
+    lastEntry,
+    hover,
     actionsRightExt,
     onAvatarClick,
     onContentClick,
@@ -134,8 +142,15 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       : []),
   ];
 
+  const hoverStyleLastEntry = lastEntry ? 'rounded-b-2xl' : '';
+  const hoverStyle = hover
+    ? `${getColorClasses({ light: 'grey9/60', dark: 'grey3' }, 'hover:bg')} ${hoverStyleLastEntry}`
+    : '';
+
+  const publishTime = entryData?.createdAt ? formatRelativeTime(entryData.createdAt, locale) : '';
+
   const entryCardUi = (
-    <Stack spacing="gap-y-2" padding="p-4">
+    <Stack spacing="gap-y-2" padding="p-4" customStyle={hoverStyle}>
       <Stack direction="row" justify="between">
         <>
           {authorProfile.status === 'loading' ? (
@@ -149,6 +164,29 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               }
               avatarImage={authorProfile.status === 'error' ? null : authorProfile.data?.avatar}
               href={`${profileAnchorLink}/${entryData.author.id}`}
+              metadata={
+                publishTime &&
+                !hidePublishTime && (
+                  <Stack direction="row" align="center" spacing="gap-x-1">
+                    <Text
+                      variant="footnotes2"
+                      weight="normal"
+                      color={{ light: 'grey4', dark: 'grey7' }}
+                    >
+                      ·
+                    </Text>
+                    <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
+                      <Text
+                        variant="footnotes2"
+                        weight="normal"
+                        color={{ light: 'grey4', dark: 'grey7' }}
+                      >
+                        {publishTime}
+                      </Text>
+                    </Tooltip>
+                  </Stack>
+                )
+              }
               onClick={() => {
                 if (onAvatarClick) onAvatarClick(entryData.author.id);
               }}
@@ -156,25 +194,17 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             />
           )}
         </>
-        <Stack direction="row" spacing="gap-2" align="center" customStyle="shrink-0">
-          {entryData?.createdAt && !hidePublishTime && (
-            <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
-              <Text customStyle="flex shrink-0 text(grey4 dark:grey7)">
-                {formatRelativeTime(entryData?.createdAt, locale)}
-              </Text>
-            </Tooltip>
-          )}
-          <Menu
-            anchor={{
-              icon: 'EllipsisHorizontalIcon',
-              variant: 'primary',
-              greyBg: true,
-              iconOnly: true,
-            }}
-            items={menuItems}
-            disabled={disableActions}
-          />
-        </Stack>
+        <Menu
+          anchor={{
+            icon: 'EllipsisHorizontalIcon',
+            plainIcon: true,
+            iconOnly: true,
+            size: 'md',
+          }}
+          items={menuItems}
+          disabled={disableActions}
+          customStyle="shrink-0"
+        />
       </Stack>
       {!entryData.active && (
         <EntryCardRemoved

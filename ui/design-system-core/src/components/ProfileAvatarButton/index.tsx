@@ -1,7 +1,5 @@
-import React from 'react';
-
+import React, { ReactElement } from 'react';
 import { Profile } from '@akashaorg/typings/lib/ui';
-
 import Avatar, { AvatarSize } from '../Avatar';
 import Stack from '../Stack';
 import Button from '../Button';
@@ -18,6 +16,7 @@ export interface ProfileAvatarButtonProps {
   active?: boolean;
   truncateText?: boolean;
   href?: string;
+  metadata?: ReactElement;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   onClickAvatar?: () => void;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
@@ -34,6 +33,7 @@ const ProfileAvatarButton = React.forwardRef(
       profileId,
       truncateText = true,
       href,
+      metadata,
       onClick,
       onClickAvatar,
       onMouseEnter,
@@ -75,10 +75,11 @@ const ProfileAvatarButton = React.forwardRef(
           testId="info-box"
           aria-label="info-box"
         >
-          <Stack ref={ref}>
+          <Stack direction="row" align="center" spacing="gap-x-1" ref={ref}>
             <Text variant="button-sm" weight="bold" truncate={true} customStyle={textTruncateStyle}>
               {label || profileId}
             </Text>
+            {metadata}
           </Stack>
           <DidField did={profileId} isValid={true} copiable={false} />
         </Stack>
