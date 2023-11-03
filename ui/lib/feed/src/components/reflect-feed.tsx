@@ -162,7 +162,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     >
       {cardProps => {
         const { items, allEntries, measureElementRef } = cardProps;
-        return items.map(item => {
+        return items.map((item, idx) => {
           const { index, key } = item;
           const entryData = allEntries[index];
           const isLoader = index > allEntries.length - 1;
@@ -183,7 +183,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
                     entryData={entryData}
                     reflectToId={reflectionsOf.entryId}
                     contentClickable={true}
-                    lastEntry={index === items.length}
+                    lastEntry={idx === items.length - 1}
                     hover={true}
                     onReflect={() => {
                       onNavigate(

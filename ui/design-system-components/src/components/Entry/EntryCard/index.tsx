@@ -144,8 +144,10 @@ const EntryCard: React.FC<EntryCardProps> = props => {
 
   const hoverStyleLastEntry = lastEntry ? 'rounded-b-2xl' : '';
   const hoverStyle = hover
-    ? `${getColorClasses({ light: 'grey8', dark: 'grey3' }, 'hover:bg')} ${hoverStyleLastEntry}`
+    ? `${getColorClasses({ light: 'grey9/60', dark: 'grey3' }, 'hover:bg')} ${hoverStyleLastEntry}`
     : '';
+
+  const publishTime = entryData?.createdAt ? formatRelativeTime(entryData.createdAt, locale) : '';
 
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4" customStyle={hoverStyle}>
@@ -162,6 +164,29 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               }
               avatarImage={authorProfile.status === 'error' ? null : authorProfile.data?.avatar}
               href={`${profileAnchorLink}/${entryData.author.id}`}
+              metadata={
+                publishTime &&
+                !hidePublishTime && (
+                  <Stack direction="row" align="center" spacing="gap-x-1">
+                    <Text
+                      variant="footnotes2"
+                      weight="normal"
+                      color={{ light: 'grey4', dark: 'grey7' }}
+                    >
+                      ·
+                    </Text>
+                    <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
+                      <Text
+                        variant="footnotes2"
+                        weight="normal"
+                        color={{ light: 'grey4', dark: 'grey7' }}
+                      >
+                        {publishTime}
+                      </Text>
+                    </Tooltip>
+                  </Stack>
+                )
+              }
               onClick={() => {
                 if (onAvatarClick) onAvatarClick(entryData.author.id);
               }}
@@ -169,25 +194,17 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             />
           )}
         </>
-        <Stack direction="row" spacing="gap-2" align="center" customStyle="shrink-0">
-          {entryData?.createdAt && !hidePublishTime && (
-            <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
-              <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
-                {formatRelativeTime(entryData?.createdAt, locale)}
-              </Text>
-            </Tooltip>
-          )}
-          <Menu
-            anchor={{
-              icon: 'EllipsisHorizontalIcon',
-              variant: 'primary',
-              greyBg: true,
-              iconOnly: true,
-            }}
-            items={menuItems}
-            disabled={disableActions}
-          />
-        </Stack>
+        <Menu
+          anchor={{
+            icon: 'EllipsisHorizontalIcon',
+            noBg: true,
+            iconOnly: true,
+            size: 'md',
+          }}
+          items={menuItems}
+          disabled={disableActions}
+          customStyle="shrink-0"
+        />
       </Stack>
       {!entryData.active && (
         <EntryCardRemoved
