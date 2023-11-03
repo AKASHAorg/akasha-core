@@ -48,7 +48,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
   const { id } = itemData || {};
 
   const { t } = useTranslation('app-search');
-  const { uiEvents, navigateToModal } = useRootComponentProps();
+  const { navigateToModal } = useRootComponentProps();
   const profileDataReq = useGetProfileByDidQuery(
     { id: itemData.author.id },
     { select: response => response.node },
@@ -176,9 +176,6 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}
               hideActionButtons={hideActionButtons}
               actionsRightExt={<Extension name={`entry-card-actions-right_${id}`} />}
-              headerMenuExt={
-                itemData.author.isViewer && <Extension name={`entry-card-edit-button_${id}`} />
-              }
             >
               {({ blockID }) => <Extension name={`${blockID}_content_block`} />}
             </EntryCard>

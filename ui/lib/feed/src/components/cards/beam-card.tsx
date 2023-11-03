@@ -60,6 +60,8 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
       sortedContents={sortByKey(entryData.content, 'order')}
+      flagAsLabel={t('Report')}
+      editLabel={t('Edit')}
       removed={{
         author: {
           firstPart: t('AKASHA world members won’t be able to see the content '),

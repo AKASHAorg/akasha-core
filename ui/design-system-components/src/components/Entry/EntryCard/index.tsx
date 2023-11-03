@@ -3,20 +3,20 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import EntryCardRemoved, { AuthorsRemovedMessage, OthersRemovedMessage } from '../EntryCardRemoved';
 import CardActions from './card-actions';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import CardHeaderMenuDropdown from './card-header-menu';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
 import NSFW, { NSFWProps } from '../NSFW';
+import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import { ILocale, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 import { formatDate } from '../../../utils/time';
 import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { AkashaProfile, EntityTypes, NavigateToParams } from '@akashaorg/typings/lib/ui';
+import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 
 export type EntryCardProps = {
   entryData: Omit<AkashaBeam, 'reflectionsCount' | 'reflections'> | AkashaReflect;
@@ -29,10 +29,12 @@ export type EntryCardProps = {
   moderatedContentLabel?: string;
   ctaLabel?: string;
   removeEntryLabel?: string;
+  notEditableLabel?: string;
   removed?: {
     author: AuthorsRemovedMessage;
     others: OthersRemovedMessage;
   };
+  editLabel?: string;
   nsfw?: Omit<NSFWProps, 'onClickToView'>;
   profileAnchorLink?: string;
   repliesAnchorLink?: string;
@@ -44,8 +46,6 @@ export type EntryCardProps = {
   scrollHiddenContent?: boolean;
   contentClickable?: boolean;
   editable?: boolean;
-  notEditableLabel?: string;
-  headerMenuExt?: ReactElement;
   actionsRightExt?: ReactNode;
   customStyle?: CSSProperties;
   ref?: Ref<HTMLDivElement>;
@@ -78,6 +78,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     authorProfile,
     flagAsLabel,
     removed,
+    notEditableLabel,
+    editLabel,
     nsfw,
     profileAnchorLink,
     repliesAnchorLink,
@@ -88,9 +90,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     hideActionButtons,
     scrollHiddenContent,
     contentClickable,
-    notEditableLabel,
     editable = true,
-    headerMenuExt,
     actionsRightExt,
     onAvatarClick,
     onContentClick,
@@ -109,11 +109,30 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const nsfwHeightStyle = entryData.nsfw && !showNSFW ? 'min-h-[6rem]' : '';
   const nsfwBlurStyle = entryData.nsfw && !showNSFW ? 'blur-lg' : '';
 
-  const editableIconButtonUi = (
-    <Button onClick={editable ? onEdit : null} disabled={!editable} plain>
-      <Icon size="md" type="PencilIcon" />
-    </Button>
-  );
+  const menuItems: ListItem[] = [
+    ...(!entryData.author.isViewer
+      ? [
+          {
+            icon: 'FlagIcon' as const,
+            label: flagAsLabel,
+            color: { light: 'errorLight' as const, dark: 'errorDark' as const },
+            disabled: disableReporting,
+            onClick: onEntryFlag,
+          },
+        ]
+      : []),
+    ...(entryData.author.isViewer
+      ? [
+          {
+            icon: 'PencilIcon' as const,
+            label: editLabel,
+            disabled: !editable,
+            toolTipContent: editable ? null : notEditableLabel,
+            onClick: onEdit,
+          },
+        ]
+      : []),
+  ];
 
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4">
@@ -145,32 +164,16 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               </Text>
             </Tooltip>
           )}
-          {entryData?.createdAt &&
-            (!editable && notEditableLabel ? (
-              <Tooltip placement={'top'} content={notEditableLabel}>
-                {editableIconButtonUi}
-              </Tooltip>
-            ) : (
-              editableIconButtonUi
-            ))}
-          {!entryData.active && (
-            <CardHeaderMenuDropdown
-              disabled={disableActions}
-              menuItems={
-                !entryData.author.isViewer
-                  ? [
-                      {
-                        icon: 'FlagIcon',
-                        label: flagAsLabel,
-                        disabled: disableReporting,
-                        handler: onEntryFlag,
-                      },
-                    ]
-                  : []
-              }
-              headerMenuExt={headerMenuExt}
-            />
-          )}
+          <Menu
+            anchor={{
+              icon: 'EllipsisHorizontalIcon',
+              variant: 'primary',
+              greyBg: true,
+              iconOnly: true,
+            }}
+            items={menuItems}
+            disabled={disableActions}
+          />
         </Stack>
       </Stack>
       {!entryData.active && (

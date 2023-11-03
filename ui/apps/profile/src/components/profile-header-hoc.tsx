@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import routes, { EDIT } from '../routes';
 import FollowProfileButton from './follow-profile-button';
+import FollowingFeedback from './following-feedback';
 import {
   ProfileHeader,
   ProfileHeaderLoading,
@@ -16,7 +17,7 @@ import {
 import { hasOwn, useLoggedIn, useValidDid } from '@akashaorg/ui-awf-hooks';
 
 type ProfileHeaderViewProps = {
-  handleFeedback: () => void;
+  handleCopyFeedback: () => void;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (opts: ModalNavigationOptions) => void;
   navigateTo: (args: NavigateToParams) => void;
@@ -24,10 +25,10 @@ type ProfileHeaderViewProps = {
 
 const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const { t } = useTranslation('app-profile');
-  const { handleFeedback, showLoginModal, navigateToModal, navigateTo } = props;
+  const { handleCopyFeedback, showLoginModal, navigateToModal, navigateTo } = props;
   const { profileId } = useParams<{ profileId: string }>();
 
-  const { isLoggedIn } = useLoggedIn();
+  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -38,10 +39,12 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
     },
   );
 
-  const { isViewer, akashaProfile: profileData } =
+  const { akashaProfile: profileData } =
     profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
       ? profileDataReq.data
-      : { isViewer: null, akashaProfile: null };
+      : { akashaProfile: null };
+
+  const isViewer = profileData?.did?.id === loggedInProfileId;
 
   const { validDid, isEthAddress } = useValidDid(profileId, !!profileData);
 
@@ -75,7 +78,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const handleCopy = () => {
     const profileUrl = new URL(location.pathname, location.origin).href;
     navigator.clipboard.writeText(profileUrl).then(() => {
-      handleFeedback();
+      handleCopyFeedback();
     });
   };
 
@@ -140,6 +143,7 @@ export const withProfileHeader = <T extends ProfileHeaderViewProps>(
       <>
         <ProfileHeaderView {...props} />
         {wrappedComponent}
+        <FollowingFeedback />
       </>
     );
   };

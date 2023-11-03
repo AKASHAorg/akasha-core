@@ -3,7 +3,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import BeamCardLoading from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card-loading';
+import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
 import { useParams } from 'react-router-dom';
 import {
@@ -54,7 +54,7 @@ const BeamPage: React.FC<unknown> = () => {
       />
     );
 
-  if (beamReq.status === 'loading') return <BeamCardLoading />;
+  if (beamReq.status === 'loading') return <EntrySectionLoading />;
 
   return (
     <Card padding="p-0">
@@ -70,7 +70,7 @@ const BeamPage: React.FC<unknown> = () => {
         <FeedWidget
           queryKey="akasha-beam-page-query"
           itemType={EntityTypes.REFLECT}
-          beamId={beamId}
+          reflectionsOf={{ beamId, itemType: EntityTypes.BEAM }}
           loggedProfileData={loggedProfileData}
           onEntryFlag={() => {
             return () => {

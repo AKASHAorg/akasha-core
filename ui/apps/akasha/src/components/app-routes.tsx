@@ -6,7 +6,8 @@ import ProfileFeedPage from './pages/profile-feed-page/profile-feed-page';
 import BeamPage from './pages/entry-page/beam-page';
 import ReflectionPage from './pages/entry-page/reflection-page';
 import TagFeedPage from './pages/tag-feed-page/tag-feed-page';
-import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS } from '../routes';
+import EditorPage from './pages/editor-page/editor-page';
+import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, EDITOR } from '../routes';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -61,8 +62,16 @@ const AppRoutes: React.FC<unknown> = () => {
               />
             }
           />
-          <Route path={`${routes[REFLECT]}/:reflectId`} element={<ReflectionPage />} />
+          <Route path={`${routes[REFLECT]}/:reflectionId`} element={<ReflectionPage />} />
+          <Route
+            path={`${routes[REFLECT]}/:reflectionId${routes[REFLECT]}`}
+            element={<ReflectionPage />}
+          />
           <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
+          <Route
+            path={routes[EDITOR]}
+            element={<EditorPage loggedProfileData={loggedProfileData} />}
+          />
         </Routes>
       </Stack>
     </Router>

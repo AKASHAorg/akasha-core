@@ -2,46 +2,47 @@ import React from 'react';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import ReflectEditor from '../../reflect-editor';
+import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import routes, { REFLECT } from '../../../routes';
-import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useTranslation } from 'react-i18next';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useLocation } from 'react-router-dom';
 
-type BeamSectionProps = {
+type ReflectionSectionProps = {
   beamId: string;
-  entryData: AkashaBeam;
+  reflectionId: string;
+  entryData: AkashaReflect;
   isLoggedIn: boolean;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
   showLoginModal: () => void;
 };
 
-const BeamSection: React.FC<BeamSectionProps> = props => {
-  const { beamId, entryData, isLoggedIn, onNavigate, showLoginModal } = props;
+const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
+  const { beamId, reflectionId, entryData, isLoggedIn, onNavigate, showLoginModal } = props;
   const { t } = useTranslation('app-akasha-integration');
   const location = useLocation();
 
   const wrapperRef = useCloseActions(() => {
-    onNavigate({ authorId: entryData?.author?.id, id: entryData?.id }, EntityTypes.BEAM);
+    onNavigate({ authorId: entryData?.author?.id, id: entryData?.id }, EntityTypes.REFLECT);
   });
 
   return (
     <Stack spacing="gap-y-2" ref={wrapperRef}>
-      <BeamCard
+      <EditableReflection
         entryData={entryData}
-        noWrapperCard={true}
         contentClickable={false}
+        reflectToId={entryData.id}
         onReflect={() => {
           onNavigate(
             {
-              authorId: entryData?.author?.id,
+              authorId: entryData?.author.id,
               id: entryData?.id,
               reflect: !location.pathname.includes(routes[REFLECT]),
             },
-            EntityTypes.BEAM,
+            EntityTypes.REFLECT,
           );
         }}
       />
@@ -58,7 +59,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
         {isLoggedIn && entryData?.active && (
           <ReflectEditor
             beamId={beamId}
-            reflectToId={beamId}
+            reflectToId={reflectionId}
             showEditorInitialValue={location.pathname.endsWith(routes[REFLECT])}
           />
         )}
@@ -67,4 +68,4 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
   );
 };
 
-export default BeamSection;
+export default ReflectionSection;

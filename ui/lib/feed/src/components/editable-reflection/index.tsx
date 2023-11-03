@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import ReflectCard, { ReflectCardProps } from '../cards/reflect-card';
+import ReflectionCard, { ReflectCardProps } from '../cards/reflection-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   decodeb64SlateContent,
@@ -13,6 +13,8 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import {
   useGetMyProfileQuery,
+  useGetReflectionByIdQuery,
+  useInfiniteGetReflectReflectionsQuery,
   useInfiniteGetReflectionsFromBeamQuery,
   useUpdateAkashaReflectMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -23,8 +25,8 @@ import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 
 const MAX_EDIT_TIME_IN_MINUTES = 10;
 
-const EditableReflection: React.FC<ReflectCardProps> = props => {
-  const { entryData, ...rest } = props;
+const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> = props => {
+  const { entryData, reflectToId, ...rest } = props;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const [editInProgress, setEditInProgress] = useState(false);
@@ -34,6 +36,8 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
   const [tagQuery, setTagQuery] = useState(null);
   const [editorState, setEditorState] = useState(null);
 
+  const beamId = entryData.beamID;
+  const isReflectOfReflection = beamId !== reflectToId;
   const queryClient = useQueryClient();
   const mentionSearch = null;
   const tagSearch = null;
@@ -47,11 +51,30 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
       setEditInProgress(true);
     },
     onSuccess: async data => {
-      await queryClient.invalidateQueries(
-        useInfiniteGetReflectionsFromBeamQuery.getKey({
-          id: data.updateAkashaReflect.document.beam?.id,
-        }),
-      );
+      if (!isReflectOfReflection) {
+        await queryClient.invalidateQueries(
+          useInfiniteGetReflectionsFromBeamQuery.getKey({
+            id: beamId,
+          }),
+        );
+      }
+
+      if (isReflectOfReflection) {
+        if (data.updateAkashaReflect.document.id === reflectToId) {
+          await queryClient.invalidateQueries(
+            useGetReflectionByIdQuery.getKey({
+              id: reflectToId,
+            }),
+          );
+        }
+        if (data.updateAkashaReflect.document.id !== reflectToId) {
+          await queryClient.invalidateQueries(
+            useInfiniteGetReflectReflectionsQuery.getKey({
+              id: reflectToId,
+            }),
+          );
+        }
+      }
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Updated',
@@ -118,7 +141,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
   if (editInProgress && newContent) {
     return (
       <Stack customStyle={`px-4 border border(grey8 dark:grey3) bg-secondaryLight/30`}>
-        <ReflectCard
+        <ReflectionCard
           entryData={{
             ...entryData,
             content: newContent,
@@ -169,7 +192,7 @@ const EditableReflection: React.FC<ReflectCardProps> = props => {
           {/*@TODO reflect error logic goes here */}
         </div>
       ) : (
-        <ReflectCard
+        <ReflectionCard
           entryData={entryData}
           editable={reflectionCreationElapsedTimeInMinutes <= MAX_EDIT_TIME_IN_MINUTES}
           onEdit={() => setEdit(true)}

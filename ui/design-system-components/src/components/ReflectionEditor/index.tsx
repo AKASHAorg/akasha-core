@@ -37,18 +37,14 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     editorState = editorDefaultValue,
     embedEntryData,
     showDraft,
-    uploadedImages,
     background,
     customStyle,
     setEditorState,
-    onPlaceholderClick,
     onCancelClick,
-    uploadRequest,
     getLinkPreview,
     getMentions,
     getTags,
     onPublish,
-    handleSaveImagesDraft,
     handleSaveLinkPreviewDraft,
     onClear,
   } = props;
@@ -82,9 +78,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
 
   const handleToggleEditor = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
-    if (onPlaceholderClick) {
-      onPlaceholderClick();
-    }
     setShowEditor(!showEditor);
   };
 
@@ -95,7 +88,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
           onClick={handleToggleEditor}
           profileId={profileId}
           avatar={avatar}
-          buttonLabel={placeholderButtonLabel}
+          actionLabel={placeholderButtonLabel}
           placeholderLabel={placeholderLabel}
         />
       )}
@@ -118,7 +111,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             linkPreview={linkPreview}
             mentions={mentions}
             tags={tags}
-            uploadedImages={uploadedImages}
             withMeter={true}
             editorState={editorState}
             cancelButtonLabel={cancelButtonLabel}
@@ -127,14 +119,12 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             showDraft={showDraft}
             setEditorState={setEditorState}
             onPublish={handlePublish}
-            handleSaveImagesDraft={handleSaveImagesDraft}
             handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
             getLinkPreview={getLinkPreview}
             getMentions={getMentions}
             getTags={getTags}
             onClear={onClear}
             onCancelClick={onCancelClick}
-            uploadRequest={uploadRequest}
           />
         </Card>
       )}

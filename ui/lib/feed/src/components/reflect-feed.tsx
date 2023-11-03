@@ -17,10 +17,13 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
 import { AkashaReflect, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { useInfiniteGetReflectionsFromBeamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
+import {
+  useInfiniteGetReflectReflectionsQuery,
+  useInfiniteGetReflectionsFromBeamQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';
+import { hasOwn } from '@akashaorg/ui-awf-hooks';
 
 export type ReflectFeedProps = Omit<
   EntryListProps<AkashaReflect>,
@@ -33,8 +36,7 @@ export type ReflectFeedProps = Omit<
   | 'onFetchNextPage'
   | 'onScrollStateSave'
 > & {
-  beamId?: string;
-  className?: string;
+  reflectionsOf: { entryId: string; itemType: EntityTypes };
   modalSlotId: string;
   accentBorderTop?: boolean;
   totalEntryCount?: number;
@@ -57,7 +59,7 @@ export type ReflectFeedProps = Omit<
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
-    beamId,
+    reflectionsOf,
     itemSpacing = 8,
     i18n,
     initialScrollState,
@@ -68,11 +70,36 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     onScrollStateChange,
   } = props;
 
+  const isReflectOfReflection = reflectionsOf.itemType === EntityTypes.REFLECT;
+
   //@TODO replace this hook with one handling virtual list
-  const reflectionsReq = useInfiniteGetReflectionsFromBeamQuery(
+  const reflectionsFromBeamReq = useInfiniteGetReflectionsFromBeamQuery(
     'sorting',
     {
-      id: beamId,
+      id: reflectionsOf.entryId,
+      first: 10,
+      sorting: {
+        createdAt: SortOrder.Desc,
+      },
+      filters: {
+        where: { reflection: { isNull: true } },
+      },
+    },
+    {
+      select: data => {
+        return {
+          pages: data.pages,
+          pageParams: data.pageParams,
+        };
+      },
+      enabled: reflectionsOf.itemType === EntityTypes.BEAM,
+    },
+  );
+
+  const reflectReflectionReq = useInfiniteGetReflectReflectionsQuery(
+    'sorting',
+    {
+      id: reflectionsOf.entryId,
       first: 10,
       sorting: {
         createdAt: SortOrder.Desc,
@@ -85,17 +112,29 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           pageParams: data.pageParams,
         };
       },
+      enabled: isReflectOfReflection,
     },
   );
-  const entryData = reflectionsReq.data?.pages?.flatMap(page =>
-    hasOwn(page.node, 'reflections')
-      ? page.node?.reflections.edges?.map(edge => ({
+
+  const reflectionsReq = isReflectOfReflection ? reflectReflectionReq : reflectionsFromBeamReq;
+  const entryData = isReflectOfReflection
+    ? reflectReflectionReq.data?.pages?.flatMap(page =>
+        page?.akashaReflectIndex?.edges?.map(edge => ({
           ...edge.node,
           beam: null /*Note: the hook returns partial result for beam, if complete result is needed the result of the hook should be modified*/,
           beamID: edge.node.beam?.id,
-        }))
-      : null,
-  );
+        })),
+      )
+    : reflectionsFromBeamReq.data?.pages?.flatMap(page =>
+        page.node && hasOwn(page.node, 'reflections')
+          ? page.node?.reflections.edges?.map(edge => ({
+              ...edge.node,
+
+              beam: null /*Note: the hook returns partial result for beam, if complete result is needed the result of the hook should be modified*/,
+              beamID: edge.node.beam?.id,
+            }))
+          : null,
+      );
 
   return (
     <EntryList<AkashaReflect>
@@ -141,6 +180,8 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
                   <Divider />
                   <EditableReflection
                     entryData={entryData}
+                    contentClickable={true}
+                    reflectToId={reflectionsOf.entryId}
                     onReflect={() => {
                       onNavigate(
                         {

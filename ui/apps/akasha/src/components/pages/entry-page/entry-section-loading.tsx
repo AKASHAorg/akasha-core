@@ -5,7 +5,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 
-const BeamCardLoading: React.FC<unknown> = () => {
+const EntrySectionLoading: React.FC<unknown> = () => {
   return (
     <Card padding="p-0">
       <Stack spacing="gap-y-2" customStyle="pb-2">
@@ -19,4 +19,4 @@ const BeamCardLoading: React.FC<unknown> = () => {
   );
 };
 
-export default BeamCardLoading;
+export default EntrySectionLoading;

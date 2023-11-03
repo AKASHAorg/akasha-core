@@ -5,6 +5,7 @@ import {
   EntityTypes,
   AnalyticsCategories,
   ModalNavigationOptions,
+  Profile,
 } from '@akashaorg/typings/lib/ui';
 import {
   useMutationsListener,
@@ -13,9 +14,9 @@ import {
   useEntryNavigation,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import routes, { EDITOR } from '../../../routes';
+import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-import { Profile } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
@@ -31,9 +32,12 @@ const FeedPage: React.FC<FeedPageProps> = props => {
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
+
   //get the post id for repost from the search param
   const [postId, setPostId] = React.useState(new URLSearchParams(location.search).get('repost'));
+
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
+
   React.useEffect(() => {
     const controller = new AbortController();
     /*The single-spa:before-routing-event listener is required for reposts happening from the feed page */
@@ -84,24 +88,28 @@ const FeedPage: React.FC<FeedPageProps> = props => {
     });
   };
 
+  const handleEditorPlaceholderClick = () => {
+    navigateTo?.current({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: () => `/${routes[EDITOR]}`,
+    });
+  };
+
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
       {loggedProfileData?.did?.id ? (
-        <>
-          <Stack customStyle="mb-1">
-            {postId ? (
-              <Extension
-                name={`inline-editor_repost_${postId}`}
-                extensionData={{ itemId: postId, itemType: EntityTypes.BEAM, action: 'rebeam' }}
-              />
-            ) : (
-              <Extension name="beam-editor_feed_page" extensionData={{ action: 'beam' }} />
-            )}
-          </Stack>
-        </>
+        <Stack customStyle="mb-4">
+          <EditorPlaceholder
+            profileId={loggedProfileData.did.id}
+            avatar={loggedProfileData.avatar}
+            actionLabel={t(`Start Beaming`)}
+            placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
+            onClick={handleEditorPlaceholderClick}
+          />
+        </Stack>
       ) : (
         !dismissed && (
           <Stack customStyle="mb-2">

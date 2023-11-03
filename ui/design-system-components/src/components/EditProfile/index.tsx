@@ -10,6 +10,14 @@ import { General, GeneralProps } from './General';
 import { EditProfileFormValues } from './types';
 import { ButtonType } from '../types/common.types';
 
+type SocialLinkForm = Pick<
+  SocialLinksProps,
+  'socialLinks' | 'linkLabel' | 'addNewLinkButtonLabel' | 'description'
+>;
+
+type GeneralForm = Pick<GeneralProps, 'header' | 'name' | 'userName' | 'bio' | 'ens' | 'ensButton'>;
+
+//@TODO: Replace react-hook-form with better architected react form library.
 export type EditProfileProps = {
   defaultValues?: EditProfileFormValues;
   cancelButton: ButtonType;
@@ -18,8 +26,9 @@ export type EditProfileProps = {
     loading?: boolean;
     handleClick: (formValues: EditProfileFormValues) => void;
   };
-} & Omit<GeneralProps, 'control' | 'onAvatarChange' | 'onCoverImageChange'> &
-  Omit<SocialLinksProps, 'control' | 'onDeleteLink'>;
+  customStyle?: string;
+} & GeneralForm &
+  SocialLinkForm;
 
 const EditProfile: React.FC<EditProfileProps> = ({
   defaultValues = {
@@ -39,8 +48,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const {
     control,
     setValue,
+    getValues,
+    resetField,
     handleSubmit,
-    unregister,
+    trigger,
     formState: { isDirty, isValid },
   } = useForm<EditProfileFormValues>({
     defaultValues,
@@ -49,7 +60,17 @@ const EditProfile: React.FC<EditProfileProps> = ({
   });
 
   const onSave = (formValues: EditProfileFormValues) =>
-    saveButton.handleClick({ ...formValues, links: formValues.links.filter(link => link) });
+    saveButton.handleClick({ ...formValues, links: formValues.links?.filter(link => link) || [] });
+
+  const isFormDirty = () => {
+    const links = getValues('links')?.filter(link => link) || [];
+    //Compute isDirty for links accurately
+    if (links.length !== defaultValues.links?.length) {
+      return true;
+    }
+
+    return isDirty;
+  };
 
   return (
     <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
@@ -66,10 +87,12 @@ const EditProfile: React.FC<EditProfileProps> = ({
         />
         <SocialLinks
           {...rest}
-          control={control}
-          onDeleteLink={index => {
-            unregister(`links.${index}`);
+          onDeleteLink={async () => {
+            //compute form state accurately as a result of the following function calls ... react-hook-form is very bad at handling the state for unregistered component
+            resetField('links');
+            await trigger();
           }}
+          control={control}
         />
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
@@ -82,7 +105,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
             variant="primary"
             label={saveButton.label}
             loading={saveButton.loading}
-            disabled={!isDirty || !isValid}
+            disabled={isValid ? !isFormDirty() : true}
             onClick={handleSubmit(onSave)}
             type="submit"
           />
@@ -108,12 +131,14 @@ const schema = z.object({
   coverImage: z.any().optional(),
   ens: z.string().optional(),
   bio: z.string().optional(),
-  links: z.array(
-    z
-      .string({ required_error: 'Url is required' })
-      .url({
-        message: `Hmm this doesn't look like a URL 🤔`,
-      })
-      .optional(),
-  ),
+  links: z
+    .array(
+      z
+        .string()
+        .url({
+          message: `Hmm this doesn't look like a URL 🤔`,
+        })
+        .optional(),
+    )
+    .optional(),
 });
