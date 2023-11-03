@@ -3,6 +3,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
+import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-orignal-beam';
 import EntrySectionLoading from './entry-section-loading';
 import ReflectionSection from './reflection-section';
 import { useParams } from 'react-router-dom';
@@ -61,7 +62,13 @@ const ReflectionPage: React.FC<unknown> = () => {
   if (reflectionReq.status === 'loading') return <EntrySectionLoading />;
 
   return (
-    <Card padding="p-0">
+    <Card padding="p-0" margin="mb-4">
+      <BackToOriginalBeam
+        label={t('Back to original beam')}
+        onClick={() =>
+          onNavigate({ authorId: entryData?.author?.id, id: entryData.beam?.id }, EntityTypes.BEAM)
+        }
+      />
       <ReflectionSection
         beamId={entryData.beam?.id}
         reflectionId={entryData.id}
@@ -85,7 +92,7 @@ const ReflectionPage: React.FC<unknown> = () => {
           onEntryRemove={() => {
             //@TODO
           }}
-          itemSpacing={8}
+          itemSpacing={0}
           newItemsPublishedLabel={t('New Reflects published recently')}
           onLoginModalOpen={showLoginModal}
           trackEvent={analyticsActions.trackEvent}

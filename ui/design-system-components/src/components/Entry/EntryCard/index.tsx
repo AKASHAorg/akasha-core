@@ -11,7 +11,11 @@ import ReadOnlyEditor from '../../ReadOnlyEditor';
 import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
 import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
-import { ILocale, formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
+import {
+  ILocale,
+  formatRelativeTime,
+  getColorClasses,
+} from '@akashaorg/design-system-core/lib/utils';
 import { formatDate } from '../../../utils/time';
 import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -41,10 +45,12 @@ export type EntryCardProps = {
   disableReporting?: boolean;
   hidePublishTime?: boolean;
   disableActions?: boolean;
-  noWrapperCard?: boolean;
+  plainCard?: boolean;
   hideActionButtons?: boolean;
   scrollHiddenContent?: boolean;
   contentClickable?: boolean;
+  lastEntry?: boolean;
+  hover?: boolean;
   editable?: boolean;
   actionsRightExt?: ReactNode;
   customStyle?: CSSProperties;
@@ -86,11 +92,13 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     disableReporting,
     hidePublishTime,
     disableActions,
-    noWrapperCard = false,
+    plainCard = false,
     hideActionButtons,
     scrollHiddenContent,
     contentClickable,
     editable = true,
+    lastEntry,
+    hover,
     actionsRightExt,
     onAvatarClick,
     onContentClick,
@@ -134,8 +142,13 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       : []),
   ];
 
+  const hoverStyleLastEntry = lastEntry ? 'rounded-b-2xl' : '';
+  const hoverStyle = hover
+    ? `${getColorClasses({ light: 'grey8', dark: 'grey3' }, 'hover:bg')} ${hoverStyleLastEntry}`
+    : '';
+
   const entryCardUi = (
-    <Stack spacing="gap-y-2" padding="p-4">
+    <Stack spacing="gap-y-2" padding="p-4" customStyle={hoverStyle}>
       <Stack direction="row" justify="between">
         <>
           {authorProfile.status === 'loading' ? (
@@ -159,7 +172,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         <Stack direction="row" spacing="gap-2" align="center" customStyle="shrink-0">
           {entryData?.createdAt && !hidePublishTime && (
             <Tooltip placement={'top'} content={formatDate(entryData?.createdAt, locale)}>
-              <Text customStyle="flex shrink-0 text(grey4 dark:grey7)">
+              <Text variant="footnotes2" weight="normal" color={{ light: 'grey4', dark: 'grey7' }}>
                 {formatRelativeTime(entryData?.createdAt, locale)}
               </Text>
             </Tooltip>
@@ -239,7 +252,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     </Stack>
   );
 
-  return noWrapperCard ? (
+  return plainCard ? (
     <>{entryCardUi}</>
   ) : (
     <Card ref={ref} padding="p-0">

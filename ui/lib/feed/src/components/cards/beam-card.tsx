@@ -14,7 +14,7 @@ import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 type BeamCardProps = Pick<
   EntryCardProps,
   | 'contentClickable'
-  | 'noWrapperCard'
+  | 'plainCard'
   | 'onContentClick'
   | 'onReflect'
   | 'hidePublishTime'

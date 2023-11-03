@@ -143,9 +143,9 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
           : () => handleFollow(profileID, followId)
       }
       icon={following ? 'following' : 'UserPlusIcon'}
-      variant={'secondary'}
+      variant={'primary'}
       loading={loading}
-      greyBg={following}
+      greyBg={true}
       iconOnly={true}
     />
   ) : (

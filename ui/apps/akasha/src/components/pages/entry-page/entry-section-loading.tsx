@@ -9,7 +9,7 @@ const EntrySectionLoading: React.FC<unknown> = () => {
   return (
     <Card padding="p-0">
       <Stack spacing="gap-y-2" customStyle="pb-2">
-        <EntryCardLoading noWrapperCard={true} />
+        <EntryCardLoading plainCard={true} />
         <Divider />
         <Stack padding="px-2">
           <EditorPlaceholderLoading />

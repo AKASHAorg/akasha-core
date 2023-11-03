@@ -16,7 +16,7 @@ import {
 import { i18n } from 'i18next';
 import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useInfiniteBeams } from '../utils/use-infinite-beams';
-import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';
 
@@ -66,7 +66,6 @@ const BeamFeed: React.FC<BeamFeedProps> = props => {
     newItemsPublishedLabel,
   } = props;
 
-  const { uiEvents } = useRootComponentProps();
   const beamsReq = useInfiniteBeams({
     db,
     scrollerOptions,

@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 export type ReflectCardProps = Pick<
   EntryCardProps,
   | 'contentClickable'
-  | 'noWrapperCard'
+  | 'plainCard'
   | 'onContentClick'
   | 'onEdit'
   | 'onReflect'
@@ -22,6 +22,8 @@ export type ReflectCardProps = Pick<
   | 'hidePublishTime'
   | 'hideActionButtons'
   | 'disableActions'
+  | 'hover'
+  | 'lastEntry'
 > & {
   entryData: AkashaReflect;
 };
@@ -59,7 +61,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       locale={locale}
       profileAnchorLink="/@akashaorg/app-profile"
       slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
-      noWrapperCard={true}
+      plainCard={true}
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}
       removed={{
