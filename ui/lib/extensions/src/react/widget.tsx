@@ -4,7 +4,6 @@ import { useRoutingEvents } from './use-routing-events';
 import { WidgetInterface, WidgetStorePlugin } from '@akashaorg/typings/lib/ui';
 import Parcel from 'single-spa-react/parcel';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { unmountComponentAtNode } from 'react-dom';
 
 export type WidgetExtensionProps = {
   name: string;
