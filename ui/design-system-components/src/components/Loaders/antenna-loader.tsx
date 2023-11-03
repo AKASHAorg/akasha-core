@@ -28,7 +28,7 @@ const AntennaLoader: React.FC = () => {
             <TextLine animated={true} width="w-4/5" />
           </Stack>
           <Stack justify="center" customStyle="w-3/12">
-            <TextLine animated={true} width="w-5/5" />
+            <TextLine animated={true} width="w-4/5" />
           </Stack>
         </Stack>
       </Card>
