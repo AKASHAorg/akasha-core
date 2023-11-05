@@ -20,6 +20,8 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const location = useRoutingEvents();
 
+  const [isParcelMounted, setIsParcelMounted] = React.useState(false);
+
   const widgets = React.useMemo(() => {
     if (!widgetStore.current) return [];
     return widgetStore.current.getMatchingWidgets(name, location);
@@ -40,12 +42,21 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
     };
     resolveConfigs().catch();
   }, []);
-  const isLoading = widgets.length > parcelConfigs.length;
+
+  const loadingConfiguredParcel = parcelConfigs.length > 0 ? !isParcelMounted : false;
+  const isLoading = widgets.length > parcelConfigs.length || loadingConfiguredParcel;
+
   return (
     <Stack customStyle={`${customStyle} ${fullHeight ? 'h-full' : ''}`} id={name}>
       {isLoading && loadingIndicator}
       {parcelConfigs.map(parcelConf => (
         <Parcel
+          wrapStyle={{
+            display: isLoading ? 'none' : undefined,
+          }}
+          parcelDidMount={() => {
+            setIsParcelMounted(true);
+          }}
           key={parcelConf.widget.appName}
           config={parcelConf.config}
           {...getContext()}

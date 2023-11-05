@@ -1,32 +1,24 @@
 import React from 'react';
 
-import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import TrendingWidgetItemLoader from './trending-widget-item-loader';
 
 const TrendingWidgetLoadingCard: React.FC = () => {
   return (
-    <Stack direction="row" spacing="gap-y-2" align="center" justify="between">
-      <Stack direction="row" spacing="gap-x-1">
-        <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
-        <Stack
-          direction="column"
-          spacing="gap-y-1"
-          customStyle="max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])"
-        >
-          <TextLine title="tagName" animated={true} width="w-[80px]" />
-          <TextLine title="tagName" animated={true} width="w-[100px]" />
+    <Card radius="rounded-2xl">
+      <Stack direction="column" spacing="gap-y-2" align="center" fullWidth>
+        <Stack direction="column" spacing="gap-y-6" align="start" fullWidth>
+          <TextLine width="w-3/6" height="h-[1.5rem]" animated />
+          {Array.from({ length: 3 }, (_el, index: number) => (
+            <React.Fragment key={index}>
+              <TrendingWidgetItemLoader />
+            </React.Fragment>
+          ))}
         </Stack>
       </Stack>
-
-      <TextLine
-        title="tagName"
-        animated={true}
-        width="w-[5rem]"
-        height="h-[2rem]"
-        round="rounded-full"
-      />
-    </Stack>
+    </Card>
   );
 };
 

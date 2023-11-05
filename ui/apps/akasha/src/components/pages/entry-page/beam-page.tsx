@@ -57,7 +57,7 @@ const BeamPage: React.FC<unknown> = () => {
   if (beamReq.status === 'loading') return <EntrySectionLoading />;
 
   return (
-    <Card padding="p-0">
+    <Card padding="p-0" margin="mb-4">
       <BeamSection
         beamId={beamId}
         entryData={entryData}
@@ -80,7 +80,7 @@ const BeamPage: React.FC<unknown> = () => {
           onEntryRemove={() => {
             //@TODO
           }}
-          itemSpacing={8}
+          itemSpacing={0}
           newItemsPublishedLabel={t('New Reflects published recently')}
           onLoginModalOpen={showLoginModal}
           trackEvent={analyticsActions.trackEvent}
