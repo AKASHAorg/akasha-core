@@ -46,28 +46,31 @@ export type VirtualItemProps<T> = {
   item: VirtualDataItem<T>;
   estimatedHeight: number;
   onHeightChanged?: (itemKey: string, newHeight: number) => void;
-  style?: React.CSSProperties;
   itemSpacing?: number;
   itemHeight: number;
+  itemOffset: number;
   isTransitioning: boolean;
   visible: boolean;
+  index: number;
 };
 // renderer for a virtual item
 export const VirtualItem = <T,>(props: VirtualItemProps<T>) => {
   const {
     item,
+    index,
     interfaceRef,
     estimatedHeight,
     resizeObserver,
     onHeightChanged,
-    style,
     itemSpacing,
     itemHeight,
     isTransitioning,
     visible,
+    itemOffset,
   } = props;
   const rootNodeRef = React.useRef<HTMLDivElement>();
   const currentHeight = React.useRef(estimatedHeight);
+  const prevOffset = React.useRef(0);
   const animateNext = React.useRef(false);
 
   React.useImperativeHandle(interfaceRef(item.key), () => ({
@@ -93,7 +96,6 @@ export const VirtualItem = <T,>(props: VirtualItemProps<T>) => {
     const nodeHeight = rootNodeRef.current?.getBoundingClientRect().height + itemSpacing;
     if (nodeHeight === itemHeight && animateNext.current) {
       resizeObserver.observe(rootNodeRef.current, handleSizeChange);
-      animateNext.current = false;
     }
   }, [itemSpacing, itemHeight, resizeObserver, handleSizeChange]);
 
@@ -119,13 +121,24 @@ export const VirtualItem = <T,>(props: VirtualItemProps<T>) => {
     }
   };
 
+  const transitionStyle = React.useMemo(() => {
+    if (isTransitioning) {
+      return 'opacity 0.214s ease-in';
+    }
+    if (itemOffset !== prevOffset.current) {
+      prevOffset.current = itemOffset;
+      return 'top 0.15s linear';
+    }
+    return undefined;
+  }, [isTransitioning, itemOffset]);
+
   return (
     <div
       ref={setRootRefs}
+      data-testidx={index}
       style={{
-        ...style,
-        transition: isTransitioning ? 'opacity 0.214s ease-out' : 'transform 0.14s linear',
-        willChange: animateNext.current ? 'transform' : undefined,
+        top: itemOffset,
+        transition: transitionStyle,
         position: 'absolute',
         width: '100%',
         opacity: visible ? undefined : 0.01,

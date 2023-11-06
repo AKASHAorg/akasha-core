@@ -27,7 +27,11 @@ export type MountedItem<T> = {
   virtualData: VirtualDataItem<T>;
   visible?: boolean;
 };
-
+export const enum SliceOperation {
+  None,
+  WillAppend,
+  WillPrepend,
+}
 export class VirtualizerCore<T> {
   options: VirtualizerCoreOptions;
   isScrolling = false;
@@ -48,7 +52,7 @@ export class VirtualizerCore<T> {
     this.slice = { start: 0, end: 0 };
   }
 
-  setOptions = (options: Partial<VirtualizerCoreOptions>) => {
+  public setOptions = (options: Partial<VirtualizerCoreOptions>) => {
     // @TODO: double check if we really need to filter out undefined values
     Object.entries(options).forEach(([k, v]) => {
       if (typeof v === 'undefined') delete options[k];
@@ -69,7 +73,7 @@ export class VirtualizerCore<T> {
   public hasMeasuredHeight = (itemKey: string) => {
     return this.itemHeights.has(itemKey);
   };
-  computeInitialProjection = (
+  public computeInitialProjection = (
     restoreItem: RestorationItem<T>,
     itemList: VirtualDataItem<T>[],
     restorationItems: RestorationItem<T>[],
@@ -85,8 +89,7 @@ export class VirtualizerCore<T> {
     for (let i = idx; i < itemList.length && offsetTop < viewportHeight; i += 1) {
       const listItem = itemList[i];
       const rstItem = restorationItems.find(restItem => restItem.virtualData.key === listItem.key);
-      const itemHeight =
-        (this.itemHeights.get(listItem.key) || rstItem?.height) ?? this.itemHeightAverage;
+      const itemHeight = this.itemHeights.get(listItem.key) ?? rstItem?.height;
       if (typeof itemHeight !== 'number') {
         break;
       }
@@ -100,22 +103,22 @@ export class VirtualizerCore<T> {
       });
       offsetTop = offsetTop + itemHeight + this.options.itemSpacing;
     }
-    // offsetTop = restoreItem.start || 0;
-    // for (let i = idx - 1; i > -1 && offsetTop > 0; i -= 1) {
-    //   const listItem = itemList[i];
-    //   const rstItem = restorationItems.find(restItem => restItem.virtualData.key === listItem.key);
-    //   const itemHeight = this.itemHeights.get(listItem.key) ?? rstItem.height;
-    //   if (typeof itemHeight !== 'number') {
-    //     break;
-    //   }
-    //   offsetTop = offsetTop - itemHeight + this.options.itemSpacing;
-    //   projectionItems.unshift({
-    //     start: offsetTop,
-    //     height: itemHeight,
-    //     visible: true,
-    //     virtualData: { ...listItem },
-    //   });
-    // }
+    offsetTop = restoreItem.start || 0;
+    for (let i = idx - 1; i > -1 && offsetTop > 0; i -= 1) {
+      const listItem = itemList[i];
+      const rstItem = restorationItems.find(restItem => restItem.virtualData.key === listItem.key);
+      const itemHeight = this.itemHeights.get(listItem.key) ?? rstItem?.height;
+      if (typeof itemHeight !== 'number') {
+        break;
+      }
+      offsetTop = offsetTop - itemHeight + this.options.itemSpacing;
+      projectionItems.unshift({
+        start: offsetTop,
+        height: itemHeight,
+        visible: true,
+        virtualData: { ...listItem },
+      });
+    }
     return projectionItems;
   };
 
@@ -141,52 +144,7 @@ export class VirtualizerCore<T> {
     (prev: VirtualItemInfo[], itemList: VirtualDataItem<T>[]) => MountedItem<T>[]
   >(this.computeProjection);
 
-  getAllItemInfos = (startItem: VirtualItemInfo, itemList: VirtualDataItem<T>[]) => {
-    const topDistance = this.getDistanceFromTop(startItem.key, itemList);
-    let offset = startItem.start - topDistance;
-    const items: VirtualItemInfo[] = [];
-    itemList.forEach(item => {
-      const height = this.getItemHeight(item.key);
-      items.push({
-        key: item.key,
-        start: offset,
-        visible: this.itemHeights.has(item.key),
-        maybeRef: item.maybeRef,
-        height,
-      });
-      offset += height;
-    });
-    return items;
-  };
-
-  computeNextProjection = (
-    startItem: VirtualItemInfo,
-    viewportRect: Rect,
-    alreadyRendered: boolean,
-    itemList: VirtualDataItem<T>[],
-  ) => {
-    const maxViewportHeight = this.options.overscan * this.itemHeightAverage;
-    const minViewportHeight = this.options.overscan * this.options.estimatedHeight;
-    const minViewportRect = new Rect(
-      viewportRect.getTop() - minViewportHeight,
-      viewportRect.getHeight() + 2 * minViewportHeight,
-    );
-    const maxViewportRect = new Rect(
-      viewportRect.getTop() - maxViewportHeight,
-      viewportRect.getHeight() + 2 * maxViewportHeight,
-    );
-    const allItems = this.getAllItemInfos(startItem, itemList);
-    const visibleItems = allItems.filter(it =>
-      Rect.fromItem(it).overlaps(alreadyRendered ? maxViewportRect : minViewportRect),
-    );
-    const visibleSlice = getVisibleItemsSlice(visibleItems, allItems);
-    const slice = this.getSlice(alreadyRendered, visibleSlice);
-    const nextRendered = allItems.slice(slice.start, slice.end);
-
-    return { allItems, nextRendered, slice };
-  };
-
-  updateProjection = (
+  public updateProjection = (
     startFrom: VirtualItemInfo,
     viewportRect: Rect,
     itemList: VirtualDataItem<T>[],
@@ -198,16 +156,19 @@ export class VirtualizerCore<T> {
       alreadyRendered,
       itemList,
     );
-    const mustReposition = this.shouldReposition(startFrom, itemList);
+    const hasDelta =
+      this.hasProjectionDelta(startFrom, itemList) &&
+      nextProjection.sliceOperation !== SliceOperation.None;
     const first = nextProjection.allItems.at(0);
     const last = nextProjection.allItems.at(nextProjection.allItems.length - 1);
     const height = getHeightBetweenItems(first, last);
-    // const listTopPadding = this.getTopPadding(nextProjection.allItems, viewportRect);
+    const listTopPadding = this.getTopPadding(nextProjection.allItems, viewportRect);
     // const listBottomPadding = this.getBottomPadding(nextProjection.allItems, viewportRect);
 
     const hasMeasuredHeights = this.hasMeasuredHeights(nextProjection.nextRendered);
     const mustMeasure =
-      (hasMeasuredHeights && (!this.isScrolling || height <= viewportRect.getHeight())) ||
+      (hasMeasuredHeights &&
+        (!this.isScrolling || height + listTopPadding <= viewportRect.getHeight())) ||
       (hasMeasuredHeights && this.initialMount);
     this.slice = nextProjection.slice;
 
@@ -215,15 +176,20 @@ export class VirtualizerCore<T> {
       this.initialMount = false;
     }
 
-    if (mustReposition && mustMeasure) {
-      const repositioned = this.reposition(startFrom, nextProjection.nextRendered, itemList);
+    if (hasDelta && mustMeasure) {
+      const projectionWithDelta = this.getProjectionDelta(
+        startFrom,
+        nextProjection.nextRendered,
+        itemList,
+      );
       return {
-        mountedItems: repositioned.rendered,
+        mountedItems: projectionWithDelta.rendered,
         listHeight: height,
         allItems: nextProjection.allItems,
-        repositionOffset: repositioned.offset,
+        projectionDelta: projectionWithDelta.offset,
         alreadyRendered,
-        mustReposition,
+        hasDelta,
+        sliceOperation: nextProjection.sliceOperation,
       };
     } else {
       return {
@@ -231,7 +197,8 @@ export class VirtualizerCore<T> {
         listHeight: height,
         allItems: nextProjection.allItems,
         alreadyRendered,
-        mustReposition,
+        hasDelta,
+        sliceOperation: nextProjection.sliceOperation,
       };
     }
   };
@@ -246,11 +213,11 @@ export class VirtualizerCore<T> {
     this.batchedHeightUpdates.add(itemKey);
     // only update when items in state are resized
     if (
-      mountedItems.some(
+      mountedItems.every(
         item =>
           this.hasMeasuredHeight(item.key) ||
           this.batchedHeightUpdates.has(item.key) ||
-          this.batchedHeightUpdates.size >= this.options.overscan,
+          this.batchedHeightUpdates.size >= this.options.overscan * 2,
       )
     ) {
       this.options.updateScheduler.update('item height update');
@@ -258,6 +225,7 @@ export class VirtualizerCore<T> {
     }
   };
   public setIsInitialMount = (initialMount: boolean) => (this.initialMount = initialMount);
+
   public getCommonProjectionItem = (
     mountedItems: VirtualItemInfo[],
     viewportRect: Rect,
@@ -267,13 +235,7 @@ export class VirtualizerCore<T> {
     if (atTop) {
       const item = mountedItems.at(0);
       if (item) {
-        return {
-          key: item.key,
-          visible: item.visible,
-          maybeRef: false,
-          start: item.start,
-          height: item.height,
-        };
+        return { ...item, maybeRef: false };
       }
       return undefined;
     }
@@ -282,12 +244,12 @@ export class VirtualizerCore<T> {
     const firstRefInView = findFirstInView(referenceItems, (prev, current) => {
       const prevRect = new Rect(prev.start, prev.height);
       const currentRect = new Rect(current.start, current.height);
-      return (
-        Rect.visibleFactor(prevRect, viewportRect) -
-          Rect.visibleFactor(currentRect, viewportRect) ||
+      const isVisible =
+        Rect.visibleFactor(prevRect, viewportRect) - Rect.visibleFactor(currentRect, viewportRect);
+      const hasVisibleHeight =
         Rect.getVisibleHeight(currentRect, viewportRect) -
-          Rect.getVisibleHeight(prevRect, viewportRect)
-      );
+        Rect.getVisibleHeight(prevRect, viewportRect);
+      return isVisible || hasVisibleHeight;
     });
     if (firstRefInView) {
       return {
@@ -328,10 +290,67 @@ export class VirtualizerCore<T> {
       }
     });
   };
-  public shouldReposition = (fromItem: VirtualItemInfo, itemList: VirtualDataItem<T>[]) => {
-    return this.getListOffset(fromItem, itemList) !== 0;
+
+  /********************************
+   *                              *
+   *       PRIVATE METHODS        *
+   *                              *
+   *******************************/
+  private getAllItemInfos = (startItem: VirtualItemInfo, itemList: VirtualDataItem<T>[]) => {
+    const topDistance = this.getDistanceFromTop(startItem.key, itemList);
+    let offset = startItem.start - topDistance;
+    const items: VirtualItemInfo[] = [];
+    itemList.forEach(item => {
+      const height = this.getItemHeight(item.key);
+      items.push({
+        key: item.key,
+        start: offset,
+        visible: this.itemHeights.has(item.key),
+        maybeRef: item.maybeRef,
+        height,
+      });
+      offset += height;
+    });
+    return items;
   };
-  public reposition = (
+
+  private computeNextProjection = (
+    startItem: VirtualItemInfo,
+    viewportRect: Rect,
+    alreadyRendered: boolean,
+    itemList: VirtualDataItem<T>[],
+  ) => {
+    const minViewportHeight = this.options.overscan * this.itemHeightAverage;
+
+    const minViewportRect = new Rect(
+      viewportRect.getTop() - minViewportHeight,
+      viewportRect.getHeight() + 2 * minViewportHeight,
+    );
+
+    const allItems = this.getAllItemInfos(startItem, itemList);
+    const visibleItems = allItems.filter(it => Rect.fromItem(it).overlaps(minViewportRect));
+    const visibleSlice = getVisibleItemsSlice(visibleItems, allItems);
+    const slice = this.getSlice(alreadyRendered, visibleSlice);
+
+    let sliceOperation = SliceOperation.None;
+    if (slice.start > this.slice.start || slice.end > this.slice.end) {
+      sliceOperation = SliceOperation.WillAppend;
+    }
+    if (slice.start < this.slice.start || slice.end < this.slice.end) {
+      sliceOperation = SliceOperation.WillPrepend;
+    }
+    const nextRendered = allItems.slice(slice.start, slice.end);
+
+    return { allItems, nextRendered, slice, sliceOperation };
+  };
+
+  private hasProjectionDelta = (
+    projectionItem: VirtualItemInfo,
+    itemList: VirtualDataItem<T>[],
+  ) => {
+    return this.getListOffset(projectionItem, itemList) !== 0;
+  };
+  private getProjectionDelta = (
     startItem: VirtualItemInfo,
     mountedItems: VirtualItemInfo[],
     itemList: VirtualDataItem<T>[],
@@ -345,13 +364,6 @@ export class VirtualizerCore<T> {
       })),
     };
   };
-
-  /********************************
-   *                              *
-   *       PRIVATE METHODS        *
-   *                              *
-   *******************************/
-
   private computeAvgItemHeight = (newHeight: number, listSize: number) => {
     this.itemHeightAverage = (this.itemHeightAverage * (listSize - 1) + newHeight) / listSize;
   };
@@ -360,7 +372,7 @@ export class VirtualizerCore<T> {
     if (!viewportRect) {
       return true;
     }
-    return viewportRect.getTop() <= this.itemHeightAverage;
+    return this.options.viewport.isAtTop();
   };
   private getReferenceItems = (mountedItems: VirtualItemInfo[], itemList: VirtualDataItem<T>[]) => {
     return this.getProjection(mountedItems, itemList).filter(
@@ -386,33 +398,21 @@ export class VirtualizerCore<T> {
     return 0;
   };
 
-  // private getTopPadding = (items: VirtualItemInfo[], viewportRect: Rect) => {
-  //   const maybeRefs = items.filter(it => it.maybeRef);
-  //   const lastRef = maybeRefs.at(maybeRefs.length - 1);
-  //   const firstItem = items.at(0);
-  //   if (!firstItem) {
-  //     return 0;
-  //   }
-  //   const height =
-  //     Rect.fromItem(lastRef ?? firstItem).getBottom() - Rect.fromItem(firstItem).getTop();
-  //   const space = 0; // viewport.getDocumentViewportHeight() - viewportRect.getHeight();
-  //   return Math.max(0, viewportRect.getHeight() - height - space);
-  // };
-  //
-  // private getBottomPadding = (items: VirtualItemInfo[], viewportRect: Rect) => {
-  //   const maybeRefs = items.filter(it => it.maybeRef);
-  //   const lastRef = maybeRefs.at(maybeRefs.length - 1);
-  //   const lastItem = items.at(items.length - 1);
-  //   if (!lastItem) {
-  //     return 0;
-  //   }
-  //   const height =
-  //     Rect.fromItem(lastItem).getBottom() - Rect.fromItem(lastRef ?? lastItem).getTop();
-  //   return Math.max(0, viewportRect.getHeight() - height + this.options.viewport.getOffsetBottom());
-  // };
+  private getTopPadding = (items: VirtualItemInfo[], viewportRect: Rect) => {
+    const maybeRefs = items.filter(it => it.maybeRef);
+    const lastRef = maybeRefs.at(maybeRefs.length - 1);
+    const firstItem = items.at(0);
+    if (!firstItem) {
+      return 0;
+    }
+    const height =
+      Rect.fromItem(lastRef ?? firstItem).getBottom() - Rect.fromItem(firstItem).getTop();
+    const space = 0; // viewport.getDocumentViewportHeight() - viewportRect.getHeight();
+    return Math.max(0, viewportRect.getHeight() - height - space);
+  };
 
   private hasMeasuredHeights = (items: VirtualItemInfo[]) =>
-    items.some(item => this.itemHeights.has(item.key));
+    items.every(item => this.itemHeights.has(item.key));
 
   private getSlice = (alreadyRendered: boolean, visibleSlice: { start: number; end: number }) => {
     if (alreadyRendered) {

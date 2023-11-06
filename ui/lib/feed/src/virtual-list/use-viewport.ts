@@ -5,11 +5,10 @@ import React from 'react';
 export type UseViewportProps = {
   initialRect: Rect;
   offsetTop: number;
-  offsetBottom: number;
   rootNode: React.MutableRefObject<HTMLElement>;
 };
 export const useViewport = (props: UseViewportProps) => {
-  const { initialRect, offsetTop, offsetBottom, rootNode } = props;
+  const { initialRect, offsetTop, rootNode } = props;
   const unregisterScroll = React.useRef<() => void>();
   const unregisterResize = React.useRef<() => void>();
   const scrollListeners = React.useRef([]);
@@ -20,16 +19,12 @@ export const useViewport = (props: UseViewportProps) => {
   const stateRef = React.useRef({
     rect: initialRect,
     offsetTop: offsetTop,
-    offsetBottom: offsetBottom,
   });
 
   React.useEffect(() => {
     if (!stateRef.current.rect) {
       const clientHeight = Math.ceil(window.document.documentElement.clientHeight);
-      const height = Math.max(
-        0,
-        clientHeight - stateRef.current.offsetTop - stateRef.current.offsetBottom,
-      );
+      const height = Math.max(0, clientHeight - stateRef.current.offsetTop);
       stateRef.current.rect = new Rect(stateRef.current.offsetTop, height);
     }
   }, []);
@@ -128,7 +123,7 @@ export const useViewport = (props: UseViewportProps) => {
 
   const getRelativeToRootNode = () => {
     if (rootNode.current && stateRef.current.rect) {
-      return new Rect(stateRef.current.rect.getTop(), stateRef.current.rect.getHeight()).translate(
+      return stateRef.current.rect.translate(
         -rootNode.current.getBoundingClientRect().top + rootNode.current.offsetTop,
       );
     }
@@ -162,7 +157,6 @@ export const useViewport = (props: UseViewportProps) => {
     getRect: () => new Rect(stateRef.current.rect.getTop(), stateRef.current.rect.getHeight()),
     resizeRect,
     getOffsetTop: () => stateRef.current.offsetTop,
-    getOffsetBottom: () => stateRef.current.offsetBottom,
     getOverScroll: () => overScroll.current,
     setOffsetTop: (offset: number) => (stateRef.current.offsetTop = offset),
     updateOverScroll: (overscroll: number) => (overScroll.current = overscroll),

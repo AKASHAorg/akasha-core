@@ -18,7 +18,7 @@ export const findFirstInView = <T>(
   compareFn: (prev: MountedItem<T>, curr: MountedItem<T>) => number,
 ) => {
   if (!items.length) return undefined;
-  return items.reduce((prev, curr) => (compareFn(prev, curr) > 0 ? curr : prev));
+  return items.reduce((prev, curr) => (compareFn(prev, curr) > 0 ? prev : curr));
 };
 
 export const getVisibleItemsSlice = (

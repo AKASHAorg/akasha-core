@@ -5,22 +5,19 @@ import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useInfiniteBeams } from '@akashaorg/ui-lib-feed/lib/utils/use-infinite-beams';
 import { ScrollStateDBWrapper } from '@akashaorg/ui-lib-feed/lib/utils/scroll-state-db';
-import { IndicatorPosition, Virtualizer } from './virtual-list';
+import { Virtualizer, EdgeArea } from '@akashaorg/ui-lib-feed/lib/virtual-list';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import { useBeams } from './use-beams';
-import { useScrollRestore } from './virtual-list/use-scroll-restore';
+import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { EdgeArea } from './virtual-list/use-edge-detector';
 
 export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: Profile;
 };
+const MY_FEED_OVERSCAN = 10;
 
 const MyFeedPage: React.FC<MyFeedPageProps> = props => {
   const { loggedProfileData, showLoginModal } = props;
@@ -31,9 +28,9 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
   const isLoggedUser = React.useMemo(() => !!loggedProfileData?.did.id, [loggedProfileData]);
 
   // const postsReq = useInfiniteGetBeamsQuery('last', { last: 15 });
-  const db = React.useMemo(() => {
-    return new ScrollStateDBWrapper('scroll-state');
-  }, []);
+  // const db = React.useMemo(() => {
+  //   return new ScrollStateDBWrapper('scroll-state');
+  // }, []);
 
   const {
     pages,
@@ -44,17 +41,16 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
     fetchInitialData,
     onReset,
   } = useBeams({
-    overscan: 10,
-    queryKey: 'my-feed-page',
+    overscan: MY_FEED_OVERSCAN,
   });
 
   const handleFetch = (newArea: EdgeArea) => {
     switch (newArea) {
       case EdgeArea.NEAR_BOTTOM:
-        fetchNextPage(pages.at(-1).cursor);
+        fetchNextPage();
         break;
       case EdgeArea.NEAR_TOP:
-        fetchPreviousPage(pages.at(0).cursor);
+        fetchPreviousPage();
         break;
       case EdgeArea.TOP:
       case EdgeArea.BOTTOM:
@@ -133,12 +129,11 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       <Virtualizer<AkashaBeamEdge>
         restorationKey={'app-akasha-integration_my-antenna'}
         estimatedHeight={150}
+        overscan={MY_FEED_OVERSCAN}
         items={pages}
         onFetchInitialData={fetchInitialData}
         itemKeyExtractor={item => item.cursor}
         itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
-        onFetchNextPage={fetchNextPage}
-        onFetchPrevPage={fetchPreviousPage}
         hasPreviousPage={hasPreviousPage}
         hasNextPage={hasNextPage}
         onListReset={onReset}

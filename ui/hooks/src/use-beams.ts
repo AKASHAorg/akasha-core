@@ -1,11 +1,10 @@
-import { useGetBeamsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import React from 'react';
+import { useGetBeamsQuery } from './generated/hooks-new';
 import { AkashaBeamEdge, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useQueryClient } from '@tanstack/react-query';
 
 export type UseBeamsOptions = {
   overscan: number;
-  queryKey: string;
 };
 
 const enum InitialFetchEdge {
@@ -13,7 +12,7 @@ const enum InitialFetchEdge {
   NEXT,
   PREVIOUS,
 }
-export const useBeams = ({ overscan, queryKey }: UseBeamsOptions) => {
+export const useBeams = ({ overscan }: UseBeamsOptions) => {
   const [pageCursor, setPageCursor] = React.useState({
     next: undefined,
     prev: undefined,
@@ -30,16 +29,18 @@ export const useBeams = ({ overscan, queryKey }: UseBeamsOptions) => {
       },
     },
     {
-      queryKey: [queryKey, 'nextQuery'],
       enabled: pageCursor.next?.length > 0 || initialFetch === InitialFetchEdge.NEXT,
       onSuccess: resp => {
         if (!resp.akashaBeamIndex.edges.length) return;
-        const firstItem = resp.akashaBeamIndex.edges.at(0);
-        if (beams.some(beam => beam.cursor === firstItem.cursor)) {
-          // @TODO: update beams. this is a refetch
-          return;
-        }
-        setBeams(prev => [...prev, ...resp.akashaBeamIndex.edges]);
+        const newBeams = [];
+        resp.akashaBeamIndex.edges.forEach(edgeNode => {
+          if (!beams.some(beam => beam.cursor === edgeNode.cursor)) {
+            newBeams.push(edgeNode);
+          } else {
+            // @TODO: update already fetched beam...
+          }
+        });
+        setBeams(prev => [...prev, ...newBeams]);
       },
     },
   );
@@ -51,11 +52,10 @@ export const useBeams = ({ overscan, queryKey }: UseBeamsOptions) => {
       before: pageCursor.prev,
     },
     {
-      queryKey: [queryKey, 'previousQuery'],
       enabled: pageCursor.prev?.length > 0 || initialFetch === InitialFetchEdge.PREVIOUS,
       onSuccess: resp => {
-        const newBeams = [];
         if (!resp.akashaBeamIndex.edges.length) return;
+        const newBeams = [];
         resp.akashaBeamIndex.edges.forEach(edgeNode => {
           if (!beams.some(beam => beam.cursor === edgeNode.cursor)) {
             newBeams.push(edgeNode);
@@ -70,30 +70,31 @@ export const useBeams = ({ overscan, queryKey }: UseBeamsOptions) => {
     },
   );
 
-  const fetchNextPage = React.useCallback(
-    (lastCursor: string) => {
-      if (nextReq.isInitialLoading) return;
-      if (pageCursor.next === lastCursor) return;
-      setPageCursor(prevState => ({
-        ...prevState,
-        next: lastCursor,
-      }));
-    },
-    [pageCursor.next, nextReq.isInitialLoading],
-  );
+  const fetchNextPage = React.useCallback(() => {
+    if (nextReq.isInitialLoading) return;
+    if (!beams.length) return;
+    const lastCursor = beams.at(-1).cursor;
+    if (lastCursor === pageCursor.next) return;
+    setPageCursor(prevState => ({
+      ...prevState,
+      next: lastCursor,
+    }));
+  }, [nextReq.isInitialLoading, beams, pageCursor.next]);
 
-  const fetchPreviousPage = React.useCallback(
-    (firstCursor: string) => {
-      if (prevReq.isInitialLoading) return;
-      if (pageCursor.prev === firstCursor) return;
-      setPageCursor(prevState => ({ ...prevState, prev: firstCursor }));
-    },
-    [pageCursor.prev, prevReq.isInitialLoading],
-  );
+  const fetchPreviousPage = React.useCallback(() => {
+    if (prevReq.isInitialLoading) return;
+    if (!beams.length) return;
+    const firstCursor = beams.at(0).cursor;
+    if (firstCursor === pageCursor.prev) return;
+    setPageCursor(prevState => ({
+      ...prevState,
+      prev: firstCursor,
+    }));
+  }, [beams, pageCursor.prev, prevReq.isInitialLoading]);
 
   const fetchInitialData = React.useCallback(
     (cursors: string[]) => {
-      const resumeItemCursor = cursors.at(cursors.length - 1);
+      const resumeItemCursor = cursors.at(-1);
       if (resumeItemCursor) {
         setPageCursor({ prev: resumeItemCursor, next: undefined });
       }
@@ -105,7 +106,6 @@ export const useBeams = ({ overscan, queryKey }: UseBeamsOptions) => {
   );
 
   const handleReset = async () => {
-    console.log('fetch from start');
     await queryClient.invalidateQueries(['GetBeams']);
     setPageCursor({ next: undefined, prev: undefined });
     setBeams([]);

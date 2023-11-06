@@ -27,8 +27,6 @@ export type VirtualizerProps<T> = {
   initialRect?: VirtualListProps<unknown>['initialRect'];
   overscan?: VirtualListProps<unknown>['overscan'];
   itemSpacing?: number;
-  onFetchNextPage: (lastKey: string) => void;
-  onFetchPrevPage?: (firstKey: string) => void;
   onFetchInitialData?: VirtualListProps<T>['onFetchInitialData'];
   isFetchingNext?: boolean;
   isFetchingPrev?: boolean;
@@ -42,7 +40,7 @@ export type VirtualizerProps<T> = {
   onEdgeDetectorChange: UseEdgeDetectorProps['onEdgeDetectorChange'];
 };
 
-export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
+const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   const {
     estimatedHeight,
     itemKeyExtractor,
@@ -50,10 +48,8 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     header,
     items,
     renderItem,
-    overscan = 5,
+    overscan = 20,
     itemSpacing = 8,
-    onFetchNextPage,
-    onFetchPrevPage,
     loadingIndicator,
     debug = false,
     onFetchInitialData,
@@ -106,8 +102,6 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
 
   const edgeDetector = useEdgeDetector({
     overscan,
-    onLoadNext: onFetchNextPage,
-    onLoadPrev: onFetchPrevPage,
     hasNextPage,
     hasPreviousPage,
     onEdgeDetectorChange,
@@ -180,11 +174,6 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
 
   if (!scrollRestore.isFetched) {
     scrollRestore.fetchScrollState();
-  }
-
-  if (!scrollRestore.isFetched) {
-    // probably not a good place and time to show a
-    // spinner or sorts because we might restore the scroll
     return null;
   }
 
@@ -208,3 +197,6 @@ export const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     />
   );
 };
+
+export { Virtualizer };
+export { EdgeArea } from './use-edge-detector';
