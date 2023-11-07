@@ -1,10 +1,17 @@
 import React from 'react';
 import { useGetBeamsQuery } from './generated/hooks-new';
-import { AkashaBeamEdge, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import {
+  AkashaBeamEdge,
+  AkashaBeamFiltersInput,
+  AkashaBeamSortingInput,
+  SortOrder,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useQueryClient } from '@tanstack/react-query';
 
 export type UseBeamsOptions = {
   overscan: number;
+  filters?: AkashaBeamFiltersInput;
+  sorting?: AkashaBeamSortingInput;
 };
 
 const enum InitialFetchEdge {
@@ -12,7 +19,12 @@ const enum InitialFetchEdge {
   NEXT,
   PREVIOUS,
 }
-export const useBeams = ({ overscan }: UseBeamsOptions) => {
+
+const defaultSorting: AkashaBeamSortingInput = {
+  createdAt: SortOrder.Desc,
+};
+
+export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   const [pageCursor, setPageCursor] = React.useState({
     next: undefined,
     prev: undefined,
@@ -20,13 +32,19 @@ export const useBeams = ({ overscan }: UseBeamsOptions) => {
   const [initialFetch, setInitialFetch] = React.useState<InitialFetchEdge>(InitialFetchEdge.NONE);
   const [beams, setBeams] = React.useState<AkashaBeamEdge[]>([]);
   const queryClient = useQueryClient();
+  const mergedVars: { sorting: AkashaBeamSortingInput; filters?: AkashaBeamFiltersInput } = {
+    sorting: { ...defaultSorting, ...(sorting ?? {}) },
+  };
+
+  if (filters) {
+    mergedVars.filters = filters;
+  }
+
   const nextReq = useGetBeamsQuery(
     {
+      ...mergedVars,
       first: overscan,
       after: pageCursor.next,
-      sorting: {
-        createdAt: SortOrder.Desc,
-      },
     },
     {
       enabled: pageCursor.next?.length > 0 || initialFetch === InitialFetchEdge.NEXT,
@@ -47,8 +65,8 @@ export const useBeams = ({ overscan }: UseBeamsOptions) => {
 
   const prevReq = useGetBeamsQuery(
     {
+      ...mergedVars,
       last: overscan,
-      sorting: { createdAt: SortOrder.Desc },
       before: pageCursor.prev,
     },
     {

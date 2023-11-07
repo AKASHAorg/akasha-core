@@ -115,10 +115,7 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
 
   // main projection update function
   // this method sets state
-  const update = (debugFrom?: string) => {
-    if (debug) {
-      console.log('update requested from', debugFrom);
-    }
+  const update = () => {
     let viewportRect = viewport.getRelativeToRootNode();
     if (!viewportRect) {
       return;
@@ -147,10 +144,16 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
         },
         () => {
           // delta between updates (old commonProjectionItem - new commonProjectionItem)
-          if (hasOwn(newProjection, 'projectionDelta') && newProjection.projectionDelta !== 0) {
+          if (
+            newProjection.hasDelta &&
+            newProjection.mustMeasure &&
+            newProjection.projectionDelta !== 0
+          ) {
             viewport.preventNextScroll();
             viewport.scrollBy(-newProjection.projectionDelta);
             viewportRect = viewport.getRelativeToRootNode();
+          } else if (newProjection.hasDelta || !newProjection.alreadyRendered) {
+            updateScheduler.debouncedUpdate('setState/update callback');
           }
           if (viewportRect) {
             onEdgeDetectorUpdate(
@@ -160,12 +163,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
               virtualCore.current.itemHeightAverage,
               newProjection.alreadyRendered,
             );
-          }
-          if (
-            (newProjection.hasDelta || !newProjection.alreadyRendered) &&
-            !hasOwn(newProjection, 'projectionDelta')
-          ) {
-            updateScheduler.debouncedUpdate('setState/update callback');
           }
         },
       );
@@ -224,9 +221,7 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
               viewport.scrollBy(viewport.getOffsetCorrection());
             }
             virtualCore.current.setIsInitialMount(false);
-            window.requestAnimationFrame(() =>
-              window.requestAnimationFrame(() => updateScheduler.RAFUpdate('initial projection')),
-            );
+            updateScheduler.RAFUpdate('initial projection');
           },
         );
       }
@@ -324,23 +319,21 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     if (viewport.getScrollY() >= viewport.getDocumentViewportHeight()) {
       showScrollTopButton.current = true;
     }
-    updateScheduler.RAFUpdate('onScrollEnd');
-  }, 150);
+    if (!prevent) {
+      updateScheduler.RAFUpdate('onScrollEnd');
+    }
+  }, 250);
 
   const onScroll = React.useCallback(
     (prevented?: boolean) => {
       if (virtualCore.current.initialMount) {
         return;
       }
-      if (prevented) {
-        viewport.preventNextScroll(false);
-        return;
-      }
       virtualCore.current.setIsScrolling(true);
-      handleScrollEnd();
+      handleScrollEnd(prevented);
       updateScheduler.throttledUpdate('onScroll');
     },
-    [handleScrollEnd, updateScheduler, viewport],
+    [handleScrollEnd, updateScheduler],
   );
 
   React.useLayoutEffect(() => {

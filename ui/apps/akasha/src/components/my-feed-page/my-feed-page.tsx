@@ -46,14 +46,14 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
 
   const handleFetch = (newArea: EdgeArea) => {
     switch (newArea) {
-      case EdgeArea.NEAR_BOTTOM:
-        fetchNextPage();
-        break;
+      case EdgeArea.TOP:
       case EdgeArea.NEAR_TOP:
         fetchPreviousPage();
         break;
-      case EdgeArea.TOP:
       case EdgeArea.BOTTOM:
+      case EdgeArea.NEAR_BOTTOM:
+        fetchNextPage();
+        break;
       default:
         break;
     }

@@ -156,15 +156,11 @@ export class VirtualizerCore<T> {
       alreadyRendered,
       itemList,
     );
-    const hasDelta =
-      this.hasProjectionDelta(startFrom, itemList) &&
-      nextProjection.sliceOperation !== SliceOperation.None;
+    const hasDelta = this.hasProjectionDelta(startFrom, itemList);
     const first = nextProjection.allItems.at(0);
     const last = nextProjection.allItems.at(nextProjection.allItems.length - 1);
     const height = getHeightBetweenItems(first, last);
     const listTopPadding = this.getTopPadding(nextProjection.allItems, viewportRect);
-    // const listBottomPadding = this.getBottomPadding(nextProjection.allItems, viewportRect);
-
     const hasMeasuredHeights = this.hasMeasuredHeights(nextProjection.nextRendered);
     const mustMeasure =
       (hasMeasuredHeights &&
@@ -173,7 +169,9 @@ export class VirtualizerCore<T> {
     this.slice = nextProjection.slice;
 
     if (hasMeasuredHeights) {
-      this.initialMount = false;
+      window.requestAnimationFrame(() => {
+        this.initialMount = false;
+      });
     }
 
     if (hasDelta && mustMeasure) {
@@ -189,6 +187,7 @@ export class VirtualizerCore<T> {
         projectionDelta: projectionWithDelta.offset,
         alreadyRendered,
         hasDelta,
+        mustMeasure,
         sliceOperation: nextProjection.sliceOperation,
       };
     } else {
@@ -198,6 +197,7 @@ export class VirtualizerCore<T> {
         allItems: nextProjection.allItems,
         alreadyRendered,
         hasDelta,
+        mustMeasure,
         sliceOperation: nextProjection.sliceOperation,
       };
     }
@@ -333,10 +333,10 @@ export class VirtualizerCore<T> {
     const slice = this.getSlice(alreadyRendered, visibleSlice);
 
     let sliceOperation = SliceOperation.None;
-    if (slice.start > this.slice.start || slice.end > this.slice.end) {
+    if (slice.end > this.slice.end) {
       sliceOperation = SliceOperation.WillAppend;
     }
-    if (slice.start < this.slice.start || slice.end < this.slice.end) {
+    if (slice.start < this.slice.start) {
       sliceOperation = SliceOperation.WillPrepend;
     }
     const nextRendered = allItems.slice(slice.start, slice.end);
