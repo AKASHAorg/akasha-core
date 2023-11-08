@@ -251,3 +251,17 @@ mutation UpdateContentBlock($i: UpdateAkashaContentBlockInput!){
     clientMutationId
   }
 }
+
+fragment IndexedBeamFragment on IndexBeamPayloadDocument{
+  id
+  createdAt
+  beamID
+}
+
+mutation IndexBeam($jws: DID_JWS, $capability: CACAO_CAPABILITY){
+  indexBeam(jws: $jws, capability: $capability){
+    document{
+      ...IndexedBeamFragment
+    }
+  }
+}

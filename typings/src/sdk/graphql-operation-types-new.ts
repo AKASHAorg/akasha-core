@@ -105,6 +105,16 @@ export type UpdateContentBlockMutationVariables = Types.Exact<{
 
 export type UpdateContentBlockMutation = { updateAkashaContentBlock?: { clientMutationId?: string | null, document: { id: string, active: boolean, appVersionID: any, createdAt: any, kind?: Types.AkashaContentBlockBlockDef | null, version: any, nsfw?: boolean | null, content: Array<{ propertyType: string, value: string, label: string }>, appVersion?: { applicationID: any, id: string, version: string, application?: { name: string, displayName: string, id: string } | null } | null, author: { id: string, isViewer: boolean } } } | null };
 
+export type IndexedBeamFragmentFragment = { id: string, createdAt: string, beamID: string };
+
+export type IndexBeamMutationVariables = Types.Exact<{
+  jws?: Types.InputMaybe<Types.Did_Jws>;
+  capability?: Types.InputMaybe<Types.Cacao_Capability>;
+}>;
+
+
+export type IndexBeamMutation = { indexBeam?: { document?: { id: string, createdAt: string, beamID: string } | null } | null };
+
 export type ReflectFragmentFragment = { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null };
 
 export type GetReflectionsFromBeamQueryVariables = Types.Exact<{

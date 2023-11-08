@@ -122,6 +122,13 @@ export const BlockStorageFragmentDoc = /*#__PURE__*/ `
   }
 }
     `;
+export const IndexedBeamFragmentDoc = /*#__PURE__*/ `
+    fragment IndexedBeamFragment on IndexBeamPayloadDocument {
+  id
+  createdAt
+  beamID
+}
+    `;
 export const ReflectFragmentDoc = /*#__PURE__*/ `
     fragment ReflectFragment on AkashaReflect {
   id
@@ -751,6 +758,27 @@ export const useUpdateContentBlockMutation = <
 useUpdateContentBlockMutation.getKey = () => ['UpdateContentBlock'];
 
 useUpdateContentBlockMutation.fetcher = (variables: Types.UpdateContentBlockMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables, options);
+export const IndexBeamDocument = /*#__PURE__*/ `
+    mutation IndexBeam($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexBeam(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedBeamFragment
+    }
+  }
+}
+    ${IndexedBeamFragmentDoc}`;
+export const useIndexBeamMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.IndexBeamMutation, TError, Types.IndexBeamMutationVariables, TContext>) =>
+    useMutation<Types.IndexBeamMutation, TError, Types.IndexBeamMutationVariables, TContext>(
+      ['IndexBeam'],
+      (variables?: Types.IndexBeamMutationVariables) => composeDbFetch<Types.IndexBeamMutation, Types.IndexBeamMutationVariables>(IndexBeamDocument, variables)(),
+      options
+    );
+useIndexBeamMutation.getKey = () => ['IndexBeam'];
+
+useIndexBeamMutation.fetcher = (variables?: Types.IndexBeamMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.IndexBeamMutation, Types.IndexBeamMutationVariables>(IndexBeamDocument, variables, options);
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
     query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput) {
   node(id: $id) {

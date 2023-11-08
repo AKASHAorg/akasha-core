@@ -103,6 +103,13 @@ export const BlockStorageFragmentDoc = /*#__PURE__*/ gql`
   }
 }
     `;
+export const IndexedBeamFragmentDoc = /*#__PURE__*/ gql`
+    fragment IndexedBeamFragment on IndexBeamPayloadDocument {
+  id
+  createdAt
+  beamID
+}
+    `;
 export const ReflectFragmentDoc = /*#__PURE__*/ gql`
     fragment ReflectFragment on AkashaReflect {
   id
@@ -418,6 +425,15 @@ export const UpdateContentBlockDocument = /*#__PURE__*/ gql`
   }
 }
     ${ContentBlockFragmentDoc}`;
+export const IndexBeamDocument = /*#__PURE__*/ gql`
+    mutation IndexBeam($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexBeam(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedBeamFragment
+    }
+  }
+}
+    ${IndexedBeamFragmentDoc}`;
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
     query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput) {
   node(id: $id) {
@@ -1148,6 +1164,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     UpdateContentBlock(variables: Types.UpdateContentBlockMutationVariables, options?: C): Promise<Types.UpdateContentBlockMutation> {
       return requester<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables, options) as Promise<Types.UpdateContentBlockMutation>;
+    },
+    IndexBeam(variables?: Types.IndexBeamMutationVariables, options?: C): Promise<Types.IndexBeamMutation> {
+      return requester<Types.IndexBeamMutation, Types.IndexBeamMutationVariables>(IndexBeamDocument, variables, options) as Promise<Types.IndexBeamMutation>;
     },
     GetReflectionsFromBeam(variables: Types.GetReflectionsFromBeamQueryVariables, options?: C): Promise<Types.GetReflectionsFromBeamQuery> {
       return requester<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables, options) as Promise<Types.GetReflectionsFromBeamQuery>;

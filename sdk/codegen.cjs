@@ -2,7 +2,7 @@
 
 /** @type {import("@graphql-codegen/cli").CodegenConfig} */
 const config = {
-  schema: '../tools/composedb/lib/schema.graphql', //can be also an url
+  schema: '../tools/composedb/lib/supergraph.graphql', //can be also an url
   documents: ['src/**/*-compose-new.graphql'], // @Todo: replace with src/**/*.graphql
   emitLegacyCommonJSImports: false,
   generates: {
