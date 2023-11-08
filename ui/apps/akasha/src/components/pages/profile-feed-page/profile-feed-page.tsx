@@ -56,17 +56,6 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     });
   };
 
-  const handleRebeam = (withComment: boolean, beamId: string) => {
-    if (!loggedProfileData?.did.id) {
-      showLoginModal();
-    } else {
-      getRoutingPlugin().navigateTo?.({
-        appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: () => `/feed?repost=${beamId}`,
-      });
-    }
-  };
-
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
@@ -101,19 +90,6 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
             />
           )}
         />
-        {/*<FeedWidget*/}
-        {/*  queryKey="akasha-profile-beams-query-key"*/}
-        {/*  itemType={EntityTypes.BEAM}*/}
-        {/*  loggedProfileData={loggedProfileData}*/}
-        {/*  onLoginModalOpen={showLoginModal}*/}
-        {/*  contentClickable={true}*/}
-        {/*  onEntryFlag={handleEntryFlag}*/}
-        {/*  onEntryRemove={handleEntryRemove}*/}
-        {/*  itemSpacing={8}*/}
-        {/*  onRebeam={handleRebeam}*/}
-        {/*  onNavigate={useEntryNavigation(getRoutingPlugin()?.routing?.navigateTo)}*/}
-        {/*  newItemsPublishedLabel={t('New Beams published recently')}*/}
-        {/*/>*/}
       </>
     </Stack>
   );

@@ -27,11 +27,11 @@ import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-
 import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/components/EditProfile/types';
 
 type EditProfilePageProps = {
-  handleFeedback: () => void;
+  handleProfileUpdatedFeedback: () => void;
 };
 
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
-  const { handleFeedback } = props;
+  const { handleProfileUpdatedFeedback } = props;
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
@@ -87,7 +87,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       await queryClient.invalidateQueries({
         queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
       });
-      handleFeedback();
+      handleProfileUpdatedFeedback();
     },
     onSettled,
   });
@@ -97,16 +97,17 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       await queryClient.invalidateQueries({
         queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
       });
-      handleFeedback();
+      handleProfileUpdatedFeedback();
     },
     onSettled,
   });
 
   if (!isLoggedIn) {
-    return navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
+    return null;
   }
 
   const status = profileDataReq.status;
@@ -186,7 +187,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
                   bio: profileData.description,
                   ens: '',
                   userName: '',
-                  links: [],
+                  links: profileData.links?.map(link => link.href),
                 }
               : undefined
           }

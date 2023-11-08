@@ -1,5 +1,7 @@
 import React from 'react';
-import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import EntryCard, {
+  EntryCardProps,
+} from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -8,17 +10,32 @@ import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-awf-
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { useTranslation } from 'react-i18next';
 
-type ReflectCardProps = {
+export type ReflectCardProps = Pick<
+  EntryCardProps,
+  | 'contentClickable'
+  | 'noWrapperCard'
+  | 'onContentClick'
+  | 'onEdit'
+  | 'onReflect'
+  | 'editable'
+  | 'notEditableLabel'
+  | 'hidePublishTime'
+  | 'hideActionButtons'
+  | 'disableActions'
+  | 'hover'
+  | 'lastEntry'
+> & {
   entryData: AkashaReflect;
-  locale: ILocale;
-  onContentClick: () => void;
 };
 
-const ReflectCard: React.FC<ReflectCardProps> = props => {
-  const { getRoutingPlugin } = useRootComponentProps();
+const ReflectionCard: React.FC<ReflectCardProps> = props => {
+  const { entryData, onReflect, ...rest } = props;
+  const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const { t } = useTranslation('ui-lib-feed');
+  const locale =
+    /*TODO: fix typing in translation plugin and avoid type assertion*/ (getTranslationPlugin().i18n
+      ?.languages?.[0] as ILocale) || 'en';
 
-  const { entryData, locale, onContentClick } = props;
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },
     { select: response => response.node },
@@ -45,6 +62,8 @@ const ReflectCard: React.FC<ReflectCardProps> = props => {
       profileAnchorLink="/@akashaorg/app-profile"
       slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}
       noWrapperCard={true}
+      flagAsLabel={t('Report')}
+      editLabel={t('Edit')}
       removed={{
         author: {
           firstPart: t('AKASHA world members won’t be able to see the content '),
@@ -64,10 +83,11 @@ const ReflectCard: React.FC<ReflectCardProps> = props => {
         clickToViewLabel: t('Click to View'),
       }}
       itemType={EntityTypes.REFLECT}
+      onReflect={onReflect}
       onAvatarClick={onAvatarClick}
-      onContentClick={onContentClick}
+      {...rest}
     />
   );
 };
 
-export default ReflectCard;
+export default ReflectionCard;

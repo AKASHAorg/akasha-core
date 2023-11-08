@@ -1,5 +1,5 @@
 import React, { LegacyRef, PropsWithChildren, forwardRef } from 'react';
-import { getPaddingClasses } from '../../utils';
+import { getPaddingClasses, getColorClasses } from '../../utils';
 import { getAlignClasses, getAlignSelfClasses } from './getAlignClasses';
 import { getDirectionClasses } from './getDirectionClasses';
 import {
@@ -8,7 +8,7 @@ import {
   getJustifySelfClasses,
 } from './getJustifyClasses';
 import { apply, tw } from '@twind/core';
-import { Padding } from '../types/common.types';
+import { Color, Padding } from '../types/common.types';
 
 export type Direction = 'column' | 'column-reverse' | 'row' | 'row-reverse';
 export type Align = 'start' | 'end' | 'center' | 'stretch' | 'baseline';
@@ -25,6 +25,7 @@ export type StackProps = {
   justifySelf?: JustifySelf;
   alignSelf?: AlignSelf;
   align?: Align;
+  background?: Color;
   spacing?: `gap-x-${number}` | `gap-y-${number}` | `gap-${number}`;
   customStyle?: string;
   fullWidth?: boolean;
@@ -37,6 +38,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = forwardRef(
   (
     {
       direction = 'column',
+      background,
       padding = 'p-0',
       justify,
       justifyItems,
@@ -53,6 +55,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = forwardRef(
     ref,
   ) => {
     const baseStyle = `flex`;
+    const backgroundStyle = getColorClasses(background, 'bg');
     const paddingStyle = getPaddingClasses(padding);
     const justifyStyle = justify ? getJustifyClasses(justify) : '';
     const justifyItemsStyle = justifyItems ? getJustifyItemsClasses(justifyItems) : '';
@@ -65,7 +68,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = forwardRef(
       <div
         id={id}
         className={tw(
-          apply`${baseStyle} ${directionStyle} ${paddingStyle} ${justifyStyle} ${alignSelfStyle} ${justifyItemsStyle} ${justifySelfStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
+          apply`${baseStyle} ${directionStyle} ${backgroundStyle} ${paddingStyle} ${justifyStyle} ${alignSelfStyle} ${justifyItemsStyle} ${justifySelfStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
         )}
         data-testid={testId}
         ref={ref}

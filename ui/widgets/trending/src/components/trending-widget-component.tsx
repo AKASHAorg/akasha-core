@@ -67,7 +67,10 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    { select: response => response.viewer?.akashaFollowList, enabled: isLoggedIn },
+    {
+      select: response => response.viewer?.akashaFollowList,
+      enabled: isLoggedIn && !!followProfileIds.length,
+    },
   );
   const createInterest = useCreateInterestsMutation({
     onSuccess: async () => {
@@ -78,7 +81,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   });
 
   const latestTopics = latestTopicsReq.data || [];
-  const tagSubscriptions = tagSubscriptionsReq.data;
+  const tagSubscriptions = isLoggedIn ? tagSubscriptionsReq.data : [];
   const followList = isLoggedIn
     ? getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node))
     : null;

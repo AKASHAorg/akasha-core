@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import * as queryListnerHooks from '@akashaorg/ui-awf-hooks/lib/use-query-listener';
 import * as entryUtilHooks from '@akashaorg/ui-awf-hooks/lib/utils/entry-utils';
 
@@ -9,12 +9,10 @@ import {
   genPendingPost,
   genUser,
 } from '@akashaorg/af-testing';
-import { PendingReflect } from '../item-page/pending-reflect';
+import { PendingReflect } from '../pages/entry-page/pending-reflect';
 
 describe('< PendingReflect /> component', () => {
-  const BaseComponent = (
-    <PendingReflect postId="oxfg" loggedProfileData={genUser()} commentIds={[]} />
-  );
+  const BaseComponent = <PendingReflect beamId="oxfg" loggedProfileData={genUser()} />;
 
   beforeAll(() => {
     (

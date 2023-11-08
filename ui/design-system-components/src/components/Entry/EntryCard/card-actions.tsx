@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -19,10 +19,8 @@ const CardActions: React.FC<CardActionProps> = props => {
       <>{actionsRightExt}</>
       <Anchor
         href={`${repliesAnchorLink}/${itemId}`}
-        customStyle="no-underline"
         onClick={e => {
           e.preventDefault();
-          //@TODO: refactor the onReflect prop
           if (!disableActions) onReflect();
         }}
       >

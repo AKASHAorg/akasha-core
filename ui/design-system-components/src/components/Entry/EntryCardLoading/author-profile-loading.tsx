@@ -13,7 +13,7 @@ const AuthorProfileLoading: React.FC<AuthorProfileLoadingProps> = props => {
     <Stack direction="row" spacing="gap-1">
       <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated={animated} />
       <Stack direction="column" justify="center" spacing="gap-y-1">
-        <TextLine width="w-24" height="h-4" animated={animated} />
+        <TextLine width="w-28" height="h-4" animated={animated} />
         <TextLine width="w-24" height="h-4" animated={animated} />
       </Stack>
     </Stack>

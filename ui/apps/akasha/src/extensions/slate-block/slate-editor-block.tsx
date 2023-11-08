@@ -12,7 +12,7 @@ import {
   IEntryData,
   RootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
-import { Draft } from '../inline-editor/utils';
+import { Draft } from '../../utils';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import {
   AkashaContentBlockBlockDef,
@@ -86,16 +86,12 @@ export const SlateEditorBlock = (
   return (
     <EditorBox
       // ref={editorRef}
-      // avatar={avatar}
+      showAvatar={false}
       profileId={'profileId'}
-      // postLabel={''}
       placeholderLabel={'write here'}
-      // disablePublishLabel={disablePublishLabel}
-      // disablePublish={disablePublish}
       onPublish={() => {
         // void
       }}
-      // handleSaveImagesDraft={handleSaveImagesDraft}
       // handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
       // linkPreview={linkPreview}
       // getLinkPreview={getLinkPreview}
@@ -107,27 +103,13 @@ export const SlateEditorBlock = (
       }}
       // mentions={mentions}
       // tags={tags}
-      // uploadRequest={uploadRequest}
-      // uploadedImages={uploadedImages}
-      withMeter={false}
+      withMeter={true}
       editorState={editorState}
       setEditorState={(value: IEntryData['slateContent']) => {
-        // if (canSaveDraft) {
-        //   if (isEqual(value, editorDefaultValue)) {
-        //     postDraft.clear();
-        //     return;
-        //   }
-        //   postDraft.save({ ...postDraft.get(), slateContent: value });
-        // }
         setEditorState(value);
       }}
-      // cancelButtonLabel={cancelButtonLabel}
-      // onCancelClick={onCancelClick}
       showCancelButton={false}
       showPostButton={false}
-      // embedEntryData={embedEntryData}
-      // showDraft={showDraft}
-      // onClear={onClear}
     />
   );
 };

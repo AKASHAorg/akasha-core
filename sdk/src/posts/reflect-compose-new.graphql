@@ -67,6 +67,41 @@ query GetReflectionsByAuthorDid($id: ID!, $after: String, $before: String, $firs
   }
 }
 
+query GetReflectionStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaReflectStreamFiltersInput, $sorting: AkashaReflectStreamSortingInput){
+  node(id: $indexer){
+    ... on CeramicAccount{
+      akashaReflectStreamList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting: $sorting){
+        edges{
+          node{
+            reflectionID
+            moderationID
+            beamID
+            active
+            status
+            createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+
+query GetReflectionById($id: ID!){
+  node(id: $id){
+    ... on AkashaReflect{
+      ...ReflectFragment
+    }
+  }
+}
+
 # should be CeramicStreamID instead of String for $id
 #
 query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput){

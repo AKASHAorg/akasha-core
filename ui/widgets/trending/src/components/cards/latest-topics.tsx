@@ -45,6 +45,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     subscribedTags,
   } = props;
 
+  if (tags.length === 0 && isLoadingTags) return <TrendingWidgetLoadingCard />;
+
   return (
     <Card padding={16}>
       <Stack customStyle="mb-4">
@@ -56,18 +58,12 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       <Stack>
         <ul>
           {tags.length === 0 && !isLoadingTags && (
-            <Stack align="center" justify="center">
-              <Text>{noTagsLabel}</Text>
+            <Stack direction="column" spacing="gap-y-6" align="start">
+              <Stack align="center" justify="center">
+                <Text>{noTagsLabel}</Text>
+              </Stack>
             </Stack>
           )}
-
-          {tags.length === 0 &&
-            isLoadingTags &&
-            Array.from({ length: 4 }, (_el, index: number) => (
-              <React.Fragment key={index}>
-                <TrendingWidgetLoadingCard />
-              </React.Fragment>
-            ))}
 
           <Stack spacing="gap-y-4">
             {tags.length !== 0 &&

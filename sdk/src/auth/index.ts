@@ -347,6 +347,7 @@ class AWF_Auth {
       return Promise.resolve(null);
     }
     const localUser = localStorage.getItem(this.currentUserKey);
+
     if (localUser) {
       this._globalChannel.next({
         data: { emit: true },

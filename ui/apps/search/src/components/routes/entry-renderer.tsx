@@ -21,7 +21,6 @@ export type EntryCardRendererProps = {
   loggedProfileData?: Profile;
   navigateTo?: (args: NavigateToParams) => void;
   onContentClick: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  onRebeam: (withComment: boolean, entryId: string) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (profileId: string) => void;
   onTagClick: (name: string) => void;
@@ -40,7 +39,6 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
     itemType,
     style,
     contentClickable,
-    onRebeam,
     navigateTo,
     onMentionClick,
     onTagClick,
@@ -50,7 +48,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
   const { id } = itemData || {};
 
   const { t } = useTranslation('app-search');
-  const { uiEvents, navigateToModal } = useRootComponentProps();
+  const { navigateToModal } = useRootComponentProps();
   const profileDataReq = useGetProfileByDidQuery(
     { id: itemData.author.id },
     { select: response => response.node },
@@ -133,12 +131,6 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
       });
   };
 
-  const handleRebeam = () => {
-    if (onRebeam) {
-      onRebeam(false, id);
-    }
-  };
-
   const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REFLECT, [itemType]);
 
   return (
@@ -184,9 +176,6 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}
               hideActionButtons={hideActionButtons}
               actionsRightExt={<Extension name={`entry-card-actions-right_${id}`} />}
-              headerMenuExt={
-                itemData.author.isViewer && <Extension name={`entry-card-edit-button_${id}`} />
-              }
             >
               {({ blockID }) => <Extension name={`${blockID}_content_block`} />}
             </EntryCard>

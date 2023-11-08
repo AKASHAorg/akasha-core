@@ -83,17 +83,5 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       mountsIn: 'beam-editor_*',
       loadingFn: () => import('./extensions/beam-editor'),
     },
-    {
-      mountsIn: 'entry-remove-confirmation',
-      loadingFn: () => import('./extensions/entry-remove-modal'),
-    },
-    {
-      mountsIn: 'entry-card-edit-button_*',
-      loadingFn: () => import('./extensions/entry-edit-button'),
-    },
-    {
-      mountsIn: 'inline-editor_*',
-      loadingFn: () => import('./extensions/inline-editor'),
-    },
   ],
 });

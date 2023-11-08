@@ -39,6 +39,8 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
 
   const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none';
 
+  if (profiles.length === 0 && isLoadingProfiles) return <TrendingWidgetLoadingCard />;
+
   return (
     <Card padding={16}>
       <Stack customStyle="mb-4">
@@ -54,14 +56,6 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
               <Text>{noProfilesLabel}</Text>
             </Stack>
           )}
-
-          {profiles.length === 0 &&
-            isLoadingProfiles &&
-            Array.from({ length: 4 }, (_el, index: number) => (
-              <React.Fragment key={index}>
-                <TrendingWidgetLoadingCard />
-              </React.Fragment>
-            ))}
 
           <Stack spacing="gap-y-4">
             {profiles.length !== 0 &&

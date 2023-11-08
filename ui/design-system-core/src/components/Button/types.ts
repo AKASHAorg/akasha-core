@@ -12,6 +12,7 @@ export type ButtonProps = {
   loading?: boolean;
   iconOnly?: boolean;
   greyBg?: boolean;
+  plainIcon?: boolean;
   plain?: boolean;
   breakPointSize?: BreakPointSize;
   customStyle?: string;

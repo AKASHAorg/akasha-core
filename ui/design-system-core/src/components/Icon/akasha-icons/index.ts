@@ -38,6 +38,7 @@ import vibe from './vibe';
 import widget from './widget';
 import metamask from './metamask';
 import walletconnect from './walletconnect';
+import following from './following';
 
 /**
  * maintain alphabetical order for custom icon names
@@ -82,6 +83,7 @@ export type CustomIconTypes = Extract<
   | 'vibe'
   | 'walletconnect'
   | 'widget'
+  | 'following'
 >;
 
 export {
@@ -123,4 +125,5 @@ export {
   vibe,
   walletconnect,
   widget,
+  following,
 };

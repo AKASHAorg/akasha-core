@@ -44,10 +44,13 @@ const FeedWidgetRoot = <T,>(props: FeedWidgetProps<T>) => {
       {/*{props.itemType === EntityTypes.REFLECT && (*/}
       {/*  <ReflectFeed*/}
       {/*    {...props}*/}
-      {/*    beamId={props.beamId}*/}
+      {/*    reflectionsOf={*/}
+      {/*      props.reflectionsOf.itemType === EntityTypes.BEAM*/}
+      {/*        ? { entryId: props.reflectionsOf.beamId, itemType: EntityTypes.BEAM }*/}
+      {/*        : { entryId: props.reflectionsOf.reflectionId, itemType: EntityTypes.REFLECT }*/}
+      {/*    }*/}
       {/*    i18n={i18n}*/}
       {/*    modalSlotId={layoutConfig.modalSlotId}*/}
-      {/*    locale={i18n.languages[0].toLowerCase() as ILocale}*/}
       {/*    db={db}*/}
       {/*  />*/}
       {/*)}*/}

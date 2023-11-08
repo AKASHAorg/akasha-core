@@ -228,6 +228,40 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ gql`
   createdAt
 }
     `;
+export const GetBeamStreamDocument = /*#__PURE__*/ gql`
+    query GetBeamStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamStreamFiltersInput, $sorting: AkashaBeamStreamSortingInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaBeamStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            beamID
+            createdAt
+            active
+            status
+            moderationID
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    `;
 export const GetBeamsDocument = /*#__PURE__*/ gql`
     query GetBeams($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamFiltersInput, $sorting: AkashaBeamSortingInput) {
   akashaBeamIndex(
@@ -292,6 +326,40 @@ export const GetBeamByIdDocument = /*#__PURE__*/ gql`
   }
 }
     ${BeamFragmentDoc}`;
+export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
+    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $beamID: String!) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaContentBlockStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: {where: {beamID: {equalTo: $beamID}}}
+      ) {
+        edges {
+          node {
+            beamID
+            createdAt
+            active
+            status
+            blockID
+            moderationID
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    `;
 export const GetContentBlockByIdDocument = /*#__PURE__*/ gql`
     query GetContentBlockById($id: ID!) {
   node(id: $id) {
@@ -409,6 +477,50 @@ export const GetReflectionsByAuthorDidDocument = /*#__PURE__*/ gql`
   }
 }
     ${ReflectFragmentDoc}`;
+export const GetReflectionStreamDocument = /*#__PURE__*/ gql`
+    query GetReflectionStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaReflectStreamFiltersInput, $sorting: AkashaReflectStreamSortingInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaReflectStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            reflectionID
+            moderationID
+            beamID
+            active
+            status
+            createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    `;
+export const GetReflectionByIdDocument = /*#__PURE__*/ gql`
+    query GetReflectionById($id: ID!) {
+  node(id: $id) {
+    ... on AkashaReflect {
+      ...ReflectFragment
+    }
+  }
+}
+    ${ReflectFragmentDoc}`;
 export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
     query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput) {
   akashaReflectIndex(
@@ -513,6 +625,39 @@ export const GetProfilesDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
+export const GetProfileStreamDocument = /*#__PURE__*/ gql`
+    query GetProfileStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileStreamFiltersInput, $sorting: AkashaProfileStreamSortingInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaProfileStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            profileID
+            active
+            createdAt
+            moderationID
+            status
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+    `;
 export const GetInterestsDocument = /*#__PURE__*/ gql`
     query GetInterests($after: String, $before: String, $first: Int, $last: Int) {
   akashaProfileInterestsIndex(
@@ -863,6 +1008,39 @@ export const GetAppsDocument = /*#__PURE__*/ gql`
 }
     ${AkashaAppFragmentDoc}
 ${UserProfileFragmentDoc}`;
+export const GetAppsStreamDocument = /*#__PURE__*/ gql`
+    query GetAppsStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppsStreamFiltersInput, $sorting: AkashaAppsStreamSortingInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaAppsStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            moderationID
+            active
+            applicationID
+            status
+            createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+    `;
 export const GetAppsByIdDocument = /*#__PURE__*/ gql`
     query GetAppsByID($id: ID!) {
   node(id: $id) {
@@ -938,6 +1116,9 @@ ${UserProfileFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
+    GetBeamStream(variables: Types.GetBeamStreamQueryVariables, options?: C): Promise<Types.GetBeamStreamQuery> {
+      return requester<Types.GetBeamStreamQuery, Types.GetBeamStreamQueryVariables>(GetBeamStreamDocument, variables, options) as Promise<Types.GetBeamStreamQuery>;
+    },
     GetBeams(variables?: Types.GetBeamsQueryVariables, options?: C): Promise<Types.GetBeamsQuery> {
       return requester<Types.GetBeamsQuery, Types.GetBeamsQueryVariables>(GetBeamsDocument, variables, options) as Promise<Types.GetBeamsQuery>;
     },
@@ -946,6 +1127,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetBeamById(variables: Types.GetBeamByIdQueryVariables, options?: C): Promise<Types.GetBeamByIdQuery> {
       return requester<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options) as Promise<Types.GetBeamByIdQuery>;
+    },
+    GetContentBlockStream(variables: Types.GetContentBlockStreamQueryVariables, options?: C): Promise<Types.GetContentBlockStreamQuery> {
+      return requester<Types.GetContentBlockStreamQuery, Types.GetContentBlockStreamQueryVariables>(GetContentBlockStreamDocument, variables, options) as Promise<Types.GetContentBlockStreamQuery>;
     },
     GetContentBlockById(variables: Types.GetContentBlockByIdQueryVariables, options?: C): Promise<Types.GetContentBlockByIdQuery> {
       return requester<Types.GetContentBlockByIdQuery, Types.GetContentBlockByIdQueryVariables>(GetContentBlockByIdDocument, variables, options) as Promise<Types.GetContentBlockByIdQuery>;
@@ -971,6 +1155,12 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetReflectionsByAuthorDid(variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: C): Promise<Types.GetReflectionsByAuthorDidQuery> {
       return requester<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options) as Promise<Types.GetReflectionsByAuthorDidQuery>;
     },
+    GetReflectionStream(variables: Types.GetReflectionStreamQueryVariables, options?: C): Promise<Types.GetReflectionStreamQuery> {
+      return requester<Types.GetReflectionStreamQuery, Types.GetReflectionStreamQueryVariables>(GetReflectionStreamDocument, variables, options) as Promise<Types.GetReflectionStreamQuery>;
+    },
+    GetReflectionById(variables: Types.GetReflectionByIdQueryVariables, options?: C): Promise<Types.GetReflectionByIdQuery> {
+      return requester<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>(GetReflectionByIdDocument, variables, options) as Promise<Types.GetReflectionByIdQuery>;
+    },
     GetReflectReflections(variables: Types.GetReflectReflectionsQueryVariables, options?: C): Promise<Types.GetReflectReflectionsQuery> {
       return requester<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options) as Promise<Types.GetReflectReflectionsQuery>;
     },
@@ -991,6 +1181,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetProfiles(variables?: Types.GetProfilesQueryVariables, options?: C): Promise<Types.GetProfilesQuery> {
       return requester<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options) as Promise<Types.GetProfilesQuery>;
+    },
+    GetProfileStream(variables: Types.GetProfileStreamQueryVariables, options?: C): Promise<Types.GetProfileStreamQuery> {
+      return requester<Types.GetProfileStreamQuery, Types.GetProfileStreamQueryVariables>(GetProfileStreamDocument, variables, options) as Promise<Types.GetProfileStreamQuery>;
     },
     GetInterests(variables?: Types.GetInterestsQueryVariables, options?: C): Promise<Types.GetInterestsQuery> {
       return requester<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options) as Promise<Types.GetInterestsQuery>;
@@ -1042,6 +1235,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetApps(variables?: Types.GetAppsQueryVariables, options?: C): Promise<Types.GetAppsQuery> {
       return requester<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options) as Promise<Types.GetAppsQuery>;
+    },
+    GetAppsStream(variables: Types.GetAppsStreamQueryVariables, options?: C): Promise<Types.GetAppsStreamQuery> {
+      return requester<Types.GetAppsStreamQuery, Types.GetAppsStreamQueryVariables>(GetAppsStreamDocument, variables, options) as Promise<Types.GetAppsStreamQuery>;
     },
     GetAppsByID(variables: Types.GetAppsByIdQueryVariables, options?: C): Promise<Types.GetAppsByIdQuery> {
       return requester<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options) as Promise<Types.GetAppsByIdQuery>;

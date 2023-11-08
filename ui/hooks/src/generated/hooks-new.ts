@@ -247,6 +247,78 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ `
   createdAt
 }
     `;
+export const GetBeamStreamDocument = /*#__PURE__*/ `
+    query GetBeamStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamStreamFiltersInput, $sorting: AkashaBeamStreamSortingInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaBeamStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            beamID
+            createdAt
+            active
+            status
+            moderationID
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    `;
+export const useGetBeamStreamQuery = <
+      TData = Types.GetBeamStreamQuery,
+      TError = unknown
+    >(
+      variables: Types.GetBeamStreamQueryVariables,
+      options?: UseQueryOptions<Types.GetBeamStreamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetBeamStreamQuery, TError, TData>(
+      ['GetBeamStream', variables],
+      composeDbFetch<Types.GetBeamStreamQuery, Types.GetBeamStreamQueryVariables>(GetBeamStreamDocument, variables),
+      options
+    );
+useGetBeamStreamQuery.document = GetBeamStreamDocument;
+
+
+useGetBeamStreamQuery.getKey = (variables: Types.GetBeamStreamQueryVariables) => ['GetBeamStream', variables];
+;
+
+export const useInfiniteGetBeamStreamQuery = <
+      TData = Types.GetBeamStreamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetBeamStreamQueryVariables,
+      variables: Types.GetBeamStreamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetBeamStreamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetBeamStreamQuery, TError, TData>(
+      ['GetBeamStream.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetBeamStreamQuery, Types.GetBeamStreamQueryVariables>(GetBeamStreamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetBeamStreamQuery.getKey = (variables: Types.GetBeamStreamQueryVariables) => ['GetBeamStream.infinite', variables];
+;
+
+useGetBeamStreamQuery.fetcher = (variables: Types.GetBeamStreamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBeamStreamQuery, Types.GetBeamStreamQueryVariables>(GetBeamStreamDocument, variables, options);
 export const GetBeamsDocument = /*#__PURE__*/ `
     query GetBeams($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamFiltersInput, $sorting: AkashaBeamSortingInput) {
   akashaBeamIndex(
@@ -425,6 +497,78 @@ useInfiniteGetBeamByIdQuery.getKey = (variables: Types.GetBeamByIdQueryVariables
 ;
 
 useGetBeamByIdQuery.fetcher = (variables: Types.GetBeamByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options);
+export const GetContentBlockStreamDocument = /*#__PURE__*/ `
+    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $beamID: String!) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaContentBlockStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: {where: {beamID: {equalTo: $beamID}}}
+      ) {
+        edges {
+          node {
+            beamID
+            createdAt
+            active
+            status
+            blockID
+            moderationID
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    `;
+export const useGetContentBlockStreamQuery = <
+      TData = Types.GetContentBlockStreamQuery,
+      TError = unknown
+    >(
+      variables: Types.GetContentBlockStreamQueryVariables,
+      options?: UseQueryOptions<Types.GetContentBlockStreamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetContentBlockStreamQuery, TError, TData>(
+      ['GetContentBlockStream', variables],
+      composeDbFetch<Types.GetContentBlockStreamQuery, Types.GetContentBlockStreamQueryVariables>(GetContentBlockStreamDocument, variables),
+      options
+    );
+useGetContentBlockStreamQuery.document = GetContentBlockStreamDocument;
+
+
+useGetContentBlockStreamQuery.getKey = (variables: Types.GetContentBlockStreamQueryVariables) => ['GetContentBlockStream', variables];
+;
+
+export const useInfiniteGetContentBlockStreamQuery = <
+      TData = Types.GetContentBlockStreamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetContentBlockStreamQueryVariables,
+      variables: Types.GetContentBlockStreamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetContentBlockStreamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetContentBlockStreamQuery, TError, TData>(
+      ['GetContentBlockStream.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetContentBlockStreamQuery, Types.GetContentBlockStreamQueryVariables>(GetContentBlockStreamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetContentBlockStreamQuery.getKey = (variables: Types.GetContentBlockStreamQueryVariables) => ['GetContentBlockStream.infinite', variables];
+;
+
+useGetContentBlockStreamQuery.fetcher = (variables: Types.GetContentBlockStreamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetContentBlockStreamQuery, Types.GetContentBlockStreamQueryVariables>(GetContentBlockStreamDocument, variables, options);
 export const GetContentBlockByIdDocument = /*#__PURE__*/ `
     query GetContentBlockById($id: ID!) {
   node(id: $id) {
@@ -742,6 +886,126 @@ useInfiniteGetReflectionsByAuthorDidQuery.getKey = (variables: Types.GetReflecti
 ;
 
 useGetReflectionsByAuthorDidQuery.fetcher = (variables: Types.GetReflectionsByAuthorDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetReflectionsByAuthorDidQuery, Types.GetReflectionsByAuthorDidQueryVariables>(GetReflectionsByAuthorDidDocument, variables, options);
+export const GetReflectionStreamDocument = /*#__PURE__*/ `
+    query GetReflectionStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaReflectStreamFiltersInput, $sorting: AkashaReflectStreamSortingInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaReflectStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            reflectionID
+            moderationID
+            beamID
+            active
+            status
+            createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    `;
+export const useGetReflectionStreamQuery = <
+      TData = Types.GetReflectionStreamQuery,
+      TError = unknown
+    >(
+      variables: Types.GetReflectionStreamQueryVariables,
+      options?: UseQueryOptions<Types.GetReflectionStreamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetReflectionStreamQuery, TError, TData>(
+      ['GetReflectionStream', variables],
+      composeDbFetch<Types.GetReflectionStreamQuery, Types.GetReflectionStreamQueryVariables>(GetReflectionStreamDocument, variables),
+      options
+    );
+useGetReflectionStreamQuery.document = GetReflectionStreamDocument;
+
+
+useGetReflectionStreamQuery.getKey = (variables: Types.GetReflectionStreamQueryVariables) => ['GetReflectionStream', variables];
+;
+
+export const useInfiniteGetReflectionStreamQuery = <
+      TData = Types.GetReflectionStreamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetReflectionStreamQueryVariables,
+      variables: Types.GetReflectionStreamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetReflectionStreamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetReflectionStreamQuery, TError, TData>(
+      ['GetReflectionStream.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetReflectionStreamQuery, Types.GetReflectionStreamQueryVariables>(GetReflectionStreamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetReflectionStreamQuery.getKey = (variables: Types.GetReflectionStreamQueryVariables) => ['GetReflectionStream.infinite', variables];
+;
+
+useGetReflectionStreamQuery.fetcher = (variables: Types.GetReflectionStreamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetReflectionStreamQuery, Types.GetReflectionStreamQueryVariables>(GetReflectionStreamDocument, variables, options);
+export const GetReflectionByIdDocument = /*#__PURE__*/ `
+    query GetReflectionById($id: ID!) {
+  node(id: $id) {
+    ... on AkashaReflect {
+      ...ReflectFragment
+    }
+  }
+}
+    ${ReflectFragmentDoc}`;
+export const useGetReflectionByIdQuery = <
+      TData = Types.GetReflectionByIdQuery,
+      TError = unknown
+    >(
+      variables: Types.GetReflectionByIdQueryVariables,
+      options?: UseQueryOptions<Types.GetReflectionByIdQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetReflectionByIdQuery, TError, TData>(
+      ['GetReflectionById', variables],
+      composeDbFetch<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>(GetReflectionByIdDocument, variables),
+      options
+    );
+useGetReflectionByIdQuery.document = GetReflectionByIdDocument;
+
+
+useGetReflectionByIdQuery.getKey = (variables: Types.GetReflectionByIdQueryVariables) => ['GetReflectionById', variables];
+;
+
+export const useInfiniteGetReflectionByIdQuery = <
+      TData = Types.GetReflectionByIdQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetReflectionByIdQueryVariables,
+      variables: Types.GetReflectionByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetReflectionByIdQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetReflectionByIdQuery, TError, TData>(
+      ['GetReflectionById.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>(GetReflectionByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetReflectionByIdQuery.getKey = (variables: Types.GetReflectionByIdQueryVariables) => ['GetReflectionById.infinite', variables];
+;
+
+useGetReflectionByIdQuery.fetcher = (variables: Types.GetReflectionByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetReflectionByIdQuery, Types.GetReflectionByIdQueryVariables>(GetReflectionByIdDocument, variables, options);
 export const GetReflectReflectionsDocument = /*#__PURE__*/ `
     query GetReflectReflections($id: String!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput) {
   akashaReflectIndex(
@@ -1060,6 +1324,77 @@ useInfiniteGetProfilesQuery.getKey = (variables?: Types.GetProfilesQueryVariable
 ;
 
 useGetProfilesQuery.fetcher = (variables?: Types.GetProfilesQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options);
+export const GetProfileStreamDocument = /*#__PURE__*/ `
+    query GetProfileStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileStreamFiltersInput, $sorting: AkashaProfileStreamSortingInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaProfileStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            profileID
+            active
+            createdAt
+            moderationID
+            status
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+    `;
+export const useGetProfileStreamQuery = <
+      TData = Types.GetProfileStreamQuery,
+      TError = unknown
+    >(
+      variables: Types.GetProfileStreamQueryVariables,
+      options?: UseQueryOptions<Types.GetProfileStreamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetProfileStreamQuery, TError, TData>(
+      ['GetProfileStream', variables],
+      composeDbFetch<Types.GetProfileStreamQuery, Types.GetProfileStreamQueryVariables>(GetProfileStreamDocument, variables),
+      options
+    );
+useGetProfileStreamQuery.document = GetProfileStreamDocument;
+
+
+useGetProfileStreamQuery.getKey = (variables: Types.GetProfileStreamQueryVariables) => ['GetProfileStream', variables];
+;
+
+export const useInfiniteGetProfileStreamQuery = <
+      TData = Types.GetProfileStreamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetProfileStreamQueryVariables,
+      variables: Types.GetProfileStreamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetProfileStreamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetProfileStreamQuery, TError, TData>(
+      ['GetProfileStream.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetProfileStreamQuery, Types.GetProfileStreamQueryVariables>(GetProfileStreamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetProfileStreamQuery.getKey = (variables: Types.GetProfileStreamQueryVariables) => ['GetProfileStream.infinite', variables];
+;
+
+useGetProfileStreamQuery.fetcher = (variables: Types.GetProfileStreamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetProfileStreamQuery, Types.GetProfileStreamQueryVariables>(GetProfileStreamDocument, variables, options);
 export const GetInterestsDocument = /*#__PURE__*/ `
     query GetInterests($after: String, $before: String, $first: Int, $last: Int) {
   akashaProfileInterestsIndex(
@@ -1848,6 +2183,77 @@ useInfiniteGetAppsQuery.getKey = (variables?: Types.GetAppsQueryVariables) => va
 ;
 
 useGetAppsQuery.fetcher = (variables?: Types.GetAppsQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetAppsQuery, Types.GetAppsQueryVariables>(GetAppsDocument, variables, options);
+export const GetAppsStreamDocument = /*#__PURE__*/ `
+    query GetAppsStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppsStreamFiltersInput, $sorting: AkashaAppsStreamSortingInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaAppsStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            moderationID
+            active
+            applicationID
+            status
+            createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+    `;
+export const useGetAppsStreamQuery = <
+      TData = Types.GetAppsStreamQuery,
+      TError = unknown
+    >(
+      variables: Types.GetAppsStreamQueryVariables,
+      options?: UseQueryOptions<Types.GetAppsStreamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetAppsStreamQuery, TError, TData>(
+      ['GetAppsStream', variables],
+      composeDbFetch<Types.GetAppsStreamQuery, Types.GetAppsStreamQueryVariables>(GetAppsStreamDocument, variables),
+      options
+    );
+useGetAppsStreamQuery.document = GetAppsStreamDocument;
+
+
+useGetAppsStreamQuery.getKey = (variables: Types.GetAppsStreamQueryVariables) => ['GetAppsStream', variables];
+;
+
+export const useInfiniteGetAppsStreamQuery = <
+      TData = Types.GetAppsStreamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetAppsStreamQueryVariables,
+      variables: Types.GetAppsStreamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetAppsStreamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetAppsStreamQuery, TError, TData>(
+      ['GetAppsStream.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetAppsStreamQuery, Types.GetAppsStreamQueryVariables>(GetAppsStreamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetAppsStreamQuery.getKey = (variables: Types.GetAppsStreamQueryVariables) => ['GetAppsStream.infinite', variables];
+;
+
+useGetAppsStreamQuery.fetcher = (variables: Types.GetAppsStreamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetAppsStreamQuery, Types.GetAppsStreamQueryVariables>(GetAppsStreamDocument, variables, options);
 export const GetAppsByIdDocument = /*#__PURE__*/ `
     query GetAppsByID($id: ID!) {
   node(id: $id) {

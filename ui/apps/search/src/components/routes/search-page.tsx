@@ -64,7 +64,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const [analyticsActions] = useAnalytics();
   const { t, i18n } = useTranslation('app-search');
   const { getRoutingPlugin } = useRootComponentProps();
-  const locale = (i18n.languages[0] || 'en') as ILocale;
+  const locale = /*TODO: fix typing in translation plugin and avoid type assertion*/ (i18n
+    .languages[0] || 'en') as ILocale;
 
   // @TODO replace with new hooks
   const tagSubscriptionsReq = null;
@@ -458,7 +459,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   itemType={EntityTypes.BEAM}
                   onContentClick={handleEntryNavigation}
                   navigateTo={navigateTo}
-                  onRebeam={handleRebeam}
                   onAvatarClick={handleAvatarClick}
                   onMentionClick={handleMentionClick}
                   onTagClick={handleTagClick}

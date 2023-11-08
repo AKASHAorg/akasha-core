@@ -1,63 +1,61 @@
 import * as React from 'react';
 import EditorPlaceholder from '../EditorPlaceholder';
 import EditorBox, { EditorBoxProps } from '../Editor';
-import { editorDefaultValue } from '../Editor/initialValue';
-import { useOnClickAway } from '../../utils/clickAway';
-import isEqual from 'lodash.isequal';
-import { IPublishData } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import isEqual from 'lodash.isequal';
+import { editorDefaultValue } from '../Editor/initialValue';
+import { useOnClickAway } from '../../utils/clickAway';
+import { IPublishData } from '@akashaorg/typings/lib/ui';
 import { Colors } from '@akashaorg/typings/lib/ui';
 
 export type ReflectionEditorProps = EditorBoxProps & {
   placeholderButtonLabel?: string;
-  openEditor?: boolean;
+  showEditorInitialValue?: boolean;
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
   background?: { light: Colors; dark: Colors };
+  customStyle?: string;
 };
 
 const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
   const {
     profileId,
     avatar,
-    postLabel,
+    actionLabel,
     placeholderLabel,
     emojiPlaceholderLabel,
-    disablePublishLabel,
+    disableActionLabel,
     disablePublish,
-    onPublish,
-    handleSaveImagesDraft,
-    handleSaveLinkPreviewDraft,
     linkPreview,
+    mentions,
+    tags,
+    placeholderButtonLabel,
+    showEditorInitialValue = false,
+    showCancelButton,
+    cancelButtonLabel,
+    editorState = editorDefaultValue,
+    embedEntryData,
+    showDraft,
+    background,
+    customStyle,
+    setEditorState,
+    onCancelClick,
     getLinkPreview,
     getMentions,
     getTags,
-    mentions,
-    tags,
-    uploadRequest,
-    placeholderButtonLabel,
-    openEditor = false,
-    showCancelButton,
-    cancelButtonLabel,
-    onCancelClick,
-    editorState = editorDefaultValue,
-    onPlaceholderClick,
-    embedEntryData,
-    setEditorState,
-    showDraft,
-    uploadedImages,
+    onPublish,
+    handleSaveLinkPreviewDraft,
     onClear,
-    background,
   } = props;
 
-  const [showEditor, setShowEditor] = React.useState(openEditor);
+  const [showEditor, setShowEditor] = React.useState(showEditorInitialValue);
   const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const editorRef = React.useRef(null);
 
   const handleClickAway = () => {
     if (
-      !openEditor &&
+      !showEditorInitialValue &&
       showEditor &&
       isEqual(editorState, editorDefaultValue) &&
       !editorRef.current?.getUploadingState() &&
@@ -68,8 +66,8 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
   };
 
   React.useEffect(() => {
-    setShowEditor(openEditor);
-  }, [openEditor]);
+    setShowEditor(showEditorInitialValue);
+  }, [showEditorInitialValue]);
 
   const handlePublish = (data: IPublishData) => {
     onPublish(data);
@@ -80,20 +78,17 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
 
   const handleToggleEditor = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
-    if (onPlaceholderClick) {
-      onPlaceholderClick();
-    }
     setShowEditor(!showEditor);
   };
 
   return (
-    <Stack ref={wrapperRef} customStyle="grid">
+    <Stack ref={wrapperRef} customStyle={customStyle}>
       {!showEditor && (
         <EditorPlaceholder
           onClick={handleToggleEditor}
           profileId={profileId}
           avatar={avatar}
-          buttonLabel={placeholderButtonLabel}
+          actionLabel={placeholderButtonLabel}
           placeholderLabel={placeholderLabel}
         />
       )}
@@ -108,31 +103,28 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             ref={editorRef}
             avatar={avatar}
             profileId={profileId}
-            postLabel={postLabel}
+            actionLabel={actionLabel}
             placeholderLabel={placeholderLabel}
             emojiPlaceholderLabel={emojiPlaceholderLabel}
-            disablePublishLabel={disablePublishLabel}
+            disableActionLabel={disableActionLabel}
             disablePublish={disablePublish}
-            onPublish={handlePublish}
-            handleSaveImagesDraft={handleSaveImagesDraft}
-            handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
             linkPreview={linkPreview}
-            getLinkPreview={getLinkPreview}
-            getMentions={getMentions}
-            getTags={getTags}
             mentions={mentions}
             tags={tags}
-            uploadRequest={uploadRequest}
-            uploadedImages={uploadedImages}
             withMeter={true}
             editorState={editorState}
-            setEditorState={setEditorState}
             cancelButtonLabel={cancelButtonLabel}
-            onCancelClick={onCancelClick}
             showCancelButton={showCancelButton}
             embedEntryData={embedEntryData}
             showDraft={showDraft}
+            setEditorState={setEditorState}
+            onPublish={handlePublish}
+            handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
+            getLinkPreview={getLinkPreview}
+            getMentions={getMentions}
+            getTags={getTags}
             onClear={onClear}
+            onCancelClick={onCancelClick}
           />
         </Card>
       )}

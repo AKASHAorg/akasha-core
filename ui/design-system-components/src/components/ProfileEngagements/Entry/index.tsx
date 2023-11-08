@@ -36,19 +36,15 @@ const Entry: React.FC<EntryProps> = props => {
 
   return (
     <Stack direction="row" align="center" justify="between" customStyle="pb-4" fullWidth>
-      <Anchor
+      <ProfileAvatarButton
+        profileId={profileIds.did}
+        avatarImage={getMediaUrl(avatar)}
+        label={name}
         href={`${profileAnchorLink}/${profileIds.did}`}
-        onClick={event => {
-          event.preventDefault();
+        onClick={() => {
           onProfileClick(profileIds.did);
         }}
-      >
-        <ProfileAvatarButton
-          profileId={profileIds.did}
-          avatarImage={getMediaUrl(avatar)}
-          label={name}
-        />
-      </Anchor>
+      />
       {renderFollowElement && renderFollowElement(profileIds.id, followId, isFollowing)}
     </Stack>
   );

@@ -97,6 +97,31 @@ query GetProfiles($after: String, $before: String, $first: Int, $last: Int, $fil
   }
 }
 
+query GetProfileStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaProfileStreamFiltersInput, $sorting: AkashaProfileStreamSortingInput ){
+  node(id: $indexer){
+    ... on CeramicAccount{
+      akashaProfileStreamList(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting: $sorting ){
+        edges {
+          node {
+            profileID
+            active
+            createdAt
+            moderationID
+            status
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+
 # saved interests for all documents, might be useful at some point
 query GetInterests($after: String, $before: String, $first: Int, $last: Int){
   akashaProfileInterestsIndex(after: $after, before: $before, first: $first, last: $last ){
@@ -126,7 +151,7 @@ query GetInterestsStream($after: String, $before: String, $first: Int, $last: In
   akashaInterestsStreamIndex(after: $after, before: $before, first: $first, last: $last, sorting: $sorting, filters: $filters){
     edges {
       node {
-       labelType
+        labelType
         value
         active
         createdAt

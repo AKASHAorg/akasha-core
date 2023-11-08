@@ -1,29 +1,22 @@
-import * as React from 'react';
-import ReflectPage from '../item-page/reflect-page';
+import React from 'react';
+import ReflectionPage from '../pages/entry-page/reflection-page';
+import ReflectEditor from '../reflect-editor';
 
 import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
-import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import { when } from 'jest-when';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 const partialArgs = (...argsToMatch) =>
   when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
 
 const MockedInlineEditor = ({ action }) => (
-  <InlineEditor
-    extensionData={{
-      itemId: '01gf',
-      itemType: EntityTypes.REFLECT,
-      action,
-    }}
-  />
+  <ReflectEditor beamId="oxaa" reflectToId="oxaa" showEditorInitialValue={false} />
 );
 
 describe('< ReflectPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <ReflectPage />
+      <ReflectionPage />
     </AnalyticsProvider>
   );
 

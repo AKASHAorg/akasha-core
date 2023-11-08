@@ -24,6 +24,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     loading = false,
     iconOnly = false,
     greyBg = false,
+    plainIcon = false,
     children,
     breakPointSize,
     customStyle = '',
@@ -57,6 +58,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         variant={variant}
         loading={loading}
         greyBg={greyBg}
+        plainIcon={plainIcon}
         disabled={disabled}
         breakPointSize={breakPointSize}
         customStyle={customStyle}
