@@ -413,7 +413,6 @@ class AWF_Auth {
   }
 
   async verifyDIDSignature(args: string | DagJWS) {
-    console.info(this.#_didSession);
     return this._verifySignature(args);
   }
 
