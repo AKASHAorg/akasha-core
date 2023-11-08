@@ -15,7 +15,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
@@ -23,7 +22,6 @@ import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/compo
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
-import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
 
 export type FeedPageProps = {

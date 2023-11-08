@@ -1,10 +1,7 @@
 import React from 'react';
-
 import { useTranslation } from 'react-i18next';
-
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { EntityTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
-
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
