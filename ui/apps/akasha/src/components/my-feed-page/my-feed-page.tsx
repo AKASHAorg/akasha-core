@@ -5,19 +5,19 @@ import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { ScrollStateDBWrapper } from '@akashaorg/ui-lib-feed/lib/utils/scroll-state-db';
-import { Virtualizer, EdgeArea } from '@akashaorg/ui-lib-feed/lib/virtual-list';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
+import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
 
 export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: Profile;
 };
-const MY_FEED_OVERSCAN = 10;
+const MY_ANTENNA_OVERSCAN = 10;
 
 const MyFeedPage: React.FC<MyFeedPageProps> = props => {
   const { loggedProfileData, showLoginModal } = props;
@@ -31,33 +31,6 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
   // const db = React.useMemo(() => {
   //   return new ScrollStateDBWrapper('scroll-state');
   // }, []);
-
-  const {
-    pages,
-    hasPreviousPage,
-    hasNextPage,
-    fetchNextPage,
-    fetchPreviousPage,
-    fetchInitialData,
-    onReset,
-  } = useBeams({
-    overscan: MY_FEED_OVERSCAN,
-  });
-
-  const handleFetch = (newArea: EdgeArea) => {
-    switch (newArea) {
-      case EdgeArea.TOP:
-      case EdgeArea.NEAR_TOP:
-        fetchPreviousPage();
-        break;
-      case EdgeArea.BOTTOM:
-      case EdgeArea.NEAR_BOTTOM:
-        fetchNextPage();
-        break;
-      default:
-        break;
-    }
-  };
 
   const tagSubsReq = useGetInterestsByDidQuery(
     { id: loggedProfileData?.did.id },
@@ -110,34 +83,28 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
         <title>AKASHA World</title>
       </Helmet.Helmet>
 
-      {/*<Stack customStyle="mb-2">*/}
-      {/*  <StartCard*/}
-      {/*    title={t('My Feed')}*/}
-      {/*    heading={t('Add some magic to your feed 🪄')}*/}
-      {/*    description={t(*/}
-      {/*      'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',*/}
-      {/*    )}*/}
-      {/*    secondaryDescription={t('Your customized view of AKASHA World')}*/}
-      {/*    image="/images/news-feed.webp"*/}
-      {/*    showMainArea={!userHasSubscriptions}*/}
-      {/*    hideMainAreaOnMobile={false}*/}
-      {/*    showSecondaryArea={userHasSubscriptions}*/}
-      {/*    CTALabel={t('Customize My Feed')}*/}
-      {/*    onClickCTA={handleCTAClick}*/}
-      {/*  />*/}
-      {/*</Stack>*/}
-      <Virtualizer<AkashaBeamEdge>
-        restorationKey={'app-akasha-integration_my-antenna'}
+      <Stack customStyle="mb-2">
+        <StartCard
+          title={t('My Feed')}
+          heading={t('Add some magic to your feed 🪄')}
+          description={t(
+            'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
+          )}
+          secondaryDescription={t('Your customized view of AKASHA World')}
+          image="/images/news-feed.webp"
+          showMainArea={!userHasSubscriptions}
+          hideMainAreaOnMobile={false}
+          showSecondaryArea={userHasSubscriptions}
+          CTALabel={t('Customize My Feed')}
+          onClickCTA={handleCTAClick}
+        />
+      </Stack>
+      <FeedWidget<AkashaBeamEdge>
+        queryKey={'app-akasha-integration_my-antenna'}
         estimatedHeight={150}
-        overscan={MY_FEED_OVERSCAN}
-        items={pages}
-        onFetchInitialData={fetchInitialData}
-        itemKeyExtractor={item => item.cursor}
-        itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
-        hasPreviousPage={hasPreviousPage}
-        hasNextPage={hasNextPage}
-        onListReset={onReset}
-        onEdgeDetectorChange={handleFetch}
+        itemSpacing={8}
+        itemType={EntityTypes.BEAM}
+        scrollerOptions={{ overscan: MY_ANTENNA_OVERSCAN }}
         scrollTopIndicator={(listRect, onScrollToTop) => (
           <ScrollTopWrapper placement={listRect.left}>
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
@@ -156,20 +123,6 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
           />
         )}
       />
-
-      {/*<FeedWidget*/}
-      {/*  queryKey="akasha-my-feed-query"*/}
-      {/*  itemType={EntityTypes.BEAM}*/}
-      {/*  onLoginModalOpen={showLoginModal}*/}
-      {/*  loggedProfileData={loggedProfileData}*/}
-      {/*  contentClickable={true}*/}
-      {/*  onEntryFlag={handleEntryFlag}*/}
-      {/*  onEntryRemove={handleEntryRemove}*/}
-      {/*  itemSpacing={8}*/}
-      {/*  accentBorderTop={true}*/}
-      {/*  onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}*/}
-      {/*  newItemsPublishedLabel={t('New Beams published recently')}*/}
-      {/*/>*/}
 
       {/*{userHasSubscriptions && !postsReq.isFetching && (*/}
       {/*  <MyFeedCard*/}

@@ -18,7 +18,6 @@ import EntryList, {
   ScrollerState,
 } from '@akashaorg/design-system-components/lib/components/EntryList';
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
-import type { FeedWidgetCommonProps } from './app';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useInfiniteGetReflectionsFromBeamQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
@@ -54,7 +53,7 @@ export type ReflectFeedProps = Omit<
   initialScrollState?: ScrollerState;
   onScrollStateReset?: () => void;
   db: ScrollStateDBWrapper;
-  scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
+  scrollerOptions?: { overscan: number };
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {

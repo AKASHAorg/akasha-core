@@ -20,6 +20,10 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
+import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
+import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
+import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type FeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -146,19 +150,29 @@ const FeedPage: React.FC<FeedPageProps> = props => {
             />
           ),
       )}
-      <FeedWidget
-        queryKey="akashaorg-antenna-page-query"
-        itemType={EntityTypes.BEAM}
-        loggedProfileData={loggedProfileData}
-        onLoginModalOpen={showLoginModal}
-        contentClickable={true}
-        onEntryFlag={handleEntryFlag}
-        onEntryRemove={handleEntryRemove}
+      <FeedWidget<AkashaBeamEdge>
+        queryKey={'app-akasha-integration_general-antenna'}
+        estimatedHeight={150}
         itemSpacing={8}
-        onRebeam={handleRebeam}
-        trackEvent={analyticsActions.trackEvent}
-        onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
-        newItemsPublishedLabel={t('New Beams published recently')}
+        itemType={EntityTypes.BEAM}
+        scrollerOptions={{ overscan: 10 }}
+        scrollTopIndicator={(listRect, onScrollToTop) => (
+          <ScrollTopWrapper placement={listRect.left}>
+            <ScrollTopButton hide={false} onClick={onScrollToTop} />
+          </ScrollTopWrapper>
+        )}
+        renderItem={itemData => (
+          <BeamCard
+            entryData={itemData.node}
+            contentClickable={true}
+            onContentClick={() =>
+              navigateTo.current({
+                appName: '@akashaorg/app-akasha-integration',
+                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+              })
+            }
+          />
+        )}
       />
     </Stack>
   );

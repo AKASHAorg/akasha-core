@@ -83,25 +83,25 @@ const BeamPage: React.FC = () => {
                 />
               )}
             </Stack>
-            <FeedWidget
-              queryKey="akasha-beam-page-query"
-              itemType={EntityTypes.REFLECT}
-              beamId={beamId}
-              loggedProfileData={loggedProfileData}
-              onLoginModalOpen={showLoginModal}
-              onEntryFlag={() => {
-                return () => {
-                  //@TODO
-                };
-              }}
-              onEntryRemove={() => {
-                //@TODO
-              }}
-              itemSpacing={8}
-              trackEvent={analyticsActions.trackEvent}
-              onNavigate={onNavigate}
-              newItemsPublishedLabel={t('New Beams published recently')}
-            />
+            {/*<FeedWidget*/}
+            {/*  queryKey="akasha-beam-page-query"*/}
+            {/*  itemType={EntityTypes.REFLECT}*/}
+            {/*  beamId={beamId}*/}
+            {/*  loggedProfileData={loggedProfileData}*/}
+            {/*  onLoginModalOpen={showLoginModal}*/}
+            {/*  onEntryFlag={() => {*/}
+            {/*    return () => {*/}
+            {/*      //@TODO*/}
+            {/*    };*/}
+            {/*  }}*/}
+            {/*  onEntryRemove={() => {*/}
+            {/*    //@TODO*/}
+            {/*  }}*/}
+            {/*  itemSpacing={8}*/}
+            {/*  trackEvent={analyticsActions.trackEvent}*/}
+            {/*  onNavigate={onNavigate}*/}
+            {/*  newItemsPublishedLabel={t('New Beams published recently')}*/}
+            {/*/>*/}
           </Stack>
         </Card>
       )}
