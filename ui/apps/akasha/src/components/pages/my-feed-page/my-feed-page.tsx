@@ -5,13 +5,12 @@ import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
-import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';
+import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
 
 export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -99,11 +98,10 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
           onClickCTA={handleCTAClick}
         />
       </Stack>
-      <FeedWidget<AkashaBeamEdge>
+      <BeamFeed
         queryKey={'app-akasha-integration_my-antenna'}
         estimatedHeight={150}
         itemSpacing={8}
-        itemType={EntityTypes.BEAM}
         scrollerOptions={{ overscan: MY_ANTENNA_OVERSCAN }}
         scrollTopIndicator={(listRect, onScrollToTop) => (
           <ScrollTopWrapper placement={listRect.left}>

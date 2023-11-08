@@ -24,6 +24,7 @@ import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/Scrol
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
 
 export type FeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -144,11 +145,10 @@ const FeedPage: React.FC<FeedPageProps> = props => {
             />
           ),
       )}
-      <FeedWidget<AkashaBeamEdge>
+      <BeamFeed
         queryKey={'app-akasha-integration_general-antenna'}
         estimatedHeight={150}
         itemSpacing={8}
-        itemType={EntityTypes.BEAM}
         scrollerOptions={{ overscan: 10 }}
         scrollTopIndicator={(listRect, onScrollToTop) => (
           <ScrollTopWrapper placement={listRect.left}>

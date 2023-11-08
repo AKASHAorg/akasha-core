@@ -19,7 +19,7 @@ export type BeamFeedProps = {
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
   scrollTopIndicator: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<unknown>['renderItem'];
+  renderItem: VirtualizerProps<AkashaBeamEdge>['renderItem'];
   estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];

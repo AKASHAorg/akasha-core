@@ -1,8 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
-
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import type { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
@@ -12,7 +10,7 @@ import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/h
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
-import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
 
 export type ProfilePageProps = {
   loggedProfileData: Profile;
@@ -66,11 +64,10 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
       </Helmet.Helmet>
 
       <>
-        <FeedWidget<AkashaBeamEdge>
+        <BeamFeed
           queryKey={`app-akasha-integration_${loggedProfileData.did.id}-profile-antenna`}
           estimatedHeight={150}
           itemSpacing={8}
-          itemType={EntityTypes.BEAM}
           scrollerOptions={{ overscan: 10 }}
           scrollTopIndicator={(listRect, onScrollToTop) => (
             <ScrollTopWrapper placement={listRect.left}>

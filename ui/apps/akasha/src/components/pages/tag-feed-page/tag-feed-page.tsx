@@ -3,18 +3,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { EntityTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
-import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
-import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
 
 export type TagFeedPageProps = {
   loggedProfileData?: Profile;
@@ -98,11 +97,10 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           />
         </Stack>
       )}
-      <FeedWidget<AkashaBeamEdge>
+      <BeamFeed
         queryKey={'app-akasha-integration_tag-antenna'}
         estimatedHeight={150}
         itemSpacing={8}
-        itemType={EntityTypes.BEAM}
         scrollerOptions={{ overscan: 10 }}
         scrollTopIndicator={(listRect, onScrollToTop) => (
           <ScrollTopWrapper placement={listRect.left}>

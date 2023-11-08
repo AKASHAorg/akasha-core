@@ -2,7 +2,6 @@ import React from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-orignal-beam';
 import EntrySectionLoading from './entry-section-loading';
 import ReflectionSection from './reflection-section';
@@ -20,13 +19,15 @@ import {
 import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
+import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 
 const ReflectionPage: React.FC<unknown> = () => {
   const { reflectionId } = useParams<{
     reflectionId: string;
   }>();
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal, layoutConfig, getTranslationPlugin } =
+    useRootComponentProps();
   const reflectionReq = useGetReflectionByIdQuery(
     { id: reflectionId },
     { select: response => response.node },
@@ -79,25 +80,25 @@ const ReflectionPage: React.FC<unknown> = () => {
       />
       <PendingReflect beamId={entryData.beam?.id} loggedProfileData={loggedProfileData} />
       <Stack spacing="gap-y-2">
-        {/*<FeedWidget*/}
-        {/*  queryKey="akasha-reflection-page-query"*/}
-        {/*  itemType={EntityTypes.REFLECT}*/}
-        {/*  reflectionsOf={{ reflectionId: entryData.id, itemType: EntityTypes.REFLECT }}*/}
-        {/*  loggedProfileData={loggedProfileData}*/}
-        {/*  onEntryFlag={() => {*/}
-        {/*    return () => {*/}
-        {/*      //@TODO*/}
-        {/*    };*/}
-        {/*  }}*/}
-        {/*  onEntryRemove={() => {*/}
-        {/*    //@TODO*/}
-        {/*  }}*/}
-        {/*  itemSpacing={0}*/}
-        {/*  newItemsPublishedLabel={t('New Reflects published recently')}*/}
-        {/*  onLoginModalOpen={showLoginModal}*/}
-        {/*  trackEvent={analyticsActions.trackEvent}*/}
-        {/*  onNavigate={onNavigate}*/}
-        {/*/>*/}
+        <ReflectFeed
+          reflectionsOf={{ entryId: entryData.id, itemType: EntityTypes.REFLECT }}
+          loggedProfileData={loggedProfileData}
+          onEntryFlag={() => {
+            return () => {
+              //@TODO
+            };
+          }}
+          onEntryRemove={() => {
+            //@TODO
+          }}
+          itemSpacing={0}
+          newItemsPublishedLabel={t('New Reflects published recently')}
+          onLoginModalOpen={showLoginModal}
+          trackEvent={analyticsActions.trackEvent}
+          onNavigate={onNavigate}
+          modalSlotId={layoutConfig.modalSlotId}
+          i18n={getTranslationPlugin().i18n}
+        />
       </Stack>
     </Card>
   );
