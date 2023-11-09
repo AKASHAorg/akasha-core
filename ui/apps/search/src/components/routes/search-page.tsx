@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { tw } from '@twind/core';
 import {
   IEntryData,
   ITag,
@@ -43,7 +42,7 @@ export enum ButtonValues {
 
 export type SearchPageProps = {
   onError?: (err: Error) => void;
-  loggedProfileData: Profile;
+  loggedInProfileId: string | null;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
@@ -56,7 +55,7 @@ const initSearchState = {
 };
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { loggedProfileData, showLoginModal } = props;
+  const { loggedInProfileId, showLoginModal } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
@@ -189,7 +188,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const unfollowReq = null;
 
   const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
-    if (!loggedProfileData?.did?.id) {
+    if (!loggedInProfileId) {
       showLoginModal();
       return;
     }
@@ -207,7 +206,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
   const handleFollowProfile = (id: string) => {
-    if (!loggedProfileData?.did?.id) {
+    if (!loggedInProfileId) {
       showLoginModal();
       return;
     }
@@ -244,7 +243,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleUnfollowProfile = (id: string) => {
-    if (!loggedProfileData?.did?.id) {
+    if (!loggedInProfileId) {
       showLoginModal();
       return;
     }
@@ -268,7 +267,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       category: AnalyticsCategories.BEAM,
       action: 'Repost Clicked',
     });
-    if (!loggedProfileData?.did?.id) {
+    if (!loggedInProfileId) {
       showLoginModal();
       return;
     } else {
@@ -334,7 +333,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           activeButton={activeButton}
           onTabClick={onTabClick}
           buttonValues={buttonValues}
-          loggedUser={loggedProfileData?.did?.id}
+          loggedUser={loggedInProfileId}
         />
       </SearchStartCard>
       {activeButton === ButtonValues.CONTENT && (

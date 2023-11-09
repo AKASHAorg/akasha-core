@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ModalNavigationOptions, NotificationEvents, Profile } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, NotificationEvents } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -15,7 +15,7 @@ import routes, { RESULTS } from '../../routes';
 
 export type SettingsPageProps = {
   onError?: (err: Error) => void;
-  loggedProfileData: Profile;
+  isLoggedIn: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
