@@ -3,10 +3,9 @@ import { tw } from '@twind/core';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 
 export type ListAppTopbarProps = {
   titleLabel: string;
@@ -27,7 +26,7 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
 
   const [showMenu, setShowMenu] = React.useState(false);
 
-  const dropDownActions: ListProps['items'] = [
+  const dropDownActions: MenuProps['items'] = [
     {
       label: removeAllLabel,
       onClick: () => {
@@ -45,14 +44,17 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
     <React.Fragment>
       <Stack justify="between" direction="row" customStyle="my-3">
         <Text variant="h5">{titleLabel}</Text>
-
-        <Stack customStyle="relativ w-min">
-          <Button plain={true} onClick={() => setShowMenu(!showMenu)}>
-            <Icon type="EllipsisHorizontalIcon" accentColor={true} />
-          </Button>
-
-          {showMenu && <List items={dropDownActions} customStyle="absolute right-0 top-7 w-max" />}
-        </Stack>
+        <Menu
+          anchor={{
+            icon: 'EllipsisHorizontalIcon',
+            variant: 'primary',
+            greyBg: true,
+            iconOnly: true,
+            'aria-label': 'settings',
+          }}
+          items={dropDownActions}
+          customStyle="w-max z-99"
+        />
       </Stack>
 
       <div className={tw('flex justify-between items-center my-2')}>

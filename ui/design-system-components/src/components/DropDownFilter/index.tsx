@@ -1,5 +1,4 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DropDown, { DropdownMenuItemGroupType } from '../SearchAppDropdownFilter';
