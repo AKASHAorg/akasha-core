@@ -6,18 +6,8 @@ import getSDK from '@akashaorg/awf-sdk';
 
 export function composeDbFetch<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
   const sdk = getSDK();
-  const { optionName } = sdk.services.gql.mutationNotificationConfig;
-
-  return async (): Promise<TData> => {
-
-    const call = sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
-
-    const result = options?.hasOwnProperty(optionName) ?
-      await sdk.services.gql.wrapWithMutationEvent(call, JSON.stringify(options[optionName])) : await call;
-    if (!result.errors || !result.errors.length) {
-      return result.data as TData;
-    }
-    throw result.errors;
+  return async () => {
+   return sdk.services.gql.requester<TData, TVariables>(query, variables, options);
   };
 }
 

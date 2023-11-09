@@ -13,10 +13,12 @@ import { ExecutionResult } from 'graphql/index';
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, Observable, split } from '@apollo/client';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';
+import { gql } from 'graphql-tag';
 
-const enum ContextSources{
+const enum ContextSources {
   DEFAULT = 1,
   COMPOSEDB = 2,
+  REACT_QUERY = 3
 }
 
 /** @internal  */
@@ -30,7 +32,7 @@ class Gql {
   private _log: pino.Logger;
   private _gqlStash: IQuickLRU;
   private _globalChannel: EventBus;
-  readonly apolloClient: ApolloClient<unknown>
+  readonly apolloClient: ApolloClient<unknown>;
 
   // create Apollo link object and initialize the stash
   public constructor (
@@ -73,31 +75,40 @@ class Gql {
       cache: new InMemoryCache(),
       link: directionalLink,
     });
-    const requester = async <R, V> (doc: DocumentNode, vars?: V, options?: Record<string, any>): Promise<R> => {
-      const result = await this.queryClient({
-        query: doc,
-        variables: vars as Record<string, unknown> | undefined,
-        context: options?.context,
-      });
 
-      if (!result.errors || !result.errors.length) {
-        return result.data as R;
-      }
-      throw result.errors;
-    };
 
-    this._client = getSdk(requester);
+    this._client = getSdk(this.requester);
   }
 
-  get queryClient() {
+  async requester<R, V> (doc: DocumentNode | string, vars?: V, options?: Record<string, any>): Promise<R> {
+    let query: DocumentNode;
+    if (typeof doc === 'string') {
+      query = gql(doc);
+    } else {
+      query = doc;
+    }
+    const result = await this.queryClient({
+      query: query,
+      variables: vars as Record<string, unknown> | undefined,
+      context: options?.context,
+    });
+
+    if (!result.errors || !result.errors.length) {
+      return result.data as R;
+    }
+    throw result.errors;
+  };
+
+  get queryClient () {
     return this.apolloClient.query;
   }
 
-  get contextSources(){
+  get contextSources () {
     return {
       default: ContextSources.DEFAULT,
-      composeDB: ContextSources.COMPOSEDB
-    }
+      composeDB: ContextSources.COMPOSEDB,
+      reactQuery: ContextSources.REACT_QUERY,
+    };
   }
 
   async wrapWithMutationEvent (c: Promise<ExecutionResult<Record<string, unknown>>>, m: string) {
