@@ -98,18 +98,20 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
           variant !== 'text' ? BUTTON_SIZE_PADDING_MAP[size] : ''
         }`}
       >
-        {loading ? (
-          <ButtonIcon
-            size={size}
-            type="ArrowPathIcon"
-            variant={variant}
-            greyBg={greyBg}
-            loading={true}
-            breakPointSize={breakPointSize}
-            disabled={disabled}
-          />
-        ) : (
+        {
           <>
+            {loading && (
+              <ButtonIcon
+                size={size}
+                type="ArrowPathIcon"
+                variant={variant}
+                greyBg={greyBg}
+                loading={true}
+                breakPointSize={breakPointSize}
+                disabled={disabled}
+                active={active}
+              />
+            )}
             {icon && iconDirection === 'left' && (
               <ButtonIcon
                 size={size}
@@ -121,26 +123,33 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
                 disabled={disabled}
                 active={active}
                 hoverColor={hover ? hoverColors?.icon : null}
+                customStyle={loading ? 'invisible' : ''}
               />
             )}
-            <Text variant={BUTTON_SIZE_TEXT_MAP[size]} as="span" customStyle={textStyle}>
+            <Text
+              variant={BUTTON_SIZE_TEXT_MAP[size]}
+              as="span"
+              customStyle={`${textStyle} ${loading ? 'invisible' : ''}`}
+            >
               {label}
             </Text>
             {icon && iconDirection === 'right' && (
-              <ButtonIcon
-                size={size}
-                type={icon}
-                variant={variant}
-                greyBg={greyBg}
-                loading={false}
-                breakPointSize={breakPointSize}
-                disabled={disabled}
-                active={active}
-                hoverColor={hover ? hoverColors?.icon : null}
-              />
+              <Stack customStyle={loading ? 'invisible' : ''}>
+                <ButtonIcon
+                  size={size}
+                  type={loading ? 'ArrowPathIcon' : icon}
+                  variant={variant}
+                  greyBg={greyBg}
+                  loading={false}
+                  breakPointSize={breakPointSize}
+                  disabled={disabled}
+                  active={active}
+                  hoverColor={hover ? hoverColors?.icon : null}
+                />
+              </Stack>
             )}
           </>
-        )}
+        }
       </Stack>
     </button>
   );

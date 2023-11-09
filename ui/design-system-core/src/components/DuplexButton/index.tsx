@@ -63,7 +63,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
   }, [active]);
 
   if (loading) {
-    return <Button loading={true} {...rest} />;
+    return <Button loading={true} label={active ? activeLabel : inactiveLabel} {...rest} />;
   }
 
   const getLabel = () => {
