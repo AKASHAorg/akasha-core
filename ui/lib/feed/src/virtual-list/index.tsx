@@ -34,7 +34,10 @@ export type VirtualizerProps<T> = {
   hasPreviousPage?: boolean;
   loadingIndicator?: (position: IndicatorPosition) => React.ReactNode;
   debug?: boolean;
-  onScrollSave?: (state: ScrollState<T>) => void;
+  onScrollSave?: (state: {
+    listHeight: number;
+    items: { key: string; offsetTop: number }[];
+  }) => void;
   scrollTopIndicator?: VirtualListProps<T>['scrollTopIndicator'];
   onListReset?: VirtualListProps<T>['onListReset'];
   onEdgeDetectorChange: UseEdgeDetectorProps['onEdgeDetectorChange'];
@@ -62,7 +65,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     onEdgeDetectorChange,
   } = props;
 
-  const vlistRef = React.useRef<VirtualListInterface<T>>();
+  const vlistRef = React.useRef<VirtualListInterface>();
   const prevRestoreKey = React.useRef<string>();
 
   const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
@@ -114,27 +117,12 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
 
   const saveScroll = () => {
     const scrollState = vlistRef.current.getRestorationState();
-    const items = scrollState.items
-      .filter(
-        it =>
-          !it.virtualData.key.startsWith(LOADING_INDICATOR) &&
-          it.virtualData.key !== HEADER_COMPONENT,
-      )
-      .map(it => {
-        return {
-          ...it,
-          virtualData: {
-            key: it.virtualData.key,
-            data: it.virtualData.data,
-            index: it.virtualData.index,
-            maybeRef: it.virtualData.maybeRef,
-          },
-        };
-      });
+    const items = scrollState.items.filter(
+      it => !it.key.startsWith(LOADING_INDICATOR) && it.key !== HEADER_COMPONENT,
+    );
 
-    const newScrollState: ScrollState<T> = {
+    const newScrollState: { listHeight: number; items: { key: string; offsetTop: number }[] } = {
       listHeight: scrollState.listHeight,
-      scrollOffset: scrollState.scrollOffset,
       items,
     };
 

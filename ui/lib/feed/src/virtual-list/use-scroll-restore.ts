@@ -16,9 +16,15 @@ export type UseScrollRestoreProps = {
 export const useScrollRestore = <T>({ restoreKey, enabled }: UseScrollRestoreProps) => {
   const isRestored = React.useRef(false);
   const [isFetched, setIsFetched] = React.useState(false);
-  const [scrollState, setScrollState] = React.useState<ScrollState<T>>();
+  const [scrollState, setScrollState] = React.useState<{
+    listHeight: number;
+    items: { key: string; offsetTop: number }[];
+  }>();
 
-  const saveScrollState = (state: ScrollState<T>) => {
+  const saveScrollState = (state: {
+    listHeight: number;
+    items: { key: string; offsetTop: number }[];
+  }) => {
     if (!enabled) return;
     window.history.replaceState(
       Object.assign(window.history.state ?? {}, { [restoreKey]: state }),

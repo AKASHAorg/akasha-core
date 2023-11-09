@@ -74,25 +74,19 @@ export class VirtualizerCore<T> {
     return this.itemHeights.has(itemKey);
   };
   public computeInitialProjection = (
-    restoreItem: RestorationItem<T>,
+    restoreItem: { key: string; offsetTop: number },
     itemList: VirtualDataItem<T>[],
-    restorationItems: RestorationItem<T>[],
   ) => {
     const projectionItems: MountedItem<T>[] = [];
     if (!restoreItem) {
       return projectionItems;
     }
-    const viewportHeight =
-      this.options.viewport.getRect().getTop() + this.options.viewport.getDocumentViewportHeight();
-    let offsetTop = restoreItem.start || 0;
-    const idx = itemList.findIndex(item => item.key === restoreItem.virtualData.key);
+    const viewportHeight = this.options.viewport.getDocumentViewportHeight();
+    let offsetTop = restoreItem.offsetTop || 0;
+    const idx = itemList.findIndex(item => item.key === restoreItem.key);
     for (let i = idx; i < itemList.length && offsetTop < viewportHeight; i += 1) {
       const listItem = itemList[i];
-      const rstItem = restorationItems.find(restItem => restItem.virtualData.key === listItem.key);
-      const itemHeight = this.itemHeights.get(listItem.key) ?? rstItem?.height;
-      if (typeof itemHeight !== 'number') {
-        break;
-      }
+      const itemHeight = this.itemHeights.get(listItem.key) ?? this.itemHeightAverage;
       projectionItems.push({
         start: offsetTop,
         height: itemHeight,
@@ -103,14 +97,10 @@ export class VirtualizerCore<T> {
       });
       offsetTop = offsetTop + itemHeight + this.options.itemSpacing;
     }
-    offsetTop = restoreItem.start || 0;
+    offsetTop = restoreItem.offsetTop || 0;
     for (let i = idx - 1; i > -1 && offsetTop > 0; i -= 1) {
       const listItem = itemList[i];
-      const rstItem = restorationItems.find(restItem => restItem.virtualData.key === listItem.key);
-      const itemHeight = this.itemHeights.get(listItem.key) ?? rstItem?.height;
-      if (typeof itemHeight !== 'number') {
-        break;
-      }
+      const itemHeight = this.itemHeights.get(listItem.key) ?? this.itemHeightAverage;
       offsetTop = offsetTop - itemHeight + this.options.itemSpacing;
       projectionItems.unshift({
         start: offsetTop,
@@ -169,9 +159,7 @@ export class VirtualizerCore<T> {
     this.slice = nextProjection.slice;
 
     if (hasMeasuredHeights) {
-      window.requestAnimationFrame(() => {
-        this.initialMount = false;
-      });
+      this.initialMount = false;
     }
 
     if (hasDelta && mustMeasure) {
@@ -388,7 +376,7 @@ export class VirtualizerCore<T> {
     const distance = this.getDistanceFromTop(startItem.key, itemList);
     return startItem.start - distance;
   };
-  private getDistanceFromTop = (itemKey: string, itemList: VirtualDataItem<T>[]) => {
+  public getDistanceFromTop = (itemKey: string, itemList: VirtualDataItem<T>[]) => {
     const idx = itemList.findIndex(it => it.key === itemKey);
     if (idx >= 0) {
       return itemList

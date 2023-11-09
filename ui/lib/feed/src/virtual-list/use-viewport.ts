@@ -21,7 +21,7 @@ export const useViewport = (props: UseViewportProps) => {
     offsetTop: offsetTop,
   });
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!stateRef.current.rect) {
       const clientHeight = Math.ceil(window.document.documentElement.clientHeight);
       const height = Math.max(0, clientHeight - stateRef.current.offsetTop);
