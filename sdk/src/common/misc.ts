@@ -11,7 +11,7 @@ import { utils } from 'ethers';
 class AWF_Misc {
   private endPoint: string;
   private resolver: Resolver | undefined;
-  static readonly statsPath = '/api/service-status';
+  static readonly statsPath = "?query=%7BserviceStatus%7D";
 
   constructor() {
     const url = new URL(AWF_Misc.statsPath, process.env.GRAPHQL_URI);
@@ -33,7 +33,7 @@ class AWF_Misc {
   }
 
   public async getApiStatus() {
-    return fetch(this.endPoint, { method: 'GET' }).then(response => {
+    return fetch(this.endPoint, { method: 'GET', headers: {"apollo-require-preflight": "true"} }).then(response => {
       return { statusCode: response.status, success: response.ok };
     });
   }

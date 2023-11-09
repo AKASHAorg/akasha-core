@@ -10,6 +10,14 @@ import EventBus from '../common/event-bus';
 import { validate } from '../common/validator';
 import { z } from 'zod';
 import { ExecutionResult } from 'graphql/index';
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, Observable, split } from '@apollo/client';
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
+import { sha256 } from 'crypto-hash';
+
+const enum ContextSources{
+  DEFAULT = 1,
+  COMPOSEDB = 2,
+}
 
 /** @internal  */
 @injectable()
@@ -22,6 +30,7 @@ class Gql {
   private _log: pino.Logger;
   private _gqlStash: IQuickLRU;
   private _globalChannel: EventBus;
+  readonly apolloClient: ApolloClient<unknown>
 
   // create Apollo link object and initialize the stash
   public constructor (
@@ -39,14 +48,37 @@ class Gql {
       maxAge: 1000 * 60 * 2,
     }).data;
     this._ceramic = ceramic;
-    const { optionName } = this.mutationNotificationConfig;
-    const requester = async <R, V> (doc: DocumentNode, vars?: V, options?: unknown): Promise<R> => {
-      const call = this._ceramic
-        .getComposeClient()
-        .execute(doc, vars as Record<string, unknown> | undefined);
+    const composeDBlink = new ApolloLink((operation) => {
+      return new Observable((observer) => {
+        this._ceramic.getComposeClient().execute(operation.query, operation.variables).then(
+          (result) => {
+            observer.next(result);
+            observer.complete();
+          },
+          (error) => {
+            observer.error(error);
+          },
+        );
+      });
+    });
+    const directionalLink = split(
+      (operation) => {
+        return operation.getContext().source === this.contextSources.composeDB;
+      },
+      composeDBlink,
+      createPersistedQueryLink({ sha256 }).concat(new HttpLink({ uri: process.env.GRAPHQL_URI || 'http://localhost:4112/' })),
+    );
 
-      const result = options?.hasOwnProperty(optionName) ?
-        await this.wrapWithMutationEvent(call, JSON.stringify(options[optionName])) : await call;
+    this.apolloClient = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: directionalLink,
+    });
+    const requester = async <R, V> (doc: DocumentNode, vars?: V, options?: Record<string, any>): Promise<R> => {
+      const result = await this.queryClient({
+        query: doc,
+        variables: vars as Record<string, unknown> | undefined,
+        context: options?.context,
+      });
 
       if (!result.errors || !result.errors.length) {
         return result.data as R;
@@ -55,6 +87,17 @@ class Gql {
     };
 
     this._client = getSdk(requester);
+  }
+
+  get queryClient() {
+    return this.apolloClient.query;
+  }
+
+  get contextSources(){
+    return {
+      default: ContextSources.DEFAULT,
+      composeDB: ContextSources.COMPOSEDB
+    }
   }
 
   async wrapWithMutationEvent (c: Promise<ExecutionResult<Record<string, unknown>>>, m: string) {
@@ -72,7 +115,7 @@ class Gql {
         event: GQL_EVENTS.MUTATION,
       });
     } else {
-      sessionStorage.setItem(uuid, JSON.stringify({errors: result.errors, successInfo: m}));
+      sessionStorage.setItem(uuid, JSON.stringify({ errors: result.errors, successInfo: m }));
       this._globalChannel.next({
         data: { uuid, success: false, errors: result.errors, pending: false },
         event: GQL_EVENTS.MUTATION,
