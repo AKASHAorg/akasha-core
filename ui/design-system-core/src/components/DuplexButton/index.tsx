@@ -44,6 +44,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
   const [iconOnly, setIconOnly] = useState(window.matchMedia('(max-width: 992px)').matches);
   const activeHoverIconElem = activeHoverIcon ?? icon;
   const activeIconElem = activeIcon ?? icon;
+  const fixWidth = 'w-[7rem]';
 
   useEffect(() => {
     const mql = window.matchMedia('(max-width: 992px)');
@@ -63,7 +64,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
   }, [active]);
 
   if (loading) {
-    return <Button loading={true} label={active ? activeLabel : inactiveLabel} {...rest} />;
+    return <Button loading={true} customStyle={fixWidth} {...rest} />;
   }
 
   const getLabel = () => {
@@ -83,6 +84,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         plain
+        customStyle={fixWidth}
       >
         <Icon
           type={getIcon()}
@@ -102,7 +104,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
       variant={active ? activeVariant : inactiveVariant}
       size={size}
       hover={hovered && active}
-      customStyle={customStyle}
+      customStyle={`${customStyle} ${fixWidth}`}
       {...rest}
     />
   );
