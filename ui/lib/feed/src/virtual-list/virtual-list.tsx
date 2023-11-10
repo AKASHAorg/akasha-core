@@ -214,12 +214,13 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
             listHeight,
           },
           () => {
-            // viewport.preventNextScroll();
             viewport.scrollBy(viewport.getOffsetCorrection());
           },
         );
         scrollRestore.restore();
         prevItemListSize.current = itemList.length;
+      } else {
+        RAFUpdate('restore callback');
       }
       isScrollRestored.current = true;
     }
