@@ -1,8 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
+import DropDownFilter from '@akashaorg/design-system-components/lib/components/DropDownFilter';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
@@ -22,7 +21,7 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
   dropDownMenuItems,
   handleIconMenuClick,
 }) => {
-  const [filterByCategory, setfilterCategory] = React.useState(null);
+  const [filterByCategory, setFilterByCategory] = React.useState(null);
 
   const [showMenu, setShowMenu] = React.useState(false);
 
@@ -37,7 +36,7 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
   ];
 
   const resetHandler = () => {
-    setfilterCategory(dropDownMenuItems[0]);
+    setFilterByCategory(dropDownMenuItems[0]);
   };
 
   return (
@@ -58,27 +57,15 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
       </Stack>
 
       <div className={tw('flex justify-between items-center my-2')}>
-        <div className={tw('w-8/12 sm:w-full md:w-3/6')}>
-          <DropDown
-            name="filterByCategory"
+        <div className={tw('w-full')}>
+          <DropDownFilter
             selected={filterByCategory}
-            menuItems={dropDownMenuItems}
-            setSelected={setfilterCategory}
+            dropdownMenuItems={dropDownMenuItems}
+            setSelected={setFilterByCategory}
+            resetHandler={resetHandler}
+            resetLabel={resetLabel}
           />
         </div>
-
-        <Button variant="secondary" plain={true} size="md" onClick={resetHandler}>
-          <Text
-            variant="body2"
-            color={
-              filterByCategory?.id !== '0'
-                ? { light: 'secondaryLight', dark: 'secondaryDark' }
-                : { light: 'grey4', dark: 'grey7' }
-            }
-          >
-            {resetLabel}
-          </Text>
-        </Button>
       </div>
     </React.Fragment>
   );

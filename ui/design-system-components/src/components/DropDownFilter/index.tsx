@@ -20,7 +20,7 @@ const DropDownFilter: React.FC<DropDownFilterProps> = ({
 }) => {
   return (
     <Stack direction="row" justify="between" align="center" customStyle="my-6">
-      <Stack direction="row" customStyle="w-7/12 lg:w-2/6">
+      <Stack direction="row" customStyle="w-8/12 lg:w-2/6">
         <DropDown
           menuItems={dropdownMenuItems}
           selected={selected}
