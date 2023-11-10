@@ -20,7 +20,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-notifications');
   const { baseRouteName } = useRootComponentProps();
 
-  const { isLoggedIn, isLoading } = useLoggedIn();
+  const { isLoggedIn } = useLoggedIn();
 
   return (
     <Router basename={baseRouteName}>
@@ -37,7 +37,6 @@ const AppRoutes: React.FC<unknown> = () => {
               leftButtonLabel={t('Skip')}
               rightButtonLabel={t('Customize your notifications')}
               isLoggedIn={isLoggedIn}
-              isLoading={isLoading}
             />
           }
         />
@@ -57,7 +56,6 @@ const AppRoutes: React.FC<unknown> = () => {
               finalStep={true}
               rightButtonLabel={t('Go to my notifications')}
               isLoggedIn={isLoggedIn}
-              isLoading={isLoading}
             />
           }
         />

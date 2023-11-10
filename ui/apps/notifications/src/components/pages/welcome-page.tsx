@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps, useGetSettings, useSaveSettings } from '@akashaorg/ui-awf-hooks';
 import { NotificationEvents } from '@akashaorg/typings/lib/ui';
@@ -6,7 +6,6 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 
@@ -18,7 +17,6 @@ export type WelcomePageProps = {
   rightButtonLabel: string;
   finalStep?: boolean;
   isLoggedIn: boolean;
-  isLoading: boolean;
 };
 
 const WelcomePage: React.FC<WelcomePageProps> = props => {
@@ -30,11 +28,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
     image,
     finalStep = false,
     isLoggedIn,
-    isLoading,
   } = props;
-  React.useEffect(() => {
-    console.log('isLoggedIn ', isLoggedIn);
-  }, [isLoggedIn]);
 
   const { t } = useTranslation('app-notifications');
   const { baseRouteName, getRoutingPlugin, uiEvents } = useRootComponentProps();
@@ -97,11 +91,6 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
 
     goToNotificationsPage();
   };
-
-
-  if (isLoading) {
-    return <Spinner />;
-  }
 
   if (!finalStep && existingSettings) {
     return navigateTo?.({

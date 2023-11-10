@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useGetLogin } from './use-login.new';
 import { useQueryClient } from '@tanstack/react-query';
 import { useGetMyProfileQuery } from './generated/hooks-new';
@@ -13,20 +13,12 @@ import { LOGIN_STATE_KEY } from './use-login.new';
 export function useLoggedIn() {
   const loginQuery = useGetLogin();
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const myProfileQuery = useGetMyProfileQuery(null, {
     enabled: !!loginQuery.data?.id,
     //users who hasnt filled in their account info has no akashaProfile(null), but they are considered logged in if the viewer is not null
     select: response => response.viewer,
-    onSettled: () => {
-      setIsLoading(false);
-    },
   });
-  useEffect(() => {
-    if (loginQuery.isFetching) setIsLoading(true);
-    if (loginQuery.isFetched && !loginQuery.data?.id) setIsLoading(false);
-  }, [loginQuery.data?.id, loginQuery.isFetched, loginQuery.isFetching]);
 
   useEffect(() => {
     if (loginQuery.data?.id && !myProfileQuery.data) {
@@ -52,6 +44,5 @@ export function useLoggedIn() {
     ).toLowerCase(),
     userName: myProfileQuery.data?.akashaProfile?.name ?? '',
     avatar: myProfileQuery.data?.akashaProfile?.avatar ?? null,
-    isLoading: isLoading,
   };
 }
