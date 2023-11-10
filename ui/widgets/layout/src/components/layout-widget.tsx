@@ -244,7 +244,7 @@ const Layout: React.FC<unknown> = () => {
             </Stack>
 
             <Stack customStyle="fixed bottom-0 mr-4 mb-4">
-              <Widget name={layoutConfig.cookieWidgetSlotId} loadingIndicator={<Spinner />} />
+              <Widget name={layoutConfig.cookieWidgetSlotId} />
             </Stack>
           </Stack>
         </Stack>
