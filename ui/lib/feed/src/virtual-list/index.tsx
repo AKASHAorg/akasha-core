@@ -8,7 +8,7 @@ import {
   VirtualItemInfo,
 } from './virtual-item';
 import { useEdgeDetector, UseEdgeDetectorProps } from './use-edge-detector';
-import { ScrollState, useScrollRestore } from './use-scroll-restore';
+import { useScrollRestore } from './use-scroll-restore';
 import { Rect } from './rect';
 
 export const enum IndicatorPosition {
@@ -110,26 +110,18 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     onEdgeDetectorChange,
   });
 
-  const scrollRestore = useScrollRestore<T>({
+  const scrollRestore = useScrollRestore({
     restoreKey: restorationKey,
     enabled: typeof onScrollSave !== 'function',
   });
 
   const saveScroll = () => {
     const scrollState = vlistRef.current.getRestorationState();
-    const items = scrollState.items.filter(
-      it => !it.key.startsWith(LOADING_INDICATOR) && it.key !== HEADER_COMPONENT,
-    );
-
-    const newScrollState: { listHeight: number; items: { key: string; offsetTop: number }[] } = {
-      listHeight: scrollState.listHeight,
-      items,
-    };
 
     if (onScrollSave && typeof onScrollSave === 'function') {
-      onScrollSave(newScrollState);
+      onScrollSave(scrollState);
     } else {
-      scrollRestore.saveScrollState(newScrollState);
+      scrollRestore.saveScrollState(scrollState);
     }
   };
 

@@ -1,29 +1,24 @@
 import React from 'react';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
-import { RestorationItem } from './virtual-list';
-
-export type ScrollState<T> = {
-  listHeight: number;
-  scrollOffset: number;
-  items: RestorationItem<T>[];
-};
 
 export type UseScrollRestoreProps = {
   restoreKey: string;
   enabled: boolean;
 };
 
-export const useScrollRestore = <T>({ restoreKey, enabled }: UseScrollRestoreProps) => {
+export const useScrollRestore = ({ restoreKey, enabled }: UseScrollRestoreProps) => {
   const isRestored = React.useRef(false);
   const [isFetched, setIsFetched] = React.useState(false);
   const [scrollState, setScrollState] = React.useState<{
     listHeight: number;
     items: { key: string; offsetTop: number }[];
+    measurementsCache: Map<string, number>;
   }>();
 
   const saveScrollState = (state: {
     listHeight: number;
     items: { key: string; offsetTop: number }[];
+    measurementsCache: Map<string, number>;
   }) => {
     if (!enabled) return;
     window.history.replaceState(

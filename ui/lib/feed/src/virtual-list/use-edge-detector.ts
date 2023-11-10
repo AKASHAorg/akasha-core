@@ -53,16 +53,10 @@ export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
         filteredItems.at(-1).start + filteredItems.at(-1).height,
       );
       let newArea: EdgeArea;
-      if (
-        viewportRect.getTop() === listRect.getTop() &&
-        detectorState.current.newArea === EdgeArea.NEAR_TOP
-      ) {
+      if (viewportRect.getTop() === listRect.getTop()) {
         newArea = EdgeArea.TOP;
       }
-      if (
-        viewportRect.getBottom() === listRect.getBottom() &&
-        detectorState.current.newArea === EdgeArea.NEAR_BOTTOM
-      ) {
+      if (viewportRect.getBottom() === listRect.getBottom()) {
         newArea = EdgeArea.BOTTOM;
       }
       if (

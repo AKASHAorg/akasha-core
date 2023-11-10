@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const useDebounce = (cb: (...args: unknown[]) => void, delay: number) => {
+export const useDebounce = (cb: (...args: unknown[]) => void, delay: number, deps: unknown[]) => {
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout>>();
   React.useEffect(() => {
     return () => {
@@ -9,10 +9,15 @@ export const useDebounce = (cb: (...args: unknown[]) => void, delay: number) => 
       }
     };
   }, []);
-  return (...args: unknown[]) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => cb(...args), delay);
-  };
+
+  return React.useCallback(
+    (...args: unknown[]) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => cb(...args), delay);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [cb, delay, ...deps],
+  );
 };
