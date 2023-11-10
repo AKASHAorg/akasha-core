@@ -218,16 +218,13 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
           },
         );
         scrollRestore.restore();
-        prevItemListSize.current = itemList.length;
-      } else {
-        RAFUpdate('restore callback');
       }
       isScrollRestored.current = true;
     }
     if (prevItemListSize.current === itemList.length) {
       return;
     }
-    update('list update hook');
+    RAFUpdate('list update hook');
     prevItemListSize.current = itemList.length;
   }, [itemList, scrollRestore, listState, viewport, setListState, update]);
 
