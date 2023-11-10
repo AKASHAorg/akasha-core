@@ -113,7 +113,6 @@ export const VirtualItem = <T,>(props: VirtualItemProps<T>) => {
         top: itemOffset,
         position: 'absolute',
         width: '100%',
-        // transition: 'top 0.215s ease-in',
       }}
     >
       {item.render(item.data)}

@@ -87,11 +87,9 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
   const [listState, setListState] = useStateWithCallback<{
     mountedItems: VirtualItemInfo[];
     listHeight: number;
-    isTransitioning: boolean;
   }>({
     mountedItems: [],
     listHeight: 0,
-    isTransitioning: false,
   });
 
   const resizeObserver = useResizeObserver();
@@ -120,9 +118,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
       if (!viewportRect) {
         return;
       }
-      if (_debugFrom === 'item height update') {
-        console.log('state in update for item height update', listState.mountedItems);
-      }
       virtualCore.current.measureItemHeights();
       // @TODO: common item lags a bit behind. need to adjust the logic
       const projectionItem: VirtualItemInfo | undefined =
@@ -143,7 +138,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
           {
             mountedItems: newProjection.mountedItems,
             listHeight: newProjection.listHeight,
-            isTransitioning: !newProjection.hasCorrection,
           },
           () => {
             if (
@@ -218,7 +212,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
               visible: true,
             })),
             listHeight,
-            isTransitioning: true,
           },
           () => {
             // viewport.preventNextScroll();
@@ -370,7 +363,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
             batchedHeightUpdates.current.size >= overscan * 2,
         )
       ) {
-        console.log('state before item height update', listState.mountedItems);
         update('item height update');
         batchedHeightUpdates.current.clear();
       }
@@ -406,7 +398,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
         style={{
           position: 'relative',
           minHeight: listState.listHeight,
-          // transition: listState.isTransitioning ? 'min-height 0.15s linear' : undefined,
         }}
       >
         {projection.map(mounted => (
