@@ -2,6 +2,77 @@ import type * as Types from '@akashaorg/typings/lib/sdk/graphql-operation-types-
 
 import type { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
+export const IndexedBeamFragmentDoc = /*#__PURE__*/ gql`
+    fragment IndexedBeamFragment on IndexBeamPayloadDocument {
+  id
+  createdAt
+  beamID
+}
+    `;
+export const BeamFragmentMFragmentDoc = /*#__PURE__*/ gql`
+    fragment BeamFragmentM on AkashaBeam {
+  id
+  reflectionsCount
+  active
+  embeddedBeam {
+    label
+    embeddedID
+  }
+  author {
+    id
+    isViewer
+  }
+  content {
+    blockID
+    order
+  }
+  tags
+  version
+  createdAt
+  nsfw
+  reflections(last: 1) {
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+    `;
+export const ContentBlockFragmentMFragmentDoc = /*#__PURE__*/ gql`
+    fragment ContentBlockFragmentM on AkashaContentBlock {
+  id
+  content {
+    propertyType
+    value
+    label
+  }
+  active
+  appVersion {
+    application {
+      name
+      displayName
+      id
+    }
+    applicationID
+    id
+    version
+  }
+  appVersionID
+  createdAt
+  kind
+  author {
+    id
+    isViewer
+  }
+  version
+  nsfw
+}
+    `;
 export const BeamFragmentDoc = /*#__PURE__*/ gql`
     fragment BeamFragment on AkashaBeam {
   id
@@ -103,11 +174,31 @@ export const BlockStorageFragmentDoc = /*#__PURE__*/ gql`
   }
 }
     `;
-export const IndexedBeamFragmentDoc = /*#__PURE__*/ gql`
-    fragment IndexedBeamFragment on IndexBeamPayloadDocument {
+export const ReflectFragmentMFragmentDoc = /*#__PURE__*/ gql`
+    fragment ReflectFragmentM on AkashaReflect {
   id
+  author {
+    id
+    isViewer
+  }
+  version
+  active
+  content {
+    label
+    propertyType
+    value
+  }
+  isReply
+  reflection
   createdAt
-  beamID
+  beam {
+    id
+    author {
+      id
+      isViewer
+    }
+  }
+  nsfw
 }
     `;
 export const ReflectFragmentDoc = /*#__PURE__*/ gql`
@@ -135,6 +226,104 @@ export const ReflectFragmentDoc = /*#__PURE__*/ gql`
     }
   }
   nsfw
+}
+    `;
+export const UserProfileFragmentMFragmentDoc = /*#__PURE__*/ gql`
+    fragment UserProfileFragmentM on AkashaProfile {
+  id
+  did {
+    id
+    isViewer
+  }
+  name
+  links {
+    href
+    label
+  }
+  background {
+    alternatives {
+      src
+      width
+      height
+    }
+    default {
+      src
+      width
+      height
+    }
+  }
+  description
+  avatar {
+    default {
+      src
+      width
+      height
+    }
+    alternatives {
+      src
+      width
+      height
+    }
+  }
+  followers(last: 5) {
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+  }
+  createdAt
+  nsfw
+}
+    `;
+export const AkashaAppFragmentMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AkashaAppFragmentM on AkashaApp {
+  id
+  applicationType
+  description
+  licence
+  name
+  displayName
+  keywords
+  releases(last: 5) {
+    edges {
+      node {
+        id
+        createdAt
+        source
+        version
+      }
+      cursor
+    }
+  }
+  releasesCount
+  author {
+    id
+    isViewer
+    akashaProfile {
+      ...UserProfileFragmentM
+    }
+  }
+  contributors {
+    id
+    isViewer
+    akashaProfile {
+      ...UserProfileFragmentM
+    }
+  }
+}
+    `;
+export const AppReleaseFragmentMFragmentDoc = /*#__PURE__*/ gql`
+    fragment AppReleaseFragmentM on AkashaAppRelease {
+  application {
+    ...AkashaAppFragmentM
+  }
+  applicationID
+  id
+  source
+  version
+  createdAt
 }
     `;
 export const UserProfileFragmentDoc = /*#__PURE__*/ gql`
@@ -235,6 +424,55 @@ export const AppReleaseFragmentDoc = /*#__PURE__*/ gql`
   createdAt
 }
     `;
+export const IndexBeamDocument = /*#__PURE__*/ gql`
+    mutation IndexBeam($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexBeam(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedBeamFragment
+    }
+  }
+}
+    ${IndexedBeamFragmentDoc}`;
+export const CreateBeamDocument = /*#__PURE__*/ gql`
+    mutation CreateBeam($i: CreateAkashaBeamInput!) {
+  createAkashaBeam(input: $i) {
+    document {
+      ...BeamFragmentM
+    }
+    clientMutationId
+  }
+}
+    ${BeamFragmentMFragmentDoc}`;
+export const UpdateBeamDocument = /*#__PURE__*/ gql`
+    mutation UpdateBeam($i: UpdateAkashaBeamInput!) {
+  updateAkashaBeam(input: $i) {
+    document {
+      ...BeamFragmentM
+    }
+    clientMutationId
+  }
+}
+    ${BeamFragmentMFragmentDoc}`;
+export const CreateContentBlockDocument = /*#__PURE__*/ gql`
+    mutation CreateContentBlock($i: CreateAkashaContentBlockInput!) {
+  createAkashaContentBlock(input: $i) {
+    document {
+      ...ContentBlockFragmentM
+    }
+    clientMutationId
+  }
+}
+    ${ContentBlockFragmentMFragmentDoc}`;
+export const UpdateContentBlockDocument = /*#__PURE__*/ gql`
+    mutation UpdateContentBlock($i: UpdateAkashaContentBlockInput!) {
+  updateAkashaContentBlock(input: $i) {
+    document {
+      ...ContentBlockFragmentM
+    }
+    clientMutationId
+  }
+}
+    ${ContentBlockFragmentMFragmentDoc}`;
 export const GetBeamStreamDocument = /*#__PURE__*/ gql`
     query GetBeamStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaBeamStreamFiltersInput, $sorting: AkashaBeamStreamSortingInput) {
   node(id: $indexer) {
@@ -385,55 +623,26 @@ export const GetBlockStorageByIdDocument = /*#__PURE__*/ gql`
   }
 }
     ${BlockStorageFragmentDoc}`;
-export const CreateBeamDocument = /*#__PURE__*/ gql`
-    mutation CreateBeam($i: CreateAkashaBeamInput!) {
-  createAkashaBeam(input: $i) {
+export const CreateReflectDocument = /*#__PURE__*/ gql`
+    mutation CreateReflect($i: CreateAkashaReflectInput!) {
+  createAkashaReflect(input: $i) {
     document {
-      ...BeamFragment
+      ...ReflectFragmentM
     }
     clientMutationId
   }
 }
-    ${BeamFragmentDoc}`;
-export const UpdateBeamDocument = /*#__PURE__*/ gql`
-    mutation UpdateBeam($i: UpdateAkashaBeamInput!) {
-  updateAkashaBeam(input: $i) {
+    ${ReflectFragmentMFragmentDoc}`;
+export const UpdateAkashaReflectDocument = /*#__PURE__*/ gql`
+    mutation UpdateAkashaReflect($i: UpdateAkashaReflectInput!) {
+  updateAkashaReflect(input: $i) {
     document {
-      ...BeamFragment
+      ...ReflectFragmentM
     }
     clientMutationId
   }
 }
-    ${BeamFragmentDoc}`;
-export const CreateContentBlockDocument = /*#__PURE__*/ gql`
-    mutation CreateContentBlock($i: CreateAkashaContentBlockInput!) {
-  createAkashaContentBlock(input: $i) {
-    document {
-      ...ContentBlockFragment
-    }
-    clientMutationId
-  }
-}
-    ${ContentBlockFragmentDoc}`;
-export const UpdateContentBlockDocument = /*#__PURE__*/ gql`
-    mutation UpdateContentBlock($i: UpdateAkashaContentBlockInput!) {
-  updateAkashaContentBlock(input: $i) {
-    document {
-      ...ContentBlockFragment
-    }
-    clientMutationId
-  }
-}
-    ${ContentBlockFragmentDoc}`;
-export const IndexBeamDocument = /*#__PURE__*/ gql`
-    mutation IndexBeam($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
-  indexBeam(jws: $jws, capability: $capability) {
-    document {
-      ...IndexedBeamFragment
-    }
-  }
-}
-    ${IndexedBeamFragmentDoc}`;
+    ${ReflectFragmentMFragmentDoc}`;
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
     query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput) {
   node(id: $id) {
@@ -562,26 +771,101 @@ export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
   }
 }
     ${ReflectFragmentDoc}`;
-export const CreateReflectDocument = /*#__PURE__*/ gql`
-    mutation CreateReflect($i: CreateAkashaReflectInput!) {
-  createAkashaReflect(input: $i) {
+export const CreateProfileDocument = /*#__PURE__*/ gql`
+    mutation CreateProfile($i: CreateAkashaProfileInput!) {
+  createAkashaProfile(input: $i) {
     document {
-      ...ReflectFragment
+      ...UserProfileFragmentM
     }
     clientMutationId
   }
 }
-    ${ReflectFragmentDoc}`;
-export const UpdateAkashaReflectDocument = /*#__PURE__*/ gql`
-    mutation UpdateAkashaReflect($i: UpdateAkashaReflectInput!) {
-  updateAkashaReflect(input: $i) {
+    ${UserProfileFragmentMFragmentDoc}`;
+export const UpdateProfileDocument = /*#__PURE__*/ gql`
+    mutation UpdateProfile($i: UpdateAkashaProfileInput!) {
+  updateAkashaProfile(input: $i) {
     document {
-      ...ReflectFragment
+      ...UserProfileFragmentM
     }
     clientMutationId
   }
 }
-    ${ReflectFragmentDoc}`;
+    ${UserProfileFragmentMFragmentDoc}`;
+export const CreateInterestsDocument = /*#__PURE__*/ gql`
+    mutation CreateInterests($i: CreateAkashaProfileInterestsInput!) {
+  createAkashaProfileInterests(input: $i) {
+    document {
+      topics {
+        value
+        labelType
+      }
+      did {
+        id
+      }
+      id
+    }
+    clientMutationId
+  }
+}
+    `;
+export const UpdateInterestsDocument = /*#__PURE__*/ gql`
+    mutation UpdateInterests($i: UpdateAkashaProfileInterestsInput!) {
+  updateAkashaProfileInterests(input: $i) {
+    document {
+      topics {
+        value
+        labelType
+      }
+      did {
+        id
+      }
+      id
+    }
+    clientMutationId
+  }
+}
+    `;
+export const CreateFollowDocument = /*#__PURE__*/ gql`
+    mutation CreateFollow($i: CreateAkashaFollowInput!) {
+  createAkashaFollow(input: $i) {
+    document {
+      isFollowing
+      profile {
+        ...UserProfileFragmentM
+      }
+      did {
+        id
+      }
+      id
+    }
+  }
+}
+    ${UserProfileFragmentMFragmentDoc}`;
+export const UpdateFollowDocument = /*#__PURE__*/ gql`
+    mutation UpdateFollow($i: UpdateAkashaFollowInput!) {
+  updateAkashaFollow(input: $i) {
+    document {
+      isFollowing
+      profile {
+        ...UserProfileFragmentM
+      }
+      did {
+        id
+      }
+      id
+    }
+  }
+}
+    ${UserProfileFragmentMFragmentDoc}`;
+export const GetMyProfileDocument = /*#__PURE__*/ gql`
+    query GetMyProfile {
+  viewer {
+    akashaProfile {
+      ...UserProfileFragmentM
+    }
+  }
+}
+    ${UserProfileFragmentMFragmentDoc}`;
 export const GetProfileByIdDocument = /*#__PURE__*/ gql`
     query GetProfileByID($id: ID!) {
   node(id: $id) {
@@ -848,15 +1132,6 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
-export const GetMyProfileDocument = /*#__PURE__*/ gql`
-    query GetMyProfile {
-  viewer {
-    akashaProfile {
-      ...UserProfileFragment
-    }
-  }
-}
-    ${UserProfileFragmentDoc}`;
 export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
     query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
   viewer {
@@ -890,114 +1165,52 @@ export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
-export const CreateProfileDocument = /*#__PURE__*/ gql`
-    mutation CreateProfile($i: CreateAkashaProfileInput!) {
-  createAkashaProfile(input: $i) {
+export const CreateAppReleaseDocument = /*#__PURE__*/ gql`
+    mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
+  createAkashaAppRelease(input: $i) {
     document {
-      ...UserProfileFragment
+      ...AppReleaseFragmentM
     }
     clientMutationId
   }
 }
-    ${UserProfileFragmentDoc}`;
-export const UpdateProfileDocument = /*#__PURE__*/ gql`
-    mutation UpdateProfile($i: UpdateAkashaProfileInput!) {
-  updateAkashaProfile(input: $i) {
+    ${AppReleaseFragmentMFragmentDoc}
+${AkashaAppFragmentMFragmentDoc}
+${UserProfileFragmentMFragmentDoc}`;
+export const UpdateAppReleaseDocument = /*#__PURE__*/ gql`
+    mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!) {
+  updateAkashaAppRelease(input: $i) {
     document {
-      ...UserProfileFragment
+      ...AppReleaseFragmentM
     }
     clientMutationId
   }
 }
-    ${UserProfileFragmentDoc}`;
-export const CreateInterestsDocument = /*#__PURE__*/ gql`
-    mutation CreateInterests($i: CreateAkashaProfileInterestsInput!) {
-  createAkashaProfileInterests(input: $i) {
-    document {
-      topics {
-        value
-        labelType
-      }
-      did {
-        id
-      }
-      id
-    }
-    clientMutationId
-  }
-}
-    `;
-export const UpdateInterestsDocument = /*#__PURE__*/ gql`
-    mutation UpdateInterests($i: UpdateAkashaProfileInterestsInput!) {
-  updateAkashaProfileInterests(input: $i) {
-    document {
-      topics {
-        value
-        labelType
-      }
-      did {
-        id
-      }
-      id
-    }
-    clientMutationId
-  }
-}
-    `;
-export const CreateFollowDocument = /*#__PURE__*/ gql`
-    mutation CreateFollow($i: CreateAkashaFollowInput!) {
-  createAkashaFollow(input: $i) {
-    document {
-      isFollowing
-      profile {
-        ...UserProfileFragment
-      }
-      did {
-        id
-      }
-      id
-    }
-  }
-}
-    ${UserProfileFragmentDoc}`;
-export const UpdateFollowDocument = /*#__PURE__*/ gql`
-    mutation UpdateFollow($i: UpdateAkashaFollowInput!) {
-  updateAkashaFollow(input: $i) {
-    document {
-      isFollowing
-      profile {
-        ...UserProfileFragment
-      }
-      did {
-        id
-      }
-      id
-    }
-  }
-}
-    ${UserProfileFragmentDoc}`;
+    ${AppReleaseFragmentMFragmentDoc}
+${AkashaAppFragmentMFragmentDoc}
+${UserProfileFragmentMFragmentDoc}`;
 export const CreateAppDocument = /*#__PURE__*/ gql`
     mutation CreateApp($i: CreateAkashaAppInput!) {
   createAkashaApp(input: $i) {
     document {
-      ...AkashaAppFragment
+      ...AkashaAppFragmentM
     }
     clientMutationId
   }
 }
-    ${AkashaAppFragmentDoc}
-${UserProfileFragmentDoc}`;
+    ${AkashaAppFragmentMFragmentDoc}
+${UserProfileFragmentMFragmentDoc}`;
 export const UpdateAppDocument = /*#__PURE__*/ gql`
     mutation UpdateApp($i: UpdateAkashaAppInput!) {
   updateAkashaApp(input: $i) {
     document {
-      ...AkashaAppFragment
+      ...AkashaAppFragmentM
     }
     clientMutationId
   }
 }
-    ${AkashaAppFragmentDoc}
-${UserProfileFragmentDoc}`;
+    ${AkashaAppFragmentMFragmentDoc}
+${UserProfileFragmentMFragmentDoc}`;
 export const GetAppsDocument = /*#__PURE__*/ gql`
     query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput) {
   akashaAppIndex(
@@ -1067,30 +1280,6 @@ export const GetAppsByIdDocument = /*#__PURE__*/ gql`
 }
     ${AkashaAppFragmentDoc}
 ${UserProfileFragmentDoc}`;
-export const CreateAppReleaseDocument = /*#__PURE__*/ gql`
-    mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
-  createAkashaAppRelease(input: $i) {
-    document {
-      ...AppReleaseFragment
-    }
-    clientMutationId
-  }
-}
-    ${AppReleaseFragmentDoc}
-${AkashaAppFragmentDoc}
-${UserProfileFragmentDoc}`;
-export const UpdateAppReleaseDocument = /*#__PURE__*/ gql`
-    mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!) {
-  updateAkashaAppRelease(input: $i) {
-    document {
-      ...AppReleaseFragment
-    }
-    clientMutationId
-  }
-}
-    ${AppReleaseFragmentDoc}
-${AkashaAppFragmentDoc}
-${UserProfileFragmentDoc}`;
 export const GetAppsReleasesDocument = /*#__PURE__*/ gql`
     query GetAppsReleases($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppReleaseFiltersInput, $sorting: AkashaAppReleaseSortingInput) {
   akashaAppReleaseIndex(
@@ -1132,6 +1321,21 @@ ${UserProfileFragmentDoc}`;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
+    IndexBeam(variables?: Types.IndexBeamMutationVariables, options?: C): Promise<Types.IndexBeamMutation> {
+      return requester<Types.IndexBeamMutation, Types.IndexBeamMutationVariables>(IndexBeamDocument, variables, options) as Promise<Types.IndexBeamMutation>;
+    },
+    CreateBeam(variables: Types.CreateBeamMutationVariables, options?: C): Promise<Types.CreateBeamMutation> {
+      return requester<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables, options) as Promise<Types.CreateBeamMutation>;
+    },
+    UpdateBeam(variables: Types.UpdateBeamMutationVariables, options?: C): Promise<Types.UpdateBeamMutation> {
+      return requester<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables, options) as Promise<Types.UpdateBeamMutation>;
+    },
+    CreateContentBlock(variables: Types.CreateContentBlockMutationVariables, options?: C): Promise<Types.CreateContentBlockMutation> {
+      return requester<Types.CreateContentBlockMutation, Types.CreateContentBlockMutationVariables>(CreateContentBlockDocument, variables, options) as Promise<Types.CreateContentBlockMutation>;
+    },
+    UpdateContentBlock(variables: Types.UpdateContentBlockMutationVariables, options?: C): Promise<Types.UpdateContentBlockMutation> {
+      return requester<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables, options) as Promise<Types.UpdateContentBlockMutation>;
+    },
     GetBeamStream(variables: Types.GetBeamStreamQueryVariables, options?: C): Promise<Types.GetBeamStreamQuery> {
       return requester<Types.GetBeamStreamQuery, Types.GetBeamStreamQueryVariables>(GetBeamStreamDocument, variables, options) as Promise<Types.GetBeamStreamQuery>;
     },
@@ -1153,20 +1357,11 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetBlockStorageById(variables: Types.GetBlockStorageByIdQueryVariables, options?: C): Promise<Types.GetBlockStorageByIdQuery> {
       return requester<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables, options) as Promise<Types.GetBlockStorageByIdQuery>;
     },
-    CreateBeam(variables: Types.CreateBeamMutationVariables, options?: C): Promise<Types.CreateBeamMutation> {
-      return requester<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables, options) as Promise<Types.CreateBeamMutation>;
+    CreateReflect(variables: Types.CreateReflectMutationVariables, options?: C): Promise<Types.CreateReflectMutation> {
+      return requester<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables, options) as Promise<Types.CreateReflectMutation>;
     },
-    UpdateBeam(variables: Types.UpdateBeamMutationVariables, options?: C): Promise<Types.UpdateBeamMutation> {
-      return requester<Types.UpdateBeamMutation, Types.UpdateBeamMutationVariables>(UpdateBeamDocument, variables, options) as Promise<Types.UpdateBeamMutation>;
-    },
-    CreateContentBlock(variables: Types.CreateContentBlockMutationVariables, options?: C): Promise<Types.CreateContentBlockMutation> {
-      return requester<Types.CreateContentBlockMutation, Types.CreateContentBlockMutationVariables>(CreateContentBlockDocument, variables, options) as Promise<Types.CreateContentBlockMutation>;
-    },
-    UpdateContentBlock(variables: Types.UpdateContentBlockMutationVariables, options?: C): Promise<Types.UpdateContentBlockMutation> {
-      return requester<Types.UpdateContentBlockMutation, Types.UpdateContentBlockMutationVariables>(UpdateContentBlockDocument, variables, options) as Promise<Types.UpdateContentBlockMutation>;
-    },
-    IndexBeam(variables?: Types.IndexBeamMutationVariables, options?: C): Promise<Types.IndexBeamMutation> {
-      return requester<Types.IndexBeamMutation, Types.IndexBeamMutationVariables>(IndexBeamDocument, variables, options) as Promise<Types.IndexBeamMutation>;
+    UpdateAkashaReflect(variables: Types.UpdateAkashaReflectMutationVariables, options?: C): Promise<Types.UpdateAkashaReflectMutation> {
+      return requester<Types.UpdateAkashaReflectMutation, Types.UpdateAkashaReflectMutationVariables>(UpdateAkashaReflectDocument, variables, options) as Promise<Types.UpdateAkashaReflectMutation>;
     },
     GetReflectionsFromBeam(variables: Types.GetReflectionsFromBeamQueryVariables, options?: C): Promise<Types.GetReflectionsFromBeamQuery> {
       return requester<Types.GetReflectionsFromBeamQuery, Types.GetReflectionsFromBeamQueryVariables>(GetReflectionsFromBeamDocument, variables, options) as Promise<Types.GetReflectionsFromBeamQuery>;
@@ -1183,11 +1378,26 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetReflectReflections(variables: Types.GetReflectReflectionsQueryVariables, options?: C): Promise<Types.GetReflectReflectionsQuery> {
       return requester<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options) as Promise<Types.GetReflectReflectionsQuery>;
     },
-    CreateReflect(variables: Types.CreateReflectMutationVariables, options?: C): Promise<Types.CreateReflectMutation> {
-      return requester<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables, options) as Promise<Types.CreateReflectMutation>;
+    CreateProfile(variables: Types.CreateProfileMutationVariables, options?: C): Promise<Types.CreateProfileMutation> {
+      return requester<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options) as Promise<Types.CreateProfileMutation>;
     },
-    UpdateAkashaReflect(variables: Types.UpdateAkashaReflectMutationVariables, options?: C): Promise<Types.UpdateAkashaReflectMutation> {
-      return requester<Types.UpdateAkashaReflectMutation, Types.UpdateAkashaReflectMutationVariables>(UpdateAkashaReflectDocument, variables, options) as Promise<Types.UpdateAkashaReflectMutation>;
+    UpdateProfile(variables: Types.UpdateProfileMutationVariables, options?: C): Promise<Types.UpdateProfileMutation> {
+      return requester<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables, options) as Promise<Types.UpdateProfileMutation>;
+    },
+    CreateInterests(variables: Types.CreateInterestsMutationVariables, options?: C): Promise<Types.CreateInterestsMutation> {
+      return requester<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables, options) as Promise<Types.CreateInterestsMutation>;
+    },
+    UpdateInterests(variables: Types.UpdateInterestsMutationVariables, options?: C): Promise<Types.UpdateInterestsMutation> {
+      return requester<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables, options) as Promise<Types.UpdateInterestsMutation>;
+    },
+    CreateFollow(variables: Types.CreateFollowMutationVariables, options?: C): Promise<Types.CreateFollowMutation> {
+      return requester<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables, options) as Promise<Types.CreateFollowMutation>;
+    },
+    UpdateFollow(variables: Types.UpdateFollowMutationVariables, options?: C): Promise<Types.UpdateFollowMutation> {
+      return requester<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options) as Promise<Types.UpdateFollowMutation>;
+    },
+    GetMyProfile(variables?: Types.GetMyProfileQueryVariables, options?: C): Promise<Types.GetMyProfileQuery> {
+      return requester<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options) as Promise<Types.GetMyProfileQuery>;
     },
     GetProfileByID(variables: Types.GetProfileByIdQueryVariables, options?: C): Promise<Types.GetProfileByIdQuery> {
       return requester<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables, options) as Promise<Types.GetProfileByIdQuery>;
@@ -1222,29 +1432,14 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetFollowersListByDid(variables: Types.GetFollowersListByDidQueryVariables, options?: C): Promise<Types.GetFollowersListByDidQuery> {
       return requester<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables, options) as Promise<Types.GetFollowersListByDidQuery>;
     },
-    GetMyProfile(variables?: Types.GetMyProfileQueryVariables, options?: C): Promise<Types.GetMyProfileQuery> {
-      return requester<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options) as Promise<Types.GetMyProfileQuery>;
-    },
     GetFollowDocuments(variables?: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
       return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
     },
-    CreateProfile(variables: Types.CreateProfileMutationVariables, options?: C): Promise<Types.CreateProfileMutation> {
-      return requester<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options) as Promise<Types.CreateProfileMutation>;
+    CreateAppRelease(variables: Types.CreateAppReleaseMutationVariables, options?: C): Promise<Types.CreateAppReleaseMutation> {
+      return requester<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options) as Promise<Types.CreateAppReleaseMutation>;
     },
-    UpdateProfile(variables: Types.UpdateProfileMutationVariables, options?: C): Promise<Types.UpdateProfileMutation> {
-      return requester<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables, options) as Promise<Types.UpdateProfileMutation>;
-    },
-    CreateInterests(variables: Types.CreateInterestsMutationVariables, options?: C): Promise<Types.CreateInterestsMutation> {
-      return requester<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables, options) as Promise<Types.CreateInterestsMutation>;
-    },
-    UpdateInterests(variables: Types.UpdateInterestsMutationVariables, options?: C): Promise<Types.UpdateInterestsMutation> {
-      return requester<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables, options) as Promise<Types.UpdateInterestsMutation>;
-    },
-    CreateFollow(variables: Types.CreateFollowMutationVariables, options?: C): Promise<Types.CreateFollowMutation> {
-      return requester<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables, options) as Promise<Types.CreateFollowMutation>;
-    },
-    UpdateFollow(variables: Types.UpdateFollowMutationVariables, options?: C): Promise<Types.UpdateFollowMutation> {
-      return requester<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options) as Promise<Types.UpdateFollowMutation>;
+    UpdateAppRelease(variables: Types.UpdateAppReleaseMutationVariables, options?: C): Promise<Types.UpdateAppReleaseMutation> {
+      return requester<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options) as Promise<Types.UpdateAppReleaseMutation>;
     },
     CreateApp(variables: Types.CreateAppMutationVariables, options?: C): Promise<Types.CreateAppMutation> {
       return requester<Types.CreateAppMutation, Types.CreateAppMutationVariables>(CreateAppDocument, variables, options) as Promise<Types.CreateAppMutation>;
@@ -1260,12 +1455,6 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetAppsByID(variables: Types.GetAppsByIdQueryVariables, options?: C): Promise<Types.GetAppsByIdQuery> {
       return requester<Types.GetAppsByIdQuery, Types.GetAppsByIdQueryVariables>(GetAppsByIdDocument, variables, options) as Promise<Types.GetAppsByIdQuery>;
-    },
-    CreateAppRelease(variables: Types.CreateAppReleaseMutationVariables, options?: C): Promise<Types.CreateAppReleaseMutation> {
-      return requester<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options) as Promise<Types.CreateAppReleaseMutation>;
-    },
-    UpdateAppRelease(variables: Types.UpdateAppReleaseMutationVariables, options?: C): Promise<Types.UpdateAppReleaseMutation> {
-      return requester<Types.UpdateAppReleaseMutation, Types.UpdateAppReleaseMutationVariables>(UpdateAppReleaseDocument, variables, options) as Promise<Types.UpdateAppReleaseMutation>;
     },
     GetAppsReleases(variables?: Types.GetAppsReleasesQueryVariables, options?: C): Promise<Types.GetAppsReleasesQuery> {
       return requester<Types.GetAppsReleasesQuery, Types.GetAppsReleasesQueryVariables>(GetAppsReleasesDocument, variables, options) as Promise<Types.GetAppsReleasesQuery>;

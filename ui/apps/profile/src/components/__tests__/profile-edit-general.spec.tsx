@@ -3,7 +3,7 @@ import React from 'react';
 // @ts-ignore-next-line
 import EditProfilePage from '../pages/edit-profile';
 
-import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated';
 import * as useLoggedIn from '@akashaorg/ui-awf-hooks/lib/use-logged-in';
 
 import userEvent from '@testing-library/user-event';

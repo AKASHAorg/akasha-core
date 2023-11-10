@@ -6,7 +6,7 @@ import {
   ContentBlockExtensionInterface,
   ContentBlockModes,
 } from '@akashaorg/typings/lib/ui';
-import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { ParcelConfigObject } from 'single-spa';
 

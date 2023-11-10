@@ -121,21 +121,5 @@ query GetReflectReflections($id: String!, $after: String, $before: String, $firs
   }
 }
 
-mutation CreateReflect($i: CreateAkashaReflectInput!){
-  createAkashaReflect(input: $i){
-    document {
-      ...ReflectFragment
-    }
-    clientMutationId
-  }
-}
 
-mutation UpdateAkashaReflect($i: UpdateAkashaReflectInput!){
-  updateAkashaReflect(input: $i){
-    document {
-      ...ReflectFragment
-    }
-    clientMutationId
-  }
-}
 

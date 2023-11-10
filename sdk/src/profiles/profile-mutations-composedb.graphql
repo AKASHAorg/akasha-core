@@ -1,0 +1,133 @@
+fragment UserProfileFragmentM on AkashaProfile{
+  id
+  did{
+    id
+    isViewer
+  }
+  name
+  links{
+    href
+    label
+  }
+  background {
+    alternatives {
+      src
+      width
+      height
+    }
+    default {
+      src
+      width
+      height
+    }
+  }
+  description
+  avatar {
+    default {
+      src
+      width
+      height
+    }
+    alternatives {
+      src
+      width
+      height
+    }
+  }
+
+  followers(last: 5){
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+  }
+
+  createdAt
+  nsfw
+}
+
+# create new Profile document attached to did
+mutation CreateProfile($i: CreateAkashaProfileInput!){
+  createAkashaProfile(input: $i){
+    document {
+      ...UserProfileFragmentM
+    }
+    clientMutationId
+  }
+}
+
+# update an existing Profile document
+mutation UpdateProfile($i: UpdateAkashaProfileInput!){
+  updateAkashaProfile(input: $i){
+    document {
+      ...UserProfileFragmentM
+    }
+    clientMutationId
+  }
+}
+
+# create an Interests document for the authenticated Did account
+mutation CreateInterests($i: CreateAkashaProfileInterestsInput!){
+  createAkashaProfileInterests(input: $i){
+    document {
+      topics {
+        value
+        labelType
+      }
+      did {
+        id
+      }
+      id
+    }
+    clientMutationId
+  }
+}
+
+# update an existing Interests document for the authenticated Did account
+mutation UpdateInterests($i: UpdateAkashaProfileInterestsInput!){
+  updateAkashaProfileInterests(input: $i){
+    document {
+      topics {
+        value
+        labelType
+      }
+      did {
+        id
+      }
+      id
+    }
+    clientMutationId
+  }
+}
+
+mutation CreateFollow($i: CreateAkashaFollowInput!){
+  createAkashaFollow(input: $i){
+    document {
+      isFollowing
+      profile {
+        ...UserProfileFragmentM
+      }
+      did {
+        id
+      }
+      id
+    }
+  }
+}
+
+mutation UpdateFollow($i: UpdateAkashaFollowInput!){
+  updateAkashaFollow(input: $i){
+    document {
+      isFollowing
+      profile {
+        ...UserProfileFragmentM
+      }
+      did {
+        id
+      }
+      id
+    }
+  }
+}

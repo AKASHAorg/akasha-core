@@ -188,7 +188,8 @@ export default class AppLoader {
     // user logged in
     if (loginData && loginData.id) {
       this.user = { id: loginData.id };
-      this.loadUserExtensions().catch(err => this.logger.error(err));
+      //@Todo: fix this
+      //this.loadUserExtensions().catch(err => this.logger.error(err));
     }
   };
   handleLogout = () => {

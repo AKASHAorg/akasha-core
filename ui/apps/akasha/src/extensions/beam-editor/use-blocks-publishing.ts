@@ -6,7 +6,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 /**
  * Steps when publishBeam is called:

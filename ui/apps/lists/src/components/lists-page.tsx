@@ -11,7 +11,7 @@ import ListAppTopbar from '@akashaorg/design-system-components/lib/components/Li
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 const ListsPage: React.FC<unknown> = () => {
   const [showModal, setShowModal] = React.useState(false);

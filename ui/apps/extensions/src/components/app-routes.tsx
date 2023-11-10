@@ -8,7 +8,7 @@ import MasterPage from './pages/master-page';
 import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO, APPS } from '../routes';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
 import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { hiddenIntegrations } from '../hidden-integrations';
 
 const AppRoutes: React.FC<unknown> = () => {

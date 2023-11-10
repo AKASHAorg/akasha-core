@@ -282,6 +282,8 @@ class AWF_Auth {
     });
 
     this._db.create(`af-beta-${this.#_didSession.id}`);
+    await this._gql.resetCache();
+
     this._globalChannel.next({
       data: this.currentUser,
       event: AUTH_EVENTS.READY,
@@ -377,6 +379,7 @@ class AWF_Auth {
     await this._web3.disconnect();
     await this._lit.disconnect();
     await this._ceramic.disconnect();
+    await this._gql.resetCache();
     return true;
   }
 

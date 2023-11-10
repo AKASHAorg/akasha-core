@@ -21,7 +21,7 @@ import { AkashaReflect, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-typ
 import {
   useInfiniteGetReflectReflectionsQuery,
   useInfiniteGetReflectionsFromBeamQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import type { FeedWidgetCommonProps } from './app';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';

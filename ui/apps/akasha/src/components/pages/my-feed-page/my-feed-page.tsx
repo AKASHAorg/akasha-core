@@ -6,7 +6,7 @@ import { Profile } from '@akashaorg/typings/lib/ui';
 import {
   useGetInterestsByDidQuery,
   useInfiniteGetBeamsQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import StartCard from '@akashaorg/design-system-components/lib/components/StartCard';

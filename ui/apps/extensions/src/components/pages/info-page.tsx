@@ -5,7 +5,7 @@ import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo'
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getProfileImageVersionsWithMediaUrl, useLoggedIn } from '@akashaorg/ui-awf-hooks';
-import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 const InfoPage: React.FC<unknown> = () => {
   const { appId } = useParams<{ appId: string }>();

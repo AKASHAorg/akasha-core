@@ -10,7 +10,7 @@ import {
   useLogout,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import ConnectWallet from './connect-wallet';
 import ChooseProvider from './choose-provider';
 import { getInjectedProviderDetails } from '../../utils/getInjectedProvider';

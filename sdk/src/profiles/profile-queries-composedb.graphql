@@ -1,0 +1,7 @@
+query GetMyProfile{
+    viewer {
+        akashaProfile {
+            ...UserProfileFragmentM
+        }
+    }
+}
