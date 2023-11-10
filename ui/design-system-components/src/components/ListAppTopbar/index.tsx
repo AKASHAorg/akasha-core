@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import DropDownFilter from '@akashaorg/design-system-components/lib/components/DropDownFilter';
+import DropDownFilter from '../DropDownFilter';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
