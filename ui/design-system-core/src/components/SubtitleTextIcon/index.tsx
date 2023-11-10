@@ -59,7 +59,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
         </Stack>
       )}
 
-      <Stack customStyle="max-w(xl:[7rem] lg:[6rem] md:[6rem] xs:[2rem])">
+      <Stack customStyle="max-w(xl:[8rem] lg:[10rem] md:[6rem] xs:[2rem])">
         <Text variant="button-sm" weight="bold" truncate={true}>
           {label}
         </Text>
