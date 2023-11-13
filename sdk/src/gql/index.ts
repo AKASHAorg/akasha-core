@@ -109,6 +109,7 @@ class Gql {
     this.apolloClient = new ApolloClient({
       cache: this._apolloCache,
       link: directionalLink,
+      version: "0.1dev",
       defaultOptions: {
         watchQuery: {
           fetchPolicy: 'network-only',

@@ -5,7 +5,7 @@ on:
     branches:
       - next
     paths:
-      - 'build/**'
+      - 'sdk/**'
 jobs:
   publish:
     name: Update registry apps
