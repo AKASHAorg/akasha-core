@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetBeamsQuery } from './generated/hooks-new';
+import { useGetBeamsQuery } from './generated';
 import {
   AkashaBeamEdge,
   AkashaBeamFiltersInput,
