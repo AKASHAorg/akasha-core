@@ -12,7 +12,7 @@ import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { hasOwn, sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 export type EntryCardRendererProps = {
   itemData?: AkashaBeam;

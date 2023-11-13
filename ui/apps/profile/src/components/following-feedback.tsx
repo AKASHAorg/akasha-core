@@ -4,7 +4,7 @@ import { hasOwn, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateFollowMutation,
   useUpdateFollowMutation,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { AkashaFollowDocument } from '@akashaorg/typings/lib/ui';

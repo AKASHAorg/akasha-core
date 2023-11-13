@@ -17,7 +17,7 @@ import {
   useInfiniteGetReflectReflectionsQuery,
   useInfiniteGetReflectionsFromBeamQuery,
   useUpdateAkashaReflectMutation,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
 import { useQueryClient } from '@tanstack/react-query';

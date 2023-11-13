@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';

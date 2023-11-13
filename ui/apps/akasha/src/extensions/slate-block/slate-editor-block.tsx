@@ -13,7 +13,7 @@ import {
   RootExtensionProps,
 } from '@akashaorg/typings/lib/ui';
 import { Draft } from '../../utils';
-import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   AkashaContentBlockBlockDef,
   AkashaContentBlockLabeledValueInput,
