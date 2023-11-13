@@ -71,10 +71,18 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   contentBlocks: [
     {
       propertyType: 'slate-block',
-      icon: 'Bars3BottomLeftIcon',
+      icon: 'text',
       displayName: 'Slate text block',
       loadingFn: () => {
         return () => import('./extensions/slate-block');
+      },
+    },
+    {
+      propertyType: 'image-block',
+      icon: 'PhotoIcon',
+      displayName: 'Image block',
+      loadingFn: () => {
+        return () => import('./extensions/image-block');
       },
     },
   ],

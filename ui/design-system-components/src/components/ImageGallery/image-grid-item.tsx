@@ -6,8 +6,7 @@ import { DelayLoad } from '../../utils/delay-load';
 export interface ImageObject {
   originalSrc?: string;
   src: { url?: string; fallbackUrl?: string };
-  size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
-  id: string;
+  size: { width: number; height: number; naturalWidth?: number; naturalHeight?: number };
 }
 
 export interface IGridItemProps {

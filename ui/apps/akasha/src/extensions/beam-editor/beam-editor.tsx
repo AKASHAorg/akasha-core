@@ -87,7 +87,7 @@ export const BeamEditor: React.FC = () => {
   };
 
   return (
-    <Card customStyle="divide(y grey9 dark:grey3)" padding={0}>
+    <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] relative" padding={0}>
       <Header
         addBlockLabel={t('Add a Block')}
         beamEditorLabel={t('Beam Editor')}
@@ -96,7 +96,7 @@ export const BeamEditor: React.FC = () => {
         handleNsfwCheckbox={handleNsfwCheckbox}
         uiState={uiState}
       />
-      <Stack customStyle="relative">
+      <Stack customStyle="relative overflow-auto">
         <Stack>
           {blocksInUse.map((block, idx) => (
             <div key={`${block.propertyType}-${idx}`} id={`${block.propertyType}-${idx}`}>
@@ -115,7 +115,7 @@ export const BeamEditor: React.FC = () => {
                     <Stack
                       align="center"
                       justify="center"
-                      customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey3)'}
+                      customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
                     >
                       <Icon
                         size="xs"
@@ -139,7 +139,7 @@ export const BeamEditor: React.FC = () => {
         </Stack>
         <Stack
           background={{ light: 'white', dark: 'grey2' }}
-          customStyle={`absolute top-0 left-0 h-full w-full z-1 divide-y ${
+          customStyle={`absolute top-0 left-0 h-full w-full z-1 divide(y grey8 dark:grey5) ${
             uiState === 'blocks' ? 'flex' : 'hidden'
           }`}
         >
@@ -150,6 +150,7 @@ export const BeamEditor: React.FC = () => {
                 customStyle="w-full"
                 direction="row"
                 justify="between"
+                align="center"
                 background={
                   block.propertyType === selectedBlock?.propertyType && {
                     light: 'grey8',
@@ -157,9 +158,33 @@ export const BeamEditor: React.FC = () => {
                   }
                 }
               >
-                <Stack direction="row" spacing="gap-1">
-                  <Icon type={block.icon} />
-                  <Text>{block.displayName}</Text>
+                <Stack direction="row" align="center" spacing="gap-2">
+                  <Stack
+                    align="center"
+                    justify="center"
+                    customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
+                  >
+                    <Icon
+                      size="xs"
+                      accentColor={block.propertyType === selectedBlock?.propertyType}
+                      type={block.icon}
+                    />
+                  </Stack>
+                  <Text
+                    color={
+                      block.propertyType === selectedBlock?.propertyType
+                        ? {
+                            light: 'secondaryLight',
+                            dark: 'secondaryDark',
+                          }
+                        : {
+                            light: 'black',
+                            dark: 'white',
+                          }
+                    }
+                  >
+                    {block.displayName}
+                  </Text>
                 </Stack>
                 {block.propertyType === selectedBlock?.propertyType && (
                   <Icon type="CheckIcon" accentColor={true} />

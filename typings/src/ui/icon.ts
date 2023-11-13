@@ -32,6 +32,7 @@ export type IconType =
   | 'solana'
   | 'strikethrough'
   | 'telegram'
+  | 'text'
   | 'textcaseLower'
   | 'textcaseSentence'
   | 'textcaseUpper'

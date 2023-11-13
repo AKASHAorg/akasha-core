@@ -1,6 +1,6 @@
 import React, { useImperativeHandle } from 'react';
 import { useTranslation } from 'react-i18next';
-import {} from '@akashaorg/ui-awf-hooks';
+import { getMediaUrl, saveMediaFile } from '@akashaorg/ui-awf-hooks';
 import { BlockInstanceMethods, ContentBlockRootProps } from '@akashaorg/typings/lib/ui';
 
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
@@ -13,6 +13,8 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
+import ImageGallery from '@akashaorg/design-system-components/lib/components/ImageGallery';
+import { ImageObject } from '@akashaorg/design-system-components/lib/components/ImageGallery/image-grid-item';
 
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9r1pcwsu441cf';
@@ -72,35 +74,97 @@ export const ImageEditorBlock = (
     setImageLink(e.currentTarget.value);
   };
 
+  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
+  const [uploading, setUploading] = React.useState(false);
+  const [imageUploadDisabled, setImageUploadDisabled] = React.useState(false);
+
+  const [images, setImages] = React.useState<ImageObject[]>([]);
+
+  const handleMediaClick = () => {
+    if (uploadInputRef.current && !imageUploadDisabled) {
+      uploadInputRef.current.click();
+    }
+  };
+
+  const onUpload = async (image: File) => {
+    if (!image) return null;
+    setUiState('gallery');
+    setUploading(true);
+
+    const mediaFile = await saveMediaFile({
+      name: 'beam-block-image',
+      isUrl: false,
+      content: image,
+    });
+    setUploading(false);
+    if (!mediaFile) return null;
+
+    const mediaUri = `ipfs://${mediaFile.CID}`;
+
+    const mediaUrl = getMediaUrl(mediaUri);
+
+    const imageObj = {
+      size: { height: mediaFile.size.height, width: mediaFile.size.width },
+      src: { url: mediaUrl.originLink || mediaUrl.fallbackLink },
+    };
+    setImages(prev => [...prev, imageObj]);
+  };
+
+  const handleDeleteImage = (element: ImageObject) => {
+    const newImages = images.filter(image => image.src !== element.src);
+    if (newImages.length < 4) {
+      setImageUploadDisabled(false);
+    }
+    if (newImages.length === 0) {
+      setUiState('menu');
+    }
+    setImages(newImages);
+  };
+
+  const [uiState, setUiState] = React.useState('menu');
+
   return (
-    <Card background={{ dark: 'grey3', light: 'grey9' }}>
-      <Stack direction="column" padding={16} justify="evenly">
-        <Stack direction="column" spacing="gap-2">
-          <Stack direction="row" justify="between">
-            <Text variant="h5">{t('Add an image')} </Text>
-            <Text>{`${uploadedImages.length}/4 ${t('images')}`}</Text>
+    <>
+      {uiState === 'menu' && (
+        <Card background={{ dark: 'grey3', light: 'grey9' }}>
+          <Stack direction="column" spacing="gap-4">
+            <Stack direction="column" spacing="gap-2">
+              <Stack direction="row" justify="between">
+                <Text variant="h6">{t('Add an image')} </Text>
+                <Text variant="subtitle2">{`${uploadedImages.length}/4 ${t('images')}`}</Text>
+              </Stack>
+              <Text variant="subtitle2">
+                {t('You can upload JPEG, PNG, or WebP images to your Beam, up to 1.5MB each.')}
+              </Text>
+            </Stack>
+            <Stack direction="row" justify="between">
+              <Text variant="h6">{t('From Device')}</Text>
+              <Button label={t('Select')} variant="text" onClick={handleMediaClick} />
+            </Stack>
+            <Stack direction="column" spacing="gap-2">
+              <Text variant="subtitle2">{t('Or upload an image using a URL')}</Text>
+              <Stack direction="row" justify="between">
+                <TextField
+                  value={imageLink}
+                  placeholder={t('Paste image link')}
+                  type={'text'}
+                  onChange={handleChange}
+                />
+                <Button label={t('Upload')} variant="text" />
+              </Stack>
+            </Stack>
           </Stack>
-          <Text variant="subtitle1">
-            {t('You can upload JPEG, PNG, or WebP images to your Beam, up to 1.5MB each.')}
-          </Text>
-        </Stack>
-        <Stack direction="row" justify="between">
-          <Text variant="h5">{t('From Device')}</Text>
-          <Button label={t('Select')} variant="text" />
-        </Stack>
-        <Stack direction="column" spacing="gap-1">
-          <Text variant="subtitle1">{t('Or upload an image using a URL')}</Text>
-          <Stack direction="row" justify="between">
-            <TextField
-              value={imageLink}
-              placeholder={t('Paste image link')}
-              type={'text'}
-              onChange={handleChange}
-            />
-            <Button label={t('Upload')} variant="text" />
-          </Stack>
-        </Stack>
-      </Stack>
-    </Card>
+        </Card>
+      )}
+      {uiState === 'gallery' && uploading && <Stack>Loading</Stack>}
+      {uiState === 'gallery' && images.length && <ImageGallery images={images} />}
+      <input
+        ref={uploadInputRef}
+        type="file"
+        accept="image/png, image/jpeg, image/webp"
+        onChange={e => onUpload(e.target.files[0])}
+        hidden
+      />
+    </>
   );
 };

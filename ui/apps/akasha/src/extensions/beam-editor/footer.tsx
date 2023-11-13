@@ -101,7 +101,14 @@ export const Footer: React.FC<FooterProps> = props => {
   };
 
   return (
-    <Stack padding={16} justify={'between'} direction="row">
+    <Stack
+      padding={16}
+      fullWidth
+      justify="between"
+      direction="row"
+      customStyle="absolute bottom-0 left-0 rounded-b-xl"
+      background={{ light: 'white', dark: 'grey2' }}
+    >
       {renderContent()}
     </Stack>
   );

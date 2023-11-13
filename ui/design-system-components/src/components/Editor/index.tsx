@@ -475,9 +475,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
 
   return (
     <div
-      className={tw(
-        `flex flex-col justify-between w-full bg(white dark:grey2) h-[45vh] md:max-h-[38rem]`,
-      )}
+      className={tw(`flex flex-col justify-between w-full bg(white dark:grey2) md:max-h-[38rem]`)}
     >
       <div
         className={tw(
@@ -491,7 +489,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
             <Avatar avatar={avatar} profileId={profileId} />
           </div>
         )}
-        <div className={tw(`w-full p-2 flex flex-col overflow-auto`)}>
+        <div className={tw(`w-full py-2 flex flex-col overflow-auto`)}>
           <div className={tw(`w-full flex flex-col`)}>
             <Slate
               editor={editor}
@@ -549,7 +547,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
           </div>
         </div>
       </div>
-      <div className={tw(`flex flex-row w-full p-2 justify-between`)}>
+      <div className={tw(`flex flex-row w-full justify-between`)}>
         <div className={tw(`flex flex-row gap-2 items-center`)}>
           <div className={tw('sm:hidden')}>
             <Popover className="relative">
