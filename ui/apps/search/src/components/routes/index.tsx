@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
 import SettingsPage from './settings-page';

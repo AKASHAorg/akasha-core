@@ -13,7 +13,7 @@ import { useParams } from 'react-router';
 import {
   useGetFollowDocumentsQuery,
   useGetProfileByDidQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import { hasOwn, useLoggedIn, useValidDid } from '@akashaorg/ui-awf-hooks';
 
 type ProfileHeaderViewProps = {

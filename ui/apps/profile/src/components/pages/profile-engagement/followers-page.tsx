@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import {
   useGetFollowDocumentsQuery,
   useInfiniteGetFollowersListByDidQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   getProfileImageVersionsWithMediaUrl,
   hasOwn,

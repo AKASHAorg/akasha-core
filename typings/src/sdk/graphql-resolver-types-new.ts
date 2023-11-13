@@ -220,6 +220,12 @@ export type ResolversTypes = {
   AkashaReflectStreamObjectFilterInput: Types.AkashaReflectStreamObjectFilterInput;
   AkashaReflectStreamSortingInput: Types.AkashaReflectStreamSortingInput;
   BooleanValueFilterInput: Types.BooleanValueFilterInput;
+  CACAO_CAPABILITY: Types.Cacao_Capability;
+  CacaoHeader: Types.CacaoHeader;
+  CacaoHeaderT: ResolverTypeWrapper<Types.Scalars['CacaoHeaderT']['output']>;
+  CacaoPayload: Types.CacaoPayload;
+  CacaoSignature: Types.CacaoSignature;
+  CacaoSignatureT: ResolverTypeWrapper<Types.Scalars['CacaoSignatureT']['output']>;
   CeramicAccount: ResolverTypeWrapper<Types.CeramicAccount>;
   CeramicCommitID: ResolverTypeWrapper<Types.Scalars['CeramicCommitID']['output']>;
   CeramicStreamID: ResolverTypeWrapper<Types.Scalars['CeramicStreamID']['output']>;
@@ -254,8 +260,14 @@ export type ResolversTypes = {
   CreateAkashaReflectStreamInput: Types.CreateAkashaReflectStreamInput;
   CreateAkashaReflectStreamPayload: ResolverTypeWrapper<Types.CreateAkashaReflectStreamPayload>;
   DID: ResolverTypeWrapper<Types.Scalars['DID']['output']>;
+  DID_JWS: Types.Did_Jws;
   DateTime: ResolverTypeWrapper<Types.Scalars['DateTime']['output']>;
+  IndexBeamPayload: ResolverTypeWrapper<Types.IndexBeamPayload>;
+  IndexBeamPayloadDocument: ResolverTypeWrapper<Types.IndexBeamPayloadDocument>;
+  IndexProfilePayload: ResolverTypeWrapper<Types.IndexProfilePayload>;
+  IndexProfilePayloadDocument: ResolverTypeWrapper<Types.IndexProfilePayloadDocument>;
   InterPlanetaryCID: ResolverTypeWrapper<Types.Scalars['InterPlanetaryCID']['output']>;
+  JWS_Signature: Types.Jws_Signature;
   Mutation: ResolverTypeWrapper<{}>;
   Node: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Node']>;
   PageInfo: ResolverTypeWrapper<Types.PageInfo>;
@@ -309,6 +321,10 @@ export type ResolversTypes = {
   UpdateAkashaReflectStreamInput: Types.UpdateAkashaReflectStreamInput;
   UpdateAkashaReflectStreamPayload: ResolverTypeWrapper<Types.UpdateAkashaReflectStreamPayload>;
   UpdateOptionsInput: Types.UpdateOptionsInput;
+  join__FieldSet: ResolverTypeWrapper<Types.Scalars['join__FieldSet']['output']>;
+  join__Graph: Types.Join__Graph;
+  link__Import: ResolverTypeWrapper<Types.Scalars['link__Import']['output']>;
+  link__Purpose: Types.Link__Purpose;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -447,6 +463,12 @@ export type ResolversParentTypes = {
   AkashaReflectStreamObjectFilterInput: Types.AkashaReflectStreamObjectFilterInput;
   AkashaReflectStreamSortingInput: Types.AkashaReflectStreamSortingInput;
   BooleanValueFilterInput: Types.BooleanValueFilterInput;
+  CACAO_CAPABILITY: Types.Cacao_Capability;
+  CacaoHeader: Types.CacaoHeader;
+  CacaoHeaderT: Types.Scalars['CacaoHeaderT']['output'];
+  CacaoPayload: Types.CacaoPayload;
+  CacaoSignature: Types.CacaoSignature;
+  CacaoSignatureT: Types.Scalars['CacaoSignatureT']['output'];
   CeramicAccount: Types.CeramicAccount;
   CeramicCommitID: Types.Scalars['CeramicCommitID']['output'];
   CeramicStreamID: Types.Scalars['CeramicStreamID']['output'];
@@ -481,8 +503,14 @@ export type ResolversParentTypes = {
   CreateAkashaReflectStreamInput: Types.CreateAkashaReflectStreamInput;
   CreateAkashaReflectStreamPayload: Types.CreateAkashaReflectStreamPayload;
   DID: Types.Scalars['DID']['output'];
+  DID_JWS: Types.Did_Jws;
   DateTime: Types.Scalars['DateTime']['output'];
+  IndexBeamPayload: Types.IndexBeamPayload;
+  IndexBeamPayloadDocument: Types.IndexBeamPayloadDocument;
+  IndexProfilePayload: Types.IndexProfilePayload;
+  IndexProfilePayloadDocument: Types.IndexProfilePayloadDocument;
   InterPlanetaryCID: Types.Scalars['InterPlanetaryCID']['output'];
+  JWS_Signature: Types.Jws_Signature;
   Mutation: {};
   Node: ResolversInterfaceTypes<ResolversParentTypes>['Node'];
   PageInfo: Types.PageInfo;
@@ -535,7 +563,67 @@ export type ResolversParentTypes = {
   UpdateAkashaReflectStreamInput: Types.UpdateAkashaReflectStreamInput;
   UpdateAkashaReflectStreamPayload: Types.UpdateAkashaReflectStreamPayload;
   UpdateOptionsInput: Types.UpdateOptionsInput;
+  join__FieldSet: Types.Scalars['join__FieldSet']['output'];
+  link__Import: Types.Scalars['link__Import']['output'];
 };
+
+export type Join__EnumValueDirectiveArgs = {
+  graph: Types.Join__Graph;
+};
+
+export type Join__EnumValueDirectiveResolver<Result, Parent, ContextType = any, Args = Join__EnumValueDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type Join__FieldDirectiveArgs = {
+  external?: Types.Maybe<Types.Scalars['Boolean']['input']>;
+  graph?: Types.Maybe<Types.Join__Graph>;
+  override?: Types.Maybe<Types.Scalars['String']['input']>;
+  provides?: Types.Maybe<Types.Scalars['join__FieldSet']['input']>;
+  requires?: Types.Maybe<Types.Scalars['join__FieldSet']['input']>;
+  type?: Types.Maybe<Types.Scalars['String']['input']>;
+  usedOverridden?: Types.Maybe<Types.Scalars['Boolean']['input']>;
+};
+
+export type Join__FieldDirectiveResolver<Result, Parent, ContextType = any, Args = Join__FieldDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type Join__GraphDirectiveArgs = {
+  name: Types.Scalars['String']['input'];
+  url: Types.Scalars['String']['input'];
+};
+
+export type Join__GraphDirectiveResolver<Result, Parent, ContextType = any, Args = Join__GraphDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type Join__ImplementsDirectiveArgs = {
+  graph: Types.Join__Graph;
+  interface: Types.Scalars['String']['input'];
+};
+
+export type Join__ImplementsDirectiveResolver<Result, Parent, ContextType = any, Args = Join__ImplementsDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type Join__TypeDirectiveArgs = {
+  extension?: Types.Scalars['Boolean']['input'];
+  graph: Types.Join__Graph;
+  isInterfaceObject?: Types.Scalars['Boolean']['input'];
+  key?: Types.Maybe<Types.Scalars['join__FieldSet']['input']>;
+  resolvable?: Types.Scalars['Boolean']['input'];
+};
+
+export type Join__TypeDirectiveResolver<Result, Parent, ContextType = any, Args = Join__TypeDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type Join__UnionMemberDirectiveArgs = {
+  graph: Types.Join__Graph;
+  member: Types.Scalars['String']['input'];
+};
+
+export type Join__UnionMemberDirectiveResolver<Result, Parent, ContextType = any, Args = Join__UnionMemberDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type LinkDirectiveArgs = {
+  as?: Types.Maybe<Types.Scalars['String']['input']>;
+  for?: Types.Maybe<Types.Link__Purpose>;
+  import?: Types.Maybe<Array<Types.Maybe<Types.Scalars['link__Import']['input']>>>;
+  url?: Types.Maybe<Types.Scalars['String']['input']>;
+};
+
+export type LinkDirectiveResolver<Result, Parent, ContextType = any, Args = LinkDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type AkashaAppResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaApp'] = ResolversParentTypes['AkashaApp']> = {
   applicationType?: Resolver<Types.Maybe<ResolversTypes['AkashaAppApplicationType']>, ParentType, ContextType>;
@@ -962,6 +1050,14 @@ export type AkashaReflectStreamEdgeResolvers<ContextType = any, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface CacaoHeaderTScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['CacaoHeaderT'], any> {
+  name: 'CacaoHeaderT';
+}
+
+export interface CacaoSignatureTScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['CacaoSignatureT'], any> {
+  name: 'CacaoSignatureT';
+}
+
 export type CeramicAccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['CeramicAccount'] = ResolversParentTypes['CeramicAccount']> = {
   akashaAppList?: Resolver<Types.Maybe<ResolversTypes['AkashaAppConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppListArgs>>;
   akashaAppReleaseList?: Resolver<Types.Maybe<ResolversTypes['AkashaAppReleaseConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppReleaseListArgs>>;
@@ -1119,6 +1215,30 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type IndexBeamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexBeamPayload'] = ResolversParentTypes['IndexBeamPayload']> = {
+  document?: Resolver<Types.Maybe<ResolversTypes['IndexBeamPayloadDocument']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IndexBeamPayloadDocumentResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexBeamPayloadDocument'] = ResolversParentTypes['IndexBeamPayloadDocument']> = {
+  beamID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IndexProfilePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexProfilePayload'] = ResolversParentTypes['IndexProfilePayload']> = {
+  document?: Resolver<Types.Maybe<ResolversTypes['IndexProfilePayloadDocument']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IndexProfilePayloadDocumentResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexProfilePayloadDocument'] = ResolversParentTypes['IndexProfilePayloadDocument']> = {
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  profileID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface InterPlanetaryCidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['InterPlanetaryCID'], any> {
   name: 'InterPlanetaryCID';
 }
@@ -1139,6 +1259,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createAkashaProfileStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaProfileStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaProfileStreamArgs, 'input'>>;
   createAkashaReflect?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaReflectPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaReflectArgs, 'input'>>;
   createAkashaReflectStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaReflectStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaReflectStreamArgs, 'input'>>;
+  indexBeam?: Resolver<Types.Maybe<ResolversTypes['IndexBeamPayload']>, ParentType, ContextType, Partial<Types.MutationIndexBeamArgs>>;
+  indexProfile?: Resolver<Types.Maybe<ResolversTypes['IndexProfilePayload']>, ParentType, ContextType, Partial<Types.MutationIndexProfileArgs>>;
   updateAkashaApp?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppArgs, 'input'>>;
   updateAkashaAppRelease?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppReleasePayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppReleaseArgs, 'input'>>;
   updateAkashaAppsStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppsStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppsStreamArgs, 'input'>>;
@@ -1186,6 +1308,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   akashaReflectIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaReflectIndexArgs>>;
   akashaReflectStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaReflectStreamIndexArgs>>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.QueryNodeArgs, 'id'>>;
+  serviceStatus?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
 };
 
@@ -1313,6 +1436,14 @@ export type UpdateAkashaReflectStreamPayloadResolvers<ContextType = any, ParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface Join__FieldSetScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['join__FieldSet'], any> {
+  name: 'join__FieldSet';
+}
+
+export interface Link__ImportScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['link__Import'], any> {
+  name: 'link__Import';
+}
+
 export type Resolvers<ContextType = any> = {
   AkashaApp?: AkashaAppResolvers<ContextType>;
   AkashaAppConnection?: AkashaAppConnectionResolvers<ContextType>;
@@ -1368,6 +1499,8 @@ export type Resolvers<ContextType = any> = {
   AkashaReflectStream?: AkashaReflectStreamResolvers<ContextType>;
   AkashaReflectStreamConnection?: AkashaReflectStreamConnectionResolvers<ContextType>;
   AkashaReflectStreamEdge?: AkashaReflectStreamEdgeResolvers<ContextType>;
+  CacaoHeaderT?: GraphQLScalarType;
+  CacaoSignatureT?: GraphQLScalarType;
   CeramicAccount?: CeramicAccountResolvers<ContextType>;
   CeramicCommitID?: GraphQLScalarType;
   CeramicStreamID?: GraphQLScalarType;
@@ -1388,6 +1521,10 @@ export type Resolvers<ContextType = any> = {
   CreateAkashaReflectStreamPayload?: CreateAkashaReflectStreamPayloadResolvers<ContextType>;
   DID?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;
+  IndexBeamPayload?: IndexBeamPayloadResolvers<ContextType>;
+  IndexBeamPayloadDocument?: IndexBeamPayloadDocumentResolvers<ContextType>;
+  IndexProfilePayload?: IndexProfilePayloadResolvers<ContextType>;
+  IndexProfilePayloadDocument?: IndexProfilePayloadDocumentResolvers<ContextType>;
   InterPlanetaryCID?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;
@@ -1409,5 +1546,16 @@ export type Resolvers<ContextType = any> = {
   UpdateAkashaProfileStreamPayload?: UpdateAkashaProfileStreamPayloadResolvers<ContextType>;
   UpdateAkashaReflectPayload?: UpdateAkashaReflectPayloadResolvers<ContextType>;
   UpdateAkashaReflectStreamPayload?: UpdateAkashaReflectStreamPayloadResolvers<ContextType>;
+  join__FieldSet?: GraphQLScalarType;
+  link__Import?: GraphQLScalarType;
 };
 
+export type DirectiveResolvers<ContextType = any> = {
+  join__enumValue?: Join__EnumValueDirectiveResolver<any, any, ContextType>;
+  join__field?: Join__FieldDirectiveResolver<any, any, ContextType>;
+  join__graph?: Join__GraphDirectiveResolver<any, any, ContextType>;
+  join__implements?: Join__ImplementsDirectiveResolver<any, any, ContextType>;
+  join__type?: Join__TypeDirectiveResolver<any, any, ContextType>;
+  join__unionMember?: Join__UnionMemberDirectiveResolver<any, any, ContextType>;
+  link?: LinkDirectiveResolver<any, any, ContextType>;
+};

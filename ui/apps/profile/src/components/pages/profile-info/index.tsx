@@ -20,7 +20,7 @@ import {
   useRootComponentProps,
   useValidDid,
 } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 export type ProfilePageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;

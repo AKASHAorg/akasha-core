@@ -1,0 +1,83 @@
+fragment AkashaAppFragmentM on AkashaApp{
+  id
+  applicationType
+  description
+  licence
+  name
+  displayName
+  keywords
+  releases(last: 5){
+    edges {
+      node {
+        id
+        createdAt
+        source
+        version
+      }
+      cursor
+    }
+  }
+  releasesCount
+  author {
+    id
+    isViewer
+    akashaProfile {
+      ...UserProfileFragmentM
+    }
+  }
+  contributors {
+    id
+    isViewer
+    akashaProfile {
+      ...UserProfileFragmentM
+    }
+  }
+}
+
+fragment AppReleaseFragmentM on AkashaAppRelease{
+  application {
+    ...AkashaAppFragmentM
+  }
+  applicationID
+  id
+  source
+  version
+  createdAt
+}
+
+mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!){
+  createAkashaAppRelease(input: $i){
+    document {
+      ...AppReleaseFragmentM
+    }
+    clientMutationId
+  }
+}
+
+
+mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!){
+  updateAkashaAppRelease(input: $i){
+    document {
+      ...AppReleaseFragmentM
+    }
+    clientMutationId
+  }
+}
+
+mutation CreateApp($i: CreateAkashaAppInput!){
+  createAkashaApp(input: $i){
+    document {
+      ...AkashaAppFragmentM
+    }
+    clientMutationId
+  }
+}
+
+mutation UpdateApp($i: UpdateAkashaAppInput!){
+  updateAkashaApp(input: $i){
+    document {
+      ...AkashaAppFragmentM
+    }
+    clientMutationId
+  }
+}

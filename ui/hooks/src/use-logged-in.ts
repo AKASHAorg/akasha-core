@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useGetLogin } from './use-login.new';
 import { useQueryClient } from '@tanstack/react-query';
-import { useGetMyProfileQuery } from './generated/hooks-new';
+import { useGetMyProfileQuery } from './generated';
 import { LOGIN_STATE_KEY } from './use-login.new';
 /**
  * Hook for retrieving a flag to check if a user is logged in or not and the profile id of a user

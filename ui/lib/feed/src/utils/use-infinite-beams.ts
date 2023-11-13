@@ -3,7 +3,7 @@ import type { ScrollerState } from '@akashaorg/design-system-components/lib/comp
 import {
   useGetBeamsQuery,
   useInfiniteGetBeamsQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useGetScrollState, useRemoveScrollState, useSaveScrollState } from './use-scroll-state';
 import { ScrollStateDBWrapper } from './scroll-state-db';
