@@ -10,7 +10,7 @@ import EditorPage from './pages/editor-page/editor-page';
 import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, EDITOR } from '../routes';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import AntennaLoader from '@akashaorg/design-system-components/lib/components/Loaders/antenna-loader';
 

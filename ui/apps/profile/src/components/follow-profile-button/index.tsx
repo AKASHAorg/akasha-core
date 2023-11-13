@@ -9,7 +9,7 @@ import {
   useUpdateFollowMutation,
   useInfiniteGetFollowersListByDidQuery,
   useInfiniteGetFollowingListByDidQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useQueryClient } from '@tanstack/react-query';
 
 export type FollowProfileButtonProps = {

@@ -215,39 +215,6 @@ query GetBlockStorageById($id: ID!){
 }
 
 
-mutation CreateBeam($i: CreateAkashaBeamInput!){
-  createAkashaBeam(input: $i){
-    document {
-      ...BeamFragment
-    }
-    clientMutationId
-  }
-}
-
-mutation UpdateBeam($i: UpdateAkashaBeamInput!){
-  updateAkashaBeam(input: $i){
-    document {
-      ...BeamFragment
-    }
-    clientMutationId
-  }
-}
-
-mutation CreateContentBlock($i: CreateAkashaContentBlockInput!){
-  createAkashaContentBlock(input: $i){
-    document {
-      ...ContentBlockFragment
-    }
-    clientMutationId
-  }
-}
 
 
-mutation UpdateContentBlock($i: UpdateAkashaContentBlockInput!){
-  updateAkashaContentBlock(input: $i){
-    document {
-      ...ContentBlockFragment
-    }
-    clientMutationId
-  }
-}
+

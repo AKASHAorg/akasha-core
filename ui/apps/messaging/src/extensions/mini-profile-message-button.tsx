@@ -9,7 +9,7 @@ import {
   validateType,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 

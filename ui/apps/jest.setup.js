@@ -8,7 +8,7 @@ require('@testing-library/jest-dom/extend-expect');
 /**
  * sdk mock for Apps package.
  * Include only methods needed for the apps tests
- * 
+ *
  * using .doMock() here instead of .mock() to fix error about referencing out-of-scope variables.
  */
 jest.doMock('@akashaorg/awf-sdk', () => () => ({
@@ -21,6 +21,7 @@ jest.doMock('@akashaorg/awf-sdk', () => () => ({
   services: {
     gql: {
       mutationNotificationConfig: { optionName: 'testMutationConfig' },
+      contextSources: { composeDB: Symbol.for("composeDB"), default: Symbol.for("defaultContextSource") },
     },
     common: {
       misc: {

@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  CacaoHeaderT: { input: any; output: any; }
+  CacaoSignatureT: { input: any; output: any; }
   /** A Ceramic Commit ID */
   CeramicCommitID: { input: any; output: any; }
   /** A Ceramic Stream ID */
@@ -24,6 +26,8 @@ export type Scalars = {
   InterPlanetaryCID: { input: any; output: any; }
   /** A field whose value conforms to the standard Uniform Resource Identifier (URI) format as specified in RFC3986. */
   URI: { input: any; output: any; }
+  join__FieldSet: { input: any; output: any; }
+  link__Import: { input: any; output: any; }
   _FieldSet: { input: any; output: any; }
 };
 
@@ -1184,6 +1188,35 @@ export type BooleanValueFilterInput = {
   isNull?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type Cacao_Capability = {
+  h: CacaoHeader;
+  p: CacaoPayload;
+  s?: InputMaybe<CacaoSignature>;
+};
+
+export type CacaoHeader = {
+  t: Scalars['CacaoHeaderT']['input'];
+};
+
+export type CacaoPayload = {
+  aud: Scalars['String']['input'];
+  domain: Scalars['String']['input'];
+  exp?: InputMaybe<Scalars['String']['input']>;
+  iat: Scalars['String']['input'];
+  iss: Scalars['String']['input'];
+  nbf?: InputMaybe<Scalars['String']['input']>;
+  nonce: Scalars['String']['input'];
+  requestId?: InputMaybe<Scalars['String']['input']>;
+  resources?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  statement?: InputMaybe<Scalars['String']['input']>;
+  version: Scalars['String']['input'];
+};
+
+export type CacaoSignature = {
+  s: Scalars['String']['input'];
+  t: Scalars['CacaoSignatureT']['input'];
+};
+
 export type CeramicAccount = Node & {
   akashaAppList?: Maybe<AkashaAppConnection>;
   akashaAppReleaseList?: Maybe<AkashaAppReleaseConnection>;
@@ -1621,6 +1654,36 @@ export type CreateAkashaReflectStreamPayloadNodeArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type Did_Jws = {
+  payload: Scalars['String']['input'];
+  signatures: Array<Jws_Signature>;
+};
+
+export type IndexBeamPayload = {
+  document?: Maybe<IndexBeamPayloadDocument>;
+};
+
+export type IndexBeamPayloadDocument = {
+  beamID: Scalars['String']['output'];
+  createdAt: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+};
+
+export type IndexProfilePayload = {
+  document?: Maybe<IndexProfilePayloadDocument>;
+};
+
+export type IndexProfilePayloadDocument = {
+  createdAt: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  profileID: Scalars['String']['output'];
+};
+
+export type Jws_Signature = {
+  protected: Scalars['String']['input'];
+  signature: Scalars['String']['input'];
+};
+
 export type Mutation = {
   createAkashaApp?: Maybe<CreateAkashaAppPayload>;
   createAkashaAppRelease?: Maybe<CreateAkashaAppReleasePayload>;
@@ -1637,6 +1700,8 @@ export type Mutation = {
   createAkashaProfileStream?: Maybe<CreateAkashaProfileStreamPayload>;
   createAkashaReflect?: Maybe<CreateAkashaReflectPayload>;
   createAkashaReflectStream?: Maybe<CreateAkashaReflectStreamPayload>;
+  indexBeam?: Maybe<IndexBeamPayload>;
+  indexProfile?: Maybe<IndexProfilePayload>;
   updateAkashaApp?: Maybe<UpdateAkashaAppPayload>;
   updateAkashaAppRelease?: Maybe<UpdateAkashaAppReleasePayload>;
   updateAkashaAppsStream?: Maybe<UpdateAkashaAppsStreamPayload>;
@@ -1727,6 +1792,18 @@ export type MutationCreateAkashaReflectArgs = {
 
 export type MutationCreateAkashaReflectStreamArgs = {
   input: CreateAkashaReflectStreamInput;
+};
+
+
+export type MutationIndexBeamArgs = {
+  capability?: InputMaybe<Cacao_Capability>;
+  jws?: InputMaybe<Did_Jws>;
+};
+
+
+export type MutationIndexProfileArgs = {
+  capability?: InputMaybe<Cacao_Capability>;
+  jws?: InputMaybe<Did_Jws>;
 };
 
 
@@ -1968,6 +2045,7 @@ export type Query = {
   akashaReflectStreamIndex?: Maybe<AkashaReflectStreamConnection>;
   /** Fetches an object given its ID */
   node?: Maybe<Node>;
+  serviceStatus?: Maybe<Scalars['String']['output']>;
   /** Account currently authenticated on the Ceramic instance, if set */
   viewer?: Maybe<CeramicAccount>;
 };
@@ -2463,3 +2541,15 @@ export type UpdateOptionsInput = {
   /** Only perform mutation if the document matches the provided version */
   version?: InputMaybe<Scalars['CeramicCommitID']['input']>;
 };
+
+export enum Join__Graph {
+  Composedb = 'COMPOSEDB',
+  Streams = 'STREAMS'
+}
+
+export enum Link__Purpose {
+  /** `EXECUTION` features provide metadata necessary for operation execution. */
+  Execution = 'EXECUTION',
+  /** `SECURITY` features provide metadata necessary to securely resolve fields. */
+  Security = 'SECURITY'
+}

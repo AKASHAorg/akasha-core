@@ -14,7 +14,7 @@ import {
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
   useGetFollowDocumentsQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useQueryClient, useIsMutating } from '@tanstack/react-query';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';

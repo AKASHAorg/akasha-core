@@ -282,6 +282,8 @@ class AWF_Auth {
     });
 
     this._db.create(`af-beta-${this.#_didSession.id}`);
+    await this._gql.resetCache();
+
     this._globalChannel.next({
       data: this.currentUser,
       event: AUTH_EVENTS.READY,
@@ -377,6 +379,7 @@ class AWF_Auth {
     await this._web3.disconnect();
     await this._lit.disconnect();
     await this._ceramic.disconnect();
+    await this._gql.resetCache();
     return true;
   }
 
@@ -405,17 +408,13 @@ class AWF_Auth {
     return this.#_didSession.did.createJWS(data);
   }
 
-  /**
-   * Verify if a signature was made by a specific Public Key
-   * @param args - object containing the signature, the serialized data and the public key
-   */
-  @validate(
-    z.object({
-      pubKey: PubKeySchema,
-      data: z.union([z.string(), z.record(z.unknown()), z.instanceof(Uint8Array)]),
-      signature: z.union([z.string(), z.instanceof(Uint8Array)]),
-    }),
-  )
+  @validate(z.string().min(16))
+  async prepareIndexedID(id: string) {
+    const payload = { ID: id };
+    const jws = await this._signData(payload);
+    return { jws: jws, capability: this.#_didSession?.did.capability}
+  }
+
   async verifyDIDSignature(args: string | DagJWS) {
     return this._verifySignature(args);
   }

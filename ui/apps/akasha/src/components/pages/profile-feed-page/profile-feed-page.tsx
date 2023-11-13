@@ -8,7 +8,7 @@ import type { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui'
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 export type ProfilePageProps = {
   loggedProfileData: Profile;

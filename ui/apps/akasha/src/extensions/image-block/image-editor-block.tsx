@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {} from '@akashaorg/ui-awf-hooks';
 import { BlockInstanceMethods, ContentBlockRootProps } from '@akashaorg/typings/lib/ui';
 
-import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   AkashaContentBlockBlockDef,
   AkashaContentBlockLabeledValueInput,

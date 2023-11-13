@@ -18,7 +18,7 @@ import {
   useGetMyProfileQuery,
   useGetProfileByDidQuery,
   useUpdateFollowMutation,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const { plugins } = props;
