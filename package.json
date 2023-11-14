@@ -128,7 +128,8 @@
     "@multiformats/murmur3": "2.1.5",
     "single-spa": "5.9.5",
     "single-spa-react": "5.1.4",
-    "graphql": "16.8.1"
+    "graphql": "16.8.1",
+    "@apollo/client": "3.8.7"
   },
   "workspaces": {
     "packages": [

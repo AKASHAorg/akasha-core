@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@akashaorg/composedb-models": "*",
-    "@apollo/client": "^3.8.7",
+    "@apollo/client": "3.8.7",
     "@composedb/client": "0.5.2",
     "@didtools/cacao": "2.1.0",
     "@didtools/pkh-ethereum": "0.4.1",
@@ -73,6 +73,7 @@
     "@graphql-codegen/typescript-resolvers": "4.0.1",
     "@graphql-codegen/typescript-graphql-request": "5.0.0",
     "@graphql-codegen/typescript-react-query": "4.1.0",
+    "@graphql-codegen/typescript-react-apollo": "^4.1.0",
     "@graphql-codegen/near-operation-file-preset": "2.5.0",
     "@nomiclabs/hardhat-ethers": "2.2.1",
     "@openzeppelin/hardhat-upgrades": "1.22.0",

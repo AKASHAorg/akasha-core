@@ -8,7 +8,6 @@ import type { DocumentNode } from 'graphql';
 import EventBus from '../common/event-bus';
 import { validate } from '../common/validator';
 import { z } from 'zod';
-import { ExecutionResult } from 'graphql/index';
 import {
   ApolloClient,
   ApolloLink,
@@ -16,11 +15,12 @@ import {
   InMemoryCache,
   Observable,
   split,
+  gql,
 } from '@apollo/client';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';
-import { gql } from 'graphql-tag';
 import { getMainDefinition } from '@apollo/client/utilities';
+import buildTypePolicies from './type-policies';
 
 const enum ContextSources {
   DEFAULT = 'gql#DEFAULT',
@@ -36,7 +36,7 @@ class Gql {
   private _log: pino.Logger;
   private _globalChannel: EventBus;
   private readonly _apolloCache: InMemoryCache;
-  readonly apolloClient: ApolloClient<unknown>;
+  readonly apolloClient: ApolloClient<any>;
   private readonly _contextSources: { default: symbol; composeDB: symbol; };
 
   public constructor (
@@ -51,6 +51,29 @@ class Gql {
       default: Symbol.for(ContextSources.DEFAULT),
       composeDB: Symbol.for(ContextSources.COMPOSEDB),
     });
+
+    /*
+     * composeDBLink
+     *
+     * This creates a new ApolloLink that handles sending GraphQL operations to ComposeDB.
+     *
+     * It customizes the handling of mutation operations:
+     *
+     * - Generates a UUID
+     * - Stores mutation details in sessionStorage using the UUID
+     * - Dispatches a "mutation started" event on the global event bus with the UUID
+     *
+     * On completion, it dispatches either a "mutation succeeded" or "mutation failed"
+     * event with the UUID to track status.
+     *
+     * Parameters:
+     *
+     * - operation: The GraphQL operation being sent
+     *
+     * Returns:
+     *
+     * - An Observable for the operation result
+    */
     const composeDBlink = new ApolloLink((operation) => {
       return new Observable((observer) => {
         const definition = getMainDefinition(operation.query);
@@ -96,6 +119,28 @@ class Gql {
         );
       });
     });
+
+    /*
+     * directionalLink
+     *
+     * Creates a split ApolloLink that routes GraphQL operations to different links
+     * based on the context source.
+     *
+     * Operations from the 'composeDB' context source will be sent to the composeDBLink.
+     *
+     * All other operations will be sent to a link that combines:
+     *
+     * - A persisted query link
+     * - A standard HTTP link to the GraphQL server
+     *
+     * Parameters:
+     *
+     * - operation: The GraphQL operation
+     *
+     * Returns:
+     *
+     * - The link to use for the operation based on its context source
+    */
     const directionalLink = split(
       (operation) => {
         return operation.getContext().source === this.contextSources.composeDB;
@@ -104,12 +149,20 @@ class Gql {
       createPersistedQueryLink({ sha256 }).concat(new HttpLink({ uri: process.env.GRAPHQL_URI || 'http://localhost:4112/' })),
     );
 
-    this._apolloCache = new InMemoryCache();
+    this._apolloCache = new InMemoryCache(
+      // {
+      //   typePolicies: {
+      //     CeramicAccount: {
+      //       keyFields: false,
+      //     },
+      //   },
+      // },
+    );
 
     this.apolloClient = new ApolloClient({
       cache: this._apolloCache,
       link: directionalLink,
-      version: "0.1dev",
+      version: '0.1dev',
       defaultOptions: {
         watchQuery: {
           fetchPolicy: 'network-only',
@@ -121,6 +174,25 @@ class Gql {
     this._client = getSdk(this.requester);
   }
 
+  /*
+   * requester
+   *
+   * Executes a GraphQL query or mutation using the configured Apollo client.
+   *
+   * Parameters:
+   *
+   * - doc: The GraphQL document, either a string or parsed DocumentNode
+   * - vars: Optional variables
+   * - options: Additional options like context
+   *
+   * Returns:
+   *
+   * - The result data if the request succeeded
+   *
+   * Throws:
+   *
+   * - Any errors from the GraphQL endpoint
+  */
   public requester = async <R, V> (doc: DocumentNode | string, vars?: V, options?: Record<string, any>): Promise<R> => {
     let query: DocumentNode;
     if (typeof doc === 'string') {
@@ -141,7 +213,7 @@ class Gql {
   };
 
   get queryClient () {
-    return this.apolloClient.query;
+    return this.apolloClient;
   }
 
   get contextSources () {

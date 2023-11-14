@@ -45,6 +45,28 @@ const config = {
                     useTypeImports: true
                   },
               },
+            '../ui/hooks/src/generated/apollo.ts': {
+              preset: 'import-types-preset',
+              presetConfig: {
+                typesPath: '@akashaorg/typings/lib/sdk/graphql-operation-types-new',
+              },
+              plugins: [
+                'typescript-react-apollo'
+              ],
+              config: {
+                federation: true,
+                skipTypename: true,
+                dedupeOperationSuffix: true,
+                dedupeFragments: true,
+                pureMagicComment: true,
+                useTypeImports: true,
+                addInfiniteQuery: true,
+                legacyMode: false,
+                exposeDocument: true,
+                exposeQueryKeys: true,
+                exposeMutationKeys: true,
+              },
+            },
             '../typings/src/sdk/graphql-resolver-types-new.ts': {
                 preset: 'import-types-preset',
                 presetConfig: {
