@@ -15,6 +15,8 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import ImageGallery from '@akashaorg/design-system-components/lib/components/ImageGallery';
 import { ImageObject } from '@akashaorg/design-system-components/lib/components/ImageGallery/image-grid-item';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
 
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9r1pcwsu441cf';
@@ -92,7 +94,7 @@ export const ImageEditorBlock = (
     setUploading(true);
 
     const mediaFile = await saveMediaFile({
-      name: 'beam-block-image',
+      name: image.name || 'beam-block-image',
       isUrl: false,
       content: image,
     });
@@ -106,6 +108,7 @@ export const ImageEditorBlock = (
     const imageObj = {
       size: { height: mediaFile.size.height, width: mediaFile.size.width },
       src: { url: mediaUrl.originLink || mediaUrl.fallbackLink },
+      name: image.name,
     };
     setImages(prev => [...prev, imageObj]);
   };
@@ -152,6 +155,18 @@ export const ImageEditorBlock = (
                 />
                 <Button label={t('Upload')} variant="text" />
               </Stack>
+            </Stack>
+            <Stack direction="column" spacing="gap-2" customStyle="overflow-auto">
+              {images.map((imageObj, index) => (
+                <Stack key={index} direction="row" justify="between">
+                  <Stack>
+                    <Image src={imageObj.src.url} customStyle="object-cotain w-8 h-8" />
+                  </Stack>
+                  <button onClick={() => handleDeleteImage(imageObj)}>
+                    <Icon accentColor type="XMarkIcon" />
+                  </button>
+                </Stack>
+              ))}
             </Stack>
           </Stack>
         </Card>
