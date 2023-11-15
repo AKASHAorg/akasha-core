@@ -27,19 +27,15 @@ const MenuSubItems: React.FC<MenuSubItemsProps> = props => {
           subRoute?.route === activeOption?.route || location.pathname.includes(subRoute?.route);
 
         return (
-          <Stack
+          <button
             key={subRoute.label + idx}
-            direction="row"
-            customStyle={'hover:bg-grey8 dark:hover:bg-grey5'}
+            onClick={e => {
+              e.preventDefault();
+              onOptionClick(menuItem, subRoute);
+            }}
           >
-            <button
-              onClick={e => {
-                e.preventDefault();
-                onOptionClick(menuItem, subRoute);
-              }}
-            >
+            <Stack direction="row" customStyle={'bg(hover:grey8 dark:hover:grey5)'}>
               <Stack
-                key={subRoute.label + idx}
                 customStyle={`ml-8 border(l-4 ${
                   isActive ? 'secondaryLight dark:secondaryDark' : 'grey9 dark:grey3'
                 })`}
@@ -55,8 +51,8 @@ const MenuSubItems: React.FC<MenuSubItemsProps> = props => {
                   {subRoute.label}
                 </Text>
               </Stack>
-            </button>
-          </Stack>
+            </Stack>
+          </button>
         );
       })}
     </Stack>
