@@ -40,7 +40,10 @@ const ListSidebarApps: React.FC<ListSidebarAppsProps> = props => {
       {appsWithSubroutes.map((app, idx) => (
         <Accordion
           key={app.label + idx}
-          customStyle="py-2 px-6 bg(hover:grey8 dark:hover:grey5)"
+          customStyle={`py-2 px-6 bg(hover:grey8 dark:hover:grey5) ${
+            location.pathname.includes(app.name) ? 'bg(grey8 dark:grey5)' : ''
+          }`}
+          open={app.subRoutes.some(r => location.pathname === `/${app.name}${r.route}`)} // sets initial value for toggle state and ensures that the app with active sub menu stays open even after refresh
           titleNode={<MenuItemLabel menuItem={app} />}
           contentNode={
             <MenuSubItems
