@@ -15,16 +15,24 @@ import {
   InMemoryCache,
   Observable,
   split,
-  gql,
+  gql, makeVar, FetchResult,
 } from '@apollo/client';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';
 import { getMainDefinition } from '@apollo/client/utilities';
 import buildTypePolicies from './type-policies';
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 
 const enum ContextSources {
   DEFAULT = 'gql#DEFAULT',
   COMPOSEDB = 'gql#COMPOSEDB',
+}
+
+declare const __DEV__: boolean;
+
+if (__DEV__) {  // Adds messages only in a dev environment
+  loadDevMessages();
+  loadErrorMessages();
 }
 
 /** @internal  */
@@ -52,69 +60,34 @@ class Gql {
       composeDB: Symbol.for(ContextSources.COMPOSEDB),
     });
 
-    /*
-     * composeDBLink
-     *
-     * This creates a new ApolloLink that handles sending GraphQL operations to ComposeDB.
-     *
-     * It customizes the handling of mutation operations:
-     *
-     * - Generates a UUID
-     * - Stores mutation details in sessionStorage using the UUID
-     * - Dispatches a "mutation started" event on the global event bus with the UUID
-     *
-     * On completion, it dispatches either a "mutation succeeded" or "mutation failed"
-     * event with the UUID to track status.
-     *
-     * Parameters:
-     *
-     * - operation: The GraphQL operation being sent
-     *
-     * Returns:
-     *
-     * - An Observable for the operation result
-    */
+  /*
+   * composeDBLink
+   *
+   * Creates an ApolloLink that sends GraphQL operations to ComposeDB.
+   *
+   * This uses the Ceramic service to get the ComposeDB client instance,
+   * and calls the execute() method on it, passing the operation's
+   * query and variables.
+   *
+   * The result or error is passed back to the Observable observer.
+   *
+   * Parameters:
+   *
+   * - operation: The GraphQL operation to send to ComposeDB
+   *
+   * Returns:
+   *
+   * - An Observable for the GraphQL operation result
+  */
     const composeDBlink = new ApolloLink((operation) => {
       return new Observable((observer) => {
-        const definition = getMainDefinition(operation.query);
-        let uuid: string = '';
-
-        if (definition.kind === 'OperationDefinition' && definition.operation === 'mutation') {
-          uuid = crypto.randomUUID();
-          sessionStorage.setItem(
-            uuid,
-            JSON.stringify({ name: operation.operationName, variables: operation.variables }),
-          );
-          this._globalChannel.next({
-            data: { uuid, success: false, pending: true, name: operation.operationName },
-            event: GQL_EVENTS.MUTATION,
-          });
-
-        }
-
         this._ceramic.getComposeClient().execute(operation.query, operation.variables).then(
           (result) => {
             observer.next(result);
-
-            if (uuid) {
-              this._globalChannel.next({
-                data: { uuid, success: true, pending: false, name: operation.operationName },
-                event: GQL_EVENTS.MUTATION,
-              });
-            }
-
             observer.complete();
           },
           (error) => {
             observer.error(error);
-
-            if (uuid) {
-              sessionStorage.setItem(uuid, JSON.stringify({ errors: JSON.stringify(error) }));
-              this._globalChannel.next({
-                data: { uuid, success: false, errors: error, pending: false },
-                event: GQL_EVENTS.MUTATION,
-              });
-            }
           },
         );
       });
@@ -177,21 +150,32 @@ class Gql {
   /*
    * requester
    *
-   * Executes a GraphQL query or mutation using the configured Apollo client.
+   * Sends a GraphQL operation to the Apollo client and handles errors.
    *
    * Parameters:
    *
-   * - doc: The GraphQL document, either a string or parsed DocumentNode
+   * - doc: The GraphQL document node or string
    * - vars: Optional variables
-   * - options: Additional options like context
+   * - options: Additional context options
    *
    * Returns:
    *
-   * - The result data if the request succeeded
+   * - The result data for queries
    *
-   * Throws:
+   * For mutations:
    *
-   * - Any errors from the GraphQL endpoint
+   * - Generates a UUID
+   * - Publishes mutation notifications via globalChannel
+   * - Stores errors in sessionStorage
+   * - Throws errors
+   *
+   * Checks if doc is a string and converts to DocumentNode.
+   *
+   * Checks for mutation and handles notifications.
+   *
+   * Otherwise sends as standard query.
+   *
+   * Throws errors if present.
   */
   public requester = async <R, V> (doc: DocumentNode | string, vars?: V, options?: Record<string, any>): Promise<R> => {
     let query: DocumentNode;
@@ -200,15 +184,47 @@ class Gql {
     } else {
       query = doc;
     }
-    const result = await this.apolloClient.query({
-      query: query,
-      variables: vars as Record<string, unknown> | undefined,
-      context: options?.context,
-    });
+    let uuid: string = '';
+    const definition = getMainDefinition(query);
+    let result: FetchResult<unknown, Record<string, unknown>, Record<string, unknown>>;
+    if (definition.kind === 'OperationDefinition' && definition.operation === 'mutation') {
+      uuid = crypto.randomUUID();
+      sessionStorage.setItem(
+        uuid,
+        JSON.stringify({ variables: definition.variableDefinitions }),
+      );
+      this._globalChannel.next({
+        data: { uuid, success: false, pending: true },
+        event: GQL_EVENTS.MUTATION,
+      });
+      result = await this.apolloClient.mutate({
+        mutation: query,
+        variables: vars as Record<string, unknown> | undefined,
+        context: options?.context,
+      });
+    }else {
+      result = await this.apolloClient.query({
+        query: query,
+        variables: vars as Record<string, unknown> | undefined,
+        context: options?.context,
+      });
+    }
 
     if (!result.errors || !result.errors.length) {
+      if (uuid) {
+        this._globalChannel.next({
+          data: { uuid, success: true, pending: false, variables: definition.variableDefinitions },
+          event: GQL_EVENTS.MUTATION,
+        });
+      }
       return result.data as R;
     }
+
+    sessionStorage.setItem(uuid, JSON.stringify({ errors: JSON.stringify(result.errors) }));
+    this._globalChannel.next({
+      data: { uuid, success: false, errors: result.errors, pending: false },
+      event: GQL_EVENTS.MUTATION,
+    });
     throw result.errors;
   };
 
