@@ -13,6 +13,7 @@ import {
   PageHeader,
   SubtitleRenderer,
 } from '../common';
+import { useAccordion } from '@akashaorg/ui-awf-hooks';
 
 export type ReportItemProps = PageHeaderProps &
   CategoryPillsProps &
@@ -20,12 +21,14 @@ export type ReportItemProps = PageHeaderProps &
     step: number;
     introLabel: string;
     subTextLabel: string;
-    accordionNodes: AccordionProps[];
+    accordionNodes: Omit<AccordionProps, 'accordionId' | 'open' | 'handleClick'>[];
     reasonPlaceholderLabel: string;
   };
 
 export const ReportItem: React.FC<ReportItemProps> = props => {
   const { step, introLabel, subTextLabel, accordionNodes, reasonPlaceholderLabel } = props;
+
+  const { active, handleAccordionClick } = useAccordion();
 
   return (
     <PageHeader {...props}>
@@ -44,7 +47,14 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
             <Stack spacing="gap-y-2">
               {accordionNodes.map(({ titleNode, contentNode }, idx) => (
                 <Stack key={idx}>
-                  <Accordion titleNode={titleNode} contentNode={contentNode} contentStyle="p-0" />
+                  <Accordion
+                    accordionId={idx}
+                    open={active === idx}
+                    titleNode={titleNode}
+                    contentNode={contentNode}
+                    handleClick={handleAccordionClick}
+                    contentStyle="p-0"
+                  />
                 </Stack>
               ))}
             </Stack>
