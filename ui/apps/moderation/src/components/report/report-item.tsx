@@ -49,7 +49,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
                 <Stack key={idx}>
                   <Accordion
                     accordionId={idx}
-                    open={active === idx}
+                    open={idx === active}
                     titleNode={titleNode}
                     contentNode={contentNode}
                     handleClick={handleAccordionClick}

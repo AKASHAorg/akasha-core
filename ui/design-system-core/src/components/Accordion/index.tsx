@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import Button from '../Button';
 import Divider from '../Divider';
@@ -28,8 +28,7 @@ const Accordion: React.FC<AccordionProps> = props => {
     handleClick,
   } = props;
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleToggle = useCallback(() => handleClick(accordionId), []);
+  const handleToggle = () => handleClick(accordionId);
 
   const headerUi = useMemo(
     () => (
@@ -47,18 +46,16 @@ const Accordion: React.FC<AccordionProps> = props => {
 
   return (
     <>
-      {headerDivider ? (
-        <Button plain={true} onClick={handleToggle} customStyle="w-full">
+      <Button plain={true} onClick={handleToggle} customStyle="w-full">
+        {headerDivider ? (
           <Stack direction="column" spacing="gap-y-4">
             {headerUi}
             <Divider />
           </Stack>
-        </Button>
-      ) : (
-        <Button plain={true} onClick={handleToggle} customStyle="w-full">
-          {headerUi}
-        </Button>
-      )}
+        ) : (
+          headerUi
+        )}
+      </Button>
 
       {open && <Stack customStyle={`${contentStyle}`}>{contentNode}</Stack>}
     </>
