@@ -8,26 +8,28 @@ import Stack from '../Stack';
 export type AccordionProps = {
   customStyle?: string;
   contentStyle?: string;
+  accordionId: number;
+  open: boolean;
+  headerDivider?: boolean;
   titleNode: React.ReactNode;
   contentNode: React.ReactNode;
-  open?: boolean;
-  headerDivider?: boolean;
+  handleClick: (id: number) => void;
 };
 
 const Accordion: React.FC<AccordionProps> = props => {
   const {
     customStyle = '',
     contentStyle = '',
-    titleNode,
-    contentNode,
+    accordionId,
     open,
     headerDivider,
+    titleNode,
+    contentNode,
+    handleClick,
   } = props;
 
-  // internal state for accordion toggle
-  const [isToggled, setIsToggled] = React.useState<boolean>(open);
-
-  const handleToggle = useCallback(() => setIsToggled(!isToggled), [isToggled]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleToggle = useCallback(() => handleClick(accordionId), []);
 
   const headerUi = useMemo(
     () => (
@@ -36,11 +38,11 @@ const Accordion: React.FC<AccordionProps> = props => {
         <Icon
           accentColor={true}
           customStyle="h-4, w-4 secondaryDark"
-          type={isToggled ? 'ChevronUpIcon' : 'ChevronDownIcon'}
+          type={open ? 'ChevronUpIcon' : 'ChevronDownIcon'}
         />
       </Stack>
     ),
-    [customStyle, isToggled, titleNode],
+    [customStyle, open, titleNode],
   );
 
   return (
@@ -58,7 +60,7 @@ const Accordion: React.FC<AccordionProps> = props => {
         </Button>
       )}
 
-      {isToggled && <Stack customStyle={`${contentStyle}`}>{contentNode}</Stack>}
+      {open && <Stack customStyle={`${contentStyle}`}>{contentNode}</Stack>}
     </>
   );
 };
