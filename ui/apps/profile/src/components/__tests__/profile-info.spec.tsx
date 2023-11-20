@@ -14,11 +14,6 @@ import { Profile } from '@akashaorg/typings/lib/ui';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { AkashaFollow } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
-jest.mock('@akashaorg/ui-awf-hooks/lib/generated', () => ({
-  __esModule: true,
-  ...jest.requireActual('@akashaorg/ui-awf-hooks/lib/generated'),
-}));
-
 describe('< ProfileInfoPage />', () => {
   const navigateTo = jest.fn();
 

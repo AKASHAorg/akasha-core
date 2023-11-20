@@ -12,11 +12,6 @@ import { renderWithAllProviders, act, screen, genUser, waitFor } from '@akashaor
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { MemoryRouter as Router } from 'react-router-dom';
 
-jest.mock('@akashaorg/ui-awf-hooks/lib/generated', () => ({
-  __esModule: true,
-  ...jest.requireActual('@akashaorg/ui-awf-hooks/lib/generated'),
-}));
-
 describe('<EditProfilePage />', () => {
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
