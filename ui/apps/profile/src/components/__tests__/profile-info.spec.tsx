@@ -7,13 +7,17 @@ import ProfileInfoPage from '../pages/profile-info';
 import withProfileHeader from '../../components/profile-header-hoc';
 
 import userEvent from '@testing-library/user-event';
-import hooks from '@akashaorg/ui-awf-hooks/lib/generated';
+import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated';
 
 import { renderWithAllProviders, act, screen, genUser, waitFor } from '@akashaorg/af-testing';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { AkashaFollow } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
+jest.mock('@akashaorg/ui-awf-hooks/lib/generated', () => ({
+  __esModule: true,
+  ...jest.requireActual('@akashaorg/ui-awf-hooks/lib/generated'),
+}));
 
 describe('< ProfileInfoPage />', () => {
   const navigateTo = jest.fn();

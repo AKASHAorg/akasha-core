@@ -3,7 +3,7 @@ import React from 'react';
 // @ts-ignore-next-line
 import EditProfilePage from '../pages/edit-profile';
 
-import hooks from '@akashaorg/ui-awf-hooks/lib/generated';
+import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated';
 import * as useLoggedIn from '@akashaorg/ui-awf-hooks/lib/use-logged-in';
 
 import userEvent from '@testing-library/user-event';
@@ -11,6 +11,11 @@ import userEvent from '@testing-library/user-event';
 import { renderWithAllProviders, act, screen, genUser, waitFor } from '@akashaorg/af-testing';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { MemoryRouter as Router } from 'react-router-dom';
+
+jest.mock('@akashaorg/ui-awf-hooks/lib/generated', () => ({
+  __esModule: true,
+  ...jest.requireActual('@akashaorg/ui-awf-hooks/lib/generated'),
+}));
 
 describe('<EditProfilePage />', () => {
   const BaseComponent = (
