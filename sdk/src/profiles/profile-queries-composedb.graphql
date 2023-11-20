@@ -5,3 +5,28 @@ query GetMyProfile{
         }
     }
 }
+
+query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]){
+  viewer {
+    akashaFollowList(after: $after, before: $before, first: $first, last: $last, filters: {where: {profileID: {in: $following}}}, sorting: $sorting){
+      edges {
+        node {
+          id
+          isFollowing
+          profileID
+          profile {
+            ...UserProfileFragmentM
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    isViewer
+  }
+}

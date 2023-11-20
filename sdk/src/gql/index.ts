@@ -15,7 +15,8 @@ import {
   InMemoryCache,
   Observable,
   split,
-  gql, makeVar, FetchResult,
+  gql,
+  FetchResult,
 } from '@apollo/client';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';

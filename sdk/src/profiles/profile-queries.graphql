@@ -270,29 +270,6 @@ query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: I
 }
 
 
-query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]){
-  viewer {
-    akashaFollowList(after: $after, before: $before, first: $first, last: $last, filters: {where: {profileID: {in: $following}}}, sorting: $sorting){
-      edges {
-        node {
-          id
-          isFollowing
-          profileID
-          profile {
-            ...UserProfileFragment
-          }
-        }
-        cursor
-      }
-      pageInfo {
-        startCursor
-        endCursor
-        hasNextPage
-        hasPreviousPage
-      }
-    }
-    isViewer
-  }
-}
+
 
 

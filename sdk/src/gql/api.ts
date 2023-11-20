@@ -866,6 +866,39 @@ export const GetMyProfileDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentMFragmentDoc}`;
+export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
+    query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
+  viewer {
+    akashaFollowList(
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+      filters: {where: {profileID: {in: $following}}}
+      sorting: $sorting
+    ) {
+      edges {
+        node {
+          id
+          isFollowing
+          profileID
+          profile {
+            ...UserProfileFragmentM
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    isViewer
+  }
+}
+    ${UserProfileFragmentMFragmentDoc}`;
 export const GetProfileByIdDocument = /*#__PURE__*/ gql`
     query GetProfileByID($id: ID!) {
   node(id: $id) {
@@ -1132,39 +1165,6 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
-export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
-    query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
-  viewer {
-    akashaFollowList(
-      after: $after
-      before: $before
-      first: $first
-      last: $last
-      filters: {where: {profileID: {in: $following}}}
-      sorting: $sorting
-    ) {
-      edges {
-        node {
-          id
-          isFollowing
-          profileID
-          profile {
-            ...UserProfileFragment
-          }
-        }
-        cursor
-      }
-      pageInfo {
-        startCursor
-        endCursor
-        hasNextPage
-        hasPreviousPage
-      }
-    }
-    isViewer
-  }
-}
-    ${UserProfileFragmentDoc}`;
 export const CreateAppReleaseDocument = /*#__PURE__*/ gql`
     mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
   createAkashaAppRelease(input: $i) {
@@ -1399,6 +1399,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetMyProfile(variables?: Types.GetMyProfileQueryVariables, options?: C): Promise<Types.GetMyProfileQuery> {
       return requester<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options) as Promise<Types.GetMyProfileQuery>;
     },
+    GetFollowDocuments(variables?: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
+      return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
+    },
     GetProfileByID(variables: Types.GetProfileByIdQueryVariables, options?: C): Promise<Types.GetProfileByIdQuery> {
       return requester<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables, options) as Promise<Types.GetProfileByIdQuery>;
     },
@@ -1431,9 +1434,6 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetFollowersListByDid(variables: Types.GetFollowersListByDidQueryVariables, options?: C): Promise<Types.GetFollowersListByDidQuery> {
       return requester<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables, options) as Promise<Types.GetFollowersListByDidQuery>;
-    },
-    GetFollowDocuments(variables?: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
-      return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
     },
     CreateAppRelease(variables: Types.CreateAppReleaseMutationVariables, options?: C): Promise<Types.CreateAppReleaseMutation> {
       return requester<Types.CreateAppReleaseMutation, Types.CreateAppReleaseMutationVariables>(CreateAppReleaseDocument, variables, options) as Promise<Types.CreateAppReleaseMutation>;
