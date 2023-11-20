@@ -166,6 +166,30 @@ class AWF_Auth {
     return createFormattedValue(user);
   }
 
+/*
+Signs the user in and initializes the session.
+
+Parameters:
+- args:
+  - provider: The Ethereum provider to use.
+  - checkRegistered: Whether to check if the address is registered.
+  - resumeSignIn: Whether to resume a previous session.
+
+Functionality:
+1. Get the provider from the args or previous session.
+2. Connect the Ethereum address with the provider.
+3. Check if the address is registered if checkRegistered is true.
+4. Initialize the Ceramic DID session.
+5. Store the DID session encrypted in localStorage.
+6. Set the current user object.
+7. Notify subscribers of auth events.
+8. Create a DB instance for the user.
+9. Reset the GraphQL cache.
+10. Notify that auth is ready.
+
+Returns:
+- The CurrentUser object with auth status.
+*/
   private async _signIn(
     args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean } = {
       provider: EthProviders.Web3Injected,
