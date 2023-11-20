@@ -21,7 +21,7 @@ import {
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';
 import { getMainDefinition } from '@apollo/client/utilities';
-import buildTypePolicies from './type-policies';
+
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 
 const enum ContextSources {
@@ -123,15 +123,16 @@ class Gql {
       createPersistedQueryLink({ sha256 }).concat(new HttpLink({ uri: process.env.GRAPHQL_URI || 'http://localhost:4112/' })),
     );
 
-    this._apolloCache = new InMemoryCache(
-      // {
-      //   typePolicies: {
-      //     CeramicAccount: {
-      //       keyFields: false,
-      //     },
-      //   },
-      // },
-    );
+    this._apolloCache = new InMemoryCache({
+     typePolicies: {
+       AkashaBeam: {
+         merge: true,
+       },
+       AkashaReflectConnection: {
+         merge: true,
+       }
+     }
+    });
 
     this.apolloClient = new ApolloClient({
       cache: this._apolloCache,
