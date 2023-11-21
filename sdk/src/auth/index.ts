@@ -249,14 +249,20 @@ class AWF_Auth {
       data: {},
       event: AUTH_EVENTS.CONNECT_ADDRESS,
     });
-    await this._web3.connect();
-    await this._web3.checkCurrentNetwork();
-    const resp = await this._web3.getCurrentEthAddress();
-    this._globalChannel.next({
-      data: { address: resp },
-      event: AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS,
-    });
-    return resp;
+    const response = await this._web3.connect();
+    if(response.connected){
+      if(response.unsubscribe){
+        response.unsubscribe();
+      }
+      await this._web3.checkCurrentNetwork();
+      const resp = await this._web3.getCurrentEthAddress();
+      this._globalChannel.next({
+        data: { address: resp },
+        event: AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS,
+      });
+
+      return resp;
+    }
   }
 
   async connectAddress () {
@@ -294,6 +300,9 @@ class AWF_Auth {
     }
     const localUser = localStorage.getItem(this.currentUserKey);
 
+    if(!localUser){
+      return Promise.resolve(null);
+    }
     if (localUser) {
       this._globalChannel.next({
         data: { emit: true },
