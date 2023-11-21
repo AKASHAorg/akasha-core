@@ -1,0 +1,100 @@
+
+fragment BeamFragmentM on AkashaBeam{
+  id
+  reflectionsCount
+  active
+  embeddedBeam{
+    label
+    embeddedID
+  }
+  author{
+    id
+    isViewer
+  }
+  content {
+    blockID
+    order
+  }
+  tags
+  version
+  createdAt
+  nsfw
+  reflections(last: 1){
+    edges {
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+
+fragment ContentBlockFragmentM on AkashaContentBlock{
+  id
+  content {
+    propertyType
+    value
+    label
+  }
+  active
+  appVersion {
+    application {
+      name
+      displayName
+      id
+    }
+    applicationID
+    id
+    version
+  }
+  appVersionID
+  createdAt
+  kind
+  author {
+    id
+    isViewer
+  }
+  version
+  nsfw
+}
+
+
+mutation CreateBeam($i: CreateAkashaBeamInput!){
+  createAkashaBeam(input: $i){
+    document {
+      ...BeamFragmentM
+    }
+    clientMutationId
+  }
+}
+
+mutation UpdateBeam($i: UpdateAkashaBeamInput!){
+  updateAkashaBeam(input: $i){
+    document {
+      ...BeamFragmentM
+    }
+    clientMutationId
+  }
+}
+
+mutation CreateContentBlock($i: CreateAkashaContentBlockInput!){
+  createAkashaContentBlock(input: $i){
+    document {
+      ...ContentBlockFragmentM
+    }
+    clientMutationId
+  }
+}
+
+
+mutation UpdateContentBlock($i: UpdateAkashaContentBlockInput!){
+  updateAkashaContentBlock(input: $i){
+    document {
+      ...ContentBlockFragmentM
+    }
+    clientMutationId
+  }
+}

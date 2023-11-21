@@ -12,7 +12,7 @@ import {
   useGetFollowDocumentsQuery,
   useGetProfileByDidQuery,
   useInfiniteGetFollowingListByDidQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   getProfileImageVersionsWithMediaUrl,
   hasOwn,

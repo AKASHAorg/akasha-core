@@ -45,24 +45,6 @@ fragment AppReleaseFragment on AkashaAppRelease{
   createdAt
 }
 
-mutation CreateApp($i: CreateAkashaAppInput!){
-  createAkashaApp(input: $i){
-    document {
-      ...AkashaAppFragment
-    }
-    clientMutationId
-  }
-}
-
-mutation UpdateApp($i: UpdateAkashaAppInput!){
-  updateAkashaApp(input: $i){
-    document {
-      ...AkashaAppFragment
-    }
-    clientMutationId
-  }
-}
-
 query GetApps($after: String, $before: String, $first: Int, $last: Int, $filters: AkashaAppFiltersInput, $sorting: AkashaAppSortingInput){
   akashaAppIndex(after: $after, before: $before, first: $first, last: $last, filters: $filters, sorting:  $sorting){
     edges {
@@ -110,25 +92,6 @@ query GetAppsByID($id: ID!) {
     ...on AkashaApp {
       ...AkashaAppFragment
     }
-  }
-}
-
-mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!){
-  createAkashaAppRelease(input: $i){
-    document {
-      ...AppReleaseFragment
-    }
-    clientMutationId
-  }
-}
-
-
-mutation UpdateAppRelease($i: UpdateAkashaAppReleaseInput!){
-  updateAkashaAppRelease(input: $i){
-    document {
-      ...AppReleaseFragment
-    }
-    clientMutationId
   }
 }
 

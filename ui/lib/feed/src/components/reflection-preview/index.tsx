@@ -2,7 +2,7 @@ import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import EditableReflection from '../editable-reflection';
-import { useGetReflectReflectionsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetReflectReflectionsQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';

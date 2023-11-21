@@ -11,6 +11,7 @@ import ListAppTopbar from '@akashaorg/design-system-components/lib/components/Li
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 const ListsPage: React.FC<unknown> = () => {
   const [showModal, setShowModal] = React.useState(false);
@@ -20,10 +21,16 @@ const ListsPage: React.FC<unknown> = () => {
 
   const bookmarkDelete = null;
 
+  const profileDataReq = useGetMyProfileQuery(null, {
+    select: resp => {
+      return resp.viewer?.akashaProfile;
+    },
+  });
+  const loggedProfileData = profileDataReq?.data;
+
   const { isLoggedIn } = useLoggedIn();
 
-  //temporary, replace with real query
-  const listsReq = { isFetched: true, data: null, status: 'success', error: null };
+  const listsReq = null;
   const lists = listsReq?.data || [];
 
   const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);
@@ -38,7 +45,7 @@ const ListsPage: React.FC<unknown> = () => {
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!isLoggedIn) {
+    if (!loggedProfileData?.did?.id) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     navigateToModal({ name: 'report-modal', itemId, itemType });
@@ -82,6 +89,15 @@ const ListsPage: React.FC<unknown> = () => {
       )}
 
       <Stack data-testid="lists" spacing="gap-8">
+        {/* <StartCard
+            title={t('Lists')}
+            subtitle={getSubtitleText()}
+            heading={t('✨ Save what inspires you ✨')}
+            description={description}
+            image={'/images/no-saved-posts-error.webp'}
+            showMainArea={!isLoggedIn}
+          /> */}
+
         {!listsReq?.isFetched && isLoggedIn && <Spinner />}
         {(!isLoggedIn || (listsReq?.isFetched && (!lists || !lists.length))) && (
           <DefaultEmptyCard

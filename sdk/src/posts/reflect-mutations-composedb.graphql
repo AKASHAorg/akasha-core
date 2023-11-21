@@ -1,0 +1,44 @@
+fragment ReflectFragmentM on AkashaReflect{
+  id
+  author {
+    id
+    isViewer
+  }
+  version
+  active
+  content {
+    label
+    propertyType
+    value
+  }
+  isReply
+  reflection
+  createdAt
+  beam {
+    id
+    author{
+      id
+      isViewer
+    }
+  }
+  nsfw
+}
+
+
+mutation CreateReflect($i: CreateAkashaReflectInput!){
+  createAkashaReflect(input: $i){
+    document {
+      ...ReflectFragmentM
+    }
+    clientMutationId
+  }
+}
+
+mutation UpdateAkashaReflect($i: UpdateAkashaReflectInput!){
+  updateAkashaReflect(input: $i){
+    document {
+      ...ReflectFragmentM
+    }
+    clientMutationId
+  }
+}

@@ -7,7 +7,7 @@ import ProfileInfoPage from '../pages/profile-info';
 import withProfileHeader from '../../components/profile-header-hoc';
 
 import userEvent from '@testing-library/user-event';
-import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated';
 
 import { renderWithAllProviders, act, screen, genUser, waitFor } from '@akashaorg/af-testing';
 import { Profile } from '@akashaorg/typings/lib/ui';

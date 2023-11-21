@@ -20,7 +20,16 @@ describe('<Accordion /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Accordion titleNode={Title} contentNode={Content} />, {});
+      componentWrapper = customRender(
+        <Accordion
+          accordionId={0}
+          open={true}
+          handleClick={jest.fn()}
+          titleNode={Title}
+          contentNode={Content}
+        />,
+        {},
+      );
     });
   });
 
@@ -32,7 +41,7 @@ describe('<Accordion /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('toggle when clicked correctly', () => {
+  it('toggles when clicked correctly', () => {
     const { container, getByText } = componentWrapper;
 
     const accordion = container.querySelector('div');

@@ -11,7 +11,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import {
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
-} from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+} from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   useShowFeedback,
   hasOwn,

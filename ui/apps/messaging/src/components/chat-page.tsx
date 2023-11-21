@@ -4,7 +4,7 @@ import { Profile } from '@akashaorg/typings/lib/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/hooks-new';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
 import { useLiveQuery } from 'dexie-react-hooks';

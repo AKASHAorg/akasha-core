@@ -43,6 +43,27 @@ export default class CeramicService {
     });
   }
 
+/*
+Creates an Ethereum account ID and DID session to authenticate with Ceramic.
+
+Parameters:
+- chainNameSpace: The Ethereum chain namespace ('eip155')
+- chainId: The Ethereum chain ID from the connected Web3 provider
+- chainIdNameSpace: The combined chain namespace and ID
+- ethAddress: The current Ethereum address from the Web3 connector
+- accountId: The Ethereum account ID created from the address and chain ID
+- web3Provider: The underlying Web3 provider instance
+- authMethod: The Ethereum authentication method for Ceramic
+- this._didSession: The Ceramic DID session
+
+Functionality:
+1. Get the Ethereum chain ID from the connected Web3 provider
+2. Get the current Ethereum address from Web3
+3. Create an Ethereum account ID from the address and chain ID
+4. Get the Ethereum authentication method from Web3
+5. Create a DID session with the authentication method
+6. Set the DID on the ComposeClient instance
+*/
   async connect(): Promise<DIDSession> {
     const chainNameSpace = 'eip155';
     const chainId = this._web3.networkId[this._web3.network];
