@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
@@ -53,7 +53,12 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           akashaProfileInterests: { topics: { value: string; labelType: string }[] };
         };
 
-        return akashaProfileInterests?.topics ?? [];
+        return (
+          akashaProfileInterests?.topics.map(topic => ({
+            value: topic.value,
+            labelType: topic.labelType,
+          })) ?? []
+        );
       },
     },
   );
@@ -83,7 +88,11 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const isMutatingInterests = useIsMutating({ mutationKey: useCreateInterestsMutation.getKey() });
 
   const latestTopics = latestTopicsReq.data || [];
-  const tagSubscriptions = isLoggedIn ? tagSubscriptionsReq.data : [];
+  const tagSubscriptions = useMemo(
+    () => (isLoggedIn ? tagSubscriptionsReq.data : []),
+    [isLoggedIn, tagSubscriptionsReq.data],
+  );
+
   const followList = isLoggedIn
     ? getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node))
     : null;

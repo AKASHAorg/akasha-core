@@ -30,7 +30,8 @@ const ListsPage: React.FC<unknown> = () => {
 
   const { isLoggedIn } = useLoggedIn();
 
-  const listsReq = null;
+  //temporary
+  const listsReq = { isFetched: true, data: null, status: 'success', error: null };
   const lists = listsReq?.data || [];
 
   const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);

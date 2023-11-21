@@ -87,7 +87,6 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
     : '';
 
-  console.log('customStyle', customStyle);
   return (
     <button ref={ref} className={tw(customStyle)} type="button" {...rest} disabled={disabled}>
       <Stack

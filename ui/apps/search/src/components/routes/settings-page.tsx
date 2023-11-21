@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ModalNavigationOptions, NotificationEvents } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, NotificationEvents, Profile } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -15,7 +15,7 @@ import routes, { RESULTS } from '../../routes';
 
 export type SettingsPageProps = {
   onError?: (err: Error) => void;
-  isLoggedIn: boolean;
+  loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
@@ -30,7 +30,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
   // check if show NSFW option has already been set
   React.useEffect(() => {
     if (window.localStorage) {
-      setShowNsfwContent(JSON.parse(localStorage.getItem('searchApp-showNsfwContent')));
+      setShowNsfwContent(Boolean(JSON.parse(localStorage.getItem('searchApp-showNsfwContent'))));
     }
   }, []);
 

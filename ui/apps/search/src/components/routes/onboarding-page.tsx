@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -11,12 +11,12 @@ import OnboardingStartCard from '@akashaorg/design-system-components/lib/compone
 
 export type OnboardingPageProps = {
   onError?: (err: Error) => void;
-  isLoggedIn: boolean;
+  loggedProfileData: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const OnboardingPage: React.FC<OnboardingPageProps> = props => {
-  const { isLoggedIn, showLoginModal } = props;
+  const { loggedProfileData, showLoginModal } = props;
 
   const { t } = useTranslation('app-search');
 
@@ -48,7 +48,7 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   };
 
   const toggleTagSubscribe = (tagName: string) => {
-    if (!isLoggedIn) {
+    if (!loggedProfileData) {
       showLoginModal();
       return;
     }
@@ -56,7 +56,7 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   };
 
   const handleFollow = (id: string) => {
-    if (!isLoggedIn) {
+    if (!loggedProfileData) {
       showLoginModal();
       return;
     }
@@ -64,7 +64,7 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   };
 
   const handleUnfollow = (id: string) => {
-    if (!isLoggedIn) {
+    if (!loggedProfileData) {
       showLoginModal();
       return;
     }
