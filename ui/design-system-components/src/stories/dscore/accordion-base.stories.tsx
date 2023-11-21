@@ -40,7 +40,13 @@ const content = (
 export const BaseAccordion: Story = {
   render: () => (
     <div className={tw('w-[15%]')}>
-      <Accordion titleNode={title} contentNode={content} />
+      <Accordion
+        accordionId={0}
+        open={true}
+        handleClick={() => null}
+        titleNode={title}
+        contentNode={content}
+      />
     </div>
   ),
 };

@@ -29,6 +29,7 @@ export { useValidDid } from './use-valid-did';
 export { useLoggedIn } from './use-logged-in';
 export { disconnectProvider, useInjectedProvider } from './use-injected-provider';
 export { useModerationCategory } from './use-moderation-categories';
+export { useAccordion } from './use-accordion';
 
 // the following hooks needs refactor/reimplementation
 export {
