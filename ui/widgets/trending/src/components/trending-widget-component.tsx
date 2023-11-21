@@ -7,6 +7,7 @@ import {
   useRootComponentProps,
   getFollowList,
   useLoggedIn,
+  hasOwn,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useGetProfilesQuery,
@@ -49,16 +50,13 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     {
       enabled: isLoggedIn,
       select: resp => {
-        const { akashaProfileInterests } = resp.node as {
-          akashaProfileInterests: { topics: { value: string; labelType: string }[] };
-        };
-
-        return (
-          akashaProfileInterests?.topics.map(topic => ({
+        if (hasOwn(resp.node, 'akashaProfileInterests')) {
+          return resp.node.akashaProfileInterests?.topics?.map(topic => ({
             value: topic.value,
             labelType: topic.labelType,
-          })) ?? []
-        );
+          }));
+        }
+        return [];
       },
     },
   );
