@@ -15,11 +15,11 @@ import { MemoryRouter as Router } from 'react-router-dom';
 describe('<EditProfilePage />', () => {
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
-      <EditProfilePage handleFeedback={jest.fn} />
+      <EditProfilePage handleProfileUpdatedFeedback={jest.fn} />
     </Router>
   );
 
-  const profile = genUser();
+  const profile = genUser('pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff');
 
   beforeEach(async () => {
     userEvent.setup();
