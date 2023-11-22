@@ -92,11 +92,19 @@ class Web3Connector {
   }
 
 
-  @validate(EthProvidersSchema)
-  async connect (): Promise<void> {
+  async connect (): Promise<{ connected: boolean, unsubscribe?: () => void }> {
     if (!this.#w3modal.getIsConnected()) {
-      await this.#w3modal.open({ view: 'Connect' });
+      return new Promise(async (resolve, reject) => {
+        const unsubscribe = this.#w3modal.subscribeProvider((state) => {
+          if (state.provider && state.isConnected && state.address) {
+            resolve({ connected: true, unsubscribe });
+          }
+        });
+        await this.#w3modal.open({ view: 'Connect' });
+      });
+
     }
+    return { connected: this.#w3modal.getIsConnected() };
   }
 
   #_registerWalletChangeEvents () {
@@ -143,7 +151,9 @@ class Web3Connector {
   async disconnect (): Promise<void> {
     this.#web3Instance = null;
     this.#currentProviderType = null;
-    await this.#w3modal?.disconnect();
+    if(this.#w3modal && this.#w3modal.getIsConnected()){
+      await this.#w3modal?.disconnect();
+    }
     this.#globalChannel.next({
       data: undefined,
       event: WEB3_EVENTS.DISCONNECTED,
@@ -192,14 +202,7 @@ class Web3Connector {
   }
 
   async #_getCurrentAddress () {
-    if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
-      const signer = this.#web3Instance.getSigner();
-      return signer.getAddress();
-    }
-    if (this.#wallet instanceof ethers.Wallet) {
-      return this.#wallet.getAddress();
-    }
-    return null;
+    return this.#w3modal.getAddress() || null;
   }
 
   getCurrentEthAddress () {
