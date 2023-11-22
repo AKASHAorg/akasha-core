@@ -52,6 +52,10 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     });
   };
 
+  const sortedEntryContent = React.useMemo(() => {
+    return sortByKey(entryData.content, 'order');
+  }, [entryData.content]);
+
   return (
     <EntryCard
       entryData={entryData}
@@ -59,7 +63,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       locale={locale}
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
-      sortedContents={sortByKey(entryData.content, 'order')}
+      sortedContents={sortedEntryContent}
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}
       removed={{
