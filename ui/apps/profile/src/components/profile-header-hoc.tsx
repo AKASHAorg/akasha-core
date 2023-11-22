@@ -28,7 +28,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const { handleCopyFeedback, showLoginModal, navigateToModal, navigateTo } = props;
   const { profileId } = useParams<{ profileId: string }>();
 
-  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
+  const { isLoggedIn, loggedInProfileId: authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -40,11 +40,11 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   );
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
       : { akashaProfile: null };
 
-  const isViewer = profileData?.did?.id === loggedInProfileId;
+  const isViewer = profileData?.did?.id === authenticatedDID;
 
   const { validDid, isEthAddress } = useValidDid(profileId, !!profileData);
 

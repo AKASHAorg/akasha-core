@@ -19,7 +19,7 @@ describe('<EditProfilePage />', () => {
     </Router>
   );
 
-  const profile = genUser('pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff');
+  const profile = genUser();
 
   beforeEach(async () => {
     userEvent.setup();

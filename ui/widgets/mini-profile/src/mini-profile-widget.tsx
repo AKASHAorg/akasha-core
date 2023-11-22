@@ -132,7 +132,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         isFollowing={!!hasFollowed && hasFollowed.node.isFollowing}
         loggedEthAddress={loggedProfileQuery.data?.did.id}
         profileData={authorProfileDataReq.data.akashaProfile}
-        isViewer={authorProfileDataReq.data.isViewer}
+        isViewer={loggedProfileQuery.data.did.id === beamAuthorId.data}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         followingLabel={t('Following')}
