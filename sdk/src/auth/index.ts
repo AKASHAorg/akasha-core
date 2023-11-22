@@ -52,24 +52,17 @@ class AWF_Auth {
   private _gql: Gql;
   private _lit: Lit;
   private _ceramic: CeramicService;
-  private channel?: BroadcastChannel;
   private sessKey;
-  private inboxWatcher;
   private currentUser?: CurrentUser;
   private _lockSignIn?: boolean;
 
   #_didSession?: DIDSession;
 
   public readonly waitForAuth = 'waitForAuth';
-  public readonly providerKey = '@providerType';
   public readonly currentUserKey = '@currentUserType';
-  public readonly SYNC_REQUEST = '@sync_request';
-  public readonly SYNC_RESPONSE = '@sync_response';
-  public readonly SYNC_CHANNEL = '@sync_data';
-  public readonly SIGN_OUT_EVENT = '@sign_out';
   public readonly encoder = new TextEncoder();
 
-  constructor(
+  constructor (
     @inject(TYPES.Db) db: DB,
     @inject(TYPES.Web3) web3: Web3Connector,
     @inject(TYPES.EventBus) globalChannel: EventBus,
@@ -87,47 +80,8 @@ class AWF_Auth {
     this._gql = gql;
     this._lit = lit;
     this._ceramic = ceramic;
-    this.enableSync();
   }
 
-  /**
-   * enable key sync between opened tabs
-   */
-  enableSync() {
-    if ('BroadcastChannel' in self) {
-      this.channel = new BroadcastChannel(this.SYNC_CHANNEL);
-      this.channel.postMessage({ type: this.SYNC_REQUEST });
-      this.channel.onmessage = event => {
-        const { type } = event.data;
-        if (type === this.SYNC_REQUEST) {
-          if (this.currentUser) {
-            const response = {
-              [this.providerKey]: localStorage.getItem(this.providerKey),
-              [this.currentUserKey]: localStorage.getItem(this.currentUserKey),
-              identity: { key: this.sessKey },
-            };
-            this.channel?.postMessage({ response, type: this.SYNC_RESPONSE });
-          }
-        } else if (type === this.SYNC_RESPONSE) {
-          const { response } = event.data;
-          if (response && response.identity.key !== this.sessKey) {
-            this._log.info('syncing session');
-            this.currentUser = undefined;
-            this._getCurrentUser().then(() => this._log.info('logged in'));
-          }
-        } else if (type === this.SIGN_OUT_EVENT && this.currentUser) {
-          this._signOut().then(() => {
-            const response = {
-              data: null,
-              event: AUTH_EVENTS.SIGN_OUT,
-            };
-            this._globalChannel.next(response);
-            this._log.info('signed-out');
-          });
-        }
-      };
-    }
-  }
 
   /**
    * Verifies if an ethereum address is already registered
@@ -135,7 +89,7 @@ class AWF_Auth {
    * @param ethAddress - the eth address
    */
   @validate(EthAddressSchema)
-  async checkIfSignedUp(ethAddress: EthAddress) {
+  async checkIfSignedUp (ethAddress: EthAddress) {
     // const variables = { ethAddress };
     // const prof = await this._gql.getAPI().GetProfile(variables);
     // return !!prof?.getProfile?.pubKey;
@@ -156,7 +110,7 @@ class AWF_Auth {
       ),
     }),
   )
-  async signIn(args: {
+  async signIn (args: {
     provider?: EthProviders;
     checkRegistered: boolean;
     resumeSignIn?: boolean;
@@ -166,37 +120,36 @@ class AWF_Auth {
     return createFormattedValue(user);
   }
 
-/*
-Signs the user in and initializes the session.
+  /*
+  Signs the user in and initializes the session.
 
-Parameters:
-- args:
-  - provider: The Ethereum provider to use.
-  - checkRegistered: Whether to check if the address is registered.
-  - resumeSignIn: Whether to resume a previous session.
+  Parameters:
+  - args:
+    - provider: The Ethereum provider to use.
+    - checkRegistered: Whether to check if the address is registered.
+    - resumeSignIn: Whether to resume a previous session.
 
-Functionality:
-1. Get the provider from the args or previous session.
-2. Connect the Ethereum address with the provider.
-3. Check if the address is registered if checkRegistered is true.
-4. Initialize the Ceramic DID session.
-5. Store the DID session encrypted in localStorage.
-6. Set the current user object.
-7. Notify subscribers of auth events.
-8. Create a DB instance for the user.
-9. Reset the GraphQL cache.
-10. Notify that auth is ready.
+  Functionality:
+  1. Get the provider from the args or previous session.
+  2. Connect the Ethereum address with the provider.
+  3. Check if the address is registered if checkRegistered is true.
+  4. Initialize the Ceramic DID session.
+  5. Store the DID session encrypted in localStorage.
+  6. Set the current user object.
+  7. Notify subscribers of auth events.
+  8. Create a DB instance for the user.
+  9. Reset the GraphQL cache.
+  10. Notify that auth is ready.
 
-Returns:
-- The CurrentUser object with auth status.
-*/
-  private async _signIn(
+  Returns:
+  - The CurrentUser object with auth status.
+  */
+  private async _signIn (
     args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean } = {
       provider: EthProviders.Web3Injected,
       checkRegistered: true,
     },
   ): Promise<(CurrentUser & { isNewUser: boolean }) | null> {
-    let currentProvider = args.provider as EthProviders;
     if (!args.resumeSignIn) {
       if (this._lockSignIn) {
         return null;
@@ -206,27 +159,13 @@ Returns:
         return Promise.resolve(Object.assign({}, this.currentUser, authStatus));
       }
       this._lockSignIn = true;
-      if (args.provider === EthProviders.None) {
-        if (!localStorage.getItem(this.providerKey)) {
-          throw new Error('The provider must have a wallet/key in order to authenticate.');
-        }
-        const providerKey = localStorage.getItem(this.providerKey);
-        if (providerKey) {
-          currentProvider = +providerKey; // cast to int
-        }
-      } else {
-        if (currentProvider === EthProviders.WalletConnect) {
-          this._log.info('using wc bridge');
-          // localStorage.removeItem('walletconnect');
-        }
-      }
       try {
-        const address = await this._connectAddress(currentProvider);
+        const address = await this._connectAddress();
         const localUser = localStorage.getItem(this.currentUserKey);
         const chainNameSpace = 'eip155';
         const chainId = this._web3.networkId[this._web3.network];
         const chainIdNameSpace = `${chainNameSpace}:${chainId}`;
-        this.sessKey = `@identity:${chainIdNameSpace}:${address?.toLowerCase()}:${currentProvider}`;
+        this.sessKey = `@identity:${chainIdNameSpace}:${address?.toLowerCase()}:${this._web3.state.providerType}`;
         const sessValue = localStorage.getItem(this.sessKey);
         if (localUser && sessValue) {
           const tmpSession = JSON.parse(localUser);
@@ -270,7 +209,6 @@ Returns:
         this._lockSignIn = false;
         this.#_didSession = undefined;
         localStorage.removeItem(this.sessKey);
-        localStorage.removeItem(this.providerKey);
         localStorage.removeItem(this.currentUserKey);
         this._log.error(e);
         await this._web3.disconnect();
@@ -288,17 +226,7 @@ Returns:
     if (swResponse) {
       localStorage.setItem(this.sessKey, JSON.stringify(swResponse));
     }
-    localStorage.setItem(this.providerKey, currentProvider.toString());
     localStorage.setItem(this.currentUserKey, JSON.stringify(this.currentUser));
-
-    if (this.channel) {
-      const response = {
-        [this.providerKey]: localStorage.getItem(this.providerKey),
-        identity: { key: this.sessKey },
-        [this.currentUserKey]: localStorage.getItem(this.currentUserKey),
-      };
-      this.channel.postMessage({ response, type: this.SYNC_RESPONSE });
-    }
 
     this._globalChannel.next({
       data: this.currentUser,
@@ -316,13 +244,12 @@ Returns:
     return Object.assign({}, this.currentUser, authStatus);
   }
 
-  @validate(EthProvidersSchema)
-  async _connectAddress(provider: EthProviders) {
+  async _connectAddress () {
     this._globalChannel.next({
       data: {},
       event: AUTH_EVENTS.CONNECT_ADDRESS,
     });
-    await this._web3.connect(provider);
+    await this._web3.connect();
     await this._web3.checkCurrentNetwork();
     const resp = await this._web3.getCurrentEthAddress();
     this._globalChannel.next({
@@ -332,23 +259,19 @@ Returns:
     return resp;
   }
 
-  @validate(EthProvidersSchema)
-  async connectAddress(provider: EthProviders) {
-    return this._connectAddress(provider);
+  async connectAddress () {
+    return this._connectAddress();
   }
 
   /**
    * Returns current session objects for textile
    */
-  async getSession() {
+  async getSession () {
     const session = await this._getSession();
     return createFormattedValue(session);
   }
 
-  private async _getSession() {
-    if (!localStorage.getItem(this.providerKey)) {
-      throw new Error('No previous session found');
-    }
+  private async _getSession () {
 
     if (!this.currentUser) {
       await this.signIn({ provider: EthProviders.None, checkRegistered: false });
@@ -361,16 +284,13 @@ Returns:
    * Returns the currently logged-in user object
    * It will try to log in if there is a previous session detected
    */
-  async getCurrentUser() {
+  async getCurrentUser () {
     return this._getCurrentUser();
   }
 
-  private async _getCurrentUser(): Promise<null | CurrentUser> {
+  private async _getCurrentUser (): Promise<null | CurrentUser> {
     if (this.currentUser) {
       return Promise.resolve(this.currentUser);
-    }
-    if (!localStorage.getItem(this.providerKey)) {
-      return Promise.resolve(null);
     }
     const localUser = localStorage.getItem(this.currentUserKey);
 
@@ -386,20 +306,15 @@ Returns:
   /**
    * Destroy all the session objects
    */
-  async signOut() {
+  async signOut () {
     return createFormattedValue(await this._signOut());
   }
 
-  private async _signOut() {
+  private async _signOut () {
     sessionStorage.clear();
     localStorage.removeItem(this.sessKey);
-    localStorage.removeItem(this.providerKey);
     localStorage.removeItem(this.currentUserKey);
-    this.inboxWatcher = null;
     this.currentUser = undefined;
-    if (this.channel) {
-      this.channel.postMessage({ type: this.SIGN_OUT_EVENT });
-    }
     await this._web3.disconnect();
     await this._lit.disconnect();
     await this._ceramic.disconnect();
@@ -407,7 +322,7 @@ Returns:
     return true;
   }
 
-  async signData(
+  async signData (
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format = false,
   ) {
@@ -421,11 +336,11 @@ Returns:
    * @param data -
    */
   @validate(z.record(z.unknown()).or(z.string()))
-  async signDataWithDID(data: Record<string, unknown> | string) {
+  async signDataWithDID (data: Record<string, unknown> | string) {
     return this._signData(data);
   }
 
-  private async _signData(data: Record<string, unknown> | string) {
+  private async _signData (data: Record<string, unknown> | string) {
     if (!this.#_didSession) {
       throw new Error('No DID session found!');
     }
@@ -433,17 +348,17 @@ Returns:
   }
 
   @validate(z.string().min(16))
-  async prepareIndexedID(id: string) {
+  async prepareIndexedID (id: string) {
     const payload = { ID: id };
     const jws = await this._signData(payload);
-    return { jws: jws, capability: this.#_didSession?.did.capability}
+    return { jws: jws, capability: this.#_didSession?.did.capability };
   }
 
-  async verifyDIDSignature(args: string | DagJWS) {
+  async verifyDIDSignature (args: string | DagJWS) {
     return this._verifySignature(args);
   }
 
-  private async _verifySignature(args: string | DagJWS) {
+  private async _verifySignature (args: string | DagJWS) {
     return this.#_didSession?.did.verifyJWS(args);
   }
 
@@ -457,7 +372,7 @@ Returns:
       .or(z.string())
       .or(z.array(z.record(z.unknown()))),
   )
-  async authenticateMutationData(
+  async authenticateMutationData (
     data: Record<string, unknown> | string | Record<string, unknown>[],
   ) {
     this._log.warn('Deprecated method');
@@ -490,7 +405,7 @@ Returns:
    * @param to - DID of the recipient
    * @param message - body text to be encrypted
    */
-  async createEncryptedMessage(to: string, message: string): Promise<JWE> {
+  async createEncryptedMessage (to: string, message: string): Promise<JWE> {
     if (!this.#_didSession) {
       throw new Error('No DID session found!');
     }
@@ -501,7 +416,7 @@ Returns:
 
   // validate an encrypted message from cli
   @validate(z.string())
-  async validateDevKeyFromBase64Message(message: string) {
+  async validateDevKeyFromBase64Message (message: string) {
     throw new Error('Deprecated method');
     // const decodedMessage = Buffer.from(message, 'base64');
     // const decodedMessageArray = Uint8Array.from(decodedMessage);
@@ -557,7 +472,7 @@ Returns:
    * @param name - human-readable string to identify the key
    */
   @validate(z.string(), z.string().optional())
-  async addDevKeyFromBase64Message(message: string, name?: string) {
+  async addDevKeyFromBase64Message (message: string, name?: string) {
     const validatedMsg = await this.validateDevKeyFromBase64Message(message);
     devKeys.push({
       pubKey: '',
@@ -568,20 +483,20 @@ Returns:
 
   // returns all the dev public keys
   // @Todo: connect it with the actual api
-  async getDevKeys() {
+  async getDevKeys () {
     return Promise.resolve(devKeys);
   }
 
   // @Todo: connect it to the api when ready
   @validate(PubKeySchema)
-  async removeDevKey(pubKey: PubKey) {
+  async removeDevKey (pubKey: PubKey) {
     const index = devKeys.findIndex(e => e.pubKey === pubKey);
     if (index !== -1) {
       devKeys.splice(index, 1);
     }
   }
 
-  private async _decryptMessage<T>(message: JWE): Promise<T> {
+  private async _decryptMessage<T> (message: JWE): Promise<T> {
     const decryptedBody = await this.#_didSession?.did.decryptJWE(message);
     let body;
     try {
@@ -592,7 +507,7 @@ Returns:
     return body as T;
   }
 
-  static serializeMessage(content) {
+  static serializeMessage (content) {
     try {
       const stringifyContent = JSON.stringify(content);
       const encoder = new TextEncoder();
@@ -603,7 +518,7 @@ Returns:
   }
 
   @validate(z.string(), z.unknown())
-  async sendMessage(to: string, content: unknown) {
+  async sendMessage (to: string, content: unknown) {
     const serializedMessage = AWF_Auth.serializeMessage(content);
     if (!serializedMessage) {
       throw new Error('Content is not serializable');
@@ -615,18 +530,18 @@ Returns:
    * Returns all the inbox messages from Textile Users
    * @param args - InboxListOptions
    */
-  async getMessages(args?: { limit?: number }): Promise<{ data: IMessage[] }> {
+  async getMessages (args?: { limit?: number }): Promise<{ data: IMessage[] }> {
     return createFormattedValue(await this._getMessages(args));
   }
 
-  private async _getMessages(args?: { limit?: number }) {
+  private async _getMessages (args?: { limit?: number }) {
     const limit = args?.limit || 50;
     return [].slice(0, limit);
   }
 
   // pubKey seek does not work
   // @Todo: workaround pubKey filtering
-  async getConversation(_pubKey: string) {
+  async getConversation (_pubKey: string) {
     const limit = 10000;
     return createFormattedValue([].slice(0, limit));
   }
@@ -635,17 +550,17 @@ Returns:
    * Checks the Textile Users inbox and looks for specific
    * notification message type
    */
-  async hasNewNotifications() {
+  async hasNewNotifications () {
     const hasNewNotifications = await this._hasNewNotifications();
     return createFormattedValue(hasNewNotifications);
   }
 
-  private async _hasNewNotifications() {
+  private async _hasNewNotifications () {
     return false;
   }
 
   @validate(z.string())
-  async markMessageAsRead(messageId: string) {
+  async markMessageAsRead (messageId: string) {
     const marked = await this._markMessageAsRead(messageId);
     this._globalChannel.next({
       data: { messageId },
@@ -659,12 +574,12 @@ Returns:
    * @param _messageId - message id to mark as read
    */
   @validate(z.string())
-  private async _markMessageAsRead(_messageId: string) {
+  private async _markMessageAsRead (_messageId: string) {
     return true;
   }
 
   @validate(InviteCodeSchema)
-  async validateInvite(inviteCode: InviteCode) {
+  async validateInvite (inviteCode: InviteCode) {
     return this._validateInvite(inviteCode);
   }
 
@@ -672,7 +587,7 @@ Returns:
    *
    * @param inviteCode - invitation code received by email
    */
-  private async _validateInvite(inviteCode: InviteCode) {
+  private async _validateInvite (inviteCode: InviteCode) {
     // no need for invitation codes atm
     return true;
 
@@ -690,7 +605,7 @@ Returns:
     // throw new Error('Sorry, this code is not valid. Please try again.');
   }
 
-  async getToken() {
+  async getToken () {
     return Promise.resolve('fakeToken');
   }
 }
