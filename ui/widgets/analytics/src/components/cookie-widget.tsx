@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import CookieCard from '@akashaorg/design-system-components/lib/components/CookieCard';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import {
@@ -10,6 +9,9 @@ import {
   uninstallPageTacking,
 } from '../analytics';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { EventTypes } from '@akashaorg/typings/lib/ui';
+
+import CookieCard from '@akashaorg/design-system-components/lib/components/CookieCard';
 
 export const COOKIE_CONSENT_NAME = 'ewa-cookie-consent';
 
@@ -54,12 +56,17 @@ const CookieWidget: React.FC<unknown> = () => {
       uninstallPageTacking();
     };
   }, [cookieType]);
+
   const handleAcceptCookie = (all?: boolean) => {
     window.localStorage.setItem(
       COOKIE_CONSENT_NAME,
       all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL,
     );
     setCookieType(all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL);
+    // emit event to be captured by the settings app
+    _uiEvents.current.next({
+      event: EventTypes.SetInitialCookieType,
+    });
   };
 
   return (

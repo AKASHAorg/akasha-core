@@ -28,7 +28,7 @@ async function saveSettings({
 
 /**
  * Hook to save app's settings using sdk settings service
- * @param app - The app's name for example @akashaorg/app-akasha-verse
+ * @param app - The app's name for example \@akashaorg/app-akasha-verse
  * @param options - Array of option pairs [optionName, value]
  * @example useSaveSettings hook
  * ```typescript
