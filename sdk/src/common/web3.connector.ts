@@ -3,31 +3,28 @@ import { ethers } from 'ethers';
 import {
   EthProviders,
   EthProvidersSchema,
-  INJECTED_PROVIDERS,
   PROVIDER_ERROR_CODES,
   TYPES,
   WEB3_EVENTS,
 } from '@akashaorg/typings/lib/sdk';
-import detectEthereumProvider from '@metamask/detect-provider';
-import { EthereumProvider } from '@walletconnect/ethereum-provider';
 import Logging from '../logging';
 import EventBus from './event-bus';
-import { throwError } from 'rxjs';
 import pino from 'pino';
 import { createFormattedValue } from '../helpers/observable';
 import { validate } from './validator';
 import { z } from 'zod';
-import { IEthereumProvider } from '@walletconnect/ethereum-provider/dist/types/EthereumProvider';
+import { createWeb3Modal, defaultConfig } from '@web3modal/ethers5';
+import type { Web3Modal } from '@web3modal/ethers5/dist/types/src/client';
 
 @injectable()
 class Web3Connector {
   #logFactory: Logging;
   #log: pino.Logger;
-  #web3Instance: ethers.providers.BaseProvider | ethers.providers.Web3Provider | null;
+  #web3Instance: ethers.providers.Web3Provider | undefined | null;
   #globalChannel: EventBus;
   #wallet: ethers.Wallet | null;
-  #walletConnect: IEthereumProvider | null;
-  #currentProviderId: EthProviders | null;
+  #w3modal: Web3Modal;
+  #currentProviderType: string | undefined | null;
   readonly network = 'goerli';
   #networkId = '0x5';
   // mapping for network name and ids
@@ -43,7 +40,7 @@ class Web3Connector {
   /**
    *
    */
-  constructor(
+  constructor (
     @inject(TYPES.Log) logFactory: Logging,
     @inject(TYPES.EventBus) globalChannel: EventBus,
   ) {
@@ -52,54 +49,110 @@ class Web3Connector {
     this.#globalChannel = globalChannel;
     this.#web3Instance = null;
     this.#wallet = null;
-    this.#walletConnect = null;
-    this.#currentProviderId = null;
+    const projectId = process.env.WALLETCONNECT_PROJECT_ID as string;
+    if (!projectId) {
+      throw new Error('WALLETCONNECT_PROJECT_ID is not set');
+    }
+
+    const chains = [
+      {
+        chainId: this.networkId.goerli,
+        name: 'Ethereum',
+        currency: 'ETH',
+        explorerUrl: 'https://goerli.etherscan.io/',
+        rpcUrl: 'https://ethereum.akasha.world/v1/goerli',
+      },
+    ];
+
+    const ethersConfig = defaultConfig({
+      metadata: {
+        name: 'AKASHA World',
+        description: 'AKASHA Web3Modal',
+        url: 'https://akasha.world',
+        icons: ['https://avatars.githubusercontent.com/u/9638191'],
+      },
+      defaultChainId: this.networkId.goerli,
+      rpcUrl: 'https://ethereum.akasha.world/v1/goerli',
+      enableCoinbase: false,
+    });
+
+    this.#w3modal = createWeb3Modal({
+      ethersConfig,
+      projectId,
+      chains,
+      themeMode: 'light',
+      themeVariables: {
+        '--w3m-font-family': 'Inter, Content-font, Roboto, sans-serif',
+        '--w3m-color-mix': '#7222d2',
+        '--w3m-accent': '#4e71ff',
+      },
+      privacyPolicyUrl: 'https://akasha.org/privacy-policy/',
+      termsConditionsUrl: 'https://akasha.org/legal/',
+
+    });
+    this.#_registerWalletChangeEvents();
   }
 
-  /**
-   *
-   * @param provider - Number representing the provider option
-   */
-  @validate(EthProvidersSchema)
-  async connect(provider: EthProviders = EthProviders.None): Promise<boolean> {
-    this.#log.info(`connecting to provider ${provider}`);
-    if (this.#web3Instance && this.#currentProviderId && this.#currentProviderId === provider) {
-      this.#log.info(`provider ${provider} already connected`);
-      return true;
+
+  async connect (): Promise<{ connected: boolean, unsubscribe?: () => void }> {
+
+    if (!this.#w3modal.getIsConnected()) {
+      return new Promise(async (resolve, reject) => {
+        const unsubscribe = this.#w3modal.subscribeProvider((state) => {
+          if (state.provider && state.isConnected && state.address) {
+            resolve({ connected: true, unsubscribe });
+          }
+        });
+        await this.#w3modal.open({ view: 'Connect' });
+      });
+
     }
-    this.#web3Instance = await this.#_getProvider(provider);
-    this.#currentProviderId = provider;
-    this.#globalChannel.next({
-      data: { provider },
-      event: WEB3_EVENTS.CONNECTED,
-    });
-    this.#log.info(`connected to provider ${provider}`);
-    return true;
+    return { connected: this.#w3modal.getIsConnected() };
   }
 
-  requestWalletPermissions() {
-    if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
-      return this.#web3Instance.send('wallet_requestPermissions', [{ eth_accounts: {} }]);
+  toggleDarkTheme (enable?:boolean) {
+    const themeMode = this.#w3modal.getThemeMode();
+    if (enable || themeMode !== 'dark') {
+      this.#w3modal.setThemeMode('dark');
+    } else {
+      this.#w3modal.setThemeMode('light');
     }
-    return throwError(() => {
-      return new Error(`Method wallet_requestPermissions not supported on the current provider`);
+  }
+
+  #_registerWalletChangeEvents () {
+    this.#w3modal.subscribeProvider(event => {
+      if (event.isConnected) {
+        this.#web3Instance = this.#w3modal.getWalletProvider();
+        this.#currentProviderType = this.#w3modal?.getWalletProviderType();
+        this.#globalChannel.next({
+          data: { providerType: this.#currentProviderType },
+          event: WEB3_EVENTS.CONNECTED,
+        });
+        if (this.#web3Instance) {
+          this.#_registerProviderChangeEvents(this.#web3Instance);
+        }
+      } else {
+        if (this.#web3Instance) {
+          this.#web3Instance.removeAllListeners(['accountsChanged', 'chainChanged']);
+        }
+      }
     });
+  }
+
+  get state () {
+    return {
+      providerType: this.#currentProviderType,
+      connected: this.#w3modal.getIsConnected(),
+      address: this.#w3modal.getAddress(),
+      chainId: this.#w3modal.getChainId(),
+    };
   }
 
   /**
    * Get access to the web3 provider instance
    */
-  get provider() {
+  get provider () {
     if (this.#web3Instance) {
-      return this.#web3Instance;
-    } else {
-      this.#web3Instance = new ethers.providers.InfuraProvider(
-        {
-          name: this.network,
-          chainId: this.networkId[this.network],
-        },
-        process.env.INFURA_ID,
-      );
       return this.#web3Instance;
     }
   }
@@ -107,16 +160,16 @@ class Web3Connector {
   /**
    * Remove the web3 connection
    */
-  async disconnect(): Promise<void> {
+  async disconnect (): Promise<void> {
     this.#web3Instance = null;
-    this.#currentProviderId = null;
+    this.#currentProviderType = null;
+    if (this.#w3modal && this.#w3modal.getIsConnected()) {
+      await this.#w3modal?.disconnect();
+    }
     this.#globalChannel.next({
       data: undefined,
       event: WEB3_EVENTS.DISCONNECTED,
     });
-    if (this.#walletConnect instanceof EthereumProvider) {
-      await this.#walletConnect.disconnect();
-    }
   }
 
   /**
@@ -124,11 +177,11 @@ class Web3Connector {
    * @param message - Human readable string to sign
    */
   @validate(z.string().min(3))
-  signMessage(message: string) {
+  signMessage (message: string) {
     return this.getSigner()?.signMessage(message);
   }
 
-  getSigner() {
+  getSigner () {
     if (this.#wallet instanceof ethers.Wallet) {
       return this.#wallet;
     }
@@ -139,14 +192,14 @@ class Web3Connector {
     return;
   }
 
-  getRequiredNetwork() {
+  getRequiredNetwork () {
     if (!this.network) {
       throw new Error('The required ethereum network was not set!');
     }
     return createFormattedValue({ name: this.network, chainId: this.networkId[this.network] });
   }
 
-  async switchToRequiredNetwork() {
+  async switchToRequiredNetwork () {
     if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
       const result = await this.#web3Instance.send('wallet_switchEthereumChain', [
         { chainId: this.#networkId },
@@ -160,133 +213,37 @@ class Web3Connector {
     throw err;
   }
 
-  async #_getCurrentAddress() {
-    if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
-      const signer = await this.#web3Instance.getSigner();
-      return signer.getAddress();
-    }
-    if (this.#wallet instanceof ethers.Wallet) {
-      return this.#wallet.getAddress();
-    }
-    return null;
+  async #_getCurrentAddress () {
+    return this.#w3modal.getAddress() || null;
   }
 
-  getCurrentEthAddress() {
+  getCurrentEthAddress () {
     return this.#_getCurrentAddress();
   }
 
-  checkCurrentNetwork() {
+  checkCurrentNetwork () {
     return this.#_checkCurrentNetwork();
-  }
-
-  async detectInjectedProvider() {
-    return createFormattedValue(await this.#_detectInjectedProvider());
-  }
-
-  async #_detectInjectedProvider() {
-    const ethProvider = await detectEthereumProvider();
-    if (!ethProvider) {
-      return INJECTED_PROVIDERS.NOT_DETECTED;
-    }
-    const injectedProviders = [
-      { flag: 'isSafe', name: INJECTED_PROVIDERS.SAFE },
-      { flag: 'isNiftyWallet', name: INJECTED_PROVIDERS.NIFTY },
-      { flag: 'isDapper', name: INJECTED_PROVIDERS.DAPPER },
-      { flag: 'isOpera', name: INJECTED_PROVIDERS.OPERA },
-      { flag: 'isTrust', name: INJECTED_PROVIDERS.TRUST },
-      { flag: 'isToshi', name: INJECTED_PROVIDERS.COINBASE },
-      { flag: 'isCipher', name: INJECTED_PROVIDERS.CIPHER },
-      { flag: 'isImToken', name: INJECTED_PROVIDERS.IM_TOKEN },
-      { flag: 'isStatus', name: INJECTED_PROVIDERS.STATUS },
-      { flag: 'isMetaMask', name: INJECTED_PROVIDERS.METAMASK },
-    ];
-    let detectedProvider = INJECTED_PROVIDERS.FALLBACK;
-    for (const injectedProvider of injectedProviders) {
-      if (ethProvider.hasOwnProperty(injectedProvider.flag) && ethProvider[injectedProvider.flag]) {
-        detectedProvider = injectedProvider.name;
-        break;
-      }
-    }
-    return detectedProvider;
   }
 
   /**
    * Ensures that the web3 provider is connected to the specified network
    */
-  async #_checkCurrentNetwork() {
-    if (!this.#web3Instance) {
+  async #_checkCurrentNetwork () {
+    if (!this.#w3modal.getIsConnected()) {
       throw new Error('Must connect first to a provider!');
     }
-    const network = await this.#web3Instance.detectNetwork();
-    if (network?.chainId !== this.networkId[this.network]) {
+    const network = this.#w3modal.getState();
+    if (network.selectedNetworkId !== this.networkId[this.network]) {
       const error: Error & { code?: number } = new Error(
         `Please change the ethereum network to ${this.network}!`,
       );
       error.code = PROVIDER_ERROR_CODES.WrongNetwork;
       throw error;
     }
-    this.#log.info(`currently on network: ${network.name}`);
+    this.#log.info(`currently on network: ${network.selectedNetworkId}`);
   }
 
-  /**
-   *
-   * @param provider - Number representing the provider option
-   */
-  async #_getProvider(provider: EthProviders) {
-    let ethProvider: ethers.providers.ExternalProvider | undefined;
-    const network = {
-      name: this.network,
-      chainId: this.networkId[this.network],
-    };
-    if (provider === EthProviders.FallbackProvider || provider === EthProviders.None) {
-      return new ethers.providers.InfuraProvider(network, process.env.INFURA_ID);
-    }
-
-    if (provider === EthProviders.Web3Injected) {
-      ethProvider = await this.#_getInjectedProvider();
-    }
-
-    if (provider === EthProviders.WalletConnect) {
-      this.#walletConnect = await this.#_getWalletConnectProvider();
-      ethProvider = this.#walletConnect;
-    }
-    if (!ethProvider) {
-      throw new Error('No Web3 Provider found');
-    }
-    const web3Provider = new ethers.providers.Web3Provider(ethProvider, network);
-    this.#_registerProviderChangeEvents(web3Provider);
-    return web3Provider;
-  }
-
-  /**
-   * Handler for web3 provider from metamask extension
-   * and dApp browsers(ex: metamask mobile dApp browser)
-   */
-  async #_getInjectedProvider() {
-    const provider:
-      | (ethers.providers.ExternalProvider & {
-          on?: (event: string, listener: (...args: unknown[]) => void) => void;
-        })
-      | null = await detectEthereumProvider();
-
-    if (!provider) {
-      throw new Error('No Web3 Provider found');
-    }
-    if (!provider.request) {
-      throw new Error('Provider does not support request method');
-    }
-    const acc = await provider.request({
-      method: 'eth_requestAccounts',
-    });
-    if (!acc?.length) {
-      throw new Error('Must connect at least one address from the wallet.');
-    }
-    // this registers listeners on window.ethereum
-    this.#_registerProviderChangeEvents(provider);
-    return provider;
-  }
-
-  #_registerProviderChangeEvents(provider: {
+  #_registerProviderChangeEvents (provider: {
     on?: (event: string, listener: (...args: unknown[]) => void) => void;
   }) {
     if (!provider) {
@@ -313,31 +270,7 @@ class Web3Connector {
         event: WEB3_EVENTS.CHAIN_CHANGED,
       });
     });
-  }
 
-  /**
-   * Enables qr code scan to connect from a mobile wallet
-   */
-  async #_getWalletConnectProvider() {
-    const provider = await EthereumProvider.init({
-      projectId: process.env.WALLETCONNECT_PROJECT_ID as string,
-      chains: [this.networkId[this.network]],
-      showQrModal: true,
-      events: ['chainChanged', 'accountsChanged', 'connect', 'disconnect'],
-      qrModalOptions: {
-        themeVariables: {
-          '--wcm-font-family': 'Inter, Content-font, Roboto, sans-serif',
-          '--wcm-background-color': '#7222d2 ',
-          '--wcm-accent-color': '#4e71ff',
-        },
-        privacyPolicyUrl: 'https://akasha.org/privacy-policy/', //example
-        termsOfServiceUrl: 'https://akasha.org/legal/',
-      },
-    });
-
-    // must wait for the approval
-    await provider.enable();
-    return provider;
   }
 }
 
