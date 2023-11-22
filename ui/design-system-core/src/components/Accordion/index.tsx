@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import Button from '../Button';
 import Divider from '../Divider';
@@ -8,26 +8,27 @@ import Stack from '../Stack';
 export type AccordionProps = {
   customStyle?: string;
   contentStyle?: string;
+  accordionId: number;
+  open: boolean;
+  headerDivider?: boolean;
   titleNode: React.ReactNode;
   contentNode: React.ReactNode;
-  open?: boolean;
-  headerDivider?: boolean;
+  handleClick: (id: number) => void;
 };
 
 const Accordion: React.FC<AccordionProps> = props => {
   const {
     customStyle = '',
     contentStyle = '',
-    titleNode,
-    contentNode,
+    accordionId,
     open,
     headerDivider,
+    titleNode,
+    contentNode,
+    handleClick,
   } = props;
 
-  // internal state for accordion toggle
-  const [isToggled, setIsToggled] = React.useState<boolean>(open);
-
-  const handleToggle = useCallback(() => setIsToggled(!isToggled), [isToggled]);
+  const handleToggle = () => handleClick(accordionId);
 
   const headerUi = useMemo(
     () => (
@@ -36,29 +37,27 @@ const Accordion: React.FC<AccordionProps> = props => {
         <Icon
           accentColor={true}
           customStyle="h-4, w-4 secondaryDark"
-          type={isToggled ? 'ChevronUpIcon' : 'ChevronDownIcon'}
+          type={open ? 'ChevronUpIcon' : 'ChevronDownIcon'}
         />
       </Stack>
     ),
-    [customStyle, isToggled, titleNode],
+    [customStyle, open, titleNode],
   );
 
   return (
     <>
-      {headerDivider ? (
-        <Button plain={true} onClick={handleToggle} customStyle="w-full">
+      <Button plain={true} onClick={handleToggle} customStyle="w-full">
+        {headerDivider ? (
           <Stack direction="column" spacing="gap-y-4">
             {headerUi}
             <Divider />
           </Stack>
-        </Button>
-      ) : (
-        <Button plain={true} onClick={handleToggle} customStyle="w-full">
-          {headerUi}
-        </Button>
-      )}
+        ) : (
+          headerUi
+        )}
+      </Button>
 
-      {isToggled && <Stack customStyle={`${contentStyle}`}>{contentNode}</Stack>}
+      {open && <Stack customStyle={`${contentStyle}`}>{contentNode}</Stack>}
     </>
   );
 };

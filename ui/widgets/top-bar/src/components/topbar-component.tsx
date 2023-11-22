@@ -9,7 +9,7 @@ import {
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 
 const TopbarComponent: React.FC<unknown> = () => {
-  const { uiEvents, layoutConfig, worldConfig, plugins, encodeAppName, getRoutingPlugin } =
+  const { uiEvents, layoutConfig, worldConfig, encodeAppName, getRoutingPlugin } =
     useRootComponentProps();
 
   const location = useLocation();

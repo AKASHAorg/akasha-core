@@ -8,7 +8,6 @@ import type { DocumentNode } from 'graphql';
 import EventBus from '../common/event-bus';
 import { validate } from '../common/validator';
 import { z } from 'zod';
-import { ExecutionResult } from 'graphql/index';
 import {
   ApolloClient,
   ApolloLink,
@@ -16,15 +15,25 @@ import {
   InMemoryCache,
   Observable,
   split,
+  gql,
+  FetchResult,
 } from '@apollo/client';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';
-import { gql } from 'graphql-tag';
 import { getMainDefinition } from '@apollo/client/utilities';
+
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 
 const enum ContextSources {
   DEFAULT = 'gql#DEFAULT',
   COMPOSEDB = 'gql#COMPOSEDB',
+}
+
+declare const __DEV__: boolean;
+
+if (__DEV__) {  // Adds messages only in a dev environment
+  loadDevMessages();
+  loadErrorMessages();
 }
 
 /** @internal  */
@@ -36,7 +45,7 @@ class Gql {
   private _log: pino.Logger;
   private _globalChannel: EventBus;
   private readonly _apolloCache: InMemoryCache;
-  readonly apolloClient: ApolloClient<unknown>;
+  readonly apolloClient: ApolloClient<any>;
   private readonly _contextSources: { default: symbol; composeDB: symbol; };
 
   public constructor (
@@ -51,51 +60,61 @@ class Gql {
       default: Symbol.for(ContextSources.DEFAULT),
       composeDB: Symbol.for(ContextSources.COMPOSEDB),
     });
+
+  /*
+   * composeDBLink
+   *
+   * Creates an ApolloLink that sends GraphQL operations to ComposeDB.
+   *
+   * This uses the Ceramic service to get the ComposeDB client instance,
+   * and calls the execute() method on it, passing the operation's
+   * query and variables.
+   *
+   * The result or error is passed back to the Observable observer.
+   *
+   * Parameters:
+   *
+   * - operation: The GraphQL operation to send to ComposeDB
+   *
+   * Returns:
+   *
+   * - An Observable for the GraphQL operation result
+  */
     const composeDBlink = new ApolloLink((operation) => {
       return new Observable((observer) => {
-        const definition = getMainDefinition(operation.query);
-        let uuid: string = '';
-
-        if (definition.kind === 'OperationDefinition' && definition.operation === 'mutation') {
-          uuid = crypto.randomUUID();
-          sessionStorage.setItem(
-            uuid,
-            JSON.stringify({ name: operation.operationName, variables: operation.variables }),
-          );
-          this._globalChannel.next({
-            data: { uuid, success: false, pending: true, name: operation.operationName },
-            event: GQL_EVENTS.MUTATION,
-          });
-
-        }
-
         this._ceramic.getComposeClient().execute(operation.query, operation.variables).then(
           (result) => {
             observer.next(result);
-
-            if (uuid) {
-              this._globalChannel.next({
-                data: { uuid, success: true, pending: false, name: operation.operationName },
-                event: GQL_EVENTS.MUTATION,
-              });
-            }
-
             observer.complete();
           },
           (error) => {
             observer.error(error);
-
-            if (uuid) {
-              sessionStorage.setItem(uuid, JSON.stringify({ errors: JSON.stringify(error) }));
-              this._globalChannel.next({
-                data: { uuid, success: false, errors: error, pending: false },
-                event: GQL_EVENTS.MUTATION,
-              });
-            }
           },
         );
       });
     });
+
+    /*
+     * directionalLink
+     *
+     * Creates a split ApolloLink that routes GraphQL operations to different links
+     * based on the context source.
+     *
+     * Operations from the 'composeDB' context source will be sent to the composeDBLink.
+     *
+     * All other operations will be sent to a link that combines:
+     *
+     * - A persisted query link
+     * - A standard HTTP link to the GraphQL server
+     *
+     * Parameters:
+     *
+     * - operation: The GraphQL operation
+     *
+     * Returns:
+     *
+     * - The link to use for the operation based on its context source
+    */
     const directionalLink = split(
       (operation) => {
         return operation.getContext().source === this.contextSources.composeDB;
@@ -104,12 +123,21 @@ class Gql {
       createPersistedQueryLink({ sha256 }).concat(new HttpLink({ uri: process.env.GRAPHQL_URI || 'http://localhost:4112/' })),
     );
 
-    this._apolloCache = new InMemoryCache();
+    this._apolloCache = new InMemoryCache({
+     typePolicies: {
+       AkashaBeam: {
+         merge: true,
+       },
+       AkashaReflectConnection: {
+         merge: true,
+       }
+     }
+    });
 
     this.apolloClient = new ApolloClient({
       cache: this._apolloCache,
       link: directionalLink,
-      version: "0.1dev",
+      version: '0.1dev',
       defaultOptions: {
         watchQuery: {
           fetchPolicy: 'network-only',
@@ -121,6 +149,36 @@ class Gql {
     this._client = getSdk(this.requester);
   }
 
+  /*
+   * requester
+   *
+   * Sends a GraphQL operation to the Apollo client and handles errors.
+   *
+   * Parameters:
+   *
+   * - doc: The GraphQL document node or string
+   * - vars: Optional variables
+   * - options: Additional context options
+   *
+   * Returns:
+   *
+   * - The result data for queries
+   *
+   * For mutations:
+   *
+   * - Generates a UUID
+   * - Publishes mutation notifications via globalChannel
+   * - Stores errors in sessionStorage
+   * - Throws errors
+   *
+   * Checks if doc is a string and converts to DocumentNode.
+   *
+   * Checks for mutation and handles notifications.
+   *
+   * Otherwise sends as standard query.
+   *
+   * Throws errors if present.
+  */
   public requester = async <R, V> (doc: DocumentNode | string, vars?: V, options?: Record<string, any>): Promise<R> => {
     let query: DocumentNode;
     if (typeof doc === 'string') {
@@ -128,20 +186,52 @@ class Gql {
     } else {
       query = doc;
     }
-    const result = await this.apolloClient.query({
-      query: query,
-      variables: vars as Record<string, unknown> | undefined,
-      context: options?.context,
-    });
+    let uuid: string = '';
+    const definition = getMainDefinition(query);
+    let result: FetchResult<unknown, Record<string, unknown>, Record<string, unknown>>;
+    if (definition.kind === 'OperationDefinition' && definition.operation === 'mutation') {
+      uuid = crypto.randomUUID();
+      sessionStorage.setItem(
+        uuid,
+        JSON.stringify({ variables: definition.variableDefinitions }),
+      );
+      this._globalChannel.next({
+        data: { uuid, success: false, pending: true },
+        event: GQL_EVENTS.MUTATION,
+      });
+      result = await this.apolloClient.mutate({
+        mutation: query,
+        variables: vars as Record<string, unknown> | undefined,
+        context: options?.context,
+      });
+    }else {
+      result = await this.apolloClient.query({
+        query: query,
+        variables: vars as Record<string, unknown> | undefined,
+        context: options?.context,
+      });
+    }
 
     if (!result.errors || !result.errors.length) {
+      if (uuid) {
+        this._globalChannel.next({
+          data: { uuid, success: true, pending: false, variables: definition.variableDefinitions },
+          event: GQL_EVENTS.MUTATION,
+        });
+      }
       return result.data as R;
     }
+
+    sessionStorage.setItem(uuid, JSON.stringify({ errors: JSON.stringify(result.errors) }));
+    this._globalChannel.next({
+      data: { uuid, success: false, errors: result.errors, pending: false },
+      event: GQL_EVENTS.MUTATION,
+    });
     throw result.errors;
   };
 
   get queryClient () {
-    return this.apolloClient.query;
+    return this.apolloClient;
   }
 
   get contextSources () {

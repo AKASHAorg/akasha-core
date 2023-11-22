@@ -10,7 +10,7 @@ import Web3ConnectCard from './web3-connect-card';
 import { useTranslation } from 'react-i18next';
 import { IconType } from '@akashaorg/typings/lib/ui';
 import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/lib/sdk';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useAccordion, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type ChooseProviderProps = {
   injectedProvider: {
@@ -24,6 +24,8 @@ export type ChooseProviderProps = {
 
 const ChooseProvider: React.FC<ChooseProviderProps> = props => {
   const { injectedProvider, onProviderSelect } = props;
+
+  const { active, handleAccordionClick } = useAccordion();
   const { t } = useTranslation('app-auth-ewa');
   const { getRoutingPlugin } = useRootComponentProps();
 
@@ -67,6 +69,8 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
         <Text variant="h6">{t('Web3 Wallets')}</Text>
 
         <Accordion
+          accordionId={0}
+          open={active === 0}
           headerDivider={true}
           titleNode={
             <Text variant="footnotes2" weight="normal" color={{ light: 'black', dark: 'grey7' }}>
@@ -119,6 +123,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
               </Stack>
             </Stack>
           }
+          handleClick={handleAccordionClick}
         />
 
         <Stack spacing="gap-y-2">
