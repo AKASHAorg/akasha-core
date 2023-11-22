@@ -73,7 +73,7 @@ class Web3Connector {
       },
       defaultChainId: this.networkId.goerli,
       rpcUrl: 'https://ethereum.akasha.world/v1/goerli',
-      enableCoinbase: false
+      enableCoinbase: false,
     });
 
     this.#w3modal = createWeb3Modal({
@@ -95,6 +95,7 @@ class Web3Connector {
 
 
   async connect (): Promise<{ connected: boolean, unsubscribe?: () => void }> {
+
     if (!this.#w3modal.getIsConnected()) {
       return new Promise(async (resolve, reject) => {
         const unsubscribe = this.#w3modal.subscribeProvider((state) => {
@@ -107,6 +108,15 @@ class Web3Connector {
 
     }
     return { connected: this.#w3modal.getIsConnected() };
+  }
+
+  toggleDarkTheme (enable?:boolean) {
+    const themeMode = this.#w3modal.getThemeMode();
+    if (enable || themeMode !== 'dark') {
+      this.#w3modal.setThemeMode('dark');
+    } else {
+      this.#w3modal.setThemeMode('light');
+    }
   }
 
   #_registerWalletChangeEvents () {
@@ -153,7 +163,7 @@ class Web3Connector {
   async disconnect (): Promise<void> {
     this.#web3Instance = null;
     this.#currentProviderType = null;
-    if(this.#w3modal && this.#w3modal.getIsConnected()){
+    if (this.#w3modal && this.#w3modal.getIsConnected()) {
       await this.#w3modal?.disconnect();
     }
     this.#globalChannel.next({
