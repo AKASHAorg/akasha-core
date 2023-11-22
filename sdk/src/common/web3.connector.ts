@@ -73,6 +73,7 @@ class Web3Connector {
       },
       defaultChainId: this.networkId.goerli,
       rpcUrl: 'https://ethereum.akasha.world/v1/goerli',
+      enableCoinbase: false
     });
 
     this.#w3modal = createWeb3Modal({
@@ -87,6 +88,7 @@ class Web3Connector {
       },
       privacyPolicyUrl: 'https://akasha.org/privacy-policy/',
       termsConditionsUrl: 'https://akasha.org/legal/',
+
     });
     this.#_registerWalletChangeEvents();
   }
@@ -217,18 +219,18 @@ class Web3Connector {
    * Ensures that the web3 provider is connected to the specified network
    */
   async #_checkCurrentNetwork () {
-    if (!this.#web3Instance) {
+    if (!this.#w3modal.getIsConnected()) {
       throw new Error('Must connect first to a provider!');
     }
-    const network = await this.#web3Instance.detectNetwork();
-    if (network?.chainId !== this.networkId[this.network]) {
+    const network = this.#w3modal.getState();
+    if (network.selectedNetworkId !== this.networkId[this.network]) {
       const error: Error & { code?: number } = new Error(
         `Please change the ethereum network to ${this.network}!`,
       );
       error.code = PROVIDER_ERROR_CODES.WrongNetwork;
       throw error;
     }
-    this.#log.info(`currently on network: ${network.name}`);
+    this.#log.info(`currently on network: ${network.selectedNetworkId}`);
   }
 
   #_registerProviderChangeEvents (provider: {
