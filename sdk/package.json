@@ -17,6 +17,7 @@
     "@walletconnect/ethereum-provider": "2.9.0",
     "@walletconnect/modal": "2.6.0",
     "@web3modal/ui": "2.7.0",
+    "@web3modal/ethers5": "^3.3.2",
     "@web3-storage/w3up-client": "7.0.0",
     "assert": "2.0.0",
     "browser-image-resizer": "2.4.1",

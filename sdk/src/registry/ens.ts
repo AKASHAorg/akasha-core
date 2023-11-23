@@ -184,7 +184,7 @@ class AWF_ENS {
     if (uiStash.has(key)) {
       ensName = uiStash.get(key);
     } else {
-      ensName = await this._web3.provider.lookupAddress(ethAddress);
+      ensName = await this._web3?.provider?.lookupAddress(ethAddress);
       uiStash.set(key, ensName);
     }
 
@@ -205,14 +205,14 @@ class AWF_ENS {
     if (uiStash.has(key)) {
       ensAddress = uiStash.get(key);
     } else {
-      ensAddress = await this._web3.provider.resolveName(name);
+      ensAddress = await this._web3.provider?.resolveName(name);
       uiStash.set(key, ensAddress);
     }
     return createFormattedValue(ensAddress);
   }
   @validate(EnsSchema)
   async getTexts(name: Ens) {
-    const resolver = await this._web3.provider.getResolver(name);
+    const resolver = await this._web3.provider?.getResolver(name);
     const texts = EnsDefaultTexts.map(async txt => {
       const value = await resolver?.getText(txt);
       return { txt, value };
