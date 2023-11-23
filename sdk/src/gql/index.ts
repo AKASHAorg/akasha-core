@@ -20,7 +20,7 @@ import {
 } from '@apollo/client';
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
 import { sha256 } from 'crypto-hash';
-import { getMainDefinition } from '@apollo/client/utilities';
+import { getMainDefinition, relayStylePagination } from '@apollo/client/utilities';
 
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 
@@ -136,6 +136,11 @@ class Gql {
         },
         AkashaReflectConnection: {
           merge: true,
+        },
+        Query: {
+          fields: {
+            akashaBeamIndex: relayStylePagination(),
+          },
         },
       },
     });
