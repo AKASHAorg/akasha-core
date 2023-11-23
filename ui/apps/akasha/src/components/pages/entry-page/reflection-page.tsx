@@ -77,7 +77,7 @@ const ReflectionPage: React.FC<unknown> = () => {
         onNavigate={onNavigate}
         showLoginModal={showLoginModal}
       />
-      <PendingReflect beamId={entryData.beam?.id} loggedProfileData={loggedProfileData} />
+      <PendingReflect beamId={entryData.beam?.id} authorId={entryData.author?.id} />
       <Stack spacing="gap-y-2">
         <FeedWidget
           queryKey="akasha-reflection-page-query"

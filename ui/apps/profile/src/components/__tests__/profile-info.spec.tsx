@@ -20,7 +20,7 @@ describe('< ProfileInfoPage />', () => {
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
       {withProfileHeader(<ProfileInfoPage showLoginModal={jest.fn()} />)({
-        handleFeedback: jest.fn(),
+        handleCopyFeedback: jest.fn(),
         navigateTo,
         navigateToModal: jest.fn(),
         showLoginModal: jest.fn(),
