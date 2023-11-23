@@ -11,13 +11,11 @@ import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import {
-  useCreateFollowMutation,
   useGetBeamByIdQuery,
   useGetFollowersListByDidQuery,
   useGetFollowingListByDidQuery,
   useGetMyProfileQuery,
   useGetProfileByDidQuery,
-  useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
@@ -81,9 +79,6 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
       enabled: authorProfileDataReq.isSuccess && !!authorProfileDataReq.data.akashaProfile.did,
     },
   );
-
-  const createFollowMutation = useCreateFollowMutation();
-  const updateFollowMutation = useUpdateFollowMutation();
 
   const hasFollowed = React.useMemo(() => {
     return followersListReq.data.find(
