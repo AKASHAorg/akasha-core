@@ -9,8 +9,7 @@ import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
-import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
+import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 export type ProfilePageProps = {
   loggedProfileData: Profile;
@@ -82,6 +81,13 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
                 getRoutingPlugin().navigateTo({
                   appName: '@akashaorg/app-akasha-integration',
                   getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+                })
+              }
+              onReflect={() =>
+                getRoutingPlugin().navigateTo({
+                  appName: '@akashaorg/app-akasha-integration',
+                  getNavigationUrl: navRoutes =>
+                    `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
                 })
               }
             />

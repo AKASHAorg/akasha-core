@@ -21,8 +21,7 @@ import LoginCTACard from '@akashaorg/design-system-components/lib/components/Log
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
-import BeamFeed from '@akashaorg/ui-lib-feed/lib/components/beam-feed';
+import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 export type FeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -161,6 +160,13 @@ const FeedPage: React.FC<FeedPageProps> = props => {
               navigateTo.current({
                 appName: '@akashaorg/app-akasha-integration',
                 getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+              })
+            }
+            onReflect={() =>
+              navigateTo.current({
+                appName: '@akashaorg/app-akasha-integration',
+                getNavigationUrl: navRoutes =>
+                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
               })
             }
           />

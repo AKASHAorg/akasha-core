@@ -31,7 +31,8 @@ const enum ContextSources {
 
 declare const __DEV__: boolean;
 
-if (__DEV__) {  // Adds messages only in a dev environment
+if (__DEV__) {
+  // Adds messages only in a dev environment
   loadDevMessages();
   loadErrorMessages();
 }
@@ -46,9 +47,9 @@ class Gql {
   private _globalChannel: EventBus;
   private readonly _apolloCache: InMemoryCache;
   readonly apolloClient: ApolloClient<any>;
-  private readonly _contextSources: { default: symbol; composeDB: symbol; };
+  private readonly _contextSources: { default: symbol; composeDB: symbol };
 
-  public constructor (
+  public constructor(
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Ceramic) ceramic: CeramicService,
     @inject(TYPES.EventBus) globalChannel: EventBus,
@@ -61,36 +62,39 @@ class Gql {
       composeDB: Symbol.for(ContextSources.COMPOSEDB),
     });
 
-  /*
-   * composeDBLink
-   *
-   * Creates an ApolloLink that sends GraphQL operations to ComposeDB.
-   *
-   * This uses the Ceramic service to get the ComposeDB client instance,
-   * and calls the execute() method on it, passing the operation's
-   * query and variables.
-   *
-   * The result or error is passed back to the Observable observer.
-   *
-   * Parameters:
-   *
-   * - operation: The GraphQL operation to send to ComposeDB
-   *
-   * Returns:
-   *
-   * - An Observable for the GraphQL operation result
-  */
-    const composeDBlink = new ApolloLink((operation) => {
-      return new Observable((observer) => {
-        this._ceramic.getComposeClient().execute(operation.query, operation.variables).then(
-          (result) => {
-            observer.next(result);
-            observer.complete();
-          },
-          (error) => {
-            observer.error(error);
-          },
-        );
+    /*
+     * composeDBLink
+     *
+     * Creates an ApolloLink that sends GraphQL operations to ComposeDB.
+     *
+     * This uses the Ceramic service to get the ComposeDB client instance,
+     * and calls the execute() method on it, passing the operation's
+     * query and variables.
+     *
+     * The result or error is passed back to the Observable observer.
+     *
+     * Parameters:
+     *
+     * - operation: The GraphQL operation to send to ComposeDB
+     *
+     * Returns:
+     *
+     * - An Observable for the GraphQL operation result
+     */
+    const composeDBlink = new ApolloLink(operation => {
+      return new Observable(observer => {
+        this._ceramic
+          .getComposeClient()
+          .execute(operation.query, operation.variables)
+          .then(
+            result => {
+              observer.next(result);
+              observer.complete();
+            },
+            error => {
+              observer.error(error);
+            },
+          );
       });
     });
 
@@ -114,30 +118,33 @@ class Gql {
      * Returns:
      *
      * - The link to use for the operation based on its context source
-    */
+     */
     const directionalLink = split(
-      (operation) => {
+      operation => {
         return operation.getContext().source === this.contextSources.composeDB;
       },
       composeDBlink,
-      createPersistedQueryLink({ sha256 }).concat(new HttpLink({ uri: process.env.GRAPHQL_URI || 'http://localhost:4112/' })),
+      createPersistedQueryLink({ sha256 }).concat(
+        new HttpLink({ uri: process.env.GRAPHQL_URI || 'http://localhost:4112/' }),
+      ),
     );
 
     this._apolloCache = new InMemoryCache({
-     typePolicies: {
-       AkashaBeam: {
-         merge: true,
-       },
-       AkashaReflectConnection: {
-         merge: true,
-       }
-     }
+      typePolicies: {
+        AkashaBeam: {
+          merge: true,
+        },
+        AkashaReflectConnection: {
+          merge: true,
+        },
+      },
     });
 
     this.apolloClient = new ApolloClient({
       cache: this._apolloCache,
       link: directionalLink,
       version: '0.1dev',
+      connectToDevTools: __DEV__,
       defaultOptions: {
         watchQuery: {
           fetchPolicy: 'network-only',
@@ -178,23 +185,24 @@ class Gql {
    * Otherwise sends as standard query.
    *
    * Throws errors if present.
-  */
-  public requester = async <R, V> (doc: DocumentNode | string, vars?: V, options?: Record<string, any>): Promise<R> => {
+   */
+  public requester = async <R, V>(
+    doc: DocumentNode | string,
+    vars?: V,
+    options?: Record<string, any>,
+  ): Promise<R> => {
     let query: DocumentNode;
     if (typeof doc === 'string') {
       query = gql(doc);
     } else {
       query = doc;
     }
-    let uuid: string = '';
+    let uuid = '';
     const definition = getMainDefinition(query);
     let result: FetchResult<unknown, Record<string, unknown>, Record<string, unknown>>;
     if (definition.kind === 'OperationDefinition' && definition.operation === 'mutation') {
       uuid = crypto.randomUUID();
-      sessionStorage.setItem(
-        uuid,
-        JSON.stringify({ variables: definition.variableDefinitions }),
-      );
+      sessionStorage.setItem(uuid, JSON.stringify({ variables: definition.variableDefinitions }));
       this._globalChannel.next({
         data: { uuid, success: false, pending: true },
         event: GQL_EVENTS.MUTATION,
@@ -204,7 +212,7 @@ class Gql {
         variables: vars as Record<string, unknown> | undefined,
         context: options?.context,
       });
-    }else {
+    } else {
       result = await this.apolloClient.query({
         query: query,
         variables: vars as Record<string, unknown> | undefined,
@@ -230,26 +238,26 @@ class Gql {
     throw result.errors;
   };
 
-  get queryClient () {
+  get queryClient() {
     return this.apolloClient;
   }
 
-  get contextSources () {
+  get contextSources() {
     return this._contextSources;
   }
 
-  async resetCache () {
+  async resetCache() {
     return this._apolloCache.reset();
   }
 
-  get mutationNotificationConfig () {
+  get mutationNotificationConfig() {
     return Object.freeze({
       optionName: 'EmitNotification',
     });
   }
 
   @validate(z.string().min(20))
-  consumeMutationNotificationObject (uuid: string) {
+  consumeMutationNotificationObject(uuid: string) {
     const notification = sessionStorage.getItem(uuid);
     sessionStorage.removeItem(uuid);
     if (!notification) {
@@ -266,11 +274,11 @@ class Gql {
   /**
    * @deprecated Use client method instead
    */
-  getAPI () {
+  getAPI() {
     return this._client;
   }
 
-  get client () {
+  get client() {
     return this._client;
   }
 }
