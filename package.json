@@ -129,7 +129,9 @@
     "single-spa": "5.9.5",
     "single-spa-react": "5.1.4",
     "graphql": "16.8.1",
-    "@apollo/client": "3.8.7"
+    "@apollo/client": "3.8.7",
+    "vue-template-compiler": "2.7.15",
+    "vue": "2.7.15"
   },
   "workspaces": {
     "packages": [
