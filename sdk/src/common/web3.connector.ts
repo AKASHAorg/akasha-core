@@ -37,9 +37,26 @@ class Web3Connector {
     sepolia: 11155111,
   });
 
-  /**
-   *
-   */
+/*
+ * Web3Connector constructor
+ *
+ * @param logFactory - Logging factory to create logger
+ * @param globalChannel - EventBus for emitting events
+ *
+ * Initializes:
+ * - Logger
+ * - EventBus
+ * - Web3Modal configuration
+ *   - Project ID (required)
+ *   - Chain configuration
+ *   - Theming
+ *   - Privacy and terms URLs
+ *
+ * Creates Web3Modal instance
+ * Registers wallet change event listeners
+ *
+ * Throws error if WALLETCONNECT_PROJECT_ID env var not set
+*/
   constructor (
     @inject(TYPES.Log) logFactory: Logging,
     @inject(TYPES.EventBus) globalChannel: EventBus,
@@ -93,9 +110,24 @@ class Web3Connector {
     this.#_registerWalletChangeEvents();
   }
 
-
+/*
+ * Connect to a web3 wallet provider
+ *
+ * @returns {Promise<{connected: boolean, unsubscribe?: () => void}>}
+ * - Returns a promise that resolves to an object indicating if connected
+ * - The object contains:
+ *   - connected: boolean - Whether successfully connected or not
+ *   - unsubscribe: () => void - Optional function to unsubscribe from provider changes
+ *
+ * The method first checks if already connected.
+ * If not connected:
+ * - Opens the Web3Modal connect modal view
+ * - Subscribes to provider changes
+ * - When provider, isConnected and address is set, resolves promise
+ *
+ * If already connected, resolves returning current connected state.
+*/
   async connect (): Promise<{ connected: boolean, unsubscribe?: () => void }> {
-
     if (!this.#w3modal.getIsConnected()) {
       return new Promise(async (resolve, reject) => {
         const unsubscribe = this.#w3modal.subscribeProvider((state) => {
@@ -110,7 +142,19 @@ class Web3Connector {
     return { connected: this.#w3modal.getIsConnected() };
   }
 
-  toggleDarkTheme (enable?:boolean) {
+/*
+ * Toggle the Web3Modal dark theme
+ *
+ * @param {boolean} enable - Optional flag to force enable dark theme
+ *
+ * If enable passed:
+ * - Enables dark theme
+ *
+ * If no enable passed:
+ * - Toggles dark on if currently light
+ * - Toggles dark off if currently dark
+*/
+  toggleDarkTheme (enable?: boolean) {
     const themeMode = this.#w3modal.getThemeMode();
     if (enable || themeMode !== 'dark') {
       this.#w3modal.setThemeMode('dark');
@@ -119,6 +163,21 @@ class Web3Connector {
     }
   }
 
+/*
+ * Register event listeners for wallet provider changes
+ *
+ * Subscribes to provider changes from Web3Modal:
+ * - On provider connected:
+ *   - Set web3 instance from Web3Modal provider
+ *   - Set current provider type
+ *   - Emit CONNECTED event with provider type
+ *   - Register web3 provider change event listeners
+ *
+ * - On provider disconnected:
+ *   - Remove web3 provider change event listeners
+ *
+ * This allows reacting to changes in wallet connection state.
+*/
   #_registerWalletChangeEvents () {
     this.#w3modal.subscribeProvider(event => {
       if (event.isConnected) {
@@ -139,6 +198,15 @@ class Web3Connector {
     });
   }
 
+/*
+ * Get current Web3Connector state
+ *
+ * @returns {Object} State object containing:
+ * - providerType: Current provider type
+ * - connected: Whether provider is connected
+ * - address: Current selected address
+ * - chainId: Current chain ID
+*/
   get state () {
     return {
       providerType: this.#currentProviderType,
@@ -157,9 +225,16 @@ class Web3Connector {
     }
   }
 
-  /**
-   * Remove the web3 connection
-   */
+/*
+ * Disconnect from the current web3 provider
+ *
+ * Resets the web3 instance and provider type to null.
+ * Calls Web3Modal disconnect if connected.
+ * Emits DISCONNECTED event.
+ *
+ * @returns {Promise<void>}
+ * Promise resolves when disconnected.
+*/
   async disconnect (): Promise<void> {
     this.#web3Instance = null;
     this.#currentProviderType = null;
@@ -243,6 +318,20 @@ class Web3Connector {
     this.#log.info(`currently on network: ${network.selectedNetworkId}`);
   }
 
+ /*
+ * Register event listeners for provider changes
+ *
+ * @param {Object} provider - The web3 provider instance
+ * @param {Function} provider.on - The provider's 'on' method to add listeners
+ *
+ * Registers listeners for:
+ * - accountsChanged - Emits event with new ETH address
+* - chainChanged - Emits event with new chain ID
+ *
+ * Throws errors if:
+ * - Provider not specified
+ * - Provider does not support .on() method
+*/
   #_registerProviderChangeEvents (provider: {
     on?: (event: string, listener: (...args: unknown[]) => void) => void;
   }) {

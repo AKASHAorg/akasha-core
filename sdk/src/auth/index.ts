@@ -120,30 +120,29 @@ class AWF_Auth {
     return createFormattedValue(user);
   }
 
-  /*
-  Signs the user in and initializes the session.
-
-  Parameters:
-  - args:
-    - provider: The Ethereum provider to use.
-    - checkRegistered: Whether to check if the address is registered.
-    - resumeSignIn: Whether to resume a previous session.
-
-  Functionality:
-  1. Get the provider from the args or previous session.
-  2. Connect the Ethereum address with the provider.
-  3. Check if the address is registered if checkRegistered is true.
-  4. Initialize the Ceramic DID session.
-  5. Store the DID session encrypted in localStorage.
-  6. Set the current user object.
-  7. Notify subscribers of auth events.
-  8. Create a DB instance for the user.
-  9. Reset the GraphQL cache.
-  10. Notify that auth is ready.
-
-  Returns:
-  - The CurrentUser object with auth status.
-  */
+/*
+ * Sign the user in and initialize the session
+ *
+ * @param args - Arguments
+ * @param [args.provider] - Ethereum provider to use
+ * @param args.checkRegistered - Whether to check if address is registered
+ * @param [args.resumeSignIn] - Whether to resume previous session
+ *
+ * Functionality:
+ * 1. Connect Ethereum address
+ * 2. Check if address is registered
+ * 3. Initialize Ceramic session
+ * 4. Store encrypted session in localStorage
+ * 5. Set current user object
+ * 6. Notify subscribers of auth events
+ * 7. Create DB instance
+ * 8. Reset GraphQL cache
+ * 9. Notify auth is ready
+ *
+ * Returns:
+ * - CurrentUser object with auth status
+ * - null if error
+*/
   private async _signIn (
     args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean } = {
       provider: EthProviders.Web3Injected,
@@ -286,14 +285,32 @@ class AWF_Auth {
     return this.currentUser;
   }
 
-  /**
-   * Returns the currently logged-in user object
-   * It will try to log in if there is a previous session detected
-   */
+/*
+ * Get the current authenticated user
+ *
+ * Calls the internal _getCurrentUser method
+ *
+ * @returns {Promise<CurrentUser | null>} The current user object or null if not authenticated
+*/
   async getCurrentUser () {
     return this._getCurrentUser();
   }
 
+/*
+ * Get the current authenticated user (internal method)
+ *
+ * Checks if current user is already set:
+ * - If yes, returns it
+ *
+ * Checks localStorage for user session
+ * - If no session, returns null
+ *
+ * If session exists:
+ * - Emits wait event
+ * - Calls _signIn to resume session
+ *
+ * @returns {Promise<CurrentUser | null>} The current user object or null
+*/
   private async _getCurrentUser (): Promise<null | CurrentUser> {
     if (this.currentUser) {
       return Promise.resolve(this.currentUser);
@@ -356,6 +373,16 @@ class AWF_Auth {
     return this.#_didSession.did.createJWS(data);
   }
 
+/*
+ * Prepare an indexed ID for storage
+ *
+ * @param {string} id - The ID to index
+ *
+ * Signs a payload with the ID
+ * Returns object with:
+ * - jws: Signed payload
+ * - capability: Capability delegation proof
+ */
   @validate(z.string().min(16))
   async prepareIndexedID (id: string) {
     const payload = { ID: id };
