@@ -65,7 +65,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
             </Stack>
           </Stack>
           <Stack direction="row" spacing="gap-2">
-            <Icon icon={<Akasha />} />
+            <Icon icon={<Akasha />} solid={true} />
             <button onClick={toggleMenuDrop}>
               <Icon icon={<EllipsisVerticalIcon />} />
             </button>

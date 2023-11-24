@@ -11,6 +11,7 @@ export type SubtitleTextIconProps = {
   customStyle?: string;
   dataTestId?: string;
   icon?: React.ReactElement;
+  solid?: boolean;
   backgroundSize?: string;
   backgroundColor?: boolean;
   label?: string | number;
@@ -25,6 +26,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   const {
     customStyle = '',
     icon,
+    solid,
     backgroundColor,
     backgroundSize,
     label,
@@ -53,6 +55,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
         <Stack direction="row" align="center" justify="center" customStyle={iconBackgroundStyle}>
           <Icon
             icon={icon}
+            solid={solid}
             size={{ width: 'w-4', height: 'h-5' }}
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
           />

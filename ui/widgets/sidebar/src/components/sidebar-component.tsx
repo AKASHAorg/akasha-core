@@ -349,7 +349,13 @@ const SidebarComponent: React.FC<unknown> = () => {
                 rel="noreferrer noopener"
                 customStyle="mr-4"
               >
-                <Button icon={socialLink.icon} variant="primary" greyBg={true} iconOnly={true} />
+                <Button
+                  icon={socialLink.icon}
+                  solidIcon={idx > 0}
+                  variant="primary"
+                  greyBg={true}
+                  iconOnly={true}
+                />
               </Anchor>
             ))}
           </Stack>

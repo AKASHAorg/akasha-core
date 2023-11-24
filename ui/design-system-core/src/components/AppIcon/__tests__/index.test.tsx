@@ -9,7 +9,7 @@ describe('<AppIcon /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<AppIcon placeholderIcon={<Discord />} />, {});
+      componentWrapper = customRender(<AppIcon placeholderIcon={<Discord />} solid={true} />, {});
     });
   });
 

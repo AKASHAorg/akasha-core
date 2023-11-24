@@ -26,6 +26,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     iconOnly = false,
     greyBg = false,
     plainIcon = false,
+    solidIcon = false,
     children,
     breakPointSize,
     customStyle = '',
@@ -115,6 +116,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
               <ButtonIcon
                 size={size}
                 icon={icon}
+                solid={solidIcon}
                 variant={variant}
                 greyBg={greyBg}
                 loading={false}
@@ -131,6 +133,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
               <ButtonIcon
                 size={size}
                 icon={icon}
+                solid={solidIcon}
                 variant={variant}
                 greyBg={greyBg}
                 loading={false}

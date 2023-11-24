@@ -51,7 +51,7 @@ export const CustomIcons: Story = {
   render: () => (
     <Stack spacing="gap-x-2">
       {customIcons.map((icon, idx) => (
-        <Icon key={idx} icon={icon} color="white" />
+        <Icon key={idx} icon={icon} solid={idx !== 2} color="white" />
       ))}
     </Stack>
   ),
@@ -61,7 +61,7 @@ export const IconVariants: Story = {
   render: () => (
     <Stack spacing="gap-x-2">
       {variants.map((variant, idx) => (
-        <Icon key={idx} {...variant} color="white" />
+        <Icon key={idx} {...variant} solid={true} color="white" />
       ))}
     </Stack>
   ),

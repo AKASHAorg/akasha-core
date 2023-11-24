@@ -93,7 +93,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
       </Stack>
       <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
         <Stack align="center" justify="center" direction="column">
-          <Icon icon={<Akasha />} customStyle="w-18 h-7" />
+          <Icon icon={<Akasha />} solid={true} customStyle="w-18 h-7" />
           <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
             AKASHA World
           </Text>
@@ -106,6 +106,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
               <Button
                 iconOnly={true}
                 icon={<Akasha />}
+                solidIcon={true}
                 onClick={onAppWidgetClick}
                 variant="primary"
               />

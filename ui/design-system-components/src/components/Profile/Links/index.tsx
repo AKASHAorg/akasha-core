@@ -26,31 +26,36 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
   const getIconFromLink = (href: string) => {
     const host = new URL(href).host;
 
-    if ('github.com'.includes(host)) return <Github />;
-    if ('twitter.com'.includes(host)) return <Twitter />;
-    if ('discordapp.com'.includes(host)) return <Discord />;
-    if ('telegram.me'.includes(host) || 't.me'.includes(host)) return <Telegram />;
-    return <LinkIcon />;
+    if ('github.com'.includes(host)) return { icon: <Github />, solid: false };
+    if ('twitter.com'.includes(host)) return { icon: <Twitter />, solid: true };
+    if ('discordapp.com'.includes(host)) return { icon: <Discord />, solid: true };
+    if ('telegram.me'.includes(host) || 't.me'.includes(host))
+      return { icon: <Telegram />, solid: true };
+    return { icon: <LinkIcon />, solid: false };
   };
 
   return (
     <Card elevation="1" radius={20} padding={'p-4'}>
       <Stack direction="column" spacing="gap-y-2.5">
         <Text variant="label">{title}</Text>
-        {links.map((link, index) => (
-          <CopyToClipboard key={`${link.href}${index}`} value={link.href}>
-            <Stack direction="row" align="center" spacing="gap-x-2">
-              <AppIcon placeholderIcon={getIconFromLink(link.href)} size="xs" accentColor />
-              <Text
-                variant="body2"
-                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                breakWord
-              >
-                {link.href}
-              </Text>
-            </Stack>
-          </CopyToClipboard>
-        ))}
+        {links.map((link, index) => {
+          const { icon, solid } = getIconFromLink(link.href);
+
+          return (
+            <CopyToClipboard key={`${link.href}${index}`} value={link.href}>
+              <Stack direction="row" align="center" spacing="gap-x-2">
+                <AppIcon placeholderIcon={icon} solid={solid} size="xs" accentColor />
+                <Text
+                  variant="body2"
+                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                  breakWord
+                >
+                  {link.href}
+                </Text>
+              </Stack>
+            </CopyToClipboard>
+          );
+        })}
       </Stack>
     </Card>
   );

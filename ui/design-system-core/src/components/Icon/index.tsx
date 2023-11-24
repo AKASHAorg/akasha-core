@@ -5,7 +5,6 @@ import Stack from '../Stack';
 
 import { BasicIconSize, BasicSize, BreakPointSize, Color } from '../types/common.types';
 import { getWidthClasses, getHeightClasses, getColorClasses } from '../../utils';
-import { Akasha, Discord, Telegram, Twitter, Widget, Metamask } from './akasha-icons';
 
 export interface IconProps {
   color?: Color;
@@ -21,15 +20,6 @@ export interface IconProps {
   hoverColor?: Color;
   solid?: boolean;
 }
-
-const fillOnlyIcons: React.ReactElement[] = [
-  <Akasha />,
-  <Discord />,
-  <Telegram />,
-  <Twitter />,
-  <Widget />,
-  <Metamask />,
-];
 
 const Icon: React.FC<IconProps> = props => {
   const {
@@ -56,29 +46,27 @@ const Icon: React.FC<IconProps> = props => {
       ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
       : `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
 
-  const isFillOnlyIcon = fillOnlyIcons.includes(icon) || solid;
-
   const baseStyle = `select-none ${
     hover
       ? `cursor-pointer ${getColorClasses(
           hoverColor,
-          isFillOnlyIcon ? 'group-hover:[&>*]:fill' : 'group-hover:[&>*]:stroke',
+          solid ? 'group-hover:[&>*]:fill' : 'group-hover:[&>*]:stroke',
         )}`
       : ''
   }`;
 
   let colorStyle: string;
   if (color) {
-    colorStyle = `${getColorClasses(color, isFillOnlyIcon ? '[&>*]:fill' : '[&>*]:stroke')}`;
+    colorStyle = `${getColorClasses(color, solid ? '[&>*]:fill' : '[&>*]:stroke')}`;
   } else {
-    colorStyle = isFillOnlyIcon
+    colorStyle = solid
       ? '[&>*]:fill-black dark:[&>*]:fill-white'
       : '[&>*]:stroke-black dark:[&>*]:stroke-white';
   }
 
   const accentColorStyle = accentColor
     ? `${
-        isFillOnlyIcon
+        solid
           ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark'
           : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
       }`

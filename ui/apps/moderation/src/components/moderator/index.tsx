@@ -99,7 +99,7 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
         {moderator.social && (
           <Stack spacing="gap-x-2">
             {moderator.social?.discord && (
-              <AppIcon placeholderIcon={<Discord />} accentColor={true} />
+              <AppIcon placeholderIcon={<Discord />} solid={true} accentColor={true} />
             )}
 
             {moderator.social?.email && (

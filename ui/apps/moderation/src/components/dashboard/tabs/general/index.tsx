@@ -23,7 +23,7 @@ export type GeneralTabProps = {
   moderationCategories: string[];
   contactInfoLabel: string;
   contactInfoIntroLabel: string;
-  contactInfo: { icon: React.ReactElement; value: string }[];
+  contactInfo: { icon: React.ReactElement; solid?: boolean; value: string }[];
   maxApplicantsLabel: string;
   maxApplicantsIntroLabel: string;
   currentNumberLabel: string;
@@ -111,9 +111,16 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
         <Text>{contactInfoIntroLabel}</Text>
 
         <Stack spacing="gap-y-2">
-          {contactInfo.map(({ icon, value }) => (
+          {contactInfo.map(({ icon, solid, value }) => (
             <Stack direction="row" key={value} align="center" spacing="gap-x-2">
-              <Button icon={icon} variant="primary" greyBg={true} iconOnly={true} size="sm" />
+              <Button
+                icon={icon}
+                solidIcon={solid}
+                variant="primary"
+                greyBg={true}
+                iconOnly={true}
+                size="sm"
+              />
 
               <Text>{value}</Text>
             </Stack>

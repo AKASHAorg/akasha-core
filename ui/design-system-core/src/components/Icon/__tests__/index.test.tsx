@@ -9,7 +9,10 @@ describe('<Icon /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<Icon icon={<Akasha />} testId="akasha-icon" />, {});
+      componentWrapper = customRender(
+        <Icon icon={<Akasha />} solid={true} testId="akasha-icon" />,
+        {},
+      );
     });
   });
 

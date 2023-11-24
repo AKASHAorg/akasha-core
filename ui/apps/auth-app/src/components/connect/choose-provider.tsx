@@ -102,6 +102,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
               <Stack direction="row" align="center" justify="center" spacing="gap-x-2">
                 <AppIcon
                   placeholderIcon={<Metamask />}
+                  solid={true}
                   background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
                   size="sm"
                   radius={4}

@@ -97,7 +97,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
               <Text color="white">{draftLabel}</Text>
             </Stack>
           )}
-          <Icon icon={<Akasha />} />
+          <Icon icon={<Akasha />} solid={true} />
           <button onClick={ev => toggleMenuDrop(ev, articleData.id)}>
             <Icon icon={<EllipsisVerticalIcon />} />
           </button>

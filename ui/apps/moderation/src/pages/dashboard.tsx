@@ -120,7 +120,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
         'By providing this information the community will be able to contact you',
       )}
       contactInfo={[
-        { icon: <Discord />, value: 'julie#t112' },
+        { icon: <Discord />, solid: true, value: 'julie#t112' },
         { icon: <EnvelopeIcon />, value: 'juliet112@gmail.com' },
       ]}
       maxApplicantsLabel={t('Maximum Number of Applicant')}

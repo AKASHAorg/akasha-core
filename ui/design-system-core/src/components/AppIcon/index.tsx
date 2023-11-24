@@ -18,6 +18,7 @@ import {
 export type AppIconProps = {
   appImg?: LogoSourceType;
   placeholderIcon: React.ReactElement;
+  solid?: boolean;
   accentColor?: boolean;
   // props for notifications icon
   stackedIcon?: boolean;

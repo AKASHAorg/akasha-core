@@ -13,7 +13,7 @@ describe('<SubtitleTextIcon /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        <SubtitleTextIcon label={label} subtitle={subtitle} icon={<Akasha />} />,
+        <SubtitleTextIcon label={label} subtitle={subtitle} icon={<Akasha />} solid={true} />,
         {},
       );
     });
