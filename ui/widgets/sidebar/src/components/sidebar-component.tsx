@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { EventTypes, MenuItemAreaType, IMenuItem } from '@akashaorg/typings/lib/ui';
 import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk/events';
 import {
-  getProfileImageVersionsWithMediaUrl,
   useLogout,
   LOGIN_STATE_KEY,
   useDismissedCard,
@@ -16,14 +15,14 @@ import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-cor
 import getSDK from '@akashaorg/awf-sdk';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListSidebarApps from './list-sidebar-apps';
 import SidebarCTACard from './cta-card';
+import SidebarHeader from './sidebar-header';
+import FallbackHeader from './fallback-header';
 
 const SidebarComponent: React.FC<unknown> = () => {
   const {
@@ -42,7 +41,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { isLoggedIn, loggedInProfileId, userName, avatar } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const logoutMutation = useLogout();
   const queryClient = useQueryClient();
 
@@ -50,21 +49,11 @@ const SidebarComponent: React.FC<unknown> = () => {
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
-  const profileName = useMemo(
-    () => (!isLoggedIn ? t('Guest') : userName),
-    [userName, isLoggedIn, t],
-  );
-
   useEffect(() => {
     if (isLoggedIn) {
       setIsLoading(false);
     }
   }, [isLoggedIn]);
-
-  const headerBackground = isLoading ? 'bg(secondaryLight/30 dark:grey5)' : '';
-
-  //this padding style will adjust the header's vertical space to maintain the same height through different states
-  const headerPadding = profileName && isLoggedIn && !isLoading ? 'pb-[2.125rem]' : '';
 
   useEffect(() => {
     const mql = window.matchMedia(startMobileSidebarHidingBreakpoint);
@@ -84,7 +73,7 @@ const SidebarComponent: React.FC<unknown> = () => {
 
     const subSDK = sdk.api.globalChannel.subscribe({
       next: (eventData: { data: { name: string }; event: AUTH_EVENTS | WEB3_EVENTS }) => {
-        if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS) {
+        if (eventData.event === AUTH_EVENTS.CONNECT_ADDRESS && !isLoggedIn) {
           setIsLoading(true);
           return;
         }
@@ -99,7 +88,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     return () => {
       subSDK.unsubscribe();
     };
-  }, []);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     let sub;
@@ -237,57 +226,18 @@ const SidebarComponent: React.FC<unknown> = () => {
       radius="rounded-r-2xl xl:rounded-2xl"
       padding="p-0"
     >
-      <Stack
-        direction="row"
-        justifyItems="stretch"
-        customStyle={`p-4 border-b-1 border(grey9 dark:grey3) rounded-t-2xl ${headerPadding} ${headerBackground}`}
+      <Suspense
+        fallback={<FallbackHeader authenticatedDID={authenticatedDID} isLoggedIn={isLoggedIn} />}
       >
-        <Stack customStyle="w-fit h-fit mr-2">
-          <Avatar
-            profileId={!isLoggedIn || isLoading ? null : loggedInProfileId}
-            avatar={!isLoggedIn || isLoading ? null : getProfileImageVersionsWithMediaUrl(avatar)}
-            isClickable={isLoggedIn}
-            onClick={() => handleAvatarClick(loggedInProfileId)}
-          />
-        </Stack>
-        <Stack justify="center" customStyle={'w-fit flex-grow'}>
-          <Text variant="button-md">{isLoading ? t('Guest') : profileName}</Text>
-          {isLoggedIn && !isLoading && (
-            <DidField
-              did={loggedInProfileId}
-              textColor="grey7"
-              copyLabel={t('Copy to clipboard')}
-              copiedLabel={t('Copied')}
-            />
-          )}
-          {(!isLoggedIn || isLoading) && (
-            <Text
-              variant="footnotes2"
-              color="grey7"
-              customStyle="whitespace-normal"
-              truncate
-              breakWord
-            >
-              {t('Connect to see')}
-              <br />
-              {t('member only features.')}
-            </Text>
-          )}
-        </Stack>
-        <Stack customStyle="w-fit h-fit self-start">
-          {isLoading && <Button variant="primary" size="sm" loading onClick={handleLogoutClick} />}
-          {!isLoading && (
-            <>
-              {isLoggedIn && (
-                <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={handleLogoutClick} />
-              )}
-              {!isLoggedIn && (
-                <Button size="sm" variant="primary" label="Connect" onClick={handleLoginClick} />
-              )}
-            </>
-          )}
-        </Stack>
-      </Stack>
+        <SidebarHeader
+          authenticatedDID={authenticatedDID}
+          isLoggedIn={isLoggedIn}
+          logoutClickHandler={handleLogoutClick}
+          loginClickHandler={handleLoginClick}
+          isLoading={isLoading}
+          handleAvatarClick={handleAvatarClick}
+        />
+      </Suspense>
       {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
