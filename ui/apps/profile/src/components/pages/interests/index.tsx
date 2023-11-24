@@ -39,7 +39,7 @@ const InterestsPage: React.FC<unknown> = () => {
   };
 
   const queryClient = useQueryClient();
-  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const ownInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node },
@@ -56,7 +56,7 @@ const InterestsPage: React.FC<unknown> = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: useGetInterestsByDidQuery.getKey({
-          id: profileId !== loggedInProfileId ? loggedInProfileId : profileId,
+          id: profileId !== authenticatedDID ? authenticatedDID : profileId,
         }),
       });
       setShowFeedback(true);
@@ -91,7 +91,7 @@ const InterestsPage: React.FC<unknown> = () => {
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
       <Card elevation="1" radius={20} padding={'p-4'}>
-        {profileId !== loggedInProfileId && (
+        {profileId !== authenticatedDID && (
           <Stack direction="column" spacing="gap-y-2.5">
             <Text variant="h5">{t('Interests')} </Text>
             <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey7' }}>
@@ -121,7 +121,7 @@ const InterestsPage: React.FC<unknown> = () => {
             </Stack>
           </Stack>
         )}
-        {profileId === loggedInProfileId && (
+        {profileId === authenticatedDID && (
           <EditInterests
             title={t('Your interests')}
             subTitle={t('(30 topics max.)')}

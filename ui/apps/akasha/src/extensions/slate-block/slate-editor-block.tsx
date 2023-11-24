@@ -26,14 +26,14 @@ export const SlateEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
   const { name } = useRootComponentProps<RootExtensionProps>();
-  const { loggedInProfileId } = useLoggedIn();
+  const { authenticatedDID } = useLoggedIn();
 
   const createContentBlock = useCreateContentBlockMutation();
 
   const postDraft = new Draft<IEntryData['slateContent']>({
     storage: localStorage,
     appName: name,
-    userId: loggedInProfileId,
+    userId: authenticatedDID,
     action: 'post',
   });
 

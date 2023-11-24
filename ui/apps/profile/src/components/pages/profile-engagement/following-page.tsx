@@ -31,7 +31,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -140,7 +140,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
       )}
       {followingReq.status === 'success' && (
         <Following
-          loggedInProfileId={loggedInProfileId}
+          authenticatedDID={authenticatedDID}
           followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}

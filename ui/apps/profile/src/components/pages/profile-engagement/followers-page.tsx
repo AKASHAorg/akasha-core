@@ -32,7 +32,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const followersReq = useInfiniteGetFollowersListByDidQuery(
     'first',
     {
@@ -131,7 +131,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
       )}
       {followersReq.status === 'success' && (
         <Followers
-          loggedInProfileId={loggedInProfileId}
+          authenticatedDID={authenticatedDID}
           followers={followers}
           followList={followList}
           profileAnchorLink={'/@akashaorg/app-profile'}
