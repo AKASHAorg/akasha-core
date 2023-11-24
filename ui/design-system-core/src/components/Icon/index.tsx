@@ -1,18 +1,16 @@
 import React from 'react';
-
-import { IconType } from '@akashaorg/typings/lib/ui';
+import { apply, tw } from '@twind/core';
 
 import Stack from '../Stack';
 
-import { PassedIcon } from './passed-icon';
-
 import { BasicIconSize, BasicSize, BreakPointSize, Color } from '../types/common.types';
 import { getWidthClasses, getHeightClasses, getColorClasses } from '../../utils';
+import { Akasha, Discord, Telegram, Twitter, Widget, Metamask } from './akasha-icons';
 
 export interface IconProps {
   color?: Color;
   ref?: React.Ref<HTMLDivElement>;
-  type: IconType;
+  icon?: React.ReactElement;
   size?: BasicIconSize;
   breakPointSize?: BreakPointSize;
   accentColor?: boolean;
@@ -24,18 +22,18 @@ export interface IconProps {
   solid?: boolean;
 }
 
-const fillOnlyIcons: IconType[] = [
-  'akasha',
-  'discord',
-  'telegram',
-  'twitter',
-  'widget',
-  'metamask',
+const fillOnlyIcons: React.ReactElement[] = [
+  <Akasha />,
+  <Discord />,
+  <Telegram />,
+  <Twitter />,
+  <Widget />,
+  <Metamask />,
 ];
 
 const Icon: React.FC<IconProps> = props => {
   const {
-    type,
+    icon,
     ref,
     accentColor = false,
     size = 'md',
@@ -58,7 +56,7 @@ const Icon: React.FC<IconProps> = props => {
       ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
       : `${ICON_SIZE_MAP[size]} ${breakPointStyle}`;
 
-  const isFillOnlyIcon = fillOnlyIcons.includes(type) || solid;
+  const isFillOnlyIcon = fillOnlyIcons.includes(icon) || solid;
 
   const baseStyle = `select-none ${
     hover
@@ -95,7 +93,10 @@ const Icon: React.FC<IconProps> = props => {
 
   return (
     <Stack ref={ref} customStyle={customStyle}>
-      <PassedIcon customStyle={iconStyle} testId={testId} type={type} solid={solid} />
+      {React.cloneElement(icon, {
+        className: tw(apply(iconStyle)),
+        'data-testid': testId,
+      })}
     </Stack>
   );
 };
