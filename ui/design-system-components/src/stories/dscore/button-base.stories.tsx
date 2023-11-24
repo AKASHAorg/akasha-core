@@ -2,6 +2,10 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import {
+  CheckIcon,
+  PlusIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 
@@ -20,7 +24,7 @@ const variants: ButtonProps[] = [
   {
     label: 'Button',
     size: 'xs',
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     variant: 'primary',
   },
   {
@@ -31,14 +35,14 @@ const variants: ButtonProps[] = [
   {
     label: 'Button',
     size: 'sm',
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     iconDirection: 'left',
     variant: 'primary',
   },
   {
     label: 'Button',
     size: 'sm',
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     iconDirection: 'right',
     variant: 'primary',
   },
@@ -49,7 +53,7 @@ const variants: ButtonProps[] = [
   },
   {
     label: 'Button',
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     iconDirection: 'right',
     disabled: true,
     variant: 'primary',
@@ -68,14 +72,14 @@ const variants: ButtonProps[] = [
     label: 'Button',
     variant: 'primary',
     active: true,
-    icon: 'CheckIcon',
+    icon: <CheckIcon />,
     iconDirection: 'right',
   },
   {
     label: 'Button',
     size: 'xs',
     variant: 'secondary',
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
   },
   {
     label: 'Button',
@@ -93,34 +97,34 @@ const variants: ButtonProps[] = [
     variant: 'secondary',
   },
   {
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     size: 'md',
     iconOnly: true,
     variant: 'primary',
   },
   {
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     size: 'md',
     iconOnly: true,
     loading: true,
     variant: 'primary',
   },
   {
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     size: 'md',
     iconOnly: true,
     variant: 'primary',
     disabled: true,
   },
   {
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     size: 'md',
     iconOnly: true,
     variant: 'primary',
     greyBg: true,
   },
   {
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     size: 'md',
     iconOnly: true,
     loading: true,
@@ -128,7 +132,7 @@ const variants: ButtonProps[] = [
     greyBg: true,
   },
   {
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     size: 'md',
     iconOnly: true,
     variant: 'primary',
@@ -139,7 +143,7 @@ const variants: ButtonProps[] = [
     label: 'Button',
     variant: 'secondary',
     active: true,
-    icon: 'CheckIcon',
+    icon: <CheckIcon />,
     iconDirection: 'right',
   },
   {
@@ -148,13 +152,13 @@ const variants: ButtonProps[] = [
   },
   {
     label: 'Button',
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     iconDirection: 'left',
     variant: 'text',
   },
   {
     label: 'Button',
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     iconDirection: 'right',
     variant: 'text',
   },
@@ -165,24 +169,24 @@ const variants: ButtonProps[] = [
   },
   {
     label: 'Button',
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     iconDirection: 'right',
     variant: 'text',
     disabled: true,
   },
   {
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     iconOnly: true,
     variant: 'text',
   },
   {
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     loading: true,
     iconOnly: true,
     variant: 'text',
   },
   {
-    icon: 'PlusIcon',
+    icon: <PlusIcon />,
     iconOnly: true,
     variant: 'text',
     disabled: true,

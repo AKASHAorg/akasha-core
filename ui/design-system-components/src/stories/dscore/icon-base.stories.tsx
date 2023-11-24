@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  Akasha,
+  Discord,
+  Github,
+  Telegram,
+  Twitter,
+  Widget,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { CustomIconTypes } from '@akashaorg/design-system-core/src/components/Icon/akasha-icons';
+// import { CustomIconTypes } from '@akashaorg/design-system-core/src/components/Icon/akasha-icons';
 
 const meta: Meta<IconProps> = {
   title: 'DSCore/Icons/Icon',
@@ -13,29 +21,29 @@ const meta: Meta<IconProps> = {
 export default meta;
 type Story = StoryObj<IconProps>;
 
-const customIcons: CustomIconTypes[] = [
-  'akasha',
-  'discord',
-  'github',
-  'telegram',
-  'twitter',
-  'widget',
+const customIcons: ReactElement[] = [
+  <Akasha />,
+  <Discord />,
+  <Github />,
+  <Telegram />,
+  <Twitter />,
+  <Widget />,
 ];
 
 const variants: IconProps[] = [
   {
-    type: 'akasha',
+    icon: <Akasha />,
     size: 'xs',
   },
   {
-    type: 'akasha',
+    icon: <Akasha />,
     size: 'sm',
   },
   {
-    type: 'akasha',
+    icon: <Akasha />,
   },
   {
-    type: 'akasha',
+    icon: <Akasha />,
     size: 'lg',
   },
 ];
@@ -43,8 +51,8 @@ const variants: IconProps[] = [
 export const CustomIcons: Story = {
   render: () => (
     <Stack spacing="gap-x-2">
-      {customIcons.map(icon => (
-        <Icon key={icon} type={icon} color="white" />
+      {customIcons.map((icon, idx) => (
+        <Icon key={idx} icon={icon} color="white" />
       ))}
     </Stack>
   ),

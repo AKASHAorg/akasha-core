@@ -6,6 +6,8 @@ import {
   MenuItemType,
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { Vibe } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import routes, { DASHBOARD, HISTORY, HOME, MODERATORS } from './routes';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
@@ -19,7 +21,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Vibe',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'vibe' },
+    logo: { type: LogoTypeSource.ICON, value: <Vibe /> },
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.OtherArea],
     subRoutes: [
       {

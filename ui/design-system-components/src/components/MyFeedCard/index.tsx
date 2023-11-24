@@ -1,6 +1,10 @@
 import * as React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  ChevronRightIcon,
+  QueueListIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { tw } from '@twind/core';
 
@@ -22,7 +26,7 @@ const MyFeedCard: React.FC<MyFeedCardProps> = props => {
       <div className={tw(`flex items-center py-6 px-4`)}>
         {!hasPosts && (
           <>
-            <Icon type="QueueListIcon" size="lg" accentColor={true} />
+            <Icon icon={<QueueListIcon />} size="lg" accentColor={true} />
             <Text variant="h1" align="center" customStyle="mt-6">
               {noPostsTitle}
             </Text>
@@ -49,7 +53,7 @@ const MyFeedCard: React.FC<MyFeedCardProps> = props => {
           <Text variant="h3" color={{ dark: 'secondaryDark', light: 'secondaryLight' }}>
             {CTALabel}
           </Text>
-          <Icon type="ChevronRightIcon" accentColor={true} />
+          <Icon icon={<ChevronRightIcon />} accentColor={true} />
         </button>
       </div>
     </Card>

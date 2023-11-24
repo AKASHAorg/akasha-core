@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
+
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import {
+  CheckIcon,
+  UserPlusIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Following } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import {
@@ -142,7 +149,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
           ? () => handleUnfollow(profileID, followId)
           : () => handleFollow(profileID, followId)
       }
-      icon={following ? 'following' : 'UserPlusIcon'}
+      icon={following ? <Following /> : <UserPlusIcon />}
       variant={'primary'}
       loading={loading}
       greyBg={true}
@@ -156,8 +163,8 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       activeHoverLabel={t('Unfollow')}
       active={following}
       iconDirection="left"
-      activeIcon="CheckIcon"
-      activeHoverIcon="XMarkIcon"
+      activeIcon={<CheckIcon />}
+      activeHoverIcon={<XMarkIcon />}
       inactiveVariant="secondary"
       loading={loading}
       hoverColors={{

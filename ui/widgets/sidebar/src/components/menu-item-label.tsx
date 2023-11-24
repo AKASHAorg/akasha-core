@@ -5,6 +5,7 @@ import { IMenuItem } from '@akashaorg/typings/lib/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { BellIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type MenuItemLabelProps = {
   menuItem: IMenuItem;
@@ -27,8 +28,8 @@ const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
           <AppIcon
             size="md"
             accentColor={true}
-            stackedIcon={menuItem.logo.value === 'BellIcon'}
-            placeholderIconType={menuItem.logo.value}
+            stackedIcon={menuItem.logo.value === <BellIcon />}
+            placeholderIcon={menuItem.logo.value}
           />
         )}
       </Stack>

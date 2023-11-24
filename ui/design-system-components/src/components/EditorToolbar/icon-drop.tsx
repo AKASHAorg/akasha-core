@@ -21,7 +21,7 @@ const IconDrop: React.FC<IIconDropProps> = props => {
       {dropItems.map((icon, idx) => (
         <button onClick={icon.handler}>
           <Stack key={`${icon.type}-${idx}`} align="center" customStyle="rounded-lg cursor-pointer">
-            <Icon type={icon.type} size="sm" />
+            {/* <Icon type={icon.type} size="sm" /> */}
           </Stack>
         </button>
       ))}

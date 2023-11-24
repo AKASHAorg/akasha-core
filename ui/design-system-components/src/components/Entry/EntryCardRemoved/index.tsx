@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -27,7 +28,7 @@ const EntryCardRemoved: React.FC<EntryCardRemovedProps> = props => {
       customStyle={props.type === 'author' ? '' : 'border-bg-errorLight'}
     >
       <Stack direction="row" spacing="gap-x-1">
-        <Icon color="errorLight" type="ExclamationTriangleIcon" />
+        <Icon color="errorLight" icon={<ExclamationTriangleIcon />} />
         {props.type === 'author' ? (
           <Stack spacing="gap-y-1" customStyle="grow">
             <Stack direction="row" spacing="gap-x-1">

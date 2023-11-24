@@ -5,11 +5,11 @@ import InputTags from './input-tags';
 
 import { License } from '../utils/licenses';
 
-import { Profile } from '@akashaorg/typings/lib/ui';
-
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { IntegrationAppCTA } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -125,12 +125,12 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
     charCount,
     tagsLabel,
     tagsSubtitleLabel,
-    tagPlaceholder,
-    tagSuggestions = [],
+    // tagPlaceholder,
+    // tagSuggestions = [],
     licenseLabel,
     licenseSubtitleLabel,
-    licensesArr,
-    selectLicensePlaceholder,
+    // licensesArr,
+    // selectLicensePlaceholder,
     selectedLicense,
     saveDraftLabel,
     confirmLabel,
@@ -138,11 +138,11 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
     onCoverImageUpload,
     onClickEditImage,
     onDescriptiveTextChange,
-    onAddTag,
-    onTagInputChange,
-    onTargetKeyDown,
+    // onAddTag,
+    // onTagInputChange,
+    // onTargetKeyDown,
     onClickTag,
-    onSelectLicense,
+    // onSelectLicense,
     onClickSaveDraft,
     onClickConfirm,
   } = props;
@@ -159,7 +159,7 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
     <Card>
       <Stack direction="row" fullWidth={true} customStyle="p-4">
         <button onClick={handleClickIcon}>
-          <Icon type="ChevronLeftIcon" />
+          <Icon icon={<ChevronRightIcon />} />
         </button>
         <Text variant="h2">{titleLabel}</Text>
       </Stack>
@@ -195,7 +195,7 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
                     padding={'p-0.5'}
                     customStyle="rounded-sm border(secondaryLight dark:secondaryDark) absolute top-2 right-2"
                   >
-                    <Icon type="integrationAppCTA" accentColor={true} />
+                    <Icon icon={<IntegrationAppCTA />} accentColor={true} />
                   </Stack>
                 </button>
                 <Image
@@ -267,11 +267,11 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
         /> */}
         {selectedLicense && (
           <Stack direction="row" align="center" customStyle="mt-2 px-1">
-            <Icon type={selectedLicense.icon} size="lg" accentColor={true} />
+            {/* <Icon type={selectedLicense.icon} size="lg" accentColor={true} /> */}
             <Stack spacing="gap-1">
               {selectedLicense.description.map((el, idx) => (
                 <Stack key={idx} direction="row" spacing="gap-2">
-                  {el.icon && <Icon type={el.icon} size="sm" accentColor={true} />}
+                  {/* {el.icon && <Icon type={el.icon} size="sm" accentColor={true} />} */}
                   <Text variant="subtitle2">{el.text}</Text>
                 </Stack>
               ))}

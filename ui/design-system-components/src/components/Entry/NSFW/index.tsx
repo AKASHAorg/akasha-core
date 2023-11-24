@@ -1,6 +1,7 @@
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { EyeSlashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import React from 'react';
@@ -16,7 +17,7 @@ const NSFW: React.FC<NSFWProps> = props => {
   return (
     <Card padding={8} radius={10} elevation="2" background="white/80" customStyle="box-content">
       <Stack direction="row" spacing="gap-x-1">
-        <Icon type="EyeSlashIcon" color="errorLight" />
+        <Icon icon={<EyeSlashIcon />} color="errorLight" />
         <Text variant="button-sm" color="errorLight">
           {sensitiveContentLabel}
         </Text>

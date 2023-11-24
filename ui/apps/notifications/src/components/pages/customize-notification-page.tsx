@@ -17,6 +17,10 @@ import routes, {
   CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
 } from '../../routes';
+import {
+  BellSnoozeIcon,
+  BellAlertIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type CustomizeNotificationPageProps = {
   initial?: boolean;
@@ -271,8 +275,8 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
                     <>{t('Snooze Notifications')}</>
                   </Text>
                   <Toggle
-                    iconChecked="BellSnoozeIcon"
-                    iconUnchecked="BellAlertIcon"
+                    iconChecked={<BellSnoozeIcon />}
+                    iconUnchecked={<BellAlertIcon />}
                     checked={snoozed}
                     onChange={snoozeChangeHandler}
                   />

@@ -6,16 +6,21 @@ import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ArrowTopRightOnSquareIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Web3ConnectCard from './web3-connect-card';
 import { useTranslation } from 'react-i18next';
-import { IconType } from '@akashaorg/typings/lib/ui';
+
 import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/lib/sdk';
 import { useAccordion, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  Metamask,
+  Walletconnect,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 export type ChooseProviderProps = {
   injectedProvider: {
     name: INJECTED_PROVIDERS;
-    iconType?: IconType;
+    iconType?: React.ReactElement;
     titleLabel?: string;
     subtitleLabel?: string;
   };
@@ -96,7 +101,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
 
               <Stack direction="row" align="center" justify="center" spacing="gap-x-2">
                 <AppIcon
-                  placeholderIconType="metamask"
+                  placeholderIcon={<Metamask />}
                   background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
                   size="sm"
                   radius={4}
@@ -117,7 +122,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                       {t('Get MetaMask Wallet')}
                     </Text>
 
-                    <Icon type="ArrowTopRightOnSquareIcon" size="md" accentColor />
+                    <Icon icon={<ArrowTopRightOnSquareIcon />} size="md" accentColor />
                   </Stack>
                 </Anchor>
               </Stack>
@@ -151,7 +156,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
           )}
 
           <Web3ConnectCard
-            leftIconType="walletconnect"
+            leftIconType={<Walletconnect />}
             subtitleLabel={t('Scan with WalletConnect')}
             titleLabel="WalletConnect"
             handleClick={() => handleProviderClick(EthProviders.WalletConnect)}

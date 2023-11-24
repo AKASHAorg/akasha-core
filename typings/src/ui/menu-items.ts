@@ -1,4 +1,3 @@
-import { IconType } from './icon';
 import { ValueOf } from './type-utils';
 
 type Sources = 'icon' | 'source' | 'string' | 'ipfs' | 'avatar';
@@ -6,7 +5,7 @@ type Sources = 'icon' | 'source' | 'string' | 'ipfs' | 'avatar';
 export type LogoSourceType =
   | {
       type: Extract<Sources, 'icon'>;
-      value: IconType;
+      value: React.ReactElement;
     }
   | {
       type: Exclude<Sources, 'icon'>;

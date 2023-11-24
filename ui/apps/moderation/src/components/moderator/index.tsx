@@ -5,6 +5,8 @@ import { Moderator } from '@akashaorg/typings/lib/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { EnvelopeIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -97,11 +99,11 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
         {moderator.social && (
           <Stack spacing="gap-x-2">
             {moderator.social?.discord && (
-              <AppIcon placeholderIconType="discord" accentColor={true} />
+              <AppIcon placeholderIcon={<Discord />} accentColor={true} />
             )}
 
             {moderator.social?.email && (
-              <AppIcon placeholderIconType="EnvelopeIcon" accentColor={true} />
+              <AppIcon placeholderIcon={<EnvelopeIcon />} accentColor={true} />
             )}
           </Stack>
         )}

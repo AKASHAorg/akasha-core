@@ -1,6 +1,7 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export interface IndicatorDotsProps {
   hasErrors?: boolean;
@@ -28,7 +29,7 @@ const IndicatorDots: React.FC<IndicatorDotsProps> = props => {
         justify="center"
         customStyle={`rounded-full w-5 h-5 ${dotColor} mx-2`}
       >
-        {hasErrors && <Icon type="ExclamationTriangleIcon" color="white" size="xs" />}
+        {hasErrors && <Icon icon={<ExclamationTriangleIcon />} color="white" size="xs" />}
       </Stack>
       <Stack customStyle={`rounded-full w-4 h-4 ${dotColor} opacity-50`} />
     </Stack>

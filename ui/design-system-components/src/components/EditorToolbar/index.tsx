@@ -3,6 +3,13 @@ import React from 'react';
 import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronDownIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import {
+  BoldAlt,
+  Italic,
+  Strikethrough,
+  Underline,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 
@@ -47,7 +54,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = props => {
   ];
 
   const [dropOpen, setDropOpen] = React.useState<string | null>(null);
-  const [caseStyle, setCaseStyle] = React.useState<string>('textcaseSentence');
+  const [, setCaseStyle] = React.useState<string>('textcaseSentence');
   const [listStyle, setListStyle] = React.useState<string>('listBulleted');
   const [alignStyle, setAlignStyle] = React.useState<string>('alignLeft');
 
@@ -80,31 +87,31 @@ const EditorToolbar: React.FC<EditorToolbarProps> = props => {
       <Stack customStyle="relative">
         <button onClick={() => setDropOpen('case')}>
           <Stack customStyle="flex flex-row items-center" ref={caseStyleRef}>
-            <Icon type={caseStyle as IconType} size="sm" />
-            <Icon type="ChevronDownIcon" />
+            {/* <Icon type={caseStyle as IconType} size="sm" /> */}
+            <Icon icon={<ChevronDownIcon />} />
           </Stack>
         </button>
 
         {caseStyleRef.current && dropOpen === 'case' && <IconDrop dropItems={caseIcons} />}
       </Stack>
       <button onClick={onBoldClick}>
-        <Icon type="boldAlt" />
+        <Icon icon={<BoldAlt />} />
       </button>
       <button onClick={onItalicClick}>
-        <Icon type="italic" />
+        <Icon icon={<Italic />} />
       </button>
       <button onClick={onUnderlineClick}>
-        <Icon type="underline" />
+        <Icon icon={<Underline />} />
       </button>
       <button onClick={onStrikeThroughClick}>
-        <Icon type="strikethrough" />
+        <Icon icon={<Strikethrough />} />
       </button>
 
       <Stack customStyle="relative">
         <button onClick={() => setDropOpen('list')}>
           <Stack direction="row" align="center" ref={listStyleRef}>
-            <Icon type={listStyle as IconType} size="sm" />
-            <Icon type="ChevronDownIcon" />
+            {/* <Icon type={listStyle as IconType} size="sm" /> */}
+            <Icon icon={<ChevronDownIcon />} />
           </Stack>
         </button>
         {listStyleRef.current && dropOpen === 'list' && <IconDrop dropItems={listIcons} />}
@@ -113,8 +120,8 @@ const EditorToolbar: React.FC<EditorToolbarProps> = props => {
       <Stack direction="row">
         <button onClick={() => setDropOpen('align')}>
           <Stack direction="row" align="center" ref={alignStyleRef}>
-            <Icon type={alignStyle as IconType} size="sm" />
-            <Icon type="ChevronDownIcon" />
+            {/* <Icon type={alignStyle as IconType} size="sm" /> */}
+            <Icon icon={<ChevronDownIcon />} />
           </Stack>
         </button>
         {alignStyleRef.current && dropOpen === 'align' && <IconDrop dropItems={alignIcons} />}

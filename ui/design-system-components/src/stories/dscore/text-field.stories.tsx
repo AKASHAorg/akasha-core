@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { TextFieldProps } from '@akashaorg/design-system-core/lib/components/TextField/types';
@@ -55,8 +56,8 @@ const variants: TextFieldProps[] = [
     caption: 'Warning Caption',
     placeholder: "what's on your mind?...",
     status: 'warning',
-    iconLeft: 'CheckCircleIcon',
-    iconRight: 'CheckCircleIcon',
+    iconLeft: <CheckCircleIcon />,
+    iconRight: <CheckCircleIcon />,
   },
   {
     type: 'text',
@@ -64,8 +65,8 @@ const variants: TextFieldProps[] = [
     caption: 'Error Caption',
     placeholder: "what's on your mind?...",
     status: 'error',
-    iconLeft: 'CheckCircleIcon',
-    iconRight: 'CheckCircleIcon',
+    iconLeft: <CheckCircleIcon />,
+    iconRight: <CheckCircleIcon />,
   },
   {
     type: 'text',
@@ -73,16 +74,16 @@ const variants: TextFieldProps[] = [
     caption: 'Success Caption',
     placeholder: "what's on your mind?...",
     status: 'success',
-    iconLeft: 'CheckCircleIcon',
-    iconRight: 'CheckCircleIcon',
+    iconLeft: <CheckCircleIcon />,
+    iconRight: <CheckCircleIcon />,
   },
   {
     type: 'text',
     label: 'Disabled Field with Icon',
     placeholder: "what's on your mind?...",
     disabled: true,
-    iconLeft: 'CheckCircleIcon',
-    iconRight: 'CheckCircleIcon',
+    iconLeft: <CheckCircleIcon />,
+    iconRight: <CheckCircleIcon />,
   },
 ];
 

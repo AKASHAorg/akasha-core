@@ -1,6 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import {
+  MoonIcon,
+  SunIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Toggle, { ToggleProps } from '@akashaorg/design-system-core/lib/components/Toggle';
 
@@ -22,12 +26,12 @@ const variants: ToggleProps[] = [
     size: 'large',
   },
   {
-    iconChecked: 'SunIcon',
-    iconUnchecked: 'MoonIcon',
+    iconChecked: <SunIcon />,
+    iconUnchecked: <MoonIcon />,
   },
   {
-    iconChecked: 'SunIcon',
-    iconUnchecked: 'MoonIcon',
+    iconChecked: <SunIcon />,
+    iconUnchecked: <MoonIcon />,
     label: 'small toggle',
   },
   {
@@ -42,8 +46,8 @@ const variants: ToggleProps[] = [
   },
   {
     checked: true,
-    iconChecked: 'SunIcon',
-    iconUnchecked: 'MoonIcon',
+    iconChecked: <SunIcon />,
+    iconUnchecked: <MoonIcon />,
     disabled: true,
   },
 ];

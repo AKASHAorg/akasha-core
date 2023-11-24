@@ -9,6 +9,13 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import ContentBlock from '@akashaorg/design-system-core/lib/components/ContentBlock';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  ArrowDownIcon,
+  ArrowPathIcon,
+  ChevronRightIcon,
+  EllipsisVerticalIcon,
+  InformationCircleIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -102,7 +109,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
               <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto">
                 {status === 'not-installed' && (
                   <Button
-                    icon="ArrowDownIcon"
+                    icon={<ArrowDownIcon />}
                     variant="primary"
                     size="xs"
                     iconOnly
@@ -112,7 +119,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                 {status === 'installed' && <DuplexAppButton onUninstall={onUninstall} />}
                 {status === 'loading' && (
                   <AppIcon
-                    placeholderIconType="ArrowPathIcon"
+                    placeholderIcon={<ArrowPathIcon />}
                     iconColor="white"
                     background="secondaryDark"
                     size="xs"
@@ -120,7 +127,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                 )}
                 <Menu
                   anchor={{
-                    icon: 'EllipsisVerticalIcon',
+                    icon: <EllipsisVerticalIcon />,
                     variant: 'primary',
                     size: 'xs',
                     greyBg: true,
@@ -153,7 +160,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                       avatarImage={developer.avatar}
                     />
                     <Icon
-                      type="ChevronRightIcon"
+                      icon={<ChevronRightIcon />}
                       size="sm"
                       color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                       customStyle="ml-auto"
@@ -172,7 +179,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                   </Text>
                   <Tooltip content={versionInfo} placement="right">
                     <Icon
-                      type="InformationCircleIcon"
+                      icon={<InformationCircleIcon />}
                       color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                     />
                   </Tooltip>

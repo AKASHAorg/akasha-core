@@ -3,6 +3,10 @@ import { tw, apply, tx } from '@twind/core';
 import isUrl from 'is-url';
 import { LinkPreviewExt } from '@akashaorg/typings/lib/ui';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  LinkIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 const closeDivClass = apply(
   'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',
@@ -87,7 +91,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
                 handleDeletePreview();
               }}
             >
-              <Icon type="XMarkIcon" />
+              <Icon icon={<XMarkIcon />} />
             </div>
           )}
           {!!(linkPreviewData.imageSources?.url || linkPreviewData.imageSources?.fallbackUrl) &&
@@ -132,7 +136,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
                   />
                 </div>
               ) : (
-                <Icon type="LinkIcon" customStyle={'h-3 w-3 text-secondary'} />
+                <Icon icon={<LinkIcon />} customStyle={'h-3 w-3 text-secondary'} />
               )}
               {!!linkPreviewData.url && <p className={'text-secondary truncate'}>{hostname}</p>}
             </div>

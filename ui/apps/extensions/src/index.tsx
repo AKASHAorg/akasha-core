@@ -11,6 +11,8 @@ import { ContentBlockStore } from './plugins/content-block-store';
 import { ExtensionStore } from './plugins/extension-store';
 import { WidgetStore } from './plugins/widget-store';
 import { InstalledAppStore } from './plugins/installed-app-store';
+import React from 'react';
+import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 /**
  * All the plugins must export an object like this:
@@ -26,7 +28,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Extensions',
     area: [MenuItemAreaType.AppArea],
-    logo: { type: LogoTypeSource.ICON, value: 'akasha' },
+    logo: { type: LogoTypeSource.ICON, value: <Akasha /> },
     subRoutes: [],
   },
   extends: (matcher, loader) => {

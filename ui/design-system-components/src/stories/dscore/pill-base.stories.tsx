@@ -1,6 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import {
+  EnvelopeIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill, { PillProps } from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
@@ -25,12 +29,12 @@ const variants: PillProps[] = [
   },
   {
     label: 'Leading icon pill',
-    icon: 'EnvelopeIcon',
+    icon: <EnvelopeIcon />,
     iconDirection: 'left',
   },
   {
     label: 'Trailing icon pill',
-    icon: 'XMarkIcon',
+    icon: <XMarkIcon />,
     iconDirection: 'right',
   },
 ];

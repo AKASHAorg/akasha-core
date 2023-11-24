@@ -7,6 +7,8 @@ import {
   MenuItemAreaType,
   MenuItemType,
 } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { Antenna } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 /**
  * Initialization of the integration is optional.
@@ -51,7 +53,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Antenna',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'antenna' },
+    logo: { type: LogoTypeSource.ICON, value: <Antenna /> },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [
       {

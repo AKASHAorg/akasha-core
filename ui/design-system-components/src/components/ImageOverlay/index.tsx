@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { tw, apply, tx } from '@twind/core';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  MagnifyingGlassMinusIcon,
+  MagnifyingGlassPlusIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Portal } from '../Editor/helpers';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
@@ -46,37 +51,38 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
 
   return (
     <Portal>
-      <div
-        className={tx(`${flexCenteredClass} w-screen h-screen bg-grey3 z-20`)}
-        onClick={(ev: React.SyntheticEvent) => {
-          /**
-           * prevents click bubbling to parent so the user doesn't get redirected
-           */
-          ev.stopPropagation();
-        }}
-      >
-        <div className={tw(`flex flex-row gap-3 p-3 absolute top-1 right-1 z-1`)}>
-          <div className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
-            <Icon type="MagnifyingGlassPlusIcon" />
+      <div className={tx(`${flexCenteredClass} w-screen h-screen bg-grey3 z-20`)}>
+        <button
+          onClick={(ev: React.SyntheticEvent) => {
+            /**
+             * prevents click bubbling to parent so the user doesn't get redirected
+             */
+            ev.stopPropagation();
+          }}
+        >
+          <div className={tw(`flex flex-row gap-3 p-3 absolute top-1 right-1 z-1`)}>
+            <button className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
+              <Icon icon={<MagnifyingGlassPlusIcon />} />
+            </button>
+            <button className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
+              <Icon icon={<MagnifyingGlassMinusIcon />} />
+            </button>
+            <button className={tx(`${closeDivClass}`)} onClick={closeModal.current}>
+              <Icon icon={<XMarkIcon />} />
+            </button>
           </div>
-          <div className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
-            <Icon type="MagnifyingGlassMinusIcon" />
-          </div>
-          <div className={tx(`${closeDivClass}`)} onClick={closeModal.current}>
-            <Icon type="XMarkIcon" />
-          </div>
-        </div>
 
-        {src && (
-          <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
-            <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
-              <picture className={tw('flex')}>
-                <source srcSet={src.url} />
-                <img src={src.fallbackUrl} alt="" />
-              </picture>
-            </TransformComponent>
-          </TransformWrapper>
-        )}
+          {src && (
+            <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
+              <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
+                <picture className={tw('flex')}>
+                  <source srcSet={src.url} />
+                  <img src={src.fallbackUrl} alt="" />
+                </picture>
+              </TransformComponent>
+            </TransformWrapper>
+          )}
+        </button>
       </div>
     </Portal>
   );

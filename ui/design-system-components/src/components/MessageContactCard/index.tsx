@@ -6,6 +6,7 @@ import { Profile } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { EllipsisVerticalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 
@@ -31,38 +32,38 @@ const MessageContactCard: React.FC<MessageContactCardProps> = props => {
     senderName,
     content,
     isRead,
-    isPinned,
+    // isPinned,
     hideBottomBorder,
-    pinConvoLabel,
-    unpinConvoLabel,
+    // pinConvoLabel,
+    // unpinConvoLabel,
     newMessageLabel,
     senderAvatar,
     senderDid,
     onClickAvatar,
-    onClickCard,
-    onConvoPin,
+    // onClickCard,
+    // onConvoPin,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
 
-  const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
+  const menuIconRef: React.Ref<HTMLButtonElement> = React.useRef(null);
 
-  const showCardMenu = React.useMemo(() => menuIconRef.current && menuDropOpen, [menuDropOpen]);
+  // const showCardMenu = React.useMemo(() => menuIconRef.current && menuDropOpen, [menuDropOpen]);
 
-  const closeMenuDrop = () => {
-    setMenuDropOpen(false);
-  };
+  // const closeMenuDrop = () => {
+  //   setMenuDropOpen(false);
+  // };
 
   const toggleMenuDrop = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
     setMenuDropOpen(!menuDropOpen);
   };
 
-  const handlePinConvo = () => {
-    if (onConvoPin) {
-      onConvoPin();
-    }
-  };
+  // const handlePinConvo = () => {
+  //   if (onConvoPin) {
+  //     onConvoPin();
+  //   }
+  // };
 
   const handleAvatarClick = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
@@ -100,12 +101,12 @@ const MessageContactCard: React.FC<MessageContactCardProps> = props => {
         </div>
         <div className={tw(`flex flex-row h-fit shrink-0 items-center gap-1`)}>
           {!isRead && <Button size="sm" label={newMessageLabel} />}
-          <div
-            onClick={(ev: React.MouseEvent<HTMLDivElement>) => toggleMenuDrop(ev)}
+          <button
+            onClick={(ev: React.MouseEvent<HTMLButtonElement>) => toggleMenuDrop(ev)}
             ref={menuIconRef}
           >
-            <Icon accentColor={menuDropOpen} type="EllipsisVerticalIcon" />
-          </div>
+            <Icon accentColor={menuDropOpen} icon={<EllipsisVerticalIcon />} />
+          </button>
         </div>
         {/* {showCardMenu && (
           <CardHeaderMenuDropdown
