@@ -15,7 +15,7 @@ import Following from './following';
 import Github from './github';
 import IntegrationAppCTA from './integration-app-cta';
 import Italic from './italic';
-import Licensewtfpl from './license-wtfpl';
+import LicenseWtfpl from './license-wtfpl';
 import LicenseAllRights from './license-all-rights';
 import LicenseAttribution from './license-attribution';
 import LicenseNoDerivatives from './license-no-derivatives';
@@ -60,7 +60,7 @@ export type CustomIconTypes = Extract<
   | 'Github'
   | 'IntegrationAppCTA'
   | 'Italic'
-  | 'Licensewtfpl'
+  | 'LicenseWtfpl'
   | 'LicenseAllRights'
   | 'LicenseAttribution'
   | 'LicenseNoDerivatives'
@@ -102,7 +102,7 @@ export {
   Github,
   IntegrationAppCTA,
   Italic,
-  Licensewtfpl,
+  LicenseWtfpl,
   LicenseAllRights,
   LicenseAttribution,
   LicenseNoDerivatives,

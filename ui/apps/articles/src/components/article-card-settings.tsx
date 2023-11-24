@@ -267,11 +267,11 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
         /> */}
         {selectedLicense && (
           <Stack direction="row" align="center" customStyle="mt-2 px-1">
-            {/* <Icon type={selectedLicense.icon} size="lg" accentColor={true} /> */}
+            <Icon icon={selectedLicense.icon} size="lg" accentColor={true} />
             <Stack spacing="gap-1">
               {selectedLicense.description.map((el, idx) => (
                 <Stack key={idx} direction="row" spacing="gap-2">
-                  {/* {el.icon && <Icon type={el.icon} size="sm" accentColor={true} />} */}
+                  {el.icon && <Icon icon={el.icon} size="sm" accentColor={true} />}
                   <Text variant="subtitle2">{el.text}</Text>
                 </Stack>
               ))}
