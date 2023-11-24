@@ -11,11 +11,6 @@ jest
 
 jest.spyOn(reactUse, 'useMedia').mockReturnValue(true);
 
-jest.mock('@akashaorg/ui-awf-hooks/lib/generated', () => ({
-  __esModule: true,
-  ...jest.requireActual('@akashaorg/ui-awf-hooks/lib/generated'),
-}));
-
 jest.mock('@akashaorg/typings/lib/ui', () => ({
   EntityTypes: {
     PROFILE: 1,

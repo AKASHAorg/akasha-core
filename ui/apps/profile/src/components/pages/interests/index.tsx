@@ -46,7 +46,7 @@ const InterestsPage: React.FC<unknown> = () => {
   );
   const ownInterests = useMemo(
     () =>
-      ownInterestsQueryReq.data && hasOwn(ownInterestsQueryReq.data, 'isViewer')
+      ownInterestsQueryReq.data && hasOwn(ownInterestsQueryReq.data, 'akashaProfileInterests')
         ? ownInterestsQueryReq.data.akashaProfileInterests?.topics || []
         : [],
     [ownInterestsQueryReq.data],

@@ -43,6 +43,7 @@ export type EntryCardProps = {
   profileAnchorLink?: string;
   repliesAnchorLink?: string;
   disableReporting?: boolean;
+  isViewer?: boolean;
   hidePublishTime?: boolean;
   disableActions?: boolean;
   noWrapperCard?: boolean;
@@ -90,6 +91,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     profileAnchorLink,
     repliesAnchorLink,
     disableReporting,
+    isViewer,
     hidePublishTime,
     disableActions,
     noWrapperCard = false,
@@ -118,7 +120,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   const nsfwBlurStyle = entryData.nsfw && !showNSFW ? 'blur-lg' : '';
 
   const menuItems: ListItem[] = [
-    ...(!entryData.author.isViewer
+    ...(!isViewer
       ? [
           {
             icon: 'FlagIcon' as const,
@@ -129,7 +131,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           },
         ]
       : []),
-    ...(entryData.author.isViewer
+    ...(isViewer
       ? [
           {
             icon: 'PencilIcon' as const,
@@ -208,7 +210,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
       </Stack>
       {!entryData.active && (
         <EntryCardRemoved
-          {...(entryData.author.isViewer
+          {...(isViewer
             ? {
                 type: 'author',
                 message: removed.author,
