@@ -1,5 +1,5 @@
 import React from 'react';
-import BeamPage from '../pages/entry-page/beam-page';
+import ReflectionPage from '../pages/entry-page/reflection-page';
 import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated';
 
 import {
@@ -7,10 +7,10 @@ import {
   renderWithAllProviders,
   act,
   genAppProps,
-  genBeamData,
+  genReflectionData,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
-import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const mockLocationValue = {
   pathname: '/',
@@ -33,10 +33,10 @@ jest.mock('react-router', () => ({
   }),
 }));
 
-describe('< BeamPage /> component', () => {
+describe('< ReflectionPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <BeamPage />
+      <ReflectionPage />
     </AnalyticsProvider>
   );
 
@@ -48,14 +48,15 @@ describe('< BeamPage /> component', () => {
 
   beforeAll(() => {
     (
-      jest.spyOn(hooks, 'useGetBeamByIdQuery') as unknown as jest.SpyInstance<{
-        data: AkashaBeam;
+      jest.spyOn(hooks, 'useGetReflectionByIdQuery') as unknown as jest.SpyInstance<{
+        data: AkashaReflect;
         status: 'success' | 'error' | 'loading';
       }>
-    ).mockReturnValue({ data: genBeamData(), status: 'success' });
+    ).mockReturnValue({ data: genReflectionData(), status: 'success' });
   });
 
-  it('should render beam page', async () => {
+  it('should render reflection page', async () => {
+    expect(screen.getByText(/Back to original beam/i)).toBeInTheDocument();
     expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Reflect/i })).toBeInTheDocument();
   });

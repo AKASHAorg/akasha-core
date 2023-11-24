@@ -32,7 +32,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
+  const { isLoggedIn, loggedInProfileId: authenticatedDID } = useLoggedIn();
   const followersReq = useInfiniteGetFollowersListByDidQuery(
     'first',
     {
@@ -42,7 +42,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     {
       getNextPageParam: lastPage => {
         const pageInfo =
-          lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
+          lastPage?.node && hasOwn(lastPage?.node, 'akashaProfile')
             ? lastPage.node?.akashaProfile?.followers?.pageInfo
             : null;
         if (pageInfo && pageInfo.hasNextPage) {
@@ -51,7 +51,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
       },
       getPreviousPageParam: firstPage => {
         const pageInfo =
-          firstPage?.node && hasOwn(firstPage?.node, 'isViewer')
+          firstPage?.node && hasOwn(firstPage?.node, 'akashaProfile')
             ? firstPage.node?.akashaProfile?.followers?.pageInfo
             : null;
         if (pageInfo && pageInfo.hasPreviousPage) {
@@ -68,7 +68,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     () =>
       followersReq.data?.pages
         ? followersReq.data.pages?.flatMap(page =>
-            hasOwn(page.node, 'isViewer')
+            hasOwn(page.node, 'akashaProfile')
               ? page.node?.akashaProfile?.followers?.edges
                   ?.map(edge => edge?.node)
                   .filter(node => node.did.akashaProfile) || []
@@ -79,7 +79,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   );
   const lastPageInfo = useMemo(() => {
     const lastPage = followersReq.data?.pages?.[followersReq.data?.pages?.length - 1];
-    return lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
+    return lastPage?.node && hasOwn(lastPage?.node, 'akashaProfile')
       ? lastPage?.node.akashaProfile?.followers?.pageInfo
       : null;
   }, [followersReq]);

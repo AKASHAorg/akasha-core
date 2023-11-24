@@ -1,128 +1,29 @@
 import React from 'react';
 import FeedPage from '../pages/feed-page/feed-page';
-import userEvent from '@testing-library/user-event';
-import ReflectEditor from '../reflect-editor';
 
-import {
-  screen,
-  renderWithAllProviders,
-  localStorageMock,
-  genAppProps,
-} from '@akashaorg/af-testing';
+import { screen, renderWithAllProviders, genAppProps, genUser } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
-import { when } from 'jest-when';
-
-const partialArgs = (...argsToMatch) =>
-  when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
-
-const MockedInlineEditor = ({ action }) => (
-  <ReflectEditor beamId="oxaa" reflectToId="oxaa" showEditorInitialValue={false} />
-);
 
 describe('< FeedPage /> component', () => {
-  const BaseComponent = () => (
+  const BaseComponent = ({ loggedProfileData }) => (
     <AnalyticsProvider {...genAppProps()}>
-      <FeedPage showLoginModal={jest.fn()} />
+      <FeedPage showLoginModal={jest.fn()} loggedProfileData={loggedProfileData} />
     </AnalyticsProvider>
   );
 
-  // @TODO fix after new hooks
-  it.skip('should render feed page for anonymous users', async () => {
+  it('should render feed page for anonymous users', async () => {
     await act(async () => {
-      renderWithAllProviders(<BaseComponent />, {});
+      renderWithAllProviders(<BaseComponent loggedProfileData={null} />, {});
     });
-    expect(screen.getByText(/Welcome, fellow Ethereans!/i)).toBeInTheDocument();
+    expect(screen.getByText(/Welcome, fellow Ethereans/i)).toBeInTheDocument();
   });
 
-  it.skip('should dismiss the notification when close button is clicked', async () => {
+  it('should render feed page for authenticated users', async () => {
     await act(async () => {
-      renderWithAllProviders(<BaseComponent />, {});
+      renderWithAllProviders(<BaseComponent loggedProfileData={genUser()} />, {});
     });
-    const closeIcon = screen.queryByTestId('close-icon-alpha-notification');
-    expect(closeIcon).toBeDefined();
-    if (closeIcon) {
-      await userEvent.click(closeIcon);
-    }
-    expect(screen.queryByText(/Welcome, fellow Ethereans!/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/From Your Mind to the World/i)).toBeInTheDocument();
+    expect(screen.getByText(/Start Beaming/i)).toBeInTheDocument();
   });
-
-  it.skip('should not display the notification again after close button is clicked', async () => {
-    await act(async () => {
-      renderWithAllProviders(<BaseComponent />, {});
-    });
-    expect(screen.queryByText(/Welcome, fellow Ethereans!/i)).not.toBeInTheDocument();
-  });
-  // @TODO fix after sign in works
-  it.skip('should render feed page for authenticated users', async () => {
-    await act(async () => {
-      renderWithAllProviders(<BaseComponent />, {});
-    });
-    expect(screen.getAllByTestId('avatar-image')).not.toBeNull();
-    expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
-  });
-  // @TODO fix after new hooks
-  it.skip('should render repost feed page', async () => {
-    //TODO: change URLSearchParams usage on feed page(and elsewhere) with a search param hook and mock the hook here
-    history.pushState(null, '', `${location.origin}?repost=oxfceee`);
-
-    await act(async () => {
-      renderWithAllProviders(<BaseComponent />, {});
-    });
-
-    // expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Publish/i })).toBeInTheDocument();
-    expect(screen.getByTestId('embed-box')).toBeInTheDocument();
-
-    //TODO: change URLSearchParams usage on feed page(and elsewhere) with a search param hook and mock the hook here
-    history.pushState(null, '', location.origin);
-  });
-  it.skip('should show saved draft post', async () => {
-    // const loginState = genLoggedInState(true);
-
-    // localStorageMock.setItem(
-    //   Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState?.id, 'post'),
-    //   JSON.stringify([
-    //     {
-    //       type: 'paragraph',
-    //       children: [
-    //         {
-    //           text: 'Post in progress ...',
-    //         },
-    //       ],
-    //     },
-    //   ]),
-    // );
-    await act(async () => {
-      renderWithAllProviders(<BaseComponent />, {});
-    });
-
-    expect(screen.getByText(/Post in progress .../i)).toBeInTheDocument();
-    expect(screen.getByText(/Draft/i)).toBeInTheDocument();
-    expect(screen.getByText(/Clear/i)).toBeInTheDocument();
-  });
-
-  // it('should clear draft post', async () => {
-  //   const loginState = genLoggedInState(true);
-  //   localStorageMock.setItem(
-  //     Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState?.id, 'post'),
-  //     JSON.stringify([
-  //       {
-  //         type: 'paragraph',
-  //         children: [
-  //           {
-  //             text: 'Post in progress ...',
-  //           },
-  //         ],
-  //       },
-  //     ]),
-  //   );
-  //   await act(async () => {
-  //     renderWithAllProviders(<BaseComponent loginState={loginState} />, {});
-  //   });
-
-  //   await userEvent.click(screen.getByText(/Clear/i));
-
-  //   expect(Object.keys(localStorageMock.getAll()).length).toBe(0);
-  // });
 });

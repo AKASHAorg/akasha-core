@@ -33,7 +33,7 @@ const Connect: React.FC<unknown> = () => {
   );
 
   const profile =
-    profileDataReq.data && 'isViewer' in profileDataReq.data
+    profileDataReq.data && 'akashaProfile' in profileDataReq.data
       ? profileDataReq.data?.akashaProfile
       : null;
 

@@ -12,7 +12,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import AntennaLoader from '@akashaorg/design-system-components/lib/components/Loaders/antenna-loader';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal } = useRootComponentProps();

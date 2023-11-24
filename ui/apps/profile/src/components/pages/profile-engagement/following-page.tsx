@@ -31,7 +31,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
+  const { isLoggedIn, loggedInProfileId: authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -42,10 +42,10 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     },
   );
 
-  const { isViewer, akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+  const { akashaProfile: profileData } =
+    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
-      : { isViewer: null, akashaProfile: null };
+      : { akashaProfile: null };
 
   const followingReq = useInfiniteGetFollowingListByDidQuery(
     'first',
@@ -56,7 +56,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     {
       getNextPageParam: lastPage => {
         const pageInfo =
-          lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
+          lastPage?.node && hasOwn(lastPage?.node, 'akashaFollowList')
             ? lastPage.node.akashaFollowList?.pageInfo
             : null;
         if (pageInfo && pageInfo.hasNextPage) {
@@ -65,7 +65,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
       },
       getPreviousPageParam: firstPage => {
         const pageInfo =
-          firstPage?.node && hasOwn(firstPage?.node, 'isViewer')
+          firstPage?.node && hasOwn(firstPage?.node, 'akashaFollowList')
             ? firstPage.node.akashaFollowList?.pageInfo
             : null;
         if (pageInfo && pageInfo.hasPreviousPage) {
@@ -82,7 +82,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     () =>
       followingReq.data?.pages
         ? followingReq.data.pages?.flatMap(page =>
-            hasOwn(page.node, 'isViewer')
+            hasOwn(page.node, 'akashaFollowList')
               ? page?.node?.akashaFollowList?.edges?.map(edge => edge?.node) || []
               : [],
           )
@@ -91,7 +91,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   );
   const lastPageInfo = useMemo(() => {
     const lastPage = followingReq.data?.pages?.[followingReq.data?.pages?.length - 1];
-    return lastPage?.node && hasOwn(lastPage?.node, 'isViewer')
+    return lastPage?.node && hasOwn(lastPage?.node, 'akashaFollowList')
       ? lastPage?.node.akashaFollowList?.pageInfo
       : null;
   }, [followingReq]);
@@ -145,7 +145,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
           ownerUserName={profileData.name}
-          viewerIsOwner={isViewer}
+          viewerIsOwner={authenticatedDID === profileData.did.id}
           loadMore={loadMore}
           onLoadMore={() => {
             if (lastPageInfo && lastPageInfo.hasNextPage) {

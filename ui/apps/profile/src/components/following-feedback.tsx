@@ -22,14 +22,14 @@ const FollowingFeedback = () => {
     },
     CreateMutationData
   >(useCreateFollowMutation.getKey());
-  const { mutation: updateFollowState, clear: updateCreateFollowState } = useMutationListener<
+  const { mutation: updateFollowState, clear: clearUpdateFollowState } = useMutationListener<
     {
       i: { content: Pick<AkashaFollowDocument, 'isFollowing' | 'profileID'> };
     },
     UpdateMutationData
   >(useUpdateFollowMutation.getKey());
 
-  const clear = createFollowState ? clearCreateFollowState : updateCreateFollowState;
+  const clear = createFollowState ? clearCreateFollowState : clearUpdateFollowState;
 
   const followState = createFollowState || updateFollowState;
 

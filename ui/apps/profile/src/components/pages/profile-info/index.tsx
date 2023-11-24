@@ -55,7 +55,7 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   } = profileStatsQuery.data;
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
       : { akashaProfile: null };
   const status = profileDataReq.status;
