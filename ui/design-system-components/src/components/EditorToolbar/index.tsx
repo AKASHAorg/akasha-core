@@ -1,13 +1,20 @@
 import React from 'react';
 
-import { IconType } from '@akashaorg/typings/lib/ui';
-
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ChevronDownIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
   BoldAlt,
   Italic,
+  ListBulleted,
+  ListNumbered,
   Strikethrough,
+  TextcaseLower,
+  TextcaseSentence,
+  TextcaseUpper,
   Underline,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -36,25 +43,25 @@ const EditorToolbar: React.FC<EditorToolbarProps> = props => {
   });
 
   const caseIcons: IconEntry[] = [
-    { type: 'textcaseSentence', handler: () => handleIconClick('textcaseSentence') },
-    { type: 'textcaseLower', handler: () => handleIconClick('textcaseLower') },
-    { type: 'textcaseUpper', handler: () => handleIconClick('textcaseUpper') },
+    { icon: <TextcaseSentence />, handler: () => handleIconClick('textcaseSentence') },
+    { icon: <TextcaseLower />, handler: () => handleIconClick('textcaseLower') },
+    { icon: <TextcaseUpper />, handler: () => handleIconClick('textcaseUpper') },
   ];
 
   const listIcons: IconEntry[] = [
-    { type: 'listBulleted', handler: () => handleIconClick('listBulleted') },
-    { type: 'listNumbered', handler: () => handleIconClick('listNumbered') },
+    { icon: <ListBulleted />, handler: () => handleIconClick('listBulleted') },
+    { icon: <ListNumbered />, handler: () => handleIconClick('listNumbered') },
   ];
 
   const alignIcons: IconEntry[] = [
-    { type: 'alignLeft', handler: () => handleIconClick('alignLeft') },
-    { type: 'alignRight', handler: () => handleIconClick('alignRight') },
-    { type: 'alignCenter', handler: () => handleIconClick('alignCenter') },
-    { type: 'alignJustify', handler: () => handleIconClick('alignJustify') },
+    { icon: <AlignLeft />, handler: () => handleIconClick('alignLeft') },
+    { icon: <AlignRight />, handler: () => handleIconClick('alignRight') },
+    { icon: <AlignCenter />, handler: () => handleIconClick('alignCenter') },
+    { icon: <AlignJustify />, handler: () => handleIconClick('alignJustify') },
   ];
 
   const [dropOpen, setDropOpen] = React.useState<string | null>(null);
-  const [, setCaseStyle] = React.useState<string>('textcaseSentence');
+  const [caseStyle, setCaseStyle] = React.useState<string>('textcaseSentence');
   const [listStyle, setListStyle] = React.useState<string>('listBulleted');
   const [alignStyle, setAlignStyle] = React.useState<string>('alignLeft');
 
@@ -77,6 +84,19 @@ const EditorToolbar: React.FC<EditorToolbarProps> = props => {
         break;
     }
   };
+
+  const getIconfromStyle = (type: string) => {
+    if (type === 'textcaseSentence') return <TextcaseSentence />;
+    if (type === 'textcaseLower') return <TextcaseLower />;
+    if (type === 'textcaseUpper') return <TextcaseUpper />;
+    if (type === 'textcaseSentence') return <TextcaseSentence />;
+    if (type === 'listBulleted') return <ListBulleted />;
+    if (type === 'listNumbered') return <ListNumbered />;
+    if (type === 'alignLeft') return <AlignLeft />;
+    if (type === 'alignRight') return <AlignRight />;
+    if (type === 'alignJustify') return <AlignJustify />;
+  };
+
   return (
     <Stack direction="row" justify="center" spacing="gap-2" customStyle="p-2">
       {/* emoji */}
@@ -87,7 +107,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = props => {
       <Stack customStyle="relative">
         <button onClick={() => setDropOpen('case')}>
           <Stack customStyle="flex flex-row items-center" ref={caseStyleRef}>
-            {/* <Icon type={caseStyle as IconType} size="sm" /> */}
+            <Icon icon={getIconfromStyle(caseStyle)} size="sm" />
             <Icon icon={<ChevronDownIcon />} />
           </Stack>
         </button>
@@ -110,7 +130,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = props => {
       <Stack customStyle="relative">
         <button onClick={() => setDropOpen('list')}>
           <Stack direction="row" align="center" ref={listStyleRef}>
-            {/* <Icon type={listStyle as IconType} size="sm" /> */}
+            <Icon icon={getIconfromStyle(listStyle)} size="sm" />
             <Icon icon={<ChevronDownIcon />} />
           </Stack>
         </button>
@@ -120,7 +140,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = props => {
       <Stack direction="row">
         <button onClick={() => setDropOpen('align')}>
           <Stack direction="row" align="center" ref={alignStyleRef}>
-            {/* <Icon type={alignStyle as IconType} size="sm" /> */}
+            <Icon icon={getIconfromStyle(alignStyle)} size="sm" />
             <Icon icon={<ChevronDownIcon />} />
           </Stack>
         </button>

@@ -1,12 +1,10 @@
 import React from 'react';
 
-import { IconType } from '@akashaorg/typings/lib/ui';
-
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export type IconEntry = {
-  type: IconType;
+  icon: React.ReactElement;
   handler: () => void;
 };
 
@@ -18,10 +16,10 @@ const IconDrop: React.FC<IIconDropProps> = props => {
   const { dropItems } = props;
   return (
     <Stack customStyle="absolute top-7 right-0">
-      {dropItems.map((icon, idx) => (
-        <button onClick={icon.handler}>
-          <Stack key={`${icon.type}-${idx}`} align="center" customStyle="rounded-lg cursor-pointer">
-            {/* <Icon type={icon.type} size="sm" /> */}
+      {dropItems.map((item, idx) => (
+        <button onClick={item.handler}>
+          <Stack key={`${item.icon}-${idx}`} align="center" customStyle="rounded-lg cursor-pointer">
+            <Icon icon={item.icon} size="sm" />
           </Stack>
         </button>
       ))}
