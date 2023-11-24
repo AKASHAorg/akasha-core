@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { lastValueFrom } from 'rxjs';
@@ -26,17 +27,14 @@ export function useConnectWallet(provider: EthProviders) {
  * ```
  */
 export function useGetLogin(onError?: (error: Error) => void) {
-  const queryClient = useQueryClient();
+  const [loginData, setLoginData] = useState(null);
 
   useGlobalLogin({
     onLogin: data => {
-      queryClient.setQueryData<CurrentUser>([LOGIN_STATE_KEY], prev => ({
-        ...prev,
-        ...data,
-      }));
+      setLoginData(data);
     },
     onLogout: () => {
-      queryClient.setQueryData([LOGIN_STATE_KEY], null);
+      setLoginData(null);
     },
     onError: payload => {
       if (onError) {
@@ -46,14 +44,7 @@ export function useGetLogin(onError?: (error: Error) => void) {
     },
   });
 
-  return useQuery(
-    [LOGIN_STATE_KEY],
-    () =>
-      new Promise<CurrentUser>(() => {
-        const currentData = queryClient.getQueryData<CurrentUser>([LOGIN_STATE_KEY]);
-        return currentData;
-      }),
-  );
+  return { data: loginData };
 }
 
 /**
@@ -107,7 +98,7 @@ export function useLogout() {
       const resp = await sdk.api.auth.signOut();
       if (resp.data) {
         //await queryClient.resetQueries([LOGIN_STATE_KEY]);
-        queryClient.setQueryData([LOGIN_STATE_KEY], null);
+        // queryClient.setQueryData([LOGIN_STATE_KEY], null);
         return resp.data;
       }
     },

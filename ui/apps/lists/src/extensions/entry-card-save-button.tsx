@@ -3,7 +3,7 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import {
-  useGetLogin,
+  useLoggedIn,
   withProviders,
   useAnalytics,
   useRootComponentProps,
@@ -17,7 +17,7 @@ type CardSaveButtonExtensionData = {
 };
 const EntryCardSaveButton = (props: RootExtensionProps<CardSaveButtonExtensionData>) => {
   const { extensionData } = props;
-  const loggedUserReq = useGetLogin();
+  const { isLoggedIn } = useLoggedIn();
   const bookmarkReq = null;
   const bookmarkCreate = null;
   const bookmarkDelete = null;
@@ -32,7 +32,7 @@ const EntryCardSaveButton = (props: RootExtensionProps<CardSaveButtonExtensionDa
 
   const handleEntryBookmark = () => {
     const { itemId, itemType } = extensionData;
-    if (loggedUserReq.isSuccess && loggedUserReq.data.ethAddress) {
+    if (isLoggedIn) {
       if (isBookmarked) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.BEAM,
