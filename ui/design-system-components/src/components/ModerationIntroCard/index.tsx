@@ -1,8 +1,6 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import { IconType } from '@akashaorg/typings/lib/ui';
-
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -13,7 +11,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 export type OverviewCTA = {
   label: string;
   url: string;
-  iconType: IconType;
+  icon: React.ReactElement;
 };
 
 export type ModerationIntroCardProps = {
@@ -88,13 +86,13 @@ const ModerationIntroCard: React.FC<ModerationIntroCardProps> = props => {
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
           <Stack direction="row" justify="between" customStyle="md:px-20">
-            {overviewCTAArr.map(({ url, label, iconType }) => (
-              <Stack key={label + iconType} customStyle="grid gap-1 grid-cols-1 w-[30%]">
-                {/* <Icon size="sm" accentColor={true} type={iconType} customStyle="mx-auto my-0" /> */}
+            {overviewCTAArr.map(({ url, label, icon }) => (
+              <Stack key={label + icon} customStyle="grid gap-1 grid-cols-1 w-[30%]">
+                <Icon size="sm" accentColor={true} icon={icon} customStyle="mx-auto my-0" />
 
                 <Anchor
                   href={url}
-                  dataTestId={`${iconType}-link`}
+                  dataTestId={`${label}-link`}
                   customStyle="text-sm text-center font-bold"
                 >
                   {label}

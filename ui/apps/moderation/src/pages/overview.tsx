@@ -12,6 +12,11 @@ import { BasePageProps } from './dashboard';
 import { BECOME_MODERATOR, CHECK_APPLICATION_STATUS } from '../routes';
 import { values } from '../services/values';
 import { externalLinks } from '../utils';
+import {
+  SparklesIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
+  EnvelopeIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export enum ApplicationStatusType {
   review = 'Under Review',
@@ -75,17 +80,17 @@ export const Overview: React.FC<OverviewPageProps> = props => {
           {
             label: t('CoC discussions'),
             url: externalLinks.discourse.CoC,
-            iconType: 'SparklesIcon',
+            icon: <SparklesIcon />,
           },
           {
             label: t('Moderation thoughts'),
             url: externalLinks.discord,
-            iconType: 'ChatBubbleOvalLeftEllipsisIcon',
+            icon: <ChatBubbleOvalLeftEllipsisIcon />,
           },
           {
             label: t('Send us a message'),
             url: externalLinks.email,
-            iconType: 'EnvelopeIcon',
+            icon: <EnvelopeIcon />,
           },
         ]}
         onCodeOfConductClick={handleCodeOfConductClick}

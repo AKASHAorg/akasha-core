@@ -11,7 +11,6 @@ import {
   Widget,
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-// import { CustomIconTypes } from '@akashaorg/design-system-core/src/components/Icon/akasha-icons';
 
 const meta: Meta<IconProps> = {
   title: 'DSCore/Icons/Icon',
