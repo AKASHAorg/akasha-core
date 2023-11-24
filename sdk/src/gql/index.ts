@@ -139,7 +139,7 @@ class Gql {
         },
         Query: {
           fields: {
-            akashaBeamIndex: relayStylePagination(),
+            akashaBeamIndex: relayStylePagination(['sorting', 'filters']),
           },
         },
       },
