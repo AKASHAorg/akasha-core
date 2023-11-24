@@ -48,6 +48,7 @@ const IconByType: React.FC<AppImgProps> = ({
   return (
     <Icon
       icon={placeholderIcon}
+      solid={solid}
       size={size}
       breakPointSize={breakPointSize}
       accentColor={accentColor}

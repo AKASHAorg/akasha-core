@@ -38,6 +38,7 @@ const AppIcon: React.FC<AppIconProps> = props => {
   const {
     appImg,
     placeholderIcon,
+    solid,
     size = 'md',
     breakPointSize,
     accentColor,
@@ -90,6 +91,7 @@ const AppIcon: React.FC<AppIconProps> = props => {
           size={size}
           breakPointSize={breakPointSize}
           placeholderIcon={placeholderIcon}
+          solid={solid}
           accentColor={accentColor}
           color={iconColor}
         />
@@ -106,6 +108,7 @@ const AppIcon: React.FC<AppIconProps> = props => {
         size={size}
         breakPointSize={breakPointSize}
         placeholderIcon={placeholderIcon}
+        solid={solid}
         accentColor={accentColor}
         color={iconColor}
       />

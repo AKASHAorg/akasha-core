@@ -56,6 +56,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     return (
       <IconOnlyButton
         icon={icon}
+        solidIcon={solidIcon}
         size={size}
         variant={variant}
         loading={loading}

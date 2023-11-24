@@ -28,7 +28,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Extensions',
     area: [MenuItemAreaType.AppArea],
-    logo: { type: LogoTypeSource.ICON, value: <Akasha /> },
+    logo: { type: LogoTypeSource.ICON, solidIcon: true, value: <Akasha /> },
     subRoutes: [],
   },
   extends: (matcher, loader) => {
