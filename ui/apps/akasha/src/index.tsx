@@ -9,6 +9,7 @@ import {
 } from '@akashaorg/typings/lib/ui';
 import React from 'react';
 import { Antenna } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { Bars3BottomLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 /**
  * Initialization of the integration is optional.
@@ -73,7 +74,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   contentBlocks: [
     {
       propertyType: 'slate-block',
-      icon: 'Bars3BottomLeftIcon',
+      icon: <Bars3BottomLeftIcon />,
       displayName: 'Slate text block',
       loadingFn: () => {
         return () => import('./extensions/slate-block');

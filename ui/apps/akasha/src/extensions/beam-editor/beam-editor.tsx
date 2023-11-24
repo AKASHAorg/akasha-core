@@ -114,7 +114,7 @@ export const BeamEditor: React.FC = () => {
                       'h-6 w-6 group relative rounded-full bg(secondaryLight dark:secondaryDark)'
                     }
                   >
-                    {/* <Icon size="xs" type={block.icon} /> */}
+                    <Icon size="xs" icon={block.icon} />
                   </Stack>
                   <button onClick={() => removeBlockFromList(block.order)}>
                     <Stack
@@ -163,7 +163,7 @@ export const BeamEditor: React.FC = () => {
                 }
               >
                 <Stack direction="row" spacing="gap-1">
-                  {/* <Icon type={block.icon} /> */}
+                  <Icon icon={block.icon} />
                   <Text>{block.displayName}</Text>
                 </Stack>
                 {block.propertyType === selectedBlock?.propertyType && (
