@@ -2,7 +2,8 @@ import React from 'react';
 
 import Button from '../Button';
 import Card from '../Card';
-import Icon, { IconProps } from '../Icon';
+import Icon from '../Icon';
+import { XMarkIcon } from '../Icon/hero-icons-outline';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
 
@@ -13,7 +14,7 @@ export type MessageCardProps = {
   title: string;
   message: string;
   titleVariant?: TextProps['variant'];
-  titleIconType?: IconProps['type'];
+  titleIcon?: React.ReactElement;
   background?: Color;
   elevation?: Elevation;
   borderColor?: Color;
@@ -25,7 +26,7 @@ export type MessageCardProps = {
 const MessageCard: React.FC<MessageCardProps> = ({
   title,
   titleVariant = 'button-sm',
-  titleIconType,
+  titleIcon,
   background = 'white',
   elevation = 'none',
   borderColor,
@@ -48,14 +49,14 @@ const MessageCard: React.FC<MessageCardProps> = ({
       <Stack direction="column" spacing="gap-y-2">
         <Stack direction="row" justify="between">
           <Stack align="center" justify="center" spacing="gap-x-1" fullWidth>
-            {titleIconType && <Icon type={titleIconType} size="sm" />}
+            {titleIcon && <Icon icon={titleIcon} size="sm" />}
             <Text variant={titleVariant} align="center">
               {title}
             </Text>
           </Stack>
 
           <Button onClick={onClose} plain aria-label="close">
-            <Icon type="XMarkIcon" size="sm" />
+            <Icon icon={<XMarkIcon />} size="sm" />
           </Button>
         </Stack>
         <Text variant="footnotes2" weight="normal">

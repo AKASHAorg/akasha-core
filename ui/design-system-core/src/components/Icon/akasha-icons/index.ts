@@ -1,129 +1,129 @@
 import { IconType } from '@akashaorg/typings/lib/ui';
 
-import akasha from './akasha';
-import alignCenter from './align-center';
-import alignJustify from './align-justify';
-import alignLeft from './align-left';
-import alignRight from './align-right';
-import antenna from './antenna';
-import boldAlt from './bold-alt';
-import didKey from './didKey';
-import discord from './discord';
-import eth from './eth';
-import faq from './faq';
-import github from './github';
-import integrationAppCTA from './integration-app-cta';
-import italic from './italic';
-import licensewtfpl from './license-wtfpl';
-import licenseAllRights from './license-all-rights';
-import licenseAttribution from './license-attribution';
-import licenseNoDerivatives from './license-no-derivatives';
-import licenseNoRights from './license-no-rights';
-import licenseNonCommercial from './license-non-commercial';
-import licenseShareAlike from './license-share-alike';
-import licenseSomeRights from './license-some-rights';
-import listBulleted from './list-bulleted';
-import listNumbered from './list-numbered';
-import noEth from './no-eth';
-import shield from './shield';
-import strikethrough from './strikethrough';
-import solana from './solana';
-import telegram from './telegram';
-import textcaseLower from './textcase-lower';
-import textcaseSentence from './textcase-sentence';
-import textcaseUpper from './textcase-upper';
-import twitter from './twitter';
-import underline from './underline';
-import vibe from './vibe';
-import widget from './widget';
-import metamask from './metamask';
-import walletconnect from './walletconnect';
-import following from './following';
+import Akasha from './akasha';
+import AlignCenter from './align-center';
+import AlignJustify from './align-justify';
+import AlignLeft from './align-left';
+import AlignRight from './align-right';
+import Antenna from './antenna';
+import BoldAlt from './bold-alt';
+import DidKey from './didKey';
+import Discord from './discord';
+import Eth from './eth';
+import Faq from './faq';
+import Following from './following';
+import Github from './github';
+import IntegrationAppCTA from './integration-app-cta';
+import Italic from './italic';
+import Licensewtfpl from './license-wtfpl';
+import LicenseAllRights from './license-all-rights';
+import LicenseAttribution from './license-attribution';
+import LicenseNoDerivatives from './license-no-derivatives';
+import LicenseNoRights from './license-no-rights';
+import LicenseNonCommercial from './license-non-commercial';
+import LicenseShareAlike from './license-share-alike';
+import LicenseSomeRights from './license-some-rights';
+import ListBulleted from './list-bulleted';
+import ListNumbered from './list-numbered';
+import Metamask from './metamask';
+import NoEth from './no-eth';
+import Shield from './shield';
+import Strikethrough from './strikethrough';
+import Solana from './solana';
+import Telegram from './telegram';
+import TextcaseLower from './textcase-lower';
+import TextcaseSentence from './textcase-sentence';
+import TextcaseUpper from './textcase-upper';
+import Twitter from './twitter';
+import Underline from './underline';
+import Vibe from './vibe';
+import Walletconnect from './walletconnect';
+import Widget from './widget';
 
 /**
  * maintain alphabetical order for custom icon names
  */
 export type CustomIconTypes = Extract<
   IconType,
-  | 'akasha'
-  | 'alignCenter'
-  | 'alignLeft'
-  | 'alignRight'
-  | 'alignJustify'
-  | 'antenna'
-  | 'boldAlt'
-  | 'didKey'
-  | 'discord'
-  | 'eth'
-  | 'faq'
-  | 'github'
-  | 'integrationAppCTA'
-  | 'italic'
-  | 'licensewtfpl'
-  | 'licenseAllRights'
-  | 'licenseAttribution'
-  | 'licenseNoDerivatives'
-  | 'licenseNoRights'
-  | 'licenseNonCommercial'
-  | 'licenseShareAlike'
-  | 'licenseSomeRights'
-  | 'listNumbered'
-  | 'listBulleted'
-  | 'metamask'
-  | 'noEth'
-  | 'shield'
-  | 'strikethrough'
-  | 'solana'
-  | 'telegram'
-  | 'textcaseLower'
-  | 'textcaseSentence'
-  | 'textcaseUpper'
-  | 'twitter'
-  | 'underline'
-  | 'vibe'
-  | 'walletconnect'
-  | 'widget'
-  | 'following'
+  | 'Akasha'
+  | 'AlignCenter'
+  | 'AlignLeft'
+  | 'AlignRight'
+  | 'AlignJustify'
+  | 'Antenna'
+  | 'BoldAlt'
+  | 'DidKey'
+  | 'Discord'
+  | 'Eth'
+  | 'Faq'
+  | 'Following'
+  | 'Github'
+  | 'IntegrationAppCTA'
+  | 'Italic'
+  | 'Licensewtfpl'
+  | 'LicenseAllRights'
+  | 'LicenseAttribution'
+  | 'LicenseNoDerivatives'
+  | 'LicenseNoRights'
+  | 'LicenseNonCommercial'
+  | 'LicenseShareAlike'
+  | 'LicenseSomeRights'
+  | 'ListNumbered'
+  | 'ListBulleted'
+  | 'Metamask'
+  | 'NoEth'
+  | 'Shield'
+  | 'Strikethrough'
+  | 'Solana'
+  | 'Telegram'
+  | 'TextcaseLower'
+  | 'TextcaseSentence'
+  | 'TextcaseUpper'
+  | 'Twitter'
+  | 'Underline'
+  | 'Vibe'
+  | 'Walletconnect'
+  | 'Widget'
 >;
 
 export {
-  akasha,
-  alignCenter,
-  alignJustify,
-  alignLeft,
-  alignRight,
-  antenna,
-  boldAlt,
-  discord,
-  didKey,
-  faq,
-  github,
-  integrationAppCTA,
-  italic,
-  licensewtfpl,
-  licenseAllRights,
-  licenseAttribution,
-  licenseNoDerivatives,
-  licenseNoRights,
-  licenseNonCommercial,
-  licenseShareAlike,
-  licenseSomeRights,
-  listBulleted,
-  listNumbered,
-  strikethrough,
-  textcaseLower,
-  textcaseSentence,
-  textcaseUpper,
-  eth,
-  metamask,
-  noEth,
-  shield,
-  solana,
-  telegram,
-  twitter,
-  underline,
-  vibe,
-  walletconnect,
-  widget,
-  following,
+  Akasha,
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
+  Antenna,
+  BoldAlt,
+  Discord,
+  DidKey,
+  Eth,
+  Faq,
+  Following,
+  Github,
+  IntegrationAppCTA,
+  Italic,
+  Licensewtfpl,
+  LicenseAllRights,
+  LicenseAttribution,
+  LicenseNoDerivatives,
+  LicenseNoRights,
+  LicenseNonCommercial,
+  LicenseShareAlike,
+  LicenseSomeRights,
+  ListBulleted,
+  ListNumbered,
+  Metamask,
+  NoEth,
+  Shield,
+  Strikethrough,
+  Solana,
+  Telegram,
+  TextcaseLower,
+  TextcaseSentence,
+  TextcaseUpper,
+  Twitter,
+  Underline,
+  Vibe,
+  Walletconnect,
+  Widget,
 };

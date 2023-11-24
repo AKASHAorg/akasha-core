@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 
-import { IconType } from '@akashaorg/typings/lib/ui';
-
 import Stack from '../Stack';
 import Icon from '../Icon';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '../Icon/hero-icons-outline';
 import Text from '../Text';
 import Anchor from '../Anchor';
 
-export type DropdownMenuItemType = { id: string; iconName?: IconType; title: string };
+export type DropdownMenuItemType = { id: string; icon?: React.ReactElement; title: string };
 
 export type DropdownProps = {
   name?: string;
@@ -32,7 +31,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     if (placeholderLabel) {
       setSelected({
         id: '',
-        iconName: null,
+        icon: null,
         title: placeholderLabel ?? menuItems[0].title,
       });
     } else {
@@ -67,9 +66,9 @@ const Dropdown: React.FC<DropdownProps> = ({
       >
         <Text variant="body1">{selected?.title}</Text>
         {dropOpen ? (
-          <Icon type="ChevronUpIcon" customStyle="ml-4" />
+          <Icon icon={<ChevronUpIcon />} customStyle="ml-4" />
         ) : (
-          <Icon type="ChevronDownIcon" customStyle="ml-4" />
+          <Icon icon={<ChevronDownIcon />} customStyle="ml-4" />
         )}
       </button>
 
@@ -95,9 +94,9 @@ const Dropdown: React.FC<DropdownProps> = ({
                     spacing="gap-x-2"
                     customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                   >
-                    {menuItem?.iconName && (
+                    {menuItem?.icon && (
                       <Icon
-                        type={menuItem.iconName}
+                        icon={menuItem.icon}
                         color={
                           isSelected
                             ? { light: 'secondaryLight', dark: 'secondaryDark' }
@@ -119,7 +118,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                   {isSelected && (
                     <span className={tw('ml-4')}>
                       <Icon
-                        type="CheckIcon"
+                        icon={<CheckIcon />}
                         color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                       />
                     </span>

@@ -1,10 +1,9 @@
-import { IconType } from '@akashaorg/typings/lib/ui';
 import { LegacyRef } from 'react';
 import { BasicSize, BreakPointSize, Color } from '../types/common.types';
 
 export type ButtonProps = {
   label?: string;
-  icon?: IconType;
+  icon?: React.ReactElement;
   iconDirection?: 'left' | 'right';
   size?: ButtonSize;
   variant?: Variant;

@@ -5,6 +5,7 @@ import { ButtonIcon } from './button-icon';
 import { IconOnlyButton } from './IconOnlyButton';
 
 import Stack from '../Stack';
+import { ArrowPathIcon } from '../Icon/hero-icons-outline';
 import Text, { TextProps } from '../Text';
 
 import { ButtonProps, ButtonSize } from './types';
@@ -101,7 +102,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         {loading ? (
           <ButtonIcon
             size={size}
-            type="ArrowPathIcon"
+            icon={<ArrowPathIcon />}
             variant={variant}
             greyBg={greyBg}
             loading={true}
@@ -113,7 +114,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
             {icon && iconDirection === 'left' && (
               <ButtonIcon
                 size={size}
-                type={icon}
+                icon={icon}
                 variant={variant}
                 greyBg={greyBg}
                 loading={false}
@@ -129,7 +130,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
             {icon && iconDirection === 'right' && (
               <ButtonIcon
                 size={size}
-                type={icon}
+                icon={icon}
                 variant={variant}
                 greyBg={greyBg}
                 loading={false}

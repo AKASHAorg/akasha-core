@@ -3,6 +3,7 @@ import { apply, tw } from '@twind/core';
 
 import { ButtonIcon } from '../button-icon';
 import { ButtonProps, ButtonSize } from '../types';
+import { ArrowPathIcon } from '../../Icon/hero-icons-outline';
 import Stack from '../../Stack';
 
 import { getContainerClasses } from '../getContainerClasses';
@@ -70,7 +71,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
           >
             <ButtonIcon
               size={size}
-              type={loading ? 'ArrowPathIcon' : icon}
+              icon={loading ? <ArrowPathIcon /> : icon}
               variant={variant}
               greyBg={greyBg}
               loading={loading}

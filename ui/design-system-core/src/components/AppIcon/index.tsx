@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { apply, tw } from '@twind/core';
 
-import { IconType, LogoSourceType } from '@akashaorg/typings/lib/ui';
+import { LogoSourceType } from '@akashaorg/typings/lib/ui';
 
 import Stack from '../Stack';
 
@@ -17,7 +17,7 @@ import {
 
 export type AppIconProps = {
   appImg?: LogoSourceType;
-  placeholderIconType: IconType;
+  placeholderIcon: React.ReactElement;
   accentColor?: boolean;
   // props for notifications icon
   stackedIcon?: boolean;
@@ -36,7 +36,7 @@ export type AppIconProps = {
 const AppIcon: React.FC<AppIconProps> = props => {
   const {
     appImg,
-    placeholderIconType,
+    placeholderIcon,
     size = 'md',
     breakPointSize,
     accentColor,
@@ -88,7 +88,7 @@ const AppIcon: React.FC<AppIconProps> = props => {
           appImg={appImg}
           size={size}
           breakPointSize={breakPointSize}
-          placeholderIconType={placeholderIconType}
+          placeholderIcon={placeholderIcon}
           accentColor={accentColor}
           color={iconColor}
         />
@@ -104,7 +104,7 @@ const AppIcon: React.FC<AppIconProps> = props => {
         appImg={appImg}
         size={size}
         breakPointSize={breakPointSize}
-        placeholderIconType={placeholderIconType}
+        placeholderIcon={placeholderIcon}
         accentColor={accentColor}
         color={iconColor}
       />

@@ -7,6 +7,7 @@ import { ButtonProps } from '../Button/types';
 import Card from '../Card';
 import Divider from '../Divider';
 import Icon from '../Icon';
+import { XMarkIcon } from '../Icon/hero-icons-outline';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
 
@@ -67,7 +68,7 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
                         </Text>
                         <Button onClick={onClose} plain customStyle="absolute top-4 right-4">
                           <Icon
-                            type="XMarkIcon"
+                            icon={<XMarkIcon />}
                             size="md"
                             color={{ light: 'grey4', dark: 'grey7' }}
                           />
