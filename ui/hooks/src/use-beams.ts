@@ -21,25 +21,31 @@ const defaultSorting: AkashaBeamSortingInput = {
 export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
     const vars = {
-      first: overscan,
       sorting: { ...defaultSorting, ...(sorting ?? {}) },
     };
     if (filters) {
       mergedVars.filters = filters;
     }
     return vars;
-  }, [overscan, sorting, filters]);
+  }, [sorting, filters]);
 
-  const [, nextQuery] = useGetBeamsLazyQuery({
+  const [fetchNext, nextQuery] = useGetBeamsLazyQuery({
     variables: {
       ...mergedVars,
+      first: overscan,
+    },
+    onError: error => {
+      console.error(error.message);
     },
   });
 
-  const [, prevQuery] = useGetBeamsLazyQuery({
+  const [fetchPrev, prevQuery] = useGetBeamsLazyQuery({
     variables: {
       ...mergedVars,
       last: overscan,
+    },
+    onError: error => {
+      console.error(error.message);
     },
   });
 
@@ -58,7 +64,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
   const fetchNextPage = React.useCallback(() => {
     if (nextQuery.loading || nextQuery.error) return;
-    const endCursor = pages.at(-1).cursor;
+    const endCursor = pages[pages.length - 1].cursor;
     if (!endCursor) {
       // initial fetch was not made yet, return
       return;
@@ -72,7 +78,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
   const fetchPreviousPage = React.useCallback(() => {
     if (prevQuery.loading || prevQuery.error) return;
-    const firstCursor = pages.at(0).cursor;
+    const firstCursor = pages[0].cursor;
     if (!firstCursor) {
       // no initial data yet, return
       return;
@@ -80,24 +86,26 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     prevQuery.fetchMore({
       variables: {
         before: firstCursor,
+        last: overscan,
       },
     });
-  }, [pages, prevQuery]);
+  }, [overscan, pages, prevQuery]);
 
   const fetchInitialData = React.useCallback(
     (cursors: string[]) => {
-      const resumeItemCursor = cursors.at(-1);
+      const resumeItemCursor = cursors[Math.floor(cursors.length / 2)];
       if (resumeItemCursor && !prevQuery.called) {
-        prevQuery.fetchMore({
+        fetchPrev({
           variables: {
             before: resumeItemCursor,
+            last: overscan,
           },
         });
       } else if (!nextQuery.called) {
-        nextQuery.fetchMore({});
+        fetchNext({});
       }
     },
-    [nextQuery, prevQuery],
+    [fetchNext, fetchPrev, nextQuery.called, overscan, prevQuery.called],
   );
 
   const handleReset = async () => {

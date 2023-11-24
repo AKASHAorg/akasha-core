@@ -48,8 +48,6 @@ export type VirtualListProps<T> = {
   scrollRestore: ReturnType<typeof useScrollRestore>;
   onFetchInitialData: (itemKeys: string[]) => void;
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
-  hasNextPage?: boolean;
-  hasPreviousPage?: boolean;
   onListReset?: () => void;
 };
 
@@ -76,7 +74,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     debug,
     onFetchInitialData,
     scrollTopIndicator,
-    hasPreviousPage,
     onListReset,
   } = props;
   const listNodeRef = React.useRef<HTMLDivElement>();
@@ -201,7 +198,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
 
       if (initialProjection.length > 0) {
         const listHeight = viewport.getDocumentViewportHeight();
-
         setListState(
           {
             mountedItems: initialProjection.map(it => ({
@@ -219,6 +215,9 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
         );
         scrollRestore.restore();
       }
+      if (!isScrollRestored.current && !viewport.isAtTop()) {
+        viewport.scrollToTop();
+      }
       isScrollRestored.current = true;
     }
     if (prevItemListSize.current === itemList.length) {
@@ -226,7 +225,7 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     }
     RAFUpdate('list update hook');
     prevItemListSize.current = itemList.length;
-  }, [itemList, scrollRestore, listState, viewport, setListState, update]);
+  }, [itemList, scrollRestore, listState, viewport, setListState, update, RAFUpdate]);
 
   if (!virtualCore.current) {
     virtualCore.current = new VirtualizerCore({
@@ -373,14 +372,10 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
   };
 
   const handleScrollToTop = () => {
-    if (hasPreviousPage) {
-      // reset the list to the newest entry
-      prevItemListSize.current = 0;
-      scrollRestore.saveScrollState({ listHeight: 0, items: [], measurementsCache: new Map() });
-      onListReset?.();
-    } else {
-      scrollToTop(true);
-    }
+    prevItemListSize.current = 0;
+    scrollRestore.saveScrollState({ listHeight: 0, items: [], measurementsCache: new Map() });
+    onListReset?.();
+    scrollToTop(true);
   };
 
   const projection = React.useMemo(

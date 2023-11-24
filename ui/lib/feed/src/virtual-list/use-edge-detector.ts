@@ -11,8 +11,6 @@ export const enum EdgeArea {
 
 export type UseEdgeDetectorProps = {
   overscan: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
   onEdgeDetectorChange: (edgeArea: EdgeArea) => void;
 };
 export type DetectorState = {

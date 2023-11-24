@@ -38,15 +38,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     itemSpacing,
   } = props;
 
-  const {
-    pages,
-    hasPreviousPage,
-    hasNextPage,
-    fetchNextPage,
-    fetchPreviousPage,
-    fetchInitialData,
-    onReset,
-  } = useBeams({
+  const { pages, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset } = useBeams({
     overscan: scrollerOptions.overscan,
     sorting,
     filters,
@@ -77,8 +69,6 @@ const BeamFeed = (props: BeamFeedProps) => {
       onFetchInitialData={fetchInitialData}
       itemKeyExtractor={item => item.cursor}
       itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
-      hasPreviousPage={hasPreviousPage}
-      hasNextPage={hasNextPage}
       onListReset={onReset}
       onEdgeDetectorChange={handleFetch}
       scrollTopIndicator={scrollTopIndicator}

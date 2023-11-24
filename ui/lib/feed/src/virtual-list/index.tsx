@@ -28,10 +28,6 @@ export type VirtualizerProps<T> = {
   overscan?: VirtualListProps<unknown>['overscan'];
   itemSpacing?: number;
   onFetchInitialData?: VirtualListProps<T>['onFetchInitialData'];
-  isFetchingNext?: boolean;
-  isFetchingPrev?: boolean;
-  hasNextPage?: boolean;
-  hasPreviousPage?: boolean;
   loadingIndicator?: (position: IndicatorPosition) => React.ReactNode;
   debug?: boolean;
   onScrollSave?: (state: {
@@ -59,8 +55,6 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     restorationKey,
     onScrollSave,
     scrollTopIndicator,
-    hasNextPage,
-    hasPreviousPage,
     onListReset,
     onEdgeDetectorChange,
   } = props;
@@ -105,8 +99,6 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
 
   const edgeDetector = useEdgeDetector({
     overscan,
-    hasNextPage,
-    hasPreviousPage,
     onEdgeDetectorChange,
   });
 
@@ -171,8 +163,6 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       debug={debug}
       onFetchInitialData={onFetchInitialData}
       scrollTopIndicator={scrollTopIndicator}
-      hasNextPage={hasNextPage}
-      hasPreviousPage={hasPreviousPage}
       onListReset={onListReset}
     />
   );
