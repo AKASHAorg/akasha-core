@@ -1,0 +1,23 @@
+{
+  "name": "cloudflare",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230419.0",
+    "typescript": "^5.0.4",
+    "wrangler": "^3.0.0"
+  },
+	"dependencies": {
+		"@ipld/car": "^5.2.4",
+		"@ipld/dag-ucan": "^3.4.0",
+		"@ucanto/core": "^9.0.1",
+		"@ucanto/principal": "^9.0.0",
+		"@web3-storage/w3up-client": "^11.0.2",
+		"hono": "^3.10.2"
+	}
+}
