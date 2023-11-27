@@ -5,10 +5,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
 import { useParams } from 'react-router-dom';
-import {
-  useGetBeamByIdQuery,
-  useGetMyProfileQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetBeamByIdQuery, useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   hasOwn,
   useAnalytics,

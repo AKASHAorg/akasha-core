@@ -5,8 +5,8 @@ import type {
   AkashaBeamFiltersInput,
   AkashaBeamSortingInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import type { GetBeamsQueryVariables } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import type { GetBeamsQueryVariables } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type UseBeamsOptions = {
   overscan: number;
@@ -19,6 +19,7 @@ const defaultSorting: AkashaBeamSortingInput = {
 };
 
 export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
+  const [beams, setBeams] = React.useState<AkashaBeamEdge[]>([]);
   const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
     const vars = {
       sorting: { ...defaultSorting, ...(sorting ?? {}) },
@@ -29,7 +30,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     return vars;
   }, [sorting, filters]);
 
-  const [fetchNext, nextQuery] = useGetBeamsLazyQuery({
+  const [fetchBeams, beamsQuery] = useGetBeamsLazyQuery({
     variables: {
       ...mergedVars,
       first: overscan,
@@ -39,89 +40,76 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     },
   });
 
-  const [fetchPrev, prevQuery] = useGetBeamsLazyQuery({
-    variables: {
-      ...mergedVars,
-      last: overscan,
-    },
-    onError: error => {
-      console.error(error.message);
-    },
-  });
+  const fetchNextPage = async (lastCursor: string) => {
+    if (beamsQuery.loading || beamsQuery.error || !lastCursor) return;
 
-  // @TODO: remove this after making sure that we are not fetching one page multiple times
-  const pages = React.useMemo(() => {
-    const beams: AkashaBeamEdge[] = [];
-    [
-      ...(prevQuery.data?.akashaBeamIndex.edges || []),
-      ...(nextQuery.data?.akashaBeamIndex.edges || []),
-    ].forEach(beamEdge => {
-      if (beams.some(b => b.node.id === beamEdge.node.id)) return;
-      beams.push(beamEdge);
-    });
-    return beams;
-  }, [prevQuery.data, nextQuery.data]);
-
-  const fetchNextPage = React.useCallback(() => {
-    if (nextQuery.loading || nextQuery.error) return;
-    const endCursor = pages[pages.length - 1].cursor;
-    if (!endCursor) {
-      // initial fetch was not made yet, return
-      return;
-    }
-    nextQuery.fetchMore({
+    const results = await beamsQuery.fetchMore({
       variables: {
-        after: endCursor,
+        after: lastCursor,
+        sorting: { createdAt: SortOrder.Desc },
       },
     });
-  }, [nextQuery, pages]);
+    if (results.error) return;
+    if (!results.data) return;
+    setBeams(prev => [...prev, ...results.data.akashaBeamIndex.edges]);
+  };
 
-  const fetchPreviousPage = React.useCallback(() => {
-    if (prevQuery.loading || prevQuery.error) return;
-    const firstCursor = pages[0].cursor;
-    if (!firstCursor) {
-      // no initial data yet, return
-      return;
-    }
-    prevQuery.fetchMore({
+  const fetchPreviousPage = async (firstCursor: string) => {
+    if (beamsQuery.loading || beamsQuery.error || !firstCursor) return;
+    const result = await beamsQuery.fetchMore({
       variables: {
-        before: firstCursor,
+        sorting: { createdAt: SortOrder.Asc },
+        after: firstCursor,
         last: overscan,
       },
     });
-  }, [overscan, pages, prevQuery]);
+    if (result.errors) return;
+    if (!result.data) return;
+    setBeams(prev => [...result.data.akashaBeamIndex.edges.reverse(), ...prev]);
+  };
 
-  const fetchInitialData = React.useCallback(
-    (cursors: string[]) => {
-      const resumeItemCursor = cursors[Math.floor(cursors.length / 2)];
-      if (resumeItemCursor && !prevQuery.called) {
-        fetchPrev({
-          variables: {
-            before: resumeItemCursor,
-            last: overscan,
-          },
-        });
-      } else if (!nextQuery.called) {
-        fetchNext({});
-      }
-    },
-    [fetchNext, fetchPrev, nextQuery.called, overscan, prevQuery.called],
-  );
+  const fetchInitialData = async (cursors: string[]) => {
+    const resumeItemCursor = cursors[cursors.length - 1];
+    if (resumeItemCursor && !beamsQuery.called) {
+      const results = await fetchBeams({
+        variables: {
+          after: resumeItemCursor,
+          last: overscan,
+          sorting: { createdAt: SortOrder.Asc },
+        },
+      });
+      if (results.error) return;
+      if (!results.data) return;
+      setBeams(results.data.akashaBeamIndex.edges.reverse());
+    } else if (!beamsQuery.called) {
+      const results = await fetchBeams({
+        variables: {
+          sorting: { createdAt: SortOrder.Desc },
+        },
+      });
+      if (results.error) return;
+      if (!results.data) return;
+      setBeams(results.data.akashaBeamIndex.edges);
+    }
+  };
 
   const handleReset = async () => {
     // @TODO: reset queries
+    setBeams([]);
+    fetchBeams({
+      variables: {
+        sorting: { createdAt: SortOrder.Desc },
+      },
+    });
   };
 
   return {
-    pages: pages,
+    beams,
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,
-    isFetchingNextPage: nextQuery.loading,
-    isFetchingPreviousPage: prevQuery.loading && !prevQuery.error,
-    hasNextPage: nextQuery.data?.akashaBeamIndex.pageInfo.hasNextPage || false,
-    hasPreviousPage: prevQuery.data?.akashaBeamIndex.pageInfo.hasPreviousPage || false,
+    isFetching: beamsQuery.loading,
     onReset: handleReset,
-    error: `${nextQuery.error?.message || ''}${nextQuery.error?.message || ''}`,
+    error: `${beamsQuery.error?.message || ''}`,
   };
 };

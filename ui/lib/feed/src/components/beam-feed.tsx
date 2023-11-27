@@ -38,21 +38,40 @@ const BeamFeed = (props: BeamFeedProps) => {
     itemSpacing,
   } = props;
 
-  const { pages, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset } = useBeams({
+  const { beams, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset } = useBeams({
     overscan: scrollerOptions.overscan,
     sorting,
     filters,
   });
 
-  const handleFetch = (newArea: EdgeArea) => {
+  const lastCursors = React.useRef({ next: null, prev: null });
+  const isLoading = React.useRef(false);
+  const prevBeams = React.useRef([]);
+
+  React.useEffect(() => {
+    if (beams.length > prevBeams.current.length) {
+      isLoading.current = false;
+    }
+    prevBeams.current.length = beams.length;
+  }, [beams.length]);
+
+  const handleFetch = async (newArea: EdgeArea) => {
     switch (newArea) {
       case EdgeArea.TOP:
       case EdgeArea.NEAR_TOP:
-        fetchPreviousPage();
+        const firstCursor = beams[0].cursor;
+        if (lastCursors.current.prev !== firstCursor && !isLoading.current) {
+          await fetchPreviousPage(firstCursor);
+          lastCursors.current.prev = firstCursor;
+        }
         break;
       case EdgeArea.BOTTOM:
       case EdgeArea.NEAR_BOTTOM:
-        fetchNextPage();
+        const lastCursor = beams[beams.length - 1].cursor;
+        if (lastCursors.current.next !== lastCursor && !isLoading.current) {
+          await fetchNextPage(lastCursor);
+          lastCursors.current.next = lastCursor;
+        }
         break;
       default:
         break;
@@ -65,10 +84,10 @@ const BeamFeed = (props: BeamFeedProps) => {
       itemSpacing={itemSpacing}
       estimatedHeight={estimatedHeight}
       overscan={scrollerOptions.overscan}
-      items={pages}
+      items={beams}
       onFetchInitialData={fetchInitialData}
       itemKeyExtractor={item => item.cursor}
-      itemIndexExtractor={itemKey => pages.findIndex(p => p.cursor === itemKey)}
+      itemIndexExtractor={itemKey => beams.findIndex(p => p.cursor === itemKey)}
       onListReset={onReset}
       onEdgeDetectorChange={handleFetch}
       scrollTopIndicator={scrollTopIndicator}
