@@ -1,0 +1,3 @@
+ENVIRONMENT=development
+KEY=secretkey
+PROOF_FILE=proof.ucan
