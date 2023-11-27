@@ -3,12 +3,14 @@ import { apply, tw } from '@twind/core';
 
 import { ButtonIcon } from '../button-icon';
 import { ButtonProps, ButtonSize } from '../types';
+import { ArrowPathIcon } from '../../Icon/hero-icons-outline';
 import Stack from '../../Stack';
 
 import { getContainerClasses } from '../getContainerClasses';
 
 type IconOnlyButtonProps = {
   icon: ButtonProps['icon'];
+  solidIcon: ButtonProps['solidIcon'];
   size: ButtonProps['size'];
   variant: ButtonProps['variant'];
   loading: ButtonProps['loading'];
@@ -28,6 +30,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
     (
       {
         icon,
+        solidIcon,
         size,
         variant,
         loading,
@@ -70,7 +73,8 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
           >
             <ButtonIcon
               size={size}
-              type={loading ? 'ArrowPathIcon' : icon}
+              icon={loading ? <ArrowPathIcon /> : icon}
+              solid={solidIcon}
               variant={variant}
               greyBg={greyBg}
               loading={loading}

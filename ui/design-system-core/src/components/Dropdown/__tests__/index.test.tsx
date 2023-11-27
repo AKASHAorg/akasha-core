@@ -1,12 +1,14 @@
 import React from 'react';
 import { act, fireEvent } from '@testing-library/react';
+
 import Dropdown, { DropdownMenuItemType } from '../';
+import { ArchiveBoxIcon, BeakerIcon } from '@heroicons/react/24/outline';
 import { customRender } from '../../../test-utils';
 
 const menuItems: DropdownMenuItemType[] = [
-  { id: '1', iconName: 'BeakerIcon', title: 'Option 1' },
-  { id: '2', iconName: 'ArchiveBoxIcon', title: 'Option 2' },
-  { id: '3', iconName: 'ArchiveBoxIcon', title: 'Option 3' },
+  { id: '1', icon: <BeakerIcon />, title: 'Option 1' },
+  { id: '2', icon: <ArchiveBoxIcon />, title: 'Option 2' },
+  { id: '3', icon: <ArchiveBoxIcon />, title: 'Option 3' },
 ];
 
 const label = 'Select one';

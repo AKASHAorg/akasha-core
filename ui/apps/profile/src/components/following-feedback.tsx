@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
+
+import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import { hasOwn, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import {
@@ -76,7 +78,7 @@ const FollowingFeedback = () => {
         })}
         handleDismiss={clear}
         type="success"
-        iconType="CheckCircleIcon"
+        icon={<CheckCircleIcon />}
         customStyle="mb-4"
       />
     )

@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -20,7 +21,7 @@ const ArticleHeader: React.FC<IArticleHeaderProps> = props => {
       <Stack direction="row" justify="between">
         <Text variant="h2">{titleLabel}</Text>
         <button onClick={onIconClick}>
-          <Icon type="Cog8ToothIcon" />
+          <Icon icon={<Cog8ToothIcon />} />
         </button>
       </Stack>
       <Stack direction="row" justify="between" align="center">

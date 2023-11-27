@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import AutoComplete from '@akashaorg/design-system-core/lib/components/AutoComplete';
+import {
+  CheckIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -127,11 +131,11 @@ const EditInterests: React.FC<EditInterestsProps> = ({
               <Pill
                 key={`${index}-${interest.value}`}
                 label={interest.value}
-                icon={myActiveInterests.has(interest) ? 'CheckIcon' : null}
+                icon={myActiveInterests.has(interest) ? <CheckIcon /> : null}
                 iconDirection="right"
                 active={myActiveInterests.has(interest)}
                 hover={
-                  myActiveInterests.has(interest) ? { icon: 'XMarkIcon', active: false } : null
+                  myActiveInterests.has(interest) ? { icon: <XMarkIcon />, active: false } : null
                 }
                 onPillClick={active => {
                   if (active) {

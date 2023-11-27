@@ -2,6 +2,10 @@ import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  ChevronLeftIcon,
+  CircleStackIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -33,7 +37,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
       <Stack align="start" fullWidth={true} customStyle="p-4">
         <Stack direction="row" fullWidth={true} customStyle="mb-4">
           <button onClick={onClickIcon}>
-            <Icon type="ChevronLeftIcon" />{' '}
+            <Icon icon={<ChevronLeftIcon />} />{' '}
           </button>
           <Text variant="h2">{titleLabel}</Text>
         </Stack>
@@ -44,7 +48,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
           {apps.map((app, idx) => (
             <Stack direction="row" align="center" spacing="gap-1" key={idx}>
               <Stack customStyle="flex rounded-sm p-2 bg(grey8 dark:grey3)">
-                <Icon size="lg" type="CircleStackIcon" />
+                <Icon size="lg" icon={<CircleStackIcon />} />
               </Stack>
               <Stack spacing="gap-0.5">
                 <Text variant="h2">{app.title}</Text>

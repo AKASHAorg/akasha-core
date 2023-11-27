@@ -5,6 +5,11 @@ import { tw } from '@twind/core';
 import ModerationIntroCard, {
   ModerationIntroCardProps,
 } from '../../components/ModerationIntroCard';
+import {
+  SparklesIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
+  EnvelopeIcon,
+} from '@heroicons/react/24/outline';
 
 const meta: Meta<ModerationIntroCardProps> = {
   title: 'DSComponents/Moderation/ModerationIntroCard',
@@ -26,17 +31,17 @@ export const BaseModerationIntroCard: Story = {
           {
             label: 'CoC discussions',
             url: '',
-            iconType: 'SparklesIcon',
+            icon: <SparklesIcon />,
           },
           {
             label: 'Moderation thoughts',
             url: '',
-            iconType: 'ChatBubbleOvalLeftEllipsisIcon',
+            icon: <ChatBubbleOvalLeftEllipsisIcon />,
           },
           {
             label: 'Send us a message',
             url: '',
-            iconType: 'EnvelopeIcon',
+            icon: <EnvelopeIcon />,
           },
         ]}
       />

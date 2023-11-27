@@ -2,6 +2,7 @@ import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export interface IInputTagsProps {
   values: string[];
@@ -21,7 +22,7 @@ const InputTags: React.FC<IInputTagsProps> = props => {
             customStyle={'rounded-lg m-0.5 px-1 py-0.5 border(grey8 dark:grey3)'}
           >
             <Text variant="body1">{tag}</Text>
-            <Icon type="XMarkIcon" />
+            <Icon icon={<XMarkIcon />} />
           </Stack>
         </button>
       ))}

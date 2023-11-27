@@ -23,7 +23,7 @@ export const Input: React.FC<InputProps> = forwardRef(
         spacing="gap-x-2"
         customStyle={`${containerStyle} ${radiusStyle}`}
       >
-        {iconLeft && <Icon type={iconLeft} color={iconColor} disabled={disabled} />}
+        {iconLeft && <Icon icon={iconLeft} color={iconColor} disabled={disabled} />}
         <input
           ref={ref}
           type="text"
@@ -33,7 +33,7 @@ export const Input: React.FC<InputProps> = forwardRef(
           aria-labelledby={id}
           {...rest}
         />
-        {iconRight && <Icon type={iconRight} color={iconColor} disabled={disabled} />}
+        {iconRight && <Icon icon={iconRight} color={iconColor} disabled={disabled} />}
       </Stack>
     );
   },

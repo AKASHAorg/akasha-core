@@ -11,6 +11,11 @@ import {
 import { I18nextProvider } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  BookmarkIcon,
+  ExclamationCircleIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+
 type CardSaveButtonExtensionData = {
   itemId: string;
   itemType: EntityTypes;
@@ -56,7 +61,7 @@ const EntryCardSaveButton = (props: RootExtensionProps<CardSaveButtonExtensionDa
     <Stack align="center">
       <button onClick={handleEntryBookmark}>
         <Icon
-          type="BookmarkIcon"
+          icon={<BookmarkIcon />}
           accentColor={true}
           customStyle={isBookmarked && `[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark`}
         />
@@ -83,7 +88,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
-    return <Icon type="ExclamationCircleIcon" />;
+    return <Icon icon={<ExclamationCircleIcon />} />;
   },
 });
 

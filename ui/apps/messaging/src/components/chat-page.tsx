@@ -11,6 +11,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ChatList from '@akashaorg/design-system-components/lib/components/ChatList';
 import ChatAreaHeader from '@akashaorg/design-system-components/lib/components/ChatAreaHeader';
@@ -69,8 +70,8 @@ const ChatPage = (props: ChatPageProps) => {
     navigateTo?.({ getNavigationUrl: () => url });
   };
 
-  const [mentionQuery, setMentionQuery] = React.useState(null);
-  const [tagQuery, setTagQuery] = React.useState(null);
+  const [, setMentionQuery] = React.useState(null);
+  const [, setTagQuery] = React.useState(null);
   const mentionQueryReq = null;
   const tagQueryReq = null;
   const handleMentionQueryChange = (query: string) => {
@@ -160,7 +161,7 @@ const ChatPage = (props: ChatPageProps) => {
     <Card customStyle="max-h-[92vh]">
       <Stack direction="row" align="center" customStyle="p-4">
         <button onClick={onChevronLeftClick}>
-          <Icon type="ChevronLeftIcon" />
+          <Icon icon={<ChevronLeftIcon />} />
         </button>
 
         <Text variant="h5" customStyle="mx-auto">

@@ -1,8 +1,6 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
 
-import { IconType } from '@akashaorg/typings/lib/ui';
-
 import Icon from '../Icon';
 import Text from '../Text';
 
@@ -15,8 +13,8 @@ export type ToggleProps = {
   checked?: boolean;
   disabled?: boolean;
   //toggle with icons
-  iconUnchecked?: IconType;
-  iconChecked?: IconType;
+  iconUnchecked?: React.ReactElement;
+  iconChecked?: React.ReactElement;
   onChange?: (ev: React.SyntheticEvent) => void;
 };
 
@@ -76,8 +74,7 @@ const Toggle: React.FC<ToggleProps> = ({
         <div className={tw(iconStyle)}>
           <Icon
             size={size === 'small' ? { width: 'w-3', height: 'h-3' } : 'sm'}
-            type={checked ? iconChecked : iconUnchecked}
-            solid={true}
+            icon={checked ? iconChecked : iconUnchecked}
             color="white"
           />
         </div>

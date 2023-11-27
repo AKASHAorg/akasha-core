@@ -2,6 +2,10 @@ import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  ChevronLeftIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -37,7 +41,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
       <Stack fullWidth={true} align="start" customStyle="p-4">
         <Stack direction="row" fullWidth={true} customStyle="mb-4">
           <button onClick={onClickIcon}>
-            <Icon type="ChevronLeftIcon" />
+            <Icon icon={<ChevronLeftIcon />} />
           </button>
           <Text variant="h2">{titleLabel}</Text>
         </Stack>
@@ -59,7 +63,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
                 <Text variant={selectedTopics.includes(topic) ? 'body1' : 'subtitle1'}>
                   {topic}
                 </Text>
-                {selectedTopics.includes(topic) && <Icon type="XMarkIcon" />}
+                {selectedTopics.includes(topic) && <Icon icon={<XMarkIcon />} />}
               </Stack>
             </button>
           ))}

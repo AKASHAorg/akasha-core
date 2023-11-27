@@ -4,6 +4,10 @@ import type { Meta, StoryObj } from '@storybook/react';
 import DuplexButton, {
   DuplexButtonProps,
 } from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import {
+  CheckIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 const meta: Meta<DuplexButtonProps> = {
   title: 'DSCore/Buttons/DuplexButton',
@@ -45,7 +49,7 @@ export const BaseDuplexButton: Story = {
 
 export const DuplexButtonWithIcon: Story = {
   render: () => (
-    <Component iconDirection="left" activeIcon="CheckIcon" activeHoverIcon="XMarkIcon" />
+    <Component iconDirection="left" activeIcon={<CheckIcon />} activeHoverIcon={<XMarkIcon />} />
   ),
 };
 
@@ -53,8 +57,8 @@ export const SecondaryDuplexButton: Story = {
   render: () => (
     <Component
       iconDirection="left"
-      activeIcon="CheckIcon"
-      activeHoverIcon="XMarkIcon"
+      activeIcon={<CheckIcon />}
+      activeHoverIcon={<XMarkIcon />}
       inactiveVariant="secondary"
     />
   ),

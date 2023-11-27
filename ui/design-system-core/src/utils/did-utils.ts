@@ -1,4 +1,3 @@
-import { IconType } from '@akashaorg/typings/lib/ui';
 import { truncateMiddle } from './string-utils';
 
 export const truncateDid = (didKey: string, type = 'eth') => {
@@ -17,19 +16,4 @@ export const truncateDid = (didKey: string, type = 'eth') => {
     }
   }
   return '';
-};
-
-const ethIdentifier = 'eip155';
-const solanaIdentifier = 'solana';
-const didKeyIdentifier = 'key';
-
-export const iconForDid = (didKey: string): IconType => {
-  if (didKey) {
-    if (didKey.includes(ethIdentifier)) {
-      return 'eth';
-    }
-    // modify if we recognize more than 3 types of keys
-    return didKey.includes(solanaIdentifier) ? 'solana' : 'didKey';
-  }
-  return null;
 };

@@ -1,11 +1,10 @@
 import React from 'react';
 import { apply } from '@twind/core';
 
-import { IconType } from '@akashaorg/typings/lib/ui';
-
 import Button from '../Button';
 import Card from '../Card';
 import Icon from '../Icon';
+import { InformationCircleIcon, XMarkIcon } from '../Icon/hero-icons-outline';
 import Stack from '../Stack';
 import Text from '../Text';
 
@@ -17,7 +16,7 @@ export type SnackBarType = 'alert' | 'caution' | 'success' | 'info';
 export type SnackbarProps = {
   title: React.ReactNode;
   type?: SnackBarType;
-  iconType?: IconType;
+  icon?: React.ReactElement;
   description?: string;
   actionButtonLabel?: string;
   customStyle?: string;
@@ -28,7 +27,7 @@ export type SnackbarProps = {
 const Snackbar: React.FC<SnackbarProps> = ({
   title,
   type = 'info',
-  iconType = 'InformationCircleIcon',
+  icon = <InformationCircleIcon />,
   description,
   //action button
   actionButtonLabel,
@@ -53,13 +52,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
       customStyle={`${instanceStyle} ${customStyle}`}
     >
       <Stack spacing="gap-x-3" fullWidth direction="row">
-        <Icon
-          type={iconType}
-          color={{ light: colorLight, dark: colorDark }}
-          // customStyle={`fill-${colorLight} dark:fill-${colorDark}`}
-          size="lg"
-          solid={true}
-        />
+        <Icon icon={icon} color={{ light: colorLight, dark: colorDark }} size="lg" />
         <Stack direction="column">
           <Text variant="button-md" color={textColor}>
             {title}
@@ -83,7 +76,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
           aria-label="dismiss"
           plain={true}
         >
-          <Icon type="XMarkIcon" color="grey7" size="lg" />
+          <Icon icon={<XMarkIcon />} color="grey7" size="lg" />
         </Button>
       </Stack>
     </Card>

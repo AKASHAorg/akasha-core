@@ -19,6 +19,7 @@ import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
 import { ModalExtension } from '@akashaorg/ui-lib-extensions/lib/react/modal-extension';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -211,7 +212,7 @@ const Layout: React.FC<unknown> = () => {
                   <Stack direction="row">
                     <Icon
                       color={{ light: 'grey3', dark: 'grey3' }}
-                      type="ExclamationTriangleIcon"
+                      icon={<ExclamationTriangleIcon />}
                       customStyle="mr-4"
                     />
                     <Stack>

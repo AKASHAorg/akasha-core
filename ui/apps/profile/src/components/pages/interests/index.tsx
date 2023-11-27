@@ -1,5 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import {
+  CheckCircleIcon,
+  CheckIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
@@ -105,7 +109,7 @@ const InterestsPage: React.FC<unknown> = () => {
                 <Pill
                   key={`${idx}-${interest.value}`}
                   label={interest.value}
-                  icon="CheckIcon"
+                  icon={<CheckIcon />}
                   iconDirection="right"
                   size="sm"
                   loading={
@@ -164,7 +168,7 @@ const InterestsPage: React.FC<unknown> = () => {
         <Snackbar
           title={t('Successfully subscribed to interest')}
           type="success"
-          iconType="CheckCircleIcon"
+          icon={<CheckCircleIcon />}
           handleDismiss={() => {
             setShowFeedback(false);
           }}

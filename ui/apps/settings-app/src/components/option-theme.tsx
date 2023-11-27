@@ -1,5 +1,9 @@
 import React from 'react';
 
+import {
+  MoonIcon,
+  SunIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
@@ -25,8 +29,8 @@ const ThemeOption: React.FC<IThemeOption> = props => {
 
           <Toggle
             checked={theme === 'Light-Theme'}
-            iconChecked="SunIcon"
-            iconUnchecked="MoonIcon"
+            iconChecked={<SunIcon />}
+            iconUnchecked={<MoonIcon />}
             onChange={onThemeSelect}
           />
         </Stack>

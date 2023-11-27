@@ -3,6 +3,10 @@ import routes, { EDIT } from '../routes';
 import FollowProfileButton from './follow-profile-button';
 import FollowingFeedback from './following-feedback';
 import {
+  FlagIcon,
+  LinkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import {
   ProfileHeader,
   ProfileHeaderLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -92,14 +96,14 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const menuItems: MenuProps['items'] = [
     {
       label: t('Copy link'),
-      icon: 'LinkIcon',
+      icon: <LinkIcon />,
       onClick: handleCopy,
     },
     ...(!isViewer
       ? ([
           {
             label: t('Report'),
-            icon: 'FlagIcon',
+            icon: <FlagIcon />,
             onClick: handleFlag(profileId, EntityTypes.PROFILE, profileData?.name),
             color: { light: 'errorLight', dark: 'errorDark' },
           },

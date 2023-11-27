@@ -9,7 +9,7 @@ import { Color } from '@akashaorg/design-system-core/lib/components/types/common
 
 export interface IWeb3ConnectCardProps {
   titleLabel: string;
-  leftIconType: AppIconProps['placeholderIconType'];
+  leftIconType: AppIconProps['placeholderIcon'];
   subtitleLabel?: string;
   iconSize: AppIconProps['size'];
   boxSize: AppIconProps['backgroundSize'];
@@ -42,7 +42,7 @@ const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
         <Stack direction="row" align="center" spacing="gap-x-2">
           <AppIcon
             iconColor={iconColor}
-            placeholderIconType={leftIconType}
+            placeholderIcon={leftIconType}
             radius={8}
             size={iconSize}
             backgroundSize={boxSize}

@@ -1,4 +1,5 @@
 import React from 'react';
+import sortBy from 'lodash/sortBy';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
@@ -6,7 +7,7 @@ import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/co
 import { hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ContentBlockModes, EntityTypes } from '@akashaorg/typings/lib/ui';
-import { sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils';
@@ -61,7 +62,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       locale={locale}
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
-      sortedContents={sortByKey(entryData.content, 'order')}
+      sortedContents={sortBy(entryData.content, 'order')}
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}
       isViewer={authenticatedDID === entryData.author.id}

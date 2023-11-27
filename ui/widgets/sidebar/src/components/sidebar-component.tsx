@@ -17,6 +17,12 @@ import getSDK from '@akashaorg/awf-sdk';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import {
+  Discord,
+  Github,
+  Telegram,
+  Twitter,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ListSidebarApps from './list-sidebar-apps';
@@ -220,6 +226,16 @@ const SidebarComponent: React.FC<unknown> = () => {
     return () => window.removeEventListener('popstate', handleBackNavEvent);
   });
 
+  /**
+   * this assigns the corresponding icons to the social links from root components
+   */
+  const modSocialLinks = socialLinks.map(el => {
+    if (el.icon === 'github') return { ...el, icon: <Github /> };
+    if (el.icon === 'discord') return { ...el, icon: <Discord /> };
+    if (el.icon === 'telegram') return { ...el, icon: <Telegram /> };
+    if (el.icon === 'twitter') return { ...el, icon: <Twitter /> };
+  });
+
   return (
     <Card
       customStyle="w-[19.5rem] max-w-[19.5rem] max-h(screen xl:[calc(100vh-20px)]) h(full xl:fit)"
@@ -265,19 +281,25 @@ const SidebarComponent: React.FC<unknown> = () => {
       {!dismissed && (
         <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
       )}
-      {socialLinks.length > 0 && (
+      {modSocialLinks.length > 0 && (
         <Stack padding="px-8 py-4" customStyle="border-t-1 border(grey9 dark:grey3)">
           <Text variant="footnotes2">{t('Get in touch')}</Text>
           <Stack direction="row" customStyle="w-fit h-fit mt-6">
-            {socialLinks.map((socialLink, idx) => (
+            {modSocialLinks.map((socialLink, idx) => (
               <Anchor
-                key={socialLink.icon + idx}
+                key={idx}
                 href={socialLink.link}
                 target="_blank"
                 rel="noreferrer noopener"
                 customStyle="mr-4"
               >
-                <Button icon={socialLink.icon} variant="primary" greyBg={true} iconOnly={true} />
+                <Button
+                  icon={socialLink.icon}
+                  solidIcon={idx > 0}
+                  variant="primary"
+                  greyBg={true}
+                  iconOnly={true}
+                />
               </Anchor>
             ))}
           </Stack>

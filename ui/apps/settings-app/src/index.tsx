@@ -6,6 +6,8 @@ import {
   MenuItemType,
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import routes from './routes';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
@@ -17,7 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     label: 'Settings',
     type: MenuItemType.App,
     area: [MenuItemAreaType.AppArea],
-    logo: { type: LogoTypeSource.ICON, value: 'Cog8ToothIcon' },
+    logo: { type: LogoTypeSource.ICON, value: <Cog8ToothIcon /> },
     subRoutes: [],
   },
   routes: {

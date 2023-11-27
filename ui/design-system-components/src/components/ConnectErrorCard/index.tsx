@@ -3,6 +3,7 @@ import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -24,7 +25,7 @@ const ConnectErrorCard: React.FC<ConnectErrorCardProps> = ({ title, message, act
         <Stack justify="between">
           <Stack direction="row" align="center" spacing="gap-x-2">
             <Icon
-              type="ExclamationTriangleIcon"
+              icon={<ExclamationTriangleIcon />}
               color={{ light: 'errorLight', dark: 'errorDark' }}
             />
             <Text

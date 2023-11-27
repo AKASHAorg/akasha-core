@@ -1,7 +1,14 @@
 import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
+
 import Menu from '../';
 import { ListItem } from '../../List';
+import {
+  ArrowUpOnSquareIcon,
+  EllipsisVerticalIcon,
+  PencilIcon,
+  TrashIcon,
+} from '../../Icon/hero-icons-outline';
 import { customRender } from '../../../test-utils';
 
 describe('<Menu /> Component', () => {
@@ -12,11 +19,11 @@ describe('<Menu /> Component', () => {
   const handleDelete = jest.fn(/** */);
 
   const items: ListItem[] = [
-    { label: 'Upload', icon: 'ArrowUpOnSquareIcon', onClick: handleUpload },
-    { label: 'Edit', icon: 'PencilIcon', onClick: handleEdit },
+    { label: 'Upload', icon: <ArrowUpOnSquareIcon />, onClick: handleUpload },
+    { label: 'Edit', icon: <PencilIcon />, onClick: handleEdit },
     {
       label: 'Delete',
-      icon: 'TrashIcon',
+      icon: <TrashIcon />,
       color: { light: 'errorLight', dark: 'errorDark' },
       onClick: handleDelete,
     },
@@ -27,7 +34,7 @@ describe('<Menu /> Component', () => {
       componentWrapper = customRender(
         <Menu
           anchor={{
-            icon: 'EllipsisVerticalIcon',
+            icon: <EllipsisVerticalIcon />,
             variant: 'primary',
             greyBg: true,
             iconOnly: true,

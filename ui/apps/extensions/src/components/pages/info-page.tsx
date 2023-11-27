@@ -1,5 +1,10 @@
 import * as React from 'react';
+
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import {
+  FlagIcon,
+  ShareIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useParams } from 'react-router-dom';
@@ -105,10 +110,10 @@ const InfoPage: React.FC<unknown> = () => {
           linksAndDocumentationTitle={t('Links & Documentation')}
           licenseTitle={t('License')}
           license={appReleaseInfo?.application?.licence}
-          share={{ label: 'Share', icon: 'ShareIcon' }}
+          share={{ label: 'Share', icon: <ShareIcon /> }}
           report={{
             label: 'Report',
-            icon: 'FlagIcon',
+            icon: <FlagIcon />,
             color: { light: 'errorLight', dark: 'errorDark' },
           }}
           onInstall={() => {

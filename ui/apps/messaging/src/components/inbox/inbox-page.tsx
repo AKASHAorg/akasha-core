@@ -5,6 +5,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import MessageContactCard from '@akashaorg/design-system-components/lib/components/MessageContactCard';
 
@@ -96,7 +97,7 @@ const InboxPage: React.FC<InboxPageProps> = () => {
         <Stack customStyle="flex-row justify-between">
           <Text variant="h1">{t('Messaging App')}</Text>
           <button onClick={handleSettingsClick}>
-            <Icon type="Cog8ToothIcon" />
+            <Icon icon={<Cog8ToothIcon />} />
           </button>
         </Stack>
         <Text>{t('Write and send private, encrypted messages 🔐 to people in AKASHA World.')}</Text>

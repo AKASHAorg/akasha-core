@@ -4,6 +4,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { Faq, Shield } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type HelloModeratorCardProps = {
@@ -39,7 +40,7 @@ const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
           <a href={moderatorGuideUrl} target="_blank" rel="noreferrer noopener">
             <Button plain={true}>
               <Stack direction="row" align="center" spacing="gap-x-2">
-                <Icon size="sm" accentColor={true} type="shield" customStyle="mx-auto my-0" />
+                <Icon size="sm" accentColor={true} icon={<Shield />} customStyle="mx-auto my-0" />
                 <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                   {moderatorGuideLabel}
                 </Text>
@@ -50,7 +51,7 @@ const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
           <a href={moderationFAQUrl} target="_blank" rel="noreferrer noopener">
             <Button plain={true}>
               <Stack direction="row" align="center" spacing="gap-x-2">
-                <Icon size="sm" accentColor={true} type="faq" customStyle="mx-auto my-0" />
+                <Icon size="sm" accentColor={true} icon={<Faq />} customStyle="mx-auto my-0" />
                 <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                   {moderationFAQLabel}
                 </Text>

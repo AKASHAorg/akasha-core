@@ -2,6 +2,7 @@ import * as React from 'react';
 import { tw } from '@twind/core';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type LoginCTACardProps = {
@@ -62,7 +63,7 @@ const LoginCTACard: React.FC<LoginCTACardProps> = props => {
           </div>
         </div>
         <button onClick={onCloseIconClick}>
-          <Icon type="XMarkIcon" size="sm" data-testid="close-icon-alpha-notification" />
+          <Icon icon={<XMarkIcon />} size="sm" data-testid="close-icon-alpha-notification" />
         </button>
       </div>
     </Card>

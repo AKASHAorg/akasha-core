@@ -10,6 +10,8 @@ import {
 import getSDK, { Logger } from '@akashaorg/awf-sdk';
 import { filter, mergeMap } from 'rxjs';
 import { AUTH_EVENTS } from '@akashaorg/typings/lib/sdk';
+import React from 'react';
+import { EnvelopeIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export const initialize = (options: IntegrationRegistrationOptions & { logger: Logger }) => {
   const notification: any = options.plugins['@akashaorg/app-notifications'].notification;
@@ -80,7 +82,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Messaging',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'EnvelopeIcon' },
+    logo: { type: LogoTypeSource.ICON, value: <EnvelopeIcon /> },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [],
   },
