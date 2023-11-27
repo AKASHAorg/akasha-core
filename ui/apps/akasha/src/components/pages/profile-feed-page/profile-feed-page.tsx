@@ -71,7 +71,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
           onEntryFlag={handleEntryFlag}
           onEntryRemove={handleEntryRemove}
           itemSpacing={8}
-          onNavigate={useEntryNavigation(getRoutingPlugin()?.routing?.navigateTo)}
+          onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
           newItemsPublishedLabel={t('New Beams published recently')}
         />
       </>

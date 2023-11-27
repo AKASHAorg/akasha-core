@@ -1,4 +1,5 @@
 import React from 'react';
+import sortBy from 'lodash/sortBy';
 import { useTranslation } from 'react-i18next';
 import {
   EntityTypes,
@@ -11,7 +12,7 @@ import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { hasOwn, sortByKey, useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 export type EntryCardRendererProps = {
@@ -160,7 +161,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
             <EntryCard
               entryData={itemData}
               authorProfile={{ data: profileData, status: profileDataReq.status }}
-              sortedContents={sortByKey(itemData.content, 'order')}
+              sortedContents={sortBy(itemData.content, 'order')}
               itemType={EntityTypes.BEAM}
               onAvatarClick={handleClickAvatar}
               onContentClick={handleContentClick}
