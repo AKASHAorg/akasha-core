@@ -15,7 +15,7 @@ import routes, { RESULTS } from '../../routes';
 
 export type SettingsPageProps = {
   onError?: (err: Error) => void;
-  loggedProfileData: Profile;
+  isLoggedIn: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 

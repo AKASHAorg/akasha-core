@@ -42,7 +42,7 @@ export enum ButtonValues {
 
 export type SearchPageProps = {
   onError?: (err: Error) => void;
-  loggedProfileData: Profile;
+  isLoggedIn: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
@@ -55,7 +55,7 @@ const initSearchState = {
 };
 
 const SearchPage: React.FC<SearchPageProps> = props => {
-  const { loggedProfileData, showLoginModal } = props;
+  const { isLoggedIn, showLoginModal } = props;
   const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
   const [searchState, setSearchState] = React.useState(initSearchState);
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
@@ -188,7 +188,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const unfollowReq = null;
 
   const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
-    if (!loggedProfileData) {
+    if (!isLoggedIn) {
       showLoginModal();
       return;
     }
@@ -206,7 +206,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
   const handleFollowProfile = (id: string) => {
-    if (!loggedProfileData) {
+    if (!isLoggedIn) {
       showLoginModal();
       return;
     }
@@ -243,7 +243,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleUnfollowProfile = (id: string) => {
-    if (!loggedProfileData) {
+    if (!isLoggedIn) {
       showLoginModal();
       return;
     }
@@ -267,7 +267,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       category: AnalyticsCategories.BEAM,
       action: 'Repost Clicked',
     });
-    if (!loggedProfileData) {
+    if (!isLoggedIn) {
       showLoginModal();
       return;
     } else {
@@ -333,7 +333,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           activeButton={activeButton}
           onTabClick={onTabClick}
           buttonValues={buttonValues}
-          loggedUser={loggedProfileData?.did?.id}
+          isLoggedIn={isLoggedIn}
         />
       </SearchStartCard>
       {activeButton === ButtonValues.CONTENT && (

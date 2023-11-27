@@ -26,7 +26,7 @@ const Component = () => {
         { value: 'Delisted', label: 'Delisted' },
       ]}
       onTabClick={onTabClick}
-      loggedUser={'0x000'}
+      isLoggedIn={true}
     />
   );
 };
