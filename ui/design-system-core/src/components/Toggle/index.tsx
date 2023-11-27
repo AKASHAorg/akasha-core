@@ -75,7 +75,6 @@ const Toggle: React.FC<ToggleProps> = ({
           <Icon
             size={size === 'small' ? { width: 'w-3', height: 'h-3' } : 'sm'}
             icon={checked ? iconChecked : iconUnchecked}
-            solid={true}
             color="white"
           />
         </div>

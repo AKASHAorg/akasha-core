@@ -53,23 +53,23 @@ const ArticleCardSettingsPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-articles');
   const { logger } = useRootComponentProps();
 
-  const getLicenseIcon = (type: string) => {
-    if (type === 'licenseAllRights') return <LicenseAllRights />;
-    if (type === 'licenseAttribution') return <LicenseAttribution />;
-    if (type === 'licenseNoDerivatives') return <LicenseNoDerivatives />;
-    if (type === 'licenseNoRights') return <LicenseNoRights />;
-    if (type === 'licenseNonCommercial') return <LicenseNonCommercial />;
-    if (type === 'licenseShareAlike') return <LicenseShareAlike />;
-    if (type === 'licenseSomeRights') return <LicenseSomeRights />;
-    if (type === 'LicenseWtfpl') return <LicenseWtfpl />;
+  const licenseIconsMap: Record<string, React.ReactElement> = {
+    licenseAllRights: <LicenseAllRights />,
+    licenseAttribution: <LicenseAttribution />,
+    licenseNoDerivatives: <LicenseNoDerivatives />,
+    licenseNoRights: <LicenseNoRights />,
+    licenseNonCommercial: <LicenseNonCommercial />,
+    licenseShareAlike: <LicenseShareAlike />,
+    licenseSomeRights: <LicenseSomeRights />,
+    LicenseWtfpl: <LicenseWtfpl />,
   };
 
   const modLicenses = licences.map(el => ({
     ...el,
-    icon: getLicenseIcon(el.type),
+    icon: licenseIconsMap[el.type],
     description: el.description.map(el => ({
       ...el,
-      ...(el.type && { icon: getLicenseIcon(el.type) }),
+      ...(el.type && { icon: licenseIconsMap[el.type] }),
     })),
   }));
 

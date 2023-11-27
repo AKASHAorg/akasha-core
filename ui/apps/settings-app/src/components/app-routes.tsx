@@ -133,7 +133,7 @@ const AppRoutes: React.FC<unknown> = () => {
               matomoLabel="Matomo"
               matomoUrl="https://matomo.org"
               trackingAnalyticsInfo3={t(
-                " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time.",
+                " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time. ",
               )}
               ctaLabel={t('Click here')}
               trackingAnalyticsInfo4={t(' to learn more.')}

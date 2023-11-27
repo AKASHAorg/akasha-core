@@ -52,7 +52,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
       customStyle={`${instanceStyle} ${customStyle}`}
     >
       <Stack spacing="gap-x-3" fullWidth direction="row">
-        <Icon icon={icon} color={{ light: colorLight, dark: colorDark }} size="lg" solid={true} />
+        <Icon icon={icon} color={{ light: colorLight, dark: colorDark }} size="lg" />
         <Stack direction="column">
           <Text variant="button-md" color={textColor}>
             {title}

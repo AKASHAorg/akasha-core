@@ -13,6 +13,7 @@ import {
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
+import { getIconFromLink } from '../../../utils/get-icon-from-link';
 import { AkashaProfileLinkSource } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type LinksProps = {
@@ -23,15 +24,12 @@ export type LinksProps = {
 };
 
 const Links: React.FC<LinksProps> = ({ title, links }) => {
-  const getIconFromLink = (href: string) => {
-    const host = new URL(href).host;
-
-    if ('github.com'.includes(host)) return { icon: <Github />, solid: false };
-    if ('twitter.com'.includes(host)) return { icon: <Twitter />, solid: true };
-    if ('discordapp.com'.includes(host)) return { icon: <Discord />, solid: true };
-    if ('telegram.me'.includes(host) || 't.me'.includes(host))
-      return { icon: <Telegram />, solid: true };
-    return { icon: <LinkIcon />, solid: false };
+  const iconsMap: Record<string, { icon: React.ReactElement; solid: boolean }> = {
+    github: { icon: <Github />, solid: false },
+    twitter: { icon: <Twitter />, solid: true },
+    discord: { icon: <Discord />, solid: true },
+    telegram: { icon: <Telegram />, solid: true },
+    LinkIcon: { icon: <LinkIcon />, solid: false },
   };
 
   return (
@@ -39,7 +37,8 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
       <Stack direction="column" spacing="gap-y-2.5">
         <Text variant="label">{title}</Text>
         {links.map((link, index) => {
-          const { icon, solid } = getIconFromLink(link.href);
+          const iconType = getIconFromLink(link.href);
+          const { icon, solid } = iconsMap[iconType];
 
           return (
             <CopyToClipboard key={`${link.href}${index}`} value={link.href}>
