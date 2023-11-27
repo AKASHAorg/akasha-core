@@ -105,6 +105,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                       text: { light: 'errorLight', dark: 'errorDark' },
                       icon: { light: 'errorLight', dark: 'errorDark' },
                     }}
+                    fixedWidth={'w-[7rem]'}
                     onClickActive={() => handleUnsubscribeTopic(tag.value)}
                     onClickInactive={() => handleSubscribeTopic(tag.value)}
                   />
