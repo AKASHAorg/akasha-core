@@ -1,11 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  useLoggedIn,
-  useMarkAsRead,
-  useRootComponentProps,
-  useGetSettings,
-} from '@akashaorg/ui-awf-hooks';
+import { useMarkAsRead, useRootComponentProps, useGetSettings } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -21,7 +16,11 @@ export type Notification = {
   [key: string]: unknown;
 };
 
-const NotificationsPage: React.FC<unknown> = () => {
+type NotificationsPageProps = {
+  isLoggedIn: boolean;
+};
+
+const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   const fetchSettingsQuery = useGetSettings('@akashaorg/app-notifications');
@@ -31,8 +30,6 @@ const NotificationsPage: React.FC<unknown> = () => {
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
-
-  const { isLoggedIn } = useLoggedIn();
 
   const _uiEvents = useRef(uiEvents);
 

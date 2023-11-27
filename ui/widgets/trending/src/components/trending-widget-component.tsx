@@ -83,7 +83,10 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const isMutatingInterests = useIsMutating({ mutationKey: useCreateInterestsMutation.getKey() });
 
   const latestTopics = latestTopicsReq.data || [];
-  const tagSubscriptions = isLoggedIn ? tagSubscriptionsReq.data : [];
+  const tagSubscriptions = useMemo(
+    () => (isLoggedIn ? tagSubscriptionsReq.data : []),
+    [isLoggedIn, tagSubscriptionsReq.data],
+  );
   const followList = isLoggedIn
     ? getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node))
     : null;
