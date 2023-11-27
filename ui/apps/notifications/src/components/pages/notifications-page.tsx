@@ -9,6 +9,11 @@ import {
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  CheckCircleIcon,
+  Cog8ToothIcon,
+  EllipsisHorizontalIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import NotificationsCard from '@akashaorg/design-system-components/lib/components/NotificationsCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DropDownFilter from '@akashaorg/design-system-components/lib/components/DropDownFilter';
@@ -179,12 +184,12 @@ const NotificationsPage: React.FC<unknown> = () => {
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Mark all as read',
-      icon: 'CheckCircleIcon',
+      icon: <CheckCircleIcon />,
       onClick: () => markAllAsRead(),
     },
     {
       label: 'Settings',
-      icon: 'Cog8ToothIcon',
+      icon: <Cog8ToothIcon />,
       onClick: () => redirectToSettingsPage(),
     },
   ];
@@ -218,7 +223,7 @@ const NotificationsPage: React.FC<unknown> = () => {
           </Text>
           <Stack direction="column" spacing="gap-y-1" customStyle="absolute right-0 top-5">
             <Button customStyle="relative" plain={true} onClick={handleTopMenuClick}>
-              <Icon type="EllipsisHorizontalIcon" accentColor={true} />
+              <Icon icon={<EllipsisHorizontalIcon />} accentColor={true} />
             </Button>
             {showMenu && (
               <List items={dropDownActions} customStyle="absolute right-0 top-7 w-max" />

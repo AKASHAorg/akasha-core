@@ -7,6 +7,11 @@ import EntryCardRemoved, { AuthorsRemovedMessage, OthersRemovedMessage } from '.
 import CardActions from './card-actions';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import {
+  EllipsisHorizontalIcon,
+  FlagIcon,
+  PencilIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
 import NSFW, { NSFWProps } from '../NSFW';
@@ -123,7 +128,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     ...(!isViewer
       ? [
           {
-            icon: 'FlagIcon' as const,
+            icon: <FlagIcon />,
             label: flagAsLabel,
             color: { light: 'errorLight' as const, dark: 'errorDark' as const },
             disabled: disableReporting,
@@ -134,7 +139,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     ...(isViewer
       ? [
           {
-            icon: 'PencilIcon' as const,
+            icon: <PencilIcon />,
             label: editLabel,
             disabled: !editable,
             toolTipContent: editable ? null : notEditableLabel,
@@ -198,7 +203,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         </>
         <Menu
           anchor={{
-            icon: 'EllipsisHorizontalIcon',
+            icon: <EllipsisHorizontalIcon />,
             plainIcon: true,
             iconOnly: true,
             size: 'md',

@@ -6,6 +6,7 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
@@ -81,7 +82,7 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
         </Stack>
 
         <Button plain={true} onClick={() => onCardClick(moderator.did.id)}>
-          <Icon type="ChevronRightIcon" accentColor={true} customStyle="justify-end" />
+          <Icon icon={<ChevronRightIcon />} accentColor={true} customStyle="justify-end" />
         </Button>
       </Stack>
     </Stack>

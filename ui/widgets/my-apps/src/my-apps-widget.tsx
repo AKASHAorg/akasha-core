@@ -7,6 +7,7 @@ import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/l
 import { withProviders, useRootComponentProps, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TabList from '@akashaorg/design-system-core/lib/components/TabList';
@@ -144,7 +145,7 @@ const ICWidget: React.FC<unknown> = () => {
             <AppsList
               apps={filteredDefaultApps.slice(0, 4)}
               onAppClick={handleAppClick}
-              appAction={<Icon type="CheckIcon" />}
+              appAction={<Icon icon={<CheckIcon />} />}
             />
           )}
 

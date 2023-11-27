@@ -6,6 +6,7 @@ import { Point, Area } from 'react-easy-crop/types';
 import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 import Icon from '../Icon';
+import { MagnifyingGlassMinusIcon, MagnifyingGlassPlusIcon } from '../Icon/hero-icons-outline';
 import Stack from '../Stack';
 import Text from '../Text';
 import { getCroppedImage, getRadiusClasses } from '../../utils';
@@ -69,7 +70,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
         {dragToRepositionLabel}
       </Text>
       <Stack justify="evenly" spacing="gap-x-2">
-        <Icon type="MagnifyingGlassMinusIcon" size="lg" />
+        <Icon icon={<MagnifyingGlassMinusIcon />} size="lg" />
         <input
           aria-label="range-input"
           type="range"
@@ -81,7 +82,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
           onChange={e => setZoom(Number(e.target.value))}
           className={tw(`w-[${(CROPPER_WIDTH - 64) / 16}rem]`)}
         />
-        <Icon type="MagnifyingGlassPlusIcon" size="lg" />
+        <Icon icon={<MagnifyingGlassPlusIcon />} size="lg" />
       </Stack>
     </Stack>
   );

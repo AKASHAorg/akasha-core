@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChatBubbleLeftRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
@@ -25,7 +26,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         }}
       >
         <Stack direction="row" align="center" spacing="gap-x-2">
-          <Icon type="ChatBubbleLeftRightIcon" accentColor={true} />
+          <Icon icon={<ChatBubbleLeftRightIcon />} accentColor={true} />
         </Stack>
       </Anchor>
     </Stack>

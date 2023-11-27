@@ -1,6 +1,7 @@
 import React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 
+import { XMarkIcon } from '../../Icon/hero-icons-outline';
 import Pill from '../';
 import { customRender } from '../../../test-utils';
 
@@ -15,7 +16,7 @@ describe('<Pill /> Component', () => {
       componentWrapper = customRender(
         <Pill
           label={label}
-          icon="XMarkIcon"
+          icon={<XMarkIcon />}
           iconDirection="right"
           onPillClick={mockChangeHandler}
         />,

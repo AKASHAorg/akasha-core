@@ -4,14 +4,13 @@ import Stack from '../Stack';
 import Tooltip from '../Tooltip';
 import ListElement from './list-element';
 import { getColorClasses } from '../../utils';
-import { IconType } from '@akashaorg/typings/lib/ui';
 import { TextProps } from '../Text';
 
 type Selected = { index: number; label?: string };
 
 export type ListItem = {
   label: string;
-  icon?: IconType;
+  icon?: React.ReactElement;
   toolTipContent?: string;
   disabled?: boolean;
   onClick?: (label?: string) => void;

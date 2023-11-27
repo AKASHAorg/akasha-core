@@ -6,6 +6,7 @@ import Dropdown, {
   DropdownMenuItemType,
 } from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { BeakerIcon, ArchiveBoxIcon } from '@heroicons/react/24/outline';
 
 const meta: Meta<DropdownProps> = {
   title: 'DSCore/Buttons/Dropdown',
@@ -19,9 +20,9 @@ const variants: Omit<DropdownProps, 'selected' | 'setSelected'>[] = [
   {
     name: 'BaseDropdown',
     menuItems: [
-      { id: '1', iconName: 'BeakerIcon', title: 'Option 1' },
-      { id: '2', iconName: 'ArchiveBoxIcon', title: 'Option 2' },
-      { id: '3', iconName: 'ArchiveBoxIcon', title: 'Option 3' },
+      { id: '1', icon: <BeakerIcon />, title: 'Option 1' },
+      { id: '2', icon: <ArchiveBoxIcon />, title: 'Option 2' },
+      { id: '3', icon: <ArchiveBoxIcon />, title: 'Option 3' },
     ],
   },
   {
@@ -34,16 +35,16 @@ const variants: Omit<DropdownProps, 'selected' | 'setSelected'>[] = [
   {
     label: 'Select One',
     menuItems: [
-      { id: '1', iconName: 'BeakerIcon', title: 'Option 1' },
-      { id: '2', iconName: 'ArchiveBoxIcon', title: 'Option 2' },
+      { id: '1', icon: <BeakerIcon />, title: 'Option 1' },
+      { id: '2', icon: <ArchiveBoxIcon />, title: 'Option 2' },
     ],
   },
   {
     name: 'DropdownWithPlaceholderLabel',
     placeholderLabel: 'Select an option',
     menuItems: [
-      { id: '1', iconName: 'BeakerIcon', title: 'Option 1' },
-      { id: '2', iconName: 'ArchiveBoxIcon', title: 'Option 2' },
+      { id: '1', icon: <BeakerIcon />, title: 'Option 1' },
+      { id: '2', icon: <ArchiveBoxIcon />, title: 'Option 2' },
     ],
   },
 ];

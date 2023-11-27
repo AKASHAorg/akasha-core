@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { act } from '@testing-library/react';
 import SubtitleTextIcon from '../';
+import { Akasha } from '../../Icon/akasha-icons';
 import { customRender } from '../../../test-utils';
 
 describe('<SubtitleTextIcon /> Component', () => {
@@ -12,7 +13,7 @@ describe('<SubtitleTextIcon /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        <SubtitleTextIcon label={label} subtitle={subtitle} iconType="akasha" />,
+        <SubtitleTextIcon label={label} subtitle={subtitle} icon={<Akasha />} solid={true} />,
         {},
       );
     });

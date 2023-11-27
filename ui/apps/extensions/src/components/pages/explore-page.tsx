@@ -144,9 +144,9 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                   />
                   <DuplexButton
                     loading={!!uninstallingApps.includes(app.name)}
-                    icon={<Icon type="arrowDown" />}
-                    activeIcon={<Icon type="checkSimple" accentColor={true} />}
-                    activeHoverIcon={<Icon type="close" />}
+                    icon={<Icon icon={<ArrowDown />} />}
+                    activeIcon={<Icon icon={<CheckSimple />} accentColor={true} />}
+                    activeHoverIcon={<Icon icon={<CloseIcon />} />}
                     active={installedAppsInfo?.some(installedApp => installedApp.name === app.name)}
                     activeLabel={t('Installed')}
                     inactiveLabel={t('Install')}

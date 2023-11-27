@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { act } from '@testing-library/react';
 import AppIcon from '../';
+import { Discord } from '../../Icon/akasha-icons';
 import { customRender } from '../../../test-utils';
 
 describe('<AppIcon /> Component', () => {
@@ -8,7 +9,7 @@ describe('<AppIcon /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<AppIcon placeholderIconType="discord" />, {});
+      componentWrapper = customRender(<AppIcon placeholderIcon={<Discord />} solid={true} />, {});
     });
   });
 

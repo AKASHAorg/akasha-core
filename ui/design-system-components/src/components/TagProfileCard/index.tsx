@@ -6,6 +6,10 @@ import { ITag } from '@akashaorg/typings/lib/ui';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  HashtagIcon,
+  RssIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
@@ -48,7 +52,7 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
               `relative rounded-full flex items-center justify-items-center w-20 h-20 shrink-0`,
             )}
           >
-            <Icon type="HashtagIcon" size="lg" accentColor={true} />
+            <Icon icon={<HashtagIcon />} size="lg" accentColor={true} />
           </div>
           <div className={tw(`p-1`)}>
             {tag && (
@@ -79,7 +83,7 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
               onClickInactive={() => handleSubscribeTag(tag.name)}
               onClickActive={() => handleUnsubscribeTag(tag.name)}
               active={subscribedTags?.includes(tag.name)}
-              icon={'RssIcon'}
+              icon={<RssIcon />}
             />
           )}
         </div>

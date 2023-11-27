@@ -2,7 +2,6 @@ import singleSpa from 'single-spa';
 import { RootComponentProps } from './root-component';
 import { GetContentBlockByIdQuery } from '../sdk/graphql-operation-types-new';
 import { AkashaContentBlockLabeledValue } from '../sdk/graphql-types-new';
-import { IconType } from './icon';
 
 export const enum ContentBlockModes {
   EDIT = 'edit-mode',
@@ -14,7 +13,7 @@ export type BlockInfo = {
 };
 export type ContentBlockExtensionInterface = {
   propertyType: string;
-  icon?: IconType;
+  icon?: React.ReactElement;
   displayName: string;
   loadingFn: (options: {
     blockInfo: BlockInfo;

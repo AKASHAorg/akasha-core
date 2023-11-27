@@ -4,6 +4,7 @@ import Stack from '../../Stack';
 import Text from '../../Text';
 import Button from '../../Button';
 import Icon from '../../Icon';
+import { XMarkIcon } from '../../Icon/hero-icons-outline';
 
 type TagProps = {
   tag: string;
@@ -20,7 +21,7 @@ const Tag: React.FC<TagProps> = props => {
           {tag}
         </Text>
         <Button onClick={onRemove} plain>
-          <Icon type="XMarkIcon" size="sm" accentColor />
+          <Icon icon={<XMarkIcon />} size="sm" accentColor />
         </Button>
       </Stack>
     </Card>

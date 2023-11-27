@@ -4,6 +4,7 @@ import { apply, tw } from '@twind/core';
 import Stack from '../Stack';
 import Text from '../Text';
 import Icon from '../Icon';
+import { ChevronRightIcon } from '../Icon/hero-icons-outline';
 
 type TDataValues = string[];
 
@@ -53,7 +54,7 @@ const Table: React.FC<TableProps> = props => {
     }
 
     if (hasIcons && idx === 3) {
-      return <Icon type="ChevronRightIcon" accentColor={true} />;
+      return <Icon icon={<ChevronRightIcon />} accentColor={true} />;
     }
     return <Text variant="body2">{value}</Text>;
   };

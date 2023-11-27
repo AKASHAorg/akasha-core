@@ -1,8 +1,12 @@
 import React from 'react';
 import dayjs from 'dayjs';
 
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import {
+  PencilIcon,
+  TrashIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type IMenuItem = {
@@ -86,7 +90,7 @@ const DevKeyCard: React.FC<DevKeyCardProps> = props => {
             {/* action buttons */}
             <Stack align="center" spacing="gap-x-4">
               <Button
-                icon="PencilIcon"
+                icon={<PencilIcon />}
                 variant="primary"
                 iconOnly={true}
                 greyBg={true}
@@ -94,7 +98,7 @@ const DevKeyCard: React.FC<DevKeyCardProps> = props => {
               />
 
               <Button
-                icon="TrashIcon"
+                icon={<TrashIcon />}
                 variant="primary"
                 iconOnly={true}
                 greyBg={true}

@@ -6,6 +6,8 @@ import {
   MenuItemType,
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { Squares2X2Icon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 import routes, { DASHBOARD } from './routes';
 
@@ -30,7 +32,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Dev Dashboard',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'Squares2X2Icon' },
+    logo: { type: LogoTypeSource.ICON, value: <Squares2X2Icon /> },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [],
   },

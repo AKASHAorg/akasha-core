@@ -7,6 +7,8 @@ import {
   IntegrationRegistrationOptions,
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { DocumentTextIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   mountsIn: opts.layoutConfig?.pluginSlotId,
@@ -22,7 +24,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Legal',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'DocumentTextIcon' },
+    logo: { type: LogoTypeSource.ICON, value: <DocumentTextIcon /> },
     area: [MenuItemAreaType.OtherArea],
     subRoutes: Object.keys(routes).map((routeLabel, idx) => ({
       label: routeLabel,

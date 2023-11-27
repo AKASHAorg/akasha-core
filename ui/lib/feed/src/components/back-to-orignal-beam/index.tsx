@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowLongLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -20,7 +21,7 @@ const BackToOriginalBeam: React.FC<BackToOriginalBeamProps> = props => {
       <Stack direction="row" spacing="gap-x-2">
         <Button
           variant="text"
-          icon="ArrowLongLeftIcon"
+          icon={<ArrowLongLeftIcon />}
           iconDirection="left"
           label={label}
           onClick={onClick}

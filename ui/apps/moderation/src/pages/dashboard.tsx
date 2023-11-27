@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 
+import { EnvelopeIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+
 import { PaginatedItem, contentTypeMap } from './transparency-log';
 import ModeratorDashboard from '../components/dashboard';
 import GuestDashboard from '../components/dashboard/guest';
@@ -117,8 +120,8 @@ export const Dashboard: React.FC<DashboardProps> = props => {
         'By providing this information the community will be able to contact you',
       )}
       contactInfo={[
-        { type: 'discord', value: 'julie#t112' },
-        { type: 'EnvelopeIcon', value: 'juliet112@gmail.com' },
+        { icon: <Discord />, solid: true, value: 'julie#t112' },
+        { icon: <EnvelopeIcon />, value: 'juliet112@gmail.com' },
       ]}
       maxApplicantsLabel={t('Maximum Number of Applicant')}
       maxApplicantsIntroLabel={t(

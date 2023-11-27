@@ -7,6 +7,7 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import EditorToolbar from '@akashaorg/design-system-components/lib/components/EditorToolbar';
 
@@ -29,7 +30,7 @@ const ArticleEditor: React.FC<unknown> = () => {
     <Card>
       <Stack direction="row" fullWidth={true} customStyle="p-4">
         <button onClick={handleNavigateBack}>
-          <Icon type="ChevronLeftIcon" />
+          <Icon icon={<ChevronLeftIcon />} />
         </button>
 
         <Text variant="h2">{t('Article Editor')}</Text>

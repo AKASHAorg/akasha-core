@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
@@ -41,7 +42,7 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
     <Card>
       <Stack direction="row" fullWidth={true} customStyle="p-4 border(b grey8 dark:grey3)">
         <button onClick={onClickCloseSettings}>
-          <Icon type="XMarkIcon" />
+          <Icon icon={<XMarkIcon />} />
         </button>
         <Text variant="h2" customStyle="mx-auto">
           {titleLabel}
@@ -69,14 +70,14 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
                 customStyle="rounded-lg border(secondaryLight dark:secondaryDark)"
               >
                 <Text>{topic}</Text>
-                <Icon type="XMarkIcon" />
+                <Icon icon={<XMarkIcon />} />
               </Stack>
             </button>
           ))}
         </Stack>
       </Stack>
       <Stack direction="row" fullWidth={true} align="center" justify="end" customStyle="p-4">
-        <Button size="lg" icon="XMarkIcon" label={uninstallLabel} onClick={onClickUninstall} />
+        <Button size="lg" icon={<XMarkIcon />} label={uninstallLabel} onClick={onClickUninstall} />
       </Stack>
     </Card>
   );

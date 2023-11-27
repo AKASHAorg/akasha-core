@@ -5,6 +5,10 @@ import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  ChevronLeftIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
@@ -66,7 +70,7 @@ const InboxPage = (props: SettingsPageProps) => {
     <Card customStyle="max-h-[92vh]">
       <Stack direction="row" align="center" customStyle="p-4 border(b grey8 dark:grey3)">
         <button onClick={onChevronLeftClick}>
-          <Icon type="ChevronLeftIcon" />
+          <Icon icon={<ChevronLeftIcon />} />
         </button>
 
         <Text variant="h5" customStyle="mx-auto">
@@ -92,7 +96,7 @@ const InboxPage = (props: SettingsPageProps) => {
         <Text>{props.loggedProfileData?.did?.id}</Text>
       </Stack>
       <Stack direction="row" justify="end" customStyle="p-4">
-        <Button label={t('Uninstall')} onClick={handleUninstall} icon="XMarkIcon" />
+        <Button label={t('Uninstall')} onClick={handleUninstall} icon={<XMarkIcon />} />
       </Stack>
     </Card>
   );

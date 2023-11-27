@@ -1,10 +1,14 @@
 import React, { PropsWithChildren } from 'react';
 import Icon from '../../Icon';
+import {
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  XCircleIcon,
+} from '../../Icon/hero-icons-outline';
 import Text from '../../Text';
 import Stack from '../../Stack';
 import { Color, Status } from '../../types/common.types';
 import { CaptionProps } from '../types';
-import { IconType } from '@akashaorg/typings/lib/ui';
 import { getIconClasses } from '../Input/getIconClasses';
 
 const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, children }) => {
@@ -18,7 +22,7 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, children }
 
   return (
     <Stack direction="row" align="center" spacing="gap-1.5">
-      {status && <Icon type={STATUS_TO_ICON_MAP[status]} color={iconStyle} />}
+      {status && <Icon icon={STATUS_TO_ICON_MAP[status]} color={iconStyle} />}
       <Text color={textColor} variant="footnotes2" weight="normal">
         {children}
       </Text>
@@ -26,10 +30,10 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, children }
   );
 };
 
-const STATUS_TO_ICON_MAP: Record<Status, IconType> = {
-  success: 'CheckCircleIcon',
-  error: 'XCircleIcon',
-  warning: 'ExclamationTriangleIcon',
+const STATUS_TO_ICON_MAP: Record<Status, React.ReactElement> = {
+  success: <CheckCircleIcon />,
+  error: <XCircleIcon />,
+  warning: <ExclamationTriangleIcon />,
 };
 
 export default Caption;

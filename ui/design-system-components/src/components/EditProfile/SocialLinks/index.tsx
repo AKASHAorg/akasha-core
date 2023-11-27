@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
+
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { SocialLink } from './social-link';
@@ -46,7 +48,7 @@ export const SocialLinks: React.FC<SocialLinksProps> = ({
           <Text variant="h6">{linkLabel}</Text>
           <Button
             variant="text"
-            icon="PlusIcon"
+            icon={<PlusIcon />}
             iconDirection="left"
             label={addNewLinkButtonLabel}
             onClick={onAddNew}

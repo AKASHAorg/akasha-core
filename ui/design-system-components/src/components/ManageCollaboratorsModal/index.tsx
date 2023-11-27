@@ -5,6 +5,7 @@ import { Profile } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -61,7 +62,7 @@ const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props 
               {titleLabel}
             </Text>
             <button onClick={closeModal}>
-              <Icon type="XMarkIcon" />{' '}
+              <Icon icon={<XMarkIcon />} />{' '}
             </button>
           </div>
           <div className={tw(`flex p-4 gap-4 overflow-y-auto block`)}>

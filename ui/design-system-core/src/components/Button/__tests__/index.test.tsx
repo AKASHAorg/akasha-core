@@ -2,6 +2,7 @@ import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 
 import Button from '../';
+import { PlusIcon } from '../../Icon/hero-icons-outline';
 import { customRender } from '../../../test-utils';
 
 const label = 'Default button';
@@ -47,7 +48,7 @@ describe('Icon Only Button', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        <Button icon="PlusIcon" iconOnly={true} variant="text" label={label} />,
+        <Button icon={<PlusIcon />} iconOnly={true} variant="text" label={label} />,
         {},
       );
     });
@@ -74,7 +75,12 @@ describe('Disabled Button', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        <Button icon="PlusIcon" label={label} disabled={true} onClick={() => mockClickHandler()} />,
+        <Button
+          icon={<PlusIcon />}
+          label={label}
+          disabled={true}
+          onClick={() => mockClickHandler()}
+        />,
         {},
       );
     });

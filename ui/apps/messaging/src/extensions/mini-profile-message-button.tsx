@@ -12,6 +12,10 @@ import {
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  EnvelopeIcon,
+  ExclamationCircleIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 type MessageButtonExtensionData = {
   profileId: string;
@@ -64,7 +68,7 @@ const MessageButton: React.FC<RootExtensionProps<MessageButtonExtensionData>> = 
   return (
     <>
       <Button
-        icon="EnvelopeIcon"
+        icon={<EnvelopeIcon />}
         label={t('Message')}
         onClick={handleClick}
         disabled={!isContact}
@@ -92,7 +96,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
-    return <Icon type="ExclamationCircleIcon" />;
+    return <Icon icon={<ExclamationCircleIcon />} />;
   },
 });
 
