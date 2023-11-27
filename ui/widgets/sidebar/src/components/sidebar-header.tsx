@@ -7,6 +7,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { PowerIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type SidebarHeaderProps = {
   authenticatedDID: string;
@@ -97,7 +98,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
         {!isLoading && (
           <>
             {isLoggedIn && (
-              <Button icon="PowerIcon" size="xs" iconOnly={true} onClick={logoutClickHandler} />
+              <Button icon={<PowerIcon />} size="xs" iconOnly={true} onClick={logoutClickHandler} />
             )}
             {!isLoggedIn && (
               <Button size="sm" variant="primary" label="Connect" onClick={loginClickHandler} />
