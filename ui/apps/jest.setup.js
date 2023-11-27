@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { ReplaySubject } from 'rxjs';
-import {genAppProps } from '@akashaorg/af-testing';
+import { genAppProps } from '@akashaorg/af-testing';
 import * as useRootComponentProps from '@akashaorg/ui-awf-hooks/lib/use-root-props';
 
 require('@testing-library/jest-dom/extend-expect');
+
+jest.mock('@akashaorg/ui-awf-hooks/lib/generated', () => ({
+  __esModule: true,
+  ...jest.requireActual('@akashaorg/ui-awf-hooks/lib/generated'),
+}));
 
 /**
  * sdk mock for Apps package.
@@ -21,7 +26,10 @@ jest.doMock('@akashaorg/awf-sdk', () => () => ({
   services: {
     gql: {
       mutationNotificationConfig: { optionName: 'testMutationConfig' },
-      contextSources: { composeDB: Symbol.for("composeDB"), default: Symbol.for("defaultContextSource") },
+      contextSources: {
+        composeDB: Symbol.for('composeDB'),
+        default: Symbol.for('defaultContextSource'),
+      },
     },
     common: {
       misc: {

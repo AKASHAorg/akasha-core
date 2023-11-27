@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useShowFeedback, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
+import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import withProfileHeader from './profile-header-hoc';
@@ -89,7 +90,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Snackbar
           title={t('Profile updated successfully')}
           type="success"
-          iconType="CheckCircleIcon"
+          icon={<CheckCircleIcon />}
           handleDismiss={() => {
             setShowUpdatedFeedback(false);
           }}
@@ -100,7 +101,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Snackbar
           title={`${t('Profile link copied')}!`}
           type="success"
-          iconType="CheckCircleIcon"
+          icon={<CheckCircleIcon />}
           handleDismiss={() => {
             setLinkCopiedFeedback(false);
           }}

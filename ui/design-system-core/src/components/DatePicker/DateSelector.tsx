@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Icon from '../Icon';
+import { ChevronLeftIcon, ChevronRightIcon } from '../Icon/hero-icons-outline';
 import { MONTHS_IN_A_YEAR, DAYS } from './calendarHelpers';
 import { tx } from '@twind/core';
 import { selectedCellStyle, unselectedCellStyle, wrapperStyle } from './MonthSelector';
@@ -194,7 +195,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         <div className={tx('flex justify-between items-center')}>
           <div>
             <Button onClick={() => getPreviousMonth(month, year)} plain={true}>
-              <Icon type="ChevronLeftIcon" accentColor={true} hover={true} />
+              <Icon icon={<ChevronLeftIcon />} accentColor={true} hover={true} />
             </Button>
           </div>
           <div onClick={handleMonthSelectToggle} className={tx('flex')}>
@@ -207,7 +208,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
           </div>
           <div>
             <Button onClick={() => getNextMonth(month, year)} plain={true}>
-              <Icon type="ChevronRightIcon" accentColor={true} hover={true} />
+              <Icon icon={<ChevronRightIcon />} accentColor={true} hover={true} />
             </Button>
           </div>
         </div>

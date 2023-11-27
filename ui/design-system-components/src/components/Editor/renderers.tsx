@@ -3,6 +3,7 @@ import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import { tw, apply } from '@twind/core';
 import { ImageElement } from '@akashaorg/typings/lib/ui';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 const closeDivClass = apply(
   'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',
@@ -41,7 +42,7 @@ const ImgElement = ({
         }}
       >
         {handleDeleteImage && (
-          <div
+          <button
             className={closeDivClass}
             onClick={ev => {
               if (handleDeleteImage && typeof handleDeleteImage === 'function') {
@@ -52,12 +53,16 @@ const ImgElement = ({
               return false;
             }}
           >
-            <Icon type="XMarkIcon" />
-          </div>
+            <Icon icon={<XMarkIcon />} />
+          </button>
         )}
         <picture className={tw(`flex`)}>
           <source srcSet={element.url} />
-          <img className={tw(`block max-w-full rounded-lg`)} src={element.fallbackUrl} />
+          <img
+            className={tw(`block max-w-full rounded-lg`)}
+            src={element.fallbackUrl}
+            alt="editor"
+          />
         </picture>
       </div>
       {children}

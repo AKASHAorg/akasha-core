@@ -7,6 +7,11 @@ import {
   useGetSettings,
 } from '@akashaorg/ui-awf-hooks';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
+import {
+  CheckCircleIcon,
+  Cog8ToothIcon,
+  EllipsisHorizontalIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import NotificationsCard from '@akashaorg/design-system-components/lib/components/NotificationsCard';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DropDownFilter from '@akashaorg/design-system-components/lib/components/DropDownFilter';
@@ -173,12 +178,12 @@ const NotificationsPage: React.FC<unknown> = () => {
   const dropDownActions: MenuProps['items'] = [
     {
       label: 'Mark all as read',
-      icon: 'CheckCircleIcon',
+      icon: <CheckCircleIcon />,
       onClick: () => markAllAsRead(),
     },
     {
       label: 'Settings',
-      icon: 'Cog8ToothIcon',
+      icon: <Cog8ToothIcon />,
       onClick: () => redirectToSettingsPage(),
     },
   ];
@@ -213,7 +218,7 @@ const NotificationsPage: React.FC<unknown> = () => {
           <Stack direction="column" spacing="gap-y-1" customStyle="absolute right-0 top-5">
             <Menu
               anchor={{
-                icon: 'EllipsisHorizontalIcon',
+                icon: <EllipsisHorizontalIcon />,
                 variant: 'primary',
                 greyBg: true,
                 iconOnly: true,

@@ -8,6 +8,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { DevKeyCardType } from '@akashaorg/design-system-components/lib/components/DevKeyCard';
 
@@ -74,7 +75,7 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
                   )}
 
                   <Icon
-                    type="ChevronRightIcon"
+                    icon={<ChevronRightIcon />}
                     color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                   />
                 </Stack>

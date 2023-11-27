@@ -1,4 +1,5 @@
 import React from 'react';
+import sortBy from 'lodash/sortBy';
 import { useTranslation } from 'react-i18next';
 import {
   EntityTypes,
@@ -11,7 +12,7 @@ import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { hasOwn, sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 export type EntryCardRendererProps = {
@@ -49,13 +50,14 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
 
   const { t } = useTranslation('app-search');
   const { navigateToModal } = useRootComponentProps();
+  const { loggedInProfileId: authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     { id: itemData.author.id },
     { select: response => response.node },
   );
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
       : { akashaProfile: null };
 
@@ -159,7 +161,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
             <EntryCard
               entryData={itemData}
               authorProfile={{ data: profileData, status: profileDataReq.status }}
-              sortedContents={sortByKey(itemData.content, 'order')}
+              sortedContents={sortBy(itemData.content, 'order')}
               itemType={EntityTypes.BEAM}
               onAvatarClick={handleClickAvatar}
               onContentClick={handleContentClick}
@@ -171,6 +173,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
                 itemType === EntityTypes.REFLECT ? 'reflect' : 'beam'
               }`}
               contentClickable={contentClickable}
+              isViewer={authenticatedDID === itemData.author.id}
               removeEntryLabel={t('Delete Post')}
               onEntryRemove={handleEntryRemove}
               onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}

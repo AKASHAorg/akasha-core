@@ -1,8 +1,9 @@
 import React from 'react';
 import ReflectFeed from './reflect-feed';
+import BeamFeed, { BeamFeedProps } from './beam-feed';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { I18nextProvider } from 'react-i18next';
 import { EntityTypes, Profile } from '@akashaorg/typings/lib/ui';
-import BeamFeed, { BeamFeedProps } from './beam-feed';
 import { ScrollStateDBWrapper } from '../utils/scroll-state-db';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
@@ -65,6 +66,7 @@ const FeedWidgetRoot: React.FC<FeedWidgetCommonProps> = props => {
           db={db}
         />
       )}
+      <Stack id="edit-reflect-error-snackbar-container" customStyle="sticky bottom-2" fullWidth />
     </I18nextProvider>
   );
 };

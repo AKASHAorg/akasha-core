@@ -1,7 +1,5 @@
 import React, { useEffect, useState, EventHandler, SyntheticEvent } from 'react';
 
-import { IconType } from '@akashaorg/typings/lib/ui';
-
 import Button from '../Button';
 import Icon from '../Icon/';
 import { ButtonProps } from '../Button/types';
@@ -15,8 +13,8 @@ export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
   activeVariant?: ButtonProps['variant'];
   activeHoverLabel?: string;
   active?: boolean;
-  activeIcon?: IconType;
-  activeHoverIcon?: IconType;
+  activeIcon?: React.ReactElement;
+  activeHoverIcon?: React.ReactElement;
   allowMinimization?: boolean;
 };
 
@@ -87,7 +85,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
         customStyle={fixWidth}
       >
         <Icon
-          type={getIcon()}
+          icon={getIcon()}
           customStyle="text-secondaryLight h-5 w-5 rounded-sm border-1 border-secondaryLight p-1"
         />
       </Button>

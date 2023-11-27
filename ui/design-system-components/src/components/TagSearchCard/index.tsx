@@ -3,6 +3,7 @@ import React from 'react';
 import { ITag } from '@akashaorg/typings/lib/ui';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import { HashtagIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
@@ -54,7 +55,7 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
                 onClick={onClickTag}
                 label={tag.name}
                 subtitle={`${tag.totalPosts} Beams`}
-                iconType="HashtagIcon"
+                icon={<HashtagIcon />}
                 backgroundColor={true}
               />
             )}

@@ -1,78 +1,62 @@
 import React from 'react';
 import BeamPage from '../pages/entry-page/beam-page';
-import ReflectEditor from '../reflect-editor';
+import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated';
 
-import { renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
+import {
+  screen,
+  renderWithAllProviders,
+  act,
+  genAppProps,
+  genBeamData,
+} from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
-import { when } from 'jest-when';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
-const partialArgs = (...argsToMatch) =>
-  when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
+const mockLocationValue = {
+  pathname: '/',
+  search: '',
+  hash: '',
+  state: null,
+};
 
-const MockedInlineEditor = ({ action }) => (
-  <ReflectEditor beamId="oxaa" reflectToId="oxaa" showEditorInitialValue={false} />
-);
+const mockRouteParams = {
+  beamId: 'kjzl6kcym7w8y7r2ej5n3oaq3l6bp4twqxmcvjoa3dlf86mvdb4vv7ryv1pkewr',
+};
 
-describe('< PostPage /> component', () => {
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useLocation: jest.fn().mockImplementation(() => {
+    return mockLocationValue;
+  }),
+  useParams: jest.fn().mockImplementation(() => {
+    return mockRouteParams;
+  }),
+}));
+
+describe('< BeamPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
       <BeamPage />
     </AnalyticsProvider>
   );
 
-  beforeAll(() => {
-    // (
-    //   jest.spyOn(profileHooks, 'useGetProfile') as unknown as jest.SpyInstance<{
-    //     data: Record<string, unknown>;
-    //     status: string;
-    //   }>
-    // ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
-  });
-
-  // @TODO fix after replacing hooks
-  it.skip('should render beam page', async () => {
-    const spiedExtension = jest.fn();
-
-    when(spiedExtension)
-      .calledWith(
-        partialArgs(
-          expect.objectContaining({ name: expect.stringMatching(/inline-editor_reply/) }),
-        ),
-      )
-      .mockReturnValue(<MockedInlineEditor action="reflect" />);
-
+  beforeEach(async () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
     });
-
-    // expect(screen.getByText(/Reply to/i)).toBeInTheDocument();
-    // expect(screen.getByRole('button', { name: /Reply/i })).toBeInTheDocument();
   });
-  // it('should render reflect fragment with view all replies link', async () => {
-  //   await act(async () => {
-  //     renderWithAllProviders(BaseComponent, {});
-  //   });
 
-  //   expect(screen.getByTestId('reflect-fragment')).toBeInTheDocument();
-  //   expect(screen.getByText(/View all replies/)).toBeInTheDocument();
-  // });
-  // it('should render edit page', async () => {
-  //   history.pushState(null, '', `${location.origin}?action=edit`);
+  beforeAll(() => {
+    (
+      jest.spyOn(hooks, 'useGetBeamByIdQuery') as unknown as jest.SpyInstance<{
+        data: AkashaBeam;
+        status: 'success' | 'error' | 'loading';
+      }>
+    ).mockReturnValue({ data: genBeamData(), status: 'success' });
+  });
 
-  //   const spiedExtension = jest.spyOn(extension, 'Extension');
-
-  //   when(spiedExtension)
-  //     .calledWith(
-  //       partialArgs(
-  //         expect.objectContaining({ name: expect.stringMatching(/inline-editor_postedit/) }),
-  //       ),
-  //     )
-  //     .mockReturnValue(<MockedInlineEditor action="edit" />);
-
-  //   await act(async () => {
-  //     renderWithAllProviders(BaseComponent, {});
-  //   });
-
-  //   expect(screen.getByRole('button', { name: /Save Changes/i })).toBeInTheDocument();
-  // });
+  it('should render beam page', async () => {
+    expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Reflect/i })).toBeInTheDocument();
+  });
 });

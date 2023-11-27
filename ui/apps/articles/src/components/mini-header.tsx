@@ -3,6 +3,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export interface IMiniHeaderProps {
   titleLabel: string;
@@ -16,7 +17,7 @@ const MiniHeader: React.FC<IMiniHeaderProps> = props => {
     <Card padding={8}>
       <Stack direction="row" fullWidth={true}>
         <button onClick={onClickIcon}>
-          <Icon type="ChevronLeftIcon" />
+          <Icon icon={<ChevronLeftIcon />} />
         </button>
         <Text variant="h2">{titleLabel}</Text>
       </Stack>

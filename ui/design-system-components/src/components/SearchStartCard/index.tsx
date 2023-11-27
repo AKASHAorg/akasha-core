@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -41,7 +42,7 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
           </Text>
           <Stack>
             <Button customStyle="relative" plain={true} onClick={() => handleTopMenuClick()}>
-              <Icon type="Cog8ToothIcon" accentColor={true} />
+              <Icon icon={<Cog8ToothIcon />} accentColor={true} />
             </Button>
           </Stack>
         </Stack>

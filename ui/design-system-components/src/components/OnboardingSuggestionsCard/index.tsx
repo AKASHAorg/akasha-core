@@ -5,6 +5,7 @@ import { ITag, Profile } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import { UserCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -83,7 +84,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                     onClickInactive={() => onClickFollow(profile.did.id)}
                     onClickActive={() => onClickUnfollow(profile.did.id)}
                     active={followedProfiles?.includes(profile.did.id)}
-                    icon="UserCircleIcon"
+                    icon={<UserCircleIcon />}
                     allowMinimization
                   />
                 </div>

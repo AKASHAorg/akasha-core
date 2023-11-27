@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Stack from '../Stack';
+import { MagnifyingGlassIcon } from '../Icon/hero-icons-outline';
 import List, { ListItem } from '../List';
 import TextField from '../TextField';
 import Tag from './Tag';
@@ -87,7 +88,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = props => {
       <TextField
         type="text"
         placeholder={placeholder}
-        iconRight="MagnifyingGlassIcon"
+        iconRight={<MagnifyingGlassIcon />}
         value={value}
         label={label}
         caption={caption}

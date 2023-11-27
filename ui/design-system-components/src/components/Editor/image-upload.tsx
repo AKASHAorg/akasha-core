@@ -3,6 +3,10 @@ import { tx, apply } from '@twind/core';
 import { useDropzone } from 'react-dropzone';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  PhotoIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Meter from '@akashaorg/design-system-core/lib/components/Meter';
 
 const closeDivClass = apply('${flexCenteredClass} z-1 w-6 h-6 rounded-full bg-grey7');
@@ -117,14 +121,14 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           )}
         >
           <button className={tx(`${closeDivClass}`)} onClick={handleCancelUpload}>
-            <Icon type="XMarkIcon" />
+            <Icon icon={<XMarkIcon />} />
           </button>
           <div
             className={tx(
               `h-12 w-12 bg(grey9 dark:grey-4) border border-grey3 rounded-lg ${flexCenteredClass}`,
             )}
           >
-            <Icon type="PhotoIcon" />
+            <Icon icon={<PhotoIcon />} />
           </div>
           <div className={tx(`flex flex-col gap-2 pl-2`)}>
             <Text truncate={true} customStyle={'max-w-[11rem]'}>

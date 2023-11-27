@@ -6,10 +6,7 @@ import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
 import { useParams } from 'react-router-dom';
-import {
-  useGetBeamByIdQuery,
-  useGetMyProfileQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetBeamByIdQuery, useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   hasOwn,
   useAnalytics,
@@ -65,7 +62,7 @@ const BeamPage: React.FC<unknown> = () => {
         onNavigate={onNavigate}
         showLoginModal={showLoginModal}
       />
-      <PendingReflect beamId={beamId} loggedProfileData={loggedProfileData} />
+      <PendingReflect beamId={beamId} authorId={entryData.author?.id} />
       <Stack spacing="gap-y-2">
         <FeedWidget
           queryKey="akasha-beam-page-query"

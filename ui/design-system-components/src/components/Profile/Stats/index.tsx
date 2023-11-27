@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { IconType } from '@akashaorg/typings/lib/ui';
-
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text, { TextProps } from '@akashaorg/design-system-core/lib/components/Text';
+import { ChatBubbleLeftRightIcon, HeartIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 type Stat = {
   label: string;
@@ -41,11 +40,11 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
     },
   };
 
-  const stats: (Stat & { icon: IconType; className?: string })[] = [
-    { ...posts, icon: 'ChatBubbleLeftRightIcon' },
-    { ...interests, icon: 'HeartIcon' },
-    { ...followers, icon: 'UsersIcon', className: 'scale-x-flip' },
-    { ...following, icon: 'UsersIcon' },
+  const stats: (Stat & { icon: React.ReactElement; className?: string })[] = [
+    { ...posts, icon: <ChatBubbleLeftRightIcon /> },
+    { ...interests, icon: <HeartIcon /> },
+    { ...followers, icon: <UsersIcon />, className: 'scale-x-flip' },
+    { ...following, icon: <UsersIcon /> },
   ];
 
   return (
@@ -56,7 +55,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
             <Button onClick={stat.onClick} key={stat.label + index} disabled={stat.disabled} plain>
               <Stack align="center" customStyle="group">
                 <AppIcon
-                  placeholderIconType={stat.icon}
+                  placeholderIcon={stat.icon}
                   size="sm"
                   breakPointSize={{ breakPoint: 'sm', size: 'lg' }}
                   customStyle={stat.className}

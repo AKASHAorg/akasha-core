@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Snackbar, { SnackbarProps } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
@@ -38,7 +39,7 @@ const variants: SnackbarProps[] = [
   {
     title: 'Success Info Snackbar',
     type: 'success',
-    iconType: 'CheckCircleIcon',
+    icon: <CheckCircleIcon />,
   },
 ];
 

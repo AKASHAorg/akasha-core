@@ -10,7 +10,8 @@ import Text from '../Text';
 export type SubtitleTextIconProps = {
   customStyle?: string;
   dataTestId?: string;
-  iconType?: IconType;
+  icon?: React.ReactElement;
+  solid?: boolean;
   backgroundSize?: string;
   backgroundColor?: boolean;
   label?: string | number;
@@ -24,7 +25,8 @@ export type SubtitleTextIconProps = {
 const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   const {
     customStyle = '',
-    iconType,
+    icon,
+    solid,
     backgroundColor,
     backgroundSize,
     label,
@@ -49,10 +51,11 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
       customStyle={InstanceWrapperStyle}
       onClick={onClick}
     >
-      {iconType && (
+      {icon && (
         <Stack direction="row" align="center" justify="center" customStyle={iconBackgroundStyle}>
           <Icon
-            type={iconType}
+            icon={icon}
+            solid={solid}
             size={{ width: 'w-4', height: 'h-5' }}
             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
           />

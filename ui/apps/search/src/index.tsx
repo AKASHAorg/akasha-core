@@ -7,6 +7,8 @@ import {
   MenuItemType,
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { MagnifyingGlassIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 /**
  * All the plugins must export an object like this:
@@ -19,7 +21,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     label: 'Search',
     area: [MenuItemAreaType.SearchArea, MenuItemAreaType.AppArea],
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'MagnifyingGlassIcon' },
+    logo: { type: LogoTypeSource.ICON, value: <MagnifyingGlassIcon /> },
     subRoutes: [],
   },
   routes: {

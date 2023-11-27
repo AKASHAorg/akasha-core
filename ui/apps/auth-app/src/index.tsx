@@ -1,6 +1,12 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import routes from './routes';
-import { IAppConfig, IntegrationRegistrationOptions, LogoTypeSource } from '@akashaorg/typings/lib/ui';
+import {
+  IAppConfig,
+  IntegrationRegistrationOptions,
+  LogoTypeSource,
+} from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { GlobeAltIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => {
   return {
@@ -13,7 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     menuItems: {
       label: 'Authentication App',
       area: [],
-      logo: { type: LogoTypeSource.ICON, value: 'GlobeAltIcon' },
+      logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
       subRoutes: [],
     },
     // allow other apps to find this app

@@ -4,7 +4,6 @@ import { AnalyticsEventData } from './analytics';
 import { ExtensionRegisterEvent } from './extensions';
 import { WidgetRegisterEvent } from './widgets';
 import { AppRegisterEvent } from './apps';
-import { ModalNavigationOptions } from './navigation';
 
 export const enum RouteRegistrationEvents {
   RegisterRoutes = 'register-routes',
@@ -54,6 +53,7 @@ export enum EventTypes {
   ShowWidgets = 'show-widgets',
   HideWidgets = 'hide-widgets',
   LayoutShowLoadingUser = 'layout:show-loading-user',
+  SetInitialCookieType = 'set-initial-cookie-type',
 }
 
 export const enum EntityTypes {
@@ -65,7 +65,7 @@ export const enum EntityTypes {
 }
 
 /**
- To be used as per example `EntityTypesMap[EntityTypes.BEAM]` to get the name of the entity type
+  To be used as per example `EntityTypesMap[EntityTypes.BEAM]` to get the name of the entity type
  */
 export const EntityTypesMap = {
   [EntityTypes.BEAM]: 'beam',

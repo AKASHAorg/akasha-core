@@ -7,6 +7,8 @@ import {
   MenuItemType,
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { NewspaperIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
@@ -19,7 +21,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Articles',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'NewspaperIcon' },
+    logo: { type: LogoTypeSource.ICON, value: <NewspaperIcon /> },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [
       {

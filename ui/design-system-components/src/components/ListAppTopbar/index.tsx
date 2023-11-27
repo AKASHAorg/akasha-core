@@ -2,6 +2,7 @@ import React from 'react';
 import { tw } from '@twind/core';
 
 import DropDownFilter from '../DropDownFilter';
+import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
@@ -45,7 +46,7 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
         <Text variant="h5">{titleLabel}</Text>
         <Menu
           anchor={{
-            icon: 'EllipsisHorizontalIcon',
+            icon: <EllipsisHorizontalIcon />,
             variant: 'primary',
             greyBg: true,
             iconOnly: true,

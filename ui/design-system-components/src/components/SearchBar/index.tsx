@@ -2,6 +2,7 @@ import * as React from 'react';
 import { apply, tw } from '@twind/core';
 
 import Icon, { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
+import { MagnifyingGlassIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 export type SearchBarProps = {
@@ -48,7 +49,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         onChange={onInputChange}
         onKeyDown={handleSearch}
       />
-      <Icon type="MagnifyingGlassIcon" />
+      <Icon icon={<MagnifyingGlassIcon />} />
     </Stack>
   );
 };
