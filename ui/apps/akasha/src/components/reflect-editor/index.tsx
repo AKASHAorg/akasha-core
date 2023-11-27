@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
+import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { getLinkPreview, serializeSlateToBase64, useAnalytics } from '@akashaorg/ui-awf-hooks';
 import {
@@ -12,6 +13,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
 import { useQueryClient } from '@tanstack/react-query';
+import { createPortal } from 'react-dom';
 
 export type ReflectEditorProps = {
   beamId: string;
@@ -26,6 +28,8 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const [editorState, setEditorState] = useState(null);
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
+  const [showEditor, setShowEditor] = useState(showEditorInitialValue);
 
   const isReflectOfReflection = reflectToId !== beamId;
 
@@ -55,6 +59,10 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Published',
       });
+    },
+    onError: () => {
+      setShowEditor(true);
+      setShowErrorSnackbar(true);
     },
   });
 
@@ -92,6 +100,12 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   // @TODO: fix author name
   const entryAuthorName = undefined;
 
+  useEffect(() => {
+    if (showErrorSnackbar) {
+      setTimeout(() => setShowErrorSnackbar(false), 5000);
+    }
+  }, [showErrorSnackbar]);
+
   if (profileDataReq.status === 'loading') return <EntryCardLoading />;
 
   if (profileDataReq.status === 'error')
@@ -113,7 +127,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         emojiPlaceholderLabel={t('Search')}
         disableActionLabel={t('Authenticating')}
         editorState={editorState}
-        showEditorInitialValue={showEditorInitialValue}
+        showEditorInitialValue={showEditor}
         avatar={profileDataReq?.data?.avatar}
         profileId={loggedProfileData?.did?.id}
         disablePublish={disablePublishing}
@@ -134,7 +148,17 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         getMentions={setMentionQuery}
         getTags={setTagQuery}
       />
-      {/*@TODO reflect error logic goes here */}
+      {showErrorSnackbar &&
+        createPortal(
+          <Snackbar
+            title={t('Something went wrong.')}
+            description={t('Please try again.')}
+            handleDismiss={() => setShowErrorSnackbar(false)}
+            type="alert"
+            iconType="XCircleIcon"
+          />,
+          document.getElementById('reflect-error-snackbar-container'),
+        )}
     </>
   );
 };
