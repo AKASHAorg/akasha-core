@@ -1,17 +1,26 @@
-import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { lastValueFrom } from 'rxjs';
 
-import { CurrentUser, EthProviders } from '@akashaorg/typings/lib/sdk';
+import { EthProviders } from '@akashaorg/typings/lib/sdk';
 
 import { useGlobalLogin } from './use-global-login';
 import { logError } from './utils/error-handler';
+import { useTheme } from './use-theme';
 
 export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
 export function useConnectWallet(provider: EthProviders) {
   const sdk = getSDK();
+  const { theme } = useTheme();
+
+  if (theme === 'Dark-Theme') {
+    sdk.services.common.web3.toggleDarkTheme(true);
+  } else {
+    sdk.services.common.web3.toggleDarkTheme();
+  }
+
   return useMutation(async () => sdk.api.auth.connectAddress());
 }
 
@@ -28,6 +37,16 @@ export function useConnectWallet(provider: EthProviders) {
  */
 export function useGetLogin(onError?: (error: Error) => void) {
   const [loginData, setLoginData] = useState(null);
+
+  // check previous session
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const sdk = getSDK();
+      const data = await sdk.api.auth.getCurrentUser();
+      setLoginData(data);
+    };
+    getCurrentUser();
+  }, []);
 
   useGlobalLogin({
     onLogin: data => {

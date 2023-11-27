@@ -151,15 +151,14 @@ class Web3Connector {
  * - Enables dark theme
  *
  * If no enable passed:
- * - Toggles dark on if currently light
  * - Toggles dark off if currently dark
 */
   toggleDarkTheme (enable?: boolean) {
     const themeMode = this.#w3modal.getThemeMode();
-    if (enable || themeMode !== 'dark') {
-      this.#w3modal.setThemeMode('dark');
+    if (enable) {
+      if (themeMode !== 'dark') this.#w3modal.setThemeMode('dark');
     } else {
-      this.#w3modal.setThemeMode('light');
+      if (themeMode !== 'light') this.#w3modal.setThemeMode('light');
     }
   }
 
