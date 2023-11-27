@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { createPortal } from 'react-dom';
+import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type ReflectEditorProps = {
   beamId: string;
@@ -155,7 +156,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
             description={t('Please try again.')}
             handleDismiss={() => setShowErrorSnackbar(false)}
             type="alert"
-            iconType="XCircleIcon"
+            icon={<XCircleIcon />}
           />,
           document.getElementById('reflect-error-snackbar-container'),
         )}

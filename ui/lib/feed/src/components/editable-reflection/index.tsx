@@ -24,6 +24,7 @@ import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { createPortal } from 'react-dom';
+import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 const MAX_EDIT_TIME_IN_MINUTES = 10;
 
@@ -219,7 +220,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             description={t('Please try again.')}
             handleDismiss={() => setShowErrorSnackbar(false)}
             type="alert"
-            iconType="XCircleIcon"
+            icon={<XCircleIcon />}
           />,
           document.getElementById('edit-reflect-error-snackbar-container'),
         )}
