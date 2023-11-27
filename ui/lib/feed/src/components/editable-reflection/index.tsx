@@ -5,6 +5,7 @@ import Editor from '@akashaorg/design-system-components/lib/components/Reflectio
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import ReflectionCard, { ReflectCardProps } from '../cards/reflection-card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import {
   decodeb64SlateContent,
   getLinkPreview,
@@ -22,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
+import { createPortal } from 'react-dom';
 
 const MAX_EDIT_TIME_IN_MINUTES = 10;
 
@@ -35,6 +37,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
   const [editorState, setEditorState] = useState(null);
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
 
   const beamId = entryData.beamID;
   const isReflectOfReflection = beamId !== reflectToId;
@@ -51,6 +54,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
       setEditInProgress(true);
     },
     onSuccess: async data => {
+      setEdit(false);
       if (!isReflectOfReflection) {
         await queryClient.invalidateQueries(
           useInfiniteGetReflectionsFromBeamQuery.getKey({
@@ -80,8 +84,10 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
         action: 'Reflect Updated',
       });
     },
+    onError: () => {
+      setShowErrorSnackbar(true);
+    },
     onSettled: () => {
-      setEdit(false);
       setEditInProgress(false);
       setNewContent(null);
     },
@@ -125,6 +131,12 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
 
   // @TODO: fix author name
   const entryAuthorName = undefined;
+
+  useEffect(() => {
+    if (showErrorSnackbar) {
+      setTimeout(() => setShowErrorSnackbar(false), 5000);
+    }
+  }, [showErrorSnackbar]);
 
   if (profileDataReq.status === 'loading') return <EntryCardLoading />;
 
@@ -200,6 +212,17 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
           {...rest}
         />
       )}
+      {showErrorSnackbar &&
+        createPortal(
+          <Snackbar
+            title={t('Something went wrong.')}
+            description={t('Please try again.')}
+            handleDismiss={() => setShowErrorSnackbar(false)}
+            type="alert"
+            iconType="XCircleIcon"
+          />,
+          document.getElementById('edit-reflect-error-snackbar-container'),
+        )}
     </>
   );
 };
