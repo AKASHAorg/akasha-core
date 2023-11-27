@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import routes, { CONNECT } from '../routes';
 import Connect from './connect';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+import routes, { CONNECT } from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName } = useRootComponentProps();
