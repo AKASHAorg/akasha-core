@@ -60,7 +60,6 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       variables: {
         sorting: { createdAt: SortOrder.Asc },
         after: firstCursor,
-        last: overscan,
       },
     });
     if (result.errors) return;
@@ -74,7 +73,6 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       const results = await fetchBeams({
         variables: {
           after: resumeItemCursor,
-          last: overscan,
           sorting: { createdAt: SortOrder.Asc },
         },
       });

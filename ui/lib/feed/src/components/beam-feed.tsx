@@ -61,6 +61,7 @@ const BeamFeed = (props: BeamFeedProps) => {
       case EdgeArea.NEAR_TOP:
         const firstCursor = beams[0].cursor;
         if (lastCursors.current.prev !== firstCursor && !isLoading.current) {
+          isLoading.current = true;
           await fetchPreviousPage(firstCursor);
           lastCursors.current.prev = firstCursor;
         }
@@ -69,6 +70,7 @@ const BeamFeed = (props: BeamFeedProps) => {
       case EdgeArea.NEAR_BOTTOM:
         const lastCursor = beams[beams.length - 1].cursor;
         if (lastCursors.current.next !== lastCursor && !isLoading.current) {
+          isLoading.current = true;
           await fetchNextPage(lastCursor);
           lastCursors.current.next = lastCursor;
         }
