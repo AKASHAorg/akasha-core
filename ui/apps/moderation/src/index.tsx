@@ -13,7 +13,7 @@ import routes, { DASHBOARD, HISTORY, HOME, MODERATORS } from './routes';
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  logo: { type: LogoTypeSource.ICON, value: 'vibe' },
+  logo: { type: LogoTypeSource.ICON, value: <Vibe /> },
   i18nNamespace: ['app-moderation-ewa'],
   routes: {
     ...routes,
