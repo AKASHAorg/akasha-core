@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
+
+import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import { hasOwn, useMutationListener } from '@akashaorg/ui-awf-hooks';
 import {
@@ -22,14 +24,14 @@ const FollowingFeedback = () => {
     },
     CreateMutationData
   >(useCreateFollowMutation.getKey());
-  const { mutation: updateFollowState, clear: updateCreateFollowState } = useMutationListener<
+  const { mutation: updateFollowState, clear: clearUpdateFollowState } = useMutationListener<
     {
       i: { content: Pick<AkashaFollowDocument, 'isFollowing' | 'profileID'> };
     },
     UpdateMutationData
   >(useUpdateFollowMutation.getKey());
 
-  const clear = createFollowState ? clearCreateFollowState : updateCreateFollowState;
+  const clear = createFollowState ? clearCreateFollowState : clearUpdateFollowState;
 
   const followState = createFollowState || updateFollowState;
 
@@ -76,7 +78,7 @@ const FollowingFeedback = () => {
         })}
         handleDismiss={clear}
         type="success"
-        iconType="CheckCircleIcon"
+        icon={<CheckCircleIcon />}
         customStyle="mb-4"
       />
     )

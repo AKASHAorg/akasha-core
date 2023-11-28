@@ -11,13 +11,11 @@ import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import {
-  useCreateFollowMutation,
   useGetBeamByIdQuery,
   useGetFollowersListByDidQuery,
   useGetFollowingListByDidQuery,
   useGetMyProfileQuery,
   useGetProfileByDidQuery,
-  useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
@@ -82,9 +80,6 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
     },
   );
 
-  const createFollowMutation = useCreateFollowMutation();
-  const updateFollowMutation = useUpdateFollowMutation();
-
   const hasFollowed = React.useMemo(() => {
     return followersListReq.data.find(
       p => p.node.profile.did.id === loggedProfileQuery.data.did.id,
@@ -132,7 +127,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         isFollowing={!!hasFollowed && hasFollowed.node.isFollowing}
         loggedEthAddress={loggedProfileQuery.data?.did.id}
         profileData={authorProfileDataReq.data.akashaProfile}
-        isViewer={authorProfileDataReq.data.isViewer}
+        isViewer={loggedProfileQuery.data.did.id === beamAuthorId.data}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         followingLabel={t('Following')}

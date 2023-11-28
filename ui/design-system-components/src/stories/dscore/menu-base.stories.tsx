@@ -2,6 +2,11 @@ import React from 'react';
 import { tw } from '@twind/core';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import {
+  EllipsisVerticalIcon,
+  FlagIcon,
+  LinkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 
 const meta: Meta<MenuProps> = {
@@ -17,7 +22,7 @@ export const BaseMenu: Story = {
     <div className={tw('w-[50%]')}>
       <Menu
         anchor={{
-          icon: 'EllipsisVerticalIcon',
+          icon: <EllipsisVerticalIcon />,
           variant: 'primary',
           greyBg: true,
           iconOnly: true,
@@ -25,14 +30,14 @@ export const BaseMenu: Story = {
         items={[
           {
             label: 'Copy',
-            icon: 'LinkIcon',
+            icon: <LinkIcon />,
             onClick: () => {
               /** */
             },
           },
           {
             label: 'Report',
-            icon: 'FlagIcon',
+            icon: <FlagIcon />,
             color: { light: 'errorLight', dark: 'errorDark' },
             onClick: () => {
               /** */

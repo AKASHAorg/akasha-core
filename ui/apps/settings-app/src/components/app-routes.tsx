@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import {
@@ -7,6 +7,7 @@ import {
   useRootComponentProps,
   useTheme,
 } from '@akashaorg/ui-awf-hooks';
+import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
 
 import AppsOption from './option-apps';
 import SettingsPage from './settings-page';
@@ -18,7 +19,7 @@ import routes, { THEME, APPS, HOME, PRIVACY } from '../routes';
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const cookieType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
+  const [cookieType, setCookieType] = useState(window.localStorage.getItem(COOKIE_CONSENT_NAME));
 
   const [checkedTracking, setCheckedTracking] = useState<boolean>(
     cookieType === CookieConsentTypes.ALL,
@@ -27,9 +28,34 @@ const AppRoutes: React.FC<unknown> = () => {
   const [checkedDataAnalytics, setCheckedDataAnalytics] = useState<boolean>(false);
 
   const { theme, propagateTheme } = useTheme();
-
+  const { uiEvents, baseRouteName, getRoutingPlugin } = useRootComponentProps();
+  const uiEventsRef = useRef(uiEvents);
   const { t } = useTranslation('app-settings-ewa');
-  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+
+  useEffect(() => {
+    const eventsSub = uiEventsRef.current.subscribe({
+      next: (eventInfo: UIEventData) => {
+        // listen to set initial cookie type event when fired
+        if (eventInfo.event === EventTypes.SetInitialCookieType) {
+          // check for cookie type
+          const _cookieType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
+
+          // if all cookies allowed, toggle checked tracking
+          if (_cookieType === CookieConsentTypes.ALL) {
+            setCheckedTracking(true);
+          }
+
+          setCookieType(_cookieType);
+        }
+      },
+    });
+
+    return () => {
+      if (eventsSub) {
+        eventsSub.unsubscribe();
+      }
+    };
+  }, []);
 
   const routing = getRoutingPlugin();
 
@@ -107,7 +133,7 @@ const AppRoutes: React.FC<unknown> = () => {
               matomoLabel="Matomo"
               matomoUrl="https://matomo.org"
               trackingAnalyticsInfo3={t(
-                " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time.",
+                " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time. ",
               )}
               ctaLabel={t('Click here')}
               trackingAnalyticsInfo4={t(' to learn more.')}

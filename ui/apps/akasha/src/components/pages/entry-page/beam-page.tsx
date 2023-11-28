@@ -63,7 +63,7 @@ const BeamPage: React.FC<unknown> = () => {
         onNavigate={onNavigate}
         showLoginModal={showLoginModal}
       />
-      <PendingReflect beamId={beamId} loggedProfileData={loggedProfileData} />
+      <PendingReflect beamId={beamId} authorId={entryData.author?.id} />
       <Stack spacing="gap-y-2">
         <ReflectFeed
           reflectionsOf={{ entryId: beamId, itemType: EntityTypes.BEAM }}

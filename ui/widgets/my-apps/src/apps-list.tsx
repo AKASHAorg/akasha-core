@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IconType } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { PaperAirplaneIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 type AppListProps = {
@@ -40,7 +41,7 @@ const AppsList: React.FC<AppListProps> = props => {
             <button onClick={handleAppClick(app.name)}>
               <Stack direction="row">
                 <Icon
-                  type="PaperAirplaneIcon"
+                  icon={<PaperAirplaneIcon />}
                   size="md"
                   customStyle="p-4 bg(grey6 dark:grey5) rounded-xl mr-4"
                 />

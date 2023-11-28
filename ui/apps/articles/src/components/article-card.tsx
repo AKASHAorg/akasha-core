@@ -3,6 +3,13 @@ import React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  ArrowPathIcon,
+  AtSymbolIcon,
+  BookmarkIcon,
+  EllipsisVerticalIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -29,7 +36,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
     saveLabel,
     savedLabel,
     toggleMenuDrop,
-    closeMenuDrop,
+    // closeMenuDrop,
     onTagClick,
     onMentionsClick,
     onRepliesClick,
@@ -58,9 +65,9 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
             </Stack>
           </Stack>
           <Stack direction="row" spacing="gap-2">
-            <Icon type="akasha" />
+            <Icon icon={<Akasha />} solid={true} />
             <button onClick={toggleMenuDrop}>
-              <Icon type="EllipsisVerticalIcon" />
+              <Icon icon={<EllipsisVerticalIcon />} />
             </button>
           </Stack>
         </Stack>
@@ -105,21 +112,21 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
       <Stack direction="row" align="center" justify="between">
         <button onClick={onMentionsClick}>
           <Stack direction="row" spacing="gap-1">
-            <Icon type="AtSymbolIcon" />
+            <Icon icon={<AtSymbolIcon />} />
             <Text variant="h6">{articleData.mentions}</Text>
             <Text variant="h6">{mentionsLabel}</Text>
           </Stack>
         </button>
         <button onClick={onRepliesClick}>
           <Stack direction="row" spacing="gap-1">
-            <Icon type="ArrowPathIcon" />
+            <Icon icon={<ArrowPathIcon />} />
             <Text variant="h6">{articleData.replies}</Text>
             <Text variant="h6">{repliesLabel}</Text>
           </Stack>
         </button>
         <button onClick={onSaveClick}>
           <Stack direction="row" spacing="gap-1">
-            <Icon type="BookmarkIcon" />
+            <Icon icon={<BookmarkIcon />} />
             <Text variant="h6">{isSaved ? savedLabel : saveLabel}</Text>
           </Stack>
         </button>

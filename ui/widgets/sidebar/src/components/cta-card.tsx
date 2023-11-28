@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -28,7 +29,7 @@ const SidebarCTACard: React.FC<SidebarCTACardProps> = props => {
         </Text>
 
         <Button plain={true} onClick={onDismissCard}>
-          <Icon type="XMarkIcon" size="sm" accentColor={true} />
+          <Icon icon={<XMarkIcon />} size="sm" accentColor={true} />
         </Button>
       </Stack>
 

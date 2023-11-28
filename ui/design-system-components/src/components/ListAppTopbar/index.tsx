@@ -4,6 +4,7 @@ import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DropDown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { EllipsisHorizontalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -48,7 +49,7 @@ const ListAppTopbar: React.FC<ListAppTopbarProps> = ({
 
         <Stack customStyle="relativ w-min">
           <Button plain={true} onClick={() => setShowMenu(!showMenu)}>
-            <Icon type="EllipsisHorizontalIcon" accentColor={true} />
+            <Icon icon={<EllipsisHorizontalIcon />} accentColor={true} />
           </Button>
 
           {showMenu && <List items={dropDownActions} customStyle="absolute right-0 top-7 w-max" />}

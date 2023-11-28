@@ -34,6 +34,7 @@ const log: any = {
 export const genAppProps = (): RootComponentProps & {
   getRoutingPlugin: (ns?: string) => any;
   getTranslationPlugin: (ns?: string) => any;
+  getExtensionsPlugin: () => any;
 } => ({
   logger: log,
   navigateToModal: () => ({}),
@@ -48,13 +49,14 @@ export const genAppProps = (): RootComponentProps & {
     getUrlForApp: jest.fn(),
   }),
   getTranslationPlugin: () => ({ i18n: {} }),
+  getExtensionsPlugin: () => ({}),
   parseQueryString: () => ({}),
   plugins: {},
   baseRouteName: '',
   domElement: null,
   encodeAppName: name => name,
   decodeAppName: name => name,
-  getModalFromParams: (location: Location) => ({ name: 'test-modal' }),
+  getModalFromParams: () => ({ name: 'test-modal' }),
 });
 
 export const genReleaseInfo = (): ReleaseInfo => ({

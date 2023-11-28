@@ -3,6 +3,11 @@ import React from 'react';
 import { Interest } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import {
+  CheckIcon,
+  HashtagIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -79,7 +84,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                   <SubtitleTextIcon
                     label={tag.value}
                     subtitle={`${tag.totalPosts || 0} ${tagSubtitleLabel}`}
-                    iconType="HashtagIcon"
+                    icon={<HashtagIcon />}
                     backgroundColor={true}
                     onClick={() => onClickTopic(tag.value)}
                   />
@@ -90,8 +95,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                     activeHoverLabel={unsubscribeLabel}
                     active={subscribedTags?.includes(tag.value)}
                     iconDirection="left"
-                    activeIcon="CheckIcon"
-                    activeHoverIcon="XMarkIcon"
+                    activeIcon={<CheckIcon />}
+                    activeHoverIcon={<XMarkIcon />}
                     inactiveVariant="secondary"
                     loading={!!isProcessingTags?.find(processingTag => processingTag === tag.value)}
                     hoverColors={{

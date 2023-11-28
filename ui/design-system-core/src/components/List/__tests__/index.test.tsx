@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 import List, { ListItem } from '../';
+import { ArrowUpOnSquareIcon, PencilIcon, TrashIcon } from '../../Icon/hero-icons-outline';
 import { customRender } from '../../../test-utils';
 
 describe('<List /> Component', () => {
@@ -11,11 +12,11 @@ describe('<List /> Component', () => {
   const handleDelete = jest.fn(/** */);
 
   const items: ListItem[] = [
-    { label: 'Upload', icon: 'ArrowUpOnSquareIcon', onClick: handleUpload },
-    { label: 'Edit', icon: 'PencilIcon', onClick: handleEdit },
+    { label: 'Upload', icon: <ArrowUpOnSquareIcon />, onClick: handleUpload },
+    { label: 'Edit', icon: <PencilIcon />, onClick: handleEdit },
     {
       label: 'Delete',
-      icon: 'TrashIcon',
+      icon: <TrashIcon />,
       color: { light: 'errorLight', dark: 'errorDark' },
       onClick: handleDelete,
     },

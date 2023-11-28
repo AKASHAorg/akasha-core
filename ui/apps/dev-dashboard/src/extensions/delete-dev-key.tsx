@@ -76,7 +76,7 @@ const DeleteDevKeyModal = (props: RootExtensionProps<DeleteDevKeyModalExtensionD
               {t('Deleting a Dev Key')}
             </Text>
             <Button plain={true} customStyle="absolute right-0" onClick={handleModalClose}>
-              <Icon type="XMarkIcon" color="gray" />
+              <Icon icon={<XMarkIcon />} color="gray" />
             </Button>
           </Stack>
 

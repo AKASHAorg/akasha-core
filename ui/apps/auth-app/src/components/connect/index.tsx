@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
-import { EthProviders } from '@akashaorg/typings/lib/sdk';
+import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/lib/sdk';
 
 import {
   useInjectedProvider,
@@ -13,9 +13,9 @@ import {
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import ConnectWallet from './connect-wallet';
 import ChooseProvider from './choose-provider';
-import { getInjectedProviderDetails } from '../../utils/getInjectedProvider';
 import routes, { CONNECT } from '../../routes';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Metamask, Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 const Connect: React.FC<unknown> = () => {
   const { isLoggedIn, loggedInProfileId } = useLoggedIn();
@@ -33,7 +33,7 @@ const Connect: React.FC<unknown> = () => {
   );
 
   const profile =
-    profileDataReq.data && 'isViewer' in profileDataReq.data
+    profileDataReq.data && 'akashaProfile' in profileDataReq.data
       ? profileDataReq.data?.akashaProfile
       : null;
 
@@ -44,9 +44,38 @@ const Connect: React.FC<unknown> = () => {
 
   const routingPlugin = React.useRef(getRoutingPlugin());
 
+  const getInjectedProviderDetails = (provider: INJECTED_PROVIDERS) => {
+    switch (provider) {
+      // metamask
+      case INJECTED_PROVIDERS.METAMASK:
+        return {
+          name: provider,
+          icon: <Metamask />,
+          titleLabel: provider,
+          subtitleLabel: t('Connect using your MetaMask wallet'),
+        };
+      // provider not detected
+      case INJECTED_PROVIDERS.NOT_DETECTED:
+        return {
+          name: provider,
+          titleLabel: '',
+          subtitleLabel: '',
+        };
+      default:
+        return {
+          name: provider,
+          icon: <Akasha />,
+          titleLabel: provider,
+          subtitleLabel: t(
+            'This wallet has not been tested extensively and may have issues. Please ensure it supports {{requiredNetworkName}} Network',
+          ),
+        };
+    }
+  };
+
   const injectedProvider = React.useMemo(() => {
-    return getInjectedProviderDetails(injectedProviderQuery.data, t);
-  }, [injectedProviderQuery.data, t]);
+    return getInjectedProviderDetails(injectedProviderQuery.data);
+  }, [injectedProviderQuery.data]);
 
   React.useEffect(() => {
     const searchParam = new URLSearchParams(location.search);

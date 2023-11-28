@@ -10,6 +10,11 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import {
+  Cog6ToothIcon,
+  EllipsisVerticalIcon,
+  EnvelopeIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
@@ -91,7 +96,7 @@ const Header: React.FC<HeaderProps> = ({
                 {viewerIsOwner && handleEdit ? (
                   <Button
                     aria-label="edit"
-                    icon="Cog6ToothIcon"
+                    icon={<Cog6ToothIcon />}
                     variant="primary"
                     onClick={handleEdit}
                     greyBg
@@ -100,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({
                 ) : (
                   followElement && (
                     <>
-                      <Button icon="EnvelopeIcon" variant="primary" greyBg iconOnly />
+                      <Button icon={<EnvelopeIcon />} variant="primary" greyBg iconOnly />
                       {followElement}
                     </>
                   )
@@ -109,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({
                 {menuItems && (
                   <Menu
                     anchor={{
-                      icon: 'EllipsisVerticalIcon',
+                      icon: <EllipsisVerticalIcon />,
                       variant: 'primary',
                       greyBg: true,
                       iconOnly: true,

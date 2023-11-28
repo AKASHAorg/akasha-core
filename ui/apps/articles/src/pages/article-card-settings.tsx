@@ -12,6 +12,16 @@ import ArticleCardSettings, {
 } from '../components/article-card-settings';
 
 import { licences } from '../utils/licenses';
+import {
+  LicenseAllRights,
+  LicenseAttribution,
+  LicenseNoDerivatives,
+  LicenseNoRights,
+  LicenseNonCommercial,
+  LicenseShareAlike,
+  LicenseSomeRights,
+  LicenseWtfpl,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 const ArticleCardSettingsPage: React.FC<unknown> = () => {
   // state values to handle image cropping
@@ -43,8 +53,28 @@ const ArticleCardSettingsPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-articles');
   const { logger } = useRootComponentProps();
 
+  const licenseIconsMap: Record<string, React.ReactElement> = {
+    licenseAllRights: <LicenseAllRights />,
+    licenseAttribution: <LicenseAttribution />,
+    licenseNoDerivatives: <LicenseNoDerivatives />,
+    licenseNoRights: <LicenseNoRights />,
+    licenseNonCommercial: <LicenseNonCommercial />,
+    licenseShareAlike: <LicenseShareAlike />,
+    licenseSomeRights: <LicenseSomeRights />,
+    LicenseWtfpl: <LicenseWtfpl />,
+  };
+
+  const modLicenses = licences.map(el => ({
+    ...el,
+    icon: licenseIconsMap[el.type],
+    description: el.description.map(el => ({
+      ...el,
+      ...(el.type && { icon: licenseIconsMap[el.type] }),
+    })),
+  }));
+
   // extract and translate licenses
-  const licensesArr = licences.map(license =>
+  const licensesArr = modLicenses.map(license =>
     t('{{licenseLabel}}', { licenseLabel: license.label }),
   );
 

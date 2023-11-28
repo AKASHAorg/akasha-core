@@ -3,6 +3,7 @@ import { useClickAway } from 'react-use';
 import { tw } from '@twind/core';
 
 import Icon from '../Icon';
+import { CalendarIcon } from '../Icon/hero-icons-outline';
 import Text from '../Text';
 
 import MonthSelector from './MonthSelector';
@@ -82,7 +83,7 @@ const DatePicker: React.FC = () => {
             })`,
           )}
         >
-          <Icon type="CalendarIcon" accentColor={true} />
+          <Icon icon={<CalendarIcon />} accentColor={true} />
           <Text variant="body2" color={{ light: 'black', dark: 'grey6' }} customStyle="ml-2">
             {datepickerValue.toString()}
           </Text>

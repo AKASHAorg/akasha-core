@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import PageLayout from './base-layout';
@@ -39,7 +40,7 @@ const SettingsPage: React.FC<BaseOption> = props => {
           const children = (
             <>
               <Text>{`${t('{{itemLabel}}', { itemLabel: item.label as string })}`}</Text>
-              {!item.isSubheading && <Icon type="ChevronRightIcon" accentColor={true} />}
+              {!item.isSubheading && <Icon icon={<ChevronRightIcon />} accentColor={true} />}
             </>
           );
 

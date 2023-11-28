@@ -1,11 +1,16 @@
 import React from 'react';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import {
+  Akasha,
+  Metamask,
+  Walletconnect,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import IndicatorDots from './indicator-dots';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
+import { EthProviders, INJECTED_PROVIDERS, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
 import { useTranslation } from 'react-i18next';
 import {
   switchToRequiredNetwork,
@@ -14,7 +19,6 @@ import {
   useNetworkChangeListener,
   useRequiredNetwork,
 } from '@akashaorg/ui-awf-hooks';
-import { getInjectedProviderDetails } from '../../utils/getInjectedProvider';
 
 export type ConnectWalletProps = {
   selectedProvider: EthProviders;
@@ -87,7 +91,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
       return t(
         "To use AKASHA World during the alpha period, you'll need to set the {{selectedProviderName}} wallet to {{requiredNetworkName}}",
         {
-          selectedProviderName: getInjectedProviderDetails(injectedProviderQuery.data, t).name,
+          selectedProviderName: getInjectedProviderDetails(injectedProviderQuery.data).name,
           requiredNetworkName,
         },
       );
@@ -143,6 +147,35 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
     signOutCall.current(selectedProvider);
   };
 
+  const getInjectedProviderDetails = (provider: INJECTED_PROVIDERS) => {
+    switch (provider) {
+      // metamask
+      case INJECTED_PROVIDERS.METAMASK:
+        return {
+          name: provider,
+          icon: <Metamask />,
+          titleLabel: provider,
+          subtitleLabel: t('Connect using your MetaMask wallet'),
+        };
+      // provider not detected
+      case INJECTED_PROVIDERS.NOT_DETECTED:
+        return {
+          name: provider,
+          titleLabel: '',
+          subtitleLabel: '',
+        };
+      default:
+        return {
+          name: provider,
+          icon: <Akasha />,
+          titleLabel: provider,
+          subtitleLabel: t(
+            'This wallet has not been tested extensively and may have issues. Please ensure it supports {{requiredNetworkName}} Network',
+          ),
+        };
+    }
+  };
+
   return (
     <Stack spacing="gap-y-4">
       <Stack>
@@ -155,8 +188,8 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
       </Stack>
       <Stack direction="row" align="center" justify="center">
         <AppIcon
-          placeholderIconType={
-            selectedProvider === EthProviders.Web3Injected ? 'metamask' : 'walletconnect'
+          placeholderIcon={
+            selectedProvider === EthProviders.Web3Injected ? <Metamask /> : <Walletconnect />
           }
           background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
           radius={24}
@@ -174,7 +207,8 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           }
         />
         <AppIcon
-          placeholderIconType="akasha"
+          placeholderIcon={<Akasha />}
+          solid={true}
           background={{ gradient: 'gradient-to-b', from: 'blue-200', to: 'red-200' }}
           radius={24}
           size={{ width: 54, height: 54 }}

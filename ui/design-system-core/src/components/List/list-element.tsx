@@ -19,7 +19,7 @@ const ListElement: React.FC<ListItemProps> = props => {
       plain
     >
       <Stack direction="row" align="center" spacing="gap-x-3" customStyle="py-2 px-4">
-        {icon && <Icon type={icon} color={color} size="sm" />}
+        {icon && <Icon icon={icon} color={color} size="sm" />}
         <Text variant="body1" {...rest}>
           {label}
         </Text>

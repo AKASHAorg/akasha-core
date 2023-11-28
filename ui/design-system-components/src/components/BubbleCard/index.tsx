@@ -63,7 +63,7 @@ const BubbleCard: React.FC<BubbleCardProps> = props => {
             {/* should be used once we allow deleting messages */}
             {/* {isFromLoggedUser && (
               <div direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">
-                <Icon size="xs" plain={true} type="moreDark" />
+                <Icon size="xs" plain={true} icon={<MoreDark />} />
               </div>
             )} */}
           </div>

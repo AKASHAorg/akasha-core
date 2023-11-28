@@ -1,8 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
 
-import { IconType } from '@akashaorg/typings/lib/ui';
-
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -25,7 +23,7 @@ export type GeneralTabProps = {
   moderationCategories: string[];
   contactInfoLabel: string;
   contactInfoIntroLabel: string;
-  contactInfo: { type: IconType; value: string }[];
+  contactInfo: { icon: React.ReactElement; solid?: boolean; value: string }[];
   maxApplicantsLabel: string;
   maxApplicantsIntroLabel: string;
   currentNumberLabel: string;
@@ -113,9 +111,16 @@ export const GeneralTab: React.FC<GeneralTabProps> = props => {
         <Text>{contactInfoIntroLabel}</Text>
 
         <Stack spacing="gap-y-2">
-          {contactInfo.map(({ type, value }) => (
-            <Stack direction="row" key={type + value} align="center" spacing="gap-x-2">
-              <Button icon={type} variant="primary" greyBg={true} iconOnly={true} size="sm" />
+          {contactInfo.map(({ icon, solid, value }) => (
+            <Stack direction="row" key={value} align="center" spacing="gap-x-2">
+              <Button
+                icon={icon}
+                solidIcon={solid}
+                variant="primary"
+                greyBg={true}
+                iconOnly={true}
+                size="sm"
+              />
 
               <Text>{value}</Text>
             </Stack>

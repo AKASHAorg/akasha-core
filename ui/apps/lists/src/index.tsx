@@ -6,6 +6,8 @@ import {
   MenuItemType,
   LogoTypeSource,
 } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { SparklesIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 /**
  * All apps must export an object like this:
@@ -24,7 +26,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'List',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'SparklesIcon' },
+    logo: { type: LogoTypeSource.ICON, value: <SparklesIcon /> },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [],
   },

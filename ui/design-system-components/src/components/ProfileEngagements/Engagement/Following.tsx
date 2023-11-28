@@ -16,7 +16,7 @@ export type FollowingProps = {
 } & EngagementProps;
 
 const Following: React.FC<FollowingProps> = ({
-  loggedInProfileId,
+  authenticatedDID,
   followList,
   following,
   profileAnchorLink,
@@ -73,7 +73,7 @@ const Following: React.FC<FollowingProps> = ({
             isFollowing={followList.get(engagement?.profile?.id)?.isFollowing}
             getMediaUrl={getMediaUrl}
             renderFollowElement={
-              loggedInProfileId !== engagement?.profile?.did.id ? renderFollowElement : null
+              authenticatedDID !== engagement?.profile?.did.id ? renderFollowElement : null
             }
             onProfileClick={onProfileClick}
           />

@@ -3,6 +3,7 @@ import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -30,7 +31,7 @@ const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
     <Card padding={20}>
       <Stack customStyle="self-end">
         <Button plain={true} onClick={onCloseButtonClick}>
-          <Icon type="XMarkIcon" />
+          <Icon icon={<XMarkIcon />} />
         </Button>
       </Stack>
       <Stack align="center" spacing="gap-y-6">

@@ -1,4 +1,4 @@
-import { IconType } from '@akashaorg/typings/lib/ui';
+import React from 'react';
 
 import { Status, Radius } from '../types/common.types';
 
@@ -9,8 +9,8 @@ export type MultlineProps = {
 } & JSX.IntrinsicElements['textarea'];
 
 export type InputProps = {
-  iconLeft?: IconType;
-  iconRight?: IconType;
+  iconLeft?: React.ReactElement;
+  iconRight?: React.ReactElement;
   type: 'text';
   status?: Status;
   radius?: Radius;

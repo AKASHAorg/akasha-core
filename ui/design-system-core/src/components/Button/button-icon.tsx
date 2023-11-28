@@ -14,7 +14,18 @@ export const ButtonIcon: React.FC<
     disabled: ButtonProps['disabled'];
     active?: ButtonProps['active'];
   }
-> = ({ size, type, variant, greyBg, loading, breakPointSize, disabled, active, hoverColor }) => {
+> = ({
+  size,
+  icon,
+  solid,
+  variant,
+  greyBg,
+  loading,
+  breakPointSize,
+  disabled,
+  active,
+  hoverColor,
+}) => {
   let color = null;
 
   if (variant === 'primary' && !greyBg) {
@@ -25,7 +36,8 @@ export const ButtonIcon: React.FC<
 
   return (
     <Icon
-      type={type}
+      icon={icon}
+      solid={solid}
       size={size}
       breakPointSize={breakPointSize}
       color={color}

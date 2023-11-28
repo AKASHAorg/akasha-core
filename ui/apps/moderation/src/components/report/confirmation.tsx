@@ -4,6 +4,8 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -36,7 +38,7 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
     <Card padding={16}>
       <Stack spacing="gap-y-4" align="center">
         <Button plain={true} customStyle="self-end" onClick={onIconClick}>
-          <Icon type="XMarkIcon" />
+          <Icon icon={<XMarkIcon />} />
         </Button>
 
         <Text variant="h5" align="center">
@@ -62,7 +64,13 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
           <a href={ctaUrl} target="_blank" rel="noreferrer noopener">
             <Button plain={true}>
               <Stack direction="row" align="center" spacing="gap-x-2">
-                <Icon size="sm" accentColor={true} type="discord" customStyle="mx-auto my-0" />
+                <Icon
+                  size="sm"
+                  accentColor={true}
+                  icon={<Discord />}
+                  solid={true}
+                  customStyle="mx-auto my-0"
+                />
 
                 <Text
                   variant="footnotes2"
