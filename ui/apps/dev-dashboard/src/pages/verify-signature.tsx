@@ -28,7 +28,7 @@ export const VerifySignature: React.FC<unknown> = () => {
   const { t } = useTranslation('app-dev-dashboard');
   const { getRoutingPlugin } = useRootComponentProps();
 
-  const { loggedInProfileId } = useLoggedIn();
+  const { authenticatedDID } = useLoggedIn();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
@@ -49,7 +49,7 @@ export const VerifySignature: React.FC<unknown> = () => {
   // };
 
   const handleVerifySignature = () => {
-    verifySignatureMutation.mutate({ did: loggedInProfileId, signature, data: message });
+    verifySignatureMutation.mutate({ did: authenticatedDID, signature, data: message });
   };
 
   const handleButtonClick = () => {
@@ -94,7 +94,7 @@ export const VerifySignature: React.FC<unknown> = () => {
             subtitleLabel={t('The message was successfully verified using the DID below')}
             paragraph1TitleLabel={t('DID 🔑')}
             paragraph2TitleLabel={t('Original Message ✉️')}
-            paragraph1Content={loggedInProfileId || '3fLBxdVgUkWj8UjVvUXcIdak5qe5xRRowUDkIuVRRQ'}
+            paragraph1Content={authenticatedDID || '3fLBxdVgUkWj8UjVvUXcIdak5qe5xRRowUDkIuVRRQ'}
             paragraph2Content={sampleMessage}
           />
         )}

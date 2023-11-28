@@ -31,7 +31,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { isLoggedIn, loggedInProfileId: authenticatedDID } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
