@@ -77,6 +77,9 @@ Functionality:
     if (this._web3.provider instanceof ethers.providers.Web3Provider) {
       web3Provider = this._web3.provider.provider;
     }
+    if(!web3Provider){
+      throw new Error('No provider found for ceramic:connect!');
+    }
     const authMethod = await EthereumWebAuth.getAuthMethod(web3Provider, accountId);
     this._didSession = await DIDSession.authorize(authMethod, {
       resources: this._composeClient.resources,
@@ -100,7 +103,14 @@ Functionality:
   }
 
   hasSession(): boolean {
-    return !!this._didSession;
+    return !!this._didSession && this._didSession.hasSession;
+  }
+
+  serialize(){
+    if(this.hasSession()){
+      return this._didSession?.serialize();
+    }
+    return null;
   }
 
   async setCeramicEndpoint(endPoint: string) {
