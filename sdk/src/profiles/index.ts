@@ -264,7 +264,7 @@ class AWF_Profile {
       totalFollowers: 0,
       totalBeams: 0,
       totalTopics: 0,
-    }
+    };
     const profile = await this._gql.getAPI().GetProfileByDid({ id: id });
     if (profile.node && hasOwn(profile.node, 'akashaProfile') && profile.node.akashaProfile) {
       stats.totalFollowing = await this._ceramic.getComposeClient().context.queryCount({
@@ -285,8 +285,8 @@ class AWF_Profile {
       });
     }
     // getting all the interests
-    const interests = await this._gql.getAPI().GetInterestsByDid({id: id});
-    if(interests.node && hasOwn(interests.node, 'akashaProfileInterests') && interests.node.akashaProfileInterests){
+    const interests = await this._gql.getAPI().GetInterestsByDid({ id: id });
+    if (interests.node && hasOwn(interests.node, 'akashaProfileInterests') && interests.node.akashaProfileInterests) {
       stats.totalTopics = interests.node.akashaProfileInterests.topics.length;
     }
     return createFormattedValue(stats);
@@ -334,12 +334,15 @@ class AWF_Profile {
       autoRotate?: boolean;
       mimeType?: string;
     };
-    email?: `${string}@${string}`; // temporary workaround until space delegation works
   }) {
-    let file;
-    let path;
+    let file: File;
+    let path: string;
     if (!data.isUrl && !data.name) {
       throw new Error('Must specify a name for the media file');
+    }
+    const current = await this._auth.getCurrentUser();
+    if(!current?.id) {
+      throw new Error('Must be logged in to upload media');
     }
     if (data.isUrl) {
       const source = urlSource(data.content);
@@ -349,10 +352,12 @@ class AWF_Profile {
         arr.push(entry);
       }
       path = data.name ? data.name : source.path;
+
+      path = `${current.id}/${path}`;
       file = new File(arr, path, { type: 'image/*' });
     } else {
-      file = data.content;
-      path = data.name;
+      path = `${current.id}/${data.name!}`;
+      file = new File(data.content, path, { type: 'image/*' });
     }
     //const sess = await this._auth.getSession();
     if (!data.config) {
@@ -366,9 +371,10 @@ class AWF_Profile {
       file,
       config: data.config,
     });
-    // const buckPath = `ewa/${path}/${resized.size.width}x${resized.size.height}`;
-    // const bufferImage: ArrayBuffer = await resized.image.arrayBuffer();
-    const CID = await this._ipfs.uploadFile(resized.image, data.email);
+    const CID = await this._ipfs.uploadFile(resized.image);
+    if (!CID) {
+      throw new Error('Failed to upload file');
+    }
     const cid: string = CID.toString();
     return { CID: cid, size: resized.size, blob: resized.image };
   }
