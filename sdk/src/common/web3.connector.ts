@@ -158,6 +158,7 @@ getCurrentTheme () {
  * - Enables dark theme
  *
  * If no enable passed:
+ * - Toggles dark on if currently light
  * - Toggles dark off if currently dark
 */
   toggleDarkTheme (enable?: boolean) {
