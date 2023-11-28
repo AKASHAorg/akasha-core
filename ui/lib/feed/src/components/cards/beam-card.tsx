@@ -33,7 +33,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { loggedInProfileId: authenticatedDID } = useLoggedIn();
+  const { authenticatedDID } = useLoggedIn();
 
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },
