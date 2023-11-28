@@ -9,13 +9,26 @@ import * as Signer from '@ucanto/principal/ed25519';
 import pino from 'pino';
 import { z } from 'zod';
 import { validate } from './validator';
+import CeramicService from './ceramic';
+import { fromString } from 'uint8arrays/from-string';
+import { toString } from 'uint8arrays/to-string';
+import { extract } from '@ucanto/core/delegation';
+import type { Cacao } from '@didtools/cacao';
+
+
+export type SessionObj = {
+  sessionKeySeed: string
+  cacao: Cacao
+}
 
 @injectable()
 class AWF_IpfsConnector {
   private _log: pino.Logger;
+  private _ceramic: CeramicService;
   readonly gateway = 'https://cloudflare-ipfs.com/ipfs/';
   readonly originGateway = 'ipfs.w3s.link';
   readonly fallbackGateway = 'ipfs.cf-ipfs.com';
+  readonly delegateBaseUrl = process.env.W3_STORAGE_DELEGATE_BASE_URL;
   private readonly LEGAL_DOCS_SOURCE = {
     [LEGAL_DOCS.TERMS_OF_USE]: 'bafkreie3pa22hfttuuier6rp6sm7nngfc5jgfjzre7wc5a2ww7z375fhwm',
     [LEGAL_DOCS.TERMS_OF_SERVICE]: 'bafkreib5jg73c6bmbzkrokpusraiwwycnkypol3xh3uadsu7hhzefp6g2e',
@@ -23,13 +36,12 @@ class AWF_IpfsConnector {
     [LEGAL_DOCS.CODE_OF_CONDUCT]: 'bafkreie6ygpcmpckoxnb6rip62nxztntwu5k2oqmwfvxyubfppwimhype4',
     [LEGAL_DOCS.APP_GUIDE]: 'bafkreidpkbwzpxupnnty4bua5w4n7ddiyugb2ermb2htkxczrw7okan3nu',
   };
-  #w3upClient!: Client;
+  #w3upClient: Client | null;
 
-  constructor(@inject(TYPES.Log) log: Logging) {
+  constructor(@inject(TYPES.Log) log: Logging, @inject(TYPES.Ceramic) ceramic: CeramicService) {
     this._log = log.create('AWF_IpfsConnector');
-    create().then(c => {
-      this.#w3upClient = c;
-    });
+    this._ceramic = ceramic;
+    this.#w3upClient = null;
   }
 
   getSettings() {
@@ -38,30 +50,101 @@ class AWF_IpfsConnector {
     };
   }
 
-  // email is just temporary until delegation works
-  @validate(z.instanceof(Blob), z.string().optional())
-  async uploadFile(file: Blob, email?: `${string}@${string}`) {
-    const spaces = this.#w3upClient.spaces();
-    if (!spaces.length) {
-      const newSpace = await this.#w3upClient.createSpace(`akasha-uploads.${new Date().getTime()}`);
-      await this.#w3upClient.setCurrentSpace(newSpace.did());
+/*
+* _createClient is a private async method that creates a w3upClient instance.
+*
+* It first serializes the current Ceramic session. If no session exists, an error is thrown.
+*
+* The serialized session is parsed to extract the sessionKeySeed, which is converted from base64url to base64pad encoding.
+*
+* The sessionKeySeed is passed to the Signer.derive method to derive a principal.
+*
+* The principal is then passed to the create method from @web3-storage/w3up-client to instantiate the client.
+*
+* The new client instance is assigned to the #w3upClient property.
+*
+* @returns {Promise<void>}
+*/
+  private async _createClient(){
+    const serialisedSession = this._ceramic.serialize();
+    if(!serialisedSession){
+      throw new Error('Must start a did-session first!');
+    }
+    const { sessionKeySeed } = JSON.parse(toString(fromString(serialisedSession, 'base64url'))) as SessionObj
+    const keySeed = fromString(sessionKeySeed, 'base64pad');
+    const principal = await Signer.derive(keySeed);
+    this.#w3upClient= await create({ principal });
+  }
+
+/*
+* _getStorageProof is a private async method that retrieves a storage delegation proof from the delegateBaseUrl.
+*
+* It first checks if the delegateBaseUrl is set, and throws an error if not.
+*
+* It then constructs a URL to request a create-proof endpoint, passing the current client's DID.
+*
+* The proof is fetched and the response ArrayBuffer is extracted.
+*
+* The proof is deserialized using the extract method from @ucanto/core/delegation.
+*
+* If delegation extraction fails, an error is thrown.
+*
+* Otherwise the extracted delegation is returned.
+*
+* @returns {Promise<Delegation>} The deserialized storage delegation proof.
+*/
+  private async _getStorageProof(){
+    if(!this.delegateBaseUrl){
+      throw new Error('Must set env.W3_STORAGE_DELEGATE_BASE_URL');
+    }
+    const url = new URL(`create-proof/${this.#w3upClient!.did()}`, this.delegateBaseUrl);
+    const response = await fetch(url, { method: "POST" });
+    const data = await response.arrayBuffer()
+
+    // Deserialize the delegation
+    const delegation = await extract(new Uint8Array(data))
+    if (!delegation.ok) {
+      this._log.error(delegation.error);
+      throw new Error('Failed to extract delegation')
+    }
+    return delegation.ok;
+  }
+
+/*
+* uploadFile is an async method that uploads a file to IPFS via w3upClient.
+*
+* It first checks if the w3upClient exists, and creates it if not by calling _createClient.
+*
+* It then checks that the client was created successfully.
+*
+* It gets the current spaces for the client - if there are none, it:
+*   - Retrieves a storage delegation proof by calling _getStorageProof
+*   - Uses the proof to add a space to the client
+*   - Sets the new space as the current space
+*
+* Finally, it calls uploadFile on the client instance to upload the file.
+*
+* @param file - The Blob file to upload
+* @returns {Promise<string>} - The IPFS CID of the uploaded file
+*/
+  @validate(z.instanceof(Blob))
+  async uploadFile(file: Blob) {
+    if(!this.#w3upClient){
+      await this._createClient();
     }
 
-    // if (!this.#w3upClient.spaces()[0].registered()) {
-    //   if (!email) {
-    //     throw new Error('Must specify an email address');
-    //   }
-    //
-    //   this._log.info(`Sending email to ${email}`);
-    //   await this.#w3upClient.authorize(email);
-    //   this._log.info(`registering space for ${email}`);
-    //   await this.#w3upClient.registerSpace(email);
-    // }
-    //claim existing spaces
-    await this.#w3upClient.capability.access.claim();
-
+    if(!this.#w3upClient){
+      this._log.warn('Something went wrong with setting w3upClient.')
+      return;
+    }
+    const spaces = this.#w3upClient.spaces();
+    if (!spaces.length) {
+      const delegation = await this._getStorageProof();
+      const space = await this.#w3upClient.addSpace(delegation);
+      await this.#w3upClient.setCurrentSpace(space.did());
+    }
     this._log.info('uploading file');
-    return this.#w3upClient.uploadFile(file);
+    return this.#w3upClient!.uploadFile(file);
   }
 
   @validate(z.union([z.string(), z.instanceof(CID)]), z.boolean().optional())
