@@ -5,6 +5,7 @@ import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
 import { multiaddrToUri } from '@multiformats/multiaddr-to-uri';
 import { Client, create } from '@web3-storage/w3up-client';
+import * as Signer from '@ucanto/principal/ed25519';
 import pino from 'pino';
 import { z } from 'zod';
 import { validate } from './validator';
@@ -46,16 +47,16 @@ class AWF_IpfsConnector {
       await this.#w3upClient.setCurrentSpace(newSpace.did());
     }
 
-    if (!this.#w3upClient.spaces()[0].registered()) {
-      if (!email) {
-        throw new Error('Must specify an email address');
-      }
-
-      this._log.info(`Sending email to ${email}`);
-      await this.#w3upClient.authorize(email);
-      this._log.info(`registering space for ${email}`);
-      await this.#w3upClient.registerSpace(email);
-    }
+    // if (!this.#w3upClient.spaces()[0].registered()) {
+    //   if (!email) {
+    //     throw new Error('Must specify an email address');
+    //   }
+    //
+    //   this._log.info(`Sending email to ${email}`);
+    //   await this.#w3upClient.authorize(email);
+    //   this._log.info(`registering space for ${email}`);
+    //   await this.#w3upClient.registerSpace(email);
+    // }
     //claim existing spaces
     await this.#w3upClient.capability.access.claim();
 
