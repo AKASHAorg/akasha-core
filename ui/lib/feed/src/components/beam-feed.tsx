@@ -46,19 +46,28 @@ const BeamFeed = (props: BeamFeedProps) => {
 
   const lastCursors = React.useRef({ next: null, prev: null });
   const isLoading = React.useRef(false);
-  const prevBeams = React.useRef([]);
+  const prevBeams = React.useRef(0);
 
   React.useEffect(() => {
-    if (beams !== prevBeams.current) {
+    if (beams.length !== prevBeams.current) {
       isLoading.current = false;
+      prevBeams.current = beams.length;
     }
-    prevBeams.current = beams;
-  }, [beams]);
+  }, [beams.length]);
+
+  const handleInitialFetch = async (cursors?: string[]) => {
+    if (cursors.length) {
+      lastCursors.current.prev = cursors[cursors.length - 1];
+    }
+    isLoading.current = true;
+    await fetchInitialData(cursors);
+  };
 
   const handleFetch = async (newArea: EdgeArea) => {
     switch (newArea) {
       case EdgeArea.TOP:
       case EdgeArea.NEAR_TOP:
+        if (!beams.length) return;
         const firstCursor = beams[0].cursor;
         if (lastCursors.current.prev !== firstCursor && !isLoading.current) {
           isLoading.current = true;
@@ -68,6 +77,7 @@ const BeamFeed = (props: BeamFeedProps) => {
         break;
       case EdgeArea.BOTTOM:
       case EdgeArea.NEAR_BOTTOM:
+        if (!beams.length) return;
         const lastCursor = beams[beams.length - 1].cursor;
         if (lastCursors.current.next !== lastCursor && !isLoading.current) {
           isLoading.current = true;
@@ -80,6 +90,13 @@ const BeamFeed = (props: BeamFeedProps) => {
     }
   };
 
+  const handleReset = async () => {
+    prevBeams.current = 0;
+    isLoading.current = true;
+    await onReset();
+    lastCursors.current = { next: null, prev: null };
+  };
+
   return (
     <Virtualizer<AkashaBeamEdge>
       restorationKey={queryKey}
@@ -87,10 +104,10 @@ const BeamFeed = (props: BeamFeedProps) => {
       estimatedHeight={estimatedHeight}
       overscan={scrollerOptions.overscan}
       items={beams}
-      onFetchInitialData={fetchInitialData}
+      onFetchInitialData={handleInitialFetch}
       itemKeyExtractor={item => item.cursor}
       itemIndexExtractor={itemKey => beams.findIndex(p => p.cursor === itemKey)}
-      onListReset={onReset}
+      onListReset={handleReset}
       onEdgeDetectorChange={handleFetch}
       scrollTopIndicator={scrollTopIndicator}
       renderItem={renderItem}

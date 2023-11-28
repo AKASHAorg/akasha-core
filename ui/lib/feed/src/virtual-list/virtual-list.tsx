@@ -98,23 +98,13 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
 
   const virtualCore = React.useRef<VirtualizerCore<T>>();
 
-  const throttledUpdate = useThrottle(
-    (debugFrom?: string) => RAFUpdateRef.current(debugFrom),
-    100,
-    {
-      leading: false,
-    },
-  );
+  const throttledUpdate = useThrottle((debugFrom?: string) => RAFUpdate(debugFrom), 100, {
+    leading: false,
+  });
 
-  const RAFUpdateRef = React.useRef((debugFrom?: string) =>
-    window.requestAnimationFrame(() => update(debugFrom)),
-  );
+  const RAFUpdate = (debugFrom?: string) => window.requestAnimationFrame(() => update(debugFrom));
 
-  const debouncedUpdate = useDebounce(
-    (debugFrom?: string) => RAFUpdateRef.current(debugFrom),
-    250,
-    [],
-  );
+  const debouncedUpdate = useDebounce((debugFrom?: string) => RAFUpdate(debugFrom), 250);
 
   // main projection update function
   // this method sets state
@@ -180,11 +170,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     ],
   );
 
-  React.useLayoutEffect(() => {
-    RAFUpdateRef.current = (debugFrom?: string) =>
-      window.requestAnimationFrame(() => update(debugFrom));
-  }, [update]);
-
   React.useEffect(() => {
     if (
       scrollRestore.isFetched &&
@@ -236,9 +221,9 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     if (prevItemListSize.current === itemList.length) {
       return;
     }
-    RAFUpdateRef.current('list update hook');
+    RAFUpdate('list update hook');
     prevItemListSize.current = itemList.length;
-  }, [itemList, scrollRestore, listState, viewport, setListState, update]);
+  }, [itemList, scrollRestore, listState, viewport, setListState, update, RAFUpdate]);
 
   if (!virtualCore.current) {
     virtualCore.current = new VirtualizerCore({
@@ -319,23 +304,19 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     [update, viewport],
   );
 
-  const handleScrollEnd = useDebounce(
-    (prevent?: boolean) => {
-      virtualCore.current.setIsScrolling(false);
-      onScrollEnd?.();
-      if (viewport.getScrollY() >= viewport.getDocumentViewportHeight()) {
-        showScrollTopButton.current = true;
-      }
-      if (prevent) {
-        viewport.preventNextScroll(false);
-      }
-      if (!prevent) {
-        RAFUpdateRef.current('onScrollEnd');
-      }
-    },
-    250,
-    [],
-  );
+  const handleScrollEnd = useDebounce((prevent?: boolean) => {
+    virtualCore.current.setIsScrolling(false);
+    onScrollEnd?.();
+    if (viewport.getScrollY() >= viewport.getDocumentViewportHeight()) {
+      showScrollTopButton.current = true;
+    }
+    if (prevent) {
+      viewport.preventNextScroll(false);
+    }
+    if (!prevent) {
+      RAFUpdate('onScrollEnd');
+    }
+  }, 250);
 
   const onScroll = React.useCallback(
     (prevented?: boolean) => {

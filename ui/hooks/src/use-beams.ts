@@ -41,7 +41,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   });
 
   const fetchNextPage = async (lastCursor: string) => {
-    if (beamsQuery.loading || beamsQuery.error || !lastCursor) return;
+    if (beamsQuery.error || !lastCursor) return;
 
     const results = await beamsQuery.fetchMore({
       variables: {
@@ -51,20 +51,36 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     });
     if (results.error) return;
     if (!results.data) return;
-    setBeams(prev => [...prev, ...results.data.akashaBeamIndex.edges]);
+    const newBeams = [];
+    results.data.akashaBeamIndex.edges.forEach(e => {
+      if (beams.some(b => b.cursor === e.cursor)) {
+        console.log('duplicate found', e.cursor);
+        return;
+      }
+      newBeams.push(e);
+    });
+    setBeams(prev => [...prev, ...newBeams]);
   };
 
   const fetchPreviousPage = async (firstCursor: string) => {
-    if (beamsQuery.loading || beamsQuery.error || !firstCursor) return;
-    const result = await beamsQuery.fetchMore({
+    if (beamsQuery.error || !firstCursor) return;
+    const results = await beamsQuery.fetchMore({
       variables: {
         sorting: { createdAt: SortOrder.Asc },
         after: firstCursor,
       },
     });
-    if (result.errors) return;
-    if (!result.data) return;
-    setBeams(prev => [...result.data.akashaBeamIndex.edges.reverse(), ...prev]);
+    if (results.error) return;
+    if (!results.data) return;
+    const newBeams = [];
+    results.data.akashaBeamIndex.edges.forEach(e => {
+      if (beams.some(b => b.cursor === e.cursor)) {
+        console.log('duplicate found', e.cursor);
+        return;
+      }
+      newBeams.push(e);
+    });
+    setBeams(prev => [...newBeams.reverse(), ...prev]);
   };
 
   const fetchInitialData = async (cursors: string[]) => {
@@ -78,7 +94,15 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       });
       if (results.error) return;
       if (!results.data) return;
-      setBeams(results.data.akashaBeamIndex.edges.reverse());
+      const newBeams = [];
+      results.data.akashaBeamIndex.edges.forEach(e => {
+        if (beams.some(b => b.cursor === e.cursor)) {
+          console.log('duplicate found', e.cursor);
+          return;
+        }
+        newBeams.push(e);
+      });
+      setBeams(newBeams.reverse());
     } else if (!beamsQuery.called) {
       const results = await fetchBeams({
         variables: {
@@ -87,18 +111,27 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       });
       if (results.error) return;
       if (!results.data) return;
-      setBeams(results.data.akashaBeamIndex.edges);
+      const newBeams = [];
+      results.data.akashaBeamIndex.edges.forEach(e => {
+        if (beams.some(b => b.cursor === e.cursor)) {
+          console.log('duplicate found', e.cursor);
+          return;
+        }
+        newBeams.push(e);
+      });
+      setBeams(newBeams);
     }
   };
 
   const handleReset = async () => {
-    // @TODO: reset queries
-    setBeams([]);
-    fetchBeams({
+    const results = await fetchBeams({
       variables: {
         sorting: { createdAt: SortOrder.Desc },
       },
     });
+    if (results.error) return;
+    if (!results.data) return;
+    setBeams(results.data.akashaBeamIndex.edges);
   };
 
   return {
