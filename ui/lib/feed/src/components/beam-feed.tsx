@@ -46,14 +46,14 @@ const BeamFeed = (props: BeamFeedProps) => {
 
   const lastCursors = React.useRef({ next: null, prev: null });
   const isLoading = React.useRef(false);
-  const prevBeams = React.useRef(0);
+  const prevBeams = React.useRef([]);
 
   React.useEffect(() => {
-    if (beams.length !== prevBeams.current) {
+    if (beams !== prevBeams.current) {
       isLoading.current = false;
-      prevBeams.current = beams.length;
     }
-  }, [beams.length]);
+    prevBeams.current = beams;
+  }, [beams]);
 
   const handleInitialFetch = async (cursors?: string[]) => {
     if (cursors.length) {
@@ -91,7 +91,7 @@ const BeamFeed = (props: BeamFeedProps) => {
   };
 
   const handleReset = async () => {
-    prevBeams.current = 0;
+    prevBeams.current = [];
     isLoading.current = true;
     await onReset();
     lastCursors.current = { next: null, prev: null };
