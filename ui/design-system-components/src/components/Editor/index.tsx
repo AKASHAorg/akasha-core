@@ -489,66 +489,61 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
             <Avatar avatar={avatar} profileId={profileId} />
           </div>
         )}
-        <div className={tw(`w-full py-2 flex flex-col overflow-auto`)}>
-          <div className={tw(`w-full flex flex-col`)}>
-            <Slate
-              editor={editor}
-              value={editorState || editorDefaultValue}
-              onChange={handleChange}
-            >
-              <Editable
-                placeholder={placeholderLabel}
-                autoComplete="off"
-                spellCheck={false}
-                // autoFocus={true}
-                renderElement={(renderProps: RenderElementProps) =>
-                  renderElement(
-                    renderProps,
-                    () => null,
-                    () => null,
-                    () => null,
-                  )
-                }
-                renderLeaf={renderLeaf}
-                onKeyDown={onKeyDown}
+        {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
+        <div className={tw(`py-2 flex flex-col w-0 min-w-full`)}>
+          <Slate editor={editor} value={editorState || editorDefaultValue} onChange={handleChange}>
+            <Editable
+              placeholder={placeholderLabel}
+              autoComplete="off"
+              spellCheck={false}
+              // autoFocus={true}
+              renderElement={(renderProps: RenderElementProps) =>
+                renderElement(
+                  renderProps,
+                  () => null,
+                  () => null,
+                  () => null,
+                )
+              }
+              renderLeaf={renderLeaf}
+              onKeyDown={onKeyDown}
+            />
+            {mentionTargetRange && mentions.length > 0 && (
+              <MentionPopover
+                handleSelect={handleInsertMention}
+                ref={mentionPopoverRef}
+                values={slicedMentions}
+                currentIndex={index}
+                setIndex={setIndex}
               />
-              {mentionTargetRange && mentions.length > 0 && (
-                <MentionPopover
-                  handleSelect={handleInsertMention}
-                  ref={mentionPopoverRef}
-                  values={slicedMentions}
-                  currentIndex={index}
-                  setIndex={setIndex}
-                />
-              )}
-              {tagTargetRange && tags.length > 0 && (
-                <TagPopover
-                  handleSelect={handleInsertTag}
-                  ref={mentionPopoverRef}
-                  values={slicedTags}
-                  currentIndex={index}
-                  setIndex={setIndex}
-                />
-              )}
-            </Slate>
+            )}
+            {tagTargetRange && tags.length > 0 && (
+              <TagPopover
+                handleSelect={handleInsertTag}
+                ref={mentionPopoverRef}
+                values={slicedTags}
+                currentIndex={index}
+                setIndex={setIndex}
+              />
+            )}
+          </Slate>
 
-            {(linkPreviewState || linkPreviewUploading) && (
-              <LinkPreview
-                uploading={linkPreviewUploading}
-                linkPreviewData={linkPreviewState}
-                handleDeletePreview={handleDeletePreview}
-              />
-            )}
-            {embedEntryData && (
-              <div className={tw(`py-4 flex`)}>
-                <EmbedBox embedEntryData={embedEntryData} />
-              </div>
-            )}
-          </div>
+          {(linkPreviewState || linkPreviewUploading) && (
+            <LinkPreview
+              uploading={linkPreviewUploading}
+              linkPreviewData={linkPreviewState}
+              handleDeletePreview={handleDeletePreview}
+            />
+          )}
+          {embedEntryData && (
+            <div className={tw(`py-4 flex`)}>
+              <EmbedBox embedEntryData={embedEntryData} />
+            </div>
+          )}
         </div>
       </div>
-      <div className={tw(`flex flex-row w-full justify-between`)}>
-        <div className={tw(`flex flex-row gap-2 items-center`)}>
+      <div className={tw(`flex flex-row w-full justify-end`)}>
+        {/* <div className={tw(`flex flex-row gap-2 items-center`)}>
           <div className={tw('sm:hidden')}>
             <Popover className="relative">
               <Popover.Button>
@@ -556,12 +551,12 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
               </Popover.Button>
               <Popover.Panel className="absolute z-10">
                 <Popover.Button>
-                  {/* <Picker data={data} onEmojiSelect={handleInsertEmoji} /> */}
+                   <Picker data={data} onEmojiSelect={handleInsertEmoji} /> 
                 </Popover.Button>
               </Popover.Panel>
             </Popover>
           </div>
-        </div>
+        </div> */}
 
         <div className={tw(`flex flex-row gap-2 items-center`)}>
           {/* {showDraft && (

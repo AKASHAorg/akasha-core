@@ -22,6 +22,7 @@ export interface IconProps {
   customStyle?: string;
   hoverColor?: Color;
   solid?: boolean;
+  rotateAnimation?: boolean;
 }
 
 const fillOnlyIcons: IconType[] = [
@@ -47,6 +48,7 @@ const Icon: React.FC<IconProps> = props => {
     customStyle = '',
     hoverColor,
     solid = false,
+    rotateAnimation = false,
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -91,7 +93,9 @@ const Icon: React.FC<IconProps> = props => {
 
   const disabledStyle = disabled ? 'opacity-50' : '';
 
-  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle}`;
+  const rotateStyle = rotateAnimation ? 'animate-spin' : '';
+
+  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${rotateStyle}`;
 
   return (
     <Stack ref={ref} customStyle={customStyle}>
