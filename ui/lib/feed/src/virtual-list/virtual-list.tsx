@@ -71,7 +71,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     itemSpacing = 0,
     onEdgeDetectorUpdate,
     onScrollEnd,
-    debug,
     onFetchInitialData,
     scrollTopIndicator,
     onListReset,
@@ -99,24 +98,34 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
 
   const virtualCore = React.useRef<VirtualizerCore<T>>();
 
-  const RAFUpdate = (debugFrom?: string) => window.requestAnimationFrame(() => update(debugFrom));
-  const throttledUpdate = useThrottle((debugFrom?: string) => RAFUpdate(debugFrom), 100, {
-    leading: false,
-  });
-  const debouncedUpdate = useDebounce((debugFrom?: string) => RAFUpdate(debugFrom), 250, [
-    RAFUpdate,
-  ]);
+  const throttledUpdate = useThrottle(
+    (debugFrom?: string) => RAFUpdateRef.current(debugFrom),
+    100,
+    {
+      leading: false,
+    },
+  );
+
+  const RAFUpdateRef = React.useRef((debugFrom?: string) =>
+    window.requestAnimationFrame(() => update(debugFrom)),
+  );
+
+  const debouncedUpdate = useDebounce(
+    (debugFrom?: string) => RAFUpdateRef.current(debugFrom),
+    250,
+    [],
+  );
 
   // main projection update function
   // this method sets state
   const update = React.useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (_debugFrom: string) => {
       let viewportRect = viewport.getRelativeToRootNode();
       if (!viewportRect) {
         return;
       }
       virtualCore.current.measureItemHeights();
-      // @TODO: common item lags a bit behind. need to adjust the logic
       const projectionItem: VirtualItemInfo | undefined =
         virtualCore.current.getCommonProjectionItem(
           listState.mountedItems.filter(it => !it.key.startsWith(LOADING_INDICATOR)),
@@ -142,7 +151,6 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
               newProjection.mustMeasure &&
               newProjection.correction !== 0
             ) {
-              // viewport.preventNextScroll();
               viewport.scrollBy(-newProjection.correction);
               viewportRect = viewport.getRelativeToRootNode();
             } else if (
@@ -171,6 +179,11 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
       viewport,
     ],
   );
+
+  React.useLayoutEffect(() => {
+    RAFUpdateRef.current = (debugFrom?: string) =>
+      window.requestAnimationFrame(() => update(debugFrom));
+  }, [update]);
 
   React.useEffect(() => {
     if (
@@ -223,9 +236,9 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     if (prevItemListSize.current === itemList.length) {
       return;
     }
-    RAFUpdate('list update hook');
+    RAFUpdateRef.current('list update hook');
     prevItemListSize.current = itemList.length;
-  }, [itemList, scrollRestore, listState, viewport, setListState, update, RAFUpdate]);
+  }, [itemList, scrollRestore, listState, viewport, setListState, update]);
 
   if (!virtualCore.current) {
     virtualCore.current = new VirtualizerCore({
@@ -317,11 +330,11 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
         viewport.preventNextScroll(false);
       }
       if (!prevent) {
-        RAFUpdate('onScrollEnd');
+        RAFUpdateRef.current('onScrollEnd');
       }
     },
     250,
-    [RAFUpdate],
+    [],
   );
 
   const onScroll = React.useCallback(

@@ -49,11 +49,11 @@ const BeamFeed = (props: BeamFeedProps) => {
   const prevBeams = React.useRef([]);
 
   React.useEffect(() => {
-    if (beams.length > prevBeams.current.length) {
+    if (beams !== prevBeams.current) {
       isLoading.current = false;
     }
-    prevBeams.current.length = beams.length;
-  }, [beams.length]);
+    prevBeams.current = beams;
+  }, [beams]);
 
   const handleFetch = async (newArea: EdgeArea) => {
     switch (newArea) {
