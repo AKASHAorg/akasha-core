@@ -23,6 +23,7 @@ import { sha256 } from 'crypto-hash';
 import { getMainDefinition } from '@apollo/client/utilities';
 
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
+import { VIEWER_ID_HEADER } from '@composedb/constants';
 
 const enum ContextSources {
   DEFAULT = 'gql#DEFAULT',
@@ -44,6 +45,7 @@ class Gql {
   // #_clientWithCache: Sdk;
   private _log: pino.Logger;
   private _globalChannel: EventBus;
+  private _viewerID: string;
   private readonly _apolloCache: InMemoryCache;
   readonly apolloClient: ApolloClient<any>;
   private readonly _contextSources: { default: symbol; composeDB: symbol; };
@@ -56,6 +58,7 @@ class Gql {
     this._log = log.create('AWF_GQL');
     this._globalChannel = globalChannel;
     this._ceramic = ceramic;
+    this._viewerID = '';
     this._contextSources = Object.freeze({
       default: Symbol.for(ContextSources.DEFAULT),
       composeDB: Symbol.for(ContextSources.COMPOSEDB),
@@ -188,6 +191,12 @@ class Gql {
     }
     let uuid: string = '';
     const definition = getMainDefinition(query);
+    const context = {
+      ...options?.context,
+      headers: this._viewerID ? {
+        [VIEWER_ID_HEADER]: this._viewerID
+      }: {}
+  };
     let result: FetchResult<unknown, Record<string, unknown>, Record<string, unknown>>;
     if (definition.kind === 'OperationDefinition' && definition.operation === 'mutation') {
       uuid = crypto.randomUUID();
@@ -202,14 +211,14 @@ class Gql {
       result = await this.apolloClient.mutate({
         mutation: query,
         variables: vars as Record<string, unknown> | undefined,
-        context: options?.context,
+        context: context,
       });
     }else {
       result = await this.apolloClient.query({
         query: query,
         variables: vars as Record<string, unknown> | undefined,
-        context: options?.context,
-      });
+        context: context,
+      }, );
     }
 
     if (!result.errors || !result.errors.length) {
@@ -240,6 +249,9 @@ class Gql {
 
   async resetCache () {
     return this._apolloCache.reset();
+  }
+  set contextViewerID (id: string){
+    this._viewerID = id;
   }
 
   get mutationNotificationConfig () {
