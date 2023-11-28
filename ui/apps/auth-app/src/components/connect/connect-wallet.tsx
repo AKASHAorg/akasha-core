@@ -1,16 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import {
-  Akasha,
-  Walletconnect,
-} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
-import IndicatorDots from './indicator-dots';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
 import { useTranslation } from 'react-i18next';
+
+import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
 import {
   switchToRequiredNetwork,
   useConnectWallet,
@@ -18,6 +9,19 @@ import {
   useNetworkChangeListener,
   useRequiredNetwork,
 } from '@akashaorg/ui-awf-hooks';
+
+import IndicatorDots from './indicator-dots';
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  Akasha,
+  Walletconnect,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { ArrowsRightLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type ConnectWalletProps = {
   selectedProvider: EthProviders;
@@ -81,7 +85,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   }, [requiredNetworkQuery]);
 
   const networkNotSupportedError = useMemo(() => {
-    if (connectWalletCall.isError && selectedProvider === EthProviders.Web3Injected) {
+    if (connectWalletCall.isError && selectedProvider === EthProviders.WalletConnect) {
       if (
         (connectWalletCall.error as Error & { code?: number })?.code ===
         PROVIDER_ERROR_CODES.UserRejected
@@ -91,7 +95,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
       return t(
         "To use AKASHA World during the alpha period, you'll need to set the {{selectedProviderName}} wallet to {{requiredNetworkName}}",
         {
-          selectedProviderName: 'injected provider',
+          selectedProviderName: selectedProvider,
           requiredNetworkName,
         },
       );
@@ -154,7 +158,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   };
 
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing="gap-y-8">
       <Stack>
         <Text variant="body1" align="center" weight="bold">
           {t('Connecting to {{worldName}}', { worldName })}
@@ -211,12 +215,12 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           <Stack spacing="gap-y-8">
             <Stack spacing="gap-y-2">
               <Text variant="h6" weight="bold" align="center">
-                {isLoggedIn ? t('Authorized') : t('Authorizing')}
+                {isLoggedIn ? t('Authorized 🙌🏽') : t('Authorizing')}
               </Text>
               <Text variant="body1" align="center" color={{ light: 'grey4', dark: 'grey7' }}>
                 {isLoggedIn
                   ? t('You have successfully connected and authorized your address')
-                  : t('You will be prompted with 1 signature')}
+                  : t('You will be prompted with 2 signatures')}
               </Text>
             </Stack>
 
@@ -231,12 +235,12 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           </Stack>
         )}
         <Stack align="center" justify="center">
-          <Button
-            variant="text"
-            size="lg"
-            onClick={handleDisconnect}
-            label={t('Disconnect or change the way to connect')}
-          />
+          <Button plain={true} onClick={handleDisconnect} customStyle="flex items-center gap-x-2">
+            <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
+            <Text variant="button-lg" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+              {t('Disconnect or change the way to connect')}
+            </Text>
+          </Button>
         </Stack>
       </Stack>
     </Stack>

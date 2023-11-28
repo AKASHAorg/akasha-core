@@ -35,7 +35,7 @@ const Connect: React.FC<unknown> = () => {
   const routingPlugin = useRef(getRoutingPlugin());
 
   useEffect(() => {
-    //this is required because of the backend
+    // this is required because of the backend
     localStorage.setItem('@acceptedTermsAndPrivacy', JSON.stringify(true));
   }, []);
 

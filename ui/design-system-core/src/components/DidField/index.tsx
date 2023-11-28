@@ -41,7 +41,8 @@ const DidField: React.FC<DidFieldProps> = ({
         ? { type: 'solana', icon: <Solana /> }
         : { type: 'didKey', icon: <DidKey /> };
     }
-    return null;
+    // fallback icon for when no Did key
+    return { type: 'NoEth', icon: <NoEth /> };
   };
 
   const networkType = iconForDid(did);
