@@ -6,20 +6,24 @@ import { lastValueFrom } from 'rxjs';
 import { EthProviders } from '@akashaorg/typings/lib/sdk';
 
 import { useGlobalLogin } from './use-global-login';
-import { logError } from './utils/error-handler';
 import { useTheme } from './use-theme';
+import { logError } from './utils/error-handler';
 
 export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
 export function useConnectWallet(provider: EthProviders) {
-  const sdk = getSDK();
   const { theme } = useTheme();
+  const sdk = getSDK();
 
-  if (theme === 'Dark-Theme') {
-    sdk.services.common.web3.toggleDarkTheme(true);
-  } else {
-    sdk.services.common.web3.toggleDarkTheme();
-  }
+  useEffect(() => {
+    if (theme === 'Dark-Theme' && sdk.services.common.web3.getCurrentTheme() !== 'dark') {
+      sdk.services.common.web3.toggleDarkTheme(true);
+      return;
+    }
+    if (theme === 'Light-Theme' && sdk.services.common.web3.getCurrentTheme() !== 'light') {
+      sdk.services.common.web3.toggleDarkTheme();
+    }
+  }, [sdk.services.common.web3, theme]);
 
   return useMutation(async () => sdk.api.auth.connectAddress());
 }

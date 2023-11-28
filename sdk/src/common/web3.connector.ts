@@ -143,6 +143,13 @@ class Web3Connector {
   }
 
 /*
+ * Get the current Web3Modal theme
+*/
+getCurrentTheme () {
+  return this.#w3modal.getThemeMode();
+}
+
+/*
  * Toggle the Web3Modal dark theme
  *
  * @param {boolean} enable - Optional flag to force enable dark theme
@@ -155,10 +162,10 @@ class Web3Connector {
 */
   toggleDarkTheme (enable?: boolean) {
     const themeMode = this.#w3modal.getThemeMode();
-    if (enable) {
-      if (themeMode !== 'dark') this.#w3modal.setThemeMode('dark');
+    if (enable || themeMode !== 'dark') {
+      this.#w3modal.setThemeMode('dark');
     } else {
-      if (themeMode !== 'light') this.#w3modal.setThemeMode('light');
+      this.#w3modal.setThemeMode('light');
     }
   }
 
