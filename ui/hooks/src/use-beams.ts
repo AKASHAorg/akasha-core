@@ -41,7 +41,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   });
 
   const fetchNextPage = async (lastCursor: string) => {
-    if (beamsQuery.error || !lastCursor) return;
+    if (beamsQuery.loading || beamsQuery.error || !lastCursor) return;
 
     const results = await beamsQuery.fetchMore({
       variables: {
@@ -54,7 +54,6 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     const newBeams = [];
     results.data.akashaBeamIndex.edges.forEach(e => {
       if (beams.some(b => b.cursor === e.cursor)) {
-        console.log('duplicate found', e.cursor);
         return;
       }
       newBeams.push(e);
@@ -63,7 +62,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   };
 
   const fetchPreviousPage = async (firstCursor: string) => {
-    if (beamsQuery.error || !firstCursor) return;
+    if (beamsQuery.loading || beamsQuery.error || !firstCursor) return;
     const results = await beamsQuery.fetchMore({
       variables: {
         sorting: { createdAt: SortOrder.Asc },
@@ -75,7 +74,6 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     const newBeams = [];
     results.data.akashaBeamIndex.edges.forEach(e => {
       if (beams.some(b => b.cursor === e.cursor)) {
-        console.log('duplicate found', e.cursor);
         return;
       }
       newBeams.push(e);
@@ -97,7 +95,6 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       const newBeams = [];
       results.data.akashaBeamIndex.edges.forEach(e => {
         if (beams.some(b => b.cursor === e.cursor)) {
-          console.log('duplicate found', e.cursor);
           return;
         }
         newBeams.push(e);
@@ -114,7 +111,6 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       const newBeams = [];
       results.data.akashaBeamIndex.edges.forEach(e => {
         if (beams.some(b => b.cursor === e.cursor)) {
-          console.log('duplicate found', e.cursor);
           return;
         }
         newBeams.push(e);
