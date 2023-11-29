@@ -32,7 +32,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const { handleCopyFeedback, showLoginModal, navigateToModal, navigateTo } = props;
   const { profileId } = useParams<{ profileId: string }>();
 
-  const { isLoggedIn, loggedInProfileId: authenticatedDID } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,

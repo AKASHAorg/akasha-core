@@ -92,7 +92,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
     goToNotificationsPage();
   };
 
-  if (!finalStep && existingSettings) {
+  if (isLoggedIn && !finalStep && existingSettings) {
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[SHOW_NOTIFICATIONS_PAGE],

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
 import getSDK from '@akashaorg/awf-sdk';
-import { AUTH_EVENTS, CurrentUser } from '@akashaorg/typings/lib/sdk';
+import { AUTH_EVENTS, CurrentUser, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
 
 export type OnLoginSuccessHandler = (data: CurrentUser) => void;
 export type OnLogoutSuccessHandler = () => void;
@@ -55,7 +55,7 @@ export const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   React.useEffect(() => {
     const logoutCall = sdk.current.api.globalChannel.pipe(
       filter(payload => {
-        return payload.event === AUTH_EVENTS.SIGN_OUT;
+        return payload.event === WEB3_EVENTS.DISCONNECTED;
       }),
     );
     const sub = logoutCall.subscribe({

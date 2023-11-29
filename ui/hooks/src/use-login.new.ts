@@ -1,16 +1,30 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { lastValueFrom } from 'rxjs';
 
-import { CurrentUser, EthProviders } from '@akashaorg/typings/lib/sdk';
+import { EthProviders } from '@akashaorg/typings/lib/sdk';
 
 import { useGlobalLogin } from './use-global-login';
+import { useTheme } from './use-theme';
 import { logError } from './utils/error-handler';
 
 export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
 export function useConnectWallet(provider: EthProviders) {
+  const { theme } = useTheme();
   const sdk = getSDK();
+
+  useEffect(() => {
+    if (theme === 'Dark-Theme' && sdk.services.common.web3.getCurrentTheme() !== 'dark') {
+      sdk.services.common.web3.toggleDarkTheme(true);
+      return;
+    }
+    if (theme === 'Light-Theme' && sdk.services.common.web3.getCurrentTheme() !== 'light') {
+      sdk.services.common.web3.toggleDarkTheme();
+    }
+  }, [sdk.services.common.web3, theme]);
+
   return useMutation(async () => sdk.api.auth.connectAddress());
 }
 
@@ -26,17 +40,24 @@ export function useConnectWallet(provider: EthProviders) {
  * ```
  */
 export function useGetLogin(onError?: (error: Error) => void) {
-  const queryClient = useQueryClient();
+  const [loginData, setLoginData] = useState(null);
+
+  // check previous session
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const sdk = getSDK();
+      const data = await sdk.api.auth.getCurrentUser();
+      setLoginData(data);
+    };
+    getCurrentUser();
+  }, []);
 
   useGlobalLogin({
     onLogin: data => {
-      queryClient.setQueryData<CurrentUser>([LOGIN_STATE_KEY], prev => ({
-        ...prev,
-        ...data,
-      }));
+      setLoginData(data);
     },
     onLogout: () => {
-      queryClient.setQueryData([LOGIN_STATE_KEY], null);
+      setLoginData(null);
     },
     onError: payload => {
       if (onError) {
@@ -46,14 +67,7 @@ export function useGetLogin(onError?: (error: Error) => void) {
     },
   });
 
-  return useQuery(
-    [LOGIN_STATE_KEY],
-    () =>
-      new Promise<CurrentUser>(() => {
-        const currentData = queryClient.getQueryData<CurrentUser>([LOGIN_STATE_KEY]);
-        return currentData;
-      }),
-  );
+  return { data: loginData };
 }
 
 /**
@@ -107,7 +121,7 @@ export function useLogout() {
       const resp = await sdk.api.auth.signOut();
       if (resp.data) {
         //await queryClient.resetQueries([LOGIN_STATE_KEY]);
-        queryClient.setQueryData([LOGIN_STATE_KEY], null);
+        // queryClient.setQueryData([LOGIN_STATE_KEY], null);
         return resp.data;
       }
     },

@@ -4,7 +4,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 export type SwitchCardProps = {
-  loggedUser: string | null;
+  isLoggedIn: boolean;
   activeButton: string;
   buttonValues: { value: string; label: string }[];
   onTabClick: (value: string) => () => void;
@@ -25,7 +25,7 @@ const StickyBox: React.FC<IStickyBoxProps> = props => {
 };
 
 const SwitchCard: React.FC<SwitchCardProps> = props => {
-  const { loggedUser, activeButton, buttonValues, onTabClick } = props;
+  const { isLoggedIn, activeButton, buttonValues, onTabClick } = props;
 
   const baseStyle = 'group p-2';
 
@@ -46,7 +46,7 @@ const SwitchCard: React.FC<SwitchCardProps> = props => {
 
   return (
     <>
-      <StickyBox userSignedIn={!!loggedUser}>
+      <StickyBox userSignedIn={isLoggedIn}>
         {buttonValues.map((el: { value: string; label: string }, idx: number) => (
           <button key={idx} onClick={onTabClick(buttonValues[idx].value)}>
             <Stack
