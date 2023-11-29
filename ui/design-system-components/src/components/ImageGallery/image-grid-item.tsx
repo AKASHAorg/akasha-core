@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { DelayLoad } from '../../utils/delay-load';
 
 export interface ImageObject {
@@ -84,7 +85,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
             return false;
           }}
         >
-          <Icon type="TrashIcon" />
+          <Icon icon={<TrashIcon />} />
         </button>
       )}
       {/* when we have a single image we need to keep the original aspect ratio,

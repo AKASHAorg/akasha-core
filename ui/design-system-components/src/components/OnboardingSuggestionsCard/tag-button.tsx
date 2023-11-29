@@ -2,6 +2,7 @@ import * as React from 'react';
 import { tw } from '@twind/core';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { RssIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export interface ITagButton {
   tagName: string;
@@ -23,7 +24,7 @@ export const TagButton: React.FC<ITagButton> = props => {
       onClick={onClickTag}
     >
       <Text truncate={true}>{tagName}</Text>
-      <Icon type="RssIcon" />
+      <Icon icon={<RssIcon />} />
     </button>
   );
 };

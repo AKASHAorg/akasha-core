@@ -1,12 +1,13 @@
 import React from 'react';
+import sortBy from 'lodash/sortBy';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ContentBlockModes, EntityTypes } from '@akashaorg/typings/lib/ui';
-import { sortByKey, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils';
@@ -32,13 +33,15 @@ const BeamCard: React.FC<BeamCardProps> = props => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
+  const { loggedInProfileId: authenticatedDID } = useLoggedIn();
+
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },
     { select: response => response.node },
   );
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
       : { akashaProfile: null };
   const locale =
@@ -59,9 +62,10 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       locale={locale}
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
-      sortedContents={sortByKey(entryData.content, 'order')}
+      sortedContents={sortBy(entryData.content, 'order')}
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}
+      isViewer={authenticatedDID === entryData.author.id}
       removed={{
         author: {
           firstPart: t('AKASHA world members won’t be able to see the content '),

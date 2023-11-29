@@ -2,6 +2,10 @@ import * as React from 'react';
 import { tw, tx } from '@twind/core';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  NoSymbolIcon,
+  ExclamationTriangleIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export interface IEntryCardHiddenProps {
   moderatedContentLabel?: string;
@@ -43,7 +47,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
       )}
     >
       <div className={tw(`flex flex-row items-start p-4`)}>
-        <Icon type={delistedAccount ? 'NoSymbolIcon' : 'ExclamationTriangleIcon'} />
+        <Icon icon={delistedAccount ? <NoSymbolIcon /> : <ExclamationTriangleIcon />} />
         {reportedAccount && (
           <Text variant={'h4'}>
             {`${headerTextLabel}:`}

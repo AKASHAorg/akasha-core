@@ -1,10 +1,8 @@
 import * as React from 'react';
 
 import Icon from '../Icon';
+import { ArrowUpIcon } from '../Icon/hero-icons-outline';
 import Button from '../Button';
-import ReactMarkdown from 'react-markdown';
-import children = ReactMarkdown.propTypes.children;
-import Text from '../Text';
 
 export type ScrollTopButtonProps = {
   onClick: () => void;
@@ -25,7 +23,7 @@ const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
           customStyle={styledDiv}
         >
           <div ref={ref}>
-            <Icon type="ArrowUpIcon" hover={true} accentColor={true} />
+            <Icon icon={<ArrowUpIcon />} hover={true} accentColor={true} />
           </div>
         </Button>
       )

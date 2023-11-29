@@ -1,16 +1,20 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
-import { IconType } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type DropdownMenuItemGroupType = {
   id: string;
   title: string;
-  iconName?: IconType;
+  icon?: React.ReactElement;
   type?: 'optgroup' | 'opt';
   children?: DropdownMenuItemGroupType[];
 };
@@ -42,7 +46,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
     if (placeholderLabel) {
       setSelected({
         id: '',
-        iconName: null,
+        icon: null,
         title: placeholderLabel,
       });
     } else {
@@ -76,9 +80,9 @@ const Dropdown: React.FC<IDropdownProps> = ({
       >
         <Text variant="body1">{selected?.title}</Text>
         {dropOpen ? (
-          <Icon type="ChevronUpIcon" customStyle="ml-4" />
+          <Icon icon={<ChevronUpIcon />} customStyle="ml-4" />
         ) : (
-          <Icon type="ChevronDownIcon" customStyle="ml-4" />
+          <Icon icon={<ChevronDownIcon />} customStyle="ml-4" />
         )}
       </button>
 
@@ -126,9 +130,9 @@ const Dropdown: React.FC<IDropdownProps> = ({
                                     selected.id === item.id ? 'text-secondaryLight' : 'text-black'
                                   }`}
                                 >
-                                  {item?.iconName && (
+                                  {item?.icon && (
                                     <Icon
-                                      type={item.iconName}
+                                      icon={item.icon}
                                       color={
                                         selected.id === item.id
                                           ? { light: 'secondaryLight', dark: 'secondaryDark' }
@@ -172,9 +176,9 @@ const Dropdown: React.FC<IDropdownProps> = ({
                           fullWidth
                           customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                         >
-                          {menuItem?.iconName && (
+                          {menuItem?.icon && (
                             <Icon
-                              type={menuItem.iconName}
+                              icon={menuItem.icon}
                               color={
                                 isSelected
                                   ? { light: 'secondaryLight', dark: 'secondaryDark' }
@@ -215,9 +219,9 @@ const Dropdown: React.FC<IDropdownProps> = ({
                         fullWidth
                         customStyle={`${isSelected ? 'text-secondaryLight' : 'text-black'}`}
                       >
-                        {menuItem?.iconName && (
+                        {menuItem?.icon && (
                           <Icon
-                            type={menuItem.iconName}
+                            icon={menuItem.icon}
                             color={
                               isSelected
                                 ? { light: 'secondaryLight', dark: 'secondaryDark' }
@@ -239,7 +243,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                       {isSelected && (
                         <span className={tw('ml-4')}>
                           <Icon
-                            type="CheckIcon"
+                            icon={<CheckIcon />}
                             color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                           />
                         </span>

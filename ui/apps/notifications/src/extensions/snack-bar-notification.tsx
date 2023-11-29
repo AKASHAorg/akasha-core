@@ -120,7 +120,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
     <AppIcon
       size="xs"
       accentColor={true}
-      placeholderIconType={findAppIcon(appTitle)?.logo?.value ?? null}
+      placeholderIcon={findAppIcon(appTitle)?.logo?.value ?? null}
     />
   );
 

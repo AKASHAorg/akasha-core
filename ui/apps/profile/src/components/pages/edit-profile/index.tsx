@@ -69,7 +69,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   );
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
       : { akashaProfile: null };
 

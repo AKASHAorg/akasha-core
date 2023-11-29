@@ -1,6 +1,16 @@
 import React from 'react';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  ArrowLeftOnRectangleIcon,
+  ArrowRightOnRectangleIcon,
+  BellAlertIcon,
+  BellIcon,
+  BellSnoozeIcon,
+  BoltIcon,
+  ChevronLeftIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -28,9 +38,9 @@ export interface ITopbarProps {
 
 const notificationIcon = function (snoozeNotifications, hasNewNotifications) {
   if (snoozeNotifications) {
-    return 'BellSnoozeIcon';
+    return <BellSnoozeIcon />;
   }
-  return hasNewNotifications ? 'BellAlertIcon' : 'BellIcon';
+  return hasNewNotifications ? <BellAlertIcon /> : <BellIcon />;
 };
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -68,7 +78,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
       <Stack direction="row" spacing="gap-x-2">
         <Button
           iconOnly={true}
-          icon={sidebarVisible ? 'ArrowLeftOnRectangleIcon' : 'ArrowRightOnRectangleIcon'}
+          icon={sidebarVisible ? <ArrowLeftOnRectangleIcon /> : <ArrowRightOnRectangleIcon />}
           onClick={onSidebarToggle}
           greyBg={true}
           variant="primary"
@@ -77,13 +87,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
           iconOnly={true}
           greyBg={true}
           variant="primary"
-          icon="ChevronLeftIcon"
+          icon={<ChevronLeftIcon />}
           onClick={onBackClick}
         />
       </Stack>
       <Button plain={true} customStyle="p-0 !ml-0 cursor-pointer" onClick={onBrandClick}>
         <Stack align="center" justify="center" direction="column">
-          <Icon type="akasha" customStyle="w-18 h-7" />
+          <Icon icon={<Akasha />} solid={true} customStyle="w-18 h-7" />
           <Text customStyle="uppercase font([Inter] light) text(xs black dark:white) drop-shadow-md">
             AKASHA World
           </Text>
@@ -93,7 +103,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
         {displayWidgetTogglingButton ? (
           isLoggedIn ? (
             <>
-              <Button iconOnly={true} icon="akasha" onClick={onAppWidgetClick} variant="primary" />
+              <Button
+                iconOnly={true}
+                icon={<Akasha />}
+                solidIcon={true}
+                onClick={onAppWidgetClick}
+                variant="primary"
+              />
               <Button
                 iconOnly={true}
                 icon={notificationIcon(snoozeNotifications, hasNewNotifications)}
@@ -103,7 +119,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
               />
             </>
           ) : (
-            <Button iconOnly={true} icon="BoltIcon" onClick={onLoginClick} variant="primary" />
+            <Button iconOnly={true} icon={<BoltIcon />} onClick={onLoginClick} variant="primary" />
           )
         ) : (
           <Button

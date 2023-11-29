@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ChevronLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -42,8 +43,8 @@ const StepOne: React.FC<StepOneProps> = props => {
       <Stack fullWidth={true} align="start" customStyle="p-4">
         <Stack direction="row" fullWidth={true} customStyle="mb-4">
           <button onClick={onClickIcon}>
-            <Icon type="ChevronLeftIcon" />{' '}
-          </button>
+            <Icon icon={<ChevronLeftIcon />} />
+          </button>{' '}
           <Text variant="h2">{titleLabel}</Text>
         </Stack>
         <Stack fullWidth={true} spacing="gap-1">

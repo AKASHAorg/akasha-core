@@ -1,6 +1,16 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  AlignJustify,
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import {
+  PencilIcon,
+  PlusIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type ImageBlockToolbar = {
   handleCaptionClick: () => void;
@@ -38,7 +48,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon customStyle="absolute" type="alignJustify" />
+            <Icon icon={<AlignJustify />} customStyle="absolute" />
           </Stack>
         </button>
         <button onClick={handleLeftAlignClick}>
@@ -52,7 +62,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon customStyle="absolute" type="alignLeft" />
+            <Icon icon={<AlignLeft />} customStyle="absolute" />
           </Stack>
         </button>
         <button onClick={handleCenterAlignClick}>
@@ -66,7 +76,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon customStyle="absolute" type="alignCenter" />
+            <Icon icon={<AlignCenter />} customStyle="absolute" />
           </Stack>
         </button>
         <button onClick={handleRightAlignClick}>
@@ -80,7 +90,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon customStyle="absolute" type="alignRight" />
+            <Icon icon={<AlignRight />} customStyle="absolute" />
           </Stack>
         </button>
       </Stack>
@@ -91,7 +101,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             justify="center"
             customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
           >
-            <Icon size="xs" type="PencilIcon" accentColor />
+            <Icon size="xs" icon={<PencilIcon />} accentColor />
           </Stack>
         </button>
         <button onClick={handleAddClick}>
@@ -100,7 +110,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             justify="center"
             customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
           >
-            <Icon size="xs" type="PlusIcon" accentColor />
+            <Icon size="xs" icon={<PlusIcon />} accentColor />
           </Stack>
         </button>
       </Stack>

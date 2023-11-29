@@ -3,6 +3,10 @@ import routes, { EDIT } from '../routes';
 import FollowProfileButton from './follow-profile-button';
 import FollowingFeedback from './following-feedback';
 import {
+  FlagIcon,
+  LinkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import {
   ProfileHeader,
   ProfileHeaderLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -28,7 +32,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const { handleCopyFeedback, showLoginModal, navigateToModal, navigateTo } = props;
   const { profileId } = useParams<{ profileId: string }>();
 
-  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
+  const { isLoggedIn, loggedInProfileId: authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -40,11 +44,11 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   );
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'isViewer')
+    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
       : { akashaProfile: null };
 
-  const isViewer = profileData?.did?.id === loggedInProfileId;
+  const isViewer = profileData?.did?.id === authenticatedDID;
 
   const { validDid, isEthAddress } = useValidDid(profileId, !!profileData);
 
@@ -92,14 +96,14 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const menuItems: MenuProps['items'] = [
     {
       label: t('Copy link'),
-      icon: 'LinkIcon',
+      icon: <LinkIcon />,
       onClick: handleCopy,
     },
     ...(!isViewer
       ? ([
           {
             label: t('Report'),
-            icon: 'FlagIcon',
+            icon: <FlagIcon />,
             onClick: handleFlag(profileId, EntityTypes.PROFILE, profileData?.name),
             color: { light: 'errorLight', dark: 'errorDark' },
           },

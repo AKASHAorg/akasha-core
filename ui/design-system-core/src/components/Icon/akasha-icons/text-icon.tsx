@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Text = (props: React.SVGProps<SVGSVGElement>) => (
+const TextIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="10"
     height="8"
@@ -19,4 +19,4 @@ const Text = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default Text;
+export default TextIcon;

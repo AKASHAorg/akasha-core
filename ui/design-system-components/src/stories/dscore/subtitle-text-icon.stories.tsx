@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { BeakerIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import SubtitleTextIcon, {
   SubtitleTextIconProps,
 } from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
@@ -18,7 +19,7 @@ const variants: SubtitleTextIconProps[] = [
   {
     label: 'Text',
     subtitle: 'Some text',
-    iconType: 'BeakerIcon',
+    icon: <BeakerIcon />,
     backgroundColor: true,
   },
   {

@@ -4,6 +4,11 @@ import { useBlocksPublishing } from './use-blocks-publishing';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  CheckIcon,
+  TrashIcon,
+  XMarkIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
@@ -109,7 +114,7 @@ export const BeamEditor: React.FC = () => {
                       'h-6 w-6 group relative rounded-full bg(secondaryLight dark:secondaryDark)'
                     }
                   >
-                    <Icon size="xs" type={block.icon} />
+                    <Icon size="xs" icon={block.icon} />
                   </Stack>
                   <button onClick={() => removeBlockFromList(block.order)}>
                     <Stack
@@ -118,8 +123,8 @@ export const BeamEditor: React.FC = () => {
                       customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
                     >
                       <Icon
+                        icon={<TrashIcon />}
                         size="xs"
-                        type="TrashIcon"
                         color={{ light: 'errorLight', dark: 'errorDark' }}
                       />
                     </Stack>
@@ -167,7 +172,7 @@ export const BeamEditor: React.FC = () => {
                     <Icon
                       size="xs"
                       accentColor={block.propertyType === selectedBlock?.propertyType}
-                      type={block.icon}
+                      icon={block.icon}
                     />
                   </Stack>
                   <Text
@@ -187,7 +192,7 @@ export const BeamEditor: React.FC = () => {
                   </Text>
                 </Stack>
                 {block.propertyType === selectedBlock?.propertyType && (
-                  <Icon type="CheckIcon" accentColor={true} />
+                  <Icon icon={<CheckIcon />} accentColor={true} />
                 )}
               </Stack>
             </button>
@@ -221,7 +226,7 @@ export const BeamEditor: React.FC = () => {
                   <Pill
                     key={index}
                     label={tag}
-                    icon="XMarkIcon"
+                    icon={<XMarkIcon />}
                     iconDirection="right"
                     onPillClick={() => handleDeleteTag(tag)}
                   />

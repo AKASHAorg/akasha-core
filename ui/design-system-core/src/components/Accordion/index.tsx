@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import Button from '../Button';
 import Divider from '../Divider';
 import Icon from '../Icon';
+import { ChevronDownIcon, ChevronUpIcon } from '../Icon/hero-icons-outline';
 import Stack from '../Stack';
 
 export type AccordionProps = {
@@ -37,7 +38,7 @@ const Accordion: React.FC<AccordionProps> = props => {
         <Icon
           accentColor={true}
           customStyle="h-4, w-4 secondaryDark"
-          type={open ? 'ChevronUpIcon' : 'ChevronDownIcon'}
+          icon={open ? <ChevronUpIcon /> : <ChevronDownIcon />}
         />
       </Stack>
     ),

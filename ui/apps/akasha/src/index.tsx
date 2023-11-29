@@ -7,6 +7,9 @@ import {
   MenuItemAreaType,
   MenuItemType,
 } from '@akashaorg/typings/lib/ui';
+import React from 'react';
+import { Antenna, TextIcon } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { PhotoIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 /**
  * Initialization of the integration is optional.
@@ -51,7 +54,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Antenna',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'antenna' },
+    logo: { type: LogoTypeSource.ICON, value: <Antenna /> },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [
       {
@@ -71,7 +74,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   contentBlocks: [
     {
       propertyType: 'slate-block',
-      icon: 'text',
+      icon: <TextIcon />,
       displayName: 'Slate text block',
       loadingFn: () => {
         return () => import('./extensions/slate-block');
@@ -79,7 +82,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     },
     {
       propertyType: 'image-block',
-      icon: 'PhotoIcon',
+      icon: <PhotoIcon />,
       displayName: 'Image block',
       loadingFn: () => {
         return () => import('./extensions/image-block');

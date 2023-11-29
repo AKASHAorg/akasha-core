@@ -19,6 +19,10 @@ import { IEntryData, IMetadata, IPublishData, Profile } from '@akashaorg/typings
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  ArrowPathIcon,
+  FaceSmileIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
 import { CustomEditor } from './helpers';
@@ -71,12 +75,12 @@ export type EditorBoxProps = {
 };
 
 /* eslint-disable complexity */
-const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
+const EditorBox: React.FC<EditorBoxProps> = React.forwardRef(props => {
   const {
     avatar,
     showAvatar = true,
-    showDraft = false,
-    onClear,
+    // showDraft = false,
+    // onClear,
     profileId,
     actionLabel,
     placeholderLabel,
@@ -547,7 +551,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
           <div className={tw('sm:hidden')}>
             <Popover className="relative">
               <Popover.Button>
-                <Icon type="FaceSmileIcon" accentColor={true} />
+                <Icon icon={<FaceSmileIcon />} accentColor={true} />
               </Popover.Button>
               <Popover.Panel className="absolute z-10">
                 <Popover.Button>
@@ -581,7 +585,7 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef((props, ref) => {
           {showPostButton && (
             <Button
               variant={'primary'}
-              icon={disablePublish ? 'ArrowPathIcon' : null}
+              icon={disablePublish ? <ArrowPathIcon /> : null}
               label={disablePublish ? disableActionLabel : actionLabel}
               onClick={handlePublish}
               disabled={publishDisabled}

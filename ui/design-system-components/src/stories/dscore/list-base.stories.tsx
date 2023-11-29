@@ -1,6 +1,11 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import {
+  ArrowUpOnSquareIcon,
+  PencilIcon,
+  TrashIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 
 const meta: Meta<ListProps> = {
@@ -15,11 +20,11 @@ export const BaseList: Story = {
   render: () => (
     <List
       items={[
-        { label: 'Upload', icon: 'ArrowUpOnSquareIcon', onClick: () => ({}) },
-        { label: 'Edit', icon: 'PencilIcon', onClick: () => ({}) },
+        { label: 'Upload', icon: <ArrowUpOnSquareIcon />, onClick: () => ({}) },
+        { label: 'Edit', icon: <PencilIcon />, onClick: () => ({}) },
         {
           label: 'Delete',
-          icon: 'TrashIcon',
+          icon: <TrashIcon />,
           color: { light: 'errorLight', dark: 'errorDark' },
           onClick: () => ({}),
         },

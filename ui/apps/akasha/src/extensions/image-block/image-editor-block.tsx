@@ -18,6 +18,10 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import ImageBlockToolbar from '@akashaorg/design-system-components/lib/components/ImageBlockToolbar';
 import { ImageObject } from '@akashaorg/typings/lib/ui';
+import {
+  XMarkIcon,
+  ArrowPathIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9r1pcwsu441cf';
@@ -202,7 +206,7 @@ export const ImageEditorBlock = (
                     <Text>{imageObj.name}</Text>
                   </Stack>
                   <button onClick={() => handleDeleteImage(imageObj)}>
-                    <Icon accentColor type="XMarkIcon" />
+                    <Icon accentColor icon={<XMarkIcon />} />
                   </button>
                 </Stack>
               ))}
@@ -212,14 +216,14 @@ export const ImageEditorBlock = (
       )}
       {uiState === 'gallery' && uploading && images.length === 0 && (
         <Stack
-          customStyle="w-72 h-48 rounded-xl"
+          customStyle="w-4/5 h-48 sm:h-60 rounded-xl"
           justify="center"
           align="center"
           justifySelf="center"
           background={{ light: 'grey3', dark: 'grey5' }}
           spacing="gap-2"
         >
-          <Icon type="ArrowPathIcon" rotateAnimation />
+          <Icon icon={<ArrowPathIcon />} rotateAnimation />
           <Text>{t('Uploading image')}</Text>
         </Stack>
       )}

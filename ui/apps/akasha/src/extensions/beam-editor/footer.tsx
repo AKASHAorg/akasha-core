@@ -2,6 +2,7 @@ import * as React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { PlusIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { uiState } from './beam-editor';
 
 export interface FooterProps {
@@ -80,7 +81,7 @@ export const Footer: React.FC<FooterProps> = props => {
           <>
             <Button
               onClick={handleClickAddBlock}
-              icon="PlusIcon"
+              icon={<PlusIcon />}
               iconDirection="left"
               variant="text"
               greyBg={true}

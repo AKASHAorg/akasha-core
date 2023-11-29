@@ -11,7 +11,7 @@ export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
 export function useConnectWallet(provider: EthProviders) {
   const sdk = getSDK();
-  return useMutation(async () => sdk.api.auth.connectAddress(provider));
+  return useMutation(async () => sdk.api.auth.connectAddress());
 }
 
 /**

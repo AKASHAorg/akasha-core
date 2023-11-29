@@ -1,15 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
-import { INJECTED_PROVIDERS, WEB3_EVENTS } from '@akashaorg/typings/lib/sdk';
+import { INJECTED_PROVIDERS } from '@akashaorg/typings/lib/sdk';
 import { logError } from './utils/error-handler';
 
 export const INJECTED_PROVIDER_KEY = 'INJECTED_PROVIDER';
 
+//@Todo: remove this
 const getInjectedProvider = async () => {
   const sdk = getSDK();
-  const provider = await sdk.services.common.web3.detectInjectedProvider();
+  // const provider = await sdk.services.common.web3.detectInjectedProvider();
 
-  return provider.data;
+  return INJECTED_PROVIDERS.NOT_DETECTED;
 };
 
 /**

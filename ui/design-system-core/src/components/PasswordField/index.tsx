@@ -3,6 +3,7 @@ import { tw } from '@twind/core';
 
 import Stack from '../Stack';
 import Icon from '../Icon';
+import { EyeIcon, EyeSlashIcon } from '../Icon/hero-icons-outline';
 import Text from '../Text';
 import PasswordStrengthIndicator, {
   PasswordStrengthIndicatorProps,
@@ -34,9 +35,9 @@ const PasswordField: React.FC<PasswordFieldProps & JSX.IntrinsicElements['input'
             {...rest}
           />
 
-          <div className={tw('absolute right-2')} onClick={() => setShowPassword(!showPassword)}>
-            <Icon type={showPassword ? 'EyeSlashIcon' : 'EyeIcon'} accentColor={true} />
-          </div>
+          <button className={tw('absolute right-2')} onClick={() => setShowPassword(!showPassword)}>
+            <Icon icon={showPassword ? <EyeSlashIcon /> : <EyeIcon />} accentColor={true} />
+          </button>
         </Stack>
 
         <PasswordStrengthIndicator strengthLevel={strengthLevel} />

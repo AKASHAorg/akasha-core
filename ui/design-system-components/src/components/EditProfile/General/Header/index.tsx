@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import {
+  ArrowUpOnSquareIcon,
+  PencilIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
@@ -95,7 +101,7 @@ export const Header: React.FC<HeaderProps> = ({
   const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
-      icon: 'ArrowUpOnSquareIcon',
+      icon: <ArrowUpOnSquareIcon />,
       onClick: () => {
         if (uploadInputRef.current) uploadInputRef.current.click();
         closeActionsDropDown();
@@ -103,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({
     },
     {
       label: 'Edit',
-      icon: 'PencilIcon',
+      icon: <PencilIcon />,
       onClick: () => {
         setShowEditImage(true);
         closeActionsDropDown();
@@ -111,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({
     },
     {
       label: 'Delete',
-      icon: 'TrashIcon',
+      icon: <TrashIcon />,
       color: { light: 'errorLight', dark: 'errorDark' },
       onClick: () => {
         setShowDeleteImage(true);
@@ -192,7 +198,7 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <Stack direction="column" spacing="gap-y-1" customStyle="relative mt-auto ml-auto">
             <Button
-              icon="PencilSquareIcon"
+              icon={<PencilSquareIcon />}
               size="xs"
               variant="primary"
               onClick={() => {
@@ -233,7 +239,7 @@ export const Header: React.FC<HeaderProps> = ({
           />
           <Stack customStyle="absolute">
             <Button
-              icon="PencilSquareIcon"
+              icon={<PencilSquareIcon />}
               size="xs"
               variant="primary"
               onClick={() => {

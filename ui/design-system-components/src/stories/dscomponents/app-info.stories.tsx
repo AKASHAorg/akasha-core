@@ -1,6 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import {
+  FlagIcon,
+  ShareIcon,
+} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import AppInfo, { AppInfoProps } from '../../components/AppInfo';
@@ -40,10 +44,10 @@ export const AppInfoVariants: Story = {
             linksAndDocumentationTitle="Links & Documentation"
             licenseTitle="License"
             license="AGPL-3.0"
-            share={{ label: 'Share', icon: 'ShareIcon' }}
+            share={{ label: 'Share', icon: <ShareIcon /> }}
             report={{
               label: 'Report',
-              icon: 'FlagIcon',
+              icon: <FlagIcon />,
               color: { light: 'errorLight', dark: 'errorDark' },
             }}
             onInstall={() => ({})}
