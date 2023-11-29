@@ -50,7 +50,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
 
   const { t } = useTranslation('app-search');
   const { navigateToModal } = useRootComponentProps();
-  const { loggedInProfileId: authenticatedDID } = useLoggedIn();
+  const { authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     { id: itemData.author.id },
     { select: response => response.node },

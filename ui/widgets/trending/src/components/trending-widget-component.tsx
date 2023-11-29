@@ -27,7 +27,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('ui-widget-trending');
-  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const queryClient = useQueryClient();
 
   const [tagsQueue, setTagsQueue] = useState([]);
@@ -45,7 +45,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     },
   );
   const tagSubscriptionsReq = useGetInterestsByDidQuery(
-    { id: loggedInProfileId },
+    { id: authenticatedDID },
     {
       enabled: isLoggedIn,
       select: resp => {
@@ -75,7 +75,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const createInterestMutation = useCreateInterestsMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: useGetInterestsByDidQuery.getKey({ id: loggedInProfileId }),
+        queryKey: useGetInterestsByDidQuery.getKey({ id: authenticatedDID }),
       });
     },
   });
@@ -83,7 +83,10 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const isMutatingInterests = useIsMutating({ mutationKey: useCreateInterestsMutation.getKey() });
 
   const latestTopics = latestTopicsReq.data || [];
-  const tagSubscriptions = isLoggedIn ? tagSubscriptionsReq.data : [];
+  const tagSubscriptions = useMemo(
+    () => (isLoggedIn ? tagSubscriptionsReq.data : []),
+    [isLoggedIn, tagSubscriptionsReq.data],
+  );
   const followList = isLoggedIn
     ? getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node))
     : null;
@@ -236,7 +239,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           profiles={latestProfiles}
           followList={followList}
           isLoggedIn={isLoggedIn}
-          loggedInProfileId={loggedInProfileId}
+          authenticatedDID={authenticatedDID}
           uiEvents={uiEvents}
           onClickProfile={handleProfileClick}
         />

@@ -240,6 +240,9 @@ class AWF_Auth {
       event: AUTH_EVENTS.READY,
     });
     this._lockSignIn = false;
+    if(this.currentUser?.id){
+      this._gql.contextViewerID = this.currentUser.id;
+    }
     return Object.assign({}, this.currentUser, authStatus);
   }
 
@@ -341,6 +344,7 @@ class AWF_Auth {
     localStorage.removeItem(this.sessKey);
     localStorage.removeItem(this.currentUserKey);
     this.currentUser = undefined;
+    this._gql.contextViewerID = '';
     await this._web3.disconnect();
     await this._lit.disconnect();
     await this._ceramic.disconnect();
