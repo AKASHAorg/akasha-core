@@ -34,7 +34,7 @@ export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = pro
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');
 
-  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
 
   const { t } = useTranslation('app-dev-dashboard');
 
@@ -82,7 +82,7 @@ export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = pro
 
   useEffect(() => {
     // add key after validating
-    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loggedInProfileId) {
+    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === authenticatedDID) {
       addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -18,12 +18,12 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { Metamask, Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 
 const Connect: React.FC<unknown> = () => {
-  const { isLoggedIn, loggedInProfileId } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const logoutQuery = useLogout();
   const injectedProviderQuery = useInjectedProvider();
 
   const profileDataReq = useGetProfileByDidQuery(
-    { id: loggedInProfileId },
+    { id: authenticatedDID },
     {
       select: resp => {
         return resp.node;
@@ -85,7 +85,7 @@ const Connect: React.FC<unknown> = () => {
       if (!profile) {
         routingPlugin.current?.navigateTo({
           appName: '@akashaorg/app-profile',
-          getNavigationUrl: () => `/${loggedInProfileId}/edit`,
+          getNavigationUrl: () => `/${authenticatedDID}/edit`,
         });
         return;
       }
@@ -97,7 +97,7 @@ const Connect: React.FC<unknown> = () => {
         },
       });
     }
-  }, [isLoggedIn, loggedInProfileId, profile, profileDataReq, worldConfig.homepageApp]);
+  }, [isLoggedIn, authenticatedDID, profile, profileDataReq, worldConfig.homepageApp]);
 
   const handleProviderSelect = (provider: EthProviders) => {
     //this is required because of the backend

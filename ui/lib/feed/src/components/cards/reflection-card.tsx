@@ -36,7 +36,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
     /*TODO: fix typing in translation plugin and avoid type assertion*/ (getTranslationPlugin().i18n
       ?.languages?.[0] as ILocale) || 'en';
 
-  const { loggedInProfileId: authenticatedDID } = useLoggedIn();
+  const { authenticatedDID } = useLoggedIn();
 
   const profileDataReq = useGetProfileByDidQuery(
     { id: entryData.author.id },

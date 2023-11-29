@@ -143,6 +143,13 @@ class Web3Connector {
   }
 
 /*
+ * Get the current Web3Modal theme
+*/
+getCurrentTheme () {
+  return this.#w3modal.getThemeMode();
+}
+
+/*
  * Toggle the Web3Modal dark theme
  *
  * @param {boolean} enable - Optional flag to force enable dark theme
