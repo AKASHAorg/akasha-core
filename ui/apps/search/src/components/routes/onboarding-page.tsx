@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -11,12 +11,12 @@ import OnboardingStartCard from '@akashaorg/design-system-components/lib/compone
 
 export type OnboardingPageProps = {
   onError?: (err: Error) => void;
-  loggedProfileData: Profile;
+  isLoggedIn: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const OnboardingPage: React.FC<OnboardingPageProps> = props => {
-  const { loggedProfileData, showLoginModal } = props;
+  const { isLoggedIn, showLoginModal } = props;
 
   const { t } = useTranslation('app-search');
 
@@ -39,10 +39,6 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   const tagSubscriptionsReq = null;
   const tagSubscriptions = tagSubscriptionsReq.data;
   const toggleTagSubscriptionReq = null;
-
-  const isLoggedIn = React.useMemo(() => {
-    return loggedProfileData?.did?.id;
-  }, [loggedProfileData?.did?.id]);
 
   const handleAvatarClick = (id: string) => {
     navigateTo?.({

@@ -11,7 +11,6 @@ import ListAppTopbar from '@akashaorg/design-system-components/lib/components/Li
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import { EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 const ListsPage: React.FC<unknown> = () => {
   const [showModal, setShowModal] = React.useState(false);
@@ -21,16 +20,10 @@ const ListsPage: React.FC<unknown> = () => {
 
   const bookmarkDelete = null;
 
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-  });
-  const loggedProfileData = profileDataReq?.data;
-
   const { isLoggedIn } = useLoggedIn();
 
-  const listsReq = null;
+  //temporary
+  const listsReq = { isFetched: true, data: null, status: 'success', error: null };
   const lists = listsReq?.data || [];
 
   const bookmarkedBeamsIds = lists?.map((bm: Record<string, string>) => bm.itemId);
@@ -45,7 +38,7 @@ const ListsPage: React.FC<unknown> = () => {
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData?.did?.id) {
+    if (!isLoggedIn) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     navigateToModal({ name: 'report-modal', itemId, itemType });

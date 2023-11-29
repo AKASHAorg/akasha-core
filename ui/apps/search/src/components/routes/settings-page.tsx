@@ -15,7 +15,7 @@ import routes, { RESULTS } from '../../routes';
 
 export type SettingsPageProps = {
   onError?: (err: Error) => void;
-  loggedProfileData: Profile;
+  isLoggedIn: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
@@ -30,7 +30,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
   // check if show NSFW option has already been set
   React.useEffect(() => {
     if (window.localStorage) {
-      setShowNsfwContent(JSON.parse(localStorage.getItem('searchApp-showNsfwContent')));
+      setShowNsfwContent(Boolean(JSON.parse(localStorage.getItem('searchApp-showNsfwContent'))));
     }
   }, []);
 

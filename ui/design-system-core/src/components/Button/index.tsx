@@ -110,6 +110,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
             loading={true}
             breakPointSize={breakPointSize}
             disabled={disabled}
+            customStyle={customStyle}
           />
         ) : (
           <>
