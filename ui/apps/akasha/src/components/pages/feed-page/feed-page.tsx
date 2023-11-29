@@ -7,17 +7,11 @@ import {
   ModalNavigationOptions,
   Profile,
 } from '@akashaorg/typings/lib/ui';
-import {
-  useMutationsListener,
-  useAnalytics,
-  useDismissedCard,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
+import { useMutationsListener, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
-import LoginCTACard from '@akashaorg/design-system-components/lib/components/LoginCTACard';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
@@ -50,10 +44,6 @@ const FeedPage: React.FC<FeedPageProps> = props => {
     });
     return () => controller.abort();
   }, []);
-
-  const dismissedCardId = '@akashaorg/app-akasha-integration_private-alpha-notification';
-
-  const [dismissed, dismissCard] = useDismissedCard(dismissedCardId);
 
   const { mutations: pendingPostStates } = useMutationsListener<
     IPublishData,
@@ -101,7 +91,7 @@ const FeedPage: React.FC<FeedPageProps> = props => {
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
-      {loggedProfileData?.did?.id ? (
+      {loggedProfileData?.did?.id && (
         <Stack customStyle="mb-4">
           <EditorPlaceholder
             profileId={loggedProfileData.did.id}
@@ -111,27 +101,6 @@ const FeedPage: React.FC<FeedPageProps> = props => {
             onClick={handleEditorPlaceholderClick}
           />
         </Stack>
-      ) : (
-        !dismissed && (
-          <Stack customStyle="mb-2">
-            <LoginCTACard
-              title={`${t('Welcome, fellow Ethereans!')} 💫`}
-              subtitle={t('We are in private alpha at this time. ')}
-              beforeLinkLabel={t("If you'd like to participate, just ")}
-              afterLinkLabel={t(
-                " and we'll send you a ticket for the next shuttle going to AKASHA World.",
-              )}
-              disclaimerLabel={t(
-                "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",
-              )}
-              writeToUsLabel={t('drop us a message')}
-              writeToUsUrl={'mailto:alpha@akasha.world'}
-              onWriteToUsLabelClick={handleWriteToUsLabelClick}
-              onCloseIconClick={dismissCard}
-              key={dismissedCardId}
-            />
-          </Stack>
-        )
       )}
       {pendingPostStates?.map(
         pendingPostState =>

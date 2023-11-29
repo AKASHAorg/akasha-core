@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMarkAsRead, useRootComponentProps, useGetSettings } from '@akashaorg/ui-awf-hooks';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import {
   CheckCircleIcon,
   Cog8ToothIcon,
@@ -141,10 +139,6 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
     { id: '2', title: t('Read') },
   ];
 
-  const handleTopMenuClick = () => {
-    setShowMenu(!showMenu);
-  };
-
   const [selectedOption, setSelectedOption] = React.useState(dropDownMenuItems[0]);
 
   const handleResetClick = () => {
@@ -178,7 +172,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
     });
   };
 
-  const dropDownActions: ListProps['items'] = [
+  const dropDownActions: MenuProps['items'] = [
     {
       label: 'Mark all as read',
       icon: <CheckCircleIcon />,
@@ -219,12 +213,17 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
             <>{t('Notifications')}</>
           </Text>
           <Stack direction="column" spacing="gap-y-1" customStyle="absolute right-0 top-5">
-            <Button customStyle="relative" plain={true} onClick={handleTopMenuClick}>
-              <Icon icon={<EllipsisHorizontalIcon />} accentColor={true} />
-            </Button>
-            {showMenu && (
-              <List items={dropDownActions} customStyle="absolute right-0 top-7 w-max" />
-            )}
+            <Menu
+              anchor={{
+                icon: <EllipsisHorizontalIcon />,
+                variant: 'primary',
+                greyBg: true,
+                iconOnly: true,
+                'aria-label': 'settings',
+              }}
+              items={dropDownActions}
+              customStyle="w-max z-99"
+            />
           </Stack>
         </Stack>
         <Stack direction="column">

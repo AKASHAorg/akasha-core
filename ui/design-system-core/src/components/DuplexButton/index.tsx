@@ -16,6 +16,7 @@ export type DuplexButtonProps = Omit<ButtonProps, 'label'> & {
   activeIcon?: React.ReactElement;
   activeHoverIcon?: React.ReactElement;
   allowMinimization?: boolean;
+  fixedWidth?: string;
 };
 
 const DuplexButton = (props: DuplexButtonProps) => {
@@ -35,6 +36,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
     activeHoverIcon,
     allowMinimization,
     loading,
+    fixedWidth,
     ...rest
   } = props;
 
@@ -61,7 +63,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
   }, [active]);
 
   if (loading) {
-    return <Button loading={true} {...rest} />;
+    return <Button loading={true} customStyle={fixedWidth} {...rest} />;
   }
 
   const getLabel = () => {
@@ -81,6 +83,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         plain
+        customStyle={fixedWidth}
       >
         <Icon
           icon={getIcon()}
@@ -100,7 +103,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
       variant={active ? activeVariant : inactiveVariant}
       size={size}
       hover={hovered && active}
-      customStyle={customStyle}
+      customStyle={`${customStyle} ${fixedWidth}`}
       {...rest}
     />
   );
