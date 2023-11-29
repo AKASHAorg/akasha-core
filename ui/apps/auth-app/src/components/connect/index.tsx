@@ -1,12 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-
 import { useLoggedIn, useLogin, useLogout, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { EthProviders } from '@akashaorg/typings/lib/sdk';
-
 import ConnectWallet from './connect-wallet';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-
 import { CONNECT } from '../../routes';
 
 const Connect: React.FC<unknown> = () => {

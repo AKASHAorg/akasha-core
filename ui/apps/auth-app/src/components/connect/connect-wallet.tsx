@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
 import {
   switchToRequiredNetwork,
@@ -9,7 +8,6 @@ import {
   useNetworkChangeListener,
   useRequiredNetwork,
 } from '@akashaorg/ui-awf-hooks';
-
 import IndicatorDots from './indicator-dots';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';

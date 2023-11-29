@@ -1,12 +1,9 @@
 import React from 'react';
-
 import Icon from '../Icon';
 import Stack from '../Stack';
 import Text from '../Text';
-
 import CopyToClipboard from '../CopyToClipboard';
 import { Eth, Solana, DidKey, NoEth } from '../Icon/akasha-icons';
-
 import { Color } from '../types/common.types';
 import { truncateDid } from '../../utils/did-utils';
 
