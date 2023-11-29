@@ -3,8 +3,6 @@ import { UserProfileFragmentDataFragment } from '@akashaorg/typings/lib/sdk/grap
 import { logError } from './error-handler';
 import type { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
-export const MEDIA_UPLOAD_EMAIL = '@mediaUploadEmail';
-
 export interface IConfig {
   quality?: number;
   maxWidth: number;
@@ -71,54 +69,6 @@ export const buildProfileMediaLinks = (profile: UserProfileFragmentDataFragment)
 };
 
 /**
- * Utility to upload media to textile bucket
- */
-export const uploadMediaToTextile = async (data: File, isUrl = false) => {
-  const sdk = getSDK();
-  const uploadData: {
-    isUrl: boolean;
-    content: File;
-    name?: string;
-    config: IConfig;
-  } = {
-    isUrl,
-    content: data,
-    config: {
-      quality: 0.8,
-      maxWidth: 640,
-      maxHeight: 640,
-      autoRotate: true,
-    },
-  };
-
-  if (data.type) {
-    uploadData.config.mimeType = data.type;
-  }
-
-  if (data.name) {
-    uploadData.name = data.name;
-  }
-
-  try {
-    const res = await sdk.api.profile.saveMediaFile(uploadData);
-    //const ipfsLinks = getMediaUrl(res?.CID);
-    return {
-      /*
-      data: {
-        originalSrc: URL.createObjectURL(res?.blob),
-        src: { url: ipfsLinks?.originLink, fallbackUrl: ipfsLinks?.fallbackLink },
-        size: res?.size,
-      },
-      */
-    };
-  } catch (error) {
-    return {
-      error: error,
-    };
-  }
-};
-
-/**
  * Utility to get preview of a specified url
  */
 export const getLinkPreview = async (url: string) => {
@@ -150,15 +100,13 @@ interface ISaveMediaFile {
   name: string;
   content: File;
   isUrl: boolean;
-  email?: string;
 }
 
 /**
  * Utility to save media file
  */
-export const saveMediaFile = async ({ name, content, isUrl, email }: ISaveMediaFile) => {
+export const saveMediaFile = async ({ name, content, isUrl }: ISaveMediaFile) => {
   const sdk = getSDK();
-
   try {
     return await sdk.api.profile.saveMediaFile({
       isUrl,
