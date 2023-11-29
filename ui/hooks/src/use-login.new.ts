@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { lastValueFrom } from 'rxjs';
 
-import { EthProviders } from '@akashaorg/typings/lib/sdk';
+import { CurrentUser, EthProviders } from '@akashaorg/typings/lib/sdk';
 
 import { useGlobalLogin } from './use-global-login';
 import { useTheme } from './use-theme';
@@ -40,7 +40,8 @@ export function useConnectWallet(provider: EthProviders) {
  * ```
  */
 export function useGetLogin(onError?: (error: Error) => void) {
-  const [loginData, setLoginData] = useState(null);
+  const [loginData, setLoginData] = useState<CurrentUser>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // check previous session
   useEffect(() => {
@@ -48,6 +49,7 @@ export function useGetLogin(onError?: (error: Error) => void) {
       const sdk = getSDK();
       const data = await sdk.api.auth.getCurrentUser();
       setLoginData(data);
+      setIsLoading(false);
     };
     getCurrentUser();
   }, []);
@@ -67,7 +69,7 @@ export function useGetLogin(onError?: (error: Error) => void) {
     },
   });
 
-  return { data: loginData };
+  return { data: loginData, isLoading: isLoading };
 }
 
 /**
