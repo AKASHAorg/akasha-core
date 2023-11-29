@@ -12,7 +12,7 @@ export const AddDevKey: React.FC<unknown> = () => {
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');
 
-  const { loggedInProfileId } = useLoggedIn();
+  const { authenticatedDID } = useLoggedIn();
 
   const { t } = useTranslation('app-dev-dashboard');
 
@@ -33,7 +33,7 @@ export const AddDevKey: React.FC<unknown> = () => {
 
   useEffect(() => {
     // add key after validating
-    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === loggedInProfileId) {
+    if (validateMutation.isSuccess && validateMutation.data?.body?.aud === authenticatedDID) {
       addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -14,7 +14,7 @@ export type LatestProfilesProps = {
   // data
   profiles: Profile[];
   followList?: FollowList;
-  loggedInProfileId?: string | null;
+  authenticatedDID?: string | null;
   isLoadingProfiles?: boolean;
   isLoggedIn: boolean;
   uiEvents: RootComponentProps['uiEvents'];
@@ -34,7 +34,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
     isLoggedIn,
     isLoadingProfiles,
     noProfilesLabel,
-    loggedInProfileId,
+    authenticatedDID,
   } = props;
 
   const BaseTabPanelStyles = 'ring(white opacity-60  offset(2 blue-400)) focus:outline-none';
@@ -76,7 +76,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                     onClick={() => onClickProfile(profile.did.id)}
                   />
 
-                  {loggedInProfileId !== profile.did.id && (
+                  {authenticatedDID !== profile.did.id && (
                     <Extension
                       name={`follow_${profile.id}`}
                       extensionData={{

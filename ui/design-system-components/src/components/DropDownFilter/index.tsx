@@ -1,5 +1,4 @@
 import React from 'react';
-import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DropDown, { DropdownMenuItemGroupType } from '../SearchAppDropdownFilter';
@@ -21,7 +20,7 @@ const DropDownFilter: React.FC<DropDownFilterProps> = ({
 }) => {
   return (
     <Stack direction="row" justify="between" align="center" customStyle="my-6">
-      <Stack direction="row" customStyle="w-7/12 lg:w-2/6">
+      <Stack direction="row" customStyle="w-8/12 lg:w-2/6">
         <DropDown
           menuItems={dropdownMenuItems}
           selected={selected}

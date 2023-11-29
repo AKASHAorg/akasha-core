@@ -59,7 +59,10 @@ const AppRoutes: React.FC<unknown> = () => {
             />
           }
         />
-        <Route path={routes[SHOW_NOTIFICATIONS_PAGE]} element={<NotificationsPage />} />
+        <Route
+          path={routes[SHOW_NOTIFICATIONS_PAGE]}
+          element={<NotificationsPage isLoggedIn={isLoggedIn} />}
+        />
         <Route
           path={routes[SETTINGS_PAGE]}
           element={<CustomizeNotificationPage initial={false} isLoggedIn={isLoggedIn} />}

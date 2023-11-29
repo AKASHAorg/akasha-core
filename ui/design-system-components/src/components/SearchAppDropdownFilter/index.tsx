@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
+import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -63,13 +64,17 @@ const Dropdown: React.FC<IDropdownProps> = ({
     setDropOpen(!dropOpen);
   };
 
+  const anchorRef = useCloseActions(() => {
+    setDropOpen(false);
+  });
+
   const handleChange = (menuItem: DropdownMenuItemGroupType) => () => {
     setSelected(menuItem);
     setDropOpen(!dropOpen);
   };
 
   return (
-    <Stack fullWidth customStyle="relative" direction="row">
+    <Stack ref={anchorRef} fullWidth customStyle="relative" direction="row">
       {label && <Text variant="label">{label}</Text>}
 
       <button

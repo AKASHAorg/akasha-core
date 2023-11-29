@@ -12,7 +12,7 @@ export type PendingReflectProps = {
 
 export function PendingReflect(props: PendingReflectProps) {
   const { beamId, authorId } = props;
-  const { loggedInProfileId: authenticatedDID } = useLoggedIn();
+  const { authenticatedDID } = useLoggedIn();
   const { mutations: pendingReflectStates } = useMutationsListener<
     {
       i: { content: AkashaReflect };

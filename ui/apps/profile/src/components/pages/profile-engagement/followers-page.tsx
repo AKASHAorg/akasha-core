@@ -32,7 +32,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { isLoggedIn, loggedInProfileId: authenticatedDID } = useLoggedIn();
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const followersReq = useInfiniteGetFollowersListByDidQuery(
     'first',
     {

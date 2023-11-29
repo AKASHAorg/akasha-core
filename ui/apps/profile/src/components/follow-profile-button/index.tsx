@@ -167,6 +167,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
       activeHoverIcon={<XMarkIcon />}
       inactiveVariant="secondary"
       loading={loading}
+      fixedWidth={'w-[7rem]'}
       hoverColors={{
         background: { light: 'transparent', dark: 'transparent' },
         border: { light: 'errorLight', dark: 'errorDark' },
