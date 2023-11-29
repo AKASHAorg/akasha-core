@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { lastValueFrom } from 'rxjs';
-
 import { CurrentUser, EthProviders } from '@akashaorg/typings/lib/sdk';
-
 import { useGlobalLogin } from './use-global-login';
 import { useTheme } from './use-theme';
 import { logError } from './utils/error-handler';
@@ -47,9 +45,14 @@ export function useGetLogin(onError?: (error: Error) => void) {
   useEffect(() => {
     const getCurrentUser = async () => {
       const sdk = getSDK();
-      const data = await sdk.api.auth.getCurrentUser();
-      setLoginData(data);
-      setIsLoading(false);
+      try {
+        const data = await sdk.api.auth.getCurrentUser();
+        setLoginData(data);
+      } catch (err) {
+        logError('getCurrentUser', err);
+      } finally {
+        setIsLoading(false);
+      }
     };
     getCurrentUser();
   }, []);
