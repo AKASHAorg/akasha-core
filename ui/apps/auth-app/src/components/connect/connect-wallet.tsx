@@ -36,7 +36,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   const [errors, setErrors] = useState<{ title: string; subtitle: string }[]>([]);
   const [isSignInRetry, setIsSignInRetry] = useState(false);
 
-  const connectWalletCall = useConnectWallet(selectedProvider);
+  const connectWalletCall = useConnectWallet();
   const signInCall = useRef(onSignIn);
   const signOutCall = useRef(onDisconnect);
 
@@ -85,7 +85,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   }, [requiredNetworkQuery]);
 
   const networkNotSupportedError = useMemo(() => {
-    if (connectWalletCall.isError && selectedProvider === EthProviders.WalletConnect) {
+    if (connectWalletCall.isError) {
       if (
         (connectWalletCall.error as Error & { code?: number })?.code ===
         PROVIDER_ERROR_CODES.UserRejected
@@ -93,21 +93,14 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
         return t('You have rejected the change network request. Please change it manually.');
       }
       return t(
-        "To use AKASHA World during the alpha period, you'll need to set the {{selectedProviderName}} wallet to {{requiredNetworkName}}",
+        "To use AKASHA World during the alpha period, you'll need to set your preferred provider's network to {{requiredNetworkName}}",
         {
-          selectedProviderName: selectedProvider,
           requiredNetworkName,
         },
       );
     }
     return null;
-  }, [
-    connectWalletCall.error,
-    connectWalletCall.isError,
-    requiredNetworkName,
-    selectedProvider,
-    t,
-  ]);
+  }, [connectWalletCall.error, connectWalletCall.isError, requiredNetworkName, t]);
 
   useEffect(() => {
     connectWalletCall.mutate();
