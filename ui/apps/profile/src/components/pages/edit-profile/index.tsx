@@ -57,7 +57,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   };
 
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
-  const { isLoggedIn } = useLoggedIn();
+  const { isLoggedIn, isLoading } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -102,7 +102,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     onSettled,
   });
 
-  if (!isLoggedIn) {
+  if (!isLoading && !isLoggedIn) {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
