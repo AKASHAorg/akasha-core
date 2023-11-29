@@ -72,7 +72,7 @@ export function useGetLogin(onError?: (error: Error) => void) {
     },
   });
 
-  return { data: loginData, isLoading: isLoading };
+  return { data: loginData, isLoading };
 }
 
 /**
