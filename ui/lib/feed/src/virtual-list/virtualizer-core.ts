@@ -206,9 +206,19 @@ export class VirtualizerCore<T> {
   ): VirtualItemInfo => {
     const atTop = !this.initialMount && this.isAtTop();
     if (atTop) {
-      const item = mountedItems.at(0);
-      if (item) {
-        return { ...item, maybeRef: false };
+      const mountedItem = mountedItems.at(-1);
+      if (mountedItem) {
+        return { ...mountedItem, maybeRef: true };
+      }
+      const listItem = itemList.at(0);
+      if (listItem) {
+        return {
+          key: listItem.key,
+          start: 0,
+          height: this.itemHeightAverage,
+          visible: true,
+          maybeRef: true,
+        };
       }
       return undefined;
     }

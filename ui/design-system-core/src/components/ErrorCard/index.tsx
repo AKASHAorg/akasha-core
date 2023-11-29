@@ -18,6 +18,10 @@ export type ErrorCardProps = {
   onClick?: () => void;
 };
 
+/**
+ * Internal component used by ErrorLoader.
+ * Use ErrorLoader instead.
+ */
 const ErrorCard: React.FC<ErrorCardProps> = props => {
   const {
     boxSize,

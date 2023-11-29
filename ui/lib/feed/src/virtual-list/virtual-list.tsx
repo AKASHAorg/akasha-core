@@ -48,7 +48,7 @@ export type VirtualListProps<T> = {
   scrollRestore: ReturnType<typeof useScrollRestore>;
   onFetchInitialData: (itemKeys: string[]) => void;
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
-  onListReset?: () => void;
+  onListReset?: () => Promise<void>;
 };
 
 export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref) => {
@@ -98,13 +98,13 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
 
   const virtualCore = React.useRef<VirtualizerCore<T>>();
 
-  const throttledUpdate = useThrottle((debugFrom?: string) => RAFUpdate(debugFrom), 100, {
-    leading: false,
-  });
-
-  const RAFUpdate = (debugFrom?: string) => window.requestAnimationFrame(() => update(debugFrom));
-
-  const debouncedUpdate = useDebounce((debugFrom?: string) => RAFUpdate(debugFrom), 250);
+  const debouncedUpdate = useDebounce(
+    (debugFrom?: string) =>
+      window.requestIdleCallback
+        ? window.requestIdleCallback(() => update(debugFrom))
+        : window.requestAnimationFrame(() => update(debugFrom)),
+    250,
+  );
 
   // main projection update function
   // this method sets state
@@ -169,6 +169,15 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
       viewport,
     ],
   );
+
+  const RAFUpdate = React.useCallback(
+    (debugFrom?: string) => window.requestAnimationFrame(() => update(debugFrom)),
+    [update],
+  );
+
+  const throttledUpdate = useThrottle(RAFUpdate, 100, {
+    leading: false,
+  });
 
   React.useEffect(() => {
     if (
@@ -365,10 +374,12 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
     virtualCore.current.setItemAPI(itemKey, ref);
   };
 
-  const handleScrollToTop = () => {
+  const handleScrollToTop = async () => {
     prevItemListSize.current = 0;
     scrollRestore.saveScrollState({ listHeight: 0, items: [], measurementsCache: new Map() });
-    onListReset?.();
+    viewport.preventNextScroll();
+    virtualCore.current.setIsInitialMount(true);
+    await onListReset?.();
     scrollToTop(true);
   };
 
@@ -401,10 +412,10 @@ export const VirtualList = React.forwardRef(<T,>(props: VirtualListProps<T>, ref
           />
         ))}
       </div>
-      {scrollTopIndicator &&
-        (viewport.getRelativeToRootNode()?.getTop() || 0) >
-          virtualCore.current.itemHeightAverage * 2 &&
-        scrollTopIndicator(listNodeRef.current.getBoundingClientRect(), handleScrollToTop)}
+      {/*{scrollTopIndicator &&*/}
+      {/*  (viewport.getRelativeToRootNode()?.getTop() || 0) >*/}
+      {/*    virtualCore.current.itemHeightAverage * 2 &&*/}
+      {/*  scrollTopIndicator(listNodeRef.current.getBoundingClientRect(), handleScrollToTop)}*/}
     </>
   );
 });

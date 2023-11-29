@@ -8,6 +8,7 @@ import {
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 export type BeamFeedProps = {
   locale?: ILocale;
@@ -38,11 +39,12 @@ const BeamFeed = (props: BeamFeedProps) => {
     itemSpacing,
   } = props;
 
-  const { beams, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset } = useBeams({
-    overscan: scrollerOptions.overscan,
-    sorting,
-    filters,
-  });
+  const { beams, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset, hasErrors, errors } =
+    useBeams({
+      overscan: scrollerOptions.overscan,
+      sorting,
+      filters,
+    });
 
   const lastCursors = React.useRef({ next: null, prev: null });
   const isLoading = React.useRef(false);
@@ -93,25 +95,36 @@ const BeamFeed = (props: BeamFeedProps) => {
   const handleReset = async () => {
     prevBeams.current = [];
     isLoading.current = true;
-    await onReset();
     lastCursors.current = { next: null, prev: null };
+    await onReset();
   };
 
   return (
-    <Virtualizer<AkashaBeamEdge>
-      restorationKey={queryKey}
-      itemSpacing={itemSpacing}
-      estimatedHeight={estimatedHeight}
-      overscan={scrollerOptions.overscan}
-      items={beams}
-      onFetchInitialData={handleInitialFetch}
-      itemKeyExtractor={item => item.cursor}
-      itemIndexExtractor={itemKey => beams.findIndex(p => p.cursor === itemKey)}
-      onListReset={handleReset}
-      onEdgeDetectorChange={handleFetch}
-      scrollTopIndicator={scrollTopIndicator}
-      renderItem={renderItem}
-    />
+    <>
+      {hasErrors && (
+        <ErrorLoader
+          type="script-error"
+          title={'Sorry, there was an error when fetching beams'}
+          details={<>{errors}</>}
+        />
+      )}
+      {!hasErrors && (
+        <Virtualizer<AkashaBeamEdge>
+          restorationKey={queryKey}
+          itemSpacing={itemSpacing}
+          estimatedHeight={estimatedHeight}
+          overscan={scrollerOptions.overscan}
+          items={beams}
+          onFetchInitialData={handleInitialFetch}
+          itemKeyExtractor={item => item.cursor}
+          itemIndexExtractor={itemKey => beams.findIndex(p => p.cursor === itemKey)}
+          onListReset={handleReset}
+          onEdgeDetectorChange={handleFetch}
+          scrollTopIndicator={scrollTopIndicator}
+          renderItem={renderItem}
+        />
+      )}
+    </>
   );
 };
 
