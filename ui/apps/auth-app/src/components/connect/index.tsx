@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { useLoggedIn, useLogin, useLogout, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { EthProviders } from '@akashaorg/typings/lib/sdk';
+import ChooseProvider from './choose-provider';
 import ConnectWallet from './connect-wallet';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { CONNECT } from '../../routes';
@@ -30,11 +32,6 @@ const Connect: React.FC<unknown> = () => {
   const loginMutation = useLogin();
 
   const routingPlugin = useRef(getRoutingPlugin());
-
-  useEffect(() => {
-    // this is required because of the backend
-    localStorage.setItem('@acceptedTermsAndPrivacy', JSON.stringify(true));
-  }, []);
 
   useEffect(() => {
     const searchParam = new URLSearchParams(location.search);
@@ -72,13 +69,22 @@ const Connect: React.FC<unknown> = () => {
 
   return (
     <Card>
-      <ConnectWallet
-        selectedProvider={EthProviders.WalletConnect}
-        onSignIn={handleSignIn}
-        onDisconnect={handleDisconnect}
-        worldName={worldConfig.title}
-        signInError={loginMutation.error}
-      />
+      <Routes>
+        <Route path="*" element={<ChooseProvider />} />
+
+        <Route
+          path={'/web3modal'}
+          element={
+            <ConnectWallet
+              selectedProvider={EthProviders.WalletConnect}
+              onSignIn={handleSignIn}
+              onDisconnect={handleDisconnect}
+              worldName={worldConfig.title}
+              signInError={loginMutation.error}
+            />
+          }
+        />
+      </Routes>
     </Card>
   );
 };

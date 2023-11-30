@@ -31,19 +31,22 @@ export type ConnectWalletProps = {
 
 const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   const { selectedProvider, onSignIn, onDisconnect, worldName, signInError } = props;
+
   const [errors, setErrors] = useState<{ title: string; subtitle: string }[]>([]);
   const [isSignInRetry, setIsSignInRetry] = useState(false);
 
-  const connectWalletCall = useConnectWallet();
   const signInCall = useRef(onSignIn);
   const signOutCall = useRef(onDisconnect);
 
+  const { isLoggedIn } = useLoggedIn();
   const { t } = useTranslation('app-auth-ewa');
+  const connectWalletCall = useConnectWallet();
   const requiredNetworkQuery = useRequiredNetwork();
-
   const [changedNetwork, changedNetworkUnsubscribe] = useNetworkChangeListener();
 
-  const { isLoggedIn } = useLoggedIn();
+  useEffect(() => {
+    connectWalletCall.mutate();
+  }, []);
 
   useEffect(() => {
     if (
@@ -71,6 +74,12 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
       changedNetworkUnsubscribe();
     };
   }, [changedNetwork, requiredNetworkQuery.data]);
+
+  useEffect(() => {
+    if (connectWalletCall.isSuccess && connectWalletCall.data.length == 42 && !isSignInRetry) {
+      signInCall.current(selectedProvider);
+    }
+  }, [connectWalletCall.isSuccess, isSignInRetry]);
 
   const requiredNetworkName = useMemo(() => {
     if (requiredNetworkQuery.isSuccess) {
@@ -100,19 +109,14 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
     return null;
   }, [connectWalletCall.error, connectWalletCall.isError, requiredNetworkName, t]);
 
-  useEffect(() => {
-    connectWalletCall.mutate();
-  }, []);
-
-  useEffect(() => {
-    if (connectWalletCall.isSuccess && connectWalletCall.data.length == 42 && !isSignInRetry) {
-      signInCall.current(selectedProvider);
-    }
-  }, [connectWalletCall.isSuccess, isSignInRetry]);
+  const hasErrors =
+    Boolean(networkNotSupportedError) || Boolean(errors.length) || Boolean(signInError);
 
   const handleChangeNetwork = () => {
-    // change network to requiredNetwork
-    // avoid spamming the user with errors
+    /**
+     * change network to requiredNetwork,
+     * avoid spamming the user with errors
+     */
     switchToRequiredNetwork().catch(err => {
       let errorTitle = t("Switch Your Wallet's Network");
       let errorSubtitle = t(
@@ -167,12 +171,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           backgroundSize={120}
           iconColor="self-color"
         />
-        <IndicatorDots
-          isSuccess={isLoggedIn}
-          hasErrors={
-            Boolean(networkNotSupportedError) || Boolean(errors.length) || Boolean(signInError)
-          }
-        />
+        <IndicatorDots isSuccess={isLoggedIn} hasErrors={hasErrors} />
         <AppIcon
           placeholderIcon={<Akasha />}
           solid={true}
@@ -197,43 +196,46 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           action={{ onClick: handleSignInRetry, label: t('Retry Network') }}
         />
       )}
+
       {errors.map((errObj, idx) => (
         <ConnectErrorCard key={idx} title={errObj.title} message={errObj.subtitle} />
       ))}
 
-      <Stack spacing="gap-y-6">
-        {!!connectWalletCall.data?.length && (
-          <Stack spacing="gap-y-8">
-            <Stack spacing="gap-y-2">
-              <Text variant="h6" weight="bold" align="center">
-                {isLoggedIn ? t('Authorized 🙌🏽') : t('Authorizing')}
-              </Text>
-              <Text variant="body1" align="center" color={{ light: 'grey4', dark: 'grey7' }}>
-                {isLoggedIn
-                  ? t('You have successfully connected and authorized your address')
-                  : t('You will be prompted with 2 signatures')}
-              </Text>
-            </Stack>
+      {!hasErrors && (
+        <Stack spacing="gap-y-6">
+          {!!connectWalletCall.data?.length && (
+            <Stack spacing="gap-y-8">
+              <Stack spacing="gap-y-2">
+                <Text variant="h6" weight="bold" align="center">
+                  {isLoggedIn ? t('Authorized 🙌🏽') : t('Authorizing')}
+                </Text>
+                <Text variant="body1" align="center" color={{ light: 'grey4', dark: 'grey7' }}>
+                  {isLoggedIn
+                    ? t('You have successfully connected and authorized your address')
+                    : t('You will be prompted with 1 signature')}
+                </Text>
+              </Stack>
 
-            <Stack spacing="gap-y-2">
-              <Text variant="button-sm" weight="bold" align="center">
-                {t('Your Address')}
-              </Text>
-              <Text variant="subtitle2" align="center" color={{ light: 'grey4', dark: 'grey7' }}>
-                {connectWalletCall.data}
-              </Text>
+              <Stack spacing="gap-y-2">
+                <Text variant="button-sm" weight="bold" align="center">
+                  {t('Your Address')}
+                </Text>
+                <Text variant="subtitle2" align="center" color={{ light: 'grey4', dark: 'grey7' }}>
+                  {connectWalletCall.data}
+                </Text>
+              </Stack>
             </Stack>
+          )}
+          <Stack align="center" justify="center">
+            <Button plain={true} onClick={handleDisconnect} customStyle="flex items-center gap-x-2">
+              <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
+              <Text variant="button-lg" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                {t('Disconnect or change the way to connect')}
+              </Text>
+            </Button>
           </Stack>
-        )}
-        <Stack align="center" justify="center">
-          <Button plain={true} onClick={handleDisconnect} customStyle="flex items-center gap-x-2">
-            <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
-            <Text variant="button-lg" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-              {t('Disconnect or change the way to connect')}
-            </Text>
-          </Button>
         </Stack>
-      </Stack>
+      )}
     </Stack>
   );
 };
