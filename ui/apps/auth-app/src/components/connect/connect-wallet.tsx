@@ -1,24 +1,25 @@
-import React from 'react';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import {
-  Akasha,
-  Metamask,
-  Walletconnect,
-} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
-import IndicatorDots from './indicator-dots';
-import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import { EthProviders, INJECTED_PROVIDERS, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
 import {
   switchToRequiredNetwork,
   useConnectWallet,
-  useInjectedProvider,
+  useLoggedIn,
   useNetworkChangeListener,
   useRequiredNetwork,
 } from '@akashaorg/ui-awf-hooks';
+import IndicatorDots from './indicator-dots';
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import {
+  Akasha,
+  Walletconnect,
+} from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { ArrowsRightLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type ConnectWalletProps = {
   selectedProvider: EthProviders;
@@ -30,20 +31,24 @@ export type ConnectWalletProps = {
 
 const ConnectWallet: React.FC<ConnectWalletProps> = props => {
   const { selectedProvider, onSignIn, onDisconnect, worldName, signInError } = props;
-  const [errors, setErrors] = React.useState<{ title: string; subtitle: string }[]>([]);
-  const [isSignInRetry, setIsSignInRetry] = React.useState(false);
 
-  const connectWalletCall = useConnectWallet(selectedProvider);
-  const signInCall = React.useRef(onSignIn);
-  const signOutCall = React.useRef(onDisconnect);
+  const [errors, setErrors] = useState<{ title: string; subtitle: string }[]>([]);
+  const [isSignInRetry, setIsSignInRetry] = useState(false);
 
+  const signInCall = useRef(onSignIn);
+  const signOutCall = useRef(onDisconnect);
+
+  const { isLoggedIn } = useLoggedIn();
   const { t } = useTranslation('app-auth-ewa');
+  const connectWalletCall = useConnectWallet();
   const requiredNetworkQuery = useRequiredNetwork();
-  const injectedProviderQuery = useInjectedProvider();
-
   const [changedNetwork, changedNetworkUnsubscribe] = useNetworkChangeListener();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    connectWalletCall.mutate();
+  }, []);
+
+  useEffect(() => {
     if (
       requiredNetworkQuery.isSuccess &&
       +changedNetwork?.chainId === requiredNetworkQuery.data.chainId &&
@@ -70,7 +75,13 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
     };
   }, [changedNetwork, requiredNetworkQuery.data]);
 
-  const requiredNetworkName = React.useMemo(() => {
+  useEffect(() => {
+    if (connectWalletCall.isSuccess && connectWalletCall.data.length == 42 && !isSignInRetry) {
+      signInCall.current(selectedProvider);
+    }
+  }, [connectWalletCall.isSuccess, isSignInRetry]);
+
+  const requiredNetworkName = useMemo(() => {
     if (requiredNetworkQuery.isSuccess) {
       return `${requiredNetworkQuery.data.name
         .charAt(0)
@@ -80,8 +91,8 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
     }
   }, [requiredNetworkQuery]);
 
-  const networkNotSupportedError = React.useMemo(() => {
-    if (connectWalletCall.isError && selectedProvider === EthProviders.Web3Injected) {
+  const networkNotSupportedError = useMemo(() => {
+    if (connectWalletCall.isError) {
       if (
         (connectWalletCall.error as Error & { code?: number })?.code ===
         PROVIDER_ERROR_CODES.UserRejected
@@ -89,29 +100,23 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
         return t('You have rejected the change network request. Please change it manually.');
       }
       return t(
-        "To use AKASHA World during the alpha period, you'll need to set the {{selectedProviderName}} wallet to {{requiredNetworkName}}",
+        "To use AKASHA World during the alpha period, you'll need to set your preferred provider's network to {{requiredNetworkName}}",
         {
-          selectedProviderName: getInjectedProviderDetails(injectedProviderQuery.data).name,
           requiredNetworkName,
         },
       );
     }
     return null;
-  }, [connectWalletCall, requiredNetworkName, selectedProvider]);
+  }, [connectWalletCall.error, connectWalletCall.isError, requiredNetworkName, t]);
 
-  React.useEffect(() => {
-    connectWalletCall.mutate();
-  }, []);
-
-  React.useEffect(() => {
-    if (connectWalletCall.isSuccess && connectWalletCall.data.length == 42 && !isSignInRetry) {
-      signInCall.current(selectedProvider);
-    }
-  }, [connectWalletCall.isSuccess, isSignInRetry]);
+  const hasErrors =
+    Boolean(networkNotSupportedError) || Boolean(errors.length) || Boolean(signInError);
 
   const handleChangeNetwork = () => {
-    // change network to requiredNetwork
-    // avoid spamming the user with errors
+    /**
+     * change network to requiredNetwork,
+     * avoid spamming the user with errors
+     */
     switchToRequiredNetwork().catch(err => {
       let errorTitle = t("Switch Your Wallet's Network");
       let errorSubtitle = t(
@@ -147,40 +152,11 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
     signOutCall.current(selectedProvider);
   };
 
-  const getInjectedProviderDetails = (provider: INJECTED_PROVIDERS) => {
-    switch (provider) {
-      // metamask
-      case INJECTED_PROVIDERS.METAMASK:
-        return {
-          name: provider,
-          icon: <Metamask />,
-          titleLabel: provider,
-          subtitleLabel: t('Connect using your MetaMask wallet'),
-        };
-      // provider not detected
-      case INJECTED_PROVIDERS.NOT_DETECTED:
-        return {
-          name: provider,
-          titleLabel: '',
-          subtitleLabel: '',
-        };
-      default:
-        return {
-          name: provider,
-          icon: <Akasha />,
-          titleLabel: provider,
-          subtitleLabel: t(
-            'This wallet has not been tested extensively and may have issues. Please ensure it supports {{requiredNetworkName}} Network',
-          ),
-        };
-    }
-  };
-
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing="gap-y-8">
       <Stack>
         <Text variant="body1" align="center" weight="bold">
-          {t('Connect to {{worldName}}', { worldName })}
+          {t('Connecting to {{worldName}}', { worldName })}
         </Text>
         <Text variant="body1" align="center" weight="bold">
           {t('using your wallet')}
@@ -188,24 +164,14 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
       </Stack>
       <Stack direction="row" align="center" justify="center">
         <AppIcon
-          placeholderIcon={
-            selectedProvider === EthProviders.Web3Injected ? <Metamask /> : <Walletconnect />
-          }
+          placeholderIcon={<Walletconnect />}
           background={{ gradient: 'gradient-to-b', from: 'orange-50', to: 'orange-200' }}
           radius={24}
-          size={
-            selectedProvider === EthProviders.Web3Injected
-              ? { width: 88, height: 88 }
-              : { width: 120, height: 120 }
-          }
+          size={{ width: 120, height: 120 }}
           backgroundSize={120}
           iconColor="self-color"
         />
-        <IndicatorDots
-          hasErrors={
-            Boolean(networkNotSupportedError) || Boolean(errors.length) || Boolean(signInError)
-          }
-        />
+        <IndicatorDots isSuccess={isLoggedIn} hasErrors={hasErrors} />
         <AppIcon
           placeholderIcon={<Akasha />}
           solid={true}
@@ -230,27 +196,46 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
           action={{ onClick: handleSignInRetry, label: t('Retry Network') }}
         />
       )}
+
       {errors.map((errObj, idx) => (
         <ConnectErrorCard key={idx} title={errObj.title} message={errObj.subtitle} />
       ))}
-      <Stack>
-        {!!connectWalletCall.data?.length && (
-          <Stack>
-            <Text variant="subtitle2" weight="bold">
-              {t('Your Address')}
-            </Text>
-            <Text variant="subtitle2">{connectWalletCall.data}</Text>
+
+      {!hasErrors && (
+        <Stack spacing="gap-y-6">
+          {!!connectWalletCall.data?.length && (
+            <Stack spacing="gap-y-8">
+              <Stack spacing="gap-y-2">
+                <Text variant="h6" weight="bold" align="center">
+                  {isLoggedIn ? t('Authorized 🙌🏽') : t('Authorizing')}
+                </Text>
+                <Text variant="body1" align="center" color={{ light: 'grey4', dark: 'grey7' }}>
+                  {isLoggedIn
+                    ? t('You have successfully connected and authorized your address')
+                    : t('You will be prompted with 1 signature')}
+                </Text>
+              </Stack>
+
+              <Stack spacing="gap-y-2">
+                <Text variant="button-sm" weight="bold" align="center">
+                  {t('Your Address')}
+                </Text>
+                <Text variant="subtitle2" align="center" color={{ light: 'grey4', dark: 'grey7' }}>
+                  {connectWalletCall.data}
+                </Text>
+              </Stack>
+            </Stack>
+          )}
+          <Stack align="center" justify="center">
+            <Button plain={true} onClick={handleDisconnect} customStyle="flex items-center gap-x-2">
+              <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
+              <Text variant="button-lg" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                {t('Disconnect or change the way to connect')}
+              </Text>
+            </Button>
           </Stack>
-        )}
-        <Stack align="center" justify="center">
-          <Button
-            variant="text"
-            size="lg"
-            onClick={handleDisconnect}
-            label={t('Disconnect or change way to connect')}
-          />
         </Stack>
-      </Stack>
+      )}
     </Stack>
   );
 };

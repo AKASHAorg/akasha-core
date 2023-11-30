@@ -1,13 +1,13 @@
-import * as React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import React from 'react';
+import { Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import AppIcon, { AppIconProps } from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { IconProps } from '@akashaorg/design-system-core/lib/components/Icon';
-import { Color } from '@akashaorg/design-system-core/lib/components/types/common.types';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-export interface IWeb3ConnectCardProps {
+export type TWeb3ConnectCardProps = {
   titleLabel: string;
   leftIconType: AppIconProps['placeholderIcon'];
   subtitleLabel?: string;
@@ -16,9 +16,9 @@ export interface IWeb3ConnectCardProps {
   iconColor?: IconProps['color'];
   boxBgColor?: Color;
   handleClick: () => void;
-}
+};
 
-const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
+const Web3ConnectCard: React.FC<TWeb3ConnectCardProps> = props => {
   const {
     titleLabel,
     subtitleLabel,

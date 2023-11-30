@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
-import { lastValueFrom } from 'rxjs';
 import { CurrentUser, EthProviders } from '@akashaorg/typings/lib/sdk';
 import { useGlobalLogin } from './use-global-login';
 import { useTheme } from './use-theme';
@@ -9,7 +8,7 @@ import { logError } from './utils/error-handler';
 
 export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
-export function useConnectWallet(provider: EthProviders) {
+export function useConnectWallet() {
   const { theme } = useTheme();
   const sdk = getSDK();
 
@@ -119,7 +118,6 @@ export function useLogin(onError?: (err: Error) => void) {
  * ```
  */
 export function useLogout() {
-  const queryClient = useQueryClient();
   const sdk = getSDK();
   return useMutation(
     async () => {

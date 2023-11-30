@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
-
 import App from './app';
 
 const reactLifecycles = singleSpaReact({
