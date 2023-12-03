@@ -14,7 +14,7 @@ import {
   useInfiniteGetFollowingListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
-  getProfileImageVersionsWithMediaUrl,
+  getProfileImageUrl,
   hasOwn,
   getFollowList,
   useRootComponentProps,
@@ -31,7 +31,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
+  const { isLoggedIn, isLoading, authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -107,7 +107,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     },
   );
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn && !isLoading) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
@@ -167,7 +167,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
             )
           }
           onProfileClick={onProfileClick}
-          getMediaUrl={getProfileImageVersionsWithMediaUrl}
+          getMediaUrl={getProfileImageUrl}
         />
       )}
     </EngagementTab>
