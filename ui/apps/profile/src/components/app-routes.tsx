@@ -1,21 +1,20 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useShowFeedback, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
-import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import React, { Suspense } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
-import withProfileHeader from './profile-header-hoc';
 import InterestsPage from './pages/interests';
 import EditProfilePage from './pages/edit-profile';
 import FollowingPage from './pages/profile-engagement/following-page';
 import FollowersPage from './pages/profile-engagement/followers-page';
 import ProfileInfoPage from './pages/profile-info';
-
+import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import menuRoute, { EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
+import { useTranslation } from 'react-i18next';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { useShowFeedback, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { withProfileHeader } from './profile-header/withProfileHeader';
+import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
@@ -68,7 +67,11 @@ const AppRoutes: React.FC<unknown> = () => {
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWERS]}`}
-              element={<FollowersPage showLoginModal={showLoginModal} />}
+              element={
+                <Suspense fallback={<ProfileEngagementLoading />}>
+                  <FollowersPage showLoginModal={showLoginModal} />
+                </Suspense>
+              }
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWING]}`}
@@ -78,9 +81,11 @@ const AppRoutes: React.FC<unknown> = () => {
             <Route
               path={`:profileId${menuRoute[EDIT]}`}
               element={
-                <EditProfilePage
-                  handleProfileUpdatedFeedback={() => setShowUpdatedFeedback(true)}
-                />
+                <Suspense fallback={<ProfileLoading />}>
+                  <EditProfilePage
+                    handleProfileUpdatedFeedback={() => setShowUpdatedFeedback(true)}
+                  />
+                </Suspense>
               }
             />
           </Route>

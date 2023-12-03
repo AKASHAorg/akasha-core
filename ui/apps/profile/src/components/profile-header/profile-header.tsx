@@ -1,26 +1,21 @@
-import React, { ReactNode } from 'react';
-import routes, { EDIT } from '../routes';
-import FollowProfileButton from './follow-profile-button';
-import FollowingFeedback from './following-feedback';
+import React, { Suspense } from 'react';
+import routes, { EDIT } from '../../routes';
+import FollowButton from './follow-button';
+import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
   FlagIcon,
   LinkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import {
-  ProfileHeader,
-  ProfileHeaderLoading,
-} from '@akashaorg/design-system-components/lib/components/Profile';
+import { ProfileHeader } from '@akashaorg/design-system-components/lib/components/Profile';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import { EntityTypes, ModalNavigationOptions, NavigateToParams } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import {
-  useGetFollowDocumentsQuery,
-  useGetProfileByDidQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hasOwn, useLoggedIn, useValidDid } from '@akashaorg/ui-awf-hooks';
 
-type ProfileHeaderViewProps = {
+export type ProfileHeaderViewProps = {
   handleCopyFeedback: () => void;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (opts: ModalNavigationOptions) => void;
@@ -33,20 +28,13 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const { profileId } = useParams<{ profileId: string }>();
 
   const { isLoggedIn, authenticatedDID } = useLoggedIn();
-  const profileDataReq = useGetProfileByDidQuery(
-    {
-      id: profileId,
-    },
-    {
-      select: response => response.node,
-      enabled: !!profileId,
-    },
-  );
+  const { data, error } = useGetProfileByDidSuspenseQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: { id: profileId },
+  });
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
-      ? profileDataReq.data
-      : { akashaProfile: null };
+    data.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
   const isViewer = profileData?.did?.id === authenticatedDID;
 
@@ -61,23 +49,20 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
     },
     [isLoggedIn, navigateToModal, showLoginModal],
   );
-  const followDocuments = useGetFollowDocumentsQuery(
-    {
-      following: [profileData?.id],
-      last: 1,
-    },
-    { select: response => response.viewer, enabled: !!profileData },
-  );
-
-  const followDocument = followDocuments.data?.akashaFollowList?.edges[0];
 
   const profileNotFound = !profileData && !validDid;
 
-  if (profileDataReq.status === 'loading' || followDocuments.status === 'loading')
-    return <ProfileHeaderLoading />;
+  if (profileNotFound) return null;
 
-  if (profileDataReq.status === 'error' || followDocuments.status === 'error' || profileNotFound)
-    return null;
+  if (error)
+    return (
+      <ErrorLoader
+        type="script-error"
+        title={t('There was an error loading the profile header')}
+        details={t('We cannot show this profile header right now')}
+        devDetails={error.message}
+      />
+    );
 
   const handleCopy = () => {
     const profileUrl = new URL(location.pathname, location.origin).href;
@@ -125,32 +110,15 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       copiedLabel={t('Copied')}
       publicImagePath="/images"
       followElement={
-        <FollowProfileButton
-          profileID={profileData?.id}
-          isLoggedIn={isLoggedIn}
-          followId={followDocument?.node?.id}
-          isFollowing={followDocument?.node?.isFollowing}
-          showLoginModal={showLoginModal}
-          iconOnly={true}
-        />
+        <Suspense
+          fallback={<CircularPlaceholder height="h-8" width="w-8" customStyle="ml-auto shrink-0" />}
+        >
+          <FollowButton profileID={profileData?.id} showLoginModal={showLoginModal} />
+        </Suspense>
       }
       handleEdit={handleEdit}
     />
   );
 };
 
-export const withProfileHeader = <T extends ProfileHeaderViewProps>(
-  wrappedComponent: ReactNode,
-) => {
-  return (props: T) => {
-    return (
-      <>
-        <ProfileHeaderView {...props} />
-        {wrappedComponent}
-        <FollowingFeedback />
-      </>
-    );
-  };
-};
-
-export default withProfileHeader;
+export default ProfileHeaderView;

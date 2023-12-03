@@ -62,7 +62,7 @@ const BeamPage: React.FC<unknown> = () => {
         onNavigate={onNavigate}
         showLoginModal={showLoginModal}
       />
-      <PendingReflect beamId={beamId} authorId={entryData.author?.id} />
+      <PendingReflect beamId={beamId} authorId={loggedProfileData?.did.id} />
       <Stack spacing="gap-y-2">
         <FeedWidget
           queryKey="akasha-beam-page-query"
