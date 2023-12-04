@@ -37,7 +37,9 @@ jobs:
             - dependency-cache-v1
       - run:
           name: Install yarn packages
-          command: yarn install
+          command: |
+            rm -rf node_modules
+            yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
