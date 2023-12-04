@@ -2,7 +2,7 @@ import React from 'react';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import { getProfileImageUrl, hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { transformImageVersions, hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
@@ -86,7 +86,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
         clickToViewLabel: t('Click to View'),
       }}
       itemType={EntityTypes.REFLECT}
-      getMediaUrl={getProfileImageUrl}
+      getMediaUrl={transformImageVersions}
       onReflect={onReflect}
       onAvatarClick={onAvatarClick}
       {...rest}

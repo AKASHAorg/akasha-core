@@ -12,7 +12,7 @@ import {
   useGetProfileByDidSuspenseQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { getProfileImageUrl, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { transformImageVersions, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useParams } from 'react-router';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -56,10 +56,10 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
   const background = useMemo(
-    () => getProfileImageUrl(profileData?.background),
+    () => transformImageVersions(profileData?.background),
     [profileData?.background],
   );
-  const avatar = useMemo(() => getProfileImageUrl(profileData?.avatar), [profileData?.avatar]);
+  const avatar = useMemo(() => transformImageVersions(profileData?.avatar), [profileData?.avatar]);
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted,

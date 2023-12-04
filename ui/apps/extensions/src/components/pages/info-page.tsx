@@ -9,7 +9,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getProfileImageUrl, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { transformImageVersions, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 const InfoPage: React.FC<unknown> = () => {
@@ -76,7 +76,7 @@ const InfoPage: React.FC<unknown> = () => {
   // const releases = releasesInfoReq.data.map(release => release.node);
 
   const developers = appReleaseInfo?.application?.contributors?.map(contributor => {
-    const avatarImg = getProfileImageUrl(contributor.akashaProfile?.avatar);
+    const avatarImg = transformImageVersions(contributor.akashaProfile?.avatar);
     return {
       profileId: contributor.akashaProfile.did.id,
       name: contributor.akashaProfile.name,

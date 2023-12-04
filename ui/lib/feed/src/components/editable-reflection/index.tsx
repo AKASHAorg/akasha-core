@@ -9,7 +9,7 @@ import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import {
   decodeb64SlateContent,
   getLinkPreview,
-  getProfileImageUrl,
+  transformImageVersions,
   serializeSlateToBase64,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
@@ -181,7 +181,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             editorState={editorState}
             showEditorInitialValue={true}
             showCancelButton={true}
-            avatar={getProfileImageUrl(profileDataReq?.data?.avatar)}
+            avatar={transformImageVersions(profileDataReq?.data?.avatar)}
             profileId={loggedProfileData?.did?.id}
             disablePublish={disablePublishing}
             tags={tagSearch?.data}

@@ -13,7 +13,7 @@ import {
   useInfiniteGetFollowersListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
-  getProfileImageUrl,
+  transformImageVersions,
   hasOwn,
   getFollowList,
   useRootComponentProps,
@@ -156,7 +156,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
             )
           }
           onProfileClick={onProfileClick}
-          getMediaUrl={getProfileImageUrl}
+          getMediaUrl={transformImageVersions}
         />
       )}
     </EngagementTab>

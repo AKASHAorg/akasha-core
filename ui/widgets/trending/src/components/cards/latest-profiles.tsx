@@ -6,7 +6,7 @@ import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/Pr
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import { FollowList, Profile, RootComponentProps } from '@akashaorg/typings/lib/ui';
-import { getProfileImageUrl } from '@akashaorg/ui-awf-hooks';
+import { transformImageVersions } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 
 export type LatestProfilesProps = {
@@ -71,7 +71,7 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                     profileId={profile.did.id}
                     label={profile.name}
                     size="md"
-                    avatarImage={getProfileImageUrl(profile.avatar)}
+                    avatarImage={transformImageVersions(profile.avatar)}
                     onClick={() => onClickProfile(profile.did.id)}
                   />
 

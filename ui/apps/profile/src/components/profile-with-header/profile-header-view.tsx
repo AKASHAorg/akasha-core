@@ -13,7 +13,7 @@ import { EntityTypes, ModalNavigationOptions, NavigateToParams } from '@akashaor
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { getProfileImageUrl, hasOwn, useLoggedIn, useValidDid } from '@akashaorg/ui-awf-hooks';
+import { transformImageVersions, hasOwn, useLoggedIn, useValidDid } from '@akashaorg/ui-awf-hooks';
 
 export type ProfileHeaderViewProps = {
   handleCopyFeedback: () => void;
@@ -101,7 +101,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
       did={profileData ? profileData.did : { id: profileId }}
       validAddress={profileData ? true : isEthAddress || validDid}
       background={profileData?.background}
-      avatar={getProfileImageUrl(profileData?.avatar)}
+      avatar={transformImageVersions(profileData?.avatar)}
       name={profileData?.name}
       ensName={null /*@TODO: integrate ENS when the API is ready */}
       viewerIsOwner={isViewer}

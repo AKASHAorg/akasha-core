@@ -3,7 +3,7 @@ import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { getProfileImageUrl, hasOwn, sortByKey, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { transformImageVersions, hasOwn, sortByKey, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ContentBlockModes, EntityTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -86,7 +86,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         clickToViewLabel: t('Click to View'),
       }}
       itemType={EntityTypes.BEAM}
-      getMediaUrl={getProfileImageUrl}
+      getMediaUrl={transformImageVersions}
       onAvatarClick={onAvatarClick}
       onReflect={onReflect}
       {...rest}

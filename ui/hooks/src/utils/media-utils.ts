@@ -124,9 +124,9 @@ export const saveMediaFile = async ({ name, content, isUrl, email }: ISaveMediaF
 };
 
 /**
- * Utility to get profile image url
+ * Utility to transform image versions
  */
-export const getProfileImageUrl = (
+export const transformImageVersions = (
   image?: AkashaProfileImageVersions,
 ): AkashaProfileImageVersions => {
   if (!image) return null;
