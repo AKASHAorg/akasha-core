@@ -899,6 +899,41 @@ export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentMFragmentDoc}`;
+export const GetFollowDocumentsByDidDocument = /*#__PURE__*/ gql`
+    query GetFollowDocumentsByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaFollowList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: {where: {profileID: {in: $following}}}
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            id
+            isFollowing
+            profileID
+            profile {
+              ...UserProfileFragmentM
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentMFragmentDoc}`;
 export const GetProfileByIdDocument = /*#__PURE__*/ gql`
     query GetProfileByID($id: ID!) {
   node(id: $id) {
@@ -1401,6 +1436,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetFollowDocuments(variables?: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
       return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
+    },
+    GetFollowDocumentsByDid(variables: Types.GetFollowDocumentsByDidQueryVariables, options?: C): Promise<Types.GetFollowDocumentsByDidQuery> {
+      return requester<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, variables, options) as Promise<Types.GetFollowDocumentsByDidQuery>;
     },
     GetProfileByID(variables: Types.GetProfileByIdQueryVariables, options?: C): Promise<Types.GetProfileByIdQuery> {
       return requester<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables, options) as Promise<Types.GetProfileByIdQuery>;
