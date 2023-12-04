@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
+import Connect from './connect';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import routes, { CONNECT } from '../routes';
-import Connect from './connect';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName } = useRootComponentProps();
