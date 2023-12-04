@@ -5,8 +5,8 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import EditProfile from '@akashaorg/design-system-components/lib/components/EditProfile';
+import getSDK from '@akashaorg/awf-sdk';
 import { useTranslation } from 'react-i18next';
-
 import {
   useCreateProfileMutation,
   useGetProfileByDidSuspenseQuery,
@@ -23,7 +23,6 @@ import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-content';
 import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/components/EditProfile/types';
-import getSDK from '@akashaorg/awf-sdk';
 
 type EditProfilePageProps = {
   handleProfileUpdatedFeedback: () => void;
