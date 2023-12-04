@@ -68,7 +68,7 @@ export type EntryCardProps = {
   onEntryRemove?: (itemId: string) => void;
   onEntryFlag?: () => void;
   onEdit?: () => void;
-  getMediaUrl?: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
+  transformImageVersions?: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
 } & (
   | {
       sortedContents: AkashaBeam['content'];
@@ -109,7 +109,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     lastEntry,
     hover,
     actionsRightExt,
-    getMediaUrl,
+    transformImageVersions,
     onAvatarClick,
     onContentClick,
     onEntryFlag,
@@ -174,7 +174,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               label={
                 authorProfile.status === 'error' ? entryData.author.id : authorProfile.data?.name
               }
-              avatarImage={getMediaUrl ? getMediaUrl(avatar) : avatar}
+              avatarImage={transformImageVersions ? transformImageVersions(avatar) : avatar}
               href={`${profileAnchorLink}/${entryData.author.id}`}
               metadata={
                 publishTime &&

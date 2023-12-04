@@ -156,7 +156,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
             )
           }
           onProfileClick={onProfileClick}
-          getMediaUrl={transformImageVersions}
+          transformImageVersions={transformImageVersions}
         />
       )}
     </EngagementTab>

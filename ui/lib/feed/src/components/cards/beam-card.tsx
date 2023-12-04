@@ -86,7 +86,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         clickToViewLabel: t('Click to View'),
       }}
       itemType={EntityTypes.BEAM}
-      getMediaUrl={transformImageVersions}
+      transformImageVersions={transformImageVersions}
       onAvatarClick={onAvatarClick}
       onReflect={onReflect}
       {...rest}

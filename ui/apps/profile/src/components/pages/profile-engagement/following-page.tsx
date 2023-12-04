@@ -167,7 +167,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
             )
           }
           onProfileClick={onProfileClick}
-          getMediaUrl={transformImageVersions}
+          transformImageVersions={transformImageVersions}
         />
       )}
     </EngagementTab>

@@ -86,7 +86,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
         clickToViewLabel: t('Click to View'),
       }}
       itemType={EntityTypes.REFLECT}
-      getMediaUrl={transformImageVersions}
+      transformImageVersions={transformImageVersions}
       onReflect={onReflect}
       onAvatarClick={onAvatarClick}
       {...rest}
