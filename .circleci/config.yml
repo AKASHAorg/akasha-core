@@ -33,16 +33,17 @@ jobs:
       - restore_cache: # special step to restore the dependency cache
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           keys:
-            - new-dep-cache-v1-{{ checksum "yarn.lock" }}
-            - new-dep-cache-v1
+            - dep-new-cache-v1-{{ checksum "yarn.lock" }}
+            - dep-new-cache-v1
       - run:
           name: Install yarn packages
           command: |
+            yarn cache clean
             yarn install
       - save_cache:
           paths:
             - node_modules
-          key: new-dep-cache-v1-{{ checksum "yarn.lock" }}
+          key: dep-new-cache-v1-{{ checksum "yarn.lock" }}
       - run:
           name: Prepare continuation parameters
           command: |
