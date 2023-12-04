@@ -609,6 +609,79 @@ useInfiniteGetFollowDocumentsQuery.getKey = (variables?: Types.GetFollowDocument
 ;
 
 useGetFollowDocumentsQuery.fetcher = (variables?: Types.GetFollowDocumentsQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options);
+export const GetFollowDocumentsByDidDocument = /*#__PURE__*/ `
+    query GetFollowDocumentsByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaFollowList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: {where: {profileID: {in: $following}}}
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            id
+            isFollowing
+            profileID
+            profile {
+              ...UserProfileFragmentM
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentMFragmentDoc}`;
+export const useGetFollowDocumentsByDidQuery = <
+      TData = Types.GetFollowDocumentsByDidQuery,
+      TError = unknown
+    >(
+      variables: Types.GetFollowDocumentsByDidQueryVariables,
+      options?: UseQueryOptions<Types.GetFollowDocumentsByDidQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetFollowDocumentsByDidQuery, TError, TData>(
+      ['GetFollowDocumentsByDid', variables],
+      composeDbFetch<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, variables),
+      options
+    );
+useGetFollowDocumentsByDidQuery.document = GetFollowDocumentsByDidDocument;
+
+
+useGetFollowDocumentsByDidQuery.getKey = (variables: Types.GetFollowDocumentsByDidQueryVariables) => ['GetFollowDocumentsByDid', variables];
+;
+
+export const useInfiniteGetFollowDocumentsByDidQuery = <
+      TData = Types.GetFollowDocumentsByDidQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetFollowDocumentsByDidQueryVariables,
+      variables: Types.GetFollowDocumentsByDidQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetFollowDocumentsByDidQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetFollowDocumentsByDidQuery, TError, TData>(
+      ['GetFollowDocumentsByDid.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetFollowDocumentsByDidQuery.getKey = (variables: Types.GetFollowDocumentsByDidQueryVariables) => ['GetFollowDocumentsByDid.infinite', variables];
+;
+
+useGetFollowDocumentsByDidQuery.fetcher = (variables: Types.GetFollowDocumentsByDidQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, variables, options);
 export const CreateAppReleaseDocument = /*#__PURE__*/ `
     mutation CreateAppRelease($i: CreateAkashaAppReleaseInput!) {
   createAkashaAppRelease(input: $i) {
