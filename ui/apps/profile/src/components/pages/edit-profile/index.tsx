@@ -12,12 +12,7 @@ import {
   useGetProfileByDidSuspenseQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import {
-  getProfileImageUrl,
-  hasOwn,
-  useLoggedIn,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
+import { getProfileImageUrl, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useParams } from 'react-router';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -25,11 +20,12 @@ import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-
 import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/components/EditProfile/types';
 
 type EditProfilePageProps = {
+  isLoggedIn: boolean;
   handleProfileUpdatedFeedback: () => void;
 };
 
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
-  const { handleProfileUpdatedFeedback } = props;
+  const { isLoggedIn, handleProfileUpdatedFeedback } = props;
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
@@ -44,7 +40,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
-  const { isLoggedIn, isLoading } = useLoggedIn();
   const { data, error } = useGetProfileByDidSuspenseQuery({
     variables: { id: profileId },
     skip: !!profileId,
@@ -75,7 +70,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   });
   const isProcessing = createProfileProcessing || updateProfileProcessing;
 
-  if (!isLoading && !isLoggedIn) {
+  if (!isLoggedIn) {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,

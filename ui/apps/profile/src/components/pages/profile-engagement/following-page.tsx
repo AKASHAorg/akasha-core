@@ -18,20 +18,20 @@ import {
   hasOwn,
   getFollowList,
   useRootComponentProps,
-  useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
 export type FollowingPageProps = {
+  isLoggedIn: boolean;
+  authenticatedDID: string;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 const FollowingPage: React.FC<FollowingPageProps> = props => {
-  const { showLoginModal } = props;
+  const { isLoggedIn, authenticatedDID, showLoginModal } = props;
   const [loadMore, setLoadingMore] = useState(false);
   const { profileId } = useParams<{ profileId: string }>();
 
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { isLoggedIn, isLoading, authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -107,7 +107,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     },
   );
 
-  if (!isLoggedIn && !isLoading) {
+  if (!isLoggedIn) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
