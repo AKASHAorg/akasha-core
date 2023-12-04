@@ -14,24 +14,24 @@ import {
   useInfiniteGetFollowingListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
-  getProfileImageVersionsWithMediaUrl,
+  getProfileImageUrl,
   hasOwn,
   getFollowList,
   useRootComponentProps,
-  useLoggedIn,
 } from '@akashaorg/ui-awf-hooks';
 export type FollowingPageProps = {
+  isLoggedIn: boolean;
+  authenticatedDID: string;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 const FollowingPage: React.FC<FollowingPageProps> = props => {
-  const { showLoginModal } = props;
+  const { isLoggedIn, authenticatedDID, showLoginModal } = props;
   const [loadMore, setLoadingMore] = useState(false);
   const { profileId } = useParams<{ profileId: string }>();
 
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     {
       id: profileId,
@@ -167,7 +167,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
             )
           }
           onProfileClick={onProfileClick}
-          getMediaUrl={getProfileImageVersionsWithMediaUrl}
+          getMediaUrl={getProfileImageUrl}
         />
       )}
     </EngagementTab>

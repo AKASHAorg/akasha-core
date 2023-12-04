@@ -38,7 +38,6 @@ export function useConnectWallet() {
  */
 export function useGetLogin(onError?: (error: Error) => void) {
   const [loginData, setLoginData] = useState<CurrentUser>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   // check previous session
   useEffect(() => {
@@ -49,8 +48,6 @@ export function useGetLogin(onError?: (error: Error) => void) {
         setLoginData(data);
       } catch (err) {
         logError('getCurrentUser', err);
-      } finally {
-        setIsLoading(false);
       }
     };
     getCurrentUser();
@@ -71,7 +68,7 @@ export function useGetLogin(onError?: (error: Error) => void) {
     },
   });
 
-  return { data: loginData, isLoading };
+  return { data: loginData };
 }
 
 /**

@@ -26,6 +26,7 @@ import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { AkashaProfile, EntityTypes, NavigateToParams } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
+import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type EntryCardProps = {
   entryData: Omit<AkashaBeam, 'reflectionsCount' | 'reflections'> | AkashaReflect;
@@ -67,6 +68,7 @@ export type EntryCardProps = {
   onEntryRemove?: (itemId: string) => void;
   onEntryFlag?: () => void;
   onEdit?: () => void;
+  getMediaUrl?: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
 } & (
   | {
       sortedContents: AkashaBeam['content'];
@@ -107,6 +109,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     lastEntry,
     hover,
     actionsRightExt,
+    getMediaUrl,
     onAvatarClick,
     onContentClick,
     onEntryFlag,
@@ -156,6 +159,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
 
   const publishTime = entryData?.createdAt ? formatRelativeTime(entryData.createdAt, locale) : '';
 
+  const avatar = authorProfile.status === 'error' ? null : authorProfile.data?.avatar;
+
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4" customStyle={hoverStyle}>
       <Stack direction="row" justify="between">
@@ -169,7 +174,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               label={
                 authorProfile.status === 'error' ? entryData.author.id : authorProfile.data?.name
               }
-              avatarImage={authorProfile.status === 'error' ? null : authorProfile.data?.avatar}
+              avatarImage={getMediaUrl ? getMediaUrl(avatar) : avatar}
               href={`${profileAnchorLink}/${entryData.author.id}`}
               metadata={
                 publishTime &&

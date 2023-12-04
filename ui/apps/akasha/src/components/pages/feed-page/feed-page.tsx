@@ -7,7 +7,12 @@ import {
   ModalNavigationOptions,
   Profile,
 } from '@akashaorg/typings/lib/ui';
-import { useMutationsListener, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  useMutationsListener,
+  useAnalytics,
+  useRootComponentProps,
+  getProfileImageUrl,
+} from '@akashaorg/ui-awf-hooks';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -95,7 +100,7 @@ const FeedPage: React.FC<FeedPageProps> = props => {
         <Stack customStyle="mb-4">
           <EditorPlaceholder
             profileId={loggedProfileData.did.id}
-            avatar={loggedProfileData.avatar}
+            avatar={getProfileImageUrl(loggedProfileData.avatar)}
             actionLabel={t(`Start Beaming`)}
             placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
             onClick={handleEditorPlaceholderClick}

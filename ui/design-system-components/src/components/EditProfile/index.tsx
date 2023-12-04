@@ -15,7 +15,7 @@ type SocialLinkForm = Pick<
   'socialLinks' | 'linkLabel' | 'addNewLinkButtonLabel' | 'description'
 >;
 
-type GeneralForm = Pick<GeneralProps, 'header' | 'name' | 'userName' | 'bio' | 'ens' | 'ensButton'>;
+type GeneralForm = Pick<GeneralProps, 'header' | 'name' | 'userName' | 'bio'>;
 
 //@TODO: Replace react-hook-form with better architected react form library.
 export type EditProfileProps = {
