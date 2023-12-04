@@ -1,8 +1,7 @@
 import React from 'react';
 import FollowProfileButton from '../follow-profile-button';
-import getSDK from '@akashaorg/awf-sdk';
-import { useGetFollowDocumentsSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { useGetFollowDocumentsByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 type FollowButtonProps = {
@@ -12,19 +11,22 @@ type FollowButtonProps = {
 
 const FollowButton: React.FC<FollowButtonProps> = props => {
   const { profileID, showLoginModal } = props;
-  const { isLoggedIn } = useLoggedIn();
-  const sdk = getSDK();
-  const { data, error } = useGetFollowDocumentsSuspenseQuery({
-    context: { source: sdk.services.gql.contextSources.composeDB },
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
+  const { data, error } = useGetFollowDocumentsByDidSuspenseQuery({
     variables: {
+      id: authenticatedDID,
       following: [profileID],
       last: 1,
     },
+    skip: !isLoggedIn,
   });
 
   if (error) return null;
 
-  const followDocument = data.viewer?.akashaFollowList?.edges[0];
+  const followDocument =
+    data?.node && hasOwn(data.node, 'akashaFollowList')
+      ? data?.node.akashaFollowList?.edges[0]
+      : null;
 
   return (
     <FollowProfileButton
