@@ -10,16 +10,17 @@ import {
 import {
   useMutationsListener,
   useAnalytics,
-  useEntryNavigation,
   useRootComponentProps,
   getProfileImageUrl,
 } from '@akashaorg/ui-awf-hooks';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import EntryPublishErrorCard from '@akashaorg/design-system-components/lib/components/Entry/EntryPublishErrorCard';
+import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
+import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 export type FeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -115,18 +116,36 @@ const FeedPage: React.FC<FeedPageProps> = props => {
             />
           ),
       )}
-      <FeedWidget
-        queryKey="akashaorg-antenna-page-query"
-        itemType={EntityTypes.BEAM}
-        loggedProfileData={loggedProfileData}
-        onLoginModalOpen={showLoginModal}
-        contentClickable={true}
-        onEntryFlag={handleEntryFlag}
-        onEntryRemove={handleEntryRemove}
+      <BeamFeed
+        queryKey={'app-akasha-integration_general-antenna'}
+        estimatedHeight={150}
         itemSpacing={8}
+        scrollerOptions={{ overscan: 10 }}
+        scrollTopIndicator={(listRect, onScrollToTop) => (
+          <ScrollTopWrapper placement={listRect.left}>
+            <ScrollTopButton hide={false} onClick={onScrollToTop} />
+          </ScrollTopWrapper>
+        )}
+        renderItem={itemData => (
+          <BeamCard
+            entryData={itemData.node}
+            contentClickable={true}
+            onContentClick={() =>
+              navigateTo.current({
+                appName: '@akashaorg/app-akasha-integration',
+                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+              })
+            }
+            onReflect={() =>
+              navigateTo.current({
+                appName: '@akashaorg/app-akasha-integration',
+                getNavigationUrl: navRoutes =>
+                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
+              })
+            }
+          />
+        )}
         trackEvent={analyticsActions.trackEvent}
-        onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
-        newItemsPublishedLabel={t('New Beams published recently')}
       />
     </Stack>
   );

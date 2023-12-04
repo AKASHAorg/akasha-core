@@ -1,16 +1,15 @@
 import React from 'react';
-
 import { useTranslation } from 'react-i18next';
-
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import { EntityTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
-
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
-import { useEntryNavigation, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
+import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
+import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 export type TagFeedPageProps = {
   loggedProfileData?: Profile;
@@ -28,25 +27,10 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   // @TODO fix hooks
   const getTagQuery = undefined;
 
-  // const reqPosts = undefined;
-
   // const tagSubscriptionsReq = undefined;
   const tagSubscriptions = undefined;
 
   const toggleTagSubscriptionReq = undefined;
-
-  // const postPages = React.useMemo(() => {
-  //   if (reqPosts.data) {
-  //     return reqPosts.data.pages;
-  //   }
-  //   return [];
-  // }, [reqPosts.data]);
-
-  // const handleLoadMore = React.useCallback(() => {
-  //   if (!reqPosts.isLoading && reqPosts.hasNextPage) {
-  //     reqPosts.fetchNextPage();
-  //   }
-  // }, [reqPosts]);
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loggedProfileData?.did?.id) {
@@ -94,18 +78,35 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           />
         </Stack>
       )}
-      <FeedWidget
-        queryKey="akasha-tag-feed-query"
-        // @TODO add a new entry for tags
-        itemType={EntityTypes.BEAM}
-        loggedProfileData={loggedProfileData}
-        onLoginModalOpen={showLoginModal}
-        contentClickable={true}
-        onEntryRemove={handleEntryRemove}
-        onEntryFlag={handleEntryFlag}
+      <BeamFeed
+        queryKey={'app-akasha-integration_tag-antenna'}
+        estimatedHeight={150}
         itemSpacing={8}
-        onNavigate={useEntryNavigation(getRoutingPlugin().navigateTo)}
-        newItemsPublishedLabel={t('New Beams published recently')}
+        scrollerOptions={{ overscan: 10 }}
+        scrollTopIndicator={(listRect, onScrollToTop) => (
+          <ScrollTopWrapper placement={listRect.left}>
+            <ScrollTopButton hide={false} onClick={onScrollToTop} />
+          </ScrollTopWrapper>
+        )}
+        renderItem={itemData => (
+          <BeamCard
+            entryData={itemData.node}
+            contentClickable={true}
+            onContentClick={() =>
+              getRoutingPlugin().navigateTo({
+                appName: '@akashaorg/app-akasha-integration',
+                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+              })
+            }
+            onReflect={() =>
+              getRoutingPlugin().navigateTo({
+                appName: '@akashaorg/app-akasha-integration',
+                getNavigationUrl: navRoutes =>
+                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
+              })
+            }
+          />
+        )}
       />
     </Stack>
   );
