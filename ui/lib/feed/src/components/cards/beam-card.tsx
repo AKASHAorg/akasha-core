@@ -4,7 +4,7 @@ import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, sortByKey, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ContentBlockModes, EntityTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -55,6 +55,10 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     });
   };
 
+  const sortedEntryContent = React.useMemo(() => {
+    return sortByKey(entryData.content, 'order');
+  }, [entryData.content]);
+
   return (
     <EntryCard
       entryData={entryData}
@@ -62,7 +66,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       locale={locale}
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
-      sortedContents={sortBy(entryData.content, 'order')}
+      sortedContents={sortedEntryContent}
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}
       isViewer={authenticatedDID === entryData.author.id}
