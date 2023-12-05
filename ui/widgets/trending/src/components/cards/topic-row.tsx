@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import getSDK from '@akashaorg/awf-sdk';
+import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
+import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import {
-  CreateInterestsDocument,
-  GetInterestsByDidDocument,
   useCreateInterestsMutation,
   useUpdateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
@@ -14,69 +14,56 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 
 export type TopicRowProps = {
   tag: string;
   subscribedTags?: any;
-  subscriptionId: string | null;
-  isLoadingTags?: boolean;
-  isProcessingTags?: string[];
   // labels
   noTagsLabel?: string;
   tagSubtitleLabel: string;
   subscribeLabel: string;
   subscribedLabel: string;
   unsubscribeLabel: string;
+  isLoggedIn: boolean;
   // handlers
   onClickTopic: (topic: string) => void;
-  tagSubscriptionsRefetch: () => void;
+  setSubscribedInterests: React.Dispatch<React.SetStateAction<string[]>>;
+  showLoginModal: () => void;
 };
 
 export const TopicRow: React.FC<TopicRowProps> = props => {
   const {
     tagSubtitleLabel,
     tag,
-    subscriptionId,
-    isLoadingTags,
-    isProcessingTags,
-    noTagsLabel,
     subscribeLabel,
     subscribedLabel,
     unsubscribeLabel,
     subscribedTags,
+    isLoggedIn,
     onClickTopic,
-    tagSubscriptionsRefetch,
+    setSubscribedInterests,
+    showLoginModal,
   } = props;
 
   const sdk = getSDK();
-  console.log('subscribedTags', subscribedTags);
+  const [analyticsActions] = useAnalytics();
 
   const [createInterestsMutation, { data, loading, error }] = useCreateInterestsMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    // refetchQueries: [{ query: GetInterestsByDidDocument }],
-    // awaitRefetchQueries: true,
-  });
-
-  const [
-    updateInterestsMutation,
-    { data: updateData, loading: updateLoading, error: updateError },
-  ] = useUpdateInterestsMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
-    // refetchQueries: [{ query: GetInterestsByDidDocument }],
-    // awaitRefetchQueries: true,
   });
 
   const handleTopicSubscribe = () => {
-    // if (!isLoggedIn) {
-    //   showLoginModal();
-    //   return;
-    // }
-    // analyticsActions.trackEvent({
-    //   category: AnalyticsCategories.TRENDING_WIDGET,
-    //   action: 'Trending Topic Subscribed',
-    // });
+    if (!isLoggedIn) {
+      showLoginModal();
+      return;
+    }
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending Topic Subscribed',
+    });
+
+    setSubscribedInterests(prev => [...prev, tag]);
 
     createInterestsMutation({
       variables: {
@@ -89,27 +76,27 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
           },
         },
       },
-      onCompleted(data, clientOptions) {
-        console.log(' handleTopicSubscribe mutation data', data);
-        tagSubscriptionsRefetch();
+      onError: () => {
+        setSubscribedInterests(prev => prev.filter(topic => topic !== tag));
       },
     });
   };
 
   const handleTopicUnsubscribe = () => {
-    // if (!isLoggedIn) {
-    //   showLoginModal();
-    //   return;
-    // }
-    // analyticsActions.trackEvent({
-    //   category: AnalyticsCategories.TRENDING_WIDGET,
-    //   action: 'Trending Topic Subscribed',
-    // });
+    if (!isLoggedIn) {
+      showLoginModal();
+      return;
+    }
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending Topic Unsubscribed',
+    });
 
-    updateInterestsMutation({
+    setSubscribedInterests(prev => prev.filter(topic => topic !== tag));
+
+    createInterestsMutation({
       variables: {
         i: {
-          id: subscriptionId,
           content: {
             topics: subscribedTags
               .filter(topic => topic !== tag)
@@ -117,9 +104,8 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
           },
         },
       },
-      onCompleted(data, clientOptions) {
-        console.log('handleTopicUnsubscribe mutation data', data);
-        tagSubscriptionsRefetch();
+      onError: () => {
+        setSubscribedInterests(prev => [...prev, tag]);
       },
     });
   };
@@ -149,7 +135,7 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
         activeIcon={<CheckIcon />}
         activeHoverIcon={<XMarkIcon />}
         inactiveVariant="secondary"
-        loading={loading || updateLoading}
+        loading={loading}
         hoverColors={{
           background: { light: 'transparent', dark: 'transparent' },
           border: { light: 'errorLight', dark: 'errorDark' },
