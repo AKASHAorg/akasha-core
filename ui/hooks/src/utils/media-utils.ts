@@ -120,19 +120,19 @@ export const saveMediaFile = async ({ name, content, isUrl }: ISaveMediaFile) =>
 };
 
 /**
- * Utility to get profile image versions with media url
+ * Utility to transform image versions
  */
-export const getProfileImageVersionsWithMediaUrl = (
+export const transformImageVersions = (
   image?: AkashaProfileImageVersions,
 ): AkashaProfileImageVersions => {
   if (!image) return null;
 
-  const mediaUrl = getMediaUrl(image.default.src);
+  const defaultUrl = getMediaUrl(image.default.src);
 
   return {
     default: {
       ...image.default,
-      src: mediaUrl.originLink || mediaUrl.fallbackLink,
+      src: defaultUrl.originLink || defaultUrl.fallbackLink,
     },
     alternatives: image.alternatives,
   };

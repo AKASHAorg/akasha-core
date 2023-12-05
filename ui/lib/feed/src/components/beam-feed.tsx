@@ -1,157 +1,129 @@
-import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import BeamCard from './cards/beam-card';
-import EntryList, {
-  EntryListProps,
-} from '@akashaorg/design-system-components/lib/components/EntryList';
+import * as React from 'react';
+import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
+import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
-  AnalyticsEventData,
-  EntityTypes,
-  IContentClickDetails,
-  ModalNavigationOptions,
-  Profile,
-} from '@akashaorg/typings/lib/ui';
-import { i18n } from 'i18next';
-import { AkashaBeamEdge } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { useInfiniteBeams } from '../utils/use-infinite-beams';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
-import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
-import type { FeedWidgetCommonProps } from './app';
-import AntennaLoader from '@akashaorg/design-system-components/lib/components/Loaders/antenna-loader';
+  AkashaBeamEdge,
+  AkashaBeamFiltersInput,
+  AkashaBeamSortingInput,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
+import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
-export type BeamFeedProps = Omit<
-  EntryListProps<AkashaBeamEdge>,
-  | 'itemCard'
-  | 'isFetchingNextPage'
-  | 'requestStatus'
-  | 'getItemKey'
-  | 'pages'
-  | 'isFetchingPreviousPage'
-  | 'onScrollStateChange'
-  | 'onFetchPreviousPage'
-  | 'onFetchNextPage'
-  | 'onScrollStateSave'
-> & {
-  contentClickable?: boolean;
+export type BeamFeedProps = {
+  locale?: ILocale;
   className?: string;
-  modalSlotId: string;
-  accentBorderTop?: boolean;
-  totalEntryCount?: number;
-  loggedProfileData?: Profile;
-  i18n: i18n;
-  db: ScrollStateDBWrapper;
-  scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
-  queryKey: string;
-  newItemsPublishedLabel: string;
-  onEntryFlag?: (
-    entryId: string,
-    itemType: EntityTypes,
-    reporterEthAddress?: string | null,
-  ) => () => void;
-  onEntryRemove?: (entryId: string) => void;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
-  onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
+  scrollerOptions?: { overscan: number };
+  queryKey: string;
+  newItemsPublishedLabel?: string;
+  filters?: AkashaBeamFiltersInput;
+  sorting?: AkashaBeamSortingInput;
+  scrollTopIndicator: VirtualizerProps<unknown>['scrollTopIndicator'];
+  renderItem: VirtualizerProps<AkashaBeamEdge>['renderItem'];
+  estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
+  itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
+  header?: VirtualizerProps<unknown>['header'];
 };
 
-const BeamFeed: React.FC<BeamFeedProps> = props => {
+const BeamFeed = (props: BeamFeedProps) => {
   const {
-    i18n,
-    itemSpacing = 8,
-    onNavigate,
-    db,
     scrollerOptions = { overscan: 5 },
+    filters,
+    sorting,
+    scrollTopIndicator,
+    renderItem,
     queryKey,
     newItemsPublishedLabel,
+    estimatedHeight = 150,
+    itemSpacing,
   } = props;
 
-  const beamsReq = useInfiniteBeams({
-    db,
-    scrollerOptions,
-    queryKey,
-  });
+  const { beams, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset, hasErrors, errors } =
+    useBeams({
+      overscan: scrollerOptions.overscan,
+      sorting,
+      filters,
+    });
+
+  const lastCursors = React.useRef({ next: null, prev: null });
+  const isLoading = React.useRef(false);
+  const prevBeams = React.useRef([]);
+
+  React.useEffect(() => {
+    if (beams !== prevBeams.current) {
+      isLoading.current = false;
+    }
+    prevBeams.current = beams;
+  }, [beams]);
+
+  const handleInitialFetch = async (cursors?: string[]) => {
+    if (cursors.length) {
+      lastCursors.current.prev = cursors[cursors.length - 1];
+    }
+    isLoading.current = true;
+    await fetchInitialData(cursors);
+  };
+
+  const handleFetch = async (newArea: EdgeArea) => {
+    switch (newArea) {
+      case EdgeArea.TOP:
+      case EdgeArea.NEAR_TOP:
+        if (!beams.length) return;
+        const firstCursor = beams[0].cursor;
+        if (lastCursors.current.prev !== firstCursor && !isLoading.current) {
+          isLoading.current = true;
+          await fetchPreviousPage(firstCursor);
+          lastCursors.current.prev = firstCursor;
+        }
+        break;
+      case EdgeArea.BOTTOM:
+      case EdgeArea.NEAR_BOTTOM:
+        if (!beams.length) return;
+        const lastCursor = beams[beams.length - 1].cursor;
+        if (lastCursors.current.next !== lastCursor && !isLoading.current) {
+          isLoading.current = true;
+          await fetchNextPage(lastCursor);
+          lastCursors.current.next = lastCursor;
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleReset = async () => {
+    prevBeams.current = [];
+    isLoading.current = true;
+    lastCursors.current = { next: null, prev: null };
+    await onReset();
+  };
 
   return (
     <>
-      {!beamsReq.initialScrollState.isFetched && (
-        <Stack fullWidth={true}>
-          <AntennaLoader />
-        </Stack>
+      {hasErrors && (
+        <ErrorLoader
+          type="script-error"
+          title={'Sorry, there was an error when fetching beams'}
+          details={<>{errors}</>}
+        />
       )}
-
-      <EntryList<AkashaBeamEdge>
-        requestStatus={beamsReq.status}
-        isFetchingNextPage={beamsReq.isFetchingNextPage}
-        pages={beamsReq.pages}
-        itemSpacing={itemSpacing}
-        languageDirection={i18n?.dir() || 'ltr'}
-        onScrollStateSave={beamsReq.onScrollStateSave}
-        initialScrollState={beamsReq.initialScrollState}
-        onScrollStateReset={beamsReq.onScrollStateReset}
-        getItemKey={(idx, items) => {
-          if (!items || !items.length) return null;
-          return hasOwn(items[idx], 'key') ? items[idx]['key'] : items[idx]['cursor'];
-        }}
-        scrollerOptions={scrollerOptions}
-        onFetchNextPage={beamsReq.tryFetchNextPage}
-        onFetchPreviousPage={beamsReq.tryFetchPreviousPage}
-        newItemsCount={beamsReq.newItemsCount}
-        isFetchingPreviousPage={beamsReq.isFetchingPreviousPage}
-        newItemsPublishedLabel={newItemsPublishedLabel}
-      >
-        {cardProps => {
-          const { items, allEntries, measureElementRef } = cardProps;
-          return items.map(item => {
-            if (!item) {
-              return <div key={item.key} />;
-            }
-            const { index, key } = item;
-            const entryData = allEntries[index];
-            const isNextLoader = index > allEntries.length - 1;
-            if (isNextLoader) {
-              return (
-                <Stack fullWidth={true} key={'$next-loader'} customStyle="p-8">
-                  <Spinner />
-                </Stack>
-              );
-            }
-            return (
-              <div
-                key={key}
-                data-index={index}
-                ref={measureElementRef}
-                data-cursor={entryData?.cursor || entryData?.['key'] || ''}
-              >
-                {!entryData.node && <EntryCardLoading />}
-                {entryData.node && (
-                  <BeamCard
-                    entryData={entryData.node}
-                    contentClickable={true}
-                    onReflect={() => {
-                      onNavigate(
-                        {
-                          authorId: entryData.node?.author.id,
-                          id: entryData.node?.id,
-                          reflect: true,
-                        },
-                        EntityTypes.BEAM,
-                      );
-                    }}
-                    onContentClick={() =>
-                      onNavigate(
-                        { authorId: entryData.node?.author.id, id: entryData.node?.id },
-                        EntityTypes.BEAM,
-                      )
-                    }
-                  />
-                )}
-              </div>
-            );
-          });
-        }}
-      </EntryList>
+      {!hasErrors && (
+        <Virtualizer<AkashaBeamEdge>
+          restorationKey={queryKey}
+          itemSpacing={itemSpacing}
+          estimatedHeight={estimatedHeight}
+          overscan={scrollerOptions.overscan}
+          items={beams}
+          onFetchInitialData={handleInitialFetch}
+          itemKeyExtractor={item => item.cursor}
+          itemIndexExtractor={itemKey => beams.findIndex(p => p.cursor === itemKey)}
+          onListReset={handleReset}
+          onEdgeDetectorChange={handleFetch}
+          scrollTopIndicator={scrollTopIndicator}
+          renderItem={renderItem}
+        />
+      )}
     </>
   );
 };

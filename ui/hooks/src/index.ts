@@ -27,7 +27,6 @@ export { usePlaformHealthCheck } from './use-health-check';
 export { useDismissedCard } from './use-dismissed-card';
 export { useValidDid } from './use-valid-did';
 export { useLoggedIn } from './use-logged-in';
-export { disconnectProvider, useInjectedProvider } from './use-injected-provider';
 export { useModerationCategory } from './use-moderation-categories';
 export { useAccordion } from './use-accordion';
 

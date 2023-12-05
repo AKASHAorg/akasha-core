@@ -5,37 +5,30 @@ import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import EditProfile from '@akashaorg/design-system-components/lib/components/EditProfile';
+import getSDK from '@akashaorg/awf-sdk';
 import { useTranslation } from 'react-i18next';
-
 import {
   useCreateProfileMutation,
-  useGetProfileByDidQuery,
+  useGetProfileByDidSuspenseQuery,
   useUpdateProfileMutation,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
-import {
-  getProfileImageVersionsWithMediaUrl,
-  hasOwn,
-  useLoggedIn,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
-import { useQueryClient } from '@tanstack/react-query';
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { transformImageVersions, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useParams } from 'react-router';
-import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-content';
 import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/components/EditProfile/types';
 
 type EditProfilePageProps = {
+  isLoggedIn: boolean;
   handleProfileUpdatedFeedback: () => void;
 };
 
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
-  const { handleProfileUpdatedFeedback } = props;
+  const { isLoggedIn, handleProfileUpdatedFeedback } = props;
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialAkashaProfileInput | null>(null);
@@ -45,64 +38,39 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
-  const queryClient = useQueryClient();
 
-  const onMutate = () => {
-    setIsProcessing(true);
-  };
+  const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
+  const { data, error } = useGetProfileByDidSuspenseQuery({
+    variables: { id: profileId },
+    skip: !!profileId,
+  });
 
-  const onSettled = () => {
-    setIsProcessing(false);
+  const onCompleted = () => {
+    handleProfileUpdatedFeedback();
     navigateToProfileInfoPage();
   };
 
-  const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
-  const { isLoggedIn, isLoading } = useLoggedIn();
-  const profileDataReq = useGetProfileByDidQuery(
-    {
-      id: profileId,
-    },
-    {
-      select: response => response.node,
-      enabled: !!profileId,
-    },
-  );
+  const sdk = getSDK();
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
-      ? profileDataReq.data
-      : { akashaProfile: null };
+    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
   const background = useMemo(
-    () => getProfileImageVersionsWithMediaUrl(profileData?.background),
+    () => transformImageVersions(profileData?.background),
     [profileData?.background],
   );
-  const avatar = useMemo(
-    () => getProfileImageVersionsWithMediaUrl(profileData?.avatar),
-    [profileData?.avatar],
-  );
-  const createProfileMutation = useCreateProfileMutation({
-    onMutate,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
-      });
-      handleProfileUpdatedFeedback();
-    },
-    onSettled,
+  const avatar = useMemo(() => transformImageVersions(profileData?.avatar), [profileData?.avatar]);
+  const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+    onCompleted,
   });
-  const updateProfileMutation = useUpdateProfileMutation({
-    onMutate,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: useGetProfileByDidQuery.getKey({ id: profileId }),
-      });
-      handleProfileUpdatedFeedback();
-    },
-    onSettled,
+  const [updateProfileMutation, { loading: updateProfileProcessing }] = useUpdateProfileMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+    onCompleted,
   });
+  const isProcessing = createProfileProcessing || updateProfileProcessing;
 
-  if (!isLoading && !isLoggedIn) {
+  if (!isLoggedIn) {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
@@ -110,11 +78,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     return null;
   }
 
-  const status = profileDataReq.status;
-
-  if (status === 'loading') return <ProfileLoading />;
-
-  if (status === 'error')
+  if (error)
     return (
       <ErrorLoader
         type="script-error"
@@ -134,14 +98,16 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     formValues: EditProfileFormValues,
     profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
   ) => {
-    createProfileMutation.mutate({
-      i: {
-        content: {
-          name: formValues.name,
-          description: formValues.bio,
-          links: formValues.links.map(link => ({ href: link })),
-          createdAt: new Date().toISOString(),
-          ...profileImages,
+    createProfileMutation({
+      variables: {
+        i: {
+          content: {
+            name: formValues.name,
+            description: formValues.bio,
+            links: formValues.links.map(link => ({ href: link })),
+            createdAt: new Date().toISOString(),
+            ...profileImages,
+          },
         },
       },
     });
@@ -151,14 +117,16 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
     formValues: EditProfileFormValues,
     profileImages: Pick<PartialAkashaProfileInput, 'avatar' | 'background'>,
   ) => {
-    updateProfileMutation.mutate({
-      i: {
-        id: profileData.id,
-        content: {
-          name: formValues.name,
-          description: formValues.bio,
-          links: formValues.links.map(link => ({ href: link })),
-          ...profileImages,
+    updateProfileMutation({
+      variables: {
+        i: {
+          id: profileData.id,
+          content: {
+            name: formValues.name,
+            description: formValues.bio,
+            links: formValues.links.map(link => ({ href: link })),
+            ...profileImages,
+          },
         },
       },
     });
@@ -221,23 +189,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               ),
           }}
           name={{ label: t('Name'), initialValue: profileData?.name }}
-          // userName={{ label: t('Username'), initialValue: profileData.userName }}
           bio={{ label: t('Bio'), initialValue: profileData?.description }}
-          // ens={{
-          //   label: t('ENS Name'),
-          //   initialValue:
-          //     ENSReq.isFetching && !ENSReq.isFetched
-          //       ? 'loading'
-          //       : ENSReq.isFetched && ENSReq.data
-          //       ? ENSReq.data
-          //       : '',
-          // }}
-          ensButton={{
-            label: t('Fill info from ENS data'),
-            handleClick: () => {
-              //@TODO
-            },
-          }}
           linkLabel={t('External URLs')}
           addNewLinkButtonLabel={t('Add new')}
           description={t(
@@ -261,11 +213,13 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               }
 
               if (profileContentOnImageDelete) {
-                updateProfileMutation.mutate({
-                  i: {
-                    id: profileData.id,
-                    content: profileContentOnImageDelete,
-                    options: { replace: true },
+                updateProfileMutation({
+                  variables: {
+                    i: {
+                      id: profileData.id,
+                      content: profileContentOnImageDelete,
+                      options: { replace: true },
+                    },
                   },
                 });
                 setProfileContentOnImageDelete(null);

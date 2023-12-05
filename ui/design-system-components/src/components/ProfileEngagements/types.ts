@@ -10,7 +10,7 @@ export type EngagementProps = {
   loadMore: boolean;
   followList: FollowList;
   onLoadMore: () => void;
-  getMediaUrl: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
+  transformImageVersions: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
   renderFollowElement: (
     profileId: string,
     followId: string,

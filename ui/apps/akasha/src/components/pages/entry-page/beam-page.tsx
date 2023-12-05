@@ -2,7 +2,6 @@ import React from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/app';
 import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
 import { useParams } from 'react-router-dom';
@@ -16,13 +15,15 @@ import {
 import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
+import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 
 const BeamPage: React.FC<unknown> = () => {
   const { beamId } = useParams<{
     beamId: string;
   }>();
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal, layoutConfig, getTranslationPlugin } =
+    useRootComponentProps();
   const beamReq = useGetBeamByIdQuery({ id: beamId }, { select: response => response.node });
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
@@ -62,12 +63,10 @@ const BeamPage: React.FC<unknown> = () => {
         onNavigate={onNavigate}
         showLoginModal={showLoginModal}
       />
-      <PendingReflect beamId={beamId} authorId={entryData.author?.id} />
+      <PendingReflect beamId={beamId} authorId={loggedProfileData?.did.id} />
       <Stack spacing="gap-y-2">
-        <FeedWidget
-          queryKey="akasha-beam-page-query"
-          itemType={EntityTypes.REFLECT}
-          reflectionsOf={{ beamId, itemType: EntityTypes.BEAM }}
+        <ReflectFeed
+          reflectionsOf={{ entryId: beamId, itemType: EntityTypes.BEAM }}
           loggedProfileData={loggedProfileData}
           onEntryFlag={() => {
             return () => {
@@ -82,6 +81,8 @@ const BeamPage: React.FC<unknown> = () => {
           onLoginModalOpen={showLoginModal}
           trackEvent={analyticsActions.trackEvent}
           onNavigate={onNavigate}
+          modalSlotId={layoutConfig.modalSlotId}
+          i18n={getTranslationPlugin().i18n}
         />
       </Stack>
     </Card>

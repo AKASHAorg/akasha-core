@@ -24,7 +24,7 @@ const Following: React.FC<FollowingProps> = ({
   viewerIsOwner,
   loadMore,
   onLoadMore,
-  getMediaUrl,
+  transformImageVersions,
   renderFollowElement,
   onProfileClick,
 }) => {
@@ -71,7 +71,7 @@ const Following: React.FC<FollowingProps> = ({
             name={engagement?.profile?.name}
             followId={followList.get(engagement?.profile?.id)?.id}
             isFollowing={followList.get(engagement?.profile?.id)?.isFollowing}
-            getMediaUrl={getMediaUrl}
+            transformImageVersions={transformImageVersions}
             renderFollowElement={
               authenticatedDID !== engagement?.profile?.did.id ? renderFollowElement : null
             }

@@ -14,7 +14,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-settings-ewa'],
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  logo: { type: LogoTypeSource.ICON, value: 'Cog8ToothIcon' },
+  logo: { type: LogoTypeSource.ICON, value: <Cog8ToothIcon /> },
   menuItems: {
     label: 'Settings',
     type: MenuItemType.App,

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
-
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppRoutes from './app-routes';

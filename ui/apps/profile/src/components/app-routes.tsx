@@ -1,24 +1,23 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useShowFeedback, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
-import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import React, { Suspense } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
-import withProfileHeader from './profile-header-hoc';
 import InterestsPage from './pages/interests';
 import EditProfilePage from './pages/edit-profile';
 import FollowingPage from './pages/profile-engagement/following-page';
 import FollowersPage from './pages/profile-engagement/followers-page';
 import ProfileInfoPage from './pages/profile-info';
-
+import ProfileWithHeader from './profile-with-header';
 import menuRoute, { EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
+import { useTranslation } from 'react-i18next';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { useShowFeedback, useRootComponentProps, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const [showUpdatedFeedback, setShowUpdatedFeedback] = useShowFeedback(false);
   const [showLinkCopiedFeedback, setLinkCopiedFeedback] = useShowFeedback(false);
@@ -46,41 +45,53 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route path="/">
             <Route
               path={':profileId'}
-              element={withProfileHeader(<ProfileInfoPage showLoginModal={showLoginModal} />)(
-                commonHeaderViewProps,
-              )}
+              element={
+                <ProfileWithHeader {...commonHeaderViewProps}>
+                  <ProfileInfoPage showLoginModal={showLoginModal} />
+                </ProfileWithHeader>
+              }
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWERS]}`}
-              element={withProfileHeader(<FollowersPage showLoginModal={showLoginModal} />)(
-                commonHeaderViewProps,
-              )}
+              element={
+                <ProfileWithHeader {...commonHeaderViewProps}>
+                  <FollowersPage
+                    isLoggedIn={isLoggedIn}
+                    authenticatedDID={authenticatedDID}
+                    showLoginModal={showLoginModal}
+                  />
+                </ProfileWithHeader>
+              }
             />
             <Route
               path={`:profileId${menuRoute[FOLLOWING]}`}
-              element={withProfileHeader(<FollowingPage showLoginModal={showLoginModal} />)(
-                commonHeaderViewProps,
-              )}
+              element={
+                <ProfileWithHeader {...commonHeaderViewProps}>
+                  <FollowingPage
+                    isLoggedIn={isLoggedIn}
+                    authenticatedDID={authenticatedDID}
+                    showLoginModal={showLoginModal}
+                  />
+                </ProfileWithHeader>
+              }
             />
             <Route
               path={`:profileId${menuRoute[INTERESTS]}`}
-              element={withProfileHeader(<InterestsPage />)(commonHeaderViewProps)}
+              element={
+                <ProfileWithHeader {...commonHeaderViewProps}>
+                  <InterestsPage isLoggedIn={isLoggedIn} authenticatedDID={authenticatedDID} />
+                </ProfileWithHeader>
+              }
             />
-            <Route
-              path={`:profileId${menuRoute[FOLLOWERS]}`}
-              element={<FollowersPage showLoginModal={showLoginModal} />}
-            />
-            <Route
-              path={`:profileId${menuRoute[FOLLOWING]}`}
-              element={<FollowingPage showLoginModal={showLoginModal} />}
-            />
-            <Route path={`:profileId${menuRoute[INTERESTS]}`} element={<InterestsPage />} />
             <Route
               path={`:profileId${menuRoute[EDIT]}`}
               element={
-                <EditProfilePage
-                  handleProfileUpdatedFeedback={() => setShowUpdatedFeedback(true)}
-                />
+                <Suspense fallback={<ProfileLoading />}>
+                  <EditProfilePage
+                    isLoggedIn={isLoggedIn}
+                    handleProfileUpdatedFeedback={() => setShowUpdatedFeedback(true)}
+                  />
+                </Suspense>
               }
             />
           </Route>

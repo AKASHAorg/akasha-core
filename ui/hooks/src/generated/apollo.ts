@@ -1750,6 +1750,80 @@ export type GetFollowDocumentsQueryHookResult = ReturnType<typeof useGetFollowDo
 export type GetFollowDocumentsLazyQueryHookResult = ReturnType<typeof useGetFollowDocumentsLazyQuery>;
 export type GetFollowDocumentsSuspenseQueryHookResult = ReturnType<typeof useGetFollowDocumentsSuspenseQuery>;
 export type GetFollowDocumentsQueryResult = Apollo.QueryResult<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>;
+export const GetFollowDocumentsByDidDocument = /*#__PURE__*/ gql`
+    query GetFollowDocumentsByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
+  node(id: $id) {
+    ... on CeramicAccount {
+      akashaFollowList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: {where: {profileID: {in: $following}}}
+        sorting: $sorting
+      ) {
+        edges {
+          node {
+            id
+            isFollowing
+            profileID
+            profile {
+              ...UserProfileFragmentM
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      isViewer
+    }
+  }
+}
+    ${UserProfileFragmentMFragmentDoc}`;
+
+/**
+ * __useGetFollowDocumentsByDidQuery__
+ *
+ * To run a query within a React component, call `useGetFollowDocumentsByDidQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFollowDocumentsByDidQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFollowDocumentsByDidQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *      sorting: // value for 'sorting'
+ *      following: // value for 'following'
+ *   },
+ * });
+ */
+export function useGetFollowDocumentsByDidQuery(baseOptions: Apollo.QueryHookOptions<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, options);
+      }
+export function useGetFollowDocumentsByDidLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, options);
+        }
+export function useGetFollowDocumentsByDidSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, options);
+        }
+export type GetFollowDocumentsByDidQueryHookResult = ReturnType<typeof useGetFollowDocumentsByDidQuery>;
+export type GetFollowDocumentsByDidLazyQueryHookResult = ReturnType<typeof useGetFollowDocumentsByDidLazyQuery>;
+export type GetFollowDocumentsByDidSuspenseQueryHookResult = ReturnType<typeof useGetFollowDocumentsByDidSuspenseQuery>;
+export type GetFollowDocumentsByDidQueryResult = Apollo.QueryResult<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>;
 export const GetProfileByIdDocument = /*#__PURE__*/ gql`
     query GetProfileByID($id: ID!) {
   node(id: $id) {

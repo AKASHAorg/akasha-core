@@ -1,12 +1,12 @@
-import { getProfileImageVersionsWithMediaUrl, hasOwn } from '@akashaorg/ui-awf-hooks';
 import React, { Suspense, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { transformImageVersions, hasOwn } from '@akashaorg/ui-awf-hooks';
+import { useTranslation } from 'react-i18next';
+import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { PowerIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type SidebarHeaderProps = {
@@ -61,7 +61,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
       <Stack customStyle="w-fit h-fit mr-2">
         <Avatar
           profileId={authenticatedDID}
-          avatar={getProfileImageVersionsWithMediaUrl(avatar)}
+          avatar={transformImageVersions(avatar)}
           isClickable={isLoggedIn}
           onClick={() => handleAvatarClick(authenticatedDID)}
         />
