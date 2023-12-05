@@ -260,6 +260,10 @@ class Gql {
     return this._contextSources;
   }
 
+  get indexingDID(){
+    return process.env.INDEXING_DID;
+  }
+
   async resetCache() {
     return this._apolloCache.reset();
   }

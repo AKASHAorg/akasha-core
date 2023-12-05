@@ -2159,30 +2159,34 @@ export type GetInterestsLazyQueryHookResult = ReturnType<typeof useGetInterestsL
 export type GetInterestsSuspenseQueryHookResult = ReturnType<typeof useGetInterestsSuspenseQuery>;
 export type GetInterestsQueryResult = Apollo.QueryResult<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>;
 export const GetInterestsStreamDocument = /*#__PURE__*/ gql`
-    query GetInterestsStream($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput) {
-  akashaInterestsStreamIndex(
-    after: $after
-    before: $before
-    first: $first
-    last: $last
-    sorting: $sorting
-    filters: $filters
-  ) {
-    edges {
-      node {
-        labelType
-        value
-        active
-        createdAt
-        id
+    query GetInterestsStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaInterestsStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        sorting: $sorting
+        filters: $filters
+      ) {
+        edges {
+          node {
+            labelType
+            value
+            active
+            createdAt
+            id
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
       }
-      cursor
-    }
-    pageInfo {
-      startCursor
-      endCursor
-      hasNextPage
-      hasPreviousPage
     }
   }
 }
@@ -2200,6 +2204,7 @@ export const GetInterestsStreamDocument = /*#__PURE__*/ gql`
  * @example
  * const { data, loading, error } = useGetInterestsStreamQuery({
  *   variables: {
+ *      indexer: // value for 'indexer'
  *      after: // value for 'after'
  *      before: // value for 'before'
  *      first: // value for 'first'
@@ -2209,7 +2214,7 @@ export const GetInterestsStreamDocument = /*#__PURE__*/ gql`
  *   },
  * });
  */
-export function useGetInterestsStreamQuery(baseOptions?: Apollo.QueryHookOptions<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>) {
+export function useGetInterestsStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, options);
       }

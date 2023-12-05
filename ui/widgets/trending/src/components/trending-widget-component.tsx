@@ -22,6 +22,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 import { LatestProfiles, LatestTopics } from './cards';
+import { useGetIndexingDID } from '@akashaorg/ui-awf-hooks/lib/use-settings';
 
 const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
@@ -38,11 +39,16 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     { last: 4 },
     { select: result => result?.akashaProfileIndex?.edges.map(profile => profile.node) },
   );
+  const currentIndexingDID = useGetIndexingDID();
   const latestTopicsReq = useGetInterestsStreamQuery(
-    { last: 4 },
+    { last: 4, indexer: currentIndexingDID },
     {
-      select: result =>
-        result?.akashaInterestsStreamIndex?.edges.flatMap(interest => interest.node),
+      select: result =>{
+        if(hasOwn(result?.node, 'akashaInterestsStreamList')){
+          return result?.node?.akashaInterestsStreamList?.edges.flatMap(interest => interest.node)
+        }
+        return [];
+      }
     },
   );
   const tagSubscriptionsReq = useGetInterestsByDidQuery(
