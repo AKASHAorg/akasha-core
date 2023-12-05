@@ -22,30 +22,17 @@ import {
   useInfiniteGetReflectReflectionsQuery,
   useInfiniteGetReflectionsFromBeamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
-import type { ScrollStateDBWrapper } from '../utils/scroll-state-db';
-import type { FeedWidgetCommonProps } from './app';
 import { hasOwn } from '@akashaorg/ui-awf-hooks';
 
-export type ReflectFeedProps = Omit<
-  EntryListProps<AkashaReflect>,
-  | 'itemCard'
-  | 'isFetchingNextPage'
-  | 'requestStatus'
-  | 'pages'
-  | 'isFetchingPreviousPage'
-  | 'onFetchPreviousPage'
-  | 'onFetchNextPage'
-  | 'onScrollStateSave'
-> & {
+export type ReflectFeedProps = {
   reflectionsOf: { entryId: string; itemType: EntityTypes };
   modalSlotId: string;
   accentBorderTop?: boolean;
   totalEntryCount?: number;
   loggedProfileData?: Profile;
   i18n: i18n;
-  initialScrollState?: ScrollerState;
-  db: ScrollStateDBWrapper;
-  scrollerOptions?: FeedWidgetCommonProps['scrollerOptions'];
+  initialScrollState?: ScrollerState & { isFetched: boolean };
+  scrollerOptions?: { overscan: number };
   onEntryFlag?: (
     entryId: string,
     itemType: EntityTypes,
@@ -56,6 +43,9 @@ export type ReflectFeedProps = Omit<
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
   onScrollStateReset?: () => void;
+  itemSpacing?: number;
+  newItemsPublishedLabel?: string;
+  onScrollStateChange?: EntryListProps<unknown>['onScrollStateChange'];
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {

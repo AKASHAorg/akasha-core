@@ -54,14 +54,6 @@ export const BaseEditProfile: Story = {
       }}
       name={{ label: 'Name', initialValue: 'Mr. Snowman' }}
       userName={{ label: 'Username', initialValue: 'snowman' }}
-      ens={{
-        label: 'ENS Name',
-        initialValue: 'snowman.eth',
-      }}
-      ensButton={{
-        label: 'Fill info from ENS data',
-        handleClick: () => ({}),
-      }}
       bio={{
         label: 'Bio',
         initialValue: 'Bio',

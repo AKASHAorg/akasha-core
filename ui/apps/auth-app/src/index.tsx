@@ -13,7 +13,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     loadingFn: () => import('./components'),
     mountsIn: opts.layoutConfig?.pluginSlotId,
     i18nNamespace: ['app-auth-ewa'],
-    logo: { type: LogoTypeSource.ICON, value: 'GlobeAltIcon' },
+    logo: { type: LogoTypeSource.ICON, value: <GlobeAltIcon /> },
     // allow other apps to navigate to this app
     routes: routes,
     menuItems: {

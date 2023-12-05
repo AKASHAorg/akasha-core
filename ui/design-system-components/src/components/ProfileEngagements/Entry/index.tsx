@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -12,7 +11,7 @@ export type EntryProps = {
   name: string;
   followId: string;
   isFollowing: boolean;
-  getMediaUrl: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
+  transformImageVersions: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
   renderFollowElement: (
     profileId: string,
     followId: string,
@@ -29,7 +28,7 @@ const Entry: React.FC<EntryProps> = props => {
     name,
     followId,
     isFollowing,
-    getMediaUrl,
+    transformImageVersions,
     renderFollowElement,
     onProfileClick,
   } = props;
@@ -38,7 +37,7 @@ const Entry: React.FC<EntryProps> = props => {
     <Stack direction="row" align="center" justify="between" customStyle="pb-4" fullWidth>
       <ProfileAvatarButton
         profileId={profileIds.did}
-        avatarImage={getMediaUrl(avatar)}
+        avatarImage={transformImageVersions(avatar)}
         label={name}
         href={`${profileAnchorLink}/${profileIds.did}`}
         onClick={() => {

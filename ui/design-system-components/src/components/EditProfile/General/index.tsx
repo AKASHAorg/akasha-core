@@ -16,7 +16,7 @@ export type GeneralProps = {
   userName?: InputType;
   ens?: InputType;
   bio: InputType;
-  ensButton: ButtonType;
+  ensButton?: ButtonType;
   customStyle?: string;
   control: Control<EditProfileFormValues>;
   onAvatarChange: (avatar: File) => void;

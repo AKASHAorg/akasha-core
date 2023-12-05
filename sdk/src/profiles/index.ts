@@ -324,7 +324,7 @@ class AWF_Profile {
    * @param data - media file data
    */
   async saveMediaFile (data: {
-    content: Buffer | ArrayBuffer | string | any;
+    content: File | Buffer | ArrayBuffer | string | any;
     isUrl?: boolean;
     name?: string;
     config?: {
@@ -357,7 +357,8 @@ class AWF_Profile {
       file = new File(arr, path, { type: 'image/*' });
     } else {
       path = `${current.id}/${data.name!}`;
-      file = new File(data.content, path, { type: 'image/*' });
+      const content = data.content instanceof Blob ? [data.content]: data.content;
+      file = new File(content, path, { type: data.content?.type || 'image/*' });
     }
     //const sess = await this._auth.getSession();
     if (!data.config) {

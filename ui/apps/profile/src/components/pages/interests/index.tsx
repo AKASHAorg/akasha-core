@@ -16,14 +16,15 @@ import {
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
-import {
-  useShowFeedback,
-  hasOwn,
-  useRootComponentProps,
-  useLoggedIn,
-} from '@akashaorg/ui-awf-hooks';
+import { useShowFeedback, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
-const InterestsPage: React.FC<unknown> = () => {
+type InterestsPageProps = {
+  isLoggedIn: boolean;
+  authenticatedDID: string;
+};
+
+const InterestsPage: React.FC<InterestsPageProps> = props => {
+  const { isLoggedIn, authenticatedDID } = props;
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
 
@@ -43,7 +44,6 @@ const InterestsPage: React.FC<unknown> = () => {
   };
 
   const queryClient = useQueryClient();
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const ownInterestsQueryReq = useGetInterestsByDidQuery(
     { id: profileId },
     { select: response => response.node },

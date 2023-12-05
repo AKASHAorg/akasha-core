@@ -27,7 +27,7 @@ export const BaseEntry: Story = {
       }}
       followId="id"
       isFollowing={false}
-      getMediaUrl={() => ({
+      transformImageVersions={() => ({
         default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },
       })}
       renderFollowElement={() => <></>}
