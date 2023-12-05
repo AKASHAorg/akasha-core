@@ -31,6 +31,7 @@ import Shield from './shield';
 import Strikethrough from './strikethrough';
 import Solana from './solana';
 import Telegram from './telegram';
+import TextIcon from './text-icon';
 import TextcaseLower from './textcase-lower';
 import TextcaseSentence from './textcase-sentence';
 import TextcaseUpper from './textcase-upper';
@@ -76,6 +77,7 @@ export type CustomIconTypes = Extract<
   | 'Strikethrough'
   | 'Solana'
   | 'Telegram'
+  | 'TextIcon'
   | 'TextcaseLower'
   | 'TextcaseSentence'
   | 'TextcaseUpper'
@@ -118,6 +120,7 @@ export {
   Strikethrough,
   Solana,
   Telegram,
+  TextIcon,
   TextcaseLower,
   TextcaseSentence,
   TextcaseUpper,
