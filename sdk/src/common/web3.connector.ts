@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { ethers } from 'ethers';
+import { BrowserProvider, ethers } from 'ethers';
 import {
   EthProviders,
   EthProvidersSchema,
@@ -13,14 +13,14 @@ import pino from 'pino';
 import { createFormattedValue } from '../helpers/observable';
 import { validate } from './validator';
 import { z } from 'zod';
-import { createWeb3Modal, defaultConfig } from '@web3modal/ethers5';
-import type { Web3Modal } from '@web3modal/ethers5/dist/types/src/client';
+import { createWeb3Modal, defaultConfig } from '@web3modal/ethers';
+import type { Web3Modal } from '@web3modal/ethers/dist/types/src/client';
 
 @injectable()
 class Web3Connector {
   #logFactory: Logging;
   #log: pino.Logger;
-  #web3Instance: ethers.providers.Web3Provider | undefined | null;
+  #web3Instance: ethers.BrowserProvider | undefined | null;
   #globalChannel: EventBus;
   #wallet: ethers.Wallet | null;
   #w3modal: Web3Modal;
@@ -188,14 +188,18 @@ getCurrentTheme () {
   #_registerWalletChangeEvents () {
     this.#w3modal.subscribeProvider(event => {
       if (event.isConnected) {
-        this.#web3Instance = this.#w3modal.getWalletProvider();
+        const provider = this.#w3modal.getWalletProvider();
+        if(provider){
+          this.#web3Instance = new BrowserProvider(provider);
+        }
         this.#currentProviderType = this.#w3modal?.getWalletProviderType();
         this.#globalChannel.next({
           data: { providerType: this.#currentProviderType },
           event: WEB3_EVENTS.CONNECTED,
         });
         if (this.#web3Instance) {
-          this.#_registerProviderChangeEvents(this.#web3Instance);
+          // need to find a different way
+          //this.#_registerProviderChangeEvents(this.#web3Instance);
         }
       } else {
         if (this.#web3Instance) {
@@ -232,6 +236,12 @@ getCurrentTheme () {
     }
   }
 
+  get walletProvider(){
+    if(this.#w3modal){
+      return this.#w3modal.getWalletProvider();
+    }
+  }
+
 /*
  * Disconnect from the current web3 provider
  *
@@ -259,19 +269,19 @@ getCurrentTheme () {
    * @param message - Human readable string to sign
    */
   @validate(z.string().min(3))
-  signMessage (message: string) {
-    return this.getSigner()?.signMessage(message);
+  async signMessage (message: string) {
+    const signer = await this.getSigner();
+    if(signer){
+      return signer.signMessage(message);
+    }
   }
 
-  getSigner () {
-    if (this.#wallet instanceof ethers.Wallet) {
-      return this.#wallet;
+  async getSigner () {
+    if(!this.#web3Instance){
+      this.#log.warn('Must provider a signer!');
+      return;
     }
-    if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
-      return this.#web3Instance.getSigner();
-    }
-    this.#log.warn('Must provider a signer!');
-    return;
+    return this.#web3Instance.getSigner();
   }
 
   getRequiredNetwork () {
@@ -282,7 +292,7 @@ getCurrentTheme () {
   }
 
   async switchToRequiredNetwork () {
-    if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
+    if (this.#web3Instance instanceof ethers.BrowserProvider) {
       const result = await this.#web3Instance.send('wallet_switchEthereumChain', [
         { chainId: this.#networkId },
       ]);
