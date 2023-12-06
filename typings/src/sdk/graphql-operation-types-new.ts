@@ -328,6 +328,7 @@ export type GetInterestsQueryVariables = Types.Exact<{
 export type GetInterestsQuery = { akashaProfileInterestsIndex?: { edges?: Array<{ cursor: string, node?: { id: string, topics: Array<{ value: string, labelType: string }>, did: { id: string } } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
 
 export type GetInterestsStreamQueryVariables = Types.Exact<{
+  indexer: Types.Scalars['ID']['input'];
   after?: Types.InputMaybe<Types.Scalars['String']['input']>;
   before?: Types.InputMaybe<Types.Scalars['String']['input']>;
   first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
@@ -337,7 +338,7 @@ export type GetInterestsStreamQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetInterestsStreamQuery = { akashaInterestsStreamIndex?: { edges?: Array<{ cursor: string, node?: { labelType: string, value: string, active: boolean, createdAt: any, id: string } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
+export type GetInterestsStreamQuery = { node?: { akashaInterestsStreamList?: { edges?: Array<{ cursor: string, node?: { labelType: string, value: string, active: boolean, createdAt: any, id: string } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
 
 export type GetInterestsByDidQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']['input'];

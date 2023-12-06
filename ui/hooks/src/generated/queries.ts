@@ -1322,30 +1322,34 @@ useInfiniteGetInterestsQuery.getKey = (variables?: Types.GetInterestsQueryVariab
 
 useGetInterestsQuery.fetcher = (variables?: Types.GetInterestsQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options);
 export const GetInterestsStreamDocument = /*#__PURE__*/ `
-    query GetInterestsStream($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput) {
-  akashaInterestsStreamIndex(
-    after: $after
-    before: $before
-    first: $first
-    last: $last
-    sorting: $sorting
-    filters: $filters
-  ) {
-    edges {
-      node {
-        labelType
-        value
-        active
-        createdAt
-        id
+    query GetInterestsStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaInterestsStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        sorting: $sorting
+        filters: $filters
+      ) {
+        edges {
+          node {
+            labelType
+            value
+            active
+            createdAt
+            id
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
       }
-      cursor
-    }
-    pageInfo {
-      startCursor
-      endCursor
-      hasNextPage
-      hasPreviousPage
     }
   }
 }
@@ -1354,18 +1358,18 @@ export const useGetInterestsStreamQuery = <
       TData = Types.GetInterestsStreamQuery,
       TError = unknown
     >(
-      variables?: Types.GetInterestsStreamQueryVariables,
+      variables: Types.GetInterestsStreamQueryVariables,
       options?: UseQueryOptions<Types.GetInterestsStreamQuery, TError, TData>
     ) =>
     useQuery<Types.GetInterestsStreamQuery, TError, TData>(
-      variables === undefined ? ['GetInterestsStream'] : ['GetInterestsStream', variables],
+      ['GetInterestsStream', variables],
       composeDbFetch<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, variables),
       options
     );
 useGetInterestsStreamQuery.document = GetInterestsStreamDocument;
 
 
-useGetInterestsStreamQuery.getKey = (variables?: Types.GetInterestsStreamQueryVariables) => variables === undefined ? ['GetInterestsStream'] : ['GetInterestsStream', variables];
+useGetInterestsStreamQuery.getKey = (variables: Types.GetInterestsStreamQueryVariables) => ['GetInterestsStream', variables];
 ;
 
 export const useInfiniteGetInterestsStreamQuery = <
@@ -1373,21 +1377,21 @@ export const useInfiniteGetInterestsStreamQuery = <
       TError = unknown
     >(
       pageParamKey: keyof Types.GetInterestsStreamQueryVariables,
-      variables?: Types.GetInterestsStreamQueryVariables,
+      variables: Types.GetInterestsStreamQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetInterestsStreamQuery, TError, TData>
     ) =>{
     
     return useInfiniteQuery<Types.GetInterestsStreamQuery, TError, TData>(
-      variables === undefined ? ['GetInterestsStream.infinite'] : ['GetInterestsStream.infinite', variables],
+      ['GetInterestsStream.infinite', variables],
       (metaData) => composeDbFetch<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteGetInterestsStreamQuery.getKey = (variables?: Types.GetInterestsStreamQueryVariables) => variables === undefined ? ['GetInterestsStream.infinite'] : ['GetInterestsStream.infinite', variables];
+useInfiniteGetInterestsStreamQuery.getKey = (variables: Types.GetInterestsStreamQueryVariables) => ['GetInterestsStream.infinite', variables];
 ;
 
-useGetInterestsStreamQuery.fetcher = (variables?: Types.GetInterestsStreamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, variables, options);
+useGetInterestsStreamQuery.fetcher = (variables: Types.GetInterestsStreamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, variables, options);
 export const GetInterestsByDidDocument = /*#__PURE__*/ `
     query GetInterestsByDid($id: ID!) {
   node(id: $id) {
