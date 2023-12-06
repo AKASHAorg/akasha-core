@@ -35,7 +35,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const { data, fetchMore, loading, error } = useGetFollowersListByDidQuery({
     variables: {
       id: profileId,
-      first: 10,
+      first: 2,
     },
     skip: !isLoggedIn,
   });
