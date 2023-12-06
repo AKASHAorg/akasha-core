@@ -3,8 +3,6 @@ import { UserProfileFragmentDataFragment } from '@akashaorg/typings/lib/sdk/grap
 import { logError } from './error-handler';
 import type { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
-export const MEDIA_UPLOAD_EMAIL = '@mediaUploadEmail';
-
 export interface IConfig {
   quality?: number;
   maxWidth: number;
@@ -102,15 +100,13 @@ interface ISaveMediaFile {
   name: string;
   content: File;
   isUrl: boolean;
-  email?: string;
 }
 
 /**
  * Utility to save media file
  */
-export const saveMediaFile = async ({ name, content, isUrl, email }: ISaveMediaFile) => {
+export const saveMediaFile = async ({ name, content, isUrl }: ISaveMediaFile) => {
   const sdk = getSDK();
-
   try {
     return await sdk.api.profile.saveMediaFile({
       isUrl,

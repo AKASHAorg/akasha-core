@@ -1,52 +1,30 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { TrashIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { DelayLoad } from '../../utils/delay-load';
-
-export interface ImageObject {
-  originalSrc?: string;
-  src: { url?: string; fallbackUrl?: string };
-  size: { width: number; height: number; naturalWidth?: number; naturalHeight?: number };
-}
+import { ImageObject } from '@akashaorg/typings/lib/ui';
 
 export interface IGridItemProps {
   image: ImageObject;
   images: ImageObject[];
   handleClickImage: (image: ImageObject) => void;
-  handleDeleteImage: (image: ImageObject) => void;
-  editorStyle?: boolean;
 }
 
-export const ImageGridItem: React.FC<IGridItemProps> = props => {
-  const { image, images, handleClickImage, handleDeleteImage, editorStyle } = props;
+export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
+  const { image, images, handleClickImage } = props;
 
   const imageSrc = React.useMemo(() => image, [image]);
 
   const [imgLoaded, setImgLoaded] = React.useState(false);
 
   const getGridSpan = () => {
-    if (editorStyle) {
-      switch (images.length) {
-        case 1:
-          return 6;
-        case 2:
-          return 3;
-        case 4:
-          return 3;
-        default:
-          return 2;
-      }
-    } else {
-      switch (images.length) {
-        case 1:
-          return 6;
-        case 3:
-          return 2;
+    switch (images.length) {
+      case 1:
+        return 6;
+      case 3:
+        return 2;
 
-        default:
-          return 3;
-      }
+      default:
+        return 3;
     }
   };
 
@@ -56,7 +34,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
   };
 
   const singleImageStyle = apply`${images.length === 1 && 'max-w-full'}`;
-  const mobileStyle = apply`${editorStyle && 'h-40 pr-1 sm:h-full sm:pr-0'}`;
+  const mobileStyle = apply`${'h-40 sm:max-h-60'}`;
 
   return (
     <button
@@ -71,23 +49,6 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
         return false;
       }}
     >
-      {handleDeleteImage && (
-        <button
-          className={tw(
-            'flex items-center justify-items-center z-1 absolute top-5 right-5 w-6 h-6 rounded-full bg-grey7',
-          )}
-          onClick={ev => {
-            if (handleDeleteImage && typeof handleDeleteImage === 'function') {
-              handleDeleteImage(imageSrc);
-            }
-            ev.stopPropagation();
-            ev.preventDefault();
-            return false;
-          }}
-        >
-          <Icon icon={<TrashIcon />} />
-        </button>
-      )}
       {/* when we have a single image we need to keep the original aspect ratio,
           otherwise give images a 1:1 ratio */}
       <picture className={tw('flex')}>

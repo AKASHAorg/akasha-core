@@ -16,7 +16,7 @@ export const licences: License[] = [
   {
     id: '1',
     label: 'All rights reserved',
-    type: 'licenseAllRights',
+    type: 'LicenseAllRights',
     description: [
       {
         text:
@@ -28,7 +28,7 @@ export const licences: License[] = [
   {
     id: '2',
     label: 'Some rights reserved',
-    type: 'licenseSomeRights',
+    type: 'LicenseSomeRights',
     description: [
       {
         text: 'There are some rights reserved with this licence.',
@@ -38,7 +38,7 @@ export const licences: License[] = [
   {
     id: '3',
     label: 'No rights reserved',
-    type: 'licenseNoRights',
+    type: 'LicenseNoRights',
     description: [
       {
         text: 'You will not have any rights.',
@@ -48,10 +48,10 @@ export const licences: License[] = [
   {
     id: '4',
     label: 'Attribution',
-    type: 'licenseSomeRights',
+    type: 'LicenseSomeRights',
     description: [
       {
-        type: 'licenseAttribution',
+        type: 'LicenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
     ],
@@ -59,14 +59,14 @@ export const licences: License[] = [
   {
     id: '5',
     label: 'Attribution, no derivatives',
-    type: 'licenseSomeRights',
+    type: 'LicenseSomeRights',
     description: [
       {
-        type: 'licenseAttribution',
+        type: 'LicenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        type: 'licenseNoDerivatives',
+        type: 'LicenseNoDerivatives',
         text: 'Others can only distribute non-derivative copies of your work.',
       },
     ],
@@ -74,14 +74,14 @@ export const licences: License[] = [
   {
     id: '6',
     label: 'Attribution, share-alike',
-    type: 'licenseSomeRights',
+    type: 'LicenseSomeRights',
     description: [
       {
-        type: 'licenseAttribution',
+        type: 'LicenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        type: 'licenseShareAlike',
+        type: 'LicenseShareAlike',
         text: 'Others must distribute derivatives of your work under the same license.',
       },
     ],
@@ -89,14 +89,14 @@ export const licences: License[] = [
   {
     id: '7',
     label: 'Attribution, non-commercial',
-    type: 'licenseSomeRights',
+    type: 'LicenseSomeRights',
     description: [
       {
-        type: 'licenseAttribution',
+        type: 'LicenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        type: 'licenseNonCommercial',
+        type: 'LicenseNonCommercial',
         text: 'Others can use your work for non-commercial purposes only. ',
       },
     ],
@@ -104,18 +104,18 @@ export const licences: License[] = [
   {
     id: '8',
     label: 'Attribution, non-commercial, no-derivatives',
-    type: 'licenseSomeRights',
+    type: 'LicenseSomeRights',
     description: [
       {
-        type: 'licenseAttribution',
+        type: 'LicenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        type: 'licenseNonCommercial',
+        type: 'LicenseNonCommercial',
         text: 'Others can use your work for non-commercial purposes only. ',
       },
       {
-        type: 'licenseNoDerivatives',
+        type: 'LicenseNoDerivatives',
         text: 'Others can only distribute non-derivative copies of your work.',
       },
     ],
@@ -123,18 +123,18 @@ export const licences: License[] = [
   {
     id: '9',
     label: 'Attribution, non-commercial, share-alike',
-    type: 'licenseSomeRights',
+    type: 'LicenseSomeRights',
     description: [
       {
-        type: 'licenseAttribution',
+        type: 'LicenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        type: 'licenseNonCommercial',
+        type: 'LicenseNonCommercial',
         text: 'Others can use your work for non-commercial purposes only. ',
       },
       {
-        type: 'licenseShareAlike',
+        type: 'LicenseShareAlike',
         text: 'Others must distribute derivatives of your work under the same license.',
       },
     ],
@@ -142,7 +142,7 @@ export const licences: License[] = [
   {
     id: '10',
     label: 'Creative Commons copyright waiver',
-    type: 'licenseNoRights',
+    type: 'LicenseNoRights',
     description: [
       {
         text: 'You waive all your copyright and related rights in this work, worldwide.',
@@ -152,7 +152,7 @@ export const licences: License[] = [
   {
     id: '11',
     label: 'Public Domain',
-    type: 'licenseNoRights',
+    type: 'LicenseNoRights',
     description: [
       {
         text: 'This work is already in the public domain and free of copyright restrictions.',
