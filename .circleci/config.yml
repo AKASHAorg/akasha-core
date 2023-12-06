@@ -30,17 +30,20 @@ jobs:
       - run:
           name: Install gcc
           command: 'sudo apt-get update -y && sudo apt-get install -y build-essential libsqlite3-dev'
+      - run:
+          name: Install nx
+          command: sudo npm install -g nx@14.6.5
       - restore_cache: # special step to restore the dependency cache
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           keys:
-            - dependency-cache-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - dependency-cache-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Install yarn packages
-          command: yarn install --frozen-lockfile
+          command: yarn bootstrap
       - save_cache:
           paths:
             - node_modules
-          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: dependency-cache-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Prepare continuation parameters
           command: |
