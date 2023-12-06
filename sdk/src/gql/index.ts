@@ -140,14 +140,24 @@ class Gql {
         AkashaReflectConnection: {
           merge: true,
         },
-        AkashaProfile: {
+        AkashaFollow: {
+          merge: true
+        },
+        CeramicAccount:{
           merge: true,
+          fields: {
+            akashaFollowList: relayStylePagination(['sorting', 'filters']),
+          }
+        },
+        AkashaProfile:{
+          merge: true,
+          fields: {
+            followers: relayStylePagination(['sorting', 'filters']),
+          }
         },
         Query: {
           fields: {
             akashaBeamIndex: relayStylePagination(['sorting', 'filters']),
-            followers: relayStylePagination(['sorting', 'filters']),
-            akashaFollowList: relayStylePagination(['sorting', 'filters']),
           },
         },
       },
