@@ -35,7 +35,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const { data, fetchMore, loading, error } = useGetFollowersListByDidQuery({
     variables: {
       id: profileId,
-      first: 2,
+      first: 10,
     },
     skip: !isLoggedIn,
   });
@@ -114,33 +114,6 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
               await fetchMore({
                 variables: {
                   after: pageInfo.endCursor,
-                },
-                updateQuery(_, { fetchMoreResult }) {
-                  const newEdges =
-                    fetchMoreResult?.node && hasOwn(fetchMoreResult.node, 'akashaProfile')
-                      ? fetchMoreResult.node.akashaProfile?.followers?.edges
-                      : null;
-                  const pageInfo =
-                    fetchMoreResult?.node && hasOwn(fetchMoreResult.node, 'akashaProfile')
-                      ? fetchMoreResult.node.akashaProfile?.followers?.pageInfo
-                      : null;
-                  return newEdges
-                    ? {
-                        node: {
-                          ...(data.node || {}),
-                          akashaProfile: {
-                            ...(data.node?.['akashaProfile'] || {}),
-                            followers: {
-                              edges: [
-                                ...(data.node?.['akashaProfile']?.followers?.edges || []),
-                                ...newEdges,
-                              ],
-                              pageInfo,
-                            },
-                          },
-                        },
-                      }
-                    : data;
                 },
               });
               setLoadingMore(false);
