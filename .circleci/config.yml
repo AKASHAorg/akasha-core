@@ -36,9 +36,7 @@ jobs:
             - dependency-cache-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Install yarn packages
-          command: |
-            yarn add @web3modal/ethers5@^3.3.2 -W
-            yarn install --frozen-lockfile
+          command: yarn install --frozen-lockfile
       - save_cache:
           paths:
             - node_modules
