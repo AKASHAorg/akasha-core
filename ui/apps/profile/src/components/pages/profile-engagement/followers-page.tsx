@@ -3,15 +3,15 @@ import FollowProfileButton from '../../follow-profile-button';
 import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
 import EngagementTab from './engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
+import routes, { FOLLOWERS } from '../../../routes';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useParams } from 'react-router-dom';
 import {
-  useGetFollowDocumentsQuery,
-  useInfiniteGetFollowersListByDidQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
+  useGetFollowDocumentsByDidQuery,
+  useGetFollowersListByDidQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   transformImageVersions,
   hasOwn,
@@ -29,74 +29,42 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const { isLoggedIn, authenticatedDID, showLoginModal } = props;
   const [loadMore, setLoadingMore] = useState(false);
   const { profileId } = useParams<{ profileId: string }>();
-
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const followersReq = useInfiniteGetFollowersListByDidQuery(
-    'first',
-    {
+  const { data, fetchMore, loading, error } = useGetFollowersListByDidQuery({
+    variables: {
       id: profileId,
       first: 10,
     },
-    {
-      getNextPageParam: lastPage => {
-        const pageInfo =
-          lastPage?.node && hasOwn(lastPage?.node, 'akashaProfile')
-            ? lastPage.node?.akashaProfile?.followers?.pageInfo
-            : null;
-        if (pageInfo && pageInfo.hasNextPage) {
-          return { after: pageInfo.endCursor };
-        }
-      },
-      getPreviousPageParam: firstPage => {
-        const pageInfo =
-          firstPage?.node && hasOwn(firstPage?.node, 'akashaProfile')
-            ? firstPage.node?.akashaProfile?.followers?.pageInfo
-            : null;
-        if (pageInfo && pageInfo.hasPreviousPage) {
-          return { before: pageInfo.startCursor };
-        }
-      },
-      onSettled: () => {
-        setLoadingMore(false);
-      },
-      enabled: isLoggedIn,
-    },
-  );
+    skip: !isLoggedIn,
+  });
   const followers = useMemo(
     () =>
-      followersReq.data?.pages
-        ? followersReq.data.pages?.flatMap(page =>
-            hasOwn(page.node, 'akashaProfile')
-              ? page.node?.akashaProfile?.followers?.edges
-                  ?.map(edge => edge?.node)
-                  .filter(node => node.did.akashaProfile) || []
-              : [],
-          )
+      data?.node && hasOwn(data.node, 'akashaProfile')
+        ? data.node?.akashaProfile?.followers?.edges
+            ?.map(edge => edge?.node)
+            .filter(node => node.did.akashaProfile) || []
         : [],
-    [followersReq.data],
+    [data?.node],
   );
-  const lastPageInfo = useMemo(() => {
-    const lastPage = followersReq.data?.pages?.[followersReq.data?.pages?.length - 1];
-    return lastPage?.node && hasOwn(lastPage?.node, 'akashaProfile')
-      ? lastPage?.node.akashaProfile?.followers?.pageInfo
+  const pageInfo = useMemo(() => {
+    return data?.node && hasOwn(data?.node, 'akashaProfile')
+      ? data?.node.akashaProfile?.followers?.pageInfo
       : null;
-  }, [followersReq]);
+  }, [data]);
   const followProfileIds = useMemo(
     () => followers.map(follower => follower.did?.akashaProfile?.id).filter(id => !!id),
     [followers],
   );
-  const followDocumentsReq = useGetFollowDocumentsQuery(
-    {
+  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
+    variables: {
+      id: authenticatedDID,
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    {
-      select: response => response.viewer?.akashaFollowList,
-      enabled: isLoggedIn && !!followProfileIds.length,
-    },
-  );
+    skip: !isLoggedIn || !followProfileIds.length,
+  });
 
   if (!isLoggedIn) {
     return navigateTo({
@@ -105,7 +73,11 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     });
   }
 
-  const followList = getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node));
+  const followList = getFollowList(
+    followDocuments?.node && hasOwn(followDocuments?.node, 'akashaFollowList')
+      ? followDocuments?.node?.akashaFollowList?.edges?.map(edge => edge?.node)
+      : null,
+  );
 
   const onProfileClick = (profileId: string) => {
     navigateTo?.({
@@ -117,44 +89,72 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const onError = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileId}${routes[FOLLOWERS]}`,
     });
   };
 
   return (
     <EngagementTab navigateTo={navigateTo}>
-      {followersReq.status === 'loading' && <ProfileEngagementLoading />}
-      {followersReq.status === 'error' && (
+      {loading && <ProfileEngagementLoading />}
+      {error && (
         <Stack customStyle="mt-8">
           <EntryError onError={onError} />
         </Stack>
       )}
-      {followersReq.status === 'success' && (
+      {data && (
         <Followers
           authenticatedDID={authenticatedDID}
           followers={followers}
           followList={followList}
           profileAnchorLink={'/@akashaorg/app-profile'}
           loadMore={loadMore}
-          onLoadMore={() => {
-            if (lastPageInfo && lastPageInfo.hasNextPage) {
+          onLoadMore={async () => {
+            if (pageInfo && pageInfo.hasNextPage) {
               setLoadingMore(true);
-              followersReq.fetchNextPage();
+              await fetchMore({
+                variables: {
+                  after: pageInfo.endCursor,
+                },
+                updateQuery(_, { fetchMoreResult }) {
+                  const newEdges =
+                    fetchMoreResult?.node && hasOwn(fetchMoreResult.node, 'akashaProfile')
+                      ? fetchMoreResult.node.akashaProfile?.followers?.edges
+                      : null;
+                  const pageInfo =
+                    fetchMoreResult?.node && hasOwn(fetchMoreResult.node, 'akashaProfile')
+                      ? fetchMoreResult.node.akashaProfile?.followers?.pageInfo
+                      : null;
+                  return newEdges
+                    ? {
+                        node: {
+                          ...(data.node || {}),
+                          akashaProfile: {
+                            ...(data.node?.['akashaProfile'] || {}),
+                            followers: {
+                              edges: [
+                                ...(data.node?.['akashaProfile']?.followers?.edges || []),
+                                ...newEdges,
+                              ],
+                              pageInfo,
+                            },
+                          },
+                        },
+                      }
+                    : data;
+                },
+              });
+              setLoadingMore(false);
             }
           }}
-          renderFollowElement={(profileId, followId, isFollowing) =>
-            followDocumentsReq.status === 'loading' ? (
-              <TextLine width="w-24" animated />
-            ) : (
-              <FollowProfileButton
-                profileID={profileId}
-                isLoggedIn={isLoggedIn}
-                followId={followId}
-                isFollowing={isFollowing}
-                showLoginModal={showLoginModal}
-              />
-            )
-          }
+          renderFollowElement={(profileId, followId, isFollowing) => (
+            <FollowProfileButton
+              profileID={profileId}
+              isLoggedIn={isLoggedIn}
+              followId={followId}
+              isFollowing={isFollowing}
+              showLoginModal={showLoginModal}
+            />
+          )}
           onProfileClick={onProfileClick}
           transformImageVersions={transformImageVersions}
         />

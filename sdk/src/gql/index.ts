@@ -140,6 +140,9 @@ class Gql {
         AkashaReflectConnection: {
           merge: true,
         },
+        CeramicAccount: {
+          merge: true,
+        },
         Query: {
           fields: {
             akashaBeamIndex: relayStylePagination(['sorting', 'filters']),
