@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
@@ -14,14 +14,16 @@ import {
   useGetInterestsStreamQuery,
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
-  useGetFollowDocumentsQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetFollowDocumentsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+
 import { useQueryClient, useIsMutating } from '@tanstack/react-query';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 import { LatestProfiles, LatestTopics } from './cards';
+import { useGetIndexingDID } from '@akashaorg/ui-awf-hooks/lib/use-settings';
 
 const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
@@ -38,11 +40,16 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     { last: 4 },
     { select: result => result?.akashaProfileIndex?.edges.map(profile => profile.node) },
   );
+  const currentIndexingDID = useGetIndexingDID();
   const latestTopicsReq = useGetInterestsStreamQuery(
-    { last: 4 },
+    { last: 4, indexer: currentIndexingDID },
     {
-      select: result =>
-        result?.akashaInterestsStreamIndex?.edges.flatMap(interest => interest.node),
+      select: result =>{
+        if(hasOwn(result?.node, 'akashaInterestsStreamList')){
+          return result?.node?.akashaInterestsStreamList?.edges.flatMap(interest => interest.node)
+        }
+        return [];
+      }
     },
   );
   const tagSubscriptionsReq = useGetInterestsByDidQuery(
@@ -65,16 +72,14 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     () => latestProfiles.map(follower => follower.id),
     [latestProfiles],
   );
-  const followDocumentsReq = useGetFollowDocumentsQuery(
-    {
+  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
+    variables: {
+      id: authenticatedDID,
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    {
-      select: response => response.viewer?.akashaFollowList,
-      enabled: isLoggedIn && !!followProfileIds.length,
-    },
-  );
+    skip: !isLoggedIn || !followProfileIds.length,
+  });
   const createInterestMutation = useCreateInterestsMutation({
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -91,7 +96,11 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     [isLoggedIn, tagSubscriptionsReq.data],
   );
   const followList = isLoggedIn
-    ? getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node))
+    ? getFollowList(
+        followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
+          ? followDocuments.node?.akashaFollowList?.edges?.map(edge => edge?.node)
+          : null,
+      )
     : null;
 
   const showLoginModal = () => {

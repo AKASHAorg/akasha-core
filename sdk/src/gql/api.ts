@@ -866,39 +866,6 @@ export const GetMyProfileDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentMFragmentDoc}`;
-export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
-    query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
-  viewer {
-    akashaFollowList(
-      after: $after
-      before: $before
-      first: $first
-      last: $last
-      filters: {where: {profileID: {in: $following}}}
-      sorting: $sorting
-    ) {
-      edges {
-        node {
-          id
-          isFollowing
-          profileID
-          profile {
-            ...UserProfileFragmentM
-          }
-        }
-        cursor
-      }
-      pageInfo {
-        startCursor
-        endCursor
-        hasNextPage
-        hasPreviousPage
-      }
-    }
-    isViewer
-  }
-}
-    ${UserProfileFragmentMFragmentDoc}`;
 export const GetFollowDocumentsByDidDocument = /*#__PURE__*/ gql`
     query GetFollowDocumentsByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
   node(id: $id) {
@@ -1057,30 +1024,34 @@ export const GetInterestsDocument = /*#__PURE__*/ gql`
 }
     `;
 export const GetInterestsStreamDocument = /*#__PURE__*/ gql`
-    query GetInterestsStream($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput) {
-  akashaInterestsStreamIndex(
-    after: $after
-    before: $before
-    first: $first
-    last: $last
-    sorting: $sorting
-    filters: $filters
-  ) {
-    edges {
-      node {
-        labelType
-        value
-        active
-        createdAt
-        id
+    query GetInterestsStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaInterestsStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        sorting: $sorting
+        filters: $filters
+      ) {
+        edges {
+          node {
+            labelType
+            value
+            active
+            createdAt
+            id
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
       }
-      cursor
-    }
-    pageInfo {
-      startCursor
-      endCursor
-      hasNextPage
-      hasPreviousPage
     }
   }
 }
@@ -1434,9 +1405,6 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetMyProfile(variables?: Types.GetMyProfileQueryVariables, options?: C): Promise<Types.GetMyProfileQuery> {
       return requester<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options) as Promise<Types.GetMyProfileQuery>;
     },
-    GetFollowDocuments(variables?: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
-      return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
-    },
     GetFollowDocumentsByDid(variables: Types.GetFollowDocumentsByDidQueryVariables, options?: C): Promise<Types.GetFollowDocumentsByDidQuery> {
       return requester<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, variables, options) as Promise<Types.GetFollowDocumentsByDidQuery>;
     },
@@ -1458,7 +1426,7 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetInterests(variables?: Types.GetInterestsQueryVariables, options?: C): Promise<Types.GetInterestsQuery> {
       return requester<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options) as Promise<Types.GetInterestsQuery>;
     },
-    GetInterestsStream(variables?: Types.GetInterestsStreamQueryVariables, options?: C): Promise<Types.GetInterestsStreamQuery> {
+    GetInterestsStream(variables: Types.GetInterestsStreamQueryVariables, options?: C): Promise<Types.GetInterestsStreamQuery> {
       return requester<Types.GetInterestsStreamQuery, Types.GetInterestsStreamQueryVariables>(GetInterestsStreamDocument, variables, options) as Promise<Types.GetInterestsStreamQuery>;
     },
     GetInterestsByDid(variables: Types.GetInterestsByDidQueryVariables, options?: C): Promise<Types.GetInterestsByDidQuery> {
