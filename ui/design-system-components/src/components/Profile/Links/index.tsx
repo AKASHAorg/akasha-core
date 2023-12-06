@@ -38,7 +38,9 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
         <Text variant="label">{title}</Text>
         {links.map((link, index) => {
           const iconType = getIconFromLink(link.href);
-          const { icon, solid } = iconsMap[iconType];
+          const { icon, solid } = iconsMap[iconType]
+            ? iconsMap[iconType]
+            : { icon: <LinkIcon />, solid: false };
 
           return (
             <CopyToClipboard key={`${link.href}${index}`} value={link.href}>

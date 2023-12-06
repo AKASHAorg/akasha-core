@@ -124,28 +124,28 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
                 variables: {
                   after: pageInfo.endCursor,
                 },
-                updateQuery(_, { fetchMoreResult }) {
-                  const newEdges =
-                    fetchMoreResult?.node && hasOwn(fetchMoreResult.node, 'akashaFollowList')
-                      ? fetchMoreResult.node.akashaFollowList?.edges
-                      : null;
-                  const pageInfo =
-                    fetchMoreResult?.node && hasOwn(fetchMoreResult.node, 'akashaFollowList')
-                      ? fetchMoreResult.node.akashaFollowList?.pageInfo
-                      : null;
-                  return newEdges
-                    ? {
-                        node: {
-                          ...(data.node || {}),
-                          akashaFollowList: {
-                            ...(data.node?.['akashaFollowList'] || {}),
-                            edges: [...(data.node?.['akashaFollowList']?.edges || []), ...newEdges],
-                            pageInfo,
-                          },
-                        },
-                      }
-                    : data;
-                },
+                // updateQuery(_, { fetchMoreResult }) {
+                //   const newEdges =
+                //     fetchMoreResult?.node && hasOwn(fetchMoreResult.node, 'akashaFollowList')
+                //       ? fetchMoreResult.node.akashaFollowList?.edges
+                //       : null;
+                //   const pageInfo =
+                //     fetchMoreResult?.node && hasOwn(fetchMoreResult.node, 'akashaFollowList')
+                //       ? fetchMoreResult.node.akashaFollowList?.pageInfo
+                //       : null;
+                //   return newEdges
+                //     ? {
+                //         node: {
+                //           ...(data.node || {}),
+                //           akashaFollowList: {
+                //             ...(data.node?.['akashaFollowList'] || {}),
+                //             edges: [...(data.node?.['akashaFollowList']?.edges || []), ...newEdges],
+                //             pageInfo,
+                //           },
+                //         },
+                //       }
+                //     : data;
+                // },
               });
               setLoadingMore(false);
             }

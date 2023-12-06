@@ -140,12 +140,14 @@ class Gql {
         AkashaReflectConnection: {
           merge: true,
         },
-        CeramicAccount: {
+        AkashaProfile: {
           merge: true,
         },
         Query: {
           fields: {
             akashaBeamIndex: relayStylePagination(['sorting', 'filters']),
+            followers: relayStylePagination(['sorting', 'filters']),
+            akashaFollowList: relayStylePagination(['sorting', 'filters']),
           },
         },
       },
@@ -212,10 +214,12 @@ class Gql {
     const definition = getMainDefinition(query);
     const context = {
       ...options?.context,
-      headers: this._viewerID ? {
-        [VIEWER_ID_HEADER]: this._viewerID
-      }: {}
-  };
+      headers: this._viewerID
+        ? {
+            [VIEWER_ID_HEADER]: this._viewerID,
+          }
+        : {},
+    };
     let result: FetchResult<unknown, Record<string, unknown>, Record<string, unknown>>;
     if (definition.kind === 'OperationDefinition' && definition.operation === 'mutation') {
       uuid = crypto.randomUUID();
@@ -234,7 +238,7 @@ class Gql {
         query: query,
         variables: vars as Record<string, unknown> | undefined,
         context: context,
-      }, );
+      });
     }
 
     if (!result.errors || !result.errors.length) {
@@ -266,7 +270,7 @@ class Gql {
   async resetCache() {
     return this._apolloCache.reset();
   }
-  set contextViewerID (id: string){
+  set contextViewerID(id: string) {
     this._viewerID = id;
   }
 
