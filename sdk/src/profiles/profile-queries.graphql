@@ -147,23 +147,27 @@ query GetInterests($after: String, $before: String, $first: Int, $last: Int){
   }
 }
 
-query GetInterestsStream($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput){
-  akashaInterestsStreamIndex(after: $after, before: $before, first: $first, last: $last, sorting: $sorting, filters: $filters){
-    edges {
-      node {
-        labelType
-        value
-        active
-        createdAt
-        id
+query GetInterestsStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaInterestsStreamSortingInput, $filters: AkashaInterestsStreamFiltersInput){
+  node(id: $indexer){
+    ... on CeramicAccount{
+      akashaInterestsStreamList(after: $after, before: $before, first: $first, last: $last, sorting: $sorting, filters: $filters){
+        edges {
+          node {
+            labelType
+            value
+            active
+            createdAt
+            id
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
       }
-      cursor
-    }
-    pageInfo {
-      startCursor
-      endCursor
-      hasNextPage
-      hasPreviousPage
     }
   }
 }
