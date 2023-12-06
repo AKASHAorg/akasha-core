@@ -25,7 +25,7 @@ jobs:
             - checkout
             - restore_cache:
                 keys:
-                  - dependency-cache-v1-$CIRCLE_BRANCH-{{ checksum "yarn.lock" }}
+                  - dependency-cache-v1-{{ .Branch }}--{{ checksum "yarn.lock" }}
             - run: #TODO: The command 'npx nx' isn't working in jobs steps. It returns `nx command not found` error hence we are using the following alternative.
                 name: Install nx
                 command: sudo npm install -g nx@14.6.5
