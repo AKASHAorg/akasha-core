@@ -230,10 +230,10 @@ const SidebarComponent: React.FC<unknown> = () => {
    * this assigns the corresponding icons to the social links from root components
    */
   const modSocialLinks = socialLinks.map(el => {
-    if (el.icon === 'github') return { ...el, icon: <Github /> };
-    if (el.icon === 'discord') return { ...el, icon: <Discord /> };
-    if (el.icon === 'telegram') return { ...el, icon: <Telegram /> };
-    if (el.icon === 'twitter') return { ...el, icon: <Twitter /> };
+    if (el.icon === 'Github') return { ...el, icon: <Github /> };
+    if (el.icon === 'Discord') return { ...el, icon: <Discord /> };
+    if (el.icon === 'Telegram') return { ...el, icon: <Telegram /> };
+    if (el.icon === 'Twitter') return { ...el, icon: <Twitter /> };
   });
 
   return (
