@@ -91,7 +91,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   );
   const followList = isLoggedIn
     ? getFollowList(
-        followDocuments.node && hasOwn(followDocuments.node, 'akashaFollowList')
+        followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
           ? followDocuments.node?.akashaFollowList?.edges?.map(edge => edge?.node)
           : null,
       )
