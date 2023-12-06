@@ -116,6 +116,7 @@
     "ts-loader": "9.4.1",
     "typescript": "4.9.3",
     "web3.storage": "4.4.0",
+    "@web3modal/ethers5": "^3.3.2",
     "webpack": "5.88.2",
     "webpack-assets-manifest": "5.1.0",
     "webpack-bundle-analyzer": "4.6.1",
