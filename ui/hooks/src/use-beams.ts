@@ -22,12 +22,13 @@ const defaultSorting: AkashaBeamSortingInput = {
 export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   const [beams, setBeams] = React.useState<AkashaBeamEdge[]>([]);
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
+
   const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
-    const vars = {
+    const vars: { sorting: AkashaBeamSortingInput; filters?: AkashaBeamFiltersInput } = {
       sorting: { ...defaultSorting, ...(sorting ?? {}) },
     };
     if (filters) {
-      mergedVars.filters = filters;
+      vars.filters = filters;
     }
     return vars;
   }, [sorting, filters]);
@@ -85,7 +86,10 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
           after: firstCursor,
         },
       });
-      if (results.error) return;
+      if (results.error) {
+        setErrors(prev => [...prev, results.error]);
+        return;
+      }
       if (!results.data) return;
       const newBeams = [];
       results.data.akashaBeamIndex.edges.forEach(e => {
@@ -110,7 +114,10 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
             sorting: { createdAt: SortOrder.Asc },
           },
         });
-        if (results.error) return;
+        if (results.error) {
+          setErrors(prev => [...prev, results.error]);
+          return;
+        }
         if (!results.data) return;
         const newBeams = [];
         results.data.akashaBeamIndex.edges.forEach(e => {
@@ -131,7 +138,10 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
           },
           fetchPolicy: 'network-only',
         });
-        if (results.error) return;
+        if (results.error) {
+          setErrors(prev => [...prev, results.error]);
+          return;
+        }
         if (!results.data) return;
         const newBeams = [];
         results.data.akashaBeamIndex.edges.forEach(e => {

@@ -20,6 +20,8 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
 import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
+import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
+import { ReflectionCard } from '@akashaorg/ui-lib-feed';
 
 const ReflectionPage: React.FC<unknown> = () => {
   const { reflectionId } = useParams<{
@@ -82,22 +84,32 @@ const ReflectionPage: React.FC<unknown> = () => {
       <Stack spacing="gap-y-2">
         <ReflectFeed
           reflectionsOf={{ entryId: entryData.id, itemType: EntityTypes.REFLECT }}
-          loggedProfileData={loggedProfileData}
-          onEntryFlag={() => {
-            return () => {
-              //@TODO
-            };
-          }}
-          onEntryRemove={() => {
-            //@TODO
-          }}
           itemSpacing={0}
           newItemsPublishedLabel={t('New Reflects published recently')}
-          onLoginModalOpen={showLoginModal}
           trackEvent={analyticsActions.trackEvent}
-          onNavigate={onNavigate}
-          modalSlotId={layoutConfig.modalSlotId}
-          i18n={getTranslationPlugin().i18n}
+          locale={getTranslationPlugin().i18n.language as ILocale}
+          estimatedHeight={120}
+          queryKey={`reflect-feed-${entryData.id}`}
+          renderItem={itemData => (
+            <ReflectionCard
+              entryData={itemData.node}
+              contentClickable={true}
+              onContentClick={() =>
+                getRoutingPlugin().navigateTo({
+                  appName: '@akashaorg/app-akasha-integration',
+                  getNavigationUrl: navRoutes => `${navRoutes.Reflect}/${itemData.node.id}`,
+                })
+              }
+              onReflect={() =>
+                getRoutingPlugin().navigateTo({
+                  appName: '@akashaorg/app-akasha-integration',
+                  getNavigationUrl: navRoutes =>
+                    `${navRoutes.Reflect}/${itemData.node.id}/${navRoutes.Reflect}`,
+                })
+              }
+            />
+          )}
+          scrollTopIndicator={() => <>ST</>}
         />
       </Stack>
     </Card>

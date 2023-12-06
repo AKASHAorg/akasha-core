@@ -1,205 +1,118 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import EditableReflection from './editable-reflection';
-import EntryList, {
-  EntryListProps,
-  ScrollerState,
-} from '@akashaorg/design-system-components/lib/components/EntryList';
-import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
-import ReflectionPreview from './reflection-preview';
+import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
+import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
-  AnalyticsEventData,
-  EntityTypes,
-  IContentClickDetails,
-  ModalNavigationOptions,
-  Profile,
-} from '@akashaorg/typings/lib/ui';
-import { i18n } from 'i18next';
-import { AkashaReflect, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import {
-  useInfiniteGetReflectReflectionsQuery,
-  useInfiniteGetReflectionsFromBeamQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
+  AkashaReflectEdge,
+  AkashaReflectFiltersInput,
+  AkashaReflectSortingInput,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
+import { useReflections } from '@akashaorg/ui-awf-hooks/lib/use-reflections';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 export type ReflectFeedProps = {
   reflectionsOf: { entryId: string; itemType: EntityTypes };
-  modalSlotId: string;
-  accentBorderTop?: boolean;
-  totalEntryCount?: number;
-  loggedProfileData?: Profile;
-  i18n: i18n;
-  initialScrollState?: ScrollerState & { isFetched: boolean };
+  locale?: ILocale;
   scrollerOptions?: { overscan: number };
-  onEntryFlag?: (
-    entryId: string,
-    itemType: EntityTypes,
-    reporterEthAddress?: string | null,
-  ) => () => void;
-  onEntryRemove?: (entryId: string) => void;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
-  onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  onScrollStateReset?: () => void;
   itemSpacing?: number;
   newItemsPublishedLabel?: string;
-  onScrollStateChange?: EntryListProps<unknown>['onScrollStateChange'];
+  queryKey: string;
+  estimatedHeight: number;
+  scrollTopIndicator: VirtualizerProps<unknown>['scrollTopIndicator'];
+  renderItem: VirtualizerProps<AkashaReflectEdge>['renderItem'];
+  filters?: AkashaReflectFiltersInput;
+  sorting?: AkashaReflectSortingInput;
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
   const {
     reflectionsOf,
     itemSpacing = 8,
-    i18n,
-    initialScrollState,
     scrollerOptions = { overscan: 5 },
     newItemsPublishedLabel,
-    onNavigate,
-    onScrollStateReset,
-    onScrollStateChange,
+    queryKey,
+    estimatedHeight,
+    scrollTopIndicator,
+    renderItem,
+    filters,
+    sorting,
   } = props;
 
   const isReflectOfReflection = reflectionsOf.itemType === EntityTypes.REFLECT;
 
-  //@TODO replace this hook with one handling virtual list
-  const reflectionsFromBeamReq = useInfiniteGetReflectionsFromBeamQuery(
-    'sorting',
-    {
-      id: reflectionsOf.entryId,
-      first: 10,
-      sorting: {
-        createdAt: SortOrder.Desc,
-      },
-      filters: {
-        where: { reflection: { isNull: true } },
-      },
-    },
-    {
-      select: data => {
-        return {
-          pages: data.pages,
-          pageParams: data.pageParams,
-        };
-      },
-      enabled: reflectionsOf.itemType === EntityTypes.BEAM,
-    },
-  );
+  const { reflections, fetchInitialData, fetchPreviousPage, fetchNextPage, hasErrors, errors } =
+    useReflections({
+      entityId: reflectionsOf.entryId,
+      entityType: reflectionsOf.itemType,
+      overscan: scrollerOptions.overscan,
+      filters,
+      sorting,
+    });
+  const lastCursors = React.useRef({ next: null, prev: null });
+  const isLoading = React.useRef(false);
 
-  const reflectReflectionReq = useInfiniteGetReflectReflectionsQuery(
-    'sorting',
-    {
-      id: reflectionsOf.entryId,
-      first: 10,
-      sorting: {
-        createdAt: SortOrder.Desc,
-      },
-    },
-    {
-      select: data => {
-        return {
-          pages: data.pages,
-          pageParams: data.pageParams,
-        };
-      },
-      enabled: isReflectOfReflection,
-    },
-  );
+  const handleInitialFetch = async (cursors?: string[]) => {
+    if (cursors.length) {
+      lastCursors.current.prev = cursors[cursors.length - 1];
+    }
+    isLoading.current = true;
+    await fetchInitialData(cursors);
+  };
 
-  const reflectionsReq = isReflectOfReflection ? reflectReflectionReq : reflectionsFromBeamReq;
-  const entryData = isReflectOfReflection
-    ? reflectReflectionReq.data?.pages?.flatMap(page =>
-        page?.akashaReflectIndex?.edges?.map(edge => ({
-          ...edge.node,
-          beam: null /*Note: the hook returns partial result for beam, if complete result is needed the result of the hook should be modified*/,
-          beamID: edge.node.beam?.id,
-        })),
-      )
-    : reflectionsFromBeamReq.data?.pages?.flatMap(page =>
-        page.node && hasOwn(page.node, 'reflections')
-          ? page.node?.reflections.edges?.map(edge => ({
-              ...edge.node,
-
-              beam: null /*Note: the hook returns partial result for beam, if complete result is needed the result of the hook should be modified*/,
-              beamID: edge.node.beam?.id,
-            }))
-          : null,
-      );
+  const handleFetch = async (newArea: EdgeArea) => {
+    switch (newArea) {
+      case EdgeArea.TOP:
+      case EdgeArea.NEAR_TOP:
+        if (!reflections.length) return;
+        const firstCursor = reflections[0].cursor;
+        if (lastCursors.current.prev !== firstCursor && !isLoading.current) {
+          isLoading.current = true;
+          await fetchPreviousPage(firstCursor);
+          lastCursors.current.prev = firstCursor;
+        }
+        break;
+      case EdgeArea.BOTTOM:
+      case EdgeArea.NEAR_BOTTOM:
+        if (!reflections.length) return;
+        const lastCursor = reflections[reflections.length - 1].cursor;
+        if (lastCursors.current.next !== lastCursor && !isLoading.current) {
+          isLoading.current = true;
+          await fetchNextPage(lastCursor);
+          lastCursors.current.next = lastCursor;
+        }
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
-    <EntryList<AkashaReflect>
-      requestStatus={reflectionsReq.status}
-      isFetchingNextPage={reflectionsReq.isFetchingNextPage}
-      pages={entryData}
-      itemSpacing={itemSpacing}
-      languageDirection={i18n?.dir() || 'ltr'}
-      initialScrollState={initialScrollState}
-      onScrollStateReset={onScrollStateReset}
-      onScrollStateChange={onScrollStateChange}
-      getItemKey={(idx, items) => items[idx]['id']}
-      scrollerOptions={scrollerOptions}
-      onFetchNextPage={(lastCursor: string) => {
-        //@TODO:
-      }}
-      onFetchPreviousPage={firstCursor => {
-        //@TODO:
-      }}
-      onScrollStateSave={() => {
-        //@TODO:
-      }}
-      newItemsPublishedLabel={newItemsPublishedLabel}
-    >
-      {cardProps => {
-        const { items, allEntries, measureElementRef } = cardProps;
-        return items.map((item, idx) => {
-          const { index, key } = item;
-          const entryData = allEntries[index];
-          const isLoader = index > allEntries.length - 1;
-          if (isLoader || reflectionsReq.isFetchingNextPage) {
-            return (
-              <Stack key={key} customStyle="p-8 w-full">
-                <Spinner />
-              </Stack>
-            );
-          }
-          return (
-            <div key={key} data-index={index} ref={measureElementRef}>
-              {!entryData && <EntryCardLoading />}
-              {entryData && (
-                <>
-                  <Divider />
-                  <EditableReflection
-                    entryData={entryData}
-                    reflectToId={reflectionsOf.entryId}
-                    contentClickable={true}
-                    lastEntry={idx === items.length - 1}
-                    hover={true}
-                    onReflect={() => {
-                      onNavigate(
-                        {
-                          authorId: entryData?.author.id,
-                          id: entryData?.id,
-                          reflect: true,
-                        },
-                        EntityTypes.REFLECT,
-                      );
-                    }}
-                    onContentClick={() =>
-                      onNavigate(
-                        { authorId: entryData?.author.id, id: entryData.id },
-                        EntityTypes.REFLECT,
-                      )
-                    }
-                  />
-                  <ReflectionPreview reflectionId={entryData?.id} onNavigate={onNavigate} />
-                </>
-              )}
-            </div>
-          );
-        });
-      }}
-    </EntryList>
+    <>
+      {hasErrors && (
+        <ErrorLoader
+          type="script-error"
+          title={'Sorry, there was an error when fetching beams'}
+          details={<>{errors}</>}
+        />
+      )}
+      {!hasErrors && (
+        <Virtualizer<AkashaReflectEdge>
+          restorationKey={queryKey}
+          itemSpacing={itemSpacing}
+          estimatedHeight={estimatedHeight}
+          overscan={scrollerOptions.overscan}
+          items={reflections}
+          onFetchInitialData={handleInitialFetch}
+          itemKeyExtractor={item => item.cursor}
+          itemIndexExtractor={itemKey => reflections.findIndex(p => p.cursor === itemKey)}
+          onListReset={() => Promise.resolve()}
+          onEdgeDetectorChange={handleFetch}
+          scrollTopIndicator={scrollTopIndicator}
+          renderItem={renderItem}
+        />
+      )}
+    </>
   );
 };
 

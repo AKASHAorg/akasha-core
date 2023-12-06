@@ -13,17 +13,18 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, NavigationOptions } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
-import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
+import { ReflectFeed, ReflectionCard, ReflectionPreview } from '@akashaorg/ui-lib-feed';
+import { ILocale } from '@akashaorg/design-system-core/lib/utils';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 const BeamPage: React.FC<unknown> = () => {
   const { beamId } = useParams<{
     beamId: string;
   }>();
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin, navigateToModal, layoutConfig, getTranslationPlugin } =
-    useRootComponentProps();
+  const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
   const beamReq = useGetBeamByIdQuery({ id: beamId }, { select: response => response.node });
   const profileDataReq = useGetMyProfileQuery(null, {
     select: resp => {
@@ -66,23 +67,49 @@ const BeamPage: React.FC<unknown> = () => {
       <PendingReflect beamId={beamId} authorId={loggedProfileData?.did.id} />
       <Stack spacing="gap-y-2">
         <ReflectFeed
+          queryKey={`reflect-feed-${beamId}`}
+          filters={{ where: { reflection: { isNull: true } } }}
+          estimatedHeight={120}
+          renderItem={itemData => (
+            <>
+              <Divider />
+              <ReflectionCard
+                entryData={itemData.node}
+                contentClickable={true}
+                onContentClick={() =>
+                  getRoutingPlugin().navigateTo({
+                    appName: '@akashaorg/app-akasha-integration',
+                    getNavigationUrl: navRoutes => `${navRoutes.Reflect}/${itemData.node.id}`,
+                  })
+                }
+                onReflect={() =>
+                  getRoutingPlugin().navigateTo({
+                    appName: '@akashaorg/app-akasha-integration',
+                    getNavigationUrl: navRoutes =>
+                      `${navRoutes.Reflect}/${itemData.node.id}/${navRoutes.Reflect}`,
+                  })
+                }
+              />
+              <ReflectionPreview
+                reflectionId={itemData.node.id}
+                onNavigate={(options: { id: string; reflect?: boolean }) => {
+                  getRoutingPlugin().navigateTo({
+                    appName: '@akashaorg/app-akasha-integration',
+                    getNavigationUrl: navRoutes =>
+                      `${navRoutes.Reflect}/${options.id}${
+                        options.reflect ? navRoutes.Reflect : ''
+                      }`,
+                  });
+                }}
+              />
+            </>
+          )}
+          scrollTopIndicator={() => <>ST</>}
           reflectionsOf={{ entryId: beamId, itemType: EntityTypes.BEAM }}
-          loggedProfileData={loggedProfileData}
-          onEntryFlag={() => {
-            return () => {
-              //@TODO
-            };
-          }}
-          onEntryRemove={() => {
-            //@TODO
-          }}
           itemSpacing={0}
           newItemsPublishedLabel={t('New Reflects published recently')}
-          onLoginModalOpen={showLoginModal}
           trackEvent={analyticsActions.trackEvent}
-          onNavigate={onNavigate}
-          modalSlotId={layoutConfig.modalSlotId}
-          i18n={getTranslationPlugin().i18n}
+          locale={getTranslationPlugin().i18n.language as ILocale}
         />
       </Stack>
     </Card>
