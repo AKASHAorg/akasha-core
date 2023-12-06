@@ -16,7 +16,7 @@ import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
 import Logging from '../logging';
-import { constants as ethersConstants, ethers, utils as ethersUtils } from 'ethers';
+import { ethers, id, ZeroHash, zeroPadBytes } from 'ethers';
 import IntegrationRegistryABI from '../contracts/abi/IntegrationRegistry.json';
 import { createFormattedValue } from '../helpers/observable';
 import EventBus from '../common/event-bus';
@@ -59,11 +59,11 @@ class AWF_IC_REGISTRY {
     this._ipfs = ipfs;
   }
 
-  #_setupContracts() {
+  async #_setupContracts() {
     if (this._IntegrationRegistryInstance) {
       return;
     }
-    const signer = this._web3.getSigner();
+    const signer = await this._web3.getSigner();
     if (signer) {
       this._IntegrationRegistryInstance = new ethers.Contract(
         this.INTEGRATION_REGISTRY_ADDRESS,
@@ -98,7 +98,7 @@ class AWF_IC_REGISTRY {
       true,
     );
     const { links, sources } = manifestData;
-    const integrationID = integrationId || ethersUtils.id(data.integrationName);
+    const integrationID = integrationId || id(data.integrationName);
     const integrationInfo = await this._IntegrationRegistryInstance.getPackageInfo(integrationID);
     const ipfsSources = this._ipfs.multiAddrToUri(sources);
     let manifest: ManifestInfo;
@@ -141,7 +141,7 @@ class AWF_IC_REGISTRY {
   // on chain call for latest version info
   @validate(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial())
   async getLatestVersionInfo(integration: { name?: IntegrationName; id?: IntegrationId }) {
-    const integrationID = integration.id || ethers.utils.id(integration.name || '');
+    const integrationID = integration.id || id(integration.name || '');
     const info = await this.getIntegrationInfo(integrationID);
     return this.getIntegrationReleaseInfo(info.latestReleaseId, integrationID);
   }
@@ -159,7 +159,7 @@ class AWF_IC_REGISTRY {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getAllPackageIds(offset);
     return createFormattedValue({
-      integrationIds: data.integrationIds.filter(x => x !== ethersConstants.HashZero),
+      integrationIds: data.integrationIds.filter(x => x !== ZeroHash),
       nextIndex: data.next,
     });
   }
@@ -169,19 +169,19 @@ class AWF_IC_REGISTRY {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getAllReleaseIds(integrationName, offset);
     return createFormattedValue({
-      releaseIds: data.releaseIds.filter(x => x !== ethersConstants.HashZero),
+      releaseIds: data.releaseIds.filter(x => x !== ZeroHash),
       nextIndex: data.next,
     });
   }
 
   @validate(IntegrationNameSchema)
   async getIntegrationId(name: IntegrationName) {
-    const data = ethersUtils.id(name);
+    const data = id(name);
     return Promise.resolve(createFormattedValue({ id: data }));
   }
   @validate(IntegrationNameSchema, z.string())
   async getIntegrationReleaseId(name: IntegrationName, version: string) {
-    const data = ethersUtils.id(name + version);
+    const data = id(name + version);
     return Promise.resolve(createFormattedValue({ id: data }));
   }
 
@@ -191,7 +191,7 @@ class AWF_IC_REGISTRY {
       if (el.id) {
         return el.id;
       }
-      return ethersUtils.id(el.name || '');
+      return id(el.name || '');
     });
   }
   // @validate(z.array(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial()))

@@ -74,9 +74,7 @@ Functionality:
     }
     const accountId = new AccountId({ address: ethAddress, chainId: chainIdNameSpace });
     let web3Provider;
-    if (this._web3.provider instanceof ethers.providers.Web3Provider) {
-      web3Provider = this._web3.provider.provider;
-    }
+    web3Provider = this._web3.walletProvider;
     if(!web3Provider){
       throw new Error('No provider found for ceramic:connect!');
     }
