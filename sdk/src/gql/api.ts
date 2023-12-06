@@ -866,39 +866,6 @@ export const GetMyProfileDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentMFragmentDoc}`;
-export const GetFollowDocumentsDocument = /*#__PURE__*/ gql`
-    query GetFollowDocuments($after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
-  viewer {
-    akashaFollowList(
-      after: $after
-      before: $before
-      first: $first
-      last: $last
-      filters: {where: {profileID: {in: $following}}}
-      sorting: $sorting
-    ) {
-      edges {
-        node {
-          id
-          isFollowing
-          profileID
-          profile {
-            ...UserProfileFragmentM
-          }
-        }
-        cursor
-      }
-      pageInfo {
-        startCursor
-        endCursor
-        hasNextPage
-        hasPreviousPage
-      }
-    }
-    isViewer
-  }
-}
-    ${UserProfileFragmentMFragmentDoc}`;
 export const GetFollowDocumentsByDidDocument = /*#__PURE__*/ gql`
     query GetFollowDocumentsByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaFollowSortingInput, $following: [String!]) {
   node(id: $id) {
@@ -1437,9 +1404,6 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetMyProfile(variables?: Types.GetMyProfileQueryVariables, options?: C): Promise<Types.GetMyProfileQuery> {
       return requester<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options) as Promise<Types.GetMyProfileQuery>;
-    },
-    GetFollowDocuments(variables?: Types.GetFollowDocumentsQueryVariables, options?: C): Promise<Types.GetFollowDocumentsQuery> {
-      return requester<Types.GetFollowDocumentsQuery, Types.GetFollowDocumentsQueryVariables>(GetFollowDocumentsDocument, variables, options) as Promise<Types.GetFollowDocumentsQuery>;
     },
     GetFollowDocumentsByDid(variables: Types.GetFollowDocumentsByDidQueryVariables, options?: C): Promise<Types.GetFollowDocumentsByDidQuery> {
       return requester<Types.GetFollowDocumentsByDidQuery, Types.GetFollowDocumentsByDidQueryVariables>(GetFollowDocumentsByDidDocument, variables, options) as Promise<Types.GetFollowDocumentsByDidQuery>;
