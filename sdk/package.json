@@ -75,7 +75,7 @@
     "@types/node": "18.11.15",
     "chai": "4.3.7",
     "dotenv-webpack": "8.0.1",
-    "hardhat": "2.12.4",
+    "hardhat": "2.19.2",
     "tslib": "2.4.1",
     "workbox-cacheable-response": "6.6.1",
     "workbox-core": "6.6.1",
