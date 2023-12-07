@@ -80,14 +80,16 @@ export function useGetLogin(onError?: (error: Error) => void) {
 export const useGetLoginProfile = () => {
   const { data } = useGetLogin();
   const [fetchProfile, profileQuery] = useGetProfileByDidLazyQuery();
+
   React.useEffect(() => {
-    if (!data || !data.id || profileQuery.loading) return;
+    if (!data || !data.id) return;
     fetchProfile({
       variables: {
         id: data.id,
       },
     }).catch(err => console.error(err));
-  }, [data, fetchProfile, profileQuery.loading]);
+  }, [data, fetchProfile]);
+
   return React.useMemo(() => {
     if (profileQuery.data?.node && hasOwn(profileQuery.data.node, 'akashaProfile')) {
       return profileQuery.data.node;

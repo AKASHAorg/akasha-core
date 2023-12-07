@@ -17,8 +17,8 @@ import { Rect } from './rect';
 
 export type VirtualizerProps<T> = {
   restorationKey: string;
-  header?: React.ReactNode;
-  footer?: React.ReactNode;
+  header?: () => React.ReactNode;
+  footer?: () => React.ReactNode;
   estimatedHeight: VirtualListRendererProps<unknown>['estimatedHeight'];
   items: T[];
   itemKeyExtractor: (item: T) => string;
@@ -61,9 +61,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
     const itemList: VirtualDataItem<T>[] = [];
     if (header) {
-      itemList.push(
-        createVirtualDataItem(HEADER_COMPONENT, HEADER_COMPONENT as T, false, () => header),
-      );
+      itemList.push(createVirtualDataItem(HEADER_COMPONENT, HEADER_COMPONENT as T, false, header));
     }
 
     itemList.push(
@@ -77,10 +75,9 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
         ),
       ),
     );
+
     if (footer) {
-      itemList.push(
-        createVirtualDataItem(FOOTER_COMPONENT, FOOTER_COMPONENT as T, false, () => footer),
-      );
+      itemList.push(createVirtualDataItem(FOOTER_COMPONENT, FOOTER_COMPONENT as T, false, footer));
     }
     return itemList;
   }, [footer, header, itemIndexExtractor, items]);
