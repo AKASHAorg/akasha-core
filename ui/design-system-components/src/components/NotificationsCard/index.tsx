@@ -163,7 +163,10 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
       </>
     );
 
-    const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
+    const relativeTime = formatRelativeTime(
+      Math.floor(notif.createdAt / 1000000000).toString(),
+      'en',
+    );
     return (
       <Stack key={index} customStyle={`${index === notifications.length - 1 ? 'basis-full' : ''}`}>
         <Stack key={index} padding="py-3 pl-4" customStyle="flex-row">

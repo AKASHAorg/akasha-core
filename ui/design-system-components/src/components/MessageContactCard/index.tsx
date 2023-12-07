@@ -8,10 +8,9 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { EllipsisVerticalIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 
 export type MessageContactCardProps = {
-  locale: ILocale;
+  locale: string;
   senderName: Profile['name'];
   content?: string;
   isRead?: boolean;

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
-import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
   AkashaBeamEdge,
   AkashaBeamFiltersInput,
@@ -11,7 +10,6 @@ import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 export type BeamFeedProps = {
-  locale?: ILocale;
   className?: string;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
   scrollerOptions?: { overscan: number };
@@ -34,7 +32,6 @@ const BeamFeed = (props: BeamFeedProps) => {
     scrollTopIndicator,
     renderItem,
     queryKey,
-    newItemsPublishedLabel,
     estimatedHeight = 150,
     itemSpacing,
   } = props;
