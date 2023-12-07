@@ -1,21 +1,21 @@
 import React from 'react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore-next-line
 import EditProfilePage from '../pages/edit-profile';
-
-import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated';
-import * as useLoggedIn from '@akashaorg/ui-awf-hooks/lib/use-logged-in';
-
 import userEvent from '@testing-library/user-event';
-
-import { renderWithAllProviders, act, screen, genUser, waitFor } from '@akashaorg/af-testing';
+import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import {
+  renderWithAllProvidersAndApollo,
+  act,
+  screen,
+  genUser,
+  waitFor,
+} from '@akashaorg/af-testing';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { MemoryRouter as Router } from 'react-router-dom';
 
 describe('<EditProfilePage />', () => {
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
-      <EditProfilePage handleProfileUpdatedFeedback={jest.fn} />
+      <EditProfilePage isLoggedIn={true} handleProfileUpdatedFeedback={jest.fn} />
     </Router>
   );
 
@@ -24,24 +24,19 @@ describe('<EditProfilePage />', () => {
   beforeEach(async () => {
     userEvent.setup();
     await act(async () => {
-      renderWithAllProviders(BaseComponent, {});
+      renderWithAllProvidersAndApollo(BaseComponent, {});
     });
   });
 
   beforeAll(() => {
     (
-      jest.spyOn(hooks, 'useGetProfileByDidQuery') as unknown as jest.SpyInstance<{
+      jest.spyOn(hooks, 'useGetProfileByDidSuspenseQuery') as unknown as jest.SpyInstance<{
         data: {
           isViewer: boolean;
           akashaProfile: Profile;
         };
-        status: 'success' | 'error';
       }>
-    ).mockReturnValue({ data: { isViewer: true, akashaProfile: profile }, status: 'success' });
-
-    (
-      jest.spyOn(useLoggedIn, 'useLoggedIn') as unknown as jest.SpyInstance<{ isLoggedIn: boolean }>
-    ).mockReturnValue({ isLoggedIn: true });
+    ).mockReturnValue({ data: { isViewer: true, akashaProfile: profile } });
   });
 
   it('should render edit page', async () => {

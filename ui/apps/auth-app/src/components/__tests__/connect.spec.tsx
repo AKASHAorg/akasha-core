@@ -21,11 +21,11 @@ describe('< SignIn /> component', () => {
 
   it('should render sign in page', async () => {
     expect(screen.getByText(/Welcome to AKASHA World/i)).toBeInTheDocument();
-    expect(screen.getByText(/Choose a way to connect/i)).toBeInTheDocument();
+    expect(screen.getByText(/Connect your wallet/i)).toBeInTheDocument();
   });
 
   it('has a connect option', async () => {
-    const walletConnect = screen.getByText('Scan with WalletConnect');
+    const walletConnect = screen.getByText(/Connect with Web3Modal/i);
     expect(walletConnect).toBeInTheDocument();
   });
 });

@@ -69,7 +69,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
       <Text variant="footnotes2" align="center" weight="normal">
         {dragToRepositionLabel}
       </Text>
-      <Stack justify="evenly" spacing="gap-x-2">
+      <Stack direction="row" justify="evenly" spacing="gap-x-2">
         <Icon icon={<MagnifyingGlassMinusIcon />} size="lg" />
         <input
           aria-label="range-input"
