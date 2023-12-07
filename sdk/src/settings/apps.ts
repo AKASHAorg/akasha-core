@@ -10,7 +10,7 @@ import DB from '../db';
 import { createFormattedValue } from '../helpers/observable';
 import Logging from '../logging/index';
 import IcRegistry from '../registry/icRegistry';
-import { ethers } from 'ethers';
+import { ethers, id } from 'ethers';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
 import { validate } from '../common/validator';
@@ -152,7 +152,7 @@ class AppSettings {
 
   async updateVersion(app: VersionInfo) {
     const release = await this._icRegistry.getIntegrationReleaseInfo(
-      ethers.utils.id(`${app.name}${app.version}`),
+      id(`${app.name}${app.version}`),
     );
     const currentInfo = await this.get(release.name);
     const collection = this._db.getCollections().integrations;

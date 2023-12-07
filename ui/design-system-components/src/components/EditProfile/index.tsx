@@ -64,8 +64,12 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
   const isFormDirty = () => {
     const links = getValues('links')?.filter(link => link) || [];
-    //Compute isDirty for links accurately
-    if (links.length !== defaultValues.links?.length) {
+
+    if (
+      links.length !== defaultValues.links?.length /*Compute isDirty for links accurately*/ ||
+      getValues('avatar') ||
+      getValues('coverImage')
+    ) {
       return true;
     }
 

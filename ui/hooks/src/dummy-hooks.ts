@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-type DataGeneratorFn<TData = unknown> = ({ pageParam = 0 }) => TData;
+type DataGeneratorFn<TData = unknown> = () => TData ;
 
 export function useInfiniteDummy<
   TQueryReturnData,
