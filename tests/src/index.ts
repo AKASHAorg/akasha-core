@@ -1,6 +1,6 @@
 import { render, RenderOptions } from '@testing-library/react';
 import React from 'react';
-import { AllProviders } from './providers';
+import { AllProviders, AllProvidersWithApollo } from './providers';
 // import reactI18next from 'react-i18next';
 
 // const installMocks = (origI18next: typeof reactI18next) => {
@@ -32,8 +32,14 @@ const renderWithAllProviders = (component: React.ReactElement, options: RenderOp
   return render(component, { wrapper: AllProviders, ...options });
 };
 
+/*@TODO replacement for renderWithAllProviders when react-query is fully migrated to apollo */
+/* Utility function to render with all required providers with apollo */
+const renderWithAllProvidersAndApollo = (component: React.ReactElement, options: RenderOptions) => {
+  return render(component, { wrapper: AllProvidersWithApollo, ...options });
+};
+
 export * from '@testing-library/react';
-export { renderWithWrapper, renderWithAllProviders };
+export { renderWithWrapper, renderWithAllProviders, renderWithAllProvidersAndApollo };
 
 export * from './data-generator';
 export * from './mocks/operator';
