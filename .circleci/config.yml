@@ -13,7 +13,7 @@ jobs:
   setup:
     docker:
       # specify the version you desire here
-      - image: cimg/node:18.16.0
+      - image: cimg/node:20.9.0
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -24,9 +24,6 @@ jobs:
 
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
-      - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@9.5.1'
       - run:
           name: Install gcc
           command: 'sudo apt-get update -y && sudo apt-get install -y build-essential libsqlite3-dev'
