@@ -4,7 +4,6 @@ import Editor from '@akashaorg/design-system-components/lib/components/Reflectio
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
-  getLinkPreview,
   transformImageVersions,
   serializeSlateToBase64,
   useAnalytics,
@@ -150,7 +149,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         onCancelClick={() => {
           //@TODO
         }}
-        getLinkPreview={getLinkPreview}
         getMentions={setMentionQuery}
         getTags={setTagQuery}
       />

@@ -23,6 +23,7 @@ const DEFAULT_TEXT_BLOCK = 'slate-block';
 
 export const useBlocksPublishing = () => {
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
+  const [isNsfw, setIsNsfw] = React.useState(false);
   const { getExtensionsPlugin } = useRootComponentProps();
   React.useLayoutEffect(() => {
     if (getExtensionsPlugin()) {
@@ -64,6 +65,7 @@ export const useBlocksPublishing = () => {
     if (blocksInUse.every(bl => bl.status === 'success')) {
       const beamContent: AkashaBeamInput = {
         active: true,
+        nsfw: isNsfw,
         content: blocksInUse.map(blockData => ({
           blockID: blockData.response.blockID,
           order: blockData.order,
@@ -91,27 +93,31 @@ export const useBlocksPublishing = () => {
     }
   }, [blocksInUse, createBeam]);
 
-  const createContentBlocks = React.useCallback(async () => {
-    setIsPublishing(true);
-    for (const [idx, block] of blocksInUse.entries()) {
-      if (block.status !== 'success' && block.status !== 'pending') {
-        setBlocksInUse(prev => [
-          ...prev.slice(0, idx),
-          { ...block, status: 'pending' },
-          ...prev.slice(idx + 1),
-        ]);
-        const data = await block.blockRef.current.createBlock();
-        if (data.response) {
-          console.log('block:', data.blockInfo, 'created successfully...');
+  const createContentBlocks = React.useCallback(
+    async (nsfw: boolean) => {
+      setIsPublishing(true);
+      setIsNsfw(nsfw);
+      for (const [idx, block] of blocksInUse.entries()) {
+        if (block.status !== 'success' && block.status !== 'pending') {
           setBlocksInUse(prev => [
             ...prev.slice(0, idx),
-            { ...block, status: 'success', response: data.response },
+            { ...block, status: 'pending' },
             ...prev.slice(idx + 1),
           ]);
+          const data = await block.blockRef.current.createBlock();
+          if (data.response) {
+            console.log('block:', data.blockInfo, 'created successfully...');
+            setBlocksInUse(prev => [
+              ...prev.slice(0, idx),
+              { ...block, status: 'success', response: data.response },
+              ...prev.slice(idx + 1),
+            ]);
+          }
         }
       }
-    }
-  }, [blocksInUse]);
+    },
+    [blocksInUse],
+  );
 
   // convenience method to add a new block into the beam editor
   // if index (idx) param is omitted, it will be added as the last block in the list

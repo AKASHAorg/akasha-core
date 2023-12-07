@@ -34,7 +34,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
   };
 
   const singleImageStyle = apply`${images.length === 1 && 'max-w-full'}`;
-  const mobileStyle = apply`${'h-40 sm:max-h-60'}`;
+  const mobileStyle = apply`${'max-h-40 sm:max-h-60'}`;
 
   return (
     <button

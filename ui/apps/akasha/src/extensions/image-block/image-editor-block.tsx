@@ -22,6 +22,7 @@ import {
   XMarkIcon,
   ArrowPathIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9r1pcwsu441cf';
@@ -166,43 +167,42 @@ export const ImageEditorBlock = (
     <>
       {uiState === 'menu' && (
         <Card background={{ dark: 'grey3', light: 'grey9' }}>
-          <Stack direction="column" spacing="gap-4">
-            <Stack direction="column" spacing="gap-2">
-              <Stack direction="row" justify="between">
-                <Text variant="h6">{t('Add an image')} </Text>
-                <Text variant="subtitle2">{`${images.length}/4 ${t('images')}`}</Text>
-              </Stack>
-              <Text variant="subtitle2">
-                {t('You can upload JPEG, PNG, or WebP images to your Beam, up to 1.5MB each.')}
-              </Text>
-            </Stack>
-            <Stack direction="row" justify="between">
-              <Text variant="h6">{t('From Device')}</Text>
+          <Stack direction="column">
+            <Stack customStyle="pb-8">
               <Button
-                label={t('Select')}
-                variant="text"
+                label={t('Add an image from device')}
+                variant="primary"
+                customStyle="w-full sm:w-48"
                 onClick={handleMediaClick}
                 disabled={imageUploadDisabled}
               />
             </Stack>
-            <Stack direction="column" spacing="gap-2">
-              <Text variant="subtitle2">{t('Or upload an image using a URL')}</Text>
+            <Divider />
+            <Stack direction="column" spacing="gap-2" customStyle="py-8">
+              <Text variant="h6">{t('From URL')}</Text>
               <Stack direction="row" justify="between">
                 <TextField
                   value={imageLink}
                   placeholder={t('Paste image link')}
+                  altBg
+                  fullWidth
                   type={'text'}
                   onChange={handleChange}
                   disabled={imageUploadDisabled}
                 />
-                <Button label={t('Upload')} variant="text" />
+                <Button label={t('Add')} variant="secondary" disabled={!imageLink} />
               </Stack>
             </Stack>
-            <Stack direction="column" spacing="gap-2" customStyle="overflow-auto">
+            <Divider />
+            <Stack direction="column" spacing="gap-2" customStyle="overflow-auto pt-8">
+              <Stack direction="row" justify="between">
+                <Text variant="h6">{t('Uploaded images')} </Text>
+                <Text variant="subtitle2">{`${images.length}/4 ${t('images')}`}</Text>
+              </Stack>
               {images.map((imageObj, index) => (
                 <Stack key={index} direction="row" justify="between">
-                  <Stack direction="row" spacing="gap-1">
-                    <Image src={imageObj.src.url} customStyle="object-contain w-8 h-8" />
+                  <Stack direction="row" spacing="gap-1" align="center">
+                    <Image src={imageObj.src.url} customStyle="object-fill w-8 h-8 rounded-lg" />
                     <Text>{imageObj.name}</Text>
                   </Stack>
                   <button onClick={() => handleDeleteImage(imageObj)}>
@@ -219,8 +219,7 @@ export const ImageEditorBlock = (
           customStyle="w-4/5 h-48 sm:h-60 rounded-xl"
           justify="center"
           align="center"
-          justifySelf="center"
-          background={{ light: 'grey3', dark: 'grey5' }}
+          background={{ light: 'grey8', dark: 'grey5' }}
           spacing="gap-2"
         >
           <Icon icon={<ArrowPathIcon />} rotateAnimation />

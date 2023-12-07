@@ -14,6 +14,8 @@ export type InputProps = {
   type: 'text';
   status?: Status;
   radius?: Radius;
+  altBg?: boolean;
+  fullWidth?: boolean;
 } & JSX.IntrinsicElements['input'];
 
 export type LabelProps = {

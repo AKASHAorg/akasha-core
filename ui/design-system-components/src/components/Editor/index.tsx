@@ -18,11 +18,7 @@ import { IEntryData, IMetadata, IPublishData, Profile } from '@akashaorg/typings
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  ArrowPathIcon,
-  FaceSmileIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { ArrowPathIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
 import { CustomEditor } from './helpers';
@@ -75,7 +71,7 @@ export type EditorBoxProps = {
 };
 
 /* eslint-disable complexity */
-const EditorBox: React.FC<EditorBoxProps> = React.forwardRef(props => {
+const EditorBox: React.FC<EditorBoxProps> = props => {
   const {
     avatar,
     showAvatar = true,
@@ -90,7 +86,6 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef(props => {
     embedEntryData,
     minHeight,
     withMeter,
-    handleSaveLinkPreviewDraft,
     linkPreview,
     getLinkPreview,
     getMentions,
@@ -124,13 +119,11 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef(props => {
     setLinkPreviewUploading(true);
     const linkPreview = await getLinkPreview(url);
     setLinkPreviewState(linkPreview);
-    handleSaveLinkPreviewDraft(linkPreview);
     setLinkPreviewUploading(false);
   };
 
   const handleDeletePreview = () => {
     setLinkPreviewState(null);
-    handleSaveLinkPreviewDraft(null);
   };
 
   /**
@@ -595,6 +588,6 @@ const EditorBox: React.FC<EditorBoxProps> = React.forwardRef(props => {
       </div>
     </div>
   );
-});
+};
 
 export default EditorBox;

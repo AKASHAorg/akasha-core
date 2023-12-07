@@ -5,7 +5,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
-  CheckIcon,
   TrashIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -40,7 +39,7 @@ export const BeamEditor: React.FC = () => {
   };
 
   const handleBeamPublish = () => {
-    createContentBlocks();
+    createContentBlocks(isNsfw);
   };
 
   const [uiState, setUiState] = React.useState<uiState>('editor');
@@ -62,15 +61,12 @@ export const BeamEditor: React.FC = () => {
     setUiState('editor');
   };
 
-  const [selectedBlock, setSelectedBlock] = React.useState(null);
-
-  const handleAddBlock = () => {
+  const handleAddBlock = selectedBlock => {
     const newBlock = availableBlocks.find(
       block => block.propertyType === selectedBlock.propertyType,
     );
     onBlockSelectAfter(newBlock);
     setUiState('editor');
-    setSelectedBlock(null);
   };
 
   const [tagValue, setTagValue] = React.useState('');
@@ -111,7 +107,7 @@ export const BeamEditor: React.FC = () => {
                     align="center"
                     justify="center"
                     customStyle={
-                      'h-6 w-6 group relative rounded-full bg(secondaryLight dark:secondaryDark)'
+                      'h-6 w-6 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark/30)'
                     }
                   >
                     <Icon size="xs" icon={block.icon} />
@@ -149,19 +145,13 @@ export const BeamEditor: React.FC = () => {
           }`}
         >
           {availableBlocks.map((block, idx) => (
-            <button key={idx} onClick={() => setSelectedBlock(block)}>
+            <button key={idx} onClick={() => handleAddBlock(block)}>
               <Stack
                 padding={16}
                 customStyle="w-full"
                 direction="row"
                 justify="between"
                 align="center"
-                background={
-                  block.propertyType === selectedBlock?.propertyType && {
-                    light: 'grey8',
-                    dark: 'grey3',
-                  }
-                }
               >
                 <Stack direction="row" align="center" spacing="gap-2">
                   <Stack
@@ -169,31 +159,10 @@ export const BeamEditor: React.FC = () => {
                     justify="center"
                     customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
                   >
-                    <Icon
-                      size="xs"
-                      accentColor={block.propertyType === selectedBlock?.propertyType}
-                      icon={block.icon}
-                    />
+                    <Icon size="xs" icon={block.icon} />
                   </Stack>
-                  <Text
-                    color={
-                      block.propertyType === selectedBlock?.propertyType
-                        ? {
-                            light: 'secondaryLight',
-                            dark: 'secondaryDark',
-                          }
-                        : {
-                            light: 'black',
-                            dark: 'white',
-                          }
-                    }
-                  >
-                    {block.displayName}
-                  </Text>
+                  <Text>{block.displayName}</Text>
                 </Stack>
-                {block.propertyType === selectedBlock?.propertyType && (
-                  <Icon icon={<CheckIcon />} accentColor={true} />
-                )}
               </Stack>
             </button>
           ))}
@@ -240,7 +209,6 @@ export const BeamEditor: React.FC = () => {
         handleClickAddBlock={handleAddBlockBtn}
         handleClickTags={handleTagsBtn}
         handleClickCancel={handleClickCancel}
-        handleAddBlock={handleAddBlock}
         handleAddTags={handleAddTags}
         handleBeamPublish={handleBeamPublish}
         addBlockLabel={t('Add a Block')}
