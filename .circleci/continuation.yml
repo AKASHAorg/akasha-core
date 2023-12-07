@@ -30,6 +30,9 @@ jobs:
                 name: Install nx
                 command: sudo npm install -g nx@14.6.5
             - run:
+                name: Ensure all packages are available
+                command:  yarn --frozen-lockfile --cache-folder ~/.cache/yarn && yarn build:executors
+            - run:
                 name: Test affected projects
                 command: |
                   #TODO: exclude messaging, af-testing, hup-api, and app loader apps till their tsc and failing tests are fixed
