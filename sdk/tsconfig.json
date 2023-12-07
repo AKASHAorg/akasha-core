@@ -5,7 +5,7 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "types": ["reflect-metadata", "node"],
+    "types": ["node"],
     "typeRoots": ["./node_modules/@types"],
     "lib": [
       "dom",
