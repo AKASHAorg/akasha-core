@@ -9,8 +9,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 import BasicInfoCard from './basic-info-card';
 import ProfileAvatarNotificationApp from './profile-avatar-notification-app';
-
-import { formatRelativeTime } from '../../utils/time';
+import { formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 
 export type NotificationsCardProps = {
   // data
