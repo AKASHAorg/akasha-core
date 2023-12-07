@@ -1,65 +1,56 @@
+import * as React from 'react';
 import { Rect } from './rect';
-import { dpr, isWindow, pxToDPR } from './utils';
-import React from 'react';
 
 export type UseViewportProps = {
-  initialRect: Rect;
+  initialRect?: Rect;
   offsetTop: number;
-  rootNode: React.MutableRefObject<HTMLElement>;
+  rootNode: React.RefObject<HTMLElement>;
 };
+
 export const useViewport = (props: UseViewportProps) => {
   const { initialRect, offsetTop, rootNode } = props;
-  const unregisterScroll = React.useRef<() => void>();
-  const unregisterResize = React.useRef<() => void>();
-  const scrollListeners = React.useRef([]);
-  const resizeListeners = React.useRef([]);
-  const overScroll = React.useRef(0);
-  const preventNextScrollListener = React.useRef(false);
 
-  const stateRef = React.useRef({
-    rect: initialRect,
+  const isWindow = React.useRef(typeof window !== 'undefined');
+  const dpr = React.useRef(isWindow.current ? window.devicePixelRatio ?? 1 : 1);
+  const scrollListeners = React.useRef<((prevented?: boolean) => void)[]>([]);
+  const unregisterScroll = React.useRef<() => void>();
+  const preventNextScrollListener = React.useRef(false);
+  const bottomOffset = React.useRef(0);
+  const topOffset = React.useRef(0);
+  const stateRef = React.useRef<{ rect: Rect; offsetTop: number }>({
+    rect: initialRect, // it's assigned below
     offsetTop: offsetTop,
   });
 
-  React.useLayoutEffect(() => {
-    if (!stateRef.current.rect) {
-      const clientHeight = Math.ceil(window.document.documentElement.clientHeight);
-      const height = Math.max(0, clientHeight - stateRef.current.offsetTop);
-      stateRef.current.rect = new Rect(stateRef.current.offsetTop, height);
+  const pxToDPR = React.useRef((px: number, dpr: number) => Math.ceil(px * dpr) / dpr);
+
+  if (!stateRef.current.rect) {
+    const clientHeight = Math.ceil(window.document.documentElement.clientHeight);
+    const height = Math.max(0, clientHeight - stateRef.current.offsetTop);
+    stateRef.current.rect = new Rect(stateRef.current.offsetTop, height);
+  }
+
+  React.useEffect(() => {
+    if (rootNode.current) {
+      setTopOffset(rootNode.current.offsetTop);
+      if (rootNode.current.parentElement) {
+        setBottomOffset(
+          rootNode.current.parentElement.offsetHeight -
+            rootNode.current.offsetTop -
+            rootNode.current.offsetHeight,
+        );
+      }
     }
-  }, []);
-
-  const defaultResizeListener = () => {
-    resizeListeners.current.forEach(listener => {
-      listener();
-    });
-  };
-
-  const registerResizeListener = () => {
-    if (!isWindow) return;
-    window.addEventListener('resize', defaultResizeListener);
-    return () => window.removeEventListener('resize', defaultResizeListener);
-  };
+  }, [rootNode]);
 
   const defaultScrollListener = () => {
     scrollListeners.current.forEach(listener => listener(preventNextScrollListener.current));
   };
 
   const registerScrollListener = () => {
-    if (!isWindow) return;
+    if (!isWindow.current) return;
     window.addEventListener('scroll', defaultScrollListener);
     return () => window.removeEventListener('scroll', defaultScrollListener);
-  };
-
-  if (!resizeListeners.current.length && isWindow) {
-    registerResizeListener();
-  }
-  if (!scrollListeners.current.length && isWindow) {
-    registerScrollListener();
-  }
-
-  const getHeight = () => {
-    return stateRef.current.rect.getHeight();
   };
 
   const addScrollListener = (listener: () => void) => {
@@ -81,44 +72,24 @@ export const useViewport = (props: UseViewportProps) => {
       unregisterScroll.current?.();
     }
   };
-  const addResizeListener = (listener: () => void) => {
-    if (!resizeListeners.current.length) {
-      unregisterResize.current = registerResizeListener();
-    }
-    resizeListeners.current.push(listener);
-    return () => removeResizeListener(listener);
+
+  const resizeRect = (top?: number, height?: number) => {
+    const newTop = top ?? stateRef.current.rect.getTop();
+    const newHeight = height ?? stateRef.current.rect.getHeight();
+    stateRef.current.rect = new Rect(newTop, newHeight);
   };
 
-  const removeResizeListener = (listener: () => void) => {
-    const idx = resizeListeners.current.indexOf(listener);
-    if (idx >= 0) {
-      resizeListeners.current.splice(idx, 1);
-    }
-    if (!resizeListeners.current.length) {
-      unregisterResize.current?.();
-    }
+  const getDocumentViewportHeight = (): number => {
+    if (initialRect) return initialRect.getHeight();
+    if (isWindow) return document.documentElement.clientHeight;
+    return 0;
   };
 
-  const getScrollY = () => {
-    if (isWindow) {
-      return -1 * window.document.documentElement.getBoundingClientRect().top;
-    }
-  };
-
-  const scrollBy = (amount: number) => {
-    if (isWindow) {
-      window.scrollBy(0, amount);
-    }
-  };
-
-  const scrollTo = (x: number, y: number) => {
-    if (isWindow) {
-      window.scrollTo(x, y);
-    }
-  };
-
-  const scrollToTop = () => {
-    scrollTo(0, 0);
+  const getOffsetCorrection = () => {
+    if (!rootNode.current) return 0;
+    const rect = rootNode.current.getBoundingClientRect();
+    const top = stateRef.current.rect.getTop();
+    return pxToDPR.current(rect.top - top, dpr.current);
   };
 
   const getRelativeToRootNode = () => {
@@ -129,48 +100,42 @@ export const useViewport = (props: UseViewportProps) => {
     }
   };
 
-  const getOffsetCorrection = () => {
-    if (!rootNode.current) return 0;
-    const rect = rootNode.current.getBoundingClientRect();
-    const top = stateRef.current.rect.getTop();
-    return pxToDPR(rect.top - top, dpr);
-  };
-
-  const getDocumentViewportHeight = (): number => {
-    if (initialRect) return initialRect.getHeight();
-    if (isWindow) return document.documentElement.clientHeight;
-    return 0;
-  };
   const isAtTop = () => {
     const viewportRect = getRelativeToRootNode();
     if (!viewportRect) return true;
+    if (!rootNode.current) return true;
     return viewportRect.getTop() <= rootNode.current.offsetTop;
   };
-
-  const resizeRect = (top?: number, height?: number) => {
-    const newTop = top ?? stateRef.current.rect.getTop();
-    const newHeight = height ?? stateRef.current.rect.getHeight();
-    stateRef.current.rect = new Rect(newTop, newHeight);
+  const setTopOffset = (offset: number) => {
+    topOffset.current = offset;
+  };
+  const setBottomOffset = (offset: number) => {
+    bottomOffset.current = offset;
   };
 
   return {
     getRect: () => new Rect(stateRef.current.rect.getTop(), stateRef.current.rect.getHeight()),
     resizeRect,
-    getOffsetTop: () => stateRef.current.offsetTop,
-    getOverScroll: () => overScroll.current,
-    setOffsetTop: (offset: number) => (stateRef.current.offsetTop = offset),
-    updateOverScroll: (overscroll: number) => (overScroll.current = overscroll),
-    preventNextScroll: (prevent = true) => (preventNextScrollListener.current = prevent),
-    isAtTop,
-    getOffsetCorrection,
-    getRelativeToRootNode,
-    getHeight,
-    getScrollY,
     addScrollListener,
-    addResizeListener,
-    scrollBy,
-    scrollTo,
-    scrollToTop,
     getDocumentViewportHeight,
+    getOffsetCorrection,
+    pxToDPR: pxToDPR.current,
+    dpr: dpr.current,
+    scrollBy: (amount: number) => {
+      if (!isWindow.current) return;
+      window.scrollBy(0, amount);
+    },
+    getRelativeToRootNode,
+    isAtTop,
+    setBottomOffset,
+    getBottomOffset: () => bottomOffset.current,
+    setTopOffset,
+    getTopOffset: () => topOffset.current,
+    getScrollY: () => {
+      if (isWindow.current) {
+        return -1 * window.document.documentElement.getBoundingClientRect().top;
+      }
+      return 0;
+    },
   };
 };

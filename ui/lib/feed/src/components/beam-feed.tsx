@@ -9,6 +9,8 @@ import {
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { RestoreItem } from '../virtual-list/use-scroll-state';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 export type BeamFeedProps = {
   locale?: ILocale;
@@ -19,11 +21,12 @@ export type BeamFeedProps = {
   newItemsPublishedLabel?: string;
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
-  scrollTopIndicator: VirtualizerProps<unknown>['scrollTopIndicator'];
+  scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
   renderItem: VirtualizerProps<AkashaBeamEdge>['renderItem'];
   estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];
+  loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
 };
 
 const BeamFeed = (props: BeamFeedProps) => {
@@ -37,6 +40,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     newItemsPublishedLabel,
     estimatedHeight = 150,
     itemSpacing,
+    loadingIndicator,
   } = props;
 
   const { beams, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset, hasErrors, errors } =
@@ -50,6 +54,12 @@ const BeamFeed = (props: BeamFeedProps) => {
   const isLoading = React.useRef(false);
   const prevBeams = React.useRef([]);
 
+  const loadingIndicatorRef = React.useRef(loadingIndicator);
+
+  if (!loadingIndicatorRef.current) {
+    loadingIndicatorRef.current = () => <Spinner />;
+  }
+
   React.useEffect(() => {
     if (beams !== prevBeams.current) {
       isLoading.current = false;
@@ -57,12 +67,9 @@ const BeamFeed = (props: BeamFeedProps) => {
     prevBeams.current = beams;
   }, [beams]);
 
-  const handleInitialFetch = async (cursors?: string[]) => {
-    if (cursors.length) {
-      lastCursors.current.prev = cursors[cursors.length - 1];
-    }
+  const handleInitialFetch = async (restoreItem?: RestoreItem) => {
     isLoading.current = true;
-    await fetchInitialData(cursors);
+    await fetchInitialData(restoreItem);
   };
 
   const handleFetch = async (newArea: EdgeArea) => {
@@ -117,11 +124,12 @@ const BeamFeed = (props: BeamFeedProps) => {
           items={beams}
           onFetchInitialData={handleInitialFetch}
           itemKeyExtractor={item => item.cursor}
-          itemIndexExtractor={itemKey => beams.findIndex(p => p.cursor === itemKey)}
+          itemIndexExtractor={item => beams.findIndex(p => p.cursor === item.cursor)}
           onListReset={handleReset}
           onEdgeDetectorChange={handleFetch}
           scrollTopIndicator={scrollTopIndicator}
           renderItem={renderItem}
+          loadingIndicator={loadingIndicatorRef.current}
         />
       )}
     </>

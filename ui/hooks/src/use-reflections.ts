@@ -70,14 +70,13 @@ export const useReflections = (props: UseReflectionProps) => {
       return result.akashaReflectIndex.edges;
     }
   };
-  const fetchInitialData = async (cursors: string[]) => {
-    const resumeItemCursor = cursors[cursors.length - 1];
-    if (resumeItemCursor && !reflectionsQuery.called) {
+  const fetchInitialData = async (restoreItem: { key: string; offsetTop: number }) => {
+    if (restoreItem && !reflectionsQuery.called) {
       try {
         const results = await fetchReflections({
           variables: {
             ...mergedVars,
-            after: resumeItemCursor,
+            after: restoreItem.key,
           },
         });
         if (results.error) {

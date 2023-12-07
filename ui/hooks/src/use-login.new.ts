@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { CurrentUser, EthProviders } from '@akashaorg/typings/lib/sdk';
 import { useGlobalLogin } from './use-global-login';
 import { useTheme } from './use-theme';
 import { logError } from './utils/error-handler';
+import { useGetProfileByDidLazyQuery } from './generated/apollo';
+import { hasOwn } from './utils/has-own';
 
 export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
@@ -72,6 +74,29 @@ export function useGetLogin(onError?: (error: Error) => void) {
 }
 
 /**
+ * Hook that automatically fetches the profile data of the logged in user
+ * when it logs in
+ */
+export const useGetLoginProfile = () => {
+  const { data } = useGetLogin();
+  const [fetchProfile, profileQuery] = useGetProfileByDidLazyQuery();
+  React.useEffect(() => {
+    if (!data || !data.id || profileQuery.loading) return;
+    fetchProfile({
+      variables: {
+        id: data.id,
+      },
+    }).catch(err => console.error(err));
+  }, [data, fetchProfile, profileQuery.loading]);
+  return React.useMemo(() => {
+    if (profileQuery.data?.node && hasOwn(profileQuery.data.node, 'akashaProfile')) {
+      return profileQuery.data.node;
+    }
+    return undefined;
+  }, [profileQuery]);
+};
+
+/**
  * Hook to sign in a user
  */
 export function useLogin(onError?: (err: Error) => void) {
@@ -120,8 +145,6 @@ export function useLogout() {
     async () => {
       const resp = await sdk.api.auth.signOut();
       if (resp.data) {
-        //await queryClient.resetQueries([LOGIN_STATE_KEY]);
-        // queryClient.setQueryData([LOGIN_STATE_KEY], null);
         return resp.data;
       }
     },

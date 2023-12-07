@@ -1,6 +1,6 @@
 import React from 'react';
 import BeamPage from '../pages/entry-page/beam-page';
-import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated';
+import * as hooks from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 import {
   screen,
@@ -8,6 +8,7 @@ import {
   act,
   genAppProps,
   genBeamData,
+  genUser,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -33,7 +34,20 @@ jest.mock('react-router', () => ({
   }),
 }));
 
+class ResizeObserver {
+  observe() {
+    return;
+  }
+  unobserve() {
+    return;
+  }
+  disconnect() {
+    return;
+  }
+}
+
 describe('< BeamPage /> component', () => {
+  global.ResizeObserver = ResizeObserver;
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
       <BeamPage />
@@ -48,11 +62,16 @@ describe('< BeamPage /> component', () => {
 
   beforeAll(() => {
     (
-      jest.spyOn(hooks, 'useGetBeamByIdQuery') as unknown as jest.SpyInstance<{
-        data: AkashaBeam;
-        status: 'success' | 'error' | 'loading';
+      jest.spyOn(hooks, 'useGetBeamByIdSuspenseQuery') as unknown as jest.SpyInstance<{
+        data: { node: AkashaBeam };
+        isLoading: boolean;
       }>
-    ).mockReturnValue({ data: genBeamData(), status: 'success' });
+    ).mockReturnValue({ data: { node: genBeamData() }, isLoading: true });
+    (
+      jest.spyOn(hooks, 'useGetMyProfileQuery') as unknown as jest.SpyInstance<{
+        data: { viewer: { akashaProfile: ReturnType<typeof genUser> } };
+      }>
+    ).mockReturnValue({ data: { viewer: { akashaProfile: genUser() } } });
   });
 
   it('should render beam page', async () => {

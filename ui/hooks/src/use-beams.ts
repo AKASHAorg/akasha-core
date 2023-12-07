@@ -46,7 +46,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
   React.useEffect(() => {
     const unsub = queryClient.current.onClearStore(() => {
-      return fetchInitialData([]);
+      return fetchInitialData();
     });
     return () => {
       unsub();
@@ -104,13 +104,12 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     }
   };
 
-  const fetchInitialData = async (cursors: string[]) => {
-    const resumeItemCursor = cursors[cursors.length - 1];
-    if (resumeItemCursor && !beamsQuery.called) {
+  const fetchInitialData = async (restoreItem?: { key: string; offsetTop: number }) => {
+    if (restoreItem && !beamsQuery.called) {
       try {
         const results = await fetchBeams({
           variables: {
-            after: resumeItemCursor,
+            after: restoreItem.key,
             sorting: { createdAt: SortOrder.Asc },
           },
         });

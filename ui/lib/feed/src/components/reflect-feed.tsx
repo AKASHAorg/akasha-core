@@ -19,10 +19,11 @@ export type ReflectFeedProps = {
   newItemsPublishedLabel?: string;
   queryKey: string;
   estimatedHeight: number;
-  scrollTopIndicator: VirtualizerProps<unknown>['scrollTopIndicator'];
+  scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
   renderItem: VirtualizerProps<AkashaReflectEdge>['renderItem'];
   filters?: AkashaReflectFiltersInput;
   sorting?: AkashaReflectSortingInput;
+  loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
@@ -51,13 +52,18 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     });
   const lastCursors = React.useRef({ next: null, prev: null });
   const isLoading = React.useRef(false);
+  const prevReflections = React.useRef([]);
 
-  const handleInitialFetch = async (cursors?: string[]) => {
-    if (cursors.length) {
-      lastCursors.current.prev = cursors[cursors.length - 1];
+  React.useEffect(() => {
+    if (reflections !== prevReflections.current) {
+      isLoading.current = false;
     }
+    prevReflections.current = reflections;
+  }, [reflections]);
+
+  const handleInitialFetch = async (restoreItem?: { key: string; offsetTop: number }) => {
     isLoading.current = true;
-    await fetchInitialData(cursors);
+    await fetchInitialData(restoreItem);
   };
 
   const handleFetch = async (newArea: EdgeArea) => {
@@ -105,7 +111,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           items={reflections}
           onFetchInitialData={handleInitialFetch}
           itemKeyExtractor={item => item.cursor}
-          itemIndexExtractor={itemKey => reflections.findIndex(p => p.cursor === itemKey)}
+          itemIndexExtractor={item => reflections.findIndex(p => p.cursor === item.cursor)}
           onListReset={() => Promise.resolve()}
           onEdgeDetectorChange={handleFetch}
           scrollTopIndicator={scrollTopIndicator}

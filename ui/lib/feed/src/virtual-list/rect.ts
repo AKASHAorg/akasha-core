@@ -1,4 +1,4 @@
-import { VirtualItemInfo } from './virtual-item';
+import { VirtualItem } from './virtual-item-renderer';
 
 export class Rect {
   readonly #top: number;
@@ -28,7 +28,7 @@ export class Rect {
     return new Rect(this.getTop() + top, this.getHeight() + height);
   };
 
-  static fromItem = (item: VirtualItemInfo) => new Rect(item.start, item.height);
+  static fromItem = (item: VirtualItem) => new Rect(item.start, item.height);
   static visibleFactor = (rect: Rect, containerRect: Rect) => {
     const visibleHeight = Math.max(
       0,

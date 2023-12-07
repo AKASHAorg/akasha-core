@@ -7,13 +7,10 @@ import EntrySectionLoading from './entry-section-loading';
 import ReflectionSection from './reflection-section';
 import { useParams } from 'react-router-dom';
 import {
-  useGetMyProfileQuery,
-  useGetReflectionByIdQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
-import {
   hasOwn,
   useAnalytics,
   useEntryNavigation,
+  useGetLoginProfile,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
@@ -22,29 +19,28 @@ import { PendingReflect } from './pending-reflect';
 import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import { ReflectionCard } from '@akashaorg/ui-lib-feed';
+import { useGetReflectionByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 const ReflectionPage: React.FC<unknown> = () => {
   const { reflectionId } = useParams<{
     reflectionId: string;
   }>();
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin, navigateToModal, layoutConfig, getTranslationPlugin } =
-    useRootComponentProps();
-  const reflectionReq = useGetReflectionByIdQuery(
-    { id: reflectionId },
-    { select: response => response.node },
-  );
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-  });
+  const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
+  const reflectionReq = useGetReflectionByIdSuspenseQuery({ variables: { id: reflectionId } });
+  const profileDataReq = useGetLoginProfile();
 
   const [analyticsActions] = useAnalytics();
 
-  const loggedProfileData = profileDataReq.data;
-  const entryData =
-    reflectionReq.data && hasOwn(reflectionReq.data, 'id') ? reflectionReq.data : null;
+  const entryData = React.useMemo(() => {
+    if (
+      reflectionReq.data &&
+      hasOwn(reflectionReq.data, 'node') &&
+      hasOwn(reflectionReq.data.node, 'id')
+    ) {
+      return reflectionReq.data.node;
+    }
+  }, [reflectionReq]);
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
@@ -52,17 +48,15 @@ const ReflectionPage: React.FC<unknown> = () => {
 
   const onNavigate = useEntryNavigation(getRoutingPlugin().navigateTo);
 
-  if (reflectionReq.status === 'error')
+  if (reflectionReq.error)
     return (
       <ErrorLoader
         type="script-error"
         title={t('There was an error loading the entry')}
         details={t('We cannot show this entry right now')}
-        devDetails={reflectionReq.error as string}
+        devDetails={reflectionReq.error.message}
       />
     );
-
-  if (reflectionReq.status === 'loading') return <EntrySectionLoading />;
 
   return (
     <Card padding="p-0" margin="mb-4">
@@ -72,15 +66,20 @@ const ReflectionPage: React.FC<unknown> = () => {
           onNavigate({ authorId: entryData?.author?.id, id: entryData.beam?.id }, EntityTypes.BEAM)
         }
       />
-      <ReflectionSection
+      <React.Suspense fallback={<EntrySectionLoading />}>
+        <ReflectionSection
+          beamId={entryData.beam?.id}
+          reflectionId={entryData.id}
+          entryData={{ ...entryData, beam: null, beamID: entryData.beam?.id }}
+          isLoggedIn={!!profileDataReq?.akashaProfile?.id}
+          onNavigate={onNavigate}
+          showLoginModal={showLoginModal}
+        />
+      </React.Suspense>
+      <PendingReflect
         beamId={entryData.beam?.id}
-        reflectionId={entryData.id}
-        entryData={{ ...entryData, beam: null, beamID: entryData.beam?.id }}
-        isLoggedIn={!!loggedProfileData?.id}
-        onNavigate={onNavigate}
-        showLoginModal={showLoginModal}
+        authorId={profileDataReq?.akashaProfile?.did.id}
       />
-      <PendingReflect beamId={entryData.beam?.id} authorId={loggedProfileData?.did.id} />
       <Stack spacing="gap-y-2">
         <ReflectFeed
           reflectionsOf={{ entryId: entryData.id, itemType: EntityTypes.REFLECT }}
@@ -109,7 +108,6 @@ const ReflectionPage: React.FC<unknown> = () => {
               }
             />
           )}
-          scrollTopIndicator={() => <>ST</>}
         />
       </Stack>
     </Card>
