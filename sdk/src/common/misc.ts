@@ -5,7 +5,7 @@ import { AccountId } from 'caip';
 import { Resolver } from 'did-resolver';
 import { getResolver } from 'pkh-did-resolver';
 import KeyResolver from 'key-did-resolver';
-import { utils } from 'ethers';
+import { isAddress } from 'ethers';
 
 @injectable()
 class AWF_Misc {
@@ -56,7 +56,7 @@ class AWF_Misc {
       if (segments.includes('eip155')) {
         const address = segments.at(-1);
         if (address)
-          return Object.assign({}, info.didDocument, { isEthAddress: utils.isAddress(address) });
+          return Object.assign({}, info.didDocument, { isEthAddress: isAddress(address) });
       }
     }
     return info?.didDocument;

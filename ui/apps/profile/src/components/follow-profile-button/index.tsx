@@ -28,6 +28,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   const { profileID, isLoggedIn, isFollowing, followId, iconOnly, showLoginModal } = props;
   const { t } = useTranslation('app-profile');
   const [following, setFollowing] = useState(isFollowing);
+  const [followDocumentId, setFollowDocumentId] = useState(followId);
 
   const sdk = getSDK();
 
@@ -35,6 +36,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: async ({ createAkashaFollow }) => {
       setFollowing(createAkashaFollow.document.isFollowing);
+      setFollowDocumentId(createAkashaFollow.document.id);
     },
   });
 
@@ -42,6 +44,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: async ({ updateAkashaFollow }) => {
       setFollowing(updateAkashaFollow.document.isFollowing);
+      setFollowDocumentId(updateAkashaFollow.document.id);
     },
   });
 
@@ -51,6 +54,11 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   useEffect(() => {
     setFollowing(isFollowing);
   }, [isFollowing]);
+
+  //reset `followDocumentId` whenever followId prop changes
+  useEffect(() => {
+    setFollowDocumentId(followId);
+  }, [followId]);
 
   const handleFollow = (profileID: string, followId?: string) => {
     if (!isLoggedIn) {
@@ -75,7 +83,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     }
   };
 
-  const handleUnfollow = (profileID: string, followId?: string) => {
+  const handleUnFollow = (profileID: string, followId?: string) => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
@@ -96,8 +104,8 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     <Button
       onClick={
         following
-          ? () => handleUnfollow(profileID, followId)
-          : () => handleFollow(profileID, followId)
+          ? () => handleUnFollow(profileID, followDocumentId)
+          : () => handleFollow(profileID, followDocumentId)
       }
       icon={following ? <Following /> : <UserPlusIcon />}
       variant={'primary'}
@@ -124,8 +132,8 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
         text: { light: 'errorLight', dark: 'errorDark' },
         icon: { light: 'errorLight', dark: 'errorDark' },
       }}
-      onClickInactive={() => handleFollow(profileID, followId)}
-      onClickActive={() => handleUnfollow(profileID, followId)}
+      onClickInactive={() => handleFollow(profileID, followDocumentId)}
+      onClickActive={() => handleUnFollow(profileID, followDocumentId)}
     />
   );
 };

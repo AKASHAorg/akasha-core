@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export const SETTING_KEY = 'Notification-Settings';
 
@@ -78,4 +79,17 @@ export function useGetSettings(app: string) {
     enabled: !!app,
     onError: (err: Error) => logError('useGetSettings', err),
   });
+}
+/*
+ * Hook to get the indexing DID used by the SDK's GraphQL client.
+ *
+ * @returns {string} The indexing DID currently used by the SDK's GraphQL client.
+ *
+ * @example
+ * const currentIndexingDID = useGetIndexingDID();
+ */
+
+export function useGetIndexingDID(){
+  const sdk = getSDK();
+  return useMemo(() => sdk.services.gql.indexingDID, [sdk.services.gql.indexingDID]);
 }

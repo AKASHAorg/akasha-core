@@ -20,7 +20,7 @@ import {
   useRootComponentProps,
   useValidDid,
 } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export type ProfilePageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -37,16 +37,13 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const profileDataReq = useGetProfileByDidQuery(
-    {
+  const { data, loading, error } = useGetProfileByDidQuery({
+    variables: {
       id: profileId,
     },
-    {
-      select: response => response.node,
-      enabled: !!profileId,
-    },
-  );
-  const { validDid, isLoading } = useValidDid(profileId, !!profileDataReq.data);
+    skip: !profileId,
+  });
+  const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileId, !!data?.node);
 
   const profileStatsQuery = useProfileStats(profileId);
 
@@ -55,11 +52,8 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   } = profileStatsQuery.data;
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
-      ? profileDataReq.data
-      : { akashaProfile: null };
-  const status = profileDataReq.status;
-  const hasProfile = status === 'success' && profileData;
+    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+  const hasProfile = data && profileData;
 
   const goToHomepage = () => {
     navigateTo({
@@ -68,9 +62,9 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
     });
   };
 
-  if (status === 'loading' || profileStatsQuery.isLoading || isLoading) return <ProfileLoading />;
+  if (loading || profileStatsQuery.isLoading || validDidCheckLoading) return <ProfileLoading />;
 
-  if (status === 'error')
+  if (error)
     return (
       <ErrorLoader
         type="script-error"

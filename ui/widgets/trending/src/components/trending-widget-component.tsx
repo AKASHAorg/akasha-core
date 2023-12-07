@@ -1,17 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps, getFollowList, useLoggedIn, hasOwn } from '@akashaorg/ui-awf-hooks';
-import {
-  useGetProfilesQuery,
-  useGetFollowDocumentsQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetProfilesQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   useGetInterestsStreamQuery,
   useGetInterestsByDidQuery,
+  useGetFollowDocumentsByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { LatestProfiles, LatestTopics } from './cards';
+import { useGetIndexingDID } from '@akashaorg/ui-awf-hooks/lib/use-settings';
 
 const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
@@ -24,11 +23,17 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     { last: 4 },
     { select: result => result?.akashaProfileIndex?.edges.map(profile => profile.node) },
   );
+  const currentIndexingDID = useGetIndexingDID();
   const {
     data: latestTopicsReqData,
     loading: latestTopicsLoading,
     error: latestTopicsError,
-  } = useGetInterestsStreamQuery({ variables: { last: 4 } });
+  } = useGetInterestsStreamQuery({
+    variables: {
+      last: 4,
+      indexer: currentIndexingDID,
+    },
+  });
   const {
     data: tagSubscriptionsData,
     loading,
@@ -42,19 +47,20 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     () => latestProfiles.map(follower => follower.id),
     [latestProfiles],
   );
-  const followDocumentsReq = useGetFollowDocumentsQuery(
-    {
+  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
+    variables: {
+      id: authenticatedDID,
       following: followProfileIds,
       last: followProfileIds.length,
     },
-    {
-      select: response => response.viewer?.akashaFollowList,
-      enabled: isLoggedIn && !!followProfileIds.length,
-    },
-  );
+    skip: !isLoggedIn || !followProfileIds.length,
+  });
 
   const latestTopics =
-    latestTopicsReqData?.akashaInterestsStreamIndex?.edges.map(edge => edge.node.value) ?? [];
+    latestTopicsReqData?.node && hasOwn(latestTopicsReqData.node, 'akashaInterestsStreamList')
+      ? latestTopicsReqData?.node.akashaInterestsStreamList?.edges.map(edge => edge.node.value)
+      : [];
+
   const tagSubscriptions = useMemo(() => {
     if (!isLoggedIn) return [];
     return tagSubscriptionsData && hasOwn(tagSubscriptionsData.node, 'akashaProfileInterests')
@@ -63,7 +69,11 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   }, [isLoggedIn, tagSubscriptionsData]);
 
   const followList = isLoggedIn
-    ? getFollowList(followDocumentsReq.data?.edges?.map(edge => edge?.node))
+    ? getFollowList(
+        followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
+          ? followDocuments.node?.akashaFollowList?.edges?.map(edge => edge?.node)
+          : null,
+      )
     : null;
 
   const showLoginModal = () => {
