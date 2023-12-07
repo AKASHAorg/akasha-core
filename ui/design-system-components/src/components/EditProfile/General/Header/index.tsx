@@ -209,7 +209,7 @@ export const Header: React.FC<HeaderProps> = ({
               iconOnly
             />
             {showCoverActions && (
-              <List items={dropDownActions} customStyle="absolute right-0 top-7" />
+              <List items={dropDownActions} customStyle="absolute right-0 top-7 w-auto" />
             )}
           </Stack>
         </Card>
@@ -249,7 +249,9 @@ export const Header: React.FC<HeaderProps> = ({
               greyBg
               iconOnly
             />
-            {showAvatarActions && <List items={dropDownActions} customStyle="absolute top-7" />}
+            {showAvatarActions && (
+              <List items={dropDownActions} customStyle="absolute top-7 w-auto" />
+            )}
           </Stack>
         </Stack>
       </Stack>
