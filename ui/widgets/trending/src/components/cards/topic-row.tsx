@@ -2,10 +2,7 @@ import React from 'react';
 import getSDK from '@akashaorg/awf-sdk';
 import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import {
-  useCreateInterestsMutation,
-  useUpdateInterestsMutation,
-} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useCreateInterestsMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import {
   CheckIcon,
@@ -63,16 +60,15 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
       action: 'Trending Topic Subscribed',
     });
 
-    setSubscribedInterests(prev => [...prev, tag]);
+    const newInterests = [...subscribedTags, tag];
+
+    setSubscribedInterests(newInterests);
 
     createInterestsMutation({
       variables: {
         i: {
           content: {
-            topics: [
-              ...subscribedTags.map(tag => ({ value: tag, labelType: 'TOPIC' })),
-              { value: tag, labelType: 'TOPIC' },
-            ],
+            topics: [...newInterests.map(tag => ({ value: tag, labelType: 'TOPIC' }))],
           },
         },
       },
@@ -92,15 +88,15 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
       action: 'Trending Topic Unsubscribed',
     });
 
-    setSubscribedInterests(prev => prev.filter(topic => topic !== tag));
+    const newInterests = subscribedTags.filter(topic => topic !== tag);
+
+    setSubscribedInterests(newInterests);
 
     createInterestsMutation({
       variables: {
         i: {
           content: {
-            topics: subscribedTags
-              .filter(topic => topic !== tag)
-              .map(tag => ({ value: tag, labelType: 'TOPIC' })),
+            topics: newInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
           },
         },
       },
