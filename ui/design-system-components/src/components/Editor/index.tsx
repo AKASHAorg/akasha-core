@@ -550,7 +550,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               </Popover.Button>
               <Popover.Panel className="absolute z-10">
                 <Popover.Button>
-                   <Picker data={data} onEmojiSelect={handleInsertEmoji} /> 
+                   <Picker data={data} onEmojiSelect={handleInsertEmoji} />
                 </Popover.Button>
               </Popover.Panel>
             </Popover>
