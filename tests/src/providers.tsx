@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MockedProvider } from '@apollo/client/testing';
+
 import i18n from 'i18next';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
@@ -52,4 +54,15 @@ const AllProviders: React.FC<{
   );
 };
 
-export { TranslationProvider, AllProviders };
+/*@TODO replacement for AllProviders when react-query is fully migrated to apollo */
+const AllProvidersWithApollo: React.FC<{
+  children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+}> = ({ children }) => {
+  return (
+    <MockedProvider mocks={[]} addTypename={false}>
+      <TranslationProvider>{children}</TranslationProvider>
+    </MockedProvider>
+  );
+};
+
+export { TranslationProvider, AllProviders, AllProvidersWithApollo };
