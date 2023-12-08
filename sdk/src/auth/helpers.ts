@@ -1,12 +1,11 @@
-let worker:Worker;
+let worker: Worker;
 
 export const executeOnSW = <T>(payload): Promise<T | null> => {
-  if(!worker){
+  if (!worker) {
     worker = new Worker(
       /* webpackIgnore: true */
       new URL('/worker.js', window.location.origin),
-      {name: "ed-worker"}
-
+      { name: 'ed-worker' },
     );
   }
   const messageChannel = new MessageChannel();
