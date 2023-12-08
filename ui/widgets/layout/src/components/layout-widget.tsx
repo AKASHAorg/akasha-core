@@ -22,8 +22,8 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import TopbarLoader from '@akashaorg/design-system-components/lib/components/Loaders/topbar-loader';
+import MiniProfileWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/mini-profile-widget-loader';
 import TrendingWidgetLoader from '@akashaorg/design-system-components/lib/components/Loaders/trending-widget-loader';
 import SidebarLoader from '@akashaorg/design-system-components/lib/components/Loaders/sidebar-loader';
 
@@ -236,8 +236,11 @@ const Layout: React.FC<unknown> = () => {
           </Stack>
 
           <Stack customStyle="sticky top-0 h-screen">
-            <Stack customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
-              <Widget name={layoutConfig.widgetSlotId} loadingIndicator={<Spinner />} />
+            <Stack spacing='gap-y-4' customStyle={`grid grid-auto-rows pt-4 ${showWidgets ? '' : 'hidden'}`}>
+              <Widget
+                name={layoutConfig.widgetSlotId}
+                loadingIndicator={<MiniProfileWidgetLoader />}
+              />
               <Widget
                 name={layoutConfig.rootWidgetSlotId}
                 loadingIndicator={<TrendingWidgetLoader />}
