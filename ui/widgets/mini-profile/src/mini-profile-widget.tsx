@@ -3,139 +3,100 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
-
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
-import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
+import {
+  getFollowList,
+  hasOwn,
+  transformImageVersions,
+  useLoggedIn,
+  useProfileStats,
+  useRootComponentProps,
+  withProviders,
+} from '@akashaorg/ui-awf-hooks';
 import {
   useGetBeamByIdQuery,
-  useGetFollowersListByDidQuery,
-  useGetFollowingListByDidQuery,
-  useGetMyProfileQuery,
+  useGetFollowDocumentsByDidQuery,
   useGetProfileByDidQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const { plugins } = props;
-  const params: { beamId?: string } = useParams();
+
+  const { beamId } = useParams<{ beamId?: string }>();
   const { t } = useTranslation('ui-widget-mini-profile');
 
-  const loggedProfileQuery = useGetMyProfileQuery(null, {
-    select: data => data.viewer?.akashaProfile,
+  const { isLoggedIn, authenticatedDID } = useLoggedIn();
+
+  const { data: beam } = useGetBeamByIdQuery({ variables: { id: beamId } });
+
+  const authorId = beam?.node && hasOwn(beam.node, 'author') ? beam?.node?.author.id : '';
+
+  const { data: authorProfileData } = useGetProfileByDidQuery({
+    variables: {
+      id: authorId,
+    },
+    skip: beam?.node && !hasOwn(beam.node, 'author'),
   });
 
-  const beamAuthorId = useGetBeamByIdQuery(
-    { id: params.beamId },
-    {
-      select: data => {
-        if (data.node && 'author' in data.node) {
-          return data.node.author.id;
-        }
-        return null;
-      },
+  const profileData =
+    authorProfileData?.node && hasOwn(authorProfileData.node, 'akashaProfile')
+      ? authorProfileData.node.akashaProfile
+      : null;
+
+  const { data: stats } = useProfileStats(authorId);
+
+  const {
+    data: { totalBeams, totalFollowers },
+  } = stats;
+
+  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
+    variables: {
+      id: authenticatedDID,
+      following: [authorId],
+      last: 1,
     },
-  );
+    skip: !isLoggedIn,
+  });
 
-  const authorProfileDataReq = useGetProfileByDidQuery(
-    { id: beamAuthorId.data },
-    {
-      enabled: beamAuthorId.isSuccess,
-      select: data => {
-        if (data.node && 'akashaProfile' in data.node) {
-          return data.node;
-        }
-        return null;
-      },
-    },
-  );
+  const followList = isLoggedIn
+    ? getFollowList(
+        followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
+          ? followDocuments.node?.akashaFollowList?.edges?.map(edge => edge?.node)
+          : null,
+      )
+    : null;
 
-  const followersListReq = useGetFollowersListByDidQuery(
-    {
-      id: authorProfileDataReq.data?.akashaProfile?.did.id,
-    },
-    {
-      select: data => {
-        if (data.node && 'akashaProfile' in data.node) {
-          return data.node.akashaProfile.followers.edges;
-        }
-      },
-      enabled: authorProfileDataReq.isSuccess && !!authorProfileDataReq.data?.akashaProfile?.did,
-    },
-  );
-
-  const followingListReq = useGetFollowingListByDidQuery(
-    {
-      id: authorProfileDataReq.data?.akashaProfile.did.id,
-    },
-    {
-      select: data => {
-        if (data.node && 'akashaFollowList' in data.node) {
-          return data.node.akashaFollowList.edges;
-        }
-      },
-      enabled: authorProfileDataReq.isSuccess && !!authorProfileDataReq.data.akashaProfile.did,
-    },
-  );
-
-  const hasFollowed = React.useMemo(() => {
-    return followersListReq.data.find(
-      p => p.node.profile.did.id === loggedProfileQuery.data.did.id,
-    );
-  }, [followersListReq.data, loggedProfileQuery.data]);
-
-  const showLoginModal = () => {
-    props.navigateToModal({ name: 'login' });
-  };
-
-  const handleFollow = React.useCallback(() => {
-    if (!loggedProfileQuery.data?.did) {
-      showLoginModal();
-      return;
-    }
-
-    if (!hasFollowed) {
-      // create follow mutation
-    } else {
-      // update follow mutation if isFollowing is false
-    }
-  }, [followersListReq.data, loggedProfileQuery.data]);
-
-  const handleUnfollow = () => {
-    if (!hasFollowed) {
-      console.log('something is wrong, you cannot unfollow someone you never followed');
-    } else {
-      // update follow mutation if isFollowing is true
-    }
-  };
-
-  const handleProfileClick = (id: string) => {
+  const handleCardClick = () => {
     plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${id}`,
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorId}`,
     });
   };
 
   return (
-    <Stack padding="pb-2" customStyle="max-h-[30rem]">
-      <ProfileMiniCard
-        handleClick={handleProfileClick}
-        handleFollow={handleFollow}
-        handleUnfollow={handleUnfollow}
-        isFollowing={!!hasFollowed && hasFollowed.node.isFollowing}
-        loggedEthAddress={loggedProfileQuery.data?.did.id}
-        profileData={authorProfileDataReq.data.akashaProfile}
-        isViewer={loggedProfileQuery.data.did.id === beamAuthorId.data}
-        followLabel={t('Follow')}
-        unfollowLabel={t('Unfollow')}
-        followingLabel={t('Following')}
-        followersLabel={t('Followers')}
-        postsLabel={t('Posts')}
-        footerExt={<Extension name={`profile-mini-card-footer-extension`} />}
-      />
-    </Stack>
+    <ProfileMiniCard
+      profileData={{ ...profileData, avatar: transformImageVersions(profileData?.avatar) }}
+      authenticatedDID={authenticatedDID}
+      beamsLabel={t('Beams')}
+      followingLabel={t('Following')}
+      followersLabel={t('Followers')}
+      stats={{ followers: totalFollowers, beams: totalBeams }}
+      handleClick={handleCardClick}
+      footerExt={
+        <Extension
+          name={`follow_${profileData?.id}`}
+          extensionData={{
+            profileID: profileData?.id,
+            isFollowing: followList?.get(profileData?.id)?.isFollowing,
+            followId: followList?.get(profileData?.id)?.id,
+            isLoggedIn,
+          }}
+        />
+      }
+    />
   );
 };
 
@@ -146,7 +107,7 @@ const Wrapped = (props: RootExtensionProps) => {
     <Router>
       <Routes>
         <Route
-          path="@akashaorg/app-akasha-integration/post/:postId"
+          path="@akashaorg/app-akasha-integration/beam/:beamId"
           element={
             <I18nextProvider i18n={getTranslationPlugin().i18n}>
               <ProfileCardWidget {...props} />
@@ -167,7 +128,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
     return (
-      <ErrorLoader type="script-error" title="Error in profile card widget" details={err.message} />
+      <ErrorLoader type="script-error" title="Error in mini profile widget" details={err.message} />
     );
   },
 });
