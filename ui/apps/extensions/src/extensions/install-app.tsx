@@ -22,7 +22,7 @@ const IntegrationInstallModal: React.FC<
 > = props => {
   const { extensionData, uiEvents, singleSpa } = props;
   const sdk = getSDK();
-  const { t } = useTranslation('app-akasha-integration');
+  const { t } = useTranslation('app-extensions');
 
   const PROGRESS_STEP_TO_PROGRESS_INFO_MAP = {
     1: t('Saving install information...'),

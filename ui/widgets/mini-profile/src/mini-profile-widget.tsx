@@ -21,7 +21,7 @@ import {
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const { plugins } = props;
   const params: { beamId?: string } = useParams();
-  const { t } = useTranslation('app-akasha-integration');
+  const { t } = useTranslation('ui-widget-mini-profile');
 
   const loggedProfileQuery = useGetMyProfileQuery(null, {
     select: data => data.viewer?.akashaProfile,
