@@ -3,7 +3,7 @@ import { useGetBeamsLazyQuery } from './generated/apollo';
 import type {
   AkashaBeamEdge,
   AkashaBeamFiltersInput,
-  AkashaBeamSortingInput,
+  AkashaBeamSortingInput, PageInfo,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import type { GetBeamsQueryVariables } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
@@ -20,7 +20,13 @@ const defaultSorting: AkashaBeamSortingInput = {
 };
 
 export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
-  const [beams, setBeams] = React.useState<AkashaBeamEdge[]>([]);
+  const [state, setState] = React.useState<{
+    beams: AkashaBeamEdge[],
+    pageInfo?: PageInfo
+  }>({
+    beams: [],
+  });
+
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
 
   const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
@@ -66,12 +72,15 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       if (!results.data) return;
       const newBeams = [];
       results.data.akashaBeamIndex.edges.forEach(e => {
-        if (beams.some(b => b.cursor === e.cursor)) {
+        if (state.beams.some(b => b.cursor === e.cursor)) {
           return;
         }
         newBeams.push(e);
       });
-      setBeams(prev => [...prev, ...newBeams]);
+      setState(prev => ({
+        beams: [...prev.beams, ...newBeams],
+        pageInfo: results.data.akashaBeamIndex.pageInfo,
+      }));
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
@@ -93,12 +102,15 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       if (!results.data) return;
       const newBeams = [];
       results.data.akashaBeamIndex.edges.forEach(e => {
-        if (beams.some(b => b.cursor === e.cursor)) {
+        if (state.beams.some(b => b.cursor === e.cursor)) {
           return;
         }
         newBeams.push(e);
       });
-      setBeams(prev => [...newBeams.reverse(), ...prev]);
+      setState(prev => ({
+        beams: [...newBeams.reverse(), ...prev.beams],
+        pageInfo: results.data.akashaBeamIndex.pageInfo,
+      }));
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
@@ -120,12 +132,15 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
         if (!results.data) return;
         const newBeams = [];
         results.data.akashaBeamIndex.edges.forEach(e => {
-          if (beams.some(b => b.cursor === e.cursor)) {
+          if (state.beams.some(b => b.cursor === e.cursor)) {
             return;
           }
           newBeams.push(e);
         });
-        setBeams(newBeams.reverse());
+        setState({
+          beams: newBeams.reverse(),
+          pageInfo: results.data.akashaBeamIndex.pageInfo
+        });
       } catch (err) {
         setErrors(prev => prev.concat(err));
       }
@@ -144,12 +159,12 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
         if (!results.data) return;
         const newBeams = [];
         results.data.akashaBeamIndex.edges.forEach(e => {
-          if (beams.some(b => b.cursor === e.cursor)) {
+          if (state.beams.some(b => b.cursor === e.cursor)) {
             return;
           }
           newBeams.push(e);
         });
-        setBeams(newBeams);
+        setState({ beams: newBeams, pageInfo: results.data.akashaBeamIndex.pageInfo });
       } catch (err) {
         setErrors(prev => prev.concat(err));
       }
@@ -157,7 +172,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   };
 
   const handleReset = async () => {
-    setBeams([]);
+    setState({ beams: [] });
     try {
       await queryClient.current.clearStore();
     } catch (err) {
@@ -166,11 +181,13 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   };
 
   return {
-    beams,
+    beams: state.beams,
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,
     isFetching: beamsQuery.loading,
+    hasNextPage: state.pageInfo?.hasNextPage,
+    hasPreviousPage: state.pageInfo?.hasPreviousPage,
     onReset: handleReset,
     hasErrors: errors.length > 0,
     errors: errors.map(err => {

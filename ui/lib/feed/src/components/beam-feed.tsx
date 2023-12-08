@@ -11,6 +11,7 @@ import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 export type BeamFeedProps = {
   locale?: ILocale;
@@ -57,7 +58,7 @@ const BeamFeed = (props: BeamFeedProps) => {
   const loadingIndicatorRef = React.useRef(loadingIndicator);
 
   if (!loadingIndicatorRef.current) {
-    loadingIndicatorRef.current = () => <Spinner />;
+    loadingIndicatorRef.current = () => <Stack align="center"><Spinner /></Stack>;
   }
 
   React.useEffect(() => {

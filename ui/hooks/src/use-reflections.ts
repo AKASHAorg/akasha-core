@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
+import { useGetReflectionsFromBeamLazyQuery, useGetReflectReflectionsLazyQuery } from './generated/apollo';
 import {
-  useGetReflectionsFromBeamLazyQuery,
-  useGetReflectReflectionsLazyQuery,
-} from './generated/apollo';
-import {
+  AkashaReflectEdge,
   AkashaReflectFiltersInput,
   AkashaReflectSortingInput,
+  PageInfo,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
@@ -30,7 +29,13 @@ const defaultSorting: AkashaReflectSortingInput = {
 
 export const useReflections = (props: UseReflectionProps) => {
   const { overscan = 10, entityId, entityType, sorting, filters } = props;
-  const [reflections, setReflections] = React.useState([]);
+  const [state, setState] = React.useState<{
+    reflections: AkashaReflectEdge[];
+    pageInfo?: PageInfo
+  }>({
+    reflections: [],
+  });
+
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
 
   const getterHook =
@@ -89,12 +94,14 @@ export const useReflections = (props: UseReflectionProps) => {
         const newReflections = [];
         const edges = extractEdges(results.data);
         edges.forEach(e => {
-          if (reflections.some(b => b.cursor === e.cursor)) {
+          if (state.reflections.some(b => b.cursor === e.cursor)) {
             return;
           }
           newReflections.push(e);
         });
-        setReflections(newReflections.reverse());
+        setState({
+          reflections: newReflections.reverse(),
+          pageInfo: extractPageInfo()
       } catch (err) {
         setErrors(prev => prev.concat(err));
       }

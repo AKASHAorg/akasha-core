@@ -92,14 +92,21 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     mountedItems: VirtualItem[],
     viewportRect: Rect,
     averageItemHeight: number,
+    measurementsCache: Map<string, number>,
     isNewUpdate: boolean,
   ) => {
     edgeDetector.update(itemList, mountedItems, viewportRect, averageItemHeight, isNewUpdate);
     if (!isMounted.current) return;
+    if (vlistRef.current.isAtTop()) {
+      return scrollRestore.save([], new Map());
+    }
     const restoreItems = mountedItems.filter(it =>
       viewportRect.overlaps(new Rect(it.start, it.height)),
     );
-    scrollRestore.save(restoreItems.map(it => ({ offsetTop: it.start, key: it.key })));
+    scrollRestore.save(
+      restoreItems.map(it => ({ offsetTop: it.start, key: it.key })),
+      measurementsCache,
+    );
   };
 
   const restoreStartItem = React.useRef<RestoreItem>();

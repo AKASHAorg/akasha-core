@@ -13,7 +13,11 @@ const getScrollState = (restoreKey: string) => {
   if (!scrollState) return { loaded: true };
   const savedItems = scrollState.items;
   if (savedItems.length > 0) {
-    return { ...scrollState, loaded: true };
+    return {
+      ...scrollState,
+      measurementsCache: new Map(scrollState.measurementsCache.entries),
+      loaded: true,
+    };
   }
   return { loaded: true };
 };
@@ -34,13 +38,16 @@ export const useScrollState = (restoreKey: string) => {
     }
   }, [restoreKey]);
 
-  const save = (restoreItems: RestoreItem[]) => {
+  const save = (restoreItems: RestoreItem[], measurementsCache: Map<string, number>) => {
     if (typeof window !== 'undefined' && window.history) {
       window.history.replaceState(
         Object.assign(window.history.state ?? {}, {
           virtualListPosition: {
             ...(window.history.state?.virtualListPosition || {}),
-            [restoreKey]: { items: restoreItems },
+            [restoreKey]: {
+              items: restoreItems,
+              measurementsCache: Object.fromEntries(measurementsCache),
+            },
           },
         }),
         '',
