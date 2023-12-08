@@ -1,139 +1,97 @@
-import * as React from 'react';
-import { tw } from '@twind/core';
-
+import React from 'react';
 import { Profile } from '@akashaorg/typings/lib/ui';
-
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import DidField from '@akashaorg/design-system-core/lib/components/DidField';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 
-import { truncateMiddle } from '../../utils/string-utils';
-
-export interface IProfileMiniCard {
-  // data
-  profileData: Profile;
-  isViewer?: boolean;
-  loggedEthAddress?: string | null;
-  isFollowing?: boolean;
-  // labels
-  followLabel?: string;
-  followingLabel?: string;
+export type ProfileMiniCardProps = {
+  publicImagePath?: string;
+  profileData: Profile | null;
+  authenticatedDID: string;
+  beamsLabel?: string;
   followersLabel?: string;
-  unfollowLabel?: string;
-  postsLabel?: string;
-  // handlers
-  handleClick?: (arg1?: string) => void;
-  handleFollow?: (profileEthAddress: string) => void;
-  handleUnfollow?: (profileEthAddress: string) => void;
-  disableFollowing?: boolean;
+  followingLabel?: string;
+  stats: { followers: number; beams: number };
+  handleClick?: () => void;
   footerExt?: React.ReactNode;
-}
+};
 
-const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
+const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
   const {
+    publicImagePath = '/images',
     profileData,
-    followLabel,
-    followingLabel,
+    authenticatedDID,
+    beamsLabel,
     followersLabel,
-    unfollowLabel,
-    // postsLabel,
-    isViewer,
+    stats: { followers, beams },
     handleClick,
-    handleFollow,
-    handleUnfollow,
-    isFollowing,
-    disableFollowing,
     footerExt,
   } = props;
 
-  const onFollow = (ev: React.SyntheticEvent) => {
-    if (handleFollow) {
-      handleFollow(profileData.id);
-    }
-    ev.stopPropagation();
-  };
-
-  const onUnfollow = (ev: React.SyntheticEvent) => {
-    if (handleUnfollow) {
-      handleUnfollow(profileData.id);
-    }
-    ev.stopPropagation();
-  };
-
-  const onClick = () => {
-    if (handleClick) {
-      handleClick(profileData.id);
-    }
-  };
+  const seed = getImageFromSeed(profileData?.did?.id, 3);
+  const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
 
   return (
-    <Card elevation={{ light: '1', dark: '1' }} radius={'rounded-2xl'}>
-      <Button plain={true} onClick={onClick}>
-        <div
-          style={{ backgroundImage: `url(${profileData.background})` }}
-          className={tw(`flex items-center justify-center w-full h-28 rounded-t-2xl`)}
-        >
-          <div className={tw(`relative top-4`)}>
-            <Avatar
-              size="xl"
-              border="sm"
-              borderColor="darkerBlue"
-              avatar={profileData.avatar}
-              profileId={profileData.did.id}
-            />
-          </div>
-        </div>
-        <div className={tw(`flex flex-col items-center justify-items-center px-1`)}>
-          <div className={tw(`pb-4 mt-4 items-center`)}>
-            {profileData.name && (
-              <Text variant="h6" breakWord={true} align="center">
-                {profileData.name}
-              </Text>
-            )}
-            <Text variant="subtitle2" breakWord={true} align="center">
-              {/* {(profileData.userName && `@${profileData.userName}`) || */}
-              {truncateMiddle(profileData.did.id)}
-            </Text>
-          </div>
-          <div className={tw(`flex flex-row gap-2`)}>
-            {/*<Text variant="subtitle2">{`${profileData.did.id || 0} ${postsLabel}`}</Text>*/}
-            <Text variant="subtitle2">{`${profileData.did || 0} ${followersLabel}`}</Text>
-            {/* <Text variant="subtitle2">{`${
-              profileData.totalFollowing || 0
-            } ${followingLabel}`}</Text> */}
-          </div>
-        </div>
+    <Card
+      elevation="1"
+      radius="rounded-2xl"
+      onClick={handleClick}
+      padding="p-0"
+      customStyle="max-h-[30rem]"
+    >
+      <Stack
+        align="center"
+        customStyle={`h-28 rounded-t-2xl bg-[url(${
+          profileData?.background?.default?.src ?? coverImageFallback
+        })]`}
+      >
+        <Stack customStyle="relative top-16">
+          <Avatar
+            size="xl"
+            border="sm"
+            borderColor="darkerBlue"
+            avatar={profileData?.avatar}
+            profileId={profileData?.did?.id}
+          />
+        </Stack>
+      </Stack>
 
-        <div className={tw(`flex flex-col p-4 gap-4`)}>
+      <Stack spacing="gap-y-6" align="center" padding="p-6">
+        <Stack spacing="gap-y-1" padding='pt-3'>
+          {profileData?.name && (
+            <Text variant="h6" breakWord={true}>
+              {profileData.name}
+            </Text>
+          )}
+
+          <DidField did={profileData?.did?.id} isValid={true} copiable={false} />
+        </Stack>
+
+        <Stack direction="row" spacing="gap-x-3">
+          <Text variant="subtitle2">
+            {beams} {beamsLabel}
+          </Text>
+          <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+            |
+          </Text>
+          <Text variant="subtitle2">
+            {followers} {followersLabel}
+          </Text>
+        </Stack>
+
+        {profileData?.description && (
           <Text breakWord={true} truncate={true}>
             {profileData.description}
           </Text>
+        )}
 
-          {!disableFollowing && isViewer && (
-            <DuplexButton
-              inactiveLabel={followLabel}
-              activeLabel={followingLabel}
-              activeHoverLabel={unfollowLabel}
-              onClickInactive={onFollow}
-              onClickActive={onUnfollow}
-              active={isFollowing}
-            />
-          )}
-          {footerExt}
-        </div>
-      </Button>
+        {authenticatedDID !== profileData?.did?.id && footerExt}
+      </Stack>
     </Card>
   );
-};
-
-ProfileMiniCard.defaultProps = {
-  followLabel: 'Follow',
-  followingLabel: 'Following',
-  followersLabel: 'Followers',
-  unfollowLabel: 'Unfollow',
-  postsLabel: 'Posts',
 };
 
 export default ProfileMiniCard;
