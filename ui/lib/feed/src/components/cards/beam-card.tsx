@@ -9,7 +9,6 @@ import { ContentBlockModes, EntityTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useTranslation } from 'react-i18next';
-import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 
 type BeamCardProps = Pick<
   EntryCardProps,
@@ -43,9 +42,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
       : { akashaProfile: null };
-  const locale =
-    /*TODO: fix typing in translation plugin and avoid type assertion*/ (getTranslationPlugin().i18n
-      ?.languages?.[0] as ILocale) || 'en';
+  const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
 
   const onAvatarClick = (id: string) => {
     navigateTo({

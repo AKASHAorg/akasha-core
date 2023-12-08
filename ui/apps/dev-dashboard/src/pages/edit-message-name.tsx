@@ -10,7 +10,7 @@ import menuRoute, { DEV_KEYS } from '../routes';
 import { CardWrapper, DevMessageForm } from '../components/common';
 
 export const EditMessageName: React.FC<unknown> = () => {
-  const { t } = useTranslation('app-profile');
+  const { t } = useTranslation('app-dev-dashboard');
 
   const { getRoutingPlugin } = useRootComponentProps();
 

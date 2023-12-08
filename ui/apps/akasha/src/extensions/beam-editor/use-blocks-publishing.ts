@@ -79,8 +79,7 @@ export const useBlocksPublishing = () => {
             content: beamContent,
           },
         })
-        .then(res => {
-          console.info('Beam successfully created', res);
+        .then(() => {
           setBlocksInUse([]);
           setIsPublishing(false);
         })
@@ -102,7 +101,6 @@ export const useBlocksPublishing = () => {
         ]);
         const data = await block.blockRef.current.createBlock();
         if (data.response) {
-          console.log('block:', data.blockInfo, 'created successfully...');
           setBlocksInUse(prev => [
             ...prev.slice(0, idx),
             { ...block, status: 'success', response: data.response },

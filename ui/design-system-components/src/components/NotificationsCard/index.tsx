@@ -9,8 +9,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 import BasicInfoCard from './basic-info-card';
 import ProfileAvatarNotificationApp from './profile-avatar-notification-app';
-
-import { formatRelativeTime } from '../../utils/time';
+import { formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 
 export type NotificationsCardProps = {
   // data
@@ -163,7 +162,10 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
       </>
     );
 
-    const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
+    const relativeTime = formatRelativeTime(
+      Math.floor(notif.createdAt / 1000000000).toString(),
+      'en',
+    );
     return (
       <Stack key={index} customStyle={`${index === notifications.length - 1 ? 'basis-full' : ''}`}>
         <Stack key={index} padding="py-3 pl-4" customStyle="flex-row">
