@@ -83,7 +83,7 @@ const Layout: React.FC<unknown> = () => {
   }, [maintenanceReq.status, maintenanceReq.data]);
 
   const _uiEvents = useRef(uiEvents);
-  const { t } = useTranslation();
+  const { t } = useTranslation('ui-widget-layout');
 
   const handleSidebarShow = () => {
     setShowSidebar(true);

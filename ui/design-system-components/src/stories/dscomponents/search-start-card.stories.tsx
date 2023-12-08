@@ -15,6 +15,7 @@ export const BaseSearchStartCard: Story = {
   render: () => (
     <SearchStartCard
       searchKeyword=""
+      titleLabel="Search"
       inputPlaceholderLabel="Search"
       handleSearch={() => ({})}
       handleTopMenuClick={() => ({})}

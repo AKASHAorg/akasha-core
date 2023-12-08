@@ -17,11 +17,10 @@ import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
 import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import {
-  ILocale,
+  formatDate,
   formatRelativeTime,
   getColorClasses,
 } from '@akashaorg/design-system-core/lib/utils';
-import { formatDate } from '../../../utils/time';
 import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { AkashaProfile, EntityTypes, NavigateToParams } from '@akashaorg/typings/lib/ui';
@@ -34,7 +33,7 @@ export type EntryCardProps = {
     data: Pick<AkashaProfile, 'name' | 'avatar' | 'did'>;
     status: 'loading' | 'error' | 'success';
   };
-  locale?: ILocale;
+  locale?: string;
   flagAsLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
