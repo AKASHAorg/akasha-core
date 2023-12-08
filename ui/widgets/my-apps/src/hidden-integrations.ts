@@ -1,9 +1,5 @@
 export const hiddenIntegrations = [
   {
-    name: '@akashaorg/app-translation',
-    id: '0x694ff1a407cb48aaf43ace2eb570ef17d0403182870f99a617b74cb36af4e366',
-  },
-  {
     name: '@akashaorg/app-routing',
     id: '0xc7dbd964618fa46a51ec3633a23d10c77b458d218ba061755ca7452f627d6504',
   },
