@@ -75,6 +75,9 @@ export const useReflections = (props: UseReflectionProps) => {
       return result.akashaReflectIndex.edges;
     }
   };
+  const extractPageInfo = (data: GetReflectionsFromBeamQuery | GetReflectReflectionsQuery ): PageInfo => {
+    return {} as PageInfo;
+  }
   const fetchInitialData = async (restoreItem: { key: string; offsetTop: number }) => {
     if (restoreItem && !reflectionsQuery.called) {
       try {
@@ -101,7 +104,8 @@ export const useReflections = (props: UseReflectionProps) => {
         });
         setState({
           reflections: newReflections.reverse(),
-          pageInfo: extractPageInfo()
+          pageInfo: extractPageInfo(results.data),
+        });
       } catch (err) {
         setErrors(prev => prev.concat(err));
       }
