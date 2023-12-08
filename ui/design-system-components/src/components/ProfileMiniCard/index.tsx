@@ -48,29 +48,30 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
           profileData?.background?.default?.src ?? coverImageFallback
         })]`}
       >
-        <Stack customStyle="relative top-16">
-          <Avatar
-            size="xl"
-            border="sm"
-            borderColor="darkerBlue"
-            avatar={profileData?.avatar}
-            profileId={profileData?.did?.id}
-          />
-        </Stack>
+        <Avatar
+          size="xl"
+          border="sm"
+          borderColor="darkerBlue"
+          avatar={profileData?.avatar}
+          profileId={profileData?.did?.id}
+          customStyle="relative top-16"
+        />
       </Stack>
 
       <Stack spacing="gap-y-6" align="center" padding="p-6">
-        <Stack spacing="gap-y-1" padding='pt-3'>
+        <Stack spacing="gap-y-1" padding="pt-3" align="center">
           {profileData?.name && (
             <Text variant="h6" breakWord={true}>
               {profileData.name}
             </Text>
           )}
 
-          <DidField did={profileData?.did?.id} isValid={true} copiable={false} />
+          {profileData?.did?.id && (
+            <DidField did={profileData.did.id} isValid={true} copiable={false} />
+          )}
         </Stack>
 
-        <Stack direction="row" spacing="gap-x-3">
+        <Stack direction="row" spacing="gap-x-3" align="center" justify="center">
           <Text variant="subtitle2">
             {beams} {beamsLabel}
           </Text>
