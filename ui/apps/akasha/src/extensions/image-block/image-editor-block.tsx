@@ -38,7 +38,7 @@ export const ImageEditorBlock = (
   const [uiState, setUiState] = React.useState('menu');
 
   const [images, setImages] = React.useState<ImageObject[]>([]);
-  const imageUrls = React.useMemo(() => images.map(imageObj => imageObj.src.url), [images]);
+  const imageUrls = React.useMemo(() => images.map(imageObj => imageObj.src?.url), [images]);
   const [alignState, setAlignState] = React.useState<'start' | 'center' | 'end'>('start');
   const [showCaption, setShowCaption] = React.useState(false);
   const [caption, setCaption] = React.useState('');
@@ -104,14 +104,14 @@ export const ImageEditorBlock = (
     }
   };
 
-  const onUpload = async (image: File) => {
+  const onUpload = async (image: File, isUrl?: boolean) => {
     if (!image || images.length > 4) return null;
     setUiState('gallery');
     setUploading(true);
 
     const mediaFile = await saveMediaFile({
       name: image.name || 'beam-block-image',
-      isUrl: false,
+      isUrl: isUrl || false,
       content: image,
     });
     setUploading(false);
@@ -125,8 +125,9 @@ export const ImageEditorBlock = (
       size: { height: mediaFile.size.height, width: mediaFile.size.width },
       src: { url: mediaUrl.originLink || mediaUrl.fallbackLink },
       name: image.name,
-      originalSourceFile: image,
+      originalSrc: image,
     };
+
     return imageObj;
   };
 
@@ -134,7 +135,7 @@ export const ImageEditorBlock = (
     const uploadedImage = await onUpload(image);
     setImages(prev => [
       ...prev,
-      { size: uploadedImage.size, src: uploadedImage.src, name: uploadedImage.name },
+      { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
     ]);
   };
 
@@ -142,10 +143,16 @@ export const ImageEditorBlock = (
     const uploadedImage = await onUpload(image);
     setImages(prev => [
       ...prev.slice(0, indexOfEditedImage),
-      { size: uploadedImage.size, src: uploadedImage.src, name: uploadedImage.name },
-      ...prev.slice(indexOfEditedImage),
+      { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
+      ...prev.slice(indexOfEditedImage + 1),
     ]);
   };
+
+  React.useEffect(() => {
+    if (!uploading && showEditModal) {
+      setShowEditModal(false);
+    }
+  }, [uploading, showEditModal]);
 
   const handleDeleteImage = (element: ImageObject) => {
     const newImages = images.filter(image => image.src !== element.src);

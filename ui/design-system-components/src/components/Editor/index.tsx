@@ -27,7 +27,7 @@ import { serializeToPlainText } from './serialize';
 import { MentionPopover } from './mention-popover';
 import { editorDefaultValue } from './initialValue';
 import { renderElement, renderLeaf } from './renderers';
-import { withMentions, withImages, withTags, withLinks } from './plugins';
+import { withMentions, withTags, withLinks } from './plugins';
 
 import EmbedBox from '../EmbedBox';
 import LinkPreview from '../LinkPreview';
@@ -136,7 +136,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
    * initialise editor with all the required plugins
    */
   const editorRef = useRef(
-    withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
+    withLinks(withTags(withMentions(withHistory(withReact(createEditor()))))),
   );
 
   const editor = editorRef.current;

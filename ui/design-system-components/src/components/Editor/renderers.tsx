@@ -1,83 +1,15 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
-import { tw, apply } from '@twind/core';
+import { tw } from '@twind/core';
 import { ImageElement } from '@akashaorg/typings/lib/ui';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-
-const closeDivClass = apply(
-  'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',
-);
-
-const ImgElement = ({
-  attributes,
-  children,
-  element,
-  handleDeleteImage,
-  handleClickImage,
-}: any) => {
-  return (
-    <div
-      {...attributes}
-      onClick={ev => {
-        if (handleClickImage && typeof handleClickImage === 'function') {
-          handleClickImage(element);
-        }
-        ev.stopPropagation();
-        ev.preventDefault();
-        return false;
-      }}
-    >
-      <div
-        role="img"
-        aria-label={element.url}
-        contentEditable={false}
-        style={{
-          minHeight: 30,
-          height: 'fit-content',
-          width: 'fit-content',
-          position: 'relative',
-          overflow: 'hidden',
-          contain: 'layout',
-        }}
-      >
-        {handleDeleteImage && (
-          <button
-            className={closeDivClass}
-            onClick={ev => {
-              if (handleDeleteImage && typeof handleDeleteImage === 'function') {
-                handleDeleteImage(element);
-              }
-              ev.stopPropagation();
-              ev.preventDefault();
-              return false;
-            }}
-          >
-            <Icon icon={<XMarkIcon />} />
-          </button>
-        )}
-        <picture className={tw(`flex`)}>
-          <source srcSet={element.url} />
-          <img
-            className={tw(`block max-w-full rounded-lg`)}
-            src={element.fallbackUrl}
-            alt="editor"
-          />
-        </picture>
-      </div>
-      {children}
-    </div>
-  );
-};
 
 const MentionElement = (props: any) => {
   const { handleMentionClick, attributes, element, children } = props;
   const mention = element.userName || element.name || element.ethAddress;
   const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
   return (
-    <span
-      role="presentation"
-      className={tw(`cursor-pointer text-secondaryLight dark:text-secondaryDark`)}
+    <button
+      className={tw(`text-secondaryLight dark:text-secondaryDark`)}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
@@ -89,14 +21,14 @@ const MentionElement = (props: any) => {
     >
       {displayedMention}
       {children}
-    </span>
+    </button>
   );
 };
 
 const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
   return (
-    <span
-      className={tw(`cursor-pointer text-secondaryLight dark:text-secondaryDark`)}
+    <button
+      className={tw(`text-secondaryLight dark:text-secondaryDark`)}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
@@ -106,7 +38,7 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
     >
       #{element.name}
       {children}
-    </span>
+    </button>
   );
 };
 
@@ -141,18 +73,8 @@ const renderElement = (
   handleMentionClick?: (id: string) => void,
   handleTagClick?: (name: string) => void,
   handleLinkClick?: (url: string) => void,
-  handleDeleteImage?: ((element: ImageElement) => void) | null,
-  handleClickImage?: (element: ImageElement) => void,
 ) => {
   switch (props.element.type) {
-    case 'image':
-      return (
-        <ImgElement
-          handleDeleteImage={handleDeleteImage}
-          handleClickImage={handleClickImage}
-          {...props}
-        />
-      );
     case 'mention':
       return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
     case 'tag':
