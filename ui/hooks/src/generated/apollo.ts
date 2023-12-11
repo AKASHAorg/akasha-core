@@ -229,6 +229,13 @@ export const ReflectFragmentDoc = /*#__PURE__*/ gql`
   nsfw
 }
     `;
+export const IndexedProfileFragmentDoc = /*#__PURE__*/ gql`
+    fragment IndexedProfileFragment on IndexProfilePayloadDocument {
+  id
+  createdAt
+  profileID
+}
+    `;
 export const UserProfileFragmentMFragmentDoc = /*#__PURE__*/ gql`
     fragment UserProfileFragmentM on AkashaProfile {
   id
@@ -1396,6 +1403,42 @@ export type GetReflectReflectionsQueryHookResult = ReturnType<typeof useGetRefle
 export type GetReflectReflectionsLazyQueryHookResult = ReturnType<typeof useGetReflectReflectionsLazyQuery>;
 export type GetReflectReflectionsSuspenseQueryHookResult = ReturnType<typeof useGetReflectReflectionsSuspenseQuery>;
 export type GetReflectReflectionsQueryResult = Apollo.QueryResult<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>;
+export const IndexProfileDocument = /*#__PURE__*/ gql`
+    mutation IndexProfile($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexProfile(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedProfileFragment
+    }
+  }
+}
+    ${IndexedProfileFragmentDoc}`;
+export type IndexProfileMutationFn = Apollo.MutationFunction<Types.IndexProfileMutation, Types.IndexProfileMutationVariables>;
+
+/**
+ * __useIndexProfileMutation__
+ *
+ * To run a mutation, you first call `useIndexProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useIndexProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [indexProfileMutation, { data, loading, error }] = useIndexProfileMutation({
+ *   variables: {
+ *      jws: // value for 'jws'
+ *      capability: // value for 'capability'
+ *   },
+ * });
+ */
+export function useIndexProfileMutation(baseOptions?: Apollo.MutationHookOptions<Types.IndexProfileMutation, Types.IndexProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.IndexProfileMutation, Types.IndexProfileMutationVariables>(IndexProfileDocument, options);
+      }
+export type IndexProfileMutationHookResult = ReturnType<typeof useIndexProfileMutation>;
+export type IndexProfileMutationResult = Apollo.MutationResult<Types.IndexProfileMutation>;
+export type IndexProfileMutationOptions = Apollo.BaseMutationOptions<Types.IndexProfileMutation, Types.IndexProfileMutationVariables>;
 export const CreateProfileDocument = /*#__PURE__*/ gql`
     mutation CreateProfile($i: CreateAkashaProfileInput!) {
   createAkashaProfile(input: $i) {

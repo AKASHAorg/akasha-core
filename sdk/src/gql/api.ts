@@ -228,6 +228,13 @@ export const ReflectFragmentDoc = /*#__PURE__*/ gql`
   nsfw
 }
     `;
+export const IndexedProfileFragmentDoc = /*#__PURE__*/ gql`
+    fragment IndexedProfileFragment on IndexProfilePayloadDocument {
+  id
+  createdAt
+  profileID
+}
+    `;
 export const UserProfileFragmentMFragmentDoc = /*#__PURE__*/ gql`
     fragment UserProfileFragmentM on AkashaProfile {
   id
@@ -771,6 +778,15 @@ export const GetReflectReflectionsDocument = /*#__PURE__*/ gql`
   }
 }
     ${ReflectFragmentDoc}`;
+export const IndexProfileDocument = /*#__PURE__*/ gql`
+    mutation IndexProfile($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexProfile(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedProfileFragment
+    }
+  }
+}
+    ${IndexedProfileFragmentDoc}`;
 export const CreateProfileDocument = /*#__PURE__*/ gql`
     mutation CreateProfile($i: CreateAkashaProfileInput!) {
   createAkashaProfile(input: $i) {
@@ -1383,6 +1399,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetReflectReflections(variables: Types.GetReflectReflectionsQueryVariables, options?: C): Promise<Types.GetReflectReflectionsQuery> {
       return requester<Types.GetReflectReflectionsQuery, Types.GetReflectReflectionsQueryVariables>(GetReflectReflectionsDocument, variables, options) as Promise<Types.GetReflectReflectionsQuery>;
+    },
+    IndexProfile(variables?: Types.IndexProfileMutationVariables, options?: C): Promise<Types.IndexProfileMutation> {
+      return requester<Types.IndexProfileMutation, Types.IndexProfileMutationVariables>(IndexProfileDocument, variables, options) as Promise<Types.IndexProfileMutation>;
     },
     CreateProfile(variables: Types.CreateProfileMutationVariables, options?: C): Promise<Types.CreateProfileMutation> {
       return requester<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options) as Promise<Types.CreateProfileMutation>;
