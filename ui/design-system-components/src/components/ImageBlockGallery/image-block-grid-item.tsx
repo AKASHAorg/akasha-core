@@ -64,6 +64,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
           hidden={!imgLoaded}
         />
       </picture>
+
       {!imgLoaded && (
         <DelayLoad>
           <div className={tw('flex')}>

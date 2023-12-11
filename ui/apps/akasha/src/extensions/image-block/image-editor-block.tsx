@@ -17,6 +17,7 @@ import ImageBlockGallery from '@akashaorg/design-system-components/lib/component
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import ImageBlockToolbar from '@akashaorg/design-system-components/lib/components/ImageBlockToolbar';
+import EditImageModal from '@akashaorg/design-system-components/lib/components/EditImageModal';
 import { ImageObject } from '@akashaorg/typings/lib/ui';
 import {
   XMarkIcon,
@@ -37,9 +38,11 @@ export const ImageEditorBlock = (
   const [uiState, setUiState] = React.useState('menu');
 
   const [images, setImages] = React.useState<ImageObject[]>([]);
+  const imageUrls = React.useMemo(() => images.map(imageObj => imageObj.src.url), [images]);
   const [alignState, setAlignState] = React.useState<'start' | 'center' | 'end'>('start');
   const [showCaption, setShowCaption] = React.useState(false);
   const [caption, setCaption] = React.useState('');
+  const [showEditModal, setShowEditModal] = React.useState(false);
 
   useImperativeHandle(
     props.blockRef,
@@ -122,8 +125,26 @@ export const ImageEditorBlock = (
       size: { height: mediaFile.size.height, width: mediaFile.size.width },
       src: { url: mediaUrl.originLink || mediaUrl.fallbackLink },
       name: image.name,
+      originalSourceFile: image,
     };
-    setImages(prev => [...prev, imageObj]);
+    return imageObj;
+  };
+
+  const uploadNewImage = async (image: File) => {
+    const uploadedImage = await onUpload(image);
+    setImages(prev => [
+      ...prev,
+      { size: uploadedImage.size, src: uploadedImage.src, name: uploadedImage.name },
+    ]);
+  };
+
+  const uploadEditedImage = async (image: File, indexOfEditedImage: number) => {
+    const uploadedImage = await onUpload(image);
+    setImages(prev => [
+      ...prev.slice(0, indexOfEditedImage),
+      { size: uploadedImage.size, src: uploadedImage.src, name: uploadedImage.name },
+      ...prev.slice(indexOfEditedImage),
+    ]);
   };
 
   const handleDeleteImage = (element: ImageObject) => {
@@ -142,7 +163,7 @@ export const ImageEditorBlock = (
   };
 
   const handleClickEdit = () => {
-    setUiState('menu');
+    setShowEditModal(true);
   };
 
   const handleCaptionClick = () => {
@@ -201,8 +222,8 @@ export const ImageEditorBlock = (
               </Stack>
               {images.map((imageObj, index) => (
                 <Stack key={index} direction="row" justify="between">
-                  <Stack direction="row" spacing="gap-1" align="center">
-                    <Image src={imageObj.src.url} customStyle="object-fill w-8 h-8 rounded-lg" />
+                  <Stack direction="row" spacing="gap-1">
+                    <Image src={imageObj.src.url} customStyle="object-contain w-8 h-8 rounded-lg" />
                     <Text>{imageObj.name}</Text>
                   </Stack>
                   <button onClick={() => handleDeleteImage(imageObj)}>
@@ -249,13 +270,24 @@ export const ImageEditorBlock = (
             alignState={alignState}
             showCaption={showCaption}
           />
+          <EditImageModal
+            show={showEditModal}
+            title={{ label: t('Edit Image') }}
+            cancelLabel={t('Cancel')}
+            saveLabel={t('Save')}
+            onClose={() => (uploading ? undefined : setShowEditModal(false))}
+            images={imageUrls}
+            dragToRepositionLabel={t('Drag the image to reposition')}
+            isSavingImage={uploading}
+            onSave={uploadEditedImage}
+          />
         </Stack>
       )}
       <input
         ref={uploadInputRef}
         type="file"
         accept="image/png, image/jpeg, image/webp"
-        onChange={e => onUpload(e.target.files[0])}
+        onChange={e => uploadNewImage(e.target.files[0])}
         hidden
       />
     </>
