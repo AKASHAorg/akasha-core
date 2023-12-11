@@ -192,7 +192,7 @@ export const Header: React.FC<HeaderProps> = ({
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
           customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
-            coverImageUrl?.default?.src || coverImageFallback
+            coverImageUrl?.default?.src ?? coverImageFallback
           })]`}
           ref={editCoverRef}
         >

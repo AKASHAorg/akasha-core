@@ -167,7 +167,7 @@ const Layout: React.FC<unknown> = () => {
       } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
 
-  //style to prevent horizontal shift when vertical scrollbar appears
+  // style to prevent horizontal shift when vertical scrollbar appears
   const widthStyle = `w-[calc(100vw-${scrollBarWidth}px)]`;
 
   return (

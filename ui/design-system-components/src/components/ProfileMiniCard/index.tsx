@@ -44,9 +44,9 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
     >
       <Stack
         align="center"
-        customStyle={`h-28 rounded-t-2xl bg-[url(${
+        customStyle={`h-28 rounded-t-2xl bg(center cover [url(${
           profileData?.background?.default?.src ?? coverImageFallback
-        })]`}
+        })])`}
       >
         <Avatar
           size="xl"
