@@ -9,7 +9,13 @@ describe('<StackedAvatar /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<StackedAvatar userData={userData} maxAvatars={4} />, {});
+      componentWrapper = customRender(
+        <StackedAvatar
+          userData={userData.map(item => ({ ...item, avatar: item.avatar?.default }))}
+          maxAvatars={4}
+        />,
+        {},
+      );
     });
   });
 

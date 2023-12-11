@@ -1,6 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMarkAsRead, useRootComponentProps, useGetSettings } from '@akashaorg/ui-awf-hooks';
+import {
+  useMarkAsRead,
+  useRootComponentProps,
+  useGetSettings,
+  transformSource,
+} from '@akashaorg/ui-awf-hooks';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import {
   CheckCircleIcon,
@@ -251,6 +256,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
           handleMessageRead={markAsRead.mutate}
           handleEntryClick={handleEntryClick}
           handleProfileClick={handleAvatarClick}
+          transformSource={transformSource}
           loggedIn={true}
           isFetching={false}
         />

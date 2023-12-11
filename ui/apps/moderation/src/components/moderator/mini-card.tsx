@@ -1,16 +1,14 @@
 import React from 'react';
-
-import { Moderator } from '@akashaorg/typings/lib/ui';
-
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-
 import { formatDate } from '../../utils';
+import { Moderator } from '@akashaorg/typings/lib/ui';
+import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 export type ModeratorDetailMiniCardProps = {
   moderator: Moderator;
@@ -41,7 +39,12 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
         align="start"
         customStyle=" w([50%] md:[30%]) px-4 border(r-1 solid grey8 dark:grey3)"
       >
-        <Avatar avatar={moderator.avatar} />
+        <Avatar
+          avatar={transformSource(moderator.avatar?.default)}
+          alternativeAvatars={moderator.avatar?.alternatives?.map(alternative =>
+            transformSource(alternative),
+          )}
+        />
         <Stack>
           <Tooltip content={moderator.name} placement="right">
             <Text variant="body2" weight="bold" truncate={true} customStyle={textStyle}>

@@ -23,7 +23,7 @@ const title = (
   <Stack align="center">
     <Avatar
       profileId={ethAddress}
-      avatar={{ default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } }}
+      avatar={{ src: 'https://placebeard.it/360x360', height: 360, width: 360 }}
     />
     <p className={tw('ml-2.5 text-white dark:text-black')}>Item name</p>
   </Stack>

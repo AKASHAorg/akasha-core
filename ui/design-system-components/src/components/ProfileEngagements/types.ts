@@ -1,5 +1,4 @@
-import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { FollowList } from '@akashaorg/typings/lib/ui';
+import { FollowList, Image } from '@akashaorg/typings/lib/ui';
 import { ReactElement } from 'react';
 
 export const LOADING_LIST_SIZE = 10;
@@ -10,7 +9,7 @@ export type EngagementProps = {
   loadMore: boolean;
   followList: FollowList;
   onLoadMore: () => void;
-  transformImageVersions: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
+  transformSource: (src: Image) => Image;
   renderFollowElement: (
     profileId: string,
     followId: string,

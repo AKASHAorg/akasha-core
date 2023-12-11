@@ -1,8 +1,7 @@
 import React, { ReactElement } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { Profile } from '@akashaorg/typings/lib/ui';
-import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { type Image, Profile } from '@akashaorg/typings/lib/ui';
 
 export type EntryProps = {
   profileAnchorLink: string;
@@ -11,13 +10,13 @@ export type EntryProps = {
   name: string;
   followId: string;
   isFollowing: boolean;
-  transformImageVersions: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
   renderFollowElement: (
     profileId: string,
     followId: string,
     isFollowing: boolean,
   ) => ReactElement | null;
   onProfileClick: (profileId: string) => void;
+  transformSource: (src: Image) => Image;
 };
 
 const Entry: React.FC<EntryProps> = props => {
@@ -28,16 +27,17 @@ const Entry: React.FC<EntryProps> = props => {
     name,
     followId,
     isFollowing,
-    transformImageVersions,
     renderFollowElement,
     onProfileClick,
+    transformSource,
   } = props;
 
   return (
     <Stack direction="row" align="center" justify="between" customStyle="pb-4" fullWidth>
       <ProfileAvatarButton
         profileId={profileIds.did}
-        avatarImage={transformImageVersions(avatar)}
+        avatar={transformSource(avatar?.default)}
+        alternativeAvatars={avatar?.alternatives?.map(alternative => transformSource(alternative))}
         label={name}
         href={`${profileAnchorLink}/${profileIds.did}`}
         onClick={() => {

@@ -9,7 +9,7 @@ import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import {
   decodeb64SlateContent,
   getLinkPreview,
-  transformImageVersions,
+  transformSource,
   serializeSlateToBase64,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
@@ -181,12 +181,13 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             editorState={editorState}
             showEditorInitialValue={true}
             showCancelButton={true}
-            avatar={transformImageVersions(profileDataReq?.data?.avatar)}
+            avatar={profileDataReq?.data?.avatar}
             profileId={loggedProfileData?.did?.id}
             disablePublish={disablePublishing}
             tags={tagSearch?.data}
             mentions={mentionSearch?.data}
             background={{ light: 'grey9', dark: 'grey3' }}
+            customStyle="px-2 pt-2"
             onPublish={data => {
               if (!profileDataReq.data) {
                 return;
@@ -201,7 +202,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             getLinkPreview={getLinkPreview}
             getMentions={setMentionQuery}
             getTags={setTagQuery}
-            customStyle="px-2 pt-2"
+            transformSource={transformSource}
           />
           {/*@TODO reflect error logic goes here */}
         </div>

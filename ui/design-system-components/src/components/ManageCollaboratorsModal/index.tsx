@@ -1,12 +1,12 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import { Profile } from '@akashaorg/typings/lib/ui';
+import { type Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
+import ImageComponent from '@akashaorg/design-system-core/lib/components/Image';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import Collaborator from './collaborator';
@@ -25,6 +25,7 @@ export type ManageCollaboratorsModalProps = Omit<SearchBarProps, 'searchInputSiz
   removeButtonLabel: string;
   closeModal: () => void;
   onClickCollaborator: (profileId: string, action: 'add' | 'remove') => () => void;
+  transformSource: (src: Image) => Image;
 };
 
 const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props => {
@@ -45,6 +46,7 @@ const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props 
     onSearch,
     closeModal,
     onClickCollaborator,
+    transformSource,
   } = props;
 
   return (
@@ -84,6 +86,7 @@ const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props 
                     profile={profile}
                     buttonLabel={addButtonLabel}
                     onClick={onClickCollaborator(profile.did.id, 'add')}
+                    transformSource={transformSource}
                   />
                 ))}
             </div>
@@ -91,7 +94,7 @@ const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props 
             {!collaborators.length && (
               <div className={tw(`flex w-full gap-2`)}>
                 <div className={tw(`w-60 h-60 self-center`)}>
-                  <Image
+                  <ImageComponent
                     customStyle="object-contain"
                     src={`${publicImgPath}/${assetName}.${assetExtension}`}
                   />
@@ -110,6 +113,7 @@ const ManageCollaboratorsModal: React.FC<ManageCollaboratorsModalProps> = props 
                     buttonLabel={removeButtonLabel}
                     isRed={true}
                     onClick={onClickCollaborator(profile.did.id, 'remove')}
+                    transformSource={transformSource}
                   />
                 ))}
               </div>

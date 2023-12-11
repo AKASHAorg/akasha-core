@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
 
-import { Profile } from '@akashaorg/typings/lib/ui';
+import { type Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -24,6 +24,7 @@ export type MessageContactCardProps = {
   onClickAvatar?: () => void;
   onClickCard?: () => void;
   onConvoPin?: () => void;
+  transformSource: (src: Image) => Image;
 };
 
 const MessageContactCard: React.FC<MessageContactCardProps> = props => {
@@ -41,6 +42,7 @@ const MessageContactCard: React.FC<MessageContactCardProps> = props => {
     onClickAvatar,
     // onClickCard,
     // onConvoPin,
+    transformSource,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -80,7 +82,14 @@ const MessageContactCard: React.FC<MessageContactCardProps> = props => {
       <div className={tw(`flex flex-row justify-between`)}>
         <div className={tw(`flex flex-row items-start`)}>
           <button onClick={handleAvatarClick}>
-            <Avatar size="lg" avatar={senderAvatar} profileId={senderDid} />
+            <Avatar
+              size="lg"
+              avatar={transformSource(senderAvatar?.default)}
+              alternativeAvatars={senderAvatar.alternatives?.map(alternative =>
+                transformSource(alternative),
+              )}
+              profileId={senderDid}
+            />
           </button>
 
           <div className={tw(`flex items-start ml-2`)}>

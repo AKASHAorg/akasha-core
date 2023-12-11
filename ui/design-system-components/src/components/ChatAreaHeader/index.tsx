@@ -1,16 +1,17 @@
-import * as React from 'react';
-import { tw } from '@twind/core';
-
-import { Profile } from '@akashaorg/typings/lib/ui';
-
+import React from 'react';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import { tw } from '@twind/core';
+import { type Image, Profile } from '@akashaorg/typings/lib/ui';
 
-export type ChatAreaHeaderProps = Pick<Profile, 'name' | 'avatar' | 'did'> & {
+export type ChatAreaHeaderProps = Pick<Profile, 'name' | 'did'> & {
+  avatar?: Image;
+  alternativeAvatars?: Image[];
   onClickAvatar?: () => void;
+  transformSource?: (src: Image) => Image;
 };
 
 const ChatAreaHeader: React.FC<ChatAreaHeaderProps> = props => {
-  const { name, avatar, did, onClickAvatar } = props;
+  const { name, avatar, alternativeAvatars, did, onClickAvatar, transformSource } = props;
 
   return (
     <div
@@ -21,7 +22,8 @@ const ChatAreaHeader: React.FC<ChatAreaHeaderProps> = props => {
       <ProfileAvatarButton
         label={name}
         profileId={did.id}
-        avatarImage={avatar}
+        avatar={transformSource(avatar)}
+        alternativeAvatars={alternativeAvatars.map(alternative => transformSource(alternative))}
         onClick={onClickAvatar}
       />
     </div>

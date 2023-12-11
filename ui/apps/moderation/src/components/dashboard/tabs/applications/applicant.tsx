@@ -1,14 +1,13 @@
 import React from 'react';
-
-import { ModeratorApplicantData } from '@akashaorg/typings/lib/ui';
-
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import { ModeratorApplicantData } from '@akashaorg/typings/lib/ui';
+import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 export type ApplicantProps = {
   applicant: ModeratorApplicantData;
@@ -23,7 +22,12 @@ const Applicant: React.FC<ApplicantProps> = props => {
   return (
     <Stack direction="row" justify="between">
       <Stack direction="row" align="start" spacing="gap-x-2">
-        <Avatar avatar={applicant.avatar} />
+        <Avatar
+          avatar={transformSource(applicant.avatar?.default)}
+          alternativeAvatars={applicant.avatar?.alternatives?.map(alternative =>
+            transformSource(alternative),
+          )}
+        />
 
         <Stack>
           <Tooltip content={applicant.name} placement="right">

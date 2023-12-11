@@ -12,7 +12,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import { CropperProps } from 'react-easy-crop';
-import { ProfileImageType, Profile } from '@akashaorg/typings/lib/ui';
+import { ProfileImageType, Profile, type Image } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
@@ -34,6 +34,7 @@ export type HeaderProps = {
   dragToRepositionLabel: string;
   isSavingImage: boolean;
   publicImagePath: string;
+  transformSource: (src: Image) => Image;
   onAvatarChange: (avatar?: File) => void;
   onCoverImageChange: (coverImage?: File) => void;
   onImageSave: (type: ProfileImageType, image?: File) => void;
@@ -54,6 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
   dragToRepositionLabel,
   isSavingImage,
   publicImagePath,
+  transformSource,
   onAvatarChange,
   onCoverImageChange,
   onImageSave,
@@ -192,7 +194,7 @@ export const Header: React.FC<HeaderProps> = ({
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
           customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
-            coverImageUrl?.default?.src || coverImageFallback
+            transformSource(coverImageUrl?.default)?.src || coverImageFallback
           })]`}
           ref={editCoverRef}
         >
@@ -222,7 +224,10 @@ export const Header: React.FC<HeaderProps> = ({
           <Avatar
             profileId={profileId}
             size="lg"
-            avatar={avatarUrl}
+            avatar={transformSource(avatarUrl.default)}
+            alternativeAvatars={avatarUrl.alternatives?.map(alternative =>
+              transformSource(alternative),
+            )}
             customStyle={`border-2 ${getColorClasses(
               {
                 light: 'white',
@@ -261,7 +266,11 @@ export const Header: React.FC<HeaderProps> = ({
         cancelLabel={cancelLabel}
         saveLabel={saveLabel}
         onClose={() => (isSavingImage ? undefined : setShowEditImage(false))}
-        image={ProfileImageType === 'avatar' ? avatarUrl : coverImageUrl}
+        image={
+          ProfileImageType === 'avatar'
+            ? transformSource(avatarUrl?.default)?.src
+            : transformSource(coverImageUrl?.default)?.src
+        }
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}

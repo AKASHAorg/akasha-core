@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Profile } from '@akashaorg/typings/lib/ui';
+import { type Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
@@ -22,6 +22,7 @@ export type ProfileSearchCardProps = {
   onClickProfile?: () => void;
   showPostCount?: boolean;
   isViewer?: boolean;
+  transformSource: (src: Image) => Image;
 };
 
 const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
@@ -36,6 +37,7 @@ const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
     isViewer,
     profileAnchorLink,
     onClickProfile,
+    transformSource,
   } = props;
 
   return (
@@ -51,7 +53,10 @@ const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
           onClick={onClickProfile}
           label={profileData.name}
           size="md"
-          avatarImage={profileData.avatar}
+          avatar={transformSource(profileData.avatar?.default)}
+          alternativeAvatars={profileData.avatar?.alternatives?.map(alternative =>
+            transformSource(alternative),
+          )}
           truncateText={false}
           profileId={profileData.did.id}
         />

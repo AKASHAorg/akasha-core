@@ -1,11 +1,12 @@
-import * as React from 'react';
-import { tw } from '@twind/core';
+import React from 'react';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { IEntryData } from '@akashaorg/typings/lib/ui';
 import ReadOnlyEditor from '../ReadOnlyEditor';
+import { tw } from '@twind/core';
+import { IEntryData, type Image } from '@akashaorg/typings/lib/ui';
 
 export interface IEmbedEntryBox {
   embedEntryData: IEntryData;
+  transformSource: (src: Image) => Image;
 }
 
 const EmbedBox: React.FC<IEmbedEntryBox> = props => (
@@ -17,7 +18,10 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
   >
     <ProfileAvatarButton
       label={props.embedEntryData.author?.name}
-      avatarImage={props.embedEntryData.author?.avatar}
+      avatar={props.transformSource(props.embedEntryData.author?.avatar?.default)}
+      alternativeAvatars={props.embedEntryData.author?.avatar?.alternatives?.map(alternative =>
+        props.transformSource(alternative),
+      )}
       profileId={props.embedEntryData.author?.did?.id}
     />
 

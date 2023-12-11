@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
 
-import { Profile } from '@akashaorg/typings/lib/ui';
+import { type Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -27,6 +27,7 @@ export interface IProfileMiniCard {
   handleClick?: (arg1?: string) => void;
   handleFollow?: (profileEthAddress: string) => void;
   handleUnfollow?: (profileEthAddress: string) => void;
+  transformSource: (src: Image) => Image;
   disableFollowing?: boolean;
   footerExt?: React.ReactNode;
 }
@@ -43,6 +44,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     handleClick,
     handleFollow,
     handleUnfollow,
+    transformSource,
     isFollowing,
     disableFollowing,
     footerExt,
@@ -80,7 +82,10 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
               size="xl"
               border="sm"
               borderColor="darkerBlue"
-              avatar={profileData.avatar}
+              avatar={transformSource(profileData.avatar?.default)}
+              alternativeAvatars={profileData.avatar?.alternatives?.map(alternative =>
+                transformSource(alternative),
+              )}
               profileId={profileData.did.id}
             />
           </div>

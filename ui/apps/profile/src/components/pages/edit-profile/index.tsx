@@ -12,7 +12,7 @@ import {
   useGetProfileByDidSuspenseQuery,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { transformImageVersions, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { transformSource, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useParams } from 'react-router';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -55,11 +55,8 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
-  const background = useMemo(
-    () => transformImageVersions(profileData?.background),
-    [profileData?.background],
-  );
-  const avatar = useMemo(() => transformImageVersions(profileData?.avatar), [profileData?.avatar]);
+  const background = useMemo(() => profileData?.background, [profileData?.background]);
+  const avatar = useMemo(() => profileData?.avatar, [profileData?.avatar]);
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted,
@@ -187,6 +184,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               setProfileContentOnImageDelete(
                 deleteImageAndGetProfileContent({ profileData, type }),
               ),
+            transformSource,
           }}
           name={{ label: t('Name'), initialValue: profileData?.name }}
           bio={{ label: t('Bio'), initialValue: profileData?.description }}

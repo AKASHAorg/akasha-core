@@ -9,7 +9,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import {
   useGetBeamByIdQuery,
   useGetFollowersListByDidQuery,
@@ -124,6 +124,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         handleClick={handleProfileClick}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
+        transformSource={transformSource}
         isFollowing={!!hasFollowed && hasFollowed.node.isFollowing}
         loggedEthAddress={loggedProfileQuery.data?.did.id}
         profileData={authorProfileDataReq.data.akashaProfile}

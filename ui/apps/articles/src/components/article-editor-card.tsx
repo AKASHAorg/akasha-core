@@ -62,7 +62,15 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
         <button onClick={onManageCollaborators}>
           <Stack direction="row" spacing="gap-2" align="center">
             {articleCollaborators.length > 0 && (
-              <StackedAvatar size="md" userData={articleCollaborators} maxAvatars={4} />
+              <StackedAvatar
+                size="md"
+                userData={articleCollaborators.map(item => ({
+                  ...item,
+                  avatar: item.avatar?.default,
+                  alternativeAvatars: item.avatar?.alternatives,
+                }))}
+                maxAvatars={4}
+              />
             )}
             <Text
               variant="h6"

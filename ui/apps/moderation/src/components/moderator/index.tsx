@@ -1,19 +1,17 @@
 import React from 'react';
-
-import { Moderator } from '@akashaorg/typings/lib/ui';
-
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { EnvelopeIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-
 import { formatDate } from '../../utils';
+import { Moderator } from '@akashaorg/typings/lib/ui';
+import { EnvelopeIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 export type ModeratorDetailCardProps = {
   moderator: Moderator;
@@ -48,7 +46,12 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
     <Card padding={16} customStyle="space-y-4">
       <Stack justify="between">
         <Stack customStyle="flex space-x-2 items-center w([50%] md:[30%])">
-          <Avatar avatar={moderator.avatar} />
+          <Avatar
+            avatar={transformSource(moderator.avatar?.default)}
+            alternativeAvatars={moderator.avatar?.alternatives?.map(alternative =>
+              transformSource(alternative),
+            )}
+          />
           <Stack>
             <Tooltip content={moderator.name} placement="right">
               <Text

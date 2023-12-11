@@ -17,6 +17,7 @@ import Image from '@akashaorg/design-system-core/lib/components/Image';
 
 import { IArticlesMiniCardProps } from '../components/articles-mini-card';
 import { userData } from './dummy-data';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 export interface IArticleCardProps extends IArticlesMiniCardProps {
   tagsLabel: string;
@@ -50,7 +51,10 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           <Stack spacing="gap-1">
             <Stack direction="row" spacing="gap-0.5" align="center">
               <Avatar
-                avatar={articleData.authorAvatar}
+                avatar={transformSource(articleData.authorAvatar?.default)}
+                alternativeAvatars={articleData.authorAvatar.alternatives?.map(alternative =>
+                  transformSource(alternative),
+                )}
                 profileId={articleData.authorProfileId}
                 size="xs"
               />
@@ -106,7 +110,15 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           <Text variant="h2" customStyle="uppercase">
             {collaboratorsLabel}
           </Text>
-          <StackedAvatar size="md" userData={userData} maxAvatars={4} />
+          <StackedAvatar
+            size="md"
+            userData={userData.map(item => ({
+              ...item,
+              avatar: item.avatar?.default,
+              alternativeAvatars: item.avatar?.alternatives,
+            }))}
+            maxAvatars={4}
+          />
         </Stack>
       </Stack>
       <Stack direction="row" align="center" justify="between">

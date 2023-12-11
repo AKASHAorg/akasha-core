@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw, apply } from '@twind/core';
 
-import { Profile } from '@akashaorg/typings/lib/ui';
+import { type Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar, { AvatarSize } from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -9,13 +9,14 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export interface ProfileAvatarNotificationAppProps {
   info?: string | React.ReactElement;
-  avatarImage?: Profile['avatar'];
+  avatar?: Profile['avatar'];
   label?: string | React.ReactElement;
   size?: AvatarSize;
   bold?: boolean;
   active?: boolean;
   customStyle?: string;
   profileId: string;
+  transformSource: (src: Image) => Image;
   onClickAvatar?: () => void;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
@@ -27,7 +28,7 @@ const ProfileAvatarNotificationApp = React.forwardRef(
     const {
       customStyle = '',
       size,
-      avatarImage,
+      avatar,
       label,
       info,
       onClick,
@@ -36,6 +37,7 @@ const ProfileAvatarNotificationApp = React.forwardRef(
       active,
       onMouseEnter,
       onMouseLeave,
+      transformSource,
     } = props;
 
     const AlignmentStyle = apply`
@@ -51,7 +53,15 @@ const ProfileAvatarNotificationApp = React.forwardRef(
               <div className={tw('w-2 h-2 rounded-full bg(secondaryLight dark:secondaryDark)')} />
             )}
           </div>
-          <Avatar size={size} avatar={avatarImage} profileId={profileId} onClick={onClickAvatar} />
+          <Avatar
+            size={size}
+            avatar={transformSource(avatar?.default)}
+            alternativeAvatars={avatar?.alternatives?.map(alternative =>
+              transformSource(alternative),
+            )}
+            profileId={profileId}
+            onClick={onClickAvatar}
+          />
         </div>
         <Button
           plain={true}

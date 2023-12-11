@@ -21,8 +21,10 @@ const commonProps = {
   profileAnchorLink: '#',
   loadMore: false,
   onLoadMore: () => ({}),
-  transformImageVersions: () => ({
-    default: { src: 'https://placebeard.it/360x360', width: 360, height: 360 },
+  transformSource: () => ({
+    src: 'https://placebeard.it/360x360',
+    width: 360,
+    height: 360,
   }),
   renderFollowElement: () => <></>,
   onProfileClick: () => ({}),

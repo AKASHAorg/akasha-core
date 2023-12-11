@@ -1,10 +1,12 @@
 import React from 'react';
-
-import { IArticleData } from '@akashaorg/typings/lib/ui';
-
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
+import Image from '@akashaorg/design-system-core/lib/components/Image';
+import { IArticleData } from '@akashaorg/typings/lib/ui';
 import {
   ArrowPathIcon,
   AtSymbolIcon,
@@ -12,11 +14,7 @@ import {
   EllipsisVerticalIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
-import Image from '@akashaorg/design-system-core/lib/components/Image';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 export interface IArticlesMiniCardProps {
   articleData: IArticleData;
@@ -73,7 +71,10 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
       <Stack direction="row" justify="between">
         <Stack direction="row" spacing="gap-0.5" align="center">
           <Avatar
-            avatar={articleData.authorAvatar}
+            avatar={transformSource(articleData.authorAvatar?.default)}
+            alternativeAvatars={articleData.authorAvatar.alternatives?.map(alternative =>
+              transformSource(alternative),
+            )}
             profileId={articleData.authorProfileId}
             size="xs"
           />
@@ -159,7 +160,15 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
       )}
       {activeTabIndex === 1 && articleData.collaborators?.length > 0 && (
         <Stack direction="row" spacing="gap-2" align="center">
-          <StackedAvatar size="md" userData={articleData.collaborators} maxAvatars={4} />
+          <StackedAvatar
+            size="md"
+            userData={articleData.collaborators.map(collaborator => ({
+              ...collaborator,
+              avatar: collaborator.avatar?.default,
+              alternativeAvatars: collaborator.avatar?.alternatives,
+            }))}
+            maxAvatars={4}
+          />
           <Text variant="subtitle2">{collaboratingLabel}</Text>
         </Stack>
       )}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { tw } from '@twind/core';
 import { Menu } from '@headlessui/react';
 
-import { Profile } from '@akashaorg/typings/lib/ui';
+import { type Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -13,6 +13,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 export interface ISocialBox {
   socialData: Profile[];
   onClickUser?: (profileId: string) => void;
+  transformSource: (src: Image) => Image;
   // labels
   repostedThisLabel?: string;
   andLabel?: string;
@@ -20,7 +21,8 @@ export interface ISocialBox {
 }
 
 const SocialBox: React.FC<ISocialBox> = props => {
-  const { socialData, andLabel, othersLabel, repostedThisLabel, onClickUser } = props;
+  const { socialData, andLabel, othersLabel, repostedThisLabel, onClickUser, transformSource } =
+    props;
 
   const avatarUserData = socialData.map(user => {
     return {
@@ -34,7 +36,10 @@ const SocialBox: React.FC<ISocialBox> = props => {
     <div className={tw(`flex flex-row items-center gap-1 px-4 py-2`)}>
       {avatarUserData && (
         <Avatar
-          avatar={avatarUserData[0].avatar}
+          avatar={transformSource(avatarUserData[0].avatar?.default)}
+          alternativeAvatars={avatarUserData[0].avatar?.alternatives?.map(alternative =>
+            transformSource(alternative),
+          )}
           profileId={avatarUserData[0].profileId}
           size="xs"
           onClick={() => {
@@ -80,7 +85,10 @@ const SocialBox: React.FC<ISocialBox> = props => {
                         )}
                       >
                         <Avatar
-                          avatar={user.avatar}
+                          avatar={transformSource(user.avatar?.default)}
+                          alternativeAvatars={user.avatar?.alternatives?.map(alternative =>
+                            transformSource(alternative),
+                          )}
                           profileId={user.profileId}
                           size="xs"
                           onClick={() => {

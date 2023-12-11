@@ -12,7 +12,12 @@ import {
 
 import routes, { SETTINGS } from '../../routes';
 
-import { useEntryNavigation, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  useEntryNavigation,
+  useAnalytics,
+  useRootComponentProps,
+  transformSource,
+} from '@akashaorg/ui-awf-hooks';
 
 import { SearchTagsResult } from '@akashaorg/typings/lib/sdk/graphql-types';
 
@@ -399,6 +404,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     shareProfileLabel={t('Share')}
                     profileAnchorLink={'/profile'}
                     onClickProfile={() => handleProfileClick(profileData.did.id)}
+                    transformSource={transformSource}
                   />
                 </Stack>
               ))}

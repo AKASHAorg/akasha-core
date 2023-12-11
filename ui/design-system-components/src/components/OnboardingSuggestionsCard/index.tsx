@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import { ITag, Profile } from '@akashaorg/typings/lib/ui';
+import { ITag, type Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
@@ -21,6 +21,7 @@ export interface OnboardingSuggestionsCardProps {
   profiles?: Profile[];
   subscribedTags?: string[];
   followedProfiles?: string[];
+  transformSource: (src: Image) => Image;
   onClickTag?: (tagName: string) => void;
   onClickProfile?: (id: string) => void;
   onClickFollow?: (id: string) => void;
@@ -38,6 +39,7 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
     profiles,
     subscribedTags,
     followedProfiles,
+    transformSource,
     onClickTag,
     onClickProfile,
     onClickFollow,
@@ -73,7 +75,10 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                 label={profile.name}
                 // info={profile.userName && `@${profile.userName}`}
                 size="md"
-                avatarImage={profile.avatar}
+                avatar={transformSource(profile.avatar?.default)}
+                alternativeAvatars={profile.avatar?.alternatives?.map(alternative =>
+                  transformSource(alternative),
+                )}
               />
               {!isViewer && (
                 <div>

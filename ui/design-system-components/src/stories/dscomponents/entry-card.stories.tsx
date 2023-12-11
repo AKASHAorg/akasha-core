@@ -54,6 +54,11 @@ export const BaseEntryCard: Story = {
       onContentClick={() => ({})}
       onMentionClick={() => ({})}
       onTagClick={() => ({})}
+      transformSource={() => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      })}
     />
   ),
 };
@@ -86,6 +91,11 @@ export const DelistedEntryCardOthers: Story = {
       onContentClick={() => ({})}
       onMentionClick={() => ({})}
       onTagClick={() => ({})}
+      transformSource={() => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      })}
     />
   ),
 };
@@ -118,6 +128,11 @@ export const DelistedEntryCardAuthor: Story = {
       onContentClick={() => ({})}
       onMentionClick={() => ({})}
       onTagClick={() => ({})}
+      transformSource={() => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      })}
     />
   ),
 };
@@ -165,6 +180,11 @@ export const NSFWCard: Story = {
       onContentClick={() => ({})}
       onMentionClick={() => ({})}
       onTagClick={() => ({})}
+      transformSource={() => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      })}
     />
   ),
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, type Image } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -31,6 +31,7 @@ export type NotificationsCardProps = {
   handleMessageRead: (notifId: string) => void;
   handleEntryClick: (itemId: string, itemType: EntityTypes) => void;
   handleProfileClick: (id: string) => void;
+  transformSource: (src: Image) => Image;
   loggedIn?: boolean;
 };
 
@@ -51,6 +52,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
     handleMessageRead,
     handleEntryClick,
     handleProfileClick,
+    transformSource,
     loggedIn,
   } = props;
 
@@ -171,12 +173,13 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
         <Stack key={index} padding="py-3 pl-4" customStyle="flex-row">
           <ProfileAvatarNotificationApp
             profileId={profileData.did?.id}
-            avatarImage={profileData.avatar}
+            avatar={profileData.avatar}
             label={fullLabel}
             info={relativeTime}
             onClickAvatar={clickHandler}
             onClick={clickHandler}
             active={!notif.read}
+            transformSource={transformSource}
           />
         </Stack>
         {index !== notifications.length - 1 && <Divider />}

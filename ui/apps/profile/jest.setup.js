@@ -6,7 +6,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 global.ResizeObserver = ResizeObserver;
 
 jest
-  .spyOn(mediaHooks, 'transformImageVersions')
+  .spyOn(mediaHooks, 'transformSource')
   .mockReturnValue({ defaults: { height: 0, width: 0, src: '' } });
 
 jest.spyOn(reactUse, 'useMedia').mockReturnValue(true);
