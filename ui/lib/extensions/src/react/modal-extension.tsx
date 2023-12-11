@@ -8,15 +8,20 @@ export const ModalExtension = () => {
   const [activeModal, setActiveModal] = React.useState<string>();
 
   React.useLayoutEffect(() => {
-    window.addEventListener('single-spa:routing-event', () => {
-      const modal = getModalFromParamsRef.current(location);
-      if (activeModal && !modal) {
-        setActiveModal(null);
-      } else if (!activeModal && modal && modal.name) {
-        setActiveModal(modal.name);
-      }
-    });
-  }, [activeModal]);
+    const controller = new AbortController();
+    window.addEventListener(
+      'popstate',
+      function () {
+        const modal = getModalFromParamsRef.current(location);
+        if (modal && modal.name) {
+          setActiveModal(modal.name);
+          return;
+        }
+      },
+      { signal: controller.signal },
+    );
+    return () => controller.abort();
+  }, []);
 
-  return <>{activeModal && <Extension name={activeModal} />}</>;
+  return activeModal && <Extension name={activeModal} />;
 };
