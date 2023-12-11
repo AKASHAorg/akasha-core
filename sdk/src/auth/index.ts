@@ -62,7 +62,7 @@ class AWF_Auth {
   public readonly currentUserKey = '@currentUserType';
   public readonly encoder = new TextEncoder();
 
-  constructor (
+  constructor(
     @inject(TYPES.Db) db: DB,
     @inject(TYPES.Web3) web3: Web3Connector,
     @inject(TYPES.EventBus) globalChannel: EventBus,
@@ -82,14 +82,13 @@ class AWF_Auth {
     this._ceramic = ceramic;
   }
 
-
   /**
    * Verifies if an ethereum address is already registered
    * Throws an UserNotRegistered error for addresses that are not registered
    * @param ethAddress - the eth address
    */
   @validate(EthAddressSchema)
-  async checkIfSignedUp (ethAddress: EthAddress) {
+  async checkIfSignedUp(ethAddress: EthAddress) {
     // const variables = { ethAddress };
     // const prof = await this._gql.getAPI().GetProfile(variables);
     // return !!prof?.getProfile?.pubKey;
@@ -110,7 +109,7 @@ class AWF_Auth {
       ),
     }),
   )
-  async signIn (args: {
+  async signIn(args: {
     provider?: EthProviders;
     checkRegistered: boolean;
     resumeSignIn?: boolean;
@@ -120,30 +119,30 @@ class AWF_Auth {
     return createFormattedValue(user);
   }
 
-/*
- * Sign the user in and initialize the session
- *
- * @param args - Arguments
- * @param [args.provider] - Ethereum provider to use
- * @param args.checkRegistered - Whether to check if address is registered
- * @param [args.resumeSignIn] - Whether to resume previous session
- *
- * Functionality:
- * 1. Connect Ethereum address
- * 2. Check if address is registered
- * 3. Initialize Ceramic session
- * 4. Store encrypted session in localStorage
- * 5. Set current user object
- * 6. Notify subscribers of auth events
- * 7. Create DB instance
- * 8. Reset GraphQL cache
- * 9. Notify auth is ready
- *
- * Returns:
- * - CurrentUser object with auth status
- * - null if error
-*/
-  private async _signIn (
+  /*
+   * Sign the user in and initialize the session
+   *
+   * @param args - Arguments
+   * @param [args.provider] - Ethereum provider to use
+   * @param args.checkRegistered - Whether to check if address is registered
+   * @param [args.resumeSignIn] - Whether to resume previous session
+   *
+   * Functionality:
+   * 1. Connect Ethereum address
+   * 2. Check if address is registered
+   * 3. Initialize Ceramic session
+   * 4. Store encrypted session in localStorage
+   * 5. Set current user object
+   * 6. Notify subscribers of auth events
+   * 7. Create DB instance
+   * 8. Reset GraphQL cache
+   * 9. Notify auth is ready
+   *
+   * Returns:
+   * - CurrentUser object with auth status
+   * - null if error
+   */
+  private async _signIn(
     args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean } = {
       provider: EthProviders.Web3Injected,
       checkRegistered: true,
@@ -164,7 +163,9 @@ class AWF_Auth {
         const chainNameSpace = 'eip155';
         const chainId = this._web3.networkId[this._web3.network];
         const chainIdNameSpace = `${chainNameSpace}:${chainId}`;
-        this.sessKey = `@identity:${chainIdNameSpace}:${address?.toLowerCase()}:${this._web3.state.providerType}`;
+        this.sessKey = `@identity:${chainIdNameSpace}:${address?.toLowerCase()}:${
+          this._web3.state.providerType
+        }`;
         const sessValue = localStorage.getItem(this.sessKey);
         if (localUser && sessValue) {
           const tmpSession = JSON.parse(localUser);
@@ -240,20 +241,20 @@ class AWF_Auth {
       event: AUTH_EVENTS.READY,
     });
     this._lockSignIn = false;
-    if(this.currentUser?.id){
-      this._gql.contextViewerID = this.currentUser.id;
+    if (this.currentUser?.id) {
+      await this._gql.setContextViewerID(this.currentUser.id);
     }
     return Object.assign({}, this.currentUser, authStatus);
   }
 
-  async _connectAddress () {
+  async _connectAddress() {
     this._globalChannel.next({
       data: {},
       event: AUTH_EVENTS.CONNECT_ADDRESS,
     });
     const response = await this._web3.connect();
-    if(response.connected){
-      if(response.unsubscribe){
+    if (response.connected) {
+      if (response.unsubscribe) {
         response.unsubscribe();
       }
       await this._web3.checkCurrentNetwork();
@@ -267,20 +268,19 @@ class AWF_Auth {
     }
   }
 
-  async connectAddress () {
+  async connectAddress() {
     return this._connectAddress();
   }
 
   /**
    * Returns current session objects for textile
    */
-  async getSession () {
+  async getSession() {
     const session = await this._getSession();
     return createFormattedValue(session);
   }
 
-  private async _getSession () {
-
+  private async _getSession() {
     if (!this.currentUser) {
       await this.signIn({ provider: EthProviders.None, checkRegistered: false });
     }
@@ -288,39 +288,39 @@ class AWF_Auth {
     return this.currentUser;
   }
 
-/*
- * Get the current authenticated user
- *
- * Calls the internal _getCurrentUser method
- *
- * @returns {Promise<CurrentUser | null>} The current user object or null if not authenticated
-*/
-  async getCurrentUser () {
+  /*
+   * Get the current authenticated user
+   *
+   * Calls the internal _getCurrentUser method
+   *
+   * @returns {Promise<CurrentUser | null>} The current user object or null if not authenticated
+   */
+  async getCurrentUser() {
     return this._getCurrentUser();
   }
 
-/*
- * Get the current authenticated user (internal method)
- *
- * Checks if current user is already set:
- * - If yes, returns it
- *
- * Checks localStorage for user session
- * - If no session, returns null
- *
- * If session exists:
- * - Emits wait event
- * - Calls _signIn to resume session
- *
- * @returns {Promise<CurrentUser | null>} The current user object or null
-*/
-  private async _getCurrentUser (): Promise<null | CurrentUser> {
+  /*
+   * Get the current authenticated user (internal method)
+   *
+   * Checks if current user is already set:
+   * - If yes, returns it
+   *
+   * Checks localStorage for user session
+   * - If no session, returns null
+   *
+   * If session exists:
+   * - Emits wait event
+   * - Calls _signIn to resume session
+   *
+   * @returns {Promise<CurrentUser | null>} The current user object or null
+   */
+  private async _getCurrentUser(): Promise<null | CurrentUser> {
     if (this.currentUser) {
       return Promise.resolve(this.currentUser);
     }
     const localUser = localStorage.getItem(this.currentUserKey);
 
-    if(!localUser){
+    if (!localUser) {
       return Promise.resolve(null);
     }
     if (localUser) {
@@ -335,16 +335,16 @@ class AWF_Auth {
   /**
    * Destroy all the session objects
    */
-  async signOut () {
+  async signOut() {
     return createFormattedValue(await this._signOut());
   }
 
-  private async _signOut () {
+  private async _signOut() {
     sessionStorage.clear();
     localStorage.removeItem(this.sessKey);
     localStorage.removeItem(this.currentUserKey);
     this.currentUser = undefined;
-    this._gql.contextViewerID = '';
+    await this._gql.setContextViewerID('');
     await this._web3.disconnect();
     await this._lit.disconnect();
     await this._ceramic.disconnect();
@@ -352,7 +352,7 @@ class AWF_Auth {
     return true;
   }
 
-  async signData (
+  async signData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format = false,
   ) {
@@ -366,39 +366,39 @@ class AWF_Auth {
    * @param data -
    */
   @validate(z.record(z.unknown()).or(z.string()))
-  async signDataWithDID (data: Record<string, unknown> | string) {
+  async signDataWithDID(data: Record<string, unknown> | string) {
     return this._signData(data);
   }
 
-  private async _signData (data: Record<string, unknown> | string) {
+  private async _signData(data: Record<string, unknown> | string) {
     if (!this.#_didSession) {
       throw new Error('No DID session found!');
     }
     return this.#_didSession.did.createJWS(data);
   }
 
-/*
- * Prepare an indexed ID for storage
- *
- * @param {string} id - The ID to index
- *
- * Signs a payload with the ID
- * Returns object with:
- * - jws: Signed payload
- * - capability: Capability delegation proof
- */
+  /*
+   * Prepare an indexed ID for storage
+   *
+   * @param {string} id - The ID to index
+   *
+   * Signs a payload with the ID
+   * Returns object with:
+   * - jws: Signed payload
+   * - capability: Capability delegation proof
+   */
   @validate(z.string().min(16))
-  async prepareIndexedID (id: string) {
+  async prepareIndexedID(id: string) {
     const payload = { ID: id };
     const jws = await this._signData(payload);
     return { jws: jws, capability: this.#_didSession?.did.capability };
   }
 
-  async verifyDIDSignature (args: string | DagJWS) {
+  async verifyDIDSignature(args: string | DagJWS) {
     return this._verifySignature(args);
   }
 
-  private async _verifySignature (args: string | DagJWS) {
+  private async _verifySignature(args: string | DagJWS) {
     return this.#_didSession?.did.verifyJWS(args);
   }
 
@@ -412,7 +412,7 @@ class AWF_Auth {
       .or(z.string())
       .or(z.array(z.record(z.unknown()))),
   )
-  async authenticateMutationData (
+  async authenticateMutationData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
   ) {
     this._log.warn('Deprecated method');
@@ -445,7 +445,7 @@ class AWF_Auth {
    * @param to - DID of the recipient
    * @param message - body text to be encrypted
    */
-  async createEncryptedMessage (to: string, message: string): Promise<JWE> {
+  async createEncryptedMessage(to: string, message: string): Promise<JWE> {
     if (!this.#_didSession) {
       throw new Error('No DID session found!');
     }
@@ -456,7 +456,7 @@ class AWF_Auth {
 
   // validate an encrypted message from cli
   @validate(z.string())
-  async validateDevKeyFromBase64Message (message: string) {
+  async validateDevKeyFromBase64Message(message: string) {
     throw new Error('Deprecated method');
     // const decodedMessage = Buffer.from(message, 'base64');
     // const decodedMessageArray = Uint8Array.from(decodedMessage);
@@ -512,7 +512,7 @@ class AWF_Auth {
    * @param name - human-readable string to identify the key
    */
   @validate(z.string(), z.string().optional())
-  async addDevKeyFromBase64Message (message: string, name?: string) {
+  async addDevKeyFromBase64Message(message: string, name?: string) {
     const validatedMsg = await this.validateDevKeyFromBase64Message(message);
     devKeys.push({
       pubKey: '',
@@ -523,20 +523,20 @@ class AWF_Auth {
 
   // returns all the dev public keys
   // @Todo: connect it with the actual api
-  async getDevKeys () {
+  async getDevKeys() {
     return Promise.resolve(devKeys);
   }
 
   // @Todo: connect it to the api when ready
   @validate(PubKeySchema)
-  async removeDevKey (pubKey: PubKey) {
+  async removeDevKey(pubKey: PubKey) {
     const index = devKeys.findIndex(e => e.pubKey === pubKey);
     if (index !== -1) {
       devKeys.splice(index, 1);
     }
   }
 
-  private async _decryptMessage<T> (message: JWE): Promise<T> {
+  private async _decryptMessage<T>(message: JWE): Promise<T> {
     const decryptedBody = await this.#_didSession?.did.decryptJWE(message);
     let body;
     try {
@@ -547,7 +547,7 @@ class AWF_Auth {
     return body as T;
   }
 
-  static serializeMessage (content) {
+  static serializeMessage(content) {
     try {
       const stringifyContent = JSON.stringify(content);
       const encoder = new TextEncoder();
@@ -558,7 +558,7 @@ class AWF_Auth {
   }
 
   @validate(z.string(), z.unknown())
-  async sendMessage (to: string, content: unknown) {
+  async sendMessage(to: string, content: unknown) {
     const serializedMessage = AWF_Auth.serializeMessage(content);
     if (!serializedMessage) {
       throw new Error('Content is not serializable');
@@ -570,18 +570,18 @@ class AWF_Auth {
    * Returns all the inbox messages from Textile Users
    * @param args - InboxListOptions
    */
-  async getMessages (args?: { limit?: number }): Promise<{ data: IMessage[] }> {
+  async getMessages(args?: { limit?: number }): Promise<{ data: IMessage[] }> {
     return createFormattedValue(await this._getMessages(args));
   }
 
-  private async _getMessages (args?: { limit?: number }) {
+  private async _getMessages(args?: { limit?: number }) {
     const limit = args?.limit || 50;
     return [].slice(0, limit);
   }
 
   // pubKey seek does not work
   // @Todo: workaround pubKey filtering
-  async getConversation (_pubKey: string) {
+  async getConversation(_pubKey: string) {
     const limit = 10000;
     return createFormattedValue([].slice(0, limit));
   }
@@ -590,17 +590,17 @@ class AWF_Auth {
    * Checks the Textile Users inbox and looks for specific
    * notification message type
    */
-  async hasNewNotifications () {
+  async hasNewNotifications() {
     const hasNewNotifications = await this._hasNewNotifications();
     return createFormattedValue(hasNewNotifications);
   }
 
-  private async _hasNewNotifications () {
+  private async _hasNewNotifications() {
     return false;
   }
 
   @validate(z.string())
-  async markMessageAsRead (messageId: string) {
+  async markMessageAsRead(messageId: string) {
     const marked = await this._markMessageAsRead(messageId);
     this._globalChannel.next({
       data: { messageId },
@@ -614,12 +614,12 @@ class AWF_Auth {
    * @param _messageId - message id to mark as read
    */
   @validate(z.string())
-  private async _markMessageAsRead (_messageId: string) {
+  private async _markMessageAsRead(_messageId: string) {
     return true;
   }
 
   @validate(InviteCodeSchema)
-  async validateInvite (inviteCode: InviteCode) {
+  async validateInvite(inviteCode: InviteCode) {
     return this._validateInvite(inviteCode);
   }
 
@@ -627,7 +627,7 @@ class AWF_Auth {
    *
    * @param inviteCode - invitation code received by email
    */
-  private async _validateInvite (inviteCode: InviteCode) {
+  private async _validateInvite(inviteCode: InviteCode) {
     // no need for invitation codes atm
     return true;
 
@@ -645,7 +645,7 @@ class AWF_Auth {
     // throw new Error('Sorry, this code is not valid. Please try again.');
   }
 
-  async getToken () {
+  async getToken() {
     return Promise.resolve('fakeToken');
   }
 }
