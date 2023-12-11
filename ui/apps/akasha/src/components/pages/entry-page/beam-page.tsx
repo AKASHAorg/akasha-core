@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
 import { ReflectFeed, ReflectionCard, ReflectionPreview } from '@akashaorg/ui-lib-feed';
-import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import { useGetBeamByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
@@ -107,7 +106,7 @@ const BeamPage: React.FC<unknown> = () => {
           itemSpacing={0}
           newItemsPublishedLabel={t('New Reflects published recently')}
           trackEvent={analyticsActions.trackEvent}
-          locale={getTranslationPlugin().i18n.language as ILocale}
+          locale={getTranslationPlugin().i18n.language}
         />
       </Stack>
     </Card>

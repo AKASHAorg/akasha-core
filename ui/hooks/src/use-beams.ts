@@ -3,7 +3,8 @@ import { useGetBeamsLazyQuery } from './generated/apollo';
 import type {
   AkashaBeamEdge,
   AkashaBeamFiltersInput,
-  AkashaBeamSortingInput, PageInfo,
+  AkashaBeamSortingInput,
+  PageInfo,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import type { GetBeamsQueryVariables } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
@@ -21,8 +22,8 @@ const defaultSorting: AkashaBeamSortingInput = {
 
 export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   const [state, setState] = React.useState<{
-    beams: AkashaBeamEdge[],
-    pageInfo?: PageInfo
+    beams: AkashaBeamEdge[];
+    pageInfo?: PageInfo;
   }>({
     beams: [],
   });
@@ -50,15 +51,6 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
   });
   const queryClient = React.useRef(beamsQuery.client);
 
-  React.useEffect(() => {
-    const unsub = queryClient.current.onClearStore(() => {
-      return fetchInitialData();
-    });
-    return () => {
-      unsub();
-    };
-  }, []);
-
   const fetchNextPage = async (lastCursor: string) => {
     if (beamsQuery.loading || beamsQuery.error || !lastCursor) return;
     try {
@@ -70,16 +62,23 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       });
       if (results.error) return;
       if (!results.data) return;
-      const newBeams = [];
-      results.data.akashaBeamIndex.edges.forEach(e => {
+
+      const newBeams: AkashaBeamEdge[] = [];
+      results.data?.akashaBeamIndex?.edges?.forEach(e => {
         if (state.beams.some(b => b.cursor === e.cursor)) {
           return;
         }
         newBeams.push(e);
       });
+
       setState(prev => ({
         beams: [...prev.beams, ...newBeams],
-        pageInfo: results.data.akashaBeamIndex.pageInfo,
+        pageInfo: {
+          startCursor: prev.pageInfo.startCursor,
+          endCursor: results.data.akashaBeamIndex.pageInfo.endCursor,
+          hasPreviousPage: prev.pageInfo.hasPreviousPage,
+          hasNextPage: results.data.akashaBeamIndex.pageInfo.hasNextPage,
+        },
       }));
     } catch (err) {
       setErrors(prev => prev.concat(err));
@@ -109,67 +108,75 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       });
       setState(prev => ({
         beams: [...newBeams.reverse(), ...prev.beams],
-        pageInfo: results.data.akashaBeamIndex.pageInfo,
+        pageInfo: {
+          startCursor: results.data.akashaBeamIndex.pageInfo.endCursor,
+          endCursor: prev.pageInfo.startCursor,
+          hasPreviousPage: results.data.akashaBeamIndex.pageInfo.hasNextPage,
+          hasNextPage: prev.pageInfo.hasNextPage,
+        },
       }));
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
   };
 
-  const fetchInitialData = async (restoreItem?: { key: string; offsetTop: number }) => {
-    if (restoreItem && !beamsQuery.called) {
+  const fetchInitialBeams = React.useCallback(
+    async (variables?: GetBeamsQueryVariables) => {
       try {
-        const results = await fetchBeams({
-          variables: {
-            after: restoreItem.key,
-            sorting: { createdAt: SortOrder.Asc },
-          },
-        });
+        const results = await fetchBeams({ variables });
         if (results.error) {
           setErrors(prev => [...prev, results.error]);
           return;
         }
         if (!results.data) return;
-        const newBeams = [];
-        results.data.akashaBeamIndex.edges.forEach(e => {
-          if (state.beams.some(b => b.cursor === e.cursor)) {
-            return;
-          }
-          newBeams.push(e);
-        });
-        setState({
-          beams: newBeams.reverse(),
-          pageInfo: results.data.akashaBeamIndex.pageInfo
-        });
-      } catch (err) {
-        setErrors(prev => prev.concat(err));
-      }
-    } else if (!beamsQuery.called) {
-      try {
-        const results = await fetchBeams({
-          variables: {
-            sorting: { createdAt: SortOrder.Desc },
-          },
-          fetchPolicy: 'network-only',
-        });
-        if (results.error) {
-          setErrors(prev => [...prev, results.error]);
-          return;
+        const newBeams: AkashaBeamEdge[] = results.data.akashaBeamIndex.edges.filter(
+          edge => !state.beams.some(beam => beam.cursor === edge.cursor),
+        );
+        let pageInfo: PageInfo = results.data.akashaBeamIndex.pageInfo;
+
+        if (variables?.after) {
+          pageInfo = {
+            startCursor: results.data.akashaBeamIndex.pageInfo.endCursor,
+            endCursor: results.data.akashaBeamIndex.pageInfo.startCursor,
+            hasPreviousPage: results.data.akashaBeamIndex.pageInfo.hasNextPage,
+            hasNextPage: true,
+          };
+          newBeams.reverse();
         }
-        if (!results.data) return;
-        const newBeams = [];
-        results.data.akashaBeamIndex.edges.forEach(e => {
-          if (state.beams.some(b => b.cursor === e.cursor)) {
-            return;
-          }
-          newBeams.push(e);
-        });
-        setState({ beams: newBeams, pageInfo: results.data.akashaBeamIndex.pageInfo });
+        setState({ beams: newBeams, pageInfo });
       } catch (err) {
         setErrors(prev => prev.concat(err));
       }
-    }
-  };
+    },
+    [fetchBeams, state.beams],
+  );
+
+  const fetchInitialData = React.useCallback(
+    async (restoreItem?: { key: string; offsetTop: number }) => {
+      if (beamsQuery.called) return;
+
+      if (restoreItem) {
+        await fetchInitialBeams({
+          after: restoreItem.key,
+          sorting: { createdAt: SortOrder.Asc },
+        });
+      } else {
+        await fetchInitialBeams({
+          sorting: { createdAt: SortOrder.Desc },
+        });
+      }
+    },
+    [beamsQuery.called, fetchInitialBeams],
+  );
+
+  React.useEffect(() => {
+    const unsub = queryClient.current.onClearStore(() => {
+      return fetchInitialData();
+    });
+    return () => {
+      unsub();
+    };
+  }, [fetchInitialData]);
 
   const handleReset = async () => {
     setState({ beams: [] });

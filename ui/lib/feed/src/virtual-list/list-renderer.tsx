@@ -30,7 +30,14 @@ export type VirtualListRendererProps<T> = {
   estimatedHeight: number;
   itemSpacing: number;
   overscan: number;
-  onEdgeDetectorUpdate: (itemList: VirtualItem[], rendered: VirtualItem[], viewportRect: Rect, averageItemHeight: number, measurementsCache: Map<string, number>, isNewUpdate: boolean,) => void;
+  onEdgeDetectorUpdate: (
+    itemList: VirtualItem[],
+    rendered: VirtualItem[],
+    viewportRect: Rect,
+    averageItemHeight: number,
+    measurementsCache: Map<string, number>,
+    isNewUpdate: boolean,
+  ) => void;
   onListReset?: () => void;
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
 };
@@ -134,10 +141,8 @@ export const VirtualListRenderer = React.forwardRef(
           mounted: itemsToRender,
           listHeight: viewportHeight,
         };
-      } else {
-        beforeStateUpdates.current = 'update';
       }
-
+      beforeStateUpdates.current = 'update';
       return initialState;
     };
 

@@ -69,14 +69,21 @@ export const useReflections = (props: UseReflectionProps) => {
       if (hasOwn(result.node, 'reflections')) {
         return result.node.reflections.edges;
       }
-      return [];
+      return [] as AkashaReflectEdge[];
     } else {
       const result = data as GetReflectReflectionsQuery;
       return result.akashaReflectIndex.edges;
     }
   };
-  const extractPageInfo = (data: GetReflectionsFromBeamQuery | GetReflectReflectionsQuery ): PageInfo => {
-    return {} as PageInfo;
+  const extractPageInfo = (data: GetReflectionsFromBeamQuery | GetReflectReflectionsQuery): PageInfo => {
+    if (entityType === EntityTypes.BEAM && hasOwn(data, 'node')) {
+      const result = data.node;
+      if (result && hasOwn(result, 'reflections')) {
+        return result.reflections.pageInfo;
+      }
+    } else if (entityType === EntityTypes.REFLECT && hasOwn(data, 'akashaReflectIndex')){
+      return data.akashaReflectIndex?.pageInfo;
+    }
   }
   const fetchInitialData = async (restoreItem: { key: string; offsetTop: number }) => {
     if (restoreItem && !reflectionsQuery.called) {
@@ -125,12 +132,12 @@ export const useReflections = (props: UseReflectionProps) => {
         const newReflections = [];
         const edges = extractEdges(results.data);
         edges.forEach(e => {
-          if (reflections.some(b => b.cursor === e.cursor)) {
+          if (state.reflections.some(b => b.cursor === e.cursor)) {
             return;
           }
           newReflections.push(e);
         });
-        setReflections(newReflections);
+        setState({ reflections: newReflections, pageInfo: extractPageInfo(results.data) });
       } catch (err) {
         setErrors(prev => prev.concat(err));
       }
@@ -139,7 +146,7 @@ export const useReflections = (props: UseReflectionProps) => {
   const fetchNextPage = async (lastCursor: string) => {
     if (reflectionsQuery.loading || reflectionsQuery.error || !lastCursor) return;
     try {
-      const results = await reflectionsQuery.fetchMore({
+      const results = await reflectionsQuery.fetchMore<GetReflectionsFromBeamQuery | GetReflectReflectionsQuery>({
         variables: {
           after: lastCursor,
           sorting: { createdAt: SortOrder.Desc },
@@ -153,12 +160,15 @@ export const useReflections = (props: UseReflectionProps) => {
       const newReflections = [];
       const edges = extractEdges(results.data);
       edges.forEach(e => {
-        if (reflections.some(b => b.cursor === e.cursor)) {
+        if (state.reflections.some(b => b.cursor === e.cursor)) {
           return;
         }
         newReflections.push(e);
       });
-      setReflections(prev => [...prev, ...newReflections]);
+      setState(prev => ({
+        reflections: [...prev.reflections, ...newReflections],
+        pageInfo: { ...extractPageInfo(results.data),  },
+      }));
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
@@ -166,7 +176,7 @@ export const useReflections = (props: UseReflectionProps) => {
   const fetchPreviousPage = async (firstCursor: string) => {
     if (reflectionsQuery.loading || reflectionsQuery.error || !firstCursor) return;
     try {
-      const results = await reflectionsQuery.fetchMore({
+      const results = await reflectionsQuery.fetchMore<GetReflectionsFromBeamQuery | GetReflectReflectionsQuery>({
         variables: {
           sorting: { createdAt: SortOrder.Asc },
           after: firstCursor,
@@ -180,12 +190,15 @@ export const useReflections = (props: UseReflectionProps) => {
       const newReflections = [];
       const edges = extractEdges(results.data);
       edges.forEach(e => {
-        if (reflections.some(b => b.cursor === e.cursor)) {
+        if (state.reflections.some(b => b.cursor === e.cursor)) {
           return;
         }
         newReflections.push(e);
       });
-      setReflections(prev => [...newReflections.reverse(), ...prev]);
+      setState(prev => ({
+        reflections: [...newReflections.reverse(), ...prev.reflections],
+        pageInfo: extractPageInfo(results.data)
+      }));
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
@@ -194,10 +207,12 @@ export const useReflections = (props: UseReflectionProps) => {
     //@TODO:
   };
   return {
-    reflections,
+    reflections: state.reflections,
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,
+    hasNextPage: state.pageInfo?.hasNextPage,
+    hasPreviousPage: state.pageInfo?.hasPreviousPage,
     onReset: handleReset,
     hasErrors: errors.length > 0,
     errors: errors.map(err => {

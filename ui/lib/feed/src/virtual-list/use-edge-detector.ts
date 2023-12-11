@@ -19,6 +19,14 @@ export type DetectorState = {
   newArea?: EdgeArea;
 };
 
+const getListRect = (filteredItems: VirtualItem[]) => {
+  const filteredStart = filteredItems.at(0);
+  const filteredEnd = filteredItems.at(-1);
+  if (filteredStart && filteredEnd) {
+    return new Rect(filteredStart.start, filteredEnd.start + filteredEnd.height);
+  }
+};
+
 export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
   const { overscan, onEdgeDetectorChange } = props;
 
@@ -26,60 +34,73 @@ export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
     listSize: 0,
   });
 
-  const prevArea = React.useRef<EdgeArea>(EdgeArea.NONE);
+  const getEdge = (
+    viewportRect: Rect,
+    listRect: Rect,
+    overscanHeight: number,
+    listSize: number,
+  ) => {
+    let newArea = EdgeArea.NONE;
+
+    if (listSize > 1) {
+      if (viewportRect.getTop() === listRect.getTop()) {
+        newArea = EdgeArea.TOP;
+      }
+      if (viewportRect.getBottom() === listRect.getBottom()) {
+        newArea = EdgeArea.BOTTOM;
+      }
+      if (
+        viewportRect.getTop() - listRect.getTop() <= overscanHeight &&
+        newArea !== EdgeArea.TOP &&
+        detectorState.current.newArea !== EdgeArea.NEAR_TOP &&
+        detectorState.current.newArea !== EdgeArea.TOP
+      ) {
+        newArea = EdgeArea.NEAR_TOP;
+      }
+      if (
+        listRect.getBottom() - viewportRect.getBottom() <= overscanHeight &&
+        newArea !== EdgeArea.BOTTOM &&
+        detectorState.current.newArea !== EdgeArea.NEAR_BOTTOM
+      ) {
+        newArea = EdgeArea.NEAR_BOTTOM;
+      }
+    }
+
+    return newArea;
+  };
+
+  const isNewArea = (newArea: EdgeArea) => newArea !== detectorState.current.newArea;
+
+  const update = (
+    itemList: VirtualItem[],
+    rendered: VirtualItem[],
+    viewportRect: Rect,
+    averageItemHeight: number,
+    isNewUpdate: boolean,
+  ) => {
+    if (!isNewUpdate) return;
+    const overscanHeight = overscan * averageItemHeight;
+    const filteredItems = itemList.filter(it => it.maybeRef);
+    if (!filteredItems.length && !detectorState.current.newArea) {
+      detectorState.current = {
+        newArea: EdgeArea.TOP,
+        listSize: 0,
+      };
+      return onEdgeDetectorChange(EdgeArea.TOP);
+    }
+    const listRect = getListRect(filteredItems);
+    const newArea = getEdge(viewportRect, listRect, overscanHeight, itemList.length);
+
+    if (isNewArea(newArea)) {
+      detectorState.current = {
+        newArea,
+        listSize: itemList.length,
+      };
+      onEdgeDetectorChange(newArea);
+    }
+  };
 
   return {
-    update: (
-      itemList: VirtualItem[],
-      rendered: VirtualItem[],
-      viewportRect: Rect,
-      averageItemHeight: number,
-      isNewUpdate: boolean,
-    ) => {
-      if (!isNewUpdate) return;
-      const overscanHeight = overscan * averageItemHeight;
-      const filteredItems = itemList.filter(it => it.maybeRef);
-      if (!filteredItems.length && !detectorState.current.newArea) {
-        detectorState.current = {
-          newArea: EdgeArea.TOP,
-          listSize: 0,
-        };
-        return onEdgeDetectorChange(EdgeArea.TOP);
-      }
-      const filteredStart = filteredItems.at(0);
-      const filteredEnd = filteredItems.at(-1);
-      let newArea: EdgeArea = EdgeArea.NONE;
-      if (filteredStart && filteredEnd && filteredStart !== filteredEnd) {
-        const listRect = new Rect(filteredStart.start, filteredEnd.start + filteredEnd.height);
-        if (viewportRect.getTop() === listRect.getTop()) {
-          newArea = EdgeArea.TOP;
-        }
-        if (viewportRect.getBottom() === listRect.getBottom()) {
-          newArea = EdgeArea.BOTTOM;
-        }
-        if (
-          viewportRect.getTop() - listRect.getTop() <= overscanHeight &&
-          newArea !== EdgeArea.TOP &&
-          detectorState.current.newArea !== EdgeArea.NEAR_TOP &&
-          detectorState.current.newArea !== EdgeArea.TOP
-        ) {
-          newArea = EdgeArea.NEAR_TOP;
-        }
-        if (
-          listRect.getBottom() - viewportRect.getBottom() <= overscanHeight &&
-          newArea !== EdgeArea.BOTTOM &&
-          detectorState.current.newArea !== EdgeArea.NEAR_BOTTOM
-        ) {
-          newArea = EdgeArea.NEAR_BOTTOM;
-        }
-        detectorState.current = {
-          newArea,
-          listSize: itemList.length,
-        };
-      }
-      if (newArea !== prevArea.current) {
-        onEdgeDetectorChange(newArea);
-      }
-    },
+    update,
   };
 };

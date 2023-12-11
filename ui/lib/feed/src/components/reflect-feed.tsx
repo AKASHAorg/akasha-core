@@ -1,6 +1,5 @@
 import React from 'react';
 import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
-import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
   AkashaReflectEdge,
   AkashaReflectFiltersInput,
@@ -12,7 +11,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 
 export type ReflectFeedProps = {
   reflectionsOf: { entryId: string; itemType: EntityTypes };
-  locale?: ILocale;
+  locale?: string;
   scrollerOptions?: { overscan: number };
   trackEvent?: (data: AnalyticsEventData['data']) => void;
   itemSpacing?: number;

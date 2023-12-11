@@ -55,7 +55,11 @@ const BeamFeed = (props: BeamFeedProps) => {
   const loadingIndicatorRef = React.useRef(loadingIndicator);
 
   if (!loadingIndicatorRef.current) {
-    loadingIndicatorRef.current = () => <Stack align="center"><Spinner /></Stack>;
+    loadingIndicatorRef.current = () => (
+      <Stack align="center">
+        <Spinner />
+      </Stack>
+    );
   }
 
   React.useEffect(() => {

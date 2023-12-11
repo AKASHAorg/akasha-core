@@ -49,7 +49,7 @@ export const useViewport = (props: UseViewportProps) => {
 
   const registerScrollListener = () => {
     if (!isWindow.current) return;
-    window.addEventListener('scroll', defaultScrollListener);
+    window.addEventListener('scroll', defaultScrollListener, { passive: true });
     return () => window.removeEventListener('scroll', defaultScrollListener);
   };
 

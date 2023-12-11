@@ -11,7 +11,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
+import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui';
 
 import { Header } from './header';
 import { Footer } from './footer';
@@ -32,7 +32,7 @@ export const BeamEditor: React.FC = () => {
     removeBlockFromList,
   } = useBlocksPublishing();
 
-  const onBlockSelectAfter = newSelection => {
+  const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
       return;
     }
@@ -40,7 +40,7 @@ export const BeamEditor: React.FC = () => {
   };
 
   const handleBeamPublish = () => {
-    createContentBlocks();
+    createContentBlocks().catch();
   };
 
   const [uiState, setUiState] = React.useState<uiState>('editor');
@@ -66,7 +66,9 @@ export const BeamEditor: React.FC = () => {
 
   const handleAddBlock = () => {
     const newBlock = availableBlocks.find(
-      block => block.propertyType === selectedBlock.propertyType,
+      block =>
+        block.propertyType === selectedBlock.propertyType &&
+        block.appName === selectedBlock.appName,
     );
     onBlockSelectAfter(newBlock);
     setUiState('editor');
@@ -103,8 +105,8 @@ export const BeamEditor: React.FC = () => {
       />
       <Stack customStyle="relative overflow-auto">
         <Stack>
-          {blocksInUse.map((block, idx) => (
-            <div key={`${block.propertyType}-${idx}`} id={`${block.propertyType}-${idx}`}>
+          {blocksInUse.map(block => (
+            <div key={`${block.key}`} id={`${block.propertyType}-${block.key}`}>
               <Stack padding={16} direction="column" spacing="gap-2">
                 <Stack direction="row" justify="between">
                   <Stack

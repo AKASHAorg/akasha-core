@@ -89,7 +89,9 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       {...rest}
     >
       {({ blockID }) => (
-        <ContentBlockExtension readMode={{ blockID }} mode={ContentBlockModes.READONLY} />
+        <React.Suspense fallback={<></>}>
+          <ContentBlockExtension readMode={{ blockID }} mode={ContentBlockModes.READONLY} />
+        </React.Suspense>
       )}
     </EntryCard>
   );

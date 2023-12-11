@@ -2,20 +2,17 @@ import * as React from 'react';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Parcel from 'single-spa-react/parcel';
 import {
-  ContentBlock,
-  ContentBlockExtensionInterface,
+  type BlockInstanceMethods,
+  type ContentBlockExtensionInterface,
   ContentBlockModes,
 } from '@akashaorg/typings/lib/ui';
 import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { ParcelConfigObject } from 'single-spa';
-
-export type BlockExtensionInterface = {
-  createBlock?: () => Promise<{
-    response: { blockID: string; error?: string };
-    blockInfo: Omit<ContentBlock, 'loadingFn'> & { mode: ContentBlockModes };
-  }>;
-};
+import {
+  useGetContentBlockByIdLazyQuery,
+  useGetContentBlockByIdSuspenseQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export type MatchingBlock = {
   blockInfo: ContentBlockExtensionInterface & {
@@ -34,7 +31,7 @@ export type ContentBlockExtensionProps = {
   readMode?: {
     blockID: string;
   };
-  blockRef?: React.RefObject<BlockExtensionInterface>;
+  blockRef?: React.RefObject<BlockInstanceMethods>;
 };
 
 export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
@@ -52,17 +49,14 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     }
   }, [getExtensionsPlugin]);
 
-  const blockInfoQuery = useGetContentBlockByIdQuery(
-    { id: readMode?.blockID },
-    {
-      enabled: !!readMode?.blockID,
-      select: data => {
-        if (hasOwn(data.node, 'id')) {
-          return data.node;
-        }
-      },
-    },
-  );
+  const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery({
+    variables: { id: readMode?.blockID },
+  });
+  React.useEffect(() => {
+    if (readMode?.blockID) {
+      fetchBlockInfo().catch(err => console.error(err, '<< failed to fetch content block'));
+    }
+  }, [fetchBlockInfo, readMode?.blockID]);
 
   const matchingBlocks: MatchingBlock[] = React.useMemo(() => {
     if (!contentBlockStoreRef.current) return [];
@@ -107,8 +101,8 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
   }, [matchingBlocks, mode, parcels.length]);
 
   return (
-    <div>
-      {matchingBlocks && matchingBlocks.length > parcels.length && <div>Loading content</div>}
+    <React.Suspense fallback={<></>}>
+      {/*{matchingBlocks && matchingBlocks.length > parcels.length && <div>Loading content</div>}*/}
       {parcels.map((matchingBlock, index) => {
         return (
           <div
@@ -129,6 +123,6 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
           </div>
         );
       })}
-    </div>
+    </React.Suspense>
   );
 };
