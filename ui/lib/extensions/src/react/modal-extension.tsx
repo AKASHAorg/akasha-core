@@ -10,7 +10,7 @@ export const ModalExtension = () => {
   React.useLayoutEffect(() => {
     const controller = new AbortController();
     window.addEventListener(
-      'popstate',
+      'single-spa:routing-event',
       function () {
         const modal = getModalFromParamsRef.current(location);
         if (modal && modal.name) {
