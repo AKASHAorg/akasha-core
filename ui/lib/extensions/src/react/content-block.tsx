@@ -1,18 +1,14 @@
 import * as React from 'react';
-import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Parcel from 'single-spa-react/parcel';
 import {
   type BlockInstanceMethods,
   type ContentBlockExtensionInterface,
   ContentBlockModes,
 } from '@akashaorg/typings/lib/ui';
-import { useGetContentBlockByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { ParcelConfigObject } from 'single-spa';
-import {
-  useGetContentBlockByIdLazyQuery,
-  useGetContentBlockByIdSuspenseQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useGetContentBlockByIdLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export type MatchingBlock = {
   blockInfo: ContentBlockExtensionInterface & {
@@ -49,12 +45,15 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     }
   }, [getExtensionsPlugin]);
 
-  const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery({
-    variables: { id: readMode?.blockID },
-  });
+  const [fetchBlockInfo, blockInfoQuery] = useGetContentBlockByIdLazyQuery();
+
   React.useEffect(() => {
     if (readMode?.blockID) {
-      fetchBlockInfo().catch(err => console.error(err, '<< failed to fetch content block'));
+      fetchBlockInfo({
+        variables: {
+          id: readMode?.blockID,
+        },
+      }).catch(err => console.error(err, '<< failed to fetch content block'));
     }
   }, [fetchBlockInfo, readMode?.blockID]);
 
@@ -67,8 +66,8 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
           propertyType: editMode.propertyType,
         });
       case ContentBlockModes.READONLY:
-        if (!blockInfoQuery.data) return [];
-        return contentBlockStoreRef.current.getMatchingBlocks(blockInfoQuery.data);
+        if (!blockInfoQuery.data?.node) return [];
+        return contentBlockStoreRef.current.getMatchingBlocks(blockInfoQuery.data.node);
       default:
         return [];
     }

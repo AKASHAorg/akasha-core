@@ -65,7 +65,7 @@ export const SlateEditorBlock = (
             },
           },
         },
-        context: { sources: sdk.current.services.gql.contextSources.composeDB },
+        context: { source: sdk.current.services.gql.contextSources.composeDB },
       });
       return {
         response: { blockID: resp.data.createAkashaContentBlock.document.id },

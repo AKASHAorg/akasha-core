@@ -5,8 +5,13 @@ import {
   ContentBlockRootProps,
 } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import type { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import type {
+  AkashaBeamInput,
+  CreateAkashaBeamPayload,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import getSDK from '@akashaorg/awf-sdk';
+import { useIndexBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 /**
  * Steps when publishBeam is called:
@@ -23,7 +28,7 @@ const DEFAULT_TEXT_BLOCK = 'slate-block';
 export const useBlocksPublishing = () => {
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
   const globalIdx = React.useRef(0);
-
+  const sdk = React.useRef(getSDK());
   const { getExtensionsPlugin } = useRootComponentProps();
   React.useLayoutEffect(() => {
     if (getExtensionsPlugin()) {
@@ -31,7 +36,11 @@ export const useBlocksPublishing = () => {
     }
   }, [getExtensionsPlugin]);
 
-  const [createBeam, createBeamQuery] = useCreateBeamMutation();
+  const [createBeam, createBeamQuery] = useCreateBeamMutation({
+    context: { source: sdk.current.services.gql.contextSources.composeDB },
+  });
+
+  const [createBeamIndex, beamIndexQuery] = useIndexBeamMutation();
 
   const [isPublishing, setIsPublishing] = React.useState(false);
 
@@ -76,6 +85,7 @@ export const useBlocksPublishing = () => {
       };
 
       if (createBeamQuery.loading || createBeamQuery.error) return;
+      if (createBeamQuery.called) return;
 
       createBeam({
         variables: {
@@ -83,17 +93,35 @@ export const useBlocksPublishing = () => {
             content: beamContent,
           },
         },
-      })
-        .then(() => {
-          setBlocksInUse([]);
-          setIsPublishing(false);
-        })
-        .catch(err => {
-          // @TODO: handle errors!
-          console.error('error creating beam.', err);
-        });
+      }).catch(err => {
+        // @TODO: handle errors!
+        console.error('error creating beam.', err);
+      });
     }
   }, [blocksInUse, createBeam, createBeamQuery]);
+
+  const indexBeam = React.useCallback(
+    async (beamData: CreateAkashaBeamPayload) => {
+      try {
+        const indexingVars = await sdk.current.api.auth.prepareIndexedID(beamData.document.id);
+        createBeamIndex({
+          variables: indexingVars,
+        }).then(() => {
+          setBlocksInUse([]);
+          setIsPublishing(false);
+        });
+      } catch (err) {
+        console.error('error indexing beam:', err);
+      }
+    },
+    [createBeamIndex],
+  );
+
+  React.useEffect(() => {
+    if (isPublishing && createBeamQuery.data?.createAkashaBeam && !beamIndexQuery.called) {
+      indexBeam(createBeamQuery.data.createAkashaBeam).catch();
+    }
+  }, [beamIndexQuery.called, createBeamQuery, indexBeam, isPublishing]);
 
   const createContentBlocks = React.useCallback(async () => {
     setIsPublishing(true);
