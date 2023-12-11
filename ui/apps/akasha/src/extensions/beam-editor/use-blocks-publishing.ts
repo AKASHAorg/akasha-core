@@ -27,9 +27,12 @@ const DEFAULT_TEXT_BLOCK = 'slate-block';
 
 export const useBlocksPublishing = () => {
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
+  const [isPublishing, setIsPublishing] = React.useState(false);
+  const [errors, setErrors] = React.useState<Error[]>([]);
   const globalIdx = React.useRef(0);
   const sdk = React.useRef(getSDK());
   const { getExtensionsPlugin } = useRootComponentProps();
+
   React.useLayoutEffect(() => {
     if (getExtensionsPlugin()) {
       setAvailableBlocks(getExtensionsPlugin().contentBlockStore.getInfos());
@@ -41,8 +44,6 @@ export const useBlocksPublishing = () => {
   });
 
   const [createBeamIndex, beamIndexQuery] = useIndexBeamMutation();
-
-  const [isPublishing, setIsPublishing] = React.useState(false);
 
   const [blocksInUse, setBlocksInUse] = React.useState<
     (ContentBlockRootProps['blockInfo'] & {
@@ -94,8 +95,7 @@ export const useBlocksPublishing = () => {
           },
         },
       }).catch(err => {
-        // @TODO: handle errors!
-        console.error('error creating beam.', err);
+        setErrors(prev => [...prev, new Error(`failed to create beam: ${err.message}`)]);
       });
     }
   }, [blocksInUse, createBeam, createBeamQuery]);
@@ -111,7 +111,7 @@ export const useBlocksPublishing = () => {
           setIsPublishing(false);
         });
       } catch (err) {
-        console.error('error indexing beam:', err);
+        setErrors(prev => [...prev, new Error(`Failed to index beam: ${err.message}`)]);
       }
     },
     [createBeamIndex],
@@ -149,7 +149,10 @@ export const useBlocksPublishing = () => {
             ]);
           }
         } catch (err) {
-          console.log(err);
+          setErrors(prev => [
+            ...prev,
+            new Error(`Failed to create content blocks: ${err.message}`),
+          ]);
         }
       }
     }
@@ -202,6 +205,20 @@ export const useBlocksPublishing = () => {
     });
   };
 
+  const formattedErrors = React.useMemo(() => {
+    const err = [];
+    if (errors.length) {
+      err.push(errors.map(err => err.message));
+    }
+    if (beamIndexQuery.error) {
+      err.push(beamIndexQuery.error.message);
+    }
+    if (createBeamQuery.error) {
+      err.push(createBeamQuery.error.message);
+    }
+    return err;
+  }, [beamIndexQuery.error, createBeamQuery.error, errors]);
+
   return {
     isPublishing,
     setIsPublishing,
@@ -210,5 +227,7 @@ export const useBlocksPublishing = () => {
     addBlockToList,
     removeBlockFromList,
     availableBlocks,
+    errors: formattedErrors,
+    isLoading: beamIndexQuery.loading || createBeamQuery.loading,
   };
 };
