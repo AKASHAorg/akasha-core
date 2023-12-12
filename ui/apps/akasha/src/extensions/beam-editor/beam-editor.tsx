@@ -107,7 +107,7 @@ export const BeamEditor: React.FC = () => {
                     align="center"
                     justify="center"
                     customStyle={
-                      'h-6 w-6 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark/30)'
+                      'h-6 w-6 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
                     }
                   >
                     <Icon size="xs" icon={block.icon} />
