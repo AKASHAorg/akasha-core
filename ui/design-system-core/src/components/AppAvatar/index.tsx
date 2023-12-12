@@ -4,7 +4,7 @@ import { IntegrationTypes } from '@akashaorg/typings/lib/ui';
 
 import Anchor from '../Anchor';
 import { AvatarProps } from '../Avatar';
-import Avatar from '../Avatar/avatar-image';
+import AvatarImage from '../Avatar/avatar-image';
 import Stack from '../Stack';
 
 import { generateActiveOverlayClass, generateAvatarContainerStyle } from '../../utils';
@@ -65,7 +65,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     <Anchor onClick={onClick} tabIndex={-6}>
       <Stack customStyle={className}>
         <React.Suspense fallback={<></>}>
-          <Avatar url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
+          <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
         </React.Suspense>
 
         {active && <div className={activeOverlayClass}></div>}
