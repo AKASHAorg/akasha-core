@@ -1,12 +1,11 @@
 import React from 'react';
-
-import { Profile } from '@akashaorg/typings/lib/ui';
-
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { Profile } from '@akashaorg/typings/lib/ui';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 export type ModeratorListItemProps = {
   assignButtonLabel: string;
@@ -23,7 +22,12 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
   if (assignedAdmin) {
     return (
       <Stack spacing="gap-x-2" align="center">
-        <Avatar avatar={selectedModerator.avatar} />
+        <Avatar
+          avatar={transformSource(selectedModerator?.avatar?.default)}
+          alternativeAvatars={selectedModerator?.avatar?.alternatives?.map(alternative =>
+            transformSource(alternative),
+          )}
+        />
 
         <Stack>
           <Text
@@ -49,7 +53,12 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
         <React.Fragment key={moderator.name}>
           <Stack justify="between">
             <Stack spacing="gap-x-2" align="center">
-              <Avatar avatar={moderator.avatar} />
+              <Avatar
+                avatar={transformSource(moderator?.avatar?.default)}
+                alternativeAvatars={moderator?.avatar?.alternatives?.map(alternative =>
+                  transformSource(alternative),
+                )}
+              />
 
               <Stack>
                 <Text variant="button-md" weight="bold" truncate={true}>{`${moderator.name}`}</Text>

@@ -1,7 +1,7 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { UserProfileFragmentDataFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import { logError } from './error-handler';
-import type { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { type Image } from '@akashaorg/typings/lib/ui';
 
 export interface IConfig {
   quality?: number;
@@ -120,20 +120,15 @@ export const saveMediaFile = async ({ name, content, isUrl }: ISaveMediaFile) =>
 };
 
 /**
- * Utility to transform image versions
+ * Utility to transform source
  */
-export const transformImageVersions = (
-  image?: AkashaProfileImageVersions,
-): AkashaProfileImageVersions => {
+export const transformSource = (image?: Image): Image => {
   if (!image) return null;
 
-  const defaultUrl = getMediaUrl(image.default.src);
+  const defaultUrl = getMediaUrl(image.src);
 
   return {
-    default: {
-      ...image.default,
-      src: defaultUrl.originLink || defaultUrl.fallbackLink,
-    },
-    alternatives: image.alternatives,
+    ...image,
+    src: defaultUrl.originLink || defaultUrl.fallbackLink,
   };
 };

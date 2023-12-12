@@ -5,7 +5,7 @@ import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
   getLinkPreview,
-  transformImageVersions,
+  transformSource,
   serializeSlateToBase64,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
@@ -134,7 +134,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         disableActionLabel={t('Authenticating')}
         editorState={editorState}
         showEditorInitialValue={showEditor}
-        avatar={transformImageVersions(profileDataReq?.data?.avatar)}
+        avatar={profileDataReq?.data?.avatar}
         profileId={loggedProfileData?.did?.id}
         disablePublish={disablePublishing}
         tags={tagSearch?.data}
@@ -153,6 +153,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         getLinkPreview={getLinkPreview}
         getMentions={setMentionQuery}
         getTags={setTagQuery}
+        transformSource={transformSource}
       />
       {showErrorSnackbar &&
         createPortal(

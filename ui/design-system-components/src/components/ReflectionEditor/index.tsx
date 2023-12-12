@@ -47,6 +47,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     onPublish,
     handleSaveLinkPreviewDraft,
     onClear,
+    transformSource,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(showEditorInitialValue);
@@ -90,6 +91,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
           avatar={avatar}
           actionLabel={placeholderButtonLabel}
           placeholderLabel={placeholderLabel}
+          transformSource={transformSource}
         />
       )}
       {showEditor && (
@@ -125,6 +127,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             getTags={getTags}
             onClear={onClear}
             onCancelClick={onCancelClick}
+            transformSource={transformSource}
           />
         </Card>
       )}

@@ -7,7 +7,7 @@
 export const getImageFromSeed = (seed: string | null, numberOfPlaceholders: number) => {
   let str = seed;
 
-  if (seed && seed.startsWith('0x')) {
+  if (seed && seed.search('0x') != -1) {
     str = seed.replace('0x', '');
   }
 

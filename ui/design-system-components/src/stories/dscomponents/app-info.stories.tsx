@@ -53,6 +53,11 @@ export const AppInfoVariants: Story = {
             onInstall={() => ({})}
             onUninstall={() => ({})}
             onSelectDeveloper={() => ({})}
+            transformSource={() => ({
+              src: 'https://placebeard.it/360x360',
+              width: 360,
+              height: 360,
+            })}
           />
         </Stack>
       ))}

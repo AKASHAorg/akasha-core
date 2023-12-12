@@ -27,6 +27,7 @@ export type BeamFeedProps = {
   header?: VirtualizerProps<unknown>['header'];
   footer?: VirtualizerProps<unknown>['footer'];
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
+  did?: string;
 };
 
 const BeamFeed = (props: BeamFeedProps) => {
@@ -42,6 +43,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     loadingIndicator,
     header,
     footer,
+    did,
   } = props;
 
   const {
@@ -59,6 +61,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     overscan: scrollerOptions.overscan,
     sorting,
     filters,
+    did,
   });
 
   const lastCursors = React.useRef({ next: null, prev: null });

@@ -11,7 +11,7 @@ import {
   useMutationsListener,
   useAnalytics,
   useRootComponentProps,
-  transformImageVersions,
+  transformSource,
 } from '@akashaorg/ui-awf-hooks';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
@@ -97,10 +97,11 @@ const FeedPage: React.FC<FeedPageProps> = props => {
         <Stack customStyle="mb-4">
           <EditorPlaceholder
             profileId={loggedProfileData.did.id}
-            avatar={transformImageVersions(loggedProfileData.avatar)}
+            avatar={loggedProfileData.avatar}
             actionLabel={t(`Start Beaming`)}
             placeholderLabel={t(`From Your Mind to the World 🧠 🌏 ✨`)}
             onClick={handleEditorPlaceholderClick}
+            transformSource={transformSource}
           />
         </Stack>
       );

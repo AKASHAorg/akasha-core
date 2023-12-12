@@ -13,7 +13,13 @@ import { tw } from '@twind/core';
 import { withHistory } from 'slate-history';
 import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
-import { IEntryData, IMetadata, IPublishData, Profile } from '@akashaorg/typings/lib/ui';
+import {
+  IEntryData,
+  IMetadata,
+  IPublishData,
+  type Image,
+  Profile,
+} from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -45,28 +51,29 @@ export type EditorBoxProps = {
   placeholderLabel?: string;
   emojiPlaceholderLabel?: string;
   disableActionLabel?: string;
-  onPublish: (publishData: IPublishData) => void;
   disablePublish?: boolean;
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
-  handleSaveLinkPreviewDraft?: (LinkPreview: IEntryData['linkPreview']) => void;
   linkPreview?: IEntryData['linkPreview'];
-  getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
-  getMentions: (query: string) => void;
-  getTags: (query: string) => void;
   mentions?: Profile[];
   tags?: { name: string; totalPosts: number }[];
   publishingApp?: string;
   editorState?: Descendant[];
-  setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
   ref?: React.Ref<unknown>;
   showCancelButton?: boolean;
-  onCancelClick?: () => void;
   cancelButtonLabel?: string;
   showDraft?: boolean;
-  onClear?: () => void;
   showPostButton?: boolean;
+  transformSource: (avatar: Image) => Image;
+  onPublish: (publishData: IPublishData) => void;
+  onClear?: () => void;
+  onCancelClick?: () => void;
+  handleSaveLinkPreviewDraft?: (LinkPreview: IEntryData['linkPreview']) => void;
+  setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
+  getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
+  getMentions: (query: string) => void;
+  getTags: (query: string) => void;
 };
 
 /* eslint-disable complexity */
@@ -99,6 +106,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     onCancelClick,
     showCancelButton,
     showPostButton = true,
+    transformSource,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -485,7 +493,13 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
       >
         {showAvatar && (
           <div className={tw(`flex shrink-0 pb-2`)}>
-            <Avatar avatar={avatar} profileId={profileId} />
+            <Avatar
+              avatar={transformSource(avatar?.default)}
+              alternativeAvatars={avatar?.alternatives?.map(alternative =>
+                transformSource(alternative),
+              )}
+              profileId={profileId}
+            />
           </div>
         )}
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
@@ -514,6 +528,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
                 values={slicedMentions}
                 currentIndex={index}
                 setIndex={setIndex}
+                transformSource={transformSource}
               />
             )}
             {tagTargetRange && tags.length > 0 && (
@@ -536,7 +551,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           )}
           {embedEntryData && (
             <div className={tw(`py-4 flex`)}>
-              <EmbedBox embedEntryData={embedEntryData} />
+              <EmbedBox embedEntryData={embedEntryData} transformSource={transformSource} />
             </div>
           )}
         </div>

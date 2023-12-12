@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { act, fireEvent, getByTestId } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import ProfileAvatarButton from '../';
 import { customRender } from '../../../test-utils';
 
@@ -11,11 +11,9 @@ describe('<ProfileAvatarButton /> Component', () => {
   const profileId = 'profileId';
 
   const avatar = {
-    default: {
-      height: 320,
-      src: '',
-      width: 320,
-    },
+    height: 320,
+    src: '',
+    width: 320,
   };
 
   const handleClick = jest.fn(/** */);
@@ -28,7 +26,7 @@ describe('<ProfileAvatarButton /> Component', () => {
       componentWrapper = customRender(
         <ProfileAvatarButton
           label={label}
-          avatarImage={avatar}
+          avatar={avatar}
           profileId={profileId}
           onClick={handleClick}
           onClickAvatar={handleClickAvatar}

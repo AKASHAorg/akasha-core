@@ -13,7 +13,7 @@ type Story = StoryObj<AvatarProps>;
 
 const ethAddress = '0x003410490050000320006570034567114572000';
 
-const avatar = { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } };
+const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
 
 export const BaseAvatar: Story = {
   render: () => <Avatar profileId={ethAddress} avatar={avatar} />,

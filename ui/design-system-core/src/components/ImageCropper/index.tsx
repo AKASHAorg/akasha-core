@@ -3,16 +3,15 @@ import { apply, tw } from '@twind/core';
 import Cropper, { CropperProps } from 'react-easy-crop';
 import { Point, Area } from 'react-easy-crop/types';
 
-import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-
 import Icon from '../Icon';
 import { MagnifyingGlassMinusIcon, MagnifyingGlassPlusIcon } from '../Icon/hero-icons-outline';
 import Stack from '../Stack';
 import Text from '../Text';
 import { getCroppedImage, getRadiusClasses } from '../../utils';
+import { type Image } from '@akashaorg/typings/lib/ui';
 
 export type ImageCropperProps = Partial<Omit<CropperProps, 'image'>> & {
-  image: string | AkashaProfileImageVersions;
+  image: string | Image;
   dragToRepositionLabel: string;
   onCrop: (image: Blob) => void;
 };
@@ -32,8 +31,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({
 }) => {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const imageUrl =
-    typeof image === 'string' ? image : image?.default.src || image?.alternatives[0].src;
+  const imageUrl = typeof image === 'string' ? image : image?.src;
 
   const onCropComplete = useCallback(
     async (_: Area, croppedAreaPixels: Area) => {

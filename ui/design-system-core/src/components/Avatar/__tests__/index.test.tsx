@@ -7,11 +7,9 @@ describe('<Avatar /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const avatar = {
-    default: {
-      height: 320,
-      src: '',
-      width: 320,
-    },
+    height: 320,
+    src: '',
+    width: 320,
   };
 
   beforeEach(() => {

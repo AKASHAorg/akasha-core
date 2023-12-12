@@ -11,7 +11,12 @@ import {
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { hasOwn, useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  transformSource,
+  useLoggedIn,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 export type EntryCardRendererProps = {
@@ -169,6 +174,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}
               hideActionButtons={hideActionButtons}
               actionsRightExt={<Extension name={`entry-card-actions-right_${id}`} />}
+              transformSource={transformSource}
             >
               {({ blockID }) => <Extension name={`${blockID}_content_block`} />}
             </EntryCard>

@@ -28,7 +28,7 @@ export function deleteImageAndGetProfileContent({ profileData, type }: IDeleteIm
 
   const avatarObj = avatar
     ? {
-        default: avatar.default,
+        default: avatar?.default,
         alternatives:
           /* TODO: the following logical or won't be necessary once the default value is set as undefined rater than null on ceramic side*/
           avatar?.alternatives || undefined,

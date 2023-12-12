@@ -1,19 +1,20 @@
-import * as React from 'react';
+import React from 'react';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { Portal } from './helpers';
 import { tw, tx } from '@twind/core';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
-export interface IMentionPopover {
+export type MentionPopover = {
   values: Profile[];
   ref: React.Ref<HTMLDivElement>;
   currentIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   handleSelect: (index: number) => void;
-}
+  transformSource: (src: Image) => Image;
+};
 
-export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props, ref) => {
-  const { values, currentIndex, setIndex, handleSelect } = props;
+export const MentionPopover: React.FC<MentionPopover> = React.forwardRef((props, ref) => {
+  const { values, currentIndex, setIndex, handleSelect, transformSource } = props;
 
   return (
     <Portal>
@@ -40,7 +41,10 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
           >
             <ProfileAvatarButton
               label={value.name}
-              avatarImage={value.avatar}
+              avatar={transformSource(value?.avatar?.default)}
+              alternativeAvatars={value?.avatar?.alternatives?.map(alternative =>
+                transformSource(alternative),
+              )}
               profileId={value.did.id}
             />
           </div>

@@ -2,6 +2,7 @@ import React, { useImperativeHandle } from 'react';
 import EditorBox from '@akashaorg/design-system-components/lib/components/Editor';
 import {
   serializeSlateToBase64,
+  transformSource,
   useLoggedIn,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
@@ -129,6 +130,7 @@ export const SlateEditorBlock = (
       }}
       showCancelButton={false}
       showPostButton={false}
+      transformSource={transformSource}
     />
   );
 };
