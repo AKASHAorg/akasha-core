@@ -16,14 +16,14 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
 
   const [analyticsActions] = useAnalytics();
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
 
   const { profileId } = useParams<{
     profileId: string;
   }>();
 
   if (!isLoggedIn) {
-    return navigateTo({
+    return navigateTo.current({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
