@@ -19,6 +19,13 @@ export const IndexedBeamFragmentDoc = /*#__PURE__*/ `
   beamID
 }
     `;
+export const IndexedProfileFragmentDoc = /*#__PURE__*/ `
+    fragment IndexedProfileFragment on IndexProfilePayloadDocument {
+  id
+  createdAt
+  profileID
+}
+    `;
 export const IndexBeamDocument = /*#__PURE__*/ `
     mutation IndexBeam($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
   indexBeam(jws: $jws, capability: $capability) {
@@ -40,3 +47,24 @@ export const useIndexBeamMutation = <
 useIndexBeamMutation.getKey = () => ['IndexBeam'];
 
 useIndexBeamMutation.fetcher = (variables?: Types.IndexBeamMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.IndexBeamMutation, Types.IndexBeamMutationVariables>(IndexBeamDocument, variables, options);
+export const IndexProfileDocument = /*#__PURE__*/ `
+    mutation IndexProfile($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexProfile(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedProfileFragment
+    }
+  }
+}
+    ${IndexedProfileFragmentDoc}`;
+export const useIndexProfileMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.IndexProfileMutation, TError, Types.IndexProfileMutationVariables, TContext>) =>
+    useMutation<Types.IndexProfileMutation, TError, Types.IndexProfileMutationVariables, TContext>(
+      ['IndexProfile'],
+      (variables?: Types.IndexProfileMutationVariables) => composeDbFetch<Types.IndexProfileMutation, Types.IndexProfileMutationVariables>(IndexProfileDocument, variables)(),
+      options
+    );
+useIndexProfileMutation.getKey = () => ['IndexProfile'];
+
+useIndexProfileMutation.fetcher = (variables?: Types.IndexProfileMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.IndexProfileMutation, Types.IndexProfileMutationVariables>(IndexProfileDocument, variables, options);

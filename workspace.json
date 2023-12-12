@@ -669,26 +669,6 @@
         }
       }
     },
-    "@akashaorg/app-translation": {
-      "root": "ui/apps/translation",
-      "sourceRoot": "ui/apps/translation/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/translation"
-          ],
-          "options": {
-            "commands": [
-              "yarn run pack"
-            ],
-            "cwd": "ui/apps/translation",
-            "parallel": false
-          }
-        }
-      }
-    },
     "@akashaorg/app-routing": {
       "root": "ui/apps/routing",
       "sourceRoot": "ui/apps/routing/src",

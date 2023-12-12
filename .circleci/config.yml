@@ -36,10 +36,11 @@ jobs:
             - dependency-cache-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Install yarn packages
-          command: yarn bootstrap
+          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
       - save_cache:
           paths:
             - node_modules
+            - ~/.cache/yarn
           key: dependency-cache-v2-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Prepare continuation parameters

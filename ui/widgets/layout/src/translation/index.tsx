@@ -27,12 +27,3 @@ export class TranslationPlugin {
     return new Promise(resolve => resolve(this.defaultPath));
   }
 }
-
-export const getPlugin = async () => {
-  TranslationPlugin.i18n = await TranslationPlugin.initTranslation();
-  return {
-    translation: {
-      i18n: TranslationPlugin.i18n,
-    },
-  };
-};

@@ -3,13 +3,12 @@ import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { transformImageVersions, hasOwn, sortByKey, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { transformSource, hasOwn, sortByKey, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { ContentBlockModes, EntityTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useTranslation } from 'react-i18next';
-import { ILocale } from '@akashaorg/design-system-core/lib/utils';
 
 type BeamCardProps = Pick<
   EntryCardProps,
@@ -43,9 +42,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
       : { akashaProfile: null };
-  const locale =
-    /*TODO: fix typing in translation plugin and avoid type assertion*/ (getTranslationPlugin().i18n
-      ?.languages?.[0] as ILocale) || 'en';
+  const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
 
   const onAvatarClick = (id: string) => {
     navigateTo({
@@ -86,7 +83,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         clickToViewLabel: t('Click to View'),
       }}
       itemType={EntityTypes.BEAM}
-      transformImageVersions={transformImageVersions}
+      transformSource={transformSource}
       onAvatarClick={onAvatarClick}
       onReflect={onReflect}
       {...rest}

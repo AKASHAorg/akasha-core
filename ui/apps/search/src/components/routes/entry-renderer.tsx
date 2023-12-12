@@ -8,17 +8,20 @@ import {
   Profile,
   IContentClickDetails,
 } from '@akashaorg/typings/lib/ui';
-import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { hasOwn, useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  hasOwn,
+  transformSource,
+  useLoggedIn,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 
 export type EntryCardRendererProps = {
   itemData?: AkashaBeam;
   itemType?: EntityTypes;
-  locale?: ILocale;
   loggedProfileData?: Profile;
   navigateTo?: (args: NavigateToParams) => void;
   onContentClick: (details: IContentClickDetails, itemType: EntityTypes) => void;
@@ -33,23 +36,13 @@ export type EntryCardRendererProps = {
 };
 
 const EntryCardRenderer = (props: EntryCardRendererProps) => {
-  const {
-    loggedProfileData,
-    locale,
-    itemData,
-    itemType,
-    style,
-    contentClickable,
-    navigateTo,
-    onMentionClick,
-    onTagClick,
-    onContentClick,
-  } = props;
+  const { loggedProfileData, itemData, itemType, contentClickable, navigateTo, onContentClick } =
+    props;
 
   const { id } = itemData || {};
 
   const { t } = useTranslation('app-search');
-  const { navigateToModal } = useRootComponentProps();
+  const { getTranslationPlugin, navigateToModal } = useRootComponentProps();
   const { authenticatedDID } = useLoggedIn();
   const profileDataReq = useGetProfileByDidQuery(
     { id: itemData.author.id },
@@ -60,6 +53,8 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
     profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
       ? profileDataReq.data
       : { akashaProfile: null };
+
+  const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
 
   const handleClickAvatar = () => {
     navigateTo?.({
@@ -166,7 +161,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               onAvatarClick={handleClickAvatar}
               onContentClick={handleContentClick}
               flagAsLabel={t('Report Post')}
-              locale={locale || 'en'}
+              locale={locale}
               moderatedContentLabel={t('This content has been moderated')}
               profileAnchorLink={'/@akashaorg/app-profile'}
               repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
@@ -179,6 +174,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
               onEntryFlag={handleEntryFlag(itemData.id, EntityTypes.BEAM)}
               hideActionButtons={hideActionButtons}
               actionsRightExt={<Extension name={`entry-card-actions-right_${id}`} />}
+              transformSource={transformSource}
             >
               {({ blockID }) => <Extension name={`${blockID}_content_block`} />}
             </EntryCard>

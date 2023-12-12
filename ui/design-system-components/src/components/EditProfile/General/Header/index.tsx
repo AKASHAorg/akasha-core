@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -12,7 +12,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import { CropperProps } from 'react-easy-crop';
-import { ProfileImageType, Profile } from '@akashaorg/typings/lib/ui';
+import { ProfileImageType, Profile, type Image } from '@akashaorg/typings/lib/ui';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
@@ -34,6 +34,7 @@ export type HeaderProps = {
   dragToRepositionLabel: string;
   isSavingImage: boolean;
   publicImagePath: string;
+  transformSource: (src: Image) => Image;
   onAvatarChange: (avatar?: File) => void;
   onCoverImageChange: (coverImage?: File) => void;
   onImageSave: (type: ProfileImageType, image?: File) => void;
@@ -54,6 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
   dragToRepositionLabel,
   isSavingImage,
   publicImagePath,
+  transformSource,
   onAvatarChange,
   onCoverImageChange,
   onImageSave,
@@ -65,10 +67,13 @@ export const Header: React.FC<HeaderProps> = ({
   const [ProfileImageType, setProfileImageType] = useState<ProfileImageType>();
   const [showEditImage, setShowEditImage] = useState(false);
   const [showDeleteImage, setShowDeleteImage] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(avatar);
-  const [coverImageUrl, setCoverImageUrl] = useState(coverImage);
+  const [avatarUrl, setAvatarUrl] = useState(transformSource(avatar?.default));
+  const [coverImageUrl, setCoverImageUrl] = useState(transformSource(coverImage?.default));
   const [avatarFile, setAvatarFile] = useState(null);
   const [coverImageFile, setCoverImageFile] = useState(null);
+  const alternativeAvatars = useRef(
+    avatar?.alternatives?.map(alternative => transformSource(alternative)),
+  );
 
   const seed = getImageFromSeed(profileId, 3);
   const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
@@ -137,12 +142,12 @@ export const Header: React.FC<HeaderProps> = ({
         case 'avatar':
           onImageSave('avatar', image);
           setAvatarFile(image);
-          setAvatarUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
+          setAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
           break;
         case 'cover-image':
           onImageSave('cover-image', image);
           setCoverImageFile(image);
-          setCoverImageUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
+          setCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
       }
     }
   };
@@ -165,11 +170,11 @@ export const Header: React.FC<HeaderProps> = ({
       switch (ProfileImageType) {
         case 'avatar':
           setAvatarFile(image);
-          setAvatarUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
+          setAvatarUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
           break;
         case 'cover-image':
           setCoverImageFile(image);
-          setCoverImageUrl({ default: { src: URL.createObjectURL(image), width: 0, height: 0 } });
+          setCoverImageUrl({ src: URL.createObjectURL(image), width: 0, height: 0 });
       }
       setShowEditImage(true);
     }
@@ -191,9 +196,8 @@ export const Header: React.FC<HeaderProps> = ({
         <Card
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
-          customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
-            coverImageUrl?.default?.src || coverImageFallback
-          })]`}
+          style={{ backgroundImage: `url(${coverImageUrl?.src || coverImageFallback})` }}
+          customStyle="flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover"
           ref={editCoverRef}
         >
           <Stack direction="column" spacing="gap-y-1" customStyle="relative mt-auto ml-auto">
@@ -223,6 +227,7 @@ export const Header: React.FC<HeaderProps> = ({
             profileId={profileId}
             size="lg"
             avatar={avatarUrl}
+            alternativeAvatars={alternativeAvatars.current}
             customStyle={`border-2 ${getColorClasses(
               {
                 light: 'white',
@@ -261,7 +266,7 @@ export const Header: React.FC<HeaderProps> = ({
         cancelLabel={cancelLabel}
         saveLabel={saveLabel}
         onClose={() => (isSavingImage ? undefined : setShowEditImage(false))}
-        images={ProfileImageType === 'avatar' ? [avatarUrl] : [coverImageUrl]}
+        images={ProfileImageType === 'avatar' ? [avatarUrl.src] : [coverImageUrl.src]}
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}

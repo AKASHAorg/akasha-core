@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
-import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import {
   AkashaBeamEdge,
   AkashaBeamFiltersInput,
@@ -11,7 +10,6 @@ import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 export type BeamFeedProps = {
-  locale?: ILocale;
   className?: string;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
   scrollerOptions?: { overscan: number };
@@ -24,6 +22,7 @@ export type BeamFeedProps = {
   estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];
+  did?: string;
 };
 
 const BeamFeed = (props: BeamFeedProps) => {
@@ -34,9 +33,9 @@ const BeamFeed = (props: BeamFeedProps) => {
     scrollTopIndicator,
     renderItem,
     queryKey,
-    newItemsPublishedLabel,
     estimatedHeight = 150,
     itemSpacing,
+    did,
   } = props;
 
   const { beams, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset, hasErrors, errors } =
@@ -44,6 +43,7 @@ const BeamFeed = (props: BeamFeedProps) => {
       overscan: scrollerOptions.overscan,
       sorting,
       filters,
+      did: did,
     });
 
   const lastCursors = React.useRef({ next: null, prev: null });

@@ -14,12 +14,12 @@ import { fromString } from 'uint8arrays/from-string';
 import { toString } from 'uint8arrays/to-string';
 import { extract } from '@ucanto/core/delegation';
 import type { Cacao } from '@didtools/cacao';
-
+import { StoreMemory } from '@web3-storage/access/stores/store-memory';
 
 export type SessionObj = {
-  sessionKeySeed: string
-  cacao: Cacao
-}
+  sessionKeySeed: string;
+  cacao: Cacao;
+};
 
 @injectable()
 class AWF_IpfsConnector {
@@ -50,91 +50,93 @@ class AWF_IpfsConnector {
     };
   }
 
-/*
-* _createClient is a private async method that creates a w3upClient instance.
-*
-* It first serializes the current Ceramic session. If no session exists, an error is thrown.
-*
-* The serialized session is parsed to extract the sessionKeySeed, which is converted from base64url to base64pad encoding.
-*
-* The sessionKeySeed is passed to the Signer.derive method to derive a principal.
-*
-* The principal is then passed to the create method from @web3-storage/w3up-client to instantiate the client.
-*
-* The new client instance is assigned to the #w3upClient property.
-*
-* @returns {Promise<void>}
-*/
-  private async _createClient(){
+  /*
+   * _createClient is a private async method that creates a w3upClient instance.
+   *
+   * It first serializes the current Ceramic session. If no session exists, an error is thrown.
+   *
+   * The serialized session is parsed to extract the sessionKeySeed, which is converted from base64url to base64pad encoding.
+   *
+   * The sessionKeySeed is passed to the Signer.derive method to derive a principal.
+   *
+   * The principal is then passed to the create method from @web3-storage/w3up-client to instantiate the client.
+   *
+   * The new client instance is assigned to the #w3upClient property.
+   *
+   * @returns {Promise<void>}
+   */
+  private async _createClient() {
     const serialisedSession = this._ceramic.serialize();
-    if(!serialisedSession){
+    if (!serialisedSession) {
       throw new Error('Must start a did-session first!');
     }
-    const { sessionKeySeed } = JSON.parse(toString(fromString(serialisedSession, 'base64url'))) as SessionObj
+    const { sessionKeySeed } = JSON.parse(
+      toString(fromString(serialisedSession, 'base64url')),
+    ) as SessionObj;
     const keySeed = fromString(sessionKeySeed, 'base64pad');
     const principal = await Signer.derive(keySeed);
-    this.#w3upClient= await create({ principal });
+    this.#w3upClient = await create({ principal, store: new StoreMemory() });
   }
 
-/*
-* _getStorageProof is a private async method that retrieves a storage delegation proof from the delegateBaseUrl.
-*
-* It first checks if the delegateBaseUrl is set, and throws an error if not.
-*
-* It then constructs a URL to request a create-proof endpoint, passing the current client's DID.
-*
-* The proof is fetched and the response ArrayBuffer is extracted.
-*
-* The proof is deserialized using the extract method from @ucanto/core/delegation.
-*
-* If delegation extraction fails, an error is thrown.
-*
-* Otherwise the extracted delegation is returned.
-*
-* @returns {Promise<Delegation>} The deserialized storage delegation proof.
-*/
-  private async _getStorageProof(){
-    if(!this.delegateBaseUrl){
+  /*
+   * _getStorageProof is a private async method that retrieves a storage delegation proof from the delegateBaseUrl.
+   *
+   * It first checks if the delegateBaseUrl is set, and throws an error if not.
+   *
+   * It then constructs a URL to request a create-proof endpoint, passing the current client's DID.
+   *
+   * The proof is fetched and the response ArrayBuffer is extracted.
+   *
+   * The proof is deserialized using the extract method from @ucanto/core/delegation.
+   *
+   * If delegation extraction fails, an error is thrown.
+   *
+   * Otherwise the extracted delegation is returned.
+   *
+   * @returns {Promise<Delegation>} The deserialized storage delegation proof.
+   */
+  private async _getStorageProof() {
+    if (!this.delegateBaseUrl) {
       throw new Error('Must set env.W3_STORAGE_DELEGATE_BASE_URL');
     }
     const url = new URL(`create-proof/${this.#w3upClient!.did()}`, this.delegateBaseUrl);
-    const response = await fetch(url, { method: "POST" });
-    const data = await response.arrayBuffer()
+    const response = await fetch(url, { method: 'POST' });
+    const data = await response.arrayBuffer();
 
     // Deserialize the delegation
-    const delegation = await extract(new Uint8Array(data))
+    const delegation = await extract(new Uint8Array(data));
     if (!delegation.ok) {
       this._log.error(delegation.error);
-      throw new Error('Failed to extract delegation')
+      throw new Error('Failed to extract delegation');
     }
     return delegation.ok;
   }
 
-/*
-* uploadFile is an async method that uploads a file to IPFS via w3upClient.
-*
-* It first checks if the w3upClient exists, and creates it if not by calling _createClient.
-*
-* It then checks that the client was created successfully.
-*
-* It gets the current spaces for the client - if there are none, it:
-*   - Retrieves a storage delegation proof by calling _getStorageProof
-*   - Uses the proof to add a space to the client
-*   - Sets the new space as the current space
-*
-* Finally, it calls uploadFile on the client instance to upload the file.
-*
-* @param file - The Blob file to upload
-* @returns {Promise<string>} - The IPFS CID of the uploaded file
-*/
+  /*
+   * uploadFile is an async method that uploads a file to IPFS via w3upClient.
+   *
+   * It first checks if the w3upClient exists, and creates it if not by calling _createClient.
+   *
+   * It then checks that the client was created successfully.
+   *
+   * It gets the current spaces for the client - if there are none, it:
+   *   - Retrieves a storage delegation proof by calling _getStorageProof
+   *   - Uses the proof to add a space to the client
+   *   - Sets the new space as the current space
+   *
+   * Finally, it calls uploadFile on the client instance to upload the file.
+   *
+   * @param file - The Blob file to upload
+   * @returns {Promise<string>} - The IPFS CID of the uploaded file
+   */
   @validate(z.instanceof(Blob))
   async uploadFile(file: Blob) {
-    if(!this.#w3upClient){
+    if (!this.#w3upClient) {
       await this._createClient();
     }
 
-    if(!this.#w3upClient){
-      this._log.warn('Something went wrong with setting w3upClient.')
+    if (!this.#w3upClient) {
+      this._log.warn('Something went wrong with setting w3upClient.');
       return;
     }
     const spaces = this.#w3upClient.spaces();
@@ -247,6 +249,7 @@ class AWF_IpfsConnector {
         results.push(multiaddrToUri(addr));
       }
     }
+
     return results;
   }
 }

@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Profile, RootExtensionProps } from '@akashaorg/typings/lib/ui';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { transformSource, withProviders } from '@akashaorg/ui-awf-hooks';
 import { trendingProfilesData } from '@akashaorg/design-system-components/lib/utils/dummy-data';
 
 import ManageCollaboratorsModal from '@akashaorg/design-system-components/lib/components/ManageCollaboratorsModal';
@@ -72,6 +72,7 @@ const ManageCollaborators = (props: RootExtensionProps) => {
       onSearch={handleSearch}
       closeModal={handleModalClose}
       onClickCollaborator={handleClickCollaborator}
+      transformSource={transformSource}
     />
   );
 };

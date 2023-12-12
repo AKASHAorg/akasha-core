@@ -7,11 +7,10 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ReadOnlyEditor from '../ReadOnlyEditor';
-
-import { formatRelativeTime, ILocale } from '../../utils/time';
+import { formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 
 export type BubbleCardProps = {
-  locale: ILocale;
+  locale: string;
   senderName?: string;
   youLabel: string;
   content?: Descendant[];
@@ -36,7 +35,7 @@ const BubbleCard: React.FC<BubbleCardProps> = props => {
   } = props;
 
   const time = dayjs(+chatTimestamp / 1000000).format('HH:mm');
-  const relativeTime = formatRelativeTime(+chatTimestamp / 1000000, locale);
+  const relativeTime = formatRelativeTime((+chatTimestamp / 1000000).toString(), locale);
 
   return (
     <div>

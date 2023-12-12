@@ -3,11 +3,7 @@ import EntryCardLoading from '@akashaorg/design-system-components/lib/components
 import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import {
-  transformImageVersions,
-  serializeSlateToBase64,
-  useAnalytics,
-} from '@akashaorg/ui-awf-hooks';
+import { transformSource, serializeSlateToBase64, useAnalytics } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
   useGetMyProfileQuery,
@@ -133,7 +129,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         disableActionLabel={t('Authenticating')}
         editorState={editorState}
         showEditorInitialValue={showEditor}
-        avatar={transformImageVersions(profileDataReq?.data?.avatar)}
+        avatar={profileDataReq?.data?.avatar}
         profileId={loggedProfileData?.did?.id}
         disablePublish={disablePublishing}
         tags={tagSearch?.data}
@@ -151,6 +147,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         }}
         getMentions={setMentionQuery}
         getTags={setTagQuery}
+        transformSource={transformSource}
       />
       {showErrorSnackbar &&
         createPortal(

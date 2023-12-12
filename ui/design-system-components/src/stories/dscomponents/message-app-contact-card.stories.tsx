@@ -27,6 +27,11 @@ export const BaseMessageContactCard: Story = {
       unpinConvoLabel="Unpin"
       senderAvatar={senderAvatar}
       senderDid={senderDid}
+      transformSource={() => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      })}
     />
   ),
 };

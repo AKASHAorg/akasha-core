@@ -195,6 +195,16 @@ export type GetReflectReflectionsQueryVariables = Types.Exact<{
 
 export type GetReflectReflectionsQuery = { akashaReflectIndex?: { edges?: Array<{ cursor: string, node?: { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
 
+export type IndexedProfileFragmentFragment = { id: string, createdAt: string, profileID: string };
+
+export type IndexProfileMutationVariables = Types.Exact<{
+  jws?: Types.InputMaybe<Types.Did_Jws>;
+  capability?: Types.InputMaybe<Types.Cacao_Capability>;
+}>;
+
+
+export type IndexProfileMutation = { indexProfile?: { document?: { id: string, createdAt: string, profileID: string } | null } | null };
+
 export type UserProfileFragmentMFragment = { id: string, name: string, description?: string | null, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
 
 export type CreateProfileMutationVariables = Types.Exact<{

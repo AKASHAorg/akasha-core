@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { useTranslation } from 'react-i18next';
 
 const NoAppsMessage = () => {
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('ui-widget-my-apps');
   return (
     <Stack direction="column" align="center" spacing="gap-y-4" customStyle="px-4">
       <Icon
