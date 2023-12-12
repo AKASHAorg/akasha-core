@@ -24,6 +24,7 @@ export type BeamFeedProps = {
   estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];
+  did?: string;
 };
 
 const BeamFeed = (props: BeamFeedProps) => {
@@ -37,6 +38,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     newItemsPublishedLabel,
     estimatedHeight = 150,
     itemSpacing,
+    did,
   } = props;
 
   const { beams, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset, hasErrors, errors } =
@@ -44,6 +46,7 @@ const BeamFeed = (props: BeamFeedProps) => {
       overscan: scrollerOptions.overscan,
       sorting,
       filters,
+      did: did,
     });
 
   const lastCursors = React.useRef({ next: null, prev: null });
