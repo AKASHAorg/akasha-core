@@ -1,5 +1,5 @@
 import React from 'react';
-import { Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
@@ -15,6 +15,7 @@ export type ProfileMiniCardProps = {
   followersLabel?: string;
   followingLabel?: string;
   stats: { followers: number; beams: number };
+  transformSource: (src: Image) => Image;
   handleClick?: () => void;
   footerExt?: React.ReactNode;
 };
@@ -27,6 +28,7 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
     beamsLabel,
     followersLabel,
     stats: { followers, beams },
+    transformSource,
     handleClick,
     footerExt,
   } = props;
@@ -39,7 +41,7 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
       elevation="1"
       radius="rounded-2xl"
       onClick={handleClick}
-      margin='mb-4'
+      margin="mb-4"
       padding="p-0"
       customStyle="max-h-[30rem]"
     >
@@ -53,8 +55,11 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
           size="xl"
           border="sm"
           borderColor="darkerBlue"
-          avatar={profileData?.avatar}
-          profileId={profileData?.did?.id}
+          avatar={transformSource(profileData?.avatar?.default)}
+          alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
+            transformSource(alternative),
+          )}
+          profileId={profileData.did.id}
           customStyle="relative top-16"
         />
       </Stack>

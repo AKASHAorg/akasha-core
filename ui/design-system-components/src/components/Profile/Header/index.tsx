@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 
-import { Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
@@ -33,6 +33,7 @@ export type HeaderProps = {
   followElement?: ReactElement;
   publicImagePath: string;
   handleEdit?: () => void;
+  transformSource: (src: Image) => Image;
 };
 
 const Header: React.FC<HeaderProps> = ({
@@ -49,10 +50,12 @@ const Header: React.FC<HeaderProps> = ({
   followElement,
   publicImagePath,
   handleEdit,
+  transformSource,
 }) => {
   const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
   const seed = getImageFromSeed(did.id, 3);
   const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
+  const backgroundUrl = transformSource(background?.default)?.src ?? coverImageFallback;
 
   return (
     <Stack>
@@ -60,9 +63,7 @@ const Header: React.FC<HeaderProps> = ({
         elevation="1"
         radius={{ top: 20 }}
         background={{ light: 'grey7', dark: 'grey5' }}
-        customStyle={`h-32 bg(center no-repeat cover [url(${
-          background?.default?.src ?? coverImageFallback
-        })])`}
+        customStyle={`h-32 bg(center no-repeat cover [url(${backgroundUrl})])`}
       />
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
         <Stack direction="column" customStyle="pl-2" fullWidth>
@@ -71,7 +72,10 @@ const Header: React.FC<HeaderProps> = ({
               <Avatar
                 profileId={did.id}
                 size="xl"
-                avatar={avatar}
+                avatar={transformSource(avatar?.default)}
+                alternativeAvatars={avatar?.alternatives?.map(alternative =>
+                  transformSource(alternative),
+                )}
                 customStyle={`absolute -top-6 border-2 border-white dark:border-grey2 ${getColorClasses(
                   {
                     light: 'grey8',

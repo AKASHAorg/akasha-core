@@ -18,11 +18,11 @@ type Story = StoryObj<StackedAvatarProps>;
 
 const variants: StackedAvatarProps[] = [
   {
-    userData: userData,
+    userData: userData.map(item => ({ ...item, avatar: item.avatar?.default })),
     maxAvatars: 4, // slices this number from user data and renders the corresponding avatars
   },
   {
-    userData: userData,
+    userData: userData.map(item => ({ ...item, avatar: item.avatar?.default })),
     maxAvatars: 4,
     size: 'xl',
   },

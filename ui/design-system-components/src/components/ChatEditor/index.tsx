@@ -23,6 +23,7 @@ const ChatEditor: React.FC<Omit<EditorBoxProps, 'setEditorState'>> = props => {
     cancelButtonLabel,
     onCancelClick,
     editorState,
+    transformSource,
   } = props;
 
   const [contentState, setContentState] = React.useState(editorState || editorDefaultValue);
@@ -48,6 +49,7 @@ const ChatEditor: React.FC<Omit<EditorBoxProps, 'setEditorState'>> = props => {
         setEditorState={setContentState}
         cancelButtonLabel={cancelButtonLabel}
         onCancelClick={onCancelClick}
+        transformSource={transformSource}
         showCancelButton={showCancelButton}
       />
     </div>

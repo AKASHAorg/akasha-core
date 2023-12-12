@@ -7,7 +7,7 @@ import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import {
   getFollowList,
   hasOwn,
-  transformImageVersions,
+  transformSource,
   useLoggedIn,
   useProfileStats,
   useRootComponentProps,
@@ -78,12 +78,13 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
 
   return (
     <ProfileMiniCard
-      profileData={{ ...profileData, avatar: transformImageVersions(profileData?.avatar) }}
+      profileData={profileData}
       authenticatedDID={authenticatedDID}
       beamsLabel={t('Beams')}
       followingLabel={t('Following')}
       followersLabel={t('Followers')}
       stats={{ followers: totalFollowers, beams: totalBeams }}
+      transformSource={transformSource}
       handleClick={handleCardClick}
       footerExt={
         <Extension

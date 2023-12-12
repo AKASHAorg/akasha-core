@@ -13,7 +13,7 @@ import {
   useGetFollowersListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
-  transformImageVersions,
+  transformSource,
   hasOwn,
   getFollowList,
   useRootComponentProps,
@@ -129,7 +129,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
             />
           )}
           onProfileClick={onProfileClick}
-          transformImageVersions={transformImageVersions}
+          transformSource={transformSource}
         />
       )}
     </EngagementTab>

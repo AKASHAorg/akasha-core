@@ -23,6 +23,11 @@ const commonProps = {
   name: 'Coffee Lover',
   flagLabel: 'Report',
   publicImagePath: '/images',
+  transformSource: () => ({
+    src: 'https://placebeard.it/360x360',
+    width: 360,
+    height: 360,
+  }),
 };
 
 const variants = [

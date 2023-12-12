@@ -7,11 +7,9 @@ describe('<ImageCropper /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const image = {
-    default: {
-      height: 320,
-      src: 'https://placebeard.it/360x360',
-      width: 320,
-    },
+    height: 320,
+    src: 'https://placebeard.it/360x360',
+    width: 320,
   };
 
   const cropHandler = jest.fn(() => {
