@@ -125,14 +125,16 @@ export const ImageEditorBlock = (
       size: { height: mediaFile.size.height, width: mediaFile.size.width },
       src: { url: mediaUrl.originLink || mediaUrl.fallbackLink },
       name: image.name,
-      originalSrc: image,
+      originalSrc: URL.createObjectURL(image),
     };
 
     return imageObj;
   };
 
+  const [editorImages, setEditorImages] = React.useState([]);
   const uploadNewImage = async (image: File) => {
     const uploadedImage = await onUpload(image);
+    setEditorImages(prev => [...prev, uploadedImage]);
     setImages(prev => [
       ...prev,
       { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
@@ -141,6 +143,17 @@ export const ImageEditorBlock = (
 
   const uploadEditedImage = async (image: File, indexOfEditedImage: number) => {
     const uploadedImage = await onUpload(image);
+    const oldImage = editorImages[indexOfEditedImage];
+    setEditorImages(prev => [
+      ...prev.slice(0, indexOfEditedImage),
+      {
+        name: oldImage.name,
+        src: uploadedImage.src,
+        originalSrc: uploadedImage.src,
+        size: uploadedImage.size,
+      },
+      ...prev.slice(indexOfEditedImage + 1),
+    ]);
     setImages(prev => [
       ...prev.slice(0, indexOfEditedImage),
       { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
@@ -148,11 +161,17 @@ export const ImageEditorBlock = (
     ]);
   };
 
+  const [canCloseModal, setCanCloseModal] = React.useState(false);
   React.useEffect(() => {
-    if (!uploading && showEditModal) {
+    if (!uploading && showEditModal && canCloseModal) {
       setShowEditModal(false);
+      setCanCloseModal(false);
     }
-  }, [uploading, showEditModal]);
+  }, [uploading, showEditModal, canCloseModal]);
+
+  const handleCloseModal = () => {
+    setCanCloseModal(true);
+  };
 
   const handleDeleteImage = (element: ImageObject) => {
     const newImages = images.filter(image => image.src !== element.src);
@@ -254,10 +273,10 @@ export const ImageEditorBlock = (
           <Text>{t('Uploading image')}</Text>
         </Stack>
       )}
-      {uiState === 'gallery' && images.length !== 0 && (
+      {uiState === 'gallery' && editorImages.length !== 0 && (
         <Stack spacing="gap-1">
           <Stack alignSelf={alignState}>
-            <ImageBlockGallery images={images} />
+            <ImageBlockGallery images={editorImages} />
           </Stack>
           {showCaption && (
             <TextField
@@ -282,7 +301,7 @@ export const ImageEditorBlock = (
             title={{ label: t('Edit Image') }}
             cancelLabel={t('Cancel')}
             saveLabel={t('Save')}
-            onClose={() => (uploading ? undefined : setShowEditModal(false))}
+            onClose={handleCloseModal}
             images={imageUrls}
             dragToRepositionLabel={t('Drag the image to reposition')}
             isSavingImage={uploading}

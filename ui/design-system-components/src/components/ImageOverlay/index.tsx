@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { tw, apply, tx } from '@twind/core';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -19,9 +20,9 @@ export interface IImageOverlay {
 }
 
 const closeDivClass = apply(
-  'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg(grey9 dark:grey3)',
+  'flex items-center justify-center z-1 w-12 h-12 rounded-full bg(grey9 dark:grey3)',
 );
-const flexCenteredClass = apply(`flex items-center justify-items-center`);
+const flexCenteredClass = apply(`flex items-center justify-center`);
 
 /**
  * renders the full screen image modal that is triggered on image click
@@ -73,43 +74,34 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
 
   return (
     <Portal>
-      <div className={tw(`${flexCenteredClass} w-screen h-screen bg-black/80 z-20`)}>
-        <button
-          onClick={(ev: React.SyntheticEvent) => {
-            /**
-             * prevents click bubbling to parent so the user doesn't get redirected
-             */
-            ev.stopPropagation();
-          }}
-        >
-          <div className={tw(`flex flex-row gap-3 p-3 absolute top-1 right-1 z-1`)}>
-            <button className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
-              <Icon icon={<MagnifyingGlassPlusIcon />} />
-            </button>
-            <button className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
-              <Icon icon={<MagnifyingGlassMinusIcon />} />
-            </button>
-            <button className={tx(`${closeDivClass}`)} onClick={closeModal}>
-              <Icon icon={<XMarkIcon />} />
-            </button>
-          </div>
+      <div className={tw(`${flexCenteredClass} absolute top-0 w-screen h-screen bg-black/80 z-20`)}>
+        <div>
+          <Stack direction="row" customStyle="justify-end sm:justify-between pb-12">
+            <Stack direction="row" spacing="gap-3">
+              {images.length > 1 && (
+                <button className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
+                  <Icon icon={<ArrowLeftIcon />} accentColor />
+                </button>
+              )}
+              {images.length > 1 && (
+                <button className={tx(`${closeDivClass}`)} onClick={handleNextImg}>
+                  <Icon icon={<ArrowRightIcon />} accentColor />
+                </button>
+              )}
+            </Stack>
 
-          {images.length > 1 && (
-            <div className={tw(`absolute left-2.5 top-1/2 z-1`)}>
-              <button className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
-                <Icon icon={<ArrowLeftIcon />} />
+            <Stack direction="row" spacing="gap-3">
+              <button className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
+                <Icon icon={<MagnifyingGlassPlusIcon />} accentColor />
               </button>
-            </div>
-          )}
-
-          {images.length > 1 && (
-            <div className={tw(`absolute right-2.5 top-1/2 z-1`)}>
-              <button className={tx(`${closeDivClass}`)} onClick={handleNextImg}>
-                <Icon icon={<ArrowRightIcon />} />
+              <button className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
+                <Icon icon={<MagnifyingGlassMinusIcon />} accentColor />
               </button>
-            </div>
-          )}
-
+              <button className={tx(`${closeDivClass}`)} onClick={closeModal}>
+                <Icon icon={<XMarkIcon />} accentColor />
+              </button>
+            </Stack>
+          </Stack>
           {currentImg && (
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
@@ -120,7 +112,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
               </TransformComponent>
             </TransformWrapper>
           )}
-        </button>
+        </div>
       </div>
     </Portal>
   );

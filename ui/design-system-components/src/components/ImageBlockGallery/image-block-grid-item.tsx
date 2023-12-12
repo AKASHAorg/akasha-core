@@ -52,14 +52,14 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
       {/* when we have a single image we need to keep the original aspect ratio,
           otherwise give images a 1:1 ratio */}
       <picture className={tw('flex')}>
-        <source srcSet={imageSrc.originalSrc} />
-        <source srcSet={imageSrc.src?.url} />
+        <source srcSet={imageSrc?.originalSrc} />
+        <source srcSet={imageSrc?.src?.url} />
         <img
-          alt={imageSrc.src?.fallbackUrl}
+          alt={imageSrc?.src?.fallbackUrl}
           className={tx(
             `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
           )}
-          src={imageSrc.src?.fallbackUrl}
+          src={imageSrc?.src?.fallbackUrl}
           onLoad={() => setImgLoaded(true)}
           hidden={!imgLoaded}
         />
@@ -74,7 +74,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
                 `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
               )}
               src={'/images/image-placeholder.webp'}
-              height={images.length === 1 ? image.size?.height : ''}
+              height={images.length === 1 ? imageSrc?.size?.height : ''}
             />
           </div>
         </DelayLoad>
