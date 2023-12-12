@@ -28,17 +28,17 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
 
   const { isLoggedIn } = useLoggedIn();
 
-  const handleNavigateToProfilePosts = () => {
-    if (!isLoggedIn) {
-      return showLoginModal();
-    }
-    navigateTo({
-      appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: routes => `${routes.ProfileFeed}/${profileId}`,
-    });
-  };
+  // const handleNavigateToProfilePosts = () => {
+  //   if (!isLoggedIn) {
+  //     return showLoginModal();
+  //   }
+  //   navigateTo({
+  //     appName: '@akashaorg/app-profile',
+  //     getNavigationUrl: routes => `${routes.ProfileFeed}/${profileId}`,
+  //   });
+  // };
 
-  const onStatClick = (stat: 'followers' | 'following' | 'interests') => () => {
+  const onStatClick = (stat: 'beams' | 'followers' | 'following' | 'interests') => () => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
@@ -53,7 +53,7 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
       posts={{
         label: t('Beams'),
         total: totalBeams,
-        onClick: handleNavigateToProfilePosts,
+        onClick: totalBeams > 0 ? onStatClick('beams') : null,
       }}
       interests={{
         label: t('Interests'),

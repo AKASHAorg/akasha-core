@@ -6,8 +6,9 @@ import EditProfilePage from './pages/edit-profile';
 import FollowingPage from './pages/profile-engagement/following-page';
 import FollowersPage from './pages/profile-engagement/followers-page';
 import ProfileInfoPage from './pages/profile-info';
+import ProfileBeamsPage from './pages/profile-beams';
 import ProfileWithHeader from './profile-with-header';
-import menuRoute, { EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
+import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
@@ -95,6 +96,14 @@ const AppRoutes: React.FC<unknown> = () => {
               }
             />
           </Route>
+          <Route
+            path={`:profileId${menuRoute[BEAMS]}`}
+            element={
+              <ProfileWithHeader {...commonHeaderViewProps}>
+                <ProfileBeamsPage isLoggedIn={isLoggedIn} />
+              </ProfileWithHeader>
+            }
+          />
         </Routes>
       </Router>
       {showUpdatedFeedback && (
