@@ -114,8 +114,10 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
             size="md"
             userData={userData.map(item => ({
               ...item,
-              avatar: item.avatar?.default,
-              alternativeAvatars: item.avatar?.alternatives,
+              avatar: transformSource(item.avatar?.default),
+              alternativeAvatars: item.avatar?.alternatives?.map(alternative =>
+                transformSource(alternative),
+              ),
             }))}
             maxAvatars={4}
           />

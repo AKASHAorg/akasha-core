@@ -164,8 +164,10 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
             size="md"
             userData={articleData.collaborators.map(collaborator => ({
               ...collaborator,
-              avatar: collaborator.avatar?.default,
-              alternativeAvatars: collaborator.avatar?.alternatives,
+              avatar: transformSource(collaborator.avatar?.default),
+              alternativeAvatars: collaborator.avatar?.alternatives?.map(alternative =>
+                transformSource(alternative),
+              ),
             }))}
             maxAvatars={4}
           />
