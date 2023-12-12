@@ -4,7 +4,7 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { type Image, Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 export type EditorPlaceholderType = {
   avatar?: Profile['avatar'];

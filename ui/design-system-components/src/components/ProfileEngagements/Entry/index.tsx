@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { type Image, Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 export type EntryProps = {
   profileAnchorLink: string;

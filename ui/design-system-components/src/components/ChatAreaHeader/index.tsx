@@ -1,7 +1,7 @@
 import React from 'react';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { tw } from '@twind/core';
-import { type Image, Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 export type ChatAreaHeaderProps = Pick<Profile, 'name' | 'did'> & {
   avatar?: Image;

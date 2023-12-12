@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 
-import { type Image, Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';

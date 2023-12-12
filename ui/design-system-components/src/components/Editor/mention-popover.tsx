@@ -2,7 +2,7 @@ import React from 'react';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { Portal } from './helpers';
 import { tw, tx } from '@twind/core';
-import { type Image, Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 export type MentionPopover = {
   values: Profile[];

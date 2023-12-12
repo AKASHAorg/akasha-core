@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { type Image, Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';

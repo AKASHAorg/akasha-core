@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { tw, apply } from '@twind/core';
 
-import { type Image, Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar, { AvatarSize } from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';

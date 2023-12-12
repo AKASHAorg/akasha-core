@@ -2,7 +2,7 @@ import React from 'react';
 import { apply, tw } from '@twind/core';
 
 import Avatar, { AvatarSize } from '../Avatar';
-import { type Image, Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 export type StackedAvatarProps = {
   userData: { did: Profile['did']; avatar?: Image; alternativeAvatars?: Image[] }[];
