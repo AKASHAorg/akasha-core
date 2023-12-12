@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import getSDK from '@akashaorg/awf-sdk';
 import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
@@ -8,6 +8,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import { TopicRow } from './topic-row';
+import isEqual from 'lodash/isEqual';
 
 export type LatestTopicsProps = {
   // data
@@ -43,11 +44,17 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     showLoginModal,
   } = props;
 
-  const [subscribedInterests, setSubscribedInterests] = useState(null);
+  const [subscribedInterests, setSubscribedInterests] = useState([]);
+  // const [subscribedTags, setSubscribedTags] = useState([]);
+  const tagsInitialized = useRef(null);
 
   useEffect(() => {
-    if (subscribedTags) setSubscribedInterests(subscribedTags);
-  }, [subscribedTags]);
+    if (subscribedTags.length > 0 && !tagsInitialized.current) {
+      console.log('subscribedTags', subscribedTags);
+      setSubscribedInterests(subscribedTags);
+      tagsInitialized.current = true;
+    }
+  }, [subscribedTags, tagsInitialized]);
 
   const sdk = getSDK();
   const [analyticsActions] = useAnalytics();
@@ -56,11 +63,42 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
+  useEffect(() => {
+    if (subscribedInterests.length === 0) return;
+    if (loading) return;
+    console.log('subscribedInterests', subscribedInterests);
+    console.log('subscribedTags', subscribedTags);
+
+    if (!isEqual(subscribedTags, subscribedInterests)) {
+      //setSubscribedTags(subscribedInterests);
+
+      createInterestsMutation({
+        variables: {
+          i: {
+            content: {
+              topics: [...subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' }))],
+            },
+          },
+        },
+        onCompleted: data => {
+          console.log('data success', data);
+        },
+        // onError: () => {
+        //   setSubscribedInterests(prev => prev.filter(topic => topic !== tag));
+        // },
+      });
+    }
+  }, [subscribedTags, subscribedInterests, loading, createInterestsMutation]);
+
   const handleTopicSubscribe = (tag: string) => {
     if (!isLoggedIn) {
       showLoginModal();
       return;
     }
+
+    const newInterests = [...subscribedInterests, tag];
+
+    setSubscribedInterests(newInterests);
 
     if (loading) {
       return;
@@ -70,10 +108,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       category: AnalyticsCategories.TRENDING_WIDGET,
       action: 'Trending Topic Subscribed',
     });
-
-    const newInterests = [...subscribedTags, tag];
-
-    setSubscribedInterests(newInterests);
 
     createInterestsMutation({
       variables: {
@@ -95,6 +129,10 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       return;
     }
 
+    const newInterests = subscribedInterests.filter(topic => topic !== tag);
+
+    setSubscribedInterests(newInterests);
+
     if (loading) {
       return;
     }
@@ -103,10 +141,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       category: AnalyticsCategories.TRENDING_WIDGET,
       action: 'Trending Topic Unsubscribed',
     });
-
-    const newInterests = subscribedTags.filter(topic => topic !== tag);
-
-    setSubscribedInterests(newInterests);
 
     createInterestsMutation({
       variables: {
@@ -155,7 +189,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                   unsubscribeLabel={unsubscribeLabel}
                   isLoggedIn={isLoggedIn}
                   onClickTopic={onClickTopic}
-                  isLoading={loading}
+                  isLoading={false}
                   // setSubscribedInterests={setSubscribedInterests}
                   showLoginModal={showLoginModal}
                   handleTopicUnsubscribe={handleTopicUnsubscribe}
