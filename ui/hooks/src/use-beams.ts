@@ -65,26 +65,24 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
         },
   });
 
+  const beamCursors = React.useMemo(() => new Set(state.beams.map(b => b.cursor)), [state]);
+
   const extractData = React.useCallback(
     (results: GetBeamsQuery | GetBeamsByAuthorDidQuery) => {
       if (hasOwn(results, 'node') && results.node && hasOwn(results.node, 'akashaBeamList')) {
         return {
-          edges: results.node.akashaBeamList.edges.filter(
-            edge => !state.beams.some(beam => beam.cursor === edge.cursor),
-          ),
+          edges: results.node.akashaBeamList.edges.filter(edge => !beamCursors.has(edge.cursor)),
           pageInfo: results.node.akashaBeamList.pageInfo,
         };
       }
       if (hasOwn(results, 'akashaBeamIndex') && results.akashaBeamIndex) {
         return {
-          edges: results.akashaBeamIndex.edges.filter(
-            edge => !state.beams.some(beam => beam.cursor === edge.cursor),
-          ),
+          edges: results.akashaBeamIndex.edges.filter(edge => !beamCursors.has(edge.cursor)),
           pageInfo: results.akashaBeamIndex.pageInfo,
         };
       }
     },
-    [state.beams],
+    [beamCursors],
   );
 
   const queryClient = React.useRef(beamsQuery.client);

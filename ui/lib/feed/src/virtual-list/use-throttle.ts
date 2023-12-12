@@ -21,8 +21,7 @@ export const useThrottle = (
     [option],
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const callback = React.useMemo(() => fn, [fn, ...deps]);
+  // const callback = React.useMemo(() => fn, [fn]);
 
   return React.useCallback(
     function (...args: unknown[]) {
@@ -30,7 +29,7 @@ export const useThrottle = (
 
       const waitFn = () => {
         if (trailing && lastArgs.current) {
-          callback(...lastArgs.current);
+          fn(...lastArgs.current);
           lastArgs.current = undefined;
           timerId.current = setTimeout(waitFn, timeout);
         } else {
@@ -39,7 +38,7 @@ export const useThrottle = (
       };
 
       if (!timerId.current && leading) {
-        callback(...args);
+        fn(...args);
       } else {
         lastArgs.current = args;
       }
@@ -48,6 +47,6 @@ export const useThrottle = (
         timerId.current = setTimeout(waitFn, timeout);
       }
     },
-    [opt, callback, timeout],
+    [opt, fn, timeout],
   );
 };

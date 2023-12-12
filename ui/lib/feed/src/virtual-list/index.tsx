@@ -168,6 +168,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       {!deferredIsMounted && loadingIndicator && loadingIndicator()}
       {deferredIsMounted && (
         <VirtualListRenderer
+          restorationKey={restorationKey}
           ref={vlistRef}
           itemList={itemList}
           estimatedHeight={estimatedHeight}

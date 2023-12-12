@@ -43,6 +43,7 @@ export type VirtualListRendererProps<T> = {
   hasPreviousPage: boolean;
   isLoading?: boolean;
   loadingIndicator?: () => React.ReactElement;
+  restorationKey?: string;
 };
 
 const initialState = {
@@ -54,9 +55,7 @@ export const VirtualListRenderer = React.forwardRef(
   <T,>(props: VirtualListRendererProps<T>, ref) => {
     React.useImperativeHandle(ref, () => ({
       isAtTop,
-      scrollToTop: () => {
-        //@TODO:
-      },
+      scrollToTop: viewport.scrollToTop,
     }));
     const {
       itemList,
@@ -72,6 +71,7 @@ export const VirtualListRenderer = React.forwardRef(
       isLoading,
       loadingIndicator,
       hasPreviousPage,
+      restorationKey,
     } = props;
     const rootNodeRef = React.useRef<HTMLDivElement>();
     const itemHeights = React.useMemo(
@@ -200,10 +200,11 @@ export const VirtualListRenderer = React.forwardRef(
     const isAtTop = React.useCallback(() => {
       const viewportRect = getRelativeToRootNode();
       if (!viewportRect) return true;
-      if (!rootNodeRef.current) return true;
+
       if (hasNextPage) {
         return viewportRect.getBottom() >= state.listHeight - rootNodeRef.current.offsetTop;
       }
+
       return viewportRect.getTop() <= rootNodeRef.current.offsetTop;
     }, [getRelativeToRootNode, hasNextPage, state.listHeight]);
 
@@ -496,12 +497,12 @@ export const VirtualListRenderer = React.forwardRef(
       prevItemList.current = itemList;
       RAFUpdate('itemList updated');
       if (isScrollAtTop.current) {
-        if (hasPreviousPage) {
+        if (hasNextPage) {
           return viewport.scrollTo(0, state.listHeight);
         }
         return viewport.scrollToTop();
       }
-    }, [RAFUpdate, hasPreviousPage, itemList, state.listHeight, viewport]);
+    }, [RAFUpdate, hasNextPage, itemList, state.listHeight, viewport]);
 
     const resizeObserver = useResizeObserver();
 
@@ -545,6 +546,7 @@ export const VirtualListRenderer = React.forwardRef(
 
     return (
       <div
+        id={restorationKey}
         ref={setRootNode}
         style={{
           position: 'relative',
