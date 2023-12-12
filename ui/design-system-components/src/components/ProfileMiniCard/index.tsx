@@ -39,6 +39,7 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
       elevation="1"
       radius="rounded-2xl"
       onClick={handleClick}
+      margin='mb-4'
       padding="p-0"
       customStyle="max-h-[30rem]"
     >
