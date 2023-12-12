@@ -49,10 +49,7 @@ const EditImageModal: React.FC<EditImageModalProps> = ({
       {images.length > 0 && (
         <Stack direction="row" spacing="gap-2">
           {images.map((imageData, index) => {
-            const imageUrl =
-              typeof imageData === 'string'
-                ? imageData
-                : imageData?.default.src || imageData?.alternatives[0].src;
+            const imageUrl = typeof imageData === 'string' ? imageData : imageData?.src;
             return (
               <button key={index} onClick={() => setIndexOfSelectedImage(index)}>
                 <Image src={imageUrl} customStyle="object-contain w-10 h-10 rounded-lg" />
