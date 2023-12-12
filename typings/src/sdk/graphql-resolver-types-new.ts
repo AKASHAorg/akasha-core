@@ -262,10 +262,18 @@ export type ResolversTypes = {
   DID: ResolverTypeWrapper<Types.Scalars['DID']['output']>;
   DID_JWS: Types.Did_Jws;
   DateTime: ResolverTypeWrapper<Types.Scalars['DateTime']['output']>;
+  IndexAppPayload: ResolverTypeWrapper<Types.IndexAppPayload>;
+  IndexAppPayloadDocument: ResolverTypeWrapper<Types.IndexAppPayloadDocument>;
   IndexBeamPayload: ResolverTypeWrapper<Types.IndexBeamPayload>;
   IndexBeamPayloadDocument: ResolverTypeWrapper<Types.IndexBeamPayloadDocument>;
+  IndexContentBlockPayload: ResolverTypeWrapper<Types.IndexContentBlockPayload>;
+  IndexContentBlockPayloadDocument: ResolverTypeWrapper<Types.IndexContentBlockPayloadDocument>;
+  IndexInterestPayload: ResolverTypeWrapper<Types.IndexInterestPayload>;
+  IndexInterestPayloadDocument: ResolverTypeWrapper<Types.IndexInterestPayloadDocument>;
   IndexProfilePayload: ResolverTypeWrapper<Types.IndexProfilePayload>;
   IndexProfilePayloadDocument: ResolverTypeWrapper<Types.IndexProfilePayloadDocument>;
+  IndexReflectPayload: ResolverTypeWrapper<Types.IndexReflectPayload>;
+  IndexReflectPayloadDocument: ResolverTypeWrapper<Types.IndexReflectPayloadDocument>;
   InterPlanetaryCID: ResolverTypeWrapper<Types.Scalars['InterPlanetaryCID']['output']>;
   JWS_Signature: Types.Jws_Signature;
   Mutation: ResolverTypeWrapper<{}>;
@@ -287,6 +295,7 @@ export type ResolversTypes = {
   PartialAkashaReflectInput: Types.PartialAkashaReflectInput;
   PartialAkashaReflectStreamInput: Types.PartialAkashaReflectStreamInput;
   Query: ResolverTypeWrapper<{}>;
+  SetOptionsInput: Types.SetOptionsInput;
   SortOrder: Types.SortOrder;
   StringValueFilterInput: Types.StringValueFilterInput;
   URI: ResolverTypeWrapper<Types.Scalars['URI']['output']>;
@@ -505,10 +514,18 @@ export type ResolversParentTypes = {
   DID: Types.Scalars['DID']['output'];
   DID_JWS: Types.Did_Jws;
   DateTime: Types.Scalars['DateTime']['output'];
+  IndexAppPayload: Types.IndexAppPayload;
+  IndexAppPayloadDocument: Types.IndexAppPayloadDocument;
   IndexBeamPayload: Types.IndexBeamPayload;
   IndexBeamPayloadDocument: Types.IndexBeamPayloadDocument;
+  IndexContentBlockPayload: Types.IndexContentBlockPayload;
+  IndexContentBlockPayloadDocument: Types.IndexContentBlockPayloadDocument;
+  IndexInterestPayload: Types.IndexInterestPayload;
+  IndexInterestPayloadDocument: Types.IndexInterestPayloadDocument;
   IndexProfilePayload: Types.IndexProfilePayload;
   IndexProfilePayloadDocument: Types.IndexProfilePayloadDocument;
+  IndexReflectPayload: Types.IndexReflectPayload;
+  IndexReflectPayloadDocument: Types.IndexReflectPayloadDocument;
   InterPlanetaryCID: Types.Scalars['InterPlanetaryCID']['output'];
   JWS_Signature: Types.Jws_Signature;
   Mutation: {};
@@ -530,6 +547,7 @@ export type ResolversParentTypes = {
   PartialAkashaReflectInput: Types.PartialAkashaReflectInput;
   PartialAkashaReflectStreamInput: Types.PartialAkashaReflectStreamInput;
   Query: {};
+  SetOptionsInput: Types.SetOptionsInput;
   StringValueFilterInput: Types.StringValueFilterInput;
   URI: Types.Scalars['URI']['output'];
   UpdateAkashaAppInput: Types.UpdateAkashaAppInput;
@@ -830,7 +848,6 @@ export type AkashaContentBlockLabeledValueResolvers<ContextType = any, ParentTyp
 
 export type AkashaContentBlockStreamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AkashaContentBlockStream'] = ResolversParentTypes['AkashaContentBlockStream']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  beamID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
   block?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlock']>, ParentType, ContextType>;
   blockID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -998,7 +1015,7 @@ export type AkashaReflectResolvers<ContextType = any, ParentType extends Resolve
   content?: Resolver<Array<ResolversTypes['AkashaReflectProviderValue']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isReply?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isReply?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   mentions?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicStreamID']>>>, ParentType, ContextType>;
   nsfw?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   reflection?: Resolver<Types.Maybe<ResolversTypes['CeramicStreamID']>, ParentType, ContextType>;
@@ -1060,20 +1077,33 @@ export interface CacaoSignatureTScalarConfig extends GraphQLScalarTypeConfig<Res
 
 export type CeramicAccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['CeramicAccount'] = ResolversParentTypes['CeramicAccount']> = {
   akashaAppList?: Resolver<Types.Maybe<ResolversTypes['AkashaAppConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppListArgs>>;
+  akashaAppListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppListCountArgs>>;
   akashaAppReleaseList?: Resolver<Types.Maybe<ResolversTypes['AkashaAppReleaseConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppReleaseListArgs>>;
+  akashaAppReleaseListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppReleaseListCountArgs>>;
   akashaAppsStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaAppsStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppsStreamListArgs>>;
+  akashaAppsStreamListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaAppsStreamListCountArgs>>;
   akashaBeamList?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaBeamListArgs>>;
+  akashaBeamListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaBeamListCountArgs>>;
   akashaBeamStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaBeamStreamListArgs>>;
+  akashaBeamStreamListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaBeamStreamListCountArgs>>;
   akashaBlockStorageList?: Resolver<Types.Maybe<ResolversTypes['AkashaBlockStorageConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaBlockStorageListArgs>>;
+  akashaBlockStorageListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaBlockStorageListCountArgs>>;
   akashaContentBlockList?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaContentBlockListArgs>>;
+  akashaContentBlockListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaContentBlockListCountArgs>>;
   akashaContentBlockStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaContentBlockStreamListArgs>>;
+  akashaContentBlockStreamListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaContentBlockStreamListCountArgs>>;
   akashaFollowList?: Resolver<Types.Maybe<ResolversTypes['AkashaFollowConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaFollowListArgs>>;
+  akashaFollowListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaFollowListCountArgs>>;
   akashaInterestsStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaInterestsStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaInterestsStreamListArgs>>;
+  akashaInterestsStreamListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaInterestsStreamListCountArgs>>;
   akashaProfile?: Resolver<Types.Maybe<ResolversTypes['AkashaProfile']>, ParentType, ContextType>;
   akashaProfileInterests?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileInterests']>, ParentType, ContextType>;
   akashaProfileStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaProfileStreamListArgs>>;
+  akashaProfileStreamListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaProfileStreamListCountArgs>>;
   akashaReflectList?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaReflectListArgs>>;
+  akashaReflectListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaReflectListCountArgs>>;
   akashaReflectStreamList?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStreamConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAkashaReflectStreamListArgs>>;
+  akashaReflectStreamListCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CeramicAccountAkashaReflectStreamListCountArgs>>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isViewer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1215,6 +1245,18 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type IndexAppPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexAppPayload'] = ResolversParentTypes['IndexAppPayload']> = {
+  document?: Resolver<Types.Maybe<ResolversTypes['IndexAppPayloadDocument']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IndexAppPayloadDocumentResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexAppPayloadDocument'] = ResolversParentTypes['IndexAppPayloadDocument']> = {
+  applicationID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type IndexBeamPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexBeamPayload'] = ResolversParentTypes['IndexBeamPayload']> = {
   document?: Resolver<Types.Maybe<ResolversTypes['IndexBeamPayloadDocument']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1227,6 +1269,31 @@ export type IndexBeamPayloadDocumentResolvers<ContextType = any, ParentType exte
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type IndexContentBlockPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexContentBlockPayload'] = ResolversParentTypes['IndexContentBlockPayload']> = {
+  document?: Resolver<Types.Maybe<ResolversTypes['IndexContentBlockPayloadDocument']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IndexContentBlockPayloadDocumentResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexContentBlockPayloadDocument'] = ResolversParentTypes['IndexContentBlockPayloadDocument']> = {
+  blockID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IndexInterestPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexInterestPayload'] = ResolversParentTypes['IndexInterestPayload']> = {
+  document?: Resolver<Types.Maybe<ResolversTypes['IndexInterestPayloadDocument']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IndexInterestPayloadDocumentResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexInterestPayloadDocument'] = ResolversParentTypes['IndexInterestPayloadDocument']> = {
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  labelType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type IndexProfilePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexProfilePayload'] = ResolversParentTypes['IndexProfilePayload']> = {
   document?: Resolver<Types.Maybe<ResolversTypes['IndexProfilePayloadDocument']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1236,6 +1303,19 @@ export type IndexProfilePayloadDocumentResolvers<ContextType = any, ParentType e
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   profileID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IndexReflectPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexReflectPayload'] = ResolversParentTypes['IndexReflectPayload']> = {
+  document?: Resolver<Types.Maybe<ResolversTypes['IndexReflectPayloadDocument']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IndexReflectPayloadDocumentResolvers<ContextType = any, ParentType extends ResolversParentTypes['IndexReflectPayloadDocument'] = ResolversParentTypes['IndexReflectPayloadDocument']> = {
+  beamID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  reflectionID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1259,8 +1339,12 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createAkashaProfileStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaProfileStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaProfileStreamArgs, 'input'>>;
   createAkashaReflect?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaReflectPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaReflectArgs, 'input'>>;
   createAkashaReflectStream?: Resolver<Types.Maybe<ResolversTypes['CreateAkashaReflectStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAkashaReflectStreamArgs, 'input'>>;
+  indexApp?: Resolver<Types.Maybe<ResolversTypes['IndexAppPayload']>, ParentType, ContextType, Partial<Types.MutationIndexAppArgs>>;
   indexBeam?: Resolver<Types.Maybe<ResolversTypes['IndexBeamPayload']>, ParentType, ContextType, Partial<Types.MutationIndexBeamArgs>>;
+  indexContentBlock?: Resolver<Types.Maybe<ResolversTypes['IndexContentBlockPayload']>, ParentType, ContextType, Partial<Types.MutationIndexContentBlockArgs>>;
+  indexInterest?: Resolver<Types.Maybe<ResolversTypes['IndexInterestPayload']>, ParentType, ContextType, Partial<Types.MutationIndexInterestArgs>>;
   indexProfile?: Resolver<Types.Maybe<ResolversTypes['IndexProfilePayload']>, ParentType, ContextType, Partial<Types.MutationIndexProfileArgs>>;
+  indexReflection?: Resolver<Types.Maybe<ResolversTypes['IndexReflectPayload']>, ParentType, ContextType, Partial<Types.MutationIndexReflectionArgs>>;
   updateAkashaApp?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppArgs, 'input'>>;
   updateAkashaAppRelease?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppReleasePayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppReleaseArgs, 'input'>>;
   updateAkashaAppsStream?: Resolver<Types.Maybe<ResolversTypes['UpdateAkashaAppsStreamPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAkashaAppsStreamArgs, 'input'>>;
@@ -1292,22 +1376,38 @@ export type PageInfoResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  akashaAppCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaAppCountArgs>>;
   akashaAppIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaAppConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaAppIndexArgs>>;
+  akashaAppReleaseCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaAppReleaseCountArgs>>;
   akashaAppReleaseIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaAppReleaseConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaAppReleaseIndexArgs>>;
+  akashaAppsStreamCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaAppsStreamCountArgs>>;
   akashaAppsStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaAppsStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaAppsStreamIndexArgs>>;
+  akashaBeamCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaBeamCountArgs>>;
   akashaBeamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaBeamIndexArgs>>;
+  akashaBeamStreamCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaBeamStreamCountArgs>>;
   akashaBeamStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaBeamStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaBeamStreamIndexArgs>>;
+  akashaBlockStorageCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaBlockStorageCountArgs>>;
   akashaBlockStorageIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaBlockStorageConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaBlockStorageIndexArgs>>;
+  akashaContentBlockCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaContentBlockCountArgs>>;
   akashaContentBlockIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaContentBlockIndexArgs>>;
+  akashaContentBlockStreamCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaContentBlockStreamCountArgs>>;
   akashaContentBlockStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaContentBlockStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaContentBlockStreamIndexArgs>>;
+  akashaFollowCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaFollowCountArgs>>;
   akashaFollowIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaFollowConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaFollowIndexArgs>>;
+  akashaInterestsStreamCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaInterestsStreamCountArgs>>;
   akashaInterestsStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaInterestsStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaInterestsStreamIndexArgs>>;
+  akashaProfileCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaProfileCountArgs>>;
   akashaProfileIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaProfileIndexArgs>>;
+  akashaProfileInterestsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   akashaProfileInterestsIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileInterestsConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaProfileInterestsIndexArgs>>;
+  akashaProfileStreamCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaProfileStreamCountArgs>>;
   akashaProfileStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaProfileStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaProfileStreamIndexArgs>>;
+  akashaReflectCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaReflectCountArgs>>;
   akashaReflectIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaReflectIndexArgs>>;
+  akashaReflectStreamCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.QueryAkashaReflectStreamCountArgs>>;
   akashaReflectStreamIndex?: Resolver<Types.Maybe<ResolversTypes['AkashaReflectStreamConnection']>, ParentType, ContextType, Partial<Types.QueryAkashaReflectStreamIndexArgs>>;
   node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.QueryNodeArgs, 'id'>>;
+  nodes?: Resolver<Array<Types.Maybe<ResolversTypes['Node']>>, ParentType, ContextType, RequireFields<Types.QueryNodesArgs, 'ids'>>;
   serviceStatus?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
 };
@@ -1521,10 +1621,18 @@ export type Resolvers<ContextType = any> = {
   CreateAkashaReflectStreamPayload?: CreateAkashaReflectStreamPayloadResolvers<ContextType>;
   DID?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;
+  IndexAppPayload?: IndexAppPayloadResolvers<ContextType>;
+  IndexAppPayloadDocument?: IndexAppPayloadDocumentResolvers<ContextType>;
   IndexBeamPayload?: IndexBeamPayloadResolvers<ContextType>;
   IndexBeamPayloadDocument?: IndexBeamPayloadDocumentResolvers<ContextType>;
+  IndexContentBlockPayload?: IndexContentBlockPayloadResolvers<ContextType>;
+  IndexContentBlockPayloadDocument?: IndexContentBlockPayloadDocumentResolvers<ContextType>;
+  IndexInterestPayload?: IndexInterestPayloadResolvers<ContextType>;
+  IndexInterestPayloadDocument?: IndexInterestPayloadDocumentResolvers<ContextType>;
   IndexProfilePayload?: IndexProfilePayloadResolvers<ContextType>;
   IndexProfilePayloadDocument?: IndexProfilePayloadDocumentResolvers<ContextType>;
+  IndexReflectPayload?: IndexReflectPayloadResolvers<ContextType>;
+  IndexReflectPayloadDocument?: IndexReflectPayloadDocumentResolvers<ContextType>;
   InterPlanetaryCID?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Node?: NodeResolvers<ContextType>;

@@ -39,10 +39,9 @@ type AkashaBeamStream @createModel(accountRelation: LIST, description: "Moderate
   moderationID: StreamID
 }
 
-type AkashaContentBlockStream @createModel(accountRelation: LIST, description: "Moderated Content Blocks") @createIndex(fields:[{path: "active"},{path: "blockID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "beamID"}]){
+type AkashaContentBlockStream @createModel(accountRelation: LIST, description: "Moderated Content Blocks") @createIndex(fields:[{path: "active"},{path: "blockID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
   blockID: StreamID! @documentReference(model: "AkashaContentBlock")
   block: AkashaContentBlock! @relationDocument(property: "blockID")
-  beamID: StreamID! @documentReference(model: "AkashaBeam")
   active: Boolean!
   createdAt: DateTime!
   status: ModerationStatus
