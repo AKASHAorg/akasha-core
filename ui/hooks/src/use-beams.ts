@@ -53,11 +53,6 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
   const fetchNextPage = async (lastCursor: string) => {
     if (beamsQuery.loading || beamsQuery.error || !lastCursor) return;
-    console.log(
-      'fetching next',
-      state.beams.findIndex(b => b.cursor === lastCursor),
-      state.beams.length,
-    );
     try {
       const results = await beamsQuery.fetchMore({
         variables: {
@@ -65,7 +60,9 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
           sorting: { createdAt: SortOrder.Desc },
         },
       });
-      if (results.error) return;
+      if (results.error) {
+        setErrors(prev => [...prev, results.error]);
+      }
       if (!results.data) return;
 
       const newBeams: AkashaBeamEdge[] = results.data?.akashaBeamIndex?.edges;
