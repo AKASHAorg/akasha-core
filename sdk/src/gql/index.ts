@@ -141,19 +141,19 @@ class Gql {
           merge: true,
         },
         AkashaFollow: {
-          merge: true
+          merge: true,
         },
-        CeramicAccount:{
+        CeramicAccount: {
           merge: true,
           fields: {
             akashaFollowList: relayStylePagination(['sorting', 'filters']),
-          }
+          },
         },
-        AkashaProfile:{
+        AkashaProfile: {
           merge: true,
           fields: {
             followers: relayStylePagination(['sorting', 'filters']),
-          }
+          },
         },
         Query: {
           fields: {
@@ -277,15 +277,17 @@ class Gql {
     return this._contextSources;
   }
 
-  get indexingDID(){
+  get indexingDID() {
     return process.env.INDEXING_DID;
   }
 
   async resetCache() {
     return this._apolloCache.reset();
   }
-  set contextViewerID(id: string) {
+
+  async setContextViewerID(id: string) {
     this._viewerID = id;
+    await this.resetCache();
   }
 
   get mutationNotificationConfig() {
