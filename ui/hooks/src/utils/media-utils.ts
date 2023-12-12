@@ -1,7 +1,6 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { UserProfileFragmentDataFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import { logError } from './error-handler';
-import type { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { type Image } from '@akashaorg/typings/lib/ui';
 
 export interface IConfig {

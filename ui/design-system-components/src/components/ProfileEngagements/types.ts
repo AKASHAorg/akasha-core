@@ -1,4 +1,4 @@
-import { FollowList, Image } from '@akashaorg/typings/lib/ui';
+import { FollowList, type Image } from '@akashaorg/typings/lib/ui';
 import { ReactElement } from 'react';
 
 export const LOADING_LIST_SIZE = 10;

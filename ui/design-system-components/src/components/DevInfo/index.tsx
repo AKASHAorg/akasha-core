@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Developer, Image } from '@akashaorg/typings/lib/ui';
+import { Developer, type Image } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';

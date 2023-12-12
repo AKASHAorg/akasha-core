@@ -23,7 +23,12 @@ import {
 } from '@akashaorg/design-system-core/lib/utils';
 import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { AkashaProfile, EntityTypes, Image, NavigateToParams } from '@akashaorg/typings/lib/ui';
+import {
+  AkashaProfile,
+  EntityTypes,
+  type Image,
+  NavigateToParams,
+} from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 
 export type EntryCardProps = {
