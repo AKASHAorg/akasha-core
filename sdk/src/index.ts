@@ -108,14 +108,14 @@ export function init(): AWF_SDK {
   const appSettings = container.get<AppSettings>(TYPES.AppSettings);
   const icRegistry = container.get<AWF_IC_REGISTRY>(TYPES.ICRegistry);
   const misc = container.get<AWF_Misc>(TYPES.Misc);
-  const fetchService = async () => {
-    // await importLazy();
-    const gqlNew = container.get<Gql>(TYPES.Gql);
-    console.info('new gql client', gqlNew);
-    return gqlNew;
-  };
-
-  console.log('lazy load gql client', fetchService);
+  // const fetchService = async () => {
+  //   // await importLazy();
+  //   const gqlNew = container.get<Gql>(TYPES.Gql);
+  //   console.info('new gql client', gqlNew);
+  //   return gqlNew;
+  // };
+  //
+  // console.log('lazy load gql client', fetchService);
 
   const ceramic = container.get<AWF_Ceramic>(TYPES.Ceramic);
 

@@ -4,7 +4,7 @@ import { hasOwn } from './utils/has-own';
 
 const RootComponentPropsContext = React.createContext(null);
 const DEFAULT_ROUTING_PLUGIN = '@akashaorg/app-routing';
-const DEFAULT_TRANSLATION_PLUGIN = '@akashaorg/app-translation';
+const DEFAULT_TRANSLATION_PLUGIN = '@akashaorg/ui-widget-layout';
 const DEFAULT_EXTENSIONS_PLUGIN = '@akashaorg/app-extensions';
 
 const RootComponentPropsProvider = ({

@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 /**
  * Higher order component that wraps a component with all necessary providers
  */
-export const withProviders = <T extends RootComponentProps> (
+export const withProviders = <T extends RootComponentProps>(
   WrappedComponent: React.ComponentType<T>,
 ) => {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'WrappedHOComponent';

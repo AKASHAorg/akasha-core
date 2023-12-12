@@ -19,7 +19,7 @@ import NoAppsMessage from './no-apps-message';
 const ICWidget: React.FC<unknown> = () => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  const { t } = useTranslation('app-extensions');
+  const { t } = useTranslation('ui-widget-my-apps');
   const { worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const { isLoggedIn } = useLoggedIn();
 

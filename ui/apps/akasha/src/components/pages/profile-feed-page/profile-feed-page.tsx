@@ -19,7 +19,7 @@ export type ProfilePageProps = {
 const ProfileFeedPage = (props: ProfilePageProps) => {
   const { loggedProfileData, showLoginModal } = props;
 
-  const { t } = useTranslation('app-profile');
+  const { t } = useTranslation('app-akasha-integration');
   const { did } = useParams<{ did: string }>();
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
 
@@ -64,7 +64,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
 
       <>
         <BeamFeed
-          queryKey={`app-akasha-integration_${loggedProfileData.did.id}-profile-antenna`}
+          queryKey={`app-akasha-integration_${loggedProfileData?.did?.id}-profile-antenna`}
           estimatedHeight={150}
           itemSpacing={8}
           scrollerOptions={{ overscan: 10 }}
