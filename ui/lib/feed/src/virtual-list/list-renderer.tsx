@@ -496,12 +496,12 @@ export const VirtualListRenderer = React.forwardRef(
       if (prevItemList.current === itemList) return;
       prevItemList.current = itemList;
       RAFUpdate('itemList updated');
-      if (isScrollAtTop.current) {
-        if (hasNextPage) {
-          return viewport.scrollTo(0, state.listHeight);
-        }
-        return viewport.scrollToTop();
-      }
+      // if (isScrollAtTop.current) {
+      //   if (hasNextPage) {
+      //     return viewport.scrollTo(0, state.listHeight);
+      //   }
+      //   return viewport.scrollToTop();
+      // }
     }, [RAFUpdate, hasNextPage, itemList, state.listHeight, viewport]);
 
     const resizeObserver = useResizeObserver();
