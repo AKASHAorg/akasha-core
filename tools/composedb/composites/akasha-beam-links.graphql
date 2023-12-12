@@ -1,5 +1,5 @@
 
-type AkashaReflect @loadModel(id: "kjzl6hvfrbw6caw9cwn1v195fntubx2zsfc2z7xythi538se6szelz2c4z8nm1r") {
+type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c7g649dzvhgj2llnx44wxkne2p5l5j3bvxjv2s5v67uzro21odq") {
   id: ID!
 }
 

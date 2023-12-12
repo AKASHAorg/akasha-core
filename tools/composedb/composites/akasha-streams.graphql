@@ -11,7 +11,7 @@ type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c9l8sxje9238fz8hx6u6whu9njmww96wn
   id: ID!
 }
 
-type AkashaReflect @loadModel(id: "kjzl6hvfrbw6caw9cwn1v195fntubx2zsfc2z7xythi538se6szelz2c4z8nm1r") {
+type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c7g649dzvhgj2llnx44wxkne2p5l5j3bvxjv2s5v67uzro21odq") {
   id: ID!
 }
 
@@ -37,10 +37,9 @@ type AkashaBeamStream @createModel(accountRelation: LIST, description: "Moderate
   moderationID: StreamID
 }
 
-type AkashaContentBlockStream @createModel(accountRelation: LIST, description: "Moderated Content Blocks") @createIndex(fields:[{path: "active"},{path: "blockID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "beamID"}]){
+type AkashaContentBlockStream @createModel(accountRelation: LIST, description: "Moderated Content Blocks") @createIndex(fields:[{path: "active"},{path: "blockID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
   blockID: StreamID! @documentReference(model: "AkashaContentBlock")
   block: AkashaContentBlock! @relationDocument(property: "blockID")
-  beamID: StreamID! @documentReference(model: "AkashaBeam")
   active: Boolean!
   createdAt: DateTime!
   status: ModerationStatus
