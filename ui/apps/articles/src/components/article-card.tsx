@@ -51,8 +51,8 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           <Stack spacing="gap-1">
             <Stack direction="row" spacing="gap-0.5" align="center">
               <Avatar
-                avatar={transformSource(articleData.authorAvatar?.default)}
-                alternativeAvatars={articleData.authorAvatar.alternatives?.map(alternative =>
+                avatar={transformSource(articleData?.authorAvatar?.default)}
+                alternativeAvatars={articleData?.authorAvatar?.alternatives?.map(alternative =>
                   transformSource(alternative),
                 )}
                 profileId={articleData.authorProfileId}

@@ -71,8 +71,8 @@ export const LatestProfiles: React.FC<LatestProfilesProps> = props => {
                     profileId={profile.did.id}
                     label={profile.name}
                     size="md"
-                    avatar={transformSource(profile.avatar?.default)}
-                    alternativeAvatars={profile.avatar?.alternatives?.map(alternative =>
+                    avatar={transformSource(profile?.avatar?.default)}
+                    alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
                       transformSource(alternative),
                     )}
                     onClick={() => onClickProfile(profile.did.id)}

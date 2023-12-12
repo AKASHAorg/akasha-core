@@ -82,8 +82,8 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
               size="xl"
               border="sm"
               borderColor="darkerBlue"
-              avatar={transformSource(profileData.avatar?.default)}
-              alternativeAvatars={profileData.avatar?.alternatives?.map(alternative =>
+              avatar={transformSource(profileData?.avatar?.default)}
+              alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
                 transformSource(alternative),
               )}
               profileId={profileData.did.id}

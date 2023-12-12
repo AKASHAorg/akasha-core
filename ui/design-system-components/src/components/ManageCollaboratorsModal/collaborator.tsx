@@ -23,8 +23,8 @@ const Collaborator: React.FC<ICollaboratorProps> = props => {
       <div className={tw(`flex flex-row gap-1 items-center`)}>
         <Avatar
           size="md"
-          avatar={transformSource(profile.avatar?.default)}
-          alternativeAvatars={profile.avatar?.alternatives?.map(alternative =>
+          avatar={transformSource(profile?.avatar?.default)}
+          alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
             transformSource(alternative),
           )}
         />

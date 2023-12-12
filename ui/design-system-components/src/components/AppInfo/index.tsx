@@ -156,8 +156,8 @@ const AppInfo: React.FC<AppInfoProps> = ({
                       profileId={developer.profileId}
                       label={developer.name}
                       size="md"
-                      avatar={transformSource(developer.avatar?.default)}
-                      alternativeAvatars={developer.avatar?.alternatives?.map(alternative =>
+                      avatar={transformSource(developer?.avatar?.default)}
+                      alternativeAvatars={developer?.avatar?.alternatives?.map(alternative =>
                         transformSource(alternative),
                       )}
                     />

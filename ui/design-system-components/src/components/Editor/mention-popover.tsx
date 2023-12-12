@@ -41,8 +41,8 @@ export const MentionPopover: React.FC<MentionPopover> = React.forwardRef((props,
           >
             <ProfileAvatarButton
               label={value.name}
-              avatar={transformSource(value.avatar?.default)}
-              alternativeAvatars={value.avatar?.alternatives?.map(alternative =>
+              avatar={transformSource(value?.avatar?.default)}
+              alternativeAvatars={value?.avatar?.alternatives?.map(alternative =>
                 transformSource(alternative),
               )}
               profileId={value.did.id}

@@ -33,8 +33,8 @@ const DevInfo: React.FC<DevInfoProps> = ({
           <Stack key={developer.profileId} direction="column" spacing="gap-y-2">
             <ProfileAvatarButton
               {...developer}
-              avatar={transformSource(developer.avatar?.default)}
-              alternativeAvatars={developer.avatar?.alternatives?.map(alternative =>
+              avatar={transformSource(developer?.avatar?.default)}
+              alternativeAvatars={developer?.avatar?.alternatives?.map(alternative =>
                 transformSource(alternative),
               )}
             />

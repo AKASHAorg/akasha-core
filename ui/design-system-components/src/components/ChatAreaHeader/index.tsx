@@ -23,7 +23,7 @@ const ChatAreaHeader: React.FC<ChatAreaHeaderProps> = props => {
         label={name}
         profileId={did.id}
         avatar={transformSource(avatar)}
-        alternativeAvatars={alternativeAvatars.map(alternative => transformSource(alternative))}
+        alternativeAvatars={alternativeAvatars?.map(alternative => transformSource(alternative))}
         onClick={onClickAvatar}
       />
     </div>

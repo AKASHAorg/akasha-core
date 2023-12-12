@@ -47,8 +47,8 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
       <Stack justify="between">
         <Stack customStyle="flex space-x-2 items-center w([50%] md:[30%])">
           <Avatar
-            avatar={transformSource(moderator.avatar?.default)}
-            alternativeAvatars={moderator.avatar?.alternatives?.map(alternative =>
+            avatar={transformSource(moderator?.avatar?.default)}
+            alternativeAvatars={moderator?.avatar?.alternatives?.map(alternative =>
               transformSource(alternative),
             )}
           />

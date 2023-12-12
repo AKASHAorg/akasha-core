@@ -75,8 +75,8 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                 label={profile.name}
                 // info={profile.userName && `@${profile.userName}`}
                 size="md"
-                avatar={transformSource(profile.avatar?.default)}
-                alternativeAvatars={profile.avatar?.alternatives?.map(alternative =>
+                avatar={transformSource(profile?.avatar?.default)}
+                alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
                   transformSource(alternative),
                 )}
               />

@@ -40,8 +40,8 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
         customStyle=" w([50%] md:[30%]) px-4 border(r-1 solid grey8 dark:grey3)"
       >
         <Avatar
-          avatar={transformSource(moderator.avatar?.default)}
-          alternativeAvatars={moderator.avatar?.alternatives?.map(alternative =>
+          avatar={transformSource(moderator?.avatar?.default)}
+          alternativeAvatars={moderator?.avatar?.alternatives?.map(alternative =>
             transformSource(alternative),
           )}
         />

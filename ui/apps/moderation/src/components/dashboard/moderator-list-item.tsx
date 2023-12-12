@@ -23,8 +23,8 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
     return (
       <Stack spacing="gap-x-2" align="center">
         <Avatar
-          avatar={transformSource(selectedModerator.avatar?.default)}
-          alternativeAvatars={selectedModerator.avatar?.alternatives?.map(alternative =>
+          avatar={transformSource(selectedModerator?.avatar?.default)}
+          alternativeAvatars={selectedModerator?.avatar?.alternatives?.map(alternative =>
             transformSource(alternative),
           )}
         />
@@ -54,8 +54,8 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
           <Stack justify="between">
             <Stack spacing="gap-x-2" align="center">
               <Avatar
-                avatar={transformSource(moderator.avatar?.default)}
-                alternativeAvatars={moderator.avatar?.alternatives?.map(alternative =>
+                avatar={transformSource(moderator?.avatar?.default)}
+                alternativeAvatars={moderator?.avatar?.alternatives?.map(alternative =>
                   transformSource(alternative),
                 )}
               />

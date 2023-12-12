@@ -85,7 +85,7 @@ const MessageContactCard: React.FC<MessageContactCardProps> = props => {
             <Avatar
               size="lg"
               avatar={transformSource(senderAvatar?.default)}
-              alternativeAvatars={senderAvatar.alternatives?.map(alternative =>
+              alternativeAvatars={senderAvatar?.alternatives?.map(alternative =>
                 transformSource(alternative),
               )}
               profileId={senderDid}

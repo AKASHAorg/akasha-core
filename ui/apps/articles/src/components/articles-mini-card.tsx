@@ -71,8 +71,8 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
       <Stack direction="row" justify="between">
         <Stack direction="row" spacing="gap-0.5" align="center">
           <Avatar
-            avatar={transformSource(articleData.authorAvatar?.default)}
-            alternativeAvatars={articleData.authorAvatar.alternatives?.map(alternative =>
+            avatar={transformSource(articleData?.authorAvatar?.default)}
+            alternativeAvatars={articleData?.authorAvatar?.alternatives?.map(alternative =>
               transformSource(alternative),
             )}
             profileId={articleData.authorProfileId}

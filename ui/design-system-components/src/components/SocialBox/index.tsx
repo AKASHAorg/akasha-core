@@ -36,8 +36,8 @@ const SocialBox: React.FC<ISocialBox> = props => {
     <div className={tw(`flex flex-row items-center gap-1 px-4 py-2`)}>
       {avatarUserData && (
         <Avatar
-          avatar={transformSource(avatarUserData[0].avatar?.default)}
-          alternativeAvatars={avatarUserData[0].avatar?.alternatives?.map(alternative =>
+          avatar={transformSource(avatarUserData[0]?.avatar?.default)}
+          alternativeAvatars={avatarUserData[0]?.avatar?.alternatives?.map(alternative =>
             transformSource(alternative),
           )}
           profileId={avatarUserData[0].profileId}
@@ -85,8 +85,8 @@ const SocialBox: React.FC<ISocialBox> = props => {
                         )}
                       >
                         <Avatar
-                          avatar={transformSource(user.avatar?.default)}
-                          alternativeAvatars={user.avatar?.alternatives?.map(alternative =>
+                          avatar={transformSource(user?.avatar?.default)}
+                          alternativeAvatars={user?.avatar?.alternatives?.map(alternative =>
                             transformSource(alternative),
                           )}
                           profileId={user.profileId}

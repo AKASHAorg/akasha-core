@@ -23,8 +23,8 @@ const Applicant: React.FC<ApplicantProps> = props => {
     <Stack direction="row" justify="between">
       <Stack direction="row" align="start" spacing="gap-x-2">
         <Avatar
-          avatar={transformSource(applicant.avatar?.default)}
-          alternativeAvatars={applicant.avatar?.alternatives?.map(alternative =>
+          avatar={transformSource(applicant?.avatar?.default)}
+          alternativeAvatars={applicant?.avatar?.alternatives?.map(alternative =>
             transformSource(alternative),
           )}
         />

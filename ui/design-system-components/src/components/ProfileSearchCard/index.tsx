@@ -53,8 +53,8 @@ const ProfileSearchCard: React.FC<ProfileSearchCardProps> = props => {
           onClick={onClickProfile}
           label={profileData.name}
           size="md"
-          avatar={transformSource(profileData.avatar?.default)}
-          alternativeAvatars={profileData.avatar?.alternatives?.map(alternative =>
+          avatar={transformSource(profileData?.avatar?.default)}
+          alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
             transformSource(alternative),
           )}
           truncateText={false}
