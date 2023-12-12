@@ -1,9 +1,4 @@
 import React from 'react';
-import getSDK from '@akashaorg/awf-sdk';
-import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
-import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { useCreateInterestsMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import {
   CheckIcon,
   HashtagIcon,
@@ -15,7 +10,7 @@ import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexBut
 
 export type TopicRowProps = {
   tag: string;
-  subscribedTags?: any;
+  subscribedTags?: string[];
   // labels
   noTagsLabel?: string;
   tagSubtitleLabel: string;
@@ -23,10 +18,13 @@ export type TopicRowProps = {
   subscribedLabel: string;
   unsubscribeLabel: string;
   isLoggedIn: boolean;
+  isLoading: boolean;
   // handlers
   onClickTopic: (topic: string) => void;
-  setSubscribedInterests: React.Dispatch<React.SetStateAction<string[]>>;
+  // setSubscribedInterests: React.Dispatch<React.SetStateAction<string[]>>;
   showLoginModal: () => void;
+  handleTopicUnsubscribe: (topic: string) => void;
+  handleTopicSubscribe: (topic: string) => void;
 };
 
 export const TopicRow: React.FC<TopicRowProps> = props => {
@@ -38,73 +36,13 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
     unsubscribeLabel,
     subscribedTags,
     isLoggedIn,
+    isLoading,
     onClickTopic,
-    setSubscribedInterests,
+    // setSubscribedInterests,
     showLoginModal,
+    handleTopicUnsubscribe,
+    handleTopicSubscribe,
   } = props;
-
-  const sdk = getSDK();
-  const [analyticsActions] = useAnalytics();
-
-  const [createInterestsMutation, { data, loading, error }] = useCreateInterestsMutation({
-    context: { source: sdk.services.gql.contextSources.composeDB },
-  });
-
-  const handleTopicSubscribe = () => {
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    }
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending Topic Subscribed',
-    });
-
-    const newInterests = [...subscribedTags, tag];
-
-    setSubscribedInterests(newInterests);
-
-    createInterestsMutation({
-      variables: {
-        i: {
-          content: {
-            topics: [...newInterests.map(tag => ({ value: tag, labelType: 'TOPIC' }))],
-          },
-        },
-      },
-      onError: () => {
-        setSubscribedInterests(prev => prev.filter(topic => topic !== tag));
-      },
-    });
-  };
-
-  const handleTopicUnsubscribe = () => {
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    }
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending Topic Unsubscribed',
-    });
-
-    const newInterests = subscribedTags.filter(topic => topic !== tag);
-
-    setSubscribedInterests(newInterests);
-
-    createInterestsMutation({
-      variables: {
-        i: {
-          content: {
-            topics: newInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
-          },
-        },
-      },
-      onError: () => {
-        setSubscribedInterests(prev => [...prev, tag]);
-      },
-    });
-  };
 
   return (
     <Stack
@@ -131,7 +69,7 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
         activeIcon={<CheckIcon />}
         activeHoverIcon={<XMarkIcon />}
         inactiveVariant="secondary"
-        loading={loading}
+        loading={isLoading}
         hoverColors={{
           background: { light: 'transparent', dark: 'transparent' },
           border: { light: 'errorLight', dark: 'errorDark' },
@@ -139,8 +77,8 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
           icon: { light: 'errorLight', dark: 'errorDark' },
         }}
         fixedWidth={'w-[7rem]'}
-        onClickActive={() => handleTopicUnsubscribe()}
-        onClickInactive={() => handleTopicSubscribe()}
+        onClickActive={() => handleTopicUnsubscribe(tag)}
+        onClickInactive={() => handleTopicSubscribe(tag)}
       />
     </Stack>
   );
