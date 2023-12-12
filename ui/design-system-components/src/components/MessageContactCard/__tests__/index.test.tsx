@@ -30,6 +30,11 @@ describe('<MessageContactCard /> Component', () => {
           onClickCard={handleClickCard}
           onClickAvatar={handleClickAvatar}
           onConvoPin={handleConvoPin}
+          transformSource={() => ({
+            src: 'https://placebeard.it/360x360',
+            width: 360,
+            height: 360,
+          })}
         />,
 
         {},

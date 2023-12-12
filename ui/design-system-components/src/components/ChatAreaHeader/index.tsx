@@ -7,7 +7,7 @@ export type ChatAreaHeaderProps = Pick<Profile, 'name' | 'did'> & {
   avatar?: Image;
   alternativeAvatars?: Image[];
   onClickAvatar?: () => void;
-  transformSource?: (src: Image) => Image;
+  transformSource: (src: Image) => Image;
 };
 
 const ChatAreaHeader: React.FC<ChatAreaHeaderProps> = props => {
