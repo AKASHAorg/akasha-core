@@ -1,16 +1,13 @@
 import React from 'react';
-
-import { Profile } from '@akashaorg/typings/lib/ui';
-
 import Anchor from '../Anchor';
 import Stack from '../Stack';
-
 import AvatarImage from './avatar-image';
 import {
   generateActiveOverlayClass,
   generateAvatarContainerStyle,
   getImageFromSeed,
 } from '../../utils';
+import { type Image } from '@akashaorg/typings/lib/ui';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
@@ -23,7 +20,8 @@ export type AvatarProps = {
   alt?: string;
   publicImgPath?: string;
   backgroundColor?: string;
-  avatar?: Profile['avatar'];
+  avatar?: Image;
+  alternativeAvatars?: Image[];
   size?: AvatarSize;
   border?: AvatarBorderSize;
   borderColor?: AvatarBorderColor;
@@ -53,12 +51,8 @@ const Avatar: React.FC<AvatarProps> = props => {
     onClick,
   } = props;
 
-  let avatarImageFallback: string;
-
-  if (!avatarImageFallback) {
-    const seed = getImageFromSeed(profileId, 7);
-    avatarImageFallback = `${publicImgPath}/avatar-${seed}-min.webp`;
-  }
+  const seed = getImageFromSeed(profileId, 7);
+  const avatarFallback = `${publicImgPath}/avatar-${seed}-min.webp`;
 
   const containerStyle = generateAvatarContainerStyle({
     size,
@@ -74,18 +68,11 @@ const Avatar: React.FC<AvatarProps> = props => {
   return (
     <Anchor href={href} onClick={onClick} tabIndex={-6}>
       <Stack customStyle={containerStyle}>
-        {/* updating this logic, so that avatarImage loads with fallbackUrl even when avatar is null */}
-        {(avatar || avatarImageFallback) && (
+        {(avatar || avatarFallback) && (
           <React.Suspense fallback={<></>}>
-            <AvatarImage
-              url={avatar?.default?.src}
-              alt={alt}
-              fallbackUrl={avatarImageFallback}
-              faded={faded}
-            />
+            <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
           </React.Suspense>
         )}
-
         {active && <Stack customStyle={activeOverlayClass} />}
       </Stack>
     </Anchor>

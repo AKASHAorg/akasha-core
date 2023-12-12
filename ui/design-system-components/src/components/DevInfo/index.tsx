@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Developer } from '@akashaorg/typings/lib/ui';
+import { Developer, type Image } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
@@ -15,16 +15,29 @@ export type DevInfoProps = {
   developers: Developer[];
   apps: AppListProps['apps'];
   onAppSelected: (appId: string) => void;
+  transformSource: (src: Image) => Image;
 };
 
-const DevInfo: React.FC<DevInfoProps> = ({ developerTitle, developers, apps, onAppSelected }) => {
+const DevInfo: React.FC<DevInfoProps> = ({
+  developerTitle,
+  developers,
+  apps,
+  onAppSelected,
+  transformSource,
+}) => {
   return (
     <Card elevation="1" padding={'p-4'} radius={20}>
       <Stack direction="column" spacing="gap-y-2">
         <Text variant="h5">{developerTitle}</Text>
         {developers.map(developer => (
           <Stack key={developer.profileId} direction="column" spacing="gap-y-2">
-            <ProfileAvatarButton {...developer} />
+            <ProfileAvatarButton
+              {...developer}
+              avatar={transformSource(developer?.avatar?.default)}
+              alternativeAvatars={developer?.avatar?.alternatives?.map(alternative =>
+                transformSource(alternative),
+              )}
+            />
             <Divider />
             <AppList apps={apps} onAppSelected={onAppSelected} />
           </Stack>

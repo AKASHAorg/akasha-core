@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import { Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -12,15 +12,22 @@ export interface ICollaboratorProps {
   isRed?: boolean;
   buttonLabel: string;
   onClick: () => void;
+  transformSource: (src: Image) => Image;
 }
 
 const Collaborator: React.FC<ICollaboratorProps> = props => {
-  const { profile, isRed = false, buttonLabel, onClick } = props;
+  const { profile, isRed = false, buttonLabel, onClick, transformSource } = props;
 
   return (
     <div className={tw(`flex flex-row w-full justify-between items-center`)}>
       <div className={tw(`flex flex-row gap-1 items-center`)}>
-        <Avatar size="md" avatar={profile.avatar} />
+        <Avatar
+          size="md"
+          avatar={transformSource(profile?.avatar?.default)}
+          alternativeAvatars={profile?.avatar?.alternatives?.map(alternative =>
+            transformSource(alternative),
+          )}
+        />
 
         <Text variant="h5">{profile.name}</Text>
       </div>

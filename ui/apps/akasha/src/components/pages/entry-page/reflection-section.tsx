@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useLocation } from 'react-router-dom';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 type ReflectionSectionProps = {
   beamId: string;
@@ -54,6 +55,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
             profileId={null}
             actionLabel={t('Reflect')}
             placeholderLabel={t('Share your thoughts')}
+            transformSource={transformSource}
           />
         )}
         {isLoggedIn && entryData?.active && (

@@ -2,10 +2,10 @@ import React from 'react';
 import { apply, tw } from '@twind/core';
 
 import Avatar, { AvatarSize } from '../Avatar';
-import { Profile } from '@akashaorg/typings/lib/ui';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 
 export type StackedAvatarProps = {
-  userData: { did: Profile['did']; avatar?: Profile['avatar'] }[];
+  userData: { did: Profile['did']; avatar?: Image; alternativeAvatars?: Image[] }[];
   maxAvatars?: number;
   size?: AvatarSize;
 };
@@ -31,6 +31,7 @@ const StackedAvatar: React.FC<StackedAvatarProps> = props => {
           }}
           profileId={data[level].did.id}
           avatar={data[level].avatar}
+          alternativeAvatars={data[level].alternativeAvatars}
           size={size}
           border="xs"
         />

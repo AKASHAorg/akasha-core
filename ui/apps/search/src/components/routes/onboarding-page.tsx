@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
@@ -113,6 +113,7 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
           onClickTag={toggleTagSubscribe}
           onClickFollow={handleFollow}
           onClickUnfollow={handleUnfollow}
+          transformSource={transformSource}
         />
       </Stack>
     </Stack>

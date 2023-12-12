@@ -15,6 +15,14 @@ type Story = StoryObj<OnboardingSuggestionsCardProps>;
 
 export const BaseOnboardingSuggestionsCard: Story = {
   render: () => (
-    <OnboardingSuggestionsCard topicsLabel="TOPICS TO FOLLOW" peopleLabel="PEOPLE TO FOLLOW" />
+    <OnboardingSuggestionsCard
+      topicsLabel="TOPICS TO FOLLOW"
+      peopleLabel="PEOPLE TO FOLLOW"
+      transformSource={() => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      })}
+    />
   ),
 };

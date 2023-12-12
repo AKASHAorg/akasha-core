@@ -21,6 +21,7 @@ export * from './icon';
 export * from './colors';
 export * from './extensions';
 export * from './editor-blocks';
+export * from './media';
 
 export enum IntegrationTypes {
   APP = 'App',

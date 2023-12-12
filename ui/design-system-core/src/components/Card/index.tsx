@@ -19,12 +19,10 @@ export type CardProps = {
   border?: boolean;
   noBorderRadius?: boolean;
   customStyle?: string;
-  onClick?: () => void;
   tabIndex?: number;
-  onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   ref?: LegacyRef<HTMLDivElement>;
   testId?: string;
-};
+} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => {
   const {
@@ -41,10 +39,7 @@ const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => 
     customStyle = '',
     tabIndex = 0,
     testId,
-    onKeyDown = () => {
-      void 0;
-    },
-    onClick,
+    ...rest
   } = props;
 
   const generatedBorder = React.useMemo(() => {
@@ -83,12 +78,11 @@ const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => 
   return (
     <div
       className={tw(className)}
-      role={onClick ? 'button' : 'presentation'}
+      role={rest.onClick ? 'button' : 'presentation'}
       tabIndex={tabIndex}
       ref={ref}
-      onClick={onClick}
-      onKeyDown={onKeyDown}
       data-testid={testId}
+      {...rest}
     >
       {children}
     </div>

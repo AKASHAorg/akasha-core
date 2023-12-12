@@ -1,17 +1,18 @@
 import React, { ReactElement } from 'react';
-import { Profile } from '@akashaorg/typings/lib/ui';
 import Avatar, { AvatarSize } from '../Avatar';
 import Stack from '../Stack';
 import Button from '../Button';
 import DidField from '../DidField';
 import Text from '../Text';
+import { type Image } from '@akashaorg/typings/lib/ui';
 
-export interface ProfileAvatarButtonProps {
+export type ProfileAvatarButtonProps = {
   customStyle?: string;
-  avatarImage?: Profile['avatar'];
+  avatar?: Image;
+  alternativeAvatars?: Image[];
   label?: string;
   size?: AvatarSize;
-  profileId: Profile['did']['id'];
+  profileId: string;
   bold?: boolean;
   active?: boolean;
   truncateText?: boolean;
@@ -21,14 +22,14 @@ export interface ProfileAvatarButtonProps {
   onClickAvatar?: () => void;
   onMouseEnter?: React.MouseEventHandler<HTMLButtonElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLButtonElement>;
-}
+};
 
 const ProfileAvatarButton = React.forwardRef(
   (props: ProfileAvatarButtonProps, ref: React.LegacyRef<HTMLDivElement>) => {
     const {
       customStyle = '',
       size = 'md',
-      avatarImage,
+      avatar,
       label,
       profileId,
       truncateText = true,
@@ -61,7 +62,7 @@ const ProfileAvatarButton = React.forwardRef(
         <Stack customStyle="shrink-0" testId="avatar-box" aria-label="avatar-box">
           <Avatar
             size={size}
-            avatar={avatarImage}
+            avatar={avatar}
             profileId={profileId}
             customStyle="cursor-pointer"
             href={href}

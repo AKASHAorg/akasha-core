@@ -14,11 +14,9 @@ export default meta;
 type Story = StoryObj<ImageCropperProps>;
 
 const avatar = {
-  default: {
-    height: 320,
-    src: 'https://placebeard.it/320x320',
-    width: 320,
-  },
+  height: 320,
+  src: 'https://placebeard.it/320x320',
+  width: 320,
 };
 
 export const BaseImageCropper: Story = {
