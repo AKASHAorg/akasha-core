@@ -23,6 +23,8 @@ export type ReflectFeedProps = {
   filters?: AkashaReflectFiltersInput;
   sorting?: AkashaReflectSortingInput;
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
+  header?: VirtualizerProps<unknown>['header'];
+  footer?: VirtualizerProps<unknown>['footer'];
 };
 
 const ReflectFeed: React.FC<ReflectFeedProps> = props => {
@@ -37,31 +39,31 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     renderItem,
     filters,
     sorting,
+    header,
+    footer,
   } = props;
 
-  const isReflectOfReflection = reflectionsOf.itemType === EntityTypes.REFLECT;
+  // const isReflectOfReflection = reflectionsOf.itemType === EntityTypes.REFLECT;
 
-  const { reflections, fetchInitialData, fetchPreviousPage, fetchNextPage, hasErrors, errors } =
-    useReflections({
-      entityId: reflectionsOf.entryId,
-      entityType: reflectionsOf.itemType,
-      overscan: scrollerOptions.overscan,
-      filters,
-      sorting,
-    });
+  const {
+    reflections,
+    hasNextPage,
+    hasPreviousPage,
+    fetchInitialData,
+    fetchPreviousPage,
+    fetchNextPage,
+    hasErrors,
+    errors,
+  } = useReflections({
+    entityId: reflectionsOf.entryId,
+    entityType: reflectionsOf.itemType,
+    overscan: scrollerOptions.overscan,
+    filters,
+    sorting,
+  });
   const lastCursors = React.useRef({ next: null, prev: null });
-  const isLoading = React.useRef(false);
-  const prevReflections = React.useRef([]);
-
-  React.useEffect(() => {
-    if (reflections !== prevReflections.current) {
-      isLoading.current = false;
-    }
-    prevReflections.current = reflections;
-  }, [reflections]);
 
   const handleInitialFetch = async (restoreItem?: { key: string; offsetTop: number }) => {
-    isLoading.current = true;
     await fetchInitialData(restoreItem);
   };
 
@@ -71,20 +73,18 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       case EdgeArea.NEAR_TOP:
         if (!reflections.length) return;
         const firstCursor = reflections[0].cursor;
-        if (lastCursors.current.prev !== firstCursor && !isLoading.current) {
-          isLoading.current = true;
-          await fetchPreviousPage(firstCursor);
+        if (lastCursors.current.prev !== firstCursor) {
           lastCursors.current.prev = firstCursor;
+          await fetchPreviousPage(firstCursor);
         }
         break;
       case EdgeArea.BOTTOM:
       case EdgeArea.NEAR_BOTTOM:
         if (!reflections.length) return;
         const lastCursor = reflections[reflections.length - 1].cursor;
-        if (lastCursors.current.next !== lastCursor && !isLoading.current) {
-          isLoading.current = true;
-          await fetchNextPage(lastCursor);
+        if (lastCursors.current.next !== lastCursor) {
           lastCursors.current.next = lastCursor;
+          await fetchNextPage(lastCursor);
         }
         break;
       default:
@@ -115,6 +115,10 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
           onEdgeDetectorChange={handleFetch}
           scrollTopIndicator={scrollTopIndicator}
           renderItem={renderItem}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          header={header}
+          footer={footer}
         />
       )}
     </>

@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
 import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
-import { ILocale } from '@akashaorg/design-system-components/lib/utils/time';
 import { ReflectionCard } from '@akashaorg/ui-lib-feed';
 import { useGetReflectionByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
@@ -86,7 +85,7 @@ const ReflectionPage: React.FC<unknown> = () => {
           itemSpacing={0}
           newItemsPublishedLabel={t('New Reflects published recently')}
           trackEvent={analyticsActions.trackEvent}
-          locale={getTranslationPlugin().i18n.language as ILocale}
+          locale={getTranslationPlugin().i18n.language}
           estimatedHeight={120}
           queryKey={`reflect-feed-${entryData.id}`}
           renderItem={itemData => (

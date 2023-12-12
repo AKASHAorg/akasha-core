@@ -1,12 +1,12 @@
 import React from 'react';
 import { useGetBeamsLazyQuery } from './generated/apollo';
-import type {
-  AkashaBeamEdge,
-  AkashaBeamFiltersInput,
-  AkashaBeamSortingInput,
-  PageInfo,
+import {
+  type AkashaBeamEdge,
+  type AkashaBeamFiltersInput,
+  type AkashaBeamSortingInput,
+  type PageInfo,
+  SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import type { GetBeamsQueryVariables } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { ApolloError } from '@apollo/client';
 
@@ -53,6 +53,11 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
 
   const fetchNextPage = async (lastCursor: string) => {
     if (beamsQuery.loading || beamsQuery.error || !lastCursor) return;
+    console.log(
+      'fetching next',
+      state.beams.findIndex(b => b.cursor === lastCursor),
+      state.beams.length,
+    );
     try {
       const results = await beamsQuery.fetchMore({
         variables: {
@@ -63,13 +68,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
       if (results.error) return;
       if (!results.data) return;
 
-      const newBeams: AkashaBeamEdge[] = [];
-      results.data?.akashaBeamIndex?.edges?.forEach(e => {
-        if (state.beams.some(b => b.cursor === e.cursor)) {
-          return;
-        }
-        newBeams.push(e);
-      });
+      const newBeams: AkashaBeamEdge[] = results.data?.akashaBeamIndex?.edges;
 
       setState(prev => ({
         beams: [...prev.beams, ...newBeams],
@@ -99,13 +98,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
         return;
       }
       if (!results.data) return;
-      const newBeams = [];
-      results.data.akashaBeamIndex.edges.forEach(e => {
-        if (state.beams.some(b => b.cursor === e.cursor)) {
-          return;
-        }
-        newBeams.push(e);
-      });
+      const newBeams = results.data.akashaBeamIndex.edges.slice();
       setState(prev => ({
         beams: [...newBeams.reverse(), ...prev.beams],
         pageInfo: {
@@ -129,9 +122,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
           return;
         }
         if (!results.data) return;
-        const newBeams: AkashaBeamEdge[] = results.data.akashaBeamIndex.edges.filter(
-          edge => !state.beams.some(beam => beam.cursor === edge.cursor),
-        );
+        const newBeams: AkashaBeamEdge[] = results.data.akashaBeamIndex.edges.slice();
         let pageInfo: PageInfo = results.data.akashaBeamIndex.pageInfo;
 
         if (variables?.after) {
@@ -148,23 +139,23 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
         setErrors(prev => prev.concat(err));
       }
     },
-    [fetchBeams, state.beams],
+    [fetchBeams],
   );
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
       if (beamsQuery.called) return;
 
+      const initialVars: GetBeamsQueryVariables = {
+        sorting: { createdAt: SortOrder.Desc },
+      };
+
       if (restoreItem) {
-        await fetchInitialBeams({
-          after: restoreItem.key,
-          sorting: { createdAt: SortOrder.Asc },
-        });
-      } else {
-        await fetchInitialBeams({
-          sorting: { createdAt: SortOrder.Desc },
-        });
+        initialVars.sorting = { createdAt: SortOrder.Asc };
+        initialVars.after = restoreItem.key;
       }
+
+      await fetchInitialBeams(initialVars);
     },
     [beamsQuery.called, fetchInitialBeams],
   );
@@ -192,7 +183,7 @@ export const useBeams = ({ overscan, filters, sorting }: UseBeamsOptions) => {
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,
-    isFetching: beamsQuery.loading,
+    isLoading: beamsQuery.loading,
     hasNextPage: state.pageInfo?.hasNextPage,
     hasPreviousPage: state.pageInfo?.hasPreviousPage,
     onReset: handleReset,

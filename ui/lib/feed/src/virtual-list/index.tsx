@@ -17,8 +17,8 @@ import { Rect } from './rect';
 
 export type VirtualizerProps<T> = {
   restorationKey: string;
-  header?: () => React.ReactNode;
-  footer?: () => React.ReactNode;
+  header?: React.ReactElement;
+  footer?: React.ReactElement;
   estimatedHeight: VirtualListRendererProps<unknown>['estimatedHeight'];
   items: T[];
   itemKeyExtractor: (item: T) => string;
@@ -27,10 +27,13 @@ export type VirtualizerProps<T> = {
   overscan?: VirtualListRendererProps<unknown>['overscan'];
   itemSpacing?: number;
   onFetchInitialData?: (restoreItem?: RestoreItem) => void;
-  loadingIndicator?: () => React.ReactNode;
+  loadingIndicator?: () => React.ReactElement;
   scrollTopIndicator?: VirtualListRendererProps<T>['scrollTopIndicator'];
   onListReset?: VirtualListRendererProps<T>['onListReset'];
   onEdgeDetectorChange: UseEdgeDetectorProps['onEdgeDetectorChange'];
+  hasNextPage?: boolean;
+  hasPreviousPage?: boolean;
+  isLoading?: boolean;
 };
 
 const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -49,6 +52,9 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     scrollTopIndicator,
     onEdgeDetectorChange,
     footer,
+    hasNextPage,
+    hasPreviousPage,
+    isLoading,
   } = props;
 
   const vlistRef = React.useRef<VirtualListInterface>();
@@ -62,7 +68,9 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
     const itemList: VirtualDataItem<T>[] = [];
     if (header) {
-      itemList.push(createVirtualDataItem(HEADER_COMPONENT, HEADER_COMPONENT as T, false, header));
+      itemList.push(
+        createVirtualDataItem(HEADER_COMPONENT, HEADER_COMPONENT as T, false, () => header),
+      );
     }
 
     itemList.push(
@@ -78,7 +86,9 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     );
 
     if (footer) {
-      itemList.push(createVirtualDataItem(FOOTER_COMPONENT, FOOTER_COMPONENT as T, false, footer));
+      itemList.push(
+        createVirtualDataItem(FOOTER_COMPONENT, FOOTER_COMPONENT as T, false, () => footer),
+      );
     }
     return itemList;
   }, [footer, header, itemIndexExtractor, items]);
@@ -88,27 +98,30 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     onEdgeDetectorChange,
   });
 
-  const handleDetectorUpdate = (
-    itemList: VirtualItem[],
-    mountedItems: VirtualItem[],
-    viewportRect: Rect,
-    averageItemHeight: number,
-    measurementsCache: Map<string, number>,
-    isNewUpdate: boolean,
-  ) => {
-    edgeDetector.update(itemList, mountedItems, viewportRect, averageItemHeight, isNewUpdate);
-    if (!isMounted) return;
-    if (vlistRef.current.isAtTop()) {
-      return scrollRestore.save([], new Map());
-    }
-    const restoreItems = mountedItems.filter(it =>
-      viewportRect.overlaps(new Rect(it.start, it.height)),
-    );
-    scrollRestore.save(
-      restoreItems.map(it => ({ offsetTop: it.start, key: it.key })),
-      measurementsCache,
-    );
-  };
+  const handleDetectorUpdate = React.useCallback(
+    (
+      itemList: VirtualItem[],
+      mountedItems: VirtualItem[],
+      viewportRect: Rect,
+      averageItemHeight: number,
+      measurementsCache: Map<string, number>,
+      isNewUpdate: boolean,
+    ) => {
+      edgeDetector.update(itemList, mountedItems, viewportRect, averageItemHeight, isNewUpdate);
+      if (!isMounted) return;
+      if (vlistRef.current.isAtTop()) {
+        return scrollRestore.save([], new Map());
+      }
+      const restoreItems = mountedItems.filter(it =>
+        viewportRect.overlaps(new Rect(it.start, it.height)),
+      );
+      scrollRestore.save(
+        restoreItems.map(it => ({ offsetTop: it.start, key: it.key })),
+        measurementsCache,
+      );
+    },
+    [edgeDetector, isMounted, scrollRestore],
+  );
 
   const restoreStartItem = React.useRef<RestoreItem>();
   const isFetchingInitialData = React.useRef(false);
@@ -165,6 +178,10 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
           itemSpacing={itemSpacing}
           onEdgeDetectorUpdate={handleDetectorUpdate}
           scrollTopIndicator={scrollTopIndicator}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          isLoading={isLoading}
+          loadingIndicator={loadingIndicator}
         />
       )}
     </>

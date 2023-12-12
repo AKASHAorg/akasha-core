@@ -14,7 +14,6 @@ import { useStateWithCallback } from './use-state-with-callback';
 import { useDebounce } from './use-debounce';
 import { useThrottle } from './use-throttle';
 import { useProjection } from './use-projection';
-import { useEdgeDetector } from './use-edge-detector';
 
 export type VirtualListInterface = {
   scrollToTop: () => void;
@@ -40,6 +39,10 @@ export type VirtualListRendererProps<T> = {
   ) => void;
   onListReset?: () => void;
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  isLoading?: boolean;
+  loadingIndicator?: () => React.ReactElement;
 };
 
 const initialState = {
@@ -50,7 +53,7 @@ const initialState = {
 export const VirtualListRenderer = React.forwardRef(
   <T,>(props: VirtualListRendererProps<T>, ref) => {
     React.useImperativeHandle(ref, () => ({
-      isAtTop: viewport.isAtTop,
+      isAtTop,
       scrollToTop: () => {
         //@TODO:
       },
@@ -64,8 +67,13 @@ export const VirtualListRenderer = React.forwardRef(
       scrollRestorationType,
       itemSpacing,
       overscan,
+      onEdgeDetectorUpdate,
+      hasNextPage,
+      isLoading,
+      loadingIndicator,
+      hasPreviousPage,
     } = props;
-    const rootNodeRef = React.createRef<HTMLDivElement>();
+    const rootNodeRef = React.useRef<HTMLDivElement>();
     const itemHeights = React.useMemo(
       () => measurementsCache ?? new Map<string, number>(),
       [measurementsCache],
@@ -74,9 +82,9 @@ export const VirtualListRenderer = React.forwardRef(
     const beforeStateUpdates = React.useRef<'update' | 'RAFUpdate'>();
     const itemHeightAverage = React.useRef(estimatedHeight);
     const batchedHeightUpdates = React.useRef(new Set());
+    const isScrollAtTop = React.useRef(!restorationItem);
 
     const viewport = useViewport({
-      rootNode: rootNodeRef,
       initialRect,
       offsetTop: rootNodeRef.current?.offsetTop || 0,
     });
@@ -135,7 +143,7 @@ export const VirtualListRenderer = React.forwardRef(
       }
       isInitialPlacement.current = true;
       if (itemsToRender.length > 0) {
-        scrollCorrection.current = viewport.getOffsetCorrection();
+        scrollCorrection.current = viewport.getOffsetCorrection(rootNodeRef.current);
         beforeStateUpdates.current = 'RAFUpdate';
         return {
           mounted: itemsToRender,
@@ -181,17 +189,35 @@ export const VirtualListRenderer = React.forwardRef(
       },
       [getItemHeight, itemList],
     );
+    const getRelativeToRootNode = React.useCallback(() => {
+      if (rootNodeRef.current && viewport.state.rect) {
+        return viewport.state.rect.translate(
+          -rootNodeRef.current.getBoundingClientRect().top + rootNodeRef.current.offsetTop,
+        );
+      }
+    }, [viewport.state.rect]);
+
+    const isAtTop = React.useCallback(() => {
+      const viewportRect = getRelativeToRootNode();
+      if (!viewportRect) return true;
+      if (!rootNodeRef.current) return true;
+      if (hasNextPage) {
+        return viewportRect.getBottom() >= state.listHeight - rootNodeRef.current.offsetTop;
+      }
+      return viewportRect.getTop() <= rootNodeRef.current.offsetTop;
+    }, [getRelativeToRootNode, hasNextPage, state.listHeight]);
 
     const { projection, getCommonProjectionItem, getNextProjection } = useProjection<T>({
       mountedItems: state.mounted,
       itemList: itemList,
       isInitialPlacement: isInitialPlacement.current,
       itemHeights,
-      isAtTop: viewport.isAtTop,
+      isAtTop,
       getDistanceFromTop,
       overscan: overscan,
       getItemHeight,
       itemHeightAverage: itemHeightAverage.current,
+      hasNextPage,
     });
 
     const computeAvgItemHeight = (newHeight: number, listSize: number) => {
@@ -242,6 +268,25 @@ export const VirtualListRenderer = React.forwardRef(
       [getListOffset],
     );
 
+    const getListTopPadding = React.useCallback(
+      (items: VirtualItem[], viewportRect: Rect) => {
+        const lastItemRef = findLastItem(items, it => it.maybeRef);
+        const firstItem = items[0];
+        if (!firstItem) {
+          currentPadding.current = 0;
+          return currentPadding.current;
+        }
+        const padStartItem = lastItemRef ?? firstItem;
+        const height =
+          new Rect(padStartItem.start, padStartItem.height).getBottom() -
+          new Rect(firstItem.start, firstItem.height).getTop();
+        const space = viewport.getDocumentViewportHeight() - viewportRect.getHeight();
+        currentPadding.current = Math.max(0, viewportRect.getHeight() - space - height);
+        return currentPadding.current;
+      },
+      [viewport],
+    );
+
     const getListBottomPadding = React.useCallback(
       (items: VirtualItem[], viewportRect: Rect) => {
         const lastRef = findLastItem(items, it => it.maybeRef);
@@ -262,9 +307,12 @@ export const VirtualListRenderer = React.forwardRef(
 
     const getListPadding = React.useCallback(
       (items: VirtualItem[], viewportRect: Rect) => {
+        if (hasNextPage) {
+          return getListTopPadding(items, viewportRect);
+        }
         return getListBottomPadding(items, viewportRect);
       },
-      [getListBottomPadding],
+      [getListBottomPadding, getListTopPadding, hasNextPage],
     );
 
     const hasMeasuredHeights = React.useCallback(
@@ -284,7 +332,7 @@ export const VirtualListRenderer = React.forwardRef(
 
     const update = React.useCallback(
       (_debugFrom?: string) => {
-        const viewportRect = viewport.getRelativeToRootNode();
+        const viewportRect = getRelativeToRootNode();
         if (!viewportRect) return;
         const commonProjectionItem = getCommonProjectionItem(viewportRect);
         measureItemHeights();
@@ -322,11 +370,11 @@ export const VirtualListRenderer = React.forwardRef(
               let vpRect: Rect | undefined = viewportRect;
               if (projectionWithCorrection.offset !== 0) {
                 viewport.scrollBy(-projectionWithCorrection.offset);
-                vpRect = viewport.getRelativeToRootNode();
+                vpRect = getRelativeToRootNode();
               }
               if (vpRect) {
                 // update edge sensor
-                props.onEdgeDetectorUpdate(
+                onEdgeDetectorUpdate(
                   nextProjection.allItems,
                   projectionWithCorrection.rendered,
                   vpRect,
@@ -348,7 +396,7 @@ export const VirtualListRenderer = React.forwardRef(
                 debouncedUpdate('updatefn/debounced');
               }
               // update edge sensor
-              props.onEdgeDetectorUpdate(
+              onEdgeDetectorUpdate(
                 nextProjection.allItems,
                 nextProjection.nextRendered,
                 viewportRect,
@@ -361,17 +409,19 @@ export const VirtualListRenderer = React.forwardRef(
         }
       },
       [
-        debouncedUpdate,
+        getRelativeToRootNode,
         getCommonProjectionItem,
-        getListPadding,
-        getNextProjection,
-        getProjectionCorrection,
-        hasCorrection,
-        hasMeasuredHeights,
         measureItemHeights,
-        props,
+        getNextProjection,
+        hasCorrection,
+        getListPadding,
+        hasMeasuredHeights,
+        getProjectionCorrection,
         setState,
         viewport,
+        onEdgeDetectorUpdate,
+        itemHeights,
+        debouncedUpdate,
       ],
     );
 
@@ -386,7 +436,8 @@ export const VirtualListRenderer = React.forwardRef(
         RAFUpdate,
         50,
         {
-          leading: false,
+          leading: true,
+          trailing: false,
         },
         [update],
       ),
@@ -403,23 +454,27 @@ export const VirtualListRenderer = React.forwardRef(
     );
 
     const onScroll = React.useCallback(() => {
+      isScrollAtTop.current = isAtTop();
       if (isInitialPlacement.current) {
         return;
       }
       if (viewport.getScrollY() >= viewport.getDocumentViewportHeight()) {
         showScrollTopButton.current = true;
       }
-      if (!isInitialPlacement.current && viewport.getScrollY() >= 0) {
-        isScrolling.current = true;
-        onScrollEnd();
-        throttledUpdate('onScroll');
+      if (isInitialPlacement.current || viewport.getScrollY() < 0) {
+        return;
       }
-    }, [onScrollEnd, throttledUpdate, viewport]);
+      isScrolling.current = true;
+      onScrollEnd();
+      throttledUpdate('onScroll');
+    }, [isAtTop, onScrollEnd, throttledUpdate, viewport]);
 
     React.useEffect(() => {
-      const unsubScroll = viewport.addScrollListener(onScroll);
-      return () => unsubScroll();
-    }, [onScroll, viewport]);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      return () => {
+        window.removeEventListener('scroll', onScroll);
+      };
+    }, [onScroll]);
 
     React.useEffect(() => {
       if (beforeStateUpdates.current) {
@@ -434,6 +489,19 @@ export const VirtualListRenderer = React.forwardRef(
         beforeStateUpdates.current = undefined;
       }
     }, [state, RAFUpdate, update]);
+
+    const prevItemList = React.useRef<VirtualDataItem<T>[]>();
+    React.useEffect(() => {
+      if (prevItemList.current === itemList) return;
+      prevItemList.current = itemList;
+      RAFUpdate('itemList updated');
+      if (isScrollAtTop.current) {
+        if (hasPreviousPage) {
+          return viewport.scrollTo(0, state.listHeight);
+        }
+        return viewport.scrollToTop();
+      }
+    }, [RAFUpdate, hasPreviousPage, itemList, state.listHeight, viewport]);
 
     const resizeObserver = useResizeObserver();
 
@@ -463,14 +531,27 @@ export const VirtualListRenderer = React.forwardRef(
       [itemHeights, overscan, state.mounted, update],
     );
 
+    const setRootNode = (rootNode: HTMLDivElement) => {
+      if (rootNode && !rootNodeRef.current) {
+        viewport.setTopOffset(rootNode.offsetTop);
+        if (rootNode.parentElement) {
+          viewport.setBottomOffset(
+            rootNode.parentElement.offsetHeight - rootNode.offsetTop - rootNode.offsetHeight,
+          );
+        }
+      }
+      rootNodeRef.current = rootNode;
+    };
+
     return (
       <div
-        ref={rootNodeRef}
+        ref={setRootNode}
         style={{
           position: 'relative',
           minHeight: state.listHeight,
         }}
       >
+        {isAtTop() && hasNextPage && isLoading && loadingIndicator?.()}
         {projection.map(item => (
           <VirtualItemRenderer<T>
             key={item.virtualData.key}

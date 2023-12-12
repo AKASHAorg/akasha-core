@@ -71,34 +71,37 @@ export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
 
   const isNewArea = (newArea: EdgeArea) => newArea !== detectorState.current.newArea;
 
-  const update = (
-    itemList: VirtualItem[],
-    rendered: VirtualItem[],
-    viewportRect: Rect,
-    averageItemHeight: number,
-    isNewUpdate: boolean,
-  ) => {
-    if (!isNewUpdate) return;
-    const overscanHeight = overscan * averageItemHeight;
-    const filteredItems = itemList.filter(it => it.maybeRef);
-    if (!filteredItems.length && !detectorState.current.newArea) {
-      detectorState.current = {
-        newArea: EdgeArea.TOP,
-        listSize: 0,
-      };
-      return onEdgeDetectorChange(EdgeArea.TOP);
-    }
-    const listRect = getListRect(filteredItems);
-    const newArea = getEdge(viewportRect, listRect, overscanHeight, itemList.length);
+  const update = React.useCallback(
+    (
+      itemList: VirtualItem[],
+      rendered: VirtualItem[],
+      viewportRect: Rect,
+      averageItemHeight: number,
+      isNewUpdate: boolean,
+    ) => {
+      if (!isNewUpdate) return;
+      const overscanHeight = overscan * averageItemHeight;
+      const filteredItems = itemList.filter(it => it.maybeRef);
+      if (!filteredItems.length && !detectorState.current.newArea) {
+        detectorState.current = {
+          newArea: EdgeArea.TOP,
+          listSize: 0,
+        };
+        return onEdgeDetectorChange(EdgeArea.TOP);
+      }
+      const listRect = getListRect(filteredItems);
+      const newArea = getEdge(viewportRect, listRect, overscanHeight, itemList.length);
 
-    if (isNewArea(newArea)) {
-      detectorState.current = {
-        newArea,
-        listSize: itemList.length,
-      };
-      onEdgeDetectorChange(newArea);
-    }
-  };
+      if (isNewArea(newArea)) {
+        detectorState.current = {
+          newArea,
+          listSize: itemList.length,
+        };
+        onEdgeDetectorChange(newArea);
+      }
+    },
+    [onEdgeDetectorChange, overscan],
+  );
 
   return {
     update,

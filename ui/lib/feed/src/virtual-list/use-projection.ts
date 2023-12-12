@@ -20,6 +20,7 @@ export type UseProjectionProps<T> = {
   getDistanceFromTop: (itemKey: string) => number;
   getItemHeight: (itemKey: string) => number;
   itemHeightAverage: number;
+  hasNextPage: boolean;
 };
 
 export const useProjection = <T>(props: UseProjectionProps<T>) => {
@@ -33,6 +34,7 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
     isInitialPlacement,
     getItemHeight,
     itemHeightAverage,
+    hasNextPage,
   } = props;
 
   const slice = React.useRef({ start: 0, end: 0 });
@@ -170,9 +172,7 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
 
   const getNextProjection = React.useCallback(
     (startItem: VirtualItem, viewportRect: Rect, alreadyRendered: boolean) => {
-      const minOffscreenHeight = Math.floor(
-        viewportRect.getHeight() + (overscan / 3) * itemHeightAverage,
-      );
+      const minOffscreenHeight = Math.floor(viewportRect.getHeight() + itemHeightAverage);
       const maxOffcreenHeight = Math.floor(viewportRect.getHeight() + overscan * itemHeightAverage);
 
       const minViewportRect = new Rect(
@@ -186,7 +186,9 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
 
       const allItems = getAllVirtualItems(startItem);
       const visibleItems = allItems.filter(it =>
-        Rect.fromItem(it).overlaps(alreadyRendered ? maxViewportRect : minViewportRect),
+        Rect.fromItem(it).overlaps(
+          alreadyRendered && !hasNextPage ? maxViewportRect : minViewportRect,
+        ),
       );
       const visibleSlice = getVisibleItemsSlice(visibleItems, allItems);
       slice.current = getSlice(alreadyRendered, visibleSlice);
@@ -194,7 +196,7 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
 
       return { allItems, nextRendered, slice };
     },
-    [getAllVirtualItems, getSlice, itemHeightAverage, overscan],
+    [getAllVirtualItems, getSlice, hasNextPage, itemHeightAverage, overscan],
   );
 
   return {
