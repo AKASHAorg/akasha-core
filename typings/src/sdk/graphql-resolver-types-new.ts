@@ -656,6 +656,7 @@ export type AkashaAppResolvers<ContextType = any, ParentType extends ResolversPa
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   releases?: Resolver<ResolversTypes['AkashaAppReleaseConnection'], ParentType, ContextType, Partial<Types.AkashaAppReleasesArgs>>;
   releasesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.AkashaAppReleasesCountArgs>>;
+  version?: Resolver<ResolversTypes['CeramicCommitID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

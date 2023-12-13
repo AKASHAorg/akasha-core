@@ -45,6 +45,8 @@ export type AkashaApp = Node & {
   name: Scalars['String']['output'];
   releases: AkashaAppReleaseConnection;
   releasesCount: Scalars['Int']['output'];
+  /** Current version of the document */
+  version: Scalars['CeramicCommitID']['output'];
 };
 
 
