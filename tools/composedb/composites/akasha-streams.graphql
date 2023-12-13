@@ -3,7 +3,7 @@ type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c7emv46av2u74x3qgu9i3oywn1w7sg8u6mom
   id: ID!
 }
 
-type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c58vvx12mfk81er1aq06atqjan89i6qcb56ntqvjovyn2uryzuf") {
+type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c5a30ha3yuzt87u4mcna2v5tyjbhfoc22l8yyj91iq03pps7osb") {
   id: ID!
 }
 
@@ -15,7 +15,7 @@ type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c7g649dzvhgj2llnx44wxkne2p5l5j3bv
   id: ID!
 }
 
-type AkashaApp @loadModel(id: "kjzl6hvfrbw6caribi34q9q1g0i23a6i0bhj7yuaglq159hh0ij1zd1wcytr85z") {
+type AkashaApp @loadModel(id: "kjzl6hvfrbw6c99kqbzbtrktgontbb48psxsd9xai7og9pyey10sv4c5yqvsjvb") {
   id: ID!
 }
 

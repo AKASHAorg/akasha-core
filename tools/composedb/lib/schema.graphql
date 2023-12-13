@@ -42,6 +42,8 @@ type AkashaApp implements Node {
     account: ID,
     filters: AkashaAppReleaseFiltersInput
   ): Int!
+  "Current version of the document"
+  version: CeramicCommitID!
 }
 
 "A connection to a list of items."
