@@ -159,6 +159,7 @@ export const ImageEditorBlock = (
       { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
       ...prev.slice(indexOfEditedImage + 1),
     ]);
+    setCanCloseModal(true);
   };
 
   const [canCloseModal, setCanCloseModal] = React.useState(false);
