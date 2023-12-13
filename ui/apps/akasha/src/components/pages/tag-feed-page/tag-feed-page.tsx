@@ -6,7 +6,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
@@ -90,7 +90,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
         )}
         renderItem={itemData => (
           <BeamCard
-            entryData={itemData.node}
+            entryData={mapBeamEntryData(itemData.node)}
             contentClickable={true}
             onContentClick={() =>
               getRoutingPlugin().navigateTo({

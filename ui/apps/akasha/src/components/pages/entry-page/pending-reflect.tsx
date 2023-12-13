@@ -1,7 +1,7 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ReflectionCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflection-card';
-import { useLoggedIn, useMutationsListener } from '@akashaorg/ui-awf-hooks';
+import { useMutationsListener } from '@akashaorg/ui-awf-hooks';
 import { useCreateReflectMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
@@ -12,7 +12,6 @@ export type PendingReflectProps = {
 
 export function PendingReflect(props: PendingReflectProps) {
   const { beamId, authorId } = props;
-  const { authenticatedDID } = useLoggedIn();
   const { mutations: pendingReflectStates } = useMutationsListener<
     {
       i: { content: AkashaReflect };
@@ -35,10 +34,7 @@ export function PendingReflect(props: PendingReflectProps) {
               <ReflectionCard
                 entryData={{
                   ...pendingReflectState.state.variables.i.content,
-                  author: {
-                    id: authorId,
-                    isViewer: authenticatedDID === authorId,
-                  },
+                  authorId,
                 }}
                 contentClickable={false}
                 hidePublishTime={true}

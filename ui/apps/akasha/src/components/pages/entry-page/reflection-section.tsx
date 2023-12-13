@@ -5,17 +5,16 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ReflectEditor from '../../reflect-editor';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import routes, { REFLECT } from '../../../routes';
-import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useTranslation } from 'react-i18next';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
+import { ReflectEntryData, EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useLocation } from 'react-router-dom';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 type ReflectionSectionProps = {
   beamId: string;
   reflectionId: string;
-  entryData: AkashaReflect;
+  entryData: ReflectEntryData;
   isLoggedIn: boolean;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
   showLoginModal: () => void;
@@ -27,7 +26,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const location = useLocation();
 
   const wrapperRef = useCloseActions(() => {
-    onNavigate({ authorId: entryData?.author?.id, id: entryData?.id }, EntityTypes.REFLECT);
+    onNavigate({ authorId: entryData?.authorId, id: entryData?.id }, EntityTypes.REFLECT);
   });
 
   return (
@@ -39,7 +38,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
         onReflect={() => {
           onNavigate(
             {
-              authorId: entryData?.author.id,
+              authorId: entryData?.authorId,
               id: entryData?.id,
               reflect: !location.pathname.includes(routes[REFLECT]),
             },
