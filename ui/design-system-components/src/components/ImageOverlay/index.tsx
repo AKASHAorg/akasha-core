@@ -22,7 +22,6 @@ export interface IImageOverlay {
 const closeDivClass = apply(
   'flex items-center justify-center z-1 w-12 h-12 rounded-full bg(grey9 dark:grey3)',
 );
-const flexCenteredClass = apply(`flex items-center justify-center`);
 
 /**
  * renders the full screen image modal that is triggered on image click
@@ -74,35 +73,35 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
 
   return (
     <Portal>
-      <div className={tw(`${flexCenteredClass} absolute top-0 w-screen h-screen bg-black/80 z-20`)}>
-        <div>
-          <Stack direction="row" customStyle="justify-end sm:justify-between pb-12">
-            <Stack direction="row" spacing="gap-3">
-              {images.length > 1 && (
-                <button className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
-                  <Icon icon={<ArrowLeftIcon />} accentColor />
-                </button>
-              )}
-              {images.length > 1 && (
-                <button className={tx(`${closeDivClass}`)} onClick={handleNextImg}>
-                  <Icon icon={<ArrowRightIcon />} accentColor />
-                </button>
-              )}
-            </Stack>
-
-            <Stack direction="row" spacing="gap-3">
-              <button className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
-                <Icon icon={<MagnifyingGlassPlusIcon />} accentColor />
+      <Stack customStyle="fixed top-0 w-screen h-screen bg-black/80 z-20">
+        <Stack direction="row" customStyle="justify-end sm:justify-between p-4 sm:p-12">
+          <Stack direction="row" spacing="gap-3">
+            {images.length > 1 && (
+              <button className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
+                <Icon icon={<ArrowLeftIcon />} accentColor />
               </button>
-              <button className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
-                <Icon icon={<MagnifyingGlassMinusIcon />} accentColor />
+            )}
+            {images.length > 1 && (
+              <button className={tx(`${closeDivClass}`)} onClick={handleNextImg}>
+                <Icon icon={<ArrowRightIcon />} accentColor />
               </button>
-              <button className={tx(`${closeDivClass}`)} onClick={closeModal}>
-                <Icon icon={<XMarkIcon />} accentColor />
-              </button>
-            </Stack>
+            )}
           </Stack>
-          {currentImg && (
+
+          <Stack direction="row" spacing="gap-3">
+            <button className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
+              <Icon icon={<MagnifyingGlassPlusIcon />} accentColor />
+            </button>
+            <button className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
+              <Icon icon={<MagnifyingGlassMinusIcon />} accentColor />
+            </button>
+            <button className={tx(`${closeDivClass}`)} onClick={closeModal}>
+              <Icon icon={<XMarkIcon />} accentColor />
+            </button>
+          </Stack>
+        </Stack>
+        {currentImg && (
+          <Stack customStyle="h-full" align="center" justify="center">
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
                 <picture className={tw(`flex`)}>
@@ -111,9 +110,9 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
                 </picture>
               </TransformComponent>
             </TransformWrapper>
-          )}
-        </div>
-      </div>
+          </Stack>
+        )}
+      </Stack>
     </Portal>
   );
 };

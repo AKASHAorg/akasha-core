@@ -266,7 +266,7 @@ export const Header: React.FC<HeaderProps> = ({
         cancelLabel={cancelLabel}
         saveLabel={saveLabel}
         onClose={() => (isSavingImage ? undefined : setShowEditImage(false))}
-        images={ProfileImageType === 'avatar' ? [avatarUrl.src] : [coverImageUrl.src]}
+        images={ProfileImageType === 'avatar' ? [avatarUrl?.src] : [coverImageUrl?.src]}
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}
