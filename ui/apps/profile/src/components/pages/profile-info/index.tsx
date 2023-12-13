@@ -9,6 +9,7 @@ import {
   ProfileBio,
   ProfileLinks,
   ProfileLoading,
+  ProfileStatLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -45,11 +46,7 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   });
   const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileId, !!data?.node);
 
-  const profileStatsQuery = useProfileStats(profileId);
-
-  const {
-    data: { totalBeams, totalFollowers, totalFollowing, totalTopics },
-  } = profileStatsQuery.data;
+  const { data: stat, loading: statsLoading } = useProfileStats(profileId);
 
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
@@ -62,7 +59,7 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
     });
   };
 
-  if (loading || profileStatsQuery.isLoading || validDidCheckLoading) return <ProfileLoading />;
+  if (loading || validDidCheckLoading) return <ProfileLoading />;
 
   if (error)
     return (
@@ -108,15 +105,18 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
           buttonClickHandler={goEditProfile}
         />
       )}
-      <ProfileStatsView
-        profileId={profileId}
-        totalBeams={totalBeams}
-        totalTopics={totalTopics}
-        totalFollowers={totalFollowers}
-        totalFollowing={totalFollowing}
-        navigateTo={navigateTo}
-        showLoginModal={() => showLoginModal({ modal: { name: location.pathname } })}
-      />
+      {statsLoading && <ProfileStatLoading />}
+      {stat && (
+        <ProfileStatsView
+          profileId={profileId}
+          totalBeams={stat.totalBeams}
+          totalTopics={stat.totalTopics}
+          totalFollowers={stat.totalFollowers}
+          totalFollowing={stat.totalFollowing}
+          navigateTo={navigateTo}
+          showLoginModal={() => showLoginModal({ modal: { name: location.pathname } })}
+        />
+      )}
       {profileData?.links?.length > 0 && (
         <ProfileLinks
           title={t('Find me on')}

@@ -3,7 +3,6 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 const ProfileHeaderLoading: React.FC = () => {
   return (

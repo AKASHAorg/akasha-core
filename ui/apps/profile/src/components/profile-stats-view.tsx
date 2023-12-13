@@ -28,16 +28,6 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
 
   const { isLoggedIn } = useLoggedIn();
 
-  // const handleNavigateToProfilePosts = () => {
-  //   if (!isLoggedIn) {
-  //     return showLoginModal();
-  //   }
-  //   navigateTo({
-  //     appName: '@akashaorg/app-profile',
-  //     getNavigationUrl: routes => `${routes.ProfileFeed}/${profileId}`,
-  //   });
-  // };
-
   const onStatClick = (stat: 'beams' | 'followers' | 'following' | 'interests') => () => {
     if (!isLoggedIn) {
       return showLoginModal();

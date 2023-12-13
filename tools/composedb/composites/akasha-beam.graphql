@@ -1,4 +1,4 @@
-type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c58vvx12mfk81er1aq06atqjan89i6qcb56ntqvjovyn2uryzuf") {
+type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c5a30ha3yuzt87u4mcna2v5tyjbhfoc22l8yyj91iq03pps7osb") {
   id: ID!
 }
 
