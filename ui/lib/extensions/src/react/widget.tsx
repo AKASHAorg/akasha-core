@@ -27,6 +27,8 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
     return widgetStore.current.getMatchingWidgets(name, location);
   }, [location, name]);
 
+  console.log(widgets, parcelConfigs, location);
+
   React.useEffect(() => {
     const resolveConfigs = async () => {
       for (const widget of widgets) {
@@ -41,7 +43,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
       }
     };
     resolveConfigs().catch();
-  }, []);
+  }, [widgets, parcelConfigs]);
 
   const loadingConfiguredParcel = parcelConfigs.length > 0 ? !isParcelMounted : false;
   const isLoading = widgets.length > parcelConfigs.length || loadingConfiguredParcel;
