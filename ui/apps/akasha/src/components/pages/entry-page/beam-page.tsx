@@ -41,7 +41,7 @@ const BeamPage: React.FC<unknown> = () => {
 
   const onNavigate = useEntryNavigation(getRoutingPlugin().navigateTo);
 
-  if (beamReq.error)
+  if (beamReq.error) {
     return (
       <ErrorLoader
         type="script-error"
@@ -50,6 +50,7 @@ const BeamPage: React.FC<unknown> = () => {
         devDetails={beamReq.error.message}
       />
     );
+  }
 
   return (
     <Card padding="p-0" margin="mb-4">

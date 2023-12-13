@@ -132,9 +132,10 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       if (scrollRestore.scrollState.loaded && !isFetchingInitialData.current) {
         const restoreItem = scrollRestore.getLastItem();
         isFetchingInitialData.current = true;
-        if (restoreItem && itemList.length === 0) {
+        const listItem = itemList.filter(it => it.maybeRef);
+        if (restoreItem && listItem.length === 0) {
           onFetchInitialData(restoreItem);
-        } else if (itemList.length === 0) {
+        } else if (listItem.length === 0) {
           onFetchInitialData();
         }
       }

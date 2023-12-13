@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  HEADER_COMPONENT,
   VirtualDataItem,
   VirtualItem,
   VirtualItemInterface,
@@ -219,6 +220,7 @@ export const VirtualListRenderer = React.forwardRef(
       getItemHeight,
       itemHeightAverage: itemHeightAverage.current,
       hasNextPage,
+      hasPreviousPage,
     });
 
     const computeAvgItemHeight = (newHeight: number, listSize: number) => {
@@ -492,17 +494,28 @@ export const VirtualListRenderer = React.forwardRef(
     }, [state, RAFUpdate, update]);
 
     const prevItemList = React.useRef<VirtualDataItem<T>[]>();
+
     React.useEffect(() => {
       if (prevItemList.current === itemList) return;
+      if (
+        prevItemList.current &&
+        !prevItemList.current.find(it => it.key === HEADER_COMPONENT) &&
+        itemList.find(it => it.key === HEADER_COMPONENT)
+      ) {
+        console.log('header inserted');
+        if (state.mounted.length && state.mounted[0].start === 0 && !hasPreviousPage) {
+          window.scrollTo(0, 0);
+        }
+      }
       prevItemList.current = itemList;
       RAFUpdate('itemList updated');
-      // if (isScrollAtTop.current) {
-      //   if (hasNextPage) {
-      //     return viewport.scrollTo(0, state.listHeight);
-      //   }
-      //   return viewport.scrollToTop();
-      // }
-    }, [RAFUpdate, hasNextPage, itemList, state.listHeight, viewport]);
+    }, [RAFUpdate, getRelativeToRootNode, hasPreviousPage, itemList, state.mounted, viewport]);
+
+    React.useEffect(() => {
+      return () => {
+        rootNodeRef.current = null;
+      };
+    }, []);
 
     const resizeObserver = useResizeObserver();
 
@@ -532,22 +545,23 @@ export const VirtualListRenderer = React.forwardRef(
       [itemHeights, overscan, state.mounted, update],
     );
 
-    const setRootNode = (rootNode: HTMLDivElement) => {
-      if (rootNode && !rootNodeRef.current) {
-        viewport.setTopOffset(rootNode.offsetTop);
-        if (rootNode.parentElement) {
+    const setRootRef = (node: HTMLDivElement) => {
+      if (!rootNodeRef.current && node) {
+        viewport.setTopOffset(node.offsetTop);
+        if (node.parentElement) {
           viewport.setBottomOffset(
-            rootNode.parentElement.offsetHeight - rootNode.offsetTop - rootNode.offsetHeight,
+            node.parentElement.offsetHeight - node.offsetTop - node.offsetHeight,
           );
         }
       }
-      rootNodeRef.current = rootNode;
+      if (node) {
+        rootNodeRef.current = node;
+      }
     };
-
     return (
       <div
         id={restorationKey}
-        ref={setRootNode}
+        ref={setRootRef}
         style={{
           position: 'relative',
           minHeight: state.listHeight,

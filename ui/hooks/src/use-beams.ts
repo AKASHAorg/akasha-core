@@ -171,6 +171,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
             hasPreviousPage: extracted.pageInfo.hasNextPage,
             hasNextPage: true,
           };
+          extracted.edges = extracted.edges.reverse();
         }
         setState({ beams: extracted.edges, pageInfo: extracted.pageInfo });
       } catch (err) {
@@ -227,13 +228,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
     onReset: handleReset,
     hasErrors: errors.length > 0,
     errors: errors.map(err => {
-      if (err instanceof ApolloError) {
-        console.log('Apollo error:', JSON.stringify(err));
-        return err.message;
-      } else {
-        console.log('Error:', err);
-        return err.message;
-      }
+      return err.message;
     }),
   };
 };

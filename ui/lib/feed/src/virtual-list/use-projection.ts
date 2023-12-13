@@ -21,6 +21,7 @@ export type UseProjectionProps<T> = {
   getItemHeight: (itemKey: string) => number;
   itemHeightAverage: number;
   hasNextPage: boolean;
+  hasPreviousPage: boolean;
 };
 
 export const useProjection = <T>(props: UseProjectionProps<T>) => {
@@ -35,6 +36,7 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
     getItemHeight,
     itemHeightAverage,
     hasNextPage,
+    hasPreviousPage,
   } = props;
 
   const slice = React.useRef({ start: 0, end: 0 });
@@ -63,7 +65,7 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
 
   const getCommonProjectionItem = React.useCallback(
     (viewportRect: Rect): VirtualItem | undefined => {
-      const atTop = !isInitialPlacement && isAtTop();
+      const atTop = !isInitialPlacement && isAtTop() && !hasPreviousPage;
       if (atTop) {
         const item = itemList.at(0);
         return item

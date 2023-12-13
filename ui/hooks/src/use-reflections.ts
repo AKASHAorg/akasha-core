@@ -126,6 +126,7 @@ export const useReflections = (props: UseReflectionProps) => {
           setErrors(prev => [...prev, results.error]);
           return;
         }
+
         if (!results.data) return;
 
         const { edges, pageInfo } = extractData(results.data);
@@ -156,6 +157,7 @@ export const useReflections = (props: UseReflectionProps) => {
         setErrors(prev => [...prev, results.error]);
         return;
       }
+
       if (!results.data) return;
       const { edges, pageInfo } = extractData(results.data);
 
@@ -185,6 +187,7 @@ export const useReflections = (props: UseReflectionProps) => {
         setErrors(prev => [...prev, results.error]);
         return;
       }
+
       if (!results.data) return;
       const { edges, pageInfo } = extractData(results.data);
       setState(prev => ({
@@ -212,13 +215,7 @@ export const useReflections = (props: UseReflectionProps) => {
     onReset: handleReset,
     hasErrors: errors.length > 0,
     errors: errors.map(err => {
-      if (err instanceof ApolloError) {
-        console.log('Apollo error:', JSON.stringify(err));
-        return err.message;
-      } else {
-        console.log('Error:', err);
-        return err.message;
-      }
+      return err.message;
     }),
   };
 };

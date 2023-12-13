@@ -58,7 +58,7 @@ export const useViewport = (props: UseViewportProps) => {
     }
   };
   const scrollToTop = () => {
-    return scrollTo(0, 0);
+    return scrollTo(0, getScrollY());
   };
 
   const setTopOffset = (offset: number) => {
