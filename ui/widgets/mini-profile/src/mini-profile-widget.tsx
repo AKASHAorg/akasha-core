@@ -48,10 +48,6 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
 
   const { data: stats } = useProfileStats(authorId);
 
-  const {
-    data: { totalBeams, totalFollowers },
-  } = stats;
-
   const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     variables: {
       id: authenticatedDID,
@@ -83,7 +79,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
       beamsLabel={t('Beams')}
       followingLabel={t('Following')}
       followersLabel={t('Followers')}
-      stats={{ followers: totalFollowers, beams: totalBeams }}
+      stats={{ followers: stats?.totalFollowers, beams: stats?.totalBeams }}
       transformSource={transformSource}
       handleClick={handleCardClick}
       footerExt={
