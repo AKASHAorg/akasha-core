@@ -25,7 +25,7 @@ type Labeled{
 }
 
 
-type AkashaProfileInterests @createModel(accountRelation: SINGLE, description: "Interests list") @createIndex(fields:[{path:"topics"}]) {
+type AkashaProfileInterests @createModel(accountRelation: SINGLE, description: "Interests list"){
   topics: [Labeled!]! @list(maxLength: 100)
   did: DID! @documentAccount
 }

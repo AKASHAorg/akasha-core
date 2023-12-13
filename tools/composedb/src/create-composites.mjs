@@ -58,10 +58,13 @@ export const fillModels = async () => {
   await writeEncodedComposite(akashaProfile, './src/__generated__/akasha-profile.json');
   const { AkashaProfile } = akashaProfile.toRuntime().models
 
+  spinner.info(`AkashaProfile: ${AkashaProfile.id}`);
+
   const akashaApp = await createComposite(ceramic, './composites/akasha-app.graphql');
   await writeEncodedComposite(akashaApp, './src/__generated__/akasha-app.json');
   const { AkashaApp } = akashaApp.toRuntime().models;
 
+  spinner.info(`AkashaApp: ${AkashaApp.id}`);
 
   const akashaF = akashaFollow(AkashaProfile.id);
   const akashaFPath = path.resolve(__dirname, '../composites/akasha-follow.graphql');
@@ -182,7 +185,7 @@ const mergeComposites = async () => {
     await writeEncodedCompositeRuntime(
       ceramic,
       path.resolve(__dirname, '../lib/runtime-definition.json'),
-      path.resolve(__dirname, '../lib/runtime-definition.ts')
+      path.resolve(__dirname, '../lib/runtime-definition.js')
     )
     // await writeGraphQLSchema(
     //   path.resolve(__dirname, '../lib/runtime-definition.json'),
