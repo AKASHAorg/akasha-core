@@ -114,8 +114,8 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
           followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
-          ownerUserName={profileData.name}
-          viewerIsOwner={authenticatedDID === profileData.did.id}
+          ownerUserName={profileData?.name}
+          viewerIsOwner={authenticatedDID === profileData?.did.id}
           loadMore={loadMore}
           onLoadMore={async () => {
             if (pageInfo && pageInfo.hasNextPage) {

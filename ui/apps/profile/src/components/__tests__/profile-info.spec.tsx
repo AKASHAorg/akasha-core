@@ -64,16 +64,14 @@ describe('< ProfileInfoPage />', () => {
     (
       jest.spyOn(statHook, 'useProfileStats') as unknown as jest.SpyInstance<{
         data: {
-          data: {
-            totalFollowing: number;
-            totalFollowers: number;
-            totalBeams: number;
-            totalTopics: number;
-          };
+          totalFollowing: number;
+          totalFollowers: number;
+          totalBeams: number;
+          totalTopics: number;
         };
       }>
     ).mockReturnValue({
-      data: { data: { totalFollowing: 10, totalFollowers: 2, totalBeams: 4, totalTopics: 0 } },
+      data: { totalFollowing: 10, totalFollowers: 2, totalBeams: 4, totalTopics: 0 },
     });
 
     (
