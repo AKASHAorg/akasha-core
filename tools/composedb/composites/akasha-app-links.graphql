@@ -1,0 +1,9 @@
+type AkashaAppRelease @loadModel(id: "kjzl6hvfrbw6c9spdxcia2mvnfhkri2uzvnmkrw39srvoc4dx8xl2wkvfavtk7h") {
+  id: ID!
+}
+
+type AkashaApp @loadModel(id: "kjzl6hvfrbw6c99kqbzbtrktgontbb48psxsd9xai7og9pyey10sv4c5yqvsjvb") {
+  id: ID!
+  releases: [AkashaAppRelease] @relationFrom(model: "AkashaAppRelease", property: "applicationID")
+  releasesCount: Int! @relationCountFrom(model: "AkashaAppRelease", property: "applicationID")
+}
