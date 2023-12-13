@@ -20,7 +20,7 @@ const Followers: React.FC<FollowersProps> = ({
   profileAnchorLink,
   loadMore,
   onLoadMore,
-  transformImageVersions,
+  transformSource,
   renderFollowElement,
   onProfileClick,
 }) => {
@@ -70,7 +70,7 @@ const Followers: React.FC<FollowersProps> = ({
             name={engagement?.did?.akashaProfile?.name}
             followId={followList.get(engagement?.did?.akashaProfile?.id)?.id}
             isFollowing={followList.get(engagement?.did?.akashaProfile?.id)?.isFollowing}
-            transformImageVersions={transformImageVersions}
+            transformSource={transformSource}
             renderFollowElement={
               authenticatedDID !== engagement?.did?.akashaProfile?.did?.id
                 ? renderFollowElement

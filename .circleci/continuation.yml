@@ -11,7 +11,7 @@ parameters:
 executors:
   shared-executor:
     docker:
-      - image: cimg/node:18.16.0
+      - image: cimg/node:20.9.0
     working_directory: ~/akasha-world-framework
 
 jobs:
@@ -29,6 +29,9 @@ jobs:
             - run:
                 name: Install nx
                 command: sudo npm install -g nx@14.6.5
+            - run:
+                name: Ensure all packages are available
+                command:  yarn --frozen-lockfile --cache-folder ~/.cache/yarn && yarn build:executors
             - run:
                 name: Test affected projects
                 command: |

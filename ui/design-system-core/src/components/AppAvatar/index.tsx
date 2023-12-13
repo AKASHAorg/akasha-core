@@ -30,22 +30,22 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     onClick,
   } = props;
 
-  let avatarImageFallback: string;
+  let avatarFallback: string;
 
-  if (avatar?.default) {
-    avatarImageFallback = avatar.default.src;
+  if (avatar?.src) {
+    avatarFallback = avatar?.src;
   }
 
-  if (!avatar?.default.src && appType === IntegrationTypes.APP) {
+  if (!avatar?.src && appType === IntegrationTypes.APP) {
     // currently there are 3 placeholders for sidebar apps
-    avatarImageFallback = `${publicImgPath}/sidebar-app-placeholder-${
+    avatarFallback = `${publicImgPath}/sidebar-app-placeholder-${
       Math.floor(Math.random() * 3) + 1
     }.webp`;
   }
 
-  if (!avatar?.default.src && appType === IntegrationTypes.WIDGET) {
+  if (!avatar?.src && appType === IntegrationTypes.WIDGET) {
     // currently there are 2 placeholders for sidebar apps
-    avatarImageFallback = `${publicImgPath}/sidebar-widget-placeholder-${
+    avatarFallback = `${publicImgPath}/sidebar-widget-placeholder-${
       Math.floor(Math.random() * 2) + 1
     }.webp`;
   }
@@ -65,12 +65,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     <Anchor onClick={onClick} tabIndex={-6}>
       <Stack customStyle={className}>
         <React.Suspense fallback={<></>}>
-          <AvatarImage
-            url={avatar?.default?.src}
-            alt={alt}
-            fallbackUrl={avatarImageFallback}
-            faded={faded}
-          />
+          <AvatarImage url={avatar?.src} alt={alt} fallbackUrl={avatarFallback} faded={faded} />
         </React.Suspense>
 
         {active && <div className={activeOverlayClass}></div>}

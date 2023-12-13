@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Profile } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
@@ -131,6 +131,7 @@ const InboxPage: React.FC<InboxPageProps> = () => {
                     onClickCard={() => handleCardClick(contact.did.id)}
                     onClickAvatar={() => handleAvatarClick(contact.did.id)}
                     onConvoPin={() => handlePinConversation(contact.did.id)}
+                    transformSource={transformSource}
                   />
                 ))}
               </Stack>
@@ -163,6 +164,7 @@ const InboxPage: React.FC<InboxPageProps> = () => {
                   onClickCard={() => handleCardClick(contact.did.id)}
                   onClickAvatar={() => handleAvatarClick(contact.did.id)}
                   onConvoPin={() => handlePinConversation(contact.did.id)}
+                  transformSource={transformSource}
                 />
               ))}
             </Stack>

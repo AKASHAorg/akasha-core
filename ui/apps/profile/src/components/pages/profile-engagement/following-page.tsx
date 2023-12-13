@@ -14,7 +14,7 @@ import {
   useGetFollowingListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
-  transformImageVersions,
+  transformSource,
   hasOwn,
   getFollowList,
   useRootComponentProps,
@@ -114,8 +114,8 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
           followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
-          ownerUserName={profileData.name}
-          viewerIsOwner={authenticatedDID === profileData.did.id}
+          ownerUserName={profileData?.name}
+          viewerIsOwner={authenticatedDID === profileData?.did.id}
           loadMore={loadMore}
           onLoadMore={async () => {
             if (pageInfo && pageInfo.hasNextPage) {
@@ -138,7 +138,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
             />
           )}
           onProfileClick={onProfileClick}
-          transformImageVersions={transformImageVersions}
+          transformSource={transformSource}
         />
       )}
     </EngagementTab>

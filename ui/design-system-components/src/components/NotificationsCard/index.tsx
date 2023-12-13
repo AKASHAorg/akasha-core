@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, type Image } from '@akashaorg/typings/lib/ui';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -9,8 +9,7 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 import BasicInfoCard from './basic-info-card';
 import ProfileAvatarNotificationApp from './profile-avatar-notification-app';
-
-import { formatRelativeTime } from '../../utils/time';
+import { formatRelativeTime } from '@akashaorg/design-system-core/lib/utils';
 
 export type NotificationsCardProps = {
   // data
@@ -32,6 +31,7 @@ export type NotificationsCardProps = {
   handleMessageRead: (notifId: string) => void;
   handleEntryClick: (itemId: string, itemType: EntityTypes) => void;
   handleProfileClick: (id: string) => void;
+  transformSource: (src: Image) => Image;
   loggedIn?: boolean;
 };
 
@@ -52,6 +52,7 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
     handleMessageRead,
     handleEntryClick,
     handleProfileClick,
+    transformSource,
     loggedIn,
   } = props;
 
@@ -163,18 +164,22 @@ const NotificationsCard: React.FC<NotificationsCardProps> = props => {
       </>
     );
 
-    const relativeTime = formatRelativeTime(Math.floor(notif.createdAt / 1000000000), 'en');
+    const relativeTime = formatRelativeTime(
+      Math.floor(notif.createdAt / 1000000000).toString(),
+      'en',
+    );
     return (
       <Stack key={index} customStyle={`${index === notifications.length - 1 ? 'basis-full' : ''}`}>
         <Stack key={index} padding="py-3 pl-4" customStyle="flex-row">
           <ProfileAvatarNotificationApp
             profileId={profileData.did?.id}
-            avatarImage={profileData.avatar}
+            avatar={profileData.avatar}
             label={fullLabel}
             info={relativeTime}
             onClickAvatar={clickHandler}
             onClick={clickHandler}
             active={!notif.read}
+            transformSource={transformSource}
           />
         </Stack>
         {index !== notifications.length - 1 && <Divider />}

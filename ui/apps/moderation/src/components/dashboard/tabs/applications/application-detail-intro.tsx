@@ -1,7 +1,4 @@
 import React from 'react';
-
-import { ModeratorApplicantData } from '@akashaorg/typings/lib/ui';
-
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -9,8 +6,9 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
-
+import { ModeratorApplicantData } from '@akashaorg/typings/lib/ui';
 import { formatDate } from '../../../../utils';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 export type ApplicationDetailIntroProps = {
   selectedApplicant: ModeratorApplicantData;
@@ -35,7 +33,13 @@ const ApplicationDetailIntro: React.FC<ApplicationDetailIntroProps> = props => {
     <Card padding={0}>
       <Stack direction="row" align="center" justify="between" padding="p-4">
         <Stack direction="row" spacing="gap-x-2" align="center">
-          <Avatar size="lg" avatar={selectedApplicant.avatar} />
+          <Avatar
+            size="lg"
+            avatar={transformSource(selectedApplicant.avatar?.default)}
+            alternativeAvatars={selectedApplicant.avatar?.alternatives?.map(alternative =>
+              transformSource(alternative),
+            )}
+          />
 
           <Stack>
             <Tooltip content={selectedApplicant.name} placement="right">

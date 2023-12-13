@@ -10,9 +10,10 @@ import { useTranslation } from 'react-i18next';
 import {
   useCreateProfileMutation,
   useGetProfileByDidSuspenseQuery,
+  useIndexProfileMutation,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { transformImageVersions, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { transformSource, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useParams } from 'react-router';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -55,19 +56,21 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
-  const background = useMemo(
-    () => transformImageVersions(profileData?.background),
-    [profileData?.background],
-  );
-  const avatar = useMemo(() => transformImageVersions(profileData?.avatar), [profileData?.avatar]);
+  const background = useMemo(() => profileData?.background, [profileData?.background]);
+  const avatar = useMemo(() => profileData?.avatar, [profileData?.avatar]);
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    onCompleted,
+    onCompleted: data => {
+      const id = data.createAkashaProfile?.document.id;
+      if (id) indexProfile(id);
+      onCompleted();
+    },
   });
   const [updateProfileMutation, { loading: updateProfileProcessing }] = useUpdateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted,
   });
+  const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
 
   if (!isLoggedIn) {
@@ -92,6 +95,14 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
+  };
+
+  const indexProfile = async (id: string) => {
+    const payload = await sdk.api.auth.prepareIndexedID(id);
+    if (payload)
+      indexProfileMutation({
+        variables: payload,
+      });
   };
 
   const createProfile = async (
@@ -187,6 +198,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               setProfileContentOnImageDelete(
                 deleteImageAndGetProfileContent({ profileData, type }),
               ),
+            transformSource,
           }}
           name={{ label: t('Name'), initialValue: profileData?.name }}
           bio={{ label: t('Bio'), initialValue: profileData?.description }}

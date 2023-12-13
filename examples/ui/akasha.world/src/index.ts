@@ -15,12 +15,6 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
 
   let registryOverrides = [
     {
-      name: '@akashaorg/app-translation',
-      integrationType: INTEGRATION_TYPES.APPLICATION,
-      sources: ['/apps/translation/index.js'],
-      ...missingRequiredFields,
-    },
-    {
       name: '@akashaorg/app-routing',
       integrationType: INTEGRATION_TYPES.APPLICATION,
       sources: ['/apps/routing/index.js'],
@@ -79,7 +73,6 @@ declare const __LOAD_LOCAL_SOURCES__: boolean;
       '@akashaorg/app-profile',
       '@akashaorg/app-notifications',
       '@akashaorg/app-legal',
-      '@akashaorg/app-translation',
       '@akashaorg/app-lists',
       '@akashaorg/app-settings-ewa',
     ],

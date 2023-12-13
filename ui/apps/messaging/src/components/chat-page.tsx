@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
@@ -172,9 +172,11 @@ const ChatPage = (props: ChatPageProps) => {
         <Stack fullWidth={true} justify="between" customStyle="rounded-lg border(grey8 dark:grey3)">
           <ChatAreaHeader
             name={profileDataReq.data?.akashaProfile?.name}
-            avatar={profileDataReq.data?.akashaProfile?.avatar}
+            avatar={profileDataReq.data?.akashaProfile?.avatar?.default}
+            alternativeAvatars={profileDataReq.data?.akashaProfile?.avatar?.alternatives}
             did={profileDataReq.data?.akashaProfile?.did}
             onClickAvatar={handleProfileClick}
+            transformSource={transformSource}
           />
 
           <ChatList
@@ -212,6 +214,7 @@ const ChatPage = (props: ChatPageProps) => {
             getTags={handleTagQueryChange}
             tags={tagQueryReq.data}
             mentions={mentionQueryReq.data}
+            transformSource={transformSource}
           />
         </Stack>
       </Stack>

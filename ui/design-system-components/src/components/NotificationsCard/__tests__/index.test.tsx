@@ -57,6 +57,11 @@ describe('<NotificationsCard /> Component', () => {
           handleMessageRead={handleMessageRead}
           handleEntryClick={handleEntryClick}
           handleProfileClick={handleProfileClick}
+          transformSource={() => ({
+            src: 'https://placebeard.it/360x360',
+            width: 360,
+            height: 360,
+          })}
           loggedIn
         />,
 

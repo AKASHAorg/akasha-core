@@ -54,6 +54,11 @@ export const BaseNotificationsCard: Story = {
       handleEntryClick={() => ({})}
       handleMessageRead={() => ({})}
       handleProfileClick={() => ({})}
+      transformSource={() => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      })}
     />
   ),
 };

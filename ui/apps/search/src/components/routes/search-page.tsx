@@ -10,10 +10,14 @@ import {
   Profile,
 } from '@akashaorg/typings/lib/ui';
 
-import { ILocale } from '@akashaorg/design-system-core/lib/utils/time';
 import routes, { SETTINGS } from '../../routes';
 
-import { useEntryNavigation, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  useEntryNavigation,
+  useAnalytics,
+  useRootComponentProps,
+  transformSource,
+} from '@akashaorg/ui-awf-hooks';
 
 import { SearchTagsResult } from '@akashaorg/typings/lib/sdk/graphql-types';
 
@@ -61,10 +65,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.CONTENT);
 
   const [analyticsActions] = useAnalytics();
-  const { t, i18n } = useTranslation('app-search');
+  const { t } = useTranslation('app-search');
   const { getRoutingPlugin } = useRootComponentProps();
-  const locale = /*TODO: fix typing in translation plugin and avoid type assertion*/ (i18n
-    .languages[0] || 'en') as ILocale;
 
   // @TODO replace with new hooks
   const tagSubscriptionsReq = null;
@@ -326,6 +328,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       <SearchStartCard
         searchKeyword={searchKeyword}
         handleSearch={handleSearch}
+        titleLabel={t('Search')}
         inputPlaceholderLabel={t('Search')}
         handleTopMenuClick={handleTopMenuClick}
       >
@@ -401,6 +404,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     shareProfileLabel={t('Share')}
                     profileAnchorLink={'/profile'}
                     onClickProfile={() => handleProfileClick(profileData.did.id)}
+                    transformSource={transformSource}
                   />
                 </Stack>
               ))}
@@ -462,7 +466,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   onMentionClick={handleMentionClick}
                   onTagClick={handleTagClick}
                   contentClickable={true}
-                  locale={locale}
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}
                 />

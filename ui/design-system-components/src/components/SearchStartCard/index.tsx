@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -11,6 +10,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import SearchBar from '../SearchBar';
 
 export type SearchStartProps = {
+  titleLabel: string;
   inputPlaceholderLabel: string;
   handleSearch: (val: string) => void;
   handleTopMenuClick: () => void;
@@ -19,6 +19,7 @@ export type SearchStartProps = {
 };
 
 const SearchStartCard: React.FC<SearchStartProps> = ({
+  titleLabel,
   inputPlaceholderLabel,
   handleSearch,
   handleTopMenuClick,
@@ -26,8 +27,6 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
   children,
 }: SearchStartProps) => {
   const [inputValue, setInputValue] = React.useState<string>(searchKeyword);
-
-  const { t } = useTranslation('app-search');
 
   React.useEffect(() => {
     setInputValue(searchKeyword);
@@ -38,7 +37,7 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
       <Card radius="rounded-lg" padding="px-4 py-0">
         <Stack direction="row" justify="between" customStyle="my-3">
           <Text variant="h5" align="center">
-            <>{t('Search')}</>
+            {titleLabel}
           </Text>
           <Stack>
             <Button customStyle="relative" plain={true} onClick={() => handleTopMenuClick()}>

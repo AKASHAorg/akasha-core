@@ -2,8 +2,7 @@ import React from 'react';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import { transformImageVersions, hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
-import { ILocale } from '@akashaorg/design-system-core/lib/utils';
+import { transformSource, hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -32,9 +31,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
   const { entryData, onReflect, ...rest } = props;
   const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
   const { t } = useTranslation('ui-lib-feed');
-  const locale =
-    /*TODO: fix typing in translation plugin and avoid type assertion*/ (getTranslationPlugin().i18n
-      ?.languages?.[0] as ILocale) || 'en';
+  const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
 
   const { authenticatedDID } = useLoggedIn();
 
@@ -86,7 +83,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
         clickToViewLabel: t('Click to View'),
       }}
       itemType={EntityTypes.REFLECT}
-      transformImageVersions={transformImageVersions}
+      transformSource={transformSource}
       onReflect={onReflect}
       onAvatarClick={onAvatarClick}
       {...rest}

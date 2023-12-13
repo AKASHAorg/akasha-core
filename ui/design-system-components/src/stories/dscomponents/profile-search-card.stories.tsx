@@ -24,6 +24,11 @@ export const BaseProfileSearchCard: Story = {
       profileData={profileData}
       handleFollow={() => ({})}
       handleUnfollow={() => ({})}
+      transformSource={() => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      })}
     />
   ),
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
@@ -15,12 +15,11 @@ import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 const LoginModal = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');
   const location = useLocation();
-  const { getRoutingPlugin } = useRootComponentProps();
-  const [showModal, setShowModal] = useState(true);
+  const { getRoutingPlugin, getModalFromParams } = useRootComponentProps();
+  const modal = getModalFromParams(window.location);
 
   const handleModalClose = () => {
     window.history.replaceState(null, null, location.pathname);
-    setShowModal(false);
   };
 
   const handleConnectClick = () => {
@@ -36,12 +35,11 @@ const LoginModal = (props: RootExtensionProps) => {
       },
       true,
     );
-    setShowModal(false);
   };
 
   return (
     <Modal
-      show={showModal}
+      show={modal?.name === 'login'}
       title={{ label: t('AKASHA World'), variant: 'h6' }}
       actions={[
         { label: t('Cancel'), variant: 'secondary', onClick: handleModalClose },

@@ -9,6 +9,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { articles } from './dummy-data';
+import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 export interface IArticleEditorCardProps {
   inviteCollaboratorsLabel: string;
@@ -62,7 +63,17 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
         <button onClick={onManageCollaborators}>
           <Stack direction="row" spacing="gap-2" align="center">
             {articleCollaborators.length > 0 && (
-              <StackedAvatar size="md" userData={articleCollaborators} maxAvatars={4} />
+              <StackedAvatar
+                size="md"
+                userData={articleCollaborators.map(item => ({
+                  ...item,
+                  avatar: transformSource(item.avatar?.default),
+                  alternativeAvatars: item.avatar?.alternatives?.map(alternative =>
+                    transformSource(alternative),
+                  ),
+                }))}
+                maxAvatars={4}
+              />
             )}
             <Text
               variant="h6"

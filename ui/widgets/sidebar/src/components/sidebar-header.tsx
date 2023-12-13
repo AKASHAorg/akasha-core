@@ -4,7 +4,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import { transformImageVersions, hasOwn } from '@akashaorg/ui-awf-hooks';
+import { transformSource, hasOwn } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { PowerIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -61,7 +61,10 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
       <Stack customStyle="w-fit h-fit mr-2">
         <Avatar
           profileId={authenticatedDID}
-          avatar={transformImageVersions(avatar)}
+          avatar={transformSource(avatar?.default)}
+          alternativeAvatars={avatar?.alternatives?.map(alternative =>
+            transformSource(alternative),
+          )}
           isClickable={isLoggedIn}
           onClick={() => handleAvatarClick(authenticatedDID)}
         />

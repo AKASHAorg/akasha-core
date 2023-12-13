@@ -17,16 +17,19 @@ import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
 import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import {
-  ILocale,
+  formatDate,
   formatRelativeTime,
   getColorClasses,
 } from '@akashaorg/design-system-core/lib/utils';
-import { formatDate } from '../../../utils/time';
 import { Descendant } from 'slate';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { AkashaProfile, EntityTypes, NavigateToParams } from '@akashaorg/typings/lib/ui';
+import {
+  AkashaProfile,
+  EntityTypes,
+  type Image,
+  NavigateToParams,
+} from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
-import { AkashaProfileImageVersions } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type EntryCardProps = {
   entryData: Omit<AkashaBeam, 'reflectionsCount' | 'reflections'> | AkashaReflect;
@@ -34,7 +37,7 @@ export type EntryCardProps = {
     data: Pick<AkashaProfile, 'name' | 'avatar' | 'did'>;
     status: 'loading' | 'error' | 'success';
   };
-  locale?: ILocale;
+  locale?: string;
   flagAsLabel?: string;
   moderatedContentLabel?: string;
   ctaLabel?: string;
@@ -68,7 +71,7 @@ export type EntryCardProps = {
   onEntryRemove?: (itemId: string) => void;
   onEntryFlag?: () => void;
   onEdit?: () => void;
-  transformImageVersions?: (image?: AkashaProfileImageVersions) => AkashaProfileImageVersions;
+  transformSource: (src: Image) => Image;
 } & (
   | {
       sortedContents: AkashaBeam['content'];
@@ -109,12 +112,12 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     lastEntry,
     hover,
     actionsRightExt,
-    transformImageVersions,
     onAvatarClick,
     onContentClick,
     onEntryFlag,
     onReflect,
     onEdit,
+    transformSource,
     ...rest
   } = props;
 
@@ -174,7 +177,10 @@ const EntryCard: React.FC<EntryCardProps> = props => {
               label={
                 authorProfile.status === 'error' ? entryData.author.id : authorProfile.data?.name
               }
-              avatarImage={transformImageVersions ? transformImageVersions(avatar) : avatar}
+              avatar={transformSource(avatar?.default)}
+              alternativeAvatars={avatar?.alternatives?.map(alternative =>
+                transformSource(alternative),
+              )}
               href={`${profileAnchorLink}/${entryData.author.id}`}
               metadata={
                 publishTime &&

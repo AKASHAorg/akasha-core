@@ -11,7 +11,7 @@ const meta: Meta<ChatAreaHeaderProps> = {
 export default meta;
 type Story = StoryObj<ChatAreaHeaderProps>;
 
-const avatar = { default: { src: 'https://placebeard.it/360x360', height: 360, width: 360 } };
+const avatar = { src: 'https://placebeard.it/360x360', height: 360, width: 360 };
 
 export const BaseChatAreaHeader: Story = {
   render: () => (
@@ -19,6 +19,11 @@ export const BaseChatAreaHeader: Story = {
       name="Estelle Collier"
       avatar={avatar}
       did={{ id: 'did:key:003410490050000320006570034567114572000' }}
+      transformSource={() => ({
+        src: 'https://placebeard.it/360x360',
+        width: 360,
+        height: 360,
+      })}
     />
   ),
 };
