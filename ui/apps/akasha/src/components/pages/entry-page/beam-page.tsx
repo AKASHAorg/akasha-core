@@ -4,10 +4,12 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
+import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 import { useParams } from 'react-router-dom';
 import { useGetBeamByIdQuery, useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   hasOwn,
+  mapBeamEntryData,
   useAnalytics,
   useEntryNavigation,
   useRootComponentProps,
@@ -15,7 +17,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
-import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
 
 const BeamPage: React.FC<unknown> = () => {
   const { beamId } = useParams<{
@@ -58,7 +59,7 @@ const BeamPage: React.FC<unknown> = () => {
     <Card padding="p-0" margin="mb-4">
       <BeamSection
         beamId={beamId}
-        entryData={entryData}
+        entryData={mapBeamEntryData(entryData)}
         isLoggedIn={!!loggedProfileData?.id}
         onNavigate={onNavigate}
         showLoginModal={showLoginModal}

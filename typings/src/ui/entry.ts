@@ -1,6 +1,7 @@
 import { Descendant } from 'slate';
 import { LinkPreview } from '../sdk/graphql-types';
 import { Profile } from './profile';
+import { AkashaBeam, AkashaReflect } from '../sdk/graphql-types-new';
 
 export type ITag = {
   name: string;
@@ -18,6 +19,7 @@ export interface LinkPreviewExt extends LinkPreview {
   faviconSources?: { url: string; fallbackUrl: string };
 }
 
+//@TODO remove type
 export interface IEntryData {
   // id is missing when the entry is in pending state
   id?: string;
@@ -77,3 +79,18 @@ export interface ImageObject {
   size: { width: number; height: number; naturalWidth?: number; naturalHeight?: number };
   name?: string;
 }
+
+export type EntryData = {
+  id: string;
+  active: boolean;
+  authorId: string;
+  createdAt: string;
+  nsfw?: boolean;
+};
+
+export type BeamEntryData = EntryData & { content: AkashaBeam['content'] };
+
+export type ReflectEntryData = EntryData & {
+  content: AkashaReflect['content'];
+  beamID: AkashaReflect['beamID'];
+};

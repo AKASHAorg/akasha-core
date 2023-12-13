@@ -4,7 +4,7 @@ import { EntityTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings
 import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import MyFeedCard from '@akashaorg/design-system-components/lib/components/MyFeedCard';
@@ -110,7 +110,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
         )}
         renderItem={itemData => (
           <BeamCard
-            entryData={itemData.node}
+            entryData={mapBeamEntryData(itemData.node)}
             contentClickable={true}
             onContentClick={() =>
               navigateTo({
