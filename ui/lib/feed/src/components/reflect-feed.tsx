@@ -132,7 +132,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     <EntryList<ReflectEntryData>
       requestStatus={reflectionsReq.status}
       isFetchingNextPage={reflectionsReq.isFetchingNextPage}
-      pages={entryData.map(reflection => mapReflectEntryData(reflection))}
+      pages={entryData?.map(reflection => mapReflectEntryData(reflection))}
       itemSpacing={itemSpacing}
       languageDirection={i18n?.dir() || 'ltr'}
       initialScrollState={initialScrollState}
@@ -171,7 +171,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
                 <>
                   <Divider />
                   <EditableReflection
-                    entryData={mapReflectEntryData(entryData)}
+                    entryData={entryData}
                     reflectToId={reflectionsOf.entryId}
                     contentClickable={true}
                     lastEntry={idx === items.length - 1}
