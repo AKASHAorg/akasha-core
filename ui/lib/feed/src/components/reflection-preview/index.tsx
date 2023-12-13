@@ -6,6 +6,7 @@ import { useGetReflectReflectionsQuery } from '@akashaorg/ui-awf-hooks/lib/gener
 import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import { mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 
 const MAXIMUM_REFLECTION_PREVIEWS = 2;
 
@@ -40,7 +41,7 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
           {reflections.map(reflection => (
             <EditableReflection
               key={reflection?.id}
-              entryData={reflection}
+              entryData={mapReflectEntryData(reflection)}
               contentClickable={true}
               reflectToId={reflectionId}
               hover={true}

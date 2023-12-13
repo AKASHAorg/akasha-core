@@ -1,23 +1,21 @@
-export default function compose (akashaBeamId, akashaProfileId, akashaContentBlockId, akashaReflectId, akashaAppId) {
 
-  return `
-type AkashaBeam @loadModel(id: "${akashaBeamId}") {
+type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c7emv46av2u74x3qgu9i3oywn1w7sg8u6momkyg9atp1k5g0z74") {
   id: ID!
 }
 
-type AkashaContentBlock @loadModel(id: "${akashaContentBlockId}") {
+type AkashaContentBlock @loadModel(id: "kjzl6hvfrbw6c5a30ha3yuzt87u4mcna2v5tyjbhfoc22l8yyj91iq03pps7osb") {
   id: ID!
 }
 
-type AkashaProfile @loadModel(id: "${akashaProfileId}") {
+type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c9l8sxje9238fz8hx6u6whu9njmww96wn04c6uj0lillf9jygno") {
   id: ID!
 }
 
-type AkashaReflect @loadModel(id: "${akashaReflectId}") {
+type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c7g649dzvhgj2llnx44wxkne2p5l5j3bvxjv2s5v67uzro21odq") {
   id: ID!
 }
 
-type AkashaApp @loadModel(id: "${akashaAppId}") {
+type AkashaApp @loadModel(id: "kjzl6hvfrbw6c99kqbzbtrktgontbb48psxsd9xai7og9pyey10sv4c5yqvsjvb") {
   id: ID!
 }
 
@@ -86,6 +84,4 @@ type AkashaAppsStream @createModel(accountRelation: LIST, description: "Moderate
   status: ModerationStatus
   moderationID: StreamID
 }
-  `
-
-}
+  

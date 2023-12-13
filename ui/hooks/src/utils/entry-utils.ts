@@ -1,6 +1,8 @@
 import { Logger } from '@akashaorg/awf-sdk';
 import { Comment } from '@akashaorg/typings/lib/sdk/graphql-types';
 import type { PostResultFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
+import type { BeamEntryData, ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';
@@ -20,6 +22,7 @@ export type EntryPublishObject = {
 
   quotes: PostResultFragment['quotes'];
 };
+
 export type CommentPublishObject = {
   data: Comment['content'];
   comment: {
@@ -80,4 +83,46 @@ export const decodeb64SlateContent = (
  */
 export const serializeSlateToBase64 = (slateContent: unknown) => {
   return window.btoa(toBinary(JSON.stringify(slateContent)));
+};
+
+/**
+ * Utility to map reflect entry data
+ */
+export const mapReflectEntryData = (
+  reflection?: Pick<AkashaReflect, 'id' | 'active' | 'createdAt' | 'nsfw' | 'content'> & {
+    author: { id: string };
+    beam?: { id: string };
+  },
+): ReflectEntryData => {
+  if (!reflection) return null;
+
+  return {
+    id: reflection.id,
+    active: reflection.active,
+    authorId: reflection.author.id,
+    createdAt: reflection.createdAt,
+    content: reflection.content,
+    nsfw: reflection?.nsfw,
+    beamID: reflection.beam?.id,
+  };
+};
+
+/**
+ * Utility to map beam entry data
+ */
+export const mapBeamEntryData = (
+  beam?: Pick<AkashaBeam, 'id' | 'active' | 'createdAt' | 'content' | 'nsfw'> & {
+    author: { id: string };
+  },
+): BeamEntryData => {
+  if (!beam) return null;
+
+  return {
+    id: beam.id,
+    active: beam.active,
+    authorId: beam.author.id,
+    createdAt: beam.createdAt,
+    content: beam.content,
+    nsfw: beam?.nsfw,
+  };
 };

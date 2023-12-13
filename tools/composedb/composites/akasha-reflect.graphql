@@ -1,12 +1,11 @@
-export default function compose (akashaBeamId) {
-    return `
+
 type ProviderValue{
   propertyType: String! @string(minLength: 2, maxLength: 100)
   label: String! @string(minLength: 6, maxLength: 100)
   value: String! @string(minLength: 3, maxLength: 3000)
 }
 
-type AkashaBeam @loadModel(id: "${akashaBeamId}") {
+type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c7emv46av2u74x3qgu9i3oywn1w7sg8u6momkyg9atp1k5g0z74") {
   id: ID!
 }
 
@@ -23,5 +22,4 @@ type AkashaReflect @createModel(accountRelation: LIST, description: "A Reflectio
     active: Boolean!
     createdAt: DateTime!
     nsfw: Boolean
-}`
 }

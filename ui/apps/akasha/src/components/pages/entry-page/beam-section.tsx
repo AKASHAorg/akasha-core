@@ -5,16 +5,15 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import BeamCard from '@akashaorg/ui-lib-feed/lib/components/cards/beam-card';
 import ReflectEditor from '../../reflect-editor';
 import routes, { REFLECT } from '../../../routes';
-import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useTranslation } from 'react-i18next';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
+import { BeamEntryData, EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useLocation } from 'react-router-dom';
 import { transformSource } from '@akashaorg/ui-awf-hooks';
 
 type BeamSectionProps = {
   beamId: string;
-  entryData: AkashaBeam;
+  entryData: BeamEntryData;
   isLoggedIn: boolean;
   onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
   showLoginModal: () => void;
@@ -26,7 +25,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
   const location = useLocation();
 
   const wrapperRef = useCloseActions(() => {
-    onNavigate({ authorId: entryData?.author?.id, id: entryData?.id }, EntityTypes.BEAM);
+    onNavigate({ authorId: entryData?.authorId, id: entryData?.id }, EntityTypes.BEAM);
   });
 
   return (
@@ -38,7 +37,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
         onReflect={() => {
           onNavigate(
             {
-              authorId: entryData?.author?.id,
+              authorId: entryData?.authorId,
               id: entryData?.id,
               reflect: !location.pathname.includes(routes[REFLECT]),
             },

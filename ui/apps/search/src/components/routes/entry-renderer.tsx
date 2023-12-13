@@ -13,6 +13,7 @@ import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import {
   hasOwn,
+  mapBeamEntryData,
   transformSource,
   useLoggedIn,
   useRootComponentProps,
@@ -154,7 +155,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
             !accountAwaitingModeration && */}
           {!itemData.nsfw && itemData.active && (
             <EntryCard
-              entryData={itemData}
+              entryData={mapBeamEntryData(itemData)}
               authorProfile={{ data: profileData, status: profileDataReq.status }}
               sortedContents={sortBy(itemData.content, 'order')}
               itemType={EntityTypes.BEAM}
