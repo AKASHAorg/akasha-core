@@ -24,7 +24,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 // @TODO: replace this with actual data
-const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9r1pcwsu441cf';
+const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y8af3kd0lwkkk2m1nxtchlvcikbak748md3m3gplz1ori3s1j5f';
 
 export const ImageEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },

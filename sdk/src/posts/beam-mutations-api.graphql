@@ -4,10 +4,25 @@ fragment IndexedBeamFragment on IndexBeamPayloadDocument{
   beamID
 }
 
+fragment IndexedContentBlockFragment on IndexContentBlockPayloadDocument{
+  id
+  createdAt
+  blockID
+}
+
 mutation IndexBeam($jws: DID_JWS, $capability: CACAO_CAPABILITY){
   indexBeam(jws: $jws, capability: $capability){
     document{
       ...IndexedBeamFragment
+    }
+  }
+}
+
+
+mutation IndexContentBlock($jws: DID_JWS, $capability: CACAO_CAPABILITY){
+  indexContentBlock(jws: $jws, capability: $capability){
+    document{
+      ...IndexedContentBlockFragment
     }
   }
 }

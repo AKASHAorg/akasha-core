@@ -18,15 +18,11 @@ type Story = StoryObj<EntryCardProps>;
 
 const ENTRY_DATA = {
   active: true,
-  author: {
-    id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
-    isViewer: false,
-  },
+  authorId: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8',
   content: null,
-  createdAt: new Date(),
+  createdAt: '12/12/2023',
   id: 'kshggg55555',
   beamID: 1,
-  version: 1,
 };
 
 export const BaseEntryCard: Story = {
@@ -103,7 +99,7 @@ export const DelistedEntryCardOthers: Story = {
 export const DelistedEntryCardAuthor: Story = {
   render: () => (
     <EntryCard
-      entryData={{ ...ENTRY_DATA, active: false, author: { ...ENTRY_DATA.author, isViewer: true } }}
+      entryData={{ ...ENTRY_DATA, active: false }}
       authorProfile={{
         data: {
           did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },

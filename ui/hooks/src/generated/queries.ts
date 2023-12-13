@@ -488,7 +488,7 @@ useInfiniteGetBeamByIdQuery.getKey = (variables: Types.GetBeamByIdQueryVariables
 
 useGetBeamByIdQuery.fetcher = (variables: Types.GetBeamByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options);
 export const GetContentBlockStreamDocument = /*#__PURE__*/ `
-    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $beamID: String!) {
+    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput) {
   node(id: $indexer) {
     ... on CeramicAccount {
       akashaContentBlockStreamList(
@@ -496,11 +496,10 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ `
         before: $before
         first: $first
         last: $last
-        filters: {where: {beamID: {equalTo: $beamID}}}
+        filters: $filters
       ) {
         edges {
           node {
-            beamID
             createdAt
             active
             status

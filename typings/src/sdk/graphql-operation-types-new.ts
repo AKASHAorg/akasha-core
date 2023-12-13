@@ -2,6 +2,8 @@ import type * as Types from './graphql-types-new';
 
 export type IndexedBeamFragmentFragment = { id: string, createdAt: string, beamID: string };
 
+export type IndexedContentBlockFragmentFragment = { id: string, createdAt: string, blockID: string };
+
 export type IndexBeamMutationVariables = Types.Exact<{
   jws?: Types.InputMaybe<Types.Did_Jws>;
   capability?: Types.InputMaybe<Types.Cacao_Capability>;
@@ -9,6 +11,14 @@ export type IndexBeamMutationVariables = Types.Exact<{
 
 
 export type IndexBeamMutation = { indexBeam?: { document?: { id: string, createdAt: string, beamID: string } | null } | null };
+
+export type IndexContentBlockMutationVariables = Types.Exact<{
+  jws?: Types.InputMaybe<Types.Did_Jws>;
+  capability?: Types.InputMaybe<Types.Cacao_Capability>;
+}>;
+
+
+export type IndexContentBlockMutation = { indexContentBlock?: { document?: { id: string, createdAt: string, blockID: string } | null } | null };
 
 export type BeamFragmentMFragment = { id: string, reflectionsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, embeddedBeam?: { label: string, embeddedID: any } | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }>, reflections: { edges?: Array<{ cursor: string } | null> | null, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } };
 
@@ -99,11 +109,11 @@ export type GetContentBlockStreamQueryVariables = Types.Exact<{
   before?: Types.InputMaybe<Types.Scalars['String']['input']>;
   first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   last?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  beamID: Types.Scalars['String']['input'];
+  filters?: Types.InputMaybe<Types.AkashaContentBlockStreamFiltersInput>;
 }>;
 
 
-export type GetContentBlockStreamQuery = { node?: { isViewer: boolean, akashaContentBlockStreamList?: { edges?: Array<{ cursor: string, node?: { beamID: any, createdAt: any, active: boolean, status?: Types.AkashaContentBlockStreamModerationStatus | null, blockID: any, moderationID?: any | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } | null } | {} | null };
+export type GetContentBlockStreamQuery = { node?: { isViewer: boolean, akashaContentBlockStreamList?: { edges?: Array<{ cursor: string, node?: { createdAt: any, active: boolean, status?: Types.AkashaContentBlockStreamModerationStatus | null, blockID: any, moderationID?: any | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } | null } | {} | null };
 
 export type GetContentBlockByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']['input'];
@@ -119,23 +129,33 @@ export type GetBlockStorageByIdQueryVariables = Types.Exact<{
 
 export type GetBlockStorageByIdQuery = { node?: { id: string, appVersionID: any, createdAt: any, active: boolean, version: any, blockID: any, appVersion?: { applicationID: any, id: string, version: string, application?: { name: string, displayName: string, id: string } | null } | null, content: Array<{ propertyType: string, label: string, value: string }>, author: { id: string, isViewer: boolean }, block?: { id: string, active: boolean, author: { id: string, isViewer: boolean } } | null } | {} | null };
 
-export type ReflectFragmentMFragment = { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null };
+export type IndexedReflectFragmentFragment = { id: string, createdAt: string, beamID: string, reflectionID: string };
+
+export type IndexReflectionMutationVariables = Types.Exact<{
+  jws?: Types.InputMaybe<Types.Did_Jws>;
+  capability?: Types.InputMaybe<Types.Cacao_Capability>;
+}>;
+
+
+export type IndexReflectionMutation = { indexReflection?: { document?: { id: string, createdAt: string, beamID: string, reflectionID: string } | null } | null };
+
+export type ReflectFragmentMFragment = { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null };
 
 export type CreateReflectMutationVariables = Types.Exact<{
   i: Types.CreateAkashaReflectInput;
 }>;
 
 
-export type CreateReflectMutation = { createAkashaReflect?: { clientMutationId?: string | null, document: { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } } | null };
+export type CreateReflectMutation = { createAkashaReflect?: { clientMutationId?: string | null, document: { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } } | null };
 
 export type UpdateAkashaReflectMutationVariables = Types.Exact<{
   i: Types.UpdateAkashaReflectInput;
 }>;
 
 
-export type UpdateAkashaReflectMutation = { updateAkashaReflect?: { clientMutationId?: string | null, document: { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } } | null };
+export type UpdateAkashaReflectMutation = { updateAkashaReflect?: { clientMutationId?: string | null, document: { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } } | null };
 
-export type ReflectFragmentFragment = { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null };
+export type ReflectFragmentFragment = { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null };
 
 export type GetReflectionsFromBeamQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']['input'];
@@ -148,7 +168,7 @@ export type GetReflectionsFromBeamQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetReflectionsFromBeamQuery = { node?: { reflections: { edges?: Array<{ cursor: string, node?: { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | {} | null };
+export type GetReflectionsFromBeamQuery = { node?: { reflections: { edges?: Array<{ cursor: string, node?: { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | {} | null };
 
 export type GetReflectionsByAuthorDidQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']['input'];
@@ -161,7 +181,7 @@ export type GetReflectionsByAuthorDidQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetReflectionsByAuthorDidQuery = { node?: { isViewer: boolean, akashaReflectList?: { edges?: Array<{ cursor: string, node?: { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
+export type GetReflectionsByAuthorDidQuery = { node?: { isViewer: boolean, akashaReflectList?: { edges?: Array<{ cursor: string, node?: { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null } | {} | null };
 
 export type GetReflectionStreamQueryVariables = Types.Exact<{
   indexer: Types.Scalars['ID']['input'];
@@ -181,7 +201,7 @@ export type GetReflectionByIdQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetReflectionByIdQuery = { node?: { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | {} | null };
+export type GetReflectionByIdQuery = { node?: { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | {} | null };
 
 export type GetReflectReflectionsQueryVariables = Types.Exact<{
   id: Types.Scalars['String']['input'];
@@ -193,7 +213,7 @@ export type GetReflectReflectionsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetReflectReflectionsQuery = { akashaReflectIndex?: { edges?: Array<{ cursor: string, node?: { id: string, version: any, active: boolean, isReply: boolean, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
+export type GetReflectReflectionsQuery = { akashaReflectIndex?: { edges?: Array<{ cursor: string, node?: { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
 
 export type IndexedProfileFragmentFragment = { id: string, createdAt: string, profileID: string };
 
