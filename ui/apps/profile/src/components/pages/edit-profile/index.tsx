@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import {
   useCreateProfileMutation,
   useGetProfileByDidSuspenseQuery,
+  useIndexProfileMutation,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { transformSource, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
@@ -59,12 +60,17 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const avatar = useMemo(() => profileData?.avatar, [profileData?.avatar]);
   const [createProfileMutation, { loading: createProfileProcessing }] = useCreateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
-    onCompleted,
+    onCompleted: data => {
+      const id = data.createAkashaProfile?.document.id;
+      if (id) indexProfile(id);
+      onCompleted();
+    },
   });
   const [updateProfileMutation, { loading: updateProfileProcessing }] = useUpdateProfileMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted,
   });
+  const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
 
   if (!isLoggedIn) {
@@ -89,6 +95,14 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
     });
+  };
+
+  const indexProfile = async (id: string) => {
+    const payload = await sdk.api.auth.prepareIndexedID(id);
+    if (payload)
+      indexProfileMutation({
+        variables: payload,
+      });
   };
 
   const createProfile = async (
