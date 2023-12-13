@@ -59,7 +59,7 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
           alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
             transformSource(alternative),
           )}
-          profileId={profileData.did.id}
+          profileId={profileData?.did?.id}
           customStyle="relative top-16"
         />
       </Stack>

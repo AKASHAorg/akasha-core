@@ -129,7 +129,12 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
     return (
-      <ErrorLoader type="script-error" title="Error in mini profile widget" details={err.message} />
+      <ErrorLoader
+        type="script-error"
+        title="Error in mini profile widget"
+        details={err.message}
+        customStyle="mb-4"
+      />
     );
   },
 });
