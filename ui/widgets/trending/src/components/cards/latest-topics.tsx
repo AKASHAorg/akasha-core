@@ -77,7 +77,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
   useEffect(() => {
     if (loading || updateLoading) return;
-    console.log('subscribedInterests', subscribedInterests);
 
     if (!isEqual(subscribedInterests, subscribedTags))
       if (tagSubscriptionsId) {
@@ -90,8 +89,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               },
             },
           },
-          onCompleted: data => {
-            console.log('update', data);
+          onCompleted: () => {
             setTagsQueue([]);
           },
         });
@@ -103,9 +101,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                 topics: subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
               },
             },
-          },
-          onCompleted: data => {
-            console.log('create', data);
           },
           // onError: () => {
           //   setSubscribedInterests(prev => [...prev, tag]);
@@ -182,8 +177,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           )}
 
           <Stack spacing="gap-y-4">
-            {['dogs', 'cats', 'iprf', 'coin'].length > 0 &&
-              ['dogs', 'cats', 'iprf', 'coin'].slice(0, 4).map((tag, index) => (
+            {tags.length > 0 &&
+              tags.slice(0, 4).map((tag, index) => (
                 <TopicRow
                   key={index}
                   tag={tag}
