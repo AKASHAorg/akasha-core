@@ -29,7 +29,7 @@ const defaultSorting: AkashaBeamSortingInput = {
 
 export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) => {
   const [state, setState] = React.useState<{
-    beams: AkashaBeamEdge[];
+    beams: GetBeamsQuery['akashaBeamIndex']['edges'];
     pageInfo?: PageInfo;
   }>({ beams: [] });
 
@@ -68,7 +68,9 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
   const beamCursors = React.useMemo(() => new Set(state.beams.map(b => b.cursor)), [state]);
 
   const extractData = React.useCallback(
-    (results: GetBeamsQuery | GetBeamsByAuthorDidQuery) => {
+    (
+      results: GetBeamsQuery | GetBeamsByAuthorDidQuery,
+    ): { edges: GetBeamsQuery['akashaBeamIndex']['edges']; pageInfo: PageInfo } => {
       if (hasOwn(results, 'node') && results.node && hasOwn(results.node, 'akashaBeamList')) {
         return {
           edges: results.node.akashaBeamList.edges.filter(edge => !beamCursors.has(edge.cursor)),
