@@ -15,14 +15,15 @@ import {
   IContentClickDetails,
   ModalNavigationOptions,
   Profile,
+  ReflectEntryData,
 } from '@akashaorg/typings/lib/ui';
 import { i18n } from 'i18next';
-import { AkashaReflect, SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { SortOrder } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import {
   useInfiniteGetReflectReflectionsQuery,
   useInfiniteGetReflectionsFromBeamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
-import { hasOwn } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, mapReflectEntryData } from '@akashaorg/ui-awf-hooks';
 
 export type ReflectFeedProps = {
   reflectionsOf: { entryId: string; itemType: EntityTypes };
@@ -128,10 +129,10 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
       );
 
   return (
-    <EntryList<AkashaReflect>
+    <EntryList<ReflectEntryData>
       requestStatus={reflectionsReq.status}
       isFetchingNextPage={reflectionsReq.isFetchingNextPage}
-      pages={entryData}
+      pages={entryData?.map(reflection => mapReflectEntryData(reflection))}
       itemSpacing={itemSpacing}
       languageDirection={i18n?.dir() || 'ltr'}
       initialScrollState={initialScrollState}
@@ -178,7 +179,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
                     onReflect={() => {
                       onNavigate(
                         {
-                          authorId: entryData?.author.id,
+                          authorId: entryData?.authorId,
                           id: entryData?.id,
                           reflect: true,
                         },
@@ -187,7 +188,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
                     }}
                     onContentClick={() =>
                       onNavigate(
-                        { authorId: entryData?.author.id, id: entryData.id },
+                        { authorId: entryData?.authorId, id: entryData.id },
                         EntityTypes.REFLECT,
                       )
                     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import type { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -75,7 +75,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
           )}
           renderItem={itemData => (
             <BeamCard
-              entryData={itemData.node}
+              entryData={mapBeamEntryData(itemData.node)}
               contentClickable={true}
               onContentClick={() =>
                 getRoutingPlugin().navigateTo({

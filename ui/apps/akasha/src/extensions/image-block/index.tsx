@@ -1,7 +1,8 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOMClient from 'react-dom/client';
-import { withProviders } from '@akashaorg/ui-awf-hooks';
+import { I18nextProvider } from 'react-i18next';
+import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
   BlockInstanceMethods,
@@ -15,8 +16,13 @@ import { ImageReadonlyBlock } from './image-readonly-block';
 const ImageBlockExtension = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
-  if (props.blockInfo.mode === ContentBlockModes.EDIT) return <ImageEditorBlock {...props} />;
-  if (props.blockInfo.mode === ContentBlockModes.READONLY) return <ImageReadonlyBlock {...props} />;
+  const { getTranslationPlugin } = useRootComponentProps();
+  return (
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      {props.blockInfo.mode === ContentBlockModes.EDIT && <ImageEditorBlock {...props} />}
+      {props.blockInfo.mode === ContentBlockModes.READONLY && <ImageReadonlyBlock {...props} />}
+    </I18nextProvider>
+  );
 };
 
 export const { bootstrap, mount, unmount } = singleSpaReact({
@@ -28,6 +34,6 @@ export const { bootstrap, mount, unmount } = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
-    return <ErrorLoader type="script-error" title="Error in slate-block" details={err.message} />;
+    return <ErrorLoader type="script-error" title="Error in image-block" details={err.message} />;
   },
 });

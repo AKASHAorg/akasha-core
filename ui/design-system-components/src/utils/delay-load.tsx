@@ -5,7 +5,7 @@ export interface IDelayLoad {
   loadAfter?: number;
 }
 
-export const DelayLoad: React.FC<IDelayLoad> = ({ children, loadAfter = 150 }) => {
+export const DelayLoad: React.FC<IDelayLoad> = ({ children, loadAfter = 300 }) => {
   const [show, setShow] = React.useState(false);
 
   React.useEffect(() => {

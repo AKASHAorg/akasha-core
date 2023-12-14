@@ -10,6 +10,13 @@ export const IndexedBeamFragmentDoc = /*#__PURE__*/ gql`
   beamID
 }
     `;
+export const IndexedContentBlockFragmentDoc = /*#__PURE__*/ gql`
+    fragment IndexedContentBlockFragment on IndexContentBlockPayloadDocument {
+  id
+  createdAt
+  blockID
+}
+    `;
 export const BeamFragmentMFragmentDoc = /*#__PURE__*/ gql`
     fragment BeamFragmentM on AkashaBeam {
   id
@@ -173,6 +180,14 @@ export const BlockStorageFragmentDoc = /*#__PURE__*/ gql`
       isViewer
     }
   }
+}
+    `;
+export const IndexedReflectFragmentDoc = /*#__PURE__*/ gql`
+    fragment IndexedReflectFragment on IndexReflectPayloadDocument {
+  id
+  createdAt
+  beamID
+  reflectionID
 }
     `;
 export const ReflectFragmentMFragmentDoc = /*#__PURE__*/ gql`
@@ -468,6 +483,42 @@ export function useIndexBeamMutation(baseOptions?: Apollo.MutationHookOptions<Ty
 export type IndexBeamMutationHookResult = ReturnType<typeof useIndexBeamMutation>;
 export type IndexBeamMutationResult = Apollo.MutationResult<Types.IndexBeamMutation>;
 export type IndexBeamMutationOptions = Apollo.BaseMutationOptions<Types.IndexBeamMutation, Types.IndexBeamMutationVariables>;
+export const IndexContentBlockDocument = /*#__PURE__*/ gql`
+    mutation IndexContentBlock($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexContentBlock(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedContentBlockFragment
+    }
+  }
+}
+    ${IndexedContentBlockFragmentDoc}`;
+export type IndexContentBlockMutationFn = Apollo.MutationFunction<Types.IndexContentBlockMutation, Types.IndexContentBlockMutationVariables>;
+
+/**
+ * __useIndexContentBlockMutation__
+ *
+ * To run a mutation, you first call `useIndexContentBlockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useIndexContentBlockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [indexContentBlockMutation, { data, loading, error }] = useIndexContentBlockMutation({
+ *   variables: {
+ *      jws: // value for 'jws'
+ *      capability: // value for 'capability'
+ *   },
+ * });
+ */
+export function useIndexContentBlockMutation(baseOptions?: Apollo.MutationHookOptions<Types.IndexContentBlockMutation, Types.IndexContentBlockMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.IndexContentBlockMutation, Types.IndexContentBlockMutationVariables>(IndexContentBlockDocument, options);
+      }
+export type IndexContentBlockMutationHookResult = ReturnType<typeof useIndexContentBlockMutation>;
+export type IndexContentBlockMutationResult = Apollo.MutationResult<Types.IndexContentBlockMutation>;
+export type IndexContentBlockMutationOptions = Apollo.BaseMutationOptions<Types.IndexContentBlockMutation, Types.IndexContentBlockMutationVariables>;
 export const CreateBeamDocument = /*#__PURE__*/ gql`
     mutation CreateBeam($i: CreateAkashaBeamInput!) {
   createAkashaBeam(input: $i) {
@@ -860,7 +911,7 @@ export type GetBeamByIdLazyQueryHookResult = ReturnType<typeof useGetBeamByIdLaz
 export type GetBeamByIdSuspenseQueryHookResult = ReturnType<typeof useGetBeamByIdSuspenseQuery>;
 export type GetBeamByIdQueryResult = Apollo.QueryResult<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>;
 export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
-    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $beamID: String!) {
+    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput) {
   node(id: $indexer) {
     ... on CeramicAccount {
       akashaContentBlockStreamList(
@@ -868,11 +919,10 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
         before: $before
         first: $first
         last: $last
-        filters: {where: {beamID: {equalTo: $beamID}}}
+        filters: $filters
       ) {
         edges {
           node {
-            beamID
             createdAt
             active
             status
@@ -911,7 +961,7 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
  *      before: // value for 'before'
  *      first: // value for 'first'
  *      last: // value for 'last'
- *      beamID: // value for 'beamID'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -1015,6 +1065,42 @@ export type GetBlockStorageByIdQueryHookResult = ReturnType<typeof useGetBlockSt
 export type GetBlockStorageByIdLazyQueryHookResult = ReturnType<typeof useGetBlockStorageByIdLazyQuery>;
 export type GetBlockStorageByIdSuspenseQueryHookResult = ReturnType<typeof useGetBlockStorageByIdSuspenseQuery>;
 export type GetBlockStorageByIdQueryResult = Apollo.QueryResult<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>;
+export const IndexReflectionDocument = /*#__PURE__*/ gql`
+    mutation IndexReflection($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexReflection(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedReflectFragment
+    }
+  }
+}
+    ${IndexedReflectFragmentDoc}`;
+export type IndexReflectionMutationFn = Apollo.MutationFunction<Types.IndexReflectionMutation, Types.IndexReflectionMutationVariables>;
+
+/**
+ * __useIndexReflectionMutation__
+ *
+ * To run a mutation, you first call `useIndexReflectionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useIndexReflectionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [indexReflectionMutation, { data, loading, error }] = useIndexReflectionMutation({
+ *   variables: {
+ *      jws: // value for 'jws'
+ *      capability: // value for 'capability'
+ *   },
+ * });
+ */
+export function useIndexReflectionMutation(baseOptions?: Apollo.MutationHookOptions<Types.IndexReflectionMutation, Types.IndexReflectionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<Types.IndexReflectionMutation, Types.IndexReflectionMutationVariables>(IndexReflectionDocument, options);
+      }
+export type IndexReflectionMutationHookResult = ReturnType<typeof useIndexReflectionMutation>;
+export type IndexReflectionMutationResult = Apollo.MutationResult<Types.IndexReflectionMutation>;
+export type IndexReflectionMutationOptions = Apollo.BaseMutationOptions<Types.IndexReflectionMutation, Types.IndexReflectionMutationVariables>;
 export const CreateReflectDocument = /*#__PURE__*/ gql`
     mutation CreateReflect($i: CreateAkashaReflectInput!) {
   createAkashaReflect(input: $i) {

@@ -127,7 +127,7 @@ class Gql {
         return operation.getContext().source === this.contextSources.composeDB;
       },
       composeDBlink,
-      createPersistedQueryLink({ sha256 }).concat(
+      createPersistedQueryLink({ sha256, useGETForHashedQueries: true }).concat(
         new HttpLink({ uri: process.env.GRAPHQL_URI || 'http://localhost:4112/' }),
       ),
     );

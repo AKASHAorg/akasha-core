@@ -3,8 +3,7 @@ import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { transformSource, hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
-import { AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { EntityTypes } from '@akashaorg/typings/lib/ui';
+import { EntityTypes, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +23,7 @@ export type ReflectCardProps = Pick<
   | 'hover'
   | 'lastEntry'
 > & {
-  entryData: AkashaReflect;
+  entryData: ReflectEntryData;
 };
 
 const ReflectionCard: React.FC<ReflectCardProps> = props => {
@@ -36,7 +35,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
   const { authenticatedDID } = useLoggedIn();
 
   const profileDataReq = useGetProfileByDidQuery(
-    { id: entryData.author.id },
+    { id: entryData.authorId },
     { select: response => response.node },
   );
   const { akashaProfile: profileData } =
@@ -63,7 +62,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
       noWrapperCard={true}
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}
-      isViewer={authenticatedDID === entryData.author.id}
+      isViewer={authenticatedDID === entryData.authorId}
       removed={{
         author: {
           firstPart: t('AKASHA world members won’t be able to see the content '),

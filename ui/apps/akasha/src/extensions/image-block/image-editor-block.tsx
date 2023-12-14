@@ -17,14 +17,16 @@ import ImageBlockGallery from '@akashaorg/design-system-components/lib/component
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import ImageBlockToolbar from '@akashaorg/design-system-components/lib/components/ImageBlockToolbar';
+import EditImageModal from '@akashaorg/design-system-components/lib/components/EditImageModal';
 import { ImageObject } from '@akashaorg/typings/lib/ui';
 import {
   XMarkIcon,
   ArrowPathIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 // @TODO: replace this with actual data
-const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y5yp2ew8mc4ryswawpn914fm6qhe6bpoobipgu9r1pcwsu441cf';
+const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y8af3kd0lwkkk2m1nxtchlvcikbak748md3m3gplz1ori3s1j5f';
 
 export const ImageEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
@@ -36,9 +38,11 @@ export const ImageEditorBlock = (
   const [uiState, setUiState] = React.useState('menu');
 
   const [images, setImages] = React.useState<ImageObject[]>([]);
+  const imageUrls = React.useMemo(() => images.map(imageObj => imageObj.src?.url), [images]);
   const [alignState, setAlignState] = React.useState<'start' | 'center' | 'end'>('start');
   const [showCaption, setShowCaption] = React.useState(false);
   const [caption, setCaption] = React.useState('');
+  const [showEditModal, setShowEditModal] = React.useState(false);
 
   useImperativeHandle(
     props.blockRef,
@@ -100,14 +104,14 @@ export const ImageEditorBlock = (
     }
   };
 
-  const onUpload = async (image: File) => {
+  const onUpload = async (image: File, isUrl?: boolean) => {
     if (!image || images.length > 4) return null;
     setUiState('gallery');
     setUploading(true);
 
     const mediaFile = await saveMediaFile({
       name: image.name || 'beam-block-image',
-      isUrl: false,
+      isUrl: isUrl || false,
       content: image,
     });
     setUploading(false);
@@ -121,8 +125,53 @@ export const ImageEditorBlock = (
       size: { height: mediaFile.size.height, width: mediaFile.size.width },
       src: { url: mediaUrl.originLink || mediaUrl.fallbackLink },
       name: image.name,
+      originalSrc: URL.createObjectURL(image),
     };
-    setImages(prev => [...prev, imageObj]);
+
+    return imageObj;
+  };
+
+  const [editorImages, setEditorImages] = React.useState([]);
+  const uploadNewImage = async (image: File) => {
+    const uploadedImage = await onUpload(image);
+    setEditorImages(prev => [...prev, uploadedImage]);
+    setImages(prev => [
+      ...prev,
+      { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
+    ]);
+  };
+
+  const uploadEditedImage = async (image: File, indexOfEditedImage: number) => {
+    const uploadedImage = await onUpload(image);
+    const oldImage = editorImages[indexOfEditedImage];
+    setEditorImages(prev => [
+      ...prev.slice(0, indexOfEditedImage),
+      {
+        name: oldImage.name,
+        src: uploadedImage.src,
+        originalSrc: uploadedImage.src,
+        size: uploadedImage.size,
+      },
+      ...prev.slice(indexOfEditedImage + 1),
+    ]);
+    setImages(prev => [
+      ...prev.slice(0, indexOfEditedImage),
+      { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
+      ...prev.slice(indexOfEditedImage + 1),
+    ]);
+    setCanCloseModal(true);
+  };
+
+  const [canCloseModal, setCanCloseModal] = React.useState(false);
+  React.useEffect(() => {
+    if (!uploading && showEditModal && canCloseModal) {
+      setShowEditModal(false);
+      setCanCloseModal(false);
+    }
+  }, [uploading, showEditModal, canCloseModal]);
+
+  const handleCloseModal = () => {
+    setCanCloseModal(true);
   };
 
   const handleDeleteImage = (element: ImageObject) => {
@@ -141,7 +190,7 @@ export const ImageEditorBlock = (
   };
 
   const handleClickEdit = () => {
-    setUiState('menu');
+    setShowEditModal(true);
   };
 
   const handleCaptionClick = () => {
@@ -166,43 +215,42 @@ export const ImageEditorBlock = (
     <>
       {uiState === 'menu' && (
         <Card background={{ dark: 'grey3', light: 'grey9' }}>
-          <Stack direction="column" spacing="gap-4">
-            <Stack direction="column" spacing="gap-2">
-              <Stack direction="row" justify="between">
-                <Text variant="h6">{t('Add an image')} </Text>
-                <Text variant="subtitle2">{`${images.length}/4 ${t('images')}`}</Text>
-              </Stack>
-              <Text variant="subtitle2">
-                {t('You can upload JPEG, PNG, or WebP images to your Beam, up to 1.5MB each.')}
-              </Text>
-            </Stack>
-            <Stack direction="row" justify="between">
-              <Text variant="h6">{t('From Device')}</Text>
+          <Stack direction="column">
+            <Stack customStyle="pb-8">
               <Button
-                label={t('Select')}
-                variant="text"
+                label={t('Add an image from device')}
+                variant="primary"
+                customStyle="w-full sm:w-48"
                 onClick={handleMediaClick}
                 disabled={imageUploadDisabled}
               />
             </Stack>
-            <Stack direction="column" spacing="gap-2">
-              <Text variant="subtitle2">{t('Or upload an image using a URL')}</Text>
+            <Divider />
+            <Stack direction="column" spacing="gap-2" customStyle="py-8">
+              <Text variant="h6">{t('From URL')}</Text>
               <Stack direction="row" justify="between">
                 <TextField
                   value={imageLink}
                   placeholder={t('Paste image link')}
+                  altBg
+                  fullWidth
                   type={'text'}
                   onChange={handleChange}
                   disabled={imageUploadDisabled}
                 />
-                <Button label={t('Upload')} variant="text" />
+                <Button label={t('Add')} variant="secondary" disabled={!imageLink} />
               </Stack>
             </Stack>
-            <Stack direction="column" spacing="gap-2" customStyle="overflow-auto">
+            <Divider />
+            <Stack direction="column" spacing="gap-2" customStyle="overflow-auto pt-8">
+              <Stack direction="row" justify="between">
+                <Text variant="h6">{t('Uploaded images')} </Text>
+                <Text variant="subtitle2">{`${images.length}/4 ${t('images')}`}</Text>
+              </Stack>
               {images.map((imageObj, index) => (
                 <Stack key={index} direction="row" justify="between">
                   <Stack direction="row" spacing="gap-1">
-                    <Image src={imageObj.src.url} customStyle="object-contain w-8 h-8" />
+                    <Image src={imageObj.src.url} customStyle="object-contain w-8 h-8 rounded-lg" />
                     <Text>{imageObj.name}</Text>
                   </Stack>
                   <button onClick={() => handleDeleteImage(imageObj)}>
@@ -219,18 +267,17 @@ export const ImageEditorBlock = (
           customStyle="w-4/5 h-48 sm:h-60 rounded-xl"
           justify="center"
           align="center"
-          justifySelf="center"
-          background={{ light: 'grey3', dark: 'grey5' }}
+          background={{ light: 'grey8', dark: 'grey5' }}
           spacing="gap-2"
         >
           <Icon icon={<ArrowPathIcon />} rotateAnimation />
           <Text>{t('Uploading image')}</Text>
         </Stack>
       )}
-      {uiState === 'gallery' && images.length !== 0 && (
+      {uiState === 'gallery' && editorImages.length !== 0 && (
         <Stack spacing="gap-1">
           <Stack alignSelf={alignState}>
-            <ImageBlockGallery images={images} />
+            <ImageBlockGallery images={editorImages} />
           </Stack>
           {showCaption && (
             <TextField
@@ -250,13 +297,24 @@ export const ImageEditorBlock = (
             alignState={alignState}
             showCaption={showCaption}
           />
+          <EditImageModal
+            show={showEditModal}
+            title={{ label: t('Edit Image') }}
+            cancelLabel={t('Cancel')}
+            saveLabel={t('Save')}
+            onClose={handleCloseModal}
+            images={imageUrls}
+            dragToRepositionLabel={t('Drag the image to reposition')}
+            isSavingImage={uploading}
+            onSave={uploadEditedImage}
+          />
         </Stack>
       )}
       <input
         ref={uploadInputRef}
         type="file"
         accept="image/png, image/jpeg, image/webp"
-        onChange={e => onUpload(e.target.files[0])}
+        onChange={e => uploadNewImage(e.target.files[0])}
         hidden
       />
     </>

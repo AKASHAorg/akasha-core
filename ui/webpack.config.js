@@ -78,6 +78,7 @@ const exp = {
     }),
     new webpack.DefinePlugin({
       __DEV__: !isProduction,
+      "globalThis.__DEV__": !isProduction,
     }),
     new webpack.AutomaticPrefetchPlugin(),
     new SubresourceIntegrityPlugin({
