@@ -12,6 +12,7 @@ import {
   useAnalytics,
   useRootComponentProps,
   transformSource,
+  mapBeamEntryData,
 } from '@akashaorg/ui-awf-hooks';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
@@ -135,7 +136,7 @@ const FeedPage: React.FC<FeedPageProps> = props => {
         )}
         renderItem={itemData => (
           <BeamCard
-            entryData={itemData.node}
+            entryData={mapBeamEntryData(itemData.node)}
             contentClickable={true}
             onContentClick={() =>
               navigateTo.current({

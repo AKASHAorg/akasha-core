@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { mapBeamEntryData, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
@@ -44,7 +44,7 @@ const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
         )}
         renderItem={itemData => (
           <BeamCard
-            entryData={itemData.node}
+            entryData={mapBeamEntryData(itemData.node)}
             contentClickable={true}
             onContentClick={() =>
               navigateTo.current({

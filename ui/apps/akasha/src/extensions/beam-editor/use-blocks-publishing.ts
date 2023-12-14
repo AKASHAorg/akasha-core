@@ -31,6 +31,8 @@ export const useBlocksPublishing = () => {
   const [errors, setErrors] = React.useState<Error[]>([]);
   const globalIdx = React.useRef(0);
   const sdk = React.useRef(getSDK());
+  const [isNsfw, setIsNsfw] = React.useState(false);
+
   const { getExtensionsPlugin } = useRootComponentProps();
 
   React.useLayoutEffect(() => {
@@ -78,6 +80,7 @@ export const useBlocksPublishing = () => {
     if (blocksInUse.every(bl => bl.status === 'success')) {
       const beamContent: AkashaBeamInput = {
         active: true,
+        nsfw: isNsfw,
         content: blocksInUse.map(blockData => ({
           blockID: blockData.response?.blockID,
           order: blockData.order,
@@ -98,7 +101,7 @@ export const useBlocksPublishing = () => {
         setErrors(prev => [...prev, new Error(`failed to create beam: ${err.message}`)]);
       });
     }
-  }, [blocksInUse, createBeam, createBeamQuery]);
+  }, [blocksInUse, createBeam, createBeamQuery, isNsfw]);
 
   const indexBeam = React.useCallback(
     async (beamData: CreateAkashaBeamPayload) => {
@@ -123,40 +126,52 @@ export const useBlocksPublishing = () => {
     }
   }, [beamIndexQuery.called, createBeamQuery, indexBeam, isPublishing]);
 
-  const createContentBlocks = React.useCallback(async () => {
-    setIsPublishing(true);
-    for (const [idx, block] of blocksInUse.entries()) {
-      if (!block.status) {
-        setBlocksInUse(prev => [
-          ...prev.slice(0, idx),
-          { ...block, status: 'pending' },
-          ...prev.slice(idx + 1),
-        ]);
-        try {
-          const data = await block.blockRef.current.createBlock();
-          if (data.response && data.response.blockID) {
-            setBlocksInUse(prev => [
-              ...prev.slice(0, idx),
-              { ...block, status: 'success', response: data.response },
-              ...prev.slice(idx + 1),
-            ]);
-          }
-          if (data.response && data.response.error) {
-            setBlocksInUse(prevState => [
-              ...prevState.slice(0, idx),
-              { ...block, status: 'error', response: data.response },
-              ...prevState.slice(idx + 1),
-            ]);
-          }
-        } catch (err) {
-          setErrors(prev => [
-            ...prev,
-            new Error(`Failed to create content blocks: ${err.message}`),
+  const createContentBlocks = React.useCallback(
+    async (nsfw: boolean) => {
+      setIsPublishing(true);
+      setIsNsfw(nsfw);
+      for (const [idx, block] of blocksInUse.entries()) {
+        if (!block.status) {
+          setBlocksInUse(prev => [
+            ...prev.slice(0, idx),
+            { ...block, status: 'pending' },
+            ...prev.slice(idx + 1),
           ]);
+          try {
+            const data = await block.blockRef.current.createBlock();
+            if (data.response && data.response.blockID) {
+              setBlocksInUse(prev => [
+                ...prev.slice(0, idx),
+                { ...block, status: 'success', response: data.response },
+                ...prev.slice(idx + 1),
+              ]);
+            }
+            if (data.response && data.response.error) {
+              setBlocksInUse(prevState => [
+                ...prevState.slice(0, idx),
+                { ...block, status: 'error', response: data.response },
+                ...prevState.slice(idx + 1),
+              ]);
+            }
+          } catch (err) {
+            setErrors(prev => [
+              ...prev,
+              new Error(`Failed to create content blocks: ${err.message}`),
+            ]);
+            const data = await block.blockRef.current.createBlock();
+            if (data.response) {
+              setBlocksInUse(prev => [
+                ...prev.slice(0, idx),
+                { ...block, status: 'success', response: data.response },
+                ...prev.slice(idx + 1),
+              ]);
+            }
+          }
         }
       }
-    }
-  }, [blocksInUse]);
+    },
+    [blocksInUse],
+  );
 
   // convenience method to add a new block into the beam editor
   // if index (idx) param is omitted, it will be added as the last block in the list

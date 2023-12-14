@@ -7,6 +7,8 @@ import BeamSection from './beam-section';
 import { useParams } from 'react-router-dom';
 import {
   hasOwn,
+  mapBeamEntryData,
+  mapReflectEntryData,
   useAnalytics,
   useEntryNavigation,
   useGetLoginProfile,
@@ -57,7 +59,7 @@ const BeamPage: React.FC<unknown> = () => {
       <React.Suspense fallback={<EntrySectionLoading />}>
         <BeamSection
           beamId={beamId}
-          entryData={entryData}
+          entryData={mapBeamEntryData(entryData)}
           isLoggedIn={!!profileDataReq?.akashaProfile?.id}
           onNavigate={onNavigate}
           showLoginModal={showLoginModal}
@@ -73,7 +75,7 @@ const BeamPage: React.FC<unknown> = () => {
             <>
               <Divider />
               <ReflectionCard
-                entryData={itemData.node}
+                entryData={mapReflectEntryData(itemData.node)}
                 contentClickable={true}
                 onContentClick={() =>
                   getRoutingPlugin().navigateTo({

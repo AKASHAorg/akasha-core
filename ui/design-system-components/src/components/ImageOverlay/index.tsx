@@ -1,41 +1,35 @@
 import * as React from 'react';
 import { tw, apply, tx } from '@twind/core';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Portal } from '../Editor/helpers';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import { ImageObject } from '@akashaorg/typings/lib/ui';
 
 export interface IImageOverlay {
-  src: { url?: string; fallbackUrl?: string };
+  clickedImg: ImageObject;
+  images: ImageObject[];
   closeModal: () => void;
 }
 
 const closeDivClass = apply(
-  'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',
+  'flex items-center justify-center z-1 w-12 h-12 rounded-full bg(grey9 dark:grey3)',
 );
-const flexCenteredClass = apply(`flex items-center justify-items-center`);
 
 /**
  * renders the full screen image modal that is triggered on image click
  */
 const ImageOverlay: React.FC<IImageOverlay> = props => {
-  const { src } = props;
+  const { clickedImg, images, closeModal } = props;
 
-  const closeModal = React.useRef(props.closeModal);
-
-  React.useEffect(() => {
-    const close = ev => {
-      if (ev.key === 'Escape') {
-        closeModal.current();
-      }
-    };
-    window.addEventListener('keydown', close);
-    return () => window.removeEventListener('keydown', close);
-  }, []);
+  const [currentImg, setCurrentImg] = React.useState(clickedImg);
 
   const transformRef = React.useRef(null);
 
@@ -49,41 +43,76 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
     transformRef.current.zoomOut();
   };
 
+  const handlePrevImg = React.useCallback(() => {
+    const currImgIndex = images.indexOf(currentImg);
+    const prevIndex = currImgIndex > 0 ? images[currImgIndex - 1] : images[images.length - 1];
+    setCurrentImg(prevIndex);
+  }, [currentImg, images]);
+
+  const handleNextImg = React.useCallback(() => {
+    const currImgIndex = images.indexOf(currentImg);
+    const nextIndex = currImgIndex < images.length - 1 ? images[currImgIndex + 1] : images[0];
+    setCurrentImg(nextIndex);
+  }, [currentImg, images]);
+
+  React.useEffect(() => {
+    const handler = ev => {
+      if (ev.key === 'Escape') {
+        closeModal();
+      }
+      if (ev.key === 'ArrowRight') {
+        handleNextImg();
+      }
+      if (ev.key === 'ArrowLeft') {
+        handlePrevImg();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [images, currentImg, closeModal, handleNextImg, handlePrevImg]);
+
   return (
     <Portal>
-      <div className={tx(`${flexCenteredClass} w-screen h-screen bg-grey3 z-20`)}>
-        <button
-          onClick={(ev: React.SyntheticEvent) => {
-            /**
-             * prevents click bubbling to parent so the user doesn't get redirected
-             */
-            ev.stopPropagation();
-          }}
-        >
-          <div className={tw(`flex flex-row gap-3 p-3 absolute top-1 right-1 z-1`)}>
+      <Stack customStyle="fixed top-0 w-screen h-screen bg-black/80 z-20">
+        <Stack direction="row" customStyle="justify-end sm:justify-between p-4 sm:p-12">
+          <Stack direction="row" spacing="gap-3">
+            {images.length > 1 && (
+              <button className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
+                <Icon icon={<ArrowLeftIcon />} accentColor />
+              </button>
+            )}
+            {images.length > 1 && (
+              <button className={tx(`${closeDivClass}`)} onClick={handleNextImg}>
+                <Icon icon={<ArrowRightIcon />} accentColor />
+              </button>
+            )}
+          </Stack>
+
+          <Stack direction="row" spacing="gap-3">
             <button className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
-              <Icon icon={<MagnifyingGlassPlusIcon />} />
+              <Icon icon={<MagnifyingGlassPlusIcon />} accentColor />
             </button>
             <button className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
-              <Icon icon={<MagnifyingGlassMinusIcon />} />
+              <Icon icon={<MagnifyingGlassMinusIcon />} accentColor />
             </button>
-            <button className={tx(`${closeDivClass}`)} onClick={closeModal.current}>
-              <Icon icon={<XMarkIcon />} />
+            <button className={tx(`${closeDivClass}`)} onClick={closeModal}>
+              <Icon icon={<XMarkIcon />} accentColor />
             </button>
-          </div>
-
-          {src && (
+          </Stack>
+        </Stack>
+        {currentImg && (
+          <Stack customStyle="h-full" align="center" justify="center">
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
-                <picture className={tw('flex')}>
-                  <source srcSet={src.url} />
-                  <img src={src.fallbackUrl} alt="" />
+                <picture className={tw(`flex`)}>
+                  <source srcSet={currentImg.src.url} />
+                  <img src={currentImg.src.fallbackUrl} alt="" />
                 </picture>
               </TransformComponent>
             </TransformWrapper>
-          )}
-        </button>
-      </div>
+          </Stack>
+        )}
+      </Stack>
     </Portal>
   );
 };

@@ -1,22 +1,33 @@
 import * as React from 'react';
 import { tw, apply } from '@twind/core';
 import { ImageBlockGridItem } from './image-block-grid-item';
+import ImageOverlay from '../ImageOverlay';
 import { ImageObject } from '@akashaorg/typings/lib/ui';
 
 export interface IImageGallery {
   images: ImageObject[];
-  handleDeleteImage?: (image: ImageObject) => void;
-  handleClickImage?: (image: ImageObject) => void;
 }
 
 const ImageBlockGallery: React.FC<IImageGallery> = props => {
-  const { images, handleClickImage } = props;
+  const { images } = props;
+
+  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [clickedImg, setClickedImg] = React.useState(null);
+
+  const handleCloseOverlay = () => {
+    setShowOverlay(false);
+  };
+
+  const handleClickImage = (img: ImageObject) => {
+    setShowOverlay(true);
+    setClickedImg(img);
+  };
 
   const gridStyle = apply(`grid grid-cols-6 gap-1`);
 
-  if (images.length === 1) {
-    return (
-      <div className={tw('flex')}>
+  return (
+    <>
+      <div className={images.length === 1 ? tw('flex') : tw(`${gridStyle}`)}>
         {images.map((image, index) => (
           <ImageBlockGridItem
             image={image}
@@ -26,19 +37,10 @@ const ImageBlockGallery: React.FC<IImageGallery> = props => {
           />
         ))}
       </div>
-    );
-  }
-  return (
-    <div className={tw(`${gridStyle}`)}>
-      {images.map((image, index) => (
-        <ImageBlockGridItem
-          image={image}
-          key={index}
-          handleClickImage={handleClickImage}
-          images={images}
-        />
-      ))}
-    </div>
+      {showOverlay && (
+        <ImageOverlay images={images} clickedImg={clickedImg} closeModal={handleCloseOverlay} />
+      )}
+    </>
   );
 };
 

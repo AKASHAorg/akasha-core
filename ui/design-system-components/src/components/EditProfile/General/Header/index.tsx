@@ -16,7 +16,7 @@ import { ProfileImageType, Profile, type Image } from '@akashaorg/typings/lib/ui
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
-import { EditImageModal } from './EditImageModal';
+import EditImageModal from '../../../EditImageModal';
 import { DeleteImageModal } from './DeleteImageModal';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 
@@ -266,7 +266,7 @@ export const Header: React.FC<HeaderProps> = ({
         cancelLabel={cancelLabel}
         saveLabel={saveLabel}
         onClose={() => (isSavingImage ? undefined : setShowEditImage(false))}
-        image={ProfileImageType === 'avatar' ? avatarUrl?.src : coverImageUrl?.src}
+        images={ProfileImageType === 'avatar' ? [avatarUrl?.src] : [coverImageUrl?.src]}
         dragToRepositionLabel={dragToRepositionLabel}
         isSavingImage={isSavingImage}
         onSave={onSave}

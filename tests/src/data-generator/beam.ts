@@ -1,9 +1,8 @@
 import faker from 'faker';
-import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const genAuthor = () => ({ id: faker.datatype.uuid(), isViewer: false });
 
-const genBeamData = (): AkashaBeam => {
+const genBeamData = () => {
   return {
     id: faker.datatype.uuid(),
     active: true,

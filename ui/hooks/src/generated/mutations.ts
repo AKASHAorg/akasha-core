@@ -19,6 +19,21 @@ export const IndexedBeamFragmentDoc = /*#__PURE__*/ `
   beamID
 }
     `;
+export const IndexedContentBlockFragmentDoc = /*#__PURE__*/ `
+    fragment IndexedContentBlockFragment on IndexContentBlockPayloadDocument {
+  id
+  createdAt
+  blockID
+}
+    `;
+export const IndexedReflectFragmentDoc = /*#__PURE__*/ `
+    fragment IndexedReflectFragment on IndexReflectPayloadDocument {
+  id
+  createdAt
+  beamID
+  reflectionID
+}
+    `;
 export const IndexedProfileFragmentDoc = /*#__PURE__*/ `
     fragment IndexedProfileFragment on IndexProfilePayloadDocument {
   id
@@ -47,6 +62,48 @@ export const useIndexBeamMutation = <
 useIndexBeamMutation.getKey = () => ['IndexBeam'];
 
 useIndexBeamMutation.fetcher = (variables?: Types.IndexBeamMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.IndexBeamMutation, Types.IndexBeamMutationVariables>(IndexBeamDocument, variables, options);
+export const IndexContentBlockDocument = /*#__PURE__*/ `
+    mutation IndexContentBlock($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexContentBlock(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedContentBlockFragment
+    }
+  }
+}
+    ${IndexedContentBlockFragmentDoc}`;
+export const useIndexContentBlockMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.IndexContentBlockMutation, TError, Types.IndexContentBlockMutationVariables, TContext>) =>
+    useMutation<Types.IndexContentBlockMutation, TError, Types.IndexContentBlockMutationVariables, TContext>(
+      ['IndexContentBlock'],
+      (variables?: Types.IndexContentBlockMutationVariables) => composeDbFetch<Types.IndexContentBlockMutation, Types.IndexContentBlockMutationVariables>(IndexContentBlockDocument, variables)(),
+      options
+    );
+useIndexContentBlockMutation.getKey = () => ['IndexContentBlock'];
+
+useIndexContentBlockMutation.fetcher = (variables?: Types.IndexContentBlockMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.IndexContentBlockMutation, Types.IndexContentBlockMutationVariables>(IndexContentBlockDocument, variables, options);
+export const IndexReflectionDocument = /*#__PURE__*/ `
+    mutation IndexReflection($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexReflection(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedReflectFragment
+    }
+  }
+}
+    ${IndexedReflectFragmentDoc}`;
+export const useIndexReflectionMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<Types.IndexReflectionMutation, TError, Types.IndexReflectionMutationVariables, TContext>) =>
+    useMutation<Types.IndexReflectionMutation, TError, Types.IndexReflectionMutationVariables, TContext>(
+      ['IndexReflection'],
+      (variables?: Types.IndexReflectionMutationVariables) => composeDbFetch<Types.IndexReflectionMutation, Types.IndexReflectionMutationVariables>(IndexReflectionDocument, variables)(),
+      options
+    );
+useIndexReflectionMutation.getKey = () => ['IndexReflection'];
+
+useIndexReflectionMutation.fetcher = (variables?: Types.IndexReflectionMutationVariables, options?: RequestInit['headers']) => composeDbFetch<Types.IndexReflectionMutation, Types.IndexReflectionMutationVariables>(IndexReflectionDocument, variables, options);
 export const IndexProfileDocument = /*#__PURE__*/ `
     mutation IndexProfile($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
   indexProfile(jws: $jws, capability: $capability) {

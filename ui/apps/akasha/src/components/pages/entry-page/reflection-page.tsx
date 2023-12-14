@@ -8,6 +8,7 @@ import ReflectionSection from './reflection-section';
 import { useParams } from 'react-router-dom';
 import {
   hasOwn,
+  mapReflectEntryData,
   useAnalytics,
   useEntryNavigation,
   useGetLoginProfile,
@@ -37,7 +38,7 @@ const ReflectionPage: React.FC<unknown> = () => {
       hasOwn(reflectionReq.data, 'node') &&
       hasOwn(reflectionReq.data.node, 'id')
     ) {
-      return reflectionReq.data.node;
+      return mapReflectEntryData(reflectionReq.data.node);
     }
   }, [reflectionReq]);
 
@@ -77,7 +78,11 @@ const ReflectionPage: React.FC<unknown> = () => {
       </React.Suspense>
       <PendingReflect
         beamId={entryData.beam?.id}
-        authorId={profileDataReq?.akashaProfile?.did.id}
+        reflectionId={entryData.id}
+        entryData={mapReflectEntryData(entryData)}
+        isLoggedIn={!!profileDataReq.akashaProfile?.id}
+        onNavigate={onNavigate}
+        showLoginModal={showLoginModal}
       />
       <Stack spacing="gap-y-2">
         <ReflectFeed
@@ -90,7 +95,7 @@ const ReflectionPage: React.FC<unknown> = () => {
           queryKey={`reflect-feed-${entryData.id}`}
           renderItem={itemData => (
             <ReflectionCard
-              entryData={itemData.node}
+              entryData={mapReflectEntryData(itemData.node)}
               contentClickable={true}
               onContentClick={() =>
                 getRoutingPlugin().navigateTo({

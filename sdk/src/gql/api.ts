@@ -9,6 +9,13 @@ export const IndexedBeamFragmentDoc = /*#__PURE__*/ gql`
   beamID
 }
     `;
+export const IndexedContentBlockFragmentDoc = /*#__PURE__*/ gql`
+    fragment IndexedContentBlockFragment on IndexContentBlockPayloadDocument {
+  id
+  createdAt
+  blockID
+}
+    `;
 export const BeamFragmentMFragmentDoc = /*#__PURE__*/ gql`
     fragment BeamFragmentM on AkashaBeam {
   id
@@ -172,6 +179,14 @@ export const BlockStorageFragmentDoc = /*#__PURE__*/ gql`
       isViewer
     }
   }
+}
+    `;
+export const IndexedReflectFragmentDoc = /*#__PURE__*/ gql`
+    fragment IndexedReflectFragment on IndexReflectPayloadDocument {
+  id
+  createdAt
+  beamID
+  reflectionID
 }
     `;
 export const ReflectFragmentMFragmentDoc = /*#__PURE__*/ gql`
@@ -440,6 +455,15 @@ export const IndexBeamDocument = /*#__PURE__*/ gql`
   }
 }
     ${IndexedBeamFragmentDoc}`;
+export const IndexContentBlockDocument = /*#__PURE__*/ gql`
+    mutation IndexContentBlock($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexContentBlock(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedContentBlockFragment
+    }
+  }
+}
+    ${IndexedContentBlockFragmentDoc}`;
 export const CreateBeamDocument = /*#__PURE__*/ gql`
     mutation CreateBeam($i: CreateAkashaBeamInput!) {
   createAkashaBeam(input: $i) {
@@ -579,7 +603,7 @@ export const GetBeamByIdDocument = /*#__PURE__*/ gql`
 }
     ${BeamFragmentDoc}`;
 export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
-    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $beamID: String!) {
+    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput) {
   node(id: $indexer) {
     ... on CeramicAccount {
       akashaContentBlockStreamList(
@@ -587,11 +611,10 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
         before: $before
         first: $first
         last: $last
-        filters: {where: {beamID: {equalTo: $beamID}}}
+        filters: $filters
       ) {
         edges {
           node {
-            beamID
             createdAt
             active
             status
@@ -630,6 +653,15 @@ export const GetBlockStorageByIdDocument = /*#__PURE__*/ gql`
   }
 }
     ${BlockStorageFragmentDoc}`;
+export const IndexReflectionDocument = /*#__PURE__*/ gql`
+    mutation IndexReflection($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
+  indexReflection(jws: $jws, capability: $capability) {
+    document {
+      ...IndexedReflectFragment
+    }
+  }
+}
+    ${IndexedReflectFragmentDoc}`;
 export const CreateReflectDocument = /*#__PURE__*/ gql`
     mutation CreateReflect($i: CreateAkashaReflectInput!) {
   createAkashaReflect(input: $i) {
@@ -1346,6 +1378,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     IndexBeam(variables?: Types.IndexBeamMutationVariables, options?: C): Promise<Types.IndexBeamMutation> {
       return requester<Types.IndexBeamMutation, Types.IndexBeamMutationVariables>(IndexBeamDocument, variables, options) as Promise<Types.IndexBeamMutation>;
     },
+    IndexContentBlock(variables?: Types.IndexContentBlockMutationVariables, options?: C): Promise<Types.IndexContentBlockMutation> {
+      return requester<Types.IndexContentBlockMutation, Types.IndexContentBlockMutationVariables>(IndexContentBlockDocument, variables, options) as Promise<Types.IndexContentBlockMutation>;
+    },
     CreateBeam(variables: Types.CreateBeamMutationVariables, options?: C): Promise<Types.CreateBeamMutation> {
       return requester<Types.CreateBeamMutation, Types.CreateBeamMutationVariables>(CreateBeamDocument, variables, options) as Promise<Types.CreateBeamMutation>;
     },
@@ -1378,6 +1413,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetBlockStorageById(variables: Types.GetBlockStorageByIdQueryVariables, options?: C): Promise<Types.GetBlockStorageByIdQuery> {
       return requester<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables, options) as Promise<Types.GetBlockStorageByIdQuery>;
+    },
+    IndexReflection(variables?: Types.IndexReflectionMutationVariables, options?: C): Promise<Types.IndexReflectionMutation> {
+      return requester<Types.IndexReflectionMutation, Types.IndexReflectionMutationVariables>(IndexReflectionDocument, variables, options) as Promise<Types.IndexReflectionMutation>;
     },
     CreateReflect(variables: Types.CreateReflectMutationVariables, options?: C): Promise<Types.CreateReflectMutation> {
       return requester<Types.CreateReflectMutation, Types.CreateReflectMutationVariables>(CreateReflectDocument, variables, options) as Promise<Types.CreateReflectMutation>;
