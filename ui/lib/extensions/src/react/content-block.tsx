@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Parcel from 'single-spa-react/parcel';
 import {
   type BlockInstanceMethods,
@@ -9,6 +9,11 @@ import {
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { ParcelConfigObject } from 'single-spa';
 import { useGetContentBlockByIdLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 
 export type MatchingBlock = {
   blockInfo: ContentBlockExtensionInterface & {
@@ -34,10 +39,13 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
   const { blockRef, mode, editMode, readMode } = props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
   const contentBlockStoreRef = React.useRef(getExtensionsPlugin()?.contentBlockStore);
-  const [parcels, setParcels] = React.useState<(MatchingBlock & { config: ParcelConfigObject })[]>(
-    [],
-  );
-  const isLoadingBlocks = React.useRef(false);
+  const [state, setState] = React.useState<{
+    parcels: (MatchingBlock & { config: ParcelConfigObject })[];
+    isMatched: boolean;
+  }>({
+    parcels: [],
+    isMatched: false,
+  });
 
   React.useLayoutEffect(() => {
     if (!contentBlockStoreRef.current && !!getExtensionsPlugin()) {
@@ -81,28 +89,86 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
             blockInfo: { ...block.blockInfo, mode },
             blockData: block.blockData,
           })();
-          setParcels(prev => [...prev, { ...block, config }]);
+          setState(prev => ({
+            parcels: [...prev.parcels, { ...block, config }],
+            isMatched: true,
+          }));
         } catch (err) {
           console.error(err);
         }
       }
-      isLoadingBlocks.current = false;
     };
     if (
       matchingBlocks &&
       matchingBlocks.length &&
-      matchingBlocks.length !== parcels.length &&
-      !isLoadingBlocks.current
+      matchingBlocks.length !== state.parcels.length &&
+      !state.isMatched
     ) {
-      isLoadingBlocks.current = true;
       resolveConfigs().catch(err => console.error('failed to load content blocks', err));
+    } else if (
+      matchingBlocks &&
+      !matchingBlocks.length &&
+      !state.isMatched &&
+      blockInfoQuery.called &&
+      !blockInfoQuery.loading
+    ) {
+      setState({
+        parcels: [],
+        isMatched: true,
+      });
     }
-  }, [matchingBlocks, mode, parcels.length]);
+  }, [matchingBlocks, mode, state]);
+
+  const appInfo = React.useMemo(() => {
+    if (blockInfoQuery.called && !blockInfoQuery.loading) {
+      if (
+        blockInfoQuery.data?.node &&
+        hasOwn(blockInfoQuery.data.node, 'appVersion') &&
+        blockInfoQuery.data.node.appVersion?.application
+      ) {
+        return blockInfoQuery.data.node.appVersion.application;
+      }
+    }
+  }, [blockInfoQuery]);
 
   return (
-    <React.Suspense fallback={<></>}>
-      {/*{matchingBlocks && matchingBlocks.length > parcels.length && <div>Loading content</div>}*/}
-      {parcels.map((matchingBlock, index) => {
+    <React.Suspense
+      fallback={
+        <div>
+          <TextLine animated={true} width={'w-full'} />
+          <TextLine animated={true} width={'w-1/2'} />
+        </div>
+      }
+    >
+      {blockInfoQuery.error && (
+        <div>
+          <TextLine animated={true} width={'w-full'} />
+          <TextLine animated={true} width={'w-1/2'} />
+        </div>
+      )}
+      {!state.parcels.length && !state.isMatched && (
+        <div>
+          <TextLine animated={true} width={'w-full'} />
+          <TextLine animated={true} width={'w-1/2'} />
+        </div>
+      )}
+      {!state.parcels.length && state.isMatched && appInfo && (
+        <>
+          <Stack direction="row">
+            <Stack direction="column">
+              <Text variant={'button-sm'}>App not installed</Text>
+              <Text variant="footnotes2" weight="normal">
+                You need to install {appInfo.displayName} to see this content
+              </Text>
+            </Stack>
+            <Stack>
+              <Button label={'Install'} />
+            </Stack>
+          </Stack>
+          <Divider />
+        </>
+      )}
+      {state.parcels.map((matchingBlock, index) => {
         return (
           <div
             id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}

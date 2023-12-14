@@ -95,6 +95,7 @@ export const VirtualListRenderer = React.forwardRef(
     const isScrolling = React.useRef(false);
     const currentPadding = React.useRef(0);
     const showScrollTopButton = React.useRef(false);
+    const shouldScrollToHeader = React.useRef(false);
 
     const getInitialState = () => {
       const itemsToRender: VirtualItem[] = [];
@@ -369,9 +370,14 @@ export const VirtualListRenderer = React.forwardRef(
               mounted: projectionWithCorrection.rendered,
               listHeight,
             },
-            () => {
+            newState => {
               let vpRect: Rect | undefined = viewportRect;
-              if (projectionWithCorrection.offset !== 0) {
+              if (shouldScrollToHeader.current) {
+                if (newState.mounted[0].key === HEADER_COMPONENT) {
+                  shouldScrollToHeader.current = false;
+                  viewport.scrollToTop();
+                }
+              } else if (projectionWithCorrection.offset !== 0) {
                 viewport.scrollBy(-projectionWithCorrection.offset);
                 vpRect = getRelativeToRootNode();
               }
@@ -394,8 +400,13 @@ export const VirtualListRenderer = React.forwardRef(
               mounted: nextProjection.nextRendered,
               listHeight,
             },
-            () => {
-              if (shouldCorrect || !alreadyRendered) {
+            newState => {
+              if (shouldScrollToHeader.current) {
+                if (newState.mounted[0].key === HEADER_COMPONENT) {
+                  shouldScrollToHeader.current = false;
+                  viewport.scrollToTop();
+                }
+              } else if (shouldCorrect || !alreadyRendered) {
                 debouncedUpdate('updatefn/debounced');
               }
               // update edge sensor
@@ -412,19 +423,19 @@ export const VirtualListRenderer = React.forwardRef(
         }
       },
       [
-        getRelativeToRootNode,
+        debouncedUpdate,
         getCommonProjectionItem,
-        measureItemHeights,
-        getNextProjection,
-        hasCorrection,
         getListPadding,
-        hasMeasuredHeights,
+        getNextProjection,
         getProjectionCorrection,
+        getRelativeToRootNode,
+        hasCorrection,
+        hasMeasuredHeights,
+        itemHeights,
+        measureItemHeights,
+        onEdgeDetectorUpdate,
         setState,
         viewport,
-        onEdgeDetectorUpdate,
-        itemHeights,
-        debouncedUpdate,
       ],
     );
 
@@ -502,9 +513,8 @@ export const VirtualListRenderer = React.forwardRef(
         !prevItemList.current.find(it => it.key === HEADER_COMPONENT) &&
         itemList.find(it => it.key === HEADER_COMPONENT)
       ) {
-        console.log('header inserted');
         if (state.mounted.length && state.mounted[0].start === 0 && !hasPreviousPage) {
-          window.scrollTo(0, 0);
+          shouldScrollToHeader.current = true;
         }
       }
       prevItemList.current = itemList;
@@ -567,7 +577,7 @@ export const VirtualListRenderer = React.forwardRef(
           minHeight: state.listHeight,
         }}
       >
-        {isAtTop() && hasNextPage && isLoading && loadingIndicator?.()}
+        {isAtTop() && hasPreviousPage && isLoading && loadingIndicator?.()}
         {projection.map(item => (
           <VirtualItemRenderer<T>
             key={item.virtualData.key}
@@ -581,6 +591,7 @@ export const VirtualListRenderer = React.forwardRef(
             itemSpacing={8}
           />
         ))}
+        {!isAtTop() && hasNextPage && isLoading && loadingIndicator?.()}
       </div>
     );
   },
