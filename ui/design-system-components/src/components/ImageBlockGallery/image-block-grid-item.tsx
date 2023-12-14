@@ -34,7 +34,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
   };
 
   const singleImageStyle = apply`${images.length === 1 && 'max-w-full'}`;
-  const mobileStyle = apply`${'h-40 sm:max-h-60'}`;
+  const mobileStyle = apply`${'max-h-40 sm:max-h-60'}`;
 
   return (
     <button
@@ -52,18 +52,19 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
       {/* when we have a single image we need to keep the original aspect ratio,
           otherwise give images a 1:1 ratio */}
       <picture className={tw('flex')}>
-        <source srcSet={imageSrc.originalSrc} />
-        <source srcSet={imageSrc.src.url} />
+        <source srcSet={imageSrc?.originalSrc} />
+        <source srcSet={imageSrc?.src?.url} />
         <img
-          alt={imageSrc.src.fallbackUrl}
+          alt={imageSrc?.src?.fallbackUrl}
           className={tx(
             `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
           )}
-          src={imageSrc.src.fallbackUrl}
+          src={imageSrc?.src?.fallbackUrl}
           onLoad={() => setImgLoaded(true)}
           hidden={!imgLoaded}
         />
       </picture>
+
       {!imgLoaded && (
         <DelayLoad>
           <div className={tw('flex')}>
@@ -73,7 +74,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
                 `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
               )}
               src={'/images/image-placeholder.webp'}
-              height={images.length === 1 ? image.size.height : ''}
+              height={images.length === 1 ? imageSrc?.size?.height : ''}
             />
           </div>
         </DelayLoad>

@@ -10,7 +10,6 @@ export interface FooterProps {
   handleBeamPublish: () => void;
   handleClickAddBlock: () => void;
   handleClickTags: () => void;
-  handleAddBlock: () => void;
   handleAddTags: () => void;
   handleClickCancel: () => void;
   isPublishing?: boolean;
@@ -22,12 +21,12 @@ export interface FooterProps {
   blocksLabel?: string;
   blocksNumber?: number;
   tagsNumber?: number;
+  tagValue?: string;
 }
 
 export const Footer: React.FC<FooterProps> = props => {
   const {
     uiState,
-    handleAddBlock,
     handleAddTags,
     handleClickAddBlock,
     handleClickTags,
@@ -41,6 +40,7 @@ export const Footer: React.FC<FooterProps> = props => {
     blocksLabel,
     blocksNumber = 0,
     tagsNumber = 0,
+    tagValue,
     isPublishing,
   } = props;
 
@@ -51,13 +51,7 @@ export const Footer: React.FC<FooterProps> = props => {
           <>
             <Text>{`${blocksNumber}/10 ${blocksLabel}`}</Text>
             <Stack direction="row" spacing="gap-2">
-              <Button variant="text" label={cancelLabel} onClick={handleClickCancel} />
-              <Button
-                variant="primary"
-                disabled={isPublishing}
-                label={addLabel}
-                onClick={handleAddBlock}
-              />
+              <Button variant="secondary" label={cancelLabel} onClick={handleClickCancel} />
             </Stack>
           </>
         );
@@ -69,7 +63,7 @@ export const Footer: React.FC<FooterProps> = props => {
               <Button variant="text" label={cancelLabel} onClick={handleClickCancel} />
               <Button
                 variant="primary"
-                disabled={isPublishing}
+                disabled={isPublishing || tagValue.length < 1}
                 label={addLabel}
                 onClick={handleAddTags}
               />
@@ -107,7 +101,7 @@ export const Footer: React.FC<FooterProps> = props => {
       fullWidth
       justify="between"
       direction="row"
-      customStyle="absolute bottom-0 left-0 rounded-b-xl"
+      customStyle="rounded-b-xl"
       background={{ light: 'white', dark: 'grey2' }}
     >
       {renderContent()}

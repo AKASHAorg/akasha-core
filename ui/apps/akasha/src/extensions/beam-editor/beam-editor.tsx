@@ -5,7 +5,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
-  CheckIcon,
   TrashIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -40,7 +39,7 @@ export const BeamEditor: React.FC = () => {
   };
 
   const handleBeamPublish = () => {
-    createContentBlocks();
+    createContentBlocks(isNsfw);
   };
 
   const [uiState, setUiState] = React.useState<uiState>('editor');
@@ -62,26 +61,25 @@ export const BeamEditor: React.FC = () => {
     setUiState('editor');
   };
 
-  const [selectedBlock, setSelectedBlock] = React.useState(null);
-
-  const handleAddBlock = () => {
+  const handleAddBlock = selectedBlock => {
     const newBlock = availableBlocks.find(
       block => block.propertyType === selectedBlock.propertyType,
     );
     onBlockSelectAfter(newBlock);
     setUiState('editor');
-    setSelectedBlock(null);
   };
 
   const [tagValue, setTagValue] = React.useState('');
   const [editorTags, setEditorTags] = React.useState([]);
 
   const handleAddTags = () => {
-    setEditorTags(prev => {
-      const removeDuplicates = new Set([...prev, tagValue]);
-      return [...removeDuplicates];
-    });
-    setTagValue('');
+    if (tagValue.length > 0) {
+      setEditorTags(prev => {
+        const removeDuplicates = new Set([...prev, tagValue]);
+        return [...removeDuplicates];
+      });
+      setTagValue('');
+    }
   };
 
   const handleDeleteTag = tag => {
@@ -92,7 +90,7 @@ export const BeamEditor: React.FC = () => {
   };
 
   return (
-    <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] relative" padding={0}>
+    <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between" padding={0}>
       <Header
         addBlockLabel={t('Add a Block')}
         beamEditorLabel={t('Beam Editor')}
@@ -101,8 +99,8 @@ export const BeamEditor: React.FC = () => {
         handleNsfwCheckbox={handleNsfwCheckbox}
         uiState={uiState}
       />
-      <Stack customStyle="relative overflow-auto">
-        <Stack>
+      <Stack customStyle="relative h-full overflow-hidden">
+        <Stack customStyle="overflow-auto h-full">
           {blocksInUse.map((block, idx) => (
             <div key={`${block.propertyType}-${idx}`} id={`${block.propertyType}-${idx}`}>
               <Stack padding={16} direction="column" spacing="gap-2">
@@ -111,7 +109,7 @@ export const BeamEditor: React.FC = () => {
                     align="center"
                     justify="center"
                     customStyle={
-                      'h-6 w-6 group relative rounded-full bg(secondaryLight dark:secondaryDark)'
+                      'h-6 w-6 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
                     }
                   >
                     <Icon size="xs" icon={block.icon} />
@@ -144,24 +142,18 @@ export const BeamEditor: React.FC = () => {
         </Stack>
         <Stack
           background={{ light: 'white', dark: 'grey2' }}
-          customStyle={`absolute top-0 left-0 h-full w-full z-1 divide(y grey8 dark:grey5) ${
+          customStyle={`absolute overflow-auto top-0 left-0 h-full w-full z-1 divide(y grey8 dark:grey5) ${
             uiState === 'blocks' ? 'flex' : 'hidden'
           }`}
         >
           {availableBlocks.map((block, idx) => (
-            <button key={idx} onClick={() => setSelectedBlock(block)}>
+            <button key={idx} onClick={() => handleAddBlock(block)}>
               <Stack
                 padding={16}
                 customStyle="w-full"
                 direction="row"
                 justify="between"
                 align="center"
-                background={
-                  block.propertyType === selectedBlock?.propertyType && {
-                    light: 'grey8',
-                    dark: 'grey3',
-                  }
-                }
               >
                 <Stack direction="row" align="center" spacing="gap-2">
                   <Stack
@@ -169,38 +161,17 @@ export const BeamEditor: React.FC = () => {
                     justify="center"
                     customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
                   >
-                    <Icon
-                      size="xs"
-                      accentColor={block.propertyType === selectedBlock?.propertyType}
-                      icon={block.icon}
-                    />
+                    <Icon size="xs" icon={block.icon} />
                   </Stack>
-                  <Text
-                    color={
-                      block.propertyType === selectedBlock?.propertyType
-                        ? {
-                            light: 'secondaryLight',
-                            dark: 'secondaryDark',
-                          }
-                        : {
-                            light: 'black',
-                            dark: 'white',
-                          }
-                    }
-                  >
-                    {block.displayName}
-                  </Text>
+                  <Text>{block.displayName}</Text>
                 </Stack>
-                {block.propertyType === selectedBlock?.propertyType && (
-                  <Icon icon={<CheckIcon />} accentColor={true} />
-                )}
               </Stack>
             </button>
           ))}
         </Stack>
         <Stack
           background={{ light: 'white', dark: 'grey2' }}
-          customStyle={`absolute top-0 left-0 h-full w-full z-1 ${
+          customStyle={`absolute top-0 left-0 h-full w-full z-1 overflow-auto ${
             uiState === 'tags' ? 'flex' : 'hidden'
           }`}
         >
@@ -240,7 +211,6 @@ export const BeamEditor: React.FC = () => {
         handleClickAddBlock={handleAddBlockBtn}
         handleClickTags={handleTagsBtn}
         handleClickCancel={handleClickCancel}
-        handleAddBlock={handleAddBlock}
         handleAddTags={handleAddTags}
         handleBeamPublish={handleBeamPublish}
         addBlockLabel={t('Add a Block')}
@@ -251,6 +221,7 @@ export const BeamEditor: React.FC = () => {
         publishLabel={t('Beam it')}
         blocksNumber={blocksInUse.length}
         tagsNumber={editorTags.length}
+        tagValue={tagValue}
         isPublishing={isPublishing}
       />
     </Card>

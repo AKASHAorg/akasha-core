@@ -44,7 +44,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             customStyle="relative w-6 h-6 rounded-l-sm"
             background={
               showCaption
-                ? { light: 'secondaryLight', dark: 'grey7' }
+                ? { light: 'secondaryLight/30', dark: 'grey7' }
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
@@ -58,7 +58,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             customStyle="relative w-6 h-6"
             background={
               alignState === 'start'
-                ? { light: 'secondaryLight', dark: 'grey7' }
+                ? { light: 'secondaryLight/30', dark: 'grey7' }
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
@@ -72,7 +72,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             customStyle="relative w-6 h-6"
             background={
               alignState === 'center'
-                ? { light: 'secondaryLight', dark: 'grey7' }
+                ? { light: 'secondaryLight/30', dark: 'grey7' }
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
@@ -86,7 +86,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
             customStyle="relative w-6 h-6 rounded-r-sm"
             background={
               alignState === 'end'
-                ? { light: 'secondaryLight', dark: 'grey7' }
+                ? { light: 'secondaryLight/30', dark: 'grey7' }
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
