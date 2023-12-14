@@ -4,7 +4,7 @@ import {
   ContentBlockModes,
   ContentBlockRootProps,
 } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import type {
   AkashaBeamInput,
   CreateAkashaBeamPayload,
@@ -12,6 +12,7 @@ import type {
 import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import getSDK from '@akashaorg/awf-sdk';
 import { useIndexBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import type { CreateBeamMutation } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 /**
  * Steps when publishBeam is called:
@@ -104,7 +105,7 @@ export const useBlocksPublishing = () => {
   }, [blocksInUse, createBeam, createBeamQuery, isNsfw]);
 
   const indexBeam = React.useCallback(
-    async (beamData: CreateAkashaBeamPayload) => {
+    async (beamData: CreateBeamMutation['createAkashaBeam']) => {
       try {
         const indexingVars = await sdk.current.api.auth.prepareIndexedID(beamData.document.id);
         createBeamIndex({

@@ -38,7 +38,7 @@ const ReflectionPage: React.FC<unknown> = () => {
       hasOwn(reflectionReq.data, 'node') &&
       hasOwn(reflectionReq.data.node, 'id')
     ) {
-      return mapReflectEntryData(reflectionReq.data.node);
+      return reflectionReq.data.node;
     }
   }, [reflectionReq]);
 
@@ -70,20 +70,13 @@ const ReflectionPage: React.FC<unknown> = () => {
         <ReflectionSection
           beamId={entryData.beam?.id}
           reflectionId={entryData.id}
-          entryData={{ ...entryData, beam: null, beamID: entryData.beam?.id }}
+          entryData={mapReflectEntryData(entryData)}
           isLoggedIn={!!profileDataReq?.akashaProfile?.id}
           onNavigate={onNavigate}
           showLoginModal={showLoginModal}
         />
       </React.Suspense>
-      <PendingReflect
-        beamId={entryData.beam?.id}
-        reflectionId={entryData.id}
-        entryData={mapReflectEntryData(entryData)}
-        isLoggedIn={!!profileDataReq.akashaProfile?.id}
-        onNavigate={onNavigate}
-        showLoginModal={showLoginModal}
-      />
+      <PendingReflect beamId={entryData.beam?.id} authorId={profileDataReq?.akashaProfile?.id} />
       <Stack spacing="gap-y-2">
         <ReflectFeed
           reflectionsOf={{ entryId: entryData.id, itemType: EntityTypes.REFLECT }}
