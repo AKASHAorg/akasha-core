@@ -99,7 +99,7 @@ export const Footer: React.FC<FooterProps> = props => {
       fullWidth
       justify="between"
       direction="row"
-      customStyle="absolute bottom-0 left-0 rounded-b-xl"
+      customStyle="rounded-b-xl"
       background={{ light: 'white', dark: 'grey2' }}
     >
       {renderContent()}

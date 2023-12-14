@@ -88,7 +88,7 @@ export const BeamEditor: React.FC = () => {
   };
 
   return (
-    <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] relative" padding={0}>
+    <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between" padding={0}>
       <Header
         addBlockLabel={t('Add a Block')}
         beamEditorLabel={t('Beam Editor')}
@@ -97,8 +97,8 @@ export const BeamEditor: React.FC = () => {
         handleNsfwCheckbox={handleNsfwCheckbox}
         uiState={uiState}
       />
-      <Stack customStyle="relative overflow-auto">
-        <Stack>
+      <Stack customStyle="relative h-full overflow-hidden">
+        <Stack customStyle="overflow-auto h-full">
           {blocksInUse.map((block, idx) => (
             <div key={`${block.propertyType}-${idx}`} id={`${block.propertyType}-${idx}`}>
               <Stack padding={16} direction="column" spacing="gap-2">
@@ -140,7 +140,7 @@ export const BeamEditor: React.FC = () => {
         </Stack>
         <Stack
           background={{ light: 'white', dark: 'grey2' }}
-          customStyle={`absolute top-0 left-0 h-full w-full z-1 divide(y grey8 dark:grey5) ${
+          customStyle={`absolute overflow-auto top-0 left-0 h-full w-full z-1 divide(y grey8 dark:grey5) ${
             uiState === 'blocks' ? 'flex' : 'hidden'
           }`}
         >
@@ -169,7 +169,7 @@ export const BeamEditor: React.FC = () => {
         </Stack>
         <Stack
           background={{ light: 'white', dark: 'grey2' }}
-          customStyle={`absolute top-0 left-0 h-full w-full z-1 ${
+          customStyle={`absolute top-0 left-0 h-full w-full z-1 overflow-auto ${
             uiState === 'tags' ? 'flex' : 'hidden'
           }`}
         >
