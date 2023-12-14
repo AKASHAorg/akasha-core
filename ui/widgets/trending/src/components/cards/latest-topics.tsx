@@ -121,6 +121,9 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             console.log('updatte data', data);
             setTagsQueue([]);
           },
+          onError: () => {
+            return null;
+          },
         });
       } else {
         createInterestsMutation({
@@ -136,10 +139,11 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             const id = data.createAkashaProfileInterests?.document.id;
             console.log('id', id);
             subscriptionId.current = id;
+            refetchTagSubscriptions();
           },
-          // onError: () => {
-          //   setSubscribedInterests(prev => [...prev, tag]);
-          // },
+          onError: () => {
+            return null;
+          },
         });
       }
     }
