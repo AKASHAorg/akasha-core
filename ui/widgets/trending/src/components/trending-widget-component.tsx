@@ -68,6 +68,13 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       : [];
   }, [isLoggedIn, tagSubscriptionsData]);
 
+  const tagSubscriptionsId = useMemo(() => {
+    if (!isLoggedIn) return null;
+    return tagSubscriptionsData && hasOwn(tagSubscriptionsData.node, 'akashaProfileInterests')
+      ? tagSubscriptionsData.node.akashaProfileInterests?.id
+      : null;
+  }, [isLoggedIn, tagSubscriptionsData]);
+
   const followList = isLoggedIn
     ? getFollowList(
         followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
@@ -117,6 +124,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           isLoadingTags={latestTopicsLoading}
           tags={latestTopics}
           subscribedTags={tagSubscriptions}
+          tagSubscriptionsId={tagSubscriptionsId}
           isLoggedIn={isLoggedIn}
           onClickTopic={handleTopicClick}
           showLoginModal={showLoginModal}

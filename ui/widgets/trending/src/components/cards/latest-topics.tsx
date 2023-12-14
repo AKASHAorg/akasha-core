@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import getSDK from '@akashaorg/awf-sdk';
 import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { useCreateInterestsMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import {
+  useCreateInterestsMutation,
+  useUpdateInterestsMutation,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -13,7 +16,8 @@ import isEqual from 'lodash/isEqual';
 export type LatestTopicsProps = {
   // data
   tags: string[];
-  subscribedTags?: string[];
+  subscribedTags?: string[] | null;
+  tagSubscriptionsId: string | null;
   isLoadingTags?: boolean;
   isLoggedIn: boolean;
   // labels
@@ -40,55 +44,84 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     subscribedLabel,
     unsubscribeLabel,
     subscribedTags,
+    tagSubscriptionsId,
     isLoggedIn,
     showLoginModal,
   } = props;
 
   const [subscribedInterests, setSubscribedInterests] = useState([]);
-  // const [subscribedTags, setSubscribedTags] = useState([]);
   const tagsInitialized = useRef(null);
+  const [tagsQueue, setTagsQueue] = useState([]);
+  let timer = null;
+  const currentTags = useRef([]);
 
   useEffect(() => {
     if (subscribedTags.length > 0 && !tagsInitialized.current) {
-      console.log('subscribedTags', subscribedTags);
       setSubscribedInterests(subscribedTags);
       tagsInitialized.current = true;
+      currentTags.current = subscribedTags;
     }
   }, [subscribedTags, tagsInitialized]);
 
   const sdk = getSDK();
   const [analyticsActions] = useAnalytics();
 
-  const [createInterestsMutation, { data, loading, error }] = useCreateInterestsMutation({
+  const [createInterestsMutation, { loading, error }] = useCreateInterestsMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
+  const [updateInterestsMutation, { loading: updateLoading, error: updateError }] =
+    useUpdateInterestsMutation({
+      context: { source: sdk.services.gql.contextSources.composeDB },
+    });
+
   useEffect(() => {
-    if (subscribedInterests.length === 0) return;
-    if (loading) return;
+    if (loading || updateLoading) return;
     console.log('subscribedInterests', subscribedInterests);
-    console.log('subscribedTags', subscribedTags);
 
-    if (!isEqual(subscribedTags, subscribedInterests)) {
-      //setSubscribedTags(subscribedInterests);
-
-      createInterestsMutation({
-        variables: {
-          i: {
-            content: {
-              topics: [...subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' }))],
+    if (!isEqual(subscribedInterests, subscribedTags))
+      if (tagSubscriptionsId) {
+        updateInterestsMutation({
+          variables: {
+            i: {
+              id: tagSubscriptionsId,
+              content: {
+                topics: subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
+              },
             },
           },
-        },
-        onCompleted: data => {
-          console.log('data success', data);
-        },
-        // onError: () => {
-        //   setSubscribedInterests(prev => prev.filter(topic => topic !== tag));
-        // },
-      });
-    }
-  }, [subscribedTags, subscribedInterests, loading, createInterestsMutation]);
+          onCompleted: data => {
+            console.log('update', data);
+            setTagsQueue([]);
+          },
+        });
+      } else {
+        createInterestsMutation({
+          variables: {
+            i: {
+              content: {
+                topics: subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
+              },
+            },
+          },
+          onCompleted: data => {
+            console.log('create', data);
+          },
+          // onError: () => {
+          //   setSubscribedInterests(prev => [...prev, tag]);
+          // },
+        });
+      }
+    // }
+  }, [
+    createInterestsMutation,
+    loading,
+    subscribedInterests,
+    subscribedTags,
+    tagSubscriptionsId,
+    updateInterestsMutation,
+    updateLoading,
+  ]);
 
   const handleTopicSubscribe = (tag: string) => {
     if (!isLoggedIn) {
@@ -96,31 +129,17 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       return;
     }
 
-    const newInterests = [...subscribedInterests, tag];
+    const newInterests = [...currentTags.current, tag];
 
-    setSubscribedInterests(newInterests);
+    currentTags.current = newInterests;
+    tagsQueue.push(tag);
 
-    if (loading) {
-      return;
+    if (timer != null) {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 300);
+    } else {
+      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 300);
     }
-
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending Topic Subscribed',
-    });
-
-    createInterestsMutation({
-      variables: {
-        i: {
-          content: {
-            topics: [...newInterests.map(tag => ({ value: tag, labelType: 'TOPIC' }))],
-          },
-        },
-      },
-      onError: () => {
-        setSubscribedInterests(prev => prev.filter(topic => topic !== tag));
-      },
-    });
   };
 
   const handleTopicUnsubscribe = (tag: string) => {
@@ -128,32 +147,18 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       showLoginModal();
       return;
     }
+    const newInterests = currentTags.current.filter(topic => topic !== tag);
 
-    const newInterests = subscribedInterests.filter(topic => topic !== tag);
+    currentTags.current = newInterests;
 
-    setSubscribedInterests(newInterests);
+    tagsQueue.push(tag);
 
-    if (loading) {
-      return;
+    if (timer != null) {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 300);
+    } else {
+      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 300);
     }
-
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending Topic Unsubscribed',
-    });
-
-    createInterestsMutation({
-      variables: {
-        i: {
-          content: {
-            topics: newInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
-          },
-        },
-      },
-      onError: () => {
-        setSubscribedInterests(prev => [...prev, tag]);
-      },
-    });
   };
 
   if (tags.length === 0 && isLoadingTags) return <TrendingWidgetLoadingCard />;
@@ -177,8 +182,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           )}
 
           <Stack spacing="gap-y-4">
-            {['eth', 'coin', 'social', 'dogs'].length !== 0 &&
-              ['eth', 'coin', 'social', 'dogs'].slice(0, 4).map((tag, index) => (
+            {['dogs', 'cats', 'iprf', 'coin'].length > 0 &&
+              ['dogs', 'cats', 'iprf', 'coin'].slice(0, 4).map((tag, index) => (
                 <TopicRow
                   key={index}
                   tag={tag}
@@ -189,7 +194,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                   unsubscribeLabel={unsubscribeLabel}
                   isLoggedIn={isLoggedIn}
                   onClickTopic={onClickTopic}
-                  isLoading={false}
+                  isLoading={tagsQueue.includes(tag)}
                   // setSubscribedInterests={setSubscribedInterests}
                   showLoginModal={showLoginModal}
                   handleTopicUnsubscribe={handleTopicUnsubscribe}

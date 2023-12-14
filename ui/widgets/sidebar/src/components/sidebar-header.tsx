@@ -52,6 +52,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   //this padding style will adjust the header's vertical space to maintain the same height through different states
   const headerPadding = profileName && isLoggedIn && !isLoading ? 'pb-[2.125rem]' : '';
 
+  if (error) return null;
+
   return (
     <Stack
       direction="row"
