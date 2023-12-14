@@ -73,11 +73,13 @@ export const BeamEditor: React.FC = () => {
   const [editorTags, setEditorTags] = React.useState([]);
 
   const handleAddTags = () => {
-    setEditorTags(prev => {
-      const removeDuplicates = new Set([...prev, tagValue]);
-      return [...removeDuplicates];
-    });
-    setTagValue('');
+    if (tagValue.length > 0) {
+      setEditorTags(prev => {
+        const removeDuplicates = new Set([...prev, tagValue]);
+        return [...removeDuplicates];
+      });
+      setTagValue('');
+    }
   };
 
   const handleDeleteTag = tag => {
@@ -219,6 +221,7 @@ export const BeamEditor: React.FC = () => {
         publishLabel={t('Beam it')}
         blocksNumber={blocksInUse.length}
         tagsNumber={editorTags.length}
+        tagValue={tagValue}
         isPublishing={isPublishing}
       />
     </Card>

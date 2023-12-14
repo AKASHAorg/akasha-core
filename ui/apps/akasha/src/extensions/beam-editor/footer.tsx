@@ -21,6 +21,7 @@ export interface FooterProps {
   blocksLabel?: string;
   blocksNumber?: number;
   tagsNumber?: number;
+  tagValue?: string;
 }
 
 export const Footer: React.FC<FooterProps> = props => {
@@ -39,6 +40,7 @@ export const Footer: React.FC<FooterProps> = props => {
     blocksLabel,
     blocksNumber = 0,
     tagsNumber = 0,
+    tagValue,
     isPublishing,
   } = props;
 
@@ -61,7 +63,7 @@ export const Footer: React.FC<FooterProps> = props => {
               <Button variant="text" label={cancelLabel} onClick={handleClickCancel} />
               <Button
                 variant="primary"
-                disabled={isPublishing}
+                disabled={isPublishing || tagValue.length < 1}
                 label={addLabel}
                 onClick={handleAddTags}
               />
