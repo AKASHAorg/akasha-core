@@ -56,7 +56,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const currentTags = useRef([]);
 
   useEffect(() => {
-    if (subscribedTags.length > 0 && !tagsInitialized.current) {
+    if (subscribedTags && subscribedTags.length > 0 && !tagsInitialized.current) {
       setSubscribedInterests(subscribedTags);
       tagsInitialized.current = true;
       currentTags.current = subscribedTags;
