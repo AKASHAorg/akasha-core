@@ -54,8 +54,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const [subscribedInterests, setSubscribedInterests] = useState([]);
   const subscriptionId = useRef(null);
   const tagsInitialized = useRef(null);
+  const timer = useRef(null);
   const [tagsQueue, setTagsQueue] = useState([]);
-  let timer = null;
   const currentTags = useRef([]);
 
   useEffect(() => {
@@ -107,7 +107,16 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               },
             },
           },
-          optimisticResponse: {},
+          optimisticResponse: {
+            updateAkashaProfileInterests: {
+              clientMutationId: null,
+              document: {
+                did: { id: 'did:pkh:eip155:5:0xe92bbe3e927f73106e57ed43fd3f2acf51035128' },
+                topics: subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
+                id: subscriptionId.current,
+              },
+            },
+          },
           onCompleted: data => {
             console.log('updatte data', data);
             setTagsQueue([]);
@@ -134,8 +143,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
         });
       }
     }
-
-    // }
   }, [loading, subscribedInterests, subscribedTags, tagSubscriptionsId, updateLoading]);
 
   const handleTopicSubscribe = (tag: string) => {
@@ -149,13 +156,12 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
     currentTags.current = newInterests;
 
-    if (timer != null) {
-      console.log('timer', timer);
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
-    } else {
-      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
+    console.log('timer', timer.current);
+
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current);
     }
+    timer.current = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
   };
 
   const handleTopicUnsubscribe = (tag: string) => {
@@ -169,13 +175,11 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
     currentTags.current = newInterests;
 
-    if (timer != null) {
-      console.log('timer', timer);
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
-    } else {
-      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
+    console.log('timer', timer.current);
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current);
     }
+    timer.current = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
   };
 
   if (tags.length === 0 && isLoadingTags) return <TrendingWidgetLoadingCard />;
