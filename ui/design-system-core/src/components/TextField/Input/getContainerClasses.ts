@@ -6,22 +6,31 @@ const STATUS_TO_BORDER_CLASSES_MAP: Record<Status, string> = {
   warning: 'border border-warningLight dark:border-warningDark',
 };
 
-export function getContainerClasses(disabled: boolean, status: Status, readOnly?: boolean) {
-  const defaultStyle = `px-2.5 rounded-lg bg-grey9 dark:bg-grey3`;
+export function getContainerClasses(
+  disabled: boolean,
+  status: Status,
+  readOnly?: boolean,
+  altBg?: boolean,
+) {
+  const defaultBgColors = `grey9 dark:grey3`;
+  const altBgColors = `white dark:grey5`;
+  const style = `px-2.5 rounded-lg bg(${altBg ? altBgColors : defaultBgColors}) border(${
+    altBg ? altBgColors : defaultBgColors
+  })`;
 
   if (!disabled && !status && !readOnly) {
-    return `${defaultStyle} focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark`;
+    return `${style} focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark`;
   }
 
   if (disabled) {
-    return `${defaultStyle} bg-grey9 dark:bg-grey4`;
+    return `${style} bg-grey9 dark:bg-grey4`;
   }
 
   if (readOnly) {
-    return `${defaultStyle} bg-grey8 dark:bg-grey4`;
+    return `${style} bg-grey8 dark:bg-grey4`;
   }
 
   if (status) {
-    return `${defaultStyle} ${STATUS_TO_BORDER_CLASSES_MAP[status]}`;
+    return `${style} ${STATUS_TO_BORDER_CLASSES_MAP[status]}`;
   }
 }

@@ -1,16 +1,6 @@
 import { CustomElement } from '@akashaorg/typings/lib/ui';
 import { Editor, Node, Path, Range, Transforms } from 'slate';
 
-const withImages = (editor: Editor) => {
-  const { isVoid } = editor;
-
-  editor.isVoid = element => {
-    return element.type === 'image' ? true : isVoid(element);
-  };
-
-  return editor;
-};
-
 const withMentions = (editor: Editor) => {
   const { isInline, isVoid } = editor;
 
@@ -65,15 +55,15 @@ const withLinks = (editor: Editor) => {
 };
 
 const withCorrectVoidBehavior = editor => {
-  const { deleteBackward, insertBreak } = editor;
+  const { deleteBackward, insertBreak, selection } = editor;
 
   // if current selection is void node, insert a default node below
   editor.insertBreak = () => {
-    if (!editor.selection || !Range.isCollapsed(editor.selection)) {
+    if (!selection || !Range.isCollapsed(selection)) {
       return insertBreak();
     }
 
-    const selectedNodePath = Path.parent(editor.selection.anchor.path);
+    const selectedNodePath = Path.parent(selection.anchor.path);
     const selectedNode = Node.get(editor, selectedNodePath);
     if (Editor.isVoid(editor, selectedNode as CustomElement)) {
       Editor.insertNode(editor, {
@@ -88,15 +78,12 @@ const withCorrectVoidBehavior = editor => {
 
   // if prev node is a void node, remove the current node and select the void node
   editor.deleteBackward = unit => {
-    if (
-      !editor.selection ||
-      !Range.isCollapsed(editor.selection) ||
-      editor.selection.anchor.offset !== 0
-    ) {
+    const { selection } = editor;
+    if (!selection || !Range.isCollapsed(selection) || selection.anchor.offset !== 0) {
       return deleteBackward(unit);
     }
 
-    const parentPath = Path.parent(editor.selection.anchor.path);
+    const parentPath = Path.parent(selection.anchor.path);
     const parentNode = Node.get(editor, parentPath);
     const parentIsEmpty = Node.string(parentNode).length === 0;
 
@@ -114,4 +101,4 @@ const withCorrectVoidBehavior = editor => {
   return editor;
 };
 
-export { withImages, withMentions, withTags, withLinks, withCorrectVoidBehavior };
+export { withMentions, withTags, withLinks, withCorrectVoidBehavior };

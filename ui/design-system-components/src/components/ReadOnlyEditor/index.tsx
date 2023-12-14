@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { createEditor, Descendant } from 'slate';
 import { Slate, withReact, Editable, RenderElementProps } from 'slate-react';
-import { ImageElement } from '@akashaorg/typings/lib/ui';
-import { withMentions, withImages, withTags, withLinks } from '../Editor/plugins';
+import { withMentions, withTags, withLinks } from '../Editor/plugins';
 import { renderElement, renderLeaf } from '../Editor/renderers';
-import ImageOverlay from '../ImageOverlay';
 
 export interface IReadOnlyEditor {
   content: Descendant[];
@@ -22,29 +20,15 @@ export interface IReadOnlyEditor {
  * @param handleLinkClick - click handler for links in the content, will open external links in new tab
  */
 const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
-  const { content, disabled, handleMentionClick, handleTagClick, handleLinkClick } = props;
+  const { content, handleMentionClick, handleTagClick, handleLinkClick } = props;
 
-  const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
   const [value, setValue] = React.useState(content);
-  const [imgUrl, setImgUrl] = React.useState<{ url: string; fallbackUrl?: string } | null>(null);
-
-  /**
-   * opens the fullscreen image modal and shows the clicked upon image in it
-   */
-  const handleClickImage = (element: ImageElement) => {
-    setImgUrl(element);
-    setImageOverlayOpen(true);
-  };
-
-  const closeImageOverlay = () => {
-    setImageOverlayOpen(false);
-  };
 
   /**
    * initialise the editor with required plugins to parse content
    */
   const editor = React.useMemo(
-    () => withLinks(withTags(withMentions(withReact(withImages(createEditor()))))),
+    () => withLinks(withTags(withMentions(withReact(createEditor())))),
     [],
   );
 
@@ -72,19 +56,11 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
              * pass the handlers for the various content elements in slate
              * pass null for handleDeleteImage because that is only supported when editing content
              */
-            renderElement(
-              renderProps,
-              handleMentionClick,
-              handleTagClick,
-              handleLinkClick,
-              null,
-              !disabled ? handleClickImage : null,
-            )
+            renderElement(renderProps, handleMentionClick, handleTagClick, handleLinkClick)
           }
           renderLeaf={renderLeaf}
         />
       </Slate>
-      {imageOverlayOpen && <ImageOverlay src={imgUrl} closeModal={closeImageOverlay} />}
     </>
   );
 };

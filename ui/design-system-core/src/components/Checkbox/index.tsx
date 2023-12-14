@@ -26,6 +26,7 @@ export type CheckboxProps = {
 const baseLabelStyles = apply`inline-block ml-2`;
 
 const basePseudoCheckboxStyles = `
+cursor-pointer
 before:absolute after:absolute before:visible after:visible
 after:content-[''] before:content-['']
 before:inline-block after:inline-block
