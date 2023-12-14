@@ -1,0 +1,14 @@
+fragment IndexedReflectFragment on IndexReflectPayloadDocument{
+  id
+  createdAt
+  beamID
+  reflectionID
+}
+
+mutation IndexReflection($jws: DID_JWS, $capability: CACAO_CAPABILITY){
+  indexReflection(jws: $jws, capability: $capability){
+    document{
+      ...IndexedReflectFragment
+    }
+  }
+}

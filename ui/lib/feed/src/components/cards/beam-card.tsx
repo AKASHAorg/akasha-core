@@ -4,8 +4,7 @@ import EntryCard, {
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { transformSource, hasOwn, sortByKey, useLoggedIn } from '@akashaorg/ui-awf-hooks';
-import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { ContentBlockModes, EntityTypes } from '@akashaorg/typings/lib/ui';
+import { ContentBlockModes, EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +19,7 @@ type BeamCardProps = Pick<
   | 'hideActionButtons'
   | 'disableActions'
 > & {
-  entryData: AkashaBeam;
+  entryData: BeamEntryData;
 };
 
 const BeamCard: React.FC<BeamCardProps> = props => {
@@ -34,7 +33,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   const { authenticatedDID } = useLoggedIn();
 
   const profileDataReq = useGetProfileByDidQuery(
-    { id: entryData.author.id },
+    { id: entryData.authorId },
     { select: response => response.node },
   );
 
@@ -65,7 +64,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       sortedContents={sortedEntryContent}
       flagAsLabel={t('Report')}
       editLabel={t('Edit')}
-      isViewer={authenticatedDID === entryData.author.id}
+      isViewer={authenticatedDID === entryData.authorId}
       removed={{
         author: {
           firstPart: t('AKASHA world members won’t be able to see the content '),

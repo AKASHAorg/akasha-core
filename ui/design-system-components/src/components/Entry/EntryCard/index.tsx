@@ -22,8 +22,9 @@ import {
   getColorClasses,
 } from '@akashaorg/design-system-core/lib/utils';
 import { Descendant } from 'slate';
-import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import {
+  type EntryData,
   AkashaProfile,
   EntityTypes,
   type Image,
@@ -32,7 +33,7 @@ import {
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 
 export type EntryCardProps = {
-  entryData: Omit<AkashaBeam, 'reflectionsCount' | 'reflections'> | AkashaReflect;
+  entryData: EntryData;
   authorProfile: {
     data: Pick<AkashaProfile, 'name' | 'avatar' | 'did'>;
     status: 'loading' | 'error' | 'success';
@@ -173,15 +174,15 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           ) : (
             <ProfileAvatarButton
               data-testid="entry-profile-detail"
-              profileId={entryData.author.id}
+              profileId={entryData.authorId}
               label={
-                authorProfile.status === 'error' ? entryData.author.id : authorProfile.data?.name
+                authorProfile.status === 'error' ? entryData.authorId : authorProfile.data?.name
               }
               avatar={transformSource(avatar?.default)}
               alternativeAvatars={avatar?.alternatives?.map(alternative =>
                 transformSource(alternative),
               )}
-              href={`${profileAnchorLink}/${entryData.author.id}`}
+              href={`${profileAnchorLink}/${entryData.authorId}`}
               metadata={
                 publishTime &&
                 !hidePublishTime && (
@@ -206,7 +207,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                 )
               }
               onClick={() => {
-                if (onAvatarClick) onAvatarClick(entryData.author.id);
+                if (onAvatarClick) onAvatarClick(entryData.authorId);
               }}
               ref={profileRef}
             />

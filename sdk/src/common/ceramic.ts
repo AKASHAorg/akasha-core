@@ -43,7 +43,7 @@ export default class CeramicService {
     });
   }
 
-/*
+  /*
 Creates an Ethereum account ID and DID session to authenticate with Ceramic.
 
 Parameters:
@@ -73,11 +73,11 @@ Functionality:
       throw new Error('No eth address connected!');
     }
     const accountId = new AccountId({ address: ethAddress, chainId: chainIdNameSpace });
-    let web3Provider;
-    web3Provider = this._web3.walletProvider;
-    if(!web3Provider){
+    const web3Provider = this._web3.walletProvider;
+    if (!web3Provider) {
       throw new Error('No provider found for ceramic:connect!');
     }
+
     const authMethod = await EthereumWebAuth.getAuthMethod(web3Provider, accountId);
     this._didSession = await DIDSession.authorize(authMethod, {
       resources: this._composeClient.resources,
@@ -104,8 +104,8 @@ Functionality:
     return !!this._didSession && this._didSession.hasSession;
   }
 
-  serialize(){
-    if(this.hasSession()){
+  serialize() {
+    if (this.hasSession()) {
       return this._didSession?.serialize();
     }
     return null;

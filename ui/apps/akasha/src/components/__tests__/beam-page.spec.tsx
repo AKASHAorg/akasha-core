@@ -49,7 +49,7 @@ describe('< BeamPage /> component', () => {
   beforeAll(() => {
     (
       jest.spyOn(hooks, 'useGetBeamByIdQuery') as unknown as jest.SpyInstance<{
-        data: AkashaBeam;
+        data: Pick<AkashaBeam, 'id' | 'active' | 'createdAt' | 'content' | 'nsfw'>;
         status: 'success' | 'error' | 'loading';
       }>
     ).mockReturnValue({ data: genBeamData(), status: 'success' });

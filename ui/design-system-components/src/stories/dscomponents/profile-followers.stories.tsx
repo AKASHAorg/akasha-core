@@ -4,7 +4,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Followers, {
   FollowersProps,
 } from '../../components/ProfileEngagements/Engagement/Followers';
-import { AkashaProfile } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 const meta: Meta<FollowersProps> = {
   title: 'DSComponents/Profile/Followers',
@@ -30,7 +29,7 @@ const commonProps = {
   onProfileClick: () => ({}),
 };
 
-const followerData: AkashaProfile = {
+const followerData = {
   id: 'some id',
   createdAt: Date.now(),
   name: 'Coffee Lover',

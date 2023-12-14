@@ -19,7 +19,7 @@ type AkashaReflect @createModel(accountRelation: LIST, description: "A Reflectio
     mentions: [StreamID] @list(maxLength: 10)
     version: CommitID! @documentVersion
     reflection: StreamID
-    isReply: Boolean!
+    isReply: Boolean
     active: Boolean!
     createdAt: DateTime!
     nsfw: Boolean

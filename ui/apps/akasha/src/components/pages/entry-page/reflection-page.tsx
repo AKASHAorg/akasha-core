@@ -12,6 +12,7 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   hasOwn,
+  mapReflectEntryData,
   useAnalytics,
   useEntryNavigation,
   useRootComponentProps,
@@ -73,7 +74,7 @@ const ReflectionPage: React.FC<unknown> = () => {
       <ReflectionSection
         beamId={entryData.beam?.id}
         reflectionId={entryData.id}
-        entryData={{ ...entryData, beam: null, beamID: entryData.beam?.id }}
+        entryData={mapReflectEntryData(entryData)}
         isLoggedIn={!!loggedProfileData?.id}
         onNavigate={onNavigate}
         showLoginModal={showLoginModal}
