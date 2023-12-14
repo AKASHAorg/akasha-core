@@ -73,27 +73,31 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   };
 
   return (
-    <ProfileMiniCard
-      profileData={profileData}
-      authenticatedDID={authenticatedDID}
-      beamsLabel={t('Beams')}
-      followingLabel={t('Following')}
-      followersLabel={t('Followers')}
-      stats={{ followers: stats?.totalFollowers, beams: stats?.totalBeams }}
-      transformSource={transformSource}
-      handleClick={handleCardClick}
-      footerExt={
-        <Extension
-          name={`follow_${profileData?.id}`}
-          extensionData={{
-            profileID: profileData?.id,
-            isFollowing: followList?.get(profileData?.id)?.isFollowing,
-            followId: followList?.get(profileData?.id)?.id,
-            isLoggedIn,
-          }}
+    <div>
+      {beamId && (
+        <ProfileMiniCard
+          profileData={profileData}
+          authenticatedDID={authenticatedDID}
+          beamsLabel={t('Beams')}
+          followingLabel={t('Following')}
+          followersLabel={t('Followers')}
+          stats={{ followers: stats?.totalFollowers, beams: stats?.totalBeams }}
+          transformSource={transformSource}
+          handleClick={handleCardClick}
+          footerExt={
+            <Extension
+              name={`follow_${profileData?.id}`}
+              extensionData={{
+                profileID: profileData?.id,
+                isFollowing: followList?.get(profileData?.id)?.isFollowing,
+                followId: followList?.get(profileData?.id)?.id,
+                isLoggedIn,
+              }}
+            />
+          }
         />
-      }
-    />
+      )}
+    </div>
   );
 };
 
