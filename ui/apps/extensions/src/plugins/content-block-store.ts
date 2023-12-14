@@ -71,7 +71,7 @@ export class ContentBlockStore extends BaseStore {
       ) {
         let applicationName = blockInfo.appVersion.application.name;
         // @TODO: remove this if statement
-        if (applicationName === 'Beams-Test') {
+        if (applicationName === 'testing') {
           applicationName = '@akashaorg/app-akasha-integration';
         }
         if (!applicationName) {
