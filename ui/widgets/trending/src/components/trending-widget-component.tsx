@@ -38,6 +38,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     data: tagSubscriptionsData,
     loading,
     error,
+    refetch: refetchTagSubscriptions,
   } = useGetInterestsByDidQuery({
     variables: { id: authenticatedDID },
     skip: !isLoggedIn,
@@ -62,8 +63,10 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       : [];
 
   const tagSubscriptions = useMemo(() => {
-    if (!isLoggedIn) return [];
-    return tagSubscriptionsData && hasOwn(tagSubscriptionsData.node, 'akashaProfileInterests')
+    if (!isLoggedIn) return null;
+    return tagSubscriptionsData &&
+      hasOwn(tagSubscriptionsData.node, 'akashaProfileInterests') &&
+      tagSubscriptionsData.node.akashaProfileInterests?.topics.length > 0
       ? tagSubscriptionsData.node.akashaProfileInterests?.topics.map(topic => topic.value)
       : [];
   }, [isLoggedIn, tagSubscriptionsData]);
@@ -128,6 +131,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           isLoggedIn={isLoggedIn}
           onClickTopic={handleTopicClick}
           showLoginModal={showLoginModal}
+          refetchTagSubscriptions={refetchTagSubscriptions}
         />
       )}
 

@@ -30,6 +30,7 @@ export type LatestTopicsProps = {
   // handlers
   onClickTopic: (topic: string) => void;
   showLoginModal: () => void;
+  refetchTagSubscriptions: () => void;
 };
 
 export const LatestTopics: React.FC<LatestTopicsProps> = props => {
@@ -47,21 +48,32 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     tagSubscriptionsId,
     isLoggedIn,
     showLoginModal,
+    refetchTagSubscriptions,
   } = props;
 
   const [subscribedInterests, setSubscribedInterests] = useState([]);
+  const subscriptionId = useRef(null);
   const tagsInitialized = useRef(null);
   const [tagsQueue, setTagsQueue] = useState([]);
   let timer = null;
   const currentTags = useRef([]);
 
   useEffect(() => {
-    if (subscribedTags && subscribedTags.length > 0 && !tagsInitialized.current) {
+    console.log('subscribedTags', subscribedTags);
+    console.log('tagsInitialized.current', tagsInitialized.current);
+
+    if (subscribedTags && !tagsInitialized.current) {
       setSubscribedInterests(subscribedTags);
       tagsInitialized.current = true;
       currentTags.current = subscribedTags;
     }
   }, [subscribedTags, tagsInitialized]);
+
+  useEffect(() => {
+    if (tagSubscriptionsId) {
+      subscriptionId.current = tagSubscriptionsId;
+    }
+  }, [tagSubscriptionsId]);
 
   const sdk = getSDK();
   const [analyticsActions] = useAnalytics();
@@ -76,20 +88,28 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     });
 
   useEffect(() => {
+    if (!tagsInitialized.current) return;
     if (loading || updateLoading) return;
 
-    if (!isEqual(subscribedInterests, subscribedTags))
-      if (tagSubscriptionsId) {
+    console.log('tagSubscriptionsId', tagSubscriptionsId);
+    console.log('subscriptionId', subscriptionId.current);
+
+    console.log('subscribedInterests', subscribedInterests, 'subscribedTags', subscribedTags);
+
+    if (!isEqual(subscribedInterests, subscribedTags)) {
+      if (subscriptionId.current) {
         updateInterestsMutation({
           variables: {
             i: {
-              id: tagSubscriptionsId,
+              id: subscriptionId.current,
               content: {
                 topics: subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
               },
             },
           },
-          onCompleted: () => {
+          optimisticResponse: {},
+          onCompleted: data => {
+            console.log('updatte data', data);
             setTagsQueue([]);
           },
         });
@@ -102,38 +122,39 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               },
             },
           },
+          onCompleted: data => {
+            console.log('creatte data', data);
+            const id = data.createAkashaProfileInterests?.document.id;
+            console.log('id', id);
+            subscriptionId.current = id;
+          },
           // onError: () => {
           //   setSubscribedInterests(prev => [...prev, tag]);
           // },
         });
       }
+    }
+
     // }
-  }, [
-    createInterestsMutation,
-    loading,
-    subscribedInterests,
-    subscribedTags,
-    tagSubscriptionsId,
-    updateInterestsMutation,
-    updateLoading,
-  ]);
+  }, [loading, subscribedInterests, subscribedTags, tagSubscriptionsId, updateLoading]);
 
   const handleTopicSubscribe = (tag: string) => {
     if (!isLoggedIn) {
       showLoginModal();
       return;
     }
+    setTagsQueue(prev => [...prev, tag]);
 
     const newInterests = [...currentTags.current, tag];
 
     currentTags.current = newInterests;
-    tagsQueue.push(tag);
 
     if (timer != null) {
+      console.log('timer', timer);
       window.clearTimeout(timer);
-      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 300);
+      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
     } else {
-      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 300);
+      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
     }
   };
 
@@ -142,17 +163,18 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       showLoginModal();
       return;
     }
+
+    setTagsQueue(prev => [...prev, tag]);
     const newInterests = currentTags.current.filter(topic => topic !== tag);
 
     currentTags.current = newInterests;
 
-    tagsQueue.push(tag);
-
     if (timer != null) {
+      console.log('timer', timer);
       window.clearTimeout(timer);
-      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 300);
+      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
     } else {
-      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 300);
+      timer = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
     }
   };
 
@@ -177,8 +199,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           )}
 
           <Stack spacing="gap-y-4">
-            {tags.length > 0 &&
-              tags.slice(0, 4).map((tag, index) => (
+            {['dogs', 'cats', 'chickens', 'birds'].length > 0 &&
+              ['dogs', 'cats', 'chickens', 'birds'].slice(0, 4).map((tag, index) => (
                 <TopicRow
                   key={index}
                   tag={tag}
