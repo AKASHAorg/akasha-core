@@ -25,6 +25,6 @@ export const { bootstrap, mount, unmount } = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
 
-    return <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />;
+    return <ErrorLoader type="script-error" title="Error in editor" details={err.message} />;
   },
 });

@@ -92,12 +92,9 @@ const FeedPage: React.FC<FeedPageProps> = props => {
     });
   };
 
-  return (
-    <Stack fullWidth={true}>
-      <Helmet.Helmet>
-        <title>AKASHA World</title>
-      </Helmet.Helmet>
-      {loggedProfileData?.did?.id && (
+  const listHeader = React.useMemo(() => {
+    if (loggedProfileData?.did?.id) {
+      return (
         <Stack customStyle="mb-4">
           <EditorPlaceholder
             profileId={loggedProfileData.did.id}
@@ -108,7 +105,15 @@ const FeedPage: React.FC<FeedPageProps> = props => {
             transformSource={transformSource}
           />
         </Stack>
-      )}
+      );
+    }
+  }, [loggedProfileData, t]);
+
+  return (
+    <Stack fullWidth={true}>
+      <Helmet.Helmet>
+        <title>AKASHA World</title>
+      </Helmet.Helmet>
       {pendingPostStates?.map(
         pendingPostState =>
           pendingPostState.state.status === 'error' && (
@@ -119,6 +124,7 @@ const FeedPage: React.FC<FeedPageProps> = props => {
           ),
       )}
       <BeamFeed
+        header={listHeader}
         queryKey={'app-akasha-integration_general-antenna'}
         estimatedHeight={150}
         itemSpacing={8}

@@ -1,8 +1,8 @@
 import React from 'react';
 
 export const useStateWithCallback = <S>(
-  initialState: S,
-): [S, (state: S, cb?: (state: S) => void) => void] => {
+  initialState: S | (() => S),
+): [S, (state: S, cb: (state: S) => void) => void] => {
   const [state, setState] = React.useState<S>(initialState);
   const callback = React.useRef<(state: S) => void>();
 
@@ -14,7 +14,7 @@ export const useStateWithCallback = <S>(
   React.useLayoutEffect(() => {
     if (callback.current) {
       callback.current(state);
-      callback.current = null;
+      callback.current = undefined;
     }
   }, [state]);
 

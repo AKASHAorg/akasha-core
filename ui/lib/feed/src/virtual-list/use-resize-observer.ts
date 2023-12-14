@@ -1,12 +1,14 @@
 import * as React from 'react';
 
 export const useResizeObserver = () => {
-  const callbacks = React.useRef(new WeakMap());
-  const defaultCallback = entries => {
+  const callbacks = React.useRef<
+    WeakMap<ResizeObserverEntry['target'], Set<((entry: ResizeObserverEntry) => void) | undefined>>
+  >(new WeakMap());
+  const defaultCallback = (entries: ResizeObserverEntry[]) => {
     for (const entry of entries) {
       const targetCbs = callbacks.current.get(entry.target);
       if (targetCbs) {
-        targetCbs.forEach(cb => cb(entry));
+        targetCbs.forEach(cb => cb?.(entry));
       } else {
         unobserve(entry.target);
       }
@@ -26,7 +28,7 @@ export const useResizeObserver = () => {
       observer.current.observe(node, options);
       return;
     }
-    callbacks.current.get(node).add(callback);
+    callbacks.current.get(node)?.add(callback);
   };
   const unobserve = (node: Element) => {
     callbacks.current.delete(node);

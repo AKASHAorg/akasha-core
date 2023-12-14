@@ -2,9 +2,10 @@ import * as React from 'react';
 import { useResizeObserver } from './use-resize-observer';
 
 export const HEADER_COMPONENT = 'HEADER';
+export const FOOTER_COMPONENT = 'FOOTER';
 export const LOADING_INDICATOR = 'LOADING_INDICATOR';
 
-export type VirtualItemInfo = {
+export type VirtualItem = {
   key: string;
   start: number;
   height: number;
@@ -46,15 +47,14 @@ export type VirtualItemProps<T> = {
   item: VirtualDataItem<T>;
   estimatedHeight: number;
   onHeightChanged?: (itemKey: string, newHeight: number) => void;
-  itemSpacing?: number;
+  itemSpacing: number;
   itemOffset: number;
   index: number;
 };
-// renderer for a virtual item
-export const VirtualItem = <T,>(props: VirtualItemProps<T>) => {
+
+export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
   const {
     item,
-    index,
     interfaceRef,
     estimatedHeight,
     resizeObserver,
@@ -101,18 +101,19 @@ export const VirtualItem = <T,>(props: VirtualItemProps<T>) => {
       resizeObserver.observe(node, handleSizeChange);
     } else if (!node && rootNodeRef.current) {
       resizeObserver.unobserve(rootNodeRef.current);
+      rootNodeRef.current = undefined;
     }
   };
 
   return (
     <div
       ref={setRootRefs}
-      data-testidx={index}
-      data-mayberef={item.maybeRef}
       style={{
-        top: itemOffset,
+        transform: `translateY(${itemOffset}px)`,
         position: 'absolute',
         width: '100%',
+        transition: 'opacity 0.3s ease-in',
+        opacity: rootNodeRef.current ? 1 : 0,
       }}
     >
       {item.render(item.data)}

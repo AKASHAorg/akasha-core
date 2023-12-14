@@ -1,42 +1,39 @@
 import * as React from 'react';
-import { VirtualList, VirtualListInterface, VirtualListProps } from './virtual-list';
+import {
+  VirtualListRenderer,
+  VirtualListInterface,
+  VirtualListRendererProps,
+} from './list-renderer';
 import {
   createVirtualDataItem,
   HEADER_COMPONENT,
-  LOADING_INDICATOR,
+  FOOTER_COMPONENT,
   VirtualDataItem,
-  VirtualItemInfo,
-} from './virtual-item';
+  VirtualItem,
+} from './virtual-item-renderer';
 import { useEdgeDetector, UseEdgeDetectorProps } from './use-edge-detector';
-import { useScrollRestore } from './use-scroll-restore';
+import { RestoreItem, useScrollState } from './use-scroll-state';
 import { Rect } from './rect';
-
-export const enum IndicatorPosition {
-  TOP,
-  BOTTOM,
-}
 
 export type VirtualizerProps<T> = {
   restorationKey: string;
-  header?: React.ReactNode;
-  estimatedHeight: VirtualListProps<unknown>['estimatedHeight'];
+  header?: React.ReactElement;
+  footer?: React.ReactElement;
+  estimatedHeight: VirtualListRendererProps<unknown>['estimatedHeight'];
   items: T[];
   itemKeyExtractor: (item: T) => string;
-  itemIndexExtractor: (itemKey: string) => number;
+  itemIndexExtractor: (item: T) => number;
   renderItem: (data: T) => React.ReactNode;
-  initialRect?: VirtualListProps<unknown>['initialRect'];
-  overscan?: VirtualListProps<unknown>['overscan'];
+  overscan?: VirtualListRendererProps<unknown>['overscan'];
   itemSpacing?: number;
-  onFetchInitialData?: VirtualListProps<T>['onFetchInitialData'];
-  loadingIndicator?: (position: IndicatorPosition) => React.ReactNode;
-  debug?: boolean;
-  onScrollSave?: (state: {
-    listHeight: number;
-    items: { key: string; offsetTop: number }[];
-  }) => void;
-  scrollTopIndicator?: VirtualListProps<T>['scrollTopIndicator'];
-  onListReset?: VirtualListProps<T>['onListReset'];
+  onFetchInitialData?: (restoreItem?: RestoreItem) => void;
+  loadingIndicator?: () => React.ReactElement;
+  scrollTopIndicator?: VirtualListRendererProps<T>['scrollTopIndicator'];
+  onListReset?: VirtualListRendererProps<T>['onListReset'];
   onEdgeDetectorChange: UseEdgeDetectorProps['onEdgeDetectorChange'];
+  hasNextPage?: boolean;
+  hasPreviousPage?: boolean;
+  isLoading?: boolean;
 };
 
 const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -50,91 +47,114 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     overscan = 20,
     itemSpacing = 8,
     loadingIndicator,
-    debug = false,
     onFetchInitialData,
     restorationKey,
-    onScrollSave,
     scrollTopIndicator,
-    onListReset,
     onEdgeDetectorChange,
+    footer,
+    hasNextPage,
+    hasPreviousPage,
+    isLoading,
   } = props;
 
   const vlistRef = React.useRef<VirtualListInterface>();
-  const prevRestoreKey = React.useRef<string>();
+  const [isMounted, setIsMounted] = React.useState(false);
+  const deferredIsMounted = React.useDeferredValue(isMounted);
+
+  const keyExtractorRef = React.useRef(itemKeyExtractor);
+  const itemRendererRef = React.useRef(renderItem);
+  const scrollRestore = useScrollState(restorationKey);
 
   const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
-    const list = [];
-    if (loadingIndicator) {
-      list.push(
-        createVirtualDataItem(`${LOADING_INDICATOR}_top`, {}, false, () =>
-          loadingIndicator(IndicatorPosition.TOP),
-        ),
-      );
-    }
-
+    const itemList: VirtualDataItem<T>[] = [];
     if (header) {
-      list.push(createVirtualDataItem(HEADER_COMPONENT, {}, true, () => header));
-    }
-
-    list.push(
-      ...items.map(it => {
-        const itemKey = itemKeyExtractor(it);
-        const idx = itemIndexExtractor(itemKey);
-        return createVirtualDataItem(itemKey, it, true, renderItem, idx);
-      }),
-    );
-    if (loadingIndicator) {
-      list.push(
-        createVirtualDataItem(
-          `${LOADING_INDICATOR}_bottom`,
-          {},
-          false,
-          () => loadingIndicator(IndicatorPosition.BOTTOM),
-          list.length - 1,
-        ),
+      itemList.push(
+        createVirtualDataItem(HEADER_COMPONENT, HEADER_COMPONENT as T, false, () => header),
       );
     }
-    return list;
-  }, [header, itemIndexExtractor, itemKeyExtractor, items, loadingIndicator, renderItem]);
+
+    itemList.push(
+      ...items.map(item =>
+        createVirtualDataItem(
+          keyExtractorRef.current(item),
+          item,
+          true,
+          itemRendererRef.current,
+          itemIndexExtractor(item),
+        ),
+      ),
+    );
+
+    if (footer) {
+      itemList.push(
+        createVirtualDataItem(FOOTER_COMPONENT, FOOTER_COMPONENT as T, false, () => footer),
+      );
+    }
+    return itemList;
+  }, [footer, header, itemIndexExtractor, items]);
 
   const edgeDetector = useEdgeDetector({
     overscan,
     onEdgeDetectorChange,
   });
 
-  const scrollRestore = useScrollRestore({
-    restoreKey: restorationKey,
-    enabled: typeof onScrollSave !== 'function',
-  });
+  const handleDetectorUpdate = React.useCallback(
+    (
+      itemList: VirtualItem[],
+      mountedItems: VirtualItem[],
+      viewportRect: Rect,
+      averageItemHeight: number,
+      measurementsCache: Map<string, number>,
+      isNewUpdate: boolean,
+    ) => {
+      edgeDetector.update(itemList, mountedItems, viewportRect, averageItemHeight, isNewUpdate);
+      if (!isMounted) return;
+      if (vlistRef.current.isAtTop()) {
+        return scrollRestore.save([], new Map());
+      }
+      const restoreItems = mountedItems.filter(it =>
+        viewportRect.overlaps(new Rect(it.start, it.height)),
+      );
+      scrollRestore.save(
+        restoreItems.map(it => ({ offsetTop: it.start, key: it.key })),
+        measurementsCache,
+      );
+    },
+    [edgeDetector, isMounted, scrollRestore],
+  );
 
-  const saveScroll = () => {
-    const scrollState = vlistRef.current.getRestorationState();
+  const restoreStartItem = React.useRef<RestoreItem>();
+  const isFetchingInitialData = React.useRef(false);
 
-    if (onScrollSave && typeof onScrollSave === 'function') {
-      onScrollSave(scrollState);
-    } else {
-      scrollRestore.saveScrollState(scrollState);
+  React.useEffect(() => {
+    if (!isMounted) {
+      // load scroll restoration
+      if (scrollRestore.scrollState.loaded && !isFetchingInitialData.current) {
+        const restoreItem = scrollRestore.getLastItem();
+        isFetchingInitialData.current = true;
+        const listItem = itemList.filter(it => it.maybeRef);
+        if (restoreItem && listItem.length === 0) {
+          onFetchInitialData(restoreItem);
+        } else if (listItem.length === 0) {
+          onFetchInitialData();
+        }
+      }
+      if (
+        itemList.length > 0 &&
+        scrollRestore.scrollState.loaded &&
+        scrollRestore.scrollState.items?.length
+      ) {
+        restoreStartItem.current = scrollRestore.getRestoreItem(itemList);
+        if (typeof window !== 'undefined' && window.history.scrollRestoration) {
+          window.history.scrollRestoration = 'manual';
+        }
+      }
+      if (itemList.length > 0 && scrollRestore.scrollState.loaded) {
+        isFetchingInitialData.current = false;
+        setIsMounted(true);
+      }
     }
-  };
-
-  const handleScrollEnd = () => {
-    saveScroll();
-  };
-
-  const handleEdgeDetectorUpdate = (
-    itemList: VirtualItemInfo[],
-    mountedItems: VirtualItemInfo[],
-    viewportRect: Rect,
-    averageItemHeight: number,
-    isNewUpdate: boolean,
-  ) => {
-    edgeDetector.update(itemList, mountedItems, viewportRect, averageItemHeight, isNewUpdate);
-  };
-
-  if (restorationKey && !prevRestoreKey.current) {
-    scrollRestore.fetchScrollState();
-    prevRestoreKey.current = restorationKey;
-  }
+  }, [isMounted, itemList, onFetchInitialData, scrollRestore]);
 
   const scrollRestorationType = React.useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -144,27 +164,29 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     return 'auto';
   }, []);
 
-  if (!scrollRestore.isFetched) {
-    scrollRestore.fetchScrollState();
-    return null;
-  }
-
   return (
-    <VirtualList
-      ref={vlistRef}
-      scrollRestore={scrollRestore}
-      estimatedHeight={estimatedHeight}
-      itemList={itemList}
-      scrollRestorationType={scrollRestorationType}
-      overscan={overscan}
-      itemSpacing={itemSpacing}
-      onEdgeDetectorUpdate={handleEdgeDetectorUpdate}
-      onScrollEnd={handleScrollEnd}
-      debug={debug}
-      onFetchInitialData={onFetchInitialData}
-      scrollTopIndicator={scrollTopIndicator}
-      onListReset={onListReset}
-    />
+    <>
+      {!deferredIsMounted && loadingIndicator && loadingIndicator()}
+      {deferredIsMounted && (
+        <VirtualListRenderer
+          restorationKey={restorationKey}
+          ref={vlistRef}
+          itemList={itemList}
+          estimatedHeight={estimatedHeight}
+          overscan={overscan}
+          restorationItem={restoreStartItem.current}
+          scrollRestorationType={scrollRestorationType}
+          measurementsCache={scrollRestore.scrollState.measurementsCache}
+          itemSpacing={itemSpacing}
+          onEdgeDetectorUpdate={handleDetectorUpdate}
+          scrollTopIndicator={scrollTopIndicator}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          isLoading={isLoading}
+          loadingIndicator={loadingIndicator}
+        />
+      )}
+    </>
   );
 };
 

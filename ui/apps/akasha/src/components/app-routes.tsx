@@ -12,6 +12,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import EntrySectionLoading from './pages/entry-page/entry-section-loading';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal } = useRootComponentProps();
@@ -44,8 +45,22 @@ const AppRoutes: React.FC<unknown> = () => {
               <MyFeedPage loggedProfileData={loggedProfileData} showLoginModal={showLoginModal} />
             }
           />
-          <Route path={`${routes[BEAM]}/:beamId`} element={<BeamPage />} />
-          <Route path={`${routes[BEAM]}/:beamId${routes[REFLECT]}`} element={<BeamPage />} />
+          <Route
+            path={`${routes[BEAM]}/:beamId`}
+            element={
+              <React.Suspense fallback={<EntrySectionLoading />}>
+                <BeamPage />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path={`${routes[BEAM]}/:beamId${routes[REFLECT]}`}
+            element={
+              <React.Suspense fallback={<EntrySectionLoading />}>
+                <BeamPage />
+              </React.Suspense>
+            }
+          />
           <Route
             path={`${routes[TAGS]}/:tagName`}
             element={
@@ -61,10 +76,21 @@ const AppRoutes: React.FC<unknown> = () => {
               />
             }
           />
-          <Route path={`${routes[REFLECT]}/:reflectionId`} element={<ReflectionPage />} />
+          <Route
+            path={`${routes[REFLECT]}/:reflectionId`}
+            element={
+              <React.Suspense fallback={<EntrySectionLoading />}>
+                <ReflectionPage />
+              </React.Suspense>
+            }
+          />
           <Route
             path={`${routes[REFLECT]}/:reflectionId${routes[REFLECT]}`}
-            element={<ReflectionPage />}
+            element={
+              <React.Suspense fallback={<EntrySectionLoading />}>
+                <ReflectionPage />
+              </React.Suspense>
+            }
           />
           <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
           <Route

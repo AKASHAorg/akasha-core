@@ -1,7 +1,13 @@
 import * as React from 'react';
 
-export const useDebounce = (cb: (...args: unknown[]) => void, delay: number) => {
+export const useDebounce = (
+  cb: (...args: string[]) => void,
+  delay: number,
+  deps: (never | ((arg: string) => number))[] = [],
+) => {
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout>>();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const callback = React.useMemo(() => cb, [cb, ...deps]);
   React.useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -11,13 +17,12 @@ export const useDebounce = (cb: (...args: unknown[]) => void, delay: number) => 
   }, []);
 
   return React.useCallback(
-    (...args: unknown[]) => {
+    (...args: string[]) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      timeoutRef.current = setTimeout(() => cb(...args), delay);
+      timeoutRef.current = setTimeout(() => callback(...args), delay);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [cb, delay],
+    [callback, delay],
   );
 };

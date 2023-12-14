@@ -8,6 +8,10 @@ import {
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { RestoreItem } from '../virtual-list/use-scroll-state';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import type { GetBeamsQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type BeamFeedProps = {
   className?: string;
@@ -17,11 +21,13 @@ export type BeamFeedProps = {
   newItemsPublishedLabel?: string;
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
-  scrollTopIndicator: VirtualizerProps<unknown>['scrollTopIndicator'];
+  scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
   renderItem: VirtualizerProps<AkashaBeamEdge>['renderItem'];
   estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];
+  footer?: VirtualizerProps<unknown>['footer'];
+  loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
   did?: string;
 };
 
@@ -35,66 +41,77 @@ const BeamFeed = (props: BeamFeedProps) => {
     queryKey,
     estimatedHeight = 150,
     itemSpacing,
+    loadingIndicator,
+    header,
+    footer,
     did,
   } = props;
 
-  const { beams, fetchNextPage, fetchPreviousPage, fetchInitialData, onReset, hasErrors, errors } =
-    useBeams({
-      overscan: scrollerOptions.overscan,
-      sorting,
-      filters,
-      did: did,
-    });
+  const {
+    beams,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    fetchInitialData,
+    onReset,
+    isLoading,
+    hasErrors,
+    errors,
+  } = useBeams({
+    overscan: scrollerOptions.overscan,
+    sorting,
+    filters,
+    did,
+  });
 
   const lastCursors = React.useRef({ next: null, prev: null });
-  const isLoading = React.useRef(false);
   const prevBeams = React.useRef([]);
 
-  React.useEffect(() => {
-    if (beams !== prevBeams.current) {
-      isLoading.current = false;
-    }
-    prevBeams.current = beams;
-  }, [beams]);
+  const loadingIndicatorRef = React.useRef(loadingIndicator);
 
-  const handleInitialFetch = async (cursors?: string[]) => {
-    if (cursors.length) {
-      lastCursors.current.prev = cursors[cursors.length - 1];
-    }
-    isLoading.current = true;
-    await fetchInitialData(cursors);
+  if (!loadingIndicatorRef.current) {
+    loadingIndicatorRef.current = () => (
+      <Stack align="center">
+        <Spinner />
+      </Stack>
+    );
+  }
+
+  const handleInitialFetch = async (restoreItem?: RestoreItem) => {
+    await fetchInitialData(restoreItem);
   };
 
-  const handleFetch = async (newArea: EdgeArea) => {
-    switch (newArea) {
-      case EdgeArea.TOP:
-      case EdgeArea.NEAR_TOP:
-        if (!beams.length) return;
-        const firstCursor = beams[0].cursor;
-        if (lastCursors.current.prev !== firstCursor && !isLoading.current) {
-          isLoading.current = true;
-          await fetchPreviousPage(firstCursor);
-          lastCursors.current.prev = firstCursor;
-        }
-        break;
-      case EdgeArea.BOTTOM:
-      case EdgeArea.NEAR_BOTTOM:
-        if (!beams.length) return;
-        const lastCursor = beams[beams.length - 1].cursor;
-        if (lastCursors.current.next !== lastCursor && !isLoading.current) {
-          isLoading.current = true;
-          await fetchNextPage(lastCursor);
-          lastCursors.current.next = lastCursor;
-        }
-        break;
-      default:
-        break;
-    }
-  };
+  const handleFetch = React.useCallback(
+    async (newArea: EdgeArea) => {
+      switch (newArea) {
+        case EdgeArea.TOP:
+        case EdgeArea.NEAR_TOP:
+          if (!beams.length) return;
+          const firstCursor = beams[0].cursor;
+          if (lastCursors.current.prev !== firstCursor) {
+            lastCursors.current.prev = firstCursor;
+            await fetchPreviousPage(firstCursor);
+          }
+          break;
+        case EdgeArea.BOTTOM:
+        case EdgeArea.NEAR_BOTTOM:
+          if (!beams.length) return;
+          const lastCursor = beams[beams.length - 1].cursor;
+          if (lastCursors.current.next !== lastCursor) {
+            lastCursors.current.next = lastCursor;
+            await fetchNextPage(lastCursor);
+          }
+          break;
+        default:
+          break;
+      }
+    },
+    [beams, fetchNextPage, fetchPreviousPage],
+  );
 
   const handleReset = async () => {
     prevBeams.current = [];
-    isLoading.current = true;
     lastCursors.current = { next: null, prev: null };
     await onReset();
   };
@@ -109,7 +126,9 @@ const BeamFeed = (props: BeamFeedProps) => {
         />
       )}
       {!hasErrors && (
-        <Virtualizer<AkashaBeamEdge>
+        <Virtualizer<ReturnType<typeof useBeams>['beams'][0]>
+          header={header}
+          footer={footer}
           restorationKey={queryKey}
           itemSpacing={itemSpacing}
           estimatedHeight={estimatedHeight}
@@ -117,11 +136,15 @@ const BeamFeed = (props: BeamFeedProps) => {
           items={beams}
           onFetchInitialData={handleInitialFetch}
           itemKeyExtractor={item => item.cursor}
-          itemIndexExtractor={itemKey => beams.findIndex(p => p.cursor === itemKey)}
+          itemIndexExtractor={item => beams.findIndex(p => p.cursor === item.cursor)}
           onListReset={handleReset}
           onEdgeDetectorChange={handleFetch}
           scrollTopIndicator={scrollTopIndicator}
           renderItem={renderItem}
+          loadingIndicator={loadingIndicatorRef.current}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          isLoading={isLoading}
         />
       )}
     </>

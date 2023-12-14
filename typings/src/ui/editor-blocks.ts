@@ -44,8 +44,14 @@ export type ContentBlockRegisterEvent = {
 
 export type BlockInstanceMethods = {
   createBlock: () => Promise<{
-    response: { blockID?: string; error?: string };
+    response: { blockID: string; error?: string };
     blockInfo: BlockInfo;
+    retryCount?: number;
+  }>;
+  retryBlockCreation: () => Promise<{
+    response: { blockID: string; error?: string };
+    blockInfo: BlockInfo;
+    retryCount?: number;
   }>;
 };
 
