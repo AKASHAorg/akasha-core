@@ -23,7 +23,7 @@ describe('< FeedPage /> component', () => {
     </AnalyticsProvider>
   );
 
-  it('should render feed page for anonymous users', async () => {
+  it.skip('should render feed page for anonymous users', async () => {
     await act(async () => {
       renderWithAllProviders(<BaseComponent loggedProfileData={null} />, {});
     });

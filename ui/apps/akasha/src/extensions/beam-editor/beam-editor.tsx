@@ -15,12 +15,13 @@ import { Header } from './header';
 import { Footer } from './footer';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type uiState = 'editor' | 'tags' | 'blocks';
 
 export const BeamEditor: React.FC = () => {
   const { t } = useTranslation('app-akasha-integration');
-
+  const { getRoutingPlugin } = useRootComponentProps();
   const {
     availableBlocks,
     createContentBlocks,
@@ -28,7 +29,14 @@ export const BeamEditor: React.FC = () => {
     blocksInUse,
     addBlockToList,
     removeBlockFromList,
-  } = useBlocksPublishing();
+  } = useBlocksPublishing({
+    onComplete: beamData => {
+      getRoutingPlugin().navigateTo({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: navRoutes => `${navRoutes.Beam}/${beamData.document.id}`,
+      });
+    },
+  });
 
   const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
