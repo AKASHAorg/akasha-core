@@ -58,6 +58,14 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const [tagsQueue, setTagsQueue] = useState([]);
   const currentTags = useRef([]);
 
+  //reset state when user logs out
+  useEffect(() => {
+    if (!isLoggedIn) {
+      console.log('subscribedTags', subscribedTags);
+      setSubscribedInterests([]);
+    }
+  }, [isLoggedIn]);
+
   useEffect(() => {
     console.log('subscribedTags', subscribedTags);
     console.log('tagsInitialized.current', tagsInitialized.current);
@@ -165,7 +173,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     if (timer.current !== null) {
       window.clearTimeout(timer.current);
     }
-    timer.current = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
+    timer.current = window.setTimeout(() => setSubscribedInterests(currentTags.current), 700);
   };
 
   const handleTopicUnsubscribe = (tag: string) => {
@@ -183,7 +191,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     if (timer.current !== null) {
       window.clearTimeout(timer.current);
     }
-    timer.current = window.setTimeout(() => setSubscribedInterests(currentTags.current), 1000);
+    timer.current = window.setTimeout(() => setSubscribedInterests(currentTags.current), 700);
   };
 
   if (tags.length === 0 && isLoadingTags) return <TrendingWidgetLoadingCard />;
