@@ -45,7 +45,7 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/50" />
+          <div className="fixed inset-0 bg-black/75" />
         </Transition.Child>
         <Transition.Child
           as={Fragment}
@@ -57,50 +57,52 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
           leaveTo="opacity-0 scale-95"
         >
           <Stack align="center" justify="center" customStyle="fixed inset-0">
-            <Dialog.Panel>
-              <Card radius={20} padding={'py-4'} customStyle={`${customStyle} relative`}>
-                <Stack direction="column" spacing="gap-y-4">
-                  {title && (
-                    <Dialog.Title className={tw('px-4')}>
-                      <Stack align="center" justify="center">
-                        <Text align="center" variant="h5" {...title}>
-                          {title.label}
-                        </Text>
-                        <Button onClick={onClose} plain customStyle="absolute top-4 right-4">
-                          <Icon
-                            icon={<XMarkIcon />}
-                            size="md"
-                            color={{ light: 'grey4', dark: 'grey7' }}
-                          />
-                        </Button>
-                      </Stack>
-                    </Dialog.Title>
-                  )}
+            <Stack customStyle="w-fit -ml(md:6)">
+              <Dialog.Panel>
+                <Card radius={20} padding={'py-4'} customStyle={`${customStyle} relative`}>
+                  <Stack direction="column" spacing="gap-y-4">
+                    {title && (
+                      <Dialog.Title className={tw('px-4')}>
+                        <Stack align="center" justify="center">
+                          <Text align="center" variant="h5" {...title}>
+                            {title.label}
+                          </Text>
+                          <Button onClick={onClose} plain customStyle="absolute top-4 right-4">
+                            <Icon
+                              icon={<XMarkIcon />}
+                              size="md"
+                              color={{ light: 'grey4', dark: 'grey7' }}
+                            />
+                          </Button>
+                        </Stack>
+                      </Dialog.Title>
+                    )}
 
-                  {showDivider && <Divider />}
+                    {showDivider && <Divider />}
 
-                  <Stack
-                    align="center"
-                    justify="center"
-                    direction="column"
-                    spacing="gap-y-4"
-                    customStyle="px-4"
-                  >
-                    {children}
                     <Stack
-                      direction="row"
-                      spacing="gap-x-4"
-                      justify={actionsAlign}
-                      customStyle="mt-auto"
+                      align="center"
+                      justify="center"
+                      direction="column"
+                      spacing="gap-y-4"
+                      customStyle="px-4"
                     >
-                      {actions.map((action, index) => (
-                        <Button key={index} size="md" {...action} />
-                      ))}
+                      {children}
+                      <Stack
+                        direction="row"
+                        spacing="gap-x-4"
+                        justify={actionsAlign}
+                        customStyle="mt-auto"
+                      >
+                        {actions.map((action, index) => (
+                          <Button key={index} size="md" {...action} />
+                        ))}
+                      </Stack>
                     </Stack>
                   </Stack>
-                </Stack>
-              </Card>
-            </Dialog.Panel>
+                </Card>
+              </Dialog.Panel>
+            </Stack>
           </Stack>
         </Transition.Child>
       </Dialog>

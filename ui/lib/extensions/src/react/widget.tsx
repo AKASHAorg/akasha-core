@@ -14,7 +14,7 @@ export type WidgetExtensionProps = {
 };
 
 export const Widget: React.FC<WidgetExtensionProps> = props => {
-  const { name, loadingIndicator, onError, customStyle, fullHeight } = props;
+  const { name, loadingIndicator, onError, customStyle = '', fullHeight } = props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
   const widgetStore = React.useRef<WidgetStorePlugin>(getExtensionsPlugin().widgetStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
@@ -41,7 +41,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
       }
     };
     resolveConfigs().catch();
-  }, []);
+  }, [widgets, parcelConfigs, location]);
 
   const loadingConfiguredParcel = parcelConfigs.length > 0 ? !isParcelMounted : false;
   const isLoading = widgets.length > parcelConfigs.length || loadingConfiguredParcel;

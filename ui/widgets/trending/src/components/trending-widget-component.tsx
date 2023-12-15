@@ -44,12 +44,12 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const latestTopicsReq = useGetInterestsStreamQuery(
     { last: 4, indexer: currentIndexingDID },
     {
-      select: result =>{
-        if(hasOwn(result?.node, 'akashaInterestsStreamList')){
-          return result?.node?.akashaInterestsStreamList?.edges.flatMap(interest => interest.node)
+      select: result => {
+        if (hasOwn(result?.node, 'akashaInterestsStreamList')) {
+          return result?.node?.akashaInterestsStreamList?.edges.flatMap(interest => interest.node);
         }
         return [];
-      }
+      },
     },
   );
   const tagSubscriptionsReq = useGetInterestsByDidQuery(
@@ -68,10 +68,12 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     },
   );
   const latestProfiles = useMemo(() => latestProfilesReq.data || [], [latestProfilesReq.data]);
+
   const followProfileIds = useMemo(
     () => latestProfiles.map(follower => follower.id),
     [latestProfiles],
   );
+
   const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     variables: {
       id: authenticatedDID,
