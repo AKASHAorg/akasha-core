@@ -8,6 +8,6 @@ export const register: (opts: IntegrationRegistrationOptions) => WidgetInterface
   mountsIn: opts.layoutConfig?.widgetSlotId,
   loadingFn: () => import('./mini-profile-widget'),
   activeWhen: (location, pathToActiveWhen) => {
-    return pathToActiveWhen('/@akashaorg/app-akasha-integration/post/', false)(location);
+    return pathToActiveWhen('/@akashaorg/app-akasha-integration/beam/', false)(location);
   },
 });

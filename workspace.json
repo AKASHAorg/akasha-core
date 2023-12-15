@@ -169,16 +169,17 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/layout"
-          ],
+          "outputs": ["ui/build/widgets/layout"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/layout",
             "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/layout"
           }
         }
       }
