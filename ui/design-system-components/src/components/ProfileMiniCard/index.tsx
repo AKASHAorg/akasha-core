@@ -14,6 +14,7 @@ export type ProfileMiniCardProps = {
   beamsLabel?: string;
   followersLabel?: string;
   followingLabel?: string;
+  statsLoading: boolean;
   stats: { followers: number; beams: number };
   transformSource: (src: Image) => Image;
   handleClick?: () => void;
@@ -27,7 +28,8 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
     authenticatedDID,
     beamsLabel,
     followersLabel,
-    stats: { followers = 0, beams = 0 },
+    statsLoading,
+    stats: { followers, beams },
     transformSource,
     handleClick,
     footerExt,
@@ -40,7 +42,6 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
     <Card
       elevation="1"
       radius="rounded-2xl"
-      onClick={handleClick}
       margin="mb-4"
       padding="p-0"
       customStyle="max-h-[30rem]"
@@ -51,20 +52,23 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
           profileData?.background?.default?.src ?? coverImageFallback
         })])`}
       >
-        <Avatar
-          size="xl"
-          border="sm"
-          borderColor="darkerBlue"
-          avatar={transformSource(profileData?.avatar?.default)}
-          alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
-            transformSource(alternative),
-          )}
-          profileId={profileData?.did?.id}
-          customStyle="relative top-16"
-        />
+        <Stack customStyle="relative top-16">
+          <Avatar
+            size="xl"
+            border="sm"
+            borderColor="darkerBlue"
+            avatar={transformSource(profileData?.avatar?.default)}
+            alternativeAvatars={profileData?.avatar?.alternatives?.map(alternative =>
+              transformSource(alternative),
+            )}
+            profileId={profileData?.did?.id}
+            customStyle="cursor-pointer"
+            onClick={handleClick}
+          />
+        </Stack>
       </Stack>
 
-      <Stack spacing="gap-y-6" align="center" padding="p-6">
+      <Stack spacing="gap-y-6" align="center" padding="py-6 px-4">
         <Stack spacing="gap-y-1" padding="pt-3" align="center">
           {profileData?.name && (
             <Text variant="h6" breakWord={true}>
@@ -77,17 +81,19 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
           )}
         </Stack>
 
-        <Stack direction="row" spacing="gap-x-3" align="center" justify="center">
-          <Text variant="subtitle2">
-            {beams} {beamsLabel}
-          </Text>
-          <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-            |
-          </Text>
-          <Text variant="subtitle2">
-            {followers} {followersLabel}
-          </Text>
-        </Stack>
+        {!statsLoading && (
+          <Stack direction="row" spacing="gap-x-3" align="center" justify="center">
+            <Text variant="subtitle2">
+              {beams} {beamsLabel}
+            </Text>
+            <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+              |
+            </Text>
+            <Text variant="subtitle2">
+              {followers} {followersLabel}
+            </Text>
+          </Stack>
+        )}
 
         {profileData?.description && (
           <Text breakWord={true} truncate={true}>

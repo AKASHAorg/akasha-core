@@ -51,7 +51,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
       ? authorProfileData.node.akashaProfile
       : null;
 
-  const { data: stats } = useProfileStats(authorId);
+  const { data: stats, loading: statsLoading } = useProfileStats(authorId);
 
   const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     variables: {
@@ -77,16 +77,20 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
     });
   };
 
+  const beams = stats?.totalBeams ?? 0;
+  const followers = stats?.totalFollowers ?? 0;
+
   return (
     <div>
       {(beamId || reflectionId) && (
         <ProfileMiniCard
           profileData={profileData}
           authenticatedDID={authenticatedDID}
-          beamsLabel={t('Beams')}
+          beamsLabel={beams === 1 ? t('Beam') : t('Beams')}
           followingLabel={t('Following')}
-          followersLabel={t('Followers')}
-          stats={{ followers: stats?.totalFollowers, beams: stats?.totalBeams }}
+          followersLabel={followers === 1 ? t('Follower') : t('Followers')}
+          statsLoading={statsLoading}
+          stats={{ followers, beams }}
           transformSource={transformSource}
           handleClick={handleCardClick}
           footerExt={

@@ -14,7 +14,7 @@ const MiniProfileWidgetLoader: React.FC = () => {
         </Stack>
       </Stack>
 
-      <Stack spacing="gap-y-6" align="center" padding="p-6" fullWidth>
+      <Stack spacing="gap-y-6" align="center" padding="py-6 px-4" fullWidth>
         <Stack spacing="gap-y-1" padding="pt-3" align="center" fullWidth>
           <TextLine width="w-3/6" height="h-6" animated />
           <TextLine width="w-3/6" height="h-6" animated />
