@@ -17,6 +17,7 @@ import {
   useGetBeamByIdQuery,
   useGetFollowDocumentsByDidQuery,
   useGetProfileByDidQuery,
+  useGetReflectionByIdQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -25,20 +26,24 @@ import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const { plugins } = props;
 
-  const { beamId } = useParams<{ beamId?: string }>();
+  const { beamId, reflectionId } = useParams<{ beamId?: string; reflectionId?: string }>();
   const { t } = useTranslation('ui-widget-mini-profile');
 
   const { isLoggedIn, authenticatedDID } = useLoggedIn();
 
   const { data: beam } = useGetBeamByIdQuery({ variables: { id: beamId } });
+  const { data: reflection } = useGetReflectionByIdQuery({ variables: { id: reflectionId } });
 
-  const authorId = beam?.node && hasOwn(beam.node, 'author') ? beam?.node?.author.id : '';
+  // set data based on beam or reflect page
+  const data = beamId ? beam : reflection;
+
+  const authorId = data?.node && hasOwn(data.node, 'author') ? data?.node?.author.id : '';
 
   const { data: authorProfileData } = useGetProfileByDidQuery({
     variables: {
       id: authorId,
     },
-    skip: beam?.node && !hasOwn(beam.node, 'author'),
+    skip: data?.node && !hasOwn(data.node, 'author'),
   });
 
   const profileData =
@@ -74,7 +79,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
 
   return (
     <div>
-      {beamId && (
+      {(beamId || reflectionId) && (
         <ProfileMiniCard
           profileData={profileData}
           authenticatedDID={authenticatedDID}
@@ -107,14 +112,20 @@ const Wrapped = (props: RootExtensionProps) => {
   return (
     <Router>
       <Routes>
-        <Route
-          path="@akashaorg/app-akasha-integration/beam/:beamId"
-          element={
-            <I18nextProvider i18n={getTranslationPlugin().i18n}>
-              <ProfileCardWidget {...props} />
-            </I18nextProvider>
-          }
-        />
+        {[
+          '@akashaorg/app-akasha-integration/beam/:beamId',
+          '@akashaorg/app-akasha-integration/reflect/:reflectionId',
+        ].map(r => (
+          <Route
+            key={r}
+            path={r}
+            element={
+              <I18nextProvider i18n={getTranslationPlugin().i18n}>
+                <ProfileCardWidget {...props} />
+              </I18nextProvider>
+            }
+          />
+        ))}
       </Routes>
     </Router>
   );
