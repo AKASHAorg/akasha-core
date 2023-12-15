@@ -28,7 +28,7 @@ if (window.localStorage) {
   }
 }
 if (theme) {
-  window.addEventListener('load', () => {
+  window.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add(theme, 'bg-black');
   });
 }

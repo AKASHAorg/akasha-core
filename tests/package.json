@@ -41,6 +41,7 @@
     "faker": "5.5.3",
     "react-i18next": "12.2.0",
     "react-router-dom": "6.3.0",
-    "@akashaorg/typings": "*"
+    "@akashaorg/typings": "*",
+    "@apollo/client": "3.8.7"
   }
 }

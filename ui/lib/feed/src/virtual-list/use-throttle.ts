@@ -3,7 +3,12 @@ import * as React from 'react';
 export type ThrottledFn = (...args: unknown[]) => void;
 export type UseThrottleOptions = { leading?: boolean; trailing?: boolean };
 
-export const useThrottle = (fn: ThrottledFn, timeout: number, option: UseThrottleOptions) => {
+export const useThrottle = (
+  fn: ThrottledFn,
+  timeout: number,
+  option: UseThrottleOptions,
+  deps: unknown[] = [],
+) => {
   const timerId = React.useRef<ReturnType<typeof setTimeout>>();
   const lastArgs = React.useRef<unknown[]>();
 
@@ -16,6 +21,8 @@ export const useThrottle = (fn: ThrottledFn, timeout: number, option: UseThrottl
     [option],
   );
 
+  // const callback = React.useMemo(() => fn, [fn]);
+
   return React.useCallback(
     function (...args: unknown[]) {
       const { trailing, leading } = opt;
@@ -23,10 +30,10 @@ export const useThrottle = (fn: ThrottledFn, timeout: number, option: UseThrottl
       const waitFn = () => {
         if (trailing && lastArgs.current) {
           fn(...lastArgs.current);
-          lastArgs.current = null;
+          lastArgs.current = undefined;
           timerId.current = setTimeout(waitFn, timeout);
         } else {
-          timerId.current = null;
+          timerId.current = undefined;
         }
       };
 
@@ -40,6 +47,6 @@ export const useThrottle = (fn: ThrottledFn, timeout: number, option: UseThrottl
         timerId.current = setTimeout(waitFn, timeout);
       }
     },
-    [fn, timeout, opt],
+    [opt, fn, timeout],
   );
 };

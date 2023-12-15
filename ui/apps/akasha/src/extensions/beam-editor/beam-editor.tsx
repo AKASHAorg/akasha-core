@@ -10,8 +10,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { ContentBlockModes } from '@akashaorg/typings/lib/ui';
-
+import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { Header } from './header';
 import { Footer } from './footer';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -31,7 +30,7 @@ export const BeamEditor: React.FC = () => {
     removeBlockFromList,
   } = useBlocksPublishing();
 
-  const onBlockSelectAfter = newSelection => {
+  const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
       return;
     }
@@ -63,7 +62,9 @@ export const BeamEditor: React.FC = () => {
 
   const handleAddBlock = selectedBlock => {
     const newBlock = availableBlocks.find(
-      block => block.propertyType === selectedBlock.propertyType,
+      block =>
+        block.propertyType === selectedBlock.propertyType &&
+        block.appName === selectedBlock.appName,
     );
     onBlockSelectAfter(newBlock);
     setUiState('editor');
@@ -102,7 +103,7 @@ export const BeamEditor: React.FC = () => {
       <Stack customStyle="relative h-full overflow-hidden">
         <Stack customStyle="overflow-auto h-full">
           {blocksInUse.map((block, idx) => (
-            <div key={`${block.propertyType}-${idx}`} id={`${block.propertyType}-${idx}`}>
+            <div key={`${block.key}`} id={`${block.propertyType}-${idx}`}>
               <Stack padding={16} direction="column" spacing="gap-2">
                 <Stack direction="row" justify="between">
                   <Stack

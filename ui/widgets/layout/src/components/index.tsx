@@ -1,15 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
-
 import LayoutWidget from './layout-widget';
 
 // import whyDidYouRender from '@welldone-software/why-did-you-render';
-
+//
 // if (process.env.NODE_ENV !== 'production') {
 //   whyDidYouRender(React, {
 //     trackAllPureComponents: true,

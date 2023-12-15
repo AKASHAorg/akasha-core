@@ -4,18 +4,23 @@ import {
   ContentBlockModes,
   ContentBlockRootProps,
 } from '@akashaorg/typings/lib/ui';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import type {
+  AkashaBeamInput,
+  CreateAkashaBeamPayload,
+} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import getSDK from '@akashaorg/awf-sdk';
+import { useIndexBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import type { CreateBeamMutation } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 /**
  * Steps when publishBeam is called:
  * - check if every used blocks is valid for publishing
- * - fire an event for each block to trigger contentBlockCreation
- * - listen for a generic event to gather contentBlockData for each block
+ * - call async fn `createBlock` method on each block
  * when each block si successfully published:
  * - publish the beam
- * - *
+ * - add the beam to indexing service
  */
 
 // this can be made configurable via world config
@@ -23,22 +28,31 @@ const DEFAULT_TEXT_BLOCK = 'slate-block';
 
 export const useBlocksPublishing = () => {
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
+  const [isPublishing, setIsPublishing] = React.useState(false);
+  const [errors, setErrors] = React.useState<Error[]>([]);
+  const globalIdx = React.useRef(0);
+  const sdk = React.useRef(getSDK());
   const [isNsfw, setIsNsfw] = React.useState(false);
+
   const { getExtensionsPlugin } = useRootComponentProps();
+
   React.useLayoutEffect(() => {
     if (getExtensionsPlugin()) {
       setAvailableBlocks(getExtensionsPlugin().contentBlockStore.getInfos());
     }
   }, [getExtensionsPlugin]);
 
-  const createBeam = useCreateBeamMutation();
+  const [createBeam, createBeamQuery] = useCreateBeamMutation({
+    context: { source: sdk.current.services.gql.contextSources.composeDB },
+  });
 
-  const [isPublishing, setIsPublishing] = React.useState(false);
+  const [createBeamIndex, beamIndexQuery] = useIndexBeamMutation();
 
   const [blocksInUse, setBlocksInUse] = React.useState<
     (ContentBlockRootProps['blockInfo'] & {
       appName: string;
-      blockRef: React.RefObject<any>;
+      blockRef: React.RefObject<BlockInstanceMethods>;
+      key: number;
       status?: 'success' | 'pending' | 'error';
       response?: { blockID: string; error?: string };
     })[]
@@ -55,8 +69,10 @@ export const useBlocksPublishing = () => {
           order: 0,
           mode: ContentBlockModes.EDIT,
           blockRef: React.createRef<BlockInstanceMethods>(),
+          key: 0,
         },
       ]);
+      globalIdx.current = 1;
     }
   }, [blocksInUse, defaultTextBlock]);
 
@@ -67,49 +83,90 @@ export const useBlocksPublishing = () => {
         active: true,
         nsfw: isNsfw,
         content: blocksInUse.map(blockData => ({
-          blockID: blockData.response.blockID,
+          blockID: blockData.response?.blockID,
           order: blockData.order,
         })),
         createdAt: new Date().toISOString(),
       };
 
-      if (createBeam.isLoading || createBeam.error) return;
+      if (createBeamQuery.loading || createBeamQuery.error) return;
+      if (createBeamQuery.called) return;
 
-      createBeam
-        .mutateAsync({
+      createBeam({
+        variables: {
           i: {
             content: beamContent,
           },
-        })
-        .then(() => {
+        },
+      }).catch(err => {
+        setErrors(prev => [...prev, new Error(`failed to create beam: ${err.message}`)]);
+      });
+    }
+  }, [blocksInUse, createBeam, createBeamQuery, isNsfw]);
+
+  const indexBeam = React.useCallback(
+    async (beamData: CreateBeamMutation['createAkashaBeam']) => {
+      try {
+        const indexingVars = await sdk.current.api.auth.prepareIndexedID(beamData.document.id);
+        createBeamIndex({
+          variables: indexingVars,
+        }).then(() => {
           setBlocksInUse([]);
           setIsPublishing(false);
-        })
-        .catch(err => {
-          // @TODO: handle errors!
-          console.error('error creating beam.', err);
         });
+      } catch (err) {
+        setErrors(prev => [...prev, new Error(`Failed to index beam: ${err.message}`)]);
+      }
+    },
+    [createBeamIndex],
+  );
+
+  React.useEffect(() => {
+    if (isPublishing && createBeamQuery.data?.createAkashaBeam && !beamIndexQuery.called) {
+      indexBeam(createBeamQuery.data.createAkashaBeam).catch();
     }
-  }, [blocksInUse, createBeam]);
+  }, [beamIndexQuery.called, createBeamQuery, indexBeam, isPublishing]);
 
   const createContentBlocks = React.useCallback(
     async (nsfw: boolean) => {
       setIsPublishing(true);
       setIsNsfw(nsfw);
       for (const [idx, block] of blocksInUse.entries()) {
-        if (block.status !== 'success' && block.status !== 'pending') {
+        if (!block.status) {
           setBlocksInUse(prev => [
             ...prev.slice(0, idx),
             { ...block, status: 'pending' },
             ...prev.slice(idx + 1),
           ]);
-          const data = await block.blockRef.current.createBlock();
-          if (data.response) {
-            setBlocksInUse(prev => [
-              ...prev.slice(0, idx),
-              { ...block, status: 'success', response: data.response },
-              ...prev.slice(idx + 1),
+          try {
+            const data = await block.blockRef.current.createBlock();
+            if (data.response && data.response.blockID) {
+              setBlocksInUse(prev => [
+                ...prev.slice(0, idx),
+                { ...block, status: 'success', response: data.response },
+                ...prev.slice(idx + 1),
+              ]);
+            }
+            if (data.response && data.response.error) {
+              setBlocksInUse(prevState => [
+                ...prevState.slice(0, idx),
+                { ...block, status: 'error', response: data.response },
+                ...prevState.slice(idx + 1),
+              ]);
+            }
+          } catch (err) {
+            setErrors(prev => [
+              ...prev,
+              new Error(`Failed to create content blocks: ${err.message}`),
             ]);
+            const data = await block.blockRef.current.createBlock();
+            if (data.response) {
+              setBlocksInUse(prev => [
+                ...prev.slice(0, idx),
+                { ...block, status: 'success', response: data.response },
+                ...prev.slice(idx + 1),
+              ]);
+            }
           }
         }
       }
@@ -135,6 +192,7 @@ export const useBlocksPublishing = () => {
           order: afterIdx,
           blockRef: React.createRef<BlockInstanceMethods>(),
           mode: ContentBlockModes.EDIT,
+          key: globalIdx.current + 1,
         },
         ...prev.slice(afterIdx).map(bl => ({
           ...bl,
@@ -149,8 +207,10 @@ export const useBlocksPublishing = () => {
         order: prev.length,
         blockRef: React.createRef<BlockInstanceMethods>(),
         mode: ContentBlockModes.EDIT,
+        key: globalIdx.current + 1,
       },
     ]);
+    globalIdx.current += 1;
   };
 
   const removeBlockFromList = (index: number) => {
@@ -161,6 +221,20 @@ export const useBlocksPublishing = () => {
     });
   };
 
+  const formattedErrors = React.useMemo(() => {
+    const err = [];
+    if (errors.length) {
+      err.push(errors.map(err => err.message));
+    }
+    if (beamIndexQuery.error) {
+      err.push(beamIndexQuery.error.message);
+    }
+    if (createBeamQuery.error) {
+      err.push(createBeamQuery.error.message);
+    }
+    return err;
+  }, [beamIndexQuery.error, createBeamQuery.error, errors]);
+
   return {
     isPublishing,
     setIsPublishing,
@@ -169,5 +243,7 @@ export const useBlocksPublishing = () => {
     addBlockToList,
     removeBlockFromList,
     availableBlocks,
+    errors: formattedErrors,
+    isLoading: beamIndexQuery.loading || createBeamQuery.loading,
   };
 };

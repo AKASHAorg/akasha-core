@@ -7,43 +7,40 @@ import EntrySectionLoading from './entry-section-loading';
 import ReflectionSection from './reflection-section';
 import { useParams } from 'react-router-dom';
 import {
-  useGetMyProfileQuery,
-  useGetReflectionByIdQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
-import {
   hasOwn,
   mapReflectEntryData,
   useAnalytics,
   useEntryNavigation,
+  useGetLoginProfile,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { PendingReflect } from './pending-reflect';
 import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';
+import { ReflectionCard } from '@akashaorg/ui-lib-feed';
+import { useGetReflectionByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 const ReflectionPage: React.FC<unknown> = () => {
   const { reflectionId } = useParams<{
     reflectionId: string;
   }>();
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin, navigateToModal, layoutConfig, getTranslationPlugin } =
-    useRootComponentProps();
-  const reflectionReq = useGetReflectionByIdQuery(
-    { id: reflectionId },
-    { select: response => response.node },
-  );
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-  });
+  const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
+  const reflectionReq = useGetReflectionByIdSuspenseQuery({ variables: { id: reflectionId } });
+  const profileDataReq = useGetLoginProfile();
 
   const [analyticsActions] = useAnalytics();
 
-  const loggedProfileData = profileDataReq.data;
-  const entryData =
-    reflectionReq.data && hasOwn(reflectionReq.data, 'id') ? reflectionReq.data : null;
+  const entryData = React.useMemo(() => {
+    if (
+      reflectionReq.data &&
+      hasOwn(reflectionReq.data, 'node') &&
+      hasOwn(reflectionReq.data.node, 'id')
+    ) {
+      return reflectionReq.data.node;
+    }
+  }, [reflectionReq]);
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
@@ -51,17 +48,15 @@ const ReflectionPage: React.FC<unknown> = () => {
 
   const onNavigate = useEntryNavigation(getRoutingPlugin().navigateTo);
 
-  if (reflectionReq.status === 'error')
+  if (reflectionReq.error)
     return (
       <ErrorLoader
         type="script-error"
         title={t('There was an error loading the entry')}
         details={t('We cannot show this entry right now')}
-        devDetails={reflectionReq.error as string}
+        devDetails={reflectionReq.error.message}
       />
     );
-
-  if (reflectionReq.status === 'loading') return <EntrySectionLoading />;
 
   return (
     <Card padding="p-0" margin="mb-4">
@@ -71,34 +66,45 @@ const ReflectionPage: React.FC<unknown> = () => {
           onNavigate({ authorId: entryData?.author?.id, id: entryData.beam?.id }, EntityTypes.BEAM)
         }
       />
-      <ReflectionSection
-        beamId={entryData.beam?.id}
-        reflectionId={entryData.id}
-        entryData={mapReflectEntryData(entryData)}
-        isLoggedIn={!!loggedProfileData?.id}
-        onNavigate={onNavigate}
-        showLoginModal={showLoginModal}
-      />
-      <PendingReflect beamId={entryData.beam?.id} authorId={loggedProfileData?.did.id} />
+      <React.Suspense fallback={<EntrySectionLoading />}>
+        <ReflectionSection
+          beamId={entryData.beam?.id}
+          reflectionId={entryData.id}
+          entryData={mapReflectEntryData(entryData)}
+          isLoggedIn={!!profileDataReq?.akashaProfile?.id}
+          onNavigate={onNavigate}
+          showLoginModal={showLoginModal}
+        />
+      </React.Suspense>
+      <PendingReflect beamId={entryData.beam?.id} authorId={profileDataReq?.akashaProfile?.id} />
       <Stack spacing="gap-y-2">
         <ReflectFeed
           reflectionsOf={{ entryId: entryData.id, itemType: EntityTypes.REFLECT }}
-          loggedProfileData={loggedProfileData}
-          onEntryFlag={() => {
-            return () => {
-              //@TODO
-            };
-          }}
-          onEntryRemove={() => {
-            //@TODO
-          }}
           itemSpacing={0}
           newItemsPublishedLabel={t('New Reflects published recently')}
-          onLoginModalOpen={showLoginModal}
           trackEvent={analyticsActions.trackEvent}
-          onNavigate={onNavigate}
-          modalSlotId={layoutConfig.modalSlotId}
-          i18n={getTranslationPlugin().i18n}
+          locale={getTranslationPlugin().i18n.language}
+          estimatedHeight={120}
+          queryKey={`reflect-feed-${entryData.id}`}
+          renderItem={itemData => (
+            <ReflectionCard
+              entryData={mapReflectEntryData(itemData.node)}
+              contentClickable={true}
+              onContentClick={() =>
+                getRoutingPlugin().navigateTo({
+                  appName: '@akashaorg/app-akasha-integration',
+                  getNavigationUrl: navRoutes => `${navRoutes.Reflect}/${itemData.node.id}`,
+                })
+              }
+              onReflect={() =>
+                getRoutingPlugin().navigateTo({
+                  appName: '@akashaorg/app-akasha-integration',
+                  getNavigationUrl: navRoutes =>
+                    `${navRoutes.Reflect}/${itemData.node.id}/${navRoutes.Reflect}`,
+                })
+              }
+            />
+          )}
         />
       </Stack>
     </Card>

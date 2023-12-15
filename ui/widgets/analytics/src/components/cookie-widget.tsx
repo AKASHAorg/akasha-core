@@ -27,15 +27,14 @@ const CookieWidget: React.FC<unknown> = () => {
   const eventSub = useRef(null);
   const analyticsConfig = useRef(worldConfig.analytics);
   const _uiEvents = useRef(uiEvents);
+  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
 
   useLayoutEffect(() => {
     const consentType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
-    if (consentType) {
+    if (consentType && consentType !== cookieType) {
       setCookieType(consentType);
-    } else {
-      setCookieType(null);
     }
-  }, []);
+  }, [cookieType]);
 
   useEffect(() => {
     if (cookieType && cookieType === CookieConsentTypes.ESSENTIAL) {
@@ -57,7 +56,7 @@ const CookieWidget: React.FC<unknown> = () => {
     };
   }, [cookieType]);
 
-  const handleAcceptCookie = (all?: boolean) => {
+  const handleAcceptCookie = React.useCallback((all?: boolean) => {
     window.localStorage.setItem(
       COOKIE_CONSENT_NAME,
       all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL,
@@ -67,7 +66,16 @@ const CookieWidget: React.FC<unknown> = () => {
     _uiEvents.current.next({
       event: EventTypes.SetInitialCookieType,
     });
-  };
+  }, []);
+
+  const handleSettingsClick = React.useCallback(
+    () =>
+      navigateTo.current?.({
+        appName: '@akashaorg/app-settings-ewa',
+        getNavigationUrl: navRoutes => navRoutes.Home,
+      }),
+    [],
+  );
 
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
@@ -86,11 +94,7 @@ const CookieWidget: React.FC<unknown> = () => {
                 `, an open source analytics platform that will help us improve AKASHA World. As we respect your privacy, rest assured that we don't store personal identifiable information (PII). In addition, if you change your mind, you can always opt-out by accessing the `,
               ),
               settingsLabel: t('settings '),
-              onSettingsClick: () =>
-                getRoutingPlugin().navigateTo?.({
-                  appName: '@akashaorg/app-settings-ewa',
-                  getNavigationUrl: navRoutes => navRoutes.Home,
-                }),
+              onSettingsClick: handleSettingsClick,
               lastParagraphLabel: t(' menu.'),
             }}
             paragraphThree={{

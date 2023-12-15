@@ -37,7 +37,8 @@
     "test:hooks": "nx run @akashaorg/ui-awf-hooks:test",
     "test:widgets": "nx run-many --target=test --projects=@akashaorg/ui-widget-analytics,@akashaorg/ui-widget-layout,@akashaorg/ui-widget-mini-profile,@akashaorg/ui-widget-my-apps,@akashaorg/ui-widget-sidebar,@akashaorg/ui-widget-topbar,@akashaorg/ui-widget-trending",
     "test:app-loader": "nx run @akashaorg/ui-app-loader:test",
-    "test:all": "yarn test:design-system-core && yarn test:design-system-components && yarn test:hooks",
+    "test:libs": "nx run @akashaorg/ui-lib-feed:test",
+    "test:all": "yarn test:design-system-core && yarn test:design-system-components && yarn test:hooks && yarn test:libs",
     "push:integrations": "node build/integrations_bucket_store.js",
     "sdk:graphql:generate": "nx run-many --target=graphql:generate --projects=@akashaorg/awf-sdk --output-style=stream"
   },
