@@ -11,9 +11,10 @@ import { ParcelConfigObject } from 'single-spa';
 import { useGetContentBlockByIdLazyQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
 export type MatchingBlock = {
   blockInfo: ContentBlockExtensionInterface & {
@@ -61,7 +62,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
         variables: {
           id: readMode?.blockID,
         },
-      }).catch(err => console.error(err, '<< failed to fetch content block'));
+      }).catch(err => console.error('Failed to fetch content block. Error', err));
     }
   }, [fetchBlockInfo, readMode?.blockID]);
 
@@ -117,7 +118,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
         isMatched: true,
       });
     }
-  }, [matchingBlocks, mode, state]);
+  }, [blockInfoQuery.called, blockInfoQuery.loading, matchingBlocks, mode, state]);
 
   const appInfo = React.useMemo(() => {
     if (blockInfoQuery.called && !blockInfoQuery.loading) {
@@ -134,29 +135,40 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
   return (
     <React.Suspense
       fallback={
-        <div>
-          <TextLine animated={true} width={'w-full'} />
-          <TextLine animated={true} width={'w-1/2'} />
-        </div>
+        <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
+          <TextLine animated={true} width="w-full" />
+          <TextLine animated={true} width="w-2/3" />
+        </Stack>
       }
     >
       {blockInfoQuery.error && (
-        <div>
-          <TextLine animated={true} width={'w-full'} />
-          <TextLine animated={true} width={'w-1/2'} />
-        </div>
+        <Stack
+          fullWidth={true}
+          spacing="gap-y-1"
+          customStyle="my-2 gap-2 items-center"
+          direction="row"
+        >
+          <Icon icon={<ExclamationTriangleIcon />} />
+          <Text variant="footnotes1">Ouch, there was an error when loading the content.</Text>
+        </Stack>
       )}
       {!state.parcels.length && !state.isMatched && (
-        <div>
-          <TextLine animated={true} width={'w-full'} />
-          <TextLine animated={true} width={'w-1/2'} />
-        </div>
+        <Stack fullWidth={true} spacing="gap-y-1" customStyle="mb-2">
+          <TextLine animated={true} width="w-full" />
+          <TextLine animated={true} width="w-2/3" />
+        </Stack>
       )}
       {!state.parcels.length && state.isMatched && appInfo && (
-        <>
-          <Stack direction="row">
+        <Stack fullWidth={true} customStyle="min-w-full" spacing="gap-y-1" padding="py-2">
+          <Stack
+            direction="row"
+            fullWidth={true}
+            justify="between"
+            align="center"
+            customStyle="min-w-full"
+          >
             <Stack direction="column">
-              <Text variant={'button-sm'}>App not installed</Text>
+              <Text variant="button-sm">App not installed</Text>
               <Text variant="footnotes2" weight="normal">
                 You need to install {appInfo.displayName} to see this content
               </Text>
@@ -165,12 +177,11 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
               <Button label={'Install'} />
             </Stack>
           </Stack>
-          <Divider />
-        </>
+        </Stack>
       )}
       {state.parcels.map((matchingBlock, index) => {
         return (
-          <div
+          <Stack
             id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
           >
@@ -185,7 +196,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
               blockRef={blockRef}
               content={matchingBlock.content}
             />
-          </div>
+          </Stack>
         );
       })}
     </React.Suspense>

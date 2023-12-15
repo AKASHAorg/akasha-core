@@ -4,11 +4,8 @@ import {
   ContentBlockModes,
   ContentBlockRootProps,
 } from '@akashaorg/typings/lib/ui';
-import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import type {
-  AkashaBeamInput,
-  CreateAkashaBeamPayload,
-} from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import type { AkashaBeamInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { useCreateBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import getSDK from '@akashaorg/awf-sdk';
 import { useIndexBeamMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
@@ -25,8 +22,11 @@ import type { CreateBeamMutation } from '@akashaorg/typings/lib/sdk/graphql-oper
 
 // this can be made configurable via world config
 const DEFAULT_TEXT_BLOCK = 'slate-block';
-
-export const useBlocksPublishing = () => {
+export type UseBlocksPublishingProps = {
+  onComplete?: (beamData: CreateBeamMutation['createAkashaBeam']) => void;
+};
+export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
+  const { onComplete } = props;
   const [availableBlocks, setAvailableBlocks] = React.useState([]);
   const [isPublishing, setIsPublishing] = React.useState(false);
   const [errors, setErrors] = React.useState<Error[]>([]);
@@ -123,9 +123,28 @@ export const useBlocksPublishing = () => {
 
   React.useEffect(() => {
     if (isPublishing && createBeamQuery.data?.createAkashaBeam && !beamIndexQuery.called) {
-      indexBeam(createBeamQuery.data.createAkashaBeam).catch();
+      indexBeam(createBeamQuery.data.createAkashaBeam)
+        .then(() => {
+          onComplete?.(createBeamQuery.data.createAkashaBeam);
+        })
+        .catch();
     }
-  }, [beamIndexQuery.called, createBeamQuery, indexBeam, isPublishing]);
+    if (beamIndexQuery.loading) return;
+    if (beamIndexQuery.called && !beamIndexQuery.loading) {
+      // it's probably done
+      if (!beamIndexQuery.error) {
+        onComplete?.(createBeamQuery.data.createAkashaBeam);
+      }
+    }
+  }, [
+    beamIndexQuery.called,
+    beamIndexQuery.error,
+    beamIndexQuery.loading,
+    createBeamQuery,
+    indexBeam,
+    isPublishing,
+    onComplete,
+  ]);
 
   const createContentBlocks = React.useCallback(
     async (nsfw: boolean) => {

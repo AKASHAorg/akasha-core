@@ -245,6 +245,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             justify="center"
             customStyle={`relative max-h-[50rem] ${scrollHiddenStyle} ${contentClickableStyle} ${nsfwHeightStyle}`}
             data-testid="entry-content"
+            fullWidth={true}
           >
             {entryData.nsfw && !showNSFW && (
               <Stack customStyle="absolute w-36 h-16 z-10">
@@ -256,7 +257,13 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                 />
               </Stack>
             )}
-            <Stack justifySelf="start" alignSelf="start" customStyle={nsfwBlurStyle}>
+            <Stack
+              justifySelf="start"
+              alignSelf="start"
+              align="start"
+              customStyle={nsfwBlurStyle}
+              fullWidth={true}
+            >
               {rest.itemType === EntityTypes.REFLECT ? (
                 <ReadOnlyEditor
                   content={rest.slateContent}
