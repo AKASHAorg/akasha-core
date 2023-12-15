@@ -27,7 +27,7 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
     authenticatedDID,
     beamsLabel,
     followersLabel,
-    stats: { followers, beams },
+    stats: { followers = 0, beams = 0 },
     transformSource,
     handleClick,
     footerExt,
@@ -78,21 +78,15 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
         </Stack>
 
         <Stack direction="row" spacing="gap-x-3" align="center" justify="center">
-          {beams && (
-            <Text variant="subtitle2">
-              {beams} {beamsLabel}
-            </Text>
-          )}
-          {followers && (
-            <>
-              <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                |
-              </Text>
-              <Text variant="subtitle2">
-                {followers} {followersLabel}
-              </Text>
-            </>
-          )}
+          <Text variant="subtitle2">
+            {beams} {beamsLabel}
+          </Text>
+          <Text variant="subtitle2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+            |
+          </Text>
+          <Text variant="subtitle2">
+            {followers} {followersLabel}
+          </Text>
         </Stack>
 
         {profileData?.description && (
