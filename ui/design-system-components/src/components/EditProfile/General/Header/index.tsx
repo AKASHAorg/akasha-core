@@ -196,8 +196,9 @@ export const Header: React.FC<HeaderProps> = ({
         <Card
           radius={20}
           background={{ light: 'grey7', dark: 'grey5' }}
-          style={{ backgroundImage: `url(${coverImageUrl?.src || coverImageFallback})` }}
-          customStyle="flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover"
+          customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
+            coverImageUrl?.src ?? coverImageFallback
+          })]`}
           ref={editCoverRef}
         >
           <Stack direction="column" spacing="gap-y-1" customStyle="relative mt-auto ml-auto">

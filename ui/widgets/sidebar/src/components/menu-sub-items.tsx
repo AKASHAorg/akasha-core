@@ -36,7 +36,7 @@ const MenuSubItems: React.FC<MenuSubItemsProps> = props => {
           >
             <Stack direction="row" customStyle={'bg(hover:grey8 dark:hover:grey5)'}>
               <Stack
-                customStyle={`ml-8 border(l-4 ${
+                customStyle={`ml-10 border(l-4 ${
                   isActive ? 'secondaryLight dark:secondaryDark' : 'grey9 dark:grey3'
                 })`}
               >
