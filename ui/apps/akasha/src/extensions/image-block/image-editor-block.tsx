@@ -1,12 +1,12 @@
 import React, { useImperativeHandle } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getMediaUrl, saveMediaFile } from '@akashaorg/ui-awf-hooks';
-import { BlockInstanceMethods, ContentBlockRootProps } from '@akashaorg/typings/lib/ui';
+import type { BlockInstanceMethods, ContentBlockRootProps } from '@akashaorg/typings/lib/ui';
 
-import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   AkashaContentBlockBlockDef,
-  AkashaContentBlockLabeledValueInput,
+  type AkashaContentBlockLabeledValueInput,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -23,6 +23,7 @@ import {
   XMarkIcon,
   ArrowPathIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import getSDK from '@akashaorg/awf-sdk';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 
 // @TODO: replace this with actual data
@@ -32,8 +33,9 @@ export const ImageEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
   const { t } = useTranslation('app-akasha-integration');
-  const createContentBlock = useCreateContentBlockMutation();
-
+  const sdk = React.useRef(getSDK());
+  const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
+  const retryCount = React.useRef<number>();
   const [imageLink, setImageLink] = React.useState('');
   const [uiState, setUiState] = React.useState('menu');
 
@@ -44,50 +46,67 @@ export const ImageEditorBlock = (
   const [caption, setCaption] = React.useState('');
   const [showEditModal, setShowEditModal] = React.useState(false);
 
+  const createBlock = React.useCallback(async () => {
+    const imageData = {
+      images,
+      caption,
+      align: alignState,
+    };
+    const content = JSON.stringify(imageData);
+    const contentBlockValue: AkashaContentBlockLabeledValueInput = {
+      label: props.blockInfo.appName,
+      propertyType: props.blockInfo.propertyType,
+      value: content,
+    };
+    try {
+      const resp = await createContentBlock({
+        variables: {
+          i: {
+            content: {
+              // @TODO: replace this mock appVersionID
+              appVersionID: TEST_APP_VERSION_ID,
+              createdAt: new Date().toISOString(),
+              content: [contentBlockValue],
+              active: true,
+              kind: AkashaContentBlockBlockDef.Other,
+            },
+          },
+        },
+        context: { source: sdk.current.services.gql.contextSources.composeDB },
+      });
+      return {
+        response: { blockID: resp.data.createAkashaContentBlock.document.id },
+        blockInfo: props.blockInfo,
+        retryCount: retryCount.current,
+      };
+    } catch (err) {
+      console.error('error creating content block', err);
+      return {
+        response: {
+          blockID: null,
+          error: err.message,
+        },
+        blockInfo: props.blockInfo,
+        retryCount: retryCount.current,
+      };
+    }
+  }, [alignState, caption, createContentBlock, images, props.blockInfo]);
+
+  const retryCreate = React.useCallback(async () => {
+    if (contentBlockQuery.called) {
+      contentBlockQuery.reset();
+    }
+    retryCount.current += 1;
+    return createBlock();
+  }, [contentBlockQuery, createBlock]);
+
   useImperativeHandle(
     props.blockRef,
     () => ({
-      createBlock: async () => {
-        const imageData = {
-          images,
-          caption,
-          align: alignState,
-        };
-        const content = JSON.stringify(imageData);
-        const contentBlockValue: AkashaContentBlockLabeledValueInput = {
-          label: props.blockInfo.appName,
-          propertyType: props.blockInfo.propertyType,
-          value: content,
-        };
-        try {
-          const resp = await createContentBlock.mutateAsync({
-            i: {
-              content: {
-                // @TODO: replace this mock appVersionID
-                appVersionID: TEST_APP_VERSION_ID,
-                createdAt: new Date().toISOString(),
-                content: [contentBlockValue],
-                active: true,
-                kind: AkashaContentBlockBlockDef.Other,
-              },
-            },
-          });
-          return {
-            response: { blockID: resp.createAkashaContentBlock.document.id },
-            blockInfo: props.blockInfo,
-          };
-        } catch (err) {
-          console.error('error creating content block', err);
-          return {
-            response: {
-              error: err.message,
-            },
-            blockInfo: props.blockInfo,
-          };
-        }
-      },
+      createBlock: createBlock,
+      retryBlockCreation: retryCreate,
     }),
-    [createContentBlock, images, alignState, caption, props.blockInfo],
+    [createBlock, retryCreate],
   );
 
   const handleChange = e => {

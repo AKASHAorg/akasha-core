@@ -69,4 +69,4 @@ const Spinner: React.FC<SpinnerProps> = props => {
   );
 };
 
-export default Spinner;
+export default React.memo(Spinner);

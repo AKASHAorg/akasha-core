@@ -157,7 +157,7 @@ const Layout: React.FC<unknown> = () => {
   const mobileLayoverStyle = `
       fixed xl:sticky h-full ${
         showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches
-          ? 'min-w([100vw] xl:max) bg(black/30 dark:white/30) z-[99]'
+          ? 'min-w([100vw] xl:max) bg(black/30 dark:white/10) z-[99] left-0 right-0'
           : ''
       }`;
 

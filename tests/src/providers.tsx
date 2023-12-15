@@ -4,8 +4,19 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MockedProvider } from '@apollo/client/testing';
 
 import i18n from 'i18next';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const queryClient = new QueryClient();
+const apolloClient = new ApolloClient({
+  cache: new InMemoryCache(),
+  version: '0.1dev',
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-and-network',
+    },
+  },
+});
 
 const getI18nInstance = () => {
   i18n.use(initReactI18next).init({
@@ -36,7 +47,9 @@ const AllProviders: React.FC<{
 }> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <TranslationProvider>{children}</TranslationProvider>
+      <ApolloProvider client={apolloClient}>
+        <TranslationProvider>{children}</TranslationProvider>
+      </ApolloProvider>
     </QueryClientProvider>
   );
 };

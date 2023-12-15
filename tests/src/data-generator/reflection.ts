@@ -1,5 +1,6 @@
 import faker from 'faker';
 import { toBinary } from '../utils/toBinary';
+import { genBeamData } from './beam';
 
 const genAuthor = () => ({ id: faker.datatype.uuid(), isViewer: false });
 
@@ -7,6 +8,7 @@ const genReflectionData = () => {
   return {
     id: faker.datatype.uuid(),
     active: true,
+    beam: genBeamData(),
     beamID: faker.datatype.uuid(),
     createdAt: new Date(),
     isReply: false,

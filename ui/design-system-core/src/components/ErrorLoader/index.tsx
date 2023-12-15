@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import ErrorCard from './error-card';
 
 export interface ErrorLoaderProps {
@@ -31,9 +30,10 @@ export interface ErrorLoaderProps {
    */
   devDetails?: React.ReactElement | string;
   customStyle?: string; // use valid twind classes;
+  children?: React.ReactElement | string | number;
 }
 
-const ErrorLoader: React.FC<ErrorLoaderProps> = props => {
+const ErrorLoader: React.FC<ErrorLoaderProps> = ({ children, ...props }) => {
   const { type, publicImgPath = '/images' } = props;
 
   let imagesrc: string;
@@ -66,7 +66,11 @@ const ErrorLoader: React.FC<ErrorLoaderProps> = props => {
       break;
   }
 
-  return <ErrorCard imageSrc={imagesrc} {...props} />;
+  return (
+    <ErrorCard imageSrc={imagesrc} {...props}>
+      {children}
+    </ErrorCard>
+  );
 };
 
 export default ErrorLoader;

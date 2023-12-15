@@ -23,7 +23,7 @@
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
     "watch": "webpack --config webpack.config.cjs --watch",
-    "pretest": "tsc -m commonjs",
+    "test": "jest --runInBand",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {

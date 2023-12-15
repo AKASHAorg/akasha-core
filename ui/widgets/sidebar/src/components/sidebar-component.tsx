@@ -35,6 +35,7 @@ const SidebarComponent: React.FC<unknown> = () => {
     uiEvents,
     plugins,
     worldConfig: { defaultApps, socialLinks },
+    getRoutingPlugin,
   } = useRootComponentProps();
 
   const { t } = useTranslation('ui-widget-sidebar');
@@ -53,7 +54,7 @@ const SidebarComponent: React.FC<unknown> = () => {
 
   const [dismissed, dismissCard] = useDismissedCard('@akashaorg/ui-widget-sidebar_cta-card');
 
-  const routing = plugins['@akashaorg/app-routing']?.routing;
+  const routing = getRoutingPlugin();
 
   useEffect(() => {
     if (isLoggedIn) {

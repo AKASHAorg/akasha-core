@@ -1,8 +1,9 @@
 import React from 'react';
-import { HEADER_COMPONENT, LOADING_INDICATOR, VirtualItemInfo } from './virtual-item';
+import { VirtualItem } from './virtual-item-renderer';
 import { Rect } from './rect';
 
 export const enum EdgeArea {
+  NONE = 'none',
   TOP = 'top',
   BOTTOM = 'bottom',
   NEAR_TOP = 'near-top',
@@ -18,39 +19,30 @@ export type DetectorState = {
   newArea?: EdgeArea;
 };
 
+const getListRect = (filteredItems: VirtualItem[]) => {
+  const filteredStart = filteredItems.at(0);
+  const filteredEnd = filteredItems.at(-1);
+  if (filteredStart && filteredEnd) {
+    return new Rect(filteredStart.start, filteredEnd.start + filteredEnd.height);
+  }
+};
+
 export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
   const { overscan, onEdgeDetectorChange } = props;
 
   const detectorState = React.useRef<DetectorState>({
     listSize: 0,
-    newArea: null,
   });
 
-  return {
-    update: (
-      itemList: VirtualItemInfo[],
-      rendered: VirtualItemInfo[],
-      viewportRect: Rect,
-      averageItemHeight: number,
-      isNewUpdate: boolean,
-    ) => {
-      if (!isNewUpdate) return;
-      const overscanHeight = overscan * averageItemHeight;
-      const filteredItems = itemList.filter(
-        it => !it.key.startsWith(LOADING_INDICATOR) && it.key !== HEADER_COMPONENT,
-      );
-      if (!filteredItems.length) {
-        detectorState.current = {
-          newArea: EdgeArea.TOP,
-          listSize: 0,
-        };
-        return onEdgeDetectorChange(EdgeArea.TOP);
-      }
-      const listRect = new Rect(
-        filteredItems.at(0).start,
-        filteredItems.at(-1).start + filteredItems.at(-1).height,
-      );
-      let newArea: EdgeArea;
+  const getEdge = (
+    viewportRect: Rect,
+    listRect: Rect,
+    overscanHeight: number,
+    listSize: number,
+  ) => {
+    let newArea = EdgeArea.NONE;
+
+    if (listSize > 1) {
       if (viewportRect.getTop() === listRect.getTop()) {
         newArea = EdgeArea.TOP;
       }
@@ -72,13 +64,46 @@ export const useEdgeDetector = (props: UseEdgeDetectorProps) => {
       ) {
         newArea = EdgeArea.NEAR_BOTTOM;
       }
-      detectorState.current = {
-        newArea,
-        listSize: itemList.length,
-      };
-      if (newArea) {
+    }
+
+    return newArea;
+  };
+
+  const isNewArea = (newArea: EdgeArea) => newArea !== detectorState.current.newArea;
+
+  const update = React.useCallback(
+    (
+      itemList: VirtualItem[],
+      rendered: VirtualItem[],
+      viewportRect: Rect,
+      averageItemHeight: number,
+      isNewUpdate: boolean,
+    ) => {
+      if (!isNewUpdate) return;
+      const overscanHeight = overscan * averageItemHeight;
+      const filteredItems = itemList.filter(it => it.maybeRef);
+      if (!filteredItems.length && !detectorState.current.newArea) {
+        detectorState.current = {
+          newArea: EdgeArea.TOP,
+          listSize: 0,
+        };
+        return onEdgeDetectorChange(EdgeArea.TOP);
+      }
+      const listRect = getListRect(filteredItems);
+      const newArea = getEdge(viewportRect, listRect, overscanHeight, itemList.length);
+
+      if (isNewArea(newArea)) {
+        detectorState.current = {
+          newArea,
+          listSize: itemList.length,
+        };
         onEdgeDetectorChange(newArea);
       }
     },
+    [onEdgeDetectorChange, overscan],
+  );
+
+  return {
+    update,
   };
 };

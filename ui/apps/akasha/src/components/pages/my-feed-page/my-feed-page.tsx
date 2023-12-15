@@ -75,30 +75,29 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
       getNavigationUrl: navRoutes => `${navRoutes.Onboarding}`,
     });
   };
+
   return (
     <Stack fullWidth={true}>
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
+      <Stack customStyle="mb-2">
+        <StartCard
+          title={t('My Feed')}
+          heading={t('Add some magic to your feed 🪄')}
+          description={t(
+            'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
+          )}
+          secondaryDescription={t('Your customized view of AKASHA World')}
+          image="/images/news-feed.webp"
+          showMainArea={!userHasSubscriptions}
+          hideMainAreaOnMobile={false}
+          showSecondaryArea={userHasSubscriptions}
+          CTALabel={t('Customize My Feed')}
+          onClickCTA={handleCTAClick}
+        />
+      </Stack>
       <BeamFeed
-        header={
-          <Stack customStyle="mb-2">
-            <StartCard
-              title={t('My Feed')}
-              heading={t('Add some magic to your feed 🪄')}
-              description={t(
-                'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
-              )}
-              secondaryDescription={t('Your customized view of AKASHA World')}
-              image="/images/news-feed.webp"
-              showMainArea={!userHasSubscriptions}
-              hideMainAreaOnMobile={false}
-              showSecondaryArea={userHasSubscriptions}
-              CTALabel={t('Customize My Feed')}
-              onClickCTA={handleCTAClick}
-            />
-          </Stack>
-        }
         queryKey={'app-akasha-integration_my-antenna'}
         estimatedHeight={150}
         itemSpacing={8}
