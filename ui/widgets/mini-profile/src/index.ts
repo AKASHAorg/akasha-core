@@ -7,5 +7,7 @@ import { IntegrationRegistrationOptions, WidgetInterface } from '@akashaorg/typi
 export const register: (opts: IntegrationRegistrationOptions) => WidgetInterface = opts => ({
   mountsIn: opts.layoutConfig?.widgetSlotId,
   loadingFn: () => import('./mini-profile-widget'),
-  activeWhen: () => true,
+  activeWhen: (location, pathToActiveWhen) => {
+    return pathToActiveWhen('/@akashaorg/app-akasha-integration/beam/', false)(location);
+  },
 });
