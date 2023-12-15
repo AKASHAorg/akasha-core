@@ -40,7 +40,7 @@ export const ImageEditorBlock = (
   const [uiState, setUiState] = React.useState('menu');
 
   const [images, setImages] = React.useState<ImageObject[]>([]);
-  const imageUrls = React.useMemo(() => images.map(imageObj => imageObj.src?.url), [images]);
+  const imageUrls = React.useMemo(() => images.map(imageObj => imageObj.src), [images]);
   const [alignState, setAlignState] = React.useState<'start' | 'center' | 'end'>('start');
   const [showCaption, setShowCaption] = React.useState(false);
   const [caption, setCaption] = React.useState('');
@@ -142,7 +142,8 @@ export const ImageEditorBlock = (
 
     const imageObj = {
       size: { height: mediaFile.size.height, width: mediaFile.size.width },
-      src: { url: mediaUrl.originLink || mediaUrl.fallbackLink },
+      displaySrc: mediaUrl.originLink || mediaUrl.fallbackLink,
+      src: mediaUri,
       name: image.name,
       originalSrc: URL.createObjectURL(image),
     };
@@ -153,7 +154,15 @@ export const ImageEditorBlock = (
   const [editorImages, setEditorImages] = React.useState([]);
   const uploadNewImage = async (image: File) => {
     const uploadedImage = await onUpload(image);
-    setEditorImages(prev => [...prev, uploadedImage]);
+    setEditorImages(prev => [
+      ...prev,
+      {
+        size: uploadedImage?.size,
+        src: uploadedImage?.displaySrc,
+        name: uploadedImage?.name,
+        originalSrc: uploadedImage?.originalSrc,
+      },
+    ]);
     setImages(prev => [
       ...prev,
       { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
@@ -167,7 +176,7 @@ export const ImageEditorBlock = (
       ...prev.slice(0, indexOfEditedImage),
       {
         name: oldImage.name,
-        src: uploadedImage.src,
+        src: uploadedImage.displaySrc,
         originalSrc: uploadedImage.src,
         size: uploadedImage.size,
       },
@@ -269,7 +278,7 @@ export const ImageEditorBlock = (
               {images.map((imageObj, index) => (
                 <Stack key={index} direction="row" justify="between">
                   <Stack direction="row" spacing="gap-1">
-                    <Image src={imageObj.src.url} customStyle="object-contain w-8 h-8 rounded-lg" />
+                    <Image src={imageObj.src} customStyle="object-contain w-8 h-8 rounded-lg" />
                     <Text>{imageObj.name}</Text>
                   </Stack>
                   <button onClick={() => handleDeleteImage(imageObj)}>
