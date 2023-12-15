@@ -1,6 +1,4 @@
 fragment IndexedProfileFragment on IndexProfilePayloadDocument{
-  id
-  createdAt
   profileID
 }
 

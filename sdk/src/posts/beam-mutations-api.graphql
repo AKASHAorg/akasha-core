@@ -1,12 +1,8 @@
 fragment IndexedBeamFragment on IndexBeamPayloadDocument{
-  id
-  createdAt
   beamID
 }
 
 fragment IndexedContentBlockFragment on IndexContentBlockPayloadDocument{
-  id
-  createdAt
   blockID
 }
 

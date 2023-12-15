@@ -2171,9 +2171,7 @@ type IndexAppPayload
 type IndexAppPayloadDocument
 @join__type(graph: STREAMS)
 {
-  id: String!
   applicationID: String!
-  createdAt: String!
 }
 
 type IndexBeamPayload
@@ -2185,8 +2183,6 @@ type IndexBeamPayload
 type IndexBeamPayloadDocument
 @join__type(graph: STREAMS)
 {
-  id: String!
-  createdAt: String!
   beamID: String!
 }
 
@@ -2199,8 +2195,6 @@ type IndexContentBlockPayload
 type IndexContentBlockPayloadDocument
 @join__type(graph: STREAMS)
 {
-  id: String!
-  createdAt: String!
   blockID: String!
 }
 
@@ -2213,8 +2207,6 @@ type IndexInterestPayload
 type IndexInterestPayloadDocument
 @join__type(graph: STREAMS)
 {
-  id: String!
-  createdAt: String!
   labelType: String!
   value: String!
 }
@@ -2228,8 +2220,6 @@ type IndexProfilePayload
 type IndexProfilePayloadDocument
 @join__type(graph: STREAMS)
 {
-  id: String!
-  createdAt: String!
   profileID: String!
 }
 
@@ -2242,10 +2232,7 @@ type IndexReflectPayload
 type IndexReflectPayloadDocument
 @join__type(graph: STREAMS)
 {
-  id: String!
-  createdAt: String!
   reflectionID: String!
-  beamID: String!
 }
 
 """A IPLD CID"""

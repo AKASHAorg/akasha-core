@@ -1,7 +1,4 @@
 fragment IndexedReflectFragment on IndexReflectPayloadDocument{
-  id
-  createdAt
-  beamID
   reflectionID
 }
 
