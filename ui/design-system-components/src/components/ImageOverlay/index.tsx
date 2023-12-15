@@ -11,7 +11,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Portal } from '../Editor/helpers';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { ImageObject } from '@akashaorg/typings/lib/ui';
+import { type ImageObject } from '@akashaorg/typings/lib/ui';
 
 export interface IImageOverlay {
   clickedImg: ImageObject;

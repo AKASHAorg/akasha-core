@@ -18,7 +18,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import ImageBlockToolbar from '@akashaorg/design-system-components/lib/components/ImageBlockToolbar';
 import EditImageModal from '@akashaorg/design-system-components/lib/components/EditImageModal';
-import { ImageObject } from '@akashaorg/typings/lib/ui';
+import { type ImageObject } from '@akashaorg/typings/lib/ui';
 import {
   XMarkIcon,
   ArrowPathIcon,
