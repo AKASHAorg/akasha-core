@@ -68,7 +68,7 @@ const ProfileMiniCard: React.FC<ProfileMiniCardProps> = props => {
         </Stack>
       </Stack>
 
-      <Stack spacing="gap-y-6" align="center" padding="py-6 px-4">
+      <Stack spacing="gap-y-6" align="center" padding="p-4 pt-6">
         <Stack spacing="gap-y-1" padding="pt-3" align="center">
           {profileData?.name && (
             <Text variant="h6" breakWord={true}>
