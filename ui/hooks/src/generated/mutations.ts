@@ -14,30 +14,21 @@ function composeDbFetch<TData, TVariables extends Record<string, unknown>>(query
 
 export const IndexedBeamFragmentDoc = /*#__PURE__*/ `
     fragment IndexedBeamFragment on IndexBeamPayloadDocument {
-  id
-  createdAt
   beamID
 }
     `;
 export const IndexedContentBlockFragmentDoc = /*#__PURE__*/ `
     fragment IndexedContentBlockFragment on IndexContentBlockPayloadDocument {
-  id
-  createdAt
   blockID
 }
     `;
 export const IndexedReflectFragmentDoc = /*#__PURE__*/ `
     fragment IndexedReflectFragment on IndexReflectPayloadDocument {
-  id
-  createdAt
-  beamID
   reflectionID
 }
     `;
 export const IndexedProfileFragmentDoc = /*#__PURE__*/ `
     fragment IndexedProfileFragment on IndexProfilePayloadDocument {
-  id
-  createdAt
   profileID
 }
     `;

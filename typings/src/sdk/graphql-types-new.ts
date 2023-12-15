@@ -1743,8 +1743,6 @@ export type IndexAppPayload = {
 
 export type IndexAppPayloadDocument = {
   applicationID: Scalars['String']['output'];
-  createdAt: Scalars['String']['output'];
-  id: Scalars['String']['output'];
 };
 
 export type IndexBeamPayload = {
@@ -1753,8 +1751,6 @@ export type IndexBeamPayload = {
 
 export type IndexBeamPayloadDocument = {
   beamID: Scalars['String']['output'];
-  createdAt: Scalars['String']['output'];
-  id: Scalars['String']['output'];
 };
 
 export type IndexContentBlockPayload = {
@@ -1763,8 +1759,6 @@ export type IndexContentBlockPayload = {
 
 export type IndexContentBlockPayloadDocument = {
   blockID: Scalars['String']['output'];
-  createdAt: Scalars['String']['output'];
-  id: Scalars['String']['output'];
 };
 
 export type IndexInterestPayload = {
@@ -1772,8 +1766,6 @@ export type IndexInterestPayload = {
 };
 
 export type IndexInterestPayloadDocument = {
-  createdAt: Scalars['String']['output'];
-  id: Scalars['String']['output'];
   labelType: Scalars['String']['output'];
   value: Scalars['String']['output'];
 };
@@ -1783,8 +1775,6 @@ export type IndexProfilePayload = {
 };
 
 export type IndexProfilePayloadDocument = {
-  createdAt: Scalars['String']['output'];
-  id: Scalars['String']['output'];
   profileID: Scalars['String']['output'];
 };
 
@@ -1793,9 +1783,6 @@ export type IndexReflectPayload = {
 };
 
 export type IndexReflectPayloadDocument = {
-  beamID: Scalars['String']['output'];
-  createdAt: Scalars['String']['output'];
-  id: Scalars['String']['output'];
   reflectionID: Scalars['String']['output'];
 };
 

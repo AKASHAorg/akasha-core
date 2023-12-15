@@ -1,8 +1,8 @@
 import type * as Types from './graphql-types-new';
 
-export type IndexedBeamFragmentFragment = { id: string, createdAt: string, beamID: string };
+export type IndexedBeamFragmentFragment = { beamID: string };
 
-export type IndexedContentBlockFragmentFragment = { id: string, createdAt: string, blockID: string };
+export type IndexedContentBlockFragmentFragment = { blockID: string };
 
 export type IndexBeamMutationVariables = Types.Exact<{
   jws?: Types.InputMaybe<Types.Did_Jws>;
@@ -10,7 +10,7 @@ export type IndexBeamMutationVariables = Types.Exact<{
 }>;
 
 
-export type IndexBeamMutation = { indexBeam?: { document?: { id: string, createdAt: string, beamID: string } | null } | null };
+export type IndexBeamMutation = { indexBeam?: { document?: { beamID: string } | null } | null };
 
 export type IndexContentBlockMutationVariables = Types.Exact<{
   jws?: Types.InputMaybe<Types.Did_Jws>;
@@ -18,7 +18,7 @@ export type IndexContentBlockMutationVariables = Types.Exact<{
 }>;
 
 
-export type IndexContentBlockMutation = { indexContentBlock?: { document?: { id: string, createdAt: string, blockID: string } | null } | null };
+export type IndexContentBlockMutation = { indexContentBlock?: { document?: { blockID: string } | null } | null };
 
 export type BeamFragmentMFragment = { id: string, reflectionsCount: number, active: boolean, tags?: Array<string | null> | null, version: any, createdAt: any, nsfw?: boolean | null, embeddedBeam?: { label: string, embeddedID: any } | null, author: { id: string, isViewer: boolean }, content: Array<{ blockID: any, order: number }>, reflections: { edges?: Array<{ cursor: string } | null> | null, pageInfo: { hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } };
 
@@ -129,7 +129,7 @@ export type GetBlockStorageByIdQueryVariables = Types.Exact<{
 
 export type GetBlockStorageByIdQuery = { node?: { id: string, appVersionID: any, createdAt: any, active: boolean, version: any, blockID: any, appVersion?: { applicationID: any, id: string, version: string, application?: { name: string, displayName: string, id: string } | null } | null, content: Array<{ propertyType: string, label: string, value: string }>, author: { id: string, isViewer: boolean }, block?: { id: string, active: boolean, author: { id: string, isViewer: boolean } } | null } | {} | null };
 
-export type IndexedReflectFragmentFragment = { id: string, createdAt: string, beamID: string, reflectionID: string };
+export type IndexedReflectFragmentFragment = { reflectionID: string };
 
 export type IndexReflectionMutationVariables = Types.Exact<{
   jws?: Types.InputMaybe<Types.Did_Jws>;
@@ -137,7 +137,7 @@ export type IndexReflectionMutationVariables = Types.Exact<{
 }>;
 
 
-export type IndexReflectionMutation = { indexReflection?: { document?: { id: string, createdAt: string, beamID: string, reflectionID: string } | null } | null };
+export type IndexReflectionMutation = { indexReflection?: { document?: { reflectionID: string } | null } | null };
 
 export type ReflectFragmentMFragment = { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null };
 
@@ -215,7 +215,7 @@ export type GetReflectReflectionsQueryVariables = Types.Exact<{
 
 export type GetReflectReflectionsQuery = { akashaReflectIndex?: { edges?: Array<{ cursor: string, node?: { id: string, version: any, active: boolean, isReply?: boolean | null, reflection?: any | null, createdAt: any, nsfw?: boolean | null, author: { id: string, isViewer: boolean }, content: Array<{ label: string, propertyType: string, value: string }>, beam?: { id: string, author: { id: string, isViewer: boolean } } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
 
-export type IndexedProfileFragmentFragment = { id: string, createdAt: string, profileID: string };
+export type IndexedProfileFragmentFragment = { profileID: string };
 
 export type IndexProfileMutationVariables = Types.Exact<{
   jws?: Types.InputMaybe<Types.Did_Jws>;
@@ -223,7 +223,7 @@ export type IndexProfileMutationVariables = Types.Exact<{
 }>;
 
 
-export type IndexProfileMutation = { indexProfile?: { document?: { id: string, createdAt: string, profileID: string } | null } | null };
+export type IndexProfileMutation = { indexProfile?: { document?: { profileID: string } | null } | null };
 
 export type UserProfileFragmentMFragment = { id: string, name: string, description?: string | null, createdAt: any, nsfw?: boolean | null, did: { id: string, isViewer: boolean }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null, followers: { pageInfo: { startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean, hasNextPage: boolean } } };
 
