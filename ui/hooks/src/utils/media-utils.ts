@@ -123,7 +123,7 @@ export const saveMediaFile = async ({ name, content, isUrl }: ISaveMediaFile) =>
  * Utility to transform source
  */
 export const transformSource = (image?: Image): Image => {
-  if (!image) return null;
+  if (!image || typeof image?.src !== 'string') return null;
 
   const defaultUrl = getMediaUrl(image.src);
 

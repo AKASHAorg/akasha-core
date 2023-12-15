@@ -18,7 +18,7 @@ import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import ImageBlockToolbar from '@akashaorg/design-system-components/lib/components/ImageBlockToolbar';
 import EditImageModal from '@akashaorg/design-system-components/lib/components/EditImageModal';
-import { ImageObject } from '@akashaorg/typings/lib/ui';
+import { type ImageObject } from '@akashaorg/typings/lib/ui';
 import {
   XMarkIcon,
   ArrowPathIcon,
@@ -39,8 +39,23 @@ export const ImageEditorBlock = (
   const [imageLink, setImageLink] = React.useState('');
   const [uiState, setUiState] = React.useState('menu');
 
-  const [images, setImages] = React.useState<ImageObject[]>([]);
-  const imageUrls = React.useMemo(() => images.map(imageObj => imageObj.src?.url), [images]);
+  const [contentBlockImages, setContentBlockImages] = React.useState<ImageObject[]>([]);
+  const imageGalleryImages = React.useMemo(
+    () =>
+      contentBlockImages.map(imageObj => {
+        return {
+          src: imageObj.displaySrc,
+          size: imageObj.size,
+          name: imageObj.name,
+          originalSrc: imageObj.originalSrc,
+        };
+      }),
+    [contentBlockImages],
+  );
+  const imageUrls = React.useMemo(
+    () => contentBlockImages.map(imageObj => imageObj.displaySrc),
+    [contentBlockImages],
+  );
   const [alignState, setAlignState] = React.useState<'start' | 'center' | 'end'>('start');
   const [showCaption, setShowCaption] = React.useState(false);
   const [caption, setCaption] = React.useState('');
@@ -48,7 +63,13 @@ export const ImageEditorBlock = (
 
   const createBlock = React.useCallback(async () => {
     const imageData = {
-      images,
+      images: contentBlockImages.map(imageObj => {
+        return {
+          src: imageObj?.src,
+          size: imageObj?.size,
+          name: imageObj?.name,
+        };
+      }),
       caption,
       align: alignState,
     };
@@ -90,7 +111,7 @@ export const ImageEditorBlock = (
         retryCount: retryCount.current,
       };
     }
-  }, [alignState, caption, createContentBlock, images, props.blockInfo]);
+  }, [alignState, caption, createContentBlock, contentBlockImages, props.blockInfo]);
 
   const retryCreate = React.useCallback(async () => {
     if (contentBlockQuery.called) {
@@ -124,7 +145,7 @@ export const ImageEditorBlock = (
   };
 
   const onUpload = async (image: File, isUrl?: boolean) => {
-    if (!image || images.length > 4) return null;
+    if (!image || contentBlockImages.length > 4) return null;
     setUiState('gallery');
     setUploading(true);
 
@@ -142,7 +163,8 @@ export const ImageEditorBlock = (
 
     const imageObj = {
       size: { height: mediaFile.size.height, width: mediaFile.size.width },
-      src: { url: mediaUrl.originLink || mediaUrl.fallbackLink },
+      displaySrc: mediaUrl.originLink || mediaUrl.fallbackLink,
+      src: mediaUri,
       name: image.name,
       originalSrc: URL.createObjectURL(image),
     };
@@ -150,32 +172,32 @@ export const ImageEditorBlock = (
     return imageObj;
   };
 
-  const [editorImages, setEditorImages] = React.useState([]);
   const uploadNewImage = async (image: File) => {
     const uploadedImage = await onUpload(image);
-    setEditorImages(prev => [...prev, uploadedImage]);
-    setImages(prev => [
+    setContentBlockImages(prev => [
       ...prev,
-      { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
+      {
+        name: uploadedImage?.name,
+        src: uploadedImage?.src,
+        displaySrc: uploadedImage?.displaySrc,
+        originalSrc: uploadedImage?.originalSrc,
+        size: uploadedImage?.size,
+      },
     ]);
   };
 
   const uploadEditedImage = async (image: File, indexOfEditedImage: number) => {
     const uploadedImage = await onUpload(image);
-    const oldImage = editorImages[indexOfEditedImage];
-    setEditorImages(prev => [
+    const oldImage = contentBlockImages[indexOfEditedImage];
+    setContentBlockImages(prev => [
       ...prev.slice(0, indexOfEditedImage),
       {
-        name: oldImage.name,
-        src: uploadedImage.src,
-        originalSrc: uploadedImage.src,
-        size: uploadedImage.size,
+        name: oldImage?.name,
+        src: uploadedImage?.src,
+        displaySrc: uploadedImage?.displaySrc,
+        originalSrc: uploadedImage?.originalSrc,
+        size: uploadedImage?.size,
       },
-      ...prev.slice(indexOfEditedImage + 1),
-    ]);
-    setImages(prev => [
-      ...prev.slice(0, indexOfEditedImage),
-      { size: uploadedImage?.size, src: uploadedImage?.src, name: uploadedImage?.name },
       ...prev.slice(indexOfEditedImage + 1),
     ]);
     setCanCloseModal(true);
@@ -194,14 +216,15 @@ export const ImageEditorBlock = (
   };
 
   const handleDeleteImage = (element: ImageObject) => {
-    const newImages = images.filter(image => image.src !== element.src);
+    const newImages = contentBlockImages.filter(image => image.src !== element.src);
+
     if (newImages.length < 4) {
       setImageUploadDisabled(false);
     }
     if (newImages.length === 0) {
       setUiState('menu');
     }
-    setImages(newImages);
+    setContentBlockImages(newImages);
   };
 
   const handleClickAddImage = () => {
@@ -264,12 +287,12 @@ export const ImageEditorBlock = (
             <Stack direction="column" spacing="gap-2" customStyle="overflow-auto pt-8">
               <Stack direction="row" justify="between">
                 <Text variant="h6">{t('Uploaded images')} </Text>
-                <Text variant="subtitle2">{`${images.length}/4 ${t('images')}`}</Text>
+                <Text variant="subtitle2">{`${contentBlockImages.length}/4 ${t('images')}`}</Text>
               </Stack>
-              {images.map((imageObj, index) => (
+              {contentBlockImages.map((imageObj, index) => (
                 <Stack key={index} direction="row" justify="between">
                   <Stack direction="row" spacing="gap-1">
-                    <Image src={imageObj.src.url} customStyle="object-contain w-8 h-8 rounded-lg" />
+                    <Image src={imageObj.src} customStyle="object-contain w-8 h-8 rounded-lg" />
                     <Text>{imageObj.name}</Text>
                   </Stack>
                   <button onClick={() => handleDeleteImage(imageObj)}>
@@ -281,7 +304,7 @@ export const ImageEditorBlock = (
           </Stack>
         </Card>
       )}
-      {uiState === 'gallery' && uploading && images.length === 0 && (
+      {uiState === 'gallery' && uploading && contentBlockImages.length === 0 && (
         <Stack
           customStyle="w-4/5 h-48 sm:h-60 rounded-xl"
           justify="center"
@@ -293,10 +316,10 @@ export const ImageEditorBlock = (
           <Text>{t('Uploading image')}</Text>
         </Stack>
       )}
-      {uiState === 'gallery' && editorImages.length !== 0 && (
+      {uiState === 'gallery' && imageGalleryImages.length !== 0 && (
         <Stack spacing="gap-1">
           <Stack alignSelf={alignState}>
-            <ImageBlockGallery images={editorImages} />
+            <ImageBlockGallery images={imageGalleryImages} />
           </Stack>
           {showCaption && (
             <TextField

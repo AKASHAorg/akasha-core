@@ -73,13 +73,6 @@ export interface IMetadata {
   mentions: string[];
 }
 
-export interface ImageObject {
-  originalSrc?: string;
-  src: { url?: string; fallbackUrl?: string };
-  size: { width: number; height: number; naturalWidth?: number; naturalHeight?: number };
-  name?: string;
-}
-
 export type EntryData = {
   id: string;
   active: boolean;
