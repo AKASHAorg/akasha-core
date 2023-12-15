@@ -2,7 +2,7 @@ import * as React from 'react';
 import { tw, apply } from '@twind/core';
 import { ImageBlockGridItem } from './image-block-grid-item';
 import ImageOverlay from '../ImageOverlay';
-import { ImageObject } from '@akashaorg/typings/lib/ui';
+import { type ImageObject } from '@akashaorg/typings/lib/ui';
 
 export interface IImageGallery {
   images: ImageObject[];

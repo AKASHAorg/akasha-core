@@ -11,7 +11,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Portal } from '../Editor/helpers';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { ImageObject } from '@akashaorg/typings/lib/ui';
+import { type ImageObject } from '@akashaorg/typings/lib/ui';
 
 export interface IImageOverlay {
   clickedImg: ImageObject;
@@ -105,8 +105,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
                 <picture className={tw(`flex`)}>
-                  <source srcSet={currentImg.src.url} />
-                  <img src={currentImg.src.fallbackUrl} alt="" />
+                  <img src={currentImg.src} alt="" />
                 </picture>
               </TransformComponent>
             </TransformWrapper>
