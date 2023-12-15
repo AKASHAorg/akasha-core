@@ -20,15 +20,10 @@ const MY_ANTENNA_OVERSCAN = 10;
 const MyFeedPage: React.FC<MyFeedPageProps> = props => {
   const { loggedProfileData, showLoginModal } = props;
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
-  const navigateTo = getRoutingPlugin().navigateTo;
+  const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const { t } = useTranslation('app-akasha-integration');
 
   const isLoggedUser = React.useMemo(() => !!loggedProfileData?.did.id, [loggedProfileData]);
-
-  // const postsReq = useInfiniteGetBeamsQuery('last', { last: 15 });
-  // const db = React.useMemo(() => {
-  //   return new ScrollStateDBWrapper('scroll-state');
-  // }, []);
 
   const tagSubsReq = useGetInterestsByDidQuery(
     { id: loggedProfileData?.did.id },
@@ -70,7 +65,7 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
     if (!isLoggedUser) {
       return showLoginModal();
     }
-    navigateTo?.({
+    navigateTo.current?.({
       appName: '@akashaorg/app-search',
       getNavigationUrl: navRoutes => `${navRoutes.Onboarding}`,
     });
@@ -112,13 +107,13 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
             entryData={mapBeamEntryData(itemData.node)}
             contentClickable={true}
             onContentClick={() =>
-              navigateTo({
+              navigateTo.current?.({
                 appName: '@akashaorg/app-akasha-integration',
                 getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
               })
             }
             onReflect={() =>
-              navigateTo.current({
+              navigateTo.current?.({
                 appName: '@akashaorg/app-akasha-integration',
                 getNavigationUrl: navRoutes =>
                   `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
@@ -127,22 +122,6 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
           />
         )}
       />
-
-      {/*{userHasSubscriptions && !postsReq.isFetching && (*/}
-      {/*  <MyFeedCard*/}
-      {/*    title={t('✨ Add a little magic to your feed ✨')}*/}
-      {/*    description={t(*/}
-      {/*      'Follow topics and wonderful people you care about most to feel at home every time you visit AKASHA World. ',*/}
-      {/*    )}*/}
-      {/*    noPostsTitle={t('No Posts Yet')}*/}
-      {/*    noPostsDescription={t(*/}
-      {/*      'Once you start following people or topics with published posts, they will be found here.',*/}
-      {/*    )}*/}
-      {/*    CTALabel={t('Find topics and people')}*/}
-      {/*    onClickCTA={handleCTAClick}*/}
-      {/*    hasPosts={postsReq.hasNextPage && postsReq.data?.pages?.length > 0}*/}
-      {/*  />*/}
-      {/*)}*/}
     </Stack>
   );
 };
