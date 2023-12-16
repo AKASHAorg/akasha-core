@@ -16,7 +16,7 @@ import isEqual from 'lodash/isEqual';
 export type LatestTopicsProps = {
   // data
   tags: string[];
-  subscribedTags?: string[] | null;
+  receivedTags?: string[] | null;
   tagSubscriptionsId: string | null;
   isLoadingTags?: boolean;
   isLoggedIn: boolean;
@@ -44,38 +44,37 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     subscribeLabel,
     subscribedLabel,
     unsubscribeLabel,
-    subscribedTags,
+    receivedTags,
     tagSubscriptionsId,
     isLoggedIn,
     showLoginModal,
     refetchTagSubscriptions,
   } = props;
 
-  const [subscribedInterests, setSubscribedInterests] = useState([]);
+  const [localSubscribedTags, setLocalSubscribedTags] = useState([]);
   const subscriptionId = useRef(null);
-  const tagsInitialized = useRef(null);
+  const localTagsInitialized = useRef(null);
   const timer = useRef(null);
   const [tagsQueue, setTagsQueue] = useState([]);
-  const currentTags = useRef([]);
+  const localSubscribedTagsRef = useRef([]);
 
   //reset state when user logs out
   useEffect(() => {
     if (!isLoggedIn) {
-      console.log('subscribedTags', subscribedTags);
-      setSubscribedInterests([]);
+      setLocalSubscribedTags([]);
+      localSubscribedTagsRef.current = [];
     }
   }, [isLoggedIn]);
 
   useEffect(() => {
-    console.log('subscribedTags', subscribedTags);
-    console.log('tagsInitialized.current', tagsInitialized.current);
-
-    if (subscribedTags && !tagsInitialized.current) {
-      setSubscribedInterests(subscribedTags);
-      tagsInitialized.current = true;
-      currentTags.current = subscribedTags;
+    if (receivedTags && !localTagsInitialized.current) {
+      setLocalSubscribedTags(receivedTags);
+      localTagsInitialized.current = true;
     }
-  }, [subscribedTags, tagsInitialized]);
+    if (receivedTags && tagsQueue.length === 0) {
+      localSubscribedTagsRef.current = receivedTags;
+    }
+  }, [receivedTags, localTagsInitialized]);
 
   useEffect(() => {
     if (tagSubscriptionsId) {
@@ -84,7 +83,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   }, [tagSubscriptionsId]);
 
   const sdk = getSDK();
-  const [analyticsActions] = useAnalytics();
 
   const [createInterestsMutation, { loading, error }] = useCreateInterestsMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
@@ -96,22 +94,21 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     });
 
   useEffect(() => {
-    if (!tagsInitialized.current) return;
+    if (!localTagsInitialized.current || receivedTags === null) return;
+    if (isEqual(localSubscribedTagsRef.current, receivedTags)) return;
     if (loading || updateLoading) return;
 
-    console.log('tagSubscriptionsId', tagSubscriptionsId);
-    console.log('subscriptionId', subscriptionId.current);
-
-    console.log('subscribedInterests', subscribedInterests, 'subscribedTags', subscribedTags);
-
-    if (!isEqual(subscribedInterests, subscribedTags)) {
+    if (!isEqual(localSubscribedTags, receivedTags)) {
       if (subscriptionId.current) {
         updateInterestsMutation({
           variables: {
             i: {
               id: subscriptionId.current,
               content: {
-                topics: subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
+                topics: localSubscribedTags.map(tag => ({
+                  value: tag,
+                  labelType: 'TOPIC',
+                })),
               },
             },
           },
@@ -120,17 +117,29 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               clientMutationId: null,
               document: {
                 did: { id: 'did:pkh:eip155:5:0xe92bbe3e927f73106e57ed43fd3f2acf51035128' },
-                topics: subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
+                topics: localSubscribedTags.map(tag => ({ value: tag, labelType: 'TOPIC' })),
                 id: subscriptionId.current,
               },
             },
           },
           onCompleted: data => {
-            console.log('updatte data', data);
-            setTagsQueue([]);
+            const returnedData = data.updateAkashaProfileInterests.document.topics.map(
+              topic => topic.value,
+            );
+
+            const arrDifference = returnedData
+              .filter(x => !receivedTags.includes(x))
+              .concat(receivedTags.filter(x => !returnedData.includes(x)));
+
+            setTagsQueue(prev => prev.filter(x => !arrDifference.includes(x)));
           },
-          onError: () => {
-            return null;
+          onError: err => {
+            const arrDifference = receivedTags
+              .filter(x => !localSubscribedTags.includes(x))
+              .concat(localSubscribedTags.filter(x => !receivedTags.includes(x)));
+
+            setTagsQueue(prev => prev.filter(x => !arrDifference.includes(x)));
+            refetchTagSubscriptions();
           },
         });
       } else {
@@ -138,24 +147,37 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           variables: {
             i: {
               content: {
-                topics: subscribedInterests.map(tag => ({ value: tag, labelType: 'TOPIC' })),
+                topics: localSubscribedTags.map(tag => ({ value: tag, labelType: 'TOPIC' })),
               },
             },
           },
           onCompleted: data => {
-            console.log('creatte data', data);
             const id = data.createAkashaProfileInterests?.document.id;
-            console.log('id', id);
             subscriptionId.current = id;
+
+            const returnedData = data.createAkashaProfileInterests?.document.topics.map(
+              topic => topic.value,
+            );
+
+            const arrDifference = returnedData
+              .filter(x => !localSubscribedTags.includes(x))
+              .concat(localSubscribedTags.filter(x => !returnedData.includes(x)));
+
+            setTagsQueue(prev => prev.filter(x => !arrDifference.includes(x)));
             refetchTagSubscriptions();
           },
-          onError: () => {
-            return null;
+          onError: err => {
+            const arrDifference = receivedTags
+              .filter(x => !localSubscribedTags.includes(x))
+              .concat(localSubscribedTags.filter(x => !receivedTags.includes(x)));
+
+            setTagsQueue(prev => prev.filter(x => !arrDifference.includes(x)));
+            refetchTagSubscriptions();
           },
         });
       }
     }
-  }, [loading, subscribedInterests, subscribedTags, tagSubscriptionsId, updateLoading]);
+  }, [localSubscribedTags, tagSubscriptionsId, tagsQueue, updateLoading, loading]);
 
   const handleTopicSubscribe = (tag: string) => {
     if (!isLoggedIn) {
@@ -164,16 +186,17 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     }
     setTagsQueue(prev => [...prev, tag]);
 
-    const newInterests = [...currentTags.current, tag];
+    const newInterests = [...localSubscribedTagsRef.current, tag];
 
-    currentTags.current = newInterests;
-
-    console.log('timer', timer.current);
+    localSubscribedTagsRef.current = newInterests;
 
     if (timer.current !== null) {
       window.clearTimeout(timer.current);
     }
-    timer.current = window.setTimeout(() => setSubscribedInterests(currentTags.current), 700);
+    timer.current = window.setTimeout(
+      () => setLocalSubscribedTags(localSubscribedTagsRef.current),
+      700,
+    );
   };
 
   const handleTopicUnsubscribe = (tag: string) => {
@@ -183,15 +206,17 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     }
 
     setTagsQueue(prev => [...prev, tag]);
-    const newInterests = currentTags.current.filter(topic => topic !== tag);
+    const newInterests = localSubscribedTagsRef.current.filter(topic => topic !== tag);
 
-    currentTags.current = newInterests;
+    localSubscribedTagsRef.current = newInterests;
 
-    console.log('timer', timer.current);
     if (timer.current !== null) {
       window.clearTimeout(timer.current);
     }
-    timer.current = window.setTimeout(() => setSubscribedInterests(currentTags.current), 700);
+    timer.current = window.setTimeout(
+      () => setLocalSubscribedTags(localSubscribedTagsRef.current),
+      700,
+    );
   };
 
   if (tags.length === 0 && isLoadingTags) return <TrendingWidgetLoadingCard />;
@@ -215,12 +240,12 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           )}
 
           <Stack spacing="gap-y-4">
-            {['dogs', 'cats', 'chickens', 'birds'].length > 0 &&
-              ['dogs', 'cats', 'chickens', 'birds'].slice(0, 4).map((tag, index) => (
+            {tags.length > 0 &&
+              tags.slice(0, 4).map((tag, index) => (
                 <TopicRow
                   key={index}
                   tag={tag}
-                  subscribedTags={subscribedInterests}
+                  subscribedTags={localSubscribedTagsRef.current}
                   tagSubtitleLabel={tagSubtitleLabel}
                   subscribeLabel={subscribeLabel}
                   subscribedLabel={subscribedLabel}
@@ -228,7 +253,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                   isLoggedIn={isLoggedIn}
                   onClickTopic={onClickTopic}
                   isLoading={tagsQueue.includes(tag)}
-                  // setSubscribedInterests={setSubscribedInterests}
+                  // setLocalSubscribedTags={setLocalSubscribedTags}
                   showLoginModal={showLoginModal}
                   handleTopicUnsubscribe={handleTopicUnsubscribe}
                   handleTopicSubscribe={handleTopicSubscribe}

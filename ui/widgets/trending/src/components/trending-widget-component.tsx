@@ -126,7 +126,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           noTagsLabel={t('No topics found!')}
           isLoadingTags={latestTopicsLoading}
           tags={latestTopics}
-          subscribedTags={tagSubscriptions}
+          receivedTags={tagSubscriptions}
           tagSubscriptionsId={tagSubscriptionsId}
           isLoggedIn={isLoggedIn}
           onClickTopic={handleTopicClick}
