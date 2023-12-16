@@ -93,26 +93,12 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       context: { source: sdk.services.gql.contextSources.composeDB },
     });
 
-  useEffect(() => {
-    console.log('tagsqueue update', tagsQueue);
-  }, [tagsQueue]);
 
-  // useEffect(() => {
-  //   console.log('localSubscribedTags', localSubscribedTags);
-  // }, [localSubscribedTags]);
 
   useEffect(() => {
-    console.log(
-      'localSubscribedTags',
-      localSubscribedTags,
-      'receivedTags',
-      receivedTags,
-      'localSubscribedTagsRef',
-      localSubscribedTagsRef.current,
-    );
+
 
     if (!localTagsInitialized.current || receivedTags === null) return;
-    if (isEqual(localSubscribedTagsRef.current, receivedTags)) return;
     if (loading || updateLoading) return;
 
     if (!isEqual(localSubscribedTagsRef.current, receivedTags)) {
@@ -172,8 +158,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             },
           },
           onCompleted: data => {
-            const id = data.createAkashaProfileInterests?.document.id;
-            subscriptionId.current = id;
+            subscriptionId.current = data.createAkashaProfileInterests?.document.id;
 
             const returnedData = data.createAkashaProfileInterests?.document.topics.map(
               topic => topic.value,
