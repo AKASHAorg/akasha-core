@@ -94,18 +94,35 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     });
 
   useEffect(() => {
+    console.log('tagsqueue update', tagsQueue);
+  }, [tagsQueue]);
+
+  // useEffect(() => {
+  //   console.log('localSubscribedTags', localSubscribedTags);
+  // }, [localSubscribedTags]);
+
+  useEffect(() => {
+    console.log(
+      'localSubscribedTags',
+      localSubscribedTags,
+      'receivedTags',
+      receivedTags,
+      'localSubscribedTagsRef',
+      localSubscribedTagsRef.current,
+    );
+
     if (!localTagsInitialized.current || receivedTags === null) return;
     if (isEqual(localSubscribedTagsRef.current, receivedTags)) return;
     if (loading || updateLoading) return;
 
-    if (!isEqual(localSubscribedTags, receivedTags)) {
+    if (!isEqual(localSubscribedTagsRef.current, receivedTags)) {
       if (subscriptionId.current) {
         updateInterestsMutation({
           variables: {
             i: {
               id: subscriptionId.current,
               content: {
-                topics: localSubscribedTags.map(tag => ({
+                topics: localSubscribedTagsRef.current.map(tag => ({
                   value: tag,
                   labelType: 'TOPIC',
                 })),
@@ -117,7 +134,10 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               clientMutationId: null,
               document: {
                 did: { id: 'did:pkh:eip155:5:0xe92bbe3e927f73106e57ed43fd3f2acf51035128' },
-                topics: localSubscribedTags.map(tag => ({ value: tag, labelType: 'TOPIC' })),
+                topics: localSubscribedTagsRef.current.map(tag => ({
+                  value: tag,
+                  labelType: 'TOPIC',
+                })),
                 id: subscriptionId.current,
               },
             },
@@ -177,7 +197,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
         });
       }
     }
-  }, [localSubscribedTags, tagSubscriptionsId, tagsQueue, updateLoading, loading]);
+  }, [localSubscribedTags, updateLoading, loading]);
 
   const handleTopicSubscribe = (tag: string) => {
     if (!isLoggedIn) {
