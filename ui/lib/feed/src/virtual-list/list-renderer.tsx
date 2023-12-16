@@ -448,7 +448,7 @@ export const VirtualListRenderer = React.forwardRef(
     const throttledUpdate = React.useCallback(
       useThrottle(
         RAFUpdate,
-        50,
+        150,
         {
           leading: true,
           trailing: false,

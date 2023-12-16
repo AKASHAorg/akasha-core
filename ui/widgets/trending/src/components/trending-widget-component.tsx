@@ -44,10 +44,12 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     skip: !isLoggedIn,
   });
   const latestProfiles = useMemo(() => latestProfilesReq.data || [], [latestProfilesReq.data]);
+
   const followProfileIds = useMemo(
     () => latestProfiles.map(follower => follower.id),
     [latestProfiles],
   );
+
   const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     variables: {
       id: authenticatedDID,

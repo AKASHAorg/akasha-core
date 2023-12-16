@@ -50,21 +50,3 @@
   background-color: #989898;
   border-radius: 20px;
 }
-
-.scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #989898;
-}
-
-.scrollbar::-webkit-scrollbar {
-  width: 2px;
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  background-color: #989898;
-  border-radius: 20px;
-}

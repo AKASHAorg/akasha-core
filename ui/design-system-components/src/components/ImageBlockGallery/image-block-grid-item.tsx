@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import { DelayLoad } from '../../utils/delay-load';
-import { ImageObject } from '@akashaorg/typings/lib/ui';
+import { type ImageObject } from '@akashaorg/typings/lib/ui';
 
 export interface IGridItemProps {
   image: ImageObject;
@@ -53,13 +53,13 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
           otherwise give images a 1:1 ratio */}
       <picture className={tw('flex')}>
         <source srcSet={imageSrc?.originalSrc} />
-        <source srcSet={imageSrc?.src?.url} />
+
         <img
-          alt={imageSrc?.src?.fallbackUrl}
+          alt={imageSrc?.src}
           className={tx(
             `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
           )}
-          src={imageSrc?.src?.fallbackUrl}
+          src={imageSrc?.src}
           onLoad={() => setImgLoaded(true)}
           hidden={!imgLoaded}
         />

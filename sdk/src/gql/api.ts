@@ -4,15 +4,11 @@ import type { DocumentNode } from 'graphql';
 import gql from 'graphql-tag';
 export const IndexedBeamFragmentDoc = /*#__PURE__*/ gql`
     fragment IndexedBeamFragment on IndexBeamPayloadDocument {
-  id
-  createdAt
   beamID
 }
     `;
 export const IndexedContentBlockFragmentDoc = /*#__PURE__*/ gql`
     fragment IndexedContentBlockFragment on IndexContentBlockPayloadDocument {
-  id
-  createdAt
   blockID
 }
     `;
@@ -183,9 +179,6 @@ export const BlockStorageFragmentDoc = /*#__PURE__*/ gql`
     `;
 export const IndexedReflectFragmentDoc = /*#__PURE__*/ gql`
     fragment IndexedReflectFragment on IndexReflectPayloadDocument {
-  id
-  createdAt
-  beamID
   reflectionID
 }
     `;
@@ -245,8 +238,6 @@ export const ReflectFragmentDoc = /*#__PURE__*/ gql`
     `;
 export const IndexedProfileFragmentDoc = /*#__PURE__*/ gql`
     fragment IndexedProfileFragment on IndexProfilePayloadDocument {
-  id
-  createdAt
   profileID
 }
     `;
