@@ -34,6 +34,7 @@ const BeamSection: React.FC<BeamSectionProps> = props => {
         entryData={entryData}
         noWrapperCard={true}
         contentClickable={false}
+        showHiddenContent={true}
         onReflect={() => {
           onNavigate(
             {

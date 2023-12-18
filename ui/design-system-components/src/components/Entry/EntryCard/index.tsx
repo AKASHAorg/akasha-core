@@ -58,7 +58,7 @@ export type EntryCardProps = {
   disableActions?: boolean;
   noWrapperCard?: boolean;
   hideActionButtons?: boolean;
-  scrollHiddenContent?: boolean;
+  showHiddenContent?: boolean;
   contentClickable?: boolean;
   lastEntry?: boolean;
   hover?: boolean;
@@ -107,7 +107,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     disableActions,
     noWrapperCard = false,
     hideActionButtons,
-    scrollHiddenContent,
+    showHiddenContent,
     contentClickable,
     editable = true,
     lastEntry,
@@ -126,7 +126,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
 
   const [showNSFW, setShowNSFW] = useState(false);
 
-  const scrollHiddenStyle = scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden';
+  const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle = contentClickable ? 'cursor-pointer' : 'cursor-default';
   const nsfwHeightStyle = entryData.nsfw && !showNSFW ? 'min-h-[6rem]' : '';
   const nsfwBlurStyle = entryData.nsfw && !showNSFW ? 'blur-lg' : '';
@@ -242,8 +242,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         <Button onClick={onContentClick} plain>
           <Stack
             align="center"
-            justify="center"
-            customStyle={`relative max-h-[50rem] ${scrollHiddenStyle} ${contentClickableStyle} ${nsfwHeightStyle}`}
+            justify="start"
+            customStyle={`relative overflow-hidden ${showHiddenStyle} ${contentClickableStyle} ${nsfwHeightStyle}`}
             data-testid="entry-content"
             fullWidth={true}
           >
