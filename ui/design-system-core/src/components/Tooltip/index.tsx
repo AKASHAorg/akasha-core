@@ -17,6 +17,7 @@ export type TooltipProps = {
   trigger?: 'hover' | 'click';
   centerArrowToReference?: boolean;
   arrow?: boolean;
+  customStyle?: string;
 };
 
 const ARROW_SIZE = 4;
@@ -42,6 +43,7 @@ const Tooltip: React.FC<
     trigger = 'hover',
     centerArrowToReference,
     arrow = true,
+    customStyle = '',
     children,
   } = props;
 
@@ -118,7 +120,7 @@ const Tooltip: React.FC<
         };
 
   return (
-    <>
+    <Stack customStyle={customStyle}>
       <div {...eventHandlers} className={tw(apply`w-fit cursor-pointer`)} ref={setReferenceElement}>
         {children}
       </div>
@@ -149,7 +151,7 @@ const Tooltip: React.FC<
           </Stack>
         </div>
       )}
-    </>
+    </Stack>
   );
 };
 

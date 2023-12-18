@@ -31,7 +31,7 @@ const Snackbar: React.FC<SnackbarProps> = ({
   description,
   //action button
   actionButtonLabel,
-  customStyle,
+  customStyle = '',
   handleButtonClick,
   handleDismiss,
 }) => {

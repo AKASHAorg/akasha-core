@@ -12,7 +12,7 @@ const Image: React.FC<
       React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
   >
 > = props => {
-  const { src, customStyle, dataTestId, ...rest } = props;
+  const { src, customStyle = '', dataTestId, ...rest } = props;
 
   const className = apply`object-contain ${customStyle}`;
 

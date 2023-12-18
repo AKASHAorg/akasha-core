@@ -3,9 +3,9 @@ import React from 'react';
 import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Stack from '../Stack';
-import Button from '../Button';
 import Icon from '../Icon';
 import Text from '../Text';
+import Card from '../Card';
 
 export type SubtitleTextIconProps = {
   customStyle?: string;
@@ -45,8 +45,8 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
   }`;
 
   return (
-    <Button
-      plain={true}
+    <Card
+      type="plain"
       data-testid={dataTestId}
       customStyle={InstanceWrapperStyle}
       onClick={onClick}
@@ -71,7 +71,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
           {subtitle}
         </Text>
       </Stack>
-    </Button>
+    </Card>
   );
 };
 

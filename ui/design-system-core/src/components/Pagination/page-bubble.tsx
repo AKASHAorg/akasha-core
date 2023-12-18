@@ -1,8 +1,8 @@
 import React from 'react';
 
 import Stack from '../Stack';
-import Button from '../Button';
 import Text from '../Text';
+import Card from '../Card';
 
 export type PageBubbleProps = {
   isActive: boolean;
@@ -19,7 +19,7 @@ const PageBubble: React.FC<PageBubbleProps> = props => {
 
   const regularPageWrapperBg = 'bg-(grey8 dark:grey3)';
   return (
-    <Button plain={true} onClick={onClickPage(page)}>
+    <Card type="plain" onClick={onClickPage(page)}>
       <Stack
         align="center"
         justify="center"
@@ -38,7 +38,7 @@ const PageBubble: React.FC<PageBubbleProps> = props => {
           {page}
         </Text>
       </Stack>
-    </Button>
+    </Card>
   );
 };
 

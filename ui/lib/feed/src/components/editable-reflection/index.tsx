@@ -15,14 +15,16 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import {
   useGetMyProfileQuery,
-  useGetReflectionByIdQuery,
-  useInfiniteGetReflectReflectionsQuery,
-  useInfiniteGetReflectionsFromBeamQuery,
   useUpdateAkashaReflectMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
+import {
+  GetReflectionsFromBeamDocument,
+  GetReflectionsByAuthorDidDocument,
+  GetReflectReflectionsDocument,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
-import { useQueryClient } from '@tanstack/react-query';
+import { useApolloClient } from '@apollo/client';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { createPortal } from 'react-dom';
 import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -36,6 +38,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [editInProgress, setEditInProgress] = useState(false);
   const [newContent, setNewContent] = useState(null);
   const [edit, setEdit] = useState(false);
+  //@TODO
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
   const [editorState, setEditorState] = useState(null);
@@ -43,7 +46,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
 
   const beamId = entryData.beamID;
   const isReflectOfReflection = beamId !== reflectToId;
-  const queryClient = useQueryClient();
+  const apolloClient = useApolloClient();
   const mentionSearch = null;
   const tagSearch = null;
 
@@ -58,27 +61,15 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     onSuccess: async data => {
       setEdit(false);
       if (!isReflectOfReflection) {
-        await queryClient.invalidateQueries(
-          useInfiniteGetReflectionsFromBeamQuery.getKey({
-            id: beamId,
-          }),
-        );
+        await apolloClient.refetchQueries({ include: [GetReflectionsFromBeamDocument] });
       }
 
       if (isReflectOfReflection) {
         if (data.updateAkashaReflect.document.id === reflectToId) {
-          await queryClient.invalidateQueries(
-            useGetReflectionByIdQuery.getKey({
-              id: reflectToId,
-            }),
-          );
+          await apolloClient.refetchQueries({ include: [GetReflectionsByAuthorDidDocument] });
         }
         if (data.updateAkashaReflect.document.id !== reflectToId) {
-          await queryClient.invalidateQueries(
-            useInfiniteGetReflectReflectionsQuery.getKey({
-              id: reflectToId,
-            }),
-          );
+          await apolloClient.refetchQueries({ include: [GetReflectReflectionsDocument] });
         }
       }
       analyticsActions.trackEvent({

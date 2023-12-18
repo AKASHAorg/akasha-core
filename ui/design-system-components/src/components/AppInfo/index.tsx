@@ -144,12 +144,12 @@ const AppInfo: React.FC<AppInfoProps> = ({
           <ContentBlock blockTitle={developersTitle}>
             <Stack direction="column" spacing="gap-y-2">
               {developers.map(developer => (
-                <Button
+                <Card
                   key={developer.profileId}
                   onClick={() => {
                     if (onSelectDeveloper) onSelectDeveloper(developer.profileId);
                   }}
-                  plain
+                  type="plain"
                 >
                   <Stack direction="row" align="center">
                     <ProfileAvatarButton
@@ -168,7 +168,7 @@ const AppInfo: React.FC<AppInfoProps> = ({
                       customStyle="ml-auto"
                     />
                   </Stack>
-                </Button>
+                </Card>
               ))}
             </Stack>
           </ContentBlock>

@@ -24,7 +24,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
     onClickActive,
     onClickInactive,
     size = 'sm',
-    customStyle,
+    customStyle = '',
     inactiveLabel,
     inactiveVariant = 'primary',
     activeLabel,

@@ -10,7 +10,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import IndicatorDots from './indicator-dots';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ConnectErrorCard from '@akashaorg/design-system-components/lib/components/ConnectErrorCard';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
@@ -20,6 +19,7 @@ import {
 import { ArrowsRightLeftIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 export type ConnectWalletProps = {
   selectedProvider: EthProviders;
@@ -227,12 +227,17 @@ const ConnectWallet: React.FC<ConnectWalletProps> = props => {
             </Stack>
           )}
           <Stack align="center" justify="center">
-            <Button plain={true} onClick={handleDisconnect} customStyle="flex items-center gap-x-2">
-              <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
-              <Text variant="button-lg" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                {t('Disconnect or change the way to connect')}
-              </Text>
-            </Button>
+            <Card onClick={handleDisconnect} type="plain">
+              <Stack align="center" spacing="gap-x-2">
+                <Icon icon={<ArrowsRightLeftIcon />} accentColor={true} />
+                <Text
+                  variant="button-lg"
+                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                >
+                  {t('Disconnect or change the way to connect')}
+                </Text>
+              </Stack>
+            </Card>
           </Stack>
         </Stack>
       )}

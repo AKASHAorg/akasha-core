@@ -1,10 +1,9 @@
 import React, { ReactNode } from 'react';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import { getRadiusClasses, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 
 type App = {
@@ -30,7 +29,7 @@ const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
       {apps?.map((app, index, array) => (
         <Stack key={app.name} direction="column" spacing="gap-y-4">
           <Stack direction="row" justify="between" align="center">
-            <Button onClick={() => onAppSelected(app.id)} plain>
+            <Card onClick={() => onAppSelected(app.id)} type="plain">
               <Stack direction="row" spacing="gap-x-2">
                 <Stack customStyle={iconStyle} />
 
@@ -47,7 +46,7 @@ const AppList: React.FC<AppListProps> = ({ apps, onAppSelected }) => {
                   </Text>
                 </Stack>
               </Stack>
-            </Button>
+            </Card>
 
             <Stack customStyle="ml-auto">{app.action}</Stack>
           </Stack>
