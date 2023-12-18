@@ -38,7 +38,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     embedEntryData,
     showDraft,
     background,
-    customStyle,
+    customStyle = '',
     setEditorState,
     onCancelClick,
     getLinkPreview,
@@ -128,6 +128,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
             onClear={onClear}
             onCancelClick={onCancelClick}
             transformSource={transformSource}
+            customStyle="p-2"
           />
         </Card>
       )}

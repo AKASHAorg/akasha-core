@@ -9,13 +9,13 @@ import React from 'react';
 export type NSFWProps = {
   sensitiveContentLabel: string;
   clickToViewLabel: string;
-  onClickToView: () => void;
+  onClickToView: (event: React.SyntheticEvent<HTMLButtonElement>) => void;
 };
 
 const NSFW: React.FC<NSFWProps> = props => {
   const { sensitiveContentLabel, clickToViewLabel, onClickToView } = props;
   return (
-    <Card padding={8} radius={10} elevation="2" background="white/80" customStyle="box-content">
+    <Card padding={8} radius={10} elevation="2" background="transparent" customStyle="box-content">
       <Stack direction="row" spacing="gap-x-1">
         <Icon icon={<EyeSlashIcon />} color="errorLight" />
         <Text variant="button-sm" color="errorLight">
