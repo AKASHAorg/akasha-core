@@ -5,11 +5,10 @@ import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { ChevronRightIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { DevKeyCardType } from '@akashaorg/design-system-components/lib/components/DevKeyCard';
 
 import menuRoute from '../../routes';
@@ -61,7 +60,7 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
           <Divider />
 
           <Stack padding="p-4">
-            <Button plain={true} onClick={handleClickMenuItem(item.route)} customStyle="w-full">
+            <Card type="plain" onClick={handleClickMenuItem(item.route)} customStyle="w-full">
               <Stack align="center" justify="between">
                 <Text variant="h6" weight="bold">
                   {item.label}
@@ -80,7 +79,7 @@ const DevProfileCard: React.FC<DevProfileCardProps> = props => {
                   />
                 </Stack>
               </Stack>
-            </Button>
+            </Card>
           </Stack>
         </Stack>
       ))}

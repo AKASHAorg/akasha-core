@@ -38,14 +38,12 @@ const HelloModeratorCard: React.FC<HelloModeratorCardProps> = props => {
 
         <Stack direction="row" spacing="gap-x-6" justify="center">
           <a href={moderatorGuideUrl} target="_blank" rel="noreferrer noopener">
-            <Button plain={true}>
-              <Stack direction="row" align="center" spacing="gap-x-2">
-                <Icon size="sm" accentColor={true} icon={<Shield />} customStyle="mx-auto my-0" />
-                <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-                  {moderatorGuideLabel}
-                </Text>
-              </Stack>
-            </Button>
+            <Stack direction="row" align="center" spacing="gap-x-2">
+              <Icon size="sm" accentColor={true} icon={<Shield />} customStyle="mx-auto my-0" />
+              <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                {moderatorGuideLabel}
+              </Text>
+            </Stack>
           </a>
 
           <a href={moderationFAQUrl} target="_blank" rel="noreferrer noopener">

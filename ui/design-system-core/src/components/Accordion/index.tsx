@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 
-import Button from '../Button';
 import Divider from '../Divider';
 import Icon from '../Icon';
 import { ChevronDownIcon, ChevronUpIcon } from '../Icon/hero-icons-outline';
 import Stack from '../Stack';
+import Card from '../Card';
 
 export type AccordionProps = {
   customStyle?: string;
@@ -47,7 +47,7 @@ const Accordion: React.FC<AccordionProps> = props => {
 
   return (
     <>
-      <Button plain={true} onClick={handleToggle} customStyle="w-full">
+      <Card type="plain" onClick={handleToggle} customStyle="w-full">
         {headerDivider ? (
           <Stack direction="column" spacing="gap-y-4">
             {headerUi}
@@ -56,7 +56,7 @@ const Accordion: React.FC<AccordionProps> = props => {
         ) : (
           headerUi
         )}
-      </Button>
+      </Card>
 
       {open && <Stack customStyle={`${contentStyle}`}>{contentNode}</Stack>}
     </>
