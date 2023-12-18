@@ -53,7 +53,7 @@ const List: React.FC<ListProps> = forwardRef(
           {items.map((item, index) => (
             <Fragment key={index}>
               {item.toolTipContent ? (
-                <Tooltip placement="right" content={item.toolTipContent}>
+                <Tooltip placement="left" content={item.toolTipContent}>
                   <ListElement
                     {...item}
                     onClick={handleItemClick(item, index)}

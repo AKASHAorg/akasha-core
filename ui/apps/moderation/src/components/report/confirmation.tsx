@@ -62,25 +62,23 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
           </Text>
 
           <a href={ctaUrl} target="_blank" rel="noreferrer noopener">
-            <Button plain={true}>
-              <Stack direction="row" align="center" spacing="gap-x-2">
-                <Icon
-                  size="sm"
-                  accentColor={true}
-                  icon={<Discord />}
-                  solid={true}
-                  customStyle="mx-auto my-0"
-                />
+            <Stack direction="row" align="center" spacing="gap-x-2">
+              <Icon
+                size="sm"
+                accentColor={true}
+                icon={<Discord />}
+                solid={true}
+                customStyle="mx-auto my-0"
+              />
 
-                <Text
-                  variant="footnotes2"
-                  align="center"
-                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                >
-                  {ctaLabel}
-                </Text>
-              </Stack>
-            </Button>
+              <Text
+                variant="footnotes2"
+                align="center"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              >
+                {ctaLabel}
+              </Text>
+            </Stack>
           </a>
         </Stack>
       </Stack>

@@ -117,8 +117,8 @@ const Wrapped = (props: RootExtensionProps) => {
     <Router>
       <Routes>
         {[
-          '@akashaorg/app-akasha-integration/beam/:beamId',
-          '@akashaorg/app-akasha-integration/reflect/:reflectionId',
+          '@akashaorg/app-akasha-integration/beam/:beamId/*',
+          '@akashaorg/app-akasha-integration/reflect/:reflectionId/*',
         ].map(r => (
           <Route
             key={r}

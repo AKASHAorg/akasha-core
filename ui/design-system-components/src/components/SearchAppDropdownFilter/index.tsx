@@ -11,6 +11,7 @@ import {
   ChevronUpIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 export type DropdownMenuItemGroupType = {
   id: string;
@@ -125,7 +126,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                                 cursor-pointer`,
                               )}
                             >
-                              <Button onClick={handleChange(item)} plain customStyle="w-full">
+                              <Card type="plain" onClick={handleChange(item)} customStyle="w-full">
                                 <Stack
                                   direction="row"
                                   align="center"
@@ -156,7 +157,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                                     {item.title}
                                   </Text>
                                 </Stack>
-                              </Button>
+                              </Card>
                             </li>
                           );
                         })}
@@ -216,7 +217,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                       } cursor-pointer`,
                     )}
                   >
-                    <Button onClick={handleChange(menuItem)} plain customStyle="w-full">
+                    <Card type="plain" onClick={handleChange(menuItem)} customStyle="w-full">
                       <Stack
                         direction="row"
                         align="center"
@@ -253,7 +254,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                           />
                         </span>
                       )}
-                    </Button>
+                    </Card>
                   </li>
                 );
               }

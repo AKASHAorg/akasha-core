@@ -29,7 +29,7 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
   title,
   showDivider = false,
   actionsAlign,
-  customStyle,
+  customStyle = '',
   children,
   onClose,
 }) => {

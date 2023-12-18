@@ -15,7 +15,14 @@ export type ExtensionComponentProps<D> = {
 };
 
 export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
-  const { name, loadingIndicator, emptyIndicator, onError, customStyle, extensionData } = props;
+  const {
+    name,
+    loadingIndicator,
+    emptyIndicator,
+    onError,
+    customStyle = '',
+    extensionData,
+  } = props;
   const { getExtensionsPlugin, getContext } = useRootComponentProps();
   const extensionStore = React.useRef<ExtensionStorePlugin>(getExtensionsPlugin().extensionStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);

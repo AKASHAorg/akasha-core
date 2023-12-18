@@ -8,7 +8,7 @@ import { ListItem } from '.';
 export type ListItemProps = { customStyle?: string } & ListItem;
 
 const ListElement: React.FC<ListItemProps> = props => {
-  const { label, icon, color, disabled, customStyle, onClick, ...rest } = props;
+  const { label, icon, color, disabled, customStyle = '', onClick, ...rest } = props;
   return (
     <Button
       customStyle={customStyle}

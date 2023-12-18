@@ -7,12 +7,15 @@ import { transformSource, serializeSlateToBase64, useAnalytics } from '@akashaor
 import {
   useCreateReflectMutation,
   useGetMyProfileQuery,
-  useInfiniteGetReflectReflectionsQuery,
-  useInfiniteGetReflectionsFromBeamQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
+import {
+  GetReflectionsFromBeamDocument,
+  GetReflectReflectionsDocument,
+  GetReflectionsByAuthorDidDocument,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
-import { useQueryClient } from '@tanstack/react-query';
+import { useApolloClient } from '@apollo/client';
 import { createPortal } from 'react-dom';
 import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 
@@ -27,6 +30,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const [editorState, setEditorState] = useState(null);
+  //@TODO
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
   const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
@@ -34,26 +38,23 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
   const isReflectOfReflection = reflectToId !== beamId;
 
-  const queryClient = useQueryClient();
+  const apolloClient = useApolloClient();
   const mentionSearch = null;
   const tagSearch = null;
 
   const publishReflection = useCreateReflectMutation({
     onSuccess: async data => {
       if (!isReflectOfReflection) {
-        await queryClient.invalidateQueries(
-          useInfiniteGetReflectionsFromBeamQuery.getKey({
-            id: data.createAkashaReflect.document.beam?.id,
-          }),
-        );
+        await apolloClient.refetchQueries({ include: [GetReflectionsFromBeamDocument] });
       }
 
       if (isReflectOfReflection) {
-        await queryClient.invalidateQueries(
-          useInfiniteGetReflectReflectionsQuery.getKey({
-            id: reflectToId,
-          }),
-        );
+        if (data.createAkashaReflect.document.id === reflectToId) {
+          await apolloClient.refetchQueries({ include: [GetReflectionsByAuthorDidDocument] });
+        }
+        if (data.createAkashaReflect.document.id !== reflectToId) {
+          await apolloClient.refetchQueries({ include: [GetReflectReflectionsDocument] });
+        }
       }
 
       analyticsActions.trackEvent({
@@ -100,6 +101,10 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
   // @TODO: fix author name
   const entryAuthorName = undefined;
+
+  useEffect(() => {
+    setShowEditor(showEditorInitialValue);
+  }, [showEditorInitialValue]);
 
   useEffect(() => {
     if (showErrorSnackbar) {
