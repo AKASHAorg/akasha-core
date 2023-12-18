@@ -31,7 +31,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
   elevation = 'none',
   borderColor,
   testId,
-  customStyle,
+  customStyle = '',
   message,
   onClose,
 }) => {

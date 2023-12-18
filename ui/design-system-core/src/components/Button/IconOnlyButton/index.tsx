@@ -38,7 +38,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         plainIcon,
         breakPointSize,
         disabled,
-        customStyle,
+        customStyle = '',
         active,
         hover,
         hoverColors,
