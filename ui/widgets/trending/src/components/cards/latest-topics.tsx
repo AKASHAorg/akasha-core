@@ -71,6 +71,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       setLocalSubscribedTags(receivedTags);
       localTagsInitialized.current = true;
     }
+    //prevents reseting interests wit []
     if (receivedTags && tagsQueue.length === 0) {
       localSubscribedTagsRef.current = receivedTags;
     }
@@ -93,11 +94,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
       context: { source: sdk.services.gql.contextSources.composeDB },
     });
 
-
-
   useEffect(() => {
-
-
     if (!localTagsInitialized.current || receivedTags === null) return;
     if (loading || updateLoading) return;
 
@@ -108,7 +105,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             i: {
               id: subscriptionId.current,
               content: {
-                topics: localSubscribedTagsRef.current.map(tag => ({
+                topics: [...new Set(localSubscribedTagsRef.current)].map(tag => ({
                   value: tag,
                   labelType: 'TOPIC',
                 })),
@@ -153,7 +150,10 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           variables: {
             i: {
               content: {
-                topics: localSubscribedTags.map(tag => ({ value: tag, labelType: 'TOPIC' })),
+                topics: [...new Set(localSubscribedTagsRef.current)].map(tag => ({
+                  value: tag,
+                  labelType: 'TOPIC',
+                })),
               },
             },
           },
