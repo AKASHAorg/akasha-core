@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import EditorPlaceholder from '../EditorPlaceholder';
 import EditorBox, { EditorBoxProps } from '../Editor';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -50,23 +50,16 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
     transformSource,
   } = props;
 
-  const [showEditor, setShowEditor] = React.useState(showEditorInitialValue);
-  const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
-  const editorRef = React.useRef(null);
+  const [showEditor, setShowEditor] = useState(showEditorInitialValue);
+  const wrapperRef: React.RefObject<HTMLDivElement> = useRef(null);
 
   const handleClickAway = () => {
-    if (
-      !showEditorInitialValue &&
-      showEditor &&
-      isEqual(editorState, editorDefaultValue) &&
-      !editorRef.current?.getUploadingState() &&
-      !editorRef.current?.getImagesState()
-    ) {
+    if (!showEditorInitialValue && showEditor && isEqual(editorState, editorDefaultValue)) {
       setShowEditor(false);
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setShowEditor(showEditorInitialValue);
   }, [showEditorInitialValue]);
 
@@ -102,7 +95,6 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
           customStyle="overflow-hidden"
         >
           <EditorBox
-            ref={editorRef}
             avatar={avatar}
             profileId={profileId}
             actionLabel={actionLabel}

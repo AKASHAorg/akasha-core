@@ -31,13 +31,14 @@ export type Card = CommonCardProps & ({ type: 'plain' } | (RegularCardType & { t
 
 const Card: React.FC<PropsWithChildren<Card>> = forwardRef((props, ref) => {
   if (props.type === 'plain') {
+    const { testId, customStyle, ...rest } = props;
     return (
       <div
-        {...props}
-        className={tw(props.customStyle)}
-        role={props.onClick ? 'button' : 'presentation'}
+        {...rest}
+        className={tw(customStyle)}
+        role={rest.onClick ? 'button' : 'presentation'}
         ref={ref}
-        data-testid={props.testId}
+        data-testid={testId}
       >
         {props.children}
       </div>
