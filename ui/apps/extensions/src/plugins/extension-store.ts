@@ -30,7 +30,7 @@ export class ExtensionStore extends BaseStore {
     return this.#extensions;
   };
 
-  getMatchingExtensions = (slotName: string, location: Location) => {
+  getMatchingExtensions = (slotName: string, location: URL) => {
     const matchingExtensions = [];
     for (const ext of this.#extensions) {
       if (stringToRegExp(ext.mountsIn).test(slotName) && !hasOwn(ext, 'activeWhen')) {

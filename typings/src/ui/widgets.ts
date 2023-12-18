@@ -21,6 +21,6 @@ export interface WidgetStorePlugin {
   getWidgets: () => WidgetInterface[];
   getMatchingWidgets: (
     slotName: string,
-    location: Location,
+    location: URL,
   ) => (WidgetInterface & { appName: string })[];
 }

@@ -25,6 +25,6 @@ export interface ExtensionStorePlugin {
   getExtensions: () => ExtensionInterface[];
   getMatchingExtensions: (
     slotName: string,
-    location: Location,
+    location: URL,
   ) => (ExtensionInterface & { appName: string })[];
 }
