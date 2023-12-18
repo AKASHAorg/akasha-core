@@ -42,19 +42,23 @@ export const useList = <T>(props: UseListProps<T>) => {
 
   const getListBottomPadding = React.useCallback((items: VirtualItem[], viewportRect: Rect) => {
     const lastRef = findLastItem(items, it => it.maybeRef);
-    const lastItem = items.at(-1);
+    const lastItem = items[items.length - 1];
+
     if (!lastItem) {
       currentPadding.current = 0;
       return 0;
     }
+
     const lastItemRect = new Rect(lastItem.start, lastItem.height);
     const height =
       lastItemRect.getBottom() -
-      (lastRef ? new Rect(lastRef.start, lastRef.height).getTop() : lastItemRect.getTop());
+      (lastRef ? new Rect(lastRef.start, lastRef.height) : lastItemRect).getTop();
+
     currentPadding.current = Math.max(
       0,
       viewportRect.getHeight() - height + viewportBottomRef.current,
     );
+
     return currentPadding.current;
   }, []);
 

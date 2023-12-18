@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { Virtualizer, VirtualizerProps } from '../index';
 import '@testing-library/jest-dom';
 import { act } from '@testing-library/react-hooks';
 import * as commonProjectionHook from '../use-common-projection-item';
+import { generateMountedItems } from './test-utils';
 
-const generateItems = (n: number) => Array.from({ length: n }, (_, i) => `Item ${i}`);
 class ResizeObserver {
   observe() {
     return;
@@ -39,7 +39,7 @@ describe('Virtualizer', () => {
     isLoading: false,
   };
   let rendered;
-  const mockCommonItem = generateItems(1)[0];
+  const mockCommonItem = generateMountedItems(1)[0];
   const mockCommonProjectionFn = jest.fn(() => mockCommonItem);
   beforeEach(() => {
     global.scrollTo = jest.fn();
@@ -73,7 +73,8 @@ describe('Virtualizer', () => {
     const { container } = rendered;
 
     expect(container.querySelector(`#${restorationKey}`)).toBeInTheDocument();
-    expect(container.querySelector(`#${restorationKey}`).childElementCount).toEqual(0);
+    // header + footer
+    expect(container.querySelector(`#${restorationKey}`).childElementCount).toEqual(2);
   });
 
   it('calls onFetchInitialData if itemList is empty', () => {

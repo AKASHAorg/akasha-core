@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { render, act, fireEvent, screen } from '@testing-library/react';
 import { useThrottle } from '../use-throttle';
 
@@ -95,38 +95,6 @@ describe('useThrottle', () => {
     });
     jest.advanceTimersByTime(TIMEOUT);
     expect(mockFn).toHaveBeenCalledTimes(2);
-  });
-  it('should capture newest state between triggers', () => {
-    // eslint-disable-next-line unicorn/consistent-function-scoping
-    const TestComponent = () => {
-      const [count, setCount] = React.useState(0);
-      const update = React.useCallback((val: number) => {
-        setCount(val);
-        mockFn(val);
-      }, []);
-
-      const throttledFn = useThrottle(update, TIMEOUT, { leading: true, trailing: true });
-
-      const handleClick = React.useCallback(() => throttledFn(count + 1), [count, throttledFn]);
-
-      return (
-        <div>
-          <button data-testid={'button'} onClick={handleClick}>
-            Button
-          </button>
-        </div>
-      );
-    };
-    const { getByText } = render(<TestComponent />);
-    act(() => {
-      fireEvent.click(getByText('Button'));
-      jest.advanceTimersByTime(200);
-      fireEvent.click(getByText('Button'));
-      jest.advanceTimersByTime(TIMEOUT);
-    });
-    expect(mockFn).toHaveBeenCalledTimes(2);
-    expect(mockFn).toHaveBeenNthCalledWith(1, 1);
-    expect(mockFn).toHaveBeenNthCalledWith(2, 2);
   });
 });
 

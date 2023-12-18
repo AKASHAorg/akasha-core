@@ -106,6 +106,17 @@ export const VirtualListRenderer = React.forwardRef(
       offsetBottom: 0,
     });
 
+    React.useEffect(() => {
+      if (rootNodeRef.current) {
+        if (rootNodeRef.current.offsetTop !== viewport.getRect().getTop()) {
+          viewport.resizeRect(
+            rootNodeRef.current.offsetTop,
+            viewport.getRect().getHeight() - rootNodeRef.current.offsetTop,
+          );
+        }
+      }
+    }, [viewport]);
+
     const { getListPadding, getListOffset, hasCorrection } = useList({
       itemList,
       documentViewportHeight: viewport.getDocumentViewportHeight(),
@@ -192,12 +203,8 @@ export const VirtualListRenderer = React.forwardRef(
     }, [state, viewport]);
 
     const getRelativeToRootNode = React.useCallback(() => {
-      if (rootNodeRef.current && viewport.state.rect) {
-        return viewport
-          .getRect()
-          .translate(
-            -rootNodeRef.current.getBoundingClientRect().top + rootNodeRef.current.offsetTop,
-          );
+      if (rootNodeRef.current) {
+        return viewport.getRect().translate(-rootNodeRef.current.getBoundingClientRect().top);
       }
     }, [viewport]);
 

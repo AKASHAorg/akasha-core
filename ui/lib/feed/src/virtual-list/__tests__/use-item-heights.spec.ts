@@ -1,10 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { act } from 'react-dom/test-utils';
-import { useItemHeights, UseItemHeightsProps } from '../use-item-heights'; // Adjust the import path based on your project structure
-
-const computeAvgItemHeight = (newHeight: number, listSize: number, prevAvg) => {
-  return (prevAvg * (listSize - 1) + newHeight) / listSize;
-};
+import { useItemHeights, UseItemHeightsProps } from '../use-item-heights';
+import { computeAvgItemHeight } from './test-utils';
 
 describe('useItemHeights', () => {
   const defaultProps: UseItemHeightsProps = {
@@ -61,7 +58,6 @@ describe('useItemHeights', () => {
       result.current.onItemHeightChange('item1', 70, [], jest.fn());
     });
 
-    // Batched update, so item height should not change immediately
     expect(result.current.getItemHeights().get('item1')).toBe(60);
 
     act(() => {
@@ -74,7 +70,7 @@ describe('useItemHeights', () => {
   it('should handle empty measurementsCache', () => {
     const props: UseItemHeightsProps = {
       ...defaultProps,
-      measurementsCache: new Map(), // Empty measurementsCache
+      measurementsCache: new Map(),
     };
 
     const { result, unmount } = renderHook(() => useItemHeights(props));

@@ -1,41 +1,8 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react-hooks';
 import { useCommonProjectionItem } from '../use-common-projection-item';
 import { Rect } from '../rect';
-import type { MountedItem } from '../use-projection';
 import type { VirtualDataItem, VirtualItem } from '../virtual-item-renderer';
-
-const createMockProjection = (itemList, mountedItems) => {
-  return mountedItems.reduce((acc, mountedItem) => {
-    const itemData = itemList.find(it => it.key === mountedItem.key);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { key, ...rest } = mountedItem;
-    if (itemData) {
-      acc.push({
-        ...rest,
-        virtualData: itemData,
-      });
-    }
-    return acc;
-  }, [] as MountedItem<unknown>[]);
-};
-const generateItemList = (count: number): VirtualDataItem<unknown>[] => {
-  return Array.from({ length: count }, (_, num: number) => ({
-    key: `item-${num}`,
-    index: num,
-    maybeRef: true,
-    data: {},
-    render: () => null,
-  }));
-};
-const generateMountedItems = (count: number, startOffset = 0): VirtualItem[] => {
-  return Array.from({ length: count }, (_, num: number) => ({
-    key: `item-${num}`,
-    maybeRef: true,
-    height: 250,
-    start: num * 250 + startOffset,
-    visible: true,
-  }));
-};
+import { createMockProjection, generateItemList, generateMountedItems } from './test-utils';
 
 describe('useCommonProjectionItem', () => {
   const dummyRect = new Rect(0, 980);
