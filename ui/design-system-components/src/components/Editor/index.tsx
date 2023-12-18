@@ -9,7 +9,6 @@ import {
   Descendant,
 } from 'slate';
 import isUrl from 'is-url';
-import { tw } from '@twind/core';
 import { withHistory } from 'slate-history';
 import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
@@ -36,6 +35,7 @@ import { withMentions, withTags, withLinks } from './plugins';
 
 import EmbedBox from '../EmbedBox';
 import LinkPreview from '../LinkPreview';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const MAX_LENGTH = 280;
 
@@ -65,6 +65,7 @@ export type EditorBoxProps = {
   cancelButtonLabel?: string;
   showDraft?: boolean;
   showPostButton?: boolean;
+  customStyle?: string;
   transformSource: (avatar: Image) => Image;
   onPublish: (publishData: IPublishData) => void;
   onClear?: () => void;
@@ -106,6 +107,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     showCancelButton,
     showPostButton = true,
     transformSource,
+    customStyle = '',
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -478,18 +480,21 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
   const publishDisabled = publishDisabledInternal || disablePublish;
 
   return (
-    <div
-      className={tw(`flex flex-col justify-between w-full bg(white dark:grey2) md:max-h-[38rem]`)}
+    <Stack
+      justify="between"
+      background={{ light: 'white', dark: 'grey2' }}
+      fullWidth
+      customStyle={customStyle}
     >
-      <div
-        className={tw(
-          `flex flex-row items-start h-full w-full overflow-auto ${
-            minHeight && `min-h-[${minHeight}]`
-          }`,
-        )}
+      <Stack
+        direction="row"
+        justify="start"
+        spacing="gap-x-2"
+        customStyle={`h-full ${minHeight && `min-h-[${minHeight}]`}`}
+        fullWidth
       >
         {showAvatar && (
-          <div className={tw(`flex shrink-0 pb-2`)}>
+          <Stack padding="pb-2" customStyle="shrink-0">
             <Avatar
               avatar={transformSource(avatar?.default)}
               alternativeAvatars={avatar?.alternatives?.map(alternative =>
@@ -497,10 +502,10 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               )}
               profileId={profileId}
             />
-          </div>
+          </Stack>
         )}
         {/* w-0 min-w-full is used to prevent parent width expansion without setting a fixed width */}
-        <div className={tw(`py-2 flex flex-col w-0 min-w-full`)}>
+        <Stack padding="py-2" customStyle="w-0 min-w-full">
           <Slate editor={editor} value={editorState || editorDefaultValue} onChange={handleChange}>
             <Editable
               placeholder={placeholderLabel}
@@ -547,46 +552,14 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
             />
           )}
           {embedEntryData && (
-            <div className={tw(`py-4 flex`)}>
+            <Stack padding="py-4">
               <EmbedBox embedEntryData={embedEntryData} transformSource={transformSource} />
-            </div>
+            </Stack>
           )}
-        </div>
-      </div>
-      <div className={tw(`flex flex-row w-full justify-end`)}>
-        {/* <div className={tw(`flex flex-row gap-2 items-center`)}>
-          <div className={tw('sm:hidden')}>
-            <Popover className="relative">
-              <Popover.Button>
-                <Icon icon={<FaceSmileIcon />} accentColor={true} />
-              </Popover.Button>
-              <Popover.Panel className="absolute z-10">
-                <Popover.Button>
-                   <Picker data={data} onEmojiSelect={handleInsertEmoji} />
-                </Popover.Button>
-              </Popover.Panel>
-            </Popover>
-          </div>
-        </div> */}
-
-        <div className={tw(`flex flex-row gap-2 items-center`)}>
-          {/* {showDraft && (
-            <div className={tw(`flex flex-row gap-2 items-center`)}>
-              {!publishDisabled && (
-                <p className={tw(`text(secondaryLight dark:secondaryDark)`)}>Draft</p>
-              )}
-              <button
-                className={tw(`text-color-secondaryLight dark:textColorSecondaryDark`)}
-                onClick={e => {
-                  e.preventDefault();
-                  CustomEditor.clearEditor(editor);
-                  if (onClear) onClear();
-                }}
-              >
-                Clear
-              </button>
-            </div>
-          )} */}
+        </Stack>
+      </Stack>
+      <Stack direction="row" justify="end" fullWidth>
+        <Stack direction="row" align="center" spacing="gap-x-2">
           {withMeter && <EditorMeter value={letterCount} max={MAX_LENGTH} />}
           {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
           {showPostButton && (
@@ -598,9 +571,9 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
               disabled={publishDisabled}
             />
           )}
-        </div>
-      </div>
-    </div>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 };
 

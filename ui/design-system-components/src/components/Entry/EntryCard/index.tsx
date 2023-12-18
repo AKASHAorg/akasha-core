@@ -6,7 +6,6 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import EntryCardRemoved, { AuthorsRemovedMessage, OthersRemovedMessage } from '../EntryCardRemoved';
 import CardActions from './card-actions';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import {
   EllipsisHorizontalIcon,
   FlagIcon,
@@ -128,8 +127,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
 
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle = contentClickable ? 'cursor-pointer' : 'cursor-default';
-  const nsfwHeightStyle = entryData.nsfw && !showNSFW ? 'min-h-[6rem]' : '';
-  const nsfwBlurStyle = entryData.nsfw && !showNSFW ? 'blur-lg' : '';
 
   const menuItems: ListItem[] = [
     ...(!isViewer
@@ -239,49 +236,48 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         />
       )}
       {entryData.active && (
-        <Button onClick={onContentClick} plain>
+        <Card onClick={onContentClick} type="plain">
           <Stack
             align="center"
             justify="start"
-            customStyle={`relative overflow-hidden ${showHiddenStyle} ${contentClickableStyle} ${nsfwHeightStyle}`}
+            customStyle={`overflow-hidden ${showHiddenStyle} ${contentClickableStyle}`}
             data-testid="entry-content"
             fullWidth={true}
           >
             {entryData.nsfw && !showNSFW && (
-              <Stack customStyle="absolute w-36 h-16 z-10">
+              <Stack customStyle="w-36 h-16">
                 <NSFW
                   {...nsfw}
-                  onClickToView={() => {
+                  onClickToView={event => {
+                    event.stopPropagation();
                     setShowNSFW(true);
                   }}
                 />
               </Stack>
             )}
-            <Stack
-              justifySelf="start"
-              alignSelf="start"
-              align="start"
-              customStyle={nsfwBlurStyle}
-              fullWidth={true}
-            >
-              {rest.itemType === EntityTypes.REFLECT ? (
-                <ReadOnlyEditor
-                  content={rest.slateContent}
-                  disabled={entryData.nsfw}
-                  handleMentionClick={rest.onMentionClick}
-                  handleTagClick={rest.onTagClick}
-                  handleLinkClick={url => {
-                    rest.navigateTo?.({ getNavigationUrl: () => url });
-                  }}
-                />
-              ) : (
-                rest.sortedContents?.map(item => (
-                  <Fragment key={item.blockID}>{rest.children({ blockID: item.blockID })}</Fragment>
-                ))
-              )}
-            </Stack>
+            {(!entryData.nsfw || showNSFW) && (
+              <Stack justifySelf="start" alignSelf="start" align="start" fullWidth={true}>
+                {rest.itemType === EntityTypes.REFLECT ? (
+                  <ReadOnlyEditor
+                    content={rest.slateContent}
+                    disabled={entryData.nsfw}
+                    handleMentionClick={rest.onMentionClick}
+                    handleTagClick={rest.onTagClick}
+                    handleLinkClick={url => {
+                      rest.navigateTo?.({ getNavigationUrl: () => url });
+                    }}
+                  />
+                ) : (
+                  rest.sortedContents?.map(item => (
+                    <Fragment key={item.blockID}>
+                      {rest.children({ blockID: item.blockID })}
+                    </Fragment>
+                  ))
+                )}
+              </Stack>
+            )}
           </Stack>
-        </Button>
+        </Card>
       )}
       {!hideActionButtons && (
         <CardActions

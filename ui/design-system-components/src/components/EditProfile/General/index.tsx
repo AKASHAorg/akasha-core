@@ -30,8 +30,8 @@ export const General: React.FC<GeneralProps> = ({
   ens: ensField,
   bio: bioField,
   ensButton,
-  customStyle = '',
   control,
+  customStyle = '',
   onAvatarChange,
   onCoverImageChange,
 }) => {
