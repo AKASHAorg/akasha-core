@@ -16,12 +16,12 @@ export const findFirstInView = <T>(
   compareFn: (prev: MountedItem<T>, curr: MountedItem<T>) => number,
 ) => {
   if (!items.length) return undefined;
-  return items.reduce((prev, curr) => (compareFn(prev, curr) > 0 ? prev : curr));
+  return items.reduce((prev, curr) => (compareFn(curr, prev) > 0 ? curr : prev));
 };
 
 export const getVisibleItemsSlice = (visibleItems: VirtualItem[], allItems: VirtualItem[]) => {
-  const first = visibleItems.at(0);
-  const last = visibleItems.at(visibleItems.length - 1);
+  const first = visibleItems[0];
+  const last = visibleItems[visibleItems.length - 1];
   return {
     start: first ? allItems.indexOf(first) : 0,
     end: last ? allItems.indexOf(last) + 1 : 0,
@@ -37,10 +37,7 @@ export const findLastItem = <T>(items: T[], predicate: (item: T) => boolean): T 
     }
   }
   return found;
-  // return items.reduceRight((acc: T | undefined, current: T) => {
-  //   if (predicate(current) && !acc) {
-  //     acc = current;
-  //   }
-  //   return acc;
-  // }, undefined);
 };
+export const isWindow = () => typeof window !== 'undefined';
+export const dpr = isWindow() ? window.devicePixelRatio ?? 1 : 1;
+export const pxToDPR = (px: number, dpr: number) => Math.ceil(px * dpr) / dpr;

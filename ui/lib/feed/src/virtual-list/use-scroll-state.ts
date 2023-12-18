@@ -37,9 +37,11 @@ export const useScrollState = (restoreKey: string) => {
       restoreKeyRef.current = restoreKey;
     }
   }, [restoreKey]);
-
+  const prevSavedItems = React.useRef<RestoreItem[]>();
   const save = (restoreItems: RestoreItem[], measurementsCache: Map<string, number>) => {
     if (typeof window !== 'undefined' && window.history) {
+      if (prevSavedItems.current && prevSavedItems.current === restoreItems) return;
+      prevSavedItems.current = restoreItems;
       window.history.replaceState(
         Object.assign(window.history.state ?? {}, {
           virtualListPosition: {

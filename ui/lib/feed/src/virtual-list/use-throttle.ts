@@ -11,6 +11,7 @@ export const useThrottle = (
 ) => {
   const timerId = React.useRef<ReturnType<typeof setTimeout>>();
   const lastArgs = React.useRef<unknown[]>();
+  const isUnmounted = React.useRef(false);
 
   const opt = React.useMemo(
     () => ({
@@ -21,14 +22,21 @@ export const useThrottle = (
     [option],
   );
 
-  // const callback = React.useMemo(() => fn, [fn]);
+  React.useEffect(() => {
+    return () => {
+      isUnmounted.current = true;
+      clearTimeout(timerId.current);
+    };
+  }, []);
 
   return React.useCallback(
-    function (...args: unknown[]) {
+    (...args: unknown[]) => {
+      if (isUnmounted.current) return;
+
       const { trailing, leading } = opt;
 
       const waitFn = () => {
-        if (trailing && lastArgs.current) {
+        if (!isUnmounted.current && trailing && lastArgs.current) {
           fn(...lastArgs.current);
           lastArgs.current = undefined;
           timerId.current = setTimeout(waitFn, timeout);
@@ -37,7 +45,7 @@ export const useThrottle = (
         }
       };
 
-      if (!timerId.current && leading) {
+      if (!timerId.current && leading && !isUnmounted.current) {
         fn(...args);
       } else {
         lastArgs.current = args;
@@ -47,6 +55,9 @@ export const useThrottle = (
         timerId.current = setTimeout(waitFn, timeout);
       }
     },
-    [opt, fn, timeout],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [opt, fn, timeout, ...deps],
   );
 };
+
+export default useThrottle;

@@ -34,6 +34,7 @@ export type VirtualizerProps<T> = {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
   isLoading?: boolean;
+  offsetTop?: number;
 };
 
 const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -55,6 +56,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     hasNextPage,
     hasPreviousPage,
     isLoading,
+    offsetTop,
   } = props;
 
   const vlistRef = React.useRef<VirtualListInterface>();
@@ -69,7 +71,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     const itemList: VirtualDataItem<T>[] = [];
     if (header) {
       itemList.push(
-        createVirtualDataItem(HEADER_COMPONENT, HEADER_COMPONENT as T, false, () => header),
+        createVirtualDataItem(HEADER_COMPONENT, HEADER_COMPONENT as T, true, () => header),
       );
     }
 
@@ -103,11 +105,11 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       itemList: VirtualItem[],
       mountedItems: VirtualItem[],
       viewportRect: Rect,
-      averageItemHeight: number,
+      getItemHeightAverage: () => number,
       measurementsCache: Map<string, number>,
       isNewUpdate: boolean,
     ) => {
-      edgeDetector.update(itemList, mountedItems, viewportRect, averageItemHeight, isNewUpdate);
+      edgeDetector.update(itemList, mountedItems, viewportRect, getItemHeightAverage, isNewUpdate);
       if (!isMounted) return;
       if (vlistRef.current.isAtTop()) {
         return scrollRestore.save([], new Map());
@@ -132,10 +134,10 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
       if (scrollRestore.scrollState.loaded && !isFetchingInitialData.current) {
         const restoreItem = scrollRestore.getLastItem();
         isFetchingInitialData.current = true;
-        const listItem = itemList.filter(it => it.maybeRef);
-        if (restoreItem && listItem.length === 0) {
+        const listItems = itemList.filter(it => it.maybeRef && it.key !== HEADER_COMPONENT);
+        if (restoreItem && listItems.length === 0) {
           onFetchInitialData(restoreItem);
-        } else if (listItem.length === 0) {
+        } else if (listItems.length === 0) {
           onFetchInitialData();
         }
       }
@@ -184,6 +186,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
           hasPreviousPage={hasPreviousPage}
           isLoading={isLoading}
           loadingIndicator={loadingIndicator}
+          offsetTop={offsetTop}
         />
       )}
     </>

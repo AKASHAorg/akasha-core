@@ -23,7 +23,7 @@ describe('useEdgeDetector', () => {
     );
 
     act(() => {
-      result.current.update(items, items, rect, 50, true);
+      result.current.update(items, items, rect, () => 50, true);
     });
 
     expect(onEdgeDetectorChange).toBeCalledWith(EdgeArea.TOP);

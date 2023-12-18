@@ -1,7 +1,9 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { Virtualizer, VirtualizerProps } from '../index';
 import '@testing-library/jest-dom';
+import { act } from '@testing-library/react-hooks';
+import * as commonProjectionHook from '../use-common-projection-item';
 
 const generateItems = (n: number) => Array.from({ length: n }, (_, i) => `Item ${i}`);
 class ResizeObserver {
@@ -15,52 +17,80 @@ class ResizeObserver {
     return;
   }
 }
+const restorationKey = 'test-restoration-key';
 describe('Virtualizer', () => {
   global.ResizeObserver = ResizeObserver;
+  const mockEdgeDetectorChangeFn = jest.fn();
   const mockProps: VirtualizerProps<string> = {
-    restorationKey: 'restoration-key',
+    restorationKey,
     header: <div>Header</div>,
     footer: <div>Footer</div>,
     estimatedHeight: 100,
-    items: generateItems(20),
+    items: [],
     itemKeyExtractor: item => item,
     itemIndexExtractor: item => parseInt(item.split(' ')[1]),
     renderItem: item => <div>{item}</div>,
     overscan: 20,
     itemSpacing: 8,
     onFetchInitialData: jest.fn(),
-    onEdgeDetectorChange: jest.fn(),
+    onEdgeDetectorChange: mockEdgeDetectorChangeFn,
     hasNextPage: false,
     hasPreviousPage: false,
     isLoading: false,
   };
+  let rendered;
+  const mockCommonItem = generateItems(1)[0];
+  const mockCommonProjectionFn = jest.fn(() => mockCommonItem);
   beforeEach(() => {
     global.scrollTo = jest.fn();
+    global.scrollBy = jest.fn();
+    jest.mock('../use-viewport', () => ({
+      useViewport: jest.fn(() => ({
+        getDocumentViewportHeight: jest.fn(() => 500),
+        getRect: jest.fn(() => ({ getHeight: jest.fn(() => 500) })),
+        scrollToTop: jest.fn(),
+        getScrollY: jest.fn(() => 0),
+        scrollBy: jest.fn(),
+        setTopOffset: jest.fn(),
+        setBottomOffset: jest.fn(),
+      })),
+    }));
+    (
+      jest.spyOn(
+        commonProjectionHook,
+        'useCommonProjectionItem',
+      ) as unknown as jest.SpyInstance<jest.Mock>
+    ).mockReturnValue(mockCommonProjectionFn);
+
+    rendered = render(<Virtualizer {...mockProps} />);
   });
-  it('renders correctly with default props', () => {
-    const { getByText, container } = render(<Virtualizer {...mockProps} />);
+  afterEach(() => {
+    jest.clearAllMocks();
+    global.scrollTo(0, 0);
+    rendered = undefined;
+  });
+  it('renders container on first render', () => {
+    const { container } = rendered;
 
-    // Check if header is rendered correctly
-    expect(getByText('Header')).toBeInTheDocument();
-
-    expect(container.querySelector('#restoration-key').childElementCount).toEqual(19);
+    expect(container.querySelector(`#${restorationKey}`)).toBeInTheDocument();
+    expect(container.querySelector(`#${restorationKey}`).childElementCount).toEqual(0);
   });
 
-  it.skip('calls onFetchInitialData if itemList is empty', () => {
-    const { rerender } = render(<Virtualizer {...mockProps} items={[]} />);
-
-    rerender(<Virtualizer items={[]} {...mockProps} />);
-
-    expect(mockProps.onFetchInitialData).toHaveBeenCalled();
+  it('calls onFetchInitialData if itemList is empty', () => {
+    const { rerender } = rendered;
+    rerender(<Virtualizer {...{ ...mockProps, items: [] }} />);
+    expect(mockProps.onFetchInitialData).toBeCalledTimes(1);
   });
 
-  it('edge detection works flawlessly', () => {
-    const { container } = render(<Virtualizer {...mockProps} />);
+  it('it sets the state on update and calls the callback function (and update)', async () => {
+    jest.useFakeTimers();
 
-    const listElement = container.querySelector('#restoration-key');
+    act(() => {
+      fireEvent.scroll(window, { target: { clientY: 458 } });
+      jest.advanceTimersByTime(500);
+    });
 
-    fireEvent.scroll(listElement, { target: { scrollTop: 1000 } });
-
-    expect(mockProps.onEdgeDetectorChange).toHaveBeenCalled();
+    expect(mockCommonProjectionFn).toHaveBeenCalled();
+    expect(mockEdgeDetectorChangeFn).toHaveBeenCalled();
   });
 });

@@ -50,6 +50,7 @@ export type VirtualItemProps<T> = {
   itemSpacing: number;
   itemOffset: number;
   index: number;
+  visible: boolean;
 };
 
 export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
@@ -61,6 +62,7 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
     onHeightChanged,
     itemSpacing,
     itemOffset,
+    visible,
   } = props;
   const rootNodeRef = React.useRef<HTMLDivElement>();
   const currentHeight = React.useRef(estimatedHeight);
@@ -113,7 +115,7 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
         position: 'absolute',
         width: '100%',
         transition: 'opacity 0.3s ease-in',
-        opacity: rootNodeRef.current ? 1 : 0,
+        opacity: visible ? 1 : 0,
       }}
     >
       {item.render(item.data)}

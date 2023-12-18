@@ -29,6 +29,7 @@ export type BeamFeedProps = {
   footer?: VirtualizerProps<unknown>['footer'];
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
   did?: string;
+  offsetTop?: number;
 };
 
 const BeamFeed = (props: BeamFeedProps) => {
@@ -45,6 +46,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     header,
     footer,
     did,
+    offsetTop,
   } = props;
 
   const {
@@ -145,6 +147,7 @@ const BeamFeed = (props: BeamFeedProps) => {
           hasNextPage={hasNextPage}
           hasPreviousPage={hasPreviousPage}
           isLoading={isLoading}
+          offsetTop={offsetTop}
         />
       )}
     </>
