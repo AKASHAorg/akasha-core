@@ -12,6 +12,8 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
 import { TopicRow } from './topic-row';
 import isEqual from 'lodash/isEqual';
+import difference from 'lodash/difference';
+import pullAll from 'lodash/pullAll';
 
 export type LatestTopicsProps = {
   // data
@@ -63,6 +65,8 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     if (!isLoggedIn) {
       setLocalSubscribedTags([]);
       localSubscribedTagsRef.current = [];
+      localTagsInitialized.current = null;
+      subscriptionId.current = null;
     }
   }, [isLoggedIn]);
 
@@ -130,18 +134,17 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               topic => topic.value,
             );
 
-            const arrDifference = returnedData
-              .filter(x => !receivedTags.includes(x))
-              .concat(receivedTags.filter(x => !returnedData.includes(x)));
-
-            setTagsQueue(prev => prev.filter(x => !arrDifference.includes(x)));
+            const arrDifference = difference(returnedData, receivedTags).concat(
+              difference(receivedTags, returnedData),
+            );
+            setTagsQueue(prev => pullAll(prev, arrDifference));
           },
           onError: err => {
             const arrDifference = receivedTags
               .filter(x => !localSubscribedTags.includes(x))
               .concat(localSubscribedTags.filter(x => !receivedTags.includes(x)));
 
-            setTagsQueue(prev => prev.filter(x => !arrDifference.includes(x)));
+            setTagsQueue(prev => pullAll(prev, arrDifference));
             refetchTagSubscriptions();
           },
         });
@@ -164,19 +167,19 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               topic => topic.value,
             );
 
-            const arrDifference = returnedData
-              .filter(x => !localSubscribedTags.includes(x))
-              .concat(localSubscribedTags.filter(x => !returnedData.includes(x)));
+            const arrDifference = difference(returnedData, localSubscribedTags).concat(
+              difference(localSubscribedTags, returnedData),
+            );
 
-            setTagsQueue(prev => prev.filter(x => !arrDifference.includes(x)));
+            setTagsQueue(prev => pullAll(prev, arrDifference));
             refetchTagSubscriptions();
           },
           onError: err => {
-            const arrDifference = receivedTags
-              .filter(x => !localSubscribedTags.includes(x))
-              .concat(localSubscribedTags.filter(x => !receivedTags.includes(x)));
+            const arrDifference = difference(receivedTags, localSubscribedTags).concat(
+              difference(localSubscribedTags, receivedTags),
+            );
 
-            setTagsQueue(prev => prev.filter(x => !arrDifference.includes(x)));
+            setTagsQueue(prev => pullAll(prev, arrDifference));
             refetchTagSubscriptions();
           },
         });
