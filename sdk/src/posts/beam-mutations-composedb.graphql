@@ -3,7 +3,7 @@ fragment BeamFragmentM on AkashaBeam{
   id
   reflectionsCount
   active
-  embeddedBeam{
+  embeddedStream{
     label
     embeddedID
   }
@@ -15,7 +15,10 @@ fragment BeamFragmentM on AkashaBeam{
     blockID
     order
   }
-  tags
+  tags{
+    labelType
+    value
+  }
   version
   createdAt
   nsfw
