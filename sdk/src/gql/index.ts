@@ -30,6 +30,12 @@ const enum ContextSources {
   COMPOSEDB = 'gql#COMPOSEDB',
 }
 
+export const LabelTypes = {
+  TAG: 'core#tag',
+  CATEGORY: 'core#category',
+  INTEREST: 'core#interest',
+} as const;
+
 declare const __DEV__: boolean;
 
 if (__DEV__) {
@@ -275,6 +281,10 @@ class Gql {
 
   get contextSources() {
     return this._contextSources;
+  }
+
+  get labelTypes() {
+    return LabelTypes;
   }
 
   get indexingDID() {
