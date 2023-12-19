@@ -15,6 +15,11 @@ type EmbeddedType{
   embeddedID: StreamID!
 }
 
+type Labeled{
+  labelType: String! @string(maxLength: 30)
+  value: String! @string(minLength:2, maxLength: 60)
+}
+
 type AkashaProfile @loadModel(id: "${akashaProfileId}") {
   id: ID!
 }
@@ -22,10 +27,10 @@ type AkashaProfile @loadModel(id: "${akashaProfileId}") {
 type AkashaBeam @createModel(accountRelation: LIST, description: "AKASHA Beam") @createIndex(fields:[{path:"active"}, {path: "createdAt"}, {path: "tags"}, {path: "mentions"}, {path: "nsfw"}]) {
   author: DID! @documentAccount
   content: [BlockRecord!]! @list(maxLength: 10)
-  tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32)
-  mentions: [StreamID] @list(maxLength: 10)
+  tags: [Labeled] @list(maxLength: 10)
+  mentions: [DID] @list(maxLength: 10)
   version: CommitID! @documentVersion
-  embeddedBeam: EmbeddedType
+  embeddedStream: EmbeddedType
   active: Boolean!
   createdAt: DateTime!
   nsfw: Boolean

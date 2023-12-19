@@ -5,7 +5,7 @@ type ProviderValue{
   value: String! @string(minLength: 3, maxLength: 3000)
 }
 
-type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c7emv46av2u74x3qgu9i3oywn1w7sg8u6momkyg9atp1k5g0z74") {
+type AkashaBeam @loadModel(id: "kjzl6hvfrbw6cb6hnyzrde71ovrvhr1ma70j3zh6tblh6hl48di34dzsx0w6zk4") {
   id: ID!
 }
 
