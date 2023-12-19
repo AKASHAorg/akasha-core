@@ -20,6 +20,7 @@ import { useGetFollowDocumentsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/gen
 import { useQueryClient, useIsMutating } from '@tanstack/react-query';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 import { LatestProfiles, LatestTopics } from './cards';
@@ -228,35 +229,51 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       )}
 
       {!latestTopicsReq.isError && (
-        <LatestTopics
-          titleLabel={t('Latest Topics')}
-          tagSubtitleLabel={t('mentions')}
-          subscribeLabel={t('Subscribe')}
-          subscribedLabel={t('Subscribed')}
-          unsubscribeLabel={t('Unsubscribe')}
-          noTagsLabel={t('No topics found!')}
-          isLoadingTags={latestTopicsReq.isFetching}
-          isProcessingTags={tagsQueue.map(tag => tag.topic)}
-          tags={latestTopics}
-          subscribedTags={tagSubscriptions?.map(el => el.value)}
-          onClickTopic={handleTopicClick}
-          handleSubscribeTopic={handleTopicSubscribe}
-          handleUnsubscribeTopic={handleTopicUnSubscribe}
-        />
+        <ErrorBoundary
+          errorObj={{
+            type: t('script-error'),
+            title: t('Error in latest topics widget'),
+            details: t('Unable to load widget now, try again later'),
+          }}
+        >
+          <LatestTopics
+            titleLabel={t('Latest Topics')}
+            tagSubtitleLabel={t('mentions')}
+            subscribeLabel={t('Subscribe')}
+            subscribedLabel={t('Subscribed')}
+            unsubscribeLabel={t('Unsubscribe')}
+            noTagsLabel={t('No topics found!')}
+            isLoadingTags={latestTopicsReq.isFetching}
+            isProcessingTags={tagsQueue.map(tag => tag.topic)}
+            tags={latestTopics}
+            subscribedTags={tagSubscriptions?.map(el => el.value)}
+            onClickTopic={handleTopicClick}
+            handleSubscribeTopic={handleTopicSubscribe}
+            handleUnsubscribeTopic={handleTopicUnSubscribe}
+          />
+        </ErrorBoundary>
       )}
 
       {!latestProfilesReq.isError && (
-        <LatestProfiles
-          titleLabel={t('Start Following')}
-          noProfilesLabel={t('No profiles found!')}
-          isLoadingProfiles={latestProfilesReq.isFetching}
-          profiles={latestProfiles}
-          followList={followList}
-          isLoggedIn={isLoggedIn}
-          authenticatedDID={authenticatedDID}
-          uiEvents={uiEvents}
-          onClickProfile={handleProfileClick}
-        />
+        <ErrorBoundary
+          errorObj={{
+            type: t('script-error'),
+            title: t('Error in latest profiles widget'),
+            details: t('Unable to load widget now, try again later'),
+          }}
+        >
+          <LatestProfiles
+            titleLabel={t('Start Following')}
+            noProfilesLabel={t('No profiles found!')}
+            isLoadingProfiles={latestProfilesReq.isFetching}
+            profiles={latestProfiles}
+            followList={followList}
+            isLoggedIn={isLoggedIn}
+            authenticatedDID={authenticatedDID}
+            uiEvents={uiEvents}
+            onClickProfile={handleProfileClick}
+          />
+        </ErrorBoundary>
       )}
     </Stack>
   );
