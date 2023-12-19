@@ -7,27 +7,41 @@ import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-r
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
-import { ReflectEntryData, EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
+import { ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { useLocation } from 'react-router-dom';
-import { transformSource } from '@akashaorg/ui-awf-hooks';
+import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 type ReflectionSectionProps = {
   beamId: string;
   reflectionId: string;
   entryData: ReflectEntryData;
   isLoggedIn: boolean;
-  onNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
   showLoginModal: () => void;
 };
 
 const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
-  const { beamId, reflectionId, entryData, isLoggedIn, onNavigate, showLoginModal } = props;
+  const { beamId, reflectionId, entryData, isLoggedIn, showLoginModal } = props;
   const { t } = useTranslation('app-akasha-integration');
+  const { getRoutingPlugin } = useRootComponentProps();
   const location = useLocation();
+  const navigateTo = getRoutingPlugin().navigateTo;
+
+  const onNavigate = (reflectionId: string, reflect?: boolean) => {
+    navigateTo(
+      {
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: navRoutes =>
+          `${navRoutes.Reflect}/${reflectionId}${reflect ? navRoutes.Reflect : ''}`,
+      },
+      true,
+    );
+  };
 
   const wrapperRef = useCloseActions(() => {
-    onNavigate({ authorId: entryData?.authorId, id: entryData?.id }, EntityTypes.REFLECT);
+    onNavigate(entryData?.id);
   });
+
+  const isReflecting = location.pathname.endsWith(routes[REFLECT]);
 
   return (
     <Stack spacing="gap-y-2" ref={wrapperRef}>
@@ -36,14 +50,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
         contentClickable={false}
         reflectToId={entryData.id}
         onReflect={() => {
-          onNavigate(
-            {
-              authorId: entryData?.authorId,
-              id: entryData?.id,
-              reflect: !location.pathname.includes(routes[REFLECT]),
-            },
-            EntityTypes.REFLECT,
-          );
+          onNavigate(entryData?.id, !isReflecting);
         }}
       />
       <Divider />
@@ -61,7 +68,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
           <ReflectEditor
             beamId={beamId}
             reflectToId={reflectionId}
-            showEditorInitialValue={location.pathname.endsWith(routes[REFLECT])}
+            showEditorInitialValue={isReflecting}
           />
         )}
       </Stack>

@@ -39,7 +39,7 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
     subscribedLabel,
     unsubscribeLabel,
     mentionsLabel,
-    customStyle,
+    customStyle = '',
   } = props;
 
   return (

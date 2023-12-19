@@ -30,6 +30,17 @@ enum ModerationStatus{
   OTHER
 }
 
+enum StreamType{
+  BEAM,
+  REFLECT,
+  PROFILE,
+  APP,
+  EXTENSION,
+  PLUGIN,
+  WIDGET,
+  OTHER
+}
+
 type AkashaBeamStream @createModel(accountRelation: LIST, description: "Moderated Beams list") @createIndex(fields:[{path: "active"},{path: "beamID"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}]){
   beamID: StreamID! @documentReference(model: "AkashaBeam")
   beam: AkashaBeam! @relationDocument(property: "beamID")
@@ -85,6 +96,17 @@ type AkashaAppsStream @createModel(accountRelation: LIST, description: "Moderate
   createdAt: DateTime!
   status: ModerationStatus
   moderationID: StreamID
+}
+
+type AkashaIndexedStream @createModel(accountRelation: LIST, description: "Indexed Content") @createIndex(fields:[{path: "active"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "stream"}, {path: "streamType"}, {path: "indexType"}, {path: "indexValue"}]){
+  active: Boolean!
+  createdAt: DateTime!
+  status: ModerationStatus
+  stream: StreamID!
+  streamType: StreamType!
+  moderationID: StreamID
+  indexType: String! @string(maxLength: 30)
+  indexValue: String! @string(minLength:2, maxLength: 60)
 }
   `
 

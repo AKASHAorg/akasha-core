@@ -6,7 +6,6 @@ import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import EntryCardRemoved, { AuthorsRemovedMessage, OthersRemovedMessage } from '../EntryCardRemoved';
 import CardActions from './card-actions';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import {
   EllipsisHorizontalIcon,
   FlagIcon,
@@ -58,7 +57,7 @@ export type EntryCardProps = {
   disableActions?: boolean;
   noWrapperCard?: boolean;
   hideActionButtons?: boolean;
-  scrollHiddenContent?: boolean;
+  showHiddenContent?: boolean;
   contentClickable?: boolean;
   lastEntry?: boolean;
   hover?: boolean;
@@ -107,7 +106,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     disableActions,
     noWrapperCard = false,
     hideActionButtons,
-    scrollHiddenContent,
+    showHiddenContent,
     contentClickable,
     editable = true,
     lastEntry,
@@ -126,10 +125,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
 
   const [showNSFW, setShowNSFW] = useState(false);
 
-  const scrollHiddenStyle = scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden';
+  const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle = contentClickable ? 'cursor-pointer' : 'cursor-default';
-  const nsfwHeightStyle = entryData.nsfw && !showNSFW ? 'min-h-[6rem]' : '';
-  const nsfwBlurStyle = entryData.nsfw && !showNSFW ? 'blur-lg' : '';
 
   const menuItems: ListItem[] = [
     ...(!isViewer
@@ -239,49 +236,48 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         />
       )}
       {entryData.active && (
-        <Button onClick={onContentClick} plain>
+        <Card onClick={onContentClick} type="plain">
           <Stack
             align="center"
-            justify="center"
-            customStyle={`relative max-h-[50rem] ${scrollHiddenStyle} ${contentClickableStyle} ${nsfwHeightStyle}`}
+            justify="start"
+            customStyle={`overflow-hidden ${showHiddenStyle} ${contentClickableStyle}`}
             data-testid="entry-content"
             fullWidth={true}
           >
             {entryData.nsfw && !showNSFW && (
-              <Stack customStyle="absolute w-36 h-16 z-10">
+              <Stack customStyle="w-36 h-16">
                 <NSFW
                   {...nsfw}
-                  onClickToView={() => {
+                  onClickToView={event => {
+                    event.stopPropagation();
                     setShowNSFW(true);
                   }}
                 />
               </Stack>
             )}
-            <Stack
-              justifySelf="start"
-              alignSelf="start"
-              align="start"
-              customStyle={nsfwBlurStyle}
-              fullWidth={true}
-            >
-              {rest.itemType === EntityTypes.REFLECT ? (
-                <ReadOnlyEditor
-                  content={rest.slateContent}
-                  disabled={entryData.nsfw}
-                  handleMentionClick={rest.onMentionClick}
-                  handleTagClick={rest.onTagClick}
-                  handleLinkClick={url => {
-                    rest.navigateTo?.({ getNavigationUrl: () => url });
-                  }}
-                />
-              ) : (
-                rest.sortedContents?.map(item => (
-                  <Fragment key={item.blockID}>{rest.children({ blockID: item.blockID })}</Fragment>
-                ))
-              )}
-            </Stack>
+            {(!entryData.nsfw || showNSFW) && (
+              <Stack justifySelf="start" alignSelf="start" align="start" fullWidth={true}>
+                {rest.itemType === EntityTypes.REFLECT ? (
+                  <ReadOnlyEditor
+                    content={rest.slateContent}
+                    disabled={entryData.nsfw}
+                    handleMentionClick={rest.onMentionClick}
+                    handleTagClick={rest.onTagClick}
+                    handleLinkClick={url => {
+                      rest.navigateTo?.({ getNavigationUrl: () => url });
+                    }}
+                  />
+                ) : (
+                  rest.sortedContents?.map(item => (
+                    <Fragment key={item.blockID}>
+                      {rest.children({ blockID: item.blockID })}
+                    </Fragment>
+                  ))
+                )}
+              </Stack>
+            )}
           </Stack>
-        </Button>
+        </Card>
       )}
       {!hideActionButtons && (
         <CardActions

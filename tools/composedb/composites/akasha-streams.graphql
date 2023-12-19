@@ -1,5 +1,5 @@
 
-type AkashaBeam @loadModel(id: "kjzl6hvfrbw6c7emv46av2u74x3qgu9i3oywn1w7sg8u6momkyg9atp1k5g0z74") {
+type AkashaBeam @loadModel(id: "kjzl6hvfrbw6cb6hnyzrde71ovrvhr1ma70j3zh6tblh6hl48di34dzsx0w6zk4") {
   id: ID!
 }
 
@@ -11,7 +11,7 @@ type AkashaProfile @loadModel(id: "kjzl6hvfrbw6c9l8sxje9238fz8hx6u6whu9njmww96wn
   id: ID!
 }
 
-type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c7g649dzvhgj2llnx44wxkne2p5l5j3bvxjv2s5v67uzro21odq") {
+type AkashaReflect @loadModel(id: "kjzl6hvfrbw6c8rvt0azcc4qqv0xykpxp4ch0rzw1dsd7zhl7egop4laiq64cyz") {
   id: ID!
 }
 
@@ -25,6 +25,17 @@ enum ModerationStatus{
   SUSPENDED,
   NSFW,
   OK,
+  OTHER
+}
+
+enum StreamType{
+  BEAM,
+  REFLECT,
+  PROFILE,
+  APP,
+  EXTENSION,
+  PLUGIN,
+  WIDGET,
   OTHER
 }
 
@@ -83,5 +94,16 @@ type AkashaAppsStream @createModel(accountRelation: LIST, description: "Moderate
   createdAt: DateTime!
   status: ModerationStatus
   moderationID: StreamID
+}
+
+type AkashaIndexedStream @createModel(accountRelation: LIST, description: "Indexed Content") @createIndex(fields:[{path: "active"}, {path: "createdAt"}, {path: "status"}, {path: "moderationID"}, {path: "stream"}, {path: "streamType"}, {path: "indexType"}, {path: "indexValue"}]){
+  active: Boolean!
+  createdAt: DateTime!
+  status: ModerationStatus
+  stream: StreamID!
+  streamType: StreamType!
+  moderationID: StreamID
+  indexType: String! @string(maxLength: 30)
+  indexValue: String! @string(minLength:2, maxLength: 60)
 }
   
