@@ -49,6 +49,7 @@ export type VirtualListRendererProps<T> = {
   loadingIndicator?: () => React.ReactElement;
   restorationKey?: string;
   offsetTop?: number;
+  header?: React.ReactElement;
 };
 
 const initialState = {
@@ -78,6 +79,7 @@ export const VirtualListRenderer = React.forwardRef(
       hasPreviousPage,
       restorationKey,
       offsetTop,
+      header,
     } = props;
     const rootNodeRef = React.useRef<HTMLDivElement>();
 
@@ -115,7 +117,7 @@ export const VirtualListRenderer = React.forwardRef(
           );
         }
       }
-    }, [viewport]);
+    }, [viewport, header]);
 
     const { getListPadding, getListOffset, hasCorrection } = useList({
       itemList,
@@ -202,14 +204,8 @@ export const VirtualListRenderer = React.forwardRef(
       }
     }, [state, viewport]);
 
-    const getRelativeToRootNode = React.useCallback(() => {
-      if (rootNodeRef.current) {
-        return viewport.getRect().translate(-rootNodeRef.current.getBoundingClientRect().top);
-      }
-    }, [viewport]);
-
     const isAtTop = React.useCallback(() => {
-      const viewportRect = getRelativeToRootNode();
+      const viewportRect = viewport.getRelativeToRootNode(rootNodeRef.current);
       if (!viewportRect) return true;
 
       if (hasNextPage) {
@@ -217,7 +213,7 @@ export const VirtualListRenderer = React.forwardRef(
       }
 
       return viewportRect.getTop() <= rootNodeRef.current.offsetTop;
-    }, [getRelativeToRootNode, hasNextPage, state.listHeight]);
+    }, [hasNextPage, state.listHeight, viewport]);
 
     const { projection, getNextProjection, getProjectionCorrection } = useProjection<T>({
       mountedItems: state.mounted,
@@ -260,7 +256,7 @@ export const VirtualListRenderer = React.forwardRef(
 
     const update = React.useCallback(
       (_debugFrom?: string) => {
-        const viewportRect = getRelativeToRootNode();
+        const viewportRect = viewport.getRelativeToRootNode(rootNodeRef.current);
         if (!viewportRect) return;
         const commonProjectionItem = getCommonProjectionItem(
           viewportRect,
@@ -305,7 +301,7 @@ export const VirtualListRenderer = React.forwardRef(
                 }
               } else if (projectionWithCorrection.offset !== 0) {
                 viewport.scrollBy(-projectionWithCorrection.offset);
-                vpRect = getRelativeToRootNode();
+                vpRect = viewport.getRelativeToRootNode(rootNodeRef.current);
               }
               if (vpRect) {
                 // update edge sensor
@@ -356,7 +352,6 @@ export const VirtualListRenderer = React.forwardRef(
         getListPadding,
         getNextProjection,
         getProjectionCorrection,
-        getRelativeToRootNode,
         hasCorrection,
         hasMeasuredHeights,
         getItemHeightAverage,
@@ -418,7 +413,7 @@ export const VirtualListRenderer = React.forwardRef(
 
         beforeStateUpdates.current = undefined;
       }
-    }, [state, RAFUpdate, update]);
+    }, [state, RAFUpdate, update, viewport]);
 
     const prevItemList = React.useRef<VirtualDataItem<T>[]>();
 
@@ -435,7 +430,7 @@ export const VirtualListRenderer = React.forwardRef(
       // }
       prevItemList.current = itemList;
       RAFUpdate('itemList updated');
-    }, [RAFUpdate, getRelativeToRootNode, hasPreviousPage, itemList, state.mounted, viewport]);
+    }, [RAFUpdate, itemList]);
 
     React.useEffect(() => {
       return () => {

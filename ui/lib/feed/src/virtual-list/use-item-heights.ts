@@ -86,9 +86,9 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
     (itemKey: string, itemList: VirtualDataItem<unknown>[]) => {
       const idx = itemList.findIndex(it => it.key === itemKey);
       if (idx >= 0) {
-        return itemList
-          .slice(0, idx)
-          .reduce((distance, item) => getItemHeight(item.key) + distance, 0);
+        return itemList.slice(0, idx).reduce((distance, item) => {
+          return getItemHeight(item.key) + distance;
+        }, 0);
       }
       return 0;
     },

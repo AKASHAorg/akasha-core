@@ -65,6 +65,10 @@ export const useViewport = (props: UseViewportProps) => {
     stateRef.current.offsetBottom = offset;
   };
 
+  const getRelativeToRootNode = (rootNode: HTMLElement) => {
+    return stateRef.current.rect.translateRelativeTo(rootNode);
+  };
+
   return {
     state: stateRef.current,
     getRect: () => {
@@ -89,5 +93,6 @@ export const useViewport = (props: UseViewportProps) => {
     scrollToTop,
     getTopOffset: () => stateRef.current.offsetTop,
     getScrollY,
+    getRelativeToRootNode,
   };
 };

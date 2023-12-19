@@ -124,6 +124,7 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
           alreadyRendered && !hasNextPage ? maxViewportRect : minViewportRect,
         ),
       );
+
       const visibleSlice = getVisibleItemsSlice(visibleItems, allItems);
       slice.current = getSlice(alreadyRendered, visibleSlice);
       const nextRendered = allItems.slice(slice.current.start, slice.current.end);
