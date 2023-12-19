@@ -57,7 +57,7 @@ export type EntryCardProps = {
   disableActions?: boolean;
   noWrapperCard?: boolean;
   hideActionButtons?: boolean;
-  scrollHiddenContent?: boolean;
+  showHiddenContent?: boolean;
   contentClickable?: boolean;
   lastEntry?: boolean;
   hover?: boolean;
@@ -106,7 +106,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     disableActions,
     noWrapperCard = false,
     hideActionButtons,
-    scrollHiddenContent,
+    showHiddenContent,
     contentClickable,
     editable = true,
     lastEntry,
@@ -125,7 +125,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
 
   const [showNSFW, setShowNSFW] = useState(false);
 
-  const scrollHiddenStyle = scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden';
+  const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
   const contentClickableStyle = contentClickable ? 'cursor-pointer' : 'cursor-default';
 
   const menuItems: ListItem[] = [
@@ -239,8 +239,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         <Card onClick={onContentClick} type="plain">
           <Stack
             align="center"
-            justify="center"
-            customStyle={`max-h-[50rem] ${scrollHiddenStyle} ${contentClickableStyle}`}
+            justify="start"
+            customStyle={`overflow-hidden ${showHiddenStyle} ${contentClickableStyle}`}
             data-testid="entry-content"
             fullWidth={true}
           >

@@ -18,12 +18,13 @@ type BeamCardProps = Pick<
   | 'hidePublishTime'
   | 'hideActionButtons'
   | 'disableActions'
+  | 'showHiddenContent'
 > & {
   entryData: BeamEntryData;
 };
 
 const BeamCard: React.FC<BeamCardProps> = props => {
-  const { entryData, onReflect, ...rest } = props;
+  const { entryData, onReflect, showHiddenContent, ...rest } = props;
   const { t } = useTranslation('ui-lib-feed');
   const { getRoutingPlugin } = useRootComponentProps();
   const { getTranslationPlugin } = useRootComponentProps();
@@ -81,6 +82,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
         sensitiveContentLabel: t('Sensitive Content!'),
         clickToViewLabel: t('Click to View'),
       }}
+      showHiddenContent={showHiddenContent}
       itemType={EntityTypes.BEAM}
       transformSource={transformSource}
       onAvatarClick={onAvatarClick}

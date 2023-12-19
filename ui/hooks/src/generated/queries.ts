@@ -16,7 +16,7 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
   id
   reflectionsCount
   active
-  embeddedBeam {
+  embeddedStream {
     label
     embeddedID
   }
@@ -28,7 +28,10 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
     blockID
     order
   }
-  tags
+  tags {
+    labelType
+    value
+  }
   version
   createdAt
   nsfw

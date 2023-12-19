@@ -18,7 +18,7 @@ export const BeamFragmentMFragmentDoc = /*#__PURE__*/ gql`
   id
   reflectionsCount
   active
-  embeddedBeam {
+  embeddedStream {
     label
     embeddedID
   }
@@ -30,7 +30,10 @@ export const BeamFragmentMFragmentDoc = /*#__PURE__*/ gql`
     blockID
     order
   }
-  tags
+  tags {
+    labelType
+    value
+  }
   version
   createdAt
   nsfw
@@ -82,7 +85,7 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
   id
   reflectionsCount
   active
-  embeddedBeam {
+  embeddedStream {
     label
     embeddedID
   }
@@ -94,7 +97,10 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
     blockID
     order
   }
-  tags
+  tags {
+    labelType
+    value
+  }
   version
   createdAt
   nsfw
