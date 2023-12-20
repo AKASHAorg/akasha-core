@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps, useGetSettings, useSaveSettings } from '@akashaorg/ui-awf-hooks';
-import { NotificationEvents } from '@akashaorg/typings/lib/ui';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -75,7 +75,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
-          type: 'success',
+          type: NotificationTypes.Success,
           message: 'Notification settings updated successfully',
         },
       });

@@ -17,14 +17,14 @@ import {
   MenuItemAreaType,
   NotificationEvents,
   type NotificationEvent,
-  type NotificationType,
+  NotificationTypes,
 } from '@akashaorg/typings/lib/ui';
 
 const SnackBarNotification = (_: RootExtensionProps) => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [message, setMessage] = useState('');
   const [appTitle, setAppTitle] = useState(null);
-  const [messageType, setMessageType] = useState<NotificationType>('success');
+  const [messageType, setMessageType] = useState(NotificationTypes.Success);
 
   const [routeData, setRouteData] = useState(null);
   const mutationEvents = useListenForMutationEvents();
@@ -41,7 +41,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
 
   React.useEffect(() => {
     if (!message) {
-      setMessageType('success');
+      setMessageType(NotificationTypes.Success);
       setMessageUuid('');
       setAppTitle(null);
     }
@@ -82,11 +82,11 @@ const SnackBarNotification = (_: RootExtensionProps) => {
       }
       if (pending && messageObj?.pending) {
         setMessage(messageObj?.pending);
-        setMessageType('info');
+        setMessageType(NotificationTypes.Info);
       }
       if (success && messageObj?.success) {
         setMessage(messageObj?.success);
-        setMessageType('success');
+        setMessageType(NotificationTypes.Success);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,7 +110,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
 
   const dismissHandler = () => {
     setMessage('');
-    setMessageType('success');
+    setMessageType(NotificationTypes.Success);
   };
 
   const findAppIcon = (appName: string) => {

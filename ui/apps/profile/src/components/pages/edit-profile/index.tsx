@@ -75,8 +75,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
 
-  console.log(isViewer, profileData);
-
   if (!isLoggedIn || !isViewer) {
     navigateTo({
       appName: '@akashaorg/app-profile',

@@ -10,11 +10,11 @@ import Text from '../Text';
 
 import { getColorLight, getColorDark } from './getColor';
 import { Color } from '../types/common.types';
-import { NotificationType } from '@akashaorg/typings/lib/ui';
+import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 export type SnackbarProps = {
   title: React.ReactNode;
-  type?: NotificationType;
+  type?: NotificationTypes;
   icon?: React.ReactElement;
   description?: string;
   actionButtonLabel?: string;
@@ -25,7 +25,7 @@ export type SnackbarProps = {
 
 const Snackbar: React.FC<SnackbarProps> = ({
   title,
-  type = 'info',
+  type = NotificationTypes.Info,
   icon = <InformationCircleIcon />,
   description,
   //action button

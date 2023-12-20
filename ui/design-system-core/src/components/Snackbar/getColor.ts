@@ -1,28 +1,27 @@
-import { Colors } from '@akashaorg/typings/lib/ui';
-import { SnackbarProps } from './index';
+import { Colors, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
-export function getColorLight(type: SnackbarProps['type']): Colors {
+export function getColorLight(type: NotificationTypes): Colors {
   switch (type) {
-    case 'alert':
+    case NotificationTypes.Alert:
       return 'errorLight';
-    case 'caution':
+    case NotificationTypes.Caution:
       return 'warningLight';
-    case 'success':
+    case NotificationTypes.Success:
       return 'success';
-    case 'info':
+    case NotificationTypes.Info:
       return 'secondaryLight';
   }
 }
 
-export function getColorDark(type: SnackbarProps['type']): Colors {
+export function getColorDark(type: NotificationTypes): Colors {
   switch (type) {
-    case 'alert':
+    case NotificationTypes.Alert:
       return 'errorDark';
-    case 'caution':
+    case NotificationTypes.Caution:
       return 'warningDark';
-    case 'success':
+    case NotificationTypes.Success:
       return 'success';
-    case 'info':
+    case NotificationTypes.Info:
       return 'secondaryDark';
   }
 }

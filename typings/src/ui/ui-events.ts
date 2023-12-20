@@ -36,12 +36,18 @@ export const enum NotificationEvents {
   UnsnoozeNotifications = 'unsnooze-notifications',
 }
 
-export type NotificationType = 'info' | 'alert' | 'caution' | 'success' | 'error';
+export const enum NotificationTypes {
+  Info = 'info',
+  Alert = 'alert',
+  Caution = 'caution',
+  Success = 'success',
+  Error = 'error',
+}
 
 export type NotificationEvent = {
   event: NotificationEvents;
   data?: {
-    type: NotificationType;
+    type: NotificationTypes;
     message: string;
   };
 };

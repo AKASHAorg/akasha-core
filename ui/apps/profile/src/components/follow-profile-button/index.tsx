@@ -8,7 +8,11 @@ import {
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Following } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { ModalNavigationOptions, NotificationEvents } from '@akashaorg/typings/lib/ui';
+import {
+  ModalNavigationOptions,
+  NotificationEvents,
+  NotificationTypes,
+} from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateFollowMutation,
@@ -38,7 +42,7 @@ const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
     uiEvents.next({
       event: NotificationEvents.ShowNotification,
       data: {
-        type: 'success',
+        type: NotificationTypes.Success,
         message: t('You are now following {{name}}', {
           name: profileName,
         }),
