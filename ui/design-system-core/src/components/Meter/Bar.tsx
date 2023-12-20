@@ -36,7 +36,7 @@ const Bar: React.FC<PropsWithChildren<MeterProps>> = ({
     <Stack
       justify="center"
       align="center"
-      customStyle={`inline-flex overflow-hidden ${customStyle}`}
+      customStyle={`relative inline-flex overflow-hidden ${customStyle}`}
     >
       <svg
         viewBox={

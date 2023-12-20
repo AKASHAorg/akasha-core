@@ -182,6 +182,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
       {state.parcels.map((matchingBlock, index) => {
         return (
           <Stack
+            fullWidth
             id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
           >
