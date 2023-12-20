@@ -31,7 +31,7 @@ export type Card = CommonCardProps & ({ type: 'plain' } | (RegularCardType & { t
 
 const Card: React.FC<PropsWithChildren<Card>> = forwardRef((props, ref) => {
   if (props.type === 'plain') {
-    const { testId, customStyle, ...rest } = props;
+    const { testId, customStyle = '', ...rest } = props;
     return (
       <div
         {...rest}

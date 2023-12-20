@@ -19,7 +19,7 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
   const { reflectionId, onNavigate } = props;
   const { t } = useTranslation('ui-lib-feed');
   const reflectOfReflectionReq = useGetReflectReflectionsQuery(
-    { id: reflectionId, first: MAXIMUM_REFLECTION_PREVIEWS },
+    { id: reflectionId, first: MAXIMUM_REFLECTION_PREVIEWS + 1 },
     { select: response => response?.akashaReflectIndex },
   );
 
@@ -38,7 +38,7 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
     reflections?.length > 0 && (
       <Stack spacing="gap-y-1" customStyle="ml-4">
         <Stack customStyle={leftBorderStyle}>
-          {reflections.map(reflection => (
+          {reflections.slice(0, MAXIMUM_REFLECTION_PREVIEWS).map(reflection => (
             <EditableReflection
               key={reflection?.id}
               entryData={mapReflectEntryData(reflection)}
@@ -64,12 +64,14 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
             />
           ))}
         </Stack>
-        <Button
-          variant="text"
-          label={t('View more')}
-          onClick={() => onNavigate({ id: reflectionId, authorId: null }, EntityTypes.REFLECT)}
-          customStyle="mr-auto"
-        />
+        {reflections.length > MAXIMUM_REFLECTION_PREVIEWS && (
+          <Button
+            variant="text"
+            label={t('View more')}
+            onClick={() => onNavigate({ id: reflectionId, authorId: null }, EntityTypes.REFLECT)}
+            customStyle="mr-auto"
+          />
+        )}
       </Stack>
     )
   );
