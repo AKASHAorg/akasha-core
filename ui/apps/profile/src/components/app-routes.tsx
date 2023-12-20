@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import InterestsPage from './pages/interests';
@@ -22,6 +22,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const [showUpdatedFeedback, setShowUpdatedFeedback] = useShowFeedback(false);
   const [showLinkCopiedFeedback, setLinkCopiedFeedback] = useShowFeedback(false);
+  const [showNSFW, setShowNSFW] = useState(false);
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
@@ -47,8 +48,12 @@ const AppRoutes: React.FC<unknown> = () => {
             <Route
               path={':profileId'}
               element={
-                <ProfileWithHeader {...commonHeaderViewProps}>
-                  <ProfileInfoPage showLoginModal={showLoginModal} />
+                <ProfileWithHeader {...commonHeaderViewProps} showNSFW={showNSFW}>
+                  <ProfileInfoPage
+                    showNSFW={showNSFW}
+                    setShowNSFW={setShowNSFW}
+                    showLoginModal={showLoginModal}
+                  />
                 </ProfileWithHeader>
               }
             />
