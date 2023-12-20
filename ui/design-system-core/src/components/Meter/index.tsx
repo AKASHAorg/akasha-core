@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
-import Bar from './bar';
-import Circle from './circle';
+import Bar from './Bar';
+import Circle from './Circle';
 
 import { Color } from '../types/common.types';
 
