@@ -10,7 +10,7 @@ const genReflectionData = () => {
     active: true,
     beam: genBeamData(),
     beamID: faker.datatype.uuid(),
-    createdAt: new Date(),
+    createdAt: '12/12/2023',
     isReply: false,
     author: genAuthor(),
     content: [
