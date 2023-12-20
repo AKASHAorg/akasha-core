@@ -8,12 +8,13 @@ import {
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { Following } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, NotificationEvents } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import {
   useCreateFollowMutation,
   useUpdateFollowMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type FollowProfileButtonProps = {
   profileID: string;
@@ -27,24 +28,43 @@ export type FollowProfileButtonProps = {
 const FollowProfileButton: React.FC<FollowProfileButtonProps> = props => {
   const { profileID, isLoggedIn, isFollowing, followId, iconOnly, showLoginModal } = props;
   const { t } = useTranslation('app-profile');
+  const { uiEvents } = useRootComponentProps();
   const [following, setFollowing] = useState(isFollowing);
   const [followDocumentId, setFollowDocumentId] = useState(followId);
 
   const sdk = getSDK();
 
+  const sendSuccessNotification = (profileName: string) => {
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: 'success',
+        message: t('You are now following {{name}}', {
+          name: profileName,
+        }),
+      },
+    });
+  };
+
+  const onCompleted = (followId: string, isFollowing: boolean, profileName: string) => {
+    setFollowing(isFollowing);
+    setFollowDocumentId(followId);
+    if (iconOnly && isFollowing) sendSuccessNotification(profileName);
+  };
+
   const [createFollowMutation, { loading: createFollowLoading }] = useCreateFollowMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: async ({ createAkashaFollow }) => {
-      setFollowing(createAkashaFollow.document.isFollowing);
-      setFollowDocumentId(createAkashaFollow.document.id);
+      const document = createAkashaFollow.document;
+      onCompleted(document.id, document.isFollowing, document.profile?.name);
     },
   });
 
   const [updateFollowMutation, { loading: updateFollowLoading }] = useUpdateFollowMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: async ({ updateAkashaFollow }) => {
-      setFollowing(updateAkashaFollow.document.isFollowing);
-      setFollowDocumentId(updateAkashaFollow.document.id);
+      const document = updateAkashaFollow.document;
+      onCompleted(document.id, document.isFollowing, document.profile?.name);
     },
   });
 
