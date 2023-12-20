@@ -2,7 +2,7 @@ import React from 'react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-orignal-beam';
+import BackToOriginalBeam from '@akashaorg/ui-lib-feed/lib/components/back-to-original-beam';
 import EntrySectionLoading from './entry-section-loading';
 import ReflectionSection from './reflection-section';
 import ReflectFeed from '@akashaorg/ui-lib-feed/lib/components/reflect-feed';

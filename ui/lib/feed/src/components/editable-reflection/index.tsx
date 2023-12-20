@@ -12,6 +12,7 @@ import {
   transformSource,
   serializeSlateToBase64,
   useAnalytics,
+  useShowFeedback,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useGetMyProfileQuery,
@@ -42,7 +43,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
   const [editorState, setEditorState] = useState(null);
-  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
+  const [showErrorSnackbar, setShowErrorSnackbar] = useShowFeedback(false);
 
   const beamId = entryData.beamID;
   const isReflectOfReflection = beamId !== reflectToId;
@@ -124,12 +125,6 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
 
   // @TODO: fix author name
   const entryAuthorName = undefined;
-
-  useEffect(() => {
-    if (showErrorSnackbar) {
-      setTimeout(() => setShowErrorSnackbar(false), 5000);
-    }
-  }, [showErrorSnackbar]);
 
   if (profileDataReq.status === 'loading') return <EntryCardLoading />;
 

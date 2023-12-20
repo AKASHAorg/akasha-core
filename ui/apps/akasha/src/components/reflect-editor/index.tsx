@@ -3,7 +3,12 @@ import EntryCardLoading from '@akashaorg/design-system-components/lib/components
 import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { transformSource, serializeSlateToBase64, useAnalytics } from '@akashaorg/ui-awf-hooks';
+import {
+  transformSource,
+  serializeSlateToBase64,
+  useAnalytics,
+  useShowFeedback,
+} from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
   useGetMyProfileQuery,
@@ -33,7 +38,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   //@TODO
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
-  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
+  const [showErrorSnackbar, setShowErrorSnackbar] = useShowFeedback(false);
   const [showEditor, setShowEditor] = useState(showEditorInitialValue);
 
   const isReflectOfReflection = reflectToId !== beamId;
@@ -105,12 +110,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   useEffect(() => {
     setShowEditor(showEditorInitialValue);
   }, [showEditorInitialValue]);
-
-  useEffect(() => {
-    if (showErrorSnackbar) {
-      setTimeout(() => setShowErrorSnackbar(false), 5000);
-    }
-  }, [showErrorSnackbar]);
 
   if (profileDataReq.status === 'loading') return <EntryCardLoading />;
 

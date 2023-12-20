@@ -1,8 +1,11 @@
 import React, { useImperativeHandle } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getMediaUrl, saveMediaFile } from '@akashaorg/ui-awf-hooks';
-import type { BlockInstanceMethods, ContentBlockRootProps } from '@akashaorg/typings/lib/ui';
-
+import { getMediaUrl, saveMediaFile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  type BlockInstanceMethods,
+  type ContentBlockRootProps,
+  NotificationEvents,
+} from '@akashaorg/typings/lib/ui';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   AkashaContentBlockBlockDef,
@@ -29,11 +32,19 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 // @TODO: replace this with actual data
 const TEST_APP_VERSION_ID = 'kjzl6kcym7w8y8af3kd0lwkkk2m1nxtchlvcikbak748md3m3gplz1ori3s1j5f';
 
+const isImgUrl = url => {
+  return fetch(url, { method: 'HEAD' }).then(res => {
+    return res.headers.get('Content-Type').startsWith('image');
+  });
+};
+
 export const ImageEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
   const { t } = useTranslation('app-akasha-integration');
   const sdk = React.useRef(getSDK());
+  const { uiEvents } = useRootComponentProps();
+  const _uiEvents = React.useRef(uiEvents);
   const [createContentBlock, contentBlockQuery] = useCreateContentBlockMutation();
   const retryCount = React.useRef<number>();
   const [imageLink, setImageLink] = React.useState('');
@@ -132,6 +143,16 @@ export const ImageEditorBlock = (
 
   const handleChange = e => {
     setImageLink(e.currentTarget.value);
+    if (!isImgUrl(e.currentTarget.value)) {
+      const notifMsg = t(`URL doesn't contain an image.`);
+      _uiEvents.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          name: 'error',
+          message: notifMsg,
+        },
+      });
+    }
   };
 
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
@@ -144,13 +165,15 @@ export const ImageEditorBlock = (
     }
   };
 
-  const onUpload = async (image: File, isUrl?: boolean) => {
+  const onUpload = async (image: File | string, isUrl?: boolean) => {
     if (!image || contentBlockImages.length > 4) return null;
     setUiState('gallery');
     setUploading(true);
 
+    const imageName = typeof image === 'string' ? image : image.name || 'beam-block-image';
+
     const mediaFile = await saveMediaFile({
-      name: image.name || 'beam-block-image',
+      name: imageName,
       isUrl: isUrl || false,
       content: image,
     });
@@ -165,15 +188,15 @@ export const ImageEditorBlock = (
       size: { height: mediaFile.size.height, width: mediaFile.size.width },
       displaySrc: mediaUrl.originLink || mediaUrl.fallbackLink,
       src: mediaUri,
-      name: image.name,
-      originalSrc: URL.createObjectURL(image),
+      name: imageName,
+      originalSrc: typeof image === 'string' ? image : URL.createObjectURL(image),
     };
 
     return imageObj;
   };
 
-  const uploadNewImage = async (image: File) => {
-    const uploadedImage = await onUpload(image);
+  const uploadNewImage = async (image: File | string, isUrl?: boolean) => {
+    const uploadedImage = await onUpload(image, isUrl);
     setContentBlockImages(prev => [
       ...prev,
       {
@@ -225,6 +248,14 @@ export const ImageEditorBlock = (
       setUiState('menu');
     }
     setContentBlockImages(newImages);
+    const notifMsg = t('Uploaded image removed.');
+    _uiEvents.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        name: 'success',
+        message: notifMsg,
+      },
+    });
   };
 
   const handleClickAddImage = () => {
@@ -279,8 +310,14 @@ export const ImageEditorBlock = (
                   type={'text'}
                   onChange={handleChange}
                   disabled={imageUploadDisabled}
+                  customStyle="w-5/6"
                 />
-                <Button label={t('Add')} variant="secondary" disabled={!imageLink} />
+                <Button
+                  label={t('Add')}
+                  variant="secondary"
+                  disabled={!imageLink}
+                  onClick={() => uploadNewImage(imageLink, true)}
+                />
               </Stack>
             </Stack>
             <Divider />
@@ -292,7 +329,11 @@ export const ImageEditorBlock = (
               {contentBlockImages.map((imageObj, index) => (
                 <Stack key={index} direction="row" justify="between">
                   <Stack direction="row" spacing="gap-1">
-                    <Image src={imageObj.src} customStyle="object-contain w-8 h-8 rounded-lg" />
+                    <Image
+                      alt={imageObj.name}
+                      src={imageObj.displaySrc}
+                      customStyle="object-contain w-8 h-8 rounded-lg"
+                    />
                     <Text>{imageObj.name}</Text>
                   </Stack>
                   <button onClick={() => handleDeleteImage(imageObj)}>

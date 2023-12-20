@@ -35,7 +35,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
   if (message) {
     timeoutHandle = setTimeout(() => {
       setMessage('');
-    }, 4000);
+    }, 8000);
   }
 
   React.useEffect(() => {
@@ -163,7 +163,7 @@ const reactLifecycles = singleSpaReact({
     return (
       <ErrorLoader
         type="script-error"
-        title="Error in share profile modal"
+        title="Error in snackbar notification extension"
         details={error.message}
       />
     );

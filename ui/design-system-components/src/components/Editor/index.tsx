@@ -37,7 +37,7 @@ import EmbedBox from '../EmbedBox';
 import LinkPreview from '../LinkPreview';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
-const MAX_LENGTH = 280;
+const MAX_LENGTH = 500;
 
 /**
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
