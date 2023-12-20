@@ -163,7 +163,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({ isLoggedIn }) => 
     _uiEvents.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
-        name: 'success',
+        type: 'success',
         message: 'Marked all as read successfully.',
       },
     });

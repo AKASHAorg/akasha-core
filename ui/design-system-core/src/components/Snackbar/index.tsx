@@ -10,12 +10,11 @@ import Text from '../Text';
 
 import { getColorLight, getColorDark } from './getColor';
 import { Color } from '../types/common.types';
-
-export type SnackBarType = 'alert' | 'caution' | 'success' | 'info';
+import { NotificationType } from '@akashaorg/typings/lib/ui';
 
 export type SnackbarProps = {
   title: React.ReactNode;
-  type?: SnackBarType;
+  type?: NotificationType;
   icon?: React.ReactElement;
   description?: string;
   actionButtonLabel?: string;

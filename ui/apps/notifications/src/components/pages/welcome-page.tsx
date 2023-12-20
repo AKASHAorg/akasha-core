@@ -75,7 +75,7 @@ const WelcomePage: React.FC<WelcomePageProps> = props => {
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
-          name: 'success',
+          type: 'success',
           message: 'Notification settings updated successfully',
         },
       });

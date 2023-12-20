@@ -201,7 +201,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         _uiEvents.current.next({
           event: NotificationEvents.ShowNotification,
           data: {
-            name: 'success',
+            type: 'success',
             message: 'You have snoozed your notifications successfully',
           },
         });
@@ -216,7 +216,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         _uiEvents.current.next({
           event: NotificationEvents.ShowNotification,
           data: {
-            name: 'success',
+            type: 'success',
             message: 'You have unsnoozed your notifications successfully',
           },
         });
@@ -225,7 +225,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
-          name: 'success',
+          type: 'success',
           message: 'Notification settings updated successfully',
         },
       });
@@ -240,7 +240,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
-          name: 'error',
+          type: 'error',
           message: 'Something went wrong. Retry',
         },
       });

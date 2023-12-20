@@ -1,7 +1,7 @@
 import { Colors } from '@akashaorg/typings/lib/ui';
-import { SnackBarType } from './index';
+import { SnackbarProps } from './index';
 
-export function getColorLight(type: SnackBarType): Colors {
+export function getColorLight(type: SnackbarProps['type']): Colors {
   switch (type) {
     case 'alert':
       return 'errorLight';
@@ -14,7 +14,7 @@ export function getColorLight(type: SnackBarType): Colors {
   }
 }
 
-export function getColorDark(type: SnackBarType): Colors {
+export function getColorDark(type: SnackbarProps['type']): Colors {
   switch (type) {
     case 'alert':
       return 'errorDark';

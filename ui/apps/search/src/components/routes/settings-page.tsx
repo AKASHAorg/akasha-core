@@ -73,7 +73,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
         _uiEvents.current.next({
           event: NotificationEvents.ShowNotification,
           data: {
-            name: 'success',
+            type: 'success',
             message: 'Search settings updated successfully',
           },
         });
@@ -90,7 +90,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
-          name: 'error',
+          type: 'error',
           message: 'Something went wrong. Retry',
         },
       });

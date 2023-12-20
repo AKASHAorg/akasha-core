@@ -10,20 +10,21 @@ import {
   filterEvent,
 } from '@akashaorg/ui-awf-hooks';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
+import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   RootExtensionProps,
   MenuItemAreaType,
   NotificationEvents,
-  NotificationEvent,
+  type NotificationEvent,
+  type NotificationType,
 } from '@akashaorg/typings/lib/ui';
 
 const SnackBarNotification = (_: RootExtensionProps) => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [message, setMessage] = useState('');
   const [appTitle, setAppTitle] = useState(null);
-  const [messageType, setMessageType] = useState('success');
+  const [messageType, setMessageType] = useState<NotificationType>('success');
 
   const [routeData, setRouteData] = useState(null);
   const mutationEvents = useListenForMutationEvents();
@@ -144,7 +145,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
             )
           }
           description={appTitle ? message : null}
-          type={messageType as SnackBarType}
+          type={messageType}
           handleDismiss={dismissHandler}
         />
       )}
