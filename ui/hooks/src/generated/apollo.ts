@@ -101,6 +101,9 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
     labelType
     value
   }
+  mentions {
+    id
+  }
   version
   createdAt
   nsfw
@@ -821,6 +824,7 @@ export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ gql`
           hasPreviousPage
         }
       }
+      akashaBeamListCount(filters: $filters)
       isViewer
     }
   }
@@ -935,6 +939,7 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
           hasNextPage
         }
       }
+      akashaContentBlockStreamListCount(filters: $filters)
       isViewer
     }
   }
@@ -1062,6 +1067,125 @@ export type GetBlockStorageByIdQueryHookResult = ReturnType<typeof useGetBlockSt
 export type GetBlockStorageByIdLazyQueryHookResult = ReturnType<typeof useGetBlockStorageByIdLazyQuery>;
 export type GetBlockStorageByIdSuspenseQueryHookResult = ReturnType<typeof useGetBlockStorageByIdSuspenseQuery>;
 export type GetBlockStorageByIdQueryResult = Apollo.QueryResult<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>;
+export const GetIndexedStreamDocument = /*#__PURE__*/ gql`
+    query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaIndexedStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+      ) {
+        edges {
+          node {
+            createdAt
+            active
+            status
+            indexValue
+            indexType
+            stream
+            streamType
+            moderationID
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+      }
+      akashaIndexedStreamListCount(filters: $filters)
+      isViewer
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetIndexedStreamQuery__
+ *
+ * To run a query within a React component, call `useGetIndexedStreamQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetIndexedStreamQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetIndexedStreamQuery({
+ *   variables: {
+ *      indexer: // value for 'indexer'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetIndexedStreamQuery(baseOptions: Apollo.QueryHookOptions<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>(GetIndexedStreamDocument, options);
+      }
+export function useGetIndexedStreamLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>(GetIndexedStreamDocument, options);
+        }
+export function useGetIndexedStreamSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>(GetIndexedStreamDocument, options);
+        }
+export type GetIndexedStreamQueryHookResult = ReturnType<typeof useGetIndexedStreamQuery>;
+export type GetIndexedStreamLazyQueryHookResult = ReturnType<typeof useGetIndexedStreamLazyQuery>;
+export type GetIndexedStreamSuspenseQueryHookResult = ReturnType<typeof useGetIndexedStreamSuspenseQuery>;
+export type GetIndexedStreamQueryResult = Apollo.QueryResult<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>;
+export const GetIndexedStreamCountDocument = /*#__PURE__*/ gql`
+    query GetIndexedStreamCount($indexer: ID!, $filters: AkashaIndexedStreamFiltersInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaIndexedStreamListCount(filters: $filters)
+      isViewer
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetIndexedStreamCountQuery__
+ *
+ * To run a query within a React component, call `useGetIndexedStreamCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetIndexedStreamCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetIndexedStreamCountQuery({
+ *   variables: {
+ *      indexer: // value for 'indexer'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetIndexedStreamCountQuery(baseOptions: Apollo.QueryHookOptions<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>(GetIndexedStreamCountDocument, options);
+      }
+export function useGetIndexedStreamCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>(GetIndexedStreamCountDocument, options);
+        }
+export function useGetIndexedStreamCountSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>(GetIndexedStreamCountDocument, options);
+        }
+export type GetIndexedStreamCountQueryHookResult = ReturnType<typeof useGetIndexedStreamCountQuery>;
+export type GetIndexedStreamCountLazyQueryHookResult = ReturnType<typeof useGetIndexedStreamCountLazyQuery>;
+export type GetIndexedStreamCountSuspenseQueryHookResult = ReturnType<typeof useGetIndexedStreamCountSuspenseQuery>;
+export type GetIndexedStreamCountQueryResult = Apollo.QueryResult<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>;
 export const IndexReflectionDocument = /*#__PURE__*/ gql`
     mutation IndexReflection($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
   indexReflection(jws: $jws, capability: $capability) {
@@ -1195,6 +1319,7 @@ export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
           hasPreviousPage
         }
       }
+      reflectionsCount(filters: $filters)
     }
   }
 }

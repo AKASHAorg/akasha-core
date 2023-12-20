@@ -13,12 +13,11 @@ import {
   hasOwn,
   mapReflectEntryData,
   useAnalytics,
-  useGetLoginProfile,
+  useLoggedIn,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
-import { PendingReflect } from './pending-reflect';
 import { useGetReflectionByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { ReflectionPreview } from '@akashaorg/ui-lib-feed';
 
@@ -28,12 +27,10 @@ const ReflectionPage: React.FC<unknown> = () => {
   }>();
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
+  const { isLoggedIn } = useLoggedIn();
+  const [analyticsActions] = useAnalytics();
   const navigateTo = getRoutingPlugin().navigateTo;
   const reflectionReq = useGetReflectionByIdSuspenseQuery({ variables: { id: reflectionId } });
-  const profileDataReq = useGetLoginProfile();
-
-  const [analyticsActions] = useAnalytics();
-
   const entryData = React.useMemo(() => {
     if (
       reflectionReq.data &&
@@ -80,11 +77,10 @@ const ReflectionPage: React.FC<unknown> = () => {
           beamId={entryData.beam?.id}
           reflectionId={entryData.id}
           entryData={mapReflectEntryData(entryData)}
-          isLoggedIn={!!profileDataReq?.akashaProfile?.id}
+          isLoggedIn={isLoggedIn}
           showLoginModal={showLoginModal}
         />
       </React.Suspense>
-      <PendingReflect beamId={entryData.beam?.id} authorId={profileDataReq?.akashaProfile?.id} />
       <Stack spacing="gap-y-2">
         <ReflectFeed
           reflectionsOf={{ entryId: entryData.id, itemType: EntityTypes.REFLECT }}
@@ -111,7 +107,7 @@ const ReflectionPage: React.FC<unknown> = () => {
                   navigateTo({
                     appName: '@akashaorg/app-akasha-integration',
                     getNavigationUrl: navRoutes =>
-                      `${navRoutes.Reflect}/${itemData.node.id}/${navRoutes.Reflect}`,
+                      `${navRoutes.Reflect}/${itemData.node.id}${navRoutes.Reflect}`,
                   })
                 }
               />

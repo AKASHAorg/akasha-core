@@ -1,65 +1,62 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import React, { MutableRefObject, useEffect, useMemo, useState } from 'react';
 import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import getSDK from '@akashaorg/awf-sdk';
 import {
   transformSource,
   serializeSlateToBase64,
   useAnalytics,
   useShowFeedback,
+  decodeb64SlateContent,
+  useGetLoginProfile,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
-  useGetMyProfileQuery,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
-import {
   GetReflectionsFromBeamDocument,
   GetReflectReflectionsDocument,
-  GetReflectionsByAuthorDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
-import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
+import { AnalyticsCategories, IPublishData, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { useApolloClient } from '@apollo/client';
 import { createPortal } from 'react-dom';
 import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { PendingReflect } from './pending-reflect';
 
 export type ReflectEditorProps = {
   beamId: string;
   reflectToId: string;
   showEditorInitialValue: boolean;
+  pendingReflectRef: MutableRefObject<HTMLDivElement>;
 };
 
 const ReflectEditor: React.FC<ReflectEditorProps> = props => {
-  const { beamId, reflectToId, showEditorInitialValue } = props;
+  const { beamId, reflectToId, showEditorInitialValue, pendingReflectRef } = props;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const [editorState, setEditorState] = useState(null);
+  const [newContent, setNewContent] = useState<ReflectEntryData>(null);
   //@TODO
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
   const [showErrorSnackbar, setShowErrorSnackbar] = useShowFeedback(false);
   const [showEditor, setShowEditor] = useState(showEditorInitialValue);
 
+  const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
-
   const apolloClient = useApolloClient();
+  //@TODO
   const mentionSearch = null;
   const tagSearch = null;
 
-  const publishReflection = useCreateReflectMutation({
-    onSuccess: async data => {
+  const [publishReflection, { loading: publishing }] = useCreateReflectMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+    onCompleted: async () => {
       if (!isReflectOfReflection) {
         await apolloClient.refetchQueries({ include: [GetReflectionsFromBeamDocument] });
       }
 
       if (isReflectOfReflection) {
-        if (data.createAkashaReflect.document.id === reflectToId) {
-          await apolloClient.refetchQueries({ include: [GetReflectionsByAuthorDidDocument] });
-        }
-        if (data.createAkashaReflect.document.id !== reflectToId) {
-          await apolloClient.refetchQueries({ include: [GetReflectReflectionsDocument] });
-        }
+        await apolloClient.refetchQueries({ include: [GetReflectReflectionsDocument] });
       }
 
       analyticsActions.trackEvent({
@@ -69,36 +66,41 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     },
     onError: () => {
       setShowEditor(true);
+      setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
       setShowErrorSnackbar(true);
     },
   });
+  const loggedInProfileReq = useGetLoginProfile();
+  const disablePublishing = useMemo(
+    () => !loggedInProfileReq?.akashaProfile?.did?.id,
+    [loggedInProfileReq],
+  );
 
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-  });
-
-  const loggedProfileData = profileDataReq.data;
-  const disablePublishing = useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
+  const loggedInProfileData = loggedInProfileReq?.akashaProfile;
 
   const handlePublish = (data: IPublishData) => {
     const reflection = isReflectOfReflection ? { reflection: reflectToId } : {};
-    publishReflection.mutate({
-      i: {
-        content: {
-          active: true,
-          beamID: beamId,
-          content: [
-            {
-              label: data.metadata.app,
-              propertyType: 'slate-block',
-              value: serializeSlateToBase64(data.slateContent),
-            },
-          ],
-          createdAt: new Date().toISOString(),
-          isReply: true,
-          ...reflection,
+    const content = {
+      active: true,
+      beamID: beamId,
+      content: [
+        {
+          label: data.metadata.app,
+          propertyType: 'slate-block',
+          value: serializeSlateToBase64(data.slateContent),
+        },
+      ],
+      createdAt: new Date().toISOString(),
+      isReply: true,
+      ...reflection,
+    };
+
+    setNewContent({ ...content, id: null, authorId: null });
+
+    publishReflection({
+      variables: {
+        i: {
+          content,
         },
       },
     });
@@ -111,18 +113,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     setShowEditor(showEditorInitialValue);
   }, [showEditorInitialValue]);
 
-  if (profileDataReq.status === 'loading') return <EntryCardLoading />;
-
-  if (profileDataReq.status === 'error')
-    return (
-      <ErrorLoader
-        type="script-error"
-        title={t('There was an error loading the editor')}
-        details={t('We cannot show this entry right now')}
-        devDetails={profileDataReq.error as string}
-      />
-    );
-
   return (
     <>
       <Editor
@@ -133,14 +123,14 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         disableActionLabel={t('Authenticating')}
         editorState={editorState}
         showEditorInitialValue={showEditor}
-        avatar={profileDataReq?.data?.avatar}
-        profileId={loggedProfileData?.did?.id}
+        avatar={loggedInProfileData?.avatar}
+        profileId={loggedInProfileData?.did?.id}
         disablePublish={disablePublishing}
         tags={tagSearch?.data}
         mentions={mentionSearch?.data}
         background={{ light: 'grey9', dark: 'grey3' }}
         onPublish={data => {
-          if (!profileDataReq.data) {
+          if (!loggedInProfileData) {
             return;
           }
           handlePublish(data);
@@ -153,6 +143,15 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         getTags={setTagQuery}
         transformSource={transformSource}
       />
+      {publishing &&
+        newContent &&
+        pendingReflectRef.current &&
+        createPortal(
+          <PendingReflect
+            entryData={{ ...newContent, id: null, authorId: loggedInProfileData?.did?.id }}
+          />,
+          pendingReflectRef.current,
+        )}
       {showErrorSnackbar &&
         createPortal(
           <Snackbar

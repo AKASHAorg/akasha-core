@@ -12,12 +12,11 @@ import {
   mapBeamEntryData,
   mapReflectEntryData,
   useAnalytics,
-  useGetLoginProfile,
+  useLoggedIn,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
-import { PendingReflect } from './pending-reflect';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useGetBeamByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
@@ -27,13 +26,12 @@ const BeamPage: React.FC<unknown> = () => {
   }>();
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
+  const { isLoggedIn } = useLoggedIn();
+  const [analyticsActions] = useAnalytics();
   const navigateTo = getRoutingPlugin().navigateTo;
   const beamReq = useGetBeamByIdSuspenseQuery({
     variables: { id: beamId },
   });
-  const profileDataReq = useGetLoginProfile();
-  const [analyticsActions] = useAnalytics();
-
   const entryData = React.useMemo(() => {
     if (beamReq.data && hasOwn(beamReq.data, 'node') && hasOwn(beamReq.data.node, 'id')) {
       return beamReq.data.node;
@@ -61,11 +59,10 @@ const BeamPage: React.FC<unknown> = () => {
         <BeamSection
           beamId={beamId}
           entryData={mapBeamEntryData(entryData)}
-          isLoggedIn={!!profileDataReq?.akashaProfile?.id}
+          isLoggedIn={isLoggedIn}
           showLoginModal={showLoginModal}
         />
       </React.Suspense>
-      <PendingReflect beamId={beamId} authorId={profileDataReq?.akashaProfile?.did.id} />
       <Stack spacing="gap-y-2">
         <ReflectFeed
           queryKey={`reflect-feed-${beamId}`}
@@ -76,7 +73,7 @@ const BeamPage: React.FC<unknown> = () => {
               <Divider />
               <EditableReflection
                 entryData={mapReflectEntryData(itemData.node)}
-                reflectToId={mapReflectEntryData(itemData.node).id}
+                reflectToId={beamId}
                 contentClickable={true}
                 onContentClick={() =>
                   navigateTo({
@@ -88,7 +85,7 @@ const BeamPage: React.FC<unknown> = () => {
                   navigateTo({
                     appName: '@akashaorg/app-akasha-integration',
                     getNavigationUrl: navRoutes =>
-                      `${navRoutes.Reflect}/${itemData.node.id}/${navRoutes.Reflect}`,
+                      `${navRoutes.Reflect}/${itemData.node.id}${navRoutes.Reflect}`,
                   })
                 }
               />
