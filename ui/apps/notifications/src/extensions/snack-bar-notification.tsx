@@ -126,7 +126,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
   );
 
   return (
-    <Stack customStyle={'-mt-12 md:mt-4 z-50 w-full'}>
+    <Stack customStyle="z-50" fullWidth>
       {message && (
         <Snackbar
           title={

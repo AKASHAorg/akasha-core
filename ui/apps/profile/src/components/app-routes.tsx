@@ -41,7 +41,7 @@ const AppRoutes: React.FC<unknown> = () => {
   };
 
   return (
-    <Stack direction="column" spacing="gap-y-4" customStyle="mb-8">
+    <Stack direction="column" spacing="gap-y-4" customStyle="mb-4">
       <Router basename={baseRouteName}>
         <Routes>
           <Route path="/">
