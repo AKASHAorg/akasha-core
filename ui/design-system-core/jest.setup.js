@@ -9,6 +9,7 @@ global.ResizeObserver = ResizeObserver;
 install(twindConfig);
 
 jest.mock('@akashaorg/typings/lib/ui', () => ({
+  ...jest.requireActual('@akashaorg/typings/lib/ui'),
   NotificationTypes: {
     Info: 'info',
     Alert: 'alert',
