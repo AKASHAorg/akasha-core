@@ -122,12 +122,11 @@ const EntryCard: React.FC<EntryCardProps> = props => {
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
-
-  const [showNSFW, setShowNSFW] = useState(false);
-
+  const [showNSFWContent, setShowNSFWContent] = useState(false);
+  const showNSFWCard = entryData.nsfw && !showNSFWContent;
   const showHiddenStyle = showHiddenContent ? '' : 'max-h-[50rem]';
-  const contentClickableStyle = contentClickable ? 'cursor-pointer' : 'cursor-default';
-
+  const contentClickableStyle =
+    contentClickable && !showNSFWCard ? 'cursor-pointer' : 'cursor-default';
   const menuItems: ListItem[] = [
     ...(!isViewer
       ? [
@@ -152,14 +151,11 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         ]
       : []),
   ];
-
   const hoverStyleLastEntry = lastEntry ? 'rounded-b-2xl' : '';
   const hoverStyle = hover
     ? `${getColorClasses({ light: 'grey9/60', dark: 'grey3' }, 'hover:bg')} ${hoverStyleLastEntry}`
     : '';
-
   const publishTime = entryData?.createdAt ? formatRelativeTime(entryData.createdAt, locale) : '';
-
   const avatar = authorProfile.status === 'error' ? null : authorProfile.data?.avatar;
 
   const entryCardUi = (
@@ -236,7 +232,11 @@ const EntryCard: React.FC<EntryCardProps> = props => {
         />
       )}
       {entryData.active && (
-        <Card onClick={onContentClick} type="plain">
+        <Card
+          onClick={showNSFWCard ? null : onContentClick}
+          customStyle={contentClickableStyle}
+          type="plain"
+        >
           <Stack
             align="center"
             justify="start"
@@ -244,18 +244,18 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             data-testid="entry-content"
             fullWidth={true}
           >
-            {entryData.nsfw && !showNSFW && (
+            {showNSFWCard && (
               <Stack customStyle="w-36 h-16">
                 <NSFW
                   {...nsfw}
                   onClickToView={event => {
                     event.stopPropagation();
-                    setShowNSFW(true);
+                    setShowNSFWContent(true);
                   }}
                 />
               </Stack>
             )}
-            {(!entryData.nsfw || showNSFW) && (
+            {(!entryData.nsfw || showNSFWContent) && (
               <Stack justifySelf="start" alignSelf="start" align="start" fullWidth={true}>
                 {rest.itemType === EntityTypes.REFLECT ? (
                   <ReadOnlyEditor
