@@ -100,6 +100,9 @@ export const BeamFragmentDoc = /*#__PURE__*/ gql`
     labelType
     value
   }
+  mentions {
+    id
+  }
   version
   createdAt
   nsfw
@@ -585,6 +588,7 @@ export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ gql`
           hasPreviousPage
         }
       }
+      akashaBeamListCount(filters: $filters)
       isViewer
     }
   }
@@ -627,6 +631,7 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
           hasNextPage
         }
       }
+      akashaContentBlockStreamListCount(filters: $filters)
       isViewer
     }
   }
@@ -650,6 +655,53 @@ export const GetBlockStorageByIdDocument = /*#__PURE__*/ gql`
   }
 }
     ${BlockStorageFragmentDoc}`;
+export const GetIndexedStreamDocument = /*#__PURE__*/ gql`
+    query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaIndexedStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+      ) {
+        edges {
+          node {
+            createdAt
+            active
+            status
+            indexValue
+            indexType
+            stream
+            streamType
+            moderationID
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+      }
+      akashaIndexedStreamListCount(filters: $filters)
+      isViewer
+    }
+  }
+}
+    `;
+export const GetIndexedStreamCountDocument = /*#__PURE__*/ gql`
+    query GetIndexedStreamCount($indexer: ID!, $filters: AkashaIndexedStreamFiltersInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaIndexedStreamListCount(filters: $filters)
+      isViewer
+    }
+  }
+}
+    `;
 export const IndexReflectionDocument = /*#__PURE__*/ gql`
     mutation IndexReflection($jws: DID_JWS, $capability: CACAO_CAPABILITY) {
   indexReflection(jws: $jws, capability: $capability) {
@@ -704,6 +756,7 @@ export const GetReflectionsFromBeamDocument = /*#__PURE__*/ gql`
           hasPreviousPage
         }
       }
+      reflectionsCount(filters: $filters)
     }
   }
 }
@@ -1410,6 +1463,12 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetBlockStorageById(variables: Types.GetBlockStorageByIdQueryVariables, options?: C): Promise<Types.GetBlockStorageByIdQuery> {
       return requester<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables, options) as Promise<Types.GetBlockStorageByIdQuery>;
+    },
+    GetIndexedStream(variables: Types.GetIndexedStreamQueryVariables, options?: C): Promise<Types.GetIndexedStreamQuery> {
+      return requester<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>(GetIndexedStreamDocument, variables, options) as Promise<Types.GetIndexedStreamQuery>;
+    },
+    GetIndexedStreamCount(variables: Types.GetIndexedStreamCountQueryVariables, options?: C): Promise<Types.GetIndexedStreamCountQuery> {
+      return requester<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>(GetIndexedStreamCountDocument, variables, options) as Promise<Types.GetIndexedStreamCountQuery>;
     },
     IndexReflection(variables?: Types.IndexReflectionMutationVariables, options?: C): Promise<Types.IndexReflectionMutation> {
       return requester<Types.IndexReflectionMutation, Types.IndexReflectionMutationVariables>(IndexReflectionDocument, variables, options) as Promise<Types.IndexReflectionMutation>;

@@ -104,6 +104,5 @@ type AkashaIndexedStream @createModel(accountRelation: LIST, description: "Index
   streamType: StreamType!
   moderationID: StreamID
   indexType: String! @string(maxLength: 30)
-  indexValue: String! @string(minLength:2, maxLength: 60)
+  indexValue: String! @string(minLength:2, maxLength: 90)
 }
-  
