@@ -31,12 +31,14 @@ describe('<EditProfilePage />', () => {
   beforeAll(() => {
     (
       jest.spyOn(hooks, 'useGetProfileByDidSuspenseQuery') as unknown as jest.SpyInstance<{
-        data: {
-          isViewer: boolean;
-          akashaProfile: Profile;
+        node: {
+          data: {
+            isViewer: boolean;
+            akashaProfile: Profile;
+          };
         };
       }>
-    ).mockReturnValue({ data: { isViewer: true, akashaProfile: profile } });
+    ).mockReturnValue({ node: { data: { isViewer: true, akashaProfile: profile } } });
   });
 
   it('should render edit page', async () => {
