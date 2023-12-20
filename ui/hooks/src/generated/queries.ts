@@ -32,6 +32,9 @@ export const BeamFragmentDoc = /*#__PURE__*/ `
     labelType
     value
   }
+  mentions {
+    id
+  }
   version
   createdAt
   nsfw
@@ -400,6 +403,7 @@ export const GetBeamsByAuthorDidDocument = /*#__PURE__*/ `
           hasPreviousPage
         }
       }
+      akashaBeamListCount(filters: $filters)
       isViewer
     }
   }
@@ -518,6 +522,7 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ `
           hasNextPage
         }
       }
+      akashaContentBlockStreamListCount(filters: $filters)
       isViewer
     }
   }
@@ -655,6 +660,129 @@ useInfiniteGetBlockStorageByIdQuery.getKey = (variables: Types.GetBlockStorageBy
 ;
 
 useGetBlockStorageByIdQuery.fetcher = (variables: Types.GetBlockStorageByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables, options);
+export const GetIndexedStreamDocument = /*#__PURE__*/ `
+    query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaIndexedStreamList(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        filters: $filters
+      ) {
+        edges {
+          node {
+            createdAt
+            active
+            status
+            indexValue
+            indexType
+            stream
+            streamType
+            moderationID
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+      }
+      akashaIndexedStreamListCount(filters: $filters)
+      isViewer
+    }
+  }
+}
+    `;
+export const useGetIndexedStreamQuery = <
+      TData = Types.GetIndexedStreamQuery,
+      TError = unknown
+    >(
+      variables: Types.GetIndexedStreamQueryVariables,
+      options?: UseQueryOptions<Types.GetIndexedStreamQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetIndexedStreamQuery, TError, TData>(
+      ['GetIndexedStream', variables],
+      composeDbFetch<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>(GetIndexedStreamDocument, variables),
+      options
+    );
+useGetIndexedStreamQuery.document = GetIndexedStreamDocument;
+
+
+useGetIndexedStreamQuery.getKey = (variables: Types.GetIndexedStreamQueryVariables) => ['GetIndexedStream', variables];
+;
+
+export const useInfiniteGetIndexedStreamQuery = <
+      TData = Types.GetIndexedStreamQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetIndexedStreamQueryVariables,
+      variables: Types.GetIndexedStreamQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetIndexedStreamQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetIndexedStreamQuery, TError, TData>(
+      ['GetIndexedStream.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>(GetIndexedStreamDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetIndexedStreamQuery.getKey = (variables: Types.GetIndexedStreamQueryVariables) => ['GetIndexedStream.infinite', variables];
+;
+
+useGetIndexedStreamQuery.fetcher = (variables: Types.GetIndexedStreamQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetIndexedStreamQuery, Types.GetIndexedStreamQueryVariables>(GetIndexedStreamDocument, variables, options);
+export const GetIndexedStreamCountDocument = /*#__PURE__*/ `
+    query GetIndexedStreamCount($indexer: ID!, $filters: AkashaIndexedStreamFiltersInput) {
+  node(id: $indexer) {
+    ... on CeramicAccount {
+      akashaIndexedStreamListCount(filters: $filters)
+      isViewer
+    }
+  }
+}
+    `;
+export const useGetIndexedStreamCountQuery = <
+      TData = Types.GetIndexedStreamCountQuery,
+      TError = unknown
+    >(
+      variables: Types.GetIndexedStreamCountQueryVariables,
+      options?: UseQueryOptions<Types.GetIndexedStreamCountQuery, TError, TData>
+    ) =>
+    useQuery<Types.GetIndexedStreamCountQuery, TError, TData>(
+      ['GetIndexedStreamCount', variables],
+      composeDbFetch<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>(GetIndexedStreamCountDocument, variables),
+      options
+    );
+useGetIndexedStreamCountQuery.document = GetIndexedStreamCountDocument;
+
+
+useGetIndexedStreamCountQuery.getKey = (variables: Types.GetIndexedStreamCountQueryVariables) => ['GetIndexedStreamCount', variables];
+;
+
+export const useInfiniteGetIndexedStreamCountQuery = <
+      TData = Types.GetIndexedStreamCountQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof Types.GetIndexedStreamCountQueryVariables,
+      variables: Types.GetIndexedStreamCountQueryVariables,
+      options?: UseInfiniteQueryOptions<Types.GetIndexedStreamCountQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<Types.GetIndexedStreamCountQuery, TError, TData>(
+      ['GetIndexedStreamCount.infinite', variables],
+      (metaData) => composeDbFetch<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>(GetIndexedStreamCountDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteGetIndexedStreamCountQuery.getKey = (variables: Types.GetIndexedStreamCountQueryVariables) => ['GetIndexedStreamCount.infinite', variables];
+;
+
+useGetIndexedStreamCountQuery.fetcher = (variables: Types.GetIndexedStreamCountQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetIndexedStreamCountQuery, Types.GetIndexedStreamCountQueryVariables>(GetIndexedStreamCountDocument, variables, options);
 export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
     query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $sorting: AkashaReflectSortingInput, $filters: AkashaReflectFiltersInput) {
   node(id: $id) {
@@ -680,6 +808,7 @@ export const GetReflectionsFromBeamDocument = /*#__PURE__*/ `
           hasPreviousPage
         }
       }
+      reflectionsCount(filters: $filters)
     }
   }
 }
