@@ -18,6 +18,9 @@ fragment BeamFragment on AkashaBeam{
     labelType
     value
   }
+  mentions {
+    id
+  }
   version
   createdAt
   nsfw
@@ -161,6 +164,7 @@ query GetBeamsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int
           hasPreviousPage
         }
       }
+      akashaBeamListCount(filters: $filters)
       isViewer
     }
   }
@@ -195,6 +199,7 @@ query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $fir
           hasNextPage
         }
       }
+      akashaContentBlockStreamListCount(filters: $filters)
       isViewer
     }
   }
@@ -216,7 +221,42 @@ query GetBlockStorageById($id: ID!){
   }
 }
 
+query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput){
+  node(id: $indexer) {
+    ... on CeramicAccount{
+      akashaIndexedStreamList(after: $after, before: $before, first: $first, last: $last, filters:$filters) {
+        edges {
+          node {
+            createdAt
+            active
+            status
+            indexValue
+            indexType
+            stream
+            streamType
+            moderationID
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+      }
+      akashaIndexedStreamListCount(filters:$filters)
+      isViewer
+    }
+  }
+}
 
-
-
+query GetIndexedStreamCount($indexer: ID!, $filters: AkashaIndexedStreamFiltersInput){
+  node(id: $indexer) {
+    ... on CeramicAccount{
+      akashaIndexedStreamListCount(filters:$filters)
+      isViewer
+    }
+  }
+}
 

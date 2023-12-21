@@ -52,6 +52,17 @@ export const BeamEditor: React.FC = () => {
   const [uiState, setUiState] = React.useState<uiState>('editor');
   const [isNsfw, setIsNsfw] = React.useState(false);
 
+  const bottomRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (blocksInUse.length) {
+      bottomRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      });
+    }
+  }, [blocksInUse]);
+
   const handleNsfwCheckbox = () => {
     setIsNsfw(!isNsfw);
   };
@@ -98,6 +109,11 @@ export const BeamEditor: React.FC = () => {
     });
   };
 
+  const [disablePublishing, setDisablePublishing] = React.useState(false);
+  const handleDisablePublishing = (value: boolean) => {
+    setDisablePublishing(value);
+  };
+
   return (
     <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between" padding={0}>
       <Header
@@ -141,6 +157,7 @@ export const BeamEditor: React.FC = () => {
                   editMode={{
                     appName: block.appName,
                     propertyType: block.propertyType,
+                    externalHandler: handleDisablePublishing,
                   }}
                   mode={ContentBlockModes.EDIT}
                   blockRef={block.blockRef}
@@ -148,6 +165,7 @@ export const BeamEditor: React.FC = () => {
               </Stack>
             </div>
           ))}
+          <div ref={bottomRef} />
         </Stack>
         <Stack
           background={{ light: 'white', dark: 'grey2' }}
@@ -155,28 +173,30 @@ export const BeamEditor: React.FC = () => {
             uiState === 'blocks' ? 'flex' : 'hidden'
           }`}
         >
-          {availableBlocks.map((block, idx) => (
-            <button key={idx} onClick={() => handleAddBlock(block)}>
-              <Stack
-                padding={16}
-                customStyle="w-full"
-                direction="row"
-                justify="between"
-                align="center"
-              >
-                <Stack direction="row" align="center" spacing="gap-2">
-                  <Stack
-                    align="center"
-                    justify="center"
-                    customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
-                  >
-                    <Icon size="xs" icon={block.icon} />
-                  </Stack>
-                  <Text>{block.displayName}</Text>
-                </Stack>
+          {blocksInUse.length > 9 && (
+            <button onClick={handleClickCancel}>
+              <Stack padding={32} align="center" justify="center" fullWidth>
+                <Text>{t('You have reached the maximum number of blocks for a beam.')}</Text>
               </Stack>
             </button>
-          ))}
+          )}
+          {blocksInUse.length < 10 &&
+            availableBlocks.map((block, idx) => (
+              <button key={idx} onClick={() => handleAddBlock(block)}>
+                <Stack padding={16} fullWidth direction="row" justify="between" align="center">
+                  <Stack direction="row" align="center" spacing="gap-2">
+                    <Stack
+                      align="center"
+                      justify="center"
+                      customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
+                    >
+                      <Icon size="xs" icon={block.icon} />
+                    </Stack>
+                    <Text>{block.displayName}</Text>
+                  </Stack>
+                </Stack>
+              </button>
+            ))}
         </Stack>
         <Stack
           background={{ light: 'white', dark: 'grey2' }}
@@ -232,6 +252,7 @@ export const BeamEditor: React.FC = () => {
         tagsNumber={editorTags.length}
         tagValue={tagValue}
         isPublishing={isPublishing}
+        disablePublishing={disablePublishing}
       />
     </Card>
   );

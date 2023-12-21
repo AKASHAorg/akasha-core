@@ -33,7 +33,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
     gridRowEnd: `span ${getGridSpan()}`,
   };
 
-  const singleImageStyle = apply`${images.length === 1 && 'max-w-full'}`;
+  const multipleImageStyle = apply`${images.length > 1 && 'aspect-square'}`;
   const mobileStyle = apply`${'max-h-40 sm:max-h-60'}`;
 
   return (
@@ -56,9 +56,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
 
         <img
           alt={imageSrc?.src}
-          className={tx(
-            `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
-          )}
+          className={tx(`rounded object-cover w-full ${mobileStyle} ${multipleImageStyle}`)}
           src={imageSrc?.src}
           onLoad={() => setImgLoaded(true)}
           hidden={!imgLoaded}
@@ -70,9 +68,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
           <div className={tw('flex')}>
             <img
               alt={'placeholder'}
-              className={tx(
-                `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
-              )}
+              className={tx(`rounded object-cover w-full  ${mobileStyle} ${multipleImageStyle}`)}
               src={'/images/image-placeholder.webp'}
               height={images.length === 1 ? imageSrc?.size?.height : ''}
             />

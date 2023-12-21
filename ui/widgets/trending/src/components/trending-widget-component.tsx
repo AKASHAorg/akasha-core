@@ -1,28 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
+import { useRootComponentProps, getFollowList, useLoggedIn, hasOwn } from '@akashaorg/ui-awf-hooks';
+import { useGetProfilesQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
-  useAnalytics,
-  useRootComponentProps,
-  getFollowList,
-  useLoggedIn,
-  hasOwn,
-} from '@akashaorg/ui-awf-hooks';
-import {
-  useGetProfilesQuery,
   useGetInterestsStreamQuery,
   useGetInterestsByDidQuery,
-  useCreateInterestsMutation,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
-import { useGetFollowDocumentsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-
-import { useQueryClient, useIsMutating } from '@tanstack/react-query';
-
+  useGetFollowDocumentsByDidQuery,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-
 import { LatestProfiles, LatestTopics } from './cards';
 import { useGetIndexingDID } from '@akashaorg/ui-awf-hooks/lib/use-settings';
 
@@ -32,42 +19,27 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
 
   const { t } = useTranslation('ui-widget-trending');
   const { isLoggedIn, authenticatedDID } = useLoggedIn();
-  const queryClient = useQueryClient();
 
-  const [tagsQueue, setTagsQueue] = useState([]);
-
-  const [analyticsActions] = useAnalytics();
   const latestProfilesReq = useGetProfilesQuery(
     { last: 4 },
     { select: result => result?.akashaProfileIndex?.edges.map(profile => profile.node) },
   );
   const currentIndexingDID = useGetIndexingDID();
-  const latestTopicsReq = useGetInterestsStreamQuery(
-    { last: 4, indexer: currentIndexingDID },
-    {
-      select: result => {
-        if (hasOwn(result?.node, 'akashaInterestsStreamList')) {
-          return result?.node?.akashaInterestsStreamList?.edges.flatMap(interest => interest.node);
-        }
-        return [];
-      },
+  const {
+    data: latestTopicsReqData,
+    loading: latestTopicsLoading,
+    error: latestTopicsError,
+  } = useGetInterestsStreamQuery({
+    variables: {
+      last: 4,
+      indexer: currentIndexingDID,
     },
-  );
-  const tagSubscriptionsReq = useGetInterestsByDidQuery(
-    { id: authenticatedDID },
-    {
-      enabled: isLoggedIn,
-      select: resp => {
-        if (hasOwn(resp.node, 'akashaProfileInterests')) {
-          return resp.node.akashaProfileInterests?.topics?.map(topic => ({
-            value: topic.value,
-            labelType: topic.labelType,
-          }));
-        }
-        return [];
-      },
-    },
-  );
+  });
+  const { data: tagSubscriptionsData, refetch: refetchTagSubscriptions } =
+    useGetInterestsByDidQuery({
+      variables: { id: authenticatedDID },
+      skip: !isLoggedIn,
+    });
   const latestProfiles = useMemo(() => latestProfilesReq.data || [], [latestProfilesReq.data]);
 
   const followProfileIds = useMemo(
@@ -83,21 +55,28 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     },
     skip: !isLoggedIn || !followProfileIds.length,
   });
-  const createInterestMutation = useCreateInterestsMutation({
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: useGetInterestsByDidQuery.getKey({ id: authenticatedDID }),
-      });
-    },
-  });
 
-  const isMutatingInterests = useIsMutating({ mutationKey: useCreateInterestsMutation.getKey() });
+  const latestTopics =
+    latestTopicsReqData?.node && hasOwn(latestTopicsReqData.node, 'akashaInterestsStreamList')
+      ? latestTopicsReqData?.node.akashaInterestsStreamList?.edges.map(edge => edge.node.value)
+      : [];
 
-  const latestTopics = latestTopicsReq.data || [];
-  const tagSubscriptions = useMemo(
-    () => (isLoggedIn ? tagSubscriptionsReq.data : []),
-    [isLoggedIn, tagSubscriptionsReq.data],
-  );
+  const tagSubscriptions = useMemo(() => {
+    if (!isLoggedIn) return null;
+    return tagSubscriptionsData &&
+      hasOwn(tagSubscriptionsData.node, 'akashaProfileInterests') &&
+      tagSubscriptionsData.node.akashaProfileInterests?.topics.length > 0
+      ? tagSubscriptionsData.node.akashaProfileInterests?.topics.map(topic => topic.value)
+      : [];
+  }, [isLoggedIn, tagSubscriptionsData]);
+
+  const tagSubscriptionsId = useMemo(() => {
+    if (!isLoggedIn) return null;
+    return tagSubscriptionsData && hasOwn(tagSubscriptionsData.node, 'akashaProfileInterests')
+      ? tagSubscriptionsData.node.akashaProfileInterests?.id
+      : null;
+  }, [isLoggedIn, tagSubscriptionsData]);
+
   const followList = isLoggedIn
     ? getFollowList(
         followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
@@ -117,96 +96,6 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
     });
   };
 
-  const handleTopicSubscribe = (topic: string) => {
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    }
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending Topic Subscribed',
-    });
-
-    setTagsQueue(prevState => {
-      return [...prevState, { topic: topic, type: 'sub' }];
-    });
-  };
-
-  const handleTopicUnSubscribe = (topic: string) => {
-    if (!isLoggedIn) {
-      showLoginModal();
-      return;
-    }
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_WIDGET,
-      action: 'Trending Topic Unsubscribed',
-    });
-
-    setTagsQueue(prevState => {
-      return [...prevState, { topic: topic, type: 'unsub' }];
-    });
-  };
-
-  const mutateInterests = useCallback(
-    async topics => {
-      await createInterestMutation.mutateAsync({
-        i: {
-          content: {
-            topics: topics,
-          },
-        },
-      });
-    },
-    [createInterestMutation],
-  );
-
-  const removeProcessedTopic = topic => {
-    setTagsQueue(prev => prev.filter(tag => tag.topic !== topic));
-  };
-
-  const checkIfInterestExists = useCallback(
-    topic => {
-      return tagSubscriptions.find(tag => tag.value === topic);
-    },
-    [tagSubscriptions],
-  );
-
-  React.useEffect(() => {
-    if (isMutatingInterests > 0 || tagSubscriptionsReq.status === 'loading') return;
-    if (tagsQueue.length > 0) {
-      const currentTag = tagsQueue[0];
-
-      switch (currentTag?.type) {
-        case 'sub':
-          if (checkIfInterestExists(currentTag?.topic)) return;
-          (async () => {
-            await mutateInterests([
-              ...tagSubscriptions,
-              { value: currentTag?.topic, labelType: 'TOPIC' },
-            ]);
-            removeProcessedTopic(currentTag.topic);
-          })();
-          break;
-        case 'unsub':
-          if (!checkIfInterestExists(currentTag?.topic)) return;
-          (async () => {
-            await mutateInterests(tagSubscriptions.filter(tag => tag.value !== currentTag?.topic));
-            removeProcessedTopic(currentTag.topic);
-          })();
-          break;
-        default:
-          break;
-      }
-    }
-  }, [
-    tagSubscriptionsReq.status,
-    checkIfInterestExists,
-    mutateInterests,
-    isMutatingInterests,
-    tagsQueue,
-    tagSubscriptions,
-  ]);
-
   const handleProfileClick = (did: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
@@ -216,19 +105,17 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
 
   return (
     <Stack spacing="gap-y-4">
-      {(latestTopicsReq.isError || latestProfilesReq.isError) && (
+      {(latestTopicsError || latestProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
           title={t('Oops, this widget has an error')}
           details={
-            latestTopicsReq.isError
-              ? t('Cannot load latest topics')
-              : t('Cannot load latest profiles')
+            latestTopicsError ? t('Cannot load latest topics') : t('Cannot load latest profiles')
           }
         />
       )}
 
-      {!latestTopicsReq.isError && (
+      {!latestTopicsError && (
         <ErrorBoundary
           errorObj={{
             type: t('script-error'),
@@ -243,13 +130,15 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
             subscribedLabel={t('Subscribed')}
             unsubscribeLabel={t('Unsubscribe')}
             noTagsLabel={t('No topics found!')}
-            isLoadingTags={latestTopicsReq.isFetching}
-            isProcessingTags={tagsQueue.map(tag => tag.topic)}
+            isLoadingTags={latestTopicsLoading}
             tags={latestTopics}
-            subscribedTags={tagSubscriptions?.map(el => el.value)}
+            receivedTags={tagSubscriptions}
+            tagSubscriptionsId={tagSubscriptionsId}
+            isLoggedIn={isLoggedIn}
+            authenticatedDID={authenticatedDID}
             onClickTopic={handleTopicClick}
-            handleSubscribeTopic={handleTopicSubscribe}
-            handleUnsubscribeTopic={handleTopicUnSubscribe}
+            showLoginModal={showLoginModal}
+            refetchTagSubscriptions={refetchTagSubscriptions}
           />
         </ErrorBoundary>
       )}

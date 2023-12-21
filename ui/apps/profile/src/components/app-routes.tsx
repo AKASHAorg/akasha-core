@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import InterestsPage from './pages/interests';
@@ -11,7 +11,7 @@ import ProfileWithHeader from './profile-with-header';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useShowFeedback, useRootComponentProps, useLoggedIn } from '@akashaorg/ui-awf-hooks';
 import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -22,6 +22,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const [showUpdatedFeedback, setShowUpdatedFeedback] = useShowFeedback(false);
   const [showLinkCopiedFeedback, setLinkCopiedFeedback] = useShowFeedback(false);
+  const [showNSFW, setShowNSFW] = useState(false);
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
@@ -40,15 +41,19 @@ const AppRoutes: React.FC<unknown> = () => {
   };
 
   return (
-    <Stack direction="column" spacing="gap-y-4" customStyle="mb-8">
+    <Stack direction="column" spacing="gap-y-4" customStyle="mb-4">
       <Router basename={baseRouteName}>
         <Routes>
           <Route path="/">
             <Route
               path={':profileId'}
               element={
-                <ProfileWithHeader {...commonHeaderViewProps}>
-                  <ProfileInfoPage showLoginModal={showLoginModal} />
+                <ProfileWithHeader {...commonHeaderViewProps} showNSFW={showNSFW}>
+                  <ProfileInfoPage
+                    showNSFW={showNSFW}
+                    setShowNSFW={setShowNSFW}
+                    showLoginModal={showLoginModal}
+                  />
                 </ProfileWithHeader>
               }
             />
@@ -109,7 +114,7 @@ const AppRoutes: React.FC<unknown> = () => {
       {showUpdatedFeedback && (
         <Snackbar
           title={t('Profile updated successfully')}
-          type="success"
+          type={NotificationTypes.Success}
           icon={<CheckCircleIcon />}
           handleDismiss={() => {
             setShowUpdatedFeedback(false);
@@ -120,7 +125,7 @@ const AppRoutes: React.FC<unknown> = () => {
       {showLinkCopiedFeedback && (
         <Snackbar
           title={`${t('Profile link copied')}!`}
-          type="success"
+          type={NotificationTypes.Success}
           icon={<CheckCircleIcon />}
           handleDismiss={() => {
             setLinkCopiedFeedback(false);

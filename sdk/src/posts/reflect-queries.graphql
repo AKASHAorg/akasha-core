@@ -41,6 +41,7 @@ query GetReflectionsFromBeam($id: ID!, $after: String, $before: String, $first: 
           hasPreviousPage
         }
       }
+      reflectionsCount(filters: $filters)
     }
   }
 }

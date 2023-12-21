@@ -10,20 +10,21 @@ import {
   filterEvent,
 } from '@akashaorg/ui-awf-hooks';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
-import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
+import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
   RootExtensionProps,
   MenuItemAreaType,
   NotificationEvents,
-  NotificationEvent,
+  type NotificationEvent,
+  NotificationTypes,
 } from '@akashaorg/typings/lib/ui';
 
 const SnackBarNotification = (_: RootExtensionProps) => {
   const { uiEvents, getRoutingPlugin } = useRootComponentProps();
   const [message, setMessage] = useState('');
   const [appTitle, setAppTitle] = useState(null);
-  const [messageType, setMessageType] = useState('success');
+  const [messageType, setMessageType] = useState(NotificationTypes.Success);
 
   const [routeData, setRouteData] = useState(null);
   const mutationEvents = useListenForMutationEvents();
@@ -35,12 +36,12 @@ const SnackBarNotification = (_: RootExtensionProps) => {
   if (message) {
     timeoutHandle = setTimeout(() => {
       setMessage('');
-    }, 4000);
+    }, 8000);
   }
 
   React.useEffect(() => {
     if (!message) {
-      setMessageType('success');
+      setMessageType(NotificationTypes.Success);
       setMessageUuid('');
       setAppTitle(null);
     }
@@ -81,11 +82,11 @@ const SnackBarNotification = (_: RootExtensionProps) => {
       }
       if (pending && messageObj?.pending) {
         setMessage(messageObj?.pending);
-        setMessageType('info');
+        setMessageType(NotificationTypes.Info);
       }
       if (success && messageObj?.success) {
         setMessage(messageObj?.success);
-        setMessageType('success');
+        setMessageType(NotificationTypes.Success);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,7 +110,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
 
   const dismissHandler = () => {
     setMessage('');
-    setMessageType('success');
+    setMessageType(NotificationTypes.Success);
   };
 
   const findAppIcon = (appName: string) => {
@@ -125,7 +126,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
   );
 
   return (
-    <Stack customStyle={'-mt-12 md:mt-4 z-50 w-full'}>
+    <Stack customStyle="z-50" fullWidth>
       {message && (
         <Snackbar
           title={
@@ -144,7 +145,7 @@ const SnackBarNotification = (_: RootExtensionProps) => {
             )
           }
           description={appTitle ? message : null}
-          type={messageType as SnackBarType}
+          type={messageType}
           handleDismiss={dismissHandler}
         />
       )}
@@ -163,7 +164,7 @@ const reactLifecycles = singleSpaReact({
     return (
       <ErrorLoader
         type="script-error"
-        title="Error in share profile modal"
+        title="Error in snackbar notification extension"
         details={error.message}
       />
     );

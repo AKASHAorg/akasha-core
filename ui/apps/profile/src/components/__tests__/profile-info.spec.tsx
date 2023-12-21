@@ -27,7 +27,7 @@ describe('< ProfileInfoPage />', () => {
         navigateToModal={jest.fn()}
         showLoginModal={jest.fn()}
       >
-        <ProfileInfoPage showLoginModal={jest.fn()} />
+        <ProfileInfoPage showLoginModal={jest.fn()} setShowNSFW={jest.fn()} showNSFW={false} />
       </ProfileWithHeader>
     </Router>
   );

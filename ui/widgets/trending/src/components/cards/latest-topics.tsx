@@ -1,25 +1,28 @@
-import React from 'react';
-
-import { Interest } from '@akashaorg/typings/lib/ui';
-
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import React, { useEffect, useRef, useState } from 'react';
+import getSDK from '@akashaorg/awf-sdk';
+import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
+import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import {
-  CheckIcon,
-  HashtagIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+  useCreateInterestsMutation,
+  useUpdateInterestsMutation,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import TrendingWidgetLoadingCard from '@akashaorg/design-system-components/lib/components/TrendingWidgetLoadingCard';
+import { TopicRow } from './topic-row';
+import isEqual from 'lodash/isEqual';
+import difference from 'lodash/difference';
+import pullAll from 'lodash/pullAll';
 
 export type LatestTopicsProps = {
   // data
-  tags: Interest[];
-  subscribedTags?: string[];
+  tags: string[];
+  receivedTags?: string[] | null;
+  tagSubscriptionsId: string | null;
   isLoadingTags?: boolean;
-  isProcessingTags?: string[];
+  isLoggedIn: boolean;
+  authenticatedDID: string;
   // labels
   noTagsLabel?: string;
   titleLabel: string;
@@ -29,26 +32,203 @@ export type LatestTopicsProps = {
   unsubscribeLabel: string;
   // handlers
   onClickTopic: (topic: string) => void;
-  handleSubscribeTopic: (topic: string) => void;
-  handleUnsubscribeTopic: (topic: string) => void;
+  showLoginModal: () => void;
+  refetchTagSubscriptions: () => void;
 };
 
 export const LatestTopics: React.FC<LatestTopicsProps> = props => {
   const {
     onClickTopic,
-    handleSubscribeTopic,
-    handleUnsubscribeTopic,
     titleLabel,
     tagSubtitleLabel,
     tags,
     isLoadingTags,
-    isProcessingTags,
     noTagsLabel,
     subscribeLabel,
     subscribedLabel,
     unsubscribeLabel,
-    subscribedTags,
+    receivedTags,
+    tagSubscriptionsId,
+    isLoggedIn,
+    authenticatedDID,
+    showLoginModal,
+    refetchTagSubscriptions,
   } = props;
+
+  const [localSubscribedTags, setLocalSubscribedTags] = useState([]);
+  const subscriptionId = useRef(null);
+  const localTagsInitialized = useRef(null);
+  const timer = useRef(null);
+  const [tagsQueue, setTagsQueue] = useState([]);
+  const localSubscribedTagsRef = useRef([]);
+
+  //reset state when user logs out
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setLocalSubscribedTags([]);
+      localSubscribedTagsRef.current = [];
+      localTagsInitialized.current = null;
+      subscriptionId.current = null;
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (receivedTags && !localTagsInitialized.current) {
+      setLocalSubscribedTags([...new Set(receivedTags)]);
+      localTagsInitialized.current = true;
+    }
+    //prevents reseting interests with []
+    if (receivedTags && tagsQueue.length === 0) {
+      localSubscribedTagsRef.current = receivedTags;
+    }
+  }, [receivedTags, localTagsInitialized, tagsQueue.length]);
+
+  useEffect(() => {
+    if (tagSubscriptionsId) {
+      subscriptionId.current = tagSubscriptionsId;
+    }
+  }, [tagSubscriptionsId]);
+
+  const sdk = getSDK();
+
+  const [createInterestsMutation, { loading, error }] = useCreateInterestsMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+  });
+
+  const [updateInterestsMutation, { loading: updateLoading, error: updateError }] =
+    useUpdateInterestsMutation({
+      context: { source: sdk.services.gql.contextSources.composeDB },
+    });
+
+  useEffect(() => {
+    if (!localTagsInitialized.current || receivedTags === null) return;
+    if (loading || updateLoading) return;
+
+    if (!isEqual(localSubscribedTagsRef.current, receivedTags)) {
+      if (subscriptionId.current) {
+        updateInterestsMutation({
+          variables: {
+            i: {
+              id: subscriptionId.current,
+              content: {
+                topics: [...new Set(localSubscribedTagsRef.current)].map(tag => ({
+                  value: tag,
+                  labelType: sdk.services.gql.labelTypes.INTEREST,
+                })),
+              },
+            },
+          },
+          optimisticResponse: {
+            updateAkashaProfileInterests: {
+              clientMutationId: null,
+              document: {
+                did: { id: authenticatedDID },
+                topics: localSubscribedTagsRef.current.map(tag => ({
+                  value: tag,
+                  labelType: sdk.services.gql.labelTypes.INTEREST,
+                })),
+                id: subscriptionId.current,
+              },
+            },
+          },
+          onCompleted: data => {
+            const returnedData = data.updateAkashaProfileInterests.document.topics.map(
+              topic => topic.value,
+            );
+
+            const arrDifference = difference(returnedData, receivedTags).concat(
+              difference(receivedTags, returnedData),
+            );
+
+            setTagsQueue(prev => pullAll(prev, arrDifference));
+          },
+          onError: err => {
+            const arrDifference = receivedTags
+              .filter(x => !localSubscribedTags.includes(x))
+              .concat(localSubscribedTags.filter(x => !receivedTags.includes(x)));
+
+            setTagsQueue(prev => pullAll(prev, arrDifference));
+            refetchTagSubscriptions();
+          },
+        });
+      } else {
+        createInterestsMutation({
+          variables: {
+            i: {
+              content: {
+                topics: [...new Set(localSubscribedTagsRef.current)].map(tag => ({
+                  value: tag,
+                  labelType: sdk.services.gql.labelTypes.INTEREST,
+                })),
+              },
+            },
+          },
+          onCompleted: data => {
+            subscriptionId.current = data.createAkashaProfileInterests?.document.id;
+
+            const returnedData = data.createAkashaProfileInterests?.document.topics.map(
+              topic => topic.value,
+            );
+
+            const arrDifference = difference(returnedData, localSubscribedTags).concat(
+              difference(localSubscribedTags, returnedData),
+            );
+
+            setTagsQueue(prev => pullAll(prev, arrDifference));
+            refetchTagSubscriptions();
+          },
+          onError: err => {
+            const arrDifference = difference(receivedTags, localSubscribedTags).concat(
+              difference(localSubscribedTags, receivedTags),
+            );
+
+            setTagsQueue(prev => pullAll(prev, arrDifference));
+            refetchTagSubscriptions();
+          },
+        });
+      }
+    }
+  }, [localSubscribedTags, updateLoading, loading]);
+
+  const handleTopicSubscribe = (tag: string) => {
+    if (!isLoggedIn) {
+      showLoginModal();
+      return;
+    }
+    setTagsQueue(prev => [...prev, tag]);
+
+    const newInterests = [...localSubscribedTagsRef.current, tag];
+
+    localSubscribedTagsRef.current = newInterests;
+
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current);
+    }
+    timer.current = window.setTimeout(
+      () => setLocalSubscribedTags(localSubscribedTagsRef.current),
+      700,
+    );
+  };
+
+  const handleTopicUnsubscribe = (tag: string) => {
+    if (!isLoggedIn) {
+      showLoginModal();
+      return;
+    }
+
+    setTagsQueue(prev => [...prev, tag]);
+    const newInterests = localSubscribedTagsRef.current.filter(topic => topic !== tag);
+
+    localSubscribedTagsRef.current = newInterests;
+
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current);
+    }
+    timer.current = window.setTimeout(
+      () => setLocalSubscribedTags(localSubscribedTagsRef.current),
+      700,
+    );
+  };
 
   if (tags.length === 0 && isLoadingTags) return <TrendingWidgetLoadingCard />;
 
@@ -71,46 +251,26 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
           )}
 
           <Stack spacing="gap-y-4">
-            {tags.length !== 0 &&
-              tags.slice(0, 4).map((tag, index) => (
-                <Stack
-                  key={index}
-                  direction="row"
-                  align="center"
-                  justify="between"
-                  spacing="gap-x-3"
-                  customStyle="w-(full xl:[19rem])"
-                >
-                  <SubtitleTextIcon
-                    label={tag.value}
-                    subtitle={`${tag.totalPosts || 0} ${tagSubtitleLabel}`}
-                    icon={<HashtagIcon />}
-                    backgroundColor={true}
-                    onClick={() => onClickTopic(tag.value)}
+            {tags.length > 0 &&
+              tags
+                .slice(0, 4)
+                .map((tag, index) => (
+                  <TopicRow
+                    key={index}
+                    tag={tag}
+                    subscribedTags={receivedTags}
+                    tagSubtitleLabel={tagSubtitleLabel}
+                    subscribeLabel={subscribeLabel}
+                    subscribedLabel={subscribedLabel}
+                    unsubscribeLabel={unsubscribeLabel}
+                    isLoggedIn={isLoggedIn}
+                    onClickTopic={onClickTopic}
+                    isLoading={tagsQueue.includes(tag)}
+                    showLoginModal={showLoginModal}
+                    handleTopicUnsubscribe={handleTopicUnsubscribe}
+                    handleTopicSubscribe={handleTopicSubscribe}
                   />
-
-                  <DuplexButton
-                    inactiveLabel={subscribeLabel}
-                    activeLabel={subscribedLabel}
-                    activeHoverLabel={unsubscribeLabel}
-                    active={subscribedTags?.includes(tag.value)}
-                    iconDirection="left"
-                    activeIcon={<CheckIcon />}
-                    activeHoverIcon={<XMarkIcon />}
-                    inactiveVariant="secondary"
-                    loading={!!isProcessingTags?.find(processingTag => processingTag === tag.value)}
-                    hoverColors={{
-                      background: { light: 'transparent', dark: 'transparent' },
-                      border: { light: 'errorLight', dark: 'errorDark' },
-                      text: { light: 'errorLight', dark: 'errorDark' },
-                      icon: { light: 'errorLight', dark: 'errorDark' },
-                    }}
-                    fixedWidth={'w-[7rem]'}
-                    onClickActive={() => handleUnsubscribeTopic(tag.value)}
-                    onClickInactive={() => handleSubscribeTopic(tag.value)}
-                  />
-                </Stack>
-              ))}
+                ))}
           </Stack>
         </ul>
       </Stack>

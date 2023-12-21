@@ -13,6 +13,7 @@ export interface FooterProps {
   handleAddTags: () => void;
   handleClickCancel: () => void;
   isPublishing?: boolean;
+  disablePublishing?: boolean;
   tagsLabel?: string;
   publishLabel?: string;
   addLabel?: string;
@@ -42,6 +43,7 @@ export const Footer: React.FC<FooterProps> = props => {
     tagsNumber = 0,
     tagValue,
     isPublishing,
+    disablePublishing,
   } = props;
 
   const renderContent = () => {
@@ -85,7 +87,7 @@ export const Footer: React.FC<FooterProps> = props => {
               <Button variant="text" label={tagsLabel} onClick={handleClickTags} />
               <Button
                 variant="primary"
-                disabled={isPublishing}
+                disabled={isPublishing || disablePublishing}
                 label={publishLabel}
                 onClick={handleBeamPublish}
               />

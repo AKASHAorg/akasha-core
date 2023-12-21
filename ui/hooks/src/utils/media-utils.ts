@@ -98,7 +98,7 @@ export const getLinkPreview = async (url: string) => {
 
 interface ISaveMediaFile {
   name: string;
-  content: File;
+  content: File | Buffer | ArrayBuffer | string;
   isUrl: boolean;
 }
 

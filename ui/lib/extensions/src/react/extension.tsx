@@ -41,20 +41,25 @@ export const Extension = <D,>(props: ExtensionComponentProps<D>) => {
 
   React.useEffect(() => {
     const loadConfigs = async () => {
+      const newExtensions = [];
+
       for (const extension of extensions) {
-        if (parcelConfigs.find(parcel => parcel.extension.appName === extension.appName)) {
-          return;
-        }
+        if (newExtensions.find(parcel => parcel.extension.appName === extension.appName)) return;
+
         try {
-          const conf = await extension.loadingFn();
-          setParcelConfigs(prev => [...prev, { config: conf, extension }]);
+          const config = await extension.loadingFn();
+          newExtensions.push({ config, extension });
         } catch (err) {
           console.error(extension, `Failed to load extension. ${err.message}`);
+          onError?.(extension);
         }
       }
+
+      setParcelConfigs(newExtensions);
     };
+
     loadConfigs().catch();
-  }, [extensions, parcelConfigs]);
+  }, [extensions, onError]);
 
   const handleParcelError =
     (extension: ExtensionInterface & { appName: string }) => (err: Error) => {

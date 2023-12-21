@@ -16,6 +16,7 @@ import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/gen
 import { transformSource, hasOwn, useLoggedIn, useValidDid } from '@akashaorg/ui-awf-hooks';
 
 export type ProfileHeaderViewProps = {
+  showNSFW?: boolean;
   handleCopyFeedback: () => void;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   navigateToModal: (opts: ModalNavigationOptions) => void;
@@ -24,7 +25,7 @@ export type ProfileHeaderViewProps = {
 
 const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const { t } = useTranslation('app-profile');
-  const { handleCopyFeedback, showLoginModal, navigateToModal, navigateTo } = props;
+  const { showNSFW, handleCopyFeedback, showLoginModal, navigateToModal, navigateTo } = props;
   const { profileId } = useParams<{ profileId: string }>();
 
   const { isLoggedIn, authenticatedDID } = useLoggedIn();
@@ -52,7 +53,7 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
 
   const profileNotFound = !profileData && !validDid;
 
-  if (profileNotFound) return null;
+  if (profileNotFound || (profileData?.nsfw && !showNSFW)) return null;
 
   if (error)
     return (
