@@ -1,26 +1,26 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
+import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { EntityTypes, ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
-import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 export type TagFeedPageProps = {
-  loggedProfileData?: Profile;
+  authenticatedProfile?: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const TagFeedPage: React.FC<TagFeedPageProps> = props => {
-  const { loggedProfileData, showLoginModal } = props;
+  const { authenticatedProfile, showLoginModal } = props;
 
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
+  const { getRoutingPlugin } = useRootComponentProps();
 
   // const { tagName } = useParams<{ tagName: string }>();
 
@@ -32,23 +32,8 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
 
   const toggleTagSubscriptionReq = undefined;
 
-  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData?.did?.id) {
-      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
-    }
-    navigateToModal({ name: 'report-modal', itemId, itemType });
-  };
-
-  const handleEntryRemove = (itemId: string) => {
-    navigateToModal({
-      name: 'entry-remove-confirmation',
-      itemId,
-      itemType: EntityTypes.BEAM,
-    });
-  };
-
   const handleTagSubscribe = (tagName: string) => {
-    if (!loggedProfileData?.did?.id) {
+    if (!authenticatedProfile?.did?.id) {
       showLoginModal();
       return;
     }

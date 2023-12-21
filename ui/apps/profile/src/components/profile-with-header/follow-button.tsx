@@ -1,7 +1,7 @@
 import React from 'react';
 import FollowProfileButton from '../follow-profile-button';
 import { useGetFollowDocumentsByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 type FollowButtonProps = {
@@ -11,7 +11,9 @@ type FollowButtonProps = {
 
 const FollowButton: React.FC<FollowButtonProps> = props => {
   const { profileID, showLoginModal } = props;
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
+  const { data: loginData } = useGetLogin();
+  const authenticatedDID = loginData?.id;
+  const isLoggedIn = !!loginData?.id;
   const { data, error } = useGetFollowDocumentsByDidSuspenseQuery({
     variables: {
       id: authenticatedDID,

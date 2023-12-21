@@ -9,7 +9,7 @@ import {
   LOGIN_STATE_KEY,
   useDismissedCard,
   useRootComponentProps,
-  useLoggedIn,
+  useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import getSDK from '@akashaorg/awf-sdk';
@@ -39,7 +39,7 @@ const SidebarComponent: React.FC<unknown> = () => {
   } = useRootComponentProps();
 
   const { t } = useTranslation('ui-widget-sidebar');
-
+  const { data } = useGetLogin();
   const [isMobile, setIsMobile] = useState(
     window.matchMedia(startMobileSidebarHidingBreakpoint).matches,
   );
@@ -47,8 +47,8 @@ const SidebarComponent: React.FC<unknown> = () => {
   const [activeOption, setActiveOption] = useState<IMenuItem | null>(null);
   const [clickedOptions, setClickedOptions] = useState<{ name: string; route: IMenuItem }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
+  const authenticatedDID = data?.id;
+  const isLoggedIn = !!data?.id;
   const logoutMutation = useLogout();
   const queryClient = useQueryClient();
 

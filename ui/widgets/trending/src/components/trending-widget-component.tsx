@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRootComponentProps, getFollowList, useLoggedIn, hasOwn } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, getFollowList, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { useGetProfilesQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import {
   useGetInterestsStreamQuery,
@@ -14,11 +14,12 @@ import { LatestProfiles, LatestTopics } from './cards';
 import { useGetIndexingDID } from '@akashaorg/ui-awf-hooks/lib/use-settings';
 
 const TrendingWidgetComponent: React.FC<unknown> = () => {
+  const { t } = useTranslation('ui-widget-trending');
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
+  const authenticatedDID = data?.id;
   const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
-  const { t } = useTranslation('ui-widget-trending');
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
 
   const latestProfilesReq = useGetProfilesQuery(
     { last: 4 },

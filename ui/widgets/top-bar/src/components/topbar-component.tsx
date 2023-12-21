@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, NotificationEvents, UIEventData } from '@akashaorg/typings/lib/ui';
-import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import Topbar from './topbar';
 import {
@@ -13,12 +13,11 @@ import {
 const TopbarComponent: React.FC<unknown> = () => {
   const { uiEvents, layoutConfig, worldConfig, encodeAppName, getRoutingPlugin } =
     useRootComponentProps();
-
+  const { data } = useGetLogin();
   const location = useLocation();
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
-
-  const { isLoggedIn } = useLoggedIn();
+  const isLoggedIn = !!data?.id;
 
   const { t } = useTranslation('ui-widget-topbar');
 

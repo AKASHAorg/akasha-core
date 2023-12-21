@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -25,14 +25,13 @@ export const DevDashOnboardingIntro: React.FC<DevDashOnboardingIntroProps> = pro
     assetExtension = 'webp',
     publicImgPath = '/images',
   } = props;
-
+  const { t } = useTranslation('app-dev-dashboard');
   const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { t } = useTranslation('app-dev-dashboard');
-
-  const { isLoggedIn } = useLoggedIn();
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
 
   const handleOnboardingCTAClick = () => {
     // if logged in, navigate to step 1

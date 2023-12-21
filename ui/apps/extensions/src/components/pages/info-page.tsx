@@ -9,8 +9,8 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import AppInfo from '@akashaorg/design-system-components/lib/components/AppInfo';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { transformSource, useLoggedIn } from '@akashaorg/ui-awf-hooks';
-import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { hasOwn, transformSource, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetAppReleaseByIdQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 const InfoPage: React.FC<unknown> = () => {
   const { appId } = useParams<{ appId: string }>();
@@ -21,19 +21,20 @@ const InfoPage: React.FC<unknown> = () => {
 
   const { t } = useTranslation('app-extensions');
 
-  const { isLoggedIn } = useLoggedIn();
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
 
   // const network = useCurrentNetwork(isLoggedIn).data;
 
-  const appReleaseInfoReq = useGetAppReleaseByIdQuery(
-    { id: appId },
-    {
-      select: response => response.node,
-      enabled: !!isLoggedIn,
-    },
-  );
+  const { data: appReleaseInfoReq, error } = useGetAppReleaseByIdQuery({
+    variables: { id: appId },
+    skip: !isLoggedIn,
+  });
 
-  const appReleaseInfo = 'application' in appReleaseInfoReq.data && appReleaseInfoReq.data;
+  const appReleaseInfo =
+    appReleaseInfoReq.node && hasOwn(appReleaseInfoReq?.node, 'applicationID')
+      ? appReleaseInfoReq.node
+      : null;
 
   // const author = appReleaseInfo.application.author.akashaProfile;
 
@@ -86,7 +87,7 @@ const InfoPage: React.FC<unknown> = () => {
 
   return (
     <Stack>
-      {appReleaseInfoReq.error && (
+      {error && (
         <ErrorLoader
           type="script-error"
           title={t('There was an error loading the app info')}
@@ -94,7 +95,7 @@ const InfoPage: React.FC<unknown> = () => {
           // devDetails={appReleaseInfoReq.error.message}
         />
       )}
-      {!appReleaseInfoReq.error && (
+      {appReleaseInfo && (
         <AppInfo
           integrationName={appReleaseInfo?.application?.displayName}
           packageName={appReleaseInfo?.application?.name}

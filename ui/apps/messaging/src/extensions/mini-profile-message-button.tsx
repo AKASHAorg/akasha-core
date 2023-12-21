@@ -8,8 +8,8 @@ import {
   withProviders,
   validateType,
   useRootComponentProps,
+  useGetLoginProfile,
 } from '@akashaorg/ui-awf-hooks';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
@@ -30,12 +30,8 @@ const MessageButton: React.FC<RootExtensionProps<MessageButtonExtensionData>> = 
 
   const { profileId } = extensionData;
 
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-  });
-  const loggedProfileData = profileDataReq.data;
+  const authenticatedProfileReq = useGetLoginProfile();
+  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
   const contactsToCheck = [];
   if (validateType(profileId, 'string')) {
@@ -61,7 +57,7 @@ const MessageButton: React.FC<RootExtensionProps<MessageButtonExtensionData>> = 
     });
   };
 
-  if (profileId === loggedProfileData?.did.id) {
+  if (profileId === authenticatedProfile?.did.id) {
     return;
   }
 

@@ -3,10 +3,10 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import {
-  useLoggedIn,
   withProviders,
   useAnalytics,
   useRootComponentProps,
+  useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -22,7 +22,8 @@ type CardSaveButtonExtensionData = {
 };
 const EntryCardSaveButton = (props: RootExtensionProps<CardSaveButtonExtensionData>) => {
   const { extensionData } = props;
-  const { isLoggedIn } = useLoggedIn();
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
   const bookmarkReq = null;
   const bookmarkCreate = null;
   const bookmarkDelete = null;

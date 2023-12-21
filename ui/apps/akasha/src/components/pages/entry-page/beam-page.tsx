@@ -12,7 +12,7 @@ import {
   mapBeamEntryData,
   mapReflectEntryData,
   useAnalytics,
-  useLoggedIn,
+  useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
@@ -26,8 +26,9 @@ const BeamPage: React.FC<unknown> = () => {
   }>();
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
-  const { isLoggedIn } = useLoggedIn();
+  const { data } = useGetLogin();
   const [analyticsActions] = useAnalytics();
+  const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const beamReq = useGetBeamByIdSuspenseQuery({
     variables: { id: beamId },

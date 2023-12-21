@@ -84,13 +84,13 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
       });
     },
   });
-  const loggedInProfileReq = useGetLoginProfile();
+  const authenticatedProfileDataReq = useGetLoginProfile();
   const disablePublishing = useMemo(
-    () => !loggedInProfileReq?.akashaProfile?.did?.id,
-    [loggedInProfileReq],
+    () => !authenticatedProfileDataReq?.akashaProfile?.did?.id,
+    [authenticatedProfileDataReq],
   );
 
-  const loggedInProfileData = loggedInProfileReq?.akashaProfile;
+  const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
 
   const handlePublish = (data: IPublishData) => {
     const reflection = isReflectOfReflection ? { reflection: reflectToId } : {};
@@ -137,14 +137,14 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         disableActionLabel={t('Authenticating')}
         editorState={editorState}
         showEditorInitialValue={showEditor}
-        avatar={loggedInProfileData?.avatar}
-        profileId={loggedInProfileData?.did?.id}
+        avatar={authenticatedProfile?.avatar}
+        profileId={authenticatedProfile?.did?.id}
         disablePublish={disablePublishing}
         tags={tagSearch?.data}
         mentions={mentionSearch?.data}
         background={{ light: 'grey9', dark: 'grey3' }}
         onPublish={data => {
-          if (!loggedInProfileData) {
+          if (!authenticatedProfile) {
             return;
           }
           handlePublish(data);
@@ -162,7 +162,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         pendingReflectRef.current &&
         createPortal(
           <PendingReflect
-            entryData={{ ...newContent, id: null, authorId: loggedInProfileData?.did?.id }}
+            entryData={{ ...newContent, id: null, authorId: authenticatedProfile?.did?.id }}
           />,
           pendingReflectRef.current,
         )}

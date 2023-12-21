@@ -17,19 +17,22 @@ import {
   hasOwn,
   getFollowList,
   useRootComponentProps,
+  useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 
 export type FollowersPageProps = {
-  isLoggedIn: boolean;
-  authenticatedDID: string;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const FollowersPage: React.FC<FollowersPageProps> = props => {
-  const { isLoggedIn, authenticatedDID, showLoginModal } = props;
-  const [loadMore, setLoadingMore] = useState(false);
+  const { showLoginModal } = props;
+  const { data: loginData, loading: authenticating } = useGetLogin();
+
   const { profileId } = useParams<{ profileId: string }>();
   const { getRoutingPlugin } = useRootComponentProps();
+  const [loadMore, setLoadingMore] = useState(false);
+  const authenticatedDID = loginData?.id;
+  const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const { data, fetchMore, loading, error } = useGetFollowersListByDidQuery({
@@ -66,6 +69,13 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     skip: !isLoggedIn || !followProfileIds.length,
   });
 
+  if (loading || authenticating)
+    return (
+      <EngagementTab navigateTo={navigateTo}>
+        <ProfileEngagementLoading />
+      </EngagementTab>
+    );
+
   if (!isLoggedIn) {
     return navigateTo({
       appName: '@akashaorg/app-profile',
@@ -95,7 +105,6 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
 
   return (
     <EngagementTab navigateTo={navigateTo}>
-      {loading && <ProfileEngagementLoading />}
       {error && (
         <Stack customStyle="mt-8">
           <EntryError onError={onError} />

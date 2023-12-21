@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { GenerateMessage, KeyConfirmation } from '../components/onboarding';
 
 import menuRoute, { DEV_KEYS } from '../routes';
 
 export const AddDevKey: React.FC<unknown> = () => {
+  const { t } = useTranslation('app-dev-dashboard');
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');
 
-  const { authenticatedDID } = useLoggedIn();
-
-  const { t } = useTranslation('app-dev-dashboard');
+  const { data } = useGetLogin();
+  const authenticatedDID = data?.id;
 
   const { getRoutingPlugin } = useRootComponentProps();
 

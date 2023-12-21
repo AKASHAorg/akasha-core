@@ -87,7 +87,13 @@ describe('< BeamPage /> component', () => {
       jest.spyOn(apolloHooks, 'useGetMyProfileQuery') as unknown as jest.SpyInstance<{
         data: { viewer: { akashaProfile: ReturnType<typeof genUser> } };
       }>
-    ).mockReturnValue({ data: { viewer: { akashaProfile: genUser() } } });
+    ).mockReturnValue({
+      data: {
+        viewer: {
+          akashaProfile: genUser('pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff'),
+        },
+      },
+    });
     (
       jest.spyOn(useBeamsHook, 'useBeams') as unknown as jest.SpyInstance<{
         data: unknown;
