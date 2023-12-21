@@ -1,14 +1,13 @@
 import React, { MutableRefObject, useEffect, useMemo, useState } from 'react';
 import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
-import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import getSDK from '@akashaorg/awf-sdk';
 import {
   transformSource,
   serializeSlateToBase64,
   useAnalytics,
-  useShowFeedback,
   decodeb64SlateContent,
   useGetLoginProfile,
+  useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
@@ -20,11 +19,11 @@ import {
   AnalyticsCategories,
   IPublishData,
   NotificationTypes,
+  NotificationEvents,
   ReflectEntryData,
 } from '@akashaorg/typings/lib/ui';
 import { useApolloClient } from '@apollo/client';
 import { createPortal } from 'react-dom';
-import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { PendingReflect } from './pending-reflect';
 
 export type ReflectEditorProps = {
@@ -38,12 +37,14 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const { beamId, reflectToId, showEditorInitialValue, pendingReflectRef } = props;
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
+  const { uiEvents } = useRootComponentProps();
+  const _uiEvents = React.useRef(uiEvents);
   const [editorState, setEditorState] = useState(null);
   const [newContent, setNewContent] = useState<ReflectEntryData>(null);
   //@TODO
   const [mentionQuery, setMentionQuery] = useState(null);
   const [tagQuery, setTagQuery] = useState(null);
-  const [showErrorSnackbar, setShowErrorSnackbar] = useShowFeedback(false);
+
   const [showEditor, setShowEditor] = useState(showEditorInitialValue);
 
   const sdk = getSDK();
@@ -72,7 +73,15 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     onError: () => {
       setShowEditor(true);
       setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
-      setShowErrorSnackbar(true);
+
+      const notifMsg = t(`Something went wrong.`);
+      _uiEvents.current.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Alert,
+          message: notifMsg,
+        },
+      });
     },
   });
   const loggedInProfileReq = useGetLoginProfile();
@@ -156,17 +165,6 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
             entryData={{ ...newContent, id: null, authorId: loggedInProfileData?.did?.id }}
           />,
           pendingReflectRef.current,
-        )}
-      {showErrorSnackbar &&
-        createPortal(
-          <Snackbar
-            title={t('Something went wrong.')}
-            description={t('Please try again.')}
-            handleDismiss={() => setShowErrorSnackbar(false)}
-            type={NotificationTypes.Alert}
-            icon={<XCircleIcon />}
-          />,
-          document.getElementById('reflect-error-snackbar-container'),
         )}
     </>
   );
