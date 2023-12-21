@@ -33,6 +33,7 @@ import FallbackHeader from './fallback-header';
 
 const SidebarComponent: React.FC<unknown> = () => {
   const {
+    logger,
     uiEvents,
     worldConfig: { defaultApps, socialLinks },
     getRoutingPlugin,
@@ -242,8 +243,8 @@ const SidebarComponent: React.FC<unknown> = () => {
       errorObj={{
         type: t('script-error'),
         title: t('Error in sidebar widget'),
-        details: t('Unable to load widget now, try again later'),
       }}
+      logger={logger.error}
     >
       <Card
         customStyle="w-[19.5rem] max-w-[19.5rem] max-h(screen xl:[calc(100vh-20px)]) h(full xl:fit)"

@@ -4,23 +4,27 @@ import ErrorLoader, { ErrorLoaderProps } from '../ErrorLoader';
 export type ErrorBoundaryProps = {
   children: React.ReactElement;
   fallback?: React.ReactElement;
-  errorObj?: Pick<ErrorLoaderProps, 'type' | 'title' | 'details'>;
+  errorObj?: Pick<ErrorLoaderProps, 'type' | 'title'>;
+  logger?: (err: string) => void;
 };
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, { hasError: boolean }> {
+export type ErrorBoundaryState = { hasError: boolean; error: Error };
+
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
+  componentDidCatch(error: Error): void {
+    this.setState({ hasError: true, error });
+    this.props.logger?.(error?.message);
   }
 
   render() {
     const {
-      errorObj: { type = 'script-error', title = 'An error occured', details = '' },
-      fallback = <ErrorLoader type={type} title={title} details={details} />,
+      errorObj: { type = 'script-error', title = 'An error occured' },
+      fallback = <ErrorLoader type={type} title={title} details={this.state.error?.message} />,
       children,
     } = this.props;
 

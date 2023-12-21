@@ -11,7 +11,7 @@ import {
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 
 const TopbarComponent: React.FC<unknown> = () => {
-  const { uiEvents, layoutConfig, worldConfig, encodeAppName, getRoutingPlugin } =
+  const { uiEvents, layoutConfig, logger, worldConfig, encodeAppName, getRoutingPlugin } =
     useRootComponentProps();
   const { data } = useGetLogin();
   const location = useLocation();
@@ -181,8 +181,8 @@ const TopbarComponent: React.FC<unknown> = () => {
       errorObj={{
         type: t('script-error'),
         title: t('Error in topbar widget'),
-        details: t('Unable to load widget now, try again later'),
       }}
+      logger={logger.error}
     >
       <Topbar
         isLoggedIn={isLoggedIn}

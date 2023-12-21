@@ -20,7 +20,7 @@ import NoAppsMessage from './no-apps-message';
 const ICWidget: React.FC<unknown> = () => {
   const { t } = useTranslation('ui-widget-my-apps');
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const { worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
+  const { logger, worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
   const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
@@ -125,9 +125,9 @@ const ICWidget: React.FC<unknown> = () => {
     <ErrorBoundary
       errorObj={{
         type: t('script-error'),
-        title: t('Error in my apps widget'),
-        details: t('Unable to load widget now, try again later'),
+        title: t('Error in my-apps widget'),
       }}
+      logger={logger.error}
     >
       <Stack padding="pb-4">
         <Card elevation="1">

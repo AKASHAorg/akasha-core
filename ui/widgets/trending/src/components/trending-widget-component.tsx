@@ -18,7 +18,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { data } = useGetLogin();
   const isLoggedIn = !!data?.id;
   const authenticatedDID = data?.id;
-  const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
+  const { plugins, uiEvents, logger, navigateToModal } = useRootComponentProps();
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const latestProfilesReq = useGetProfilesQuery(
@@ -121,8 +121,8 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           errorObj={{
             type: t('script-error'),
             title: t('Error in latest topics widget'),
-            details: t('Unable to load widget now, try again later'),
           }}
+          logger={logger.error}
         >
           <LatestTopics
             titleLabel={t('Latest Topics')}
@@ -149,8 +149,8 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           errorObj={{
             type: t('script-error'),
             title: t('Error in latest profiles widget'),
-            details: t('Unable to load widget now, try again later'),
           }}
+          logger={logger.error}
         >
           <LatestProfiles
             titleLabel={t('Start Following')}
