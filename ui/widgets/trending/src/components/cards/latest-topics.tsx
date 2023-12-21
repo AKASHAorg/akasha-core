@@ -72,8 +72,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
   useEffect(() => {
     if (receivedTags && !localTagsInitialized.current) {
-      console.log('receivedTags', receivedTags);
-
       setLocalSubscribedTags([...new Set(receivedTags)]);
       localTagsInitialized.current = true;
     }
@@ -106,7 +104,6 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
     if (!isEqual(localSubscribedTagsRef.current, receivedTags)) {
       if (subscriptionId.current) {
-        console.log('data', [...new Set(localSubscribedTagsRef.current)]);
         updateInterestsMutation({
           variables: {
             i: {
@@ -140,9 +137,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             const arrDifference = difference(returnedData, receivedTags).concat(
               difference(receivedTags, returnedData),
             );
-            console.log('receivedTags ', receivedTags);
 
-            console.log('arrDifference ', arrDifference);
             setTagsQueue(prev => pullAll(prev, arrDifference));
           },
           onError: err => {
