@@ -131,6 +131,7 @@ export const SlateEditorBlock = (
       showCancelButton={false}
       showPostButton={false}
       transformSource={transformSource}
+      handleDisablePublish={props.blockInfo.externalHandler}
     />
   );
 };

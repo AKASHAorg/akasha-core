@@ -109,6 +109,11 @@ export const BeamEditor: React.FC = () => {
     });
   };
 
+  const [disablePublishing, setDisablePublishing] = React.useState(false);
+  const handleDisablePublishing = (value: boolean) => {
+    setDisablePublishing(value);
+  };
+
   return (
     <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between" padding={0}>
       <Header
@@ -152,6 +157,7 @@ export const BeamEditor: React.FC = () => {
                   editMode={{
                     appName: block.appName,
                     propertyType: block.propertyType,
+                    externalHandler: handleDisablePublishing,
                   }}
                   mode={ContentBlockModes.EDIT}
                   blockRef={block.blockRef}
@@ -246,6 +252,7 @@ export const BeamEditor: React.FC = () => {
         tagsNumber={editorTags.length}
         tagValue={tagValue}
         isPublishing={isPublishing}
+        disablePublishing={disablePublishing}
       />
     </Card>
   );

@@ -4,6 +4,7 @@ import { getMediaUrl, saveMediaFile, useRootComponentProps } from '@akashaorg/ui
 import {
   type BlockInstanceMethods,
   type ContentBlockRootProps,
+  NotificationTypes,
   NotificationEvents,
 } from '@akashaorg/typings/lib/ui';
 import { useCreateContentBlockMutation } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
@@ -148,7 +149,7 @@ export const ImageEditorBlock = (
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
-          name: 'error',
+          type: NotificationTypes.Error,
           message: notifMsg,
         },
       });
@@ -252,7 +253,7 @@ export const ImageEditorBlock = (
     _uiEvents.current.next({
       event: NotificationEvents.ShowNotification,
       data: {
-        name: 'success',
+        type: NotificationTypes.Success,
         message: notifMsg,
       },
     });

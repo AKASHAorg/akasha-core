@@ -75,6 +75,7 @@ export type EditorBoxProps = {
   getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
+  handleDisablePublish?: (value: any) => void;
 };
 
 /* eslint-disable complexity */
@@ -108,6 +109,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     showPostButton = true,
     transformSource,
     customStyle = '',
+    handleDisablePublish,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -285,8 +287,10 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     /** disable publishing if no images/text or text too long */
     if (textLength > 0 && textLength <= MAX_LENGTH) {
       setPublishDisabledInternal(false);
+      handleDisablePublish(false);
     } else if (textLength === 0 || textLength > MAX_LENGTH) {
       setPublishDisabledInternal(true);
+      handleDisablePublish(true);
     }
 
     if (typeof setLetterCount === 'function') {

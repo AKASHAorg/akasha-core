@@ -29,6 +29,7 @@ export type ContentBlockExtensionProps = {
   editMode?: {
     propertyType: string;
     appName: string;
+    externalHandler?: (value: never) => void;
   };
   readMode?: {
     blockID: string;
@@ -192,6 +193,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
               blockInfo={{
                 ...matchingBlock.blockInfo,
                 mode,
+                externalHandler: editMode.externalHandler,
               }}
               blockData={matchingBlock.blockData}
               blockRef={blockRef}
