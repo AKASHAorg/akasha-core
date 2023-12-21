@@ -7,7 +7,7 @@ export const useRoutingEvents = () => {
   React.useEffect(() => {
     window.addEventListener('single-spa:before-routing-event', (ev: SingleSpaRoutingEvent) => {
       if (ev.detail.newUrl !== ev.detail.oldUrl) {
-        setCurrentLocation({ ...window.location, href: ev.detail.newUrl });
+        setCurrentLocation({ ...window.location }); // create and set a new object instance from location
       }
     });
   }, []);
