@@ -84,21 +84,26 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
 
   React.useLayoutEffect(() => {
     const resolveConfigs = async () => {
+      const newBlocks = [];
+
       for (const block of matchingBlocks) {
         try {
           const config = await block.blockInfo.loadingFn({
             blockInfo: { ...block.blockInfo, mode },
             blockData: block.blockData,
           })();
-          setState(prev => ({
-            parcels: [...prev.parcels, { ...block, config }],
-            isMatched: true,
-          }));
+          newBlocks.push({ ...block, config });
         } catch (err) {
           console.error(err);
         }
       }
+
+      setState({
+        parcels: newBlocks,
+        isMatched: true,
+      });
     };
+
     if (
       matchingBlocks &&
       matchingBlocks.length &&

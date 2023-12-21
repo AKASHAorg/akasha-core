@@ -29,19 +29,24 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
 
   React.useEffect(() => {
     const resolveConfigs = async () => {
+      const newWidgets = [];
+
       for (const widget of widgets) {
-        if (parcelConfigs.find(p => p.widget.appName === widget.appName)) return;
+        if (newWidgets.find(p => p.widget.appName === widget.appName)) return;
         try {
           const config = await widget.loadingFn();
-          setParcelConfigs(prev => [...prev, { config, widget }]);
+          newWidgets.push({ config, widget });
         } catch (err) {
           console.error('error getting widget config', widget.appName);
           onError?.(widget);
         }
       }
+
+      setParcelConfigs(newWidgets);
     };
+
     resolveConfigs().catch();
-  }, [widgets, parcelConfigs, location]);
+  }, [widgets, onError]);
 
   const loadingConfiguredParcel = parcelConfigs.length > 0 ? !isParcelMounted : false;
   const isLoading = widgets.length > parcelConfigs.length || loadingConfiguredParcel;
