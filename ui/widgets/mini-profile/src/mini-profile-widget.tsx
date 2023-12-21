@@ -8,7 +8,7 @@ import {
   getFollowList,
   hasOwn,
   transformSource,
-  useLoggedIn,
+  useGetLogin,
   useProfileStats,
   useRootComponentProps,
   withProviders,
@@ -24,15 +24,15 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
-  const { plugins } = props;
-
-  const { beamId, reflectionId } = useParams<{ beamId?: string; reflectionId?: string }>();
   const { t } = useTranslation('ui-widget-mini-profile');
-
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
-
+  const { plugins } = props;
+  const { beamId, reflectionId } = useParams<{ beamId?: string; reflectionId?: string }>();
+  const { data: loginData } = useGetLogin();
   const { data: beam } = useGetBeamByIdQuery({ variables: { id: beamId } });
   const { data: reflection } = useGetReflectionByIdQuery({ variables: { id: reflectionId } });
+
+  const authenticatedDID = loginData?.id;
+  const isLoggedIn = !!loginData?.id;
 
   // set data based on beam or reflect page
   const data = beamId ? beam : reflection;

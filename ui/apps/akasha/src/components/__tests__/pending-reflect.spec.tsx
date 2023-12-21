@@ -12,7 +12,12 @@ describe('< PendingReflect /> component', () => {
   const reflectionData = genReflectionData();
 
   const BaseComponent = (
-    <PendingReflect entryData={{ ...reflectionData, authorId: genUser().id }} />
+    <PendingReflect
+      entryData={{
+        ...reflectionData,
+        authorId: genUser('pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff').id,
+      }}
+    />
   );
 
   it('should show pending reflect', async () => {

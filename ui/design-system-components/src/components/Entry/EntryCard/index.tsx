@@ -35,7 +35,8 @@ export type EntryCardProps = {
   entryData: EntryData;
   authorProfile: {
     data: Pick<AkashaProfile, 'name' | 'avatar' | 'did'>;
-    status: 'loading' | 'error' | 'success';
+    loading: boolean;
+    error: Error;
   };
   locale?: string;
   flagAsLabel?: string;
@@ -156,21 +157,19 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     ? `${getColorClasses({ light: 'grey9/60', dark: 'grey3' }, 'hover:bg')} ${hoverStyleLastEntry}`
     : '';
   const publishTime = entryData?.createdAt ? formatRelativeTime(entryData.createdAt, locale) : '';
-  const avatar = authorProfile.status === 'error' ? null : authorProfile.data?.avatar;
+  const avatar = authorProfile.error ? null : authorProfile.data?.avatar;
 
   const entryCardUi = (
     <Stack spacing="gap-y-2" padding="p-4" customStyle={hoverStyle}>
       <Stack direction="row" justify="between">
         <>
-          {authorProfile.status === 'loading' ? (
+          {authorProfile.loading ? (
             <AuthorProfileLoading />
           ) : (
             <ProfileAvatarButton
               data-testid="entry-profile-detail"
               profileId={entryData.authorId}
-              label={
-                authorProfile.status === 'error' ? entryData.authorId : authorProfile.data?.name
-              }
+              label={authorProfile.error ? entryData.authorId : authorProfile.data?.name}
               avatar={transformSource(avatar?.default)}
               alternativeAvatars={avatar?.alternatives?.map(alternative =>
                 transformSource(alternative),

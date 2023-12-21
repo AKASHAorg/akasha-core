@@ -65,7 +65,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
           key={parcelConf.widget.appName}
           config={parcelConf.config}
           {...getContext()}
-          handleError={err => onError(parcelConf.widget, `Failed to mount: ${err.message}`)}
+          handleError={err => onError?.(parcelConf.widget, `Failed to mount: ${err.message}`)}
         />
       ))}
     </Stack>

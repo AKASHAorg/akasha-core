@@ -17,7 +17,7 @@ import { getTextileUsage } from '../api/message';
 import { MESSAGING } from '../routes';
 
 export type SettingsPageProps = {
-  loggedProfileData: Profile;
+  authenticatedProfile: Profile;
 };
 
 const convertFromBytes = val => {
@@ -93,7 +93,7 @@ const InboxPage = (props: SettingsPageProps) => {
         <Text weight={'bold'}>{t('Ethereum Public Key')}</Text>
       </Stack>
       <Stack direction="row" justify="between" customStyle="py-4 px-8 border(b grey8 dark:grey3)">
-        <Text>{props.loggedProfileData?.did?.id}</Text>
+        <Text>{props.authenticatedProfile?.did?.id}</Text>
       </Stack>
       <Stack direction="row" justify="end" customStyle="p-4">
         <Button label={t('Uninstall')} onClick={handleUninstall} icon={<XMarkIcon />} />

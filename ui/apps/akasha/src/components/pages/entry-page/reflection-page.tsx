@@ -13,7 +13,7 @@ import {
   hasOwn,
   mapReflectEntryData,
   useAnalytics,
-  useLoggedIn,
+  useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
@@ -27,8 +27,9 @@ const ReflectionPage: React.FC<unknown> = () => {
   }>();
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin, navigateToModal, getTranslationPlugin } = useRootComponentProps();
-  const { isLoggedIn } = useLoggedIn();
+  const { data } = useGetLogin();
   const [analyticsActions] = useAnalytics();
+  const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const reflectionReq = useGetReflectionByIdSuspenseQuery({ variables: { id: reflectionId } });
   const entryData = React.useMemo(() => {

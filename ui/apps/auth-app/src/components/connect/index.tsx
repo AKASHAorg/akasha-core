@@ -1,30 +1,34 @@
 import React, { useEffect, useRef } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useLoggedIn, useLogin, useLogout, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import {
+  hasOwn,
+  useGetLogin,
+  useLogin,
+  useLogout,
+  useRootComponentProps,
+} from '@akashaorg/ui-awf-hooks';
+
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { EthProviders } from '@akashaorg/typings/lib/sdk';
+import { CONNECT } from '../../routes';
 import ChooseProvider from './choose-provider';
 import ConnectWallet from './connect-wallet';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import { CONNECT } from '../../routes';
 
 const Connect: React.FC<unknown> = () => {
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
+  const authenticatedDID = data?.id;
   const logoutQuery = useLogout();
 
-  const profileDataReq = useGetProfileByDidQuery(
-    { id: authenticatedDID },
-    {
-      select: resp => {
-        return resp.node;
-      },
-      enabled: isLoggedIn,
-    },
-  );
+  const { data: profileDataReq, loading } = useGetProfileByDidQuery({
+    variables: { id: authenticatedDID },
+    skip: !isLoggedIn,
+  });
 
-  const profile =
-    profileDataReq.data && 'akashaProfile' in profileDataReq.data
-      ? profileDataReq.data?.akashaProfile
+  const profileData =
+    profileDataReq?.node && hasOwn(profileDataReq?.node, 'akashaProfile')
+      ? profileDataReq?.node?.akashaProfile
       : null;
 
   const { worldConfig, getRoutingPlugin } = useRootComponentProps();
@@ -37,8 +41,8 @@ const Connect: React.FC<unknown> = () => {
     const searchParam = new URLSearchParams(location.search);
 
     // if user is logged in, do not show the connect page
-    if (isLoggedIn && profileDataReq.status !== 'loading') {
-      if (!profile) {
+    if (isLoggedIn && !loading) {
+      if (!profileData) {
         routingPlugin.current?.navigateTo({
           appName: '@akashaorg/app-profile',
           getNavigationUrl: () => `/${authenticatedDID}/edit`,
@@ -53,7 +57,7 @@ const Connect: React.FC<unknown> = () => {
         },
       });
     }
-  }, [isLoggedIn, authenticatedDID, profile, profileDataReq, worldConfig.homepageApp]);
+  }, [isLoggedIn, loading, authenticatedDID, profileData, profileDataReq, worldConfig.homepageApp]);
 
   const handleDisconnect = () => {
     logoutQuery.mutate();

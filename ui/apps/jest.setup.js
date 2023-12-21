@@ -5,11 +5,6 @@ import * as useRootComponentProps from '@akashaorg/ui-awf-hooks/lib/use-root-pro
 
 require('@testing-library/jest-dom/extend-expect');
 
-jest.mock('@akashaorg/ui-awf-hooks/lib/generated', () => ({
-  __esModule: true,
-  ...jest.requireActual('@akashaorg/ui-awf-hooks/lib/generated'),
-}));
-
 /**
  * sdk mock for Apps package.
  * Include only methods needed for the apps tests

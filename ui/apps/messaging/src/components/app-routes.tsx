@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
 
@@ -13,12 +12,8 @@ import SettingsPage from './settings-page';
 import routes, { CHAT, MESSAGING, SETTINGS } from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-  });
-  const loggedProfileData = profileDataReq.data;
+  const authenticatedProfileReq = useGetLoginProfile();
+  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
   // const getHubUserCallback = useCallback(getHubUser, [loggedUserId]);
 
@@ -70,16 +65,19 @@ const AppRoutes: React.FC<unknown> = () => {
       <Routes>
         <Route
           path={`${routes[MESSAGING]}`}
-          element={<InboxPage loggedProfileData={loggedProfileData} />}
+          element={<InboxPage authenticatedProfile={authenticatedProfile} />}
         ></Route>
         <Route
           path={`${routes[SETTINGS]}`}
-          element={<SettingsPage loggedProfileData={loggedProfileData} />}
+          element={<SettingsPage authenticatedProfile={authenticatedProfile} />}
         ></Route>
         <Route
           path={`${routes[CHAT]}/:did`}
           element={
-            <ChatPage loggedProfileData={loggedProfileData} fetchingMessages={fetchingMessages} />
+            <ChatPage
+              authenticatedProfile={authenticatedProfile}
+              fetchingMessages={fetchingMessages}
+            />
           }
         ></Route>
         <Route path="/" element={<Navigate to={routes[MESSAGING]} replace />} />

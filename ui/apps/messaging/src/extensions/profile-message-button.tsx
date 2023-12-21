@@ -3,8 +3,12 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider } from 'react-i18next';
-import { useAnalytics, useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import {
+  useAnalytics,
+  useGetLoginProfile,
+  useRootComponentProps,
+  withProviders,
+} from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
@@ -22,12 +26,8 @@ const MessageIconButton: React.FC<RootExtensionProps<MessageIconExtensionData>> 
   const [analyticsActions] = useAnalytics();
   const { profileId } = extensionData;
 
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-  });
-  const loggedProfileData = profileDataReq.data;
+  const authenticatedProfileReq = useGetLoginProfile();
+  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
   const isContactReq = null;
   const contactList = isContactReq?.data;
@@ -48,7 +48,7 @@ const MessageIconButton: React.FC<RootExtensionProps<MessageIconExtensionData>> 
     });
   };
 
-  if (profileId === loggedProfileData.did.id) {
+  if (profileId === authenticatedProfile.did.id) {
     return;
   }
 

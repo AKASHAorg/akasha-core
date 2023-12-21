@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
@@ -28,7 +28,8 @@ export const VerifySignature: React.FC<unknown> = () => {
   const { t } = useTranslation('app-dev-dashboard');
   const { getRoutingPlugin } = useRootComponentProps();
 
-  const { authenticatedDID } = useLoggedIn();
+  const { data } = useGetLogin();
+  const authenticatedDID = data?.id;
 
   const navigateTo = getRoutingPlugin().navigateTo;
 

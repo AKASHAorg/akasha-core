@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/lib/ui';
-import { withProviders, useRootComponentProps, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { withProviders, useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -17,12 +17,11 @@ import AppsList from './apps-list';
 import NoAppsMessage from './no-apps-message';
 
 const ICWidget: React.FC<unknown> = () => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
-
   const { t } = useTranslation('ui-widget-my-apps');
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const { worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
-  const { isLoggedIn } = useLoggedIn();
-
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {

@@ -9,11 +9,11 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 export type EditorPageProps = {
-  loggedProfileData?: Profile;
+  authenticatedProfile?: Profile;
 };
 
 const EditorPage: React.FC<EditorPageProps> = props => {
-  const { loggedProfileData } = props;
+  const { authenticatedProfile } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ const EditorPage: React.FC<EditorPageProps> = props => {
       <Helmet.Helmet>
         <title>Beam Editor</title>
       </Helmet.Helmet>
-      {!loggedProfileData && (
+      {!authenticatedProfile && (
         <Stack>
           <ErrorLoader
             type={'not-registered'}
@@ -43,7 +43,7 @@ const EditorPage: React.FC<EditorPageProps> = props => {
           </ErrorLoader>
         </Stack>
       )}
-      {loggedProfileData?.did?.id && (
+      {authenticatedProfile?.did?.id && (
         <Stack customStyle="mb-1">
           <Extension name="beam-editor_feed_page" />
         </Stack>

@@ -2,10 +2,10 @@ import React from 'react';
 import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import { transformSource, hasOwn, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { transformSource, hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { decodeb64SlateContent, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 
 export type ReflectCardProps = Pick<
@@ -27,20 +27,23 @@ export type ReflectCardProps = Pick<
 };
 
 const ReflectionCard: React.FC<ReflectCardProps> = props => {
+  const { t } = useTranslation('ui-lib-feed');
   const { entryData, onReflect, ...rest } = props;
   const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
-  const { t } = useTranslation('ui-lib-feed');
+  const { data } = useGetLogin();
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
+  const authenticatedDID = data?.id;
 
-  const { authenticatedDID } = useLoggedIn();
-
-  const profileDataReq = useGetProfileByDidQuery(
-    { id: entryData.authorId },
-    { select: response => response.node },
-  );
+  const {
+    data: profileDataReq,
+    loading,
+    error,
+  } = useGetProfileByDidQuery({
+    variables: { id: entryData.authorId },
+  });
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
-      ? profileDataReq.data
+    profileDataReq?.node && hasOwn(profileDataReq.node, 'akashaProfile')
+      ? profileDataReq.node
       : { akashaProfile: null };
 
   const navigateTo = getRoutingPlugin().navigateTo;
@@ -55,7 +58,7 @@ const ReflectionCard: React.FC<ReflectCardProps> = props => {
   return (
     <EntryCard
       entryData={entryData}
-      authorProfile={{ data: profileData, status: profileDataReq.status }}
+      authorProfile={{ data: profileData, loading, error }}
       locale={locale}
       profileAnchorLink="/@akashaorg/app-profile"
       slateContent={entryData.content.flatMap(item => decodeb64SlateContent(item.value))}

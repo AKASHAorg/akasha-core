@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import { useRootComponentProps, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
 import SettingsPage from './settings-page';
@@ -11,7 +11,8 @@ import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal } = useRootComponentProps();
 
-  const { isLoggedIn } = useLoggedIn();
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
 
   const showLoginModal = () => {
     navigateToModal({ name: 'login' });
