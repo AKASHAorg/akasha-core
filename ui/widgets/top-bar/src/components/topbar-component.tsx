@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { EventTypes, NotificationEvents, UIEventData } from '@akashaorg/typings/lib/ui';
 import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import Topbar from './topbar';
 import {
   startWidgetsTogglingBreakpoint,
@@ -17,6 +19,8 @@ const TopbarComponent: React.FC<unknown> = () => {
   const isNavigatingBackRef = React.useRef(false);
 
   const { isLoggedIn } = useLoggedIn();
+
+  const { t } = useTranslation('ui-widget-topbar');
 
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
@@ -174,19 +178,27 @@ const TopbarComponent: React.FC<unknown> = () => {
   };
 
   return (
-    <Topbar
-      isLoggedIn={isLoggedIn}
-      sidebarVisible={sidebarVisible}
-      onSidebarToggle={handleSidebarToggle}
-      onAppWidgetClick={handleWidgetToggle}
-      onNotificationClick={handleNotificationClick}
-      onBackClick={handleBackClick}
-      onLoginClick={handleLoginClick}
-      currentLocation={location?.pathname}
-      onBrandClick={handleBrandClick}
-      modalSlotId={layoutConfig.modalSlotId}
-      snoozeNotifications={snoozeNotifications}
-    />
+    <ErrorBoundary
+      errorObj={{
+        type: t('script-error'),
+        title: t('Error in topbar widget'),
+        details: t('Unable to load widget now, try again later'),
+      }}
+    >
+      <Topbar
+        isLoggedIn={isLoggedIn}
+        sidebarVisible={sidebarVisible}
+        onSidebarToggle={handleSidebarToggle}
+        onAppWidgetClick={handleWidgetToggle}
+        onNotificationClick={handleNotificationClick}
+        onBackClick={handleBackClick}
+        onLoginClick={handleLoginClick}
+        currentLocation={location?.pathname}
+        onBrandClick={handleBrandClick}
+        modalSlotId={layoutConfig.modalSlotId}
+        snoozeNotifications={snoozeNotifications}
+      />
+    </ErrorBoundary>
   );
 };
 
