@@ -15,15 +15,15 @@ import {
   hasOwn,
   mapBeamEntryData,
   transformSource,
-  useLoggedIn,
+  useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export type EntryCardRendererProps = {
   itemData?: AkashaBeam;
   itemType?: EntityTypes;
-  loggedProfileData?: Profile;
+  authenticatedProfile?: Profile;
   navigateTo?: (args: NavigateToParams) => void;
   onContentClick: (details: IContentClickDetails, itemType: EntityTypes) => void;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
@@ -37,22 +37,26 @@ export type EntryCardRendererProps = {
 };
 
 const EntryCardRenderer = (props: EntryCardRendererProps) => {
-  const { loggedProfileData, itemData, itemType, contentClickable, navigateTo, onContentClick } =
+  const { authenticatedProfile, itemData, itemType, contentClickable, navigateTo, onContentClick } =
     props;
 
   const { id } = itemData || {};
 
   const { t } = useTranslation('app-search');
   const { getTranslationPlugin, navigateToModal } = useRootComponentProps();
-  const { authenticatedDID } = useLoggedIn();
-  const profileDataReq = useGetProfileByDidQuery(
-    { id: itemData.author.id },
-    { select: response => response.node },
-  );
+  const { data } = useGetLogin();
+  const authenticatedDID = data?.id;
+  const {
+    data: profileDataReq,
+    loading,
+    error,
+  } = useGetProfileByDidQuery({
+    variables: { id: itemData.author.id },
+  });
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
-      ? profileDataReq.data
+    profileDataReq?.node && hasOwn(profileDataReq.node, 'akashaProfile')
+      ? profileDataReq.node
       : { akashaProfile: null };
 
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
@@ -115,7 +119,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
   };
 
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
-    if (!loggedProfileData?.did?.id) {
+    if (!authenticatedProfile?.did?.id) {
       return showLoginModal({
         modal: { name: 'report-modal', itemId, itemType: itemType as unknown as EntityTypes },
       });
@@ -156,7 +160,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
           {!itemData.nsfw && itemData.active && (
             <EntryCard
               entryData={mapBeamEntryData(itemData)}
-              authorProfile={{ data: profileData, status: profileDataReq.status }}
+              authorProfile={{ data: profileData, loading, error }}
               sortedContents={sortBy(itemData.content, 'order')}
               itemType={EntityTypes.BEAM}
               onAvatarClick={handleClickAvatar}

@@ -94,7 +94,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
     [loggedInProfileReq],
   );
 
-  const loggedInProfileData = loggedInProfileReq?.akashaProfile;
+  const authenticatedProfile = loggedInProfileReq?.akashaProfile;
   const reflectionCreationElapsedTimeInMinutes = dayjs(new Date()).diff(
     entryData.createdAt,
     'minutes',
@@ -156,15 +156,15 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             editorState={editorState}
             showEditorInitialValue={true}
             showCancelButton={true}
-            avatar={loggedInProfileData?.avatar}
-            profileId={loggedInProfileData?.did?.id}
+            avatar={authenticatedProfile?.avatar}
+            profileId={authenticatedProfile?.did?.id}
             disablePublish={disablePublishing}
             tags={tagSearch?.data}
             mentions={mentionSearch?.data}
             background={{ light: 'grey9', dark: 'grey3' }}
             customStyle="px-2 pt-2"
             onPublish={data => {
-              if (!loggedInProfileData) {
+              if (!authenticatedProfile) {
                 return;
               }
 

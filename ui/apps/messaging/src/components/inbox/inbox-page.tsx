@@ -10,7 +10,7 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import MessageContactCard from '@akashaorg/design-system-components/lib/components/MessageContactCard';
 
 export type InboxPageProps = {
-  loggedProfileData: Profile;
+  authenticatedProfile: Profile;
 };
 
 const InboxPage: React.FC<InboxPageProps> = () => {

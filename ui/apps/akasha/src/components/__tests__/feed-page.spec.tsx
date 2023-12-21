@@ -17,22 +17,22 @@ class ResizeObserver {
 }
 describe('< FeedPage /> component', () => {
   global.ResizeObserver = ResizeObserver;
-  const BaseComponent = ({ loggedProfileData }) => (
+  const BaseComponent = ({ authenticatedProfile }) => (
     <AnalyticsProvider {...genAppProps()}>
-      <FeedPage showLoginModal={jest.fn()} loggedProfileData={loggedProfileData} />
+      <FeedPage showLoginModal={jest.fn()} authenticatedProfile={authenticatedProfile} />
     </AnalyticsProvider>
   );
 
   it.skip('should render feed page for anonymous users', async () => {
     await act(async () => {
-      renderWithAllProviders(<BaseComponent loggedProfileData={null} />, {});
+      renderWithAllProviders(<BaseComponent authenticatedProfile={null} />, {});
     });
     expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
   });
 
   it.skip('should render feed page for authenticated users', async () => {
     await act(async () => {
-      renderWithAllProviders(<BaseComponent loggedProfileData={genUser()} />, {});
+      renderWithAllProviders(<BaseComponent authenticatedProfile={genUser()} />, {});
     });
     expect(screen.getByText(/From Your Mind to the World/i)).toBeInTheDocument();
     expect(screen.getByText(/Start Beaming/i)).toBeInTheDocument();
