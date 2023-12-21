@@ -12,13 +12,12 @@ import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../rout
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ModalNavigationOptions, NotificationTypes } from '@akashaorg/typings/lib/ui';
-import { useShowFeedback, useRootComponentProps, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { useShowFeedback, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
   const { baseRouteName, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const [showUpdatedFeedback, setShowUpdatedFeedback] = useShowFeedback(false);
   const [showLinkCopiedFeedback, setLinkCopiedFeedback] = useShowFeedback(false);
@@ -61,11 +60,7 @@ const AppRoutes: React.FC<unknown> = () => {
               path={`:profileId${menuRoute[FOLLOWERS]}`}
               element={
                 <ProfileWithHeader {...commonHeaderViewProps}>
-                  <FollowersPage
-                    isLoggedIn={isLoggedIn}
-                    authenticatedDID={authenticatedDID}
-                    showLoginModal={showLoginModal}
-                  />
+                  <FollowersPage showLoginModal={showLoginModal} />
                 </ProfileWithHeader>
               }
             />
@@ -73,11 +68,7 @@ const AppRoutes: React.FC<unknown> = () => {
               path={`:profileId${menuRoute[FOLLOWING]}`}
               element={
                 <ProfileWithHeader {...commonHeaderViewProps}>
-                  <FollowingPage
-                    isLoggedIn={isLoggedIn}
-                    authenticatedDID={authenticatedDID}
-                    showLoginModal={showLoginModal}
-                  />
+                  <FollowingPage showLoginModal={showLoginModal} />
                 </ProfileWithHeader>
               }
             />
@@ -85,7 +76,7 @@ const AppRoutes: React.FC<unknown> = () => {
               path={`:profileId${menuRoute[INTERESTS]}`}
               element={
                 <ProfileWithHeader {...commonHeaderViewProps}>
-                  <InterestsPage isLoggedIn={isLoggedIn} authenticatedDID={authenticatedDID} />
+                  <InterestsPage />
                 </ProfileWithHeader>
               }
             />
@@ -94,7 +85,6 @@ const AppRoutes: React.FC<unknown> = () => {
               element={
                 <Suspense fallback={<ProfileLoading />}>
                   <EditProfilePage
-                    isLoggedIn={isLoggedIn}
                     handleProfileUpdatedFeedback={() => setShowUpdatedFeedback(true)}
                   />
                 </Suspense>
@@ -105,7 +95,7 @@ const AppRoutes: React.FC<unknown> = () => {
             path={`:profileId${menuRoute[BEAMS]}`}
             element={
               <ProfileWithHeader {...commonHeaderViewProps}>
-                <ProfileBeamsPage isLoggedIn={isLoggedIn} />
+                <ProfileBeamsPage />
               </ProfileWithHeader>
             }
           />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
 
@@ -26,7 +26,8 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
 }) => {
   const { t } = useTranslation('app-profile');
 
-  const { isLoggedIn } = useLoggedIn();
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
 
   const onStatClick = (stat: 'beams' | 'followers' | 'following' | 'interests') => () => {
     if (!isLoggedIn) {

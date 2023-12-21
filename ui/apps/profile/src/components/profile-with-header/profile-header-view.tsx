@@ -13,7 +13,7 @@ import { EntityTypes, ModalNavigationOptions, NavigateToParams } from '@akashaor
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { transformSource, hasOwn, useLoggedIn, useValidDid } from '@akashaorg/ui-awf-hooks';
+import { transformSource, hasOwn, useValidDid, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 export type ProfileHeaderViewProps = {
   showNSFW?: boolean;
@@ -27,16 +27,15 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const { t } = useTranslation('app-profile');
   const { showNSFW, handleCopyFeedback, showLoginModal, navigateToModal, navigateTo } = props;
   const { profileId } = useParams<{ profileId: string }>();
-
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
+  const { data: loginData } = useGetLogin();
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id: profileId },
   });
-
   const { akashaProfile: profileData } =
     data.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
-
+  const authenticatedDID = loginData?.id;
+  const isLoggedIn = !!loginData?.id;
   const isViewer = profileData?.did?.id === authenticatedDID;
 
   const { validDid, isEthAddress } = useValidDid(profileId, !!profileData);

@@ -3,7 +3,7 @@ import EditorBox from '@akashaorg/design-system-components/lib/components/Editor
 import {
   serializeSlateToBase64,
   transformSource,
-  useLoggedIn,
+  useGetLogin,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import type {
@@ -27,7 +27,8 @@ export const SlateEditorBlock = (
   props: ContentBlockRootProps & { blockRef?: React.RefObject<BlockInstanceMethods> },
 ) => {
   const { name } = useRootComponentProps<RootExtensionProps>();
-  const { authenticatedDID } = useLoggedIn();
+  const { data } = useGetLogin();
+  const authenticatedDID = data?.id;
   const retryCount = React.useRef<number>();
   const sdk = React.useRef(getSDK());
 
@@ -131,7 +132,7 @@ export const SlateEditorBlock = (
       showCancelButton={false}
       showPostButton={false}
       transformSource={transformSource}
-      handleDisablePublish={props.blockInfo.externalHandler}
+      handleDisablePublish={props.blockInfo?.externalHandler}
     />
   );
 };

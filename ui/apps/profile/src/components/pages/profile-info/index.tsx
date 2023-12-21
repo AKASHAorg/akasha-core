@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   hasOwn,
-  useLoggedIn,
+  useGetLogin,
   useProfileStats,
   useRootComponentProps,
   useValidDid,
@@ -36,7 +36,7 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin } = useRootComponentProps();
   const { profileId } = useParams<{ profileId: string }>();
-  const { isLoggedIn } = useLoggedIn();
+  const { data: loginData } = useGetLogin();
   const { data, loading, error } = useGetProfileByDidQuery({
     variables: {
       id: profileId,
@@ -45,7 +45,7 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   });
   const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileId, !!data?.node);
   const { data: statData, loading: statsLoading } = useProfileStats(profileId);
-
+  const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };

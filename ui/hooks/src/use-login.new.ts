@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import getSDK from '@akashaorg/awf-sdk';
 import { CurrentUser, EthProviders } from '@akashaorg/typings/lib/sdk';
 import { useGlobalLogin } from './use-global-login';
 import { useTheme } from './use-theme';
 import { logError } from './utils/error-handler';
 import { useGetProfileByDidLazyQuery } from './generated/apollo';
 import { hasOwn } from './utils/has-own';
+import getSDK from '@akashaorg/awf-sdk';
 
 export const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
@@ -35,10 +35,12 @@ export function useConnectWallet() {
  * // can be used with useGetProfile hook to get the logged profile data
  * const profileDataQuery = useGetProfile(loginQuery.data?.id);
  *
- const loggedProfileData = profileDataQuery.data;
+ const authenticatedProfile = profileDataQuery.data;
  * ```
  */
 export function useGetLogin(onError?: (error: Error) => void) {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [loginData, setLoginData] = useState<CurrentUser>(null);
 
   // check previous session
@@ -50,6 +52,9 @@ export function useGetLogin(onError?: (error: Error) => void) {
         setLoginData(data);
       } catch (err) {
         logError('getCurrentUser', err);
+        setError(err);
+      } finally {
+        setLoading(false);
       }
     };
     getCurrentUser();
@@ -67,10 +72,11 @@ export function useGetLogin(onError?: (error: Error) => void) {
         onError(payload.error);
       }
       logError('useGetLogin', payload.error);
+      setError(payload.error);
     },
   });
 
-  return { data: loginData };
+  return { data: loginData, loading, error };
 }
 
 /**

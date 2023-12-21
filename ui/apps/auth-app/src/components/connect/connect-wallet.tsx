@@ -4,7 +4,7 @@ import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/lib/sdk';
 import {
   switchToRequiredNetwork,
   useConnectWallet,
-  useLoggedIn,
+  useGetLogin,
   useNetworkChangeListener,
   useRequiredNetwork,
 } from '@akashaorg/ui-awf-hooks';
@@ -30,16 +30,16 @@ export type ConnectWalletProps = {
 };
 
 const ConnectWallet: React.FC<ConnectWalletProps> = props => {
+  const { t } = useTranslation('app-auth-ewa');
   const { selectedProvider, onSignIn, onDisconnect, worldName, signInError } = props;
-
+  const { data } = useGetLogin();
   const [errors, setErrors] = useState<{ title: string; subtitle: string }[]>([]);
   const [isSignInRetry, setIsSignInRetry] = useState(false);
 
   const signInCall = useRef(onSignIn);
   const signOutCall = useRef(onDisconnect);
 
-  const { isLoggedIn } = useLoggedIn();
-  const { t } = useTranslation('app-auth-ewa');
+  const isLoggedIn = !!data?.id;
   const connectWalletCall = useConnectWallet();
   const requiredNetworkQuery = useRequiredNetwork();
   const [changedNetwork, changedNetworkUnsubscribe] = useNetworkChangeListener();

@@ -13,21 +13,28 @@ import {
   useIndexProfileMutation,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { transformSource, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  transformSource,
+  hasOwn,
+  useRootComponentProps,
+  useGetLogin,
+} from '@akashaorg/ui-awf-hooks';
 import { useParams } from 'react-router';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-content';
 import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/components/EditProfile/types';
+import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
 type EditProfilePageProps = {
-  isLoggedIn: boolean;
   handleProfileUpdatedFeedback: () => void;
 };
 
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
-  const { isLoggedIn, handleProfileUpdatedFeedback } = props;
-
+  const { handleProfileUpdatedFeedback } = props;
+  const { data: loginData, loading: authenticating } = useGetLogin();
+  const authenticatedDID = loginData?.id;
+  const isLoggedIn = !!loginData?.id;
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -53,10 +60,8 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
 
   const sdk = getSDK();
 
-  const { akashaProfile: profileData, isViewer } =
-    data?.node && hasOwn(data.node, 'akashaProfile')
-      ? data.node
-      : { akashaProfile: null, isViewer: false };
+  const { akashaProfile: profileData } =
+    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
 
   const background = useMemo(() => profileData?.background, [profileData?.background]);
   const avatar = useMemo(() => profileData?.avatar, [profileData?.avatar]);
@@ -75,7 +80,9 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
 
-  if (!isLoggedIn || !isViewer) {
+  if (authenticating) return <ProfileLoading />;
+
+  if (!isLoggedIn || authenticatedDID !== profileId) {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,

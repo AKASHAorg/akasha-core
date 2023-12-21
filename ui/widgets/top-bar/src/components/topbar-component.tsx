@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { EventTypes, NotificationEvents, UIEventData } from '@akashaorg/typings/lib/ui';
-import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Topbar from './topbar';
 import {
   startWidgetsTogglingBreakpoint,
@@ -11,12 +11,11 @@ import {
 const TopbarComponent: React.FC<unknown> = () => {
   const { uiEvents, layoutConfig, worldConfig, encodeAppName, getRoutingPlugin } =
     useRootComponentProps();
-
+  const { data } = useGetLogin();
   const location = useLocation();
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
-
-  const { isLoggedIn } = useLoggedIn();
+  const isLoggedIn = !!data?.id;
 
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(

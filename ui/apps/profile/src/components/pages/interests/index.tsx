@@ -17,36 +17,34 @@ import {
   useUpdateInterestsMutation,
   GetInterestsByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { useShowFeedback, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import {
+  useShowFeedback,
+  hasOwn,
+  useRootComponentProps,
+  useGetLogin,
+} from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
 import { useApolloClient } from '@apollo/client';
 import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 
-type InterestsPageProps = {
-  isLoggedIn: boolean;
-  authenticatedDID: string;
-};
+const InterestsPage: React.FC<unknown> = () => {
+  const { t } = useTranslation('app-profile');
+  const { data: loginData, loading: authenticating } = useGetLogin();
+  const { profileId } = useParams<{ profileId: string }>();
+  const { getRoutingPlugin } = useRootComponentProps();
 
-const InterestsPage: React.FC<InterestsPageProps> = props => {
-  const { isLoggedIn, authenticatedDID } = props;
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
 
   const [showFeedback, setShowFeedback] = useShowFeedback(false);
-  const { profileId } = useParams<{ profileId: string }>();
-  const { t } = useTranslation('app-profile');
-  const { getRoutingPlugin } = useRootComponentProps();
 
+  const authenticatedDID = loginData?.id;
+  const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const apolloClient = useApolloClient();
 
-  const {
-    data: ownInterestsQueryData,
-    loading,
-    error,
-    refetch: refetchInterestSubscriptions,
-  } = useGetInterestsByDidQuery({
+  const { data: ownInterestsQueryData } = useGetInterestsByDidQuery({
     variables: { id: authenticatedDID },
     skip: !isLoggedIn,
   });
@@ -71,17 +69,15 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
 
   const sdk = getSDK();
 
-  const [createInterestsMutation, { loading: createMutationLoading, error: createMutationError }] =
-    useCreateInterestsMutation({
-      context: { source: sdk.services.gql.contextSources.composeDB },
-    });
+  const [createInterestsMutation] = useCreateInterestsMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+  });
 
-  const [updateInterestsMutation, { loading: updateMutationLoading, error: updateMutationError }] =
-    useUpdateInterestsMutation({
-      context: { source: sdk.services.gql.contextSources.composeDB },
-    });
+  const [updateInterestsMutation] = useUpdateInterestsMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+  });
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn && !authenticating) {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
@@ -121,7 +117,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
           await apolloClient.refetchQueries({ include: [GetInterestsByDidDocument] });
           setIsProcessing(false);
         },
-        onError: err => {
+        onError: () => {
           setIsProcessing(false);
         },
       });
@@ -138,7 +134,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
           await apolloClient.refetchQueries({ include: [GetInterestsByDidDocument] });
           setIsProcessing(false);
         },
-        onError: err => {
+        onError: () => {
           setIsProcessing(false);
         },
       });
