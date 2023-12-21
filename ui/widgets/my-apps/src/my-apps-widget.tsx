@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
@@ -170,18 +169,9 @@ const Wrapped = () => {
   const { getTranslationPlugin } = useRootComponentProps();
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="@akashaorg/app-extensions/*"
-          element={
-            <I18nextProvider i18n={getTranslationPlugin().i18n}>
-              <ICWidget />
-            </I18nextProvider>
-          }
-        />
-      </Routes>
-    </Router>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      <ICWidget />
+    </I18nextProvider>
   );
 };
 

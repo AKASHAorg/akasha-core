@@ -33,9 +33,9 @@ export const checkActivityFn = (opts: CheckActivityOptions) => {
   }
 
   if (config.hasOwnProperty('activeWhen') && typeof config.activeWhen === 'function') {
-    return config.activeWhen(location, (path, exact?: boolean) => _loc => {
+    return config.activeWhen(location, (path, exact?: boolean) => {
       // path can contain the app name;
-      return singleSpa.pathToActiveWhen(path, exact)(_loc);
+      return singleSpa.pathToActiveWhen(path, exact);
     });
   }
 
