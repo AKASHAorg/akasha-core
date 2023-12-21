@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import {
   CheckCircleIcon,
@@ -117,7 +117,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
           },
         },
         onCompleted: async () => {
-          refetchInterestSubscriptions();
+          await apolloClient.refetchQueries({ include: [GetInterestsByDidDocument] });
           setIsProcessing(false);
         },
         onError: err => {
