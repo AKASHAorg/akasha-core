@@ -111,7 +111,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               content: {
                 topics: [...new Set(localSubscribedTagsRef.current)].map(tag => ({
                   value: tag,
-                  labelType: 'TOPIC',
+                  labelType: sdk.services.gql.labelTypes.INTEREST,
                 })),
               },
             },
@@ -123,7 +123,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
                 did: { id: 'did:pkh:eip155:5:0xe92bbe3e927f73106e57ed43fd3f2acf51035128' },
                 topics: localSubscribedTagsRef.current.map(tag => ({
                   value: tag,
-                  labelType: 'TOPIC',
+                  labelType: sdk.services.gql.labelTypes.INTEREST,
                 })),
                 id: subscriptionId.current,
               },
@@ -155,7 +155,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
               content: {
                 topics: [...new Set(localSubscribedTagsRef.current)].map(tag => ({
                   value: tag,
-                  labelType: 'TOPIC',
+                  labelType: sdk.services.gql.labelTypes.INTEREST,
                 })),
               },
             },
