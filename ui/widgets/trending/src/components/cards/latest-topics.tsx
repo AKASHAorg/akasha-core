@@ -22,6 +22,7 @@ export type LatestTopicsProps = {
   tagSubscriptionsId: string | null;
   isLoadingTags?: boolean;
   isLoggedIn: boolean;
+  authenticatedDID: string;
   // labels
   noTagsLabel?: string;
   titleLabel: string;
@@ -49,6 +50,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
     receivedTags,
     tagSubscriptionsId,
     isLoggedIn,
+    authenticatedDID,
     showLoginModal,
     refetchTagSubscriptions,
   } = props;
@@ -120,7 +122,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             updateAkashaProfileInterests: {
               clientMutationId: null,
               document: {
-                did: { id: 'did:pkh:eip155:5:0xe92bbe3e927f73106e57ed43fd3f2acf51035128' },
+                did: { id: authenticatedDID },
                 topics: localSubscribedTagsRef.current.map(tag => ({
                   value: tag,
                   labelType: sdk.services.gql.labelTypes.INTEREST,

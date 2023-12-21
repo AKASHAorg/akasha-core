@@ -131,6 +131,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
           receivedTags={tagSubscriptions}
           tagSubscriptionsId={tagSubscriptionsId}
           isLoggedIn={isLoggedIn}
+          authenticatedDID={authenticatedDID}
           onClickTopic={handleTopicClick}
           showLoginModal={showLoginModal}
           refetchTagSubscriptions={refetchTagSubscriptions}
