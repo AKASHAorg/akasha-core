@@ -287,10 +287,10 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     /** disable publishing if no images/text or text too long */
     if (textLength > 0 && textLength <= MAX_LENGTH) {
       setPublishDisabledInternal(false);
-      handleDisablePublish(false);
+      handleDisablePublish?.(false);
     } else if (textLength === 0 || textLength > MAX_LENGTH) {
       setPublishDisabledInternal(true);
-      handleDisablePublish(true);
+      handleDisablePublish?.(true);
     }
 
     if (typeof setLetterCount === 'function') {

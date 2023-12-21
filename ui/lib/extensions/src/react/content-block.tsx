@@ -198,7 +198,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
               blockInfo={{
                 ...matchingBlock.blockInfo,
                 mode,
-                externalHandler: editMode.externalHandler,
+                externalHandler: editMode?.externalHandler,
               }}
               blockData={matchingBlock.blockData}
               blockRef={blockRef}
