@@ -17,6 +17,7 @@ import {
   useCreateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated';
 import { useShowFeedback, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 type InterestsPageProps = {
   isLoggedIn: boolean;
@@ -167,7 +168,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
       {showFeedback && (
         <Snackbar
           title={t('Successfully subscribed to interest')}
-          type="success"
+          type={NotificationTypes.Success}
           icon={<CheckCircleIcon />}
           handleDismiss={() => {
             setShowFeedback(false);

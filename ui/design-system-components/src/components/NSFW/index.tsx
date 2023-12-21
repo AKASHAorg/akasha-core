@@ -14,7 +14,7 @@ export type NSFWProps = {
 const NSFW: React.FC<NSFWProps> = props => {
   const { sensitiveContentLabel, clickToViewLabel, onClickToView } = props;
   return (
-    <Stack>
+    <Stack align="center" justify="center">
       <Stack direction="row" spacing="gap-x-1">
         <Icon icon={<EyeSlashIcon />} color="errorLight" />
         <Text variant="button-sm" color="errorLight">

@@ -4,6 +4,8 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileStatsView from '../../profile-stats-view';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
+import NSFW from '@akashaorg/design-system-components/lib/components/NSFW';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { EDIT } from '../../../routes';
 import {
   ProfileBio,
@@ -24,20 +26,17 @@ import {
 import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
 export type ProfilePageProps = {
+  showNSFW: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  setShowNSFW: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
-  const { showLoginModal } = props;
-
+  const { showNSFW, setShowNSFW, showLoginModal } = props;
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin } = useRootComponentProps();
-
   const { profileId } = useParams<{ profileId: string }>();
   const { isLoggedIn } = useLoggedIn();
-
-  const navigateTo = getRoutingPlugin().navigateTo;
-
   const { data, loading, error } = useGetProfileByDidQuery({
     variables: {
       id: profileId,
@@ -45,9 +44,9 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
     skip: !profileId,
   });
   const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileId, !!data?.node);
+  const { data: statData, loading: statsLoading } = useProfileStats(profileId);
 
-  const { data: stat, loading: statsLoading } = useProfileStats(profileId);
-
+  const navigateTo = getRoutingPlugin().navigateTo;
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
   const hasProfile = data && profileData;
@@ -79,7 +78,20 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
       />
     );
 
-  const goEditProfile = () => {
+  if (profileData?.nsfw && !showNSFW)
+    return (
+      <Card>
+        <NSFW
+          sensitiveContentLabel={t('Sensitive Content!')}
+          clickToViewLabel={t('Click to View')}
+          onClickToView={() => {
+            setShowNSFW(true);
+          }}
+        />
+      </Card>
+    );
+
+  const goToEditProfile = () => {
     return navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}${routes[EDIT]}`,
@@ -102,17 +114,17 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
         <DefaultEmptyCard
           infoText={t('Uh-uh! it looks like you haven’t filled your information!')}
           buttonLabel={t('Fill my info')}
-          buttonClickHandler={goEditProfile}
+          buttonClickHandler={goToEditProfile}
         />
       )}
       {statsLoading && <ProfileStatLoading />}
-      {stat && (
+      {statData && (
         <ProfileStatsView
           profileId={profileId}
-          totalBeams={stat.totalBeams}
-          totalTopics={stat.totalTopics}
-          totalFollowers={stat.totalFollowers}
-          totalFollowing={stat.totalFollowing}
+          totalBeams={statData.totalBeams}
+          totalTopics={statData.totalTopics}
+          totalFollowers={statData.totalFollowers}
+          totalFollowing={statData.totalFollowing}
           navigateTo={navigateTo}
           showLoginModal={() => showLoginModal({ modal: { name: location.pathname } })}
         />

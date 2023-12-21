@@ -53,7 +53,7 @@ const reactLifecycles = singleSpaReact({
     return (
       <ErrorLoader
         type="script-error"
-        title="Error in share profile modal"
+        title="Error in follow profile button"
         details={error.message}
       />
     );
