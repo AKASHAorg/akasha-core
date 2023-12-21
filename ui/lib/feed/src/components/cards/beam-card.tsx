@@ -26,8 +26,7 @@ type BeamCardProps = Pick<
 const BeamCard: React.FC<BeamCardProps> = props => {
   const { entryData, onReflect, showHiddenContent, ...rest } = props;
   const { t } = useTranslation('ui-lib-feed');
-  const { getRoutingPlugin } = useRootComponentProps();
-  const { getTranslationPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 

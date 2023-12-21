@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { dpr, pxToDPR } from '../utils';
-import type { VirtualDataItem, VirtualItem } from './virtual-item-renderer';
+import type { VirtualDataItem, VirtualItem, VirtualItemInterface } from './virtual-item-renderer';
 
 export type UseItemHeightsProps = {
   measurementsCache: Map<string, number>;
@@ -11,6 +11,7 @@ export type UseItemHeightsProps = {
 
 export const useItemHeights = (props: UseItemHeightsProps) => {
   const { measurementsCache, estimatedHeight, overscan } = props;
+  const itemRendererApis = React.useRef(new Map());
   const overscanRef = React.useRef(overscan);
   const itemHeights = React.useMemo(
     () => measurementsCache ?? new Map<string, number>(),
@@ -52,7 +53,7 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   );
   const hasMeasuredHeights = React.useCallback(
     (items: VirtualItem[]) => {
-      return !items.some(item => !itemHeights.has(item.key));
+      return items.every(item => itemHeights.has(item.key));
     },
     [itemHeights],
   );
@@ -94,6 +95,18 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
     },
     [getItemHeight],
   );
+  const measureItemHeights = React.useCallback(() => {
+    itemRendererApis.current.forEach((api, key) => {
+      if (!api) return;
+      const newHeight = api.measureHeight();
+      updateItemHeight(key, newHeight);
+    });
+  }, [updateItemHeight]);
+
+  const setItemRendererInterface = (itemKey: string) => (ref?: VirtualItemInterface) => {
+    itemRendererApis.current.set(itemKey, ref);
+  };
+
   const getItemHeightAverage = React.useCallback(() => itemHeightAverage.current, []);
   return {
     getItemHeights,
@@ -103,5 +116,7 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
     getItemDistanceFromTop,
     getItemHeightAverage,
     onItemHeightChange: handleItemHeightChange,
+    setItemRendererInterface,
+    measureItemHeights,
   };
 };

@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { useList } from '../use-list';
 import { generateItemList, generateMountedItems, getRelativeRectToRootNode } from './test-utils';
 import { Rect } from '../rect';
-import { render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 const mockItemList = generateItemList(10);
 

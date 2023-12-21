@@ -11,7 +11,6 @@ export type MountedItem<T> = {
 };
 
 export type UseProjectionProps<T> = {
-  mountedItems: VirtualItem[];
   itemList: VirtualDataItem<T>[];
   isInitialPlacement: boolean;
   isAtTop: () => boolean;
@@ -29,7 +28,6 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
     getDistanceFromTop,
     overscan,
     getItemHeights,
-    mountedItems,
     itemList,
     getItemHeight,
     getItemHeightAverage,
@@ -38,40 +36,73 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
 
   const slice = React.useRef({ start: 0, end: 0 });
 
-  const projection = React.useMemo(() => {
-    return mountedItems.reduce((acc, mountedItem) => {
-      const itemData = itemList.find(it => it.key === mountedItem.key);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { key, ...rest } = mountedItem;
-      if (itemData) {
-        acc.push({
-          ...rest,
-          virtualData: itemData,
-        });
-      }
-      return acc;
-    }, [] as MountedItem<T>[]);
-  }, [mountedItems, itemList]);
+  const getProjection = React.useCallback(
+    (mountedItems: VirtualItem[], itemList: VirtualDataItem<T>[]) => {
+      return mountedItems.reduce((acc, mountedItem) => {
+        const itemData = itemList.find(it => it.key === mountedItem.key);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { key, ...rest } = mountedItem;
+        if (itemData) {
+          acc.push({
+            ...rest,
+            virtualData: itemData,
+          });
+        }
+        return acc;
+      }, [] as MountedItem<T>[]);
+    },
+    [],
+  );
 
   const getAllVirtualItems = React.useCallback(
     (startItem: VirtualItem) => {
-      const topDistance = getDistanceFromTop(startItem.key, itemList);
-      let offset = startItem.start - topDistance;
-      const items: VirtualItem[] = [];
-      itemList.forEach(item => {
-        const height = getItemHeight(item.key);
+      const items: VirtualItem[] = [startItem];
+      const startIdx = itemList.findIndex(it => it.key === startItem.key);
+      if (startIdx > 0) {
+        let topOffset = startItem.start;
+        for (const item of itemList.slice(0, startIdx).reverse()) {
+          const itemHeight = getItemHeight(item.key);
+          items.unshift({
+            key: item.key,
+            start: topOffset - itemHeight,
+            visible: getItemHeights().has(item.key),
+            maybeRef: item.maybeRef,
+            height: itemHeight,
+          });
+          topOffset -= itemHeight;
+        }
+      }
+      let topOffset = startItem.start + getItemHeight(startItem.key);
+      for (const item of itemList.slice(startIdx + 1)) {
+        // push
+        const itemHeight = getItemHeight(item.key);
         items.push({
           key: item.key,
-          start: offset,
+          start: topOffset,
           visible: getItemHeights().has(item.key),
           maybeRef: item.maybeRef,
-          height,
+          height: itemHeight,
         });
-        offset += height;
-      });
+        topOffset += itemHeight;
+      }
+      // //compute slice from startItem to top
+      // console.log('here');
+      // //compute slice from startItem to last
+      //
+      // itemList.forEach(item => {
+      //   const height = getItemHeight(item.key);
+      //   items.push({
+      //     key: item.key,
+      //     start: offset,
+      //     visible: getItemHeights().has(item.key),
+      //     maybeRef: item.maybeRef,
+      //     height,
+      //   });
+      //   offset += height;
+      // });
       return items;
     },
-    [getDistanceFromTop, getItemHeight, getItemHeights, itemList],
+    [getItemHeight, getItemHeights, itemList],
   );
 
   const getSlice = React.useCallback(
@@ -105,7 +136,7 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
   const getNextProjection = React.useCallback(
     (startItem: VirtualItem, viewportRect: Rect, alreadyRendered: boolean) => {
       const minOffscreenHeight = Math.floor(viewportRect.getHeight() + getItemHeightAverage());
-      const maxOffcreenHeight = Math.floor(
+      const maxOffscreenHeight = Math.floor(
         viewportRect.getHeight() + overscan * getItemHeightAverage(),
       );
 
@@ -113,9 +144,10 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
         viewportRect.getTop() - minOffscreenHeight,
         viewportRect.getHeight() + 2 * minOffscreenHeight,
       );
+
       const maxViewportRect = new Rect(
-        viewportRect.getTop() - maxOffcreenHeight,
-        viewportRect.getHeight() + 2 * maxOffcreenHeight,
+        viewportRect.getTop() - maxOffscreenHeight,
+        viewportRect.getHeight() + 2 * maxOffscreenHeight,
       );
 
       const allItems = getAllVirtualItems(startItem);
@@ -148,7 +180,7 @@ export const useProjection = <T>(props: UseProjectionProps<T>) => {
   );
 
   return {
-    projection,
+    getProjection,
     getNextProjection,
     getProjectionCorrection,
   };
