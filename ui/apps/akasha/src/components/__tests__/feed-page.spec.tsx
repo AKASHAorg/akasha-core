@@ -32,7 +32,12 @@ describe('< FeedPage /> component', () => {
 
   it.skip('should render feed page for authenticated users', async () => {
     await act(async () => {
-      renderWithAllProviders(<BaseComponent authenticatedProfile={genUser()} />, {});
+      renderWithAllProviders(
+        <BaseComponent
+          authenticatedProfile={genUser('pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff')}
+        />,
+        {},
+      );
     });
     expect(screen.getByText(/From Your Mind to the World/i)).toBeInTheDocument();
     expect(screen.getByText(/Start Beaming/i)).toBeInTheDocument();

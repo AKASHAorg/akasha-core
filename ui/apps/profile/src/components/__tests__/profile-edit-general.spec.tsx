@@ -15,7 +15,7 @@ import { MemoryRouter as Router } from 'react-router-dom';
 describe('<EditProfilePage />', () => {
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
-      <EditProfilePage isLoggedIn={true} handleProfileUpdatedFeedback={jest.fn} />
+      <EditProfilePage handleProfileUpdatedFeedback={jest.fn} />
     </Router>
   );
 

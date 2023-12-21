@@ -31,27 +31,24 @@ type EditProfilePageProps = {
 };
 
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
+  const { t } = useTranslation('app-profile');
   const { handleProfileUpdatedFeedback } = props;
   const { data: loginData, loading: authenticating } = useGetLogin();
-  const authenticatedDID = loginData?.id;
-  const isLoggedIn = !!loginData?.id;
-  const [activeTab, setActiveTab] = useState(0);
-  const [selectedActiveTab, setSelectedActiveTab] = useState(0);
-  const [showModal, setShowModal] = useState(false);
-  const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
-    useState<PartialAkashaProfileInput | null>(null);
-
   const { profileId } = useParams<{ profileId: string }>();
-  const { t } = useTranslation('app-profile');
   const { getRoutingPlugin } = useRootComponentProps();
-
-  const navigateTo = getRoutingPlugin().navigateTo;
-
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
   const { data, error } = useGetProfileByDidSuspenseQuery({
     variables: { id: profileId },
     skip: !!profileId,
   });
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedActiveTab, setSelectedActiveTab] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
+    useState<PartialAkashaProfileInput | null>(null);
+  const authenticatedDID = loginData?.id;
+  const isLoggedIn = !!loginData?.id;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const onCompleted = () => {
     handleProfileUpdatedFeedback();
