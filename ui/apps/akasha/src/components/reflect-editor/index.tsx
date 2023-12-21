@@ -16,7 +16,12 @@ import {
   GetReflectReflectionsDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
-import { AnalyticsCategories, IPublishData, ReflectEntryData } from '@akashaorg/typings/lib/ui';
+import {
+  AnalyticsCategories,
+  IPublishData,
+  NotificationTypes,
+  ReflectEntryData,
+} from '@akashaorg/typings/lib/ui';
 import { useApolloClient } from '@apollo/client';
 import { createPortal } from 'react-dom';
 import { XCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -158,7 +163,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
             title={t('Something went wrong.')}
             description={t('Please try again.')}
             handleDismiss={() => setShowErrorSnackbar(false)}
-            type="alert"
+            type={NotificationTypes.Alert}
             icon={<XCircleIcon />}
           />,
           document.getElementById('reflect-error-snackbar-container'),

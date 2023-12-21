@@ -20,7 +20,7 @@ import {
   useUpdateAkashaReflectMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
-import { AnalyticsCategories, IPublishData } from '@akashaorg/typings/lib/ui';
+import { AnalyticsCategories, IPublishData, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useApolloClient } from '@apollo/client';
 import { useCloseActions } from '@akashaorg/design-system-core/lib/utils';
 import { createPortal } from 'react-dom';
@@ -186,7 +186,7 @@ const EditableReflection: React.FC<ReflectCardProps & { reflectToId: string }> =
             title={t('Something went wrong.')}
             description={t('Please try again.')}
             handleDismiss={() => setShowErrorSnackbar(false)}
-            type="alert"
+            type={NotificationTypes.Alert}
             icon={<XCircleIcon />}
           />,
           document.getElementById('edit-reflect-error-snackbar-container'),

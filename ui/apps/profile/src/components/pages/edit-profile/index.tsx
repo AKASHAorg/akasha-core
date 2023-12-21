@@ -53,8 +53,10 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
 
   const sdk = getSDK();
 
-  const { akashaProfile: profileData } =
-    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+  const { akashaProfile: profileData, isViewer } =
+    data?.node && hasOwn(data.node, 'akashaProfile')
+      ? data.node
+      : { akashaProfile: null, isViewer: false };
 
   const background = useMemo(() => profileData?.background, [profileData?.background]);
   const avatar = useMemo(() => profileData?.avatar, [profileData?.avatar]);
@@ -73,7 +75,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn || !isViewer) {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
