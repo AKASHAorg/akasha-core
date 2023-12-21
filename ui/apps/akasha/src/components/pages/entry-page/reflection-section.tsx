@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ReflectEditor from '../../reflect-editor';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +26,7 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
   const location = useLocation();
   const navigateTo = getRoutingPlugin().navigateTo;
+  const pendingReflectRef = useRef(null);
 
   const onNavigate = (reflectionId: string, reflect?: boolean) => {
     navigateTo(
@@ -44,34 +46,38 @@ const ReflectionSection: React.FC<ReflectionSectionProps> = props => {
   const isReflecting = location.pathname.endsWith(routes[REFLECT]);
 
   return (
-    <Stack spacing="gap-y-2" ref={wrapperRef}>
-      <EditableReflection
-        entryData={entryData}
-        contentClickable={false}
-        reflectToId={entryData.id}
-        onReflect={() => {
-          onNavigate(entryData?.id, !isReflecting);
-        }}
-      />
-      <Divider />
-      <Stack padding="px-2 pb-2">
-        {!isLoggedIn && (
-          <EditorPlaceholder
-            onClick={showLoginModal}
-            profileId={null}
-            actionLabel={t('Reflect')}
-            placeholderLabel={t('Share your thoughts')}
-            transformSource={transformSource}
-          />
-        )}
-        {isLoggedIn && entryData?.active && (
-          <ReflectEditor
-            beamId={beamId}
-            reflectToId={reflectionId}
-            showEditorInitialValue={isReflecting}
-          />
-        )}
+    <Stack ref={wrapperRef}>
+      <Stack spacing="gap-y-2">
+        <EditableReflection
+          entryData={entryData}
+          contentClickable={false}
+          reflectToId={entryData.id}
+          onReflect={() => {
+            onNavigate(entryData?.id, !isReflecting);
+          }}
+        />
+        <Divider />
+        <Stack padding="px-2 pb-2">
+          {!isLoggedIn && (
+            <EditorPlaceholder
+              onClick={showLoginModal}
+              profileId={null}
+              actionLabel={t('Reflect')}
+              placeholderLabel={t('Share your thoughts')}
+              transformSource={transformSource}
+            />
+          )}
+          {isLoggedIn && entryData?.active && (
+            <ReflectEditor
+              beamId={beamId}
+              reflectToId={reflectionId}
+              showEditorInitialValue={isReflecting}
+              pendingReflectRef={pendingReflectRef}
+            />
+          )}
+        </Stack>
       </Stack>
+      <Card ref={pendingReflectRef} type="plain" />
     </Stack>
   );
 };

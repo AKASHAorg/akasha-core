@@ -34,6 +34,7 @@ export const LabelTypes = {
   TAG: 'core#tag',
   CATEGORY: 'core#category',
   INTEREST: 'core#interest',
+  MENTION: 'core#mention',
 } as const;
 
 declare const __DEV__: boolean;

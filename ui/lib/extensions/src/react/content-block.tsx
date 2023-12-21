@@ -29,6 +29,7 @@ export type ContentBlockExtensionProps = {
   editMode?: {
     propertyType: string;
     appName: string;
+    externalHandler?: (value: never) => void;
   };
   readMode?: {
     blockID: string;
@@ -84,21 +85,26 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
 
   React.useLayoutEffect(() => {
     const resolveConfigs = async () => {
+      const newBlocks = [];
+
       for (const block of matchingBlocks) {
         try {
           const config = await block.blockInfo.loadingFn({
             blockInfo: { ...block.blockInfo, mode },
             blockData: block.blockData,
           })();
-          setState(prev => ({
-            parcels: [...prev.parcels, { ...block, config }],
-            isMatched: true,
-          }));
+          newBlocks.push({ ...block, config });
         } catch (err) {
           console.error(err);
         }
       }
+
+      setState({
+        parcels: newBlocks,
+        isMatched: true,
+      });
     };
+
     if (
       matchingBlocks &&
       matchingBlocks.length &&
@@ -182,6 +188,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
       {state.parcels.map((matchingBlock, index) => {
         return (
           <Stack
+            fullWidth
             id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
           >
@@ -191,6 +198,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
               blockInfo={{
                 ...matchingBlock.blockInfo,
                 mode,
+                externalHandler: editMode.externalHandler,
               }}
               blockData={matchingBlock.blockData}
               blockRef={blockRef}
