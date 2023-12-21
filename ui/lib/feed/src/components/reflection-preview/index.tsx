@@ -2,7 +2,7 @@ import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import EditableReflection from '../editable-reflection';
-import { useGetReflectReflectionsQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetReflectReflectionsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { EntityTypes, IContentClickDetails } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
@@ -18,12 +18,11 @@ type ReflectionPreviewProps = {
 const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
   const { reflectionId, onNavigate } = props;
   const { t } = useTranslation('ui-lib-feed');
-  const reflectOfReflectionReq = useGetReflectReflectionsQuery(
-    { id: reflectionId, first: MAXIMUM_REFLECTION_PREVIEWS + 1 },
-    { select: response => response?.akashaReflectIndex },
-  );
+  const { data: reflectOfReflectionReq } = useGetReflectReflectionsQuery({
+    variables: { id: reflectionId, first: MAXIMUM_REFLECTION_PREVIEWS + 1 },
+  });
 
-  const reflections = reflectOfReflectionReq.data?.edges?.map(edge => ({
+  const reflections = reflectOfReflectionReq?.akashaReflectIndex?.edges?.map(edge => ({
     ...edge.node,
     beam: null /*Note: the hook returns partial result for beam, if complete result is needed the result of the hook should be modified*/,
     beamID: edge.node.beam?.id,

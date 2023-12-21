@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import { ONBOARDING_STATUS } from './intro-card';
 
@@ -26,7 +26,9 @@ type DevDashOnboardingStepsProps = {
 };
 
 export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = props => {
+  const { t } = useTranslation('app-dev-dashboard');
   const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
+  const { data } = useGetLogin();
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
@@ -34,9 +36,8 @@ export const DevDashOnboardingSteps: React.FC<DevDashOnboardingStepsProps> = pro
   const [messageName] = useState<string>('');
   const [message] = useState<string>('');
 
-  const { isLoggedIn, authenticatedDID } = useLoggedIn();
-
-  const { t } = useTranslation('app-dev-dashboard');
+  const authenticatedDID = data?.id;
+  const isLoggedIn = !!data?.id;
 
   const validateMutation = { isSuccess: false, data: null, isError: false, error: null };
 

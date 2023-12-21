@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetMyProfileQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
@@ -57,13 +56,9 @@ import routes, {
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
 
-  const profileDataReq = useGetMyProfileQuery(null, {
-    select: resp => {
-      return resp.viewer?.akashaProfile;
-    },
-  });
+  const authenticatedProfileReq = useGetLoginProfile();
 
-  const loggedProfileData = profileDataReq.data;
+  const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
   const checkModeratorQuery = { data: 200 };
 
@@ -85,7 +80,7 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[HOME]}
             element={
               <Overview
-                user={loggedProfileData?.did.id}
+                user={authenticatedProfile?.did.id}
                 isAuthorised={isAuthorised}
                 applicationStatus={applicationStatus}
                 navigateTo={navigateTo}
@@ -99,7 +94,7 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[DASHBOARD]}
             element={
               <Dashboard
-                user={loggedProfileData?.did.id}
+                user={authenticatedProfile?.did.id}
                 isAuthorised={isAuthorised}
                 isAdmin={isAdmin}
                 navigateTo={navigateTo}
@@ -110,21 +105,21 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={routes[EDIT_CATEGORIES]}
             element={
-              <EditCategoriesPage user={loggedProfileData?.did.id} navigateTo={navigateTo} />
+              <EditCategoriesPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             }
           />
 
           <Route
             path={routes[EDIT_CONTACT_INFO]}
             element={
-              <EditContactInfoPage user={loggedProfileData?.did.id} navigateTo={navigateTo} />
+              <EditContactInfoPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             }
           />
 
           <Route
             path={routes[EDIT_MAX_APPLICANTS]}
             element={
-              <EditMaxApplicantsPage user={loggedProfileData?.did.id} navigateTo={navigateTo} />
+              <EditMaxApplicantsPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             }
           />
 
@@ -132,7 +127,7 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[RESIGN_ROLE]}
             element={
               <ResignRolePage
-                user={loggedProfileData?.did.id}
+                user={authenticatedProfile?.did.id}
                 isAdmin={isAdmin}
                 navigateTo={navigateTo}
               />
@@ -142,13 +137,15 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={routes[RESIGN_CONFIRMATION]}
             element={
-              <ResignConfirmationPage user={loggedProfileData?.did.id} navigateTo={navigateTo} />
+              <ResignConfirmationPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             }
           />
 
           <Route
             path={routes[ASSIGN_NEW_ADMIN]}
-            element={<AssignAdminPage user={loggedProfileData?.did.id} navigateTo={navigateTo} />}
+            element={
+              <AssignAdminPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
+            }
           />
 
           <Route path={routes[MODERATORS]} element={<Moderators navigateTo={navigateTo} />} />
@@ -165,7 +162,9 @@ const AppRoutes: React.FC<unknown> = () => {
 
           <Route
             path={routes[HISTORY]}
-            element={<TransparencyLog user={loggedProfileData?.did.id} navigateTo={navigateTo} />}
+            element={
+              <TransparencyLog user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
+            }
           />
 
           <Route path={routes[HISTORY_ITEM]} element={<TransparencyLogItem />} />
@@ -173,7 +172,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={routes[BECOME_MODERATOR]}
             element={
-              <BecomeModeratorPage user={loggedProfileData?.did.id} navigateTo={navigateTo} />
+              <BecomeModeratorPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             }
           />
 

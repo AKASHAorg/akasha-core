@@ -7,14 +7,15 @@ import AppsPage from './pages/apps-page';
 import MasterPage from './pages/master-page';
 import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO, APPS } from '../routes';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
-import { useLoggedIn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { hiddenIntegrations } from '../hidden-integrations';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { worldConfig, baseRouteName } = useRootComponentProps();
 
-  const { isLoggedIn } = useLoggedIn();
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
 
   const defaultIntegrations = [].concat(
     worldConfig.defaultApps,
@@ -23,17 +24,18 @@ const AppRoutes: React.FC<unknown> = () => {
     [worldConfig.layout],
   );
 
-  const appsReq = useGetAppsQuery(
-    {
+  const {
+    data: appsReq,
+    loading,
+    error,
+  } = useGetAppsQuery({
+    variables: {
       first: 50,
     },
-    {
-      select: response => response.akashaAppIndex.edges,
-      enabled: !!isLoggedIn,
-    },
-  );
+    skip: !isLoggedIn,
+  });
 
-  const availableApps = appsReq.data;
+  const availableApps = appsReq?.akashaAppIndex?.edges;
 
   const filteredIntegrations = React.useMemo(() => {
     return availableApps?.filter(
@@ -63,8 +65,8 @@ const AppRoutes: React.FC<unknown> = () => {
               <ExplorePage
                 installableApps={installableApps}
                 installedAppsInfo={[]}
-                isFetching={appsReq.isFetching}
-                reqError={appsReq.error as Error}
+                isFetching={loading}
+                reqError={error}
                 isUserLoggedIn={isLoggedIn}
               />
             }

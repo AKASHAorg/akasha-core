@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
-import { transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { hasOwn, transformSource, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/messages-db';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -19,12 +19,12 @@ import ChatEditor from '@akashaorg/design-system-components/lib/components/ChatE
 import BubbleCard from '@akashaorg/design-system-components/lib/components/BubbleCard';
 
 export interface ChatPageProps {
-  loggedProfileData: Profile;
+  authenticatedProfile: Profile;
   fetchingMessages?: boolean;
 }
 
 const ChatPage = (props: ChatPageProps) => {
-  const { loggedProfileData, fetchingMessages } = props;
+  const { authenticatedProfile, fetchingMessages } = props;
 
   const { t } = useTranslation('app-messaging');
   const { getRoutingPlugin } = useRootComponentProps();
@@ -48,9 +48,12 @@ const ChatPage = (props: ChatPageProps) => {
   };
 
   const contactProfileId = React.useMemo(() => did, [did]);
-  const loggedUserId = React.useMemo(() => loggedProfileData?.did?.id, [loggedProfileData]);
+  const loggedUserId = React.useMemo(() => authenticatedProfile?.did?.id, [authenticatedProfile]);
 
-  const disablePublishing = React.useMemo(() => !loggedProfileData?.did?.id, [loggedProfileData]);
+  const disablePublishing = React.useMemo(
+    () => !authenticatedProfile?.did?.id,
+    [authenticatedProfile],
+  );
 
   const handleMentionClick = (did: string) => {
     navigateTo?.({
@@ -81,23 +84,14 @@ const ChatPage = (props: ChatPageProps) => {
     setTagQuery(query);
   };
 
-  const profileDataReq = useGetProfileByDidQuery(
-    { id: did },
-    {
-      select: data => {
-        if (data.node && 'akashaProfile' in data.node) {
-          return data.node;
-        }
-        return null;
-      },
-      enabled: !!did,
-    },
-  );
+  const { data: profileDataReq } = useGetProfileByDidQuery({ variables: { id: did }, skip: !did });
 
-  const contactId = React.useMemo(
-    () => profileDataReq?.data?.akashaProfile?.name || profileDataReq?.data?.akashaProfile?.did,
-    [profileDataReq?.data],
-  );
+  const profileData =
+    profileDataReq?.node && hasOwn(profileDataReq.node, 'akashaProfile')
+      ? profileDataReq?.node?.akashaProfile
+      : null;
+
+  const contactId = React.useMemo(() => profileData?.name || profileData?.did, [profileData]);
 
   const handleSendMessage = async publishData => {
     // publish message through textile inbox api
@@ -171,10 +165,10 @@ const ChatPage = (props: ChatPageProps) => {
       <Stack padding="p-2">
         <Stack fullWidth={true} justify="between" customStyle="rounded-lg border(grey8 dark:grey3)">
           <ChatAreaHeader
-            name={profileDataReq.data?.akashaProfile?.name}
-            avatar={profileDataReq.data?.akashaProfile?.avatar?.default}
-            alternativeAvatars={profileDataReq.data?.akashaProfile?.avatar?.alternatives}
-            did={profileDataReq.data?.akashaProfile?.did}
+            name={profileData?.name}
+            avatar={profileData?.avatar?.default}
+            alternativeAvatars={profileData?.avatar?.alternatives}
+            did={profileData?.did}
             onClickAvatar={handleProfileClick}
             transformSource={transformSource}
           />
@@ -185,7 +179,7 @@ const ChatPage = (props: ChatPageProps) => {
             unreadMessagesLabel={t('You have {{numberOfUnread}} new unread messages', {
               numberOfUnread: unreadMessages?.length,
             })}
-            loggedUserProfileId={loggedProfileData?.did.id}
+            loggedUserProfileId={authenticatedProfile?.did.id}
             itemCard={
               <BubbleCard
                 locale="en"
@@ -203,7 +197,7 @@ const ChatPage = (props: ChatPageProps) => {
 
           <ChatEditor
             showAvatar={false}
-            profileId={loggedProfileData?.did.id}
+            profileId={authenticatedProfile?.did.id}
             actionLabel={t('Send')}
             placeholderLabel={t('Message')}
             emojiPlaceholderLabel={t('Search')}

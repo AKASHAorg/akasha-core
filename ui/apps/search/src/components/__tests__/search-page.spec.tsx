@@ -28,7 +28,7 @@ describe('<SearchPage />', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
       <SearchPage
-        loggedProfileData={{
+        authenticatedProfile={{
           id: 'some id',
           createdAt: Date.now(),
           name: 'some name',

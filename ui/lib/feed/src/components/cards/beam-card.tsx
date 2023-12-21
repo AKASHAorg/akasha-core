@@ -3,10 +3,10 @@ import EntryCard, {
   EntryCardProps,
 } from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { transformSource, hasOwn, sortByKey, useLoggedIn } from '@akashaorg/ui-awf-hooks';
+import { transformSource, hasOwn, sortByKey, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ContentBlockModes, EntityTypes, BeamEntryData } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated';
+import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 
 type BeamCardProps = Pick<
@@ -24,22 +24,24 @@ type BeamCardProps = Pick<
 };
 
 const BeamCard: React.FC<BeamCardProps> = props => {
-  const { entryData, onReflect, showHiddenContent, ...rest } = props;
   const { t } = useTranslation('ui-lib-feed');
+  const { entryData, onReflect, showHiddenContent, ...rest } = props;
   const { getRoutingPlugin, getTranslationPlugin } = useRootComponentProps();
-
+  const { data } = useGetLogin();
   const navigateTo = getRoutingPlugin().navigateTo;
+  const authenticatedDID = data?.id;
 
-  const { authenticatedDID } = useLoggedIn();
-
-  const profileDataReq = useGetProfileByDidQuery(
-    { id: entryData.authorId },
-    { select: response => response.node },
-  );
+  const {
+    data: profileDataReq,
+    error,
+    loading,
+  } = useGetProfileByDidQuery({
+    variables: { id: entryData.authorId },
+  });
 
   const { akashaProfile: profileData } =
-    profileDataReq.data && hasOwn(profileDataReq.data, 'akashaProfile')
-      ? profileDataReq.data
+    profileDataReq?.node && hasOwn(profileDataReq.node, 'akashaProfile')
+      ? profileDataReq.node
       : { akashaProfile: null };
   const locale = getTranslationPlugin().i18n?.languages?.[0] || 'en';
 
@@ -57,7 +59,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
   return (
     <EntryCard
       entryData={entryData}
-      authorProfile={{ data: profileData, status: profileDataReq.status }}
+      authorProfile={{ data: profileData, loading, error }}
       locale={locale}
       repliesAnchorLink="/@akashaorg/app-akasha-integration/beam"
       profileAnchorLink="/@akashaorg/app-profile"
