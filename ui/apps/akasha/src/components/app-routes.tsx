@@ -98,7 +98,6 @@ const AppRoutes: React.FC<unknown> = () => {
             element={<EditorPage loggedProfileData={loggedProfileData} />}
           />
         </Routes>
-        <Stack id="reflect-error-snackbar-container" customStyle="sticky bottom-2" fullWidth />
       </Stack>
     </Router>
   );

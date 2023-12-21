@@ -47,7 +47,7 @@ const EditImageModal: React.FC<EditImageModalProps> = ({
       ]}
     >
       {images.length > 0 && (
-        <Stack direction="row" spacing="gap-2">
+        <Stack direction="row" justify="start" align="center" spacing="gap-2">
           {images.map((imageData, index) => {
             const imageUrl = typeof imageData === 'string' ? imageData : imageData?.src;
             return (

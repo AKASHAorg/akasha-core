@@ -29,6 +29,7 @@ export type ContentBlockExtensionProps = {
   editMode?: {
     propertyType: string;
     appName: string;
+    externalHandler?: (value: never) => void;
   };
   readMode?: {
     blockID: string;
@@ -187,6 +188,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
       {state.parcels.map((matchingBlock, index) => {
         return (
           <Stack
+            fullWidth
             id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
           >
@@ -196,6 +198,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
               blockInfo={{
                 ...matchingBlock.blockInfo,
                 mode,
+                externalHandler: editMode.externalHandler,
               }}
               blockData={matchingBlock.blockData}
               blockRef={blockRef}

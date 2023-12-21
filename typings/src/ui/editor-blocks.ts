@@ -15,6 +15,7 @@ export type ContentBlockExtensionInterface = {
   propertyType: string;
   icon?: React.ReactElement;
   displayName: string;
+  externalHandler?: (value: never) => void;
   loadingFn: (options: {
     blockInfo: BlockInfo;
     blockData: GetContentBlockByIdQuery['node'];
