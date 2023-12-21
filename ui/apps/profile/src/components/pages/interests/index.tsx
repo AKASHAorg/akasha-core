@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import {
   CheckCircleIcon,
@@ -11,12 +11,16 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 import EditInterests from '@akashaorg/design-system-components/lib/components/EditInterests';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import {
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
-} from '@akashaorg/ui-awf-hooks/lib/generated';
+  useUpdateInterestsMutation,
+  GetInterestsByDidDocument,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useShowFeedback, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import getSDK from '@akashaorg/awf-sdk';
+import { useApolloClient } from '@apollo/client';
+import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 type InterestsPageProps = {
   isLoggedIn: boolean;
@@ -34,39 +38,47 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
   const { getRoutingPlugin } = useRootComponentProps();
 
   const navigateTo = getRoutingPlugin().navigateTo;
+  const apolloClient = useApolloClient();
 
-  const onMutate = () => {
-    setIsProcessing(true);
-  };
-
-  const onSettled = () => {
-    setIsProcessing(false);
-  };
-
-  const queryClient = useQueryClient();
-  const ownInterestsQueryReq = useGetInterestsByDidQuery(
-    { id: profileId },
-    { select: response => response.node },
-  );
-  const ownInterests = useMemo(
-    () =>
-      ownInterestsQueryReq.data && hasOwn(ownInterestsQueryReq.data, 'akashaProfileInterests')
-        ? ownInterestsQueryReq.data.akashaProfileInterests?.topics || []
-        : [],
-    [ownInterestsQueryReq.data],
-  );
-  const createInterest = useCreateInterestsMutation({
-    onMutate,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: useGetInterestsByDidQuery.getKey({
-          id: profileId !== authenticatedDID ? authenticatedDID : profileId,
-        }),
-      });
-      setShowFeedback(true);
-    },
-    onSettled,
+  const {
+    data: ownInterestsQueryData,
+    loading,
+    error,
+    refetch: refetchInterestSubscriptions,
+  } = useGetInterestsByDidQuery({
+    variables: { id: authenticatedDID },
+    skip: !isLoggedIn,
   });
+  const ownInterests = useMemo(() => {
+    if (!isLoggedIn) return null;
+    return ownInterestsQueryData &&
+      hasOwn(ownInterestsQueryData.node, 'akashaProfileInterests') &&
+      ownInterestsQueryData.node.akashaProfileInterests?.topics.length > 0
+      ? ownInterestsQueryData.node.akashaProfileInterests?.topics.map(topic => ({
+          value: topic.value,
+          labelType: topic.labelType,
+        }))
+      : [];
+  }, [isLoggedIn, ownInterestsQueryData]);
+
+  const interestSubscriptionId = useMemo(() => {
+    if (!isLoggedIn) return null;
+    return ownInterestsQueryData && hasOwn(ownInterestsQueryData.node, 'akashaProfileInterests')
+      ? ownInterestsQueryData.node.akashaProfileInterests?.id
+      : null;
+  }, [isLoggedIn, ownInterestsQueryData]);
+
+  const sdk = getSDK();
+
+  const [createInterestsMutation, { loading: createMutationLoading, error: createMutationError }] =
+    useCreateInterestsMutation({
+      context: { source: sdk.services.gql.contextSources.composeDB },
+    });
+
+  const [updateInterestsMutation, { loading: updateMutationLoading, error: updateMutationError }] =
+    useUpdateInterestsMutation({
+      context: { source: sdk.services.gql.contextSources.composeDB },
+    });
 
   if (!isLoggedIn) {
     navigateTo({
@@ -80,16 +92,56 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     //subscribe only if logged in user hasn't subscribed before otherwise navigate to the topic page
     if (!activeInterests.find(interest => interest.value === topic.value)) {
       const newActiveInterests = [...activeInterests, topic];
-      createInterest.mutate({
-        i: { content: { topics: newActiveInterests } },
-      });
+
+      runMutations(newActiveInterests);
       setActiveInterests(newActiveInterests);
+
       return;
     }
     navigateTo?.({
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${topic}`,
     });
+  };
+
+  const runMutations = (interests: AkashaProfileInterestsLabeled[]) => {
+    setIsProcessing(true);
+    if (interestSubscriptionId) {
+      updateInterestsMutation({
+        variables: {
+          i: {
+            id: interestSubscriptionId,
+            content: {
+              topics: interests,
+            },
+          },
+        },
+        onCompleted: async () => {
+          refetchInterestSubscriptions();
+          setIsProcessing(false);
+        },
+        onError: err => {
+          setIsProcessing(false);
+        },
+      });
+    } else {
+      createInterestsMutation({
+        variables: {
+          i: {
+            content: {
+              topics: interests,
+            },
+          },
+        },
+        onCompleted: async () => {
+          await apolloClient.refetchQueries({ include: [GetInterestsByDidDocument] });
+          setIsProcessing(false);
+        },
+        onError: err => {
+          setIsProcessing(false);
+        },
+      });
+    }
   };
 
   return (
@@ -107,7 +159,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
             <Stack align="center" justify="start" spacing="gap-2" customStyle="flex-wrap w-full">
               {ownInterests.map((interest, idx) => (
                 <Pill
-                  key={`${idx}-${interest.value}`}
+                  key={`${idx}-${interest}`}
                   label={interest.value}
                   icon={<CheckIcon />}
                   iconDirection="right"
@@ -128,7 +180,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
         {profileId === authenticatedDID && (
           <EditInterests
             title={t('Your interests')}
-            subTitle={t('(30 topics max.)')}
+            subTitle={t('(10 topics max.)')}
             description={t(
               'Your interests will help refine your social feed and throughout AKASHA World.',
             )}
@@ -137,8 +189,8 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
             moreInterestPlaceholder={t('Interests')}
             myInterests={ownInterests}
             interests={[]} /* TODO: when indexed list of interests hook is ready connect it */
-            maxInterests={30}
-            labelType="TOPIC"
+            maxInterests={10}
+            labelType={sdk.services.gql.labelTypes.INTEREST}
             maxInterestsErrorMessage={t(
               'Max interests reached. Remove some interests to add more.',
             )}
@@ -153,12 +205,9 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
               },
             }}
             saveButton={{
-              label: 'Save',
+              label: t('Save'),
               loading: isProcessing,
-              handleClick: interests =>
-                createInterest.mutate({
-                  i: { content: { topics: interests } },
-                }),
+              handleClick: interests => runMutations(interests),
             }}
             customStyle="h-full"
           />

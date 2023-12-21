@@ -72,14 +72,16 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
   useEffect(() => {
     if (receivedTags && !localTagsInitialized.current) {
-      setLocalSubscribedTags(receivedTags);
+      console.log('receivedTags', receivedTags);
+
+      setLocalSubscribedTags([...new Set(receivedTags)]);
       localTagsInitialized.current = true;
     }
-    //prevents reseting interests wit []
+    //prevents reseting interests with []
     if (receivedTags && tagsQueue.length === 0) {
       localSubscribedTagsRef.current = receivedTags;
     }
-  }, [receivedTags, localTagsInitialized]);
+  }, [receivedTags, localTagsInitialized, tagsQueue.length]);
 
   useEffect(() => {
     if (tagSubscriptionsId) {
@@ -104,6 +106,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
     if (!isEqual(localSubscribedTagsRef.current, receivedTags)) {
       if (subscriptionId.current) {
+        console.log('data', [...new Set(localSubscribedTagsRef.current)]);
         updateInterestsMutation({
           variables: {
             i: {
@@ -137,6 +140,9 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             const arrDifference = difference(returnedData, receivedTags).concat(
               difference(receivedTags, returnedData),
             );
+            console.log('receivedTags ', receivedTags);
+
+            console.log('arrDifference ', arrDifference);
             setTagsQueue(prev => pullAll(prev, arrDifference));
           },
           onError: err => {
@@ -249,24 +255,25 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
           <Stack spacing="gap-y-4">
             {tags.length > 0 &&
-              tags.slice(0, 4).map((tag, index) => (
-                <TopicRow
-                  key={index}
-                  tag={tag}
-                  subscribedTags={localSubscribedTagsRef.current}
-                  tagSubtitleLabel={tagSubtitleLabel}
-                  subscribeLabel={subscribeLabel}
-                  subscribedLabel={subscribedLabel}
-                  unsubscribeLabel={unsubscribeLabel}
-                  isLoggedIn={isLoggedIn}
-                  onClickTopic={onClickTopic}
-                  isLoading={tagsQueue.includes(tag)}
-                  // setLocalSubscribedTags={setLocalSubscribedTags}
-                  showLoginModal={showLoginModal}
-                  handleTopicUnsubscribe={handleTopicUnsubscribe}
-                  handleTopicSubscribe={handleTopicSubscribe}
-                />
-              ))}
+              tags
+                .slice(0, 4)
+                .map((tag, index) => (
+                  <TopicRow
+                    key={index}
+                    tag={tag}
+                    subscribedTags={receivedTags}
+                    tagSubtitleLabel={tagSubtitleLabel}
+                    subscribeLabel={subscribeLabel}
+                    subscribedLabel={subscribedLabel}
+                    unsubscribeLabel={unsubscribeLabel}
+                    isLoggedIn={isLoggedIn}
+                    onClickTopic={onClickTopic}
+                    isLoading={tagsQueue.includes(tag)}
+                    showLoginModal={showLoginModal}
+                    handleTopicUnsubscribe={handleTopicUnsubscribe}
+                    handleTopicSubscribe={handleTopicSubscribe}
+                  />
+                ))}
           </Stack>
         </ul>
       </Stack>
