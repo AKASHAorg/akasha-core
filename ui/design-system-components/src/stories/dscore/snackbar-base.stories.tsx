@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { CheckCircleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Snackbar, { SnackbarProps } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 const meta: Meta<SnackbarProps> = {
   title: 'DSCore/Bars/Snackbar',
@@ -16,29 +17,29 @@ type Story = StoryObj<SnackbarProps>;
 const variants: SnackbarProps[] = [
   {
     title: 'Info Snackbar',
-    type: 'info',
+    type: NotificationTypes.Info,
   },
   {
     title: 'Alert Snackbar',
     description: 'Some important information will appear here',
-    type: 'alert',
+    type: NotificationTypes.Alert,
     actionButtonLabel: 'OK',
   },
   {
     title: 'Success Alert Snackbar',
     description: 'Some important information will appear here',
-    type: 'success',
+    type: NotificationTypes.Success,
     actionButtonLabel: 'OK',
   },
   {
     title: 'Caution Alert Snackbar',
     description: 'Some important information will appear here',
-    type: 'caution',
+    type: NotificationTypes.Caution,
     actionButtonLabel: 'OK',
   },
   {
     title: 'Success Info Snackbar',
-    type: 'success',
+    type: NotificationTypes.Success,
     icon: <CheckCircleIcon />,
   },
 ];

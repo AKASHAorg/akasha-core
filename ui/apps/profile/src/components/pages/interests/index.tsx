@@ -21,6 +21,7 @@ import { useShowFeedback, hasOwn, useRootComponentProps } from '@akashaorg/ui-aw
 import getSDK from '@akashaorg/awf-sdk';
 import { useApolloClient } from '@apollo/client';
 import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 type InterestsPageProps = {
   isLoggedIn: boolean;
@@ -216,7 +217,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
       {showFeedback && (
         <Snackbar
           title={t('Successfully subscribed to interest')}
-          type="success"
+          type={NotificationTypes.Success}
           icon={<CheckCircleIcon />}
           handleDismiss={() => {
             setShowFeedback(false);
