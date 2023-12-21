@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 const PROFILE_STATS_QUERY_KEY = 'Profile_Stats';
 
 const getStats = async (profileId: string) => {
+  if (!profileId) return null;
+
   const sdk = getSDK();
 
   const res = await sdk.api.profile.getProfileStats(profileId);
@@ -42,7 +44,11 @@ export function useProfileStats(profileId: string) {
     fetchStats();
   }, [profileId]);
 
-  return { data: stat?.data, loading, error };
+  return {
+    data: stat?.data,
+    loading,
+    error,
+  };
 }
 
 useProfileStats.getKey = (profileId: string) => [`${PROFILE_STATS_QUERY_KEY}_${profileId}`];
