@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MenuItemAreaType, NotificationEvents } from '@akashaorg/typings/lib/ui';
+import { MenuItemAreaType, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, useSaveSettings, useGetSettings } from '@akashaorg/ui-awf-hooks';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -201,7 +201,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         _uiEvents.current.next({
           event: NotificationEvents.ShowNotification,
           data: {
-            name: 'success',
+            type: NotificationTypes.Success,
             message: 'You have snoozed your notifications successfully',
           },
         });
@@ -216,7 +216,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
         _uiEvents.current.next({
           event: NotificationEvents.ShowNotification,
           data: {
-            name: 'success',
+            type: NotificationTypes.Success,
             message: 'You have unsnoozed your notifications successfully',
           },
         });
@@ -225,7 +225,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
-          name: 'success',
+          type: NotificationTypes.Success,
           message: 'Notification settings updated successfully',
         },
       });
@@ -240,7 +240,7 @@ const CustomizeNotificationPage: React.FC<CustomizeNotificationPageProps> = ({
       _uiEvents.current.next({
         event: NotificationEvents.ShowNotification,
         data: {
-          name: 'error',
+          type: NotificationTypes.Error,
           message: 'Something went wrong. Retry',
         },
       });

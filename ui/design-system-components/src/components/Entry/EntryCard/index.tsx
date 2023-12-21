@@ -13,7 +13,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
-import NSFW, { NSFWProps } from '../NSFW';
+import NSFW, { NSFWProps } from '../../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import {
   formatDate,
@@ -133,7 +133,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
           {
             icon: <FlagIcon />,
             label: flagAsLabel,
-            color: { light: 'errorLight' as const, dark: 'errorDark' as const },
+            color: { light: 'errorLight', dark: 'errorDark' } as const,
             disabled: disableReporting,
             onClick: onEntryFlag,
           },
@@ -245,15 +245,13 @@ const EntryCard: React.FC<EntryCardProps> = props => {
             fullWidth={true}
           >
             {showNSFWCard && (
-              <Stack customStyle="w-36 h-16">
-                <NSFW
-                  {...nsfw}
-                  onClickToView={event => {
-                    event.stopPropagation();
-                    setShowNSFWContent(true);
-                  }}
-                />
-              </Stack>
+              <NSFW
+                {...nsfw}
+                onClickToView={event => {
+                  event.stopPropagation();
+                  setShowNSFWContent(true);
+                }}
+              />
             )}
             {(!entryData.nsfw || showNSFWContent) && (
               <Stack justifySelf="start" alignSelf="start" align="start" fullWidth={true}>

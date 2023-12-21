@@ -3,6 +3,7 @@ import { act, fireEvent } from '@testing-library/react';
 
 import Snackbar from '../';
 import { customRender } from '../../../test-utils';
+import { NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 const title = 'Default title';
 const description = 'Default description';
@@ -16,7 +17,7 @@ describe('<Snackbar /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         <Snackbar
-          type="alert"
+          type={NotificationTypes.Alert}
           title={title}
           description={description}
           handleDismiss={mockChangeHandler}
