@@ -5,8 +5,8 @@ import { PluginConf } from './plugins';
 import { IntegrationReleaseInfoFragmentFragment } from '../sdk/graphql-operation-types';
 
 export type ActivityFn = (
-  location: URL,
-  pathToActiveWhen: (path: string, exact?: boolean) => (location: any) => boolean,
+  location: Location,
+  pathToActiveWhen: (path: string, exact?: boolean) => (location: Location) => boolean,
   layoutConfig?: Extensions,
 ) => boolean;
 

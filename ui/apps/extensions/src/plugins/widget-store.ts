@@ -26,7 +26,7 @@ export class WidgetStore extends BaseStore {
 
   getWidgets = () => this.#widgets;
 
-  getMatchingWidgets = (slotName: string, location: URL) => {
+  getMatchingWidgets = (slotName: string, location: Location) => {
     const matchingWidgets = [];
     for (const widget of this.#widgets) {
       if (widget.mountsIn === slotName && !hasOwn(widget, 'activeWhen')) {
