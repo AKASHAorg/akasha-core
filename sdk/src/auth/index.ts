@@ -342,7 +342,17 @@ class AWF_Auth {
 
   private async _signOut() {
     sessionStorage.clear();
-    localStorage.clear();
+    localStorage.removeItem(this.currentUserKey);
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key) {
+        continue;
+      }
+      // remove any dangling did session
+      if (key.startsWith('@identity')) {
+        localStorage.removeItem(key);
+      }
+    }
     this.currentUser = undefined;
     await this._gql.setContextViewerID('');
     await this._web3.disconnect();
