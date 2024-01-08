@@ -163,9 +163,10 @@ class AWF_Auth {
         const chainNameSpace = 'eip155';
         const chainId = this._web3.networkId[this._web3.network];
         const chainIdNameSpace = `${chainNameSpace}:${chainId}`;
+        const ceramicResources = await this._ceramic.geResourcesHash();
         this.sessKey = `@identity:${chainIdNameSpace}:${address?.toLowerCase()}:${
           this._web3.state.providerType
-        }`;
+        }:${ceramicResources.hash}`;
         const sessValue = localStorage.getItem(this.sessKey);
         if (localUser && sessValue) {
           const tmpSession = JSON.parse(localUser);
@@ -341,8 +342,7 @@ class AWF_Auth {
 
   private async _signOut() {
     sessionStorage.clear();
-    localStorage.removeItem(this.sessKey);
-    localStorage.removeItem(this.currentUserKey);
+    localStorage.clear();
     this.currentUser = undefined;
     await this._gql.setContextViewerID('');
     await this._web3.disconnect();
