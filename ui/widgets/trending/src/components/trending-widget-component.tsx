@@ -122,7 +122,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
             type: t('script-error'),
             title: t('Error in latest topics widget'),
           }}
-          logger={logger.error}
+          logger={logger}
         >
           <LatestTopics
             titleLabel={t('Latest Topics')}
@@ -150,7 +150,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
             type: t('script-error'),
             title: t('Error in latest profiles widget'),
           }}
-          logger={logger.error}
+          logger={logger}
         >
           <LatestProfiles
             titleLabel={t('Start Following')}

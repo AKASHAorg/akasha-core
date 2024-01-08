@@ -1,11 +1,12 @@
 import React from 'react';
 import ErrorLoader, { ErrorLoaderProps } from '../ErrorLoader';
+import { ILogger } from '@akashaorg/typings/lib/sdk/log';
 
 export type ErrorBoundaryProps = {
   children: React.ReactElement;
   fallback?: React.ReactElement;
   errorObj?: Pick<ErrorLoaderProps, 'type' | 'title'>;
-  logger?: (err: string) => void;
+  logger?: ILogger;
 };
 
 export type ErrorBoundaryState = { hasError: boolean; error: Error };
@@ -18,7 +19,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 
   componentDidCatch(error: Error): void {
     this.setState({ hasError: true, error });
-    this.props.logger?.(error?.message);
+    this.props.logger?.error(error?.message);
   }
 
   render() {

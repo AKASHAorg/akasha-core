@@ -182,7 +182,7 @@ const TopbarComponent: React.FC<unknown> = () => {
         type: t('script-error'),
         title: t('Error in topbar widget'),
       }}
-      logger={logger.error}
+      logger={logger}
     >
       <Topbar
         isLoggedIn={isLoggedIn}

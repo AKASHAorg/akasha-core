@@ -127,7 +127,7 @@ const ICWidget: React.FC<unknown> = () => {
         type: t('script-error'),
         title: t('Error in my-apps widget'),
       }}
-      logger={logger.error}
+      logger={logger}
     >
       <Stack padding="pb-4">
         <Card elevation="1">

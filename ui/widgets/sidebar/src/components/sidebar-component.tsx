@@ -244,7 +244,7 @@ const SidebarComponent: React.FC<unknown> = () => {
         type: t('script-error'),
         title: t('Error in sidebar widget'),
       }}
-      logger={logger.error}
+      logger={logger}
     >
       <Card
         customStyle="w-[19.5rem] max-w-[19.5rem] max-h(screen xl:[calc(100vh-20px)]) h(full xl:fit)"
