@@ -9,6 +9,7 @@ import {
   startWidgetsTogglingBreakpoint,
   startMobileSidebarHidingBreakpoint,
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
+import { filter } from 'rxjs';
 
 const TopbarComponent: React.FC<unknown> = () => {
   const { uiEvents, layoutConfig, logger, worldConfig, encodeAppName, getRoutingPlugin } =
@@ -18,6 +19,7 @@ const TopbarComponent: React.FC<unknown> = () => {
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
   const isLoggedIn = !!data?.id;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   const { t } = useTranslation('ui-widget-topbar');
 
@@ -89,6 +91,28 @@ const TopbarComponent: React.FC<unknown> = () => {
     };
   }, []);
 
+  React.useEffect(() => {
+    const eventsSub = uiEventsRef.current
+      .pipe(filter(data => data.event === EventTypes.GoBackToPreviousRoute))
+      .subscribe({
+        next: () => {
+          handleBackClick();
+          if (historyCount.current === 0) {
+            navigateTo({
+              appName: worldConfig.homepageApp,
+              getNavigationUrl: appRoutes => appRoutes.defaultRoute,
+            });
+          }
+        },
+      });
+
+    return () => {
+      if (eventsSub) {
+        eventsSub.unsubscribe();
+      }
+    };
+  }, [navigateTo, worldConfig.homepageApp]);
+
   const handleSidebarToggle = () => {
     uiEvents.next({
       event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
@@ -118,7 +142,7 @@ const TopbarComponent: React.FC<unknown> = () => {
 
         if (isNavigatingBackRef.current) {
           isNavigatingBackRef.current = false;
-          historyCount.current = historyCount.current - 1;
+          historyCount.current = historyCount.current >= 1 ? historyCount.current - 1 : 0;
         } else if (newUrl !== oldUrl) {
           historyCount.current++;
         }
@@ -142,7 +166,7 @@ const TopbarComponent: React.FC<unknown> = () => {
       return;
     }
 
-    getRoutingPlugin().navigateTo({
+    navigateTo({
       appName: worldConfig.homepageApp,
       getNavigationUrl: appRoutes => {
         if (appRoutes.hasOwnProperty('defaultRoute')) {
@@ -161,7 +185,7 @@ const TopbarComponent: React.FC<unknown> = () => {
   };
 
   const handleNotificationClick = () => {
-    getRoutingPlugin().navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: routes => {
         return routes.myProfile;
@@ -170,7 +194,7 @@ const TopbarComponent: React.FC<unknown> = () => {
   };
 
   const handleLoginClick = () => {
-    getRoutingPlugin().navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: () => '/',
     });
