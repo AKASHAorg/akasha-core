@@ -10,6 +10,7 @@ import { DIDSession } from 'did-session';
 import { EthereumWebAuth } from '@didtools/pkh-ethereum';
 import { ComposeClient } from '@composedb/client';
 import { AccountId } from 'caip';
+import { sha256 } from 'crypto-hash';
 import { ethers } from 'ethers';
 import { definition } from '@akashaorg/composedb-models/lib/runtime-definition';
 
@@ -109,6 +110,14 @@ Functionality:
       return this._didSession?.serialize();
     }
     return null;
+  }
+
+  async geResourcesHash() {
+    const hash = await sha256(this._composeClient.resources.join(''));
+    return {
+      hash: hash,
+      resources: this._composeClient.resources,
+    };
   }
 
   async setCeramicEndpoint(endPoint: string) {
