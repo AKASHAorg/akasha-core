@@ -62,6 +62,7 @@ export enum EventTypes {
   HideWidgets = 'hide-widgets',
   LayoutShowLoadingUser = 'layout:show-loading-user',
   SetInitialCookieType = 'set-initial-cookie-type',
+  GoBackToPreviousRoute = 'routing:go-back-to-previous-route',
 }
 
 export const enum EntityTypes {

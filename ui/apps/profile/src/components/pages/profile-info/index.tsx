@@ -4,7 +4,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import ProfileStatsView from '../../profile-stats-view';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
-import NSFW from '@akashaorg/design-system-components/lib/components/NSFW';
+import NSFW from './nsfw';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { EDIT } from '../../../routes';
 import {
@@ -15,7 +15,7 @@ import {
 } from '@akashaorg/design-system-components/lib/components/Profile';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import { EventTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   hasOwn,
   useGetLogin,
@@ -34,7 +34,7 @@ export type ProfilePageProps = {
 const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   const { showNSFW, setShowNSFW, showLoginModal } = props;
   const { t } = useTranslation('app-profile');
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
   const { profileId } = useParams<{ profileId: string }>();
   const { data: loginData } = useGetLogin();
   const { data, loading, error } = useGetProfileByDidQuery({
@@ -82,8 +82,18 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
     return (
       <Card>
         <NSFW
-          sensitiveContentLabel={t('Sensitive Content!')}
-          clickToViewLabel={t('Click to View')}
+          sensitiveContentLabel={t('NSFW Profile')}
+          descriptionFirstLine={t('This profile is marked as NSFW.')}
+          descriptionSecondLine={t(
+            'It means that the content of this profile is has inappropriate content for some users.',
+          )}
+          clickToViewLabel={t('View Profile')}
+          cancelLabel={t('Cancel')}
+          onCancel={() => {
+            uiEvents.next({
+              event: EventTypes.GoBackToPreviousRoute,
+            });
+          }}
           onClickToView={() => {
             setShowNSFW(true);
           }}
