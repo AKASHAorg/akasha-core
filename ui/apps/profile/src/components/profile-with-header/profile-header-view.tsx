@@ -52,7 +52,11 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
 
   const profileNotFound = !profileData && !validDid;
 
-  if (profileNotFound || (profileData?.nsfw && !showNSFW)) return null;
+  if (
+    profileNotFound ||
+    (profileData?.nsfw && !showNSFW && authenticatedDID !== profileData.did.id)
+  )
+    return null;
 
   if (error)
     return (

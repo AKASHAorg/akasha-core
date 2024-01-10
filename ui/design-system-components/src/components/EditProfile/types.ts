@@ -5,5 +5,6 @@ export type EditProfileFormValues = {
   coverImage?: File | null;
   ens?: string;
   bio?: string;
+  nsfw?: boolean;
   links: string[];
 };

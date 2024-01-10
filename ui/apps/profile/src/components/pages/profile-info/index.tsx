@@ -46,6 +46,7 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileId, !!data?.node);
   const { data: statData, loading: statsLoading } = useProfileStats(profileId);
   const isLoggedIn = !!loginData?.id;
+  const authenticatedDID = loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
@@ -78,14 +79,14 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
       />
     );
 
-  if (profileData?.nsfw && !showNSFW)
+  if (profileData?.nsfw && !showNSFW && authenticatedDID !== profileData.did.id)
     return (
       <Card>
         <NSFW
           sensitiveContentLabel={t('NSFW Profile')}
           descriptionFirstLine={t('This profile is marked as NSFW.')}
           descriptionSecondLine={t(
-            'It means that the content of this profile is has inappropriate content for some users.',
+            'It means that the content of this profile has inappropriate content for some users.',
           )}
           clickToViewLabel={t('View Profile')}
           cancelLabel={t('Cancel')}
