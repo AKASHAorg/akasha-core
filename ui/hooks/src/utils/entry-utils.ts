@@ -3,6 +3,7 @@ import { Comment } from '@akashaorg/typings/lib/sdk/graphql-types';
 import type { PostResultFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import type { BeamEntryData, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import getSDK from '@akashaorg/awf-sdk';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';
@@ -116,7 +117,7 @@ export const mapBeamEntryData = (
   },
 ): BeamEntryData => {
   if (!beam) return null;
-
+  const sdk = getSDK();
   return {
     id: beam.id,
     active: beam.active,
@@ -124,6 +125,8 @@ export const mapBeamEntryData = (
     createdAt: beam.createdAt,
     content: beam.content,
     nsfw: beam?.nsfw,
-    tags: beam?.tags?.map(labeledTag => labeledTag.value),
+    tags: beam?.tags
+      ?.filter(labeledTag => labeledTag.labelType === sdk.services.gql.labelTypes.TAG)
+      .map(labeledTag => labeledTag.value),
   };
 };
