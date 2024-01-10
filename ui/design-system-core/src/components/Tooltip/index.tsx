@@ -1,22 +1,23 @@
 import React, { useState, PropsWithChildren, ReactNode } from 'react';
+import Stack from '../Stack';
+import Text, { TextProps } from '../Text';
 import { apply, tw } from '@twind/core';
 import { usePopper } from 'react-popper';
 import { useClickAway } from 'react-use';
 import { Placement } from '@popperjs/core';
-
-import Stack from '../Stack';
-import Text, { TextProps } from '../Text';
-
 import { getArrowClasses } from './getArrowClasses';
 import { getContentClasses } from './getContentClasses';
+import { Color } from '../types/common.types';
 
 export type TooltipProps = {
   placement: 'top' | 'left' | 'bottom' | 'right';
   content: ReactNode;
   textSize?: TextProps['variant'];
+  textColor?: Color;
   trigger?: 'hover' | 'click';
   centerArrowToReference?: boolean;
   arrow?: boolean;
+  backgroundColor?: Color;
   customStyle?: string;
 };
 
@@ -43,6 +44,8 @@ const Tooltip: React.FC<
     trigger = 'hover',
     centerArrowToReference,
     arrow = true,
+    textColor = { light: 'black', dark: 'white' },
+    backgroundColor = { light: 'secondaryDark/50', dark: 'grey4' },
     customStyle = '',
     children,
   } = props;
@@ -87,9 +90,7 @@ const Tooltip: React.FC<
 
   const isContentOfTypeString = typeof content === 'string';
 
-  const contentStyle = isContentOfTypeString
-    ? 'rounded-md bg-secondaryDark/50 dark:bg-grey4 py-[4px] px-[16px]'
-    : '';
+  const contentStyle = isContentOfTypeString ? 'rounded-md py-[4px] px-[16px]' : '';
 
   const eventHandlers =
     trigger === 'hover'
@@ -138,16 +139,23 @@ const Tooltip: React.FC<
                 ...arrowStyle,
                 [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
               }}
-              className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE))}
+              className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE, backgroundColor))}
             />
           )}
           <Stack
             ref={contentRef}
             align="center"
             justify="center"
+            background={isContentOfTypeString ? backgroundColor : null}
             customStyle={`flex-wrap w-max ${contentStyle}`}
           >
-            {isContentOfTypeString ? <Text variant={textSize}>{content}</Text> : content}
+            {isContentOfTypeString ? (
+              <Text color={textColor} variant={textSize}>
+                {content}
+              </Text>
+            ) : (
+              content
+            )}
           </Stack>
         </div>
       )}

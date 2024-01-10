@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { General, GeneralProps } from './General';
 import { EditProfileFormValues } from './types';
 import { ButtonType } from '../types/common.types';
+import { NSFW, NSFWProps } from './NSFW';
 
 type SocialLinkForm = Pick<
   SocialLinksProps,
@@ -17,7 +18,6 @@ type SocialLinkForm = Pick<
 
 type GeneralForm = Pick<GeneralProps, 'header' | 'name' | 'userName' | 'bio'>;
 
-//@TODO: Replace react-hook-form with better architected react form library.
 export type EditProfileProps = {
   defaultValues?: EditProfileFormValues;
   cancelButton: ButtonType;
@@ -28,7 +28,8 @@ export type EditProfileProps = {
   };
   customStyle?: string;
 } & GeneralForm &
-  SocialLinkForm;
+  SocialLinkForm &
+  Pick<NSFWProps, 'nsfwFormLabel' | 'nsfw'>;
 
 const EditProfile: React.FC<EditProfileProps> = ({
   defaultValues = {
@@ -38,6 +39,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
     bio: '',
     ens: '',
     userName: '',
+    nsfw: false,
     links: [],
   },
   cancelButton,
@@ -98,6 +100,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
           }}
           control={control}
         />
+        <NSFW {...rest} control={control} />
         <Stack direction="row" spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button
             variant="text"
@@ -135,6 +138,7 @@ const schema = z.object({
   coverImage: z.any().optional(),
   ens: z.string().optional(),
   bio: z.string().optional(),
+  nsfw: z.boolean().optional(),
   links: z
     .array(
       z

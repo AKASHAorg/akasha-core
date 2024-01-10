@@ -122,6 +122,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             name: formValues.name,
             description: formValues.bio,
             links: formValues.links.map(link => ({ href: link })),
+            nsfw: formValues.nsfw,
             createdAt: new Date().toISOString(),
             ...profileImages,
           },
@@ -142,6 +143,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             name: formValues.name,
             description: formValues.bio,
             links: formValues.links.map(link => ({ href: link })),
+            nsfw: formValues.nsfw,
             ...profileImages,
           },
         },
@@ -208,6 +210,11 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           }}
           name={{ label: t('Name'), initialValue: profileData?.name }}
           bio={{ label: t('Bio'), initialValue: profileData?.description }}
+          nsfw={{
+            label: t('Select NSFW if your profile contains mature or explicit content.'),
+            initialValue: profileData?.nsfw,
+          }}
+          nsfwFormLabel={t('NSFW Profile')}
           linkLabel={t('External URLs')}
           addNewLinkButtonLabel={t('Add new')}
           description={t(
