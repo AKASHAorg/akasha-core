@@ -27,6 +27,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import { useApolloClient } from '@apollo/client';
 import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { NotificationTypes } from '@akashaorg/typings/lib/ui';
+import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
 const InterestsPage: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
@@ -77,7 +78,9 @@ const InterestsPage: React.FC<unknown> = () => {
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  if (!isLoggedIn && !authenticating) {
+  if (authenticating) return <ProfileLoading />;
+
+  if (!isLoggedIn) {
     navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => `/${profileId}`,
