@@ -495,7 +495,7 @@ useInfiniteGetBeamByIdQuery.getKey = (variables: Types.GetBeamByIdQueryVariables
 
 useGetBeamByIdQuery.fetcher = (variables: Types.GetBeamByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>(GetBeamByIdDocument, variables, options);
 export const GetContentBlockStreamDocument = /*#__PURE__*/ `
-    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput) {
+    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput, $sorting: AkashaContentBlockStreamSortingInput) {
   node(id: $indexer) {
     ... on CeramicAccount {
       akashaContentBlockStreamList(
@@ -504,6 +504,7 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ `
         first: $first
         last: $last
         filters: $filters
+        sorting: $sorting
       ) {
         edges {
           node {
@@ -661,7 +662,7 @@ useInfiniteGetBlockStorageByIdQuery.getKey = (variables: Types.GetBlockStorageBy
 
 useGetBlockStorageByIdQuery.fetcher = (variables: Types.GetBlockStorageByIdQueryVariables, options?: RequestInit['headers']) => composeDbFetch<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>(GetBlockStorageByIdDocument, variables, options);
 export const GetIndexedStreamDocument = /*#__PURE__*/ `
-    query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput) {
+    query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput, $sorting: AkashaIndexedStreamSortingInput) {
   node(id: $indexer) {
     ... on CeramicAccount {
       akashaIndexedStreamList(
@@ -670,6 +671,7 @@ export const GetIndexedStreamDocument = /*#__PURE__*/ `
         first: $first
         last: $last
         filters: $filters
+        sorting: $sorting
       ) {
         edges {
           node {

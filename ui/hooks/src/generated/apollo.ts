@@ -912,7 +912,7 @@ export type GetBeamByIdLazyQueryHookResult = ReturnType<typeof useGetBeamByIdLaz
 export type GetBeamByIdSuspenseQueryHookResult = ReturnType<typeof useGetBeamByIdSuspenseQuery>;
 export type GetBeamByIdQueryResult = Apollo.QueryResult<Types.GetBeamByIdQuery, Types.GetBeamByIdQueryVariables>;
 export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
-    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput) {
+    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput, $sorting: AkashaContentBlockStreamSortingInput) {
   node(id: $indexer) {
     ... on CeramicAccount {
       akashaContentBlockStreamList(
@@ -921,6 +921,7 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
         first: $first
         last: $last
         filters: $filters
+        sorting: $sorting
       ) {
         edges {
           node {
@@ -964,6 +965,7 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
  *      first: // value for 'first'
  *      last: // value for 'last'
  *      filters: // value for 'filters'
+ *      sorting: // value for 'sorting'
  *   },
  * });
  */
@@ -1068,7 +1070,7 @@ export type GetBlockStorageByIdLazyQueryHookResult = ReturnType<typeof useGetBlo
 export type GetBlockStorageByIdSuspenseQueryHookResult = ReturnType<typeof useGetBlockStorageByIdSuspenseQuery>;
 export type GetBlockStorageByIdQueryResult = Apollo.QueryResult<Types.GetBlockStorageByIdQuery, Types.GetBlockStorageByIdQueryVariables>;
 export const GetIndexedStreamDocument = /*#__PURE__*/ gql`
-    query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput) {
+    query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput, $sorting: AkashaIndexedStreamSortingInput) {
   node(id: $indexer) {
     ... on CeramicAccount {
       akashaIndexedStreamList(
@@ -1077,6 +1079,7 @@ export const GetIndexedStreamDocument = /*#__PURE__*/ gql`
         first: $first
         last: $last
         filters: $filters
+        sorting: $sorting
       ) {
         edges {
           node {
@@ -1123,6 +1126,7 @@ export const GetIndexedStreamDocument = /*#__PURE__*/ gql`
  *      first: // value for 'first'
  *      last: // value for 'last'
  *      filters: // value for 'filters'
+ *      sorting: // value for 'sorting'
  *   },
  * });
  */
