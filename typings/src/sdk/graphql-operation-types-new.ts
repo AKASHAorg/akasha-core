@@ -110,6 +110,7 @@ export type GetContentBlockStreamQueryVariables = Types.Exact<{
   first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   last?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   filters?: Types.InputMaybe<Types.AkashaContentBlockStreamFiltersInput>;
+  sorting?: Types.InputMaybe<Types.AkashaContentBlockStreamSortingInput>;
 }>;
 
 
@@ -136,6 +137,7 @@ export type GetIndexedStreamQueryVariables = Types.Exact<{
   first?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   last?: Types.InputMaybe<Types.Scalars['Int']['input']>;
   filters?: Types.InputMaybe<Types.AkashaIndexedStreamFiltersInput>;
+  sorting?: Types.InputMaybe<Types.AkashaIndexedStreamSortingInput>;
 }>;
 
 

@@ -32,7 +32,9 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   const [errors, setErrors] = React.useState<Error[]>([]);
   const globalIdx = React.useRef(0);
   const sdk = React.useRef(getSDK());
+
   const [isNsfw, setIsNsfw] = React.useState(false);
+  const [editorTags, setEditorTags] = React.useState([]);
 
   const { getExtensionsPlugin } = useRootComponentProps();
 
@@ -79,9 +81,17 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   React.useEffect(() => {
     if (!blocksInUse.length) return;
     if (blocksInUse.every(bl => bl.status === 'success')) {
+      const tagLabelType = sdk.current.services.gql.labelTypes.TAG;
+      const tags = editorTags.map(tagName => {
+        return {
+          labelType: tagLabelType,
+          value: tagName,
+        };
+      });
       const beamContent: AkashaBeamInput = {
         active: true,
         nsfw: isNsfw,
+        tags: tags,
         content: blocksInUse.map(blockData => ({
           blockID: blockData.response?.blockID,
           order: blockData.order,
@@ -102,7 +112,7 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
         setErrors(prev => [...prev, new Error(`failed to create beam: ${err.message}`)]);
       });
     }
-  }, [blocksInUse, createBeam, createBeamQuery, isNsfw]);
+  }, [blocksInUse, createBeam, createBeamQuery, isNsfw, editorTags]);
 
   const indexBeam = React.useCallback(
     async (beamData: CreateBeamMutation['createAkashaBeam']) => {
@@ -147,9 +157,10 @@ export const useBlocksPublishing = (props: UseBlocksPublishingProps) => {
   ]);
 
   const createContentBlocks = React.useCallback(
-    async (nsfw: boolean) => {
+    async (nsfw: boolean, editorTags: string[]) => {
       setIsPublishing(true);
       setIsNsfw(nsfw);
+      setEditorTags(editorTags);
       for (const [idx, block] of blocksInUse.entries()) {
         if (!block.status) {
           setBlocksInUse(prev => [
