@@ -30,6 +30,7 @@ import {
   NavigateToParams,
 } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 
 export type EntryCardProps = {
   entryData: EntryData;
@@ -271,6 +272,17 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                     </Fragment>
                   ))
                 )}
+              </Stack>
+            )}
+            {entryData.tags?.length > 0 && (
+              <Stack
+                padding={{ y: 16 }}
+                justify="start"
+                direction="row"
+                spacing="gap-2"
+                customStyle="flex-wrap"
+              >
+                {entryData.tags?.map((tag, index) => <Pill key={index} label={tag} />)}
               </Stack>
             )}
           </Stack>

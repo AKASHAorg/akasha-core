@@ -111,7 +111,7 @@ export const mapReflectEntryData = (
  * Utility to map beam entry data
  */
 export const mapBeamEntryData = (
-  beam?: Pick<AkashaBeam, 'id' | 'active' | 'createdAt' | 'content' | 'nsfw'> & {
+  beam?: Pick<AkashaBeam, 'id' | 'active' | 'createdAt' | 'content' | 'nsfw' | 'tags'> & {
     author: { id: string };
   },
 ): BeamEntryData => {
@@ -124,5 +124,6 @@ export const mapBeamEntryData = (
     createdAt: beam.createdAt,
     content: beam.content,
     nsfw: beam?.nsfw,
+    tags: beam?.tags?.map(labeledTag => labeledTag.value),
   };
 };
