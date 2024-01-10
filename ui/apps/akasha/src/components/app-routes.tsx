@@ -1,5 +1,9 @@
 import * as React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { useTranslation } from 'react-i18next';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import FeedPage from './pages/feed-page/feed-page';
 import MyFeedPage from './pages/my-feed-page/my-feed-page';
 import ProfileFeedPage from './pages/profile-feed-page/profile-feed-page';
@@ -9,12 +13,10 @@ import TagFeedPage from './pages/tag-feed-page/tag-feed-page';
 import EditorPage from './pages/editor-page/editor-page';
 import EntrySectionLoading from './pages/entry-page/entry-section-loading';
 import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, EDITOR } from '../routes';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const { baseRouteName, navigateToModal } = useRootComponentProps();
+  const { baseRouteName, logger, navigateToModal } = useRootComponentProps();
+  const { t } = useTranslation('app-akasha-integration');
   const _navigateToModal = React.useRef(navigateToModal);
   const authenticatedProfileReq = useGetLoginProfile();
 
@@ -25,8 +27,14 @@ const AppRoutes: React.FC<unknown> = () => {
   }, []);
 
   return (
-    <Router basename={baseRouteName}>
-      <Stack>
+    <ErrorBoundary
+      errorObj={{
+        type: t('script-error'),
+        title: t('Error in social app'),
+      }}
+      logger={logger}
+    >
+      <Router basename={baseRouteName}>
         <Routes>
           <Route
             path={routes[FEED]}
@@ -102,8 +110,8 @@ const AppRoutes: React.FC<unknown> = () => {
             element={<EditorPage authenticatedProfile={authenticatedProfile} />}
           />
         </Routes>
-      </Stack>
-    </Router>
+      </Router>
+    </ErrorBoundary>
   );
 };
 

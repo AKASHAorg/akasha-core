@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-
 import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
-
 import ChatPage from './chat-page';
 import InboxPage from './inbox/inbox-page';
 import SettingsPage from './settings-page';
@@ -18,8 +17,8 @@ const AppRoutes: React.FC<unknown> = () => {
   // const getHubUserCallback = useCallback(getHubUser, [loggedUserId]);
 
   const [fetchingMessages, setFetchingMessages] = useState(false);
-
-  const { baseRouteName } = useRootComponentProps();
+  const { baseRouteName, logger } = useRootComponentProps();
+  const { t } = useTranslation('app-messaging');
 
   // @TODO: update this
   const fetchMessagesCallback = useCallback(async () => {
@@ -58,31 +57,39 @@ const AppRoutes: React.FC<unknown> = () => {
   }, [fetchMessagesCallback]);
 
   return (
-    <Router basename={baseRouteName}>
-      <Helmet>
-        <title>Message App | AKASHA World</title>
-      </Helmet>
-      <Routes>
-        <Route
-          path={`${routes[MESSAGING]}`}
-          element={<InboxPage authenticatedProfile={authenticatedProfile} />}
-        ></Route>
-        <Route
-          path={`${routes[SETTINGS]}`}
-          element={<SettingsPage authenticatedProfile={authenticatedProfile} />}
-        ></Route>
-        <Route
-          path={`${routes[CHAT]}/:did`}
-          element={
-            <ChatPage
-              authenticatedProfile={authenticatedProfile}
-              fetchingMessages={fetchingMessages}
-            />
-          }
-        ></Route>
-        <Route path="/" element={<Navigate to={routes[MESSAGING]} replace />} />
-      </Routes>
-    </Router>
+    <ErrorBoundary
+      errorObj={{
+        type: t('script-error'),
+        title: t('Error in messaging app'),
+      }}
+      logger={logger}
+    >
+      <Router basename={baseRouteName}>
+        <Helmet>
+          <title>Message App | AKASHA World</title>
+        </Helmet>
+        <Routes>
+          <Route
+            path={`${routes[MESSAGING]}`}
+            element={<InboxPage authenticatedProfile={authenticatedProfile} />}
+          ></Route>
+          <Route
+            path={`${routes[SETTINGS]}`}
+            element={<SettingsPage authenticatedProfile={authenticatedProfile} />}
+          ></Route>
+          <Route
+            path={`${routes[CHAT]}/:did`}
+            element={
+              <ChatPage
+                authenticatedProfile={authenticatedProfile}
+                fetchingMessages={fetchingMessages}
+              />
+            }
+          ></Route>
+          <Route path="/" element={<Navigate to={routes[MESSAGING]} replace />} />
+        </Routes>
+      </Router>
+    </ErrorBoundary>
   );
 };
 

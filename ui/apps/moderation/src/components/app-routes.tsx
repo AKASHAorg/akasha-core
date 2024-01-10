@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
 import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
   Dashboard,
   Overview,
@@ -28,7 +26,6 @@ import {
   ApplicationsActivityPage,
   ModerationActivityPage,
 } from '../pages';
-
 import routes, {
   DASHBOARD,
   DISMISS_MODERATOR,
@@ -54,8 +51,8 @@ import routes, {
 } from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
-
+  const { baseRouteName, logger, getRoutingPlugin } = useRootComponentProps();
+  const { t } = useTranslation('app-moderation-ewa');
   const authenticatedProfileReq = useGetLoginProfile();
 
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
@@ -73,7 +70,13 @@ const AppRoutes: React.FC<unknown> = () => {
   const navigateTo = getRoutingPlugin().navigateTo;
 
   return (
-    <Stack>
+    <ErrorBoundary
+      errorObj={{
+        type: t('script-error'),
+        title: t('Error in vibe app'),
+      }}
+      logger={logger}
+    >
       <Router basename={baseRouteName}>
         <Routes>
           <Route
@@ -208,7 +211,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
       </Router>
-    </Stack>
+    </ErrorBoundary>
   );
 };
 
