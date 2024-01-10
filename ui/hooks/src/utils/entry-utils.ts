@@ -3,9 +3,8 @@ import { Comment } from '@akashaorg/typings/lib/sdk/graphql-types';
 import type { PostResultFragment } from '@akashaorg/typings/lib/sdk/graphql-operation-types';
 import type { BeamEntryData, ReflectEntryData } from '@akashaorg/typings/lib/ui';
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import getSDK from '@akashaorg/awf-sdk';
 
-export const MEDIA_URL_PREFIX = 'CID:';
-export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';
 export const PROVIDER_AKASHA = 'AkashaApp';
 export const PROPERTY_SLATE_CONTENT = 'slateContent';
 export const PROPERTY_TEXT_CONTENT = 'textContent';
@@ -111,12 +110,12 @@ export const mapReflectEntryData = (
  * Utility to map beam entry data
  */
 export const mapBeamEntryData = (
-  beam?: Pick<AkashaBeam, 'id' | 'active' | 'createdAt' | 'content' | 'nsfw'> & {
+  beam?: Pick<AkashaBeam, 'id' | 'active' | 'createdAt' | 'content' | 'nsfw' | 'tags'> & {
     author: { id: string };
   },
 ): BeamEntryData => {
   if (!beam) return null;
-
+  const sdk = getSDK();
   return {
     id: beam.id,
     active: beam.active,
@@ -124,5 +123,8 @@ export const mapBeamEntryData = (
     createdAt: beam.createdAt,
     content: beam.content,
     nsfw: beam?.nsfw,
+    tags: beam?.tags
+      ?.filter(labeledTag => labeledTag.labelType === sdk.services.gql.labelTypes.TAG)
+      .map(labeledTag => labeledTag.value),
   };
 };
