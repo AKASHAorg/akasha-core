@@ -79,6 +79,14 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
       />
     );
 
+  const onViewNSFW = () => {
+    if (!isLoggedIn) {
+      showLoginModal({ modal: { name: location.pathname } });
+      return;
+    }
+    setShowNSFW(true);
+  };
+
   if (profileData?.nsfw && !showNSFW && authenticatedDID !== profileData.did.id)
     return (
       <Card>
@@ -96,7 +104,7 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
             });
           }}
           onClickToView={() => {
-            setShowNSFW(true);
+            onViewNSFW();
           }}
         />
       </Card>
