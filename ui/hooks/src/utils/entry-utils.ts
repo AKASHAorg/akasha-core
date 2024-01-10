@@ -5,8 +5,6 @@ import type { BeamEntryData, ReflectEntryData } from '@akashaorg/typings/lib/ui'
 import { AkashaBeam, AkashaReflect } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import getSDK from '@akashaorg/awf-sdk';
 
-export const MEDIA_URL_PREFIX = 'CID:';
-export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';
 export const PROVIDER_AKASHA = 'AkashaApp';
 export const PROPERTY_SLATE_CONTENT = 'slateContent';
 export const PROPERTY_TEXT_CONTENT = 'textContent';
