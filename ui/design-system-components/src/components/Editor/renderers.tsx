@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import { tw } from '@twind/core';
-import { ImageElement } from '@akashaorg/typings/lib/ui';
 
 const MentionElement = (props: any) => {
   const { handleMentionClick, attributes, element, children } = props;
@@ -92,48 +91,28 @@ const renderElement = (
 };
 
 const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
+  let textStyle = 'text-black dark:text-white';
   if (leaf.bold) {
-    return (
-      <span className={tw(`text-black dark:text-white`)} {...attributes}>
-        <strong>{children}</strong>
-      </span>
-    );
-  }
-
-  if (leaf.italic) {
-    return (
-      <span className={tw(`text-black dark:text-white`)} {...attributes}>
-        <em>{children}</em>
-      </span>
-    );
-  }
-
-  if (leaf.underlined) {
-    return (
-      <span className={tw(`text-black dark:text-white`)} {...attributes}>
-        <u>{children}</u>
-      </span>
-    );
+    children = <strong>{children}</strong>;
   }
 
   if (leaf.code) {
-    return (
-      <span className={tw(`text-black dark:text-white`)} {...attributes}>
-        <code>{children}</code>
-      </span>
-    );
+    children = <code>{children}</code>;
   }
 
+  if (leaf.italic) {
+    children = <em>{children}</em>;
+  }
+
+  if (leaf.underline) {
+    children = <u>{children}</u>;
+  }
   if (leaf.disabled) {
-    return (
-      <span className={tw(`text-color-grey8`)} {...attributes}>
-        {children}
-      </span>
-    );
+    textStyle = `text-color-grey8`;
   }
 
   return (
-    <span className={tw(`text-black dark:text-white`)} {...attributes}>
+    <span className={tw(textStyle)} {...attributes}>
       {children}
     </span>
   );

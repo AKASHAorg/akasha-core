@@ -55,6 +55,7 @@ export type EditorBoxProps = {
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
+  withToolbar?: boolean;
   linkPreview?: IEntryData['linkPreview'];
   mentions?: Profile[];
   tags?: { name: string; totalPosts: number }[];
@@ -94,6 +95,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     embedEntryData,
     minHeight,
     withMeter,
+    withToolbar,
     linkPreview,
     getLinkPreview,
     getMentions,
@@ -562,7 +564,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
           )}
         </Stack>
       </Stack>
-      <Stack direction="row" justify="end" fullWidth>
+      <Stack direction="row" justify={withToolbar ? 'between' : 'end'} fullWidth>
         <Stack direction="row" align="center" spacing="gap-x-2">
           {withMeter && <EditorMeter value={letterCount} max={MAX_LENGTH} />}
           {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}

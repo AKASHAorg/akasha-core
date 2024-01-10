@@ -53,7 +53,7 @@ export type CustomText = {
   bold?: boolean;
   italic?: boolean;
   code?: boolean;
-  underlined?: boolean;
+  underline?: boolean;
   disabled?: boolean;
   text: string;
 };
