@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useParams } from 'react-router-dom';
+import { BeamEntry, TagFeed } from '@akashaorg/ui-lib-feed';
 import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -18,11 +19,10 @@ export type TagFeedPageProps = {
 
 const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   const { authenticatedProfile, showLoginModal } = props;
+  const { tagName } = useParams<{ tagName: string }>();
 
   const { t } = useTranslation('app-akasha-integration');
   const { getRoutingPlugin } = useRootComponentProps();
-
-  // const { tagName } = useParams<{ tagName: string }>();
 
   // @TODO fix hooks
   const getTagQuery = undefined;
@@ -63,8 +63,9 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           />
         </Stack>
       )}
-      <BeamFeed
-        queryKey={'app-akasha-integration_tag-antenna'}
+      <TagFeed
+        queryKey={`app-akasha-integration_tag-antenna_${tagName}`}
+        tag={tagName}
         estimatedHeight={150}
         itemSpacing={8}
         scrollerOptions={{ overscan: 10 }}
@@ -73,25 +74,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => (
-          <BeamCard
-            entryData={mapBeamEntryData(itemData.node)}
-            contentClickable={true}
-            onContentClick={() =>
-              getRoutingPlugin().navigateTo({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
-              })
-            }
-            onReflect={() =>
-              getRoutingPlugin().navigateTo({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes =>
-                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
-              })
-            }
-          />
-        )}
+        renderItem={itemData => <BeamEntry beamId={itemData.node.stream} />}
       />
     </Stack>
   );
