@@ -84,6 +84,7 @@ const ReflectionEditor: React.FC<ReflectionEditorProps> = props => {
           avatar={avatar}
           actionLabel={placeholderButtonLabel}
           placeholderLabel={placeholderLabel}
+          isReflection={true}
           transformSource={transformSource}
         />
       )}
