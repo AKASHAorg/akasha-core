@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IModerationLogItem } from '@akashaorg/typings/lib/ui';
 
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -98,64 +99,66 @@ export const TransparencyLog: React.FC<BasePageProps> = props => {
   ]);
 
   return (
-    <Stack spacing="gap-y-4">
-      <Stack direction="row" align="center" justify="between">
-        <Stack direction="row" align="center" spacing="gap-x-3">
-          <Dropdown
-            name="filterByDecision"
-            placeholderLabel={decisionPlaceholderLabel}
-            selected={filterByDecision}
-            menuItems={[
-              { id: '1', title: t('Kept') },
-              { id: '2', title: t('Delisted') },
-              { id: '3', title: t('Suspended') },
-            ]}
-            setSelected={setfilterByDecision}
-          />
-          <Dropdown
-            name="filterByCategory"
-            placeholderLabel={categoryPlaceholderLabel}
-            selected={filterByCategory}
-            menuItems={[
-              { id: '1', title: t('Post') },
-              { id: '2', title: t('Reply') },
-              { id: '3', title: t('Account') },
-              { id: '4', title: t('Article') },
-            ]}
-            setSelected={setfilterByCategory}
-          />
+    <Card elevation="1" radius={16} padding="p-4">
+      <Stack spacing="gap-y-4">
+        <Stack direction="row" align="center" justify="between">
+          <Stack direction="row" align="center" spacing="gap-x-3">
+            <Dropdown
+              name="filterByDecision"
+              placeholderLabel={decisionPlaceholderLabel}
+              selected={filterByDecision}
+              menuItems={[
+                { id: '1', title: t('Kept') },
+                { id: '2', title: t('Delisted') },
+                { id: '3', title: t('Suspended') },
+              ]}
+              setSelected={setfilterByDecision}
+            />
+            <Dropdown
+              name="filterByCategory"
+              placeholderLabel={categoryPlaceholderLabel}
+              selected={filterByCategory}
+              menuItems={[
+                { id: '1', title: t('Post') },
+                { id: '2', title: t('Reply') },
+                { id: '3', title: t('Account') },
+                { id: '4', title: t('Article') },
+              ]}
+              setSelected={setfilterByCategory}
+            />
+          </Stack>
+
+          <Button plain={true} onClick={resetFilters}>
+            <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+              {`${t('Reset')}`}
+            </Text>
+          </Button>
         </Stack>
 
-        <Button plain={true} onClick={resetFilters}>
-          <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-            {`${t('Reset')}`}
-          </Text>
-        </Button>
+        {trimmedRows.length && (
+          <NoFlaggedItems noflaggedItemsLabel={t('Looks like there are no flagged items yet!')} />
+        )}
+
+        {!trimmedRows.length && (
+          <PaginatedTable
+            theadValues={[t('Date'), t('Category'), t('Decision'), '']}
+            rows={trimmedRows}
+            hasIcons={true}
+            clickableRows={true}
+            customStyle="mt-3 justify-end"
+            pageCount={pages.length}
+            currentPage={curPage}
+            prevButtonLabel={t('Prev')}
+            nextButtonLabel={t('Next')}
+            prevButtonDisabled={curPage === 1}
+            nextButtonDisabled={curPage === pages.length - 1}
+            onRowClick={handleRowClick}
+            onClickPage={handleClickPage}
+            onClickPrev={handleClickPrev}
+            onClickNext={handleClickNext}
+          />
+        )}
       </Stack>
-
-      {trimmedRows.length && (
-        <NoFlaggedItems noflaggedItemsLabel={t('Looks like there are no flagged items yet!')} />
-      )}
-
-      {!trimmedRows.length && (
-        <PaginatedTable
-          theadValues={[t('Date'), t('Category'), t('Decision'), '']}
-          rows={trimmedRows}
-          hasIcons={true}
-          clickableRows={true}
-          customStyle="mt-3 justify-end"
-          pageCount={pages.length}
-          currentPage={curPage}
-          prevButtonLabel={t('Prev')}
-          nextButtonLabel={t('Next')}
-          prevButtonDisabled={curPage === 1}
-          nextButtonDisabled={curPage === pages.length - 1}
-          onRowClick={handleRowClick}
-          onClickPage={handleClickPage}
-          onClickPrev={handleClickPrev}
-          onClickNext={handleClickNext}
-        />
-      )}
-    </Stack>
+    </Card>
   );
 };
