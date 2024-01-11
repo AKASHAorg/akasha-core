@@ -6,6 +6,12 @@ module.exports = {
     {
       '@akashaorg/ui-awf-hooks': '@akashaorg/ui-awf-hooks',
     },
+    {
+      'single-spa': 'single-spa',
+    },
+    {
+      'single-spa-react': 'single-spa-react',
+    },
     function ({ request }, callback) {
       if (/^rxjs\/operators$/.test(request)) {
         return callback(null, ['rxjs', 'operators'], 'root');
@@ -13,13 +19,6 @@ module.exports = {
       if (/^rxjs$/.test(request)) {
         return callback(null, 'rxjs', 'root');
       }
-      if (/^single-spa-react$/.test(request)) {
-        return callback(null, 'singleSpaReact', 'root');
-      }
-      if (/^single-spa$/.test(request)) {
-        return callback(null, 'singleSpa', 'root');
-      }
-
       if (/^react-dom$/.test(request)) {
         return callback(null, 'ReactDOM', 'root');
       }
