@@ -8,7 +8,7 @@ const MentionElement = (props: any) => {
   const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
   return (
     <button
-      className={tw(`text-secondaryLight dark:text-secondaryDark`)}
+      className={tw(`text-secondaryLight dark:text-secondaryDark text-${element.align}`)}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
@@ -27,7 +27,7 @@ const MentionElement = (props: any) => {
 const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
   return (
     <button
-      className={tw(`text-secondaryLight dark:text-secondaryDark`)}
+      className={tw(`text-secondaryLight dark:text-secondaryDark text-${element.align}`)}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
@@ -44,7 +44,9 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
 const LinkElement = ({ attributes, children, element, handleLinkClick }: any) => {
   return (
     <a
-      className={tw(`text-secondaryLight dark:text-secondaryDark no-underline`)}
+      className={tw(
+        `text-secondaryLight dark:text-secondaryDark no-underline text-${element.align}`,
+      )}
       {...attributes}
       contentEditable={false}
       href={element.url as string}
@@ -73,6 +75,7 @@ const renderElement = (
   handleTagClick?: (name: string) => void,
   handleLinkClick?: (url: string) => void,
 ) => {
+  const textAlignStyle = `text-${props.element.align}`;
   switch (props.element.type) {
     case 'mention':
       return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
@@ -80,10 +83,22 @@ const renderElement = (
       return <TagElement handleTagClick={handleTagClick} {...props} />;
     case 'link':
       return <LinkElement handleLinkClick={handleLinkClick} {...props} />;
+    case 'list-item':
+      return (
+        <li className={tw(`text-black dark:text-white ${textAlignStyle}`)} {...props.attributes}>
+          {props.children}
+        </li>
+      );
+    case 'numbered-list':
+      return (
+        <ol className={tw(`text-black dark:text-white ${textAlignStyle}`)} {...props.attributes}>
+          {props.children}
+        </ol>
+      );
 
     default:
       return (
-        <p className={tw(`text-black dark:text-white`)} {...props.attributes}>
+        <p className={tw(`text-black dark:text-white ${textAlignStyle}`)} {...props.attributes}>
           {props.children}
         </p>
       );
@@ -95,15 +110,9 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }
-
-  if (leaf.code) {
-    children = <code>{children}</code>;
-  }
-
   if (leaf.italic) {
     children = <em>{children}</em>;
   }
-
   if (leaf.underline) {
     children = <u>{children}</u>;
   }

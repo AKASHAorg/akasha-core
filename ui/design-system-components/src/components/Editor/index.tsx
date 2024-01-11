@@ -36,6 +36,7 @@ import { withMentions, withTags, withLinks } from './plugins';
 import EmbedBox from '../EmbedBox';
 import LinkPreview from '../LinkPreview';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import EditorToolbar from './editor-toolbar';
 
 const MAX_LENGTH = 500;
 
@@ -565,6 +566,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         </Stack>
       </Stack>
       <Stack direction="row" justify={withToolbar ? 'between' : 'end'} fullWidth>
+        {withToolbar && <EditorToolbar />}
         <Stack direction="row" align="center" spacing="gap-x-2">
           {withMeter && <EditorMeter value={letterCount} max={MAX_LENGTH} />}
           {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}

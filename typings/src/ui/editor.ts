@@ -7,19 +7,6 @@ export type EmptyText = {
   text: string;
 };
 
-export type ImageElement = {
-  type: 'image';
-  url: string;
-  fallbackUrl?: string;
-  size: {
-    width: string;
-    height: string;
-    naturalWidth: string;
-    naturalHeight: string;
-  };
-  children: EmptyText[];
-};
-
 export type LinkElement = { type: 'link'; url: string; children: EmptyText[] };
 
 export type MentionElement = {
@@ -42,17 +29,27 @@ export type ParagraphElement = {
   children: CustomText[];
 };
 
+export type ListItemElement = {
+  type: 'list-item';
+  children: CustomText[];
+};
+
+export type NumberedListElement = {
+  type: 'numbered-list';
+  children: CustomText[];
+};
+
 export type CustomElement =
-  | ImageElement
   | LinkElement
   | MentionElement
   | TagElement
-  | ParagraphElement;
+  | ParagraphElement
+  | ListItemElement
+  | NumberedListElement;
 
 export type CustomText = {
   bold?: boolean;
   italic?: boolean;
-  code?: boolean;
   underline?: boolean;
   disabled?: boolean;
   text: string;
