@@ -3,6 +3,9 @@ import routes, { EDIT } from '../../routes';
 import FollowButton from './follow-button';
 import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import Badge from '@akashaorg/design-system-core/lib/components/Badge';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 import {
   FlagIcon,
   LinkIcon,
@@ -52,7 +55,11 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
 
   const profileNotFound = !profileData && !validDid;
 
-  if (profileNotFound || (profileData?.nsfw && !showNSFW)) return null;
+  if (
+    profileNotFound ||
+    (profileData?.nsfw && !showNSFW && authenticatedDID !== profileData.did.id)
+  )
+    return null;
 
   if (error)
     return (
@@ -115,6 +122,26 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
         >
           <FollowButton profileID={profileData?.id} showLoginModal={showLoginModal} />
         </Suspense>
+      }
+      metadata={
+        profileData?.nsfw && (
+          <Tooltip
+            content={t('This profile is marked as NSFW')}
+            placement="bottom"
+            backgroundColor={{ light: 'grey6', dark: 'grey4' }}
+          >
+            <Badge background={{ light: 'errorLight', dark: 'errorDark' }}>
+              {/*@TODO: The following is a placeholder until proper icon is found */}
+              <Text
+                variant="footnotes2"
+                color={{ light: 'white', dark: 'black' }}
+                customStyle="leading-[9px] text-[9px]"
+              >
+                {t('18+')}
+              </Text>
+            </Badge>
+          </Tooltip>
+        )
       }
       handleEdit={handleEdit}
       transformSource={transformSource}

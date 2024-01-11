@@ -79,6 +79,7 @@ export type EntryData = {
   authorId: string;
   createdAt: string;
   nsfw?: boolean;
+  tags?: string[];
 };
 
 export type BeamEntryData = EntryData & { content: AkashaBeam['content'] };

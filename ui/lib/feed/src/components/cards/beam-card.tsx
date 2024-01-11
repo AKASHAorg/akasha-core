@@ -53,6 +53,13 @@ const BeamCard: React.FC<BeamCardProps> = props => {
     });
   };
 
+  const onTagClick = (tag: string) => {
+    navigateTo({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: routes => `${routes.Tags}/${tag}`,
+    });
+  };
+
   const sortedEntryContent = React.useMemo(() => {
     return sortByKey(entryData.content, 'order');
   }, [entryData.content]);
@@ -88,6 +95,7 @@ const BeamCard: React.FC<BeamCardProps> = props => {
       itemType={EntityTypes.BEAM}
       transformSource={transformSource}
       onAvatarClick={onAvatarClick}
+      onTagClick={onTagClick}
       onReflect={onReflect}
       {...rest}
     >
