@@ -9,14 +9,23 @@ import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 export type EditorPlaceholderType = {
   avatar?: Profile['avatar'];
   profileId: string | null;
-  placeholderLabel?: string;
+  placeholderLabel: string;
   actionLabel?: string;
+  isReflection?: boolean;
   onClick?: React.MouseEventHandler<HTMLElement>;
   transformSource: (src: Image) => Image;
 };
 
 const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
-  const { avatar, profileId, placeholderLabel, actionLabel, onClick, transformSource } = props;
+  const {
+    avatar,
+    profileId,
+    placeholderLabel,
+    actionLabel,
+    isReflection = false,
+    onClick,
+    transformSource,
+  } = props;
   return (
     <Card border={true} padding={0} background={{ light: 'grey9', dark: 'grey3' }}>
       <div className={tw(`flex justify-between p-4 `)}>
@@ -29,7 +38,7 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
             profileId={profileId}
             size="sm"
           />
-          <Text variant="subtitle2" truncate={true}>
+          <Text variant="subtitle2" {...(isReflection && { color: 'grey7' })} truncate={true}>
             {placeholderLabel}
           </Text>
         </div>
@@ -38,10 +47,6 @@ const EditorPlaceholder: React.FC<EditorPlaceholderType> = props => {
       </div>
     </Card>
   );
-};
-
-EditorPlaceholder.defaultProps = {
-  placeholderLabel: 'From Your Mind to the World 🧠 🌏 ✨',
 };
 
 export default EditorPlaceholder;

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 import { useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
-import SettingsPage from './settings-page';
+import SettingsPage from './search-settings-page';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';

@@ -9,18 +9,22 @@ import Text from '@akashaorg/design-system-core/lib/components/Text';
 type CardSize = { width?: string | number; height?: string | number };
 
 export type DefaultEmptyCardProps = {
+  publicImagePath?: string;
+  assetExtension?: string;
   infoText: string;
   buttonLabel?: string;
-  image?: string;
+  assetName?: string;
   noBorder?: boolean;
   customCardSize?: CardSize;
   buttonClickHandler?: () => void;
 };
 
 const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
+  publicImagePath = '/images',
+  assetExtension = 'webp',
   infoText,
   buttonLabel,
-  image,
+  assetName,
   noBorder = false,
   customCardSize,
   buttonClickHandler,
@@ -36,8 +40,11 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
       padding={'p-4'}
       customStyle="dark:bg-transparent"
     >
-      {image ? (
-        <Image src={image} customStyle="w-[180px] h-[180px] m-auto my-4" />
+      {assetName ? (
+        <Image
+          src={`${publicImagePath}/${assetName}.${assetExtension}`}
+          customStyle="w-[180px] h-[180px] m-auto my-4"
+        />
       ) : (
         <Card
           elevation={'none'}

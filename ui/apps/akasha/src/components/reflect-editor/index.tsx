@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useEffect, useMemo, useState } from 'react';
-import Editor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
+import ReflectionEditor from '@akashaorg/design-system-components/lib/components/ReflectionEditor';
 import getSDK from '@akashaorg/awf-sdk';
 import {
   transformSource,
@@ -42,8 +42,8 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const [editorState, setEditorState] = useState(null);
   const [newContent, setNewContent] = useState<ReflectEntryData>(null);
   //@TODO
-  const [mentionQuery, setMentionQuery] = useState(null);
-  const [tagQuery, setTagQuery] = useState(null);
+  const [, setMentionQuery] = useState(null);
+  const [, setTagQuery] = useState(null);
 
   const [showEditor, setShowEditor] = useState(showEditorInitialValue);
 
@@ -120,18 +120,16 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
     });
   };
 
-  // @TODO: fix author name
-  const entryAuthorName = undefined;
-
   useEffect(() => {
     setShowEditor(showEditorInitialValue);
   }, [showEditorInitialValue]);
 
   return (
     <>
-      <Editor
+      <ReflectionEditor
         actionLabel={t('Reflect')}
         placeholderButtonLabel={t('Reflect')}
+        placeholderLabel={t('My thoughts on this are...')}
         cancelButtonLabel={t('Cancel')}
         emojiPlaceholderLabel={t('Search')}
         disableActionLabel={t('Authenticating')}
