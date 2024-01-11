@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import FeedPage from './pages/feed-page/feed-page';
@@ -18,8 +18,10 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger, navigateToModal } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
   const _navigateToModal = React.useRef(navigateToModal);
+  const { data } = useGetLogin();
   const authenticatedProfileReq = useGetLoginProfile();
 
+  const isLoggedIn = !!data?.id;
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
   const showLoginModal = React.useCallback((redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -40,6 +42,7 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[FEED]}
             element={
               <FeedPage
+                isLoggedIn={isLoggedIn}
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
               />

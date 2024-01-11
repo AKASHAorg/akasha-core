@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Cog8ToothIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
@@ -34,26 +33,24 @@ const SearchStartCard: React.FC<SearchStartProps> = ({
 
   return (
     <>
-      <Card radius="rounded-lg" padding="px-4 py-0">
-        <Stack direction="row" justify="between" customStyle="my-3">
-          <Text variant="h5" align="center">
-            {titleLabel}
-          </Text>
-          <Stack>
-            <Button customStyle="relative" plain={true} onClick={() => handleTopMenuClick()}>
-              <Icon icon={<Cog8ToothIcon />} accentColor={true} />
-            </Button>
-          </Stack>
+      <Stack direction="row" justify="between" customStyle="my-3">
+        <Text variant="h5" align="center">
+          {titleLabel}
+        </Text>
+        <Stack>
+          <Button customStyle="relative" plain={true} onClick={() => handleTopMenuClick()}>
+            <Icon icon={<Cog8ToothIcon />} accentColor={true} />
+          </Button>
         </Stack>
-        <SearchBar
-          inputValue={inputValue}
-          inputPlaceholderLabel={inputPlaceholderLabel}
-          onInputChange={ev => setInputValue(ev.target.value)}
-          onSearch={handleSearch}
-          responsive={true}
-        />
-        <div>{children}</div>
-      </Card>
+      </Stack>
+      <SearchBar
+        inputValue={inputValue}
+        inputPlaceholderLabel={inputPlaceholderLabel}
+        onInputChange={ev => setInputValue(ev.target.value)}
+        onSearch={handleSearch}
+        responsive={true}
+      />
+      <div>{children}</div>
     </>
   );
 };

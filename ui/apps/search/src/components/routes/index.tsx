@@ -5,7 +5,7 @@ import { useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
-import SettingsPage from './settings-page';
+import SettingsPage from './search-settings-page';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 import routes, { ONBOARDING, RESULTS, SETTINGS } from '../../routes';
