@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ModalNavigationOptions, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useShowFeedback, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
@@ -40,101 +42,113 @@ const AppRoutes: React.FC<unknown> = () => {
     showLoginModal,
   };
 
+  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: t('script-error'),
+      title: t('Error in profile app'),
+    },
+    logger,
+  };
+
   return (
-    <ErrorBoundary
-      errorObj={{
-        type: t('script-error'),
-        title: t('Error in profile app'),
-      }}
-      logger={logger}
-    >
-      <Stack direction="column" spacing="gap-y-4" customStyle="mb-4">
-        <Router basename={baseRouteName}>
-          <Routes>
-            <Route path="/">
-              <Route
-                path={':profileId'}
-                element={
-                  <ProfileWithHeader {...commonHeaderViewProps} showNSFW={showNSFW}>
-                    <ProfileInfoPage
-                      showNSFW={showNSFW}
-                      setShowNSFW={setShowNSFW}
-                      showLoginModal={showLoginModal}
-                    />
-                  </ProfileWithHeader>
-                }
-              />
-              <Route
-                path={`:profileId${menuRoute[FOLLOWERS]}`}
-                element={
-                  <ProfileWithHeader {...commonHeaderViewProps}>
-                    <FollowersPage showLoginModal={showLoginModal} />
-                  </ProfileWithHeader>
-                }
-              />
-              <Route
-                path={`:profileId${menuRoute[FOLLOWING]}`}
-                element={
-                  <ProfileWithHeader {...commonHeaderViewProps}>
-                    <FollowingPage showLoginModal={showLoginModal} />
-                  </ProfileWithHeader>
-                }
-              />
-              <Route
-                path={`:profileId${menuRoute[INTERESTS]}`}
-                element={
-                  <ProfileWithHeader {...commonHeaderViewProps}>
-                    <InterestsPage />
-                  </ProfileWithHeader>
-                }
-              />
-              <Route
-                path={`:profileId${menuRoute[EDIT]}`}
-                element={
-                  <Suspense fallback={<ProfileLoading />}>
-                    <EditProfilePage
-                      handleProfileUpdatedFeedback={() => setShowUpdatedFeedback(true)}
-                    />
-                  </Suspense>
-                }
-              />
-            </Route>
-            <Route
-              path={`:profileId${menuRoute[BEAMS]}`}
-              element={
+    <Stack direction="column" spacing="gap-y-4" customStyle="mb-4">
+      <Router basename={baseRouteName}>
+        <Routes>
+          {/* <Route path="/"> */}
+          <Route
+            path={':profileId'}
+            element={
+              <ErrorBoundary {...props}>
+                <ProfileWithHeader {...commonHeaderViewProps} showNSFW={showNSFW}>
+                  <ProfileInfoPage
+                    showNSFW={showNSFW}
+                    setShowNSFW={setShowNSFW}
+                    showLoginModal={showLoginModal}
+                  />
+                </ProfileWithHeader>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={`:profileId${menuRoute[FOLLOWERS]}`}
+            element={
+              <ErrorBoundary {...props}>
+                <ProfileWithHeader {...commonHeaderViewProps}>
+                  <FollowersPage showLoginModal={showLoginModal} />
+                </ProfileWithHeader>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={`:profileId${menuRoute[FOLLOWING]}`}
+            element={
+              <ErrorBoundary {...props}>
+                <ProfileWithHeader {...commonHeaderViewProps}>
+                  <FollowingPage showLoginModal={showLoginModal} />
+                </ProfileWithHeader>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={`:profileId${menuRoute[INTERESTS]}`}
+            element={
+              <ErrorBoundary {...props}>
+                <ProfileWithHeader {...commonHeaderViewProps}>
+                  <InterestsPage />
+                </ProfileWithHeader>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={`:profileId${menuRoute[EDIT]}`}
+            element={
+              <ErrorBoundary {...props}>
+                <Suspense fallback={<ProfileLoading />}>
+                  <EditProfilePage
+                    handleProfileUpdatedFeedback={() => setShowUpdatedFeedback(true)}
+                  />
+                </Suspense>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={`:profileId${menuRoute[BEAMS]}`}
+            element={
+              <ErrorBoundary {...props}>
                 <ProfileWithHeader {...commonHeaderViewProps}>
                   <ProfileBeamsPage />
                 </ProfileWithHeader>
-              }
-            />
-          </Routes>
-        </Router>
-
-        {showUpdatedFeedback && (
-          <Snackbar
-            title={t('Profile updated successfully')}
-            type={NotificationTypes.Success}
-            icon={<CheckCircleIcon />}
-            handleDismiss={() => {
-              setShowUpdatedFeedback(false);
-            }}
-            customStyle="mb-4"
+              </ErrorBoundary>
+            }
           />
-        )}
+          {/* </Route> */}
+        </Routes>
+      </Router>
 
-        {showLinkCopiedFeedback && (
-          <Snackbar
-            title={`${t('Profile link copied')}!`}
-            type={NotificationTypes.Success}
-            icon={<CheckCircleIcon />}
-            handleDismiss={() => {
-              setLinkCopiedFeedback(false);
-            }}
-            customStyle="mb-4"
-          />
-        )}
-      </Stack>
-    </ErrorBoundary>
+      {showUpdatedFeedback && (
+        <Snackbar
+          title={t('Profile updated successfully')}
+          type={NotificationTypes.Success}
+          icon={<CheckCircleIcon />}
+          handleDismiss={() => {
+            setShowUpdatedFeedback(false);
+          }}
+          customStyle="mb-4"
+        />
+      )}
+
+      {showLinkCopiedFeedback && (
+        <Snackbar
+          title={`${t('Profile link copied')}!`}
+          type={NotificationTypes.Success}
+          icon={<CheckCircleIcon />}
+          handleDismiss={() => {
+            setLinkCopiedFeedback(false);
+          }}
+          customStyle="mb-4"
+        />
+      )}
+    </Stack>
   );
 };
 

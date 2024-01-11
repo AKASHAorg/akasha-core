@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useGetLogin, useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import FeedPage from './pages/feed-page/feed-page';
 import MyFeedPage from './pages/my-feed-page/my-feed-page';
 import ProfileFeedPage from './pages/profile-feed-page/profile-feed-page';
@@ -28,93 +30,113 @@ const AppRoutes: React.FC<unknown> = () => {
     _navigateToModal.current?.({ name: 'login', redirectTo });
   }, []);
 
+  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: t('script-error'),
+      title: t('Error in akasha app'),
+    },
+    logger,
+  };
+
   return (
-    <ErrorBoundary
-      errorObj={{
-        type: t('script-error'),
-        title: t('Error in social app'),
-      }}
-      logger={logger}
-    >
-      <Router basename={baseRouteName}>
-        <Routes>
-          <Route
-            path={routes[FEED]}
-            element={
+    <Router basename={baseRouteName}>
+      <Routes>
+        <Route
+          path={routes[FEED]}
+          element={
+            <ErrorBoundary {...props}>
               <FeedPage
                 isLoggedIn={isLoggedIn}
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
               />
-            }
-          />
-          <Route
-            path={routes[MY_FEED]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[MY_FEED]}
+          element={
+            <ErrorBoundary {...props}>
               <MyFeedPage
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
               />
-            }
-          />
-          <Route
-            path={`${routes[BEAM]}/:beamId`}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={`${routes[BEAM]}/:beamId`}
+          element={
+            <ErrorBoundary {...props}>
               <React.Suspense fallback={<EntrySectionLoading />}>
                 <BeamPage />
               </React.Suspense>
-            }
-          />
-          <Route
-            path={`${routes[BEAM]}/:beamId${routes[REFLECT]}`}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={`${routes[BEAM]}/:beamId${routes[REFLECT]}`}
+          element={
+            <ErrorBoundary {...props}>
               <React.Suspense fallback={<EntrySectionLoading />}>
                 <BeamPage />
               </React.Suspense>
-            }
-          />
-          <Route
-            path={`${routes[TAGS]}/:tagName`}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={`${routes[TAGS]}/:tagName`}
+          element={
+            <ErrorBoundary {...props}>
               <TagFeedPage
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
               />
-            }
-          />
-          <Route
-            path={`${routes[PROFILE_FEED]}/:did`}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={`${routes[PROFILE_FEED]}/:did`}
+          element={
+            <ErrorBoundary {...props}>
               <ProfileFeedPage
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
               />
-            }
-          />
-          <Route
-            path={`${routes[REFLECT]}/:reflectionId`}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={`${routes[REFLECT]}/:reflectionId`}
+          element={
+            <ErrorBoundary {...props}>
               <React.Suspense fallback={<EntrySectionLoading />}>
                 <ReflectionPage />
               </React.Suspense>
-            }
-          />
-          <Route
-            path={`${routes[REFLECT]}/:reflectionId${routes[REFLECT]}`}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={`${routes[REFLECT]}/:reflectionId${routes[REFLECT]}`}
+          element={
+            <ErrorBoundary {...props}>
               <React.Suspense fallback={<EntrySectionLoading />}>
                 <ReflectionPage />
               </React.Suspense>
-            }
-          />
-          <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
-          <Route
-            path={routes[EDITOR]}
-            element={<EditorPage authenticatedProfile={authenticatedProfile} />}
-          />
-        </Routes>
-      </Router>
-    </ErrorBoundary>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[EDITOR]}
+          element={
+            <ErrorBoundary {...props}>
+              <EditorPage authenticatedProfile={authenticatedProfile} />
+            </ErrorBoundary>
+          }
+        />
+        <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
+      </Routes>
+    </Router>
   );
 };
 

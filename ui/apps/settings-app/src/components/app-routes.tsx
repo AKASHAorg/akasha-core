@@ -8,7 +8,9 @@ import {
   useTheme,
 } from '@akashaorg/ui-awf-hooks';
 import { EventTypes, UIEventData } from '@akashaorg/typings/lib/ui';
-import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import AppsOption from './option-apps';
 import SettingsPage from './settings-page';
 import PrivacyOption from './option-privacy';
@@ -101,20 +103,29 @@ const AppRoutes: React.FC<unknown> = () => {
     propagateTheme(selectedTheme, true);
   };
 
+  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: t('script-error'),
+      title: t('Error in settings app'),
+    },
+    logger,
+  };
+
   return (
-    <ErrorBoundary
-      errorObj={{
-        type: t('script-error'),
-        title: t('Error in settings app'),
-      }}
-      logger={logger}
-    >
-      <Router basename={baseRouteName}>
-        <Routes>
-          <Route path={routes[HOME]} element={<SettingsPage titleLabel={t('Settings')} />} />
-          <Route
-            path={routes[PRIVACY]}
-            element={
+    <Router basename={baseRouteName}>
+      <Routes>
+        <Route
+          path={routes[HOME]}
+          element={
+            <ErrorBoundary {...props}>
+              <SettingsPage titleLabel={t('Settings')} />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[PRIVACY]}
+          element={
+            <ErrorBoundary {...props}>
               <PrivacyOption
                 titleLabel={t('Privacy')}
                 worldLabel="AKASHA World"
@@ -150,11 +161,13 @@ const AppRoutes: React.FC<unknown> = () => {
                 onPrivacyPolicyClick={handlePrivacyPolicyClick}
                 onTrackingOptionChange={handleTrackingOptionChange}
               />
-            }
-          />
-          <Route
-            path={routes[APPS]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[APPS]}
+          element={
+            <ErrorBoundary {...props}>
               <AppsOption
                 titleLabel={t('Apps')}
                 autoUpdatesLabel={t('Automatic Updates')}
@@ -170,11 +183,13 @@ const AppRoutes: React.FC<unknown> = () => {
                 onAutoUpdatesChange={handleAutoUpdatesChange}
                 onDataAnalyticsChange={handleDataAnalyticsChange}
               />
-            }
-          />
-          <Route
-            path={routes[THEME]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[THEME]}
+          element={
+            <ErrorBoundary {...props}>
               <ThemeOption
                 titleLabel="Theme"
                 themeIntroLabel={t('What mode are you feeling today?')}
@@ -184,12 +199,12 @@ const AppRoutes: React.FC<unknown> = () => {
                 theme={theme}
                 onThemeSelect={handleThemeSelect}
               />
-            }
-          />
-          <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
-        </Routes>
-      </Router>
-    </ErrorBoundary>
+            </ErrorBoundary>
+          }
+        />
+        <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
+      </Routes>
+    </Router>
   );
 };
 

@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
 import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useGetAppsQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ExplorePage from './pages/explore-page';
 import InfoPage from './pages/info-page';
 import MyAppsPage from './pages/my-apps-page';
@@ -58,20 +60,22 @@ const AppRoutes: React.FC<unknown> = () => {
   // @TODO update with new hooks
   // const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
+  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: t('script-error'),
+      title: t('Error in extensions app'),
+    },
+    logger,
+  };
+
   return (
-    <ErrorBoundary
-      errorObj={{
-        type: t('script-error'),
-        title: t('Error in extensions app'),
-      }}
-      logger={logger}
-    >
-      <Router basename={baseRouteName}>
-        <MasterPage isLoggedIn={isLoggedIn}>
-          <Routes>
-            <Route
-              path={routes[EXPLORE]}
-              element={
+    <Router basename={baseRouteName}>
+      <MasterPage isLoggedIn={isLoggedIn}>
+        <Routes>
+          <Route
+            path={routes[EXPLORE]}
+            element={
+              <ErrorBoundary {...props}>
                 <ExplorePage
                   installableApps={installableApps}
                   installedAppsInfo={[]}
@@ -79,29 +83,49 @@ const AppRoutes: React.FC<unknown> = () => {
                   reqError={error}
                   isUserLoggedIn={isLoggedIn}
                 />
-              }
-            />
-            <Route
-              path={routes[MY_APPS]}
-              element={
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={routes[MY_APPS]}
+            element={
+              <ErrorBoundary {...props}>
                 <MyAppsPage
                   availableApps={availableApps}
                   defaultIntegrations={defaultIntegrations}
                   installedAppsInfo={[]}
                 />
-              }
-            />
-            <Route path={routes[APPS]} element={<AppsPage />} />
-            <Route
-              path={routes[MY_WIDGETS]}
-              element={<MyWidgetsPage availableApps={availableApps} />}
-            />
-            <Route path={`${routes[INFO]}/:appId`} element={<InfoPage />} />
-            <Route path="/" element={<Navigate to={routes[EXPLORE]} replace />} />
-          </Routes>
-        </MasterPage>
-      </Router>
-    </ErrorBoundary>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={routes[APPS]}
+            element={
+              <ErrorBoundary {...props}>
+                <AppsPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={routes[MY_WIDGETS]}
+            element={
+              <ErrorBoundary {...props}>
+                <MyWidgetsPage availableApps={availableApps} />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={`${routes[INFO]}/:appId`}
+            element={
+              <ErrorBoundary {...props}>
+                <InfoPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route path="/" element={<Navigate to={routes[EXPLORE]} replace />} />
+        </Routes>
+      </MasterPage>
+    </Router>
   );
 };
 
