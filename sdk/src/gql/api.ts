@@ -604,7 +604,7 @@ export const GetBeamByIdDocument = /*#__PURE__*/ gql`
 }
     ${BeamFragmentDoc}`;
 export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
-    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput) {
+    query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput, $sorting: AkashaContentBlockStreamSortingInput) {
   node(id: $indexer) {
     ... on CeramicAccount {
       akashaContentBlockStreamList(
@@ -613,6 +613,7 @@ export const GetContentBlockStreamDocument = /*#__PURE__*/ gql`
         first: $first
         last: $last
         filters: $filters
+        sorting: $sorting
       ) {
         edges {
           node {
@@ -656,7 +657,7 @@ export const GetBlockStorageByIdDocument = /*#__PURE__*/ gql`
 }
     ${BlockStorageFragmentDoc}`;
 export const GetIndexedStreamDocument = /*#__PURE__*/ gql`
-    query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput) {
+    query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput, $sorting: AkashaIndexedStreamSortingInput) {
   node(id: $indexer) {
     ... on CeramicAccount {
       akashaIndexedStreamList(
@@ -665,6 +666,7 @@ export const GetIndexedStreamDocument = /*#__PURE__*/ gql`
         first: $first
         last: $last
         filters: $filters
+        sorting: $sorting
       ) {
         edges {
           node {

@@ -60,18 +60,14 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.5/lib/umd/single-spa.min.js"
-          integrity="sha256-45Eozt1VWw1uUdz1Kky3okigg//xCnxE/LZJdy1t25I="
-          crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@5.1.4/lib/umd/single-spa-react.js"
-          integrity="sha256-JIQDgDH4WQZ6a9YCreoISXaYNxROMuRdz34l5Xv3h4M="
-          crossorigin="anonymous"></script>
   <script src="/scripts/theme.js"></script>
 
   <meta name="importmap-type" content="systemjs-importmap"/>
   <script type="systemjs-importmap">
     {
       "imports": {
+        "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@6.0.0/lib/es2015/system/single-spa.min.js",
+        "single-spa-react": "https://cdn.jsdelivr.net/npm/single-spa-react@6.0.1/lib/system/single-spa-react.min.js",
         "@akashaorg/ui-app-loader": "/app-loader/index.js",
         "@akashaorg/awf-sdk": "/sdk/akasha.sdk.js",
         "@akashaorg/ui-awf-hooks": "/hooks/index.js"

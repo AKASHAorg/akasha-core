@@ -32,6 +32,7 @@ export type HeaderProps = {
   copiedLabel?: string;
   followElement?: ReactElement;
   publicImagePath: string;
+  metadata?: ReactElement;
   handleEdit?: () => void;
   transformSource: (src: Image) => Image;
 };
@@ -49,6 +50,7 @@ const Header: React.FC<HeaderProps> = ({
   copiedLabel,
   followElement,
   publicImagePath,
+  metadata,
   handleEdit,
   transformSource,
 }) => {
@@ -86,7 +88,10 @@ const Header: React.FC<HeaderProps> = ({
               />
             </Stack>
             <Stack direction="column" spacing="gap-y-1">
-              <Text variant="button-lg">{name}</Text>
+              <Stack direction="row" align="center" spacing="gap-x-1">
+                <Text variant="button-lg">{name}</Text>
+                {metadata}
+              </Stack>
               <DidField
                 did={did.id}
                 isValid={validAddress}

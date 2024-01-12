@@ -178,10 +178,10 @@ query GetBeamById($id: ID!){
   }
 }
 
-query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput){
+query GetContentBlockStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaContentBlockStreamFiltersInput, $sorting: AkashaContentBlockStreamSortingInput){
   node(id: $indexer) {
     ... on CeramicAccount{
-      akashaContentBlockStreamList(after: $after, before: $before, first: $first, last: $last, filters:$filters) {
+      akashaContentBlockStreamList(after: $after, before: $before, first: $first, last: $last, filters:$filters, sorting: $sorting ) {
         edges {
           node {
             createdAt
@@ -221,10 +221,10 @@ query GetBlockStorageById($id: ID!){
   }
 }
 
-query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput){
+query GetIndexedStream($indexer: ID!, $after: String, $before: String, $first: Int, $last: Int, $filters: AkashaIndexedStreamFiltersInput, $sorting: AkashaIndexedStreamSortingInput){
   node(id: $indexer) {
     ... on CeramicAccount{
-      akashaIndexedStreamList(after: $after, before: $before, first: $first, last: $last, filters:$filters) {
+      akashaIndexedStreamList(after: $after, before: $before, first: $first, last: $last, filters:$filters, sorting: $sorting) {
         edges {
           node {
             createdAt

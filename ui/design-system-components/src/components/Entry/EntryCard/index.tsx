@@ -13,7 +13,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 import AuthorProfileLoading from '../EntryCardLoading/author-profile-loading';
-import NSFW, { NSFWProps } from '../../NSFW';
+import NSFW, { NSFWProps } from '../NSFW';
 import Menu from '@akashaorg/design-system-core/lib/components/Menu';
 import {
   formatDate,
@@ -30,6 +30,7 @@ import {
   NavigateToParams,
 } from '@akashaorg/typings/lib/ui';
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 
 export type EntryCardProps = {
   entryData: EntryData;
@@ -68,6 +69,8 @@ export type EntryCardProps = {
   ref?: Ref<HTMLDivElement>;
   onReflect?: () => void;
   onAvatarClick?: (profileId: string) => void;
+  onTagClick?: (tag: string) => void;
+  onMentionClick?: (profileId: string) => void;
   onContentClick?: () => void;
   onEntryRemove?: (itemId: string) => void;
   onEntryFlag?: () => void;
@@ -82,8 +85,6 @@ export type EntryCardProps = {
   | {
       slateContent: Descendant[];
       itemType: EntityTypes.REFLECT;
-      onMentionClick?: (profileId: string) => void;
-      onTagClick?: (name: string) => void;
       navigateTo?: (args: NavigateToParams) => void;
     }
 );
@@ -114,6 +115,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
     hover,
     actionsRightExt,
     onAvatarClick,
+    onTagClick,
     onContentClick,
     onEntryFlag,
     onReflect,
@@ -259,7 +261,6 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                     content={rest.slateContent}
                     disabled={entryData.nsfw}
                     handleMentionClick={rest.onMentionClick}
-                    handleTagClick={rest.onTagClick}
                     handleLinkClick={url => {
                       rest.navigateTo?.({ getNavigationUrl: () => url });
                     }}
@@ -271,6 +272,28 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                     </Fragment>
                   ))
                 )}
+              </Stack>
+            )}
+            {showHiddenContent && entryData.tags?.length > 0 && (
+              <Stack
+                padding={{ y: 16 }}
+                justify="start"
+                direction="row"
+                spacing="gap-2"
+                customStyle="flex-wrap"
+                fullWidth
+              >
+                {entryData.tags?.map((tag, index) => (
+                  <Pill
+                    key={index}
+                    label={tag}
+                    onPillClick={() => {
+                      if (typeof onTagClick === 'function') {
+                        onTagClick(tag);
+                      }
+                    }}
+                  />
+                ))}
               </Stack>
             )}
           </Stack>

@@ -38,6 +38,12 @@ export const BeamEditor: React.FC = () => {
     },
   });
 
+  const [uiState, setUiState] = React.useState<uiState>('editor');
+  const [isNsfw, setIsNsfw] = React.useState(false);
+
+  const [tagValue, setTagValue] = React.useState('');
+  const [editorTags, setEditorTags] = React.useState([]);
+
   const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
       return;
@@ -46,11 +52,8 @@ export const BeamEditor: React.FC = () => {
   };
 
   const handleBeamPublish = () => {
-    createContentBlocks(isNsfw);
+    createContentBlocks(isNsfw, editorTags);
   };
-
-  const [uiState, setUiState] = React.useState<uiState>('editor');
-  const [isNsfw, setIsNsfw] = React.useState(false);
 
   const bottomRef = React.useRef<HTMLDivElement>(null);
 
@@ -88,9 +91,6 @@ export const BeamEditor: React.FC = () => {
     onBlockSelectAfter(newBlock);
     setUiState('editor');
   };
-
-  const [tagValue, setTagValue] = React.useState('');
-  const [editorTags, setEditorTags] = React.useState([]);
 
   const handleAddTags = () => {
     if (tagValue.length > 0) {
