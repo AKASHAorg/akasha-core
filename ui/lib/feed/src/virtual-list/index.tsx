@@ -61,7 +61,6 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
 
   const vlistRef = React.useRef<VirtualListInterface>();
   const [isMounted, setIsMounted] = React.useState(false);
-  const deferredIsMounted = React.useDeferredValue(isMounted);
 
   const keyExtractorRef = React.useRef(itemKeyExtractor);
   const itemRendererRef = React.useRef(renderItem);
@@ -168,8 +167,8 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
 
   return (
     <>
-      {!deferredIsMounted && loadingIndicator && loadingIndicator()}
-      {deferredIsMounted && (
+      {!isMounted && loadingIndicator && loadingIndicator()}
+      {isMounted && (
         <VirtualListRenderer
           restorationKey={restorationKey}
           ref={vlistRef}

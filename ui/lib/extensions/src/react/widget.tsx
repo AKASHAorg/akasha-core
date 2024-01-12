@@ -54,7 +54,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
   return (
     <Stack customStyle={`${customStyle} ${fullHeight ? 'h-full' : ''}`} id={name}>
       {isLoading && loadingIndicator}
-      {parcelConfigs.map(parcelConf => (
+      {parcelConfigs.map((parcelConf, index) => (
         <Parcel
           wrapStyle={{
             display: isLoading ? 'none' : undefined,
@@ -65,7 +65,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
           key={parcelConf.widget.appName}
           config={{
             ...parcelConf.config,
-            name: `${parcelConf.widget.appName}_${parcelConf.config.name}`,
+            name: `${parcelConf.widget.appName}_${index}`,
           }}
           {...getContext()}
           handleError={err => onError?.(parcelConf.widget, `Failed to mount: ${err.message}`)}

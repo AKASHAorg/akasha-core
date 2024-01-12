@@ -1,6 +1,6 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/lib/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
@@ -85,7 +85,7 @@ const MessageButtonWrapper = (props: RootExtensionProps<MessageButtonExtensionDa
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(MessageButtonWrapper),
   errorBoundary: (err, errorInfo, props: RootExtensionProps<MessageButtonExtensionData>) => {
     if (props.logger) {

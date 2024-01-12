@@ -3,7 +3,7 @@ import { I18nextProvider } from 'react-i18next';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 import { BeamEditor } from './beam-editor';
 import singleSpaReact from 'single-spa-react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
@@ -18,7 +18,7 @@ const Wrapped = (_: RootExtensionProps) => {
 
 export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {

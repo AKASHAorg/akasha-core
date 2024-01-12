@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
@@ -9,7 +9,7 @@ import App from './App';
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(App),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {

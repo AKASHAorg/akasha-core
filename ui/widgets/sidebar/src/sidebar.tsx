@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
@@ -23,7 +23,7 @@ const Widget: React.FC<unknown> = () => {
 
 export const { bootstrap, mount, unmount } = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(Widget),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {

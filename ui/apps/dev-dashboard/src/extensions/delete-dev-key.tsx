@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
@@ -108,7 +108,7 @@ const Wrapped = (props: RootExtensionProps<DeleteDevKeyModalExtensionData>) => {
 
 const reactLifecycles = singleSpaReact({
   React,
-  ReactDOMClient: ReactDOM,
+  ReactDOMClient,
   rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props: RootExtensionProps<DeleteDevKeyModalExtensionData>) => {
     if (props.logger) {
