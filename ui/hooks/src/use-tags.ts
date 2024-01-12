@@ -207,6 +207,7 @@ export const useTags = (tag: string) => {
 
   return {
     beams: state.beams,
+    called: beamsQuery.called,
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,

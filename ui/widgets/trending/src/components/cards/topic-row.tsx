@@ -25,7 +25,6 @@ export type TopicRowProps = {
   isLoading: boolean;
   // handlers
   onClickTopic: (topic: string) => void;
-  // setSubscribedInterests: React.Dispatch<React.SetStateAction<string[]>>;
   showLoginModal: () => void;
   handleTopicUnsubscribe: (topic: string) => void;
   handleTopicSubscribe: (topic: string) => void;
@@ -79,7 +78,7 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
       <SubtitleTextIcon
         label={tag}
         subtitle={
-          !loadingCount && beamCount > 0
+          !loadingCount && beamCount > 1
             ? `${beamCount} ${tagSubtitleLabel}s`
             : `${beamCount} ${tagSubtitleLabel}`
         }

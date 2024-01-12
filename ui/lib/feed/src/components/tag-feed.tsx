@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
   AkashaIndexedStreamFiltersInput,
@@ -10,6 +11,7 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 
 export type TagFeedProps = {
   className?: string;
@@ -43,8 +45,11 @@ const TagFeed = (props: TagFeedProps) => {
     tag,
   } = props;
 
+  const { t } = useTranslation('ui-lib-feed');
+
   const {
     beams,
+    called,
     fetchNextPage,
     fetchPreviousPage,
     hasNextPage,
@@ -113,6 +118,7 @@ const TagFeed = (props: TagFeedProps) => {
 
   return (
     <>
+      {isLoading && <Spinner />}
       {hasErrors && (
         <ErrorLoader
           type="script-error"
@@ -120,7 +126,21 @@ const TagFeed = (props: TagFeedProps) => {
           details={<>{errors}</>}
         />
       )}
-      {!hasErrors && !isLoading && beams.length === 0 && <>Sorry no beams</>}
+      {!hasErrors && !isLoading && called && beams.length === 0 && (
+        <Stack customStyle="mt-8">
+          <InfoCard
+            titleLabel={
+              <>
+                {t('There are no content found for ')} <strong>#{tag}</strong>
+              </>
+            }
+            bodyLabel={<>{t('Be the first one to create a beam for this topic! 🚀')}</>}
+            bodyVariant="body1"
+            publicImgPath="/images"
+            assetName="longbeam-notfound"
+          />
+        </Stack>
+      )}
       {!hasErrors && !isLoading && beams.length > 0 && (
         <Virtualizer<ReturnType<typeof useTags>['beams'][0]>
           header={header}

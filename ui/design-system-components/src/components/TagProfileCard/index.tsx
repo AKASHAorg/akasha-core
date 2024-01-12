@@ -17,7 +17,7 @@ export interface ITagProfileCard {
   // data
   tag: ITag | null;
   subscribedTags: string[];
-  loggedEthAddress?: string | null;
+  isLoading: boolean;
   // labels
   mentionsLabel?: string;
   subscribeLabel?: string;
@@ -32,6 +32,7 @@ export interface ITagProfileCard {
 const TagProfileCard: React.FC<ITagProfileCard> = props => {
   const {
     tag,
+    isLoading,
     subscribedTags,
     handleSubscribeTag,
     handleUnsubscribeTag,
@@ -44,7 +45,6 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
 
   return (
     <Card customStyle={customStyle}>
-      <div className={tw(`h(24 sm:36) bg(secondaryLight dark:secondaryDark) rounded-t-lg`)} />
       <div className={tw(`h-16 flex flex-row justify-between pb-2 mx-2`)}>
         <div className={tw(`flex flex-row`)}>
           <div
@@ -58,11 +58,15 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
             {tag && (
               <div className={tw(`gap-1`)}>
                 <div className={tw(`inline-flex flex-row gap-1 items-center`)}>
-                  <Text variant="h3" truncate={true}>
+                  <Text variant="button-lg" weight="bold" truncate={true}>
                     {tag.name}
                   </Text>
                 </div>
-                <Text variant="subtitle1">{`${tag.totalPosts} ${mentionsLabel}`}</Text>
+                <Text
+                  variant="footnotes2"
+                  color="grey7"
+                  truncate={true}
+                >{`${tag.totalPosts} ${mentionsLabel}`}</Text>
               </div>
             )}
 
@@ -80,6 +84,14 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
               inactiveLabel={subscribeLabel}
               activeLabel={subscribedLabel}
               activeHoverLabel={unsubscribeLabel}
+              inactiveVariant="secondary"
+              loading={isLoading}
+              hoverColors={{
+                background: { light: 'transparent', dark: 'transparent' },
+                border: { light: 'errorLight', dark: 'errorDark' },
+                text: { light: 'errorLight', dark: 'errorDark' },
+                icon: { light: 'errorLight', dark: 'errorDark' },
+              }}
               onClickInactive={() => handleSubscribeTag(tag.name)}
               onClickActive={() => handleUnsubscribeTag(tag.name)}
               active={subscribedTags?.includes(tag.name)}

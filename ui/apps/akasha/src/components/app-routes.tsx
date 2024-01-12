@@ -64,12 +64,7 @@ const AppRoutes: React.FC<unknown> = () => {
           />
           <Route
             path={`${routes[TAGS]}/:tagName`}
-            element={
-              <TagFeedPage
-                authenticatedProfile={authenticatedProfile}
-                showLoginModal={showLoginModal}
-              />
-            }
+            element={<TagFeedPage showLoginModal={showLoginModal} />}
           />
           <Route
             path={`${routes[PROFILE_FEED]}/:did`}
