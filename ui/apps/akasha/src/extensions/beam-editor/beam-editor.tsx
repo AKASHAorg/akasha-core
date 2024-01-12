@@ -43,6 +43,7 @@ export const BeamEditor: React.FC = () => {
 
   const [tagValue, setTagValue] = React.useState('');
   const [editorTags, setEditorTags] = React.useState([]);
+  const [newTags, setNewTags] = React.useState([]);
 
   const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
@@ -78,10 +79,6 @@ export const BeamEditor: React.FC = () => {
     setUiState('tags');
   };
 
-  const handleClickCancel = () => {
-    setUiState('editor');
-  };
-
   const handleAddBlock = selectedBlock => {
     const newBlock = availableBlocks.find(
       block =>
@@ -92,21 +89,69 @@ export const BeamEditor: React.FC = () => {
     setUiState('editor');
   };
 
-  const handleAddTags = () => {
-    if (tagValue.length > 0) {
-      setEditorTags(prev => {
-        const removeDuplicates = new Set([...prev, tagValue]);
-        return [...removeDuplicates];
-      });
-      setTagValue('');
+  const targetKeys = [' ', ',', 'Enter'];
+  const targetCodes = ['Space', 'Comma', 'Enter'];
+
+  const allTags = [...editorTags, ...newTags];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const tag = e.currentTarget.value;
+    if (targetKeys.includes(tag.charAt(tag.length - 1)) || tag.length > 30) return;
+    setTagValue(tag);
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (targetKeys.includes(e.key) || targetCodes.includes(e.code)) {
+      addTag();
     }
   };
 
-  const handleDeleteTag = tag => {
-    setEditorTags(prev => {
-      const filtered = new Set(prev.filter(elem => tag !== elem));
-      return [...filtered];
-    });
+  const addTag = () => {
+    /**
+     * if tag length is at least 2 and total number of tags
+     * is less than max specified and tag is not previously
+     * added
+     */
+    if (tagValue.length > 2 && allTags.length < 10 && !editorTags.includes(tagValue)) {
+      setNewTags(prev => [...new Set([...prev, tagValue])]);
+    }
+    setTagValue('');
+  };
+
+  const handleDeleteTag = (tag: string) => {
+    /**
+     * check if tag is previously saved, remove it from editorTags,
+     * else remove from newTags
+     */
+    if (editorTags.includes(tag)) {
+      setEditorTags(editorTags.filter(_tag => _tag !== tag));
+    } else {
+      setNewTags(newTags.filter(_tag => _tag !== tag));
+    }
+  };
+
+  const handleClickSave = () => {
+    /**
+     * if there are new tags, save and reset newTags state,
+     * then set uiState to 'editor'
+     */
+    if (newTags.length > 0) {
+      setEditorTags(allTags);
+      setNewTags([]);
+    }
+    setUiState('editor');
+  };
+
+  const handleClickCancel = () => {
+    /**
+     * if uiState is 'tags', reset newTags and tagValue states,
+     * then set uiState to 'editor'
+     */
+    if (uiState === 'tags') {
+      setNewTags([]);
+      setTagValue('');
+    }
+    setUiState('editor');
   };
 
   const [disablePublishing, setDisablePublishing] = React.useState(false);
@@ -204,33 +249,40 @@ export const BeamEditor: React.FC = () => {
             uiState === 'tags' ? 'flex' : 'hidden'
           }`}
         >
-          <Stack padding={16} spacing="gap-2">
-            <Text variant="h6">{t('Beam Tags')}</Text>
-            <Text variant="subtitle2">
+          <Stack padding={16} spacing="gap-4">
+            <Stack direction="row" spacing="gap-x-1" align="center">
+              <Text variant="h6">{t('Beam Tags')}</Text>
+              <Text variant="footnotes2" color="grey7">
+                ({t('10 max')}.)
+              </Text>
+            </Stack>
+            <Text variant="subtitle2" color="grey7">
               {t(
                 'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
               )}
             </Text>
             <TextField
               value={tagValue}
-              onChange={e => setTagValue(e.currentTarget.value)}
+              onChange={handleChange}
+              onKeyUp={handleKeyUp}
               placeholder={t('Search for tags')}
               type="text"
             />
-            {editorTags.length === 0 && (
-              <Text variant="body2">{t('You haven’t added any tags yet')}</Text>
+            {allTags.length === 0 && (
+              <Text variant="body2" weight="bold">
+                {t("You haven't added any tags yet")}
+              </Text>
             )}
             <Stack direction="row" spacing="gap-2" customStyle="flex-wrap mt-2">
-              {editorTags.length > 0 &&
-                editorTags.map((tag, index) => (
-                  <Pill
-                    key={index}
-                    label={tag}
-                    icon={<XMarkIcon />}
-                    iconDirection="right"
-                    onPillClick={() => handleDeleteTag(tag)}
-                  />
-                ))}
+              {allTags.map((tag, index) => (
+                <Pill
+                  key={index}
+                  label={tag}
+                  icon={<XMarkIcon />}
+                  iconDirection="right"
+                  onPillClick={() => handleDeleteTag(tag)}
+                />
+              ))}
             </Stack>
           </Stack>
         </Stack>
@@ -240,19 +292,18 @@ export const BeamEditor: React.FC = () => {
         handleClickAddBlock={handleAddBlockBtn}
         handleClickTags={handleTagsBtn}
         handleClickCancel={handleClickCancel}
-        handleAddTags={handleAddTags}
+        handleClickSave={handleClickSave}
         handleBeamPublish={handleBeamPublish}
         addBlockLabel={t('Add a Block')}
-        addLabel={t('Add')}
-        cancelLabel={t('Close')}
+        saveTagsLabel={t('Save')}
+        cancelLabel={t('Cancel')}
         blocksLabel={t('Blocks')}
         tagsLabel={t('Tags')}
         publishLabel={t('Beam it')}
         blocksNumber={blocksInUse.length}
-        tagsNumber={editorTags.length}
-        tagValue={tagValue}
-        isPublishing={isPublishing}
-        disablePublishing={disablePublishing}
+        tagsNumber={allTags.length}
+        disableBeamPublishing={isPublishing || disablePublishing}
+        disableTagsSave={isPublishing || newTags.length < 1}
       />
     </Card>
   );
