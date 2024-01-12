@@ -10,14 +10,16 @@ import EditorPage from './pages/editor-page/editor-page';
 import EntrySectionLoading from './pages/entry-page/entry-section-loading';
 import routes, { FEED, MY_FEED, PROFILE_FEED, BEAM, REFLECT, TAGS, EDITOR } from '../routes';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 
 const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, navigateToModal } = useRootComponentProps();
   const _navigateToModal = React.useRef(navigateToModal);
+  const { data } = useGetLogin();
   const authenticatedProfileReq = useGetLoginProfile();
 
+  const isLoggedIn = !!data?.id;
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
 
   const showLoginModal = React.useCallback((redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -32,6 +34,7 @@ const AppRoutes: React.FC<unknown> = () => {
             path={routes[FEED]}
             element={
               <FeedPage
+                isLoggedIn={isLoggedIn}
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
               />
