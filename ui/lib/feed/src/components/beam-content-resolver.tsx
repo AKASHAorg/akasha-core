@@ -6,11 +6,13 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import BeamCard from './cards/beam-card';
-export type BeamEntryProps = {
+export type BeamContentResolverProps = {
   beamId: string;
 };
 
-const BeamEntry: React.FC<React.PropsWithChildren<BeamEntryProps>> = ({ beamId }) => {
+const BeamContentResolver: React.FC<React.PropsWithChildren<BeamContentResolverProps>> = ({
+  beamId,
+}) => {
   const { beam } = useIndividualBeam({ beamId });
   const { getRoutingPlugin } = useRootComponentProps();
 
@@ -37,4 +39,4 @@ const BeamEntry: React.FC<React.PropsWithChildren<BeamEntryProps>> = ({ beamId }
   }
 };
 
-export default BeamEntry;
+export default BeamContentResolver;

@@ -5,4 +5,4 @@ export { default as ReflectFeed } from './components/reflect-feed';
 export { default as ReflectionCard } from './components/cards/reflection-card';
 export { default as ReflectionPreview } from './components/reflection-preview';
 export { default as TagFeed } from './components/tag-feed';
-export { default as BeamEntry } from './components/beam-entry';
+export { default as BeamEntry } from './components/beam-content-resolver';
