@@ -193,7 +193,10 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
           >
             <Parcel
-              config={{ ...matchingBlock.config }}
+              config={{
+                ...matchingBlock.config,
+                name: `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${index}`,
+              }}
               {...getContext()}
               blockInfo={{
                 ...matchingBlock.blockInfo,

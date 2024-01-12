@@ -71,7 +71,7 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
     onAnimationStart,
   } = props;
   const rootNodeRef = React.useRef<HTMLDivElement>();
-  const currentHeight = React.useRef(estimatedHeight);
+  const currentHeight = React.useRef(estimatedHeight + itemSpacing);
   const animationTimeout = React.useRef<ReturnType<typeof setTimeout>>();
   const itemKey = React.useRef(item.key);
   const onAnimationEndRef = React.useRef(onAnimationEnd);
@@ -99,38 +99,49 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
   const handleSizeChange = React.useCallback(
     (entry: ResizeObserverEntry) => {
       if (entry) {
-        const realHeight = entry.contentRect.height;
-        if (Math.floor(currentHeight.current) !== Math.floor(realHeight)) {
+        const realHeight = Math.round(entry.contentRect.height + itemSpacing);
+        if (currentHeight.current !== realHeight) {
+          console.log('card size changed from', currentHeight.current, 'to', realHeight);
           currentHeight.current = realHeight;
-          onHeightChanged?.(item.key, realHeight + itemSpacing);
+          onHeightChanged?.(item.key, currentHeight.current);
         }
       }
     },
     [item.key, itemSpacing, onHeightChanged],
   );
 
+  React.useEffect(() => {
+    const nodeRef = rootNodeRef.current;
+    if (nodeRef) {
+      resizeObserver.observe(nodeRef, handleSizeChange);
+    }
+    return () => {
+      resizeObserver.unobserve(nodeRef);
+    };
+  }, [handleSizeChange, resizeObserver]);
+
   const measureElementHeight = React.useCallback(() => {
     const realHeight = rootNodeRef.current
-      ? rootNodeRef.current.getBoundingClientRect().height
-      : estimatedHeight;
+      ? Math.round(rootNodeRef.current.getBoundingClientRect().height + itemSpacing)
+      : estimatedHeight + itemSpacing;
     if (currentHeight.current !== realHeight) {
       currentHeight.current = realHeight;
     }
-    return currentHeight.current + itemSpacing;
+    return currentHeight.current;
   }, [estimatedHeight, itemSpacing]);
 
-  const setRootRefs = (node: HTMLDivElement) => {
-    if (node) {
-      if (rootNodeRef.current && !node.isEqualNode(rootNodeRef.current)) {
-        resizeObserver.unobserve(node);
-      }
-      rootNodeRef.current = node;
-      resizeObserver.observe(node, handleSizeChange);
-    } else if (!node && rootNodeRef.current) {
-      resizeObserver.unobserve(rootNodeRef.current);
-      rootNodeRef.current = undefined;
-    }
-  };
+  // const setRootRefs = (node: HTMLDivElement) => {
+  //   if (node) {
+  //     if (rootNodeRef.current && !node.isEqualNode(rootNodeRef.current)) {
+  //       resizeObserver.unobserve(node);
+  //     }
+  //     rootNodeRef.current = node;
+  //     resizeObserver.observe(node, handleSizeChange);
+  //   } else if (!node && rootNodeRef.current) {
+  //     resizeObserver.unobserve(rootNodeRef.current);
+  //     rootNodeRef.current = undefined;
+  //   }
+  // };
 
   const handleAnimationEnd = React.useCallback(() => {
     if (animationTimeout.current) {
@@ -178,7 +189,7 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
 
   return (
     <div
-      ref={setRootRefs}
+      ref={rootNodeRef}
       style={{
         transform: transformStyle,
         position: 'absolute',

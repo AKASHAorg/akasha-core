@@ -16,7 +16,7 @@ export const useStateWithCallback = <S>(
       callback.current(state);
       callback.current = undefined;
     }
-  });
+  }, [state]);
 
   return [state, stateSet];
 };

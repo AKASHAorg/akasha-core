@@ -78,6 +78,7 @@ export const useList = <T>(props: UseListProps<T>) => {
         return 0;
       }
       const distance = getItemDistanceFromTop(projectionItem.key, itemList);
+      console.log(projectionItem, projectionItem.start, distance, '<<<distances!!!');
       return projectionItem.start - distance;
     },
     [getItemDistanceFromTop, itemList],

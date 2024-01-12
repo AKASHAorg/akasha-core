@@ -23,10 +23,10 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   const getItemHeights = React.useCallback(() => itemHeights, [itemHeights]);
 
   const getItemHeight = React.useCallback(
-    (key: string) => {
+    (itemKey: string) => {
       let itemHeight = itemHeightAverage.current;
-      if (itemHeights.has(key)) {
-        itemHeight = itemHeights.get(key);
+      if (itemHeights.has(itemKey)) {
+        itemHeight = itemHeights.get(itemKey);
       }
       return pxToDPR(itemHeight, dpr);
     },
@@ -37,15 +37,16 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   };
 
   const updateItemHeight = React.useCallback(
-    (key: string, newHeight: number) => {
-      if (itemHeights.has(key)) {
-        if (itemHeights.get(key) !== newHeight) {
-          itemHeights.set(key, newHeight);
+    (itemKey: string, newHeight: number) => {
+      if (itemHeights.has(itemKey)) {
+        if (itemHeights.get(itemKey) !== newHeight) {
+          console.log('updating existing item height', newHeight, itemHeights.get(itemKey));
+          itemHeights.set(itemKey, newHeight);
           computeAvgItemHeight(newHeight, itemHeights.size);
         }
       }
-      if (!itemHeights.has(key)) {
-        itemHeights.set(key, newHeight);
+      if (!itemHeights.has(itemKey)) {
+        itemHeights.set(itemKey, newHeight);
         computeAvgItemHeight(newHeight, itemHeights.size);
       }
     },
@@ -53,7 +54,7 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   );
   const hasMeasuredHeights = React.useCallback(
     (items: VirtualItem[]) => {
-      return items.every(item => itemHeights.has(item.key));
+      return items.some(item => itemHeights.has(item.key));
     },
     [itemHeights],
   );
@@ -86,15 +87,19 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
   const getItemDistanceFromTop = React.useCallback(
     (itemKey: string, itemList: VirtualDataItem<unknown>[]) => {
       const idx = itemList.findIndex(it => it.key === itemKey);
-      if (idx >= 0) {
-        return itemList.slice(0, idx).reduce((distance, item) => {
+      if (idx > 0) {
+        const sliced = itemList.slice(0, idx);
+        const distance = sliced.reduce((distance, item) => {
           return getItemHeight(item.key) + distance;
         }, 0);
+        console.log(distance, '<< distance', idx, '<< idx', sliced);
+        return distance;
       }
       return 0;
     },
     [getItemHeight],
   );
+
   const measureItemHeights = React.useCallback(() => {
     itemRendererApis.current.forEach((api, key) => {
       if (!api) return;

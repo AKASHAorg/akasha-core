@@ -51,7 +51,7 @@ const ReflectionPage: React.FC<unknown> = () => {
       {
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes =>
-          `${navRoutes.Beam}/${beamId}${reflect ? navRoutes.Reflect : ''}`,
+          `${navRoutes.Beam}/${beamId}${reflect ? navRoutes.Reflect : ' '}`,
       },
       true,
     );
