@@ -15,7 +15,6 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
-import TagFeedCard from '@akashaorg/design-system-components/lib/components/TagFeedCard';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 
