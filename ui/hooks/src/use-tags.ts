@@ -1,9 +1,5 @@
-import React, { useEffect } from 'react';
-import {
-  useGetIndexedStreamLazyQuery,
-  useGetBeamStreamQuery,
-  useGetIndexedStreamQuery,
-} from './generated/apollo';
+import React from 'react';
+import { useGetIndexedStreamLazyQuery } from './generated/apollo';
 import getSDK from '@akashaorg/awf-sdk';
 import {
   AkashaIndexedStreamStreamType,
@@ -18,7 +14,6 @@ import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
 
 export const useTags = (tag: string) => {
-  console.log('tag', tag);
   const sdk = getSDK();
   const [state, setState] = React.useState<{
     beams: Exclude<
@@ -135,11 +130,9 @@ export const useTags = (tag: string) => {
       try {
         const results = await fetchBeams({ variables });
         if (results.error) {
-          console.log('results.error', results.error);
           setErrors(prev => [...prev, results.error]);
           return;
         }
-        console.log('results.data', results.data);
 
         if (!results.data) return;
 

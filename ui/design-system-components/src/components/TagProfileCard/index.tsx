@@ -7,11 +7,15 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
+  CheckIcon,
   HashtagIcon,
   RssIcon,
+  XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 
 export interface ITagProfileCard {
   // data
@@ -45,45 +49,26 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
 
   return (
     <Card customStyle={customStyle}>
-      <div className={tw(`h-16 flex flex-row justify-between pb-2 mx-2`)}>
-        <div className={tw(`flex flex-row`)}>
-          <div
-            className={tw(
-              `relative rounded-full flex items-center justify-items-center w-20 h-20 shrink-0`,
-            )}
-          >
-            <Icon icon={<HashtagIcon />} size="lg" accentColor={true} />
-          </div>
-          <div className={tw(`p-1`)}>
-            {tag && (
-              <div className={tw(`gap-1`)}>
-                <div className={tw(`inline-flex flex-row gap-1 items-center`)}>
-                  <Text variant="button-lg" weight="bold" truncate={true}>
-                    {tag.name}
-                  </Text>
-                </div>
-                <Text
-                  variant="footnotes2"
-                  color="grey7"
-                  truncate={true}
-                >{`${tag.totalPosts} ${mentionsLabel}`}</Text>
-              </div>
-            )}
+      <Stack direction="row" align="center" justify="between" spacing="gap-x-3">
+        <SubtitleTextIcon
+          label={tag.name}
+          subtitle={mentionsLabel}
+          icon={<HashtagIcon />}
+          backgroundColor={true}
+          labelSize={'button-lg'}
+          onClick={() => console.log('clicked')}
+        />
 
-            {!tag && (
-              <div className={tw(`gap-1`)}>
-                <TextLine title="tagName" animated={false} width="140px" />
-                <TextLine title="tagName" animated={false} width="80px" />
-              </div>
-            )}
-          </div>
-        </div>
         <div className={tw(`w-28 py-1 shrink-0`)}>
           {tag && (
             <DuplexButton
               inactiveLabel={subscribeLabel}
               activeLabel={subscribedLabel}
               activeHoverLabel={unsubscribeLabel}
+              activeIcon={<CheckIcon />}
+              activeHoverIcon={<XMarkIcon />}
+              fixedWidth={'w-[7rem]'}
+              iconDirection="left"
               inactiveVariant="secondary"
               loading={isLoading}
               hoverColors={{
@@ -95,16 +80,15 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
               onClickInactive={() => handleSubscribeTag(tag.name)}
               onClickActive={() => handleUnsubscribeTag(tag.name)}
               active={subscribedTags?.includes(tag.name)}
-              icon={<RssIcon />}
             />
           )}
         </div>
-      </div>
+      </Stack>
     </Card>
   );
 };
 TagProfileCard.defaultProps = {
-  mentionsLabel: 'mentions',
+  mentionsLabel: 'Beams',
   subscribeLabel: 'Subscribe',
   subscribedLabel: 'Subscribed',
   unsubscribeLabel: 'Unsubscribe',

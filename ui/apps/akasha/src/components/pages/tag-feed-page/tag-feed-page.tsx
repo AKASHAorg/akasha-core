@@ -2,14 +2,16 @@ import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import getSDK from '@akashaorg/awf-sdk';
-import { hasOwn, useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import {
   useGetIndexedStreamCountQuery,
   useGetInterestsByDidQuery,
+  useCreateInterestsMutation,
+  useUpdateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { BeamEntry, TagFeed } from '@akashaorg/ui-lib-feed';
-import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -31,7 +33,6 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
   const { tagName } = useParams<{ tagName: string }>();
 
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin } = useRootComponentProps();
 
   const sdk = getSDK();
   const {
@@ -82,11 +83,68 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       : null;
   }, [isLoggedIn, tagSubscriptionsData]);
 
+  const [createInterestsMutation, { loading, error }] = useCreateInterestsMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+  });
+
+  const [updateInterestsMutation, { loading: updateLoading, error: updateError }] =
+    useUpdateInterestsMutation({
+      context: { source: sdk.services.gql.contextSources.composeDB },
+    });
+
+  const executeInterestsMutation = (interests: string[]) => {
+    if (tagSubscriptionsId) {
+      updateInterestsMutation({
+        variables: {
+          i: {
+            id: tagSubscriptionsId,
+            content: {
+              topics: [...new Set(interests)].map(tag => ({
+                value: tag,
+                labelType: sdk.services.gql.labelTypes.INTEREST,
+              })),
+            },
+          },
+        },
+        onError: () => {
+          refetchTagSubscriptions();
+        },
+      });
+    } else {
+      createInterestsMutation({
+        variables: {
+          i: {
+            content: {
+              topics: [...new Set(tagSubscriptions)].map(tag => ({
+                value: tag,
+                labelType: sdk.services.gql.labelTypes.INTEREST,
+              })),
+            },
+          },
+        },
+        onError: () => {
+          refetchTagSubscriptions();
+        },
+      });
+    }
+  };
+
   const handleTagSubscribe = (tagName: string) => {
     if (!isLoggedIn) {
       showLoginModal();
       return;
     }
+    const newInterests = [...tagSubscriptions, tagName];
+    executeInterestsMutation(newInterests);
+  };
+
+  const handleTagUnsubscribe = (tagName: string) => {
+    if (!isLoggedIn) {
+      showLoginModal();
+      return;
+    }
+    const newInterests = tagSubscriptions.filter(topic => topic !== tagName);
+    executeInterestsMutation(newInterests);
   };
 
   return (
@@ -110,9 +168,10 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
               totalPosts: beamCount,
             }}
             subscribedTags={tagSubscriptions}
-            isLoading={false}
+            isLoading={loading || updateLoading}
+            mentionsLabel={beamCount + (beamCount > 1 ? ' Beams' : ' Beam')}
             handleSubscribeTag={() => handleTagSubscribe(tagName)}
-            handleUnsubscribeTag={() => handleTagSubscribe(tagName)}
+            handleUnsubscribeTag={() => handleTagUnsubscribe(tagName)}
           />
         </Stack>
       )}
