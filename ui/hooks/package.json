@@ -40,10 +40,9 @@
   },
   "devDependencies": {
     "@akashaorg/typings": "*",
-    "@akashaorg/af-testing": "*",
-    "@types/react": "18.0.33"
+    "@akashaorg/af-testing": "*"
   },
   "peerDependencies": {
-    "react": "^18.1.0"
+    "react": "^18.2.0"
   }
 }
