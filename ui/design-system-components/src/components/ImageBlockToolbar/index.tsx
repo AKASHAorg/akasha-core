@@ -48,7 +48,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon size="lg" icon={<Caption />} customStyle="absolute" />
+            <Icon size="lg" icon={<Caption />} customStyle="absolute" accentColor />
           </Stack>
         </button>
         <button onClick={handleLeftAlignClick}>
@@ -62,7 +62,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon size="lg" icon={<AlignLeft />} customStyle="absolute" />
+            <Icon size="lg" icon={<AlignLeft />} customStyle="absolute" accentColor />
           </Stack>
         </button>
         <button onClick={handleCenterAlignClick}>
@@ -76,7 +76,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon size="lg" icon={<AlignCenter />} customStyle="absolute" />
+            <Icon size="lg" icon={<AlignCenter />} customStyle="absolute" accentColor />
           </Stack>
         </button>
         <button onClick={handleRightAlignClick}>
@@ -90,7 +90,7 @@ const ImageBlockToolbar: React.FC<ImageBlockToolbar> = props => {
                 : { light: 'grey8', dark: 'grey5' }
             }
           >
-            <Icon size="lg" icon={<AlignRight />} customStyle="absolute" />
+            <Icon size="lg" icon={<AlignRight />} customStyle="absolute" accentColor />
           </Stack>
         </button>
       </Stack>
