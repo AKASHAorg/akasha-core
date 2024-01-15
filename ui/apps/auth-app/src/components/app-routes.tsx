@@ -12,7 +12,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger } = useRootComponentProps();
   const { t } = useTranslation('app-auth-ewa');
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in auth app'),
@@ -26,7 +26,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[CONNECT]}/*`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <Connect />
             </ErrorBoundary>
           }

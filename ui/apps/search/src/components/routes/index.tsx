@@ -23,7 +23,7 @@ const AppRoutes: React.FC<unknown> = () => {
     navigateToModal({ name: 'login' });
   };
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in search app'),
@@ -38,7 +38,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path="/"
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <Navigate to={routes[RESULTS]} replace />
               </ErrorBoundary>
             }
@@ -47,7 +47,7 @@ const AppRoutes: React.FC<unknown> = () => {
             <Route
               path=":searchKeyword"
               element={
-                <ErrorBoundary {...props}>
+                <ErrorBoundary {...errorBoundaryProps}>
                   <SearchPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
                 </ErrorBoundary>
               }
@@ -55,7 +55,7 @@ const AppRoutes: React.FC<unknown> = () => {
             <Route
               path=""
               element={
-                <ErrorBoundary {...props}>
+                <ErrorBoundary {...errorBoundaryProps}>
                   <SearchPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
                 </ErrorBoundary>
               }
@@ -64,7 +64,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={routes[SETTINGS]}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <SettingsPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
               </ErrorBoundary>
             }
@@ -72,7 +72,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={routes[ONBOARDING]}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <OnboardingPage showLoginModal={showLoginModal} isLoggedIn={isLoggedIn} />
               </ErrorBoundary>
             }

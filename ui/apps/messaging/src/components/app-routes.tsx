@@ -58,7 +58,7 @@ const AppRoutes: React.FC<unknown> = () => {
     fetchMessagesCallback();
   }, [fetchMessagesCallback]);
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in messaging app'),
@@ -75,7 +75,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[MESSAGING]}`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <InboxPage authenticatedProfile={authenticatedProfile} />
             </ErrorBoundary>
           }
@@ -83,7 +83,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[SETTINGS]}`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <SettingsPage authenticatedProfile={authenticatedProfile} />
             </ErrorBoundary>
           }
@@ -91,7 +91,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[CHAT]}/:did`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ChatPage
                 authenticatedProfile={authenticatedProfile}
                 fetchingMessages={fetchingMessages}

@@ -30,7 +30,7 @@ const AppRoutes: React.FC<unknown> = () => {
     _navigateToModal.current?.({ name: 'login', redirectTo });
   }, []);
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in akasha app'),
@@ -44,7 +44,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[FEED]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <FeedPage
                 isLoggedIn={isLoggedIn}
                 authenticatedProfile={authenticatedProfile}
@@ -56,7 +56,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[MY_FEED]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <MyFeedPage
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
@@ -67,7 +67,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[BEAM]}/:beamId`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <React.Suspense fallback={<EntrySectionLoading />}>
                 <BeamPage />
               </React.Suspense>
@@ -77,7 +77,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[BEAM]}/:beamId${routes[REFLECT]}`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <React.Suspense fallback={<EntrySectionLoading />}>
                 <BeamPage />
               </React.Suspense>
@@ -87,7 +87,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[TAGS]}/:tagName`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <TagFeedPage
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
@@ -98,7 +98,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[PROFILE_FEED]}/:did`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ProfileFeedPage
                 authenticatedProfile={authenticatedProfile}
                 showLoginModal={showLoginModal}
@@ -109,7 +109,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[REFLECT]}/:reflectionId`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <React.Suspense fallback={<EntrySectionLoading />}>
                 <ReflectionPage />
               </React.Suspense>
@@ -119,7 +119,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={`${routes[REFLECT]}/:reflectionId${routes[REFLECT]}`}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <React.Suspense fallback={<EntrySectionLoading />}>
                 <ReflectionPage />
               </React.Suspense>
@@ -129,7 +129,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[EDITOR]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <EditorPage authenticatedProfile={authenticatedProfile} />
             </ErrorBoundary>
           }

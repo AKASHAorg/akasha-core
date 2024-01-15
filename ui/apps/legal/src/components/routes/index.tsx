@@ -17,7 +17,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger } = useRootComponentProps();
   const { t } = useTranslation('app-legal');
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in legal app'),
@@ -31,7 +31,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={route[TOS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <TermsOfService />
             </ErrorBoundary>
           }
@@ -39,7 +39,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={route[TOU]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <TermsOfUse />
             </ErrorBoundary>
           }
@@ -47,7 +47,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={route[PP]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <PrivacyPolicy />
             </ErrorBoundary>
           }
@@ -55,7 +55,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={route[COC]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <CodeOfConduct />
             </ErrorBoundary>
           }
@@ -63,7 +63,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={route[DG]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <DeveloperGuidelines />
             </ErrorBoundary>
           }

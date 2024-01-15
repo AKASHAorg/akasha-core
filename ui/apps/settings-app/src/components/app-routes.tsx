@@ -103,7 +103,7 @@ const AppRoutes: React.FC<unknown> = () => {
     propagateTheme(selectedTheme, true);
   };
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in settings app'),
@@ -117,7 +117,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[HOME]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <SettingsPage titleLabel={t('Settings')} />
             </ErrorBoundary>
           }
@@ -125,7 +125,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[PRIVACY]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <PrivacyOption
                 titleLabel={t('Privacy')}
                 worldLabel="AKASHA World"
@@ -167,7 +167,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[APPS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <AppsOption
                 titleLabel={t('Apps')}
                 autoUpdatesLabel={t('Automatic Updates')}
@@ -189,7 +189,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[THEME]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ThemeOption
                 titleLabel="Theme"
                 themeIntroLabel={t('What mode are you feeling today?')}

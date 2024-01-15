@@ -71,7 +71,7 @@ const AppRoutes: React.FC<unknown> = () => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in vibe app'),
@@ -85,7 +85,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[HOME]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <Overview
                 user={authenticatedProfile?.did.id}
                 isAuthorised={isAuthorised}
@@ -98,7 +98,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[MODERATION_VALUE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ModerationValue />
             </ErrorBoundary>
           }
@@ -106,7 +106,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[DASHBOARD]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <Dashboard
                 user={authenticatedProfile?.did.id}
                 isAuthorised={isAuthorised}
@@ -119,7 +119,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[EDIT_CATEGORIES]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <EditCategoriesPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -127,7 +127,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[EDIT_CONTACT_INFO]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <EditContactInfoPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -135,7 +135,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[EDIT_MAX_APPLICANTS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <EditMaxApplicantsPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -143,7 +143,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[RESIGN_ROLE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ResignRolePage
                 user={authenticatedProfile?.did.id}
                 isAdmin={isAdmin}
@@ -155,7 +155,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[RESIGN_CONFIRMATION]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ResignConfirmationPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -163,7 +163,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[ASSIGN_NEW_ADMIN]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <AssignAdminPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -171,7 +171,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[MODERATORS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <Moderators navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -179,7 +179,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[VIEW_MODERATOR]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ModeratorDetailPage navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -187,7 +187,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[DISMISS_MODERATOR]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <DismissModeratorPage navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -195,7 +195,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[HISTORY]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <TransparencyLog user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -203,7 +203,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[HISTORY_ITEM]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <TransparencyLogItem />
             </ErrorBoundary>
           }
@@ -211,7 +211,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[BECOME_MODERATOR]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <BecomeModeratorPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -219,7 +219,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[CHECK_APPLICATION_STATUS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ApplicationStatusPage
                 applicationStatus={applicationStatus}
                 navigateTo={navigateTo}
@@ -230,7 +230,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[MODIFY_APPLICATION]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ModifyApplicationPage navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -238,7 +238,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[REPORT_ITEM]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ReportItemPage navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -246,7 +246,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[VIEW_APPLICATION_DETAILS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ApplicationDetailPage />
             </ErrorBoundary>
           }
@@ -254,7 +254,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[APPLICATIONS_ACTIVITY]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ApplicationsActivityPage navigateTo={navigateTo} />
             </ErrorBoundary>
           }
@@ -262,7 +262,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[MODERATION_ACTIVITY]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ModerationActivityPage navigateTo={navigateTo} />
             </ErrorBoundary>
           }

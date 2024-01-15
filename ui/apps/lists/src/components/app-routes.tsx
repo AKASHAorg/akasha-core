@@ -12,7 +12,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger } = useRootComponentProps();
   const { t } = useTranslation('app-lists');
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in lists app'),
@@ -29,7 +29,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path="/"
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ListsPage />
             </ErrorBoundary>
           }

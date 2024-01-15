@@ -30,7 +30,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger } = useRootComponentProps();
   const { t } = useTranslation('app-articles');
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in articles app'),
@@ -44,7 +44,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[HOME]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <Dashboard />
             </ErrorBoundary>
           }
@@ -52,7 +52,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[MY_ARTICLES]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <MyArticles />
             </ErrorBoundary>
           }
@@ -62,7 +62,7 @@ const AppRoutes: React.FC<unknown> = () => {
             key={path + idx}
             path={path}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <ArticleEditor />
               </ErrorBoundary>
             }
@@ -77,7 +77,7 @@ const AppRoutes: React.FC<unknown> = () => {
             key={path + idx}
             path={path}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <ArticlesOnboardingSteps activeIndex={idx} />
               </ErrorBoundary>
             }
@@ -86,7 +86,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[SETTINGS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ArticleSettingsPage />
             </ErrorBoundary>
           }
@@ -94,7 +94,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[ARTICLE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ArticlePage />
             </ErrorBoundary>
           }
@@ -102,7 +102,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[ARTICLE_SETTINGS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <ArticleCardSettingsPage />
             </ErrorBoundary>
           }

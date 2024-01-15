@@ -36,7 +36,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { baseRouteName, logger } = useRootComponentProps();
   const { t } = useTranslation('app-dev-dashboard');
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in dev dashboard app'),
@@ -54,7 +54,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[DASHBOARD]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <DevDashboard />
             </ErrorBoundary>
           }
@@ -62,7 +62,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[ONBOARDING]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <DevDashOnboardingIntro />
             </ErrorBoundary>
           }
@@ -77,7 +77,7 @@ const AppRoutes: React.FC<unknown> = () => {
             key={path + idx}
             path={path}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <DevDashOnboardingSteps activeIndex={idx} />
               </ErrorBoundary>
             }
@@ -86,7 +86,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[DEV_KEYS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <DevKeysCard />
             </ErrorBoundary>
           }
@@ -94,7 +94,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[ADD_DEV_KEY]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <AddDevKey />
             </ErrorBoundary>
           }
@@ -102,7 +102,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[EDIT_MESSAGE_NAME]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <EditMessageName />
             </ErrorBoundary>
           }
@@ -110,7 +110,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[PUBLISHED_APPS]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <PublishedApps />
             </ErrorBoundary>
           }
@@ -118,7 +118,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[SIGN_MESSAGE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <SignMessage />
             </ErrorBoundary>
           }
@@ -126,7 +126,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[VERIFY_SIGNATURE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <VerifySignature />
             </ErrorBoundary>
           }

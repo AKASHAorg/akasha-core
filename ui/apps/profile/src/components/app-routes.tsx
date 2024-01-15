@@ -42,7 +42,7 @@ const AppRoutes: React.FC<unknown> = () => {
     showLoginModal,
   };
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in profile app'),
@@ -58,7 +58,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={':profileId'}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <ProfileWithHeader {...commonHeaderViewProps} showNSFW={showNSFW}>
                   <ProfileInfoPage
                     showNSFW={showNSFW}
@@ -72,7 +72,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={`:profileId${menuRoute[FOLLOWERS]}`}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <ProfileWithHeader {...commonHeaderViewProps}>
                   <FollowersPage showLoginModal={showLoginModal} />
                 </ProfileWithHeader>
@@ -82,7 +82,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={`:profileId${menuRoute[FOLLOWING]}`}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <ProfileWithHeader {...commonHeaderViewProps}>
                   <FollowingPage showLoginModal={showLoginModal} />
                 </ProfileWithHeader>
@@ -92,7 +92,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={`:profileId${menuRoute[INTERESTS]}`}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <ProfileWithHeader {...commonHeaderViewProps}>
                   <InterestsPage />
                 </ProfileWithHeader>
@@ -102,7 +102,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={`:profileId${menuRoute[EDIT]}`}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <Suspense fallback={<ProfileLoading />}>
                   <EditProfilePage
                     handleProfileUpdatedFeedback={() => setShowUpdatedFeedback(true)}
@@ -114,7 +114,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={`:profileId${menuRoute[BEAMS]}`}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <ProfileWithHeader {...commonHeaderViewProps}>
                   <ProfileBeamsPage />
                 </ProfileWithHeader>

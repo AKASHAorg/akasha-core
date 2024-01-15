@@ -23,7 +23,7 @@ const AppRoutes: React.FC<unknown> = () => {
   const { data } = useGetLogin();
   const isLoggedIn = !!data?.id;
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in notifications app'),
@@ -37,7 +37,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <WelcomePage
                 header={t('Welcome to the Notification App')}
                 description={t(
@@ -54,7 +54,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <CustomizeNotificationPage initial={true} isLoggedIn={isLoggedIn} />
             </ErrorBoundary>
           }
@@ -62,7 +62,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <WelcomePage
                 header={t('All done!')}
                 description={t(
@@ -79,7 +79,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[SHOW_NOTIFICATIONS_PAGE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <NotificationsPage isLoggedIn={isLoggedIn} />
             </ErrorBoundary>
           }
@@ -87,7 +87,7 @@ const AppRoutes: React.FC<unknown> = () => {
         <Route
           path={routes[SETTINGS_PAGE]}
           element={
-            <ErrorBoundary {...props}>
+            <ErrorBoundary {...errorBoundaryProps}>
               <CustomizeNotificationPage initial={false} isLoggedIn={isLoggedIn} />
             </ErrorBoundary>
           }

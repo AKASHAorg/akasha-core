@@ -60,7 +60,7 @@ const AppRoutes: React.FC<unknown> = () => {
   // @TODO update with new hooks
   // const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
-  const props: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
       type: t('script-error'),
       title: t('Error in extensions app'),
@@ -75,7 +75,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={routes[EXPLORE]}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <ExplorePage
                   installableApps={installableApps}
                   installedAppsInfo={[]}
@@ -89,7 +89,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={routes[MY_APPS]}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <MyAppsPage
                   availableApps={availableApps}
                   defaultIntegrations={defaultIntegrations}
@@ -101,7 +101,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={routes[APPS]}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <AppsPage />
               </ErrorBoundary>
             }
@@ -109,7 +109,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={routes[MY_WIDGETS]}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <MyWidgetsPage availableApps={availableApps} />
               </ErrorBoundary>
             }
@@ -117,7 +117,7 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             path={`${routes[INFO]}/:appId`}
             element={
-              <ErrorBoundary {...props}>
+              <ErrorBoundary {...errorBoundaryProps}>
                 <InfoPage />
               </ErrorBoundary>
             }
