@@ -56,7 +56,6 @@ const TagProfileCard: React.FC<ITagProfileCard> = props => {
           icon={<HashtagIcon />}
           backgroundColor={true}
           labelSize={'button-lg'}
-          onClick={() => console.log('clicked')}
         />
 
         <div className={tw(`w-28 py-1 shrink-0`)}>

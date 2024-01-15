@@ -10,7 +10,7 @@ import {
   useUpdateInterestsMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { BeamEntry, TagFeed } from '@akashaorg/ui-lib-feed';
+import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -186,7 +186,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => <BeamEntry beamId={itemData.node.stream} />}
+        renderItem={itemData => <BeamContentResolver beamId={itemData.node.stream} />}
       />
     </Stack>
   );
