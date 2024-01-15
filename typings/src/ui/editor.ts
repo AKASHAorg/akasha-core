@@ -7,7 +7,12 @@ export type EmptyText = {
   text: string;
 };
 
-export type LinkElement = { type: 'link'; url: string; children: EmptyText[] };
+export type LinkElement = {
+  type: 'link';
+  align?: 'left' | 'center' | 'right';
+  url: string;
+  children: EmptyText[];
+};
 
 export type MentionElement = {
   type: 'mention';
@@ -15,6 +20,7 @@ export type MentionElement = {
   id?: string;
   children?: EmptyText[];
   did: Profile['did'];
+  align?: 'left' | 'center' | 'right';
 };
 
 export type TagElement = {
@@ -22,20 +28,30 @@ export type TagElement = {
   name: string;
   totalPosts: number;
   children: EmptyText[];
+  align?: 'left' | 'center' | 'right';
 };
 
 export type ParagraphElement = {
   type: 'paragraph';
+  align?: 'left' | 'center' | 'right';
   children: CustomText[];
 };
 
 export type ListItemElement = {
   type: 'list-item';
+  align?: 'left' | 'center' | 'right';
+  children: CustomText[];
+};
+
+export type BulletedListElement = {
+  type: 'bulleted-list';
+  align?: 'left' | 'center' | 'right';
   children: CustomText[];
 };
 
 export type NumberedListElement = {
   type: 'numbered-list';
+  align?: 'left' | 'center' | 'right';
   children: CustomText[];
 };
 
@@ -45,6 +61,7 @@ export type CustomElement =
   | TagElement
   | ParagraphElement
   | ListItemElement
+  | BulletedListElement
   | NumberedListElement;
 
 export type CustomText = {

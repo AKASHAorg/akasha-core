@@ -125,6 +125,7 @@ export const SlateEditorBlock = (
       // mentions={mentions}
       // tags={tags}
       withMeter={true}
+      withToolbar={true}
       editorState={editorState}
       setEditorState={(value: IEntryData['slateContent']) => {
         setEditorState(value);

@@ -85,13 +85,22 @@ const renderElement = (
       return <LinkElement handleLinkClick={handleLinkClick} {...props} />;
     case 'list-item':
       return (
-        <li className={tw(`text-black dark:text-white ${textAlignStyle}`)} {...props.attributes}>
+        <li
+          className={tw(`text-black dark:text-white ${textAlignStyle} list-item`)}
+          {...props.attributes}
+        >
           {props.children}
         </li>
       );
+    case 'bulleted-list':
+      return (
+        <ul className={tw(`${textAlignStyle} list-disc ml-8`)} {...props.attributes}>
+          {props.children}
+        </ul>
+      );
     case 'numbered-list':
       return (
-        <ol className={tw(`text-black dark:text-white ${textAlignStyle}`)} {...props.attributes}>
+        <ol className={tw(`${textAlignStyle} list-decimal ml-8`)} {...props.attributes}>
           {props.children}
         </ol>
       );

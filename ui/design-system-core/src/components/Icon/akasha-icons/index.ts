@@ -5,6 +5,9 @@ import AlignCenter from './align-center';
 import AlignJustify from './align-justify';
 import AlignLeft from './align-left';
 import AlignRight from './align-right';
+import AlignTextCenter from './align-text-center';
+import AlignTextLeft from './align-text-left';
+import AlignTextRight from './align-text-right';
 import Antenna from './antenna';
 import BoldAlt from './bold-alt';
 import DidKey from './didKey';
@@ -51,6 +54,9 @@ export type CustomIconTypes = Extract<
   | 'AlignLeft'
   | 'AlignRight'
   | 'AlignJustify'
+  | 'AlignTextCenter'
+  | 'AlignTextLeft'
+  | 'AlignTextRight'
   | 'Antenna'
   | 'BoldAlt'
   | 'DidKey'
@@ -94,6 +100,9 @@ export {
   AlignJustify,
   AlignLeft,
   AlignRight,
+  AlignTextCenter,
+  AlignTextLeft,
+  AlignTextRight,
   Antenna,
   BoldAlt,
   Discord,
