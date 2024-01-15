@@ -15,8 +15,9 @@ import { startMobileSidebarHidingBreakpoint } from '@akashaorg/design-system-cor
 import getSDK from '@akashaorg/awf-sdk';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
   Discord,
   Github,
@@ -32,8 +33,8 @@ import FallbackHeader from './fallback-header';
 
 const SidebarComponent: React.FC<unknown> = () => {
   const {
+    logger,
     uiEvents,
-    plugins,
     worldConfig: { defaultApps, socialLinks },
     getRoutingPlugin,
   } = useRootComponentProps();
@@ -238,75 +239,83 @@ const SidebarComponent: React.FC<unknown> = () => {
   });
 
   return (
-    <Card
-      customStyle="w-[19.5rem] max-w-[19.5rem] max-h(screen xl:[calc(100vh-20px)]) h(full xl:fit)"
-      radius="rounded-r-2xl xl:rounded-2xl"
-      padding="p-0"
+    <ErrorBoundary
+      errorObj={{
+        type: t('script-error'),
+        title: t('Error in sidebar widget'),
+      }}
+      logger={logger}
     >
-      <Suspense
-        fallback={<FallbackHeader authenticatedDID={authenticatedDID} isLoggedIn={isLoggedIn} />}
+      <Card
+        customStyle="w-[19.5rem] max-w-[19.5rem] max-h(screen xl:[calc(100vh-20px)]) h(full xl:fit)"
+        radius="rounded-r-2xl xl:rounded-2xl"
+        padding="p-0"
       >
-        <SidebarHeader
-          authenticatedDID={authenticatedDID}
-          isLoggedIn={isLoggedIn}
-          logoutClickHandler={handleLogoutClick}
-          loginClickHandler={handleLoginClick}
-          isLoading={isLoading}
-          handleAvatarClick={handleAvatarClick}
-        />
-      </Suspense>
-      {/*
+        <Suspense
+          fallback={<FallbackHeader authenticatedDID={authenticatedDID} isLoggedIn={isLoggedIn} />}
+        >
+          <SidebarHeader
+            authenticatedDID={authenticatedDID}
+            isLoggedIn={isLoggedIn}
+            logoutClickHandler={handleLogoutClick}
+            loginClickHandler={handleLoginClick}
+            isLoading={isLoading}
+            handleAvatarClick={handleAvatarClick}
+          />
+        </Suspense>
+        {/*
           this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
-      <Stack direction="column" customStyle="overflow-auto">
-        {/* container for world apps */}
-        {worldApps?.length > 0 && (
-          <ListSidebarApps
-            list={worldApps}
-            activeOption={activeOption}
-            onOptionClick={handleOptionClick}
-            onClickMenuItem={handleAppIconClick}
-          />
-        )}
-        {/* container for user-installed apps */}
-        {userInstalledApps?.length > 0 && (
-          <ListSidebarApps
-            list={userInstalledApps}
-            activeOption={activeOption}
-            hasBorderTop={true}
-            onOptionClick={handleOptionClick}
-            onClickMenuItem={handleAppIconClick}
-          />
-        )}
-      </Stack>
-      {!dismissed && (
-        <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
-      )}
-      {modSocialLinks.length > 0 && (
-        <Stack padding="px-8 py-4" customStyle="border-t-1 border(grey9 dark:grey3)">
-          <Text variant="footnotes2">{t('Get in touch')}</Text>
-          <Stack direction="row" customStyle="w-fit h-fit mt-6">
-            {modSocialLinks.map((socialLink, idx) => (
-              <Anchor
-                key={idx}
-                href={socialLink.link}
-                target="_blank"
-                rel="noreferrer noopener"
-                customStyle="mr-4"
-              >
-                <Button
-                  icon={socialLink.icon}
-                  solidIcon={idx > 0}
-                  variant="primary"
-                  greyBg={true}
-                  iconOnly={true}
-                />
-              </Anchor>
-            ))}
-          </Stack>
+        <Stack direction="column" customStyle="overflow-auto">
+          {/* container for world apps */}
+          {worldApps?.length > 0 && (
+            <ListSidebarApps
+              list={worldApps}
+              activeOption={activeOption}
+              onOptionClick={handleOptionClick}
+              onClickMenuItem={handleAppIconClick}
+            />
+          )}
+          {/* container for user-installed apps */}
+          {userInstalledApps?.length > 0 && (
+            <ListSidebarApps
+              list={userInstalledApps}
+              activeOption={activeOption}
+              hasBorderTop={true}
+              onOptionClick={handleOptionClick}
+              onClickMenuItem={handleAppIconClick}
+            />
+          )}
         </Stack>
-      )}
-    </Card>
+        {!dismissed && (
+          <SidebarCTACard onClickCTAButton={handleClickExplore} onDismissCard={dismissCard} />
+        )}
+        {modSocialLinks.length > 0 && (
+          <Stack padding="px-8 py-4" customStyle="border-t-1 border(grey9 dark:grey3)">
+            <Text variant="footnotes2">{t('Get in touch')}</Text>
+            <Stack direction="row" customStyle="w-fit h-fit mt-6">
+              {modSocialLinks.map((socialLink, idx) => (
+                <Anchor
+                  key={idx}
+                  href={socialLink.link}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  customStyle="mr-4"
+                >
+                  <Button
+                    icon={socialLink.icon}
+                    solidIcon={idx > 0}
+                    variant="primary"
+                    greyBg={true}
+                    iconOnly={true}
+                  />
+                </Anchor>
+              ))}
+            </Stack>
+          </Stack>
+        )}
+      </Card>
+    </ErrorBoundary>
   );
 };
 export default SidebarComponent;

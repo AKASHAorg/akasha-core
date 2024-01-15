@@ -16,9 +16,7 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
-    return (
-      <ErrorLoader type="script-error" title="Error in search plugin" details={error.message} />
-    );
+    return <ErrorLoader type="script-error" title="Error in search app" details={error.message} />;
   },
 });
 
