@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
 import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
   Dashboard,
   Overview,
@@ -28,7 +28,6 @@ import {
   ApplicationsActivityPage,
   ModerationActivityPage,
 } from '../pages';
-
 import routes, {
   DASHBOARD,
   DISMISS_MODERATOR,
@@ -54,8 +53,8 @@ import routes, {
 } from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const { baseRouteName, getRoutingPlugin } = useRootComponentProps();
-
+  const { baseRouteName, logger, getRoutingPlugin } = useRootComponentProps();
+  const { t } = useTranslation('app-moderation-ewa');
   const authenticatedProfileReq = useGetLoginProfile();
 
   const authenticatedProfile = authenticatedProfileReq?.akashaProfile;
@@ -72,143 +71,205 @@ const AppRoutes: React.FC<unknown> = () => {
 
   const navigateTo = getRoutingPlugin().navigateTo;
 
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: t('script-error'),
+      title: t('Error in vibe app'),
+    },
+    logger,
+  };
+
   return (
-    <Stack>
-      <Router basename={baseRouteName}>
-        <Routes>
-          <Route
-            path={routes[HOME]}
-            element={
+    <Router basename={baseRouteName}>
+      <Routes>
+        <Route
+          path={routes[HOME]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <Overview
                 user={authenticatedProfile?.did.id}
                 isAuthorised={isAuthorised}
                 applicationStatus={applicationStatus}
                 navigateTo={navigateTo}
               />
-            }
-          />
-
-          <Route path={routes[MODERATION_VALUE]} element={<ModerationValue />} />
-
-          <Route
-            path={routes[DASHBOARD]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[MODERATION_VALUE]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ModerationValue />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[DASHBOARD]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <Dashboard
                 user={authenticatedProfile?.did.id}
                 isAuthorised={isAuthorised}
                 isAdmin={isAdmin}
                 navigateTo={navigateTo}
               />
-            }
-          />
-
-          <Route
-            path={routes[EDIT_CATEGORIES]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[EDIT_CATEGORIES]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <EditCategoriesPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
-            }
-          />
-
-          <Route
-            path={routes[EDIT_CONTACT_INFO]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[EDIT_CONTACT_INFO]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <EditContactInfoPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
-            }
-          />
-
-          <Route
-            path={routes[EDIT_MAX_APPLICANTS]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[EDIT_MAX_APPLICANTS]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <EditMaxApplicantsPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
-            }
-          />
-
-          <Route
-            path={routes[RESIGN_ROLE]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[RESIGN_ROLE]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <ResignRolePage
                 user={authenticatedProfile?.did.id}
                 isAdmin={isAdmin}
                 navigateTo={navigateTo}
               />
-            }
-          />
-
-          <Route
-            path={routes[RESIGN_CONFIRMATION]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[RESIGN_CONFIRMATION]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <ResignConfirmationPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
-            }
-          />
-
-          <Route
-            path={routes[ASSIGN_NEW_ADMIN]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[ASSIGN_NEW_ADMIN]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <AssignAdminPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
-            }
-          />
-
-          <Route path={routes[MODERATORS]} element={<Moderators navigateTo={navigateTo} />} />
-
-          <Route
-            path={routes[VIEW_MODERATOR]}
-            element={<ModeratorDetailPage navigateTo={navigateTo} />}
-          />
-
-          <Route
-            path={routes[DISMISS_MODERATOR]}
-            element={<DismissModeratorPage navigateTo={navigateTo} />}
-          />
-
-          <Route
-            path={routes[HISTORY]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[MODERATORS]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <Moderators navigateTo={navigateTo} />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[VIEW_MODERATOR]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ModeratorDetailPage navigateTo={navigateTo} />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[DISMISS_MODERATOR]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <DismissModeratorPage navigateTo={navigateTo} />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[HISTORY]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <TransparencyLog user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
-            }
-          />
-
-          <Route path={routes[HISTORY_ITEM]} element={<TransparencyLogItem />} />
-
-          <Route
-            path={routes[BECOME_MODERATOR]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[HISTORY_ITEM]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <TransparencyLogItem />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[BECOME_MODERATOR]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <BecomeModeratorPage user={authenticatedProfile?.did.id} navigateTo={navigateTo} />
-            }
-          />
-
-          <Route
-            path={routes[CHECK_APPLICATION_STATUS]}
-            element={
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[CHECK_APPLICATION_STATUS]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
               <ApplicationStatusPage
                 applicationStatus={applicationStatus}
                 navigateTo={navigateTo}
               />
-            }
-          />
-
-          <Route
-            path={routes[MODIFY_APPLICATION]}
-            element={<ModifyApplicationPage navigateTo={navigateTo} />}
-          />
-
-          <Route path={routes[REPORT_ITEM]} element={<ReportItemPage navigateTo={navigateTo} />} />
-
-          <Route path={routes[VIEW_APPLICATION_DETAILS]} element={<ApplicationDetailPage />} />
-
-          <Route
-            path={routes[APPLICATIONS_ACTIVITY]}
-            element={<ApplicationsActivityPage navigateTo={navigateTo} />}
-          />
-
-          <Route
-            path={routes[MODERATION_ACTIVITY]}
-            element={<ModerationActivityPage navigateTo={navigateTo} />}
-          />
-
-          <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
-        </Routes>
-      </Router>
-    </Stack>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[MODIFY_APPLICATION]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ModifyApplicationPage navigateTo={navigateTo} />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[REPORT_ITEM]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ReportItemPage navigateTo={navigateTo} />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[VIEW_APPLICATION_DETAILS]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ApplicationDetailPage />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[APPLICATIONS_ACTIVITY]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ApplicationsActivityPage navigateTo={navigateTo} />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[MODERATION_ACTIVITY]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ModerationActivityPage navigateTo={navigateTo} />
+            </ErrorBoundary>
+          }
+        />
+        <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
+      </Routes>
+    </Router>
   );
 };
 

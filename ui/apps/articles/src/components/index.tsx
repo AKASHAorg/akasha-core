@@ -17,7 +17,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ErrorLoader type="script-error" title="Error in Articles app" details={error.message} />
+      <ErrorLoader type="script-error" title="Error in articles app" details={error.message} />
     );
   },
 });
