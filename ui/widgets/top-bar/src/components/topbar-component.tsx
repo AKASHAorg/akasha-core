@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { EventTypes, NotificationEvents, UIEventData } from '@akashaorg/typings/lib/ui';
 import { useGetLogin, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import Topbar from './topbar';
 import {
   startWidgetsTogglingBreakpoint,
@@ -10,7 +12,7 @@ import {
 import { filter } from 'rxjs';
 
 const TopbarComponent: React.FC<unknown> = () => {
-  const { uiEvents, layoutConfig, worldConfig, encodeAppName, getRoutingPlugin } =
+  const { uiEvents, layoutConfig, logger, worldConfig, encodeAppName, getRoutingPlugin } =
     useRootComponentProps();
   const { data } = useGetLogin();
   const location = useLocation();
@@ -18,6 +20,8 @@ const TopbarComponent: React.FC<unknown> = () => {
   const isNavigatingBackRef = React.useRef(false);
   const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
+
+  const { t } = useTranslation('ui-widget-topbar');
 
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
@@ -197,19 +201,27 @@ const TopbarComponent: React.FC<unknown> = () => {
   };
 
   return (
-    <Topbar
-      isLoggedIn={isLoggedIn}
-      sidebarVisible={sidebarVisible}
-      onSidebarToggle={handleSidebarToggle}
-      onAppWidgetClick={handleWidgetToggle}
-      onNotificationClick={handleNotificationClick}
-      onBackClick={handleBackClick}
-      onLoginClick={handleLoginClick}
-      currentLocation={location?.pathname}
-      onBrandClick={handleBrandClick}
-      modalSlotId={layoutConfig.modalSlotId}
-      snoozeNotifications={snoozeNotifications}
-    />
+    <ErrorBoundary
+      errorObj={{
+        type: t('script-error'),
+        title: t('Error in topbar widget'),
+      }}
+      logger={logger}
+    >
+      <Topbar
+        isLoggedIn={isLoggedIn}
+        sidebarVisible={sidebarVisible}
+        onSidebarToggle={handleSidebarToggle}
+        onAppWidgetClick={handleWidgetToggle}
+        onNotificationClick={handleNotificationClick}
+        onBackClick={handleBackClick}
+        onLoginClick={handleLoginClick}
+        currentLocation={location?.pathname}
+        onBrandClick={handleBrandClick}
+        modalSlotId={layoutConfig.modalSlotId}
+        snoozeNotifications={snoozeNotifications}
+      />
+    </ErrorBoundary>
   );
 };
 

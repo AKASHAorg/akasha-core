@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ArticlesOnboardingSteps from './onboarding/onboarding-steps';
 import Dashboard from '../pages/dashboard';
 import ArticlePage from '../pages/article';
@@ -25,19 +27,47 @@ import routes, {
 } from '../routes';
 
 const AppRoutes: React.FC<unknown> = () => {
-  const { baseRouteName } = useRootComponentProps();
+  const { baseRouteName, logger } = useRootComponentProps();
+  const { t } = useTranslation('app-articles');
+
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: t('script-error'),
+      title: t('Error in articles app'),
+    },
+    logger,
+  };
 
   return (
     <Router basename={baseRouteName}>
       <Routes>
-        <Route path={routes[HOME]} element={<Dashboard />} />
-
-        <Route path={routes[MY_ARTICLES]} element={<MyArticles />} />
-
+        <Route
+          path={routes[HOME]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <Dashboard />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[MY_ARTICLES]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <MyArticles />
+            </ErrorBoundary>
+          }
+        />
         {[routes[WRITE_ARTICLE], routes[EDIT_ARTICLE]].map((path, idx) => (
-          <Route key={path + idx} path={path} element={<ArticleEditor />} />
+          <Route
+            key={path + idx}
+            path={path}
+            element={
+              <ErrorBoundary {...errorBoundaryProps}>
+                <ArticleEditor />
+              </ErrorBoundary>
+            }
+          />
         ))}
-
         {[
           routes[ONBOARDING_STEP_ONE],
           routes[ONBOARDING_STEP_TWO],
@@ -46,15 +76,37 @@ const AppRoutes: React.FC<unknown> = () => {
           <Route
             key={path + idx}
             path={path}
-            element={<ArticlesOnboardingSteps activeIndex={idx} />}
+            element={
+              <ErrorBoundary {...errorBoundaryProps}>
+                <ArticlesOnboardingSteps activeIndex={idx} />
+              </ErrorBoundary>
+            }
           />
         ))}
-        <Route path={routes[SETTINGS]} element={<ArticleSettingsPage />} />
-
-        <Route path={routes[ARTICLE]} element={<ArticlePage />} />
-
-        <Route path={routes[ARTICLE_SETTINGS]} element={<ArticleCardSettingsPage />} />
-
+        <Route
+          path={routes[SETTINGS]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ArticleSettingsPage />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[ARTICLE]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ArticlePage />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[ARTICLE_SETTINGS]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ArticleCardSettingsPage />
+            </ErrorBoundary>
+          }
+        />
         <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
       </Routes>
     </Router>

@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-
 import { useGetLoginProfile, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-
+import ErrorBoundary, {
+  ErrorBoundaryProps,
+} from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import Helmet from '@akashaorg/design-system-core/lib/components/Helmet';
-
 import ChatPage from './chat-page';
 import InboxPage from './inbox/inbox-page';
 import SettingsPage from './settings-page';
@@ -18,8 +19,8 @@ const AppRoutes: React.FC<unknown> = () => {
   // const getHubUserCallback = useCallback(getHubUser, [loggedUserId]);
 
   const [fetchingMessages, setFetchingMessages] = useState(false);
-
-  const { baseRouteName } = useRootComponentProps();
+  const { baseRouteName, logger } = useRootComponentProps();
+  const { t } = useTranslation('app-messaging');
 
   // @TODO: update this
   const fetchMessagesCallback = useCallback(async () => {
@@ -57,6 +58,14 @@ const AppRoutes: React.FC<unknown> = () => {
     fetchMessagesCallback();
   }, [fetchMessagesCallback]);
 
+  const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
+    errorObj: {
+      type: t('script-error'),
+      title: t('Error in messaging app'),
+    },
+    logger,
+  };
+
   return (
     <Router basename={baseRouteName}>
       <Helmet>
@@ -65,21 +74,31 @@ const AppRoutes: React.FC<unknown> = () => {
       <Routes>
         <Route
           path={`${routes[MESSAGING]}`}
-          element={<InboxPage authenticatedProfile={authenticatedProfile} />}
-        ></Route>
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <InboxPage authenticatedProfile={authenticatedProfile} />
+            </ErrorBoundary>
+          }
+        />
         <Route
           path={`${routes[SETTINGS]}`}
-          element={<SettingsPage authenticatedProfile={authenticatedProfile} />}
-        ></Route>
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <SettingsPage authenticatedProfile={authenticatedProfile} />
+            </ErrorBoundary>
+          }
+        />
         <Route
           path={`${routes[CHAT]}/:did`}
           element={
-            <ChatPage
-              authenticatedProfile={authenticatedProfile}
-              fetchingMessages={fetchingMessages}
-            />
+            <ErrorBoundary {...errorBoundaryProps}>
+              <ChatPage
+                authenticatedProfile={authenticatedProfile}
+                fetchingMessages={fetchingMessages}
+              />
+            </ErrorBoundary>
           }
-        ></Route>
+        />
         <Route path="/" element={<Navigate to={routes[MESSAGING]} replace />} />
       </Routes>
     </Router>
