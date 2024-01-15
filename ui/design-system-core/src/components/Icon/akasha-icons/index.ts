@@ -2,7 +2,6 @@ import { IconType } from '@akashaorg/typings/lib/ui';
 
 import Akasha from './akasha';
 import AlignCenter from './align-center';
-import AlignJustify from './align-justify';
 import AlignLeft from './align-left';
 import AlignRight from './align-right';
 import AlignTextCenter from './align-text-center';
@@ -10,6 +9,7 @@ import AlignTextLeft from './align-text-left';
 import AlignTextRight from './align-text-right';
 import Antenna from './antenna';
 import BoldAlt from './bold-alt';
+import Caption from './caption';
 import DidKey from './didKey';
 import Discord from './discord';
 import Eth from './eth';
@@ -53,12 +53,12 @@ export type CustomIconTypes = Extract<
   | 'AlignCenter'
   | 'AlignLeft'
   | 'AlignRight'
-  | 'AlignJustify'
   | 'AlignTextCenter'
   | 'AlignTextLeft'
   | 'AlignTextRight'
   | 'Antenna'
   | 'BoldAlt'
+  | 'Caption'
   | 'DidKey'
   | 'Discord'
   | 'Eth'
@@ -97,7 +97,6 @@ export type CustomIconTypes = Extract<
 export {
   Akasha,
   AlignCenter,
-  AlignJustify,
   AlignLeft,
   AlignRight,
   AlignTextCenter,
@@ -105,6 +104,7 @@ export {
   AlignTextRight,
   Antenna,
   BoldAlt,
+  Caption,
   Discord,
   DidKey,
   Eth,
