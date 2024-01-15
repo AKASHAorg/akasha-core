@@ -62,7 +62,7 @@ const ListsPage: React.FC<unknown> = () => {
   };
 
   return (
-    <Card elevation={'1'} radius={16} padding={'p-4'}>
+    <Card elevation="1" radius={16} padding="p-4">
       <ListAppTopbar
         titleLabel={t('Your List')}
         resetLabel={t('Reset')}
@@ -95,9 +95,9 @@ const ListsPage: React.FC<unknown> = () => {
         {!listsReq?.isFetched && isLoggedIn && <Spinner />}
         {(!isLoggedIn || (listsReq?.isFetched && (!lists || !lists.length))) && (
           <DefaultEmptyCard
-            infoText={t('You don’t have any saved content in your List')}
+            infoText={t("You don't have any saved content in your List")}
             noBorder
-            image="/images/listsapp-empty-min.webp"
+            assetName="listsapp-empty-min"
           />
         )}
       </Stack>

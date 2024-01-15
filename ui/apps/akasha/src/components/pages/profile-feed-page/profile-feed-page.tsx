@@ -37,38 +37,36 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
         </title>
       </Helmet.Helmet>
 
-      <>
-        <BeamFeed
-          queryKey={`app-akasha-integration_${authenticatedProfile?.did?.id}-profile-antenna`}
-          estimatedHeight={150}
-          itemSpacing={8}
-          scrollerOptions={{ overscan: 10 }}
-          scrollTopIndicator={(listRect, onScrollToTop) => (
-            <ScrollTopWrapper placement={listRect.left}>
-              <ScrollTopButton hide={false} onClick={onScrollToTop} />
-            </ScrollTopWrapper>
-          )}
-          renderItem={itemData => (
-            <BeamCard
-              entryData={mapBeamEntryData(itemData.node)}
-              contentClickable={true}
-              onContentClick={() =>
-                getRoutingPlugin().navigateTo({
-                  appName: '@akashaorg/app-akasha-integration',
-                  getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
-                })
-              }
-              onReflect={() =>
-                getRoutingPlugin().navigateTo({
-                  appName: '@akashaorg/app-akasha-integration',
-                  getNavigationUrl: navRoutes =>
-                    `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
-                })
-              }
-            />
-          )}
-        />
-      </>
+      <BeamFeed
+        queryKey={`app-akasha-integration_${authenticatedProfile?.did?.id}-profile-antenna`}
+        estimatedHeight={150}
+        itemSpacing={8}
+        scrollerOptions={{ overscan: 10 }}
+        scrollTopIndicator={(listRect, onScrollToTop) => (
+          <ScrollTopWrapper placement={listRect.left}>
+            <ScrollTopButton hide={false} onClick={onScrollToTop} />
+          </ScrollTopWrapper>
+        )}
+        renderItem={itemData => (
+          <BeamCard
+            entryData={mapBeamEntryData(itemData.node)}
+            contentClickable={true}
+            onContentClick={() =>
+              getRoutingPlugin().navigateTo({
+                appName: '@akashaorg/app-akasha-integration',
+                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+              })
+            }
+            onReflect={() =>
+              getRoutingPlugin().navigateTo({
+                appName: '@akashaorg/app-akasha-integration',
+                getNavigationUrl: navRoutes =>
+                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
+              })
+            }
+          />
+        )}
+      />
     </Stack>
   );
 };

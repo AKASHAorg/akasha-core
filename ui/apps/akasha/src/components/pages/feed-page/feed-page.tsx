@@ -16,12 +16,13 @@ import ScrollTopButton from '@akashaorg/design-system-core/lib/components/Scroll
 import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 export type FeedPageProps = {
+  isLoggedIn: boolean;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   authenticatedProfile?: Profile;
 };
 
 const FeedPage: React.FC<FeedPageProps> = props => {
-  const { authenticatedProfile } = props;
+  const { authenticatedProfile, isLoggedIn } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
@@ -36,7 +37,7 @@ const FeedPage: React.FC<FeedPageProps> = props => {
   };
 
   const listHeader = React.useMemo(() => {
-    if (authenticatedProfile?.did?.id) {
+    if (isLoggedIn && authenticatedProfile?.did?.id) {
       return (
         <Stack customStyle="mb-4">
           <EditorPlaceholder
@@ -50,7 +51,7 @@ const FeedPage: React.FC<FeedPageProps> = props => {
         </Stack>
       );
     }
-  }, [authenticatedProfile, t]);
+  }, [isLoggedIn, authenticatedProfile, t]);
 
   return (
     <Stack fullWidth={true}>

@@ -37,7 +37,6 @@
     "fs-extra": "10.1.0",
     "@akashaorg/design-system-core": "*",
     "@types/faker": "5.5.8",
-    "@types/react-router-dom": "5.3.3",
     "faker": "5.5.3",
     "react-i18next": "12.2.0",
     "react-router-dom": "6.3.0",

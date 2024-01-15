@@ -324,169 +324,173 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   return (
-    <Stack>
-      <SearchStartCard
-        searchKeyword={searchKeyword}
-        handleSearch={handleSearch}
-        titleLabel={t('Search')}
-        inputPlaceholderLabel={t('Search')}
-        handleTopMenuClick={handleTopMenuClick}
-      >
-        <SwitchCard
-          activeButton={activeButton}
-          onTabClick={onTabClick}
-          buttonValues={buttonValues}
-          isLoggedIn={isLoggedIn}
-        />
-      </SearchStartCard>
-      {activeButton === ButtonValues.CONTENT && (
-        <DropDownFilter
-          dropdownMenuItems={dropDownMenuItems}
-          selected={selected}
-          setSelected={setSelected}
-          resetLabel={t('Reset')}
-          resetHandler={handleResetClick}
-        />
-      )}
-      {searchKeyword === '' && (
-        <DefaultEmptyCard
-          noBorder={true}
-          infoText=" ✨ Start searching for something ✨"
-          image="/images/search-1.webp"
-        />
-      )}
-
-      {!isFetchingSearch && searchKeyword && !searchState[activeButton]?.results?.length && (
-        <Stack customStyle="mt-8">
-          <InfoCard
-            titleLabel=""
-            bodyLabel={
-              <>
-                {t('Oops! Looks like there’re no results for the word ')}{' '}
-                <Text weight="bold">{searchKeyword}</Text> {t('in ')}{' '}
-                <Text weight="bold">{activeButton}</Text>.{' '}
-                {t(' Try searching for something else or try a different Category!')}
-              </>
-            }
-            bodyVariant="body1"
-            customWidthStyle="w-[90%] md:w-[50%] m-auto"
-            assetName="SearchApp_NotFound-min.webp"
+    <Card elevation="1" radius={16} padding="p-4">
+      <Stack>
+        <SearchStartCard
+          searchKeyword={searchKeyword}
+          handleSearch={handleSearch}
+          titleLabel={t('Search')}
+          inputPlaceholderLabel={t('Search')}
+          handleTopMenuClick={handleTopMenuClick}
+        >
+          <SwitchCard
+            activeButton={activeButton}
+            onTabClick={onTabClick}
+            buttonValues={buttonValues}
+            isLoggedIn={isLoggedIn}
           />
-        </Stack>
-      )}
+        </SearchStartCard>
 
-      <Stack customStyle="mt-4">
-        {activeButton === ButtonValues.PEOPLE &&
-          searchState[ButtonValues.PEOPLE].done &&
-          !!searchProfilesState.length && (
-            <>
-              {
-                <SearchResultCount
-                  countLabel={t('Found {{count}} results for {{searchKeyword}} in {{category}}', {
-                    count: 0 + searchProfilesState?.length,
-                    searchKeyword: searchKeyword,
-                    category: activeButton,
-                  })}
-                />
+        {activeButton === ButtonValues.CONTENT && (
+          <DropDownFilter
+            dropdownMenuItems={dropDownMenuItems}
+            selected={selected}
+            setSelected={setSelected}
+            resetLabel={t('Reset')}
+            resetHandler={handleResetClick}
+          />
+        )}
+
+        {searchKeyword === '' && (
+          <DefaultEmptyCard
+            noBorder={true}
+            infoText=" ✨ Start searching for something ✨"
+            assetName="search-1"
+          />
+        )}
+
+        {!isFetchingSearch && searchKeyword && !searchState[activeButton]?.results?.length && (
+          <Stack customStyle="mt-8">
+            <InfoCard
+              titleLabel=""
+              bodyLabel={
+                <>
+                  {t('Oops! Looks like there’re no results for the word ')}{' '}
+                  <Text weight="bold">{searchKeyword}</Text> {t('in ')}{' '}
+                  <Text weight="bold">{activeButton}</Text>.{' '}
+                  {t(' Try searching for something else or try a different Category!')}
+                </>
               }
-              {searchProfilesState?.map((profileData: Profile, index: number) => (
-                <Stack key={index} customStyle="pb-4">
-                  <ProfileSearchCard
-                    handleFollow={() => handleFollowProfile(profileData.did.id)}
-                    handleUnfollow={() => handleUnfollowProfile(profileData.did.id)}
-                    isFollowing={followedProfiles.includes(profileData?.did.id)}
-                    profileData={profileData}
-                    followLabel={t('Follow')}
-                    unfollowLabel={t('Unfollow')}
-                    descriptionLabel={t('About me')}
-                    followingLabel={t('Following')}
-                    followersLabel={t('Followers')}
-                    shareProfileLabel={t('Share')}
-                    profileAnchorLink={'/profile'}
-                    onClickProfile={() => handleProfileClick(profileData.did.id)}
-                    transformSource={transformSource}
+              bodyVariant="body1"
+              customWidthStyle="w-[90%] md:w-[50%] m-auto"
+              assetName="SearchApp_NotFound-min.webp"
+            />
+          </Stack>
+        )}
+
+        <Stack customStyle="mt-4">
+          {activeButton === ButtonValues.PEOPLE &&
+            searchState[ButtonValues.PEOPLE].done &&
+            !!searchProfilesState.length && (
+              <>
+                {
+                  <SearchResultCount
+                    countLabel={t('Found {{count}} results for {{searchKeyword}} in {{category}}', {
+                      count: 0 + searchProfilesState?.length,
+                      searchKeyword: searchKeyword,
+                      category: activeButton,
+                    })}
                   />
-                </Stack>
-              ))}
-            </>
-          )}
-        {activeButton === ButtonValues.TAGS &&
-          searchState[ButtonValues.TAGS].done &&
-          !!searchTagsState.length && (
-            <>
-              {
-                <SearchResultCount
-                  countLabel={t('Found {{count}} results for {{searchKeyword}} in {{category}}', {
-                    count: 0 + searchTagsState?.length,
-                    searchKeyword: searchKeyword,
-                    category: activeButton,
-                  })}
-                />
-              }
-              <Card customStyle="pb-0">
-                {searchTagsState?.map((tag: ITag, index: number) => (
-                  <Stack key={index}>
-                    <TagSearchCard
-                      tag={tag}
-                      subscribedTags={tagSubscriptionsState}
-                      subscribeLabel={t('Subscribe')}
-                      unsubscribeLabel={t('Unsubscribe')}
-                      tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
-                      onClickTag={() => handleTagClick(tag.name)}
-                      handleSubscribeTag={handleTagSubscribe(true)}
-                      handleUnsubscribeTag={handleTagSubscribe(false)}
+                }
+                {searchProfilesState?.map((profileData: Profile, index: number) => (
+                  <Stack key={index} customStyle="pb-4">
+                    <ProfileSearchCard
+                      handleFollow={() => handleFollowProfile(profileData.did.id)}
+                      handleUnfollow={() => handleUnfollowProfile(profileData.did.id)}
+                      isFollowing={followedProfiles.includes(profileData?.did.id)}
+                      profileData={profileData}
+                      followLabel={t('Follow')}
+                      unfollowLabel={t('Unfollow')}
+                      descriptionLabel={t('About me')}
+                      followingLabel={t('Following')}
+                      followersLabel={t('Followers')}
+                      shareProfileLabel={t('Share')}
+                      profileAnchorLink={'/profile'}
+                      onClickProfile={() => handleProfileClick(profileData.did.id)}
+                      transformSource={transformSource}
                     />
-                    {index < searchTagsState?.length - 1 && <Divider />}
                   </Stack>
                 ))}
-              </Card>
-            </>
-          )}
-        {activeButton === ButtonValues.CONTENT &&
-          searchState[ButtonValues.CONTENT].done &&
-          !!searchBeamsState.length && (
-            <>
-              {
-                <SearchResultCount
-                  countLabel={t('Found {{count}} results for {{searchKeyword}} in {{category}}', {
-                    count: 0 + searchBeamsState?.length,
-                    searchKeyword: searchKeyword,
-                    category: activeButton,
-                  })}
-                />
-              }
-              {searchBeamsState?.map(itemData => (
-                <EntryCardRenderer
-                  key={itemData.itemId}
-                  itemData={itemData}
-                  itemType={EntityTypes.BEAM}
-                  onContentClick={handleEntryNavigation}
-                  navigateTo={navigateTo}
-                  onAvatarClick={handleAvatarClick}
-                  onMentionClick={handleMentionClick}
-                  onTagClick={handleTagClick}
-                  contentClickable={true}
-                  moderatedContentLabel={t('This content has been moderated')}
-                  ctaLabel={t('See it anyway')}
-                />
-              ))}
-            </>
-          )}
-      </Stack>
-      {isFetchingSearch && (
-        <Stack align="center" justify="center" spacing="gap-y-8" customStyle="p-8 m-auto">
-          <Spinner
-            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-            size="xxl"
-            loadingLabel="Loading..."
-            partialSpinner={true}
-          />
-          <Text variant="footnotes2">{t('Searching...')}</Text>
+              </>
+            )}
+          {activeButton === ButtonValues.TAGS &&
+            searchState[ButtonValues.TAGS].done &&
+            !!searchTagsState.length && (
+              <>
+                {
+                  <SearchResultCount
+                    countLabel={t('Found {{count}} results for {{searchKeyword}} in {{category}}', {
+                      count: 0 + searchTagsState?.length,
+                      searchKeyword: searchKeyword,
+                      category: activeButton,
+                    })}
+                  />
+                }
+                <Card customStyle="pb-0">
+                  {searchTagsState?.map((tag: ITag, index: number) => (
+                    <Stack key={index}>
+                      <TagSearchCard
+                        tag={tag}
+                        subscribedTags={tagSubscriptionsState}
+                        subscribeLabel={t('Subscribe')}
+                        unsubscribeLabel={t('Unsubscribe')}
+                        tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
+                        onClickTag={() => handleTagClick(tag.name)}
+                        handleSubscribeTag={handleTagSubscribe(true)}
+                        handleUnsubscribeTag={handleTagSubscribe(false)}
+                      />
+                      {index < searchTagsState?.length - 1 && <Divider />}
+                    </Stack>
+                  ))}
+                </Card>
+              </>
+            )}
+          {activeButton === ButtonValues.CONTENT &&
+            searchState[ButtonValues.CONTENT].done &&
+            !!searchBeamsState.length && (
+              <>
+                {
+                  <SearchResultCount
+                    countLabel={t('Found {{count}} results for {{searchKeyword}} in {{category}}', {
+                      count: 0 + searchBeamsState?.length,
+                      searchKeyword: searchKeyword,
+                      category: activeButton,
+                    })}
+                  />
+                }
+                {searchBeamsState?.map(itemData => (
+                  <EntryCardRenderer
+                    key={itemData.itemId}
+                    itemData={itemData}
+                    itemType={EntityTypes.BEAM}
+                    onContentClick={handleEntryNavigation}
+                    navigateTo={navigateTo}
+                    onAvatarClick={handleAvatarClick}
+                    onMentionClick={handleMentionClick}
+                    onTagClick={handleTagClick}
+                    contentClickable={true}
+                    moderatedContentLabel={t('This content has been moderated')}
+                    ctaLabel={t('See it anyway')}
+                  />
+                ))}
+              </>
+            )}
         </Stack>
-      )}
-      {/* triggers intersection observer */}
-      <Stack padding="p-2" ref={loadmoreRef} />
-    </Stack>
+        {isFetchingSearch && (
+          <Stack align="center" justify="center" spacing="gap-y-8" customStyle="p-8 m-auto">
+            <Spinner
+              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              size="xxl"
+              loadingLabel="Loading..."
+              partialSpinner={true}
+            />
+            <Text variant="footnotes2">{t('Searching...')}</Text>
+          </Stack>
+        )}
+        {/* triggers intersection observer */}
+        <Stack padding="p-2" ref={loadmoreRef} />
+      </Stack>
+    </Card>
   );
 };
 

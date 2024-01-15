@@ -27,16 +27,12 @@
   <title>AKASHA World</title>
   <script src="https://cdn.jsdelivr.net/npm/@twind/core@1" crossorigin></script>
   <script src="/setup.twind.js"></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/react@18.1.0/umd/react.production.min.js"
-    integrity="sha256-jZ7REICtj3fBbBmJnVaiC5WfYBLqh2yHrcRGG33uaQg="
-    crossorigin="anonymous"
-  ></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/react-dom@18.1.0/umd/react-dom.production.min.js"
-    integrity="sha256-BeltXRd9g0ocrTTHTHk1Lw34g/Wy8yrKM0QyGcNUflg="
-    crossorigin="anonymous"
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"
+          integrity="sha256-S0lp+k7zWUMk2ixteM6HZvu8L9Eh//OVrt+ZfbCpmgY="
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"
+          integrity="sha256-IXWO0ITNDjfnNXIu5POVfqlgYoop36bDzhodR6LW5Pc="
+          crossorigin="anonymous"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/rxjs@7.3.0/dist/bundles/rxjs.umd.min.js"
     integrity="sha256-+LajWfl9lUQH5nq7ZlXg9PPXKELAHI+XplMxfyHswhU="
@@ -60,18 +56,14 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa@5.9.5/lib/umd/single-spa.min.js"
-          integrity="sha256-45Eozt1VWw1uUdz1Kky3okigg//xCnxE/LZJdy1t25I="
-          crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/single-spa-react@5.1.4/lib/umd/single-spa-react.js"
-          integrity="sha256-JIQDgDH4WQZ6a9YCreoISXaYNxROMuRdz34l5Xv3h4M="
-          crossorigin="anonymous"></script>
   <script src="/scripts/theme.js"></script>
 
   <meta name="importmap-type" content="systemjs-importmap"/>
   <script type="systemjs-importmap">
     {
       "imports": {
+        "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@6.0.0/lib/es2015/system/single-spa.min.js",
+        "single-spa-react": "https://cdn.jsdelivr.net/npm/single-spa-react@6.0.1/lib/system/single-spa-react.min.js",
         "@akashaorg/ui-app-loader": "/app-loader/index.js",
         "@akashaorg/awf-sdk": "/sdk/akasha.sdk.js",
         "@akashaorg/ui-awf-hooks": "/hooks/index.js"
