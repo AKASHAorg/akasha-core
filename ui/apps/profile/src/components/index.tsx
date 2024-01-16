@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import App from './app';
+import App from './App';
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-awf-hooks';
 
