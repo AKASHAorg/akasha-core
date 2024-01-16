@@ -2,7 +2,6 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-
 import AppRoutes from './app-routes';
 
 const Application: React.FC<unknown> = () => {

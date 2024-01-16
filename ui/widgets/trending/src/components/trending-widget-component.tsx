@@ -8,6 +8,7 @@ import {
   useGetFollowDocumentsByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { LatestProfiles, LatestTopics } from './cards';
 import { useGetIndexingDID } from '@akashaorg/ui-awf-hooks/lib/use-settings';
@@ -17,7 +18,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
   const { data } = useGetLogin();
   const isLoggedIn = !!data?.id;
   const authenticatedDID = data?.id;
-  const { plugins, uiEvents, navigateToModal } = useRootComponentProps();
+  const { plugins, uiEvents, logger, navigateToModal } = useRootComponentProps();
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const latestProfilesReq = useGetProfilesQuery(
@@ -116,37 +117,53 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
       )}
 
       {!latestTopicsError && (
-        <LatestTopics
-          titleLabel={t('Latest Topics')}
-          tagSubtitleLabel={t('mentions')}
-          subscribeLabel={t('Subscribe')}
-          subscribedLabel={t('Subscribed')}
-          unsubscribeLabel={t('Unsubscribe')}
-          noTagsLabel={t('No topics found!')}
-          isLoadingTags={latestTopicsLoading}
-          tags={latestTopics}
-          receivedTags={tagSubscriptions}
-          tagSubscriptionsId={tagSubscriptionsId}
-          isLoggedIn={isLoggedIn}
-          authenticatedDID={authenticatedDID}
-          onClickTopic={handleTopicClick}
-          showLoginModal={showLoginModal}
-          refetchTagSubscriptions={refetchTagSubscriptions}
-        />
+        <ErrorBoundary
+          errorObj={{
+            type: t('script-error'),
+            title: t('Error in latest topics widget'),
+          }}
+          logger={logger}
+        >
+          <LatestTopics
+            titleLabel={t('Latest Topics')}
+            tagSubtitleLabel={t('mentions')}
+            subscribeLabel={t('Subscribe')}
+            subscribedLabel={t('Subscribed')}
+            unsubscribeLabel={t('Unsubscribe')}
+            noTagsLabel={t('No topics found!')}
+            isLoadingTags={latestTopicsLoading}
+            tags={latestTopics}
+            receivedTags={tagSubscriptions}
+            tagSubscriptionsId={tagSubscriptionsId}
+            isLoggedIn={isLoggedIn}
+            authenticatedDID={authenticatedDID}
+            onClickTopic={handleTopicClick}
+            showLoginModal={showLoginModal}
+            refetchTagSubscriptions={refetchTagSubscriptions}
+          />
+        </ErrorBoundary>
       )}
 
       {!latestProfilesReq.isError && (
-        <LatestProfiles
-          titleLabel={t('Start Following')}
-          noProfilesLabel={t('No profiles found!')}
-          isLoadingProfiles={latestProfilesReq.isFetching}
-          profiles={latestProfiles}
-          followList={followList}
-          isLoggedIn={isLoggedIn}
-          authenticatedDID={authenticatedDID}
-          uiEvents={uiEvents}
-          onClickProfile={handleProfileClick}
-        />
+        <ErrorBoundary
+          errorObj={{
+            type: t('script-error'),
+            title: t('Error in latest profiles widget'),
+          }}
+          logger={logger}
+        >
+          <LatestProfiles
+            titleLabel={t('Start Following')}
+            noProfilesLabel={t('No profiles found!')}
+            isLoadingProfiles={latestProfilesReq.isFetching}
+            profiles={latestProfiles}
+            followList={followList}
+            isLoggedIn={isLoggedIn}
+            authenticatedDID={authenticatedDID}
+            uiEvents={uiEvents}
+            onClickProfile={handleProfileClick}
+          />
+        </ErrorBoundary>
       )}
     </Stack>
   );

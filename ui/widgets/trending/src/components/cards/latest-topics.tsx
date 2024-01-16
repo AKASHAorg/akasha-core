@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import getSDK from '@akashaorg/awf-sdk';
-import { AnalyticsCategories } from '@akashaorg/typings/lib/ui';
-import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateInterestsMutation,
   useUpdateInterestsMutation,
@@ -91,14 +89,13 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
   const sdk = getSDK();
 
-  const [createInterestsMutation, { loading, error }] = useCreateInterestsMutation({
+  const [createInterestsMutation, { loading }] = useCreateInterestsMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  const [updateInterestsMutation, { loading: updateLoading, error: updateError }] =
-    useUpdateInterestsMutation({
-      context: { source: sdk.services.gql.contextSources.composeDB },
-    });
+  const [updateInterestsMutation, { loading: updateLoading }] = useUpdateInterestsMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+  });
 
   useEffect(() => {
     if (!localTagsInitialized.current || receivedTags === null) return;
@@ -142,7 +139,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
 
             setTagsQueue(prev => pullAll(prev, arrDifference));
           },
-          onError: err => {
+          onError: () => {
             const arrDifference = receivedTags
               .filter(x => !localSubscribedTags.includes(x))
               .concat(localSubscribedTags.filter(x => !receivedTags.includes(x)));
@@ -177,7 +174,7 @@ export const LatestTopics: React.FC<LatestTopicsProps> = props => {
             setTagsQueue(prev => pullAll(prev, arrDifference));
             refetchTagSubscriptions();
           },
-          onError: err => {
+          onError: () => {
             const arrDifference = difference(receivedTags, localSubscribedTags).concat(
               difference(localSubscribedTags, receivedTags),
             );

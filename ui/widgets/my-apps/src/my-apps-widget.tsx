@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { withProviders, useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
@@ -19,7 +20,7 @@ import NoAppsMessage from './no-apps-message';
 const ICWidget: React.FC<unknown> = () => {
   const { t } = useTranslation('ui-widget-my-apps');
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const { worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
+  const { logger, worldConfig, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const { data } = useGetLogin();
   const isLoggedIn = !!data?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
@@ -121,46 +122,54 @@ const ICWidget: React.FC<unknown> = () => {
   };
 
   return (
-    <Stack padding="pb-4">
-      <Card elevation="1">
-        <Stack padding="pl-4 pt-4 pb-6">
-          <Text weight="bold" variant="body1">
-            {t('My Apps')}
-          </Text>
-        </Stack>
-        <Stack>
-          <TabList
-            labels={[t('World Apps'), t('Installed')]}
-            selected={activeTabIndex}
-            onChange={onTabChange}
-            tabListDivider
-          />
-        </Stack>
-        <Stack padding="pt-4 pb-4">
-          {activeTabIndex === 0 && filteredDefaultApps.length === 0 && <NoAppsMessage />}
-          {activeTabIndex === 1 && filteredInstalledApps.length === 0 && <NoAppsMessage />}
-
-          {activeTabIndex === 0 && filteredDefaultApps.length > 0 && (
-            <AppsList
-              apps={filteredDefaultApps.slice(0, 4)}
-              onAppClick={handleAppClick}
-              appAction={<Icon icon={<CheckIcon />} />}
+    <ErrorBoundary
+      errorObj={{
+        type: t('script-error'),
+        title: t('Error in my-apps widget'),
+      }}
+      logger={logger}
+    >
+      <Stack padding="pb-4">
+        <Card elevation="1">
+          <Stack padding="pl-4 pt-4 pb-6">
+            <Text weight="bold" variant="body1">
+              {t('My Apps')}
+            </Text>
+          </Stack>
+          <Stack>
+            <TabList
+              labels={[t('World Apps'), t('Installed')]}
+              selected={activeTabIndex}
+              onChange={onTabChange}
+              tabListDivider
             />
-          )}
+          </Stack>
+          <Stack padding="pt-4 pb-4">
+            {activeTabIndex === 0 && filteredDefaultApps.length === 0 && <NoAppsMessage />}
+            {activeTabIndex === 1 && filteredInstalledApps.length === 0 && <NoAppsMessage />}
 
-          {activeTabIndex === 1 && filteredInstalledApps.length > 0 && (
-            <Stack direction="column" spacing="gap-y-4">
+            {activeTabIndex === 0 && filteredDefaultApps.length > 0 && (
               <AppsList
-                apps={filteredInstalledApps.slice(0, 4)}
+                apps={filteredDefaultApps.slice(0, 4)}
                 onAppClick={handleAppClick}
-                appAction={<Button>{t('Open')}</Button>}
-                onAppActionClick={handleInstalledAppActionClick}
+                appAction={<Icon icon={<CheckIcon />} />}
               />
-            </Stack>
-          )}
-        </Stack>
-      </Card>
-    </Stack>
+            )}
+
+            {activeTabIndex === 1 && filteredInstalledApps.length > 0 && (
+              <Stack direction="column" spacing="gap-y-4">
+                <AppsList
+                  apps={filteredInstalledApps.slice(0, 4)}
+                  onAppClick={handleAppClick}
+                  appAction={<Button>{t('Open')}</Button>}
+                  onAppActionClick={handleInstalledAppActionClick}
+                />
+              </Stack>
+            )}
+          </Stack>
+        </Card>
+      </Stack>
+    </ErrorBoundary>
   );
 };
 
