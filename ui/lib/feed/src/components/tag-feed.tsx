@@ -49,6 +49,7 @@ const TagFeed = (props: TagFeedProps) => {
 
   const {
     beams,
+    called,
     fetchNextPage,
     fetchPreviousPage,
     hasNextPage,
@@ -141,7 +142,8 @@ const TagFeed = (props: TagFeedProps) => {
         <Virtualizer<ReturnType<typeof useTags>['beams'][0]>
           header={header}
           footer={footer}
-          emptyListCard={emptyListCard}
+          queryCalled={called}
+          emptyListIndicator={emptyListCard}
           restorationKey={queryKey}
           itemSpacing={itemSpacing}
           estimatedHeight={estimatedHeight}

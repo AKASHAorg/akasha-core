@@ -139,8 +139,6 @@ export const useTags = (tag: string) => {
 
         const extracted = extractData(results.data);
 
-        console.log('extracted', extracted);
-
         if (variables?.after) {
           extracted.pageInfo = {
             startCursor: extracted.pageInfo.endCursor,
@@ -194,6 +192,7 @@ export const useTags = (tag: string) => {
 
   React.useEffect(() => {
     if (tag !== currentTag) {
+      setState({ beams: [] });
       fetchInitialData();
       setCurrentTag(tag);
     }

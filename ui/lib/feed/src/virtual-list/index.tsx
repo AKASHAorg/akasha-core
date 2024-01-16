@@ -19,7 +19,7 @@ export type VirtualizerProps<T> = {
   restorationKey: string;
   header?: React.ReactElement;
   footer?: React.ReactElement;
-  emptyListCard?: React.ReactElement;
+  emptyListIndicator?: React.ReactElement;
   estimatedHeight: VirtualListRendererProps<unknown>['estimatedHeight'];
   items: T[];
   itemKeyExtractor: (item: T) => string;
@@ -35,6 +35,7 @@ export type VirtualizerProps<T> = {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
   isLoading?: boolean;
+  queryCalled?: boolean;
 };
 
 const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -56,7 +57,8 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     hasNextPage,
     hasPreviousPage,
     isLoading,
-    emptyListCard,
+    queryCalled,
+    emptyListIndicator,
   } = props;
 
   const vlistRef = React.useRef<VirtualListInterface>();
@@ -166,7 +168,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     return 'auto';
   }, []);
 
-  if (!items.length && emptyListCard) return emptyListCard;
+  if (!items.length && queryCalled && !isLoading && emptyListIndicator) return emptyListIndicator;
 
   return (
     <>
