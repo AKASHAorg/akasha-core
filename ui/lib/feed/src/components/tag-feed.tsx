@@ -61,10 +61,6 @@ const TagFeed = (props: TagFeedProps) => {
     errors,
   } = useTags(tag);
 
-  React.useEffect(() => {
-    fetchInitialData();
-  }, [tag]);
-
   const lastCursors = React.useRef({ next: null, prev: null });
   const prevBeams = React.useRef([]);
 
@@ -118,7 +114,7 @@ const TagFeed = (props: TagFeedProps) => {
 
   return (
     <>
-      {isLoading && <Spinner />}
+      {/* {isLoading && <Spinner />} */}
       {hasErrors && (
         <ErrorLoader
           type="script-error"
@@ -126,22 +122,8 @@ const TagFeed = (props: TagFeedProps) => {
           details={<>{errors}</>}
         />
       )}
-      {!hasErrors && !isLoading && called && beams.length === 0 && (
-        <Stack customStyle="mt-8">
-          <InfoCard
-            titleLabel={
-              <>
-                {t('There are no content found for ')} <strong>#{tag}</strong>
-              </>
-            }
-            bodyLabel={<>{t('Be the first one to create a beam for this topic! 🚀')}</>}
-            bodyVariant="body1"
-            publicImgPath="/images"
-            assetName="longbeam-notfound"
-          />
-        </Stack>
-      )}
-      {!hasErrors && !isLoading && beams.length > 0 && (
+
+      {!hasErrors && (
         <Virtualizer<ReturnType<typeof useTags>['beams'][0]>
           header={header}
           footer={footer}
@@ -163,6 +145,21 @@ const TagFeed = (props: TagFeedProps) => {
           isLoading={isLoading}
         />
       )}
+      {/* {!hasErrors && !isLoading && called && beams.length === 0 && (
+        <Stack customStyle="mt-8">
+          <InfoCard
+            titleLabel={
+              <>
+                {t('There are no content found for ')} <strong>#{tag}</strong>
+              </>
+            }
+            bodyLabel={<>{t('Be the first one to create a beam for this topic! 🚀')}</>}
+            bodyVariant="body1"
+            publicImgPath="/images"
+            assetName="longbeam-notfound"
+          />
+        </Stack>
+      )} */}
     </>
   );
 };

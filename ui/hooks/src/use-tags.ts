@@ -24,6 +24,7 @@ export const useTags = (tag: string) => {
   }>({ beams: [] });
 
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
+  const [currentTag, setCurrentTag] = React.useState<string>('');
 
   const [fetchBeams, beamsQuery] = useGetIndexedStreamLazyQuery({
     variables: {
@@ -138,6 +139,8 @@ export const useTags = (tag: string) => {
 
         const extracted = extractData(results.data);
 
+        console.log('extracted', extracted);
+
         if (variables?.after) {
           extracted.pageInfo = {
             startCursor: extracted.pageInfo.endCursor,
@@ -157,7 +160,7 @@ export const useTags = (tag: string) => {
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
-      if (beamsQuery.called) return;
+      if (beamsQuery.called && tag === currentTag) return;
 
       const initialVars: GetIndexedStreamQueryVariables = {
         indexer: sdk.services.gql.indexingDID,
@@ -168,7 +171,7 @@ export const useTags = (tag: string) => {
       }
       await fetchInitialBeams(initialVars);
     },
-    [beamsQuery.called, fetchInitialBeams],
+    [beamsQuery.called, fetchInitialBeams, tag],
   );
 
   React.useEffect(() => {
@@ -190,13 +193,11 @@ export const useTags = (tag: string) => {
   };
 
   React.useEffect(() => {
-    if (beamsQuery.data) {
-      setState({
-        beams: extractData(beamsQuery.data).edges,
-        pageInfo: extractData(beamsQuery.data).pageInfo,
-      });
+    if (tag !== currentTag) {
+      fetchInitialData();
+      setCurrentTag(tag);
     }
-  }, [beamsQuery.data]);
+  }, [tag]);
 
   return {
     beams: state.beams,

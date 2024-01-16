@@ -14,9 +14,9 @@ import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
+import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 
@@ -152,7 +152,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
-      {loadingCount && <Spinner />}
+      {loadingCount && <TagFeedHeaderLoader />}
       {countQueryError && (
         <ErrorLoader
           type="script-error"
