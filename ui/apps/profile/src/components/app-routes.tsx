@@ -9,6 +9,7 @@ import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/co
 import ErrorBoundary, {
   ErrorBoundaryProps,
 } from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
+import EngagementTab from './pages/profile-engagement/engagement-tab';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../routes';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import {
@@ -18,7 +19,6 @@ import {
   Outlet,
   ScrollRestoration,
 } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { useApolloClient } from '@apollo/client';
 import {
   GetProfileByDidDocument,
@@ -28,7 +28,6 @@ import {
 import { getStats } from '@akashaorg/ui-awf-hooks/lib/use-profile-stats';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import EngagementTab from './pages/profile-engagement/engagement-tab';
 
 type ApolloClient = ReturnType<typeof useApolloClient>;
 interface RouterContext {
@@ -53,10 +52,19 @@ const RootComponent = () => {
       <ErrorBoundary {...errorBoundaryProps}>
         <Outlet />
       </ErrorBoundary>
-      <TanStackRouterDevtools />
+      <TanStackRouterDevtools position="bottom-right" />
     </>
   );
 };
+
+const TanStackRouterDevtools =
+  process.env.NODE_ENV === 'production'
+    ? () => null
+    : React.lazy(() =>
+        import('@tanstack/router-devtools').then(res => ({
+          default: res.TanStackRouterDevtools,
+        })),
+      );
 
 const rootRoute = rootRouteWithContext<RouterContext>()({
   component: RootComponent,
