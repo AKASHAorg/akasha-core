@@ -1,21 +1,23 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useBlocksPublishing } from './use-blocks-publishing';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   TrashIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { Header } from './header';
 import { Footer } from './footer';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useBlocksPublishing } from './use-blocks-publishing';
 
 export type uiState = 'editor' | 'tags' | 'blocks';
 
@@ -77,6 +79,14 @@ export const BeamEditor: React.FC = () => {
 
   const handleTagsBtn = () => {
     setUiState('tags');
+
+    /**
+     * copy existing tags, if any,
+     * to new tags state
+     */
+    if (editorTags.length > 0) {
+      setNewTags(editorTags);
+    }
   };
 
   const handleAddBlock = selectedBlock => {
@@ -92,7 +102,7 @@ export const BeamEditor: React.FC = () => {
   const targetKeys = [' ', ',', 'Enter'];
   const targetCodes = ['Space', 'Comma', 'Enter'];
 
-  const allTags = [...editorTags, ...newTags];
+  const allTags = [...new Set([...editorTags, ...newTags])];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tag = e.currentTarget.value;
@@ -112,20 +122,14 @@ export const BeamEditor: React.FC = () => {
      * is less than max specified and tag is not previously
      * added
      */
-    if (tagValue.length > 2 && allTags.length < 10 && !editorTags.includes(tagValue)) {
-      setNewTags(prev => [...new Set([...prev, tagValue])]);
+    if (tagValue.length > 2 && allTags.length < 10 && !newTags.includes(tagValue)) {
+      setNewTags(prev => [...prev, tagValue]);
     }
     setTagValue('');
   };
 
   const handleDeleteTag = (tag: string) => {
-    /**
-     * check if tag is previously saved, remove it from editorTags,
-     * else remove from newTags
-     */
-    if (editorTags.includes(tag)) {
-      setEditorTags(editorTags.filter(_tag => _tag !== tag));
-    } else {
+    if (newTags.includes(tag)) {
       setNewTags(newTags.filter(_tag => _tag !== tag));
     }
   };
@@ -136,7 +140,7 @@ export const BeamEditor: React.FC = () => {
      * then set uiState to 'editor'
      */
     if (newTags.length > 0) {
-      setEditorTags(allTags);
+      setEditorTags(newTags);
       setNewTags([]);
     }
     setUiState('editor');
@@ -261,20 +265,32 @@ export const BeamEditor: React.FC = () => {
                 'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
               )}
             </Text>
-            <TextField
-              value={tagValue}
-              onChange={handleChange}
+            <SearchBar
+              inputValue={tagValue}
+              inputPlaceholderLabel={t('Search for tags')}
+              onInputChange={handleChange}
               onKeyUp={handleKeyUp}
-              placeholder={t('Search for tags')}
-              type="text"
+              onSearch={() => {
+                /** */
+              }}
+              responsive={true}
             />
-            {allTags.length === 0 && (
+            {newTags.length === 0 && (
               <Text variant="body2" weight="bold">
                 {t("You haven't added any tags yet")}
               </Text>
             )}
-            <Stack direction="row" spacing="gap-2" customStyle="flex-wrap mt-2">
-              {allTags.map((tag, index) => (
+            <Stack fullWidth direction="row" align="center" justify="end" spacing="gap-2">
+              <Button variant="text" label={t('Clear All')} onClick={() => setNewTags([])} />
+              <Button
+                variant="primary"
+                label={t('Add')}
+                disabled={tagValue.length < 3}
+                onClick={addTag}
+              />
+            </Stack>
+            <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
+              {newTags.map((tag, index) => (
                 <Pill
                   key={index}
                   label={tag}
@@ -301,9 +317,9 @@ export const BeamEditor: React.FC = () => {
         tagsLabel={t('Tags')}
         publishLabel={t('Beam it')}
         blocksNumber={blocksInUse.length}
-        tagsNumber={allTags.length}
+        tagsNumber={uiState === 'tags' ? newTags.length : allTags.length}
         disableBeamPublishing={isPublishing || disablePublishing}
-        disableTagsSave={isPublishing || newTags.length < 1}
+        disableTagsSave={isPublishing || JSON.stringify(newTags) === JSON.stringify(editorTags)}
       />
     </Card>
   );
