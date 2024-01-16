@@ -31,13 +31,9 @@ import ListNumbered from './list-numbered';
 import Metamask from './metamask';
 import NoEth from './no-eth';
 import Shield from './shield';
-import Strikethrough from './strikethrough';
 import Solana from './solana';
 import Telegram from './telegram';
 import TextIcon from './text-icon';
-import TextcaseLower from './textcase-lower';
-import TextcaseSentence from './textcase-sentence';
-import TextcaseUpper from './textcase-upper';
 import Twitter from './twitter';
 import Underline from './underline';
 import Vibe from './vibe';
@@ -80,13 +76,9 @@ export type CustomIconTypes = Extract<
   | 'Metamask'
   | 'NoEth'
   | 'Shield'
-  | 'Strikethrough'
   | 'Solana'
   | 'Telegram'
   | 'TextIcon'
-  | 'TextcaseLower'
-  | 'TextcaseSentence'
-  | 'TextcaseUpper'
   | 'Twitter'
   | 'Underline'
   | 'Vibe'
@@ -126,13 +118,9 @@ export {
   Metamask,
   NoEth,
   Shield,
-  Strikethrough,
   Solana,
   Telegram,
   TextIcon,
-  TextcaseLower,
-  TextcaseSentence,
-  TextcaseUpper,
   Twitter,
   Underline,
   Vibe,

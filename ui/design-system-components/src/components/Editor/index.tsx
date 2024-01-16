@@ -50,6 +50,12 @@ import LinkPreview from '../LinkPreview';
 
 const MAX_LENGTH = 500;
 
+export type ToolbarButtonProps = {
+  format: string;
+  icon: JSX.Element;
+  style?: string;
+};
+
 /**
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
  * @param editorState - the state of the editor is controlled from the parent component
@@ -496,7 +502,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
 
   const publishDisabled = publishDisabledInternal || disablePublish;
 
-  const BlockButton = ({ format, icon }) => {
+  const BlockButton = ({ format, icon, style }: ToolbarButtonProps) => {
     const editor = useSlate();
     const active = CustomEditor.isBlockActive(
       editor,
@@ -513,7 +519,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         <Stack
           align="center"
           justify="center"
-          customStyle="relative w-6 h-6 rounded-l-sm"
+          customStyle={`relative w-6 h-6 ${style}`}
           background={
             active
               ? { light: 'secondaryLight/30', dark: 'grey4' }
@@ -526,7 +532,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
     );
   };
 
-  const MarkButton = ({ format, icon }) => {
+  const MarkButton = ({ format, icon, style }: ToolbarButtonProps) => {
     const editor = useSlate();
     const active = CustomEditor.isMarkActive(editor, format);
     return (
@@ -539,7 +545,7 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
         <Stack
           align="center"
           justify="center"
-          customStyle="relative w-6 h-6 rounded-l-sm"
+          customStyle={`relative w-6 h-6 ${style}`}
           background={
             active
               ? { light: 'secondaryLight/30', dark: 'grey4' }
@@ -622,14 +628,18 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
             >
               {withToolbar && (
                 <Stack direction="row">
-                  <MarkButton format="bold" icon={<BoldAlt />} />
+                  <MarkButton format="bold" icon={<BoldAlt />} style={'rounded-l-sm'} />
                   <MarkButton format="italic" icon={<Italic />} />
                   <MarkButton format="underline" icon={<Underline />} />
                   <BlockButton format="left" icon={<AlignTextLeft />} />
                   <BlockButton format="center" icon={<AlignTextCenter />} />
                   <BlockButton format="right" icon={<AlignTextRight />} />
                   <BlockButton format="numbered-list" icon={<ListNumbered />} />
-                  <BlockButton format="bulleted-list" icon={<ListBulleted />} />
+                  <BlockButton
+                    format="bulleted-list"
+                    icon={<ListBulleted />}
+                    style={'rounded-r-sm'}
+                  />
                 </Stack>
               )}
               <Stack direction="row" align="center" spacing="gap-x-2">
