@@ -1,18 +1,32 @@
 import React from 'react';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { I18nextProvider } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import AppRoutes from './app-routes';
+import { RouterProvider } from '@tanstack/react-router';
+import { createRouter } from './app-routes';
+import { useApolloClient } from '@apollo/client';
 
-const App: React.FC<unknown> = () => {
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: ReturnType<typeof createRouter>;
+  }
+}
+
+type AppProps = {
+  baseRouteName: string;
+};
+
+const App: React.FC<AppProps> = props => {
+  const { baseRouteName } = props;
   const { getTranslationPlugin } = useRootComponentProps();
+  const apolloClient = useApolloClient();
 
   return (
-    <React.Suspense fallback={<Spinner />}>
-      <I18nextProvider i18n={getTranslationPlugin().i18n}>
-        <AppRoutes />
-      </I18nextProvider>
-    </React.Suspense>
+    <I18nextProvider i18n={getTranslationPlugin().i18n}>
+      <Stack direction="column" spacing="gap-y-4">
+        <RouterProvider router={createRouter(baseRouteName, apolloClient)} />
+      </Stack>
+    </I18nextProvider>
   );
 };
 

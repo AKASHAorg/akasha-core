@@ -3,12 +3,13 @@ import TabList from '@akashaorg/design-system-core/lib/components/TabList';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { FOLLOWERS, FOLLOWING } from '../../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import ProfileHeader from '../../profile-header';
 import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from '@tanstack/react-router';
 
 export type EngagementTabProps = {
-  navigateTo: (args: NavigateToParams) => void;
+  navigateTo?: (args: NavigateToParams) => void;
 };
 
 const TAB_INDEX_TO_ROUTE_MAP = {
@@ -24,7 +25,7 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
 const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => {
   const { children, navigateTo } = props;
   const { t } = useTranslation('app-profile');
-  const { profileId } = useParams<{ profileId: string }>();
+  const { profileId } = useParams({ strict: false });
 
   const pathname = location.pathname.substring(location.pathname.lastIndexOf('/'));
 
@@ -39,17 +40,20 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
   };
 
   return (
-    <Card radius={20} elevation="1" customStyle="py-4">
-      <TabList
-        selected={activeTab}
-        labels={[t('Followers'), t('Following')]}
-        onChange={selectedIndex => {
-          setActiveTab(selectedIndex);
-          onTabChange(selectedIndex);
-        }}
-      />
-      <Stack customStyle="mt-4">{children}</Stack>
-    </Card>
+    <>
+      <ProfileHeader />
+      <Card radius={20} elevation="1" customStyle="py-4">
+        <TabList
+          selected={activeTab}
+          labels={[t('Followers'), t('Following')]}
+          onChange={selectedIndex => {
+            setActiveTab(selectedIndex);
+            onTabChange(selectedIndex);
+          }}
+        />
+        <Stack customStyle="mt-4">{children}</Stack>
+      </Card>
+    </>
   );
 };
 

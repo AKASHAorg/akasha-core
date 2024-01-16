@@ -7,10 +7,10 @@ import EntryError from '@akashaorg/design-system-components/lib/components/Profi
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import routes, { FOLLOWERS } from '../../../routes';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useParams } from 'react-router-dom';
+import { useParams } from '@tanstack/react-router';
 import {
-  useGetFollowDocumentsByDidQuery,
-  useGetFollowersListByDidQuery,
+  useGetFollowDocumentsByDidSuspenseQuery,
+  useGetFollowersListByDidSuspenseQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   transformSource,
@@ -20,22 +20,18 @@ import {
   useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 
-export type FollowersPageProps = {
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-};
-
-const FollowersPage: React.FC<FollowersPageProps> = props => {
-  const { showLoginModal } = props;
+const FollowersPage: React.FC<unknown> = () => {
   const { data: loginData, loading: authenticating } = useGetLogin();
 
-  const { profileId } = useParams<{ profileId: string }>();
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { profileId } = useParams({ strict: false });
+  const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const [loadMore, setLoadingMore] = useState(false);
   const authenticatedDID = loginData?.id;
   const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
 
-  const { data, fetchMore, loading, error } = useGetFollowersListByDidQuery({
+  const { data, fetchMore, error } = useGetFollowersListByDidSuspenseQuery({
+    fetchPolicy: 'cache-first',
     variables: {
       id: profileId,
       first: 10,
@@ -60,7 +56,8 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     () => followers.map(follower => follower.did?.akashaProfile?.id).filter(id => !!id),
     [followers],
   );
-  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
+  const { data: followDocuments } = useGetFollowDocumentsByDidSuspenseQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       id: authenticatedDID,
       following: followProfileIds,
@@ -69,7 +66,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     skip: !isLoggedIn || !followProfileIds.length,
   });
 
-  if (loading || authenticating)
+  if (authenticating)
     return (
       <EngagementTab navigateTo={navigateTo}>
         <ProfileEngagementLoading />
@@ -88,6 +85,13 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
       ? followDocuments?.node?.akashaFollowList?.edges?.map(edge => edge?.node)
       : null,
   );
+
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    navigateToModal({
+      name: 'login',
+      redirectTo,
+    });
+  };
 
   const onProfileClick = (profileId: string) => {
     navigateTo?.({

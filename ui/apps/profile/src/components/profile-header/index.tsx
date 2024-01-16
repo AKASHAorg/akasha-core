@@ -1,47 +1,60 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useCallback } from 'react';
 import routes, { EDIT } from '../../routes';
 import FollowButton from './follow-button';
 import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Badge from '@akashaorg/design-system-core/lib/components/Badge';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
   FlagIcon,
   LinkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
-import { ProfileHeader } from '@akashaorg/design-system-components/lib/components/Profile';
+import {
+  ProfileHeaderLoading,
+  ProfileHeader as ProfileHeaderPresentation,
+} from '@akashaorg/design-system-components/lib/components/Profile';
 import { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
-import { EntityTypes, ModalNavigationOptions, NavigateToParams } from '@akashaorg/typings/lib/ui';
+import {
+  EntityTypes,
+  ModalNavigationOptions,
+  NotificationEvents,
+  NotificationTypes,
+} from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { useParams } from '@tanstack/react-router';
+import {
+  transformSource,
+  useValidDid,
+  useGetLogin,
+  useRootComponentProps,
+  hasOwn,
+} from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { transformSource, hasOwn, useValidDid, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
-export type ProfileHeaderViewProps = {
-  showNSFW?: boolean;
-  handleCopyFeedback: () => void;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  navigateToModal: (opts: ModalNavigationOptions) => void;
-  navigateTo: (args: NavigateToParams) => void;
-};
-
-const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
+const ProfileHeader: React.FC<unknown> = () => {
   const { t } = useTranslation('app-profile');
-  const { showNSFW, handleCopyFeedback, showLoginModal, navigateToModal, navigateTo } = props;
-  const { profileId } = useParams<{ profileId: string }>();
+  const { profileId } = useParams({ strict: false });
   const { data: loginData } = useGetLogin();
+  const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const { data, error } = useGetProfileByDidSuspenseQuery({
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
     variables: { id: profileId },
   });
+  const { validDid, isEthAddress } = useValidDid(profileId, !!data?.node);
   const { akashaProfile: profileData } =
-    data.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
-  const authenticatedDID = loginData?.id;
-  const isLoggedIn = !!loginData?.id;
-  const isViewer = profileData?.did?.id === authenticatedDID;
+    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+  const showLoginModal = useCallback(
+    (redirectTo?: { modal: ModalNavigationOptions }) => {
+      navigateToModal({
+        name: 'login',
+        redirectTo,
+      });
+    },
+    [navigateToModal],
+  );
 
-  const { validDid, isEthAddress } = useValidDid(profileId, !!profileData);
+  const isLoggedIn = !!loginData?.id;
 
   const handleFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes, user: string) => () => {
@@ -52,14 +65,9 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
     },
     [isLoggedIn, navigateToModal, showLoginModal],
   );
-
-  const profileNotFound = !profileData && !validDid;
-
-  if (
-    profileNotFound ||
-    (profileData?.nsfw && !showNSFW && authenticatedDID !== profileData.did.id)
-  )
-    return null;
+  const authenticatedDID = loginData?.id;
+  const isViewer = profileData?.did?.id === authenticatedDID;
+  const navigateTo = getRoutingPlugin().navigateTo;
 
   if (error)
     return (
@@ -74,7 +82,13 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   const handleCopy = () => {
     const profileUrl = new URL(location.pathname, location.origin).href;
     navigator.clipboard.writeText(profileUrl).then(() => {
-      handleCopyFeedback();
+      uiEvents.next({
+        event: NotificationEvents.ShowNotification,
+        data: {
+          type: NotificationTypes.Success,
+          message: t('Profile link copied'),
+        },
+      });
     });
   };
 
@@ -104,8 +118,8 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   ];
 
   return (
-    <ProfileHeader
-      did={profileData ? profileData.did : { id: profileId }}
+    <ProfileHeaderPresentation
+      profileId={profileData?.did?.id ? profileData.did.id : profileId}
       validAddress={profileData ? true : isEthAddress || validDid}
       background={profileData?.background}
       avatar={profileData?.avatar}
@@ -149,4 +163,10 @@ const ProfileHeaderView: React.FC<ProfileHeaderViewProps> = props => {
   );
 };
 
-export default ProfileHeaderView;
+export default () => (
+  <>
+    <Suspense fallback={<ProfileHeaderLoading />}>
+      <ProfileHeader />
+    </Suspense>
+  </>
+);

@@ -20,7 +20,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 
 export type HeaderProps = {
-  did: Profile['did'];
+  profileId: Profile['did']['id'];
   validAddress?: boolean;
   background?: Profile['background'];
   avatar?: Profile['avatar'];
@@ -38,7 +38,7 @@ export type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({
-  did,
+  profileId,
   validAddress = true,
   background,
   avatar,
@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({
   transformSource,
 }) => {
   const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
-  const seed = getImageFromSeed(did.id, 3);
+  const seed = getImageFromSeed(profileId, 3);
   const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
   const backgroundUrl = transformSource(background?.default)?.src ?? coverImageFallback;
 
@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({
           <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
             <Stack customStyle={avatarContainer}>
               <Avatar
-                profileId={did.id}
+                profileId={profileId}
                 size="xl"
                 avatar={transformSource(avatar?.default)}
                 alternativeAvatars={avatar?.alternatives?.map(alternative =>
@@ -93,7 +93,7 @@ const Header: React.FC<HeaderProps> = ({
                 {metadata}
               </Stack>
               <DidField
-                did={did.id}
+                did={profileId}
                 isValid={validAddress}
                 copiable={Boolean(copyLabel && copiedLabel)}
                 copyLabel={copyLabel}
