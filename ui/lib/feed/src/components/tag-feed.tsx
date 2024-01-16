@@ -49,7 +49,6 @@ const TagFeed = (props: TagFeedProps) => {
 
   const {
     beams,
-    called,
     fetchNextPage,
     fetchPreviousPage,
     hasNextPage,
@@ -112,9 +111,24 @@ const TagFeed = (props: TagFeedProps) => {
     await onReset();
   };
 
+  const emptyListCard = (
+    <Stack customStyle="mt-8">
+      <InfoCard
+        titleLabel={
+          <>
+            {t('There are no content found for ')} <strong>#{tag}</strong>
+          </>
+        }
+        bodyLabel={<>{t('Be the first one to create a beam for this topic! 🚀')}</>}
+        bodyVariant="body1"
+        publicImgPath="/images"
+        assetName="longbeam-notfound"
+      />
+    </Stack>
+  );
+
   return (
     <>
-      {/* {isLoading && <Spinner />} */}
       {hasErrors && (
         <ErrorLoader
           type="script-error"
@@ -127,6 +141,7 @@ const TagFeed = (props: TagFeedProps) => {
         <Virtualizer<ReturnType<typeof useTags>['beams'][0]>
           header={header}
           footer={footer}
+          emptyListCard={emptyListCard}
           restorationKey={queryKey}
           itemSpacing={itemSpacing}
           estimatedHeight={estimatedHeight}
@@ -145,21 +160,6 @@ const TagFeed = (props: TagFeedProps) => {
           isLoading={isLoading}
         />
       )}
-      {/* {!hasErrors && !isLoading && called && beams.length === 0 && (
-        <Stack customStyle="mt-8">
-          <InfoCard
-            titleLabel={
-              <>
-                {t('There are no content found for ')} <strong>#{tag}</strong>
-              </>
-            }
-            bodyLabel={<>{t('Be the first one to create a beam for this topic! 🚀')}</>}
-            bodyVariant="body1"
-            publicImgPath="/images"
-            assetName="longbeam-notfound"
-          />
-        </Stack>
-      )} */}
     </>
   );
 };
