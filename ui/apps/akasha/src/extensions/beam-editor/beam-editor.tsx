@@ -135,14 +135,8 @@ export const BeamEditor: React.FC = () => {
   };
 
   const handleClickSave = () => {
-    /**
-     * if there are new tags, save and reset newTags state,
-     * then set uiState to 'editor'
-     */
-    if (newTags.length > 0) {
-      setEditorTags(newTags);
-      setNewTags([]);
-    }
+    setEditorTags(newTags);
+    setNewTags([]);
     setUiState('editor');
   };
 
@@ -281,9 +275,14 @@ export const BeamEditor: React.FC = () => {
               </Text>
             )}
             <Stack fullWidth direction="row" align="center" justify="end" spacing="gap-2">
-              <Button variant="text" label={t('Clear All')} onClick={() => setNewTags([])} />
               <Button
-                variant="primary"
+                variant="text"
+                label={t('Clear All')}
+                disabled={!newTags.length}
+                onClick={() => setNewTags([])}
+              />
+              <Button
+                variant="secondary"
                 label={t('Add')}
                 disabled={tagValue.length < 3}
                 onClick={addTag}
@@ -294,6 +293,7 @@ export const BeamEditor: React.FC = () => {
                 <Pill
                   key={index}
                   label={tag}
+                  active={!editorTags.includes(tag)}
                   icon={<XMarkIcon />}
                   iconDirection="right"
                   onPillClick={() => handleDeleteTag(tag)}
