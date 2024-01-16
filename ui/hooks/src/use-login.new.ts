@@ -53,16 +53,21 @@ export function useGetLogin(onError?: (error: Error) => void) {
       } catch (err) {
         logError('getCurrentUser', err);
         setError(err);
-      } finally {
-        setLoading(false);
       }
     };
     getCurrentUser();
   }, []);
 
+  useEffect(() => {
+    if (loginData?.id) {
+      setLoading(false);
+    }
+  }, [loginData?.id]);
+
   useGlobalLogin({
     onLogin: data => {
       setLoginData(data);
+      setLoading(false);
     },
     onLogout: () => {
       setLoginData(null);
@@ -73,6 +78,10 @@ export function useGetLogin(onError?: (error: Error) => void) {
       }
       logError('useGetLogin', payload.error);
       setError(payload.error);
+      setLoading(false);
+    },
+    onAuthenticating: () => {
+      setLoading(true);
     },
   });
 

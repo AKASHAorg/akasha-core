@@ -7,10 +7,12 @@ import { AUTH_EVENTS, CurrentUser, WEB3_EVENTS } from '@akashaorg/typings/lib/sd
 export type OnLoginSuccessHandler = (data: CurrentUser) => void;
 export type OnLogoutSuccessHandler = () => void;
 export type OnErrorHandler = (payload: { error: Error }) => void;
+export type OnAuthenticatingHandler = () => void;
 
 export interface UseGlobalLoginProps {
   onLogin: OnLoginSuccessHandler;
   onLogout: OnLogoutSuccessHandler;
+  onAuthenticating: OnAuthenticatingHandler;
   onError?: OnErrorHandler;
 }
 
@@ -29,10 +31,11 @@ export interface UseGlobalLoginProps {
  * ```
  */
 export const useGlobalLogin = (props: UseGlobalLoginProps): void => {
-  const { onError, onLogin, onLogout } = props;
+  const { onError, onLogin, onLogout, onAuthenticating } = props;
   const onErrorHandler = React.useRef(onError);
   const onLoginHandler = React.useRef(onLogin);
   const onLogoutHandler = React.useRef(onLogout);
+  const onAuthenticatingHandler = React.useRef(onAuthenticating);
 
   const sdk = React.useRef(getSDK());
 
@@ -63,6 +66,21 @@ export const useGlobalLogin = (props: UseGlobalLoginProps): void => {
         onLogoutHandler.current();
       },
       error: createErrorHandler('useGlobalLogin.logoutCall', false, onErrorHandler.current),
+    });
+    return () => sub.unsubscribe();
+  }, []);
+
+  React.useEffect(() => {
+    const authenticatingCall = sdk.current.api.globalChannel.pipe(
+      filter(payload => {
+        return payload.event === AUTH_EVENTS.CONNECT_ADDRESS;
+      }),
+    );
+    const sub = authenticatingCall.subscribe({
+      next: () => {
+        onAuthenticatingHandler.current();
+      },
+      error: createErrorHandler('useGlobalLogin.authenticating', false, onErrorHandler.current),
     });
     return () => sub.unsubscribe();
   }, []);
