@@ -13,8 +13,8 @@ jest.spyOn(loginHook, 'useGetLogin').mockReturnValue({
   error: null,
 });
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+jest.mock('@tanstack/react-router', () => ({
+  ...jest.requireActual('@tanstack/react-router'),
   useLocation: jest.fn().mockImplementation(() => {
     return mockLocationValue;
   }),
