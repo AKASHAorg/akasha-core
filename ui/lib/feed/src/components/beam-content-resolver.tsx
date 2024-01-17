@@ -2,21 +2,28 @@ import React from 'react';
 import {
   hasOwn,
   mapBeamEntryData,
+  useGetLogin,
   useIndividualBeam,
   useRootComponentProps,
 } from '@akashaorg/ui-awf-hooks';
 import BeamCard from './cards/beam-card';
+import EntryLoadingPlaceholder from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+
 export type BeamContentResolverProps = {
   beamId: string;
 };
 
-const BeamContentResolver: React.FC<React.PropsWithChildren<BeamContentResolverProps>> = ({
-  beamId,
-}) => {
-  const { beam } = useIndividualBeam({ beamId });
+const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId }) => {
+  const { beam, isLoading } = useIndividualBeam({ beamId });
   const { getRoutingPlugin } = useRootComponentProps();
+  const { data: loginData, loading: authenticating } = useGetLogin();
+  const isLoggedIn = !!loginData?.id;
+
+  if (isLoading) return <EntryLoadingPlaceholder />;
 
   if (beam && hasOwn(beam, 'id')) {
+    if (beam.nsfw && !isLoggedIn && !authenticating && !isLoading) return null;
+
     return (
       <BeamCard
         showHiddenContent={true}
