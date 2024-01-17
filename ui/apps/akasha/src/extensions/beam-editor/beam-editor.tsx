@@ -137,7 +137,7 @@ export const BeamEditor: React.FC = () => {
                       'h-8 w-8 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
                     }
                   >
-                    <Icon size="lg" icon={block.icon} />
+                    <Icon size="md" icon={block.icon} />
                   </Stack>
                   <button onClick={() => removeBlockFromList(block.order)}>
                     <Stack
@@ -147,7 +147,7 @@ export const BeamEditor: React.FC = () => {
                     >
                       <Icon
                         icon={<TrashIcon />}
-                        size="lg"
+                        size="md"
                         color={{ light: 'errorLight', dark: 'errorDark' }}
                       />
                     </Stack>

@@ -31,7 +31,7 @@ const EditorMeter: React.FC<EditorMeterProps> = props => {
   return (
     <Meter
       max={max}
-      size={24}
+      size={32}
       thickness={2}
       value={value}
       background={background}
