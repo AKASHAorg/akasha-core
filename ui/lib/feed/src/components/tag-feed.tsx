@@ -75,7 +75,7 @@ const TagFeed = (props: TagFeedProps) => {
   }
 
   const handleInitialFetch = async (restoreItem?: RestoreItem) => {
-    await fetchInitialData(restoreItem);
+    await fetchInitialData(true, restoreItem);
   };
 
   const handleFetch = React.useCallback(
@@ -138,7 +138,7 @@ const TagFeed = (props: TagFeedProps) => {
         />
       )}
 
-      {!hasErrors && (
+      {!hasErrors && tag && (
         <Virtualizer<ReturnType<typeof useTags>['beams'][0]>
           header={header}
           footer={footer}
