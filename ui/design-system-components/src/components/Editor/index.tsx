@@ -10,7 +10,7 @@ import {
 } from 'slate';
 import isUrl from 'is-url';
 import { withHistory } from 'slate-history';
-import { Editable, Slate, withReact, ReactEditor, RenderElementProps, useSlate } from 'slate-react';
+import { Editable, Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
 import {
   IEntryData,
@@ -23,7 +23,7 @@ import {
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+
 import {
   BoldAlt,
   Italic,
@@ -37,7 +37,7 @@ import {
 import { ArrowPathIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import EditorMeter from '@akashaorg/design-system-core/lib/components/EditorMeter';
 
-import { CustomEditor, TEXT_ALIGN_TYPES } from './helpers';
+import { CustomEditor } from './helpers';
 import { TagPopover } from './tag-popover';
 import { serializeToPlainText } from './serialize';
 import { MentionPopover } from './mention-popover';
@@ -45,16 +45,11 @@ import { editorDefaultValue } from './initialValue';
 import { renderElement, renderLeaf } from './renderers';
 import { withMentions, withTags, withLinks } from './plugins';
 
+import { MarkButton, BlockButton } from './formatting-buttons';
 import EmbedBox from '../EmbedBox';
 import LinkPreview from '../LinkPreview';
 
 const MAX_LENGTH = 500;
-
-export type ToolbarButtonProps = {
-  format: string;
-  icon: JSX.Element;
-  style?: string;
-};
 
 /**
  * @param uploadRequest - upload a file and returns a promise that resolves to an array
@@ -502,61 +497,6 @@ const EditorBox: React.FC<EditorBoxProps> = props => {
 
   const publishDisabled = publishDisabledInternal || disablePublish;
 
-  const BlockButton = ({ format, icon, style }: ToolbarButtonProps) => {
-    const editor = useSlate();
-    const active = CustomEditor.isBlockActive(
-      editor,
-      format,
-      TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type',
-    );
-    return (
-      <button
-        onClick={event => {
-          event.preventDefault();
-          CustomEditor.toggleBlock(editor, format);
-        }}
-      >
-        <Stack
-          align="center"
-          justify="center"
-          customStyle={`relative w-6 h-6 ${style}`}
-          background={
-            active
-              ? { light: 'secondaryLight/30', dark: 'grey4' }
-              : { light: 'grey8', dark: 'grey3' }
-          }
-        >
-          <Icon icon={icon} customStyle="absolute" solid accentColor />
-        </Stack>
-      </button>
-    );
-  };
-
-  const MarkButton = ({ format, icon, style }: ToolbarButtonProps) => {
-    const editor = useSlate();
-    const active = CustomEditor.isMarkActive(editor, format);
-    return (
-      <button
-        onClick={event => {
-          event.preventDefault();
-          CustomEditor.toggleMark(editor, format);
-        }}
-      >
-        <Stack
-          align="center"
-          justify="center"
-          customStyle={`relative w-6 h-6 ${style}`}
-          background={
-            active
-              ? { light: 'secondaryLight/30', dark: 'grey4' }
-              : { light: 'grey8', dark: 'grey3' }
-          }
-        >
-          <Icon icon={icon} customStyle="absolute" solid accentColor />
-        </Stack>
-      </button>
-    );
-  };
   return (
     <Stack
       justify="between"

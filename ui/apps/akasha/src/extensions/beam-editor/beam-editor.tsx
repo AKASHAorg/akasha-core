@@ -134,20 +134,20 @@ export const BeamEditor: React.FC = () => {
                     align="center"
                     justify="center"
                     customStyle={
-                      'h-6 w-6 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
+                      'h-8 w-8 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
                     }
                   >
-                    <Icon size="xs" icon={block.icon} />
+                    <Icon size="lg" icon={block.icon} />
                   </Stack>
                   <button onClick={() => removeBlockFromList(block.order)}>
                     <Stack
                       align="center"
                       justify="center"
-                      customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
+                      customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
                     >
                       <Icon
                         icon={<TrashIcon />}
-                        size="xs"
+                        size="lg"
                         color={{ light: 'errorLight', dark: 'errorDark' }}
                       />
                     </Stack>
@@ -188,9 +188,9 @@ export const BeamEditor: React.FC = () => {
                     <Stack
                       align="center"
                       justify="center"
-                      customStyle={'h-6 w-6 group relative rounded-full bg(grey9 dark:grey5)'}
+                      customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
                     >
-                      <Icon size="xs" icon={block.icon} />
+                      <Icon size="lg" icon={block.icon} />
                     </Stack>
                     <Text>{block.displayName}</Text>
                   </Stack>

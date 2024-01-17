@@ -103,7 +103,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
         {!isLoading && (
           <>
             {isLoggedIn && (
-              <Button icon={<PowerIcon />} size="xs" iconOnly={true} onClick={logoutClickHandler} />
+              <Button icon={<PowerIcon />} size="sm" iconOnly={true} onClick={logoutClickHandler} />
             )}
             {!isLoggedIn && (
               <Button size="sm" variant="primary" label="Connect" onClick={loginClickHandler} />

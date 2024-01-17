@@ -285,11 +285,22 @@ export const ImageEditorBlock = (
     setCaption(e.currentTarget.value);
   };
 
+  const handleCloseMenu = () => {
+    setUiState('gallery');
+  };
+
   return (
     <>
       {uiState === 'menu' && (
         <Card background={{ dark: 'grey3', light: 'grey9' }}>
           <Stack direction="column">
+            {imageGalleryImages.length > 0 && (
+              <Stack direction="row" justify="end">
+                <button onClick={handleCloseMenu}>
+                  <Icon icon={<XMarkIcon />} accentColor />
+                </button>
+              </Stack>
+            )}
             <Stack customStyle="pb-8">
               <Button
                 label={t('Add an image from device')}
@@ -358,7 +369,7 @@ export const ImageEditorBlock = (
           <Text>{t('Uploading image')}</Text>
         </Stack>
       )}
-      {uiState === 'gallery' && imageGalleryImages.length !== 0 && (
+      {uiState === 'gallery' && imageGalleryImages.length > 0 && (
         <Stack spacing="gap-1">
           <Stack alignSelf={alignState}>
             <ImageBlockGallery images={imageGalleryImages} />
