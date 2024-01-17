@@ -1,13 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
+import { hasOwn, mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { BeamCard, BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
 import type { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
+import { AkashaBeam } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 
 export type ProfilePageProps = {
   authenticatedProfile: Profile;
@@ -47,25 +48,28 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => (
-          <BeamCard
-            entryData={mapBeamEntryData(itemData.node)}
-            contentClickable={true}
-            onContentClick={() =>
-              getRoutingPlugin().navigateTo({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
-              })
-            }
-            onReflect={() =>
-              getRoutingPlugin().navigateTo({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes =>
-                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
-              })
-            }
-          />
-        )}
+        renderItem={itemData => {
+          if (hasOwn(itemData.node, 'content'))
+            return (
+              <BeamCard
+                entryData={mapBeamEntryData(itemData.node)}
+                contentClickable={true}
+                onContentClick={() =>
+                  getRoutingPlugin().navigateTo({
+                    appName: '@akashaorg/app-akasha-integration',
+                    getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+                  })
+                }
+                onReflect={() =>
+                  getRoutingPlugin().navigateTo({
+                    appName: '@akashaorg/app-akasha-integration',
+                    getNavigationUrl: navRoutes =>
+                      `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
+                  })
+                }
+              />
+            );
+        }}
       />
     </Stack>
   );

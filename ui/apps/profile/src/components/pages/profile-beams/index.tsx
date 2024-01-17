@@ -1,6 +1,7 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import {
+  hasOwn,
   mapBeamEntryData,
   useAnalytics,
   useGetLogin,
@@ -42,25 +43,28 @@ const ProfileBeamsPage: React.FC<unknown> = () => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => (
-          <BeamCard
-            entryData={mapBeamEntryData(itemData.node)}
-            contentClickable={true}
-            onContentClick={() =>
-              navigateTo.current({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
-              })
-            }
-            onReflect={() =>
-              navigateTo.current({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes =>
-                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
-              })
-            }
-          />
-        )}
+        renderItem={itemData => {
+          if (hasOwn(itemData.node, 'content'))
+            return (
+              <BeamCard
+                entryData={mapBeamEntryData(itemData.node)}
+                contentClickable={true}
+                onContentClick={() =>
+                  navigateTo.current({
+                    appName: '@akashaorg/app-akasha-integration',
+                    getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
+                  })
+                }
+                onReflect={() =>
+                  navigateTo.current({
+                    appName: '@akashaorg/app-akasha-integration',
+                    getNavigationUrl: navRoutes =>
+                      `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
+                  })
+                }
+              />
+            );
+        }}
         trackEvent={analyticsActions.trackEvent}
       />
     </Stack>
