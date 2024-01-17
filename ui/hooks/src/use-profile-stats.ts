@@ -4,20 +4,10 @@ import { useEffect, useState } from 'react';
 
 const STAT_CACHE_KEY = '@statCacheKey';
 
-/**
- * Utility to fetch profile stats and cache data for prefetching
- * @example getStats
- * ```typescript
- * const profileStats = getStats('did:pkh:eip155:5:0xadc81c169...');
-
- * console.log(profileStatsQuery.data)
- * ```
- */
-export const getStats = async (profileId: string) => {
+const getStats = async (profileId: string) => {
   if (!profileId) return null;
   const sdk = getSDK();
   const res = await sdk.api.profile.getProfileStats(profileId);
-  localStorage.setItem(STAT_CACHE_KEY, JSON.stringify(res));
   return res;
 };
 
@@ -32,7 +22,7 @@ type Stats = Awaited<ReturnType<typeof getStats>>;
  * console.log(profileStatsQuery.data)
  * ```
  */
-export function useProfileStats(profileId: string, cacheOnly?: boolean) {
+export function useProfileStats(profileId: string, readCache?: boolean) {
   const [loading, setLoading] = useState(false);
   const [stat, setStat] = useState<Stats>(null);
   const [error, setError] = useState(null);
@@ -41,12 +31,20 @@ export function useProfileStats(profileId: string, cacheOnly?: boolean) {
     const fetchStats = async () => {
       setLoading(true);
       try {
-        if (cacheOnly) {
-          const statsCache = JSON.parse(localStorage.getItem(STAT_CACHE_KEY)) || null;
-          setStat(statsCache);
-        } else {
-          setStat(await getStats(profileId));
+        if (readCache) {
+          const statCache = JSON.parse(localStorage.getItem(STAT_CACHE_KEY)) || {
+            data: {
+              totalFollowing: 0,
+              totalFollowers: 0,
+              totalBeams: 0,
+              totalTopics: 0,
+            },
+          };
+          setStat(statCache);
         }
+        const stats = await getStats(profileId);
+        setStat(stats);
+        localStorage.setItem(STAT_CACHE_KEY, JSON.stringify(stats));
       } catch (err) {
         setError(err);
         logError('useProfileStats.getStats', err);
@@ -55,7 +53,7 @@ export function useProfileStats(profileId: string, cacheOnly?: boolean) {
       }
     };
     fetchStats();
-  }, [cacheOnly, profileId]);
+  }, [readCache, profileId]);
 
   return {
     data: stat?.data,

@@ -33,6 +33,7 @@ export type HeaderProps = {
   followElement?: ReactElement;
   publicImagePath: string;
   metadata?: ReactElement;
+  actionElement?: ReactElement;
   handleEdit?: () => void;
   transformSource: (src: Image) => Image;
 };
@@ -51,6 +52,7 @@ const Header: React.FC<HeaderProps> = ({
   followElement,
   publicImagePath,
   metadata,
+  actionElement,
   handleEdit,
   transformSource,
 }) => {
@@ -112,12 +114,10 @@ const Header: React.FC<HeaderProps> = ({
                     iconOnly
                   />
                 ) : (
-                  followElement && (
-                    <>
-                      <Button icon={<EnvelopeIcon />} variant="primary" greyBg iconOnly />
-                      {followElement}
-                    </>
-                  )
+                  <>
+                    {actionElement}
+                    {followElement}
+                  </>
                 )}
 
                 {menuItems && (

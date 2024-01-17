@@ -22,7 +22,6 @@ import {
   NotificationTypes,
 } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
-import { useParams } from '@tanstack/react-router';
 import {
   transformSource,
   useValidDid,
@@ -32,13 +31,17 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
-const ProfileHeader: React.FC<unknown> = () => {
+type ProfileHeaderProps = {
+  profileId: string;
+};
+const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
+  const { profileId } = props;
   const { t } = useTranslation('app-profile');
-  const { profileId } = useParams({ strict: false });
   const { data: loginData } = useGetLogin();
   const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
   const { data, error } = useGetProfileByDidSuspenseQuery({
-    fetchPolicy: 'cache-first',
+    fetchPolicy:
+      'cache-first' /*data is prefetched during route matching as a result we prefer reading cache first here  */,
     variables: { id: profileId },
   });
   const { validDid, isEthAddress } = useValidDid(profileId, !!data?.node);
@@ -163,10 +166,10 @@ const ProfileHeader: React.FC<unknown> = () => {
   );
 };
 
-export default () => (
+export default ({ profileId }: ProfileHeaderProps) => (
   <>
     <Suspense fallback={<ProfileHeaderLoading />}>
-      <ProfileHeader />
+      <ProfileHeader profileId={profileId} />
     </Suspense>
   </>
 );

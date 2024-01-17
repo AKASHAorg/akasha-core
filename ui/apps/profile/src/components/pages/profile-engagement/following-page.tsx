@@ -7,10 +7,9 @@ import EntryError from '@akashaorg/design-system-components/lib/components/Profi
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import routes, { FOLLOWING } from '../../../routes';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import { useParams } from '@tanstack/react-router';
 import {
   useGetFollowDocumentsByDidSuspenseQuery,
-  useGetFollowingListByDidSuspenseQuery,
+  useGetFollowingListByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   transformSource,
@@ -20,10 +19,15 @@ import {
   useGetLogin,
   useGetLoginProfile,
 } from '@akashaorg/ui-awf-hooks';
+import { ENGAGEMENTS_PER_PAGE } from './types';
 
-const FollowingPage: React.FC<unknown> = () => {
+type FollowingPageProps = {
+  profileId: string;
+};
+
+const FollowingPage: React.FC<FollowingPageProps> = props => {
+  const { profileId } = props;
   const { data: loginData, loading: authenticating } = useGetLogin();
-  const { profileId } = useParams({ strict: false });
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
   const [loadMore, setLoadingMore] = useState(false);
   const authenticatedDID = loginData?.id;
@@ -31,11 +35,12 @@ const FollowingPage: React.FC<unknown> = () => {
   const navigateTo = getRoutingPlugin().navigateTo;
 
   const authenticatedProfileDataReq = useGetLoginProfile();
-  const { data, error, fetchMore } = useGetFollowingListByDidSuspenseQuery({
-    fetchPolicy: 'cache-first',
+  const { data, error, fetchMore } = useGetFollowingListByDidQuery({
+    fetchPolicy:
+      'cache-only' /*data is prefetched during route matching as a result we read from cache here */,
     variables: {
       id: profileId,
-      first: 10,
+      first: ENGAGEMENTS_PER_PAGE,
     },
     skip: !isLoggedIn,
   });
@@ -63,19 +68,15 @@ const FollowingPage: React.FC<unknown> = () => {
   });
   const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
 
-  if (authenticating)
+  if (
+    !data /*data is undefined until prefetching is complete therefore we display skeleton */ ||
+    authenticating
+  )
     return (
-      <EngagementTab navigateTo={navigateTo}>
+      <EngagementTab>
         <ProfileEngagementLoading />
       </EngagementTab>
     );
-
-  if (!isLoggedIn) {
-    return navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
-    });
-  }
 
   const followList = getFollowList(
     followDocuments?.node && hasOwn(followDocuments.node, 'akashaFollowList')
@@ -104,7 +105,7 @@ const FollowingPage: React.FC<unknown> = () => {
   };
 
   return (
-    <EngagementTab navigateTo={navigateTo}>
+    <EngagementTab profileId={profileId} navigateTo={navigateTo}>
       {error && (
         <Stack customStyle="mt-8">
           <EntryError onError={onError} />

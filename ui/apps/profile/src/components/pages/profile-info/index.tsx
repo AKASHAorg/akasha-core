@@ -12,9 +12,7 @@ import {
   ProfileBio,
   ProfileLinks,
   ProfileLoading,
-  ProfileStatLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
-import { useParams } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
@@ -26,10 +24,14 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
-const ProfileInfoPage: React.FC<unknown> = () => {
+type ProfileInfoPageProps = {
+  profileId: string;
+};
+
+const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
+  const { profileId } = props;
   const { t } = useTranslation('app-profile');
   const { getRoutingPlugin, navigateToModal, uiEvents } = useRootComponentProps();
-  const { profileId } = useParams({ strict: false });
   const { data: loginData, loading: authenticating } = useGetLogin();
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy: 'cache-first',
@@ -39,7 +41,7 @@ const ProfileInfoPage: React.FC<unknown> = () => {
     skip: !profileId,
   });
   const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileId, !!data?.node);
-  const { data: statData, loading: statsLoading } = useProfileStats(profileId, true);
+  const { data: statData } = useProfileStats(profileId, true);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
   const [showNSFW, setShowNSFW] = useState(false);
@@ -62,7 +64,11 @@ const ProfileInfoPage: React.FC<unknown> = () => {
     });
   };
 
-  if (authenticating || validDidCheckLoading) return <ProfileLoading />;
+  if (
+    authenticating /*check if authentication is in progress to prevent showing nsfw card to own profile during login */ ||
+    validDidCheckLoading
+  )
+    return <ProfileLoading />;
 
   if (error)
     return (
@@ -122,7 +128,7 @@ const ProfileInfoPage: React.FC<unknown> = () => {
 
   return (
     <>
-      <ProfileHeader />
+      <ProfileHeader profileId={profileId} />
       <Stack direction="column" spacing="gap-y-4" fullWidth>
         {profileData?.description && (
           <ProfileBio title={t('Bio')} biography={profileData.description} />
@@ -140,7 +146,6 @@ const ProfileInfoPage: React.FC<unknown> = () => {
             buttonClickHandler={goToEditProfile}
           />
         )}
-        {statsLoading && <ProfileStatLoading />}
         {statData && (
           <ProfileStatsView
             profileId={profileId}

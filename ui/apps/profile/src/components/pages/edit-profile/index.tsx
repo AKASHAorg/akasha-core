@@ -13,24 +13,20 @@ import {
   useIndexProfileMutation,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import {
-  transformSource,
-  hasOwn,
-  useRootComponentProps,
-  useGetLogin,
-} from '@akashaorg/ui-awf-hooks';
-import { useParams } from '@tanstack/react-router';
+import { transformSource, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-content';
 import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/components/EditProfile/types';
-import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
-const EditProfilePage: React.FC<unknown> = () => {
+type EditProfilePageProps = {
+  profileId: string;
+};
+
+const EditProfilePage: React.FC<EditProfilePageProps> = props => {
+  const { profileId } = props;
   const { t } = useTranslation('app-profile');
-  const { data: loginData, loading: authenticating } = useGetLogin();
-  const { profileId } = useParams({ strict: false });
   const { getRoutingPlugin, uiEvents } = useRootComponentProps();
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
   const [activeTab, setActiveTab] = useState(0);
@@ -38,12 +34,9 @@ const EditProfilePage: React.FC<unknown> = () => {
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialAkashaProfileInput | null>(null);
-  const authenticatedDID = loginData?.id;
-  const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const { data, error } = useGetProfileByDidSuspenseQuery({
     variables: { id: profileId },
-    skip: !isLoggedIn,
   });
 
   const onCompleted = () => {
@@ -87,15 +80,6 @@ const EditProfilePage: React.FC<unknown> = () => {
         details={t('We cannot show this profile right now')}
       />
     );
-
-  if (authenticating) return <ProfileLoading />;
-
-  if (!isLoggedIn || authenticatedDID !== profileId) {
-    navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
-    });
-  }
 
   const navigateToProfileInfoPage = () => {
     navigateTo({
@@ -164,7 +148,7 @@ const EditProfilePage: React.FC<unknown> = () => {
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
-      <Card radius={20} elevation="1" customStyle="py-4 h-full mb-4">
+      <Card radius={20} elevation="1" customStyle="py-4 h-full">
         <EditProfile
           defaultValues={
             profileData

@@ -12,19 +12,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
-type AppProps = {
-  baseRouteName: string;
-};
-
-const App: React.FC<AppProps> = props => {
-  const { baseRouteName } = props;
-  const { getTranslationPlugin } = useRootComponentProps();
+const App: React.FC<unknown> = () => {
+  const { getTranslationPlugin, baseRouteName } = useRootComponentProps();
   const apolloClient = useApolloClient();
 
   return (
     <I18nextProvider i18n={getTranslationPlugin().i18n}>
-      <Stack direction="column" spacing="gap-y-4">
-        <RouterProvider router={createRouter(baseRouteName, apolloClient)} />
+      <Stack direction="column" spacing="gap-y-4" customStyle="mb-4">
+        <RouterProvider
+          router={createRouter({
+            baseRouteName,
+            apolloClient,
+          })}
+        />
       </Stack>
     </I18nextProvider>
   );
