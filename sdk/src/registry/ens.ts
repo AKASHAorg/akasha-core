@@ -172,6 +172,7 @@ class AWF_ENS {
 
   /**
    * Returns ENS name associated with the ethereum address
+   * @deprecated
    */
   @validate(EthAddressSchema)
   async resolveAddress(ethAddress: EthAddress) {
