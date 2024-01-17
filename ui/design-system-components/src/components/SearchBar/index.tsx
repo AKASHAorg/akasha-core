@@ -11,13 +11,15 @@ export type SearchBarProps = {
   responsive?: boolean;
   searchInputSize?: string;
   iconSize?: IconProps['size'];
+  customStyle?: string;
   onSearch: (keyword: string) => void;
   onKeyUp?: (ev: React.KeyboardEvent<HTMLInputElement>) => void;
   onInputChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const SearchBar: React.FC<SearchBarProps> = props => {
-  const { inputValue, onInputChange, inputPlaceholderLabel, onSearch, onKeyUp } = props;
+  const { inputValue, customStyle, onInputChange, inputPlaceholderLabel, onSearch, onKeyUp } =
+    props;
 
   const handleSearch = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
@@ -36,7 +38,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
       direction="row"
       spacing="gap-y-2"
       align="center"
-      customStyle="px-2.5 bg-grey9 dark:bg-grey3 rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark"
+      customStyle={`px-2.5 bg-grey9 dark:bg-grey3 rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark ${customStyle}`}
     >
       <input
         type="text"

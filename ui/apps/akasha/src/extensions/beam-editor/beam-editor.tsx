@@ -46,6 +46,7 @@ export const BeamEditor: React.FC = () => {
   const [tagValue, setTagValue] = React.useState('');
   const [editorTags, setEditorTags] = React.useState([]);
   const [newTags, setNewTags] = React.useState([]);
+  const [errorMessage, setErrorMessage] = React.useState(null);
 
   const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
@@ -68,6 +69,18 @@ export const BeamEditor: React.FC = () => {
       });
     }
   }, [blocksInUse]);
+
+  React.useEffect(() => {
+    if (newTags.length === 10) {
+      setErrorMessage('Tags limit reached');
+    } else if (tagValue.length > 30) {
+      setErrorMessage('Tag is over the 30 characters limit');
+    } else if (newTags.includes(tagValue)) {
+      setErrorMessage('Tag added already, please try a different one');
+    } else {
+      setErrorMessage(null);
+    }
+  }, [tagValue, newTags]);
 
   const handleNsfwCheckbox = () => {
     setIsNsfw(!isNsfw);
@@ -106,7 +119,7 @@ export const BeamEditor: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tag = e.currentTarget.value;
-    if (targetKeys.includes(tag.charAt(tag.length - 1)) || tag.length > 30) return;
+    if (targetKeys.includes(tag.charAt(tag.length - 1))) return;
     setTagValue(tag);
   };
 
@@ -122,10 +135,15 @@ export const BeamEditor: React.FC = () => {
      * is less than max specified and tag is not previously
      * added
      */
-    if (tagValue.length > 2 && allTags.length < 10 && !newTags.includes(tagValue)) {
+    if (
+      tagValue.length > 2 &&
+      tagValue.length <= 30 &&
+      allTags.length < 10 &&
+      !newTags.includes(tagValue)
+    ) {
       setNewTags(prev => [...prev, tagValue]);
+      setTagValue('');
     }
-    setTagValue('');
   };
 
   const handleDeleteTag = (tag: string) => {
@@ -259,16 +277,29 @@ export const BeamEditor: React.FC = () => {
                 'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
               )}
             </Text>
-            <SearchBar
-              inputValue={tagValue}
-              inputPlaceholderLabel={t('Search for tags')}
-              onInputChange={handleChange}
-              onKeyUp={handleKeyUp}
-              onSearch={() => {
-                /** */
-              }}
-              responsive={true}
-            />
+            <Stack spacing="gap-y-1">
+              <SearchBar
+                inputValue={tagValue}
+                inputPlaceholderLabel={t('Search for tags')}
+                onInputChange={handleChange}
+                onKeyUp={handleKeyUp}
+                onSearch={() => {
+                  /** */
+                }}
+                responsive={true}
+                customStyle={`${
+                  errorMessage
+                    ? 'focus-within:border-errorLight dark:focus-within:border-errorDark))'
+                    : ''
+                }`}
+              />
+
+              {errorMessage && (
+                <Text variant="footnotes2" color={{ light: 'errorLight', dark: 'errorDark' }}>
+                  {t('{{errorMessage}}', { errorMessage })}
+                </Text>
+              )}
+            </Stack>
             {newTags.length === 0 && (
               <Text variant="body2" weight="bold">
                 {t("You haven't added any tags yet")}
@@ -284,7 +315,7 @@ export const BeamEditor: React.FC = () => {
               <Button
                 variant="secondary"
                 label={t('Add')}
-                disabled={tagValue.length < 3}
+                disabled={tagValue.length < 3 || tagValue.length > 30 || newTags.includes(tagValue)}
                 onClick={addTag}
               />
             </Stack>
