@@ -37,27 +37,27 @@ class Web3Connector {
     sepolia: 11155111,
   });
 
-/*
- * Web3Connector constructor
- *
- * @param logFactory - Logging factory to create logger
- * @param globalChannel - EventBus for emitting events
- *
- * Initializes:
- * - Logger
- * - EventBus
- * - Web3Modal configuration
- *   - Project ID (required)
- *   - Chain configuration
- *   - Theming
- *   - Privacy and terms URLs
- *
- * Creates Web3Modal instance
- * Registers wallet change event listeners
- *
- * Throws error if WALLETCONNECT_PROJECT_ID env var not set
-*/
-  constructor (
+  /*
+   * Web3Connector constructor
+   *
+   * @param logFactory - Logging factory to create logger
+   * @param globalChannel - EventBus for emitting events
+   *
+   * Initializes:
+   * - Logger
+   * - EventBus
+   * - Web3Modal configuration
+   *   - Project ID (required)
+   *   - Chain configuration
+   *   - Theming
+   *   - Privacy and terms URLs
+   *
+   * Creates Web3Modal instance
+   * Registers wallet change event listeners
+   *
+   * Throws error if WALLETCONNECT_PROJECT_ID env var not set
+   */
+  constructor(
     @inject(TYPES.Log) logFactory: Logging,
     @inject(TYPES.EventBus) globalChannel: EventBus,
   ) {
@@ -105,63 +105,61 @@ class Web3Connector {
       },
       privacyPolicyUrl: 'https://akasha.org/privacy-policy/',
       termsConditionsUrl: 'https://akasha.org/legal/',
-
     });
     this.#_registerWalletChangeEvents();
   }
 
-/*
- * Connect to a web3 wallet provider
- *
- * @returns {Promise<{connected: boolean, unsubscribe?: () => void}>}
- * - Returns a promise that resolves to an object indicating if connected
- * - The object contains:
- *   - connected: boolean - Whether successfully connected or not
- *   - unsubscribe: () => void - Optional function to unsubscribe from provider changes
- *
- * The method first checks if already connected.
- * If not connected:
- * - Opens the Web3Modal connect modal view
- * - Subscribes to provider changes
- * - When provider, isConnected and address is set, resolves promise
- *
- * If already connected, resolves returning current connected state.
-*/
-  async connect (): Promise<{ connected: boolean, unsubscribe?: () => void }> {
+  /*
+   * Connect to a web3 wallet provider
+   *
+   * @returns {Promise<{connected: boolean, unsubscribe?: () => void}>}
+   * - Returns a promise that resolves to an object indicating if connected
+   * - The object contains:
+   *   - connected: boolean - Whether successfully connected or not
+   *   - unsubscribe: () => void - Optional function to unsubscribe from provider changes
+   *
+   * The method first checks if already connected.
+   * If not connected:
+   * - Opens the Web3Modal connect modal view
+   * - Subscribes to provider changes
+   * - When provider, isConnected and address is set, resolves promise
+   *
+   * If already connected, resolves returning current connected state.
+   */
+  async connect(): Promise<{ connected: boolean; unsubscribe?: () => void }> {
     if (!this.#w3modal.getIsConnected()) {
       return new Promise(async (resolve, reject) => {
-        const unsubscribe = this.#w3modal.subscribeProvider((state) => {
+        const unsubscribe = this.#w3modal.subscribeProvider(state => {
           if (state.provider && state.isConnected && state.address) {
             resolve({ connected: true, unsubscribe });
           }
         });
         await this.#w3modal.open({ view: 'Connect' });
       });
-
     }
     return { connected: this.#w3modal.getIsConnected() };
   }
 
-/*
- * Get the current Web3Modal theme
-*/
-getCurrentTheme () {
-  return this.#w3modal.getThemeMode();
-}
+  /*
+   * Get the current Web3Modal theme
+   */
+  getCurrentTheme() {
+    return this.#w3modal.getThemeMode();
+  }
 
-/*
- * Toggle the Web3Modal dark theme
- *
- * @param {boolean} enable - Optional flag to force enable dark theme
- *
- * If enable passed:
- * - Enables dark theme
- *
- * If no enable passed:
- * - Toggles dark on if currently light
- * - Toggles dark off if currently dark
-*/
-  toggleDarkTheme (enable?: boolean) {
+  /*
+   * Toggle the Web3Modal dark theme
+   *
+   * @param {boolean} enable - Optional flag to force enable dark theme
+   *
+   * If enable passed:
+   * - Enables dark theme
+   *
+   * If no enable passed:
+   * - Toggles dark on if currently light
+   * - Toggles dark off if currently dark
+   */
+  toggleDarkTheme(enable?: boolean) {
     const themeMode = this.#w3modal.getThemeMode();
     if (enable || themeMode !== 'dark') {
       this.#w3modal.setThemeMode('dark');
@@ -170,26 +168,26 @@ getCurrentTheme () {
     }
   }
 
-/*
- * Register event listeners for wallet provider changes
- *
- * Subscribes to provider changes from Web3Modal:
- * - On provider connected:
- *   - Set web3 instance from Web3Modal provider
- *   - Set current provider type
- *   - Emit CONNECTED event with provider type
- *   - Register web3 provider change event listeners
- *
- * - On provider disconnected:
- *   - Remove web3 provider change event listeners
- *
- * This allows reacting to changes in wallet connection state.
-*/
-  #_registerWalletChangeEvents () {
+  /*
+   * Register event listeners for wallet provider changes
+   *
+   * Subscribes to provider changes from Web3Modal:
+   * - On provider connected:
+   *   - Set web3 instance from Web3Modal provider
+   *   - Set current provider type
+   *   - Emit CONNECTED event with provider type
+   *   - Register web3 provider change event listeners
+   *
+   * - On provider disconnected:
+   *   - Remove web3 provider change event listeners
+   *
+   * This allows reacting to changes in wallet connection state.
+   */
+  #_registerWalletChangeEvents() {
     this.#w3modal.subscribeProvider(event => {
       if (event.isConnected) {
         const provider = this.#w3modal.getWalletProvider();
-        if(provider){
+        if (provider) {
           this.#web3Instance = new BrowserProvider(provider);
         }
         this.#currentProviderType = this.#w3modal?.getWalletProviderType();
@@ -209,16 +207,16 @@ getCurrentTheme () {
     });
   }
 
-/*
- * Get current Web3Connector state
- *
- * @returns {Object} State object containing:
- * - providerType: Current provider type
- * - connected: Whether provider is connected
- * - address: Current selected address
- * - chainId: Current chain ID
-*/
-  get state () {
+  /*
+   * Get current Web3Connector state
+   *
+   * @returns {Object} State object containing:
+   * - providerType: Current provider type
+   * - connected: Whether provider is connected
+   * - address: Current selected address
+   * - chainId: Current chain ID
+   */
+  get state() {
     return {
       providerType: this.#currentProviderType,
       connected: this.#w3modal.getIsConnected(),
@@ -230,29 +228,29 @@ getCurrentTheme () {
   /**
    * Get access to the web3 provider instance
    */
-  get provider () {
+  get provider() {
     if (this.#web3Instance) {
       return this.#web3Instance;
     }
   }
 
-  get walletProvider(){
-    if(this.#w3modal){
+  get walletProvider() {
+    if (this.#w3modal) {
       return this.#w3modal.getWalletProvider();
     }
   }
 
-/*
- * Disconnect from the current web3 provider
- *
- * Resets the web3 instance and provider type to null.
- * Calls Web3Modal disconnect if connected.
- * Emits DISCONNECTED event.
- *
- * @returns {Promise<void>}
- * Promise resolves when disconnected.
-*/
-  async disconnect (): Promise<void> {
+  /*
+   * Disconnect from the current web3 provider
+   *
+   * Resets the web3 instance and provider type to null.
+   * Calls Web3Modal disconnect if connected.
+   * Emits DISCONNECTED event.
+   *
+   * @returns {Promise<void>}
+   * Promise resolves when disconnected.
+   */
+  async disconnect(): Promise<void> {
     this.#web3Instance = null;
     this.#currentProviderType = null;
     if (this.#w3modal && this.#w3modal.getIsConnected()) {
@@ -269,29 +267,41 @@ getCurrentTheme () {
    * @param message - Human readable string to sign
    */
   @validate(z.string().min(3))
-  async signMessage (message: string) {
+  async signMessage(message: string) {
     const signer = await this.getSigner();
-    if(signer){
+    if (signer) {
       return signer.signMessage(message);
     }
   }
 
-  async getSigner () {
-    if(!this.#web3Instance){
-      this.#log.warn('Must provider a signer!');
+  async getSigner() {
+    if (!this.#web3Instance) {
+      this.#log.warn('Must provide a signer!');
       return;
     }
     return this.#web3Instance.getSigner();
   }
 
-  getRequiredNetwork () {
+  /*
+   * Resolve an address to an ENS name
+   */
+  @validate(z.string().min(20))
+  async lookupAddress(address: string) {
+    if (!this.#web3Instance) {
+      return Promise.resolve({ ens: null });
+    }
+    const ens = await this.#web3Instance.lookupAddress(address);
+    return { ens };
+  }
+
+  getRequiredNetwork() {
     if (!this.network) {
       throw new Error('The required ethereum network was not set!');
     }
     return createFormattedValue({ name: this.network, chainId: this.networkId[this.network] });
   }
 
-  async switchToRequiredNetwork () {
+  async switchToRequiredNetwork() {
     if (this.#web3Instance instanceof ethers.BrowserProvider) {
       const result = await this.#web3Instance.send('wallet_switchEthereumChain', [
         { chainId: this.#networkId },
@@ -305,22 +315,22 @@ getCurrentTheme () {
     throw err;
   }
 
-  async #_getCurrentAddress () {
+  async #_getCurrentAddress() {
     return this.#w3modal.getAddress() || null;
   }
 
-  getCurrentEthAddress () {
+  getCurrentEthAddress() {
     return this.#_getCurrentAddress();
   }
 
-  checkCurrentNetwork () {
+  checkCurrentNetwork() {
     return this.#_checkCurrentNetwork();
   }
 
   /**
    * Ensures that the web3 provider is connected to the specified network
    */
-  async #_checkCurrentNetwork () {
+  async #_checkCurrentNetwork() {
     if (!this.#w3modal.getIsConnected()) {
       throw new Error('Must connect first to a provider!');
     }
@@ -335,21 +345,21 @@ getCurrentTheme () {
     this.#log.info(`currently on network: ${network.selectedNetworkId}`);
   }
 
- /*
- * Register event listeners for provider changes
- *
- * @param {Object} provider - The web3 provider instance
- * @param {Function} provider.on - The provider's 'on' method to add listeners
- *
- * Registers listeners for:
- * - accountsChanged - Emits event with new ETH address
-* - chainChanged - Emits event with new chain ID
- *
- * Throws errors if:
- * - Provider not specified
- * - Provider does not support .on() method
-*/
-  #_registerProviderChangeEvents (provider: {
+  /*
+   * Register event listeners for provider changes
+   *
+   * @param {Object} provider - The web3 provider instance
+   * @param {Function} provider.on - The provider's 'on' method to add listeners
+   *
+   * Registers listeners for:
+   * - accountsChanged - Emits event with new ETH address
+   * - chainChanged - Emits event with new chain ID
+   *
+   * Throws errors if:
+   * - Provider not specified
+   * - Provider does not support .on() method
+   */
+  #_registerProviderChangeEvents(provider: {
     on?: (event: string, listener: (...args: unknown[]) => void) => void;
   }) {
     if (!provider) {
@@ -376,7 +386,6 @@ getCurrentTheme () {
         event: WEB3_EVENTS.CHAIN_CHANGED,
       });
     });
-
   }
 }
 
