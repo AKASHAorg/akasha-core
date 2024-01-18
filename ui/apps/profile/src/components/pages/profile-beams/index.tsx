@@ -1,33 +1,19 @@
 import React from 'react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import {
-  mapBeamEntryData,
-  useAnalytics,
-  useGetLogin,
-  useRootComponentProps,
-} from '@akashaorg/ui-awf-hooks';
-import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { useParams } from 'react-router-dom';
+import { mapBeamEntryData, useAnalytics, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
 
-const ProfileBeamsPage: React.FC<unknown> = () => {
-  const { data: loginData, loading: authenticating } = useGetLogin();
+type ProfileBeamsPageProps = {
+  profileId: string;
+};
+
+const ProfileBeamsPage: React.FC<ProfileBeamsPageProps> = props => {
+  const { profileId } = props;
   const { getRoutingPlugin } = useRootComponentProps();
   const [analyticsActions] = useAnalytics();
-  const isLoggedIn = !!loginData?.id;
   const navigateTo = React.useRef(getRoutingPlugin().navigateTo);
-
-  const { profileId } = useParams<{
-    profileId: string;
-  }>();
-
-  if (!isLoggedIn && !authenticating) {
-    return navigateTo.current({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
-    });
-  }
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>

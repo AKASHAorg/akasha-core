@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { NavigateToParams, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
-import { ProfileStats } from '@akashaorg/design-system-components/lib/components/Profile';
+import { ProfileStats as ProfileStatsPresentation } from '@akashaorg/design-system-components/lib/components/Profile';
 
-export type ProfileStatsViewProps = {
+export type ProfileStatsProps = {
   profileId: string;
   totalBeams: number;
   totalTopics: number;
@@ -15,7 +15,7 @@ export type ProfileStatsViewProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
+const ProfileStats: React.FC<ProfileStatsProps> = ({
   profileId,
   totalBeams,
   totalTopics,
@@ -40,7 +40,7 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
   };
 
   return (
-    <ProfileStats
+    <ProfileStatsPresentation
       posts={{
         label: t('Beams'),
         total: totalBeams,
@@ -65,4 +65,4 @@ const ProfileStatsView: React.FC<ProfileStatsViewProps> = ({
   );
 };
 
-export default ProfileStatsView;
+export default ProfileStats;
