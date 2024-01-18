@@ -6,7 +6,7 @@ import {
   AkashaIndexedStreamEdge,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
-import { useBeamsByTag } from '@akashaorg/ui-awf-hooks/lib/ use-beams-by-tag';
+import { useBeamsByTag } from '@akashaorg/ui-awf-hooks/lib/use-beams-by-tag';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -142,7 +142,10 @@ const TagFeed = (props: TagFeedProps) => {
         <Virtualizer<ReturnType<typeof useBeamsByTag>['beams'][0]>
           header={header}
           footer={footer}
-          queryCalled={called}
+          requestStatus={{
+            called,
+            isLoading,
+          }}
           emptyListIndicator={emptyListCard}
           restorationKey={queryKey}
           itemSpacing={itemSpacing}
@@ -159,7 +162,6 @@ const TagFeed = (props: TagFeedProps) => {
           loadingIndicator={loadingIndicatorRef.current}
           hasNextPage={hasNextPage}
           hasPreviousPage={hasPreviousPage}
-          isLoading={isLoading}
         />
       )}
     </>

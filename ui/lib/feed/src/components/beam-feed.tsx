@@ -148,7 +148,6 @@ const BeamFeed = (props: BeamFeedProps) => {
           loadingIndicator={loadingIndicatorRef.current}
           hasNextPage={hasNextPage}
           hasPreviousPage={hasPreviousPage}
-          isLoading={isLoading}
           offsetTop={offsetTop}
           requestStatus={{ called, isLoading }}
         />

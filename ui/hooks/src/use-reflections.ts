@@ -35,9 +35,9 @@ const getDefaultFilters = (
     and: [
       {
         where:
-          entityType === EntityTypes.BEAM
-            ? { beamID: { equalTo: entityId } }
-            : { reflectionID: { equalTo: entityId } },
+          entityType === EntityTypes.REFLECT
+            ? { reflectionID: { equalTo: entityId } }
+            : { beamID: { equalTo: entityId } },
       },
     ],
   };
