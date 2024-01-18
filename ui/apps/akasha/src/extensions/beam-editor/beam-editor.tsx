@@ -70,18 +70,6 @@ export const BeamEditor: React.FC = () => {
     }
   }, [blocksInUse]);
 
-  React.useEffect(() => {
-    if (newTags.length === 10) {
-      setErrorMessage('Tags limit reached');
-    } else if (tagValue.length > 30) {
-      setErrorMessage('Tag is over the 30 characters limit');
-    } else if (newTags.includes(tagValue)) {
-      setErrorMessage('Tag added already, please try a different one');
-    } else {
-      setErrorMessage(null);
-    }
-  }, [tagValue, newTags]);
-
   const handleNsfwCheckbox = () => {
     setIsNsfw(!isNsfw);
   };
@@ -124,6 +112,15 @@ export const BeamEditor: React.FC = () => {
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (newTags.length === 10) {
+      setErrorMessage('Tags limit reached');
+    } else if (tagValue.length > 30) {
+      setErrorMessage('Tag is over the 30 characters limit');
+    } else if (newTags.includes(tagValue)) {
+      setErrorMessage('Tag added already, please try a different one');
+    } else {
+      setErrorMessage(null);
+    }
     if (targetKeys.includes(e.key) || targetCodes.includes(e.code)) {
       addTag();
     }
@@ -149,6 +146,9 @@ export const BeamEditor: React.FC = () => {
   const handleDeleteTag = (tag: string) => {
     if (newTags.includes(tag)) {
       setNewTags(newTags.filter(_tag => _tag !== tag));
+    }
+    if (errorMessage) {
+      setErrorMessage(null);
     }
   };
 
