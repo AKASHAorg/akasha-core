@@ -22,11 +22,10 @@ const BeamContentResolver: React.FC<BeamContentResolverProps> = ({ beamId }) => 
   if (isLoading) return <EntryLoadingPlaceholder />;
 
   if (beam && hasOwn(beam, 'id')) {
-    if (beam.nsfw && !isLoggedIn && !authenticating && !isLoading) return null;
+    if (beam.nsfw && !isLoggedIn && !authenticating) return null;
 
     return (
       <BeamCard
-        showHiddenContent={true}
         entryData={mapBeamEntryData(beam)}
         contentClickable={true}
         onContentClick={() =>
