@@ -6,6 +6,7 @@ import {
   useRootComponentProps,
   transformSource,
   mapBeamEntryData,
+  hasOwn,
 } from '@akashaorg/ui-awf-hooks';
 import routes, { EDITOR } from '../../../routes';
 import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
@@ -13,7 +14,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
-import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
+import { BeamCard, BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 export type FeedPageProps = {
   isLoggedIn: boolean;
@@ -69,25 +70,10 @@ const FeedPage: React.FC<FeedPageProps> = props => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => (
-          <BeamCard
-            entryData={mapBeamEntryData(itemData.node)}
-            contentClickable={true}
-            onContentClick={() =>
-              navigateTo.current({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
-              })
-            }
-            onReflect={() =>
-              navigateTo.current({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes =>
-                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
-              })
-            }
-          />
-        )}
+        renderItem={itemData => {
+          if (!hasOwn(itemData.node, 'content'))
+            return <BeamContentResolver beamId={itemData.node.beamID} />;
+        }}
         trackEvent={analyticsActions.trackEvent}
       />
     </Stack>

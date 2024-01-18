@@ -1,42 +1,39 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
-  AkashaBeamEdge,
-  AkashaBeamFiltersInput,
-  AkashaBeamSortingInput,
-  AkashaBeamStreamEdge,
+  AkashaIndexedStreamFiltersInput,
+  AkashaIndexedStreamEdge,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
-import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
+import { useBeamsByTag } from '@akashaorg/ui-awf-hooks/lib/ use-beams-by-tag';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import type { GetBeamsQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 
-export type BeamFeedProps = {
+export type TagFeedProps = {
   className?: string;
   trackEvent?: (data: AnalyticsEventData['data']) => void;
   scrollerOptions?: { overscan: number };
   queryKey: string;
   newItemsPublishedLabel?: string;
-  filters?: AkashaBeamFiltersInput;
-  sorting?: AkashaBeamSortingInput;
+  filters?: AkashaIndexedStreamFiltersInput;
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<AkashaBeamStreamEdge | AkashaBeamEdge>['renderItem'];
+  renderItem: VirtualizerProps<AkashaIndexedStreamEdge>['renderItem'];
   estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];
   footer?: VirtualizerProps<unknown>['footer'];
   loadingIndicator?: VirtualizerProps<unknown>['loadingIndicator'];
-  did?: string;
+  tag: string;
 };
 
-const BeamFeed = (props: BeamFeedProps) => {
+const TagFeed = (props: TagFeedProps) => {
   const {
     scrollerOptions = { overscan: 5 },
     filters,
-    sorting,
     scrollTopIndicator,
     renderItem,
     queryKey,
@@ -45,11 +42,14 @@ const BeamFeed = (props: BeamFeedProps) => {
     loadingIndicator,
     header,
     footer,
-    did,
+    tag,
   } = props;
+
+  const { t } = useTranslation('ui-lib-feed');
 
   const {
     beams,
+    called,
     fetchNextPage,
     fetchPreviousPage,
     hasNextPage,
@@ -59,12 +59,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     isLoading,
     hasErrors,
     errors,
-  } = useBeams({
-    overscan: scrollerOptions.overscan,
-    sorting,
-    filters,
-    did,
-  });
+  } = useBeamsByTag(tag);
 
   const lastCursors = React.useRef({ next: null, prev: null });
   const prevBeams = React.useRef([]);
@@ -80,7 +75,7 @@ const BeamFeed = (props: BeamFeedProps) => {
   }
 
   const handleInitialFetch = async (restoreItem?: RestoreItem) => {
-    await fetchInitialData(restoreItem);
+    await fetchInitialData(true, restoreItem);
   };
 
   const handleFetch = React.useCallback(
@@ -117,6 +112,22 @@ const BeamFeed = (props: BeamFeedProps) => {
     await onReset();
   };
 
+  const emptyListCard = (
+    <Stack customStyle="mt-8">
+      <InfoCard
+        titleLabel={
+          <>
+            {t('There are no content found for ')} <strong>#{tag}</strong>
+          </>
+        }
+        bodyLabel={<>{t('Be the first one to create a beam for this topic! 🚀')}</>}
+        bodyVariant="body1"
+        publicImgPath="/images"
+        assetName="longbeam-notfound"
+      />
+    </Stack>
+  );
+
   return (
     <>
       {hasErrors && (
@@ -126,10 +137,13 @@ const BeamFeed = (props: BeamFeedProps) => {
           details={<>{errors}</>}
         />
       )}
-      {!hasErrors && (
-        <Virtualizer<ReturnType<typeof useBeams>['beams'][0]>
+
+      {!hasErrors && tag && (
+        <Virtualizer<ReturnType<typeof useBeamsByTag>['beams'][0]>
           header={header}
           footer={footer}
+          queryCalled={called}
+          emptyListIndicator={emptyListCard}
           restorationKey={queryKey}
           itemSpacing={itemSpacing}
           estimatedHeight={estimatedHeight}
@@ -152,4 +166,4 @@ const BeamFeed = (props: BeamFeedProps) => {
   );
 };
 
-export default BeamFeed;
+export default TagFeed;
