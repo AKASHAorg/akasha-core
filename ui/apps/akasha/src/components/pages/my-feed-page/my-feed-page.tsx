@@ -7,8 +7,8 @@ import StartCard from '@akashaorg/design-system-components/lib/components/StartC
 import { useTranslation } from 'react-i18next';
 import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
 import { useGetInterestsByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import { hasOwn, mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
+import { hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { BeamContentResolver, BeamFeed } from '@akashaorg/ui-lib-feed';
 
 export type MyFeedPageProps = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -76,25 +76,10 @@ const MyFeedPage: React.FC<MyFeedPageProps> = props => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => (
-          <BeamCard
-            entryData={mapBeamEntryData(itemData.node)}
-            contentClickable={true}
-            onContentClick={() =>
-              navigateTo.current?.({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
-              })
-            }
-            onReflect={() =>
-              navigateTo.current?.({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes =>
-                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
-              })
-            }
-          />
-        )}
+        renderItem={itemData => {
+          if (!hasOwn(itemData.node, 'content'))
+            return <BeamContentResolver beamId={itemData.node.beamID} />;
+        }}
       />
     </Stack>
   );

@@ -19,6 +19,7 @@ export type VirtualizerProps<T> = {
   restorationKey: string;
   header?: React.ReactElement;
   footer?: React.ReactElement;
+  emptyListIndicator?: React.ReactElement;
   estimatedHeight: VirtualListRendererProps<unknown>['estimatedHeight'];
   items: T[];
   itemKeyExtractor: (item: T) => string;
@@ -33,7 +34,6 @@ export type VirtualizerProps<T> = {
   onEdgeDetectorChange: UseEdgeDetectorProps['onEdgeDetectorChange'];
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
-  isLoading?: boolean;
   offsetTop?: number;
   requestStatus: {
     called: boolean;
@@ -59,9 +59,9 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     footer,
     hasNextPage,
     hasPreviousPage,
-    isLoading,
     offsetTop,
     requestStatus,
+    emptyListIndicator,
   } = props;
 
   const vlistRef = React.useRef<VirtualListInterface>();
@@ -192,6 +192,10 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     return 'auto';
   }, []);
 
+  if (!items.length && requestStatus.called && !requestStatus.isLoading && emptyListIndicator) {
+    return emptyListIndicator;
+  }
+
   return (
     <>
       {!isMounted && loadingIndicator && loadingIndicator()}
@@ -210,7 +214,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
           scrollTopIndicator={scrollTopIndicator}
           hasNextPage={hasNextPage}
           hasPreviousPage={hasPreviousPage}
-          isLoading={isLoading}
+          isLoading={requestStatus.isLoading}
           loadingIndicator={loadingIndicator}
           offsetTop={offsetTop}
         />

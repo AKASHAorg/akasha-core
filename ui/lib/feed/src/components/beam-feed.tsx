@@ -4,6 +4,7 @@ import {
   AkashaBeamEdge,
   AkashaBeamFiltersInput,
   AkashaBeamSortingInput,
+  AkashaBeamStreamEdge,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
 import { useBeams } from '@akashaorg/ui-awf-hooks/lib/use-beams';
@@ -22,7 +23,7 @@ export type BeamFeedProps = {
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<AkashaBeamEdge>['renderItem'];
+  renderItem: VirtualizerProps<AkashaBeamStreamEdge | AkashaBeamEdge>['renderItem'];
   estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];

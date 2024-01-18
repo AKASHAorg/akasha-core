@@ -17,11 +17,7 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ErrorLoader
-        type="script-error"
-        title="Error in akasha-verse plugin"
-        details={error.message}
-      />
+      <ErrorLoader type="script-error" title="Error in extensions app" details={error.message} />
     );
   },
 });

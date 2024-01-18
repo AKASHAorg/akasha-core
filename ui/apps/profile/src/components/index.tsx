@@ -2,10 +2,9 @@ import React from 'react';
 import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import App from './App';
 import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
-
-import App from './App';
 
 const reactLifecycles = singleSpaReact({
   React,
@@ -15,9 +14,7 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
-    return (
-      <ErrorLoader type="script-error" title="Error in profile plugin" details={error.message} />
-    );
+    return <ErrorLoader type="script-error" title="Error in profile app" details={error.message} />;
   },
 });
 

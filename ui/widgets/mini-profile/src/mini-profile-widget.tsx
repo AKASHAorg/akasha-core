@@ -3,7 +3,7 @@ import ReactDOMClient from 'react-dom/client';
 import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
-import { RootExtensionProps } from '@akashaorg/typings/lib/ui';
+import { RootComponentProps } from '@akashaorg/typings/lib/ui';
 import {
   getFollowList,
   hasOwn,
@@ -21,11 +21,12 @@ import {
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import ProfileMiniCard from '@akashaorg/design-system-components/lib/components/ProfileMiniCard';
 
-const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
+const ProfileCardWidget: React.FC<unknown> = () => {
   const { t } = useTranslation('ui-widget-mini-profile');
-  const { plugins } = props;
+  const { plugins, logger } = useRootComponentProps();
   const { beamId, reflectionId } = useParams<{ beamId?: string; reflectionId?: string }>();
   const { data: loginData } = useGetLogin();
   const { data: beam } = useGetBeamByIdQuery({ variables: { id: beamId } });
@@ -81,37 +82,45 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const followers = stats?.totalFollowers ?? 0;
 
   return (
-    <div>
-      {(beamId || reflectionId) && (
-        <ProfileMiniCard
-          profileData={profileData}
-          authenticatedDID={authenticatedDID}
-          beamsLabel={beams === 1 ? t('Beam') : t('Beams')}
-          followingLabel={t('Following')}
-          followersLabel={followers === 1 ? t('Follower') : t('Followers')}
-          statsLoading={statsLoading}
-          stats={{ followers, beams }}
-          transformSource={transformSource}
-          handleClick={handleCardClick}
-          footerExt={
-            <Extension
-              name={`follow_${profileData?.id}`}
-              extensionData={{
-                profileID: profileData?.id,
-                isFollowing: followList?.get(profileData?.id)?.isFollowing,
-                followId: followList?.get(profileData?.id)?.id,
-                isLoggedIn,
-              }}
-            />
-          }
-        />
-      )}
-    </div>
+    <ErrorBoundary
+      errorObj={{
+        type: t('script-error'),
+        title: t('Error in my-apps widget'),
+      }}
+      logger={logger}
+    >
+      <div>
+        {(beamId || reflectionId) && (
+          <ProfileMiniCard
+            profileData={profileData}
+            authenticatedDID={authenticatedDID}
+            beamsLabel={beams === 1 ? t('Beam') : t('Beams')}
+            followingLabel={t('Following')}
+            followersLabel={followers === 1 ? t('Follower') : t('Followers')}
+            statsLoading={statsLoading}
+            stats={{ followers, beams }}
+            transformSource={transformSource}
+            handleClick={handleCardClick}
+            footerExt={
+              <Extension
+                name={`follow_${profileData?.id}`}
+                extensionData={{
+                  profileID: profileData?.id,
+                  isFollowing: followList?.get(profileData?.id)?.isFollowing,
+                  followId: followList?.get(profileData?.id)?.id,
+                  isLoggedIn,
+                }}
+              />
+            }
+          />
+        )}
+      </div>
+    </ErrorBoundary>
   );
 };
 
 // Router is required for the useRouteMatch hook to extract the postId from the url
-const Wrapped = (props: RootExtensionProps) => {
+const Wrapped = () => {
   const { getTranslationPlugin } = useRootComponentProps();
   return (
     <Router>
@@ -125,7 +134,7 @@ const Wrapped = (props: RootExtensionProps) => {
             path={r}
             element={
               <I18nextProvider i18n={getTranslationPlugin().i18n}>
-                <ProfileCardWidget {...props} />
+                <ProfileCardWidget />
               </I18nextProvider>
             }
           />
@@ -139,7 +148,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOMClient,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
+  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
