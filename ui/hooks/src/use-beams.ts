@@ -1,44 +1,48 @@
 import React from 'react';
-import { useGetBeamsLazyQuery, useGetBeamsByAuthorDidLazyQuery } from './generated/apollo';
+import { useGetBeamsByAuthorDidLazyQuery, useGetBeamStreamLazyQuery } from './generated/apollo';
 import {
-  type AkashaBeamEdge,
-  type AkashaBeamFiltersInput,
-  type AkashaBeamSortingInput,
+  type AkashaBeamStreamFiltersInput,
+  type AkashaBeamStreamSortingInput,
   type PageInfo,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import type {
   GetBeamsQueryVariables,
   GetBeamsByAuthorDidQuery,
-  GetBeamsQuery,
+  GetBeamStreamQuery,
   GetBeamsByAuthorDidQueryVariables,
+  GetBeamStreamQueryVariables,
 } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
+import getSDK from '@akashaorg/awf-sdk';
 
 export type UseBeamsOptions = {
   overscan: number;
-  filters?: AkashaBeamFiltersInput;
-  sorting?: AkashaBeamSortingInput;
+  filters?: AkashaBeamStreamFiltersInput;
+  sorting?: AkashaBeamStreamSortingInput;
   did?: string;
 };
 
-const defaultSorting: AkashaBeamSortingInput = {
+const defaultSorting: AkashaBeamStreamSortingInput = {
   createdAt: SortOrder.Desc,
 };
 
 export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) => {
   const [state, setState] = React.useState<{
-    beams: GetBeamsQuery['akashaBeamIndex']['edges'];
+    beams:
+      | Exclude<GetBeamStreamQuery['node'], Record<string, never>>['akashaBeamStreamList']['edges']
+      | Exclude<GetBeamsByAuthorDidQuery['node'], Record<string, never>>['akashaBeamList']['edges'];
     pageInfo?: PageInfo;
   }>({ beams: [] });
 
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
+  const sdk = getSDK();
 
   const mergedVars: GetBeamsQueryVariables = React.useMemo(() => {
     const vars: {
-      sorting?: AkashaBeamSortingInput;
-      filters?: AkashaBeamFiltersInput;
+      sorting?: AkashaBeamStreamSortingInput;
+      filters?: AkashaBeamStreamFiltersInput;
       id?: string;
     } = {
       sorting: { ...defaultSorting, ...(sorting ?? {}) },
@@ -49,38 +53,54 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
     return vars;
   }, [sorting, filters]);
 
-  const getterHook = did ? useGetBeamsByAuthorDidLazyQuery : useGetBeamsLazyQuery;
+  const getterHook = did ? useGetBeamsByAuthorDidLazyQuery : useGetBeamStreamLazyQuery;
 
   const [fetchBeams, beamsQuery] = getterHook({
     variables: did
-      ? ({
+      ? {
           ...mergedVars,
           id: did,
+          indexer: undefined,
           first: overscan,
-        } satisfies GetBeamsByAuthorDidQueryVariables)
-      : {
+        } /* satisfies GetBeamsByAuthorDidQueryVariables */
+      : ({
           ...mergedVars,
           first: overscan,
           id: undefined,
-        },
+          indexer: sdk.services.gql.indexingDID,
+        } satisfies GetBeamStreamQueryVariables & GetBeamsByAuthorDidQueryVariables),
   });
 
   const beamCursors = React.useMemo(() => new Set(state.beams.map(b => b.cursor)), [state]);
 
   const extractData = React.useCallback(
     (
-      results: GetBeamsQuery | GetBeamsByAuthorDidQuery,
-    ): { edges: GetBeamsQuery['akashaBeamIndex']['edges']; pageInfo: PageInfo } => {
+      results: GetBeamStreamQuery | GetBeamsByAuthorDidQuery,
+    ): {
+      edges:
+        | Exclude<
+            GetBeamStreamQuery['node'],
+            Record<string, never>
+          >['akashaBeamStreamList']['edges']
+        | Exclude<
+            GetBeamsByAuthorDidQuery['node'],
+            Record<string, never>
+          >['akashaBeamList']['edges'];
+
+      pageInfo: PageInfo;
+    } => {
       if (hasOwn(results, 'node') && results.node && hasOwn(results.node, 'akashaBeamList')) {
         return {
           edges: results.node.akashaBeamList.edges.filter(edge => !beamCursors.has(edge.cursor)),
           pageInfo: results.node.akashaBeamList.pageInfo,
         };
       }
-      if (hasOwn(results, 'akashaBeamIndex') && results.akashaBeamIndex) {
+      if (hasOwn(results, 'node') && results.node && hasOwn(results.node, 'akashaBeamStreamList')) {
         return {
-          edges: results.akashaBeamIndex.edges.filter(edge => !beamCursors.has(edge.cursor)),
-          pageInfo: results.akashaBeamIndex.pageInfo,
+          edges: results.node.akashaBeamStreamList.edges.filter(
+            edge => !beamCursors.has(edge.cursor),
+          ),
+          pageInfo: results.node.akashaBeamStreamList.pageInfo,
         };
       }
     },
@@ -98,12 +118,14 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
             id: did,
             after: lastCursor,
             sorting: { createdAt: SortOrder.Desc },
+            indexer: undefined,
           },
         }
       : {
           variables: {
             after: lastCursor,
             sorting: { createdAt: SortOrder.Desc },
+            indexer: sdk.services.gql.indexingDID,
           },
         };
     try {
@@ -114,14 +136,29 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       if (!results.data) return;
       const { edges, pageInfo } = extractData(results.data);
 
-      setState(prev => ({
-        beams: [...prev.beams, ...edges],
-        pageInfo: {
-          ...prev.pageInfo,
-          endCursor: pageInfo.endCursor,
-          hasNextPage: pageInfo.hasNextPage,
-        },
-      }));
+      setState(
+        prev =>
+          ({
+            beams: [...prev.beams, ...edges],
+            pageInfo: {
+              ...prev.pageInfo,
+              endCursor: pageInfo.endCursor,
+              hasNextPage: pageInfo.hasNextPage,
+            },
+          }) as {
+            /* needs a better type assertion approach to get rid of a typescript error message */
+            beams:
+              | Exclude<
+                  GetBeamStreamQuery['node'],
+                  Record<string, never>
+                >['akashaBeamStreamList']['edges']
+              | Exclude<
+                  GetBeamsByAuthorDidQuery['node'],
+                  Record<string, never>
+                >['akashaBeamList']['edges'];
+            pageInfo?: PageInfo;
+          },
+      );
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
@@ -142,21 +179,36 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       }
       if (!results.data) return;
       const { edges, pageInfo } = extractData(results.data);
-      setState(prev => ({
-        beams: [...edges.reverse(), ...prev.beams],
-        pageInfo: {
-          ...prev.pageInfo,
-          startCursor: pageInfo.endCursor,
-          hasPreviousPage: pageInfo.hasNextPage,
-        },
-      }));
+      setState(
+        prev =>
+          ({
+            beams: [...edges.reverse(), ...prev.beams],
+            pageInfo: {
+              ...prev.pageInfo,
+              startCursor: pageInfo.endCursor,
+              hasPreviousPage: pageInfo.hasNextPage,
+            },
+          }) as {
+            /* needs a better type assertion approach to get rid of a typescript error message */
+            beams:
+              | Exclude<
+                  GetBeamStreamQuery['node'],
+                  Record<string, never>
+                >['akashaBeamStreamList']['edges']
+              | Exclude<
+                  GetBeamsByAuthorDidQuery['node'],
+                  Record<string, never>
+                >['akashaBeamList']['edges'];
+            pageInfo?: PageInfo;
+          },
+      );
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
   };
 
   const fetchInitialBeams = React.useCallback(
-    async (variables?: GetBeamsByAuthorDidQueryVariables) => {
+    async (variables?: GetBeamsByAuthorDidQueryVariables & GetBeamStreamQueryVariables) => {
       try {
         const results = await fetchBeams({ variables });
         if (results.error) {
@@ -187,9 +239,10 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
     async (restoreItem?: { key: string; offsetTop: number }) => {
       if (beamsQuery.called) return;
 
-      const initialVars: GetBeamsByAuthorDidQueryVariables = {
+      const initialVars: GetBeamStreamQueryVariables & GetBeamsByAuthorDidQueryVariables = {
         sorting: { createdAt: SortOrder.Desc },
         id: did ?? undefined,
+        indexer: did ? undefined : sdk.services.gql.indexingDID,
       };
 
       if (restoreItem) {

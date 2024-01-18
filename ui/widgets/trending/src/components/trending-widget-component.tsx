@@ -126,7 +126,7 @@ const TrendingWidgetComponent: React.FC<unknown> = () => {
         >
           <LatestTopics
             titleLabel={t('Latest Topics')}
-            tagSubtitleLabel={t('mentions')}
+            tagSubtitleLabel={t('Beam')}
             subscribeLabel={t('Subscribe')}
             subscribedLabel={t('Subscribed')}
             unsubscribeLabel={t('Unsubscribe')}
