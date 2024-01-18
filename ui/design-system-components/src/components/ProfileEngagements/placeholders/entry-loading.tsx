@@ -19,7 +19,7 @@ const EntryLoading: React.FC = () => {
       direction="row"
       align="center"
       justify="between"
-      customStyle={`px-4 pb-4 ${borderBottomStyle}`}
+      customStyle={`pb-4 ${borderBottomStyle}`}
     >
       <Stack direction="row" spacing="gap-1">
         <CircularPlaceholder height="h-10" width="w-10" customStyle="shrink-0" animated />
