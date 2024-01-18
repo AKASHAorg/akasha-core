@@ -57,6 +57,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     hasPreviousPage,
     fetchInitialData,
     onReset,
+    called,
     isLoading,
     hasErrors,
     errors,
@@ -148,6 +149,7 @@ const BeamFeed = (props: BeamFeedProps) => {
           hasPreviousPage={hasPreviousPage}
           isLoading={isLoading}
           offsetTop={offsetTop}
+          requestStatus={{ called, isLoading }}
         />
       )}
     </>

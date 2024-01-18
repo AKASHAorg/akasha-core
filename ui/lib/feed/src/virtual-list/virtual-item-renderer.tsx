@@ -101,7 +101,6 @@ export const VirtualItemRenderer = <T,>(props: VirtualItemProps<T>) => {
       if (entry) {
         const realHeight = Math.round(entry.contentRect.height + itemSpacing);
         if (currentHeight.current !== realHeight) {
-          console.log('card size changed from', currentHeight.current, 'to', realHeight);
           currentHeight.current = realHeight;
           onHeightChanged?.(item.key, currentHeight.current);
         }

@@ -5,12 +5,10 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import EntrySectionLoading from './entry-section-loading';
 import BeamSection from './beam-section';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
-import EditableReflection from '@akashaorg/ui-lib-feed/lib/components/editable-reflection';
 import { useParams } from 'react-router-dom';
 import {
   hasOwn,
   mapBeamEntryData,
-  mapReflectEntryData,
   useAnalytics,
   useGetLogin,
   useRootComponentProps,
@@ -19,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 import { ReflectFeed, ReflectionPreview } from '@akashaorg/ui-lib-feed';
 import { useGetBeamByIdSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { EditableReflectionResolver } from '@akashaorg/ui-lib-feed/lib/components/editable-reflection/editable-reflection-resolver';
 
 const BeamPage: React.FC<unknown> = () => {
   const { beamId } = useParams<{
@@ -67,31 +66,16 @@ const BeamPage: React.FC<unknown> = () => {
       <Stack spacing="gap-y-2">
         <ReflectFeed
           queryKey={`reflect-feed-${beamId}`}
-          filters={{ where: { reflection: { isNull: true } } }}
           estimatedHeight={120}
           renderItem={itemData => (
             <>
               <Divider />
-              <EditableReflection
-                entryData={mapReflectEntryData(itemData.node)}
-                reflectToId={beamId}
-                contentClickable={true}
-                onContentClick={() =>
-                  navigateTo({
-                    appName: '@akashaorg/app-akasha-integration',
-                    getNavigationUrl: navRoutes => `${navRoutes.Reflect}/${itemData.node.id}`,
-                  })
-                }
-                onReflect={() =>
-                  navigateTo({
-                    appName: '@akashaorg/app-akasha-integration',
-                    getNavigationUrl: navRoutes =>
-                      `${navRoutes.Reflect}/${itemData.node.id}${navRoutes.Reflect}`,
-                  })
-                }
+              <EditableReflectionResolver
+                beamID={itemData.node.beamID}
+                reflectID={itemData.node.reflectionID}
               />
               <ReflectionPreview
-                reflectionId={itemData.node.id}
+                reflectionId={itemData.node.reflectionID}
                 onNavigate={(options: { id: string; reflect?: boolean }) => {
                   navigateTo({
                     appName: '@akashaorg/app-akasha-integration',

@@ -185,8 +185,11 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
 
   const fetchInitialData = React.useCallback(
     async (restoreItem?: { key: string; offsetTop: number }) => {
-      if (beamsQuery.called) return;
-
+      if (state.beams.length) {
+        setState({
+          beams: [],
+        });
+      }
       const initialVars: GetBeamsByAuthorDidQueryVariables = {
         sorting: { createdAt: SortOrder.Desc },
         id: did ?? undefined,
@@ -198,7 +201,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
       }
       await fetchInitialBeams(initialVars);
     },
-    [beamsQuery.called, did, fetchInitialBeams],
+    [did, fetchInitialBeams, state.beams.length],
   );
 
   React.useEffect(() => {
@@ -225,6 +228,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
     fetchNextPage,
     fetchPreviousPage,
     isLoading: beamsQuery.loading,
+    called: beamsQuery.called,
     hasNextPage: state.pageInfo?.hasNextPage,
     hasPreviousPage: state.pageInfo?.hasPreviousPage,
     onReset: handleReset,

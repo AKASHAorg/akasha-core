@@ -35,6 +35,10 @@ export type VirtualizerProps<T> = {
   hasPreviousPage?: boolean;
   isLoading?: boolean;
   offsetTop?: number;
+  requestStatus: {
+    called: boolean;
+    isLoading: boolean;
+  };
 };
 
 const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
@@ -57,6 +61,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
     hasPreviousPage,
     isLoading,
     offsetTop,
+    requestStatus,
   } = props;
 
   const vlistRef = React.useRef<VirtualListInterface>();
@@ -65,6 +70,7 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   const keyExtractorRef = React.useRef(itemKeyExtractor);
   const itemRendererRef = React.useRef(renderItem);
   const scrollRestore = useScrollState(restorationKey);
+  const prevRestorationKey = React.useRef(restorationKey);
 
   const itemList: VirtualDataItem<T>[] = React.useMemo(() => {
     const itemList: VirtualDataItem<T>[] = [];
@@ -125,14 +131,11 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
   );
 
   const restoreStartItem = React.useRef<RestoreItem>();
-  const isFetchingInitialData = React.useRef(false);
 
-  React.useEffect(() => {
-    if (!isMounted) {
-      // load scroll restoration
-      if (scrollRestore.scrollState.loaded && !isFetchingInitialData.current) {
+  const fetchInitialData = React.useCallback(() => {
+    if (scrollRestore.scrollState.loaded) {
+      if (!requestStatus.called && !requestStatus.isLoading) {
         const restoreItem = scrollRestore.getLastItem();
-        isFetchingInitialData.current = true;
         const listItems = itemList.filter(it => it.maybeRef && it.key !== HEADER_COMPONENT);
         if (restoreItem && listItems.length === 0) {
           onFetchInitialData(restoreItem);
@@ -140,6 +143,28 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
           onFetchInitialData();
         }
       }
+      if (
+        requestStatus.called &&
+        !requestStatus.isLoading &&
+        prevRestorationKey.current !== restorationKey
+      ) {
+        onFetchInitialData(scrollRestore.getLastItem());
+        prevRestorationKey.current = restorationKey;
+      }
+    }
+  }, [
+    itemList,
+    onFetchInitialData,
+    requestStatus.called,
+    requestStatus.isLoading,
+    restorationKey,
+    scrollRestore,
+  ]);
+
+  React.useEffect(() => {
+    if (!isMounted) {
+      // load scroll restoration
+      fetchInitialData();
       if (
         itemList.length > 0 &&
         scrollRestore.scrollState.loaded &&
@@ -151,11 +176,13 @@ const Virtualizer = <T,>(props: VirtualizerProps<T>) => {
         }
       }
       if (itemList.length > 0 && scrollRestore.scrollState.loaded) {
-        isFetchingInitialData.current = false;
         setIsMounted(true);
       }
     }
-  }, [isMounted, itemList, onFetchInitialData, scrollRestore]);
+    if (isMounted && prevRestorationKey.current !== restorationKey) {
+      fetchInitialData();
+    }
+  }, [fetchInitialData, isMounted, itemList, onFetchInitialData, restorationKey, scrollRestore]);
 
   const scrollRestorationType = React.useMemo(() => {
     if (typeof window !== 'undefined') {

@@ -92,7 +92,6 @@ export const useItemHeights = (props: UseItemHeightsProps) => {
         const distance = sliced.reduce((distance, item) => {
           return getItemHeight(item.key) + distance;
         }, 0);
-        console.log(distance, '<< distance', idx, '<< idx', sliced);
         return distance;
       }
       return 0;

@@ -15,7 +15,7 @@ export type WidgetExtensionProps = {
 
 export const Widget: React.FC<WidgetExtensionProps> = props => {
   const { name, loadingIndicator, onError, customStyle = '', fullHeight } = props;
-  const { getExtensionsPlugin, getContext } = useRootComponentProps();
+  const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
   const widgetStore = React.useRef<WidgetStorePlugin>(getExtensionsPlugin().widgetStore);
   const [parcelConfigs, setParcelConfigs] = React.useState([]);
   const location = useRoutingEvents();
@@ -37,7 +37,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
           const config = await widget.loadingFn();
           newWidgets.push({ config, widget });
         } catch (err) {
-          console.error('error getting widget config', widget.appName);
+          logger.error(`error getting widget config, ${widget.appName}`);
           onError?.(widget);
         }
       }
@@ -47,6 +47,14 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
 
     resolveConfigs().catch();
   }, [widgets, onError]);
+
+  const handleParcelError = React.useCallback(
+    (widget, index: number) => err => {
+      onError?.(widget, `Failed to mount: ${err.message}`);
+      if (logger) logger.error(`Failed to mount parcel: ${widget.appName}_${index}`);
+    },
+    [logger, onError],
+  );
 
   const loadingConfiguredParcel = parcelConfigs.length > 0 ? !isParcelMounted : false;
   const isLoading = widgets.length > parcelConfigs.length || loadingConfiguredParcel;
@@ -68,7 +76,7 @@ export const Widget: React.FC<WidgetExtensionProps> = props => {
             name: `${parcelConf.widget.appName}_${index}`,
           }}
           {...getContext()}
-          handleError={err => onError?.(parcelConf.widget, `Failed to mount: ${err.message}`)}
+          handleError={handleParcelError(parcelConf.widget, index)}
         />
       ))}
     </Stack>

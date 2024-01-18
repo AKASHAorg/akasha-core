@@ -11,8 +11,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import {
   useCreateReflectMutation,
-  GetReflectionsFromBeamDocument,
-  GetReflectReflectionsDocument,
+  useIndexReflectionMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import { useTranslation } from 'react-i18next';
 import {
@@ -22,7 +21,6 @@ import {
   NotificationEvents,
   ReflectEntryData,
 } from '@akashaorg/typings/lib/ui';
-import { useApolloClient } from '@apollo/client';
 import { createPortal } from 'react-dom';
 import { PendingReflect } from './pending-reflect';
 
@@ -38,7 +36,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const { uiEvents } = useRootComponentProps();
-  const _uiEvents = React.useRef(uiEvents);
+  const uiEventsRef = React.useRef(uiEvents);
   const [editorState, setEditorState] = useState(null);
   const [newContent, setNewContent] = useState<ReflectEntryData>(null);
   //@TODO
@@ -49,41 +47,21 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
   const sdk = getSDK();
   const isReflectOfReflection = reflectToId !== beamId;
-  const apolloClient = useApolloClient();
   //@TODO
   const mentionSearch = null;
   const tagSearch = null;
 
-  const [publishReflection, { loading: publishing }] = useCreateReflectMutation({
+  const [publishReflection, publishReflectionMutation] = useCreateReflectMutation({
     context: { source: sdk.services.gql.contextSources.composeDB },
     onCompleted: async () => {
-      if (!isReflectOfReflection) {
-        await apolloClient.refetchQueries({ include: [GetReflectionsFromBeamDocument] });
-      }
-
-      if (isReflectOfReflection) {
-        await apolloClient.refetchQueries({ include: [GetReflectReflectionsDocument] });
-      }
-
       analyticsActions.trackEvent({
         category: AnalyticsCategories.REFLECT,
         action: 'Reflect Published',
       });
     },
-    onError: () => {
-      setShowEditor(true);
-      setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
-
-      const notifMsg = t(`Something went wrong.`);
-      _uiEvents.current.next({
-        event: NotificationEvents.ShowNotification,
-        data: {
-          type: NotificationTypes.Alert,
-          message: notifMsg,
-        },
-      });
-    },
   });
+  const [indexReflection, indexReflectionMutation] = useIndexReflectionMutation();
+
   const authenticatedProfileDataReq = useGetLoginProfile();
   const disablePublishing = useMemo(
     () => !authenticatedProfileDataReq?.akashaProfile?.did?.id,
@@ -92,7 +70,31 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
   const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
 
-  const handlePublish = (data: IPublishData) => {
+  const showAlertNotification = React.useCallback((message: string) => {
+    uiEventsRef.current.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Alert,
+        message,
+      },
+    });
+  }, []);
+
+  React.useEffect(() => {
+    if (indexReflectionMutation.error || publishReflectionMutation.error) {
+      setShowEditor(true);
+      setEditorState(newContent.content.flatMap(item => decodeb64SlateContent(item.value)));
+      showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
+    }
+  }, [
+    indexReflectionMutation,
+    newContent?.content,
+    publishReflectionMutation,
+    showAlertNotification,
+    t,
+  ]);
+
+  const handlePublish = async (data: IPublishData) => {
     const reflection = isReflectOfReflection ? { reflection: reflectToId } : {};
     const content = {
       active: true,
@@ -111,13 +113,23 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
 
     setNewContent({ ...content, id: null, authorId: null });
 
-    publishReflection({
+    const response = await publishReflection({
       variables: {
         i: {
           content,
         },
       },
     });
+    if (response.data?.createAkashaReflect) {
+      const indexingVars = await getSDK().api.auth.prepareIndexedID(
+        response.data.createAkashaReflect.document.id,
+      );
+      await indexReflection({
+        variables: indexingVars,
+      });
+    } else {
+      showAlertNotification(`${t(`Something went wrong when publishing the reflection`)}.`);
+    }
   };
 
   useEffect(() => {
@@ -155,7 +167,7 @@ const ReflectEditor: React.FC<ReflectEditorProps> = props => {
         getTags={setTagQuery}
         transformSource={transformSource}
       />
-      {publishing &&
+      {(publishReflectionMutation.loading || indexReflectionMutation.loading) &&
         newContent &&
         pendingReflectRef.current &&
         createPortal(

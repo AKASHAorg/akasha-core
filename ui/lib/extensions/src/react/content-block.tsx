@@ -15,6 +15,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { ExclamationTriangleIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { RootParcel } from './root-parcel';
 
 export type MatchingBlock = {
   blockInfo: ContentBlockExtensionInterface & {
@@ -35,11 +36,12 @@ export type ContentBlockExtensionProps = {
     blockID: string;
   };
   blockRef?: React.RefObject<BlockInstanceMethods>;
+  onError?: (error: Error) => void;
 };
 
 export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
-  const { blockRef, mode, editMode, readMode } = props;
-  const { getExtensionsPlugin, getContext } = useRootComponentProps();
+  const { blockRef, mode, editMode, readMode, onError } = props;
+  const { getExtensionsPlugin, getContext, logger } = useRootComponentProps();
   const contentBlockStoreRef = React.useRef(getExtensionsPlugin()?.contentBlockStore);
   const [state, setState] = React.useState<{
     parcels: (MatchingBlock & { config: ParcelConfigObject })[];
@@ -66,6 +68,15 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
       }).catch(err => console.error('Failed to fetch content block. Error', err));
     }
   }, [fetchBlockInfo, readMode?.blockID]);
+
+  React.useEffect(() => {
+    return () => {
+      setState({
+        isMatched: false,
+        parcels: [],
+      });
+    };
+  }, []);
 
   const matchingBlocks: MatchingBlock[] = React.useMemo(() => {
     if (!contentBlockStoreRef.current) return [];
@@ -138,6 +149,16 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
     }
   }, [blockInfoQuery]);
 
+  const handleParcelError = React.useCallback(
+    (parcelName: string) => {
+      return error => {
+        if (logger) logger.error(`error in parcel ${parcelName}: ${error}`);
+        onError?.(error);
+      };
+    },
+    [logger, onError],
+  );
+
   return (
     <React.Suspense
       fallback={
@@ -192,7 +213,7 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
             id={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
             key={`${mode}_${matchingBlock.blockInfo.propertyType}_${index}`}
           >
-            <Parcel
+            <RootParcel
               config={{
                 ...matchingBlock.config,
                 name: `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${index}`,
@@ -206,6 +227,9 @@ export const ContentBlockExtension = (props: ContentBlockExtensionProps) => {
               blockData={matchingBlock.blockData}
               blockRef={blockRef}
               content={matchingBlock.content}
+              handleError={handleParcelError(
+                `${matchingBlock.blockInfo.appName}_${matchingBlock.blockInfo.propertyType}_${index}`,
+              )}
             />
           </Stack>
         );

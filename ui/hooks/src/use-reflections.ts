@@ -1,66 +1,78 @@
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
+
 import {
-  useGetReflectionsFromBeamLazyQuery,
-  useGetReflectReflectionsLazyQuery,
-} from './generated/apollo';
-import {
-  AkashaReflectEdge,
-  AkashaReflectFiltersInput,
-  AkashaReflectSortingInput,
+  type AkashaReflectStreamFiltersInput,
+  type AkashaReflectStreamSortingInput,
   PageInfo,
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
-import {
-  GetReflectionsFromBeamQuery,
-  GetReflectionsFromBeamQueryVariables,
-  GetReflectReflectionsQuery,
-} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+
 import { hasOwn } from './utils/has-own';
+import { useGetReflectionStreamLazyQuery } from './generated/apollo';
+import getSDK from '@akashaorg/awf-sdk';
+import type { GetReflectionStreamQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 
 export type UseReflectionProps = {
   entityId: string;
   entityType: EntityTypes;
-  filters?: AkashaReflectFiltersInput;
-  sorting?: AkashaReflectSortingInput;
+  filters?: AkashaReflectStreamFiltersInput;
+  sorting?: AkashaReflectStreamSortingInput;
   overscan?: number;
+  indexingDID?: string;
 };
-const defaultSorting: AkashaReflectSortingInput = {
+
+const defaultSorting: AkashaReflectStreamSortingInput = {
   createdAt: SortOrder.Asc,
 };
 
+const getDefaultFilters = (
+  entityId: string,
+  entityType: EntityTypes,
+): AkashaReflectStreamFiltersInput => {
+  return {
+    and: [
+      {
+        where:
+          entityType === EntityTypes.BEAM
+            ? { beamID: { equalTo: entityId } }
+            : { reflectionID: { equalTo: entityId } },
+      },
+    ],
+  };
+};
+
+export type ReflectionEdges = Exclude<
+  GetReflectionStreamQuery['node'],
+  Record<string, never>
+>['akashaReflectStreamList']['edges'];
+
 export const useReflections = (props: UseReflectionProps) => {
-  const { overscan = 10, entityId, entityType, sorting, filters } = props;
+  const { indexingDID, overscan = 10, entityId, entityType, sorting, filters } = props;
   const [state, setState] = React.useState<{
-    reflections: AkashaReflectEdge[];
+    reflections: ReflectionEdges;
     pageInfo?: PageInfo;
   }>({
     reflections: [],
   });
+
   const reflectionCursors = React.useMemo(
     () => new Set(state.reflections.map(r => r.cursor)),
     [state],
   );
   const [errors, setErrors] = React.useState<(ApolloError | Error)[]>([]);
 
-  const getterHook =
-    entityType === EntityTypes.BEAM
-      ? useGetReflectionsFromBeamLazyQuery
-      : useGetReflectReflectionsLazyQuery;
-
-  const mergedVars: GetReflectionsFromBeamQueryVariables = React.useMemo(() => {
-    const vars: GetReflectionsFromBeamQueryVariables = {
-      id: entityId,
+  const mergedVars = React.useMemo(() => {
+    const vars: Parameters<typeof useGetReflectionStreamLazyQuery>[0]['variables'] = {
+      indexer: indexingDID ?? getSDK().services.gql.indexingDID,
       sorting: { ...defaultSorting, ...(sorting ?? {}) },
+      filters: filters ?? getDefaultFilters(entityId, entityType),
     };
-    if (filters) {
-      vars.filters = filters;
-    }
     return vars;
-  }, [entityId, sorting, filters]);
+  }, [indexingDID, sorting, filters, entityId, entityType]);
 
-  const [fetchReflections, reflectionsQuery] = getterHook({
+  const [fetchReflections, reflectionsQuery] = useGetReflectionStreamLazyQuery({
     variables: {
       ...mergedVars,
       first: overscan,
@@ -69,85 +81,71 @@ export const useReflections = (props: UseReflectionProps) => {
       setErrors(prev => [...prev, error]);
     },
   });
-  const extractData = (data: GetReflectionsFromBeamQuery | GetReflectReflectionsQuery) => {
-    if (entityType === EntityTypes.BEAM && hasOwn(data, 'node')) {
-      const result = data as GetReflectionsFromBeamQuery;
-      if (hasOwn(result.node, 'reflections')) {
-        return {
-          edges: result.node.reflections.edges,
-          pageInfo: result.node.reflections.pageInfo,
-        };
-      }
-    } else {
-      const result = data as GetReflectReflectionsQuery;
-      return {
-        edges: result.akashaReflectIndex.edges,
-        pageInfo: result.akashaReflectIndex.pageInfo,
-      };
-    }
-  };
 
-  const fetchInitialData = async (restoreItem: { key: string; offsetTop: number }) => {
-    if (restoreItem && !reflectionsQuery.called) {
-      try {
-        const results = await fetchReflections({
-          variables: {
-            ...mergedVars,
-            after: restoreItem.key,
-          },
-        });
-        if (results.error) {
-          setErrors(prev => [...prev, results.error]);
-          return;
-        }
-
-        if (!results.data) return;
-
-        const { edges, pageInfo } = extractData(results.data);
-
+  const fetchInitialData = React.useCallback(
+    async (restoreItem: { key: string; offsetTop: number }) => {
+      if (state.reflections.length) {
         setState({
-          reflections: edges.filter(
-            edge => !reflectionCursors.has(edge.cursor),
-          ) as AkashaReflectEdge[],
-          pageInfo,
+          reflections: [],
         });
-      } catch (err) {
-        setErrors(prev => prev.concat(err));
       }
-    } else if (!reflectionsQuery.called) {
-      try {
-        const results = await fetchReflections({
-          variables: {
-            ...mergedVars,
-            sorting: { createdAt: SortOrder.Desc },
-          },
-        });
-        if (results.error) {
-          setErrors(prev => [...prev, results.error]);
-          return;
+
+      if (restoreItem) {
+        try {
+          const results = await fetchReflections({
+            variables: {
+              ...mergedVars,
+              after: restoreItem.key,
+            },
+          });
+          if (results.error) {
+            setErrors(prev => [...prev, results.error]);
+            return;
+          }
+
+          if (!results.data) return;
+
+          if (hasOwn(results.data.node, 'akashaReflectStreamList')) {
+            setState({
+              reflections: results.data.node.akashaReflectStreamList.edges,
+              pageInfo: results.data.node.akashaReflectStreamList.pageInfo,
+            });
+          }
+        } catch (err) {
+          setErrors(prev => prev.concat(err));
         }
+      } else {
+        try {
+          const results = await fetchReflections({
+            variables: {
+              ...mergedVars,
+              sorting: { createdAt: SortOrder.Desc },
+            },
+          });
+          if (results.error) {
+            setErrors(prev => [...prev, results.error]);
+            return;
+          }
 
-        if (!results.data) return;
+          if (!results.data) return;
 
-        const { edges, pageInfo } = extractData(results.data);
-
-        setState({
-          reflections: edges.filter(
-            edge => !reflectionCursors.has(edge.cursor),
-          ) as AkashaReflectEdge[],
-          pageInfo: pageInfo,
-        });
-      } catch (err) {
-        setErrors(prev => prev.concat(err));
+          if (hasOwn(results.data.node, 'akashaReflectStreamList')) {
+            setState({
+              reflections: results.data.node.akashaReflectStreamList.edges,
+              pageInfo: results.data.node.akashaReflectStreamList.pageInfo,
+            });
+          }
+        } catch (err) {
+          setErrors(prev => prev.concat(err));
+        }
       }
-    }
-  };
+    },
+    [fetchReflections, mergedVars, state.reflections.length],
+  );
   const fetchNextPage = async (lastCursor: string) => {
     if (reflectionsQuery.loading || reflectionsQuery.error || !lastCursor) return;
     try {
-      const results = await reflectionsQuery.fetchMore<
-        GetReflectionsFromBeamQuery | GetReflectReflectionsQuery
-      >({
+      const results = await reflectionsQuery.fetchMore({
         variables: {
           after: lastCursor,
           sorting: { createdAt: SortOrder.Desc },
@@ -159,15 +157,17 @@ export const useReflections = (props: UseReflectionProps) => {
       }
 
       if (!results.data) return;
-      const { edges, pageInfo } = extractData(results.data);
+      if (hasOwn(results.data.node, 'akashaReflectStreamList')) {
+        const streamList = results.data.node.akashaReflectStreamList;
 
-      setState(prev => ({
-        reflections: [
-          ...prev.reflections,
-          ...edges.filter(edge => reflectionCursors.has(edge.cursor)),
-        ] as AkashaReflectEdge[],
-        pageInfo: { ...pageInfo },
-      }));
+        setState(prev => ({
+          reflections: [
+            ...prev.reflections,
+            ...streamList.edges.filter(edge => reflectionCursors.has(edge.cursor)),
+          ],
+          pageInfo: streamList.pageInfo,
+        }));
+      }
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
@@ -175,9 +175,7 @@ export const useReflections = (props: UseReflectionProps) => {
   const fetchPreviousPage = async (firstCursor: string) => {
     if (reflectionsQuery.loading || reflectionsQuery.error || !firstCursor) return;
     try {
-      const results = await reflectionsQuery.fetchMore<
-        GetReflectionsFromBeamQuery | GetReflectReflectionsQuery
-      >({
+      const results = await reflectionsQuery.fetchMore({
         variables: {
           sorting: { createdAt: SortOrder.Asc },
           after: firstCursor,
@@ -189,14 +187,17 @@ export const useReflections = (props: UseReflectionProps) => {
       }
 
       if (!results.data) return;
-      const { edges, pageInfo } = extractData(results.data);
-      setState(prev => ({
-        reflections: [
-          ...edges.filter(edge => reflectionCursors.has(edge.cursor)).reverse(),
-          ...prev.reflections,
-        ] as AkashaReflectEdge[],
-        pageInfo,
-      }));
+      if (hasOwn(results.data.node, 'akashaReflectStreamList')) {
+        const streamList = results.data.node.akashaReflectStreamList;
+
+        setState(prev => ({
+          reflections: [
+            ...streamList.edges.filter(edge => !reflectionCursors.has(edge.cursor)).reverse(),
+            ...prev.reflections,
+          ],
+          pageInfo: streamList.pageInfo,
+        }));
+      }
     } catch (err) {
       setErrors(prev => prev.concat(err));
     }
@@ -207,6 +208,8 @@ export const useReflections = (props: UseReflectionProps) => {
   };
   return {
     reflections: state.reflections,
+    called: reflectionsQuery.called,
+    isLoading: reflectionsQuery.loading,
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,

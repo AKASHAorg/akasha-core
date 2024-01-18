@@ -418,7 +418,6 @@ export const VirtualListRenderer = React.forwardRef(
         if (animatingItems.current.has(itemKey)) {
           return RAFUpdate('animating item changed');
         }
-        console.log();
         onItemHeightChange(itemKey, newHeight, state.mounted, update);
       },
       [RAFUpdate, getItemHeight, onItemHeightChange, state.mounted, update],
