@@ -13,7 +13,7 @@ import type {
 import { ApolloError } from '@apollo/client';
 import { hasOwn } from './utils/has-own';
 
-export const useTags = (tag: string) => {
+export const useBeamsByTag = (tag: string) => {
   const sdk = getSDK();
   const [state, setState] = React.useState<{
     beams: Exclude<

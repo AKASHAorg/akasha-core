@@ -6,7 +6,7 @@ import {
   AkashaIndexedStreamEdge,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { EdgeArea, Virtualizer, VirtualizerProps } from '../virtual-list';
-import { useTags } from '@akashaorg/ui-awf-hooks/lib/use-tags';
+import { useBeamsByTag } from '@akashaorg/ui-awf-hooks/lib/ use-beams-by-tag';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -59,7 +59,7 @@ const TagFeed = (props: TagFeedProps) => {
     isLoading,
     hasErrors,
     errors,
-  } = useTags(tag);
+  } = useBeamsByTag(tag);
 
   const lastCursors = React.useRef({ next: null, prev: null });
   const prevBeams = React.useRef([]);
@@ -139,7 +139,7 @@ const TagFeed = (props: TagFeedProps) => {
       )}
 
       {!hasErrors && tag && (
-        <Virtualizer<ReturnType<typeof useTags>['beams'][0]>
+        <Virtualizer<ReturnType<typeof useBeamsByTag>['beams'][0]>
           header={header}
           footer={footer}
           queryCalled={called}
