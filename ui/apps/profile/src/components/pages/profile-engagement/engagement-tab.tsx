@@ -5,10 +5,10 @@ import routes, { FOLLOWERS, FOLLOWING } from '../../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { NavigateToParams } from '@akashaorg/typings/lib/ui';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 export type EngagementTabProps = {
-  navigateTo: (args: NavigateToParams) => void;
+  profileId?: string;
+  navigateTo?: (args: NavigateToParams) => void;
 };
 
 const TAB_INDEX_TO_ROUTE_MAP = {
@@ -22,9 +22,8 @@ const ROUTE_TO_TAB_INDEX_MAP: Record<string, number> = {
 };
 
 const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => {
-  const { children, navigateTo } = props;
+  const { profileId, children, navigateTo } = props;
   const { t } = useTranslation('app-profile');
-  const { profileId } = useParams<{ profileId: string }>();
 
   const pathname = location.pathname.substring(location.pathname.lastIndexOf('/'));
 

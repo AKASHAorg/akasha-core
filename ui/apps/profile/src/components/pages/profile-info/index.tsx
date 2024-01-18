@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import ProfileStatsView from '../../profile-stats-view';
+import ProfileStatsView from '../../profile-stats';
 import ProfileNotFound from '@akashaorg/design-system-components/lib/components/ProfileNotFound';
 import NSFW from './nsfw';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import ProfileHeader from '../../profile-header';
 import routes, { EDIT } from '../../../routes';
 import {
   ProfileBio,
   ProfileLinks,
   ProfileLoading,
-  ProfileStatLoading,
 } from '@akashaorg/design-system-components/lib/components/Profile';
-import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { EventTypes, ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
@@ -23,34 +22,40 @@ import {
   useRootComponentProps,
   useValidDid,
 } from '@akashaorg/ui-awf-hooks';
-import { useGetProfileByDidQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 
-export type ProfilePageProps = {
-  showNSFW: boolean;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  setShowNSFW: React.Dispatch<React.SetStateAction<boolean>>;
+type ProfileInfoPageProps = {
+  profileId: string;
 };
 
-const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
-  const { showNSFW, setShowNSFW, showLoginModal } = props;
+const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
+  const { profileId } = props;
   const { t } = useTranslation('app-profile');
-  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
-  const { profileId } = useParams<{ profileId: string }>();
-  const { data: loginData } = useGetLogin();
-  const { data, loading, error } = useGetProfileByDidQuery({
+  const { getRoutingPlugin, navigateToModal, uiEvents } = useRootComponentProps();
+  const { data: loginData, loading: authenticating } = useGetLogin();
+  const { data, error } = useGetProfileByDidSuspenseQuery({
+    fetchPolicy: 'cache-first',
     variables: {
       id: profileId,
     },
     skip: !profileId,
   });
   const { validDid, isLoading: validDidCheckLoading } = useValidDid(profileId, !!data?.node);
-  const { data: statData, loading: statsLoading } = useProfileStats(profileId);
+  const { data: statData } = useProfileStats(profileId, true);
+  const { akashaProfile: profileData } =
+    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+  const [showNSFW, setShowNSFW] = useState(false);
   const isLoggedIn = !!loginData?.id;
   const authenticatedDID = loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
-  const { akashaProfile: profileData } =
-    data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
-  const hasProfile = data && profileData;
+  const hasProfile = !!data?.node;
+
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    navigateToModal({
+      name: 'login',
+      redirectTo,
+    });
+  };
 
   const goToHomepage = () => {
     navigateTo({
@@ -59,7 +64,11 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
     });
   };
 
-  if (loading || validDidCheckLoading) return <ProfileLoading />;
+  if (
+    authenticating /*check if authentication is in progress to prevent showing nsfw card to own profile during login */ ||
+    validDidCheckLoading
+  )
+    return <ProfileLoading />;
 
   if (error)
     return (
@@ -118,45 +127,46 @@ const ProfileInfoPage: React.FC<ProfilePageProps> = props => {
   };
 
   return (
-    <Stack direction="column" spacing="gap-y-4" fullWidth>
-      {profileData?.description && (
-        <ProfileBio title={t('Bio')} biography={profileData.description} />
-      )}
-      {!isLoggedIn && !hasProfile && (
-        <DefaultEmptyCard
-          infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
-          customCardSize={{ width: '140px', height: '85px' }}
-        />
-      )}
-
-      {isLoggedIn && !profileData && (
-        <DefaultEmptyCard
-          infoText={t('Uh-uh! it looks like you haven’t filled your information!')}
-          buttonLabel={t('Fill my info')}
-          buttonClickHandler={goToEditProfile}
-        />
-      )}
-      {statsLoading && <ProfileStatLoading />}
-      {statData && (
-        <ProfileStatsView
-          profileId={profileId}
-          totalBeams={statData.totalBeams}
-          totalTopics={statData.totalTopics}
-          totalFollowers={statData.totalFollowers}
-          totalFollowing={statData.totalFollowing}
-          navigateTo={navigateTo}
-          showLoginModal={() => showLoginModal({ modal: { name: location.pathname } })}
-        />
-      )}
-      {profileData?.links?.length > 0 && (
-        <ProfileLinks
-          title={t('Find me on')}
-          links={profileData?.links}
-          copiedLabel={t('Copied')}
-          copyLabel={t('Copy to clipboard')}
-        />
-      )}
-    </Stack>
+    <>
+      <ProfileHeader profileId={profileId} />
+      <Stack direction="column" spacing="gap-y-4" fullWidth>
+        {profileData?.description && (
+          <ProfileBio title={t('Bio')} biography={profileData.description} />
+        )}
+        {!isLoggedIn && !hasProfile && (
+          <DefaultEmptyCard
+            infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
+            customCardSize={{ width: '140px', height: '85px' }}
+          />
+        )}
+        {isLoggedIn && !profileData && (
+          <DefaultEmptyCard
+            infoText={t('Uh-uh! it looks like you haven’t filled your information!')}
+            buttonLabel={t('Fill my info')}
+            buttonClickHandler={goToEditProfile}
+          />
+        )}
+        {statData && (
+          <ProfileStatsView
+            profileId={profileId}
+            totalBeams={statData.totalBeams}
+            totalTopics={statData.totalTopics}
+            totalFollowers={statData.totalFollowers}
+            totalFollowing={statData.totalFollowing}
+            navigateTo={navigateTo}
+            showLoginModal={() => showLoginModal({ modal: { name: location.pathname } })}
+          />
+        )}
+        {profileData?.links?.length > 0 && (
+          <ProfileLinks
+            title={t('Find me on')}
+            copiedLabel={t('Copied')}
+            copyLabel={t('Copy to clipboard')}
+            links={profileData?.links}
+          />
+        )}
+      </Stack>
+    </>
   );
 };
 

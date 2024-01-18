@@ -13,45 +13,40 @@ import {
   useIndexProfileMutation,
   useUpdateProfileMutation,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import {
-  transformSource,
-  hasOwn,
-  useRootComponentProps,
-  useGetLogin,
-} from '@akashaorg/ui-awf-hooks';
-import { useParams } from 'react-router';
+import { transformSource, hasOwn, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
 import { useSaveImage } from './use-save-image';
 import { PartialAkashaProfileInput } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { deleteImageAndGetProfileContent } from './delete-image-and-get-profile-content';
 import { EditProfileFormValues } from '@akashaorg/design-system-components/lib/components/EditProfile/types';
-import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
+import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 
 type EditProfilePageProps = {
-  handleProfileUpdatedFeedback: () => void;
+  profileId: string;
 };
 
 const EditProfilePage: React.FC<EditProfilePageProps> = props => {
+  const { profileId } = props;
   const { t } = useTranslation('app-profile');
-  const { handleProfileUpdatedFeedback } = props;
-  const { data: loginData, loading: authenticating } = useGetLogin();
-  const { profileId } = useParams<{ profileId: string }>();
-  const { getRoutingPlugin } = useRootComponentProps();
+  const { getRoutingPlugin, uiEvents } = useRootComponentProps();
   const { avatarImage, coverImage, saveImage, loading: isSavingImage } = useSaveImage();
-  const { data, error } = useGetProfileByDidSuspenseQuery({
-    variables: { id: profileId },
-    skip: !!profileId,
-  });
   const [activeTab, setActiveTab] = useState(0);
   const [selectedActiveTab, setSelectedActiveTab] = useState(0);
-  const [showModal, setShowModal] = useState(false);
+  const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [profileContentOnImageDelete, setProfileContentOnImageDelete] =
     useState<PartialAkashaProfileInput | null>(null);
-  const authenticatedDID = loginData?.id;
-  const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
+  const { data, error } = useGetProfileByDidSuspenseQuery({
+    variables: { id: profileId },
+  });
 
   const onCompleted = () => {
-    handleProfileUpdatedFeedback();
+    uiEvents.next({
+      event: NotificationEvents.ShowNotification,
+      data: {
+        type: NotificationTypes.Success,
+        message: t('Profile updated successfully'),
+      },
+    });
     navigateToProfileInfoPage();
   };
 
@@ -76,16 +71,6 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
   });
   const [indexProfileMutation] = useIndexProfileMutation();
   const isProcessing = createProfileProcessing || updateProfileProcessing;
-
-  if (authenticating) return <ProfileLoading />;
-
-  if (!isLoggedIn || authenticatedDID !== profileId) {
-    navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
-    });
-    return null;
-  }
 
   if (error)
     return (
@@ -163,7 +148,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
-      <Card radius={20} elevation="1" customStyle="py-4 h-full mb-4">
+      <Card radius={20} elevation="1" customStyle="py-4 h-full">
         <EditProfile
           defaultValues={
             profileData
@@ -258,10 +243,10 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
       </Card>
       <Modal
         title={{ label: t('Unsaved Changes') }}
-        show={showModal}
+        show={showUnsavedChangesModal}
         onClose={() => {
           setSelectedActiveTab(activeTab);
-          setShowModal(false);
+          setShowUnsavedChangesModal(false);
         }}
         actions={[
           {
@@ -269,14 +254,14 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
             label: t('Leave'),
             onClick: () => {
               setActiveTab(selectedActiveTab);
-              setShowModal(false);
+              setShowUnsavedChangesModal(false);
             },
           },
           {
             variant: 'primary',
             label: 'Save',
             onClick: () => {
-              setShowModal(false);
+              setShowUnsavedChangesModal(false);
               //@TODO
             },
           },
