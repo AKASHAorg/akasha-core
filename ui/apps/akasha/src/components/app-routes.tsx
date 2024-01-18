@@ -88,10 +88,7 @@ const AppRoutes: React.FC<unknown> = () => {
           path={`${routes[TAGS]}/:tagName`}
           element={
             <ErrorBoundary {...errorBoundaryProps}>
-              <TagFeedPage
-                authenticatedProfile={authenticatedProfile}
-                showLoginModal={showLoginModal}
-              />
+              <TagFeedPage showLoginModal={showLoginModal} />
             </ErrorBoundary>
           }
         />
