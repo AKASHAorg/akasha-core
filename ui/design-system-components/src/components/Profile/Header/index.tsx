@@ -13,7 +13,6 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import {
   Cog6ToothIcon,
   EllipsisVerticalIcon,
-  EnvelopeIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -34,6 +33,7 @@ export type HeaderProps = {
   publicImagePath: string;
   metadata?: ReactElement;
   actionElement?: ReactElement;
+  onClickProfileName: () => void;
   handleEdit?: () => void;
   transformSource: (src: Image) => Image;
 };
@@ -53,6 +53,7 @@ const Header: React.FC<HeaderProps> = ({
   publicImagePath,
   metadata,
   actionElement,
+  onClickProfileName,
   handleEdit,
   transformSource,
 }) => {
@@ -91,7 +92,9 @@ const Header: React.FC<HeaderProps> = ({
             </Stack>
             <Stack direction="column" spacing="gap-y-1">
               <Stack direction="row" align="center" spacing="gap-x-1">
-                <Text variant="button-lg">{name}</Text>
+                <Button plain={true} onClick={onClickProfileName}>
+                  <Text variant="button-lg">{name}</Text>
+                </Button>
                 {metadata}
               </Stack>
               <DidField

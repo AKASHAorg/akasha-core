@@ -95,6 +95,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     });
   };
 
+  const handleClickProfileName = () => {
+    navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => `/${profileId}`,
+    });
+  };
+
   const handleEdit = () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
@@ -160,6 +167,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
           </Tooltip>
         )
       }
+      onClickProfileName={handleClickProfileName}
       handleEdit={handleEdit}
       transformSource={transformSource}
     />
