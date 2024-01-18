@@ -1,51 +1,42 @@
 import React, { useMemo, useState } from 'react';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
-import {
-  CheckCircleIcon,
-  CheckIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Snackbar from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import EditInterests from '@akashaorg/design-system-components/lib/components/EditInterests';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import {
   useGetInterestsByDidQuery,
   useCreateInterestsMutation,
   useUpdateInterestsMutation,
   GetInterestsByDidDocument,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import {
-  useShowFeedback,
-  hasOwn,
-  useRootComponentProps,
-  useGetLogin,
-} from '@akashaorg/ui-awf-hooks';
+import { hasOwn, useRootComponentProps, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
 import { useApolloClient } from '@apollo/client';
 import { AkashaProfileInterestsLabeled } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import { NotificationTypes } from '@akashaorg/typings/lib/ui';
-import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 
-const InterestsPage: React.FC<unknown> = () => {
+type InterestsPageProps = {
+  profileId: string;
+};
+
+const InterestsPage: React.FC<InterestsPageProps> = props => {
+  const { profileId } = props;
   const { t } = useTranslation('app-profile');
   const { data: loginData, loading: authenticating } = useGetLogin();
-  const { profileId } = useParams<{ profileId: string }>();
   const { getRoutingPlugin } = useRootComponentProps();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeInterests, setActiveInterests] = useState([]);
-
-  const [showFeedback, setShowFeedback] = useShowFeedback(false);
 
   const authenticatedDID = loginData?.id;
   const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const apolloClient = useApolloClient();
 
-  const { data: ownInterestsQueryData } = useGetInterestsByDidQuery({
+  const { data: ownInterestsQueryData, loading } = useGetInterestsByDidQuery({
     variables: { id: authenticatedDID },
     skip: !isLoggedIn,
   });
@@ -78,15 +69,8 @@ const InterestsPage: React.FC<unknown> = () => {
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  if (authenticating) return <ProfileLoading />;
-
-  if (!isLoggedIn) {
-    navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `/${profileId}`,
-    });
-    return null;
-  }
+  //@TODO: add proper skeleton for interests page
+  if (loading || authenticating) return <Spinner />;
 
   const handleInterestClick = topic => {
     //subscribe only if logged in user hasn't subscribed before otherwise navigate to the topic page
@@ -156,7 +140,14 @@ const InterestsPage: React.FC<unknown> = () => {
               )}
             </Text>
 
-            <Stack align="center" justify="start" spacing="gap-2" customStyle="flex-wrap w-full">
+            <Stack
+              direction="row"
+              align="center"
+              justify="start"
+              spacing="gap-x-2"
+              customStyle="flex-wrap"
+              fullWidth
+            >
               {ownInterests.map((interest, idx) => (
                 <Pill
                   key={`${idx}-${interest}`}
@@ -213,17 +204,6 @@ const InterestsPage: React.FC<unknown> = () => {
           />
         )}
       </Card>
-      {showFeedback && (
-        <Snackbar
-          title={t('Successfully subscribed to interest')}
-          type={NotificationTypes.Success}
-          icon={<CheckCircleIcon />}
-          handleDismiss={() => {
-            setShowFeedback(false);
-          }}
-          customStyle="mb-4"
-        />
-      )}
     </Stack>
   );
 };

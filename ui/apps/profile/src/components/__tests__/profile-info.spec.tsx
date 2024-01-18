@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import * as queryListenerHooks from '@akashaorg/ui-awf-hooks/lib/use-query-listener';
 import * as statHook from '@akashaorg/ui-awf-hooks/lib/use-profile-stats';
 import * as apolloHooks from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
-import ProfileWithHeader from '../profile-with-header';
 import {
   renderWithAllProvidersAndApollo,
   act,
@@ -21,14 +20,7 @@ describe('< ProfileInfoPage />', () => {
 
   const BaseComponent = (
     <Router initialEntries={['/@akashaorg/app-profile/']}>
-      <ProfileWithHeader
-        handleCopyFeedback={jest.fn()}
-        navigateTo={navigateTo}
-        navigateToModal={jest.fn()}
-        showLoginModal={jest.fn()}
-      >
-        <ProfileInfoPage showLoginModal={jest.fn()} setShowNSFW={jest.fn()} showNSFW={false} />
-      </ProfileWithHeader>
+      <ProfileInfoPage profileId="did:pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff" />
     </Router>
   );
   const profile = genUser('pkh:eip155:5:0xc47a483494db8fe455ba29a53a7f75349dfc02ff');

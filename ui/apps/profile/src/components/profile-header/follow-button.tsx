@@ -14,6 +14,7 @@ const FollowButton: React.FC<FollowButtonProps> = props => {
   const { data: loginData } = useGetLogin();
   const authenticatedDID = loginData?.id;
   const isLoggedIn = !!loginData?.id;
+
   const { data, error } = useGetFollowDocumentsByDidSuspenseQuery({
     variables: {
       id: authenticatedDID,

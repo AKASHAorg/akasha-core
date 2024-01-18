@@ -2,13 +2,11 @@ import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 import { useEffect, useState } from 'react';
 
-const PROFILE_STATS_QUERY_KEY = 'Profile_Stats';
+const STAT_CACHE_KEY = '@statCacheKey';
 
 const getStats = async (profileId: string) => {
   if (!profileId) return null;
-
   const sdk = getSDK();
-
   const res = await sdk.api.profile.getProfileStats(profileId);
   return res;
 };
@@ -17,14 +15,14 @@ type Stats = Awaited<ReturnType<typeof getStats>>;
 
 /**
  * Hook to get profile stats
- *
+ * @example useProfileStats hook
  * ```typescript
  * const profileStatsQuery = useProfileStats('did:pkh:eip155:5:0xadc81c169...');
 
  * console.log(profileStatsQuery.data)
  * ```
  */
-export function useProfileStats(profileId: string) {
+export function useProfileStats(profileId: string, readCache?: boolean) {
   const [loading, setLoading] = useState(false);
   const [stat, setStat] = useState<Stats>(null);
   const [error, setError] = useState(null);
@@ -33,7 +31,20 @@ export function useProfileStats(profileId: string) {
     const fetchStats = async () => {
       setLoading(true);
       try {
-        setStat(await getStats(profileId));
+        if (readCache) {
+          const statCache = JSON.parse(localStorage.getItem(STAT_CACHE_KEY)) || {
+            data: {
+              totalFollowing: 0,
+              totalFollowers: 0,
+              totalBeams: 0,
+              totalTopics: 0,
+            },
+          };
+          setStat(statCache);
+        }
+        const stats = await getStats(profileId);
+        setStat(stats);
+        localStorage.setItem(STAT_CACHE_KEY, JSON.stringify(stats));
       } catch (err) {
         setError(err);
         logError('useProfileStats.getStats', err);
@@ -42,7 +53,7 @@ export function useProfileStats(profileId: string) {
       }
     };
     fetchStats();
-  }, [profileId]);
+  }, [readCache, profileId]);
 
   return {
     data: stat?.data,
@@ -50,5 +61,3 @@ export function useProfileStats(profileId: string) {
     error,
   };
 }
-
-useProfileStats.getKey = (profileId: string) => [`${PROFILE_STATS_QUERY_KEY}_${profileId}`];
