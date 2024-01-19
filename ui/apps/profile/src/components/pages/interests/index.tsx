@@ -69,7 +69,6 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  //@TODO: add proper skeleton for interests page
   if (loading || authenticating) return <ProfileInterestsLoading />;
 
   const handleInterestClick = topic => {
