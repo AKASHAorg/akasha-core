@@ -4,7 +4,7 @@ import { CheckIcon } from '@akashaorg/design-system-core/lib/components/Icon/her
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { ProfileInterestsLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import EditInterests from '@akashaorg/design-system-components/lib/components/EditInterests';
 import { useTranslation } from 'react-i18next';
 import {
@@ -69,8 +69,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
     context: { source: sdk.services.gql.contextSources.composeDB },
   });
 
-  //@TODO: add proper skeleton for interests page
-  if (loading || authenticating) return <Spinner />;
+  if (loading || authenticating) return <ProfileInterestsLoading />;
 
   const handleInterestClick = topic => {
     //subscribe only if logged in user hasn't subscribed before otherwise navigate to the topic page
