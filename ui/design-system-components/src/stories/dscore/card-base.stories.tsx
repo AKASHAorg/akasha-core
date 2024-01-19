@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import Card, { TCardProps } from '@akashaorg/design-system-core/lib/components/Card';
 
-const meta: Meta<React.FC<TCardProps>> = {
+const meta: Meta<TCardProps> = {
   title: 'DSCore/Cards/Card',
   component: Card,
 };

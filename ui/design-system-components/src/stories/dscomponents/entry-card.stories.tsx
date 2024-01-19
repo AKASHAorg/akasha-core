@@ -4,7 +4,7 @@ import EntryLoadingPlaceholder from '../../components/Entry/EntryCardLoading';
 import type { Meta, StoryObj } from '@storybook/react';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
-const meta: Meta<React.FC<EntryCardProps>> = {
+const meta: Meta<EntryCardProps> = {
   title: 'DSComponents/Card/EntryCard',
   component: EntryCard,
 };
