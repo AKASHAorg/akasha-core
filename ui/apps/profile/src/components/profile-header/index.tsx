@@ -36,9 +36,12 @@ type ProfileHeaderProps = {
 };
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const { profileId } = props;
+  const [showOverlay, setShowOverlay] = React.useState(false);
+
   const { t } = useTranslation('app-profile');
   const { data: loginData } = useGetLogin();
   const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
+
   const { data, error } = useGetProfileByDidSuspenseQuery({
     fetchPolicy:
       'cache-first' /*data is prefetched during route matching as a result we prefer reading cache first here  */,
@@ -47,6 +50,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const { validDid, isEthAddress } = useValidDid(profileId, !!data?.node);
   const { akashaProfile: profileData } =
     data?.node && hasOwn(data.node, 'akashaProfile') ? data.node : { akashaProfile: null };
+
   const showLoginModal = useCallback(
     (redirectTo?: { modal: ModalNavigationOptions }) => {
       navigateToModal({
@@ -58,6 +62,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   );
 
   const isLoggedIn = !!loginData?.id;
+  const authenticatedDID = loginData?.id;
+  const isViewer = profileData?.did?.id === authenticatedDID;
+  const navigateTo = getRoutingPlugin().navigateTo;
+
+  const handleClickAvatar = () => {
+    if (!profileData?.avatar) return;
+    setShowOverlay(true);
+  };
+
+  const handleCloseOverlay = () => {
+    setShowOverlay(false);
+  };
 
   const handleFlag = React.useCallback(
     (itemId: string, itemType: EntityTypes, user: string) => () => {
@@ -68,19 +84,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
     },
     [isLoggedIn, navigateToModal, showLoginModal],
   );
-  const authenticatedDID = loginData?.id;
-  const isViewer = profileData?.did?.id === authenticatedDID;
-  const navigateTo = getRoutingPlugin().navigateTo;
-
-  if (error)
-    return (
-      <ErrorLoader
-        type="script-error"
-        title={t('There was an error loading the profile header')}
-        details={t('We cannot show this profile header right now')}
-        devDetails={error.message}
-      />
-    );
 
   const handleCopy = () => {
     const profileUrl = new URL(location.pathname, location.origin).href;
@@ -127,6 +130,16 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       : []),
   ];
 
+  if (error)
+    return (
+      <ErrorLoader
+        type="script-error"
+        title={t('There was an error loading the profile header')}
+        details={t('We cannot show this profile header right now')}
+        devDetails={error.message}
+      />
+    );
+
   return (
     <ProfileHeaderPresentation
       profileId={profileData?.did?.id ? profileData.did.id : profileId}
@@ -139,7 +152,6 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       menuItems={menuItems}
       copyLabel={t('Copy to clipboard')}
       copiedLabel={t('Copied')}
-      publicImagePath="/images"
       followElement={
         <Suspense
           fallback={<CircularPlaceholder height="h-8" width="w-8" customStyle="ml-auto shrink-0" />}
@@ -167,6 +179,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
           </Tooltip>
         )
       }
+      showOverlay={showOverlay}
+      onClickAvatar={handleClickAvatar}
+      onCloseOverlay={handleCloseOverlay}
       onClickProfileName={handleClickProfileName}
       handleEdit={handleEdit}
       transformSource={transformSource}
