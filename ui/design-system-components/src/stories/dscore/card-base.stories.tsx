@@ -1,15 +1,15 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Card, { CardProps } from '@akashaorg/design-system-core/lib/components/Card';
+import Card, { TCardProps } from '@akashaorg/design-system-core/lib/components/Card';
 
-const meta: Meta<CardProps> = {
+const meta: Meta<React.FC<TCardProps>> = {
   title: 'DSCore/Cards/Card',
   component: Card,
 };
 
 export default meta;
-type Story = StoryObj<CardProps>;
+type Story = StoryObj<TCardProps>;
 
 const CardContents = (
   <>

@@ -77,6 +77,11 @@ export const BaseEditProfile: Story = {
       addNewLinkButtonLabel="Add new"
       description="You can add your personal websites or social links to be shared on your profile"
       socialLinks={[]}
+      nsfw={{
+        label: 'Select NSFW if your profile contains mature or explicit content.',
+        initialValue: false,
+      }}
+      nsfwFormLabel="NSFW Profile"
     />
   ),
 };
