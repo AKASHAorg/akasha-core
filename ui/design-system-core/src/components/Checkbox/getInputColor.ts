@@ -5,5 +5,5 @@ export function getInputColor(isDisabled: boolean, error: boolean) {
   if (isDisabled) {
     return 'grey4';
   }
-  return 'secondaryLight';
+  return 'secondaryLight dark:secondaryDark';
 }

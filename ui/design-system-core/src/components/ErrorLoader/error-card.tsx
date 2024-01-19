@@ -55,7 +55,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
       ) : (
         <Text
           variant="body2"
-          color={{ light: 'secondaryLight', dark: 'secondaryLight' }}
+          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
           customStyle="text-center pt-4 px-4 w-full"
           align="center"
         >
