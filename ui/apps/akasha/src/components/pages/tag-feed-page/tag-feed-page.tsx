@@ -1,43 +1,150 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { mapBeamEntryData, useRootComponentProps } from '@akashaorg/ui-awf-hooks';
-import { BeamCard, BeamFeed } from '@akashaorg/ui-lib-feed';
-import { ModalNavigationOptions, Profile } from '@akashaorg/typings/lib/ui';
+import getSDK from '@akashaorg/awf-sdk';
+import { hasOwn, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import {
+  useGetIndexedStreamCountQuery,
+  useGetInterestsByDidQuery,
+  useCreateInterestsMutation,
+  useUpdateInterestsMutation,
+} from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { BeamContentResolver, TagFeed } from '@akashaorg/ui-lib-feed';
+import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Helmet from '@akashaorg/design-system-core/lib/utils/helmet';
 import TagProfileCard from '@akashaorg/design-system-components/lib/components/TagProfileCard';
+import TagFeedHeaderLoader from './tag-feed-header-loader';
 import ScrollTopWrapper from '@akashaorg/design-system-core/lib/components/ScrollTopWrapper';
 import ScrollTopButton from '@akashaorg/design-system-core/lib/components/ScrollTopButton';
 
 export type TagFeedPageProps = {
-  authenticatedProfile?: Profile;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
 const TagFeedPage: React.FC<TagFeedPageProps> = props => {
-  const { authenticatedProfile, showLoginModal } = props;
+  const { showLoginModal } = props;
+  const { data } = useGetLogin();
+  const isLoggedIn = !!data?.id;
+  const authenticatedDID = data?.id;
+
+  const { tagName } = useParams<{ tagName: string }>();
 
   const { t } = useTranslation('app-akasha-integration');
-  const { getRoutingPlugin } = useRootComponentProps();
 
-  // const { tagName } = useParams<{ tagName: string }>();
+  const sdk = getSDK();
+  const {
+    data: beamCountData,
+    loading: loadingCount,
+    error: countQueryError,
+  } = useGetIndexedStreamCountQuery({
+    variables: {
+      indexer: sdk.services.gql.indexingDID,
+      filters: {
+        and: [
+          { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
+          { where: { indexType: { equalTo: sdk.services.gql.labelTypes.TAG } } },
+          { where: { indexValue: { equalTo: tagName } } },
+          { where: { active: { equalTo: true } } },
+        ],
+      },
+    },
+  });
 
-  // @TODO fix hooks
-  const getTagQuery = undefined;
+  const beamCount = useMemo(() => {
+    return beamCountData && hasOwn(beamCountData.node, 'akashaIndexedStreamListCount')
+      ? beamCountData.node.akashaIndexedStreamListCount
+      : 0;
+  }, [beamCountData]);
 
-  // const tagSubscriptionsReq = undefined;
-  const tagSubscriptions = undefined;
+  // fetch user's interest subscription
 
-  const toggleTagSubscriptionReq = undefined;
+  const { data: tagSubscriptionsData, refetch: refetchTagSubscriptions } =
+    useGetInterestsByDidQuery({
+      variables: { id: authenticatedDID },
+      skip: !isLoggedIn,
+    });
+
+  const tagSubscriptions = useMemo(() => {
+    if (!isLoggedIn) return null;
+    return tagSubscriptionsData &&
+      hasOwn(tagSubscriptionsData.node, 'akashaProfileInterests') &&
+      tagSubscriptionsData.node.akashaProfileInterests?.topics.length > 0
+      ? tagSubscriptionsData.node.akashaProfileInterests?.topics.map(topic => topic.value)
+      : [];
+  }, [isLoggedIn, tagSubscriptionsData]);
+
+  const tagSubscriptionsId = useMemo(() => {
+    if (!isLoggedIn) return null;
+    return tagSubscriptionsData && hasOwn(tagSubscriptionsData.node, 'akashaProfileInterests')
+      ? tagSubscriptionsData.node.akashaProfileInterests?.id
+      : null;
+  }, [isLoggedIn, tagSubscriptionsData]);
+
+  const [createInterestsMutation, { loading, error }] = useCreateInterestsMutation({
+    context: { source: sdk.services.gql.contextSources.composeDB },
+  });
+
+  const [updateInterestsMutation, { loading: updateLoading, error: updateError }] =
+    useUpdateInterestsMutation({
+      context: { source: sdk.services.gql.contextSources.composeDB },
+    });
+
+  const executeInterestsMutation = (interests: string[]) => {
+    if (tagSubscriptionsId) {
+      updateInterestsMutation({
+        variables: {
+          i: {
+            id: tagSubscriptionsId,
+            content: {
+              topics: [...new Set(interests)].map(tag => ({
+                value: tag,
+                labelType: sdk.services.gql.labelTypes.INTEREST,
+              })),
+            },
+          },
+        },
+        onError: () => {
+          refetchTagSubscriptions();
+        },
+      });
+    } else {
+      createInterestsMutation({
+        variables: {
+          i: {
+            content: {
+              topics: [...new Set(tagSubscriptions)].map(tag => ({
+                value: tag,
+                labelType: sdk.services.gql.labelTypes.INTEREST,
+              })),
+            },
+          },
+        },
+        onError: () => {
+          refetchTagSubscriptions();
+        },
+      });
+    }
+  };
 
   const handleTagSubscribe = (tagName: string) => {
-    if (!authenticatedProfile?.did?.id) {
+    if (!isLoggedIn) {
       showLoginModal();
       return;
     }
-    toggleTagSubscriptionReq.mutate(tagName);
+    const newInterests = [...tagSubscriptions, tagName];
+    executeInterestsMutation(newInterests);
+  };
+
+  const handleTagUnsubscribe = (tagName: string) => {
+    if (!isLoggedIn) {
+      showLoginModal();
+      return;
+    }
+    const newInterests = tagSubscriptions.filter(topic => topic !== tagName);
+    executeInterestsMutation(newInterests);
   };
 
   return (
@@ -45,26 +152,32 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
       <Helmet.Helmet>
         <title>AKASHA World</title>
       </Helmet.Helmet>
-      {getTagQuery?.status === 'loading' && <Spinner />}
-      {getTagQuery?.status === 'error' && (
+      {loadingCount && <TagFeedHeaderLoader />}
+      {countQueryError && (
         <ErrorLoader
           type="script-error"
           title={t('Error loading tag data')}
-          details={getTagQuery?.error?.message}
+          details={countQueryError?.message}
         />
       )}
-      {getTagQuery?.status === 'success' && (
+      {!loadingCount && (
         <Stack customStyle="mb-2">
           <TagProfileCard
-            tag={getTagQuery?.data}
+            tag={{
+              name: tagName,
+              totalPosts: beamCount,
+            }}
             subscribedTags={tagSubscriptions}
-            handleSubscribeTag={handleTagSubscribe}
-            handleUnsubscribeTag={handleTagSubscribe}
+            isLoading={loading || updateLoading}
+            mentionsLabel={beamCount + (beamCount > 1 ? ' Beams' : ' Beam')}
+            handleSubscribeTag={() => handleTagSubscribe(tagName)}
+            handleUnsubscribeTag={() => handleTagUnsubscribe(tagName)}
           />
         </Stack>
       )}
-      <BeamFeed
-        queryKey={'app-akasha-integration_tag-antenna'}
+      <TagFeed
+        queryKey={`app-akasha-integration_tag-antenna_${tagName}`}
+        tag={tagName}
         estimatedHeight={150}
         itemSpacing={8}
         scrollerOptions={{ overscan: 10 }}
@@ -73,25 +186,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => (
-          <BeamCard
-            entryData={mapBeamEntryData(itemData.node)}
-            contentClickable={true}
-            onContentClick={() =>
-              getRoutingPlugin().navigateTo({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes => `${navRoutes.Beam}/${itemData.node.id}`,
-              })
-            }
-            onReflect={() =>
-              getRoutingPlugin().navigateTo({
-                appName: '@akashaorg/app-akasha-integration',
-                getNavigationUrl: navRoutes =>
-                  `${navRoutes.Beam}/${itemData.node.id}${navRoutes.Reflect}`,
-              })
-            }
-          />
-        )}
+        renderItem={itemData => <BeamContentResolver beamId={itemData.node.stream} />}
       />
     </Stack>
   );

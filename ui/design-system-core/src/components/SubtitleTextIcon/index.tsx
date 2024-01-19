@@ -15,6 +15,7 @@ export type SubtitleTextIconProps = {
   backgroundSize?: string;
   backgroundColor?: boolean;
   label?: string | number;
+  labelSize?: 'button-sm' | 'button-lg';
   subtitle?: string;
   subtitleIcon?: IconType;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
@@ -30,6 +31,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
     backgroundColor,
     backgroundSize,
     label,
+    labelSize = 'button-sm',
     subtitle,
     maxWidth,
     dataTestId,
@@ -63,7 +65,7 @@ const SubtitleTextIcon: React.FC<SubtitleTextIconProps> = props => {
       )}
 
       <Stack customStyle="max-w(xl:[8rem] lg:[10rem] md:[6rem] xs:[2rem])">
-        <Text variant="button-sm" weight="bold" truncate={true}>
+        <Text variant={labelSize} weight="bold" truncate={true}>
           {label}
         </Text>
 
