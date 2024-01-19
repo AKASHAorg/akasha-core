@@ -1,21 +1,23 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useBlocksPublishing } from './use-blocks-publishing';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   TrashIcon,
   XMarkIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
-import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui';
 import { Header } from './header';
 import { Footer } from './footer';
-import TextField from '@akashaorg/design-system-core/lib/components/TextField';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { useBlocksPublishing } from './use-blocks-publishing';
 
 export type uiState = 'editor' | 'tags' | 'blocks';
 
@@ -43,6 +45,8 @@ export const BeamEditor: React.FC = () => {
 
   const [tagValue, setTagValue] = React.useState('');
   const [editorTags, setEditorTags] = React.useState([]);
+  const [newTags, setNewTags] = React.useState([]);
+  const [errorMessage, setErrorMessage] = React.useState(null);
 
   const onBlockSelectAfter = (newSelection: ContentBlock) => {
     if (!newSelection?.propertyType) {
@@ -76,10 +80,14 @@ export const BeamEditor: React.FC = () => {
 
   const handleTagsBtn = () => {
     setUiState('tags');
-  };
 
-  const handleClickCancel = () => {
-    setUiState('editor');
+    /**
+     * copy existing tags, if any,
+     * to new tags state
+     */
+    if (editorTags.length > 0) {
+      setNewTags(editorTags);
+    }
   };
 
   const handleAddBlock = selectedBlock => {
@@ -92,21 +100,74 @@ export const BeamEditor: React.FC = () => {
     setUiState('editor');
   };
 
-  const handleAddTags = () => {
-    if (tagValue.length > 0) {
-      setEditorTags(prev => {
-        const removeDuplicates = new Set([...prev, tagValue]);
-        return [...removeDuplicates];
-      });
+  const targetKeys = [' ', ',', 'Enter'];
+  const targetCodes = ['Space', 'Comma', 'Enter'];
+
+  const allTags = [...new Set([...editorTags, ...newTags])];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const tag = e.currentTarget.value;
+    if (targetKeys.includes(tag.charAt(tag.length - 1))) return;
+    setTagValue(tag);
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (newTags.length === 10) {
+      setErrorMessage('Tags limit reached');
+    } else if (tagValue.length > 30) {
+      setErrorMessage('Tag is over the 30 characters limit');
+    } else if (newTags.includes(tagValue)) {
+      setErrorMessage('Tag added already, please try a different one');
+    } else {
+      setErrorMessage(null);
+    }
+    if (targetKeys.includes(e.key) || targetCodes.includes(e.code)) {
+      addTag();
+    }
+  };
+
+  const addTag = () => {
+    /**
+     * if tag length is at least 2 and total number of tags
+     * is less than max specified and tag is not previously
+     * added
+     */
+    if (
+      tagValue.length > 2 &&
+      tagValue.length <= 30 &&
+      allTags.length < 10 &&
+      !newTags.includes(tagValue)
+    ) {
+      setNewTags(prev => [...prev, tagValue]);
       setTagValue('');
     }
   };
 
-  const handleDeleteTag = tag => {
-    setEditorTags(prev => {
-      const filtered = new Set(prev.filter(elem => tag !== elem));
-      return [...filtered];
-    });
+  const handleDeleteTag = (tag: string) => {
+    if (newTags.includes(tag)) {
+      setNewTags(newTags.filter(_tag => _tag !== tag));
+    }
+    if (errorMessage) {
+      setErrorMessage(null);
+    }
+  };
+
+  const handleClickSave = () => {
+    setEditorTags(newTags);
+    setNewTags([]);
+    setUiState('editor');
+  };
+
+  const handleClickCancel = () => {
+    /**
+     * if uiState is 'tags', reset newTags and tagValue states,
+     * then set uiState to 'editor'
+     */
+    if (uiState === 'tags') {
+      setNewTags([]);
+      setTagValue('');
+    }
+    setUiState('editor');
   };
 
   const [disablePublishing, setDisablePublishing] = React.useState(false);
@@ -204,33 +265,71 @@ export const BeamEditor: React.FC = () => {
             uiState === 'tags' ? 'flex' : 'hidden'
           }`}
         >
-          <Stack padding={16} spacing="gap-2">
-            <Text variant="h6">{t('Beam Tags')}</Text>
-            <Text variant="subtitle2">
+          <Stack padding={16} spacing="gap-4">
+            <Stack direction="row" spacing="gap-x-1" align="center">
+              <Text variant="h6">{t('Beam Tags')}</Text>
+              <Text variant="footnotes2" color="grey7">
+                ({t('10 max')}.)
+              </Text>
+            </Stack>
+            <Text variant="subtitle2" color="grey7">
               {t(
                 'Use up to 10 tags to categorize your posts on AKASHA World, helping others discover your content more easily.',
               )}
             </Text>
-            <TextField
-              value={tagValue}
-              onChange={e => setTagValue(e.currentTarget.value)}
-              placeholder={t('Search for tags')}
-              type="text"
-            />
-            {editorTags.length === 0 && (
-              <Text variant="body2">{t('You haven’t added any tags yet')}</Text>
+            <Stack spacing="gap-y-1">
+              <SearchBar
+                inputValue={tagValue}
+                inputPlaceholderLabel={t('Search for tags')}
+                onInputChange={handleChange}
+                onKeyUp={handleKeyUp}
+                onSearch={() => {
+                  /** */
+                }}
+                responsive={true}
+                customStyle={`${
+                  errorMessage
+                    ? 'focus-within:border-errorLight dark:focus-within:border-errorDark))'
+                    : ''
+                }`}
+              />
+
+              {errorMessage && (
+                <Text variant="footnotes2" color={{ light: 'errorLight', dark: 'errorDark' }}>
+                  {t('{{errorMessage}}', { errorMessage })}
+                </Text>
+              )}
+            </Stack>
+            {newTags.length === 0 && (
+              <Text variant="body2" weight="bold">
+                {t("You haven't added any tags yet")}
+              </Text>
             )}
-            <Stack direction="row" spacing="gap-2" customStyle="flex-wrap mt-2">
-              {editorTags.length > 0 &&
-                editorTags.map((tag, index) => (
-                  <Pill
-                    key={index}
-                    label={tag}
-                    icon={<XMarkIcon />}
-                    iconDirection="right"
-                    onPillClick={() => handleDeleteTag(tag)}
-                  />
-                ))}
+            <Stack fullWidth direction="row" align="center" justify="end" spacing="gap-2">
+              <Button
+                variant="text"
+                label={t('Clear All')}
+                disabled={!newTags.length}
+                onClick={() => setNewTags([])}
+              />
+              <Button
+                variant="secondary"
+                label={t('Add')}
+                disabled={tagValue.length < 3 || tagValue.length > 30 || newTags.includes(tagValue)}
+                onClick={addTag}
+              />
+            </Stack>
+            <Stack direction="row" spacing="gap-2" customStyle="flex-wrap">
+              {newTags.map((tag, index) => (
+                <Pill
+                  key={index}
+                  label={tag}
+                  active={!editorTags.includes(tag)}
+                  icon={<XMarkIcon />}
+                  iconDirection="right"
+                  onPillClick={() => handleDeleteTag(tag)}
+                />
+              ))}
             </Stack>
           </Stack>
         </Stack>
@@ -240,19 +339,18 @@ export const BeamEditor: React.FC = () => {
         handleClickAddBlock={handleAddBlockBtn}
         handleClickTags={handleTagsBtn}
         handleClickCancel={handleClickCancel}
-        handleAddTags={handleAddTags}
+        handleClickSave={handleClickSave}
         handleBeamPublish={handleBeamPublish}
         addBlockLabel={t('Add a Block')}
-        addLabel={t('Add')}
-        cancelLabel={t('Close')}
+        saveTagsLabel={t('Save')}
+        cancelLabel={t('Cancel')}
         blocksLabel={t('Blocks')}
         tagsLabel={t('Tags')}
         publishLabel={t('Beam it')}
         blocksNumber={blocksInUse.length}
-        tagsNumber={editorTags.length}
-        tagValue={tagValue}
-        isPublishing={isPublishing}
-        disablePublishing={disablePublishing}
+        tagsNumber={uiState === 'tags' ? newTags.length : allTags.length}
+        disableBeamPublishing={isPublishing || disablePublishing}
+        disableTagsSave={isPublishing || JSON.stringify(newTags) === JSON.stringify(editorTags)}
       />
     </Card>
   );

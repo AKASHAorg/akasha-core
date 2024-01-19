@@ -7,28 +7,29 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 export type SearchBarProps = {
   inputValue: string;
-  onInputChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   inputPlaceholderLabel?: string;
-  onSearch: (keyword: string) => void;
   responsive?: boolean;
   searchInputSize?: string;
   iconSize?: IconProps['size'];
+  customStyle?: string;
+  onSearch: (keyword: string) => void;
+  onKeyUp?: (ev: React.KeyboardEvent<HTMLInputElement>) => void;
+  onInputChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const SearchBar: React.FC<SearchBarProps> = props => {
-  const {
-    inputValue,
-    onInputChange,
-    inputPlaceholderLabel,
-    onSearch,
-    // responsive,
-    // searchInputSize = 'xsmall',
-    // iconSize = 'xs',
-  } = props;
+  const { inputValue, customStyle, onInputChange, inputPlaceholderLabel, onSearch, onKeyUp } =
+    props;
 
   const handleSearch = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
       onSearch(inputValue);
+    }
+  };
+
+  const handleKeyUp = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+    if (onKeyUp && typeof onKeyUp === 'function') {
+      onKeyUp(ev);
     }
   };
 
@@ -37,7 +38,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
       direction="row"
       spacing="gap-y-2"
       align="center"
-      customStyle="px-2.5 bg-grey9 dark:bg-grey3 rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark"
+      customStyle={`px-2.5 bg-grey9 dark:bg-grey3 rounded-full focus-within:border focus-within:border-secondaryLight dark:focus-within:border-secondaryDark ${customStyle}`}
     >
       <input
         type="text"
@@ -48,6 +49,7 @@ const SearchBar: React.FC<SearchBarProps> = props => {
         value={inputValue}
         onChange={onInputChange}
         onKeyDown={handleSearch}
+        onKeyUp={handleKeyUp}
       />
       <Icon icon={<MagnifyingGlassIcon />} />
     </Stack>
