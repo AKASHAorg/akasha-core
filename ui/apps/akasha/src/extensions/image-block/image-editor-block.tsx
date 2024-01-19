@@ -73,6 +73,11 @@ export const ImageEditorBlock = (
   const [caption, setCaption] = React.useState('');
   const [showEditModal, setShowEditModal] = React.useState(false);
 
+  React.useEffect(() => {
+    const disablePublish = imageGalleryImages.length === 0;
+    props.blockInfo.externalHandler(disablePublish);
+  }, [imageGalleryImages, props.blockInfo]);
+
   const createBlock = React.useCallback(async () => {
     const imageData = {
       images: contentBlockImages.map(imageObj => {
@@ -269,6 +274,9 @@ export const ImageEditorBlock = (
 
   const handleCaptionClick = () => {
     setShowCaption(!showCaption);
+    if (!showCaption) {
+      setCaption('');
+    }
   };
 
   const handleLeftAlignClick = () => {

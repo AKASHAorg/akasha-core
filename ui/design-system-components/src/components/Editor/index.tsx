@@ -88,7 +88,7 @@ export type EditorBoxProps = {
   getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
-  handleDisablePublish?: (value: any) => void;
+  handleDisablePublish?: (value: boolean) => void;
 };
 
 /* eslint-disable complexity */

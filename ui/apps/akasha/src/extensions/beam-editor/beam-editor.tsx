@@ -4,10 +4,7 @@ import { useBlocksPublishing } from './use-blocks-publishing';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import {
-  TrashIcon,
-  XMarkIcon,
-} from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { XMarkIcon } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { ContentBlockExtension } from '@akashaorg/ui-lib-extensions/lib/react/content-block';
 import { type ContentBlock, ContentBlockModes } from '@akashaorg/typings/lib/ui';
@@ -16,6 +13,7 @@ import { Footer } from './footer';
 import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { useRootComponentProps } from '@akashaorg/ui-awf-hooks';
+import { BlockHeader } from './block-header';
 
 export type uiState = 'editor' | 'tags' | 'blocks';
 
@@ -29,6 +27,7 @@ export const BeamEditor: React.FC = () => {
     blocksInUse,
     addBlockToList,
     removeBlockFromList,
+    updateBlockDisablePublishState,
   } = useBlocksPublishing({
     onComplete: beamData => {
       getRoutingPlugin().navigateTo({
@@ -60,9 +59,14 @@ export const BeamEditor: React.FC = () => {
   React.useEffect(() => {
     if (blocksInUse.length) {
       bottomRef.current?.scrollIntoView({
-        behavior: 'smooth',
+        behavior: 'auto',
         block: 'end',
       });
+    }
+    if (blocksInUse.some(block => block.disablePublish === true)) {
+      setDisablePublishing(true);
+    } else {
+      setDisablePublishing(false);
     }
   }, [blocksInUse]);
 
@@ -110,9 +114,6 @@ export const BeamEditor: React.FC = () => {
   };
 
   const [disablePublishing, setDisablePublishing] = React.useState(false);
-  const handleDisablePublishing = (value: boolean) => {
-    setDisablePublishing(value);
-  };
 
   return (
     <Card customStyle="divide(y grey9 dark:grey3) h-[80vh] justify-between" padding={0}>
@@ -129,35 +130,15 @@ export const BeamEditor: React.FC = () => {
           {blocksInUse.map((block, idx) => (
             <div key={`${block.key}`} id={`${block.propertyType}-${idx}`}>
               <Stack padding={16} direction="column" spacing="gap-2">
-                <Stack direction="row" justify="between">
-                  <Stack
-                    align="center"
-                    justify="center"
-                    customStyle={
-                      'h-8 w-8 group relative rounded-full bg(secondaryLight/30 dark:secondaryDark)'
-                    }
-                  >
-                    <Icon size="md" icon={block.icon} />
-                  </Stack>
-                  <button onClick={() => removeBlockFromList(block.order)}>
-                    <Stack
-                      align="center"
-                      justify="center"
-                      customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
-                    >
-                      <Icon
-                        icon={<TrashIcon />}
-                        size="md"
-                        color={{ light: 'errorLight', dark: 'errorDark' }}
-                      />
-                    </Stack>
-                  </button>
-                </Stack>
+                <BlockHeader
+                  icon={block.icon}
+                  handleRemoveBlock={() => removeBlockFromList(block.order)}
+                />
                 <ContentBlockExtension
                   editMode={{
                     appName: block.appName,
                     propertyType: block.propertyType,
-                    externalHandler: handleDisablePublishing,
+                    externalHandler: value => updateBlockDisablePublishState(value, block.order),
                   }}
                   mode={ContentBlockModes.EDIT}
                   blockRef={block.blockRef}
@@ -190,7 +171,7 @@ export const BeamEditor: React.FC = () => {
                       justify="center"
                       customStyle={'h-8 w-8 group relative rounded-full bg(grey9 dark:grey5)'}
                     >
-                      <Icon size="lg" icon={block.icon} />
+                      <Icon size="sm" icon={block.icon} />
                     </Stack>
                     <Text>{block.displayName}</Text>
                   </Stack>
