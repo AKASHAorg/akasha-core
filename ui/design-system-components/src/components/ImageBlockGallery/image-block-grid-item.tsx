@@ -34,7 +34,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
   };
 
   const multipleImageStyle = apply`${images.length > 1 && 'aspect-square'}`;
-  const mobileStyle = apply`${'max-h-40 sm:max-h-60'}`;
+  const heightStyle = apply`${images.length === 1 && 'max-h-40 sm:max-h-60'}`;
 
   return (
     <button
@@ -56,10 +56,11 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
 
         <img
           alt={imageSrc?.src}
-          className={tx(`rounded object-cover w-full ${mobileStyle} ${multipleImageStyle}`)}
+          className={tx(`rounded object-cover w-full ${heightStyle} ${multipleImageStyle}`)}
           src={imageSrc?.src}
           onLoad={() => setImgLoaded(true)}
           hidden={!imgLoaded}
+          height={images.length === 1 ? imageSrc?.size?.height : ''}
         />
       </picture>
 
@@ -68,7 +69,7 @@ export const ImageBlockGridItem: React.FC<IGridItemProps> = props => {
           <div className={tw('flex')}>
             <img
               alt={'placeholder'}
-              className={tx(`rounded object-cover w-full  ${mobileStyle} ${multipleImageStyle}`)}
+              className={tx(`rounded object-cover w-full  ${heightStyle} ${multipleImageStyle}`)}
               src={'/images/image-placeholder.webp'}
               height={images.length === 1 ? imageSrc?.size?.height : ''}
             />
