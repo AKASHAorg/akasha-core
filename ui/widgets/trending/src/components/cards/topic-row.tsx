@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import getSDK from '@akashaorg/awf-sdk';
+import { hasOwn } from '@akashaorg/ui-awf-hooks';
+import { useGetIndexedStreamCountQuery } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
+import { AkashaIndexedStreamStreamType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import {
   CheckIcon,
   HashtagIcon,
@@ -21,7 +25,6 @@ export type TopicRowProps = {
   isLoading: boolean;
   // handlers
   onClickTopic: (topic: string) => void;
-  // setSubscribedInterests: React.Dispatch<React.SetStateAction<string[]>>;
   showLoginModal: () => void;
   handleTopicUnsubscribe: (topic: string) => void;
   handleTopicSubscribe: (topic: string) => void;
@@ -43,6 +46,26 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
     handleTopicUnsubscribe,
     handleTopicSubscribe,
   } = props;
+  const sdk = getSDK();
+  const { data: beamCountData, loading: loadingCount } = useGetIndexedStreamCountQuery({
+    variables: {
+      indexer: sdk.services.gql.indexingDID,
+      filters: {
+        and: [
+          { where: { streamType: { equalTo: AkashaIndexedStreamStreamType.Beam } } },
+          { where: { indexType: { equalTo: sdk.services.gql.labelTypes.TAG } } },
+          { where: { indexValue: { equalTo: tag } } },
+          { where: { active: { equalTo: true } } },
+        ],
+      },
+    },
+  });
+
+  const beamCount = useMemo(() => {
+    return beamCountData && hasOwn(beamCountData.node, 'akashaIndexedStreamListCount')
+      ? beamCountData.node.akashaIndexedStreamListCount
+      : 0;
+  }, [beamCountData]);
 
   return (
     <Stack
@@ -54,7 +77,11 @@ export const TopicRow: React.FC<TopicRowProps> = props => {
     >
       <SubtitleTextIcon
         label={tag}
-        subtitle={`0 ${tagSubtitleLabel}`}
+        subtitle={
+          !loadingCount && beamCount > 1
+            ? `${beamCount} ${tagSubtitleLabel}s`
+            : `${beamCount} ${tagSubtitleLabel}`
+        }
         icon={<HashtagIcon />}
         backgroundColor={true}
         onClick={() => onClickTopic(tag)}
