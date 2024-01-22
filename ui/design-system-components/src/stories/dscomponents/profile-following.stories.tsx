@@ -36,13 +36,14 @@ const followingData = {
   createdAt: Date.now(),
   name: 'Latte Lover',
   did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377', isViewer: true },
-  followers: null,
+  // followers: null,
   followersCount: 0,
 };
 
 const variants: FollowingProps[] = [
   {
     ...commonProps,
+    titleLabel: 'This user is not following anyone yet',
     following: [
       {
         id: '1',
@@ -54,13 +55,15 @@ const variants: FollowingProps[] = [
   },
   {
     ...commonProps,
+    titleLabel: 'This user is not following anyone yet',
     following: [],
   },
 
   {
     ...commonProps,
+    titleLabel: 'You have no following yet',
     following: [],
-    viewerIsOwner: false,
+    // viewerIsOwner: false,
   },
 ];
 

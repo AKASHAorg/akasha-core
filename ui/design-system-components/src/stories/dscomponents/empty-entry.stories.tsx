@@ -14,11 +14,10 @@ type Story = StoryObj<EmptyEntryProps>;
 
 const variants: EmptyEntryProps[] = [
   {
-    type: 'following',
+    titleLabel: 'This user has no followers yet',
   },
   {
-    type: 'following',
-    viewerIsOwner: false,
+    titleLabel: 'This user is not following anyone yet',
   },
 ];
 
