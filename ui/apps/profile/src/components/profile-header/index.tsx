@@ -137,7 +137,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
         <Suspense
           fallback={<CircularPlaceholder height="h-8" width="w-8" customStyle="ml-auto shrink-0" />}
         >
-          <FollowButton profileID={profileData?.id} showLoginModal={showLoginModal} />
+          {profileData?.id && (
+            <FollowButton profileID={profileData.id} showLoginModal={showLoginModal} />
+          )}
         </Suspense>
       }
       metadata={
