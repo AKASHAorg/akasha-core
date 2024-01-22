@@ -4,11 +4,7 @@ import EntryLoadingPlaceholder from '../../components/Entry/EntryCardLoading';
 import type { Meta, StoryObj } from '@storybook/react';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
-const meta: Meta<
-  Omit<EntryCardProps, 'itemType'> & {
-    itemType: EntityTypes.REFLECT | EntityTypes.BEAM;
-  }
-> = {
+const meta: Meta<EntryCardProps> = {
   title: 'DSComponents/Card/EntryCard',
   component: EntryCard,
 };
@@ -34,7 +30,9 @@ export const BaseEntryCard: Story = {
           did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
           name: 'Coffee Lover',
         },
-        status: 'success',
+
+        loading: false,
+        error: error,
       }}
       itemType={EntityTypes.REFLECT}
       slateContent={[
@@ -59,6 +57,8 @@ export const BaseEntryCard: Story = {
   ),
 };
 
+const error = new Error('an error occured');
+
 export const DelistedEntryCardOthers: Story = {
   render: () => (
     <EntryCard
@@ -68,7 +68,8 @@ export const DelistedEntryCardOthers: Story = {
           did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
           name: 'Coffee Lover',
         },
-        status: 'success',
+        loading: false,
+        error: error,
       }}
       removed={{
         author: {
@@ -105,7 +106,8 @@ export const DelistedEntryCardAuthor: Story = {
           did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
           name: 'Coffee Lover',
         },
-        status: 'success',
+        loading: false,
+        error: error,
       }}
       removed={{
         author: {
@@ -142,7 +144,8 @@ export const NSFWCard: Story = {
           did: { id: 'did:pkh:eip155:5:0xa2aabe32856a8d50c748d50a5111312d986208a8' },
           name: 'Coffee Lover',
         },
-        status: 'success',
+        loading: false,
+        error: error,
       }}
       removed={{
         author: {

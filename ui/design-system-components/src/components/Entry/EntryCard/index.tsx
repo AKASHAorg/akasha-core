@@ -32,6 +32,18 @@ import {
 import { ListItem } from '@akashaorg/design-system-core/lib/components/List';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 
+type BeamProps = {
+  sortedContents: AkashaBeam['content'];
+  itemType: EntityTypes.BEAM;
+  children: (props: { blockID: string }) => ReactElement;
+};
+
+type ReflectProps = {
+  slateContent: Descendant[];
+  itemType: EntityTypes.REFLECT;
+  navigateTo?: (args: NavigateToParams) => void;
+};
+
 export type EntryCardProps = {
   entryData: EntryData;
   authorProfile: {
@@ -76,18 +88,7 @@ export type EntryCardProps = {
   onEntryFlag?: () => void;
   onEdit?: () => void;
   transformSource: (src: Image) => Image;
-} & (
-  | {
-      sortedContents: AkashaBeam['content'];
-      itemType: EntityTypes.BEAM;
-      children: (props: { blockID: string }) => ReactElement;
-    }
-  | {
-      slateContent: Descendant[];
-      itemType: EntityTypes.REFLECT;
-      navigateTo?: (args: NavigateToParams) => void;
-    }
-);
+} & (BeamProps | ReflectProps);
 
 const EntryCard: React.FC<EntryCardProps> = props => {
   const {
