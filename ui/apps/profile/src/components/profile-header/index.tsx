@@ -36,7 +36,7 @@ type ProfileHeaderProps = {
 };
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
   const { profileId } = props;
-  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [activeOverlay, setActiveOverlay] = React.useState<'avatar' | 'coverImage' | null>(null);
 
   const { t } = useTranslation('app-profile');
   const { data: loginData } = useGetLogin();
@@ -68,11 +68,16 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
 
   const handleClickAvatar = () => {
     if (!profileData?.avatar) return;
-    setShowOverlay(true);
+    setActiveOverlay('avatar');
+  };
+
+  const handleClickCoverImage = () => {
+    if (!profileData?.background) return;
+    setActiveOverlay('coverImage');
   };
 
   const handleCloseOverlay = () => {
-    setShowOverlay(false);
+    setActiveOverlay(null);
   };
 
   const handleFlag = React.useCallback(
@@ -181,8 +186,9 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
           </Tooltip>
         )
       }
-      showOverlay={showOverlay}
+      activeOverlay={activeOverlay}
       onClickAvatar={handleClickAvatar}
+      onClickCoverImage={handleClickCoverImage}
       onCloseOverlay={handleCloseOverlay}
       onClickProfileName={handleClickProfileName}
       handleEdit={handleEdit}
