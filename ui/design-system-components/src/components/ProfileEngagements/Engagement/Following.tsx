@@ -3,26 +3,25 @@ import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Entry from '../Entry';
 import EmptyEntry from '../Entry/EmptyEntry';
-import { tw } from '@twind/core';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaFollowing } from '@akashaorg/typings/lib/ui';
 import { EngagementProps } from '../types';
+import { InfoCardProps } from '@akashaorg/design-system-core/lib/components/InfoCard';
 
 export type FollowingProps = {
   following: AkashaFollowing;
-  ownerUserName: string;
-  viewerIsOwner: boolean;
-} & EngagementProps;
+} & EngagementProps &
+  Pick<InfoCardProps, 'titleLabel' | 'bodyLabel'>;
 
 const Following: React.FC<FollowingProps> = ({
   authenticatedDID,
   followList,
   following,
   profileAnchorLink,
-  ownerUserName,
-  viewerIsOwner,
   loadMore,
+  titleLabel,
+  bodyLabel,
   onLoadMore,
   transformSource,
   renderFollowElement,
@@ -42,8 +41,8 @@ const Following: React.FC<FollowingProps> = ({
 
   if (isEmptyEntry) {
     return (
-      <div className={tw('mt-12')}>
-        <EmptyEntry type="following" userName={ownerUserName} viewerIsOwner={viewerIsOwner} />
+      <div>
+        <EmptyEntry titleLabel={titleLabel} bodyLabel={bodyLabel} />
       </div>
     );
   }
