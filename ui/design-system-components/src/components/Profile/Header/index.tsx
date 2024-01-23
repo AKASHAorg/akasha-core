@@ -85,116 +85,113 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <>
-      <Stack>
-        <Card
-          elevation="1"
-          radius={{ top: 20 }}
-          background={{ light: 'grey7', dark: 'grey5' }}
-          customStyle={`h-32 bg(center no-repeat cover [url(${backgroundUrl})])`}
-          {...(background && { onClick: onClickCoverImage })}
-        />
-        <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
-          <Stack direction="column" customStyle="pl-2" fullWidth>
-            <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
-              <Stack customStyle={avatarContainer}>
-                <Avatar
-                  profileId={profileId}
-                  size="xl"
-                  avatar={transformedAvatar}
-                  alternativeAvatars={avatar?.alternatives?.map(alternative =>
-                    transformSource(alternative),
-                  )}
-                  customStyle={`absolute -top-6 border-2 border-white dark:border-grey2 ${
-                    avatar ? 'cursor-pointer' : ''
-                  } ${getColorClasses(
-                    {
-                      light: 'grey8',
-                      dark: 'grey4',
-                    },
-                    'bg',
-                  )}`}
-                  onClick={onClickAvatar}
-                />
-              </Stack>
-              <Stack direction="column" spacing="gap-y-1">
-                <Stack direction="row" align="center" spacing="gap-x-1">
-                  <Button plain={true} onClick={onClickProfileName}>
-                    <Text variant="button-lg">{name}</Text>
-                  </Button>
-                  {metadata}
-                </Stack>
-                <DidField
-                  did={profileId}
-                  isValid={validAddress}
-                  copiable={Boolean(copyLabel && copiedLabel)}
-                  copyLabel={copyLabel}
-                  copiedLabel={copiedLabel}
-                />
-              </Stack>
-              <Stack customStyle="relative ml-auto mt-2">
-                <Stack direction="row" align="center" spacing="gap-x-2">
-                  {viewerIsOwner ? (
-                    <Button
-                      aria-label="edit"
-                      icon={<Cog6ToothIcon />}
-                      variant="primary"
-                      onClick={handleEdit}
-                      greyBg
-                      iconOnly
-                    />
-                  ) : (
-                    <>
-                      {actionElement}
-                      {followElement}
-                    </>
-                  )}
-
-                  {menuItems && (
-                    <Menu
-                      anchor={{
-                        icon: <EllipsisVerticalIcon />,
-                        variant: 'primary',
-                        greyBg: true,
-                        iconOnly: true,
-                        'aria-label': 'settings',
-                      }}
-                      items={menuItems}
-                      customStyle="w-max z-99"
-                    />
-                  )}
-                </Stack>
-              </Stack>
+    <Stack>
+      <Card
+        elevation="1"
+        radius={{ top: 20 }}
+        background={{ light: 'grey7', dark: 'grey5' }}
+        customStyle={`h-32 bg(center no-repeat cover [url(${backgroundUrl})])`}
+        {...(background && { onClick: onClickCoverImage })}
+      />
+      <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
+        <Stack direction="column" customStyle="pl-2" fullWidth>
+          <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
+            <Stack customStyle={avatarContainer}>
+              <Avatar
+                profileId={profileId}
+                size="xl"
+                avatar={transformedAvatar}
+                alternativeAvatars={avatar?.alternatives?.map(alternative =>
+                  transformSource(alternative),
+                )}
+                customStyle={`absolute -top-6 border-2 border-white dark:border-grey2 ${
+                  avatar ? 'cursor-pointer' : ''
+                } ${getColorClasses(
+                  {
+                    light: 'grey8',
+                    dark: 'grey4',
+                  },
+                  'bg',
+                )}`}
+                onClick={onClickAvatar}
+              />
             </Stack>
-            <Stack direction="column" spacing="gap-y-4">
-              {ensName === 'loading' ? (
-                <>
-                  <TextLine width="w-24" animated />
-                  <TextLine width="w-72" animated />
-                </>
-              ) : (
-                ensName && (
+            <Stack direction="column" spacing="gap-y-1">
+              <Stack direction="row" align="center" spacing="gap-x-1">
+                <Button plain={true} onClick={onClickProfileName}>
+                  <Text variant="button-lg">{name}</Text>
+                </Button>
+                {metadata}
+              </Stack>
+              <DidField
+                did={profileId}
+                isValid={validAddress}
+                copiable={Boolean(copyLabel && copiedLabel)}
+                copyLabel={copyLabel}
+                copiedLabel={copiedLabel}
+              />
+            </Stack>
+            <Stack customStyle="relative ml-auto mt-2">
+              <Stack direction="row" align="center" spacing="gap-x-2">
+                {viewerIsOwner ? (
+                  <Button
+                    aria-label="edit"
+                    icon={<Cog6ToothIcon />}
+                    variant="primary"
+                    onClick={handleEdit}
+                    greyBg
+                    iconOnly
+                  />
+                ) : (
                   <>
-                    <Divider />
-                    <Stack direction="column" spacing="gap-y-1.5">
-                      <Text variant="label">ENS Name</Text>
-                      <CopyToClipboard value={ensName}>
-                        <Text
-                          variant="body2"
-                          color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
-                        >
-                          {ensName}
-                        </Text>
-                      </CopyToClipboard>
-                    </Stack>
+                    {actionElement}
+                    {followElement}
                   </>
-                )
-              )}
+                )}
+
+                {menuItems && (
+                  <Menu
+                    anchor={{
+                      icon: <EllipsisVerticalIcon />,
+                      variant: 'primary',
+                      greyBg: true,
+                      iconOnly: true,
+                      'aria-label': 'settings',
+                    }}
+                    items={menuItems}
+                    customStyle="w-max z-99"
+                  />
+                )}
+              </Stack>
             </Stack>
           </Stack>
-        </Card>
-      </Stack>
-
+          <Stack direction="column" spacing="gap-y-4">
+            {ensName === 'loading' ? (
+              <>
+                <TextLine width="w-24" animated />
+                <TextLine width="w-72" animated />
+              </>
+            ) : (
+              ensName && (
+                <>
+                  <Divider />
+                  <Stack direction="column" spacing="gap-y-1.5">
+                    <Text variant="label">ENS Name</Text>
+                    <CopyToClipboard value={ensName}>
+                      <Text
+                        variant="body2"
+                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                      >
+                        {ensName}
+                      </Text>
+                    </CopyToClipboard>
+                  </Stack>
+                </>
+              )
+            )}
+          </Stack>
+        </Stack>
+      </Card>
       {avatar && activeOverlay === 'avatar' && (
         <ImageOverlay
           images={[profileAvatar]}
@@ -210,7 +207,7 @@ const Header: React.FC<HeaderProps> = ({
           closeModal={onCloseOverlay}
         />
       )}
-    </>
+    </Stack>
   );
 };
 export default Header;

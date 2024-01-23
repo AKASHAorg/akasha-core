@@ -137,7 +137,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
           followList={followList}
           profileAnchorLink={'/@akashaorg/app-profile'}
           loadMore={loadMore}
-          titleLabel={
+          emptyEntryTitleLabel={
             <>
               {viewerIsOwner
                 ? t('Looks like there are no followers')
@@ -145,7 +145,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
               !
             </>
           }
-          bodyLabel={
+          emptyEntryBodyLabel={
             viewerIsOwner ? (
               <>
                 {t("Interacting with people on AKASHA's")}

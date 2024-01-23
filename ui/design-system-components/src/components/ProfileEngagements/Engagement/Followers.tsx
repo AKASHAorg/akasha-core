@@ -1,18 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React, { ReactElement, useEffect, useRef } from 'react';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Entry from '../Entry';
-import EmptyEntry from '../Entry/EmptyEntry';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaFollowers } from '@akashaorg/typings/lib/ui';
 import { EngagementProps } from '../types';
-import { InfoCardProps } from '@akashaorg/design-system-core/lib/components/InfoCard';
 
 export type FollowersProps = {
   followers: AkashaFollowers;
-} & EngagementProps &
-  Pick<InfoCardProps, 'titleLabel' | 'bodyLabel'>;
+  emptyEntryTitleLabel: ReactElement;
+  emptyEntryBodyLabel: ReactElement;
+} & EngagementProps;
 
 const Followers: React.FC<FollowersProps> = ({
   authenticatedDID,
@@ -20,8 +20,8 @@ const Followers: React.FC<FollowersProps> = ({
   followers,
   profileAnchorLink,
   loadMore,
-  titleLabel,
-  bodyLabel,
+  emptyEntryTitleLabel,
+  emptyEntryBodyLabel,
   onLoadMore,
   transformSource,
   renderFollowElement,
@@ -41,9 +41,11 @@ const Followers: React.FC<FollowersProps> = ({
 
   if (isEmptyEntry) {
     return (
-      <div>
-        <EmptyEntry titleLabel={titleLabel} bodyLabel={bodyLabel} />
-      </div>
+      <InfoCard
+        titleLabel={emptyEntryTitleLabel}
+        bodyLabel={emptyEntryBodyLabel}
+        assetName="longbeam-notfound"
+      />
     );
   }
 

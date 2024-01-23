@@ -132,7 +132,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
           loadMore={loadMore}
-          titleLabel={
+          emptyEntryTitleLabel={
             <>
               {`${viewerIsOwner ? t('You are') : `${profileData?.name} ${t('is')}`} ${t(
                 'not following anyone yet',
@@ -140,7 +140,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
               !
             </>
           }
-          bodyLabel={
+          emptyEntryBodyLabel={
             viewerIsOwner ? (
               <>
                 {t('Following others will help you see interesting')}
