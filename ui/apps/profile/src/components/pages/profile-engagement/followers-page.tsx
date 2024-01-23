@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import FollowProfileButton from '../../follow-profile-button';
 import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
 import EngagementTab from './engagement-tab';
@@ -10,6 +11,7 @@ import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   useGetFollowDocumentsByDidSuspenseQuery,
   useGetFollowersListByDidQuery,
+  useGetProfileByDidSuspenseQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   transformSource,
@@ -32,10 +34,22 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const authenticatedDID = loginData?.id;
   const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
+  const { t } = useTranslation('app-profile');
+
+  const profileDataReq = useGetProfileByDidSuspenseQuery({
+    fetchPolicy:
+      'cache-first' /* data is prefetched during route matching as a result we prefer reading cache first here  */,
+    variables: { id: profileId },
+    skip: authenticatedDID === profileId,
+  });
+  const { akashaProfile: profileData } =
+    profileDataReq.data?.node && hasOwn(profileDataReq.data.node, 'akashaProfile')
+      ? profileDataReq.data.node
+      : { akashaProfile: null };
 
   const { data, error, fetchMore } = useGetFollowersListByDidQuery({
     fetchPolicy:
-      'cache-only' /*data is prefetched during route matching as a result we read from cache here */,
+      'cache-only' /* data is prefetched during route matching as a result we read from cache here */,
     variables: {
       id: profileId,
       first: ENGAGEMENTS_PER_PAGE,
@@ -71,7 +85,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   });
 
   if (
-    !data /*data is undefined until prefetching is complete therefore we display skeleton */ ||
+    !data /* data is undefined until prefetching is complete therefore we display skeleton */ ||
     authenticating
   )
     return (
@@ -107,6 +121,8 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     });
   };
 
+  const viewerIsOwner = authenticatedDID === profileId;
+
   return (
     <EngagementTab profileId={profileId} navigateTo={navigateTo}>
       {error && (
@@ -121,6 +137,22 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
           followList={followList}
           profileAnchorLink={'/@akashaorg/app-profile'}
           loadMore={loadMore}
+          emptyEntryTitleLabel={
+            <>
+              {viewerIsOwner
+                ? t('Looks like there are no followers')
+                : `${profileData?.name} ${t('has no followers yet')}`}
+              !
+            </>
+          }
+          emptyEntryBodyLabel={
+            viewerIsOwner ? (
+              <>
+                {t("Interacting with people on AKASHA's")}
+                <br /> {t('apps will help get followers')}!
+              </>
+            ) : null
+          }
           onLoadMore={async () => {
             if (pageInfo && pageInfo.hasNextPage) {
               setLoadingMore(true);

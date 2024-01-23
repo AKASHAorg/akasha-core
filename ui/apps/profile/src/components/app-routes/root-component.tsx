@@ -21,7 +21,7 @@ const RootComponent = () => {
 
   const errorBoundaryProps: Pick<ErrorBoundaryProps, 'errorObj' | 'logger'> = {
     errorObj: {
-      type: t('script-error'),
+      type: 'script-error',
       title: t('Error in profile app'),
     },
     logger,

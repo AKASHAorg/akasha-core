@@ -16,7 +16,7 @@ type Story = StoryObj<FollowersProps>;
 const commonProps = {
   authenticatedDID: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
   followList: new Map(),
-  viewerIsOwner: false,
+  // viewerIsOwner: false,
   profileAnchorLink: '#',
   loadMore: false,
   onLoadMore: () => ({}),
@@ -34,23 +34,24 @@ const followerData = {
   createdAt: Date.now(),
   name: 'Coffee Lover',
   did: { id: 'did:key:73FaD4201494x0rt17B9892i9fae4d52fe3BD377', isViewer: false },
-  followers: null,
   followersCount: 0,
 };
 
 const variants: FollowersProps[] = [
   {
     ...commonProps,
+    titleLabel: 'This user has no followers yet!',
     followers: [{ id: '1', isFollowing: false, did: { akashaProfile: followerData } }],
   },
   {
     ...commonProps,
+    titleLabel: 'This user has no followers yet!',
     followers: [],
   },
   {
     ...commonProps,
+    titleLabel: 'This user has no followers yet!',
     followers: [{ id: '1', isFollowing: false, did: { akashaProfile: followerData } }],
-    viewerIsOwner: false,
   },
 ];
 

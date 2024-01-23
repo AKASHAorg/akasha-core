@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { ReactElement, useEffect, useRef } from 'react';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import Entry from '../Entry';
-import EmptyEntry from '../Entry/EmptyEntry';
-import { tw } from '@twind/core';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '@akashaorg/design-system-core/lib/utils';
 import { AkashaFollowing } from '@akashaorg/typings/lib/ui';
@@ -11,8 +10,8 @@ import { EngagementProps } from '../types';
 
 export type FollowingProps = {
   following: AkashaFollowing;
-  ownerUserName: string;
-  viewerIsOwner: boolean;
+  emptyEntryTitleLabel: ReactElement;
+  emptyEntryBodyLabel: ReactElement;
 } & EngagementProps;
 
 const Following: React.FC<FollowingProps> = ({
@@ -20,9 +19,9 @@ const Following: React.FC<FollowingProps> = ({
   followList,
   following,
   profileAnchorLink,
-  ownerUserName,
-  viewerIsOwner,
   loadMore,
+  emptyEntryTitleLabel,
+  emptyEntryBodyLabel,
   onLoadMore,
   transformSource,
   renderFollowElement,
@@ -42,9 +41,11 @@ const Following: React.FC<FollowingProps> = ({
 
   if (isEmptyEntry) {
     return (
-      <div className={tw('mt-12')}>
-        <EmptyEntry type="following" userName={ownerUserName} viewerIsOwner={viewerIsOwner} />
-      </div>
+      <InfoCard
+        titleLabel={emptyEntryTitleLabel}
+        bodyLabel={emptyEntryBodyLabel}
+        assetName="longbeam-notfound"
+      />
     );
   }
 

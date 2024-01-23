@@ -43,7 +43,23 @@ export const HeaderVariants: Story = {
   render: () => (
     <Stack direction="column" spacing="gap-y-2" customStyle="w-[50%]">
       {variants.map((variant, idx) => (
-        <Header key={idx} {...variant} profileId="profileId" />
+        <Header
+          key={idx}
+          {...variant}
+          profileId="profileId"
+          onClickCoverImage={() => {
+            /** */
+          }}
+          onClickAvatar={() => {
+            /** */
+          }}
+          onClickProfileName={() => {
+            /** */
+          }}
+          onCloseOverlay={() => {
+            /** */
+          }}
+        />
       ))}
     </Stack>
   ),

@@ -10,6 +10,7 @@ import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
   useGetFollowDocumentsByDidSuspenseQuery,
   useGetFollowingListByDidQuery,
+  useGetProfileByDidSuspenseQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   transformSource,
@@ -17,9 +18,9 @@ import {
   getFollowList,
   useRootComponentProps,
   useGetLogin,
-  useGetLoginProfile,
 } from '@akashaorg/ui-awf-hooks';
 import { ENGAGEMENTS_PER_PAGE } from './types';
+import { useTranslation } from 'react-i18next';
 
 type FollowingPageProps = {
   profileId: string;
@@ -33,17 +34,29 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const authenticatedDID = loginData?.id;
   const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
+  const { t } = useTranslation('app-profile');
 
-  const authenticatedProfileDataReq = useGetLoginProfile();
+  const profileDataReq = useGetProfileByDidSuspenseQuery({
+    fetchPolicy:
+      'cache-first' /* data is prefetched during route matching as a result we prefer reading cache first here  */,
+    variables: { id: profileId },
+    skip: authenticatedDID === profileId,
+  });
+  const { akashaProfile: profileData } =
+    profileDataReq.data?.node && hasOwn(profileDataReq.data.node, 'akashaProfile')
+      ? profileDataReq.data.node
+      : { akashaProfile: null };
+
   const { data, error, fetchMore } = useGetFollowingListByDidQuery({
     fetchPolicy:
-      'cache-only' /*data is prefetched during route matching as a result we read from cache here */,
+      'cache-only' /* data is prefetched during route matching as a result we read from cache here */,
     variables: {
       id: profileId,
       first: ENGAGEMENTS_PER_PAGE,
     },
     skip: !isLoggedIn,
   });
+
   const following = useMemo(
     () =>
       data?.node && hasOwn(data.node, 'akashaFollowList')
@@ -66,10 +79,9 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     },
     skip: !isLoggedIn || !followProfileIds.length,
   });
-  const authenticatedProfile = authenticatedProfileDataReq?.akashaProfile;
 
   if (
-    !data /*data is undefined until prefetching is complete therefore we display skeleton */ ||
+    !data /* data is undefined until prefetching is complete therefore we display skeleton */ ||
     authenticating
   )
     return (
@@ -104,6 +116,8 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     });
   };
 
+  const viewerIsOwner = authenticatedDID === profileId;
+
   return (
     <EngagementTab profileId={profileId} navigateTo={navigateTo}>
       {error && (
@@ -117,9 +131,23 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
           followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
-          ownerUserName={authenticatedProfile?.name}
-          viewerIsOwner={authenticatedDID === authenticatedProfile?.did.id}
           loadMore={loadMore}
+          emptyEntryTitleLabel={
+            <>
+              {`${viewerIsOwner ? t('You are') : `${profileData?.name} ${t('is')}`} ${t(
+                'not following anyone yet',
+              )}`}
+              !
+            </>
+          }
+          emptyEntryBodyLabel={
+            viewerIsOwner ? (
+              <>
+                {t('Following others will help you see interesting')}
+                <br /> {t('contents written and shared by them')}!
+              </>
+            ) : null
+          }
           onLoadMore={async () => {
             if (pageInfo && pageInfo.hasNextPage) {
               setLoadingMore(true);

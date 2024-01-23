@@ -13,11 +13,11 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import {
   Cog6ToothIcon,
   EllipsisVerticalIcon,
-  EnvelopeIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import ImageOverlay from '../../ImageOverlay';
 
 export type HeaderProps = {
   profileId: Profile['did']['id'];
@@ -31,9 +31,14 @@ export type HeaderProps = {
   copyLabel?: string;
   copiedLabel?: string;
   followElement?: ReactElement;
-  publicImagePath: string;
+  publicImagePath?: string;
   metadata?: ReactElement;
   actionElement?: ReactElement;
+  activeOverlay?: 'avatar' | 'coverImage' | null;
+  onClickAvatar: () => void;
+  onClickCoverImage: () => void;
+  onCloseOverlay: () => void;
+  onClickProfileName: () => void;
   handleEdit?: () => void;
   transformSource: (src: Image) => Image;
 };
@@ -50,16 +55,34 @@ const Header: React.FC<HeaderProps> = ({
   copyLabel,
   copiedLabel,
   followElement,
-  publicImagePath,
+  publicImagePath = '/images',
   metadata,
   actionElement,
+  activeOverlay = null,
+  onClickAvatar,
+  onClickCoverImage,
+  onCloseOverlay,
+  onClickProfileName,
   handleEdit,
   transformSource,
 }) => {
-  const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
+  const transformedAvatar = transformSource(avatar?.default);
+  const transformedCoverImage = transformSource(background?.default);
   const seed = getImageFromSeed(profileId, 3);
   const coverImageFallback = `${publicImagePath}/profile-cover-${seed}.webp`;
-  const backgroundUrl = transformSource(background?.default)?.src ?? coverImageFallback;
+  const backgroundUrl = transformedCoverImage?.src ?? coverImageFallback;
+  const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
+
+  const profileAvatar = {
+    name: 'profile avatar',
+    size: { height: transformedAvatar?.height, width: transformedAvatar?.width },
+    src: transformedAvatar?.src,
+  };
+  const profileCoverImage = {
+    name: 'profile cover image',
+    size: { height: transformedCoverImage?.height, width: transformedCoverImage?.width },
+    src: transformedCoverImage?.src,
+  };
 
   return (
     <Stack>
@@ -68,6 +91,7 @@ const Header: React.FC<HeaderProps> = ({
         radius={{ top: 20 }}
         background={{ light: 'grey7', dark: 'grey5' }}
         customStyle={`h-32 bg(center no-repeat cover [url(${backgroundUrl})])`}
+        {...(background && { onClick: onClickCoverImage })}
       />
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
         <Stack direction="column" customStyle="pl-2" fullWidth>
@@ -76,22 +100,27 @@ const Header: React.FC<HeaderProps> = ({
               <Avatar
                 profileId={profileId}
                 size="xl"
-                avatar={transformSource(avatar?.default)}
+                avatar={transformedAvatar}
                 alternativeAvatars={avatar?.alternatives?.map(alternative =>
                   transformSource(alternative),
                 )}
-                customStyle={`absolute -top-6 border-2 border-white dark:border-grey2 ${getColorClasses(
+                customStyle={`absolute -top-6 border-2 border-white dark:border-grey2 ${
+                  avatar ? 'cursor-pointer' : ''
+                } ${getColorClasses(
                   {
                     light: 'grey8',
                     dark: 'grey4',
                   },
                   'bg',
                 )}`}
+                onClick={onClickAvatar}
               />
             </Stack>
             <Stack direction="column" spacing="gap-y-1">
               <Stack direction="row" align="center" spacing="gap-x-1">
-                <Text variant="button-lg">{name}</Text>
+                <Button plain={true} onClick={onClickProfileName}>
+                  <Text variant="button-lg">{name}</Text>
+                </Button>
                 {metadata}
               </Stack>
               <DidField
@@ -163,6 +192,21 @@ const Header: React.FC<HeaderProps> = ({
           </Stack>
         </Stack>
       </Card>
+      {avatar && activeOverlay === 'avatar' && (
+        <ImageOverlay
+          images={[profileAvatar]}
+          clickedImg={profileAvatar}
+          closeModal={onCloseOverlay}
+        />
+      )}
+
+      {background && activeOverlay === 'coverImage' && (
+        <ImageOverlay
+          images={[profileCoverImage]}
+          clickedImg={profileCoverImage}
+          closeModal={onCloseOverlay}
+        />
+      )}
     </Stack>
   );
 };
