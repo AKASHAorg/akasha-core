@@ -4,16 +4,24 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 
-const ProfileHeaderLoading: React.FC = () => {
+type ProfileHeaderLoadingProps = {
+  plain?: boolean;
+};
+const ProfileHeaderLoading: React.FC<ProfileHeaderLoadingProps> = props => {
+  const { plain } = props;
   return (
     <div>
       <Card
-        elevation="1"
+        elevation={plain ? 'none' : '1'}
         radius={{ top: 20 }}
         background={{ light: 'grey6', dark: 'grey5' }}
         customStyle="h-32"
       ></Card>
-      <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
+      <Card
+        elevation={plain ? 'none' : '1'}
+        radius={plain ? '' : { bottom: 20 }}
+        padding="px-[0.5rem] pb-[1rem] pt-0"
+      >
         <Stack padding="pl-2" fullWidth>
           <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
             <Stack customStyle="relative w-20 h-[3.5rem] shrink-0">

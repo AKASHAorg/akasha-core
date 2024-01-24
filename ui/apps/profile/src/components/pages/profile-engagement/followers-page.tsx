@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useMemo } from 'react';
 import FollowProfileButton from '../../follow-profile-button';
 import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
 import EngagementTab from './engagement-tab';
@@ -9,9 +8,9 @@ import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/co
 import routes, { FOLLOWERS } from '../../../routes';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
-  useGetFollowDocumentsByDidSuspenseQuery,
+  useGetFollowDocumentsByDidQuery,
   useGetFollowersListByDidQuery,
-  useGetProfileByDidSuspenseQuery,
+  useGetProfileByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   transformSource,
@@ -21,6 +20,7 @@ import {
   useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 import { ENGAGEMENTS_PER_PAGE } from './types';
+import { useTranslation } from 'react-i18next';
 
 type FollowersPageProps = {
   profileId: string;
@@ -30,13 +30,12 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
   const { profileId } = props;
   const { data: loginData, loading: authenticating } = useGetLogin();
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
-  const [loadMore, setLoadingMore] = useState(false);
   const authenticatedDID = loginData?.id;
   const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const { t } = useTranslation('app-profile');
 
-  const profileDataReq = useGetProfileByDidSuspenseQuery({
+  const profileDataReq = useGetProfileByDidQuery({
     fetchPolicy:
       'cache-first' /* data is prefetched during route matching as a result we prefer reading cache first here  */,
     variables: { id: profileId },
@@ -74,7 +73,7 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     () => followers.map(follower => follower.did?.akashaProfile?.id).filter(id => !!id),
     [followers],
   );
-  const { data: followDocuments } = useGetFollowDocumentsByDidSuspenseQuery({
+  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       id: authenticatedDID,
@@ -136,7 +135,6 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
           followers={followers}
           followList={followList}
           profileAnchorLink={'/@akashaorg/app-profile'}
-          loadMore={loadMore}
           emptyEntryTitleLabel={
             <>
               {viewerIsOwner
@@ -153,16 +151,15 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
               </>
             ) : null
           }
-          onLoadMore={async () => {
+          onLoadMore={() => {
             if (pageInfo && pageInfo.hasNextPage) {
-              setLoadingMore(true);
-              await fetchMore({
+              return fetchMore({
                 variables: {
                   after: pageInfo.endCursor,
                 },
               });
-              setLoadingMore(false);
             }
+            return null;
           }}
           renderFollowElement={(profileId, followId, isFollowing) => (
             <FollowProfileButton

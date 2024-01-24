@@ -1,7 +1,4 @@
 import React, { ReactElement } from 'react';
-
-import type { Image, Profile } from '@akashaorg/typings/lib/ui';
-
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -9,15 +6,16 @@ import DidField from '@akashaorg/design-system-core/lib/components/DidField';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import CopyToClipboard from '@akashaorg/design-system-core/lib/components/CopyToClipboard';
+import ImageOverlay from '../../ImageOverlay';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import {
   Cog6ToothIcon,
   EllipsisVerticalIcon,
 } from '@akashaorg/design-system-core/lib/components/Icon/hero-icons-outline';
+import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
+import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import Menu, { MenuProps } from '@akashaorg/design-system-core/lib/components/Menu';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import { getImageFromSeed, getColorClasses } from '@akashaorg/design-system-core/lib/utils';
-import ImageOverlay from '../../ImageOverlay';
 
 export type HeaderProps = {
   profileId: Profile['did']['id'];
@@ -39,6 +37,8 @@ export type HeaderProps = {
   onClickCoverImage: () => void;
   onCloseOverlay: () => void;
   onClickProfileName: () => void;
+  plain?: boolean;
+  customStyle?: string;
   handleEdit?: () => void;
   transformSource: (src: Image) => Image;
 };
@@ -63,6 +63,8 @@ const Header: React.FC<HeaderProps> = ({
   onClickCoverImage,
   onCloseOverlay,
   onClickProfileName,
+  plain = false,
+  customStyle = '',
   handleEdit,
   transformSource,
 }) => {
@@ -85,15 +87,19 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <Stack>
+    <Stack customStyle={customStyle}>
       <Card
-        elevation="1"
+        elevation={plain ? 'none' : '1'}
         radius={{ top: 20 }}
         background={{ light: 'grey7', dark: 'grey5' }}
         customStyle={`h-32 bg(center no-repeat cover [url(${backgroundUrl})])`}
         {...(background && { onClick: onClickCoverImage })}
       />
-      <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
+      <Card
+        elevation={plain ? 'none' : '1'}
+        radius={plain ? '' : { bottom: 20 }}
+        padding="px-[0.5rem] pb-[1rem] pt-0"
+      >
         <Stack direction="column" customStyle="pl-2" fullWidth>
           <Stack direction="row" spacing="gap-x-2" customStyle="-ml-2">
             <Stack customStyle={avatarContainer}>

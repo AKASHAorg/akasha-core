@@ -33,11 +33,12 @@ import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/gen
 
 type ProfileHeaderProps = {
   profileId: string;
+  plain?: boolean;
+  customStyle?: string;
 };
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
-  const { profileId } = props;
   const [activeOverlay, setActiveOverlay] = React.useState<'avatar' | 'coverImage' | null>(null);
-
+  const { profileId, plain, customStyle = '' } = props;
   const { t } = useTranslation('app-profile');
   const { data: loginData } = useGetLogin();
   const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
@@ -191,16 +192,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       onClickCoverImage={handleClickCoverImage}
       onCloseOverlay={handleCloseOverlay}
       onClickProfileName={handleClickProfileName}
+      plain={plain}
       handleEdit={handleEdit}
       transformSource={transformSource}
+      customStyle={customStyle}
     />
   );
 };
 
-export default ({ profileId }: ProfileHeaderProps) => (
+export default (props: ProfileHeaderProps) => (
   <>
-    <Suspense fallback={<ProfileHeaderLoading />}>
-      <ProfileHeader profileId={profileId} />
+    <Suspense fallback={<ProfileHeaderLoading plain={props.plain} />}>
+      <ProfileHeader {...props} />
     </Suspense>
   </>
 );
