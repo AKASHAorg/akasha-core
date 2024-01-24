@@ -165,4 +165,7 @@ export const createRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
     context: {
       apolloClient,
     },
+    defaultErrorComponent: ({ error }) => {
+      return <ErrorComponent error={(error as unknown as Error).message} />;
+    },
   });
