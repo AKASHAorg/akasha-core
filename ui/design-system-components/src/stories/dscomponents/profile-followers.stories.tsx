@@ -16,9 +16,9 @@ type Story = StoryObj<FollowersProps>;
 const commonProps = {
   authenticatedDID: 'did:key:55FaD4201494x0rt17C9892i9fae4d52fe3BD124',
   followList: new Map(),
-  // viewerIsOwner: false,
   profileAnchorLink: '#',
   loadMore: false,
+  publicImgPath: '',
   onLoadMore: () => ({}),
   transformSource: () => ({
     src: 'https://placebeard.it/360x360',
@@ -40,17 +40,20 @@ const followerData = {
 const variants: FollowersProps[] = [
   {
     ...commonProps,
-    titleLabel: 'This user has no followers yet!',
+    emptyEntryTitleLabel: <>This user has no followers yet!</>,
+    emptyEntryBodyLabel: <></>,
     followers: [{ id: '1', isFollowing: false, did: { akashaProfile: followerData } }],
   },
   {
     ...commonProps,
-    titleLabel: 'This user has no followers yet!',
+    emptyEntryTitleLabel: <>This user has no followers yet!</>,
+    emptyEntryBodyLabel: <></>,
     followers: [],
   },
   {
     ...commonProps,
-    titleLabel: 'This user has no followers yet!',
+    emptyEntryTitleLabel: <>This user has no followers yet!</>,
+    emptyEntryBodyLabel: <></>,
     followers: [{ id: '1', isFollowing: false, did: { akashaProfile: followerData } }],
   },
 ];

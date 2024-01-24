@@ -21,8 +21,9 @@ type Story = StoryObj<ModerationIntroCardProps>;
 
 export const BaseModerationIntroCard: Story = {
   render: () => (
-    <div className={tw('w-[40%]')}>
+    <div className={tw('w-[50%]')}>
       <ModerationIntroCard
+        publicImgPath=""
         titleLabel="Overview"
         introLabel="Welcome to Vibe"
         subtitleLabel="Vibe facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community."

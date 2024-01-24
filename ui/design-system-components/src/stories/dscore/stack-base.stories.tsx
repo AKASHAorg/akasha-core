@@ -28,10 +28,10 @@ export const StackVariants: Story = {
     <Stack direction="column" spacing="gap-y-4">
       {variants.map((variant, idx) => (
         <Stack key={idx} {...variant}>
-          <Text color="white">item 1</Text>
-          <Text color="white">item 2</Text>
-          <Text color="white">item 3</Text>
-          <Text color="white">item 4</Text>
+          <Text>item 1</Text>
+          <Text>item 2</Text>
+          <Text>item 3</Text>
+          <Text>item 4</Text>
         </Stack>
       ))}
     </Stack>

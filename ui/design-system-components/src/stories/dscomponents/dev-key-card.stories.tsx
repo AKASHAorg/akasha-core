@@ -17,7 +17,7 @@ type Story = StoryObj<DevKeyCardProps>;
 
 export const BaseDevKeyCard: Story = {
   render: () => (
-    <Stack customStyle="w-[40%] p-0 items-center">
+    <Stack direction="row" align="center" justify="center" fullWidth padding="p-0">
       <DevKeyCard
         item={sampleDevKey}
         unusedLabel="Unused"

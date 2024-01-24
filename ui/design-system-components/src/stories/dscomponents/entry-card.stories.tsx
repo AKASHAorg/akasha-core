@@ -34,7 +34,7 @@ export const BaseEntryCard: Story = {
         loading: false,
         error: error,
       }}
-      itemType={EntityTypes.REFLECT}
+      itemType={EntityTypes?.REFLECT}
       slateContent={[
         {
           type: 'paragraph',
@@ -83,7 +83,7 @@ export const DelistedEntryCardOthers: Story = {
           secondLine: 'All reflections are disabled.',
         },
       }}
-      itemType={EntityTypes.REFLECT}
+      itemType={EntityTypes?.REFLECT}
       slateContent={[]}
       onContentClick={() => ({})}
       onMentionClick={() => ({})}
@@ -121,7 +121,7 @@ export const DelistedEntryCardAuthor: Story = {
           secondLine: 'All reflections are disabled.',
         },
       }}
-      itemType={EntityTypes.REFLECT}
+      itemType={EntityTypes?.REFLECT}
       slateContent={[]}
       onContentClick={() => ({})}
       onMentionClick={() => ({})}
@@ -163,7 +163,7 @@ export const NSFWCard: Story = {
         sensitiveContentLabel: 'Sensitive Content!',
         clickToViewLabel: 'Click to View',
       }}
-      itemType={EntityTypes.REFLECT}
+      itemType={EntityTypes?.REFLECT}
       slateContent={[
         {
           type: 'image',

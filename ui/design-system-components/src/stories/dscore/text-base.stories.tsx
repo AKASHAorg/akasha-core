@@ -35,7 +35,7 @@ export const TextVariants: Story = {
   render: () => (
     <Stack direction="column" spacing="gap-y-2">
       {variants.map((variant, idx) => (
-        <Text key={idx} variant={variant} color="white">
+        <Text key={idx} variant={variant}>
           {variant}: Almost before we knew it, we had left the ground.
         </Text>
       ))}
