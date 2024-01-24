@@ -31,7 +31,10 @@ const ProfileHeaderLoading: React.FC<ProfileHeaderLoadingProps> = props => {
               <TextLine width="w-36" animated />
               <TextLine width="w-28" animated />
             </Stack>
-            <CircularPlaceholder height="h-8" width="w-8" customStyle="ml-auto shrink-0" animated />
+            <Stack direction="row" align="center" spacing="gap-x-2" customStyle="ml-auto">
+              <CircularPlaceholder height="h-8" width="w-8" customStyle="shrink-0" animated />
+              <CircularPlaceholder height="h-8" width="w-8" customStyle=" shrink-0" animated />
+            </Stack>
           </Stack>
         </Stack>
       </Card>

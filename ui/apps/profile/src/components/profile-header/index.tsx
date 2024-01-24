@@ -1,7 +1,6 @@
 import React, { Suspense, useCallback } from 'react';
 import routes, { EDIT } from '../../routes';
 import FollowButton from './follow-button';
-import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Badge from '@akashaorg/design-system-core/lib/components/Badge';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -159,13 +158,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       copyLabel={t('Copy to clipboard')}
       copiedLabel={t('Copied')}
       followElement={
-        <Suspense
-          fallback={<CircularPlaceholder height="h-8" width="w-8" customStyle="ml-auto shrink-0" />}
-        >
+        <>
           {profileData?.id && (
             <FollowButton profileID={profileData.id} showLoginModal={showLoginModal} />
           )}
-        </Suspense>
+        </>
       }
       metadata={
         profileData?.nsfw && (
