@@ -3,7 +3,8 @@ import FollowProfileButton from '../../follow-profile-button';
 import Followers from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Followers';
 import EngagementTab from './engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import routes, { FOLLOWERS } from '../../../routes';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
@@ -126,7 +127,15 @@ const FollowersPage: React.FC<FollowersPageProps> = props => {
     <EngagementTab profileId={profileId} navigateTo={navigateTo}>
       {error && (
         <Stack customStyle="mt-8">
-          <EntryError onError={onError} />
+          <InfoCard
+            titleLabel={t('Oops! Something went wrong!')}
+            bodyLabel={
+              <>
+                {t('Click')} {<Button label="here" variant="text" onClick={onError} />}{' '}
+                {t('to try again!')}
+              </>
+            }
+          />
         </Stack>
       )}
       {data && (
