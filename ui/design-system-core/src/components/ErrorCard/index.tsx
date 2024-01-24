@@ -49,7 +49,11 @@ const ErrorCard: React.FC<ErrorCardProps> = props => {
   return (
     <div className={tw(contentWrapperClass)}>
       <div className={tw(`h-[${boxSize}] w-[${boxSize}] mb-${imageBoxHasMargin ? '0.5' : '0'}`)}>
-        <img className={tw('object-contain')} src={`${publicImgPath}/${errorType}.webp`} />
+        <img
+          className={tw('object-contain')}
+          src={`${publicImgPath}/${errorType}.webp`}
+          alt="error"
+        />
       </div>
 
       <span className={tw('font-semibold mb-0.5 mx-auto text-xl text-center')}>{titleLabel}</span>
@@ -58,7 +62,7 @@ const ErrorCard: React.FC<ErrorCardProps> = props => {
         className={tw(
           `font-normal mt-${textMarginTop ? '0.25' : ''} mb-${
             textMarginBottom ? '1.5' : ''
-          } text-secondary text-lg text-center leading-6`,
+          } text(secondaryLight dark:secondaryDark) text-lg text-center leading-6`,
         )}
       >
         {subtitleLabel}

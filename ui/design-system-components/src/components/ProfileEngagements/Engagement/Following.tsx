@@ -10,11 +10,13 @@ import { EngagementProps } from '../types';
 
 export type FollowingProps = {
   following: AkashaFollowing;
+  publicImgPath?: string;
   emptyEntryTitleLabel: ReactElement;
   emptyEntryBodyLabel: ReactElement;
 } & EngagementProps;
 
 const Following: React.FC<FollowingProps> = ({
+  publicImgPath,
   authenticatedDID,
   followList,
   following,
@@ -44,6 +46,7 @@ const Following: React.FC<FollowingProps> = ({
       <InfoCard
         titleLabel={emptyEntryTitleLabel}
         bodyLabel={emptyEntryBodyLabel}
+        publicImgPath={publicImgPath}
         assetName="longbeam-notfound"
       />
     );
