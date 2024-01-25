@@ -1,7 +1,6 @@
 import React, { Suspense, useCallback } from 'react';
 import routes, { EDIT } from '../../routes';
 import FollowButton from './follow-button';
-import CircularPlaceholder from '@akashaorg/design-system-core/lib/components/CircularPlaceholder';
 import Badge from '@akashaorg/design-system-core/lib/components/Badge';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -33,11 +32,12 @@ import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-awf-hooks/lib/gen
 
 type ProfileHeaderProps = {
   profileId: string;
+  plain?: boolean;
+  customStyle?: string;
 };
 const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
-  const { profileId } = props;
   const [activeOverlay, setActiveOverlay] = React.useState<'avatar' | 'coverImage' | null>(null);
-
+  const { profileId, plain, customStyle = '' } = props;
   const { t } = useTranslation('app-profile');
   const { data: loginData } = useGetLogin();
   const { uiEvents, navigateToModal, getRoutingPlugin } = useRootComponentProps();
@@ -158,13 +158,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       copyLabel={t('Copy to clipboard')}
       copiedLabel={t('Copied')}
       followElement={
-        <Suspense
-          fallback={<CircularPlaceholder height="h-8" width="w-8" customStyle="ml-auto shrink-0" />}
-        >
+        <>
           {profileData?.id && (
             <FollowButton profileID={profileData.id} showLoginModal={showLoginModal} />
           )}
-        </Suspense>
+        </>
       }
       metadata={
         profileData?.nsfw && (
@@ -191,16 +189,18 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = props => {
       onClickCoverImage={handleClickCoverImage}
       onCloseOverlay={handleCloseOverlay}
       onClickProfileName={handleClickProfileName}
+      plain={plain}
       handleEdit={handleEdit}
       transformSource={transformSource}
+      customStyle={customStyle}
     />
   );
 };
 
-export default ({ profileId }: ProfileHeaderProps) => (
+export default (props: ProfileHeaderProps) => (
   <>
-    <Suspense fallback={<ProfileHeaderLoading />}>
-      <ProfileHeader profileId={profileId} />
+    <Suspense fallback={<ProfileHeaderLoading plain={props.plain} />}>
+      <ProfileHeader {...props} />
     </Suspense>
   </>
 );
