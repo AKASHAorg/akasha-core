@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { EntityTypes } from '@akashaorg/typings/lib/ui';
 
 const meta: Meta<EntryCardProps> = {
-  title: 'DSComponents/Card/EntryCard',
+  title: 'DSComponents/Cards/EntryCard',
   component: EntryCard,
 };
 
@@ -73,7 +73,7 @@ export const DelistedEntryCardOthers: Story = {
       }}
       removed={{
         author: {
-          firstPart: 'AKASHA world members won’t be able to see the content ',
+          firstPart: "AKASHA world members won't be able to see the content",
           secondPart: 'of your reflection because you have violated the following ',
           thirdPart: { url: '', content: 'Code of Conduct.' },
           tapToViewLabel: 'Tap to view',

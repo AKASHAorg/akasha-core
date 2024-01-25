@@ -60,8 +60,8 @@ const ErrorCard: React.FC<ErrorCardProps> = props => {
 
       <span
         className={tw(
-          `font-normal mt-${textMarginTop ? '0.25' : ''} mb-${
-            textMarginBottom ? '1.5' : ''
+          `font-normal ${textMarginTop ? 'mt-[0.25]' : ''} ${
+            textMarginBottom ? 'mb-[1.5]' : ''
           } text(secondaryLight dark:secondaryDark) text-lg text-center leading-6`,
         )}
       >
