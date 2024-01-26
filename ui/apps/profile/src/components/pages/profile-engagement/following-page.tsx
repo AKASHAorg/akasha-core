@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import FollowProfileButton from '../../follow-profile-button';
 import Following from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Engagement/Following';
 import EngagementTab from './engagement-tab';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import EntryError from '@akashaorg/design-system-components/lib/components/ProfileEngagements/Entry/EntryError';
+import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import ProfileEngagementLoading from '@akashaorg/design-system-components/lib/components/ProfileEngagements/placeholders/profile-engagement-loading';
 import routes, { FOLLOWING } from '../../../routes';
 import { ModalNavigationOptions } from '@akashaorg/typings/lib/ui';
 import {
-  useGetFollowDocumentsByDidSuspenseQuery,
+  useGetFollowDocumentsByDidQuery,
   useGetFollowingListByDidQuery,
-  useGetProfileByDidSuspenseQuery,
+  useGetProfileByDidQuery,
 } from '@akashaorg/ui-awf-hooks/lib/generated/apollo';
 import {
   transformSource,
@@ -30,13 +31,12 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
   const { profileId } = props;
   const { data: loginData, loading: authenticating } = useGetLogin();
   const { getRoutingPlugin, navigateToModal } = useRootComponentProps();
-  const [loadMore, setLoadingMore] = useState(false);
   const authenticatedDID = loginData?.id;
   const isLoggedIn = !!loginData?.id;
   const navigateTo = getRoutingPlugin().navigateTo;
   const { t } = useTranslation('app-profile');
 
-  const profileDataReq = useGetProfileByDidSuspenseQuery({
+  const profileDataReq = useGetProfileByDidQuery({
     fetchPolicy:
       'cache-first' /* data is prefetched during route matching as a result we prefer reading cache first here  */,
     variables: { id: profileId },
@@ -70,7 +70,7 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
       : null;
   }, [data]);
   const followProfileIds = useMemo(() => following.map(follow => follow.profile?.id), [following]);
-  const { data: followDocuments } = useGetFollowDocumentsByDidSuspenseQuery({
+  const { data: followDocuments } = useGetFollowDocumentsByDidQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       id: authenticatedDID,
@@ -122,7 +122,15 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
     <EngagementTab profileId={profileId} navigateTo={navigateTo}>
       {error && (
         <Stack customStyle="mt-8">
-          <EntryError onError={onError} />
+          <InfoCard
+            titleLabel={t('Oops! Something went wrong!')}
+            bodyLabel={
+              <>
+                {t('Click')} {<Button label="here" variant="text" onClick={onError} />}{' '}
+                {t('to try again!')}
+              </>
+            }
+          />
         </Stack>
       )}
       {data && (
@@ -131,7 +139,6 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
           followList={followList}
           following={following}
           profileAnchorLink={'/@akashaorg/app-profile'}
-          loadMore={loadMore}
           emptyEntryTitleLabel={
             <>
               {`${viewerIsOwner ? t('You are') : `${profileData?.name} ${t('is')}`} ${t(
@@ -148,16 +155,15 @@ const FollowingPage: React.FC<FollowingPageProps> = props => {
               </>
             ) : null
           }
-          onLoadMore={async () => {
+          onLoadMore={() => {
             if (pageInfo && pageInfo.hasNextPage) {
-              setLoadingMore(true);
-              await fetchMore({
+              return fetchMore({
                 variables: {
                   after: pageInfo.endCursor,
                 },
               });
-              setLoadingMore(false);
             }
+            return null;
           }}
           renderFollowElement={(profileId, followId, isFollowing) => (
             <FollowProfileButton

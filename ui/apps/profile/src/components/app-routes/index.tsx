@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 import InterestsPage from '../pages/interests';
 import EditProfilePage from '../pages/edit-profile';
 import FollowingPage from '../pages/profile-engagement/following-page';
@@ -8,7 +9,7 @@ import ProfileBeamsPage from '../pages/profile-beams';
 import ProfileHeader from '../profile-header';
 import RootComponent from './root-component';
 import ProfileWithAuthorization from '../profile-with-authorization';
-import EngagementFallback from './engagement-fallback';
+import ErrorComponent from './error-component';
 import menuRoute, { BEAMS, EDIT, INTERESTS, FOLLOWERS, FOLLOWING } from '../../routes';
 import { ProfileLoading } from '@akashaorg/design-system-components/lib/components/Profile';
 import { rootRouteWithContext, Route, Router } from '@tanstack/react-router';
@@ -81,12 +82,12 @@ const followersRoute = new Route({
   component: () => {
     const { profileId } = followersRoute.useParams();
     return (
-      <Suspense fallback={<EngagementFallback profileId={profileId} />}>
-        <ProfileWithAuthorization profileId={profileId}>
-          <ProfileHeader profileId={profileId} />
+      <ProfileWithAuthorization profileId={profileId}>
+        <Card radius={20} elevation="1" padding="p-0">
+          <ProfileHeader profileId={profileId} plain={true} customStyle="sticky top-3.5 z-50" />
           <FollowersPage profileId={profileId} />
-        </ProfileWithAuthorization>
-      </Suspense>
+        </Card>
+      </ProfileWithAuthorization>
     );
   },
 });
@@ -106,12 +107,12 @@ const followingRoute = new Route({
   component: () => {
     const { profileId } = followingRoute.useParams();
     return (
-      <Suspense fallback={<EngagementFallback profileId={profileId} />}>
-        <ProfileWithAuthorization profileId={profileId}>
-          <ProfileHeader profileId={profileId} />
+      <ProfileWithAuthorization profileId={profileId}>
+        <Card radius={20} elevation="1" padding="p-0">
+          <ProfileHeader profileId={profileId} plain={true} customStyle="sticky top-3.5 z-50" />
           <FollowingPage profileId={profileId} />
-        </ProfileWithAuthorization>
-      </Suspense>
+        </Card>
+      </ProfileWithAuthorization>
     );
   },
 });
@@ -164,5 +165,8 @@ export const createRouter = ({ baseRouteName, apolloClient }: CreateRouter) =>
     basepath: baseRouteName,
     context: {
       apolloClient,
+    },
+    defaultErrorComponent: ({ error }) => {
+      return <ErrorComponent error={(error as unknown as Error).message} />;
     },
   });

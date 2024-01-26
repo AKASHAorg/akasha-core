@@ -1,6 +1,5 @@
 import React, { useState, PropsWithChildren } from 'react';
 import TabList from '@akashaorg/design-system-core/lib/components/TabList';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import routes, { FOLLOWERS, FOLLOWING } from '../../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { NavigateToParams } from '@akashaorg/typings/lib/ui';
@@ -38,7 +37,7 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
   };
 
   return (
-    <Card radius={20} elevation="1" customStyle="py-4">
+    <>
       <TabList
         selected={activeTab}
         labels={[t('Followers'), t('Following')]}
@@ -46,9 +45,12 @@ const EngagementTab: React.FC<PropsWithChildren<EngagementTabProps>> = props => 
           setActiveTab(selectedIndex);
           onTabChange(selectedIndex);
         }}
+        customStyle="sticky bg(white dark:grey2) top-52 z-50"
       />
-      <Stack customStyle="mt-4">{children}</Stack>
-    </Card>
+      <Stack padding="px-4" customStyle="mt-4">
+        {children}
+      </Stack>
+    </>
   );
 };
 

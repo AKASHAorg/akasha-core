@@ -10,6 +10,7 @@ export type EntryProps = {
   name: string;
   followId: string;
   isFollowing: boolean;
+  customStyle?: string;
   renderFollowElement: (
     profileId: string,
     followId: string,
@@ -27,13 +28,21 @@ const Entry: React.FC<EntryProps> = props => {
     name,
     followId,
     isFollowing,
+    customStyle = '',
     renderFollowElement,
     onProfileClick,
     transformSource,
   } = props;
 
   return (
-    <Stack direction="row" align="center" justify="between" customStyle="pb-4" fullWidth>
+    <Stack
+      direction="row"
+      align="center"
+      justify="between"
+      padding="pb-4"
+      customStyle={customStyle}
+      fullWidth
+    >
       <ProfileAvatarButton
         profileId={profileIds.did}
         avatar={transformSource(avatar?.default)}
