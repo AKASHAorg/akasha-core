@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { tw } from '@twind/core';
 
-import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import SearchBar from '../SearchBar';
 
@@ -27,11 +27,11 @@ const OnboardingStartCard = ({
 
   return (
     <Card>
-      <div className={tw(`flex w-ull p-4 items-center gap-8`)}>
-        <div className={tw(`flex flex-row justify-between w-full`)}>
+      <Stack align="center" padding="p-4" spacing="gap-y-8" fullWidth={true}>
+        <Stack direction="row" justify="between" fullWidth={true}>
           <Text variant="h2">{titleLabel}</Text>
           <Button disabled={!isButtonEnabled} onClick={handleButtonClick} label={buttonLabel} />
-        </div>
+        </Stack>
 
         <SearchBar
           inputValue={inputValue}
@@ -40,7 +40,7 @@ const OnboardingStartCard = ({
           onSearch={handleSearch}
           responsive={false}
         />
-      </div>
+      </Stack>
     </Card>
   );
 };

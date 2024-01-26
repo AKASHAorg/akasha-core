@@ -21,12 +21,12 @@ export default meta;
 type Story = StoryObj<IconProps>;
 
 const customIcons: ReactElement[] = [
-  <Akasha />,
-  <Discord />,
-  <Github />,
-  <Telegram />,
-  <Twitter />,
-  <Widget />,
+  <Akasha key={0} />,
+  <Discord key={1} />,
+  <Github key={2} />,
+  <Telegram key={3} />,
+  <Twitter key={4} />,
+  <Widget key={5} />,
 ];
 
 const variants: IconProps[] = [

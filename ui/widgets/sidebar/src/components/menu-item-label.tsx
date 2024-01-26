@@ -41,7 +41,9 @@ const MenuItemLabel: React.FC<MenuItemLabelProps> = props => {
             ? { light: 'secondaryLight', dark: 'secondaryDark' }
             : { light: 'black', dark: 'white' }
         }
-        customStyle={`ml-2.5 ${isActive ? 'text-secondary' : 'text(black dark:white)'}`}
+        customStyle={`ml-2.5 ${
+          isActive ? 'text(secondaryLight dark:secondaryDark)' : 'text(black dark:white)'
+        }`}
       >
         {menuItem.label}
       </Text>

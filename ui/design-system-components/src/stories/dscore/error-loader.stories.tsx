@@ -16,6 +16,7 @@ type Story = StoryObj<ErrorLoaderProps>;
 export const BaseErrorLoader: Story = {
   render: () => (
     <ErrorLoader
+      publicImgPath=""
       type="no-login"
       title="No Ethereum address detected"
       details="You need to login or allow access to your current Ethereum address in your Web3 Ethereum client like MetaMask, and then reload, please."

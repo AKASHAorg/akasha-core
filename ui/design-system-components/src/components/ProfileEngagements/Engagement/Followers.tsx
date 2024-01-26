@@ -9,11 +9,13 @@ import { ENTRY_HEIGHT, EngagementProps } from '../types';
 
 export type FollowersProps = {
   followers: AkashaFollowers;
+  publicImgPath?: string;
   emptyEntryTitleLabel: ReactElement;
   emptyEntryBodyLabel: ReactElement;
 } & EngagementProps;
 
 const Followers: React.FC<FollowersProps> = ({
+  publicImgPath,
   authenticatedDID,
   followList,
   followers,
@@ -42,6 +44,7 @@ const Followers: React.FC<FollowersProps> = ({
       <InfoCard
         titleLabel={emptyEntryTitleLabel}
         bodyLabel={emptyEntryBodyLabel}
+        publicImgPath={publicImgPath}
         assetName="longbeam-notfound"
       />
     );

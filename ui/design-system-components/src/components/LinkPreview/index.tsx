@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { tw, apply, tx } from '@twind/core';
 import isUrl from 'is-url';
+import { tw, apply, tx } from '@twind/core';
 import { LinkPreviewExt } from '@akashaorg/typings/lib/ui';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import {
   LinkIcon,
@@ -68,8 +69,8 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
         </div>
       )}
       {!uploading && linkPreviewData && (
-        <div
-          className={tw(`relative flex rounded-t-lg`)}
+        <Button
+          plain={true}
           onClick={ev => {
             if (new URL(linkPreviewData.url).origin === window.location.origin) {
               handleLinkClick(linkPreviewData.url);
@@ -82,70 +83,79 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
             return ev.stopPropagation();
           }}
         >
-          {handleDeletePreview && (
-            <div
-              className={tx(`${closeDivClass}`)}
-              onClick={ev => {
-                ev.stopPropagation();
-                ev.preventDefault();
-                handleDeletePreview();
-              }}
-            >
-              <Icon icon={<XMarkIcon />} />
-            </div>
-          )}
-          {!!(linkPreviewData.imageSources?.url || linkPreviewData.imageSources?.fallbackUrl) &&
-            showCover && (
-              <div className={tw(`flex rounded-t-sm border(solid grey8 dark:grey3)`)}>
-                <div className={tw(`flex`)}>
-                  <source srcSet={linkPreviewData.imageSources?.url} />
-                  <img
-                    // don't resize the image to fit the width of the container
-                    // because the image width might be smaller than the container width
-                    className={tw(
-                      `w-fit max-w-full max-h-full my-0 mx-auto object-contain rounded-t-lg`,
-                    )}
-                    src={linkPreviewData.imageSources?.fallbackUrl}
-                    onLoad={handleCoverLoad}
-                    alt={linkPreviewData.imageSources?.fallbackUrl}
-                    referrerPolicy={'no-referrer'}
-                  />
+          <div className={tw(`relative flex rounded-t-lg`)}>
+            {handleDeletePreview && (
+              <Button
+                plain={true}
+                onClick={ev => {
+                  ev.stopPropagation();
+                  ev.preventDefault();
+                  handleDeletePreview();
+                }}
+              >
+                <div className={tx(`${closeDivClass}`)}>
+                  <Icon icon={<XMarkIcon />} />
                 </div>
-              </div>
+              </Button>
             )}
-
-          <div
-            className={tx(
-              `bg(grey9 dark:grey2) p-4 gap-4 border(solid grey8 dark:grey3) ${
-                linkPreviewData.images?.length && showCover ? 'rounded-b-sm' : 'rounded-sm'
-              }`,
-            )}
-          >
-            <div className={tw(`flex flex-row gap-3 py-3 items-center`)}>
-              {!!(
-                linkPreviewData.faviconSources?.url || linkPreviewData.faviconSources?.fallbackUrl
-              ) && !faviconErr ? (
-                <div className={tw(`flex`)}>
-                  <source srcSet={linkPreviewData.faviconSources?.url} />
-                  <img
-                    className={tw(`h-4 w-4`)}
-                    src={linkPreviewData.faviconSources?.fallbackUrl}
-                    alt={linkPreviewData.faviconSources?.fallbackUrl}
-                    onError={handleFaviconErr}
-                    referrerPolicy={'no-referrer'}
-                  />
+            {!!(linkPreviewData.imageSources?.url || linkPreviewData.imageSources?.fallbackUrl) &&
+              showCover && (
+                <div className={tw(`flex rounded-t-sm border(solid grey8 dark:grey3)`)}>
+                  <div className={tw(`flex`)}>
+                    <source srcSet={linkPreviewData.imageSources?.url} />
+                    <img
+                      // don't resize the image to fit the width of the container
+                      // because the image width might be smaller than the container width
+                      className={tw(
+                        `w-fit max-w-full max-h-full my-0 mx-auto object-contain rounded-t-lg`,
+                      )}
+                      src={linkPreviewData.imageSources?.fallbackUrl}
+                      onLoad={handleCoverLoad}
+                      alt={linkPreviewData.imageSources?.fallbackUrl}
+                      referrerPolicy={'no-referrer'}
+                    />
+                  </div>
                 </div>
-              ) : (
-                <Icon icon={<LinkIcon />} customStyle={'h-3 w-3 text-secondary'} />
               )}
-              {!!linkPreviewData.url && <p className={'text-secondary truncate'}>{hostname}</p>}
+
+            <div
+              className={tx(
+                `bg(grey9 dark:grey2) p-4 gap-4 border(solid grey8 dark:grey3) ${
+                  linkPreviewData.images?.length && showCover ? 'rounded-b-sm' : 'rounded-sm'
+                }`,
+              )}
+            >
+              <div className={tw(`flex flex-row gap-3 py-3 items-center`)}>
+                {!!(
+                  linkPreviewData.faviconSources?.url || linkPreviewData.faviconSources?.fallbackUrl
+                ) && !faviconErr ? (
+                  <div className={tw(`flex`)}>
+                    <source srcSet={linkPreviewData.faviconSources?.url} />
+                    <img
+                      className={tw(`h-4 w-4`)}
+                      src={linkPreviewData.faviconSources?.fallbackUrl}
+                      alt={linkPreviewData.faviconSources?.fallbackUrl}
+                      onError={handleFaviconErr}
+                      referrerPolicy={'no-referrer'}
+                    />
+                  </div>
+                ) : (
+                  <Icon
+                    icon={<LinkIcon />}
+                    customStyle={'h-3 w-3 text(secondaryLight dark:secondaryDark)'}
+                  />
+                )}
+                {!!linkPreviewData.url && (
+                  <p className={'text(secondaryLight dark:secondaryDark) truncate'}>{hostname}</p>
+                )}
+              </div>
+              {!!linkPreviewData.title && (
+                <p className={`text-lg font-semibold`}>{linkPreviewData.title}</p>
+              )}
+              {!!linkPreviewData.description && <p>{htmlDecode(linkPreviewData.description)}</p>}
             </div>
-            {!!linkPreviewData.title && (
-              <p className={`text-lg font-semibold`}>{linkPreviewData.title}</p>
-            )}
-            {!!linkPreviewData.description && <p>{htmlDecode(linkPreviewData.description)}</p>}
           </div>
-        </div>
+        </Button>
       )}
     </>
   );

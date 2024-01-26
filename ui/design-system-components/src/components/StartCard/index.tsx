@@ -44,7 +44,9 @@ const StartCard: React.FC<StartCardProps> = ({
       </div>
       {showMainArea && (
         <div className={tw(`w-full px-4 ${hideMainAreaOnMobile && 'hidden'}`)}>
-          {!!image && <img alt={image} className={tw(`max-w-1/2 mx-auto py-3 pr-2`)} src={image} />}
+          {!!image && (
+            <img alt={image} className={tw('max-w-[1/2] mx-auto py-3 pr-2')} src={image} />
+          )}
           {!!icon && icon}
           <Text variant="h6" align="center">
             {heading}

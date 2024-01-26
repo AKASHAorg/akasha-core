@@ -405,7 +405,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                       followingLabel={t('Following')}
                       followersLabel={t('Followers')}
                       shareProfileLabel={t('Share')}
-                      profileAnchorLink={'/profile'}
                       onClickProfile={() => handleProfileClick(profileData.did.id)}
                       transformSource={transformSource}
                     />

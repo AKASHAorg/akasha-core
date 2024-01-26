@@ -1,8 +1,9 @@
 import React from 'react';
-import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
-import { Portal } from './helpers';
 import { tw, tx } from '@twind/core';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import { Portal } from './helpers';
 
 export type MentionPopover = {
   values: Profile[];
@@ -25,13 +26,9 @@ export const MentionPopover: React.FC<MentionPopover> = React.forwardRef((props,
         ref={ref}
       >
         {values.map((value, i) => (
-          <div
-            className={tx(
-              `p-2 cursor-pointer rounded-sm max-w-xs min-w-[12rem] truncate hover:text-secondary ${
-                i === currentIndex && 'bg-grey3'
-              }`,
-            )}
+          <Button
             key={i}
+            plain={true}
             onClick={() => {
               handleSelect(i);
             }}
@@ -39,15 +36,23 @@ export const MentionPopover: React.FC<MentionPopover> = React.forwardRef((props,
               setIndex(i);
             }}
           >
-            <ProfileAvatarButton
-              label={value.name}
-              avatar={transformSource(value?.avatar?.default)}
-              alternativeAvatars={value?.avatar?.alternatives?.map(alternative =>
-                transformSource(alternative),
+            <div
+              className={tx(
+                `p-2 cursor-pointer rounded-sm max-w-xs min-w-[12rem] truncate hover:text(secondaryLight dark:secondaryDark) ${
+                  i === currentIndex && 'bg-grey3'
+                }`,
               )}
-              profileId={value.did.id}
-            />
-          </div>
+            >
+              <ProfileAvatarButton
+                label={value.name}
+                avatar={transformSource(value?.avatar?.default)}
+                alternativeAvatars={value?.avatar?.alternatives?.map(alternative =>
+                  transformSource(alternative),
+                )}
+                profileId={value.did.id}
+              />
+            </div>
+          </Button>
         ))}
       </div>
     </Portal>

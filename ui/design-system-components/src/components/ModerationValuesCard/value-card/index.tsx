@@ -32,7 +32,7 @@ const ModerationValueCard: React.FC<ModerationValueCardProps> = props => {
   return (
     <Button plain={true} onClick={onClick}>
       <div
-        className={tw(`h-${isMini ? '32' : ''} bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`)}
+        className={tw(`bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer ${isMini ? 'h-32' : ''}`)}
       >
         <div
           className={tw(`flex flex-col h-full p-${isMini ? '3' : '4'} items-center justify-evenly`)}

@@ -14,6 +14,7 @@ type Story = StoryObj<LoginCTACardProps>;
 export const BaseLoginCTACard: Story = {
   render: () => (
     <LoginCTACard
+      publicImgPath=""
       title="Welcome, fellow Ethereans! 💫"
       subtitle="We are in private alpha at this time. "
       beforeLinkLabel="If you'd like to participate,just "

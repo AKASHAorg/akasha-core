@@ -15,7 +15,7 @@ const BasicPopover: React.FC<BasicPopoverProps> = ({ children, ...props }) => {
   const { gap, overflow = 'hidden' } = props;
 
   const className = apply`
-  overflow-${overflow} overflow w-[21rem] mt-${
+  overflow-${overflow} w-[21rem] mt-${
     gap ? `[${gap}]` : '2.5'
   } ml-6 border-1 border-${'[#425166]'} rounded
   `;
