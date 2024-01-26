@@ -70,10 +70,16 @@ const FeedPage: React.FC<FeedPageProps> = props => {
             <ScrollTopButton hide={false} onClick={onScrollToTop} />
           </ScrollTopWrapper>
         )}
-        renderItem={itemData => {
-          if (!hasOwn(itemData.node, 'content'))
-            return <BeamContentResolver beamId={itemData.node.beamID} />;
-        }}
+        // renderItem={itemData => {
+        //   if (!hasOwn(itemData.node, 'content')) {
+        //     // console.log(
+        //     //   '<BeamContentResolver/>',
+        //     //   itemData.node.beamID,
+        //     //   <BeamContentResolver beamId={itemData.node.beamID} />,
+        //     // );
+        //     return <BeamContentResolver beamId={itemData.node.beamID} />;
+        //   }
+        // }}
         trackEvent={analyticsActions.trackEvent}
       />
     </Stack>

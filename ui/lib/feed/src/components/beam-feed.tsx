@@ -12,7 +12,13 @@ import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoade
 import { RestoreItem } from '../virtual-list/use-scroll-state';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import type { GetBeamsQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import type {
+  GetBeamStreamQuery,
+  GetBeamsByAuthorDidQuery,
+  GetBeamsQuery,
+} from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
+import { hasOwn } from '@akashaorg/ui-awf-hooks';
+import BeamContentResolver from './beam-content-resolver';
 
 export type BeamFeedProps = {
   className?: string;
@@ -23,7 +29,7 @@ export type BeamFeedProps = {
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
   scrollTopIndicator?: VirtualizerProps<unknown>['scrollTopIndicator'];
-  renderItem: VirtualizerProps<AkashaBeamStreamEdge | AkashaBeamEdge>['renderItem'];
+  renderItem?: VirtualizerProps<AkashaBeamStreamEdge | AkashaBeamEdge>['renderItem'];
   estimatedHeight?: VirtualizerProps<unknown>['estimatedHeight'];
   itemSpacing?: VirtualizerProps<unknown>['itemSpacing'];
   header?: VirtualizerProps<unknown>['header'];
@@ -56,6 +62,7 @@ const BeamFeed = (props: BeamFeedProps) => {
     hasPreviousPage,
     fetchInitialData,
     onReset,
+    filterNsfwBeams,
     isLoading,
     hasErrors,
     errors,
@@ -141,7 +148,19 @@ const BeamFeed = (props: BeamFeedProps) => {
           onListReset={handleReset}
           onEdgeDetectorChange={handleFetch}
           scrollTopIndicator={scrollTopIndicator}
-          renderItem={renderItem}
+          renderItem={
+            renderItem ??
+            (itemData => {
+              if (!hasOwn(itemData.node, 'content')) {
+                return (
+                  <BeamContentResolver
+                    beamId={itemData.node.beamID}
+                    filterNsfwBeams={filterNsfwBeams}
+                  />
+                );
+              }
+            })
+          }
           loadingIndicator={loadingIndicatorRef.current}
           hasNextPage={hasNextPage}
           hasPreviousPage={hasPreviousPage}

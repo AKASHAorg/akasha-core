@@ -107,6 +107,37 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
     [beamCursors],
   );
 
+  const filterNsfwBeams = React.useCallback((beamID: string) => {
+    setState(
+      prev =>
+        ({
+          beams: prev.beams
+            .map(beam => {
+              if (hasOwn(beam.node, 'beamID') && beam.node.beamID !== beamID) {
+                return beam;
+              }
+              return null;
+            })
+            .filter(beam => beam !== null && beam.cursor),
+          pageInfo: {
+            ...prev.pageInfo,
+          },
+        }) as {
+          /* needs a better type assertion approach to get rid of a typescript error message */
+          beams:
+            | Exclude<
+                GetBeamStreamQuery['node'],
+                Record<string, never>
+              >['akashaBeamStreamList']['edges']
+            | Exclude<
+                GetBeamsByAuthorDidQuery['node'],
+                Record<string, never>
+              >['akashaBeamList']['edges'];
+          pageInfo?: PageInfo;
+        },
+    );
+  }, []);
+
   const queryClient = React.useRef(beamsQuery.client);
 
   const fetchNextPage = async (lastCursor: string) => {
@@ -277,6 +308,7 @@ export const useBeams = ({ overscan, filters, sorting, did }: UseBeamsOptions) =
     fetchInitialData,
     fetchNextPage,
     fetchPreviousPage,
+    filterNsfwBeams,
     isLoading: beamsQuery.loading,
     hasNextPage: state.pageInfo?.hasNextPage,
     hasPreviousPage: state.pageInfo?.hasPreviousPage,
