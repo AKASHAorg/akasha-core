@@ -15,8 +15,9 @@ import AppsOption from './option-apps';
 import SettingsPage from './settings-page';
 import PrivacyOption from './option-privacy';
 import ThemeOption from './option-theme';
+import NsfwOption from './option-nsfw';
 
-import routes, { THEME, APPS, HOME, PRIVACY } from '../routes';
+import routes, { THEME, NSFW, APPS, HOME, PRIVACY } from '../routes';
 
 export type theme = 'Light-Theme' | 'Dark-Theme';
 
@@ -198,6 +199,20 @@ const AppRoutes: React.FC<unknown> = () => {
                 )}
                 theme={theme}
                 onThemeSelect={handleThemeSelect}
+              />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path={routes[NSFW]}
+          element={
+            <ErrorBoundary {...errorBoundaryProps}>
+              <NsfwOption
+                titleLabel="NSFW Content"
+                introLabel={t('Show NSFW Content')}
+                subtitleLabel={t(
+                  'If you enable NSFW content, any sensitive content will show up in your search results when you lookup anything.',
+                )}
               />
             </ErrorBoundary>
           }
