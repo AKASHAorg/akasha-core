@@ -16,6 +16,10 @@ import { hasOwn } from './utils/has-own';
 export const useBeamsByTag = (tag: string) => {
   const sdk = getSDK();
   const [state, setState] = React.useState<{
+    count?: Exclude<
+      GetIndexedStreamQuery['node'],
+      Record<string, never>
+    >['akashaIndexedStreamListCount'];
     beams: Exclude<
       GetIndexedStreamQuery['node'],
       Record<string, never>
